@@ -9995,6 +9995,11 @@ with pkgs;
     withFonts = true;
   };
 
+  libreoffice-collabora-coda = callPackage ../applications/office/libreoffice {
+    variant = "collabora-coda";
+    withFonts = true;
+  };
+
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
