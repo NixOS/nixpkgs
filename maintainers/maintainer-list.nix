@@ -10733,6 +10733,11 @@
     githubId = 902012;
     name = "Monson Shao";
   };
+  honeyslatt = {
+  email = "SavaneFofana@proton.me";
+  github = "HoneySlatt";
+  githubId = 170786304;
+};
   hongchangwu = {
     email = "wuhc85@gmail.com";
     github = "hongchangwu";
@@ -20176,6 +20181,7 @@
     githubId = 357005;
     name = "Marco Orovecchia";
   };
+nvim maintainers/maintainer-list.nix
   orthros = {
     github = "orthros";
     githubId = 7820716;
