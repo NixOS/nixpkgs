@@ -2,28 +2,30 @@
   lib,
   fetchFromGitHub,
   fetchYarnDeps,
-  php,
+  php85,
   yarn,
   fixup-yarn-lock,
   nixosTests,
 }:
-
+let
+  php = php85;
+in
 php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MnN6TIkNZWT+pAQf0+z5l3hj/7K/d3BfI7VAaUEKG8s=";
+    hash = "sha256-qdN+stXuwChv6IaFSX2SrSdej7Id/M0UaO2cggAvWdc=";
   };
 
-  vendorHash = "sha256-6vWV8+4tETUFBLeEoG7d8lHKILXvM7ezWbDiG11GA/s=";
+  vendorHash = "sha256-3f7me/YG2lt7fhkgXO1+0SXO+1IK+Fdb3/gywWyaxVg=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Q+9hUxIfNrfdok39h04rz5I63RxOJ0qk3XlwvD1TcqI=";
+    hash = "sha256-48+u0NYZZiYvP2ADAkRdL079wmjWMHwPHi8rlDP41Eo=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +60,10 @@ php.buildComposerProject2 (finalAttrs: {
     rm -r $out/share
   '';
 
-  passthru.tests = { inherit (nixosTests) grocy; };
+  passthru = {
+    phpPackage = php;
+    tests = { inherit (nixosTests) grocy; };
+  };
 
   meta = {
     license = lib.licenses.mit;
