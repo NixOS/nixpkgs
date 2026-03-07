@@ -42,7 +42,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/node-red/node-red/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/node-red/node-red/blob/${src.tag}/CHANGELOG.md";
     description = "Low-code programming for event-driven applications";
     homepage = "https://nodered.org/";
     license = lib.licenses.asl20;
