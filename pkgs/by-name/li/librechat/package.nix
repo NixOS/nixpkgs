@@ -90,6 +90,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     description = "Open-source app for all your AI conversations, fully customizable and compatible with any AI provider";
     homepage = "https://github.com/danny-avila/LibreChat";
+    changelog = "https://www.librechat.ai/changelog/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "librechat-server";
