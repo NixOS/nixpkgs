@@ -194,11 +194,6 @@ stdenv.mkDerivation rec {
     hash = "sha256-YBR81GOLnTsc0g1SZL+j31/OFucJrBRFqtOTV8lcy8U=";
   };
 
-  postPatch = ''
-    # cc1: error: invalid feature modifier 'sve2' in '-march=armv8.5-a+sve+sve2+bf16'
-    substituteInPlace Makefile.arm64 --replace-fail "+sve2+bf16" ""
-  '';
-
   inherit blas64;
 
   # Some hardening features are disabled due to sporadic failures in

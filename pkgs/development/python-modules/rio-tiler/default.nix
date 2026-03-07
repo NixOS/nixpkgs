@@ -8,6 +8,7 @@
   boto3,
   cachetools,
   color-operations,
+  h5netcdf,
   hatchling,
   httpx,
   morecantile,
@@ -33,7 +34,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     cachetools
     color-operations
@@ -48,19 +49,23 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     boto3
+    h5netcdf
     pytestCheckHook
     rioxarray
   ];
 
   pythonImportsCheck = [ "rio_tiler" ];
 
+  disabledTests = [
+    # Requires obstore
+    "test_dataset_reader"
+    "test_dataset_reader_variable"
+  ];
+
   meta = {
     description = "User friendly Rasterio plugin to read raster datasets";
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
-    # Tests broken with gdal 3.10
-    # https://github.com/cogeotiff/rio-tiler/issues/769
-    broken = true;
   };
 }

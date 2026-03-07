@@ -76,11 +76,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-I2dGn4Ld5lZeML8GePcLPssplBZ+4weNR6uBEqFdZVg=";
+    hash = "sha256-+yaOUA8hzRPnz14Cmp2BbfIS5811PgMcHQLY2+FatMU=";
     sparseCheckout = [
       "projects/hipblaslt"
       "shared"
     ];
+    # Compress the 5ish GiB of yaml files so this .src is under output size limit
+    postFetch = ''
+      find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${lib.getExe zstd} --rm {} \;
+    '';
   };
   sourceRoot = "${finalAttrs.src.name}/projects/hipblaslt";
   env.CXX = compiler;
@@ -121,6 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./TensileCreateLibrary-refactor.patch
     ./Tensile-interning.patch
   ];
+
+  preConfigure = ''
+    find . -name '*.yaml.zst' -path '*/Tensile/Logic/*' -exec zstd -d --rm {} \;
+  '';
 
   postPatch = ''
     # git isn't needed and we have no .git
