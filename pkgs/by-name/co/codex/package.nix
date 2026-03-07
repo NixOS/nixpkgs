@@ -18,18 +18,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.92.0";
+  version = "0.111.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-m/g+5wdehyaHDw6i5vik4HXiisY/iWFtPX0gKjCFPNY=";
+    hash = "sha256-hdR70BhiMg9G/ibLCeHnRSY3PcGZDv0vnqBCbzSRD6I=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-fuT8vPb9/7fZam129nR6y+r+3j46WBhlf73Htkcjpzc=";
+  cargoHash = "sha256-h+TIwNz+A6aYcMACWl//LiavABITZxwYa4CvawR/0RQ=";
 
   nativeBuildInputs = [
     clang
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libclang
     openssl
+    libcap
   ];
 
   # NOTE: set LIBCLANG_PATH so bindgen can locate libclang, and adjust
@@ -59,6 +60,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-Wno-error=character-conversion"
       ]
     );
+    CARGO_PROFILE_RELEASE_LTO = "thin"; # fat lto uses way more ram at build time for no noticeable benefit.
+    CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "8";
   };
 
   # NOTE: part of the test suite requires access to networking, local shells,
