@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -29,10 +30,17 @@ python3Packages.buildPythonApplication rec {
     shiboken6
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
   pythonImportsCheck = [ "mtkclient" ];
 
-  # Note: No need to install mtkclient udev rules, 50-android.rules is covered by
+  # Note: No need to install other mtkclient udev rules, 50-android.rules is covered by
   #       systemd 258 or newer and 51-edl.rules only applies to Qualcomm (i.e. not MTK).
+  postInstall = ''
+    install -Dm444 Setup/Linux/52-mtk.rules -t $out/lib/udev/rules.d
+  '';
 
   meta = {
     description = "MTK reverse engineering and flash tool";
