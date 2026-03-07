@@ -80,7 +80,10 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/danny-avila/LibreChat";
     changelog = "https://www.librechat.ai/changelog/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      gepbird
+      niklaskorz
+    ];
     mainProgram = "librechat-server";
   };
 })
