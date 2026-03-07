@@ -288,7 +288,7 @@ with pkgs;
     name = "update-autotools-gnu-config-scripts-hook";
     substitutions = {
       gnu_config = gnu-config.override {
-        runtimeShell = targetPackages.stdenv.shell;
+        runtimeShell = if stdenv.buildPlatform == stdenv.hostPlatform then stdenv.shell else runtimeShell;
       };
     };
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
