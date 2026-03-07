@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openseachest";
-  version = "25.05.3";
+  version = "26.03.0";
 
   src = fetchFromGitHub {
     owner = "Seagate";
     repo = "openSeaChest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-huhdRF2K1AEDRX6Jyz8a/OpUEKFmH+FLNr5KHM/4Sk4=";
+    hash = "sha256-L/YoJEUr5e/XtmejbeZ5cP17ym8v3IonWvZ/T772c5E=";
     fetchSubmodules = true;
   };
 
