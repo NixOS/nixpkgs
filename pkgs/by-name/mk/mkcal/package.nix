@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkcal";
-  version = "0.7.30";
+  version = "0.7.31";
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = "mkcal";
     tag = finalAttrs.version;
-    hash = "sha256-Sr4THufulhpTOXvMEUG1BA41Lcky34AGALxJojR7sac=";
+    hash = "sha256-/txm7JBI3SvrhRN42Y+2XShoIv1AnKB0lbcfyri5aEE=";
   };
 
   outputs = [
