@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mtkclient";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bkerler";
     repo = "mtkclient";
     rev = "v${version}";
-    hash = "sha256-mbfuOYJvwHfDvjTtAgMBLi7REIRRcJ9bhkY5oVjxCAM=";
+    hash = "sha256-PNDjIoMkd/UkP/CQxLiJbCcQvJ3u1ghp0ILJ0jHJrts=";
   };
 
   build-system = [ python3Packages.hatchling ];
