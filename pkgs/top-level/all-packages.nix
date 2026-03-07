@@ -3249,6 +3249,7 @@ with pkgs;
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
     pnpm_9
+    pnpm_10_29_2
     pnpm_10
     ;
   pnpm = pnpm_10;
