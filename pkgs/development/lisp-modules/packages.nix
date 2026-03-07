@@ -201,6 +201,50 @@ let
         ];
       };
 
+      cl-electron = build-asdf-system rec {
+        pname = "cl-electron";
+        version = "20260307-git";
+        src = pkgs.fetchFromGitHub {
+          owner = "atlas-engineer";
+          repo = "cl-electron";
+          rev = "0a334b580df371f42353ce938d245bc0e505683c";
+          hash = "sha256-iu0vu31tNwgUji0A/doqvY8BvHQCZhDNcvGJN6bBYG4=";
+        };
+        npmDeps = pkgs.fetchNpmDeps {
+          name = "${pname}-${version}-npm-deps";
+          inherit src;
+          hash = "sha256-dHuhSAXgWP1wa71kq7P2wVVEEPYm5lsn1h+PRWCGDnQ=";
+        };
+        npmFlags = [ "--ignore-scripts" ];
+        nativeBuildInputs = with pkgs; [
+          nodejs
+          npmHooks.npmConfigHook
+        ];
+        lispLibs = with self; [
+          alexandria
+          cl-json
+          cl-base64
+          iolib
+          cl-ppcre
+          nclasses
+          bordeaux-threads
+          lparallel
+          parse-number
+          babel
+          # tests
+          lisp-unit2
+          spinneret
+          parenscript
+          # examples
+          lass
+        ];
+        systems = [
+          "cl-electron"
+          "cl-electron/tests"
+          "cl-electron/examples"
+        ];
+      };
+
       swank = build-with-compile-into-pwd rec {
         inherit (super.swank) pname lispLibs;
         version = "2.29.1";
