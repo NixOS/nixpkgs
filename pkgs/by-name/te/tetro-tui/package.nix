@@ -8,10 +8,12 @@ rustPlatform.buildRustPackage rec {
   pname = "tetro-tui";
   version = "1.1.0";
 
+  __structuredAttrs = true;
+
   src = fetchFromGitHub {
     owner = "Strophox";
     repo = "tetro-tui";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-F2aYUt4S8gkXYr9DMcEzgF6RBjwvcqk5F5Q6IboCzeQ=";
   };
 
