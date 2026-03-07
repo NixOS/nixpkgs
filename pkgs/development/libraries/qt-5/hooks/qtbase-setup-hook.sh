@@ -41,9 +41,6 @@ export QMAKE
 QMAKEPATH=
 export QMAKEPATH
 
-QMAKEMODULES=
-export QMAKEMODULES
-
 declare -Ag qmakePathSeen=()
 qmakePathHook() {
     # Skip this path if we have seen it before.
@@ -52,7 +49,6 @@ qmakePathHook() {
     qmakePathSeen[$1]=1
     if [ -d "$1/mkspecs" ]
     then
-        QMAKEMODULES="${QMAKEMODULES}${QMAKEMODULES:+:}/mkspecs"
         QMAKEPATH="${QMAKEPATH}${QMAKEPATH:+:}$1"
     fi
 }
