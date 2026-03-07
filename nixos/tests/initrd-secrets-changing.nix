@@ -18,6 +18,7 @@ testing.makeTest {
     { ... }:
     {
       virtualisation.useBootLoader = true;
+      virtualisation.useEFIBoot = true;
 
       boot.loader.grub.device = "/dev/vda";
 
