@@ -9062,6 +9062,11 @@
     githubId = 32936898;
     name = "Wu Zhenyu";
   };
+  freeman94 = {
+    name = "Jacob Henry Freeman";
+    github = "freeman94";
+    githubId = 7545238;
+  };
   frenetic00 = {
     github = "frenetic00";
     githubId = 50942055;
