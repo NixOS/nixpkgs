@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     sed -i 's,-static,,g' src/Makefile
   '';
 
+  enableParallelBuilding = true;
+
   preBuild = ''
     cd src
 
