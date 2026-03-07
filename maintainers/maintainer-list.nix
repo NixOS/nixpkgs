@@ -26031,12 +26031,6 @@
     githubId = 127287939;
     name = "Syed Sumairul Hasan";
   };
-  syberant = {
-    email = "sybrand@neuralcoding.com";
-    github = "syberant";
-    githubId = 20063502;
-    name = "Sybrand Aarnoutse";
-  };
   syboxez = {
     email = "syboxez@gmail.com";
     matrix = "@syboxez:matrix.org";
