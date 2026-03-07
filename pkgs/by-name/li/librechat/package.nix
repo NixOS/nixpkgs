@@ -1,7 +1,6 @@
 {
   lib,
   buildNpmPackage,
-  fetchNpmDeps,
   fetchFromGitHub,
   nodejs_22,
   pkg-config,
@@ -38,20 +37,10 @@ buildNpmPackage rec {
     # directory as well. Again, we patch this to be relative to the current working
     # directory instead.
     ./0003-upload-paths.patch
-    # The npm dependencies are causing issues with the build. The package @testing-library/react
-    # appears to not be included in NPM deps, even though it is present in the project
-    # This patch fixes this by placing the dependency in different files and regenerating the
-    # lock file.
-    ./0004-fix-deps-v080.patch
   ];
 
-  npmDepsHash = "sha256-97cEw6VD7FoVayrxClHuS1iUcQmDw7/aUoUV6ektvOY=";
-  npmDeps = fetchNpmDeps {
-    inherit src;
-    name = "${pname}-${version}-npm-deps-patched";
-    hash = npmDepsHash;
-    patches = [ ./0004-fix-deps-v080.patch ];
-  };
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-JXXOJDkh+do8ZOf4KHyiH7igMeC8WkwflMNx1rZRY3g=";
 
   # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
   nodejs = nodejs_22;
