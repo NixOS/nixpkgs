@@ -1,26 +1,26 @@
 diff --git a/api/config/meiliLogger.js b/api/config/meiliLogger.js
-index 195b387..d445e54 100644
+index 398672da5..fcd6864f8 100644
 --- a/api/config/meiliLogger.js
 +++ b/api/config/meiliLogger.js
-@@ -2,7 +2,7 @@ const path = require('path');
- const winston = require('winston');
- require('winston-daily-rotate-file');
+@@ -26,7 +26,7 @@ const getLogDir = () => {
+   }
  
--const logDir = path.join(__dirname, '..', 'logs');
-+const logDir = path.join('.', 'logs');
+   // Local development: use api/logs relative to this file
+-  return path.join(__dirname, '..', 'logs');
++  return path.join('.', 'logs');
+ };
  
- const { NODE_ENV } = process.env;
- 
+ const logDir = getLogDir();
 diff --git a/api/config/winston.js b/api/config/winston.js
-index 8f51b99..2ebd041 100644
+index 93b84f7c4..4276bd6c2 100644
 --- a/api/config/winston.js
 +++ b/api/config/winston.js
-@@ -3,7 +3,7 @@ const winston = require('winston');
- require('winston-daily-rotate-file');
- const { redactFormat, redactMessage, debugTraverse, jsonTruncateFormat } = require('./parsers');
+@@ -27,7 +27,7 @@ const getLogDir = () => {
+   }
  
--const logDir = path.join(__dirname, '..', 'logs');
-+const logDir = path.join('.', 'logs');
+   // Local development: use api/logs relative to this file
+-  return path.join(__dirname, '..', 'logs');
++  return path.join('.', 'logs');
+ };
  
- const { NODE_ENV, DEBUG_LOGGING = true, DEBUG_CONSOLE = false, CONSOLE_JSON = false } = process.env;
- 
+ const logDir = getLogDir();

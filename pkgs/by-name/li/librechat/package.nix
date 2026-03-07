@@ -12,13 +12,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "librechat";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "danny-avila";
     repo = "LibreChat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DTmb9J2nsMy6f+V6BgRtFgpTwOi9OQnvikSx4QZQ0HI=";
+    hash = "sha256-VPZFvWBNk1cxesaHmwWrxJu2YauMsR9a1GNLjMLeCeo=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ buildNpmPackage (finalAttrs: {
   ];
 
   npmDepsFetcherVersion = 2;
-  npmDepsHash = "sha256-JXXOJDkh+do8ZOf4KHyiH7igMeC8WkwflMNx1rZRY3g=";
+  npmDepsHash = "sha256-r1oJmei1W8SglZyG4lJLGycF9NV+06pGziNmujMFYBs=";
 
   # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
   nodejs = nodejs_22;
