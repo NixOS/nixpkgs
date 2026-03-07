@@ -12,15 +12,11 @@ let
     testing.makeTest {
       name = "initrd-secrets-${compressor}";
 
-      meta = {
-        maintainers = [ ];
-        broken = pkgs.stdenv.hostPlatform.isAarch64;
-      };
-
       nodes.machine =
         { ... }:
         {
           virtualisation.useBootLoader = true;
+          virtualisation.useEFIBoot = true;
           boot.initrd.secrets = {
             "/test" = secretInStore;
 
