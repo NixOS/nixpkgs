@@ -78,6 +78,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       manage a project's build, reporting and documentation from a central piece
       of information.
     '';
+    changelog = "https://maven.apache.org/docs/${finalAttrs.version}/release-notes.html";
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
