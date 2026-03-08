@@ -113,12 +113,12 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.7.0";
+  version = "2.7.1";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WqgzrppYJtoV0vmwHSwVpVlu5z+LROcsBXBIV3oAn48=";
+    hash = "sha256-QG/UGOeTG/2jIcqB2PxYuqTr3hkO5SrN9YakFgT7RvM=";
   };
   pyproject = true;
   # Waiting for https://github.com/beetbox/beets/pull/6267
