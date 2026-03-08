@@ -36,14 +36,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plopp";
-  version = "26.2.1";
+  version = "26.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "plopp";
     tag = finalAttrs.version;
-    hash = "sha256-31F6hVrVRNdvzAEifdeNsa5B52D/VtNWn4F9qUcSKJ0=";
+    hash = "sha256-8J/W40eWJS/zOEK26V1NYMklQ1mSw3zo+W0NVFn8YSw=";
   };
 
   build-system = [
@@ -81,7 +81,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   env = {
-    # See: https://github.com/scipp/plopp/blob/25.05.0/src/plopp/data/examples.py
+    # See: https://github.com/scipp/plopp/blob/26.3.0/src/plopp/data/examples.py
     PLOPP_DATA_DIR =
       let
         # NOTE this might be changed by upstream in the future.
