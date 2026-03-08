@@ -261,7 +261,7 @@ stdenv.mkDerivation rec {
       NO_STATIC = !enableStatic;
       NO_SHARED = !enableShared;
       CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
-      HOSTCC = "cc";
+      HOSTCC = lib.getExe buildPackages.stdenv.cc;
       # Makefile.system only checks defined status
       # This seems to be a bug in the openblas Makefile:
       # on x86_64 it expects NO_BINARY_MODE=
