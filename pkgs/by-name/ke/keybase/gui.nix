@@ -41,16 +41,16 @@
 }:
 
 let
-  versionSuffix = "20250428154451.19f9cfeddb";
+  versionSuffix = "20260408161357.70cbb6ec7c";
 in
 
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
-  version = "6.5.1"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "6.6.2"; # Find latest version and versionSuffix from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    hash = "sha256-PCKi1lavGwLbCoMTMG4h6PJTIzwRAu542eYqDDKzU4Y=";
+    hash = "sha256-2T17vaJQ4HRKTbR8IczBxv2KcmlH66+aARRHFdiEreM=";
   };
 
   nativeBuildInputs = [

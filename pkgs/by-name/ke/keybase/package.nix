@@ -8,7 +8,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "keybase";
-  version = "6.5.1";
+  version = "6.6.2";
 
   modRoot = "go";
   subPackages = [
@@ -22,9 +22,9 @@ buildGoModule (finalAttrs: {
     owner = "keybase";
     repo = "client";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-B3vedsxQM4FDZVpkMKR67DF7FtaTPhGIJ1e2lViKYzg=";
+    hash = "sha256-biekmiPgEI4tq6b45+3YeNFfCDPePz5MFowjmXG6HmI=";
   };
-  vendorHash = "sha256-uw1tiaYoMpMXCYt5bPL5OBbK09PJmAQYQDrDwuPShxU=";
+  vendorHash = "sha256-PI1VK1CWkCQhEwn6ExjerQhbph/J89NKAe1nSazAd1g=";
 
   patches = [
     (replaceVars ./fix-paths-keybase.patch {
