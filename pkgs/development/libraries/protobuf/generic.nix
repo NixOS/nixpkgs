@@ -146,6 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pythonProtobuf = python3.pkgs.protobuf;
       inherit grpc;
+      inherit (python3.pkgs) celery;
+
       version = testers.testVersion { package = protobuf; };
     };
 
