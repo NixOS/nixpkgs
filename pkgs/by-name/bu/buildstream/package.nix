@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  nix-update-script,
+  gitUpdater,
 
   # buildInputs
   buildbox,
@@ -120,7 +120,9 @@ python3Packages.buildPythonApplication rec {
   versionCheckProgram = "${placeholder "out"}/bin/bst";
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "dev";
+  };
 
   meta = {
     description = "Powerful software integration tool";
