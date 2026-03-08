@@ -2,6 +2,7 @@
   stdenvNoCC,
   lib,
   fetchzip,
+  installFonts,
   variants ? [
     "display"
     "hand"
@@ -74,11 +75,8 @@ stdenvNoCC.mkDerivation {
   sourceRoot = ".";
 
   srcs = map (variant: fetchFont fontMap.${variant}) selectedFonts;
-  installPhase = ''
-    runHook preInstall
-    install -Dm444 **/*.ttf -t $out/share/fonts/ttf
-    runHook postInstall
-  '';
+
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://pedroreina.net/apostrophiclab/";

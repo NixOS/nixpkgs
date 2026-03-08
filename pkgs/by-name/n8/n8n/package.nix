@@ -25,20 +25,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "2.9.4";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-XXQPZHtY66gOQ+nYH+Q1IjbR+SRZ9g06sgBy2x8gGh4=";
+    hash = "sha256-/UJ6+EpNh+jr8digBFKltxahebAeJKGwj3rbkXO0vm8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     pnpm = pnpm_10;
     fetcherVersion = 3;
-    hash = "sha256-TU7HIShYj20QtdcthP0nQdubYl0bdy+XM3CoX5Rvhzk=";
+    hash = "sha256-2m5ftzOKzXpRDdeUDfoWkpYY982cyqHB7uTZ3/3dhsk=";
   };
 
   nativeBuildInputs = [
@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
       gepbird
       AdrienLemaire
       sweenu
+      wrbbz
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

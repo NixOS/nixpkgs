@@ -27,12 +27,14 @@
 
   # dependencies
   aioprometheus,
+  amdsmi,
   anthropic,
   bitsandbytes,
   blake3,
   cachetools,
   cbor2,
   compressed-tensors,
+  datasets,
   depyf,
   einops,
   fastapi,
@@ -58,6 +60,7 @@
   outlines,
   pandas,
   partial-json-parser,
+  peft,
   prometheus-fastapi-instrumentator,
   py-cpuinfo,
   pyarrow,
@@ -70,6 +73,7 @@
   sentencepiece,
   setproctitle,
   tiktoken,
+  timm,
   tokenizers,
   torch,
   torchaudio,
@@ -294,7 +298,7 @@ let
     else if cudaSupport then
       gpuArchWarner supportedCudaCapabilities unsupportedCudaCapabilities
     else if rocmSupport then
-      rocmPackages.clr.gpuTargets
+      rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     else
       throw "No GPU targets specified"
   );
@@ -311,6 +315,13 @@ let
     libcublas
   ];
 
+  # header path ends up missing rocthrust & its deps
+  rocmExtraIncludeFlags = lib.concatMapStringsSep " " (pkg: "-I${lib.getInclude pkg}/include") [
+    rocmPackages.rocthrust
+    rocmPackages.rocprim
+    rocmPackages.hipcub
+  ];
+
   # Some packages are not available on all platforms
   nccl = shouldUsePkg (cudaPackages.nccl or null);
 
@@ -324,20 +335,21 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.15.1";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qsAvcOB8ugGlBqBrLfNHqaIUcxLwaXBTg8xWRnGyd94=";
+    hash = "sha256-7E67xVRlKmm+Hbp5nphhwH8SQC9LpCFNBfF2ZAOt79k=";
   };
 
   patches = [
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
+    ./0006-drop-rocm-extra-reqs.patch
   ];
 
   postPatch = ''
@@ -355,7 +367,8 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
+      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools" \
+      --replace-fail "grpcio-tools==1.78.0" "grpcio"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
@@ -413,6 +426,16 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
         rocprim
         hipsparse
         hipblas
+        rocrand
+        hiprand
+        rocblas
+        miopen-hip
+        hipfft
+        hipcub
+        hipsolver
+        rocsolver
+        hipblaslt
+        rocm-runtime
       ]
     )
     ++ lib.optionals stdenv.cc.isClang [
@@ -485,6 +508,13 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     cupy
     flashinfer
     nvidia-ml-py
+  ]
+  ++ lib.optionals rocmSupport [
+    rocmPackages.rocminfo
+    amdsmi
+    datasets
+    peft
+    timm
   ];
 
   optional-dependencies = {
@@ -523,9 +553,12 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     }
     // lib.optionalAttrs rocmSupport {
       VLLM_TARGET_DEVICE = "rocm";
-      # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
-      PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
-      ROCM_HOME = "${rocmPackages.clr}";
+      PYTORCH_ROCM_ARCH = gpuTargetString;
+      # vLLM's CMake logic checks `ROCM_PATH` to decide whether HIP/ROCm is available.
+      ROCM_PATH = "${rocmPackages.clr}";
+      TRITON_KERNELS_SRC_DIR = "${lib.getDev triton-kernels}/python/triton_kernels/triton_kernels";
+      HIPFLAGS = rocmExtraIncludeFlags;
+      CXXFLAGS = rocmExtraIncludeFlags;
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
@@ -558,6 +591,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       happysalada
       lach
       daniel-fahey
+      LunNova # esp. for ROCm
     ];
     badPlatforms = [
       # CMake Error at cmake/cpu_extension.cmake:188 (message):

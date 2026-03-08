@@ -235,6 +235,9 @@ in
       "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"
     )
     (mkRemovedOptionModule [ "services" "kippo" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "programs" "light" ]
+      "The corresponding package was removed from nixpkgs due to being unmaintained upstream. `brightnessctl` and `hardware.acpilight` offer replacements."
+    )
     (mkRemovedOptionModule [ "services" "lshd" ]
       "The corresponding package was removed from nixpkgs as it had no maintainer in Nixpkgs and hasn't seen an upstream release in over a decades."
     )
@@ -316,6 +319,9 @@ in
       the program being unmaintained. The options `programs.msmtp.*` can be
       used instead.
     '')
+    (mkRemovedOptionModule [ "services" "statsd" ] ''
+      The statsd module was removed because the packages it uses have been removed from nixpkgs.
+    '')
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
@@ -325,6 +331,10 @@ in
     (mkRemovedOptionModule [ "services" "unifi-video" ]
       "The unifi-video package and the corresponding module have been removed as the software has been unsupported since 2021 and requires a MongoDB version that has reached end of life."
     )
+    (mkRemovedOptionModule [
+      "services"
+      "uptime"
+    ] "The package for services.uptime has been removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "venus" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [
       "services"

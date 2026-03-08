@@ -117,15 +117,16 @@ in
       type = types.listOf types.str;
       # see: nix-shell -p suricata python3Packages.pyyaml --command 'suricata-update list-sources'
       default = [
+        "abuse.ch/sslbl-blacklist"
+        "abuse.ch/sslbl-c2"
+        "abuse.ch/sslbl-ja3"
         "et/open"
         "etnetera/aggressive"
         "stamus/lateral"
         "oisf/trafficid"
         "tgreen/hunting"
-        "sslbl/ja3-fingerprints"
-        "sslbl/ssl-fp-blacklist"
-        "malsilo/win-malware"
         "pawpatrules"
+        "ptrules/open"
       ];
       description = ''
         List of sources that should be enabled.
@@ -196,6 +197,17 @@ in
         "d /var/lib/suricata 755 ${cfg.settings.run-as.user} ${cfg.settings.run-as.group}"
         "d ${cfg.settings."default-rule-path"} 755 ${cfg.settings.run-as.user} ${cfg.settings.run-as.group}"
       ];
+
+      systemd.timers = {
+        suricata-update = {
+          timerConfig = {
+            OnBootSec = lib.mkDefault "30s";
+            OnUnitActiveSec = lib.mkDefault "24h";
+            Persistent = true;
+            Unit = config.systemd.services.suricata-update.name;
+          };
+        };
+      };
 
       systemd.services = {
         suricata-update = {

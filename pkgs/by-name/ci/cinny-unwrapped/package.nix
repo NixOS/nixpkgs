@@ -2,13 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  giflib,
-  python3,
-  pkg-config,
-  pixman,
   nodejs_22,
-  cairo,
-  pango,
   stdenv,
 }:
 
@@ -29,17 +23,10 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-2Lrd0jAwAH6HkwLHyivqwaEhcpFAIALuno+MchSIfxo=";
 
-  nativeBuildInputs = [
-    python3
-    pkg-config
+  # Skip rebuilding native modules since they're not needed for the web app
+  npmRebuildFlags = [
+    "--ignore-scripts"
   ];
-
-  buildInputs = [
-    pixman
-    cairo
-    pango
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ giflib ];
 
   installPhase = ''
     runHook preInstall

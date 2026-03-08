@@ -22,14 +22,14 @@ let
   media_kit_hash = "sha256-oJQ9sRQI4HpAIzoS995yfnzvx5ZzIubVANzbmxTt6LE=";
 in
 
-flutter.buildFlutterApplication rec {
+flutter.buildFlutterApplication (finalAttrs: {
   pname = "fladder";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "DonutWare";
     repo = "Fladder";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-lmtEgBxCmEYcckhSAXhMPDzNQBluTyW0yjkt6Rr9byA=";
   };
 
@@ -107,4 +107,4 @@ flutter.buildFlutterApplication rec {
     ];
     mainProgram = "Fladder";
   };
-}
+})

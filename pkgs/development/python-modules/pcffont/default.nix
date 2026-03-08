@@ -1,10 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pytestCheckHook,
   nix-update-script,
-  hatchling,
+  uv-build,
   bdffont,
 }:
 
@@ -13,13 +13,14 @@ buildPythonPackage rec {
   version = "0.0.24";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pcffont";
-    inherit version;
-    hash = "sha256-Sax3bUs6ogQ+LuUAy6k1zEfN4WT81zm1LzP2s/6Pecg=";
+  src = fetchFromGitHub {
+    owner = "TakWolf";
+    repo = "pcffont";
+    tag = version;
+    hash = "sha256-32u4FE5QLLqYmRVDuYYGC/laLCRH9phNGi1B9JC+cps=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [ bdffont ];
 

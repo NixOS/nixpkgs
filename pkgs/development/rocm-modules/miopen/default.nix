@@ -4,7 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchpatch,
-  rocmUpdateScript,
+  fetchurl,
   runCommand,
   pkg-config,
   cmake,
@@ -43,7 +43,7 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.1.1";
+  version = "7.2.0";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -65,42 +65,12 @@ let
     "gfx1201"
   ] gpuTargets;
 
-  kdbTargets = lib.intersectLists [
-    "gfx900"
-    "gfx906"
-    "gfx908"
-    "gfx90a"
-    "gfx942"
-    "gfx1030"
-  ] gpuTargets;
-
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-g0AEpuUiwKCu/doiRh9mW34W04m4ynHoarSyl6tR/aE=";
-    fetchLFS = true;
+    hash = "sha256-OwBFzUruHHeJD7n3zLs/NsU5cNEjwkwFgim4m2/1hR0=";
     fetchSubmodules = true;
-    # WORKAROUND: .lfsconfig is incorrectly set to exclude everything upstream
-    leaveDotGit = true;
-    # FIXME: if someone can reduce the level of awful here that would be really nice
-    postFetch = ''
-      export HOME=$(mktemp -d)
-      cd $out
-      git remote add origin $url
-      git fetch origin +refs/tags/rocm-${version}:refs/tags/rocm-${version}
-      git clean -fdx
-      git switch -c rocm-${version} refs/tags/rocm-${version}
-      git config lfs.fetchexclude "none"
-      rm .lfsconfig
-      git lfs install
-      git lfs track "*.kdb.bz2"
-      git lfs fetch --include="src/kernels/**"
-      git lfs pull --include="src/kernels/**"
-      git lfs checkout
-
-      rm -rf .git
-    '';
   };
 
   latex = lib.optionalAttrs buildDocs (
@@ -120,19 +90,27 @@ let
     )
   );
 
-  kernelDatabases = lib.genAttrs kdbTargets (
-    target:
-    runCommand "miopen-${target}.kdb" { preferLocalBuild = true; } ''
-      ${lbzip2}/bin/lbzip2 -ckd ${src}/src/kernels/${target}.kdb.bz2 > $out
-    ''
-  );
+  # Kernel databases moved from Git LFS to DVC (anonymous s3 bucket s3://therock-dvc/rocm-libraries)
+  fetchKdb =
+    name:
+    { url, hash }:
+    runCommand "miopen-${name}.kdb" { preferLocalBuild = true; } ''
+      ${lbzip2}/bin/lbzip2 -ckd ${
+        fetchurl {
+          inherit url hash;
+          name = "${name}.kdb.bz2";
+        }
+      } > $out
+    '';
+
+  kdbs = lib.mapAttrs fetchKdb (import ./kdbs.nix);
 
   linkKDBsTo =
     targetPath:
     lib.concatStringsSep "" (
-      map (target: ''
-        ln -sf ${kernelDatabases.${target}} ${targetPath}/${target}.kdb
-      '') kdbTargets
+      lib.mapAttrsToList (name: kdb: ''
+        ln -sf ${kdb} ${targetPath}/${name}.kdb
+      '') kdbs
     );
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -153,14 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ROCm/MIOpen/commit/3413d2daaeb44b7d6eadcc03033a5954a118491e.patch";
       hash = "sha256-ST4snUcTmmSI1Ogx815KEX9GdMnmubsavDzXCGJkiKs=";
     })
-    # FIXME: We need to rebase or drop this arch compat patch
-    # https://github.com/ROCm/MIOpen/issues/3540 suggests that
-    # arch compat patching doesn't work correctly for gfx1031
-    # (fetchpatch {
-    #   name = "Extend-MIOpen-ISA-compatibility.patch";
-    #   url = "https://github.com/GZGavinZhao/MIOpen/commit/416088b534618bd669a765afce59cfc7197064c1.patch";
-    #   hash = "sha256-OwONCA68y8s2GqtQj+OtotXwUXQ5jM8tpeM92iaD4MU=";
-    # })
+    (fetchpatch {
+      # [miopen] Extend HIP ISA compatibility
+      name = "Extend-MIOpen-ISA-compatibility.patch";
+      url = "https://github.com/GZGavinZhao/rocm-libraries/commit/02f0fedffdc197f146dd45f41e10990a00cde3ee.patch";
+      hash = "sha256-My32iZw75rvB4fyvUJJ2kw2bU9/39awGteFGjzijixw=";
+      relative = "projects/miopen";
+    })
   ];
 
   outputs = [
@@ -308,11 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit frugally-deep nlohmann_json;
     };
   };
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Machine intelligence library for ROCm";

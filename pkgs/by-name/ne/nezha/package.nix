@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   go-swag,
   versionCheckHook,
@@ -46,15 +46,15 @@ let
     in
     (formats.yaml { }).generate "frontend-templates.yaml" (officialThemes ++ communityThemes);
 in
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "nezha";
-  version = "1.14.14";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "nezha";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F6M/bpuupQDDxKrafWlB3vk6iKf1QfJU1x0p3MAzzhM=";
+    hash = "sha256-JzdjIAeWswW/6ZnwfRZAexzl/ehvzKmyiNyzCHBDqgA=";
   };
 
   proxyVendor = true;
@@ -90,11 +90,11 @@ buildGoModule (finalAttrs: {
   nativeBuildInputs = [ go-swag ];
 
   # Generate code for Swagger documentation endpoints (see cmd/dashboard/docs).
-  preBuild = ''
-    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d . -g ./cmd/dashboard/main.go -o ./cmd/dashboard/docs --parseGoList=false
+  postConfigure = ''
+    GOROOT=''${GOROOT-$(go env GOROOT)} swag init --pd -d cmd/dashboard -g main.go -o cmd/dashboard/docs
   '';
 
-  vendorHash = "sha256-9vJzQqXkoENRapcHp/afSCcdOrt8bxrIyJT/cBeas+A=";
+  vendorHash = "sha256-k1Xcmsx1QnkDCmSijtdG+rB34L6d1AbNLuU14zWTDhY=";
 
   ldflags = [
     "-s"

@@ -61,6 +61,11 @@ let
     stripLen = 1;
     extraPrefix = "kernel/";
   };
+
+  kernel_6_19_patch = fetchpatch {
+    url = "https://github.com/CachyOS/CachyOS-PKGBUILDS/raw/d5629d64ac1f9e298c503e407225b528760ffd37/nvidia/nvidia-utils/kernel-6.19.patch";
+    hash = "sha256-YuJjSUXE6jYSuZySYGnWSNG5sfVei7vvxDcHx3K+IN4=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -87,15 +92,16 @@ rec {
     openSha256 = "sha256-hECHfguzwduEfPo5pCDjWE/MjtRDhINVr4b1awFdP44=";
     settingsSha256 = "sha256-NWsqUciPa4f1ZX6f0By3yScz3pqKJV1ei9GvOF8qIEE=";
     persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
+    patchesOpen = [ kernel_6_19_patch ];
   });
 
   beta = selectHighestVersion latest (generic {
-    version = "590.44.01";
-    sha256_64bit = "sha256-VbkVaKwElaazojfxkHnz/nN/5olk13ezkw/EQjhKPms=";
-    sha256_aarch64 = "sha256-gpqz07aFx+lBBOGPMCkbl5X8KBMPwDqsS+knPHpL/5g=";
-    openSha256 = "sha256-ft8FEnBotC9Bl+o4vQA1rWFuRe7gviD/j1B8t0MRL/o=";
-    settingsSha256 = "sha256-wVf1hku1l5OACiBeIePUMeZTWDQ4ueNvIk6BsW/RmF4=";
-    persistencedSha256 = "sha256-nHzD32EN77PG75hH9W8ArjKNY/7KY6kPKSAhxAWcuS4=";
+    version = "595.45.04";
+    sha256_64bit = "sha256-zUllSSRsuio7dSkcbBTuxF+dN12d6jEPE0WgGvVOj14=";
+    sha256_aarch64 = "sha256-jl6lQWsgF6ya22sAhYPpERJ9r+wjnWzbGnINDpUMzsk=";
+    openSha256 = "sha256-uqNfImwTKhK8gncUdP1TPp0D6Gog4MSeIJMZQiJWDoE=";
+    settingsSha256 = "sha256-Y45pryyM+6ZTJyRaRF3LMKaiIWxB5gF5gGEEcQVr9nA=";
+    persistencedSha256 = "sha256-5FoeUaRRMBIPEWGy4Uo0Aho39KXmjzQsuAD9m/XkNpA=";
   });
 
   # Vulkan developer beta driver
@@ -119,7 +125,7 @@ rec {
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
     sha256_64bit = "sha256-8gwy/W7NH3BcbfJ5fAwIQlPs9/9I8sNH+Co5YZiC7OE=";
     persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
-    fabricmanagerSha256 = "sha256-mIFlY4JHPIkTH18mpciU+ueH8Nj6Ts+2g2xv+BfyUEI=";
+    fabricmanagerSha256 = "sha256-bVOnPmAa2ADGC1FCIz0TAyS9lccNPa3K5pJQhgX45pQ=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;

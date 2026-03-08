@@ -9,7 +9,7 @@
   lmdb,
   curl,
   sqlite,
-  wxGTK32,
+  wxwidgets_3_2,
   wrapGAppsHook3,
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     lmdb
     curl
     sqlite
-    wxGTK32
+    wxwidgets_3_2
   ];
 
   meta = {

@@ -5,7 +5,9 @@
   hatchling,
   hatch-vcs,
   html5tagger,
-  python,
+  pytestCheckHook,
+  beautifulsoup4,
+  torch,
 }:
 
 buildPythonPackage rec {
@@ -29,12 +31,11 @@ buildPythonPackage rec {
     html5tagger
   ];
 
-  postInstall = ''
-    cp tracerite/style.css $out/${python.sitePackages}/tracerite
-  '';
-
-  # no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    beautifulsoup4
+    torch
+  ];
 
   pythonImportsCheck = [ "tracerite" ];
 
@@ -42,7 +43,12 @@ buildPythonPackage rec {
     description = "Tracebacks for Humans in Jupyter notebooks";
     homepage = "https://github.com/sanic-org/tracerite";
     changelog = "https://github.com/sanic-org/tracerite/releases/tag/${src.tag}";
-    license = lib.licenses.unlicense;
+    # See https://github.com/sanic-org/tracerite/issues/13
+    license = with lib.licenses; [
+      mit
+      publicDomain
+      unlicense
+    ];
     maintainers = with lib.maintainers; [ p0lyw0lf ];
   };
 }

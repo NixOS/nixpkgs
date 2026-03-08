@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  colored,
   h5py,
   hdf5plugin,
   numpy,
   pytestCheckHook,
+  python-dateutil,
   scipy,
   setuptools-scm,
   setuptools,
@@ -27,9 +29,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    colored
     h5py
     hdf5plugin
     numpy
+    python-dateutil
     scipy
   ];
 

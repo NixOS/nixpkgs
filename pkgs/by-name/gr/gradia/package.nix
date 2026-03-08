@@ -18,18 +18,20 @@
   webp-pixbuf-loader,
   libsoup_3,
   bash,
+  glib-networking,
+  tesseract,
   nix-update-script,
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gradia";
-  version = "1.11.3";
+  version = "1.12.0";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "AlexanderVanhee";
     repo = "Gradia";
-    rev = "472a970e10c3a85f9db938719ebba121321c1d90";
-    hash = "sha256-2PSpFmojAIyDNx5yYrLE3CjO/q5iBArmIRikxCGW1HM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iYqMuqq2AmrdNMa7dkDUGg1+gCG7wL/rDEdWAPfcQnw=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +51,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     libportal-gtk4
     libsoup_3
     bash
+    glib-networking
+    tesseract
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "/app/bin/tesseract" "${lib.getExe tesseract}"
+  '';
 
   dependencies = with python3Packages; [
     pygobject3

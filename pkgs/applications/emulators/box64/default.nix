@@ -21,13 +21,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.3.8";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PVzv1790UhWbqLmw/93+mU3Gw8lQek7NBls4LXks4wQ=";
+    hash = "sha256-ihg7sos2pyyZjXiYMct/gg/ianiu0yagNtXio+A7J3c=";
   };
 
   # Setting cpu doesn't seem to work (or maybe isn't enough / gets overwritten by the wrapper's arch flag?), errors about unsupported instructions for target
@@ -82,20 +82,16 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/box64 -v
 
     echo Checking if Dynarec option was respected
-    $out/bin/box64 -v | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec
+    $out/bin/box64 -v 2>&1 | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec
 
     runHook postInstallCheck
   '';
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
-    tests.hello =
-      runCommand "box64-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
-        # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
-        # tell what problems the emulator has run into.
-        ''
-          BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version | tee $out
-        '';
+    tests.hello = runCommand "box64-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+      BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version 2>&1 | tee $out
+    '';
   };
 
   meta = {

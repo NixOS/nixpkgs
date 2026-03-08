@@ -5,6 +5,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   wrapGAppsHook3,
+  glib,
   glew,
   gtk3,
   libxrandr,
@@ -15,13 +16,13 @@
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "13.1.8";
+  version = "13.2.1";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-FDBUnGmMUuMrFvit/QgaZKF+X8u/vp/9muOpRYXFUW4=";
+    hash = "sha256-Zcl90RrcbRclUo/zUFOKVCe/q44urZhi3m4Lq2WnYSk=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -56,6 +57,8 @@ buildDotnetModule rec {
     libxcursor
     # For file dialogs
     gtk3
+    # For web view (login dialog); loaded via P/Invoke at runtime
+    glib
   ];
 
   postInstall = ''

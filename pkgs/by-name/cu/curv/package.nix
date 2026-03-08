@@ -5,7 +5,7 @@
   cmake,
   git,
   pkg-config,
-  boost,
+  boost188,
   eigen_5,
   glm,
   gcc,
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2026-01-23";
+  version = "0.5-unstable-2026-01-30";
 
   src = fetchFromCodeberg {
     owner = "doug-moen";
     repo = "curv";
-    rev = "17d03b534c69976ed60936beb8b7cc38e8c12c13";
-    hash = "sha256-qQLcRCha01b6ClUSPO2jMBDJsN28EhqzakTLu1medAQ=";
+    rev = "6a157d444e1d50628af6bb36b6c29bd4681451d5";
+    hash = "sha256-y9cfJYhgQrrerU6r7DYHABkw4LQGqcaagVEbSK7AkOg=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost188
     eigen_5
     glm
     libGL

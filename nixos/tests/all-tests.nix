@@ -840,6 +840,7 @@ in
   keymap = handleTest ./keymap.nix { };
   kimai = runTest ./kimai.nix;
   kismet = runTest ./kismet.nix;
+  kiwix-serve = runTest ./kiwix-serve;
   kmonad = runTest ./kmonad.nix;
   kmscon = runTest ./kmscon.nix;
   knot = runTest ./knot.nix;
@@ -853,6 +854,7 @@ in
     inherit runTest;
     inherit (pkgs) lib;
   };
+  labgrid = runTest ./labgrid.nix;
   lact = runTest ./lact.nix;
   ladybird = runTest ./ladybird.nix;
   languagetool = runTest ./languagetool.nix;
@@ -1128,6 +1130,9 @@ in
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
   };
+  nixos-rebuild-target-host-interrupted = runTest {
+    imports = [ ./nixos-rebuild-target-host-interrupted.nix ];
+  };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =
     pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix
@@ -1249,6 +1254,7 @@ in
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
+  perses = runTest ./perses.nix;
   pgadmin4 = runTest ./pgadmin4.nix;
   pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = runTest ./pgbouncer.nix;
@@ -1492,6 +1498,7 @@ in
   sonic-server = runTest ./sonic-server.nix;
   spacecookie = runTest ./spacecookie.nix;
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
+  speedtest-tracker = runTest ./speedtest-tracker.nix;
   spiped = runTest ./spiped.nix;
   spire = runTest ./spire.nix;
   sqlite3-to-mysql = runTest ./sqlite3-to-mysql.nix;
@@ -1639,6 +1646,7 @@ in
   timezone = runTest ./timezone.nix;
   timidity = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./timidity { };
   tinc = handleTest ./tinc { };
+  tinyauth = runTest ./tinyauth.nix;
   tinydns = runTest ./tinydns.nix;
   tinyproxy = runTest ./tinyproxy.nix;
   tinywl = runTest ./tinywl.nix;

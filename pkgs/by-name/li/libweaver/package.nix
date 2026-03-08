@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { harcodeZeroVersion = true; };
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     tests.cmake-config = testers.hasCmakeConfigModules {
       package = finalAttrs.finalPackage;
       moduleNames = [ "libweaver" ];

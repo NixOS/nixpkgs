@@ -90,6 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     CFLAGS =
       lib.optionalString stdenv.hostPlatform.isAarch32 "-std=gnu99"
       + lib.optionalString stdenv.hostPlatform.is32bit " -D_FILE_OFFSET_BITS=64";
+  }
+  // lib.optionalAttrs (!stdenv.hostPlatform.isWindows && stdenv.cc.bintools.isLLVM) {
+    # Needs to be unset when using LLVM or else it tries to include Windows headers on Linux
+    RC = "";
   };
 
   enableParallelBuilding = true;

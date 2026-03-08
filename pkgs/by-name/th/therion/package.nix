@@ -15,7 +15,7 @@
   makeWrapper,
   fmt,
   proj,
-  wxGTK32,
+  wxwidgets_3_2,
   vtk,
   freetype,
   libjpeg,
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     tclPackages.tkimg
     proj
-    wxGTK32
+    wxwidgets_3_2
     vtk
     tk
     freetype

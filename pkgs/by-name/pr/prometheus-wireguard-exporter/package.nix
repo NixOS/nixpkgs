@@ -7,14 +7,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wireguard-exporter";
   version = "3.6.6";
 
   src = fetchFromGitHub {
     owner = "MindFlavor";
     repo = "prometheus_wireguard_exporter";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-2e31ZuGJvpvu7L2Lb+n6bZWpC1JhETzEzSiNaxxsAtA=";
   };
 
@@ -41,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "prometheus_wireguard_exporter";
   };
-}
+})

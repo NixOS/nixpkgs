@@ -356,6 +356,8 @@ let
 
         ctypes-foreign = callPackage ../development/ocaml-modules/ctypes/foreign.nix { };
 
+        cudd = callPackage ../development/ocaml-modules/cudd { };
+
         cudf = callPackage ../development/ocaml-modules/cudf { };
 
         curl = callPackage ../development/ocaml-modules/curl { inherit (pkgs) curl; };
@@ -1371,6 +1373,8 @@ let
 
         mparser-pcre = callPackage ../development/ocaml-modules/mparser/pcre.nix { };
 
+        mparser-re = callPackage ../development/ocaml-modules/mparser/re.nix { };
+
         msgpck = callPackage ../development/ocaml-modules/msgpck { };
 
         mrmime = callPackage ../development/ocaml-modules/mrmime { };
@@ -1666,6 +1670,8 @@ let
         owl-base = callPackage ../development/ocaml-modules/owl-base { };
 
         ### P ###
+
+        pacomb = callPackage ../development/ocaml-modules/pacomb { };
 
         paf = callPackage ../development/ocaml-modules/paf { };
 

@@ -7,7 +7,7 @@
   zip,
   gettext,
   perl,
-  wxGTK32,
+  wxwidgets_3_2,
   libxext,
   libxi,
   libxt,
@@ -41,12 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
     perl
     pkg-config
-    wxGTK32
+    wxwidgets_3_2
     zip
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     curl
     qrencode
     openssl

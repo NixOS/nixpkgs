@@ -5,7 +5,6 @@
   dart-sass,
   electron,
   fetchFromGitHub,
-  fetchurl,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -15,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.13";
+  version = "3.2.14";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dy+xVGh5VNGXI34ecglLFl/h6SXyUdfzyvLCjXYmC/w=";
+    hash = "sha256-iB4qUFiXFT+n9lczA1kvMW/IHRuB0H44fg43v//AzKA=";
   };
 
   missingHashes = ./missing-hashes.json;
@@ -32,12 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # Temporary fix for MiSide cover image https://github.com/ebkr/r2modmanPlus/pull/2024
-    (fetchurl {
-      url = "https://github.com/ebkr/r2modmanPlus/commit/24a2b8386c7fe9a6856cea06967c96aa685d3660.patch";
-      hash = "sha256-6NmwFRtn8+t9XRPHHVLM05idbCSYcBG0VmUOd8fZKs0=";
-    })
-
     # Make it possible to launch Steam games from r2modman.
     ./steam-launch-fix.patch
   ];
@@ -118,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
       huantian
+      hythera
     ];
     inherit (electron.meta) platforms;
   };

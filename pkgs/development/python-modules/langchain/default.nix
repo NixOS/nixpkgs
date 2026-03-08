@@ -30,6 +30,7 @@
   runtimeShell,
 
   # tests
+  blockbuster,
   langchain-tests,
   pytest-asyncio,
   pytest-mock,
@@ -43,19 +44,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain";
-  version = "1.2.7";
+  version = "1.2.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain==${version}";
-    hash = "sha256-vwd8FoXeMLQyFcEViXx/3LqpNieyp4HHevMAv2AxNVY=";
+    tag = "langchain==${finalAttrs.version}";
+    hash = "sha256-Icgka7z1wLuxEjUO5baxMya7KfltYsK8TXtCMg73E1Q=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain_v1";
+  sourceRoot = "${finalAttrs.src.name}/libs/langchain_v1";
 
   postPatch = ''
     substituteInPlace langchain/agents/middleware/shell_tool.py \
@@ -63,14 +64,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
-    "numpy"
-    "tenacity"
-  ];
 
   dependencies = [
     langchain-core
@@ -98,6 +91,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    blockbuster
     langchain-tests
     # langchain-openai -- causes recursion error
     pytest-asyncio
@@ -150,11 +144,11 @@ buildPythonPackage rec {
   meta = {
     description = "Building applications with LLMs through composability";
     homepage = "https://github.com/langchain-ai/langchain";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
       sarahec
     ];
   };
-}
+})

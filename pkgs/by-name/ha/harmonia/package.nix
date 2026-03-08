@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "harmonia";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "harmonia";
     tag = "harmonia-v${finalAttrs.version}";
-    hash = "sha256-Ch7CBPwSKZxCmZwFunNCA8E74TcOWp9MLbhe3/glQ6w=";
+    hash = "sha256-BovRI3p2KXwQ6RF49NqLc0uKP/Jk+yA8E0eqScaIP68=";
   };
 
-  cargoHash = "sha256-7HZoXNL7nf6NUNnh6gzXsZ2o4eeEQL7/KDdIcbh7/jM=";
+  cargoHash = "sha256-X3A+gV32itmt0SqepioT64IGzHfrCdLsQjF6EDwCTbo=";
 
   doCheck = false;
 
@@ -41,8 +41,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Nix binary cache";
     homepage = "https://github.com/nix-community/harmonia";
+    changelog = "https://github.com/nix-community/harmonia/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
-    mainProgram = "harmonia";
+    mainProgram = "harmonia-cache";
   };
 })

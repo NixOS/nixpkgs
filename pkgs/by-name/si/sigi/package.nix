@@ -7,12 +7,12 @@
   sigi,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sigi";
   version = "3.7.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Tsrfan7aejP2oy9x9VoTIq0ba0s0tnx1RTlAB0v6eis=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ booniepepper ];
     mainProgram = "sigi";
   };
-}
+})

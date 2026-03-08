@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpkg";
-  version = "1.22.21";
+  version = "1.23.5";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf .git
       popd
     '';
-    hash = "sha256-LK6nOPewjRyKyHdwJgmLILoZ6sEfJzRtC7pIeWz01lA=";
+    hash = "sha256-Ug82hdskTvWSzMZ8l+EdWhWAmt9OhS2pUpwOYa/9FLw=";
   };
 
   configureFlags = [

@@ -7,21 +7,21 @@
   pulseaudio,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swayrbar";
   version = "0.5.0";
 
   src = fetchFromSourcehut {
     owner = "~tsdh";
     repo = "swayr";
-    tag = "swayrbar-${version}";
+    tag = "swayrbar-${finalAttrs.version}";
     sha256 = "sha256-uT8MYgH9kANQ0t+7jqjOOvQIZf5ImdQruZLLlCejwcc=";
   };
 
   cargoHash = "sha256-Aj4U2xyfNhf3HDSEd1SQ5TyO2MXn2/hrfnG0ZayzMtU=";
 
   # don't build swayr
-  buildAndTestSubdir = pname;
+  buildAndTestSubdir = finalAttrs.pname;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ ilkecan ];
     mainProgram = "swayrbar";
   };
-}
+})

@@ -9,17 +9,18 @@
   writableTmpDirAsHomeHook,
   gitMinimal,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zeroclaw";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "zeroclaw-labs";
     repo = "zeroclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D4/2h7TlOwAU4tl1xcdULRfO21KmP+zLlqQ8DzLqnjQ=";
+    hash = "sha256-6EVUk+wp3Rjhk/q2htXq41TMD+rGFO0nJbVWNbLWj5U=";
   };
 
   postPatch =
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ln -s ${zeroclaw-web} web/dist
     '';
 
-  cargoHash = "sha256-sbC+fdMzjrx0dF5zHBHzMgZeIPQth1oXNqilooVZF8s=";
+  cargoHash = "sha256-pJbWbqbvO2CF0jKhfD8VK9z+Gn9vY1UR4OV+XMt1n80=";
 
   nativeBuildInputs = [
     pkg-config
@@ -55,6 +56,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, small, and fully autonomous AI assistant infrastructure — deploy anywhere, swap anything";

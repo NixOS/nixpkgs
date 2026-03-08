@@ -554,7 +554,7 @@ rec {
     # Type
 
     ```
-    hasInferior :: string -> string -> bool
+    hasInferior :: String -> String -> Bool
     ```
 
     # Examples
@@ -586,7 +586,7 @@ rec {
     # Type
 
     ```
-    canExecute :: string -> string -> bool
+    canExecute :: String -> String -> Bool
     ```
 
     # Examples

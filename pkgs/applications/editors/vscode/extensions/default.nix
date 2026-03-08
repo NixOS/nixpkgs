@@ -1143,8 +1143,8 @@ let
         mktplcRef = {
           publisher = "DanielGavin";
           name = "ols";
-          version = "0.1.45";
-          hash = "sha256-YfaP9QCLW4vZKfMyE/MEqEyiA9M5xlnS5Uxph+RT89s=";
+          version = "0.1.46";
+          hash = "sha256-X2Tp0rsPp0UoKW4Yz7Ht/7b1zO0bL92u6CtyKRy+hDY=";
         };
         meta = {
           description = "Visual Studio Code extension for Odin language";
@@ -1188,8 +1188,8 @@ let
         mktplcRef = {
           name = "dart-code";
           publisher = "dart-code";
-          version = "3.128.0";
-          hash = "sha256-wOK+oQf/GovH9+0rHt67jTtiMPGdmaBxazr1JUnDTD0=";
+          version = "3.130.1";
+          hash = "sha256-qBCE1ior+xNKSAVWGbPGKK6pul22DUZ/movaHx0s/8c=";
         };
 
         meta.license = lib.licenses.mit;
@@ -1330,8 +1330,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.27.15";
-          hash = "sha256-LFZR0AxMC0TKUOKU/Ftz1AkLRazqUptkZQ11NIvv7Hs=";
+          version = "2.28.2";
+          hash = "sha256-zRptDItJuLcHTkKUarpsXlRBa4R84cupKXKtBt5Stmw=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.126.0";
-          hash = "sha256-ii29H3IKuJVIB394aup9G82xQ1J7YJzhs8mQH6+rbgI=";
+          version = "0.128.0";
+          hash = "sha256-ujDnHmhMorewvIH+zJXSnUpnMfQNE5XqHA1lnsq22Qk=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2310,8 +2310,8 @@ let
         mktplcRef = {
           publisher = "intellsmi";
           name = "comment-translate";
-          version = "3.0.0";
-          hash = "sha256-AtM56NkivTK4cGyKBsaZTHYvDwiJb4CrEuiJiw5hTcI=";
+          version = "3.1.0";
+          hash = "sha256-hn3G2arNr3LWMOeMLkRdR/GTWobeczaIzGI59x9/oK8=";
         };
         meta = {
           description = "Visual Studio Code extension to translate the comments for computer language";
@@ -3289,8 +3289,8 @@ let
         mktplcRef = {
           publisher = "ms-vscode";
           name = "cmake-tools";
-          version = "1.21.36";
-          hash = "sha256-IqgYnesIz46WmJ7kR8LYnr2kkD33oiupi7CrcV6rGRg=";
+          version = "1.22.28";
+          hash = "sha256-ZVtVZ53wvFBchXd9wRCxm1NQkkoTn9Yn4vcbY46GQmY=";
         };
         meta.license = lib.licenses.mit;
       };
@@ -3760,6 +3760,8 @@ let
 
       prince781.vala = callPackage ./prince781.vala { };
 
+      pranaygp.vscode-css-peek = callPackage ./pranaygp.vscode-css-peek { };
+
       prisma.prisma = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prisma";
@@ -3863,8 +3865,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "vscode-yaml";
-          version = "1.20.0";
-          hash = "sha256-JETNAqekAesVKHkOYHMVLTzD2lx8Td0IFAoDTSEWigg=";
+          version = "1.21.0";
+          hash = "sha256-55PBCTV6NJL+JVH+19vIoA5GKMDD8uB7z9OCOb+GjZM=";
         };
         meta = {
           description = "YAML Language Support by Red Hat, with built-in Kubernetes syntax support";
@@ -3913,8 +3915,8 @@ let
         mktplcRef = {
           name = "liveserver";
           publisher = "ritwickdey";
-          version = "5.7.9";
-          hash = "sha256-w0CYSEOdltwMFzm5ZhOxSrxqQ1y4+gLfB8L+EFFgzDc=";
+          version = "5.7.10";
+          hash = "sha256-D474GdTCAH8b+zuO+1M+cnluKfBv7mAMdtH7F777W5U=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -4322,8 +4324,8 @@ let
         mktplcRef = {
           publisher = "sonarsource";
           name = "sonarlint-vscode";
-          version = "4.43.0";
-          hash = "sha256-cpd8+fbp57l+XYBuDnz95lmKzJ8IUHu937KWHsLXrPk=";
+          version = "4.44.0";
+          hash = "sha256-6P29hCcOpEWNXSArnMPiWVwbbyhzlS1LCh3uSDWEfJo=";
         };
         meta.license = lib.licenses.lgpl3Only;
       };
@@ -4770,8 +4772,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.107.2";
-          hash = "sha256-Id8pKACGLtRXas1Tb2dZrw+ZrZvAQLbWcI3Q1gYpXos=";
+          version = "0.107.5";
+          hash = "sha256-8rsj1a/Tj4QpvGN83F3aMHNQVC/9TE61AFS5KhiIpy8=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";

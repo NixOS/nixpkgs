@@ -10,7 +10,7 @@
   python3Packages,
   autoPatchelfHook,
   python3,
-  openssl_1_1,
+  openssl,
 }:
 
 {
@@ -73,6 +73,7 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/application_insights-${version}-py2.py3-none-any.whl";
     hash = "sha256-4akS+zbaKxFrs0x0uKP/xX28WyK5KLduOkgZaBYeANM=";
     description = "Support for managing Application Insights components and querying metrics, events, and logs from such components";
+    pythonRelaxDeps = [ "isodate" ];
     propagatedBuildInputs = with python3Packages; [ isodate ];
     meta.maintainers = with lib.maintainers; [ andreasvoss ];
   };
@@ -173,16 +174,18 @@
 
   confcom = mkAzExtension rec {
     pname = "confcom";
-    version = "1.2.6";
+    version = "1.8.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
-    hash = "sha256-kyJ4AkPcpP/10nf4whJiuraC7hn0E6iBkhRIn43E9J0=";
+    hash = "sha256-rKEECrGR4VIKTgPzInGhFrbrXDtYqayAzYWLKclE1tg=";
     description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
     nativeBuildInputs = [ autoPatchelfHook ];
-    buildInputs = [ openssl_1_1 ];
+    buildInputs = [ openssl ];
+    pythonRelaxDeps = [ "tqdm" ];
     propagatedBuildInputs = with python3Packages; [
-      pyyaml
       deepdiff
       docker
+      pydantic
+      pyyaml
       tqdm
     ];
     postInstall = ''
@@ -314,6 +317,7 @@
       oras
       oschmod
     ];
+    pythonRelaxDeps = true;
     meta = {
       maintainers = with lib.maintainers; [ gordon-bp ];
       changelog = "https://github.com/Azure/azure-cli-extensions/blob/ssh-${version}/src/ssh/HISTORY.md";

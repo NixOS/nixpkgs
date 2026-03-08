@@ -48,7 +48,7 @@ let
       IFS=:
       for i in $XDG_CURRENT_DESKTOP; do
         case $i in
-          KDE|GNOME|Pantheon|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
+          KDE|GNOME|Pantheon|Hyprland|X-NIXOS-SYSTEMD-AWARE) echo "1"; exit; ;;
           *) ;;
         esac
       done

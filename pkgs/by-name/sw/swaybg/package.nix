@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitHub,
   meson,
   ninja,
@@ -53,8 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dman-pages=enabled"
   ];
 
+  # Fortify causes header errors in ssp
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isFreeBSD [ "fortify" ];
+
   # add support for webp
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
@@ -79,6 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ryan4yin
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

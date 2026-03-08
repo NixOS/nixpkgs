@@ -107,7 +107,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.224.11";
+  version = "0.226.5";
 
   outputs = [
     "out"
@@ -120,7 +120,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VOPAypHlcr7nY3/wk4ec/Ltv+DUf/v4rHDa5oCsg0aE=";
+    hash = "sha256-ZfYwlHTWirUb2RjEIQyonIHMneCi7ZGD2kPYOfe5HiI=";
   };
 
   postPatch = ''
@@ -140,7 +140,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-V61uZEl6LG/xckOajcWugf/K+mJR8Bn9WjqxvvwBbfw=";
+  cargoHash = "sha256-kdGHSNfvB/GUQ/7iqzXcCF4sbyaMiLYq+/zogg9N/aU=";
 
   nativeBuildInputs = [
     cmake
@@ -192,11 +192,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
-  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui/runtime_shaders" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isDarwin [ "gpui_platform/runtime_shaders" ];
 
   # Some crates define extra types or enum values in test configuration which then lead
   # to type checking errors in other crates unless this feature is enabled.
-  # gpui/runtime_shaders is required on darwin for the same reason as buildFeatures above:
+  # gpui_platform/runtime_shaders is required on darwin for the same reason as buildFeatures above:
   # without it, build.rs invokes the proprietary Metal shader compiler.
   checkFeatures = [
     "visual-tests"

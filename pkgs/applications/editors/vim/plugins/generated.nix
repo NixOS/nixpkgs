@@ -4666,6 +4666,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  diffs-nvim = buildVimPlugin {
+    pname = "diffs.nvim";
+    version = "0.3.0-unstable-2026-03-05";
+    src = fetchFromGitHub {
+      owner = "barrettruth";
+      repo = "diffs.nvim";
+      rev = "7a3c4ea01e2ad53c6b54136bc19b7f0ad977da7d";
+      hash = "sha256-rsgboDQ7s9pIc+pDOJgwTA6c950CDY7gLsyn5oycsGI=";
+    };
+    meta.homepage = "https://github.com/barrettruth/diffs.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   diffview-nvim = buildVimPlugin {
     pname = "diffview.nvim";
     version = "0-unstable-2024-06-13";
@@ -14139,6 +14152,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  screensaver-nvim = buildVimPlugin {
+    pname = "screensaver.nvim";
+    version = "0-unstable-2026-03-02";
+    src = fetchFromGitHub {
+      owner = "Root-lee";
+      repo = "screensaver.nvim";
+      rev = "38cf0b8a96b5f4a5e765ce32d43a416441462179";
+      hash = "sha256-4eiGIhy/J7wZm++wMx4zAKp5qeDQCApwPSVm8P5w5O0=";
+    };
+    meta.homepage = "https://github.com/Root-lee/screensaver.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   scretch-nvim = buildVimPlugin {
     pname = "scretch.nvim";
     version = "1.2.3-unstable-2025-09-11";
@@ -16513,6 +16539,19 @@ final: prev: {
       hash = "sha256-JHSLP9RNpxFqRSIW+jONDoCW464SXpF84JiILf+bt6Q=";
     };
     meta.homepage = "https://github.com/SirVer/ultisnips/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  unclash-nvim = buildVimPlugin {
+    pname = "unclash.nvim";
+    version = "0-unstable-2026-01-28";
+    src = fetchFromGitHub {
+      owner = "madmaxieee";
+      repo = "unclash.nvim";
+      rev = "04f6aba5e2eea8b665cba88f21082e33a7cb6e59";
+      hash = "sha256-Rd+U0WtVCV2D0rsL8Sm5B4NRK2t4W5M7n/CH1I0w6s4=";
+    };
+    meta.homepage = "https://github.com/madmaxieee/unclash.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -19244,6 +19283,19 @@ final: prev: {
       hash = "sha256-TDD99syRay/MVCF4BfX1BDeX1RFlEb61ASf15lgRT2I=";
     };
     meta.homepage = "https://github.com/kristijanhusak/vim-hybrid-material/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  vim-hypr-nav = buildVimPlugin {
+    pname = "vim-hypr-nav";
+    version = "0-unstable-2023-11-29";
+    src = fetchFromGitHub {
+      owner = "nuchs";
+      repo = "vim-hypr-nav";
+      rev = "6ab4865a7eb5aad35305298815a4563c9d48556a";
+      hash = "sha256-V4a9D3HpT1SZUrUc1XrC6SsrtKmIcFxdSVmq0Gwt/Ik=";
+    };
+    meta.homepage = "https://github.com/nuchs/vim-hypr-nav/";
     meta.hydraPlatforms = [ ];
   };
 
