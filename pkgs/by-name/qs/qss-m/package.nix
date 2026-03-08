@@ -80,8 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     "USE_SDL2=1"
   ];
 
-  makefile = "Makefile";
-
   preInstall = ''
     mkdir -p "$out/bin"
     substituteInPlace Makefile --replace "/usr/local/games/quake" "$out/bin/qss-m"
