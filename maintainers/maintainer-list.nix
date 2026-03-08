@@ -93,6 +93,12 @@
     github = "0x120581f";
     githubId = 130835755;
   };
+  _0x2B = {
+    email = "nhagan345@gmail.com"
+    name = "0x2B";
+    github = "BeastieNate5"
+    githubId = 49249957;
+  };
   _0x3f = {
     name = "0x3f";
     github = "0x3fiona";
