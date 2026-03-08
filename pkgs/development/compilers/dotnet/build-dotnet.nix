@@ -46,6 +46,7 @@ assert
   callPackage,
   systemToDotnetRid,
   xmlstarlet,
+  _experimental-update-script-combinators,
 }:
 
 let
@@ -210,9 +211,15 @@ mkWrapper type (
           let
             majorVersion = lib.concatStringsSep "." (lib.take 2 (lib.splitVersion version));
           in
-          [
-            ./update.sh
-            majorVersion
+          _experimental-update-script-combinators.sequence [
+            [
+              ./update.sh
+              majorVersion
+            ]
+            [
+              ./update-workloads.sh
+              majorVersion
+            ]
           ];
       }
     );
