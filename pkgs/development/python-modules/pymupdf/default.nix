@@ -42,7 +42,7 @@ let
   mupdf-cxx-lib = toPythonModule (lib.getLib mupdf-cxx);
   mupdf-cxx-dev = lib.getDev mupdf-cxx;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
   version = "1.27.1";
   pyproject = true;
@@ -50,7 +50,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ebvdkvp0y7seG0sciMMnztflIBVRHh/Cowpw/lSLYLE=";
   };
 
@@ -168,9 +168,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
-    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${src.tag}";
+    changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ sarahec ];
     platforms = lib.platforms.unix;
   };
-}
+})
