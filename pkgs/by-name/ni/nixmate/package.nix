@@ -28,7 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/daskladas/nixmate";
     changelog = "https://github.com/daskladas/nixmate/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      daskladas
+    ];
     mainProgram = "nixmate";
   };
 })
