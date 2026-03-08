@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "pyroscope";
-  version = "pyroscope-1.18.1";
+  version = "weekly-f160-bbab85534";
 
   src = fetchFromGitHub {
     owner = "grafana";
