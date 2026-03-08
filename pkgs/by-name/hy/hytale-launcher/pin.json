@@ -1,7 +1,7 @@
 {
-  "version": "2026.03.03-a4f6003",
+  "version": "2026.03.05-dea483c",
   "hashes": {
-    "x86_64-linux": "sha256-AiNtOekw3LxhIX4WLlmO3lTvC0RWkueQ1+aWhugX3Aw=",
-    "aarch64-darwin": "sha256-nhSraSCxuXyI29+ge9biwoUZiiWn6eHMBnQVIwkXWXU="
+    "x86_64-linux": "sha256-LViFlYnelktFUzKhz4qHQeG1zPV/Ud3ZHIeWbCzjQTA=",
+    "aarch64-darwin": "sha256-/YDYZr2PwnkUcYsLK6djNWa2F1D3luph3zxFE/uTGoY="
   }
 }
