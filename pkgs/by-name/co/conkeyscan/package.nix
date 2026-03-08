@@ -4,18 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
 }:
-
-let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      pyrate-limiter = super.pyrate-limiter_2;
-    };
-  };
-
-in
-
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "conkeyscan";
   version = "1.1.0";
   pyproject = true;
@@ -41,9 +30,9 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "{{VERSION_PLACEHOLDER}}" "${version}"
   '';
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3.pkgs; [
     atlassian-python-api
     beautifulsoup4
     clize
