@@ -8253,6 +8253,8 @@ self: super: with self; {
 
   kicadcliwrapper = callPackage ../development/python-modules/kicadcliwrapper { };
 
+  kicost-digikey-api-v4 = callPackage ../development/python-modules/kicost-digikey-api-v4 { };
+
   kinparse = callPackage ../development/python-modules/kinparse { };
 
   kiss-headers = callPackage ../development/python-modules/kiss-headers { };
