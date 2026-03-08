@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
     substituteInPlace \
       $dev/share/cmake/Caffe2/Caffe2Targets-release.cmake \
-      --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
+      --replace \''${_IMPORT_PREFIX}/lib "$out/lib"
   '';
 
   postFixup =

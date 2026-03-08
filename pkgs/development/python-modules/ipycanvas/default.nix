@@ -26,7 +26,7 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail '"jupyterlab>=3,<5",' "" \
+      --replace-fail '"jupyterlab>=3,<5",' ""
   '';
 
   build-system = [

@@ -21,7 +21,7 @@ buildHomeAssistantComponent rec {
 
   postPatch = ''
     substituteInPlace custom_components/systemair/manifest.json \
-      --replace-fail "pymodbus==" "pymodbus>=" \
+      --replace-fail "pymodbus==" "pymodbus>="
   '';
 
   dependencies = [

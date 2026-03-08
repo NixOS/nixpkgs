@@ -94,7 +94,7 @@ in
           ${lib.optionalString cfg.appendOnly "--append-only"} \
           ${lib.optionalString cfg.privateRepos "--private-repos"} \
           ${lib.optionalString cfg.prometheus "--prometheus"} \
-          ${lib.escapeShellArgs cfg.extraFlags} \
+          ${lib.escapeShellArgs cfg.extraFlags}
         '';
         Type = "simple";
         User = "restic";
