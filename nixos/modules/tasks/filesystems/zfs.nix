@@ -696,6 +696,10 @@ in
             This error can be triggered by using an absolute path, such as `"/dev/disk/..."`.
           '';
         }
+        {
+          assertion = cfgZED.enableMail -> config.services.mail.sendmailSetuidWrapper.enable;
+          message = "services.zfs.zed.enableMail requires services.mail.sendmailSetuidWrapper.enable to be enabled as otherwise no mail can be sent.";
+        }
       ];
 
       boot = {
