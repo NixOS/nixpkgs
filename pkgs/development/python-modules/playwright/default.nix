@@ -7,6 +7,7 @@
   fetchFromGitHub,
   pyee,
   python,
+  pythonOlder,
   setuptools,
   setuptools-scm,
   playwright-driver,
@@ -20,14 +21,15 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/web/playwright/update.sh to update
-  version = "1.57.0";
+  version = "1.58.0";
   pyproject = true;
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-python";
     tag = "v${version}";
-    hash = "sha256-LXTMVC6ytjo7l0QDkNPxtoMTYjmYMjCVqHz61BgAn6A=";
+    hash = "sha256-gK19pjB8TDy/kK+fb4pjwlGZlUyY26p+CNxunvIMrrY=";
   };
 
   patches = [
