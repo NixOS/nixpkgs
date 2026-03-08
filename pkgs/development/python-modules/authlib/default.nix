@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
@@ -20,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.6.6";
+  version = "1.6.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     tag = "v${version}";
-    hash = "sha256-ma1YGsp9AhQowGhyk445le7hoZOEnWtHKo9nD9db950=";
+    hash = "sha256-Socbm6jZW5sywU7TRiSELnkWSDZ/94g3+XLRTO1ln48=";
   };
 
   build-system = [ setuptools ];
