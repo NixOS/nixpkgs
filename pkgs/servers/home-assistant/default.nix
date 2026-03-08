@@ -223,6 +223,20 @@ let
         doCheck = false;
       });
 
+      # Pinned because systemmonitor in Home Assistant 2026.2.3 still requires
+      # psutil 7.1.2 and breaks with psutil 7.2.1 (missing sbattery in
+      # psutil._common).
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "7.1.2";
+        src = fetchFromGitHub {
+          owner = "giampaolo";
+          repo = "psutil";
+          tag = "release-${version}";
+          hash = "sha256-LyGnLrq+SzCQmz8/P5DOugoNEyuH0IC7uIp8UAPwH0U=";
+        };
+        doCheck = false;
+      });
+
       wolf-comm = super.wolf-comm.overridePythonAttrs rec {
         version = "0.0.23";
         src = fetchFromGitHub {
