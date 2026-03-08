@@ -56,6 +56,6 @@ appimageTools.wrapType2 {
       ZachDavies
     ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "LycheeSlicer";
+    mainProgram = "lycheeslicer";
   };
 }
