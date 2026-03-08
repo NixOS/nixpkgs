@@ -15,6 +15,8 @@ For new packages please briefly describe the package or provide a link to its ho
   - [ ] aarch64-linux
   - [ ] x86_64-darwin
   - [ ] aarch64-darwin
+  - [ ] x86_64-freebsd
+  - [ ] aarch64-freebsd
 - Tested, as applicable:
   - [ ] [NixOS tests] in [nixos/tests].
   - [ ] [Package tests] at `passthru.tests`.
