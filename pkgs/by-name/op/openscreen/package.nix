@@ -17,16 +17,16 @@ buildNpmPackage (finalAttrs: {
   inherit nodejs;
 
   pname = "openscreen";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "siddharthvaddem";
     repo = "openscreen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NW6GrmWgdLgobYGAoxlSF/ne17A0IzAQBi4LJk2awpw=";
+    hash = "sha256-9vtX6rEwRADbi8bSXOi995UvO6wI3z8ai580nhsXJEM=";
   };
 
-  npmDepsHash = "sha256-IaYSejp4sXEN0KlK7+bmzufGs8D60ZjmFWjO2zMkFrM=";
+  npmDepsHash = "sha256-wYKw8fNuRVJOzR+KMa3DVN3bcT3R5GhKe/xWEH+nt0U=";
 
   npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent running `node-gyp build`
 
@@ -36,12 +36,6 @@ buildNpmPackage (finalAttrs: {
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-
-  patches = [
-    # Avoid downloading `phantomjs` within the build sandbox
-    # by completely removing `electron-icon-builder`
-    ./electron-avoid-phantomjs.patch
-  ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,18 +47,21 @@ buildNpmPackage (finalAttrs: {
       # electronDist needs to be modifiable on Darwin
       cp -r ${electron.dist} electron-dist
       chmod -R u+w electron-dist
+
       # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
+      # https://www.electron.build/code-signing-mac.html#how-to-disable-code-signing-during-the-build-process-on-macos
+      npm exec electron-builder -- \
+        --dir \
+        -c.electronDist=electron-dist \
+        -c.electronVersion=${electron.version} \
+        -c.mac.identity=null
     ''}
     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      ln -s ${electron.dist} electron-dist
+      npm exec electron-builder -- \
+        --dir \
+        -c.electronDist=${electron.dist} \
+        -c.electronVersion=${electron.version}
     ''}
-
-    npm exec electron-builder -- \
-      --dir \
-      -c.electronDist=electron-dist \
-      -c.electronVersion=${electron.version}
 
     runHook postBuild
   '';
