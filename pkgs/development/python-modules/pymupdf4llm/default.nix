@@ -4,25 +4,29 @@
   fetchFromGitHub,
   setuptools,
   pymupdf,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "pymupdf4llm";
-  version = "0.2.9";
+  version = "0.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "RAG";
-    tag = version;
-    hash = "sha256-iuffv49voZLiuabwhag+YC3j3Oa2IAevZtcJtMVzX/4=";
+    tag = "v${version}";
+    hash = "sha256-SgJ47jkE6GcSXVsOMOx8Hm+Ce6pCAjLEhdxGeJEu6DQ=";
   };
 
   sourceRoot = "${src.name}/pymupdf4llm";
 
   build-system = [ setuptools ];
 
-  dependencies = [ pymupdf ];
+  dependencies = [
+    pymupdf
+    tabulate
+  ];
 
   checkPhase = ''
     runHook preCheck
