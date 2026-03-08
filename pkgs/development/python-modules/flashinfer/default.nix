@@ -9,9 +9,9 @@
   config,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
+  apache-tvm-ffi,
   setuptools,
 
   # nativeBuildInputs
@@ -29,29 +29,23 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flashinfer";
-  version = "0.6.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "flashinfer-ai";
     repo = "flashinfer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-NRjas11VvvCY6MZiZaYtxG5MXEaFqfbhJxflUT/uraE=";
+    hash = "sha256-Hq3oTeEJHRvXwThI8vc06E3Ot/FnPP0sZUfze3ISa2o=";
   };
 
-  patches = [
-    # TODO: remove patch with update to v0.5.2+
-    # Switch pynvml to nvidia-ml-py
-    (fetchpatch2 {
-      url = "https://github.com/flashinfer-ai/flashinfer/commit/a42f99255d68d1a54b689bd4985339c6b44963a6.patch?full_index=1";
-      hash = "sha256-3XJFcdQeZ/c5fwiQvd95z4p9BzTn8pjle21WzeBxUgk=";
-    })
+  build-system = [
+    apache-tvm-ffi
+    setuptools
   ];
-
-  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     cmake
@@ -91,6 +85,7 @@ buildPythonPackage rec {
 
   pythonRemoveDeps = [
     "nvidia-cudnn-frontend"
+    "nvidia-cutlass-dsl"
   ];
   dependencies = [
     click
@@ -119,4 +114,4 @@ buildPythonPackage rec {
       daniel-fahey
     ];
   };
-}
+})

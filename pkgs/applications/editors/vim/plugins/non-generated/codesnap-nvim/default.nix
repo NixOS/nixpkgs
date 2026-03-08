@@ -10,12 +10,12 @@
   nix-update-script,
 }:
 let
-  version = "2.0.0";
+  version = "2.0.1";
   src = fetchFromGitHub {
     owner = "mistricky";
     repo = "codesnap.nvim";
     tag = "v${version}";
-    hash = "sha256-gpsNug6lSc/AifW8DeJy9R3LYuiTStuYZV02MiIZhq8=";
+    hash = "sha256-pYBB647UX3okpfUlZ3MhrlEwILXv/V0r42j7xp4aDO0=";
   };
   codesnap-lib = rustPlatform.buildRustPackage {
     pname = "codesnap-lib";

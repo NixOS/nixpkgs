@@ -1643,6 +1643,7 @@ in
   timezone = runTest ./timezone.nix;
   timidity = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./timidity { };
   tinc = handleTest ./tinc { };
+  tinyauth = runTest ./tinyauth.nix;
   tinydns = runTest ./tinydns.nix;
   tinyproxy = runTest ./tinyproxy.nix;
   tinywl = runTest ./tinywl.nix;
