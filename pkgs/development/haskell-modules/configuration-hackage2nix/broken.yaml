@@ -20,7 +20,6 @@ broken-packages:
   - AC-MiniTest # failure in job https://hydra.nixos.org/build/233216015 at 2023-09-02
   - AC-Terminal # failure in job https://hydra.nixos.org/build/233192747 at 2023-09-02
   - AC-VanillaArray # failure in job https://hydra.nixos.org/build/233216801 at 2023-09-02
-  - accelerate # failure in job https://hydra.nixos.org/build/307516269 at 2025-09-19
   - accelerate-fftw # failure in job https://hydra.nixos.org/build/296049868 at 2025-05-02
   - accelerate-random # failure in job https://hydra.nixos.org/build/296049869 at 2025-05-02
   - accelerate-utility # failure in job https://hydra.nixos.org/build/296049871 at 2025-05-02
