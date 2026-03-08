@@ -26,21 +26,22 @@ let
       interval = "10s";
       threshold = 3;
     };
-  };
-
-  registryConfig.redis = lib.mkIf cfg.enableRedisCache {
-    addr = "${cfg.redisUrl}";
-    password = "${cfg.redisPassword}";
-    db = 0;
-    dialtimeout = "10ms";
-    readtimeout = "10ms";
-    writetimeout = "10ms";
-    pool = {
-      maxidle = 16;
-      maxactive = 64;
-      idletimeout = "300s";
+  }
+  // (lib.optionalAttrs cfg.enableRedisCache {
+    redis = {
+      addr = "${cfg.redisUrl}";
+      password = "${cfg.redisPassword}";
+      db = 0;
+      dialtimeout = "10ms";
+      readtimeout = "10ms";
+      writetimeout = "10ms";
+      pool = {
+        maxidle = 16;
+        maxactive = 64;
+        idletimeout = "300s";
+      };
     };
-  };
+  });
 
   configFile = cfg.configFile;
 in
