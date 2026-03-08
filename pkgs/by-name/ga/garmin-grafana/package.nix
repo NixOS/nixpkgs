@@ -5,7 +5,7 @@
 }:
 python3Packages.buildPythonPackage rec {
   pname = "garmin-grafana";
-  version = "0.3.0";
+  version = "0.4.0";
 
   pyproject = true;
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
     owner = "arpanghosh8453";
     repo = "garmin-grafana";
     tag = "v${version}";
-    hash = "sha256-nuVT6LK9KIs/FwUbdfI4xpKru4jfAyj1/vmk7ji43zk=";
+    hash = "sha256-AgozxXKfzW8/iYQkMKbJ5FJl6mht/NANA7Wr2F6ghj4=";
   };
 
   build-system = with python3Packages; [
