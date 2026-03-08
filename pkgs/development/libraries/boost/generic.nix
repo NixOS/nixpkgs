@@ -258,7 +258,10 @@ stdenv.mkDerivation {
     ]
     ++ lib.optional (
       stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "1.87" && lib.versionOlder version "1.88"
-    ) ./Fix-cygwin-build-187.patch;
+    ) ./Fix-cygwin-build-187.patch
+    ++ lib.optional (
+      stdenv.hostPlatform.isCygwin && lib.versionAtLeast version "1.89" && lib.versionOlder version "1.90"
+    ) ./Fix-cygwin-build-189.patch;
 
   meta = {
     homepage = "http://boost.org/";
