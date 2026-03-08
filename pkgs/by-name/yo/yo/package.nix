@@ -31,6 +31,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/yeoman/yo";
     license = lib.licenses.bsd2;
     mainProgram = "yo";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ chillcicada ];
   };
 })
