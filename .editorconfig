@@ -79,7 +79,7 @@ indent_size = unset
 trim_trailing_whitespace = true
 
 # binaries
-[*.nib]
+[*.{nib,torrent}]
 end_of_line = unset
 insert_final_newline = unset
 trim_trailing_whitespace = unset
