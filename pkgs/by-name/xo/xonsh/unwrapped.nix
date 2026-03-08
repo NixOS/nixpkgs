@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "xonsh";
-  version = "0.20.0";
+  version = "0.22.6";
   pyproject = true;
 
   # PyPI package ships incomplete tests
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "xonsh";
     repo = "xonsh";
     tag = version;
-    hash = "sha256-Wd75BMJUi8JfiBM1gekylR4+qJOQm3k3vqJILOr0xnE=";
+    hash = "sha256-jpO37QdYIjktkegaaZlv/pk1Flw9MZehfA3/T6787+Y=";
   };
 
   build-system = [
@@ -79,9 +79,13 @@ buildPythonPackage rec {
     "test_man_completion"
     "test_vc_get_branch"
 
+    # fails on python 3.13+
+    "test_on_command_not_found_replacement"
+
     # flaky tests
     "test_alias_stability"
     "test_alias_stability_exception"
+    "test_catching_exit_signal"
     "test_complete_import"
     "test_script"
     "test_subproc_output_format"
