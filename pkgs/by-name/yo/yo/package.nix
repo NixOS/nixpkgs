@@ -2,6 +2,8 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -18,6 +20,11 @@ buildNpmPackage (finalAttrs: {
   npmDepsHash = "sha256-bBGGZ5O4Nkw+nMZ5VAz7wjm8tIrCCvtv6TaXTwUCLPk=";
 
   dontNpmBuild = true;
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI tool for running Yeoman generators";
