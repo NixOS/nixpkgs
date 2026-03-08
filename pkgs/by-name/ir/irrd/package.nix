@@ -65,14 +65,14 @@ in
 
 py.pkgs.buildPythonPackage (finalAttrs: {
   pname = "irrd";
-  version = "4.5.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6z94Ha2QQ0LE4o3hzsNl4y/nPv849cSP8on3UeegE4c=";
+    hash = "sha256-98DXooabwJtjI+m/HNMGBkZKT843bEbTaXJgflVdx/A=";
   };
 
   pythonRelaxDeps = true;
@@ -141,6 +141,7 @@ py.pkgs.buildPythonPackage (finalAttrs: {
       jinja2
       joserfc
       time-machine
+      service-identity
     ]
     ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
