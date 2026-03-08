@@ -6977,7 +6977,6 @@ broken-packages:
   - utf8-conversions # failure in job https://hydra.nixos.org/build/233245725 at 2023-09-02
   - utf8-prelude # failure in job https://hydra.nixos.org/build/233240100 at 2023-09-02
   - utf8-validator # failure in job https://hydra.nixos.org/build/233211712 at 2023-09-02
-  - util # failure in job https://hydra.nixos.org/build/233234741 at 2023-09-02
   - util-logict # failure in job https://hydra.nixos.org/build/233215338 at 2023-09-02
   - util-plus # failure in job https://hydra.nixos.org/build/233231591 at 2023-09-02
   - util-primitive # failure in job https://hydra.nixos.org/build/233258861 at 2023-09-02
