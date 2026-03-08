@@ -1,0 +1,49 @@
+{
+  "name": "yarn2nix",
+  "version": "1.0.0",
+  "description": "Convert packages.json and yarn.lock into a Nix expression that downloads all the dependencies",
+  "main": "index.js",
+  "repository": ".",
+  "author": "Maarten Hoogendoorn <maarten@moretea.nl>",
+  "license": "MIT",
+  "scripts": {
+    "yarn2nix": "bin/yarn2nix.js",
+    "format": "prettier-eslint --write './**/*.{js,jsx,json}'",
+    "lint": "eslint ."
+  },
+  "bin": {
+    "yarn2nix": "bin/yarn2nix.js"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "dependencies": {
+    "@yarnpkg/lockfile": "^1.1.0",
+    "deep-equal": "^2.2.3",
+    "docopt": "^0.6.2",
+    "ramda": "^0.32",
+    "ssri": "^13.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^9.39.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-react": "^7.12.2",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "prettier-eslint-cli": "^8.0.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}

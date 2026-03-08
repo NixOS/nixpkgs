@@ -1,0 +1,25 @@
+From 09b5063e115c36b75e291230175b449a0f6d0c29 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 28 Mar 2021 13:34:33 -0500
+Subject: [PATCH] Delay resolving knsrcdir
+
+---
+ KF5NewStuffCoreConfig.cmake.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/KF5NewStuffCoreConfig.cmake.in b/KF5NewStuffCoreConfig.cmake.in
+index c65c7c4..3275627 100644
+--- a/KF5NewStuffCoreConfig.cmake.in
++++ b/KF5NewStuffCoreConfig.cmake.in
+@@ -3,7 +3,7 @@
+ include(CMakeFindDependencyMacro)
+ find_dependency(KF5Attica "@KF_DEP_VERSION@")
+ 
+-set(KDE_INSTALL_KNSRCDIR "@KDE_INSTALL_DATADIR@/knsrcfiles")
++set(KDE_INSTALL_KNSRCDIR "${KDE_INSTALL_DATADIR}/knsrcfiles")
+ 
+ include("${CMAKE_CURRENT_LIST_DIR}/KF5NewStuffCoreTargets.cmake")
+ @PACKAGE_INCLUDE_CORE_QCHTARGETS@
+-- 
+2.30.1
+

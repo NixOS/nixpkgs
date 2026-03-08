@@ -1,0 +1,87 @@
+Without the change `libhwy-1.3.0` ICEs when built for aarch64-linux as:
+https://github.com/NixOS/nixpkgs/pull/320616#issuecomment-3764400891
+
+Upstream report: http://gcc.gnu.org/PR120718
+Upstream fix: https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff;h=d755aa03db0ad5b71ee7f39b09c92870789f2f00
+Fetched as:
+$ curl -L 'https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=d755aa03db0ad5b71ee7f39b09c92870789f2f00' > aarch64-sve-rtx.patch
+
+From: Richard Sandiford <richard.sandiford@arm.com>
+Date: Thu, 14 Aug 2025 16:56:50 +0000 (+0100)
+Subject: Remove MODE_COMPOSITE_P test from simplify_gen_subreg [PR120718]
+X-Git-Url: https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=d755aa03db0ad5b71ee7f39b09c92870789f2f00
+
+Remove MODE_COMPOSITE_P test from simplify_gen_subreg [PR120718]
+
+simplify_gen_subreg rejected subregs of literal constants if
+MODE_COMPOSITE_P.  This was added by the fix for PR96648 in
+g:c0f772894b6b3cd8ed5c5dd09d0c7917f51cf70f.  Jakub said:
+
+  As for the simplify_gen_subreg change, I think it would be desirable
+  to just avoid creating SUBREGs of constants on all targets and for all
+  constants, if simplify_immed_subreg simplified, fine, otherwise punt,
+  but as we are late in GCC11 development, the patch instead guards this
+  behavior on MODE_COMPOSITE_P (outermode) - i.e. only conversions to
+  powerpc{,64,64le} double double long double - and only for the cases where
+  simplify_immed_subreg was called.
+
+I'm not sure about relaxing the codes further, since subregs might
+be wanted for CONST, SYMBOL_REF and LABEL_REF.  But removing the
+MODE_COMPOSITE_P is needed to fix PR120718, where we get an ICE
+from generating a subreg of a V2SI const_vector.
+
+Unlike the trunk version, this backport does not remove the
+VOIDmode test; see PR121501.
+
+gcc/
+	PR rtl-optimization/120718
+	* simplify-rtx.cc (simplify_context::simplify_gen_subreg):
+	Remove MODE_COMPOSITE_P condition.
+
+gcc/testsuite/
+	PR rtl-optimization/120718
+	* gcc.target/aarch64/sve/acle/general/pr120718.c: New test.
+---
+
+diff --git a/gcc/simplify-rtx.cc b/gcc/simplify-rtx.cc
+index 88d31a71c05a..8d4cbf1371a3 100644
+--- a/gcc/simplify-rtx.cc
++++ b/gcc/simplify-rtx.cc
+@@ -8317,14 +8317,11 @@ simplify_context::simplify_gen_subreg (machine_mode outermode, rtx op,
+ 
+   if (GET_CODE (op) == SUBREG
+       || GET_CODE (op) == CONCAT
+-      || GET_MODE (op) == VOIDmode)
+-    return NULL_RTX;
+-
+-  if (MODE_COMPOSITE_P (outermode)
+-      && (CONST_SCALAR_INT_P (op)
+-	  || CONST_DOUBLE_AS_FLOAT_P (op)
+-	  || CONST_FIXED_P (op)
+-	  || GET_CODE (op) == CONST_VECTOR))
++      || GET_MODE (op) == VOIDmode
++      || CONST_SCALAR_INT_P (op)
++      || CONST_DOUBLE_AS_FLOAT_P (op)
++      || CONST_FIXED_P (op)
++      || GET_CODE (op) == CONST_VECTOR)
+     return NULL_RTX;
+ 
+   if (validate_subreg (outermode, innermode, op, byte))
+diff --git a/gcc/testsuite/gcc.target/aarch64/sve/acle/general/pr120718.c b/gcc/testsuite/gcc.target/aarch64/sve/acle/general/pr120718.c
+new file mode 100644
+index 000000000000..9ca0938e36bf
+--- /dev/null
++++ b/gcc/testsuite/gcc.target/aarch64/sve/acle/general/pr120718.c
+@@ -0,0 +1,12 @@
++/* { dg-options "-O2" } */
++
++#include <arm_sve.h>
++typedef int __attribute__((vector_size(8))) v2si;
++typedef struct { int x; int y; } A;
++void bar(A a);
++void foo()
++{
++    A a;
++    *(v2si *)&a = (v2si){0, (int)svcntd_pat(SV_ALL)};
++    bar(a);
++}

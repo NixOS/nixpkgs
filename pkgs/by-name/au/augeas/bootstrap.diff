@@ -1,0 +1,15 @@
+diff --git a/bootstrap b/bootstrap
+index a84eb39..cac656d 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -53,9 +53,6 @@ case ${GNULIB_SRCDIR--} in
+     echo "$0: getting gnulib files..."
+     git submodule update || exit $?
+     GNULIB_SRCDIR=.gnulib
+-  else
+-    echo >&2 "$0: invalid gnulib srcdir: $GNULIB_SRCDIR"
+-    exit 1
+   fi
+   ;;
+ esac
+
