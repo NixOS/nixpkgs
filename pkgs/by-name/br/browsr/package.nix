@@ -77,6 +77,7 @@ python3Packages.buildPythonApplication rec {
     "rich-pixels"
     "rich"
     "textual"
+    "universal-pathlib"
   ];
 
   pythonImportsCheck = [
