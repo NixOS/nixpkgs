@@ -29,7 +29,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langsmith";
   version = "0.7.12";
   pyproject = true;
@@ -37,11 +37,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-5BVQYlp/RMFN1Ja75gz9iFneqkSuoDpqXilHbyEAPdA=";
   };
 
-  sourceRoot = "${src.name}/python";
+  sourceRoot = "${finalAttrs.src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
@@ -107,7 +107,7 @@ buildPythonPackage rec {
   meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
-    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium
@@ -115,4 +115,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "langsmith";
   };
-}
+})
