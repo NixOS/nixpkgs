@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage (finalAttrs: {
-  version = "0.9.0";
+  version = "0.10.0";
   pname = "tabulate";
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonPackage (finalAttrs: {
     owner = "astanin";
     repo = "python-tabulate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GZRmmKWmAeQkDo56fc2kWZiUjfips1x1e11MoYwZLgU=";
+    hash = "sha256-JnwkABtIgPqANuv3lo8e8zr8m6a/qnxz4w1QvTVZFxg=";
   };
 
   nativeBuildInputs = [
@@ -33,11 +33,6 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
   ]
   ++ lib.concatAttrValues finalAttrs.finalPackage.optional-dependencies;
-
-  # Tests against stdlib behavior which changed in https://github.com/python/cpython/pull/139070
-  disabledTests = [
-    "test_wrap_multiword_non_wide"
-  ];
 
   meta = {
     description = "Pretty-print tabular data";
