@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   makeBinaryWrapper,
+  installShellFiles,
   delta,
 }:
 
@@ -24,10 +25,17 @@ buildGoModule (finalAttrs: {
     "-w"
   ];
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
   postInstall = ''
     wrapProgram $out/bin/diffnav \
       --prefix PATH : ${lib.makeBinPath [ delta ]}
+     installShellCompletion --cmd diffnav \
+      --bash <($out/bin/diffnav completion bash) \
+      --fish <($out/bin/diffnav completion fish) \
+      --zsh <($out/bin/diffnav completion zsh)
   '';
 
   meta = {
