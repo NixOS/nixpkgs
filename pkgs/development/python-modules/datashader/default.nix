@@ -59,6 +59,10 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTestPaths = [
+    "scripts/download_data.py"
+  ];
+
   pythonImportsCheck = [ "datashader" ];
 
   meta = {
