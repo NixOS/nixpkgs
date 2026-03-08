@@ -22,7 +22,7 @@
 
   nix-update-script,
 
-  isDesktopVariant, # set in all-packages.nix
+  isDesktopVariant ? false,
   buildWithFrontend ? !isDesktopVariant,
 }:
 
