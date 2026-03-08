@@ -145,9 +145,9 @@
     "hash": "sha256-V2AzDorrgVQsRMlMJsEJ90t4V8fGuVPWjTTnB5tt9ww="
   },
   "kguiaddons": {
-    "version": "6.23.0",
-    "url": "mirror://kde/stable/frameworks/6.23/kguiaddons-6.23.0.tar.xz",
-    "hash": "sha256-ucWtn9j9iu/yrgGxMXoNrTAR5CWeUOTy5Whf7gAEe0g="
+    "version": "6.23.1",
+    "url": "mirror://kde/stable/frameworks/6.23/kguiaddons-6.23.1.tar.xz",
+    "hash": "sha256-ZSnIiUWrIWNU2pdepluYbakm3cgtaJVw3D7eA87a+/o="
   },
   "kholidays": {
     "version": "6.23.0",
@@ -180,9 +180,9 @@
     "hash": "sha256-Yp5Z8PAHuKGfxtr045pQQ7MPVl7rUBBIEmQiUG0065c="
   },
   "kirigami": {
-    "version": "6.23.0",
-    "url": "mirror://kde/stable/frameworks/6.23/kirigami-6.23.0.tar.xz",
-    "hash": "sha256-jcKNQGvgbTYNR+gBPhPWM7jCz7A2B/SQKbtF/9vSiRA="
+    "version": "6.23.1",
+    "url": "mirror://kde/stable/frameworks/6.23/kirigami-6.23.1.tar.xz",
+    "hash": "sha256-X2E0q0wA50WtWifK7l+5pBedOv8Du5cqzAZ8WX9Z95Y="
   },
   "kitemmodels": {
     "version": "6.23.0",
@@ -250,9 +250,9 @@
     "hash": "sha256-oC2zDvjJh7rmf0Uo78iRdHPgtSFrkVQaK3QYao/mdE8="
   },
   "kservice": {
-    "version": "6.23.0",
-    "url": "mirror://kde/stable/frameworks/6.23/kservice-6.23.0.tar.xz",
-    "hash": "sha256-79Vr9o/i/rGTmgUFYuQD2WJKdOuV3HwmTDgGgAz7LVM="
+    "version": "6.23.1",
+    "url": "mirror://kde/stable/frameworks/6.23/kservice-6.23.1.tar.xz",
+    "hash": "sha256-BRraRQrjNIQPbjb9gXKVk95qnXFSNy+sd7LXwCtYPc0="
   },
   "kstatusnotifieritem": {
     "version": "6.23.0",
