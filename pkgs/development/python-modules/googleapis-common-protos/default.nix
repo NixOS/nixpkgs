@@ -24,6 +24,10 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     grpc
     protobuf
