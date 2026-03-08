@@ -2507,6 +2507,12 @@ with haskellLib;
 
   # Unmaintained
   records-sop = doJailbreak super.records-sop;
+  failure = appendPatch (fetchpatch {
+    # https://github.com/snoyberg/failure/pull/5
+    name = "switch-error-to-except";
+    url = "https://github.com/snoyberg/failure/commit/d46bebb5afdc17a0feb268bc86adb00b7edc4cc3.patch";
+    sha256 = "sha256-CDd/vvlRq1cldyH+qsJVNMiwViqKVSosr9A0ilv2gLM";
+  }) (doJailbreak super.failure);
 
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial =
