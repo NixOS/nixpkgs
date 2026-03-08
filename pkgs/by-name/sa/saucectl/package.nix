@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "saucectl";
-  version = "0.198.0";
+  version = "0.202.0";
 
   src = fetchFromGitHub {
     owner = "saucelabs";
     repo = "saucectl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-l9iiMyL1OgjmWj2qbzQAobi+DFoecueaRP2SV6KGbn4=";
+    hash = "sha256-+YB43k8aIxz+Ih+A583c4GjrnSfRupRzgMn60ZoWH9w=";
   };
 
   ldflags = [
