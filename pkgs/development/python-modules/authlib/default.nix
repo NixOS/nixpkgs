@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
