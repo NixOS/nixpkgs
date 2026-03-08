@@ -1976,7 +1976,7 @@ with haskellLib;
   util = appendConfigureFlags [
     "--ghc-option=-fno-safe-haskell"
     "--haddock-option=--optghc=-fno-safe-haskell"
-  ] super.util;
+  ] (doJailbreak super.util); # unmaintained
   category = appendConfigureFlags [
     "--ghc-option=-fno-safe-haskell"
     "--haddock-option=--optghc=-fno-safe-haskell"
