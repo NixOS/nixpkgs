@@ -173,6 +173,7 @@ let
         withChromiumHeadlessShell = false;
       };
       inherit components;
+      updateScript = ./update.sh;
     };
   });
 
