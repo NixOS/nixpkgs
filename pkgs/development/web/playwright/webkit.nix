@@ -46,19 +46,16 @@
   wayland-scanner,
   woff2,
   zlib,
-  suffix,
   revision,
   system,
   throwSystem,
 }:
 let
-  suffix' =
-    if lib.hasPrefix "linux" suffix then
-      "ubuntu-22.04" + (lib.removePrefix "linux" suffix)
-    else if lib.hasPrefix "mac" suffix then
-      "mac-14" + (lib.removePrefix "mac" suffix)
-    else
-      suffix;
+  download =
+    (import ./browser-downloads.nix {
+      name = "webkit";
+      inherit revision;
+    }).${system} or throwSystem;
   libvpx' = libvpx.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "1.12.0";
@@ -133,12 +130,11 @@ let
   webkit-linux = stdenv.mkDerivation {
     name = "playwright-webkit";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
-      stripRoot = false;
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-wSMObGeDoy1vW7TO20wL3vWOSpcDgFciK00SqZ15EjM=";
-          aarch64-linux = "sha256-IyZNAcAUxDpCgc/I2dWtIoRqKiZJ1ggmYqqdvUKg6IE=";
+          x86_64-linux = "sha256-h9dM6RR5WhUPHdZgn5yiJlM7QrhlDVaivnaHQCEZbXQ=";
+          aarch64-linux = "sha256-sOtPdOBmPLqApGGVhgH51OW3aoTv1Y40RfCSax7CyC4=";
         }
         .${system} or throwSystem;
     };
@@ -214,12 +210,11 @@ let
     '';
   };
   webkit-darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-a8NKlNhKPEhtWREAgNosvTLE+zphmKYW+CtvW5jwFlQ=";
-        aarch64-darwin = "sha256-DvVTVAxuh4we2278xZFBomFAxcuqyEOCK7mPg3rnYpU=";
+        x86_64-darwin = "sha256-An3sdw8HltgHQ6YASsxyhoK1fd8PxZ0BBCMpnOORkv8=";
+        aarch64-darwin = "sha256-suXPCuXLMz3xoFxE5+Yjd9OXxLfNDDJiU6O1Ic0PsOI=";
       }
       .${system} or throwSystem;
   };
