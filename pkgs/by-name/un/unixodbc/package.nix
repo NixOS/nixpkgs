@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "unixobcd";
+  pname = "unixodbc";
   version = "2.3.12";
 
   # TODO: build from source https://github.com/lurcher/unixODBC
