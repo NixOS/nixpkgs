@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   colorama,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
