@@ -28,20 +28,6 @@ let
     };
   };
 
-  registryConfig.redis = lib.mkIf cfg.enableRedisCache {
-    addr = "${cfg.redisUrl}";
-    password = "${cfg.redisPassword}";
-    db = 0;
-    dialtimeout = "10ms";
-    readtimeout = "10ms";
-    writetimeout = "10ms";
-    pool = {
-      maxidle = 16;
-      maxactive = 64;
-      idletimeout = "300s";
-    };
-  };
-
   configFile = cfg.configFile;
 in
 {
@@ -138,49 +124,69 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    systemd.services.docker-registry = {
-      description = "Docker Container Registry";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
+        systemd.services.docker-registry = {
+          description = "Docker Container Registry";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
 
-      serviceConfig = {
-        ExecStart = "${lib.getExe cfg.package} serve ${configFile}";
-        User = "docker-registry";
-        WorkingDirectory = cfg.storagePath;
-        AmbientCapabilities = lib.mkIf (cfg.port < 1024) "cap_net_bind_service";
-      };
-    };
+          serviceConfig = {
+            ExecStart = "${lib.getExe cfg.package} serve ${configFile}";
+            User = "docker-registry";
+            WorkingDirectory = cfg.storagePath;
+            AmbientCapabilities = lib.mkIf (cfg.port < 1024) "cap_net_bind_service";
+          };
+        };
 
-    systemd.services.docker-registry-garbage-collect = {
-      description = "Run Garbage Collection for docker registry";
+        systemd.services.docker-registry-garbage-collect = {
+          description = "Run Garbage Collection for docker registry";
 
-      restartIfChanged = false;
-      unitConfig.X-StopOnRemoval = false;
+          restartIfChanged = false;
+          unitConfig.X-StopOnRemoval = false;
 
-      serviceConfig.Type = "oneshot";
+          serviceConfig.Type = "oneshot";
 
-      script = ''
-        ${cfg.package}/bin/registry garbage-collect ${configFile}
-        /run/current-system/systemd/bin/systemctl restart docker-registry.service
-      '';
+          script = ''
+            ${cfg.package}/bin/registry garbage-collect ${configFile}
+            /run/current-system/systemd/bin/systemctl restart docker-registry.service
+          '';
 
-      startAt = lib.optional cfg.enableGarbageCollect cfg.garbageCollectDates;
-    };
+          startAt = lib.optional cfg.enableGarbageCollect cfg.garbageCollectDates;
+        };
 
-    users.users.docker-registry =
-      (lib.optionalAttrs (cfg.storagePath != null) {
-        createHome = true;
-        home = cfg.storagePath;
+        users.users.docker-registry =
+          (lib.optionalAttrs (cfg.storagePath != null) {
+            createHome = true;
+            home = cfg.storagePath;
+          })
+          // {
+            group = "docker-registry";
+            isSystemUser = true;
+          };
+        users.groups.docker-registry = { };
+
+        networking.firewall = lib.mkIf cfg.openFirewall {
+          allowedTCPPorts = [ cfg.port ];
+        };
+      }
+
+      (lib.mkIf cfg.enableRedisCache {
+        services.dockerRegistry.extraConfig.redis = {
+          addr = "${cfg.redisUrl}";
+          password = "${cfg.redisPassword}";
+          db = 0;
+          dialtimeout = "10ms";
+          readtimeout = "10ms";
+          writetimeout = "10ms";
+          pool = {
+            maxidle = 16;
+            maxactive = 64;
+            idletimeout = "300s";
+          };
+        };
       })
-      // {
-        group = "docker-registry";
-        isSystemUser = true;
-      };
-    users.groups.docker-registry = { };
-
-    networking.firewall = lib.mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
-    };
-  };
+    ]
+  );
 }
