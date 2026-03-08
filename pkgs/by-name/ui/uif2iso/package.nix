@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchurl,
   fetchpatch,
   unzip,
@@ -8,7 +8,7 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+gcc14Stdenv.mkDerivation {
   pname = "uif2iso";
   version = "0.1.7c";
 
