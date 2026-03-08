@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   writeText,
   bluez,
   cjson,
@@ -74,6 +75,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-hUSm76PV+FhvzhiYMUbGcNDQMK1TZCPYh1PNADJmdSU=";
   };
+
+  patches = [
+    # Resolves issues with wayvr
+    # See https://github.com/NixOS/nixpkgs/pull/489154#issuecomment-4018732528
+    (fetchpatch {
+      name = "monado-cylinder-aspectRatio.patch";
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/69834fe93b84640170f8efa54b4700e5e0dc03c1.diff";
+      hash = "sha256-6lD4j7CMQk52btfxD8hOm0GWZaOxSgc1jel9hyXqktA=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
