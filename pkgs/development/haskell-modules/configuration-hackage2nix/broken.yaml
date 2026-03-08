@@ -1774,7 +1774,6 @@ broken-packages:
   - fadno-xml # failure in job https://hydra.nixos.org/build/307518209 at 2025-09-19
   - failable # failure in job https://hydra.nixos.org/build/252731566 at 2024-03-16
   - failable-list # failure in job https://hydra.nixos.org/build/233198924 at 2023-09-02
-  - failure # failure in job https://hydra.nixos.org/build/252738855 at 2024-03-16
   - failure-detector # failure in job https://hydra.nixos.org/build/233244451 at 2023-09-02
   - fake # failure in job https://hydra.nixos.org/build/233199052 at 2023-09-02
   - fake-type # failure in job https://hydra.nixos.org/build/233197081 at 2023-09-02
