@@ -2844,6 +2844,8 @@ with pkgs;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
 
+  leanPackages = callPackage ../top-level/lean-packages.nix { };
+
   inherit (callPackage ../development/tools/lerna { })
     lerna_6
     lerna_8
