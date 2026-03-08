@@ -71,6 +71,9 @@ buildPythonPackage rec {
     homepage = "https://datashader.org";
     changelog = "https://github.com/holoviz/datashader/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [
+      nickcao
+      locnide
+    ];
   };
 }
