@@ -47,7 +47,7 @@ let
     pushd "$out" &&
     sha512sum --check --strict ${./test-hashes.sha512sum} &&
     sed 's/.*  //' ${./test-hashes.sha512sum} | xargs rm --verbose &&
-    popd
+    popd || exit 1
   '';
   unflattened.postFetch = ''
     pushd "$out" &&
@@ -56,7 +56,7 @@ let
     sed 's/.*  //' ${./test-hashes.sha512sum} | xargs rm --verbose &&
     popd &&
     rm --dir --verbose Sintel &&
-    popd
+    popd || exit 1
   '';
 
   fetchtorrentWithHash =
