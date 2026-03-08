@@ -1599,6 +1599,15 @@
   "module-security-acme-reload-dependencies": [
     "index.html#module-security-acme-reload-dependencies"
   ],
+  "module-programs-tuxbox": [
+    "index.html#module-programs-tuxbox"
+  ],
+  "module-programs-tuxbox-groups": [
+    "index.html#module-programs-tuxbox-groups"
+  ],
+  "module-programs-tuxbox-profile-switching": [
+    "index.html#module-programs-tuxbox-profile-switching"
+  ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"
   ],

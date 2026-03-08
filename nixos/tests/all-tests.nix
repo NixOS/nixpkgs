@@ -1675,6 +1675,7 @@ in
   turbovnc-headless-server = runTest ./turbovnc-headless-server.nix;
   turn-rs = runTest ./turn-rs.nix;
   tusd = runTest ./tusd/default.nix;
+  tuxbox = runTest ./tuxbox.nix;
   tuxguitar = runTest ./tuxguitar.nix;
   twingate = runTest ./twingate.nix;
   txredisapi = runTest ./txredisapi.nix;
