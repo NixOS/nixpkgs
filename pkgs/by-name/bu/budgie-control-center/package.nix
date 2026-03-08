@@ -18,7 +18,6 @@
   glibc,
   gnome,
   gst_all_1,
-  gnome-color-manager,
   gnome-desktop,
   gnome-settings-daemon,
   gsettings-desktop-schemas,
@@ -83,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (replaceVars ./paths.patch {
       budgie_desktop = budgie-desktop;
-      gcm = gnome-color-manager;
       inherit
         cups
         libgnomekbd
