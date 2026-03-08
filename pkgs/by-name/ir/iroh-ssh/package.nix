@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
-  autoAddDriverRunpath,
   installShellFiles,
   writableTmpDirAsHomeHook,
   versionCheckHook,
@@ -24,7 +22,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-KZu4HA5E9R4sdBW5cdhyA5E2bo2YN2TPSKDlJuzDGnU=";
 
   nativeBuildInputs = [
-    autoAddDriverRunpath
     installShellFiles
   ];
 
@@ -41,12 +38,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    description = "ssh without ip";
+    description = "SSH to any machine without IP";
     homepage = "https://github.com/rustonbsd/iroh-ssh";
-    maintainers = "LukeDSchenk";
+    maintainers = with lib.maintainers; [ luke ];
     license = lib.licenses.mit;
     mainProgram = "iroh-ssh";
   };
 })
-
-
