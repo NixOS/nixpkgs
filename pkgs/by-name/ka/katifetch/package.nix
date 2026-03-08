@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pciutils, coreutils }:
+{ stdenv, fetchFromGitHub, bash, pciutils, coreutils, lib }:
 
 stdenv.mkDerivation {
   pname = "katifetch";
@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "1y4arp28807z28k9p69qsm0afn71cbwrpx2s3a9g7bxcpqbrnkzy";
   };
 
-  buildInputs = [ pciutils coreutils ];
+  buildInputs = [ coreutils ];
+  propagatedBuildInputs = [ bash pciutils ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -19,11 +20,11 @@ stdenv.mkDerivation {
     chmod +x $out/bin/katifetch
   '';
 
-  meta = {
-    description = "Fast and customizable Neofetch alternative written in Bash";
-    homepage = "https://github.com/ximimoments/katifetch";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
-    maintainers = with stdenv.lib.maintainers; [ ximimoments ];
-  };
+ meta = {
+  description = "Fast and customizable Neofetch alternative written in Bash";
+  homepage = "https://github.com/ximimoments/katifetch";
+  license = lib.licenses.mit;
+  platforms = lib.platforms.all;
+  maintainers = [];
+ };
 }
