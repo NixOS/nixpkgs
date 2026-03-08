@@ -597,17 +597,18 @@ with haskellLib;
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
 
-  # Hackage tarball only includes what is supported by `cabal install git-annex`,
-  # but we want e.g. completions as well. See
-  # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
-  git-annex = lib.pipe super.git-annex [
+  # Requires file-io >= 0.2 if using OsPath flag (which we want for GHC >= 9.10)
+  git-annex = lib.pipe (super.git-annex.override { file-io = self.file-io_0_2_0; }) [
     (overrideCabal (drv: {
+      # Hackage tarball only includes what is supported by `cabal install git-annex`,
+      # but we want e.g. completions as well. See
+      # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
+      # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
       src = pkgs.fetchgit {
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
         tag = super.git-annex.version;
-        sha256 = "sha256-wH/As9KdHLlUgGUuIVjBjC8akqHfCZPBWABFXry6z28=";
+        sha256 = "sha256-oh9lrQvj1Ooi3PI5heNXBopX35s1K5Kyn/mH7V4sXB8=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
