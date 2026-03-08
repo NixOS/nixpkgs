@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/krunvm \
-      --prefix PATH : ${lib.makeBinPath [ buildah ]} \
+      --prefix PATH : ${lib.makeBinPath [ buildah ]}
   '';
 
   meta = {

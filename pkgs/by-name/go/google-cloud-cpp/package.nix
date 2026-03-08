@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/GoogleCloudCppFeatures.cmake \
       --replace-fail \
         "bigtable;bigquery;iam;logging;pubsub;spanner;storage" \
-        "bigtable;bigquery;iam;logging;pubsub;spanner;storage;universe_domain" \
+        "bigtable;bigquery;iam;logging;pubsub;spanner;storage;universe_domain"
   '';
 
   nativeBuildInputs = [

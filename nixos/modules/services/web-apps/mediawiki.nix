@@ -797,11 +797,9 @@ in
                   ) "--dbprefix ${lib.escapeShellArg cfg.database.tablePrefix}"
                 } \
                 --dbuser ${lib.escapeShellArg cfg.database.user} \
-                ${
-                  optionalString (
-                    cfg.database.passwordFile != null
-                  ) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"
-                } \
+                ${optionalString (
+                  cfg.database.passwordFile != null
+                ) "--dbpassfile ${lib.escapeShellArg cfg.database.passwordFile}"}
               '';
         in
         ''

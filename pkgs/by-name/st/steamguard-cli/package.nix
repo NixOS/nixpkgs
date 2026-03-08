@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellCompletion --cmd steamguard \
       --bash <($out/bin/steamguard completion --shell bash) \
       --fish <($out/bin/steamguard completion --shell fish) \
-      --zsh <($out/bin/steamguard completion --shell zsh) \
+      --zsh <($out/bin/steamguard completion --shell zsh)
   '';
 
   meta = {
