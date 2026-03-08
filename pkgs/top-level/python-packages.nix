@@ -18630,8 +18630,6 @@ self: super: with self; {
 
   supabase-functions = callPackage ../development/python-modules/supabase-functions { };
 
-  supafunc = callPackage ../development/python-modules/supafunc { };
-
   super-collections = callPackage ../development/python-modules/super-collections { };
 
   superqt = callPackage ../development/python-modules/superqt { };
