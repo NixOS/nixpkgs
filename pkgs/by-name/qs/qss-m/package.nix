@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  installPhase = ''
+  postInstall = ''
     install -D ../Misc/QuakeSpasm_512.png "$out/share/icons/hicolor/512x512/apps/qss-m.png"
   '';
 
