@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
-  version = "1.3.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "codingjoe";
     repo = "ssdp";
     tag = version;
-    hash = "sha256-HsU67vsJvoVyOy2QEq8leYcjl1EVdQ039jN1QyL0XgU=";
+    hash = "sha256-1LO5+lfykaepp+MfS/2mlngobhcV1nZvU19Jb0sbVzk=";
   };
 
   build-system = [
