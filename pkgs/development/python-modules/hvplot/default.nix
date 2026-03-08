@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   bokeh,
@@ -37,7 +38,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
