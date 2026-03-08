@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools-scm,
   setuptools,
   wcwidth,
@@ -13,9 +13,11 @@ buildPythonPackage (finalAttrs: {
   pname = "tabulate";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-AJWxK/WWbeUpwP6x+ghnFnGzNo7sd9fverEUviwGizw=";
+  src = fetchFromGitHub {
+    owner = "astanin";
+    repo = "python-tabulate";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZRmmKWmAeQkDo56fc2kWZiUjfips1x1e11MoYwZLgU=";
   };
 
   nativeBuildInputs = [
