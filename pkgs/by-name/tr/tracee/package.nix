@@ -17,7 +17,7 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tracee";
   version = "0.23.2";
 
@@ -26,7 +26,7 @@ buildGoModule rec {
     owner = "aquasecurity";
     repo = "tracee";
     # project has branches and tags of the same name
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Rf1pa9e6t002ltg40xZZVpE5OL9Vl02Xcn2Ux0To408=";
   };
   vendorHash = "sha256-2+4UN9WB6eGzedogy5dMvhHj1x5VeUUkDM0Z28wKQgM=";
@@ -54,7 +54,7 @@ buildGoModule rec {
   ];
 
   makeFlags = [
-    "RELEASE_VERSION=v${version}"
+    "RELEASE_VERSION=v${finalAttrs.version}"
     "GO_DEBUG_FLAG=-s -w"
     # don't actually need git but the Makefile checks for it
     "CMD_GIT=echo"
@@ -95,14 +95,14 @@ buildGoModule rec {
     integration-test-cli = import ./integration-tests.nix { inherit lib tracee makeWrapper; };
     version = testers.testVersion {
       package = tracee;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
       command = "tracee version";
     };
   };
 
   meta = {
     homepage = "https://aquasecurity.github.io/tracee/latest/";
-    changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${version}";
+    changelog = "https://github.com/aquasecurity/tracee/releases/tag/v${finalAttrs.version}";
     description = "Linux Runtime Security and Forensics using eBPF";
     mainProgram = "tracee";
     longDescription = ''
@@ -128,4 +128,4 @@ buildGoModule rec {
       "share"
     ];
   };
-}
+})

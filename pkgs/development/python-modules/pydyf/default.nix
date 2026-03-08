@@ -7,19 +7,16 @@
   pillow,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pydyf";
-  version = "0.11.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "0.12.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OU3d9hnMqdDFVxXjxV6hIam/nLx4DNwSAaJCeRe4a2Q=";
+    hash = "sha256-+9fnWVQaxyXCnFBmEgA945Mkm5QxDqeK5Eyx0EsiAJU=";
   };
 
   postPatch = ''

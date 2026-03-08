@@ -1,16 +1,26 @@
 {
   buildOctavePackage,
   lib,
-  fetchurl,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildOctavePackage rec {
   pname = "instrument-control";
-  version = "0.9.5";
+  version = "0.10.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Qm1aF+dbhwrDUSh8ViJHCZIc0DiZ1jI117TnSknqzX0=";
+  src = fetchFromGitHub {
+    owner = "gnu-octave";
+    repo = "instrument-control";
+    tag = "release-${version}";
+    sha256 = "sha256-eXlH7BFRh4Vq/2LiBsmTvZNhXm4IbeCHK+OsKMQI0tY=";
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "release-(.*)"
+    ];
   };
 
   meta = {

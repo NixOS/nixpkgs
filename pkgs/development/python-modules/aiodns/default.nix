@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "aiodns";
-  version = "3.5.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "saghul";
     repo = "aiodns";
     tag = "v${version}";
-    hash = "sha256-qabXwvJzZ4bq0R2Wkb0terZgjnRRt0/ymLcJkxChR6s=";
+    hash = "sha256-/iYkhzN01+NaUfMXaM39IvlEKfoKc29+f0S4y0y3GG8=";
   };
 
   build-system = [ setuptools ];

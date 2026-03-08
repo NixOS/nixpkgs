@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   requests,
   xmltodict,
 }:
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "meteoalertapi";
   version = "0.3.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rolfberkenbosch";

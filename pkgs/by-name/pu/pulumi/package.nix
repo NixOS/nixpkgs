@@ -15,14 +15,14 @@
   nix-update-script,
   _experimental-update-script-combinators,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pulumi";
   version = "3.192.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rcDXC+xlUa67afuXvmEv8UNsYWBvQQ0P4httdtdcrh4=";
     # Some tests rely on checkout directory name
     name = "pulumi";
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-BaFw8EnPd2GPA/p9wm8XpVy/iE8gqbteRnMQC8Z4NHQ=";
 
-  sourceRoot = "${src.name}/pkg";
+  sourceRoot = "${finalAttrs.src.name}/pkg";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,7 +41,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=v${version}"
+    "-X=github.com/pulumi/pulumi/sdk/v3/go/common/version.Version=v${finalAttrs.version}"
   ];
 
   excludedPackages = [
@@ -159,7 +159,7 @@ buildGoModule rec {
     tests = {
       version = testers.testVersion {
         package = pulumi;
-        version = "v${version}";
+        version = "v${finalAttrs.version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
 
@@ -191,4 +191,4 @@ buildGoModule rec {
       tie
     ];
   };
-}
+})

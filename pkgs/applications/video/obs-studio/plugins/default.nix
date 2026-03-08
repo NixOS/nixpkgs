@@ -52,7 +52,7 @@
 
   obs-markdown = callPackage ./obs-markdown.nix { };
 
-  obs-media-controls = qt6Packages.callPackage ./obs-media-controls.nix { };
+  obs-media-controls = qt6Packages.callPackage ./obs-media-controls { };
 
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
@@ -63,6 +63,8 @@
   obs-noise = callPackage ./obs-noise.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
+
+  obs-plugin-countdown = qt6Packages.callPackage ./obs-plugin-countdown.nix { };
 
   obs-recursion-effect = callPackage ./obs-recursion-effect.nix { };
 

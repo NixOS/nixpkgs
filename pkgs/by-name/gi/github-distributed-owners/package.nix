@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-pt/GoXF/uSU78pZqG8PgFe+tlbwZH2qpGQD7jgC52NM=";
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -29,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/andrewring/github-distributed-owners";
     changelog = "https://github.com/andrewring/github-distributed-owners/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cameroncuttingedge ];
+    maintainers = [ ];
     mainProgram = "github-distributed-owners";
   };
 })

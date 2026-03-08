@@ -4,20 +4,18 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-appconfiguration";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Pr5B6b4/SubKYeXbxCxLfMAHoBBUqFBlAaJt/Bmf0+w=";
+    pname = "azure_appconfiguration";
+    inherit version;
+    hash = "sha256-zv11spi4mKjtn3MEjz859OgQWaWM2DLQUjeH/B2RKgY=";
   };
 
   build-system = [ setuptools ];

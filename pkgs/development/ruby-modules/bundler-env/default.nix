@@ -69,7 +69,7 @@ else
     bundlerEnvArgs = {
       inherit ignoreCollisions;
 
-      name = basicEnv.name;
+      inherit (basicEnv) pname version;
 
       paths = envPaths;
       pathsToLink = [ "/lib" ];

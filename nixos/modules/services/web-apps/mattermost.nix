@@ -411,7 +411,7 @@ in
         path = mkOption {
           type = types.path;
           default = "${cfg.dataDir}/mattermost.sock";
-          defaultText = ''''${config.mattermost.dataDir}/mattermost.sock'';
+          defaultText = "\${config.mattermost.dataDir}/mattermost.sock";
           description = ''
             Default location for the Mattermost control socket used by `mmctl`.
           '';

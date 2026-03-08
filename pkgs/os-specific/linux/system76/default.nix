@@ -6,18 +6,19 @@
   kernelModuleMakeFlags,
 }:
 let
-  version = "1.0.17";
   hash = "sha256-9/t+Mvfnq0KkPbe1mnrVy4mzNaK7vAgLuhUnOeEvBfI=";
 in
-stdenv.mkDerivation {
-  name = "system76-module-${version}-${kernel.version}";
+stdenv.mkDerivation (finalAttrs: {
+  name = "${finalAttrs.pname}-${finalAttrs.version}-${kernel.version}";
+  pname = "system76-module";
+  version = "1.0.17";
 
   passthru.moduleName = "system76";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-dkms";
-    rev = version;
+    rev = finalAttrs.version;
     inherit hash;
   };
 
@@ -51,4 +52,4 @@ stdenv.mkDerivation {
       some of the hotkeys and allows for custom fan control.
     '';
   };
-}
+})

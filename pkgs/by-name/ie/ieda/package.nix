@@ -28,11 +28,11 @@
 let
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2025-11-08";
+    version = "0.1.0-unstable-2025-12-23";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "038eb6454cb7e83c6b65b933e8a21b3e4b4776e0";
-      sha256 = "sha256-wUqpiCU5ap6oda2ReHtUBwI0XMEUcuXY7qWNQ2UlL9A=";
+      rev = "59662dcd768165f3957003522cb929d42b252023";
+      sha256 = "sha256-LaFGp9U7K+HmvHW1XK6HyUB/WM5O3y/tngul+cdbCP4=";
     };
 
     patches = [
@@ -43,14 +43,6 @@ let
         url = "https://github.com/Emin017/iEDA/commit/e5f3ce024965df5e1d400b6a1d7f8b5b307a4bf3.patch";
         hash = "sha256-YJnY+r9A887WT0a/H/Zf++r1PpD7t567NpkesDmIsD0=";
       })
-      # Comment out the iCTS test cases that will fail due to some linking issues on aarch64-linux
-      (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/87c5dded74bc452249e8e69f4a77dd1bed7445c2.patch";
-        hash = "sha256-1Hd0DYnB5lVAoAcB1la5tDlox4cuQqApWDiiWtqWN0Q=";
-      })
-      # Fix CMake version requirement to support newer CMake versions,
-      # Should be removed once upstream fixed it.
-      ./fix-cmake-require.patch
     ];
 
     dontBuild = true;
@@ -65,7 +57,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0.1.0-unstable-2025-11-08";
+  version = rootSrc.version;
 
   src = rootSrc;
 
@@ -133,6 +125,8 @@ stdenv.mkDerivation {
   doInstallCheck = !stdenv.hostPlatform.isAarch64; # Tests will fail on aarch64-linux, wait for upstream fix: https://github.com/microsoft/onnxruntime/issues/10038
 
   enableParallelBuild = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open-source EDA infracstructure and tools from Netlist to GDS for ASIC design";

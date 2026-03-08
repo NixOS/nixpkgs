@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folks";
-  version = "0.15.9";
+  version = "0.15.12";
 
   outputs = [
     "out"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/folks/${lib.versions.majorMinor finalAttrs.version}/folks-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IxGzc1XDUfM/Fj/cOUh0oioKBoLDGUk9bYpuQgcRQV8=";
+    hash = "sha256-IfROK9q7Huf45Bu5ltEKx9rzXHjEmBd9sMAPWAogqRQ=";
   };
 
   nativeBuildInputs = [
@@ -89,11 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
     "-Dtests=${lib.boolToString (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.isLinux)}"
   ];
-
-  # backends/eds/lib/libfolks-eds.so.26.0.0.p/edsf-persona-store.c:10697:4:
-  # error: call to undeclared function 'folks_persona_store_set_is_user_set_default';
-  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
   # Checks last re-enabled in https://github.com/NixOS/nixpkgs/pull/279843, but timeouts in tests still
   # occur inconsistently

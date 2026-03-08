@@ -3,11 +3,11 @@
   buildPythonPackage,
   fetchPypi,
   bce-python-sdk,
-  click,
-  prettytable,
-  psutil,
   requests,
   tqdm,
+  psutil,
+  click,
+  prettytable,
 }:
 
 let
@@ -30,11 +30,13 @@ buildPythonPackage {
 
   dependencies = [
     bce-python-sdk
-    click
-    prettytable
-    psutil
     requests
     tqdm
+    # Implicit dependency for file_download.py
+    psutil
+    # `aistudio` binary dependencies
+    click
+    prettytable
   ];
 
   pythonImportsCheck = [ "aistudio_sdk" ];

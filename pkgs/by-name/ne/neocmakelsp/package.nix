@@ -5,18 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "neocmakelsp";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Decodetalkers";
     repo = "neocmakelsp";
-    rev = "v${version}";
-    hash = "sha256-TFan3gJ5j2sCfM3p8a2bqPwqzn1hFN8ZyCAwAdHRZBU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-dviHzaBqsE3NKRf4AeQme/oOcu5GyKjGJBui4ZjjDv8=";
   };
 
-  cargoHash = "sha256-lqD6o+QXapd6JWMEYUWpAmZK4EWkIlqc5ZN/fMmySTs=";
+  cargoHash = "sha256-FE2DF/DnBKwW01N2wwurQ6F4qIFHMaoGZ1kb8vq86K8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -39,4 +39,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "neocmakelsp";
   };
-}
+})

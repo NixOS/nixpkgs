@@ -1,0 +1,29 @@
+diff --git a/src/exo/master/api.py b/src/exo/master/api.py
+index 30f87e2a..4aac51fe 100644
+--- a/src/exo/master/api.py
++++ b/src/exo/master/api.py
+@@ -67,7 +67,14 @@ from exo.utils.channels import Receiver, Sender, channel
+ from exo.utils.dashboard_path import find_dashboard
+ from exo.utils.event_buffer import OrderedBuffer
+ 
+-encoding = load_harmony_encoding(HarmonyEncodingName.HARMONY_GPT_OSS)
++_encoding: object = None
++
++
++def get_encoding():
++    global _encoding
++    if _encoding is None:
++        _encoding = load_harmony_encoding(HarmonyEncodingName.HARMONY_GPT_OSS)
++    return _encoding
+ 
+ 
+ def chunk_to_response(
+@@ -382,7 +389,7 @@ class API:
+         )
+ 
+     async def _process_gpt_oss(self, token_chunks: Receiver[TokenChunk]):
+-        stream = StreamableParser(encoding, role=Role.ASSISTANT)
++        stream = StreamableParser(_encoding, role=Role.ASSISTANT)
+         thinking = False
+ 
+         async for chunk in token_chunks:

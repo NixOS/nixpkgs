@@ -11,27 +11,27 @@
   giflib,
   jellyfin,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "jellyfin-web";
-  version = "10.11.5";
+  version = "10.11.6";
 
   src =
-    assert version == jellyfin.version;
+    assert finalAttrs.version == jellyfin.version;
     fetchFromGitHub {
       owner = "jellyfin";
       repo = "jellyfin-web";
-      tag = "v${version}";
-      hash = "sha256-9gDGREPORJILjVqw+Kk56+5qS/TQUd8OFmsEXL7KPAE=";
+      tag = "v${finalAttrs.version}";
+      hash = "sha256-qmpVuxwsMM9Fhjkrrkxh+pMDh6+c3rZde7in5vIpaDg=";
     };
 
   nodejs = nodejs_20; # does not build with 22
 
   postPatch = ''
     substituteInPlace webpack.common.js \
-      --replace-fail "git describe --always --dirty" "echo ${src.rev}" \
+      --replace-fail "git describe --always --dirty" "echo ${finalAttrs.src.rev}" \
   '';
 
-  npmDepsHash = "sha256-AYGWZ5QvmQl8+ayjzkWuBra+QUvde36ReIJ7Fxk89VM=";
+  npmDepsHash = "sha256-bXZn2FOWeIN8VTNLbKe7jM7yDtE2QRmyoWNZXgE5W4Q=";
 
   preBuild = ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -71,4 +71,4 @@ buildNpmPackage rec {
       jojosch
     ];
   };
-}
+})

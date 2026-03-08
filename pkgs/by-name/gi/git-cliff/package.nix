@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-cliff";
-  version = "2.11.0";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "git-cliff";
-    rev = "v${version}";
-    hash = "sha256-sXcDNt8aaruppH7rEn5EpVTkfKZVrFZdI8mnLrIxC44=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-8t7Bx3dPktSMxfWjaEeXxt3edt9Va7g5XZjE756EfY0=";
   };
 
-  cargoHash = "sha256-d7oEkoQB8+wbyYK4DE+pXIiiHzfU67UDpKbWrHMFyBQ=";
+  cargoHash = "sha256-0/NjvX3MnIgRfsE6PyYzPZ94/p2RR8PPvCntT6pPfbU=";
 
   # attempts to run the program on .git in src which is not deterministic
   doCheck = false;
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Highly customizable Changelog Generator that follows Conventional Commit specifications";
     homepage = "https://github.com/orhun/git-cliff";
-    changelog = "https://github.com/orhun/git-cliff/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/git-cliff/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       siraben
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-cliff";
   };
-}
+})

@@ -26,13 +26,13 @@
   gdk-pixbuf,
   nss,
   nspr,
-  libX11,
+  libx11,
   libxcb,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxrandr,
   libxkbfile,
   pango,
   systemd,
@@ -42,13 +42,16 @@
   libsecret,
   libpulseaudio,
   speechd-minimal,
+  writeShellScript,
+  yq,
+  curl,
+  nix-update,
+  common-updater-scripts,
 
   castlabs-electron ? callPackage ./electron.nix { },
 }:
 
 let
-  version = "5.20.1";
-
   electronLibPath = lib.makeLibraryPath [
     alsa-lib
     at-spi2-atk
@@ -62,13 +65,13 @@ let
     gtk4
     nss
     nspr
-    libX11
+    libx11
     libxcb
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
     libxkbfile
     pango
     pciutils
@@ -87,15 +90,15 @@ let
     vulkan-loader
   ];
 in
-buildNpmPackage (self: {
+buildNpmPackage (finalAttrs: {
   pname = "tidal-hifi";
-  inherit version;
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "Mastermindzh";
     repo = "tidal-hifi";
-    tag = version;
-    hash = "sha256-uiRvbxUztLwNSB1BHa9rGrPl2akt21VqxEV4pBgNwPo=";
+    tag = finalAttrs.version;
+    hash = "sha256-DIJfVoNFr2K1bII9XJRWqhBw0TGnzZgpx4Eh1EVX2OE=";
   };
 
   nativeBuildInputs = [
@@ -104,7 +107,7 @@ buildNpmPackage (self: {
     copyDesktopItems
   ];
 
-  npmDepsHash = "sha256-BsHlATxdZ/5QFr2HAGSeKo+aR7udfD6X8h/qyJnBrr0=";
+  npmDepsHash = "sha256-W3tfIiKCeLPbe/pEkXksJn/XufImp7XU/qJbCYROel8=";
   forceGitDeps = true;
   makeCacheWritable = true;
 
@@ -125,12 +128,12 @@ buildNpmPackage (self: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = self.pname;
+      name = finalAttrs.pname;
       desktopName = "TIDAL Hi-Fi";
       genericName = "Music Player";
-      comment = self.meta.description;
+      comment = finalAttrs.meta.description;
       icon = "tidal-hifi";
-      exec = self.meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       mimeTypes = [ "x-scheme-handler/tidal" ];
       categories = [
@@ -187,14 +190,35 @@ buildNpmPackage (self: {
       "''${gappsWrapperArgs[@]}"
   '';
 
+  passthru = {
+    inherit castlabs-electron;
+    updateScript = writeShellScript "update" ''
+      set -xeuo pipefail
+      export PATH="${
+        lib.makeBinPath [
+          nix-update
+          yq
+          curl
+          common-updater-scripts
+        ]
+      }:$PATH"
+
+      nix-update 'tidal-hifi'
+
+      TIDAL_VERSION="$(nix-instantiate --eval --raw -A 'tidal-hifi.version')"
+      NEW_VERSION="$(curl --silent "https://raw.githubusercontent.com/Mastermindzh/tidal-hifi/refs/tags/$TIDAL_VERSION/build/electron-builder.base.yml" | yq -r '.electronVersion')"
+
+      NIXPKGS_ALLOW_UNFREE=1 update-source-version tidal-hifi.castlabs-electron "$NEW_VERSION"
+    '';
+  };
+
   meta = {
-    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
+    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
     description = "Web version of Tidal running in Electron with Hi-Fi support thanks to Widevine";
     homepage = "https://github.com/Mastermindzh/tidal-hifi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       gerg-l
-      qbit
       spikespaz
     ];
     # `castlabs-electron` doesn't have a distribution for `aarch64-linux`.

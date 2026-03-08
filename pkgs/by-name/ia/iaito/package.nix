@@ -11,14 +11,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iaito";
-  version = "6.0.4";
+  version = "6.0.7";
 
   srcs = [
     (fetchFromGitHub {
       owner = "radareorg";
       repo = "iaito";
       tag = finalAttrs.version;
-      hash = "sha256-99SuUTwHcpyJ5V9Cnanm6ylH3NVgyk3TmDoaFVwFE4E=";
+      hash = "sha256-sATBtjNboSnk3j1PVm60HZO1MDw1A4FRttVp0M4t+/I=";
       name = "main";
     })
     (fetchFromGitHub {
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -m755 -Dt $out/bin iaito
     install -m644 -Dt $out/share/metainfo ../org.radare.iaito.appdata.xml
     install -m644 -Dt $out/share/applications ../org.radare.iaito.desktop
-    install -m644 -Dt $out/share/pixmaps ../img/org.radare.iaito.svg
+    install -m644 -Dt $out/share/icons/hicolor/scalable/apps ../img/org.radare.iaito.svg
 
     pushd ../../../translations
     make install -j$NIX_BUILD_CORES PREFIX=$out

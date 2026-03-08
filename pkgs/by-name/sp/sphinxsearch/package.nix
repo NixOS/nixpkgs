@@ -9,12 +9,12 @@
   enableMysql ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sphinxsearch";
   version = "2.2.11";
 
   src = fetchurl {
-    url = "http://sphinxsearch.com/files/sphinx-${version}-release.tar.gz";
+    url = "http://sphinxsearch.com/files/sphinx-${finalAttrs.version}-release.tar.gz";
     sha256 = "1aa1mh32y019j8s3sjzn4vwi0xn83dwgl685jnbgh51k16gh6qk6";
   };
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       expat
     ];
 
-  CXXFLAGS = "-std=c++98";
+  env.CXXFLAGS = "-std=c++98";
 
   meta = {
     description = "Open source full text search server";
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
       valodim
     ];
   };
-}
+})

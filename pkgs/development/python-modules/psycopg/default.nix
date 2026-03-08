@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -16,7 +15,6 @@
 
   # psycopg-c
   cython,
-  tomli,
 
   # docs
   furo,
@@ -27,7 +25,6 @@
   # tests
   anyio,
   pproxy,
-  pytest-randomly,
   pytestCheckHook,
   postgresql,
   postgresqlTestHook,
@@ -35,14 +32,14 @@
 
 let
   pname = "psycopg";
-  version = "3.3.2";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-ynzXQkTnCCkJK3EZrGHSpzgMeeX92U6+08m8QtNfAc4=";
+    hash = "sha256-hWiclfvimp6WldcDQPx7RFLx+XYRR9wPagAe0oZg7Pw=";
   };
 
   patches = [
@@ -77,9 +74,6 @@ let
     build-system = [
       cython
       setuptools
-    ]
-    ++ lib.optional (pythonOlder "3.11") [
-      tomli
     ];
 
     nativeBuildInputs = [
@@ -140,12 +134,6 @@ buildPythonPackage rec {
 
   sphinxRoot = "../docs";
 
-  # Introduce this file necessary for the docs build via environment var
-  LIBPQ_DOCS_FILE = fetchurl {
-    url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
-    hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
-  };
-
   inherit patches;
 
   # only move to sourceRoot after patching, makes patching easier
@@ -183,7 +171,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     anyio
     pproxy
-    pytest-randomly
     pytestCheckHook
     postgresql
   ]
@@ -192,6 +179,11 @@ buildPythonPackage rec {
   ++ optional-dependencies.pool;
 
   env = {
+    # Introduce this file necessary for the docs build via environment var
+    LIBPQ_DOCS_FILE = fetchurl {
+      url = "https://raw.githubusercontent.com/postgres/postgres/496a1dc44bf1261053da9b3f7e430769754298b4/doc/src/sgml/libpq.sgml";
+      hash = "sha256-JwtCngkoi9pb0pqIdNgukY8GbG5pUDZvrGAHZqjFOw4";
+    };
     postgresqlEnableTCP = 1;
     PGUSER = "psycopg";
     PGDATABASE = "psycopg";
@@ -233,6 +225,7 @@ buildPythonPackage rec {
     "refcount"
     "timing"
     "flakey"
+    "slow"
   ];
 
   postCheck = ''

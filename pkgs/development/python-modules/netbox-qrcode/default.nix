@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "netbox-qrcode";
-  version = "0.0.19";
+  version = "0.0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-qrcode";
     tag = "v${version}";
-    hash = "sha256-hrVnNEgLL3r1BtZdBaJu6H5b/tuXUxzGjKcITTopE60=";
+    hash = "sha256-7dPMpuJ2nuj9rRmVrfthD+xrEHoUaLFqDJWC6cGGCwY=";
   };
 
   build-system = [ setuptools ];
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/netbox-community/netbox-qrcode/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ secshell ];
+    maintainers = with lib.maintainers; [ felbinger ];
   };
 }

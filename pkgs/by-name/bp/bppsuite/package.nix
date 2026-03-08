@@ -9,7 +9,7 @@
   bpp-popgen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bppsuite";
 
   inherit (bpp-core) version postPatch;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "BioPP";
     repo = "bppsuite";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1wdwcgczqbc3m116vakvi0129wm3acln3cfc7ivqnalwvi6lrpds";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BioPP/bppsuite";
     changelog = "https://github.com/BioPP/bppsuite/blob/master/ChangeLog";
   };
-}
+})

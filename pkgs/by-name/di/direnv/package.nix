@@ -9,21 +9,21 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "direnv";
   version = "2.37.1";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-92xjoCjH5O7wx8U7OFG8Lw9eDOAdeVKNvxBHW+TiniM=";
   };
 
   vendorHash = "sha256-SAIGFQGACTB3Q0KnIdiKKNYY6fVjf/09wGqNr0Hkg+M=";
 
   # we have no bash at the moment for windows
-  BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
+  env.BASH_PATH = lib.optionalString (!stdenv.hostPlatform.isWindows) "${bash}/bin/bash";
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
@@ -48,6 +48,10 @@ buildGoModule rec {
     runHook postCheck
   '';
 
+  postInstall = ''
+    rm -rf "$out/share/fish"
+  '';
+
   meta = {
     description = "Shell extension that manages your environment";
     longDescription = ''
@@ -66,4 +70,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.zimbatm ];
     mainProgram = "direnv";
   };
-}
+})

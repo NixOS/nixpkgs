@@ -14,15 +14,15 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "memorado";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "wbernard";
     repo = "Memorado";
-    tag = version;
-    hash = "sha256-HNZdWRATjSfMk0e99CERPuR891549+wS/WeA7XGFxto=";
+    tag = finalAttrs.version;
+    hash = "sha256-pHbZ8zBfgAHLmCaMRS4MS/awFat41OG++hSSHz3k2KM=";
   };
 
   nativeBuildInputs = [
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ onny ];
   };
-}
+})

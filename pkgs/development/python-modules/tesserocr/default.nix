@@ -31,12 +31,9 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # Fix a broken test. The issue has been reported upstream at
-    # https://github.com/sirfz/tesserocr/issues/363
-    # Check the status of the issue before removing this patch at the next
-    # update.
+    # Backport https://github.com/sirfz/tesserocr/pull/364 to fix tests
     (fetchpatch {
-      url = "https://github.com/sirfz/tesserocr/commit/78d9e8187bd4d282d572bd5221db2c69e560e017.patch";
+      url = "https://github.com/sirfz/tesserocr/commit/853a885d0154a0345e1ea7db80febe04893a3da8.patch";
       hash = "sha256-s51s9EIV9AZT6UoqwTuQ8lOjToqwIIUkDLjsvCsyYFU=";
     })
   ];

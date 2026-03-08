@@ -17,9 +17,9 @@ buildFHSEnv {
       libglvnd
       libpulseaudio
       shticker-book-unwritten-unwrapped
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXext
+      libx11
+      libxcursor
+      libxext
     ];
   runScript = "shticker_book_unwritten";
 

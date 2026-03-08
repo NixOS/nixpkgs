@@ -10,7 +10,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-attachments";
-  version = "9.0.0";
+  version = "10.0.1";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kani999";
     repo = "netbox-attachments";
-    tag = version;
-    hash = "sha256-lm1+MWDT9N6Y+Uf1t3jTrFRF8jRy86JNdZSL1RQO7cw=";
+    tag = "v${version}";
+    hash = "sha256-ZsK6RKYkfzn6YSS9ern9QxLsRdcwzt8BmMdYGJTMOKM=";
   };
 
   build-system = [ setuptools ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kani999/netbox-attachments/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    teams = with lib.teams; [ secshell ];
+    maintainers = with lib.maintainers; [ felbinger ];
   };
 }

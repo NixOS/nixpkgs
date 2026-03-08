@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubexit";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "karlkfi";
     repo = "kubexit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Kzom+/Xad6SI9czw4xvmTbJ+bNB9mF2oSq37IFn384U=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

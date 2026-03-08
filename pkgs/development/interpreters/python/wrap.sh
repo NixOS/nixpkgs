@@ -1,7 +1,7 @@
 # Wrapper around wrapPythonProgramsIn, below. The $pythonPath
 # variable is passed in from the buildPythonPackage function.
 wrapPythonPrograms() {
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/bin" "$out ${pythonPath[*]}"
 }
 
 # Builds environment variables like PYTHONPATH and PATH walking through closure

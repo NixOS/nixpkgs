@@ -6,17 +6,14 @@
   google-auth,
   google-auth-oauthlib,
   pytest-vcr,
-  pytestCheckHook,
-  pythonOlder,
+  pytest8_3CheckHook,
   strenum,
 }:
 
 buildPythonPackage rec {
   pname = "gspread";
   version = "6.2.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "burnash";
@@ -35,7 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-vcr
-    pytestCheckHook
+    pytest8_3CheckHook
   ];
 
   pythonImportsCheck = [ "gspread" ];

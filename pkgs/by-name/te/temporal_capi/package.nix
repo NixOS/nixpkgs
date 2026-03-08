@@ -5,20 +5,21 @@
   fetchFromGitHub,
   nix-update-script,
   testers,
+  validatePkgConfig,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "temporal_capi";
-  version = "0.1.2";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "temporal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JmNYoskoQZewmWAU/SUBdjKdN+pnpMdLZUVv+jysS5A=";
+    hash = "sha256-RPbyl45Rl0a0c954m6c6449HQFPtbyAsDC19W8rRVnc=";
   };
 
-  cargoHash = "sha256-jIPbroAtS7D/l4QJtGCgXNa7QaQLdsF4Gh9O4NaRBCw=";
+  cargoHash = "sha256-i5vsQ12J1T9Pe2x7WCdrOLzsSKEDtSfDn/pqEDOd6aE=";
 
   postPatch = ''
     # Force crate-type to include staticlib
@@ -34,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--features"
     "zoneinfo64,compiled_data"
   ];
+  nativeBuildInputs = [ validatePkgConfig ];
 
   installPhase = ''
     runHook preInstall
@@ -84,7 +86,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.tests = {
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "temporal_capi" ];
     };
     updateScript = nix-update-script { };
   };
@@ -98,5 +99,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     maintainers = with lib.maintainers; [ aduh95 ];
+    pkgConfigModules = [ "temporal_capi" ];
   };
 })

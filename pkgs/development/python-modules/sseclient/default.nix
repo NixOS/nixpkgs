@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   requests,
   six,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sseclient";
   version = "0.0.27";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

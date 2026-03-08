@@ -10,16 +10,13 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
 buildPythonPackage rec {
   pname = "tailscale";
   version = "0.6.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.11";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frenck";

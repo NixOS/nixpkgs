@@ -10,20 +10,20 @@
 let
   libExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
-  tsc-dyn = rustPlatform.buildRustPackage rec {
+  tsc-dyn = rustPlatform.buildRustPackage (finalAttrs: {
     pname = "tsc-dyn";
     version = "0.18.0";
 
     src = fetchFromGitHub {
       owner = "emacs-tree-sitter";
       repo = "emacs-tree-sitter";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-LrakDpP3ZhRQqz47dPcyoQnu5lROdaNlxGaQfQT6u+k=";
     };
 
     cargoHash = "sha256-Tua3ZFfSyWVYXU9mPLWXE6ejGlXowTNe3nvZBaicmSQ=";
 
-    sourceRoot = "${src.name}/core";
+    sourceRoot = "${finalAttrs.src.name}/core";
 
     postInstall = ''
       pushd $out/lib
@@ -31,7 +31,7 @@ let
       echo -n $version > DYN-VERSION
       popd
     '';
-  };
+  });
 in
 melpaBuild {
   pname = "tsc";

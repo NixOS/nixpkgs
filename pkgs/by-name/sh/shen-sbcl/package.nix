@@ -7,11 +7,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "shen-sbcl";
-  version = "39.2";
+  version = "41";
 
   src = fetchzip {
     url = "https://www.shenlanguage.org/Download/S${finalAttrs.version}.zip";
-    hash = "sha256-V6op0G4aEdKifP6L0ho6cy1FPNax+0aE5ltWxT7Xniw=";
+    hash = "sha256-uWGMET1zjGbI/+yM1zeMfhVYBgrGawafAEBBGXANXGE=";
   };
 
   nativeBuildInputs = [ sbcl ];
@@ -40,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     # remove interactive prompt during image creation
     substituteInPlace install.lsp \
-      --replace-fail '(Y-OR-N-P "Load Shen Library? ")' '${
+      --replace-fail '(Y-OR-N-P "Load Shen Standard Library? ")' '${
         if installStandardLibrary then "T" else "NIL"
       }'
   '';

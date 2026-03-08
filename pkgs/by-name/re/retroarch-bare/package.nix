@@ -15,12 +15,12 @@
   libGLU,
   libpulseaudio,
   libv4l,
-  libX11,
-  libXdmcp,
-  libXext,
+  libx11,
+  libxdmcp,
+  libxext,
   libxkbcommon,
   libxml2,
-  libXxf86vm,
+  libxxf86vm,
   makeBinaryWrapper,
   mbedtls,
   libgbm,
@@ -57,7 +57,7 @@ let
   runtimeLibs =
     lib.optional withVulkan vulkan-loader ++ lib.optional withGamemode (lib.getLib gamemode);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "retroarch-bare";
   version = "1.22.2";
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     owner = "libretro";
     repo = "RetroArch";
     hash = "sha256-+3jgoh6OVbPzW5/nCvpB1CRgkMTBxLkYMm6UV16/cfU=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
@@ -99,10 +99,10 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     dbus
-    libX11
-    libXdmcp
-    libXext
-    libXxf86vm
+    libx11
+    libxdmcp
+    libxext
+    libxxf86vm
     libdrm
     libpulseaudio
     libv4l
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/libretro/RetroArch/blob/v${version}/CHANGES.md";
+    changelog = "https://github.com/libretro/RetroArch/blob/v${finalAttrs.version}/CHANGES.md";
     maintainers = with lib.maintainers; [
       kolbycrouch
     ];
@@ -191,4 +191,4 @@ stdenv.mkDerivation rec {
     # https://github.com/libretro/RetroArch/blob/71eb74d256cb4dc5b8b43991aec74980547c5069/.gitlab-ci.yml#L330
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

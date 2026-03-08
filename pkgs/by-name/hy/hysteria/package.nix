@@ -4,18 +4,18 @@
   buildGoModule,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hysteria";
-  version = "2.6.5";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "apernet";
     repo = "hysteria";
-    rev = "app/v${version}";
-    hash = "sha256-EiucZQ8poLmWVGd7MElZ4FWhDdDuM0/8CiomN+TKolw=";
+    rev = "app/v${finalAttrs.version}";
+    hash = "sha256-EqDwCb8hd0bRTCqG762DZvSw7PGCD13SXxW/W5f6HVs=";
   };
 
-  vendorHash = "sha256-ho5AC9kehhvPVS3CoB2Yucbk5vCVqWAe1MZGInusKk8=";
+  vendorHash = "sha256-CeAbWgDwGMKtqYXwXe1SDwDT+VY+2U6fztNHqUk4i84=";
   proxyVendor = true;
 
   ldflags =
@@ -25,7 +25,7 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${cmd}.appVersion=${version}"
+      "-X ${cmd}.appVersion=${finalAttrs.version}"
       "-X ${cmd}.appType=release"
     ];
 
@@ -46,4 +46,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "hysteria";
   };
-}
+})

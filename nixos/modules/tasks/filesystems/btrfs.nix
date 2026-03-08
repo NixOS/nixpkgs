@@ -89,12 +89,11 @@ in
         "crc32c"
       ]
       ++ optionals (config.boot.kernelPackages.kernel.kernelAtLeast "5.5") [
-        # Needed for mounting filesystems with new checksums
-        "xxhash_generic"
-        "blake2b_generic"
-
-        # `sha256` is always available, whereas `sha256_generic` is not available from 6.17 onwards
+        # The canonical names of these modules are not very stable, so use the algorithm names that the btrfs module expects.
+        # See: https://github.com/torvalds/linux/blob/v6.19-rc1/fs/btrfs/super.c#L2705-L2708
+        "xxhash64"
         "sha256" # Should be baked into our kernel, just to be sure
+        "blake2b-256"
       ];
 
       boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) ''

@@ -7,27 +7,24 @@
   pytest-asyncio_0,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pykaleidescape";
-  version = "2022.2.3";
+  version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pykaleidescape";
-    tag = "v${version}";
-    hash = "sha256-h5G7wV4Z+sf8Qq4GNFsp8DVDSgQgS0dLGf+DzK/egYM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IA6BefKBFMfatiaw+Ye8NdYZ6BDlR1z4L+YkZ4Iy3Wg=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dnspython
   ];
@@ -52,8 +49,8 @@ buildPythonPackage rec {
   meta = {
     description = "Module for controlling Kaleidescape devices";
     homepage = "https://github.com/SteveEasley/pykaleidescape";
-    changelog = "https://github.com/SteveEasley/pykaleidescape/releases/tag/${src.tag}";
+    changelog = "https://github.com/SteveEasley/pykaleidescape/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

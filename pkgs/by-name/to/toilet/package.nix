@@ -8,12 +8,12 @@
   testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "toilet";
   version = "0.3";
 
   src = fetchurl {
-    url = "http://caca.zoy.org/raw-attachment/wiki/toilet/toilet-${version}.tar.gz";
+    url = "http://caca.zoy.org/raw-attachment/wiki/toilet/toilet-${finalAttrs.version}.tar.gz";
     sha256 = "1pl118qb7g0frpgl9ps43w4sd0psjirpmq54yg1kqcclqcqbbm49";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "toilet";
   };
-}
+})

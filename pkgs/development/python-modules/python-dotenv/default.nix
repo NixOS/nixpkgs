@@ -4,7 +4,6 @@
   click,
   fetchFromGitHub,
   ipython,
-  mock,
   pytestCheckHook,
   setuptools,
   sh,
@@ -12,32 +11,35 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "1.1.1";
+  version = "1.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "theskumar";
     repo = "python-dotenv";
     tag = "v${version}";
-    hash = "sha256-GeN6/pnqhm7TTP+H9bKhJat6EwEl2EPl46mNSJWwFKk=";
+    hash = "sha256-YOwe/MHIyGdt6JqiwXwYi1cYxyPkGsBdUhjoG2Ks0y0=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [ click ];
+  optional-dependencies.cli = [ click ];
 
   nativeCheckInputs = [
     ipython
-    mock
     pytestCheckHook
     sh
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
-  disabledTests = [ "cli" ];
+  preCheck = ''
+    export PATH="$out/bin:$PATH"
+  '';
 
   pythonImportsCheck = [ "dotenv" ];
 
   meta = {
+    changelog = "https://github.com/theskumar/python-dotenv/blob/${src.tag}/CHANGELOG.md";
     description = "Add .env support to your django/flask apps in development and deployments";
     mainProgram = "dotenv";
     homepage = "https://github.com/theskumar/python-dotenv";

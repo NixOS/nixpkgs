@@ -9,20 +9,20 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monolith";
   version = "2.10.1";
 
   src = fetchFromGitHub {
     owner = "Y2Z";
     repo = "monolith";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7D/r9/uY1JcShKgfNUGVTn8P5kUAwUIa/xBbhpReeNw=";
   };
 
   cargoHash = "sha256-rIwlNXe7me3Ehj1EIYiOYo12FQqovmZT0ui58gFRWWw=";
 
-  OPENSSL_NO_VENDOR = true;
+  env.OPENSSL_NO_VENDOR = true;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.cc0;
     platforms = lib.platforms.unix;
   };
-}
+})

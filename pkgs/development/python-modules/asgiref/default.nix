@@ -5,22 +5,19 @@
   fetchFromGitHub,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
-  version = "3.9.1";
+  version = "3.11.0";
   pname = "asgiref";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "asgiref";
     tag = version;
-    hash = "sha256-VD8OQP+Xq3JpUz3fZRl6g+SL7mGZjeHjOU9Cd+scYzc=";
+    hash = "sha256-2ZaUIWGF5cQVNj95b7WiKGsn2wYsoJmJ/CfPhIEZdjc=";
   };
 
   propagatedBuildInputs = [ typing-extensions ];
@@ -37,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "asgiref" ];
 
   meta = {
-    changelog = "https://github.com/django/asgiref/blob/${src.rev}/CHANGELOG.txt";
+    changelog = "https://github.com/django/asgiref/blob/${src.tag}/CHANGELOG.txt";
     description = "Reference ASGI adapters and channel layers";
     homepage = "https://github.com/django/asgiref";
     license = lib.licenses.bsd3;

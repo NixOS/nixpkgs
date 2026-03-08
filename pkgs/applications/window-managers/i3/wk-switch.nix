@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "i3-wk-switch";
   version = "2020-03-18";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tmfink";

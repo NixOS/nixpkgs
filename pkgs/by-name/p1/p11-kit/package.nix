@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "p11-kit";
-  version = "0.25.10";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "p11-glue";
     repo = "p11-kit";
     tag = version;
-    hash = "sha256-srZyY14PqPoPMcEj/3WWEPrBuCcAGibvziKgZV1vxO8=";
+    hash = "sha256-RQgPSHnpkDYUL8qAZCljy/+IF0nnaH13M+MnXBZLDeY=";
     fetchSubmodules = true;
   };
 
@@ -101,5 +101,6 @@ stdenv.mkDerivation rec {
     ];
     license = lib.licenses.bsd3;
     mainProgram = "p11-kit";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "p11-kit_project" version;
   };
 }

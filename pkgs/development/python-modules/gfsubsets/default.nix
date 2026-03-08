@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fonttools,
   importlib-resources,
   setuptools,
@@ -11,12 +11,13 @@
 
 buildPythonPackage rec {
   pname = "gfsubsets";
-  version = "2024.9.25";
-  gitTag = "v2024.02.05";
+  version = "2025.11.04";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jEuIBNQ89Le3Rbk0W4PLl9LE7rP0IcE6RAzyfhZb7lY=";
+  src = fetchFromGitHub {
+    owner = "googlefonts";
+    repo = "nam-files";
+    tag = "v${version}";
+    hash = "sha256-mMsmccIuilKeOUjt68etYefibuorjlW32gLcLgV8jxo=";
   };
 
   pyproject = true;
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Codepoint definitions for the Google Fonts subsetter";
     homepage = "https://github.com/googlefonts/nam-files";
-    changelog = "https://github.com/googlefonts/nam-files/releases/tag/${gitTag}";
+    changelog = "https://github.com/googlefonts/nam-files/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ danc86 ];
   };

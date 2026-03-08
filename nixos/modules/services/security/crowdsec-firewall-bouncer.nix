@@ -45,7 +45,7 @@ in
             instead.
           '';
           default = config.services.crowdsec.enable;
-          defaultText = lib.literalExpression ''config.services.crowdsec.enable'';
+          defaultText = lib.literalExpression "config.services.crowdsec.enable";
         };
         bouncerName = mkOption {
           type = types.nonEmptyStr;
@@ -231,7 +231,7 @@ in
           after = [ "crowdsec.service" ];
           wants = after;
           script = ''
-            cscli=/run/current-system/sw/bin/cscli
+            cscli=${lib.getExe' config.services.crowdsec.package "cscli"}
             if $cscli bouncers list --output json | ${lib.getExe pkgs.jq} -e -- ${lib.escapeShellArg "any(.[]; .name == \"${cfg.registerBouncer.bouncerName}\")"} >/dev/null; then
               # Bouncer already registered. Verify the API key is still present
               if [ ! -f ${apiKeyFile} ]; then
@@ -257,12 +257,7 @@ in
             User = config.services.crowdsec.user;
             Group = config.services.crowdsec.group;
 
-            StateDirectory = "crowdsec-firewall-bouncer-register";
-
-            ReadWritePaths = [
-              # Needs write permissions to add the bouncer
-              "/var/lib/crowdsec"
-            ];
+            StateDirectory = "crowdsec-firewall-bouncer-register crowdsec";
 
             DynamicUser = true;
             LockPersonality = true;
@@ -371,7 +366,8 @@ in
               AmbientCapabilities = [
                 # Needed to be able to manipulate the rulesets
                 "CAP_NET_ADMIN"
-              ];
+              ]
+              ++ lib.optional ((cfg.settings.mode == "iptables") || (cfg.settings.mode == "ipset")) "CAP_NET_RAW";
               CapabilityBoundingSet = AmbientCapabilities;
               SystemCallFilter = [
                 "@system-service"

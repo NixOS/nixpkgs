@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-view-secret";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "elsesiy";
     repo = "kubectl-view-secret";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JFVW/k+TMsIo24zBqjtpoei6YRW/rgwu0qFEHvZbc1c=";
   };
 
@@ -27,8 +27,8 @@ buildGoModule rec {
     description = "Kubernetes CLI plugin to decode Kubernetes secrets";
     mainProgram = "kubectl-view_secret";
     homepage = "https://github.com/elsesiy/kubectl-view-secret";
-    changelog = "https://github.com/elsesiy/kubectl-view-secret/releases/tag/v${version}";
+    changelog = "https://github.com/elsesiy/kubectl-view-secret/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sagikazarmark ];
   };
-}
+})

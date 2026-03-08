@@ -3,22 +3,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "json5";
-  version = "0.12.1";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dpranke";
     repo = "pyjson5";
     tag = "v${version}";
-    hash = "sha256-ou4Rc50PsWtgWmD05JUU2fmZc2IRYppao5Kf0WVfYF0=";
+    hash = "sha256-KL5YsWSHS8xI+lQB+ZtdEKUHGKICOduZsBd51z4jItw=";
   };
 
   build-system = [ setuptools ];

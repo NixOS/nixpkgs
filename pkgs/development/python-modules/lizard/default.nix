@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   mock,
   jinja2,
@@ -12,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "lizard";
-  version = "1.17.31";
+  version = "1.20.0";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "terryyin";
     repo = "lizard";
-    rev = version;
-    hash = "sha256-8lu4EknyAI+gn7GOSo13RRHNogpZdgxJ9fTvy7NyIsM=";
+    tag = version;
+    hash = "sha256-HNpCg/ScD0aDdpVXA9Nb9QU+4ww6Kp2qIeu9Lj0O7A4=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "lizard" ];
 
   meta = {
-    changelog = "https://github.com/terryyin/lizard/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/terryyin/lizard/blob/${src.tag}/CHANGELOG.md";
     description = "Code analyzer without caring the C/C++ header files";
     mainProgram = "lizard";
     downloadPage = "https://github.com/terryyin/lizard";

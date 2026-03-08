@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = "python-lsp-black";
@@ -50,8 +48,7 @@ buildPythonPackage rec {
   dependencies = [
     black
     python-lsp-server
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   pythonImportsCheck = [ "pylsp_black" ];
 

@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "voms";
-  version = "2.1.2";
+  version = "2.1.3";
 
   src = fetchFromGitHub {
     owner = "italiangrid";
     repo = "voms";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ipNgx87M/NNvAaeUf30nUDmf4Q9k5zakkgMk4/1N6VM=";
+    hash = "sha256-odwaIGaiJEnxNeysScYknOTimpvvx1vhuHf82VGPoVg=";
   };
 
   passthru = {
@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://italiangrid.github.io/voms/";
     changelog = "https://github.com/italiangrid/voms/blob/master/ChangeLog";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux; # gsoap is currently Linux-only in Nixpkgs
-    maintainers = with lib.maintainers; [ ShamrockLee ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      ShamrockLee
+      veprbl
+    ];
   };
 })

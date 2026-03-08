@@ -2,14 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   packaging,
   pluggy,
-  py,
-  six,
   virtualenv,
-  toml,
-  tomli,
   filelock,
   hatchling,
   hatch-vcs,
@@ -24,27 +19,22 @@
 
 buildPythonPackage rec {
   pname = "tox";
-  version = "4.28.4";
-  format = "pyproject";
+  version = "4.34.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "tox";
     tag = version;
-    hash = "sha256-EKJsFf4LvfDi3OL6iNhKEBl5zlpdLET9RkfHEP7E9xU=";
+    hash = "sha256-pfftPTY7n47tCQFGCZRwsq0vCWZUeukFZO99gj5mTeo=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "packaging>=22" "packaging"
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
     chardet
     colorama
@@ -52,13 +42,9 @@ buildPythonPackage rec {
     packaging
     platformdirs
     pluggy
-    py
     pyproject-api
-    six
-    toml
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   doCheck = false; # infinite recursion via devpi-client
 

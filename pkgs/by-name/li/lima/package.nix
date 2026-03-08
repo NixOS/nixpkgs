@@ -4,7 +4,6 @@
   buildGoModule,
   callPackage,
   installShellFiles,
-  procps,
   qemu,
   darwin,
   makeWrapper,
@@ -21,10 +20,13 @@
   jq,
 }:
 
+let
+  source = callPackage ./source.nix { };
+in
 buildGoModule (finalAttrs: {
-  pname = "lima";
+  pname = "lima" + lib.optionalString withAdditionalGuestAgents "-full";
 
-  inherit (callPackage ./source.nix { }) version src vendorHash;
+  inherit (source) version src vendorHash;
 
   nativeBuildInputs = [
     makeWrapper
@@ -41,11 +43,6 @@ buildGoModule (finalAttrs: {
     substituteInPlace Makefile \
       --replace-fail 'codesign -f -v --entitlements vz.entitlements -s -' 'codesign -f --entitlements vz.entitlements -s -' \
       --replace-fail 'rm -rf _output vendor' 'rm -rf _output'
-  ''
-  # fixed upstream, remove when version >=2.0.0
-  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace pkg/networks/usernet/recoincile.go \
-      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
   '';
 
   # It attaches entitlements with codesign and strip removes those,
@@ -95,7 +92,6 @@ buildGoModule (finalAttrs: {
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/limactl";
-  versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
   installCheckPhase = ''
@@ -165,14 +161,7 @@ buildGoModule (finalAttrs: {
     };
   };
 
-  meta = {
-    homepage = "https://github.com/lima-vm/lima";
+  meta = source.meta // {
     description = "Linux virtual machines with automatic file sharing and port forwarding";
-    changelog = "https://github.com/lima-vm/lima/releases/tag/v${finalAttrs.version}";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      anhduy
-      kachick
-    ];
   };
 })

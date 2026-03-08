@@ -10,14 +10,14 @@
   SDL2_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdlpop";
   version = "1.23";
 
   src = fetchFromGitHub {
     owner = "NagyD";
     repo = "SDLPoP";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UI7NfOC/+druRYL5g2AhIjTPEq4ta1qEThcxgyrFjHY=";
   };
 
@@ -82,10 +82,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open-source port of Prince of Persia";
     homepage = "https://github.com/NagyD/SDLPoP";
-    changelog = "https://github.com/NagyD/SDLPoP/blob/v${version}/doc/ChangeLog.txt";
+    changelog = "https://github.com/NagyD/SDLPoP/blob/v${finalAttrs.version}/doc/ChangeLog.txt";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ iblech ];
     platforms = lib.platforms.unix;
     mainProgram = "prince";
   };
-}
+})

@@ -22,19 +22,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-anthropic";
-  version = "1.2.0";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-anthropic==${version}";
-    hash = "sha256-dmuDgKQW1yAz/8tjQx7LaUiuz5Sh4cAyd9nt33mCPbI=";
+    tag = "langchain-anthropic==${finalAttrs.version}";
+    hash = "sha256-8dGP26N2aheMTtI2wYMBVitlzrTsJZa5Zt5xVl+vqI4=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/anthropic";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/anthropic";
 
   build-system = [ hatchling ];
 
@@ -57,10 +57,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # TypeError from Pydantic
-    # https://github.com/langchain-ai/langchain/issues/34068
-    "test_creates_bash_tool"
-    "test_replaces_tool_with_claude_descriptor"
+    # Fails when langchain-core gets ahead of this
+    "test_serdes"
   ];
 
   pythonImportsCheck = [ "langchain_anthropic" ];
@@ -74,7 +72,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-anthropic/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain applications with Anthropic";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/anthropic";
     license = lib.licenses.mit;
@@ -82,4 +80,4 @@ buildPythonPackage rec {
       lib.maintainers.sarahec
     ];
   };
-}
+})

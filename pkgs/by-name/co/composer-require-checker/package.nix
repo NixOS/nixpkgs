@@ -7,20 +7,19 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "composer-require-checker";
-  version = "4.19.0";
+  version = "4.21.0";
 
   # Upstream no longer provides the composer.lock in their release artifact
   src = fetchgit {
     url = "https://github.com/maglnet/ComposerRequireChecker";
     tag = finalAttrs.version;
-    hash = "sha256-cTXXPsHI2yiHSakiWuuxripGLvkwmzIAADqKtwHOI7c=";
+    hash = "sha256-Vr87mIljmov6owtQ8vo3e4bTOQx2x0zDtcyEUSt+ti0=";
   };
 
-  vendorHash = "sha256-ZUAXo4X4B7Z6wfcmv7L1DFvD4Lx1sSoMmw1gR5nDEP0=";
+  vendorHash = "sha256-0hJu+k0iYdj0WnsFVuXdGQy5J82xKCGF3qg/zNsgj5s=";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";

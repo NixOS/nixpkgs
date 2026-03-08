@@ -12,7 +12,7 @@
   libsoup_2_4,
   # webkitgtk_4_0,
   webkitgtk_4_1,
-  xorg,
+  xprop,
   dmenu,
   findutils,
   gnused,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   preFixup =
     let
       depsPath = lib.makeBinPath [
-        xorg.xprop
+        xprop
         dmenu
         findutils
         gnused
@@ -90,6 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://surf.suckless.org";
     license = lib.licenses.mit;
     platforms = webkitgtk_4_1.meta.platforms;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
   };
 }

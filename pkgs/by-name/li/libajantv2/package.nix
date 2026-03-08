@@ -10,14 +10,14 @@
   linuxPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libajantv2";
   version = "17.5.0";
 
   src = fetchFromGitHub {
     owner = "aja-video";
     repo = "libajantv2";
-    rev = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "ntv2_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-/BfFbBScS75TpUZEeYzAHd1PtnZgnCNfGtjwYPJJjkg=";
   };
   patches = [
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
     Name: libajantv2
     Description: Library for controlling AJA NTV2 video devices
-    Version: ${version}
+    Version: ${finalAttrs.version}
     Libs: -L\''${libdir} -lajantv2
     Cflags: -I\''${includedir} -I\''${includedir}/ajantv2/includes -I\''${includedir}/ajantv2/src/lin -DAJALinux -DAJA_LINUX -DAJA_USE_CPLUSPLUS11 -DNDEBUG -DNTV2_USE_CPLUSPLUS11
     EOF
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.lukegb ];
     platforms = lib.platforms.linux;
   };
-}
+})

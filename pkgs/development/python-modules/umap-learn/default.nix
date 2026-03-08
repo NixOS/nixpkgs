@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.9.post2";
+  version = "0.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     tag = "release-${version}";
-    hash = "sha256-ollUXPVB07v6DkQ/d1eke0/j1f4Ekfygo1r6CtIRTuk=";
+    hash = "sha256-V63W9ax7iOq5+oZFRWaQbAws942JBeufnQ3IF4rcgko=";
   };
 
   build-system = [ setuptools ];

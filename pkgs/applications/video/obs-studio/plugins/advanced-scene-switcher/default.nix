@@ -17,14 +17,14 @@
   qtbase,
   stdenv,
   websocketpp,
-  libXScrnSaver,
+  libxscrnsaver,
   libusb1,
   pkg-config,
-# #FIXME: Could not get cmake to pick up on these dependencies
-# Ommiting them prevents cmake from building the OCR video capabilities
-# Everything else should work it's just missing this one plugin
-# tesseract,
-# leptonica,
+  # #FIXME: Could not get cmake to pick up on these dependencies
+  # Ommiting them prevents cmake from building the OCR video capabilities
+  # Everything else should work it's just missing this one plugin
+  # tesseract,
+  # leptonica,
 }:
 let
   httplib-src = fetchFromGitHub {
@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "advanced-scene-switcher";
-  version = "1.32.4";
+  version = "1.32.6";
 
   src = fetchFromGitHub {
     owner = "WarmUpTill";
     repo = "SceneSwitcher";
     rev = version;
-    hash = "sha256-OgvR37w7ol/8zCP6MLNYGYP4fq0upzbhfXYnOPCaE34=";
+    hash = "sha256-BQnu7zRk1zOsEqFjmRrOeK/jE+rmnsB1ktW+OfH+L3I=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     procps
     qtbase
     websocketpp
-    libXScrnSaver
+    libxscrnsaver
     libusb1
   ];
 

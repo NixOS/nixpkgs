@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "ftfy";
   version = "6.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "rspeer";
@@ -43,6 +40,11 @@ buildPythonPackage rec {
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
+
+  disabledTests = [
+    # https://github.com/rspeer/python-ftfy/issues/226
+    "ftfy.formatting.monospaced_width"
+  ];
 
   meta = {
     changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";

@@ -19,7 +19,7 @@ buildGoModule rec {
     hash = "sha256-NafQWP1NxHTwmOND8ovy3oVia7qq0rCwZYE3VNlMBKQ=";
   };
 
-  CGO_LDFLAGS = "-ldcgm";
+  env.CGO_LDFLAGS = "-ldcgm";
 
   buildInputs = [
     dcgm
@@ -46,7 +46,10 @@ buildGoModule rec {
     description = "NVIDIA GPU metrics exporter for Prometheus leveraging DCGM";
     homepage = "https://github.com/NVIDIA/dcgm-exporter";
     license = lib.licenses.asl20;
-    teams = [ lib.teams.deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+    ];
     mainProgram = "dcgm-exporter";
     platforms = lib.platforms.linux;
   };

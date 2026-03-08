@@ -8,7 +8,11 @@
   pkg-config,
   writableTmpDirAsHomeHook,
   libglvnd,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
   go,
   nix-update-script,
 }:
@@ -52,11 +56,11 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [
     libglvnd
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-    xorg.libXxf86vm
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+    libxxf86vm
   ];
 
   desktopItems = [ "assets/go-hass-agent.desktop" ];

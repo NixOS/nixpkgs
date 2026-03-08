@@ -8,10 +8,11 @@
   makeDesktopItem,
   libicns,
 
-  libXcursor,
-  libXext,
-  libXi,
-  libXrandr,
+  libGL,
+  libxcursor,
+  libxext,
+  libxi,
+  libxrandr,
 
   git,
   xdg-utils,
@@ -52,13 +53,15 @@ buildDotnetModule (finalAttrs: {
   ];
 
   # these are dlopen-ed at runtime
-  # libXi is needed for right-click support
+  # libxi is needed for right-click support
+  # libGL is needed for GPU-accelerated rendering (without it, Avalonia falls back to software rendering)
   # not sure about what the other ones are needed for, but I'll include them anyways
   runtimeDeps = [
-    libXcursor
-    libXext
-    libXi
-    libXrandr
+    libGL
+    libxcursor
+    libxext
+    libxi
+    libxrandr
   ];
 
   # Note: users can use `.overrideAttrs` to append to this list
@@ -80,6 +83,7 @@ buildDotnetModule (finalAttrs: {
       exec = "SourceGit";
       icon = "SourceGit";
       desktopName = "SourceGit";
+      categories = [ "Development" ];
       terminal = false;
       comment = finalAttrs.meta.description;
     })

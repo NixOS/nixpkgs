@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dumptorrent";
   version = "1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dumptorrent/dumptorrent-${version}.tar.gz";
+    url = "mirror://sourceforge/dumptorrent/dumptorrent-${finalAttrs.version}.tar.gz";
     sha256 = "073h03bmpfdy15qh37lvppayld2747i4acpyk0pm5nf2raiak0zm";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "dumptorrent";
   };
-}
+})

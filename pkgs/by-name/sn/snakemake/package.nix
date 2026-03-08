@@ -8,16 +8,16 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
-  version = "9.14.4";
+  version = "9.16.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
-    tag = "v${version}";
-    hash = "sha256-r8Fz0ZOGZbkQ5x5oarxkxzGMYSuh15N4RYlZZxPwPA0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+eEzpRY6ZEKB3v1/AkHDg4bOcM2Y6pt4UMrdKF6soac=";
   };
 
   postPatch = ''
@@ -86,8 +86,6 @@ python3Packages.buildPythonApplication rec {
       polars
     ])
     ++ [ writableTmpDirAsHomeHook ];
-
-  versionCheckProgramArg = "--version";
 
   enabledTestPaths = [
     "tests/tests.py"
@@ -172,6 +170,13 @@ python3Packages.buildPythonApplication rec {
     #   pulp.apis.core.PulpSolverError: Pulp: cannot execute cbc cwd:
     # but pulp solver is not default
     "test_access_patterns"
+
+    # Hangs with no sandbox, skips due to no network with sandbox relaxed/on
+    "test_modules_meta_wrapper"
+
+    # Hangs
+    # https://github.com/snakemake/snakemake/issues/3939
+    "test_issue1331"
   ];
 
   pythonImportsCheck = [ "snakemake" ];
@@ -180,7 +185,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
@@ -195,4 +200,4 @@ python3Packages.buildPythonApplication rec {
       veprbl
     ];
   };
-}
+})

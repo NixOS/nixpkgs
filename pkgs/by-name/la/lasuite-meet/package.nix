@@ -7,20 +7,20 @@
 let
   python = python3.override {
     self = python3;
-    packageOverrides = (self: super: { django = super.django_5_2; });
+    packageOverrides = (self: super: { django = super.django_5; });
   };
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "0.1.42";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-STb4JCEoKgzokIA5mWFqJkFH9mtdnIp8NcopLWYSbwQ=";
+    hash = "sha256-It/XicX3QBcaun36uksmbeEwhpCHpPM4SAfJwm6wjsQ=";
   };
 
   sourceRoot = "source/src/backend";
@@ -40,6 +40,7 @@ python.pkgs.buildPythonApplication rec {
       brevo-python
       brotli
       celery
+      dj-database-url
       django
       django-configurations
       django-cors-headers

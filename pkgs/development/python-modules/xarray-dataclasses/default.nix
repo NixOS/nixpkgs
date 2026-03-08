@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   poetry-core,
   pytestCheckHook,
   numpy,
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "xarray-dataclasses";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "astropenguin";

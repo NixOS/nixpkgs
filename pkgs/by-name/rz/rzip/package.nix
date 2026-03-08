@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rzip";
   version = "2.1";
 
   src = fetchurl {
-    url = "mirror://samba/rzip/rzip-${version}.tar.gz";
+    url = "mirror://samba/rzip/rzip-${finalAttrs.version}.tar.gz";
     sha256 = "4bb96f4d58ccf16749ed3f836957ce97dbcff3e3ee5fd50266229a48f89815b7";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "rzip";
   };
-}
+})

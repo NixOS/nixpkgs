@@ -95,8 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ]
-  ++ testDeps;
+  ];
+
+  checkInputs = testDeps;
 
   propagatedBuildInputs = [
     glib
@@ -104,12 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonBool "skip_gtk_tests" (!finalAttrs.finalPackage.doCheck))
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     "-Dprofiler=disabled"
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
+
+  strictDeps = true;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh

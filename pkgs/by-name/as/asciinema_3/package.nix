@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asciinema";
-  version = "3.0.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jWRq/LeDdCETiOMkWr9EIWztb14IYGCSo05QPw5HZZk=";
+    hash = "sha256-03olFWB/6O7V/B9gz6QACMxugrIx560fpp81IGVWv58=";
   };
 
-  cargoHash = "sha256-bGhShwH4BxE3O4/B8KSK1o7IXNDBmGuVt4kx5s8W/go=";
+  cargoHash = "sha256-B6s3uUPGL8m076dl3P26j+frHWLi+wzED41BQ/rQAM8=";
 
   env.ASCIINEMA_GEN_DIR = "gendir";
 
@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     homepage = "https://asciinema.org/";

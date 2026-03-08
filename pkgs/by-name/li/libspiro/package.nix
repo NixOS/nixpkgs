@@ -6,14 +6,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspiro";
   version = "20240903";
 
   src = fetchFromGitHub {
     owner = "fontforge";
     repo = "libspiro";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-psEF1SWkire6ngEUcMU0xnGYaT8ktqDCBlBckToGUMg=";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.erictapen ];
   };
-}
+})

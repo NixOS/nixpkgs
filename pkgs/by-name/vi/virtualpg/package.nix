@@ -7,12 +7,12 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virtualpg";
   version = "2.0.1";
 
   src = fetchurl {
-    url = "https://www.gaia-gis.it/gaia-sins/virtualpg-${version}.tar.gz";
+    url = "https://www.gaia-gis.it/gaia-sins/virtualpg-${finalAttrs.version}.tar.gz";
     hash = "sha256-virr64yf8nQ4IIX1HUIugjhYvKT2vC+pCYFkZMah4Is=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ sikmir ];
   };
-}
+})

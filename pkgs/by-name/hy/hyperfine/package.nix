@@ -4,16 +4,17 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hyperfine";
   version = "1.20.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "hyperfine";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ee889Fx2Mi2005SrlcKc7TwG8ZIpTqisfLebXYadvSg=";
   };
 
@@ -31,10 +32,15 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
   meta = {
     description = "Command-line benchmarking tool";
     homepage = "https://github.com/sharkdp/hyperfine";
-    changelog = "https://github.com/sharkdp/hyperfine/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/sharkdp/hyperfine/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -45,4 +51,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "hyperfine";
   };
-}
+})

@@ -13,18 +13,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vivify";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "jannis-baum";
     repo = "Vivify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LQX7HBTWDR43aMqJrogL9rDFL5qRF0Xzw/O35Uq7R3g=";
+    hash = "sha256-LjVxSf2rddg9DyAY6MAVFzuoxIT4d1a/8Wv8DukxeYM=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-rztQiOod7xI/gF9NQTCsfE7Wulm1eZHjyNLBI1YSNKk=";
+    hash = "sha256-61NXUEpXIFJXRuIZgLAkDqsk6WvV7WU2Qm24ID0oDtw=";
   };
 
   installPhase = ''

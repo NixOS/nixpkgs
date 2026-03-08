@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   stdenv,
 
   # build-system
@@ -22,14 +21,12 @@
 
 buildPythonPackage rec {
   pname = "pygal";
-  version = "3.0.5";
+  version = "3.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wKDzTlvBwBl1wr+4NCrVIeKTrULlJWmd0AxNelLBS3E=";
+    hash = "sha256-+97nNRp0I+eQf7ipw7dzBfa1Z4yy5v0Ns2qIJeQpVew=";
   };
 
   postPatch = ''

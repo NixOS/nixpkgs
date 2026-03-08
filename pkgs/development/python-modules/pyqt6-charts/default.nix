@@ -5,7 +5,6 @@
   sip,
   pyqt-builder,
   qt6Packages,
-  pythonOlder,
   pyqt6,
   python,
   mesa,
@@ -13,15 +12,13 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-charts";
-  version = "6.9.0";
+  version = "6.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "pyqt6_charts";
     inherit version;
-    hash = "sha256-fvvpu35q1PmEUhGg7+D5HKXhT5Ni7RuoTVXyuFFQkfc=";
+    hash = "sha256-keFeKNARyqTIOIGpBoezXj0F71cpDN2XYIJMlb2saj4=";
   };
 
   # fix include path and increase verbosity

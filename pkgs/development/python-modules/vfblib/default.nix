@@ -16,15 +16,20 @@
 
 buildPythonPackage rec {
   pname = "vfblib";
-  version = "0.10.4";
+  version = "0.10.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LucasFonts";
     repo = "vfbLib";
     tag = "v${version}";
-    hash = "sha256-fAczRejHDe02iWMWXQzNHLmxRX5ApIPvUzsYnwqrKn8=";
+    hash = "sha256-kPPRLs+i181stjoTjgi9XfxsQhx+VKGCggyfhy8o6Nw=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm[toml]>=9.2.0" "setuptools-scm"
+  '';
 
   build-system = [
     setuptools
@@ -38,6 +43,10 @@ buildPythonPackage rec {
     ufonormalizer
     ufolib2
     defcon
+  ];
+
+  pythonRelaxDeps = [
+    "ufonormalizer"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

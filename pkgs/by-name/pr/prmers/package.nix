@@ -7,17 +7,18 @@
   opencl-headers,
   stdenv,
   versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prmers";
-  version = "4.15.35-alpha";
+  version = "4.16.11-alpha";
 
   src = fetchFromGitHub {
     owner = "cherubrock-seb";
     repo = "PrMers";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LAbWyz1FT9Zza4gewgKeMvQt8rwkfBhHRWBGpN+DIXE=";
+    hash = "sha256-yyfPnDacU8VBqVq8gwPflxCPmbSRqMr5N6zFu5pm6x4=";
   };
 
   enableParallelBuilding = true;
@@ -43,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   versionCheckProgramArg = "-v";
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=unstable" ]; };
 
   meta = {
     description = "GPU-accelerated Mersenne primality testing";

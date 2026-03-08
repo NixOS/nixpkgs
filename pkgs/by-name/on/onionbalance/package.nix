@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "onionbalance";
   version = "0.2.4";
 
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.torproject.org";
     owner = "tpo";
     repo = "onion-services/onionbalance";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-amwKP9LJ7aHPECNUNTluFpgIFSRLxR7eHQxBxW5574I=";
   };
   dependencies = with python3Packages; [
@@ -30,9 +30,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Tool for loadbalancing onion services";
     homepage = "https://github.com/torproject/onionbalance";
-    changelog = "https://github.com/torproject/onionbalance/blob/${version}/docs/changelog.md";
+    changelog = "https://github.com/torproject/onionbalance/blob/${finalAttrs.version}/docs/changelog.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.ForgottenBeast ];
     mainProgram = "onionbalance";
   };
-}
+})

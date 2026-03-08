@@ -16,6 +16,8 @@
   readline,
   sbc,
   python3,
+  systemdSupport ? true,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     python3
-  ];
+  ]
+  ++ lib.optional systemdSupport systemdLibs;
 
   buildInputs = [
     alsa-lib
@@ -49,9 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     libbsd
     ncurses
   ]
-  ++ lib.optionals aacSupport [
-    fdk_aac
-  ];
+  ++ lib.optional aacSupport fdk_aac;
 
   configureFlags = [
     (lib.enableFeature aacSupport "aac")
@@ -59,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "rfcomm")
     (lib.withFeatureAs true "alsaplugindir" "${placeholder "out"}/lib/alsa-lib")
     (lib.withFeatureAs true "dbusconfdir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.enableFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.withFeatureAs systemdSupport "bluealsauser" "bluealsa")
+    (lib.withFeatureAs systemdSupport "bluealsaaplayuser" "bluealsa")
   ];
 
   passthru.updateScript = gitUpdater { };

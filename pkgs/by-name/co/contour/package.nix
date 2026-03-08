@@ -5,13 +5,13 @@
   cmake,
   pkg-config,
   boxed-cpp,
+  cairo,
   freetype,
   fontconfig,
   libunicode,
   libutempter,
   termbench-pro,
   qt6,
-  pcre,
   boost,
   catch2_3,
   fmt,
@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "contour";
-  version = "0.6.1.7494";
+  version = "0.6.2.8008";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jgasZhdcJ+UF3VIl8HLcxBayvbA/dkaOG8UtANRgeP4=";
+    hash = "sha256-xbJxV1q7+ddhnH0jDYzqVHwARCD0EyVh3POFRkl4d1Q=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -59,13 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boxed-cpp
+    cairo
     fontconfig
     freetype
     libunicode
     termbench-pro
     qt6.qtmultimedia
     qt6.qt5compat
-    pcre
     boost
     catch2_3
     fmt
@@ -78,8 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libutil
   ];
-
-  cmakeFlags = [ "-DCONTOUR_QT_VERSION=6" ];
 
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share

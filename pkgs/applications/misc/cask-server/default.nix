@@ -1,25 +1,27 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cask-server";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Nitrux";
     repo = "cask-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-XUgLtZMcvzGewtUcgu7FbBCn/1zqOjWvw2AI9gUwWkc=";
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
+    wrapQtAppsHook
   ];
 
   meta = {
@@ -33,5 +35,4 @@ mkDerivation rec {
     ];
     maintainers = with lib.maintainers; [ onny ];
   };
-
-}
+})

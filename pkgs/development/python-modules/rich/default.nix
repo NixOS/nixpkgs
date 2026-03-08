@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
 
   # build-system
   poetry-core,
@@ -27,14 +28,18 @@
 
 buildPythonPackage rec {
   pname = "rich";
-  version = "14.1.0";
+  version = if python.isPy313 then "14.2.0" else "14.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
     tag = "v${version}";
-    hash = "sha256-44L3eVf/gI0FlOlxzJ7/+A1jN6ILkeVEelaru1Io20U=";
+    hash =
+      if python.isPy313 then
+        "sha256-oQbxRbZnVr/Ln+i/hpBw5FlpUp3gcp/7xsxi6onPkn8="
+      else
+        "sha256-6udVO7N17ineQozlCG/tI9jJob811gqb4GtY50JZFb0=";
   };
 
   build-system = [ poetry-core ];

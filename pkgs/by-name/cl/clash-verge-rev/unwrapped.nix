@@ -8,36 +8,37 @@
   vendor-hash,
 
   rustPlatform,
-  fetchpatch,
-
   cargo-tauri,
   jq,
   moreutils,
   nodejs,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
 
   glib,
   kdePackages,
   libayatana-appindicator,
   libsForQt5,
-  libsoup,
+  libsoup_3,
   openssl,
   webkitgtk_4_1,
 }:
-
 rustPlatform.buildRustPackage {
   inherit version src meta;
   pname = "${pname}-unwrapped";
 
-  cargoRoot = "src-tauri";
-  buildAndTestSubdir = "src-tauri";
-
   cargoHash = vendor-hash;
 
-  pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
-    fetcherVersion = 1;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
     hash = pnpm-hash;
   };
 
@@ -45,11 +46,9 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/clash-verge-rev/clash-verge-rev/commit/645b92bc2815fe55bbc827907bff0edbfee48674.patch";
-      hash = "sha256-BH0SvVofW6YJ3e/LOHojisenMwcxYfm3gG/dbxvYBMs=";
-    })
+  cargoPatches = [
+    # Duplicate versions of tao-macros make fetchCargoVendor fail, keep one of them.
+    ./patch-cargo-lock.patch
   ];
 
   postPatch = ''
@@ -94,12 +93,13 @@ rustPlatform.buildRustPackage {
     moreutils
     nodejs
     pkg-config
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildInputs = [
     libayatana-appindicator
-    libsoup
+    libsoup_3
     openssl
     webkitgtk_4_1
   ];

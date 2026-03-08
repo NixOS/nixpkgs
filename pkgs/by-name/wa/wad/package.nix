@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wad";
   version = "0.4.6";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "CERN-CERT";
     repo = "WAD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/mlmOzFkyKpmK/uk4813Wk0cf/+ynX3Qxafnd1mGR5k=";
   };
 
@@ -48,4 +48,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

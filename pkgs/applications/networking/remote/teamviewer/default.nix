@@ -1,5 +1,4 @@
 {
-  mkDerivation,
   lib,
   stdenv,
   fetchurl,
@@ -9,13 +8,13 @@
   dbus,
   getconf,
   glibc,
-  libXrandr,
-  libX11,
-  libXext,
-  libXdamage,
-  libXtst,
-  libSM,
-  libXfixes,
+  libxrandr,
+  libx11,
+  libxext,
+  libxdamage,
+  libxtst,
+  libsm,
+  libxfixes,
   coreutils,
   wrapQtAppsHook,
   icu63,
@@ -23,14 +22,14 @@
   minizip,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
   outputs = [
     "out"
     "dev"
   ];
-  version = "15.71.4";
+  version = "15.74.3";
 
   src =
     let
@@ -39,11 +38,11 @@ mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-DztZRVBIFdLkZX1a89tVwJvJicgsm5YTux0ezyWL1+w=";
+        hash = "sha256-7QQlGzIr3BBFaur8ycGY0VuYz21cJI+EfCsRuCAr8XA=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-lKEAuMsScbnEkgR6VFykEyar55u/Fdt5VcCWnKPwJLU=";
+        hash = "sha256-prz3RaeMykgLrK9ai3/ivzRsUFT1dyWP1xymEl3s4eA=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -103,12 +102,8 @@ mkDerivation rec {
       --replace '/opt/teamviewer/tv_bin/script/execscript' \
         "$out/share/teamviewer/tv_bin/script/execscript"
 
-    for i in 16 20 24 32 48 256; do
-      size=$i"x"$i
-
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      ln -s $out/share/teamviewer/tv_bin/desktop/teamviewer_$i.png $out/share/icons/hicolor/$size/apps/TeamViewer.png
-    done;
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    ln -s $out/share/teamviewer/tv_bin/desktop/TeamViewer.svg $out/share/icons/hicolor/scalable/apps/TeamViewer.svg
 
     sed -i "s,/opt/teamviewer,$out/share/teamviewer,g" $out/share/teamviewer/tv_bin/desktop/com.teamviewer.*.desktop
 
@@ -127,13 +122,13 @@ mkDerivation rec {
     }"
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
-        libXrandr
-        libX11
-        libXext
-        libXdamage
-        libXtst
-        libSM
-        libXfixes
+        libxrandr
+        libx11
+        libxext
+        libxdamage
+        libxtst
+        libsm
+        libxfixes
         dbus
         icu63
       ]

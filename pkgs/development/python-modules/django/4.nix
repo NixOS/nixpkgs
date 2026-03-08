@@ -5,7 +5,6 @@
   fetchFromGitHub,
   fetchpatch,
   pythonAtLeast,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -45,16 +44,16 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.26";
-  format = "pyproject";
+  version = "4.2.29";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "django";
     repo = "django";
-    rev = "refs/tags/${version}";
-    hash = "sha256-2NkkQcsY+BDvLGtvjYfGwgAK2S6LDbbcl7CwbwuF5a0=";
+    tag = version;
+    hash = "sha256-30OcLxtACSxLJ1jT+k7fmM8CyMyleXSPc+l7/3JZKzI=";
   };
 
   patches = [

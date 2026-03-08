@@ -5,7 +5,7 @@
   asciinema,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "asciinema-automation";
   version = "0.2.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "PierreMarchand20";
     repo = "asciinema_automation";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VfIr7w/5hQwr6XYuC3f8h71uScr0lBdx6PyO1hpiZhA=";
   };
 
@@ -39,11 +39,11 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "asciinema_automation" ];
 
   meta = {
-    changelog = "https://github.com/PierreMarchand20/asciinema_automation/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/PierreMarchand20/asciinema_automation/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "CLI utility to automate asciinema recordings";
     homepage = "https://github.com/PierreMarchand20/asciinema_automation";
     license = lib.licenses.mit;
     mainProgram = "asciinema-automation";
     maintainers = [ ];
   };
-}
+})

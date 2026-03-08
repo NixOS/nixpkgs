@@ -9,13 +9,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "rmount";
   version = "1.1.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "Luis-Hebendanz";
     repo = "rmount";
     sha256 = "0j1ayncw1nnmgna7vyx44vwinh4ah1b0l5y8agc7i4s8clbvy3h0";
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
-    install -D ${src}/rmount.man  $out/share/man/man1/rmount.1
-    install -D ${src}/rmount.bash $out/bin/rmount
-    install -D ${src}/config.json $out/share/config.json
+    install -D ${finalAttrs.src}/rmount.man  $out/share/man/man1/rmount.1
+    install -D ${finalAttrs.src}/rmount.bash $out/bin/rmount
+    install -D ${finalAttrs.src}/config.json $out/share/config.json
 
     wrapProgram $out/bin/rmount --prefix PATH : ${
       lib.makeBinPath [
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "rmount";
   };
-}
+})

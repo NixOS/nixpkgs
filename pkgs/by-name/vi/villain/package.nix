@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/t3l3machus/Villain";
     license = lib.licenses.cc-by-nc-nd-40;
     mainProgram = "villain";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   version = "3.6.3";
-  format = "pyproject";
+  pyproject = true;
   pname = "rpy2-robjects";
 
   disabled = isPyPy;
@@ -52,6 +52,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    # https://github.com/rpy2/rpy2/issues/1218
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
 
   meta = {
     homepage = "https://rpy2.github.io/";

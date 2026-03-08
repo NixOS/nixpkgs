@@ -21,7 +21,13 @@
   nspr,
   nss,
   pango,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxcb,
   writeScript,
 }:
 let
@@ -58,13 +64,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nspr
     nss
     pango
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libxcb
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
+    libx11
+    libxcomposite
+    libxcb
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
   ];
 
   dontBuild = true;
@@ -94,7 +100,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeScript "update-multiviewer-for-f1" ''
     #!/usr/bin/env nix-shell
-    #!nix-shell -i bash -p curl common-updater-scripts
+    #!nix-shell -i bash -p curl jq common-updater-scripts
     set -eu -o pipefail
 
     # Get latest API for packages, store so we only make one request
@@ -108,10 +114,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     if [ "$version" != "${finalAttrs.version}" ]
     then
       # Pre-calculate package hash
-      hash=$(nix-prefetch-url --type sha256 $link)
+      hash=$(nix-hash --type sha256 --to-sri $(nix-prefetch-url --type sha256 $link))
 
       # Update ID and version in source
-      update-source-version ${finalAttrs.pname} "$id" --version-key=id
+      sed -i "s/id = \"[0-9]*\"/id = \"$id\"/" ${__curPos.file}
       update-source-version ${finalAttrs.pname} "$version" "$hash" --system=x86_64-linux
     fi
   '';

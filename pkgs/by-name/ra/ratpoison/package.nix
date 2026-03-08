@@ -5,13 +5,13 @@
   autoreconfHook,
   fontconfig,
   freetype,
-  libX11,
-  libXft,
-  libXi,
-  libXpm,
-  libXrandr,
-  libXt,
-  libXtst,
+  libx11,
+  libxft,
+  libxi,
+  libxpm,
+  libxrandr,
+  libxt,
+  libxtst,
   perl,
   pkg-config,
   readline,
@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fontconfig
     freetype
-    libX11
-    libXft
-    libXi
-    libXpm
-    libXrandr
-    libXt
-    libXtst
+    libx11
+    libxft
+    libxi
+    libxpm
+    libxrandr
+    libxt
+    libxtst
     perl
     readline
     xorgproto
@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ratpoison";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

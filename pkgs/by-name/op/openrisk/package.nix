@@ -5,14 +5,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "openrisk";
   version = "0.0.1";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "openrisk";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8DGwNoucLpdazf9r4PZrN4DEOMpTr5U7tal2Rab92pA=";
   };
 
@@ -30,9 +30,9 @@ buildGoModule rec {
   meta = {
     description = "Tool that generates an AI-based risk score";
     homepage = "https://github.com/projectdiscovery/openrisk";
-    changelog = "https://github.com/projectdiscovery/openrisk/releases/tag/v${version}";
+    changelog = "https://github.com/projectdiscovery/openrisk/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "openrisk";
   };
-}
+})

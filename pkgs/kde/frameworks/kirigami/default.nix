@@ -20,13 +20,6 @@ let
 
     patches = [
       ./rb-templates.patch
-
-      # Fix rendering issues in some applications
-      # FIXME: remove in next update
-      (fetchpatch {
-        url = "https://invent.kde.org/frameworks/kirigami/-/commit/19127672cd812d177192cf84da4107f9abed2934.diff";
-        hash = "sha256-dh1OwMTksbVTEsEDw4vfBarR3fyBaulQa8SSHsddht0=";
-      })
     ];
 
     extraNativeBuildInputs = [

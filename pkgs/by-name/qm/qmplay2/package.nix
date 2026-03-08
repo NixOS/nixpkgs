@@ -7,8 +7,8 @@
   ffmpeg,
   fribidi,
   game-music-emu,
-  libXdmcp,
-  libXv,
+  libxdmcp,
+  libxv,
   libass,
   libcddb,
   libcdio,
@@ -61,8 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     fribidi
     game-music-emu
-    libXdmcp
-    libXv
+    libxdmcp
+    libxv
     libass
     libcddb
     libcdio

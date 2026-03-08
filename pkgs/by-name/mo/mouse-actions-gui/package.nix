@@ -11,7 +11,7 @@
 
   pkg-config,
   wrapGAppsHook3,
-  libXtst,
+  libxtst,
   libevdev,
   udevCheckHook,
   gtk3,
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     # Base deps
-    libXtst
+    libxtst
     libevdev
 
     # Tauri deps

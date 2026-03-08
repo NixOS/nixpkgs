@@ -15,21 +15,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.23.1";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nE6LXB0+q313UatT3f4Cn/hbTxc4mSMHQnUm0xzTuvE=";
+    hash = "sha256-9/XIwSMEmnS3L/Wzg6ABso7R6W3TYkJomC8aFMycxZo=";
   };
 
-  vendorHash = "sha256-45SQUDvTX2xc8jJ8NXerbqRkQhBv6xyOPypJQf+tExU=";
+  vendorHash = "sha256-9CMD8Rn4q8b+hyrph+BqqS32ijZyJRNsop6ML7z5Zuk=";
 
   npmDeps = fetchNpmDeps {
     name = "anubis-npm-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-zlJD/Mv39bUHx+q+QSXpYWhELvbk7MCNWXLWcB4SP2A=";
+    hash = "sha256-2U91Dt+ymspjYgTtgCjahCNr6fIs85TT/k+I8M2aC9s=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,6 @@ buildGoModule (finalAttrs: {
       knightpp
       soopyc
       ryand56
-      sigmasquadron
       defelo
     ];
     mainProgram = "anubis";

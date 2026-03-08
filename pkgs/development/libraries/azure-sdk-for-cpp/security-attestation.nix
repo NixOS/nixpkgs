@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "azure-security-attestation_1.1.0";
     hash = "sha256-RXCMB7MMIe5x5YgMAqAf306E/1vuRXweAlN5uDHumjA=";
   };
-  sourceRoot = "source/sdk/attestation/azure-security-attestation";
+  sourceRoot = "${finalAttrs.src.name}/sdk/attestation/azure-security-attestation";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt

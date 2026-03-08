@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "korrect";
-  version = "0.3.3";
+  version = "0.3.6";
 
   src = fetchCrate {
     inherit (finalAttrs) pname version;
-    hash = "sha256-iEbzYcWxDAumGLsr7MlqOrTEj3SwGFmdvw15M5Fz9cs=";
+    hash = "sha256-w+XO3KMzXAssleH/Zs8dpZxG7w4hQRsoxMQLORjv1fA=";
   };
-  cargoHash = "sha256-RIa1rn74I/DQktjtY4BTWiYIBO1aLpXcKtXMBOAogvE=";
+  cargoHash = "sha256-uLRFXzTyoZw9H4qEkH6/B+/zE+YQc9yp5LIJRheB5/k=";
 
   # Tests create a local http server to check the download functionality
   __darwinAllowLocalNetworking = true;

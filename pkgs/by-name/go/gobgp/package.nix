@@ -4,15 +4,15 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gobgp";
-  version = "4.1.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "osrg";
     repo = "gobgp";
-    rev = "v${version}";
-    sha256 = "sha256-Lm0nJfvXGoRBu6Yv698zf74/xOfG7UagzvTExK6KXbo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-zUWesDBGRi7SQH0A9WXWvNQ73H1Za3uwexFN4RZ5Hl8=";
   };
 
   vendorHash = "sha256-y8nhrKQnTXfnDDyr/xZd5b9ccXaM85rd8RKHtoDBuwI=";
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ higebu ];
     mainProgram = "gobgp";
   };
-}
+})

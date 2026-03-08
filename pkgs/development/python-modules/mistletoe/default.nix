@@ -4,22 +4,19 @@
   buildPythonPackage,
   parameterized,
   pygments,
-  pythonOlder,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mistletoe";
-  version = "1.4.0";
+  version = "1.5.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miyuchina";
     repo = "mistletoe";
     tag = "v${version}";
-    hash = "sha256-jFU16vdASGVSPq+TJ/6cN7IGkE/61SL9BWCOPsVqNaU=";
+    hash = "sha256-h2gKvh3P4pUUPwVYTIjz43/3CwZdWbhO3aJnwFBNR+Q=";
   };
 
   pythonImportsCheck = [ "mistletoe" ];
@@ -34,7 +31,7 @@ buildPythonPackage rec {
     description = "Fast and extensible Markdown parser";
     mainProgram = "mistletoe";
     homepage = "https://github.com/miyuchina/mistletoe";
-    changelog = "https://github.com/miyuchina/mistletoe/releases/tag/v${version}";
+    changelog = "https://github.com/miyuchina/mistletoe/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ eadwu ];
   };

@@ -8,19 +8,16 @@
   python,
   pybind11,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyamg";
-  version = "5.2.1";
+  version = "5.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9EnZNCJOUDQB7nLNLuzhop2JO3q+NfYqRNUrqDEZjvo=";
+    hash = "sha256-UyPQ8aTNmZviRqkNWAyeHptYS5iIf2KY05dhEIfvhgs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

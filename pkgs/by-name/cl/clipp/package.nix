@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clipp";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "muellan";
     repo = "clipp";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0rq80ba2krwzvcg4r2g1al88453c7lz6ziri2s1ygv8inp9r775s";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ xbreak ];
     platforms = with lib.platforms; all;
   };
-}
+})

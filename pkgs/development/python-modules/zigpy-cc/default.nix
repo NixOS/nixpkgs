@@ -6,7 +6,6 @@
   pyserial-asyncio,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   zigpy,
 }:
 
@@ -18,7 +17,6 @@ buildPythonPackage rec {
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
@@ -32,7 +30,7 @@ buildPythonPackage rec {
     zigpy
   ];
 
-  doCheck = pythonOlder "3.11"; # asynctest is unsupported on python3.11
+  doCheck = false; # asynctest unsupported on 3.11+
 
   nativeCheckInputs = [
     asynctest

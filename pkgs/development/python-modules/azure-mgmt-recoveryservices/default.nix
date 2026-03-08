@@ -5,7 +5,7 @@
   buildPythonPackage,
   fetchPypi,
   isodate,
-  pythonOlder,
+  msrest,
   setuptools,
 }:
 
@@ -13,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-mgmt-recoveryservices";
   version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "azure_mgmt_recoveryservices";
@@ -28,6 +26,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
   ];
 
   # Module has no tests

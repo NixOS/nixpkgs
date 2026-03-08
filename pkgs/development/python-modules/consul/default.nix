@@ -5,27 +5,23 @@
   fetchpatch,
   setuptools,
   requests,
-  pythonOlder,
   pytestCheckHook,
   aiohttp,
   pytest-asyncio,
   pytest-cov-stub,
   python,
-  docker,
 }:
 
 buildPythonPackage rec {
   pname = "py-consul";
-  version = "1.6.0";
+  version = "1.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "criteo";
     repo = "py-consul";
     tag = "v${version}";
-    hash = "sha256-kNIFpY8rXdfGmaW2GAq7SvjK+4ahgaFnyXEqcUrXoEs=";
+    hash = "sha256-DpGSiwpxAF1kCraRFl6XPJ1eSzvR6Rdq8PkK30J/vA0=";
   };
 
   patches = [
@@ -33,6 +29,9 @@ buildPythonPackage rec {
       url = "https://salsa.debian.org/python-team/packages/python-consul/-/raw/master/debian/patches/avoir-usr-requirements.txt.patch";
       hash = "sha256-lB9Irzuc2IpbQOIP/C3JQ4iYqugf1U6CVlAEXrrFUfI=";
     })
+
+    # conftest.py always imports docker, even if related tests are disabled
+    ./disable-docker-tests.patch
   ];
 
   build-system = [
@@ -53,7 +52,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-cov-stub
-    docker
   ];
 
   # Most tests want to run a consul docker container ("hashicorp/consul:{version}" in conftest.py)
@@ -107,6 +105,12 @@ buildPythonPackage rec {
     "test_transaction"
     "test_consul_ctor"
     "test_acl_token_delete"
+    "test_acl_templated_policy_list"
+    "test_acl_templated_policy_preview"
+    "test_acl_templated_policy_read"
+    "test_acl_templated_policy_wrote"
+    "test_agent_service_tagged_addresses"
+    "test_agent_service_connect"
   ];
 
   pythonImportsCheck = [ "consul" ];

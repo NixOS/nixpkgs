@@ -17,24 +17,24 @@
   libsepol,
   libthai,
   libdatrie,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   withGTK2 ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-gtk";
-  version = "5.1.4";
+  version = "5.1.5";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-MlBLhgqpF+A9hotnhX83349wIpCQfzsqpyZb0xME2XQ=";
+    hash = "sha256-eMo/ZsZdfAxR14aSnit3yHdw/yv8KdfKjK1Hu7Ce/3o=";
   };
 
   outputs = [
@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     libsepol
     libthai
     libdatrie
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
   ]
   ++ lib.optional withGTK2 gtk2;
 

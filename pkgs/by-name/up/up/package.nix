@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "up";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "akavel";
     repo = "up";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d6FCJ9G9ytHhWQ5lXEtlmzclt3odS9e+Y1ry6EiIDsk=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     mainProgram = "up";
   };
-}
+})

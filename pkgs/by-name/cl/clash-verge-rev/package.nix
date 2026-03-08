@@ -8,21 +8,22 @@
   wrapGAppsHook3,
   v2ray-geoip,
   v2ray-domain-list-community,
-  libsoup,
+  libsoup_3,
 }:
 let
   pname = "clash-verge-rev";
-  version = "2.4.3";
+  # Please keep service version in sync
+  version = "2.4.6";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
     tag = "v${version}";
-    hash = "sha256-GmoeOLKxdW1x6PHtslwNPVq8wDWA413NHA/VeDRb4mA=";
+    hash = "sha256-s/dUy9vYxdUlAahVPkoOHjoF+WCl3xhJOubZtS1PB5o=";
   };
 
-  pnpm-hash = "sha256-qDwXPTfh1yOlugZe1UPUMKRyZOSagG4lX2eiFACgHRw=";
-  vendor-hash = "sha256-z5xVbqh+CiaTDtAx2VPQ4UjliYnV44tdp3pS8vzb1K4=";
+  pnpm-hash = "sha256-7xNaLlnXLty80x1d25pBeLZUu0r3R+87DYoJ6rTHSTA=";
+  vendor-hash = "sha256-1b0vmx0apWSNlaTMR58eufinBuIC7/F3UG3C8X62/gE=";
 
   service = callPackage ./service.nix {
     inherit
@@ -38,7 +39,7 @@ let
       pnpm-hash
       vendor-hash
       meta
-      libsoup
+      libsoup_3
       ;
   };
 
@@ -85,4 +86,6 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+  # For testing convenience
+  passthru = { inherit unwrapped service; };
 }

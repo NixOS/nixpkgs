@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-canvas-core";
     tag = version;
-    hash = "sha256-cEy9ADU/jZoKmGXVlqwG+qWKZ22STjALgCb1IxAwpO0=";
+    hash = "sha256-mJSF2OWSIxBn1blQReLFlf8Uu/vP7F3vJrcrAz0uWFY=";
   };
 
   build-system = [

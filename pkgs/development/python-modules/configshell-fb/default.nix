@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
   hatchling,
   hatch-vcs,
   pyparsing,

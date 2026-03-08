@@ -3,15 +3,12 @@
   aliyun-python-sdk-core,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-iot";
   version = "8.59.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;

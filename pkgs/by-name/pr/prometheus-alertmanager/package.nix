@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "alertmanager";
-  version = "0.29.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "alertmanager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2uP4JCbQEe7/en5sBq/k73kqK6YVmuLvfiUy1fqPitw=";
+    hash = "sha256-HkM2bpZ0vM/Uoj9cFEAKi56Cj5ixcx65dH1pJNkK6WQ=";
   };
 
-  vendorHash = "sha256-bN1iV2JrrjwiiIXr5lp389HvEoQGteJQD94cug0/048=";
+  vendorHash = "sha256-X8BiQ9OSXj56mbjmb0AFaSsAWGwDhhMV/RztklxHYa4=";
 
   subPackages = [
     "cmd/alertmanager"

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   geopandas,
   inequality,
@@ -19,15 +18,14 @@
 
 buildPythonPackage rec {
   pname = "momepy";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "momepy";
     tag = "v${version}";
-    hash = "sha256-9A1g2WSH1kIXO/BeF8ebcigshfcR8MrT2Ut5K/oxVM4=";
+    hash = "sha256-Og7W+35k9HIIEFGcDmsxggb1BT5cwnaMIi3HO3VRAX0=";
   };
 
   build-system = [ setuptools-scm ];

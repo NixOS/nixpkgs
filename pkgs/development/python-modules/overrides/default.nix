@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
-  pythonOlder,
   pytestCheckHook,
   setuptools,
 }:
@@ -13,8 +11,6 @@ buildPythonPackage rec {
   version = "7.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "mkorpela";
     repo = "overrides";
@@ -22,14 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-gQDw5/RpAFNYWFOuxIAArPkCOoBYWUnsDtv1FEFteHo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  # https://github.com/mkorpela/overrides/pull/136
+  patches = [ ./pytest9-compat.patch ];
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = lib.optionals (pythonAtLeast "3.12") [
-    # KeyError: 'assertRaises'
-    "test_enforcing_when_incompatible"
-  ];
 
   pythonImportsCheck = [ "overrides" ];
 

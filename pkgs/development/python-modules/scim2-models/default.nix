@@ -1,28 +1,31 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
+  fetchFromGitHub,
+  uv-build,
   pydantic,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scim2-models";
-  version = "0.4.1";
+  version = "0.5.1";
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "scim2_models";
-    hash = "sha256-SRUPO67otfZsrdjGQyTul5vIrYRU2WFaL0fvAtVd/1c=";
+  src = fetchFromGitHub {
+    owner = "python-scim";
+    repo = "scim2-models";
+    tag = finalAttrs.version;
+    hash = "sha256-ahwHmWsM9IoK+yq0Qd0c2+kagMlXGi80/rAB4UQsf6U=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" "uv_build"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
@@ -33,8 +36,8 @@ buildPythonPackage rec {
   meta = {
     description = "SCIM2 models serialization and validation with pydantic";
     homepage = "https://github.com/python-scim/scim2-models";
-    changelog = "https://github.com/python-scim/scim2-models/releases/tag/${version}";
+    changelog = "https://github.com/python-scim/scim2-models/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

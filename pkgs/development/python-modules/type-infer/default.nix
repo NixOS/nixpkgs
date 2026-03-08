@@ -25,7 +25,7 @@ let
     d.stopwords
   ]);
 
-  version = "0.0.25";
+  version = "0.0.26";
   tag = "v${version}";
 in
 buildPythonPackage {
@@ -37,7 +37,7 @@ buildPythonPackage {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-WL/2WSy3e2Mg/jNS8afUEnCt10wpXho4uOPAkVdzHWA=";
+    hash = "sha256-6zfe9C/werr2CbF//UuzuvP2fpwOVRy4VIlGE8UgY0o=";
   };
 
   patches = [
@@ -91,6 +91,6 @@ buildPythonPackage {
     description = "Automated type inference for Machine Learning pipelines";
     homepage = "https://github.com/mindsdb/type_infer";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

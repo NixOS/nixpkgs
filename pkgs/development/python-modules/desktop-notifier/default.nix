@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   bidict,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "desktop-notifier";
   version = "6.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "SamSchott";

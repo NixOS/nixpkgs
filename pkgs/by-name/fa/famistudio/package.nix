@@ -14,6 +14,7 @@
   openal,
   portaudio,
   rtmidi,
+  wrapGAppsHook3,
   _experimental-update-script-combinators,
   gitUpdater,
 }:
@@ -133,10 +134,16 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
+
   runtimeDeps = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     gtk3
     libglvnd
   ];
+
+  dontWrapGApps = true;
 
   executables = [ "FamiStudio" ];
 
@@ -147,11 +154,19 @@ buildDotnetModule (finalAttrs: {
     done
   '';
 
-  postFixup = ''
+  postFixup =
+    # Need GSettings schemas
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      makeWrapperArgs+=(
+        "''${gappsWrapperArgs[@]}"
+      )
+    ''
     # FFMpeg looked up from PATH
-    wrapProgram $out/bin/FamiStudio \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
-  '';
+    + ''
+      wrapProgram $out/bin/FamiStudio \
+        --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
+        ''${makeWrapperArgs[@]}
+    '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (gitUpdater { }).command

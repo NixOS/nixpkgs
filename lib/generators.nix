@@ -778,7 +778,7 @@ rec {
     # Type
 
     ```
-    toLua :: AttrSet -> Any -> String
+    toLua :: { multiline :: Bool; indent :: String; asBindings :: Bool; } -> Any -> String
     ```
 
     # Examples
@@ -879,7 +879,7 @@ rec {
     # Type
 
     ```
-    mkLuaInline :: String -> AttrSet
+    mkLuaInline :: String -> { _type = "lua-inline"; expr :: String; }
     ```
   */
   mkLuaInline = expr: {

@@ -13,16 +13,16 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tuhi";
   version = "0.6";
 
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "tuhiproject";
     repo = "tuhi";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-NwyG2KhOrAKRewgmU23OMO0+A9SjkQZsDL4SGnLVCvo=";
   };
 
@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
       --replace "/usr/bin/env sh" "sh"
   '';
   postFixup = ''
-    wrapPythonProgramsIn $out/libexec "$out $pythonPath"
+    wrapPythonProgramsIn $out/libexec "$out ''${pythonPath[*]}"
   '';
 
   meta = {
@@ -73,4 +73,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ lammermann ];
   };
-}
+})

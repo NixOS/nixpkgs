@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grpc-client-cli";
   version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "vadimi";
     repo = "grpc-client-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MzUUYthXOH+mq7uxjY63k06pifFVUhOnZg8zTujpxxQ=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     homepage = "https://github.com/vadimi/grpc-client-cli";
     license = lib.licenses.mit;
   };
-}
+})

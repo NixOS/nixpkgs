@@ -5,22 +5,23 @@
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
+  nodejs,
   usage,
   testers,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "usage";
-  version = "2.8.0";
+  version = "2.18.2";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/yDypNQdw6YS1M8YtwjdFyG8Lfh3wKkvVWyH2b/G65o=";
+    hash = "sha256-vypgdu9G+6soLl9QrlRiA1U/2ijFUEqwPS6XrV9Ubek=";
   };
 
-  cargoHash = "sha256-3tSMgTVmoiME/wWE8uHZEjnfeS8Hqbm0DeUaWNgN944=";
+  cargoHash = "sha256-CnrBFH1dnFOL8dwyFioj6FO2MPqpl169y9YMgQpPi5Y=";
 
   postPatch = ''
     substituteInPlace ./examples/*.sh \
@@ -29,8 +30,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  nativeCheckInputs = [
+    # for some tests
+    nodejs
+  ];
+
   checkFlags = [
-    # tries to build usage-cli itself
+    # has --include-bash-completion-lib so requires external lib downloaded on runtime
     "--skip=test_bash_completion_integration"
   ];
 

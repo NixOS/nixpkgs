@@ -2,17 +2,18 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "m-cli";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchFromGitHub {
     owner = "rgcr";
     repo = "m-cli";
-    rev = "v${version}";
-    sha256 = "sha256-41o7RoRlHwAmzSREDhQpq2Lchkz8QPxJRqN42ShUJb8=";
+    tag = "v${version}";
+    sha256 = "sha256-a/X7HaShb8mXJIYtTDxEPN4DcskUDourRFgHnOXksYM=";
   };
 
   dontBuild = true;
@@ -37,6 +38,8 @@ stdenv.mkDerivation rec {
     install -Dt "$out/share/zsh/site-functions/" -m444 completions/zsh/_m
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Swiss Army Knife for macOS";
     inherit (src.meta) homepage;
@@ -44,7 +47,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
 
     platforms = lib.platforms.darwin;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ anish ];
     mainProgram = "m";
   };
 }

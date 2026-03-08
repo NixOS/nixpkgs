@@ -26,14 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_BENCHMARKS=Off"
   ];
 
-  passthru.update-script = nix-update-script { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/ktprime/emhash";
     changelog = "https://github.com/ktprime/emhash/releases/tag/v${finalAttrs.version}";
     description = "Fast and memory efficient c++ flat hash map/set";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ blenderfreaky ];
+    maintainers = with lib.maintainers; [ kilyanni ];
     platforms = lib.platforms.all;
   };
 })

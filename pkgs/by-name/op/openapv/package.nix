@@ -8,17 +8,17 @@
 }:
 let
   # Requires an /etc/os-release file, so we override it with this.
-  osRelease = writeText "os-release" ''ID=NixOS'';
+  osRelease = writeText "os-release" "ID=NixOS";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openapv";
-  version = "0.2.0.4";
+  version = "0.2.1.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openapv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IkzZnf2/JZJIwg9g/6SvWTAcUkAQ/C36xXC+t44VejU=";
+    hash = "sha256-33fhm8+6t/TTcSy0dOihp19GCwJS/5ZDcsulsqnA1JY=";
   };
 
   postPatch = ''

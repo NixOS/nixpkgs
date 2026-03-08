@@ -5,14 +5,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lucida-downloader";
   version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "jelni";
     repo = "lucida-downloader";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-f5cegAucJSiRekTAZBkrdn0HoEELvINN6Rd5Ehb7InA=";
   };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
       surfaceflinger
     ];
   };
-}
+})

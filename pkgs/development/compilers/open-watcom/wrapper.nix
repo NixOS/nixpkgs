@@ -58,7 +58,8 @@ let
       name = "${open-watcom.passthru.prettyName}-${open-watcom.version}";
     in
     symlinkJoin {
-      inherit name;
+      inherit (open-watcom) version;
+      pname = open-watcom.passthru.prettyName;
 
       paths = [ open-watcom ];
 

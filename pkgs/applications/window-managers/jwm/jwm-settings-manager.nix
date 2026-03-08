@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   gettext,
-  libXpm,
+  libxpm,
   libGL,
   fltk,
   hicolor-icon-theme,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXpm
+    libxpm
     libGL
     fltk
     hicolor-icon-theme
@@ -42,14 +42,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail 'CMAKE_INSTALL_PREFIX "/usr"' "CMAKE_INSTALL_PREFIX $out"
     substituteInPlace data/CMakeLists.txt \
-      --replace 'DESTINATION usr/share' "DESTINATION share"
-  '';
-
-  postConfigure = ''
-    substituteInPlace cmake_install.cmake \
-      --replace "/var/empty" "/usr"
+      --replace-fail 'DESTINATION usr/share' "DESTINATION share"
   '';
 
   meta = {

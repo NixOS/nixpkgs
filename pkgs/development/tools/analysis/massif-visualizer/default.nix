@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchurl,
   extra-cmake-modules,
   shared-mime-info,
+  wrapQtAppsHook,
   qtsvg,
   qtxmlpatterns,
   karchive,
@@ -16,7 +17,7 @@
   kgraphviewer,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "massif-visualizer";
   version = "0.7.0";
 
@@ -30,6 +31,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     extra-cmake-modules
     shared-mime-info
+    wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oonf-olsrd2";
   version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "OLSR";
     repo = "OONF";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7EH2K7gaBGD95WFlG6RRhKEWJm91Xv2GOHYQjZWuzl0=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ mkg20001 ];
     platforms = lib.platforms.linux;
   };
-}
+})

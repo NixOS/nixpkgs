@@ -3,20 +3,22 @@
   fetchFromGitHub,
   buildGoModule,
   buildNpmPackage,
-  pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs_24,
+  pnpm_10,
   nix-update-script,
   nixosTests,
 }:
-let
-  version = "2.44.1";
 
-  pnpm = pnpm_9;
+let
+  version = "2.57.1";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-ln7Dst+sN99c3snPU7DrIGpwKBz/e4Lz+uOknmm6sxg=";
+    hash = "sha256-rd/I5M1SoL6fUNkiv/KwWImbtWCoy0/DR993C714xU8=";
   };
 
   frontend = buildNpmPackage rec {
@@ -25,18 +27,21 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmConfigHook = pnpm.configHook;
+    nativeBuildInputs = [ pnpm_10 ];
+    npmConfigHook = pnpmConfigHook;
     npmDeps = pnpmDeps;
+    nodejs = nodejs_24;
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 2;
-      hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
+      fetcherVersion = 3;
+      pnpm = pnpm_10;
+      hash = "sha256-AfQNSIiTRv+aEGsrRAymwpUO2IWDtvSruLuuTAjWy/0=";
     };
 
     installPhase = ''
@@ -48,12 +53,13 @@ let
       runHook postInstall
     '';
   };
+
 in
 buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-aVtL64Cm+nqum/qHFvplpEawgMXM2S6l8QFrJBzLVtU=";
+  vendorHash = "sha256-P6R+lBmzYYMqC5D6VwLOE7UnKuYcLN7UDVkZHWLLjMk=";
 
   excludedPackages = [ "tools" ];
 

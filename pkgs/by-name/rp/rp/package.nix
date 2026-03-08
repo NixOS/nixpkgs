@@ -5,7 +5,7 @@
   cmake,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rp";
   version = "2.1.4";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     rev = "a60f8117443e421bb572df890341b5a0f982c267";
     hash = "sha256-lkyuV+yC3NTsdipyJkoxgh1N8/+15N15nQpjItUgyb0=";
   };
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "rp";
   };
-}
+})

@@ -7,14 +7,14 @@
   mandoc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "owamp";
   version = "4.4.6";
 
   src = fetchFromGitHub {
     owner = "perfsonar";
     repo = "owamp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "5o85XSn84nOvNjIzlaZ2R6/TSHpKbWLXTO0FmqWsNMU=";
     fetchSubmodules = true;
   };
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.teto ];
     license = lib.licenses.asl20;
   };
-}
+})

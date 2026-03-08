@@ -12,7 +12,6 @@
   fetchFromGitHub,
   halo,
   poetry-core,
-  pythonOlder,
   requests,
   rich,
 }:
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "surepy";
   version = "0.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "benleb";

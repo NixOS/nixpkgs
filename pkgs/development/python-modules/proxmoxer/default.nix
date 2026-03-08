@@ -4,7 +4,6 @@
   fetchFromGitHub,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-toolbelt,
   responses,
@@ -13,10 +12,8 @@
 
 buildPythonPackage rec {
   pname = "proxmoxer";
-  version = "2.2.0-unstable-2025-02-18";
+  version = "2.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "proxmoxer";

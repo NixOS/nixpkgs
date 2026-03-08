@@ -44,7 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./format.patch
   ];
 
-  CFLAGS = lib.optionalString debug " -DDEBUG=2";
+  env = lib.optionalAttrs debug {
+    CFLAGS = " -DDEBUG=2";
+  };
 
   meta = {
     homepage = "https://eflite.sourceforge.net";

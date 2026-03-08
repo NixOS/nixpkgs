@@ -9,7 +9,6 @@
   lxml,
   pytestCheckHook,
   python-pam,
-  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "wsgidav";
   version = "4.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mar10";

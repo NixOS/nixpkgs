@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-api";
-  version = "0.2.3";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-api";
     tag = finalAttrs.version;
-    hash = "sha256-ypz15XX0ESkOWI6G+a9/36bRg5gBG0X4Y/EvB/m7qm8=";
+    hash = "sha256-n9TlmmRRB618cXCOmo5CYqeMog7I7VxURN9mlDhljWw=";
   };
 
   outputs = [
@@ -75,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+  ];
+
   env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   preBuild = ''
@@ -98,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Lomiri API Library for integrating with the Lomiri shell";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-api";
+    changelog = "https://gitlab.com/ubports/development/core/lomiri-api/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       lgpl3Only
       gpl3Only

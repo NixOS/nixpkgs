@@ -7,18 +7,18 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pypdf3";
   version = "1.0.6";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "PyPDF3";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-yUbzJzQZ43JY415yJz9JkEqxVyPYenYcERXvmXmfjF8=";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
   buildInputs = [ glibcLocales ];
 
   checkPhase = ''
@@ -33,4 +33,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ambroisie ];
   };
-}
+})

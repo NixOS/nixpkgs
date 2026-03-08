@@ -7,14 +7,14 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ctodo";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "Acolarh";
     repo = "ctodo";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0mqy5b35cbdwfpbs91ilsgz3wc4cky38xfz9pnr4q88q1vybigna";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "ctodo";
   };
-}
+})

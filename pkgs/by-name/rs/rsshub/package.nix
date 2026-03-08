@@ -4,12 +4,11 @@
   makeBinaryWrapper,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   replaceVars,
   stdenv,
 }:
-let
-  pnpm = pnpm_9;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
   version = "0-unstable-2025-11-28";
@@ -28,16 +27,18 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-fix-network-call.patch
   ];
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-zTsJZnhX7xUOsKST6S3TQUV8M1Tewcs9fZgrDSf5ba8=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-jV+MpdNeaVHut0eUP7F9SmJZuLDGQE8ULR8LsiOE7Ug=";
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   buildPhase = ''

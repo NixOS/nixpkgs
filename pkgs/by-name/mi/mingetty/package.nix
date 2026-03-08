@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mingetty";
   version = "1.08";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mingetty/mingetty-${version}.tar.gz";
+    url = "mirror://sourceforge/mingetty/mingetty-${finalAttrs.version}.tar.gz";
     sha256 = "05yxrp44ky2kg6qknk1ih0kvwkgbn9fbz77r3vci7agslh5wjm8g";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

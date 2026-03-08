@@ -5,13 +5,13 @@
   qt5,
 }:
 
-python312.pkgs.buildPythonApplication rec {
+python312.pkgs.buildPythonApplication (finalAttrs: {
   pname = "patray";
   version = "0.1.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-O8CBUexL2V1qI7bB/Lns3yjUvFOpC6spd/6asXa5+pw=";
   };
 
@@ -44,4 +44,4 @@ python312.pkgs.buildPythonApplication rec {
     maintainers = [ ];
     mainProgram = "patray";
   };
-}
+})

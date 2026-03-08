@@ -17,15 +17,15 @@
   python ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnl";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     repo = "libnl";
     owner = "thom311";
-    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-GuYV2bUOhLedB/o9Rz6Py/G5HBK2iNefwrlkZJXgbnI=";
+    rev = "libnl${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-K77WamOf+/3PNXe/hI+OYg0EBgBqvDfNDamXYXcK7P8=";
   };
 
   outputs = [
@@ -72,5 +72,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libnl_project" finalAttrs.version;
   };
-}
+})

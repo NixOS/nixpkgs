@@ -13,16 +13,16 @@
   pythonOlder,
   typing-extensions,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kicad-python";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "kicad/code";
     repo = "kicad-python";
-    tag = version;
-    hash = "sha256-M2vJ/lSwc1XjrG661ayNIOZKJitmy/UPM2SesQI1xYE=";
+    tag = finalAttrs.version;
+    hash = "sha256-FIWTYBUauq4yUdnijjPgxaXynh/U03ppnLU8YVkKYHw=";
     fetchSubmodules = true;
   };
 
@@ -67,4 +67,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

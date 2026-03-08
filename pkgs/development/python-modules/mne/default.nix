@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   hatchling,
   hatch-vcs,
   numpy,
@@ -90,6 +91,10 @@ buildPythonPackage rec {
     # flaky
     "test_fine_cal_systems"
     "test_simulate_raw_bem"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    #https://github.com/mne-tools/mne-python/issues/13577
+    "test_set_montage_artinis_basic"
   ];
 
   pytestFlag = [
@@ -113,7 +118,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin
-      mbalatsko
     ];
   };
 }

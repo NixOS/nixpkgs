@@ -2,12 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   gradle,
   autoPatchelfHook,
   jetbrains, # Requird by upstream due to JCEF dependency
   fontconfig,
-  libXinerama,
-  libXrandr,
+  libxinerama,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -35,7 +36,7 @@
   libjpeg8,
   libkate,
   librsvg,
-  xorg,
+  libxpm,
   libsForQt5,
   libupnp,
   aalib,
@@ -50,7 +51,7 @@
   libshout,
   ffmpeg_6,
   libmpeg2,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   lirc,
   lua5_2,
   taglib,
@@ -75,8 +76,41 @@
   writeShellScript,
   nix-update,
   libxml2,
+  boost,
+  thrift,
+  libGL,
+  libx11,
+  libxdamage,
+  nss,
+  nspr,
 }:
+let
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
 
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+
+    patches = (old.patches or [ ]) ++ [
+      # Fix build with gcc15
+      # https://github.com/apache/thrift/pull/3078
+      (fetchpatch {
+        name = "thrift-add-missing-cstdint-include-gcc15.patch";
+        url = "https://github.com/apache/thrift/commit/947ad66940cfbadd9b24ba31d892dfc1142dd330.patch";
+        hash = "sha256-pWcG6/BepUwc/K6cBs+6d74AWIhZ2/wXvCunb/KyB0s=";
+      })
+    ];
+  });
+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
   version = "5.2.0";
@@ -110,7 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jetbrains.jdk;
+  env = {
+    JAVA_HOME = jetbrains.jdk;
+    ANDROID_SDK_HOME = "$(pwd)";
+  };
 
   gradleFlags = [
     "-Dorg.gradle.java.home=${jetbrains.jdk}"
@@ -123,8 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
-    libXrandr
+    libxinerama
+    libxrandr
     file
     shine
     libmpeg2
@@ -140,7 +177,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg8
     libkate
     librsvg
-    xorg.libXpm
+    libxpm
     libsForQt5.qt5.qtsvg
     libsForQt5.qt5.qtbase
     libsForQt5.qt5.qtx11extras
@@ -169,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     libshout
     ffmpeg_6
-    xcbutilkeysyms
+    libxcb-keysyms
     lirc
     lua5_2
     taglib
@@ -191,6 +228,13 @@ stdenv.mkDerivation (finalAttrs: {
     libdvdnav
     flac
     libxml2
+    boost
+    thrift20
+    nss
+    nspr
+    libGL
+    libx11
+    libxdamage
   ];
 
   dontWrapQtApps = true;
@@ -215,8 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/lib/app/resources/lib
     ln -sf ${libvlc}/lib $out/lib/app/resources/
   '';
-
-  ANDROID_SDK_HOME = "$(pwd)";
 
   passthru.updateScript = writeShellScript "update-animeko" ''
     ${lib.getExe nix-update} animeko

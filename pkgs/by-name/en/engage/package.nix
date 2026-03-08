@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
+    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/engage/index.html";
   };
 
   src = fetchFromGitLab {
@@ -27,6 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-n7ypFJBYT712Uzh1NnWWSOIpEDKR0e6sQxbiIN6pZgo=";
   };
+
+  patches = [
+    # Support mdbook 0.5.x - remove deprecated multilingual field
+    ./mdbook-0.5-support.patch
+  ];
 
   cargoHash = "sha256-UTIxxPBtxzsZilxriAT8ksl2ovoDzIhB+8f+b2cGN3k=";
 
@@ -52,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     ${lib.getExe mdbook} build
     mkdir -p "$doc/share/doc"
-    mv public "$doc/share/doc/${finalAttrs.pname}"
+    mv public "$doc/share/doc/engage"
   '';
 
   meta = {

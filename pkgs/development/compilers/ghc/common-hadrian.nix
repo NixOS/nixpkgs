@@ -50,8 +50,9 @@
   # If enabled, GHC will be built with the GPL-free but slightly slower native
   # bignum backend instead of the faster but GPLed gmp backend.
   enableNativeBignum ?
-    !(lib.meta.availableOn stdenv.hostPlatform gmp && lib.meta.availableOn stdenv.targetPlatform gmp)
-    || stdenv.targetPlatform.isGhcjs,
+    stdenv.targetPlatform.isGhcjs
+    || !(lib.meta.availableOn stdenv.hostPlatform gmp)
+    || !(lib.meta.availableOn stdenv.targetPlatform gmp),
   gmp,
 
   # If enabled, use -fPIC when compiling static libs.
@@ -72,10 +73,13 @@
       stdenv.targetPlatform.isWindows
       || stdenv.targetPlatform.isGhcjs
       # Before <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13932>,
-      # we couldn't force hadrian to build terminfo for cross.
+      # we couldn't force hadrian to build terminfo for different triples.
       || (
         lib.versionOlder version "9.15.20250808"
-        && (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+        && (
+          stdenv.buildPlatform.config != stdenv.hostPlatform.config
+          || stdenv.hostPlatform.config != stdenv.targetPlatform.config
+        )
       )
     ),
 
@@ -205,21 +209,11 @@
         (
           if lib.versionOlder version "9.10" then
             ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-          else
+          else if lib.versionOlder version "9.14" then
             ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch
+          else
+            ./Cabal-3.16-paths-fix-cycle-aarch64-darwin.patch
         )
-      ]
-      ++ lib.optionals stdenv.targetPlatform.isWindows [
-        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
-        (fetchpatch {
-          name = "include-modern-utimbuf.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
-          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
-        })
-      ]
-      ++ lib.optionals stdenv.targetPlatform.isGhcjs [
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290
-        ./export-heap-methods.patch
       ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
@@ -244,6 +238,35 @@
           hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
         })
       ]
+      ++ lib.optionals (lib.versionOlder version "9.12.1") [
+        (fetchpatch {
+          name = "ghc-ppc-support-elf-v2-on-powerpc64-big-endian.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/ead75532c9dc915bfa9ebaef0ef5d148e793cc0a.patch";
+          # ghc-platform was split out of ghc-boot in ddcdd88c2c95445a87ee028f215d1e876939a4d9
+          postFetch = lib.optionalString (lib.versionOlder version "9.10.1") ''
+            substituteInPlace $out \
+              --replace-fail 'libraries/ghc-platform/src/GHC' 'libraries/ghc-boot/GHC'
+          '';
+          hash =
+            if lib.versionOlder version "9.10.1" then
+              "sha256-5SVSW1aYoItqHli5QjnudH4zGporYNLDeEo4gZksBZw="
+            else
+              "sha256-vtjT+TL/7sYPu4rcVV3xCqJQ+uqkyBbf9l0KIi97j/0=";
+        })
+      ]
+      ++
+        lib.optionals
+          (
+            (lib.versions.majorMinor version == "9.12" && lib.versionOlder version "9.12.3")
+            || (lib.versions.majorMinor version != "9.12" && lib.versionOlder version "9.14.1")
+          )
+          [
+            (fetchpatch {
+              name = "ghc-rts-Fix-compile-on-powerpc64-elf-v1.patch";
+              url = "https://gitlab.haskell.org/ghc/ghc/-/commit/05e5785a3157c71e327a8e9bdc80fa7082918739.patch";
+              hash = "sha256-xP5v3cKhXeTRSFvRiKEn9hPxGXgVgykjTILKjh/pdDU=";
+            })
+          ]
       # Fix build with gcc15
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
@@ -260,6 +283,14 @@
               hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
             })
           ]
+      # Fix subword division regression in 9.12.3 https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15264
+      ++ lib.optionals (version == "9.12.3") [
+        (fetchpatch {
+          name = "ghc-9.12.3-fix-subword-division.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/65370007e2d9f1976fbcfbb514917fb111117148.patch";
+          hash = "sha256-GMnD0StBTRynl2Lels1L0u1bo7HscLGPUAv+rTJ98QQ=";
+        })
+      ]
       # Fixes stack overrun in rts which crashes an process whenever
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25485 krank:ignore-line
@@ -272,10 +303,25 @@
         })
       ]
 
-      # Missing ELF symbols
-      ++ lib.optionals stdenv.targetPlatform.isAndroid [
+      # Unreleased or still in-progress upstream cross fixes
+      ++ lib.optionals (lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.15") [
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
+        (fetchpatch {
+          name = "include-modern-utimbuf.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
+          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
+        })
+
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26290 krank:ignore-line
+        ./export-heap-methods.patch
+      ]
+      ++ lib.optionals (lib.versionAtLeast version "9.10.3") [
+        # https://gitlab.haskell.org/ghc/ghc/-/issues/26518 krank:ignore-line
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
+
+      # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
+      ++ [ ./ghc-9.6-or-later-docs-sphinx-9.patch ]
 
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
@@ -322,7 +368,9 @@ let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
-  targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = lib.optionalString (
+    targetPlatform.config != hostPlatform.config
+  ) "${targetPlatform.config}-";
 
   # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
   # so haddock isn't available for GHC cross-compilers. Can we fix that?
@@ -340,6 +388,10 @@ let
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
       "*.*.ghc.c.opts += -optc-std=gnu99"
+    ]
+    # Inform GHC that we can't load dynamic libraries which forces iserv-proxy to load static libraries.
+    ++ lib.optionals targetPlatform.isStatic [
+      "*.ghc.cabal.configure.opts += --flags=-dynamic-system-linker"
     ];
 
   # Splicer will pull out correct variations
@@ -477,6 +529,9 @@ stdenv.mkDerivation (
     pname = "${targetPrefix}ghc${variantSuffix}";
     inherit version;
 
+    # Useful as hadrianSettings often have spaces in them
+    __structuredAttrs = true;
+
     src = ghcSrc;
 
     enableParallelBuilding = true;
@@ -597,15 +652,8 @@ stdenv.mkDerivation (
       }/share/emscripten/cache/* "$EM_CACHE/"
       chmod u+rwX -R "$EM_CACHE"
     ''
-    # Create bash array hadrianFlagsArray for use in buildPhase. Do it in
-    # preConfigure, so overrideAttrs can be used to modify it effectively.
-    # hadrianSettings are passed via the command line so they are more visible
-    # in the build log.
     + ''
-      hadrianFlagsArray=(
-        "-j$NIX_BUILD_CORES"
-        ${lib.escapeShellArgs hadrianSettings}
-      )
+      hadrianFlags+=("-j$NIX_BUILD_CORES")
     '';
 
     ${if targetPlatform.isGhcjs then "configureScript" else null} = "emconfigure ./configure";
@@ -632,7 +680,7 @@ stdenv.mkDerivation (
       "--with-ffi-includes=${targetLibs.libffi.dev}/include"
       "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
     ]
-    ++ lib.optionals (targetPlatform == hostPlatform && !enableNativeBignum) [
+    ++ lib.optionals (!enableNativeBignum) [
       "--with-gmp-includes=${targetLibs.gmp.dev}/include"
       "--with-gmp-libraries=${targetLibs.gmp.out}/lib"
     ]
@@ -747,16 +795,16 @@ stdenv.mkDerivation (
       # In 9.14 this will be default with release flavour.
       # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13444
       "--hash-unit-ids"
-    ];
+    ]
+    ++ hadrianSettings;
 
     buildPhase = ''
       runHook preBuild
 
-      # hadrianFlagsArray is created in preConfigure
-      echo "hadrianFlags: $hadrianFlags ''${hadrianFlagsArray[@]}"
+      echo "hadrianFlags: ''${hadrianFlags[@]}"
 
       # We need to go via the bindist for installing
-      hadrian $hadrianFlags "''${hadrianFlagsArray[@]}" binary-dist-dir
+      hadrian "''${hadrianFlags[@]}" binary-dist-dir
 
       runHook postBuild
     '';
@@ -795,8 +843,9 @@ stdenv.mkDerivation (
       export InstallNameToolCmd=$INSTALL_NAME_TOOL
       export OtoolCmd=$OTOOL
     ''
+    # Replicate configurePhase
     + ''
-      $configureScript $configureFlags "''${configureFlagsArray[@]}"
+      $configureScript "''${configureFlags[@]}"
     '';
 
     postInstall = ''

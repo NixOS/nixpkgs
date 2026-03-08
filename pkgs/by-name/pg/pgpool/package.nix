@@ -9,13 +9,13 @@
   pam,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgpool-II";
   version = "4.6.4";
 
   src = fetchurl {
-    url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
-    name = "pgpool-II-${version}.tar.gz";
+    url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${finalAttrs.version}.tar.gz";
+    name = "pgpool-II-${finalAttrs.version}.tar.gz";
     hash = "sha256-7w0ukamhHXN8ZHYkchnmefcYvsU1UGRhiVlO+a79KY0=";
   };
 
@@ -49,10 +49,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
     description = "Middleware that works between PostgreSQL servers and PostgreSQL clients";
     changelog = "https://www.pgpool.net/docs/latest/en/html/release-${
-      builtins.replaceStrings [ "." ] [ "-" ] version
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }.html";
     license = lib.licenses.free;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

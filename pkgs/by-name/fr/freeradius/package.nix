@@ -38,13 +38,13 @@ assert withRest -> withJson;
 
 stdenv.mkDerivation rec {
   pname = "freeradius";
-  version = "3.2.7";
+  version = "3.2.8";
 
   src = fetchFromGitHub {
     owner = "FreeRADIUS";
     repo = "freeradius-server";
     tag = "release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-FG0/quBB5Q/bdYQqkFaZc/BhcIC/n2uVstlIGe4EPvE=";
+    hash = "sha256-NvcXTT0jp3WR/w+JWcNESg6iNYqIV8QAlM8MxpYkpjs=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

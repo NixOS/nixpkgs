@@ -5,18 +5,19 @@
   meson,
   ninja,
   nix-update-script,
+  pkgsBuildBuild,
   runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "janet";
-  version = "1.40.1";
+  version = "1.41.2";
 
   src = fetchFromGitHub {
     owner = "janet-lang";
     repo = "janet";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BV5hVg85QgN8DXiMF2kA3IQNuvWjcsyciiuQP5+c+7c=";
+    hash = "sha256-sNRhcGG8JysmPHHXeRkYCt7qA75U6flptUEWWun+rDs=";
   };
 
   postPatch = ''
@@ -29,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "'test/suite-ev.janet'," ""
   '';
 
+  depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
   nativeBuildInputs = [
     meson
     ninja

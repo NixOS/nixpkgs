@@ -1,7 +1,7 @@
 {
   lib,
   buildGoModule,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
 }:
 
@@ -9,8 +9,7 @@ buildGoModule rec {
   pname = "knock";
   version = "0.0.2";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "nat-418";
     repo = "knock";
     rev = "v${version}";

@@ -12,7 +12,7 @@
   adwaita-icon-theme,
   dconf,
   gtk3,
-  wxGTK32,
+  wxwidgets_3_2,
   librsvg,
   cups,
   gsettings-desktop-schemas,
@@ -23,6 +23,7 @@
 
   pname ? "kicad",
   stable ? true,
+  compressStep ? true,
   testing ? false,
   withNgspice ? !stdenv.hostPlatform.isDarwin,
   libngspice,
@@ -133,7 +134,7 @@ let
     else
       versionsImport.${baseName}.libVersion.version;
 
-  wxGTK = wxGTK32;
+  wxGTK = wxwidgets_3_2;
   python = python3;
   wxPython = python.pkgs.wxpython;
   addonPath = "addon.zip";
@@ -177,7 +178,7 @@ in
 stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
-  passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
+  passthru.libraries = callPackages ./libraries.nix { inherit libSrc compressStep; };
   passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
     inherit stable testing;
@@ -282,7 +283,7 @@ stdenv.mkDerivation rec {
     (concatStringsSep "\n" (flatten [
       "runHook preInstall"
 
-      (optionalString withScripting "buildPythonPath \"${base} $pythonPath\" \n")
+      (optionalString withScripting ''buildPythonPath "${base} ''${pythonPath[*]}"'')
 
       # wrap each of the directly usable tools
       (map (

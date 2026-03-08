@@ -3,7 +3,6 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   urllib3,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "python-opendata-transport";
   version = "0.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "python_opendata_transport";

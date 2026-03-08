@@ -60,7 +60,6 @@ let
         changelog = "https://github.com/kubernetes/kops/tree/master/docs/releases";
         license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [
-          offline
           zimbatm
           yurrriq
         ];

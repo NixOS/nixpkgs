@@ -2,7 +2,6 @@
   lib,
   buildPythonApplication,
   fetchPypi,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -11,8 +10,6 @@ buildPythonApplication rec {
   pname = "apc-temp-fetch";
   version = "0.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "APC-Temp-fetch";

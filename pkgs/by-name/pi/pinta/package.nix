@@ -5,6 +5,7 @@
   fetchFromGitHub,
   glibcLocales,
   gtk4,
+  glib,
   intltool,
   libadwaita,
   wrapGAppsHook4,
@@ -12,13 +13,13 @@
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "3.0.5";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    hash = "sha256-teBk3+t0iFaqOh0Bzpz6mAlQ/reEd84wZSVXnYIXAio=";
+    hash = "sha256-ZlsXba1ppdAQeZW1ihrEu+deA0o6gZJk50wxJuW95Dk=";
   };
 
   nativeBuildInputs = [
@@ -28,6 +29,7 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     gtk4
+    glib
     libadwaita
   ];
 
@@ -52,8 +54,8 @@ buildDotnetModule rec {
   # TODO: use upstream build system
   postBuild = ''
     # Substitute translation placeholders
-    intltool-merge -x po/ xdg/pinta.appdata.xml.in xdg/pinta.appdata.xml
-    intltool-merge -d po/ xdg/pinta.desktop.in xdg/pinta.desktop
+    intltool-merge -x po/ xdg/com.github.PintaProject.Pinta.metainfo.xml.in xdg/com.github.PintaProject.Pinta.metainfo.xml
+    intltool-merge -d po/ xdg/com.github.PintaProject.Pinta.desktop.in xdg/com.github.PintaProject.Pinta.desktop
 
     # Build translations
     dotnet build Pinta \

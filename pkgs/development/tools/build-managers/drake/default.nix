@@ -16,7 +16,6 @@ bundlerApp {
     homepage = "http://quix.github.io/rake/";
     maintainers = with lib.maintainers; [
       romildo
-      manveru
       nicknovitski
     ];
     license = lib.licenses.mit;

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powerstat";
   version = "0.04.05";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "powerstat";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-KR+Nzm9uRISNuqqnlTwfQP1jvSK4lAy//zdn7M8HPLk=";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ womfoo ];
   };
-}
+})

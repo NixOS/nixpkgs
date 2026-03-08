@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "strictdoc";
-  version = "0.10.1";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strictdoc-project";
     repo = "strictdoc";
-    tag = version;
-    hash = "sha256-TXrSv6V5fMhcx4YolTfsFwgGL5qxNp67iv62KDC5H00=";
+    tag = finalAttrs.version;
+    hash = "sha256-pfKEPdEYCW8pMOD5DH9oNVK1ypQKfFMUOXryte+JdCs=";
   };
 
   build-system = [
@@ -32,6 +32,9 @@ python3.pkgs.buildPythonApplication rec {
     lark
     lxml
     openpyxl
+    orjson
+    pandas
+    plotly
     pybtex
     pygments
     python-multipart
@@ -46,6 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     tree-sitter
     tree-sitter-grammars.tree-sitter-cpp
     tree-sitter-grammars.tree-sitter-python
+    tree-sitter-grammars.tree-sitter-rust
     uvicorn
     webdriver-manager
     websockets
@@ -74,9 +78,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Software for technical documentation and requirements management";
     homepage = "https://github.com/strictdoc-project/strictdoc";
-    changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/strictdoc-project/strictdoc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.puzzlewolf ];
     mainProgram = "strictdoc";
   };
-}
+})

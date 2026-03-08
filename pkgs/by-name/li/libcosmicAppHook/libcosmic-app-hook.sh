@@ -15,11 +15,7 @@ libcosmicAppVergenHook() {
 
 libcosmicAppLinkerArgsHook() {
   # Force linking to certain libraries like libEGL, which are always dlopen()ed
-  # local flags="CARGO_TARGET_@cargoLinkerVar@_RUSTFLAGS"
-
-  # Temporarily use this simpler solution, it should work for simple cross compilation
-  # https://github.com/NixOS/nixpkgs/issues/464392
-  local flags="RUSTFLAGS"
+  local flags="CARGO_TARGET_@cargoLinkerVar@_RUSTFLAGS"
 
   export "$flags"="${!flags-} -C link-arg=-Wl,--push-state,--no-as-needed"
   # shellcheck disable=SC2043

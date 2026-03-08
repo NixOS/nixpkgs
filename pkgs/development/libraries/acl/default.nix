@@ -40,5 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://savannah.nongnu.org/projects/acl";
     description = "Library and tools for manipulating access control lists";
     license = lib.licenses.gpl2Plus;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "acl_project" version;
   };
 }

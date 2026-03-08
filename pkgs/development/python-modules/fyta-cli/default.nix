@@ -8,7 +8,6 @@
   mashumaro,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "fyta-cli";
   version = "0.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dontinelli";

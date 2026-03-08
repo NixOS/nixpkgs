@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "smpclient";
-  version = "5.1.0";
+  version = "6.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "intercreate";
     repo = "smpclient";
     tag = version;
-    hash = "sha256-/prS2w14yTT2t/CKDAVimh6lyXx4wRT3wQ1d18dhpSo=";
+    hash = "sha256-1FyrJivP+sOKXVFuH5NbvIlOTOkuiUO3uIRasH8D+d8=";
   };
 
   pythonRelaxDeps = [

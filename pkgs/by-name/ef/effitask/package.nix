@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "effitask";
   version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "sanpii";
     repo = "effitask";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-6BA/TCCqVh5rtgGkUgk8nIqUzozipC5rrkbXMDWYpdQ=";
   };
 
@@ -50,4 +50,4 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ mit ];
     mainProgram = "effitask";
   };
-}
+})

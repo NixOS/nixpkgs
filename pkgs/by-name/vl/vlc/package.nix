@@ -21,13 +21,13 @@
   gnutls,
   harfbuzz,
   libGL,
-  libSM,
-  libXext,
-  libXinerama,
-  libXpm,
+  libsm,
+  libxext,
+  libxinerama,
+  libxpm,
   libarchive,
   libass,
-  libbluray,
+  libbluray-full,
   libcaca,
   libcddb,
   libdc1394,
@@ -83,7 +83,7 @@
   wayland-scanner,
   wrapGAppsHook3,
   writeShellScript,
-  xcbutilkeysyms,
+  libxcb-keysyms,
   zlib,
 
   chromecastSupport ? true,
@@ -103,14 +103,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.22";
+  version = "3.0.23-2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = "vlc";
     rev = finalAttrs.version;
-    hash = "sha256-EI8w8Nep8Vhgp+5wKOdtbFHiSkURnGqb/AjTfELTq1w=";
+    hash = "sha256-vg/kKNrIpGF7Olz8EiA1ZsW5SB4iHlvFbREDp4JokB0=";
   };
 
   depsBuildBuild = optionals waylandSupport [ pkg-config ];
@@ -150,10 +150,10 @@ stdenv.mkDerivation (finalAttrs: {
     gnutls
     harfbuzz
     libGL
-    libSM
+    libsm
     libarchive
     libass
-    libbluray
+    libbluray-full
     libcaca
     libcddb
     libdc1394
@@ -193,7 +193,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     systemdLibs
     taglib_1
-    xcbutilkeysyms
+    libxcb-keysyms
     zlib
   ]
   ++ optionals (!onlyLibVLC) [ live555 ]
@@ -203,9 +203,9 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
   ]
   ++ optionals skins2Support [
-    libXext
-    libXinerama
-    libXpm
+    libxext
+    libxinerama
+    libxpm
   ]
   ++ optionals waylandSupport [
     wayland
@@ -315,7 +315,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Cross-platform media player and streaming server";
     homepage = "https://www.videolan.org/vlc/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ alois31 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "vlc";
   };

@@ -66,6 +66,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "SQLFluff extension for coc.nvim";
     homepage = "https://github.com/yaegassy/coc-sqlfluff";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  celery,
   debugpy,
   docker,
   fetchFromGitHub,
@@ -10,16 +9,20 @@
   psutil,
   pytest-docker-tools,
   pytest,
-  pythonOlder,
   tenacity,
+
+  # optional dependencies
+  redis,
+  python-memcached,
+  boto3,
+  botocore,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";
@@ -55,6 +58,23 @@ buildPythonPackage rec {
     pytest-docker-tools
     tenacity
   ];
+
+  optional-dependencies = {
+    all = [
+      redis
+      python-memcached
+      boto3
+      botocore
+      urllib3
+    ];
+    redis = [ redis ];
+    memcached = [ python-memcached ];
+    sqs = [
+      boto3
+      botocore
+      urllib3
+    ];
+  };
 
   # Infinite recursion with celery
   doCheck = false;

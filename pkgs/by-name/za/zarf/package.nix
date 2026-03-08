@@ -8,18 +8,18 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zarf";
-  version = "0.66.0";
+  version = "0.73.0";
 
   src = fetchFromGitHub {
     owner = "zarf-dev";
     repo = "zarf";
-    tag = "v${version}";
-    hash = "sha256-IveiGWOLEyxt8Dh/gGRv6eENRIQbroy5jkZk9cj6USE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zl33nIUsThq1+uuT7C6OVkoICsQwx+RM8xGqZQt8Tm8=";
   };
 
-  vendorHash = "sha256-rW3CDHGYHmrxOdBNKFvWUvrpRJYaxi5XMzOZqiTxhY0=";
+  vendorHash = "sha256-K8natFIvEomIcPTu73NsMWbN8D0qzWqLTLGjHrLSaK0=";
   proxyVendor = true;
 
   nativeBuildInputs = [
@@ -39,11 +39,11 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X"
-    "github.com/zarf-dev/zarf/src/config.CLIVersion=${src.tag}"
+    "github.com/zarf-dev/zarf/src/config.CLIVersion=${finalAttrs.src.tag}"
     "-X"
-    "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${src.tag}"
+    "k8s.io/component-base/version.gitVersion=v0.0.0+zarf${finalAttrs.src.tag}"
     "-X"
-    "k8s.io/component-base/version.gitCommit=${src.tag}"
+    "k8s.io/component-base/version.gitCommit=${finalAttrs.src.tag}"
     "-X"
     "k8s.io/component-base/version.buildDate=1970-01-01T00:00:00Z"
   ];
@@ -69,4 +69,4 @@ buildGoModule rec {
       ragingpastry
     ];
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   pytest-codspeed,
   pytest-snapshot,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "awesomeversion";
   version = "25.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ludeeus";

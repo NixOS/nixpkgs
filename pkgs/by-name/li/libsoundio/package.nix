@@ -8,14 +8,14 @@
   libpulseaudio,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.0.0";
   pname = "libsoundio";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "libsoundio";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "12l4rvaypv87vigdrmjz48d4d6sq4gfxf5asvnc4adyabxb73i4x";
   };
 
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = "http://libsound.io/";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.andrewrk ];
+    maintainers = [ ];
   };
-}
+})

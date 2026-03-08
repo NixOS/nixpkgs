@@ -196,16 +196,16 @@ in
           ];
         };
 
-        linux_6_17 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.17";
+        linux_6_18 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.18";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
           ];
         };
 
-        linux_6_18 = callPackage ../os-specific/linux/kernel/mainline.nix {
-          branch = "6.18";
+        linux_6_19 = callPackage ../os-specific/linux/kernel/mainline.nix {
+          branch = "6.19";
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -278,7 +278,7 @@ in
 
         linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
 
-        linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
+        linux_hardened = linux_6_12_hardened;
       }
       // lib.optionalAttrs config.allowAliases {
         linux_libre = throw "linux_libre has been removed due to lack of maintenance";
@@ -293,6 +293,7 @@ in
         linux_6_14 = throw "linux 6.14 was removed because it has reached its end of life upstream";
         linux_6_15 = throw "linux 6.15 was removed because it has reached its end of life upstream";
         linux_6_16 = throw "linux 6.16 was removed because it has reached its end of life upstream";
+        linux_6_17 = throw "linux 6.17 was removed because it has reached its end of life upstream";
 
         linux_5_10_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
         linux_5_15_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS";
@@ -380,7 +381,7 @@ in
 
         ch9344 = callPackage ../os-specific/linux/ch9344 { };
 
-        chipsec = callPackage ../tools/security/chipsec {
+        chipsec = callPackage ../by-name/ch/chipsec/package.nix {
           inherit kernel;
           withDriver = true;
         };
@@ -470,6 +471,8 @@ in
 
         nct6687d = callPackage ../os-specific/linux/nct6687d { };
 
+        hid-fanatecff = callPackage ../os-specific/linux/hid-fanatecff { };
+
         new-lg4ff = callPackage ../os-specific/linux/new-lg4ff { };
 
         zenergy = callPackage ../os-specific/linux/zenergy { };
@@ -491,7 +494,6 @@ in
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
         nvidia_dc_535 = nvidiaPackages.dc_535;
-        nvidia_dc_565 = nvidiaPackages.dc_565;
 
         # this is not a replacement for nvidia_x11*
         # only the opensource kernel driver exposed for hydra to build
@@ -670,6 +672,10 @@ in
           configFile = "kernel";
           inherit pkgs kernel;
         };
+        zfs_2_4 = callPackage ../os-specific/linux/zfs/2_4.nix {
+          configFile = "kernel";
+          inherit pkgs kernel;
+        };
         zfs_unstable = callPackage ../os-specific/linux/zfs/unstable.nix {
           configFile = "kernel";
           inherit pkgs kernel;
@@ -717,6 +723,7 @@ in
         tuxedo-keyboard = self.tuxedo-drivers; # Added 2024-09-28
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
+        nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
@@ -730,8 +737,8 @@ in
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
     linux_6_12 = recurseIntoAttrs (packagesFor kernels.linux_6_12);
-    linux_6_17 = recurseIntoAttrs (packagesFor kernels.linux_6_17);
     linux_6_18 = recurseIntoAttrs (packagesFor kernels.linux_6_18);
+    linux_6_19 = recurseIntoAttrs (packagesFor kernels.linux_6_19);
   }
   // lib.optionalAttrs config.allowAliases {
     linux_4_19 = throw "linux 4.19 was removed because it will reach its end of life within 24.11"; # Added 2024-09-21
@@ -743,6 +750,7 @@ in
     linux_6_14 = throw "linux 6.14 was removed because it reached its end of life upstream"; # Added 2025-06-22
     linux_6_15 = throw "linux 6.15 was removed because it reached its end of life upstream"; # Added 2025-08-23
     linux_6_16 = throw "linux 6.16 was removed because it reached its end of life upstream"; # Added 2025-10-22
+    linux_6_17 = throw "linux 6.17 was removed because it reached its end of life upstream"; # Added 2025-12-22
   };
 
   rtPackages = {
@@ -804,9 +812,9 @@ in
   );
 
   packageAliases = {
-    linux_default = packages.linux_6_12;
+    linux_default = packages.linux_6_18;
     # Update this when adding the newest kernel major version!
-    linux_latest = packages.linux_6_18;
+    linux_latest = packages.linux_6_19;
     linux_rt_default = packages.linux_rt_5_15;
     linux_rt_latest = packages.linux_rt_6_6;
   }

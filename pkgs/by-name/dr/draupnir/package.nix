@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs_22,
   matrix-sdk-crypto-nodejs,
   python3,
   sqlite,
@@ -17,18 +17,18 @@
   nix-update-script,
 }:
 let
-  nodeSources = srcOnly nodejs;
+  nodeSources = srcOnly nodejs_22;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "draupnir";
-  version = "2.8.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "the-draupnir-project";
     repo = "Draupnir";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I9DYiNxD95pzHVsgZ/hJwHfrsVqE/eBALNiePVNDpy0=";
+    hash = "sha256-j5UEW9JpIHhFWGMEwrPE1v0hdFAw5Z4CImRYEm56I4k=";
   };
 
   nativeBuildInputs = [
@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     yarnConfigHook
     yarnBuildHook
-    nodejs
+    nodejs_22
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-kTdJ6zKNjH5CxcM9EvXzbz2Phrp5xI0+pvNwMLRmLgQ=";
+    hash = "sha256-Ck6Ba/qDlEW5jqKUX8tyB0QbiVXU8+ND2tvhftmYktY=";
   };
 
   preBuild = ''
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv ./lib ./version.txt ./node_modules ./package.json $out/lib/node_modules/draupnir
 
     # Create wrapper executable
-    makeWrapper ${lib.getExe nodejs} $out/bin/draupnir \
+    makeWrapper ${lib.getExe nodejs_22} $out/bin/draupnir \
       --add-flags "--enable-source-maps" \
       --add-flags "$out/lib/node_modules/draupnir/lib/index.js"
 

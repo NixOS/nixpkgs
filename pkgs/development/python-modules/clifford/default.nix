@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   h5py,
   ipython,
   numba,
@@ -15,14 +14,12 @@
 
 buildPythonPackage rec {
   pname = "clifford";
-  version = "1.4.0";
+  version = "1.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eVE8FrD0YHoRreY9CrNb8v4v4KrG83ZU0oFz+V+p+Q0=";
+    hash = "sha256-NISzEs/w4tXhT7mUCbgkIZPDWN+qave8bqIwxGBuZvM=";
   };
 
   build-system = [ setuptools ];

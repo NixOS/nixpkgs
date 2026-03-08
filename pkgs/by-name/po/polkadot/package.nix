@@ -15,14 +15,14 @@
 let
   rocksdb = rocksdb_8_3;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkadot";
   version = "2509-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    rev = "polkadot-stable${version}";
+    rev = "polkadot-stable${finalAttrs.version}";
     hash = "sha256-XisQA5WNmFaFfY7T4EMcwlOD8FUfAjmLDV7NSWsh3vA=";
 
     # the build process of polkadot requires a .git folder in order to determine
@@ -68,9 +68,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  OPENSSL_NO_VENDOR = 1;
-  PROTOC = "${protobuf}/bin/protoc";
-  ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+    PROTOC = "${protobuf}/bin/protoc";
+    ROCKSDB_LIB_DIR = "${rocksdb}/lib";
+  };
 
   meta = {
     description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
@@ -87,4 +89,4 @@ rustPlatform.buildRustPackage rec {
       lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
     );
   };
-}
+})

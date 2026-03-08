@@ -23,8 +23,9 @@
   gnome,
   vala,
   shared-mime-info,
-  # Requires building a cdylib.
-  withPixbufLoader ? !stdenv.hostPlatform.isStatic,
+  # Requires building a cdylib and running a target binary
+  withPixbufLoader ?
+    !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.emulatorAvailable buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -44,7 +45,7 @@
   imagemagick,
   imlib2,
   vips,
-  xfce,
+  xfwm4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -212,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
         vips
         ;
       inherit (enlightenment) efl;
-      inherit (xfce) xfwm4;
+      inherit xfwm4;
       ffmpeg = ffmpeg.override { withSvg = true; };
     };
   };

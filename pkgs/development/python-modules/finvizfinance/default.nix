@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   beautifulsoup4,
@@ -15,16 +14,14 @@
 
 buildPythonPackage rec {
   pname = "finvizfinance";
-  version = "1.1.1";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "lit26";
     repo = "finvizfinance";
     tag = "v${version}";
-    hash = "sha256-QVR0ig51EHdMVzg6wBDpvMGjPnmO2ZGBs2Q0SVxauik=";
+    hash = "sha256-M/EyQgINdJLLfOFNm/RhqONz3slb4ukugHLdiozDY0s=";
   };
 
   build-system = [ setuptools ];

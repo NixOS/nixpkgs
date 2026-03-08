@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DNOSERVER=${if withServer then "OFF" else "ON"}"
   ];
 
-  NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
+  env.NIX_LDFLAGS = lib.concatMapStringsSep " " (e: "-rpath ${e}/lib") [
     SDL2.out
     SDL2_image
     SDL2_mixer
@@ -93,14 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${
-      lib.makeLibraryPath [
-        libGL
-        libGLU
-        libglut
-        physfs
-      ]
-    }"
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    (lib.makeLibraryPath [
+      libGL
+      libGLU
+      libglut
+      physfs
+    ])
   ];
 
   meta = {

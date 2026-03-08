@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   hatchling,
   scim2-client,
@@ -14,16 +13,14 @@
 
 buildPythonPackage rec {
   pname = "scim2-tester";
-  version = "0.1.14";
+  version = "0.2.4";
 
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit version;
     pname = "scim2_tester";
-    hash = "sha256-QoqD0dgEuL0VJ6vc6K76G7ipl7rKjlzJuTwFCnfS/64=";
+    hash = "sha256-r67e3AnqhLWVmtOFDj3P2Baa2Ch3TjyHm3Ol8ZwXH/g=";
   };
 
   build-system = [ hatchling ];

@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/tuxera/ntfs-3g";
     description = "FUSE-based NTFS driver with full write support";
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     mainProgram = "ntfs-3g";
     platforms = with lib.platforms; darwin ++ linux;
     license = with lib.licenses; [

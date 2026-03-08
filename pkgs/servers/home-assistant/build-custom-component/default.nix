@@ -62,7 +62,7 @@ home-assistant.python.pkgs.buildPythonPackage (
   }
   // removeAttrs args [
     "meta"
-    "nativeCheckInputs"
+    "nativeBuildInputs"
     "passthru"
   ]
 )

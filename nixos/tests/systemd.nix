@@ -109,10 +109,10 @@
       machine.wait_for_unit("first-boot-complete.target")
 
       machine.succeed(
-        "journalctl --system -o cat --grep 'systemd ${lib.escapeRegex pkgs.systemd.version} running'"
+        "journalctl --system -o cat --grep 'systemd ${lib.escapeRegex nodes.machine.systemd.package.version} running'"
       )
 
-      assert "systemd ${lib.versions.major pkgs.systemd.version} (${pkgs.systemd.version})" in machine.succeed(
+      assert "systemd ${lib.versions.major nodes.machine.systemd.package.version} (${nodes.machine.systemd.package.version})" in machine.succeed(
         "systemctl --version"
       )
 

@@ -11,13 +11,13 @@
   libGL,
   libGLU,
   libGLX,
-  libX11,
-  libXext,
-  libXmu,
-  libXpm,
+  libx11,
+  libxext,
+  libxmu,
+  libxpm,
   motif,
   python3,
-  qt5,
+  qt6,
   soxt,
   xercesc,
   zlib,
@@ -37,13 +37,13 @@ let
   };
 in
 
-stdenv.mkDerivation rec {
-  version = "11.3.2";
+stdenv.mkDerivation (finalAttrs: {
+  version = "11.4.0";
   pname = "geant4";
 
   src = fetchurl {
-    url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-iSrt10JSYqUKw9PHEX2BwMDaS0CMaIDbr1R4uTAeSIw=";
+    url = "https://cern.ch/geant4-data/releases/geant4-v${finalAttrs.version}.tar.gz";
+    hash = "sha256-rWTJa4s9cSXnRruX9fVXee1ZRoGmpdY8JwJefJzvWPo=";
   };
 
   # Fix broken paths in a .pc
@@ -81,17 +81,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedNativeBuildInputs = lib.optionals enableQt [ qt5.wrapQtAppsHook ];
+  propagatedNativeBuildInputs = lib.optionals enableQt [ qt6.wrapQtAppsHook ];
   dontWrapQtApps = true; # no binaries
 
   buildInputs =
     lib.optionals enableOpenGLX11 [
       libGLU
-      libXext
-      libXmu
+      libxext
+      libxmu
     ]
     ++ lib.optionals enableInventor [
-      libXpm
+      libxpm
       coin3d
       soxt
       motif
@@ -109,10 +109,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableOpenGLX11 [
     libGL
-    libX11
+    libx11
   ]
   ++ lib.optionals enableXM [ motif ]
-  ++ lib.optionals enableQt [ qt5.qtbase ];
+  ++ lib.optionals enableQt [ qt6.qtbase ];
 
   postFixup = ''
     substituteInPlace "$out"/bin/geant4.sh \
@@ -152,4 +152,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

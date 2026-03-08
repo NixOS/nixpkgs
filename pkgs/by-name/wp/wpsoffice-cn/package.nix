@@ -22,7 +22,9 @@
   unixODBC,
   libmysqlclient,
   libsForQt5,
-  xorg,
+  libxv,
+  libxtst,
+  libxdamage,
   # wpsoffice runtime dependencies
   cups,
   dbus,
@@ -138,7 +140,6 @@ else
       libjpeg
       libtool
       libxkbcommon
-      nss
       nspr
       udev
       gtk3
@@ -146,9 +147,9 @@ else
       libusb1
       unixODBC
       libsForQt5.qtbase
-      xorg.libXdamage
-      xorg.libXtst
-      xorg.libXv
+      libxdamage
+      libxtst
+      libxv
     ];
 
     dontWrapQtApps = true;
@@ -170,7 +171,7 @@ else
       rm -rf usr/share/{fonts,locale}
       rm -f usr/bin/misc
       rm -rf opt/kingsoft/wps-office/{desktops,INSTALL}
-      rm -f opt/kingsoft/wps-office/office6/lib{peony-wpsprint-menu-plugin,bz2,jpeg,stdc++,gcc_s,odbc*,nss*,dbus-1}.so*
+      rm -f opt/kingsoft/wps-office/office6/lib{peony-wpsprint-menu-plugin,bz2,jpeg,stdc++,gcc_s,odbc*,dbus-1}.so*
     '';
 
     installPhase = ''

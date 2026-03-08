@@ -15,12 +15,12 @@
   libvorbis,
   miniaudio,
   udev,
-  libXi,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
-  xcbutilimage,
+  libxi,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxrender,
+  libxcb-image,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YqlrY0iIsxcjlLb+buMU0zpXo7/eKSKxOsITWf7BX6s=";
   };
 
-  patches = [
+  # Only unvendor miniaudio on non-Darwin as Darwin cannot build the miniaudio package.
+  patches = lib.optional (!stdenv.hostPlatform.isDarwin) [
     # Not upstreamble in the near future, see https://github.com/SFML/SFML/pull/3555
     ./unvendor-miniaudio.patch
   ];
@@ -49,16 +50,16 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     libjpeg
     libvorbis
-    miniaudio
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
-    libXi
-    libXcursor
-    libXrandr
-    libXrender
-    xcbutilimage
+    miniaudio
+    libx11
+    libxi
+    libxcursor
+    libxrandr
+    libxrender
+    libxcb-image
   ];
 
   cmakeFlags = [

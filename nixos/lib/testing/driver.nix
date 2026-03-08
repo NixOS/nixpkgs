@@ -67,8 +67,8 @@ let
         ${lib.optionalString (!config.skipTypeCheck) ''
           # prepend type hints so the test script can be type checked with mypy
           cat "${../test-script-prepend.py}" >> testScriptWithTypes
-          echo "${builtins.toString machineNames}" >> testScriptWithTypes
-          echo "${builtins.toString vlanNames}" >> testScriptWithTypes
+          echo "${toString machineNames}" >> testScriptWithTypes
+          echo "${toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
           echo "Running type check (enable/disable: config.skipTypeCheck)"

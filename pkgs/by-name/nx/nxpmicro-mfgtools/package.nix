@@ -13,14 +13,14 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nxpmicro-mfgtools";
   version = "1.5.139";
 
   src = fetchFromGitHub {
     owner = "nxp-imx";
     repo = "mfgtools";
-    rev = "uuu_${version}";
+    rev = "uuu_${finalAttrs.version}";
     sha256 = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  preConfigure = "echo ${version} > .tarball-version";
+  preConfigure = "echo ${finalAttrs.version} > .tarball-version";
 
   postInstall = ''
     # rules printed by the following invocation are static,
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "uuu";
     platforms = lib.platforms.all;
   };
-}
+})

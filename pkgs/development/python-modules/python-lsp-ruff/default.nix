@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   ruff,
@@ -10,7 +9,6 @@
   cattrs,
   lsprotocol,
   python-lsp-server,
-  tomli,
 
   # checks
   pytestCheckHook,
@@ -65,8 +63,7 @@ buildPythonPackage rec {
     cattrs
     lsprotocol
     python-lsp-server
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

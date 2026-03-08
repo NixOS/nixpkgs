@@ -5,14 +5,14 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitlab-release-cli";
   version = "0.24.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "release-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ivOyDctjDfA4iGhZ0UxHTQYQGSQuQYDxndSn+IpOaJQ=";
   };
 
@@ -30,4 +30,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kilimnik ];
     mainProgram = "release-cli";
   };
-}
+})

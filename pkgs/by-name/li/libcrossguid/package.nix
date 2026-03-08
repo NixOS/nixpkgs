@@ -5,8 +5,8 @@
   libuuid,
 }:
 
-stdenv.mkDerivation rec {
-  name = "lib" + "crossguid" + "-" + version;
+stdenv.mkDerivation (finalAttrs: {
+  name = "lib" + "crossguid" + "-" + finalAttrs.version;
   pname = "crossguid";
   version = "2016-02-21";
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
   };
 
-}
+})

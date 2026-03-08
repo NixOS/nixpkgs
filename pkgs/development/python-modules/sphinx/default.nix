@@ -14,12 +14,11 @@
   alabaster,
   docutils,
   imagesize,
-  importlib-metadata,
   jinja2,
   packaging,
   pygments,
   requests,
-  roman-numerals-py,
+  roman-numerals,
   snowballstemmer,
   sphinxcontrib-applehelp,
   sphinxcontrib-devhelp,
@@ -28,15 +27,13 @@
   sphinxcontrib-qthelp,
   sphinxcontrib-serializinghtml,
   sphinxcontrib-websupport,
-  tomli,
 
   # check phase
   defusedxml,
-  filelock,
-  html5lib,
   pytestCheckHook,
   pytest-xdist,
   typing-extensions,
+  writableTmpDirAsHomeHook,
 
   # reverse dependencies to test
   breathe,
@@ -44,10 +41,10 @@
 
 buildPythonPackage rec {
   pname = "sphinx";
-  version = "8.2.3";
+  version = "9.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
@@ -60,7 +57,7 @@ buildPythonPackage rec {
       mv tests/roots/test-images/{testimäge,testimæge}.png
       sed -i 's/testimäge/testimæge/g' tests/{test_build*.py,roots/test-images/index.rst}
     '';
-    hash = "sha256-FoyCpDGDKNN2GMhE7gDpJLmWRWhbMCYlcVEaBTfXSEw=";
+    hash = "sha256-PgqjCeyHOhWtZjyzSZyvsPT0Q7yRyNDiW3x1fQq0K+8=";
   };
 
   build-system = [ flit-core ];
@@ -74,7 +71,7 @@ buildPythonPackage rec {
     packaging
     pygments
     requests
-    roman-numerals-py
+    roman-numerals
     snowballstemmer
     sphinxcontrib-applehelp
     sphinxcontrib-devhelp
@@ -84,24 +81,28 @@ buildPythonPackage rec {
     sphinxcontrib-serializinghtml
     # extra[docs]
     sphinxcontrib-websupport
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     defusedxml
-    filelock
-    html5lib
     pytestCheckHook
     pytest-xdist
     typing-extensions
+    writableTmpDirAsHomeHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  disabledTestPaths = lib.optionals isPyPy [
+    # internals are asserted which are sightly different in PyPy
+    "tests/test_extensions/test_ext_autodoc.py"
+    "tests/test_extensions/test_ext_autodoc_autoclass.py"
+    "tests/test_extensions/test_ext_autodoc_autofunction.py"
+    "tests/test_extensions/test_ext_autodoc_automodule.py"
+    "tests/test_extensions/test_ext_autodoc_preserve_defaults.py"
+    "tests/test_util/test_util_inspect.py"
+    "tests/test_util/test_util_typing.py"
+  ];
 
   disabledTests = [
     # requires network access
@@ -124,8 +125,6 @@ buildPythonPackage rec {
     "test_document_toc_only"
     # Assertion error
     "test_gettext_literalblock_additional"
-    # requires cython_0, but fails miserably on 3.11
-    "test_cython"
     # Could not fetch remote image: http://localhost:7777/sphinx.png
     "test_copy_images"
     # ModuleNotFoundError: No module named 'fish_licence.halibut'
@@ -138,22 +137,20 @@ buildPythonPackage rec {
     "test_load_mappings_cache_update"
     "test_load_mappings_cache_revert_update"
   ]
-  ++ lib.optionals (pythonAtLeast "3.12") [
-    # https://github.com/sphinx-doc/sphinx/issues/12430
-    "test_autodoc_type_aliases"
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    "test_autodoc_special_members"
+    "test_is_invalid_builtin_class"
+    "test_autosummary_generate_content_for_module_imported_members"
   ]
   ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
     "test_autosummary_generate_content_for_module"
     "test_autosummary_generate_content_for_module_skipped"
-    # internals are asserted which are sightly different in PyPy
-    "test_autodoc_inherited_members_None"
-    "test_automethod_for_builtin"
-    "test_builtin_function"
-    "test_isattributedescriptor"
-    "test_methoddescriptor"
-    "test_partialfunction"
+    # Struct vs struct.Struct
+    "test_restify"
+    "test_stringify_annotation"
+    "test_stringify_type_union_operator"
   ];
 
   passthru.tests = {
@@ -193,6 +190,5 @@ buildPythonPackage rec {
     homepage = "https://www.sphinx-doc.org";
     changelog = "https://www.sphinx-doc.org/en/master/changes.html";
     license = lib.licenses.bsd3;
-    teams = [ lib.teams.sphinx ];
   };
 }

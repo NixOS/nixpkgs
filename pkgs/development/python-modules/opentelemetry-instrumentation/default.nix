@@ -6,7 +6,6 @@
   opentelemetry-api,
   opentelemetry-test-utils,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   wrapt,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "opentelemetry-instrumentation";
   version = "0.55b0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # To avoid breakage, every package in opentelemetry-python-contrib must inherit this version, src, and meta
   src = fetchFromGitHub {
@@ -59,6 +56,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.natsukium ];
-    teams = [ lib.teams.deshaw ];
   };
 }

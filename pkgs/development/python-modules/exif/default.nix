@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
-  pythonOlder,
   plum-py,
   pytestCheckHook,
   baseline,
@@ -13,12 +12,10 @@ buildPythonPackage rec {
   version = "1.6.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitLab {
     owner = "TNThieding";
     repo = "exif";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uiHL3m0C6+YnAHRLwzMCSzffrQsSyVcuem6FBtTLxek=";
   };
 

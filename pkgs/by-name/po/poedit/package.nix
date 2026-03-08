@@ -7,7 +7,7 @@
   libtool,
   gettext,
   pkg-config,
-  wxGTK32,
+  wxwidgets_3_2,
   boost,
   icu,
   lucenepp,
@@ -22,14 +22,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "poedit";
   version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
-    rev = "v${version}-oss";
+    rev = "v${finalAttrs.version}-oss";
     hash = "sha256-Lb1R7GMB0GeS2xZASR7w4ee33mMEKP9gPabRHkHlIJI=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     lucenepp
     nlohmann_json
-    wxGTK32
+    wxwidgets_3_2
     icu
     pugixml
     gtk3
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     # configure: error: GTK+ build of wxWidgets is required
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

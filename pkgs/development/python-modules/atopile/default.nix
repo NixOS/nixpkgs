@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   cmake,
   ninja,
@@ -58,11 +59,12 @@
   pytest-xdist,
   hypothesis,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "atopile";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -70,8 +72,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "atopile";
-    tag = "v${version}";
-    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/1vkYGG3OHyeFpzbvRoAxUtLQLePKE2jwQx8o/CTErQ=";
   };
 
   build-system = [
@@ -130,7 +132,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "posthog"
     "prompt-toolkit"
-    "zstd"
   ];
 
   pythonImportsCheck = [ "atopile" ];
@@ -143,7 +144,9 @@ buildPythonPackage rec {
     pytest-datafiles
     pytest-timeout
     hypothesis
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     # do not report worker logs to filee
@@ -185,6 +188,7 @@ buildPythonPackage rec {
   disabledTests = [
     # timeout
     "test_build_error_logging"
+    "test_can_evaluate_literals"
     "test_examples_build"
     "test_net_names_deterministic"
     "test_performance_mifs_bus_params"
@@ -224,9 +228,9 @@ buildPythonPackage rec {
     description = "Design circuit boards with code";
     homepage = "https://atopile.io";
     downloadPage = "https://github.com/atopile/atopile";
-    changelog = "https://github.com/atopile/atopile/releases/tag/${src.tag}";
+    changelog = "https://github.com/atopile/atopile/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ato";
   };
-}
+})

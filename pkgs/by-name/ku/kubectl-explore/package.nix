@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectl-explore";
-  version = "0.14.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "keisku";
     repo = "kubectl-explore";
-    rev = "v${version}";
-    hash = "sha256-URpoIK+5MgBvCtXyZrqwU7cVubCICkAsmfS9w/8Jgks=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-sWVNDXbGaqVEWkHnZbHy9W4lFH8N/aULIzBJLGSXCjs=";
   };
 
   vendorHash = "sha256-TgC8IgB9E83FBP9qrgcqPesnOyOTA5u3AsXn32kaMnU=";
@@ -22,8 +22,8 @@ buildGoModule rec {
     description = "Better kubectl explain with the fuzzy finder";
     mainProgram = "kubectl-explore";
     homepage = "https://github.com/keisku/kubectl-explore";
-    changelog = "https://github.com/keisku/kubectl-explore/releases/tag/v${version}";
+    changelog = "https://github.com/keisku/kubectl-explore/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.koralowiec ];
   };
-}
+})

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "jenkinsapi";
-  version = "0.3.15";
-  format = "pyproject";
+  version = "0.3.17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycontribs";
     repo = "jenkinsapi";
     tag = version;
-    hash = "sha256-r6GOi/0ALJDy6R6cd/bECk+HVe/AyKZYG96sr9y9o/4=";
+    hash = "sha256-1dTcT84cDpP9V4tVrgW2MTYx4jQj0/tZiAuakC+orUQ=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +55,11 @@ buildPythonPackage rec {
   meta = {
     description = "Python API for accessing resources on a Jenkins continuous-integration server";
     homepage = "https://github.com/salimfadhley/jenkinsapi";
-    maintainers = with lib.maintainers; [ drets ];
-    teams = [ lib.teams.deshaw ];
+    maintainers = with lib.maintainers; [
+      de11n
+      despsyched
+      drets
+    ];
     license = lib.licenses.mit;
   };
 }

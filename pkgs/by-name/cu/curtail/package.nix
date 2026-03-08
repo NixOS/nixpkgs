@@ -20,16 +20,16 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "curtail";
-  version = "1.13.0";
-  format = "other";
+  version = "1.14.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
-    tag = version;
-    sha256 = "sha256-JfioWtd0jGTyaD5uELAqH6J+h04MOrfEqdR7GWgXyMw=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-AxQe7abHZp4SRp90fkFbmXf3ZQH3VmxQVkpxRcit+54=";
   };
 
   nativeBuildInputs = [
@@ -88,4 +88,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.gnome-circle ];
   };
-}
+})

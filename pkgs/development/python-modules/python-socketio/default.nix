@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "5.15.0";
+  version = "5.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "python-socketio";
     tag = "v${version}";
-    hash = "sha256-7SX55TXU7HzxoatYor4mUiZoi/2O7nqaAIniyl4lGoc=";
+    hash = "sha256-fUxwQHbtr8skjxYC/KfqLkhPMs/D7LNkFCyvRmUxFmw=";
   };
 
   build-system = [ setuptools ];

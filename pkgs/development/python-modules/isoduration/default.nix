@@ -6,15 +6,12 @@
   hypothesis,
   isodate,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "isoduration";
   version = "20.11.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "bolsote";

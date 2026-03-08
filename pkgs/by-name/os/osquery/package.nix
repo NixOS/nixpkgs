@@ -104,7 +104,6 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [
       znewman01
       lewo
-      squalus
       lesuisse
     ];
   };

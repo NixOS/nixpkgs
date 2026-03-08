@@ -6,7 +6,6 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   six,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "promise";
   version = "2.3.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "syrusakbary";

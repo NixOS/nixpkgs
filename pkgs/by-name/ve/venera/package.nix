@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   webkitgtk_4_1,
   copyDesktopItems,
@@ -13,16 +13,16 @@
 }:
 
 let
-  version = "1.5.3";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
     tag = "v${version}";
-    hash = "sha256-yjO7nQ3F+DLudjqXUp0N13lhBZSAKwAeKXRAKxPxDVQ=";
+    hash = "sha256-hqpWkYXWM/kZU2kVAP2ak2TDZt3m4j4809rGhX68dek=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "venera";
   inherit version src;
 

@@ -21,6 +21,11 @@ let
     if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
+  inherit (builtins)
+    addDrvOutputDependencies
+    unsafeDiscardOutputDependency
+    ;
+
   /**
     Restrict a derivation to a predictable set of attribute names, so
     that the returned attrset is not strict in the actual derivation,
@@ -190,7 +195,7 @@ in
     # Type
 
     ```
-    optionalDrvAttr :: Bool -> a -> a | Null
+    optionalDrvAttr :: Bool -> a -> (a | Null)
     ```
 
     # Examples
@@ -227,6 +232,12 @@ in
 
     `drv`
     : The derivation to wrap.
+
+    # Type
+
+    ```
+    warnOnInstantiate :: String -> Derivation -> Derivation
+    ```
 
     # Examples
     :::{.example}

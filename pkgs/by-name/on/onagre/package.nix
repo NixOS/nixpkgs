@@ -8,7 +8,10 @@
   freetype,
   expat,
   wayland,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   libxkbcommon,
   pop-launcher,
   vulkan-loader,
@@ -36,10 +39,10 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     expat
     freetype
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
   ];
 
   postFixup =

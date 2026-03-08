@@ -8,7 +8,18 @@
   gtk3,
   glib,
   systemd,
-  xorg,
+  libxtst,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
   nss,
   nspr,
   atk,
@@ -75,17 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           glib
           gtk3
-          xorg.libXdamage
-          xorg.libX11
-          xorg.libxcb
-          xorg.libXcomposite
-          xorg.libXcursor
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXi
-          xorg.libXrender
-          xorg.libXtst
-          xorg.libxshmfence
+          libxdamage
+          libx11
+          libxcb
+          libxcomposite
+          libxcursor
+          libxext
+          libxfixes
+          libxi
+          libxrender
+          libxtst
+          libxshmfence
           libxkbcommon
           nss
           nspr
@@ -95,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
           gdk-pixbuf
           pango
           cairo
-          xorg.libXrandr
+          libxrandr
           expat
           libdrm
           libgbm

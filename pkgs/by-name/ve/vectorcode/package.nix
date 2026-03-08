@@ -91,19 +91,21 @@ let
           "chromadb/test/db/test_migrations.py::test_migrations[sqlite]"
         ];
       });
+      lsprotocol = self.lsprotocol_2023;
+      pygls = self.pygls_1;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.7.19";
+  version = "0.7.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-H2Umh4/vRDqaGXVoK/fZaj9guA4IaVSgOEDAVEPsD9A=";
+    hash = "sha256-RU9WnKuPaxDnPW5MQyrxPEw7ufMcVNxSRyJ5QvrzoVs=";
   };
 
   build-system = with python.pkgs; [

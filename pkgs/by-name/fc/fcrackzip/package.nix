@@ -4,15 +4,15 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fcrackzip";
   version = "1.0";
   src = fetchurl {
-    url = "http://oldhome.schmorp.de/marc/data/${pname}-${version}.tar.gz";
+    url = "http://oldhome.schmorp.de/marc/data/fcrackzip-${finalAttrs.version}.tar.gz";
     sha256 = "0l1qsk949vnz18k4vjf3ppq8p497966x4c7f2yx18x8pk35whn2a";
   };
 
-  CFLAGS = "-std=gnu89";
+  env.CFLAGS = "-std=gnu89";
 
   # 'fcrackzip --use-unzip' cannot deal with file names containing a single quote
   # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=430387
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nico202 ];
     platforms = with lib.platforms; unix;
   };
-}
+})

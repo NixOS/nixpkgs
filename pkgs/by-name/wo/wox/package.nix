@@ -2,16 +2,19 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  flutter335,
+  flutter338,
   keybinder3,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3Packages,
   writableTmpDirAsHomeHook,
   buildGoModule,
   pkg-config,
   autoPatchelfHook,
-  xorg,
+  libxtst,
+  libx11,
   libxkbcommon,
   libayatana-appindicator,
   gtk3,
@@ -22,13 +25,13 @@
 }:
 
 let
-  version = "2.0.0-beta.6";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Wox-launcher";
     repo = "Wox";
     tag = "v${version}";
-    hash = "sha256-IZuk2ZADagJJuwS6X+gSAE0hjZQpvz8o0xR7TJWnCNY=";
+    hash = "sha256-6QJCv1geDff4noSaurVsO0Gz0g5+cdobG9DpKBcrMkA=";
   };
 
   metaCommon = {
@@ -38,7 +41,7 @@ let
     maintainers = [ ];
   };
 
-  ui-flutter = flutter335.buildFlutterApplication {
+  ui-flutter = flutter338.buildFlutterApplication {
     pname = "wox-ui-flutter";
     inherit version src;
 
@@ -64,18 +67,20 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs)
         pname
         version
         src
         sourceRoot
         ;
+      pnpm = pnpm_9;
       fetcherVersion = 2;
-      hash = "sha256-OyXYuUCvT9I5xusouoBG9CX4Efl+aTZAYSkOBVDzQVs=";
+      hash = "sha256-8EovIVJ+uAo9XJIIgRrpkQrcmNkKC2Ruja2md7NFZ4A=";
     };
 
     buildPhase = ''
@@ -155,7 +160,7 @@ buildGoModule {
     sed -i '/^	"path"$/d' plugin/host/host_python.go
   '';
 
-  vendorHash = "sha256-P62Q9oRRodo71n/9jzJqlsDvPkia2SQsRq28AhJ1Wno=";
+  vendorHash = "sha256-JA6D0i6lgWYGz8jS4m5yO4JCawbEaVpGGFoQ1QnNqpg=";
 
   proxyVendor = true;
 
@@ -166,8 +171,8 @@ buildGoModule {
   ];
 
   buildInputs = [
-    xorg.libX11
-    xorg.libXtst
+    libx11
+    libxtst
     libxkbcommon
     libayatana-appindicator
     gtk3

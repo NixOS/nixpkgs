@@ -4,7 +4,6 @@
   stdenv,
   buildPythonPackage,
   fetchurl,
-  fetchPypi,
   python,
   pythonOlder,
   pythonAtLeast,
@@ -20,9 +19,10 @@
   numpy,
   protobuf,
   pillow,
-  decorator,
-  astor,
+  networkx,
   opt-einsum,
+  rdma-core,
+  safetensors,
   typing-extensions,
 }:
 
@@ -31,31 +31,30 @@ let
   sources = import ./sources.nix;
   version = sources.version;
   format = "wheel";
-  pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-  cpuOrGpu = if cudaSupport then "gpu" else "cpu";
-  hash =
-    sources."${stdenv.hostPlatform.system}"."${cpuOrGpu}"."${pyShortVersion}"
-      or (throw "${pname} has no sources.nix entry for '${stdenv.hostPlatform.system}.${cpuOrGpu}.${pyShortVersion}' attribute");
-  platform = sources."${stdenv.hostPlatform.system}".platform;
-  src =
-    if cudaSupport then
-      (fetchurl {
-        url = "https://paddle-whl.bj.bcebos.com/stable/cu128/paddlepaddle-gpu/paddlepaddle-${version}-${pyShortVersion}-${pyShortVersion}-linux_x86_64.whl";
-        inherit hash;
-      })
-    else
-      (fetchPypi {
-        inherit
-          version
-          format
-          hash
-          platform
-          ;
-        pname = "paddlepaddle";
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-      });
+  pyShortVersion = "cp${lib.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
+  cudaVersion = "cu${lib.replaceStrings [ "." ] [ "" ] cudaPackages.cudatoolkit.version}";
+
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+  systemSources = sources."${stdenv.hostPlatform.system}" or throwSystem;
+
+  supportedCudaVersions = lib.concatStringsSep ", " (builtins.attrNames systemSources.gpu);
+  throwCuda = throw "Unsupported CUDA version: ${cudaVersion}. Supported versions: ${supportedCudaVersions}";
+  platformSources =
+    if cudaSupport then systemSources.gpu.${cudaVersion} or throwCuda else systemSources.cpu;
+
+  throwPython = throw "Unsupported python version: ${pyShortVersion}";
+  hash = platformSources.${pyShortVersion} or throwPython;
+
+  platform = sources.${stdenv.hostPlatform.system}.platform;
+
+  src = fetchurl {
+    url = "https://paddle-whl.bj.bcebos.com/stable/${
+      if cudaSupport then cudaVersion else "cpu"
+    }/${pname}/${
+      lib.replaceStrings [ "-" ] [ "_" ] pname
+    }-${version}-${pyShortVersion}-${pyShortVersion}-${platform}.whl";
+    inherit hash;
+  };
 in
 buildPythonPackage {
   inherit
@@ -72,15 +71,21 @@ buildPythonPackage {
   ]
   ++ lib.optionals cudaSupport [ autoPatchelfHook ];
 
+  buildInputs = lib.optionals cudaSupport [ rdma-core ];
+
+  pythonRelaxDeps = [
+    "opt_einsum"
+  ];
+
   dependencies = [
     setuptools
     httpx
     numpy
     protobuf
     pillow
-    decorator
-    astor
     opt-einsum
+    networkx
+    safetensors
     typing-extensions
   ];
 
@@ -126,6 +131,8 @@ buildPythonPackage {
       sed -i '/# Check python lib installed or not./,/^fi$/d' $out/bin/paddle
       sed -i 's/^INSTALLED_VERSION=.*/INSTALLED_VERSION="${version}"/' $out/bin/paddle
     '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Machine Learning Framework from Industrial Practice";

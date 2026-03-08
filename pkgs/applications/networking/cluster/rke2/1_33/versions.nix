@@ -1,12 +1,13 @@
 {
-  rke2Version = "1.33.6+rke2r1";
-  rke2Commit = "2c2298232b55a94bd16b059f893c76a950811489";
-  rke2TarballHash = "sha256-K58K5jqOtabjyG1MIfvnaMo4pePgWaAd9SQ5BCNo3nw=";
-  rke2VendorHash = "sha256-taNWaULzVE3d4MhHvet3JFH3Mb4m/8no+DzIhqAjyVw=";
-  k8sImageTag = "v1.33.6-rke2r1-build20251112";
-  etcdVersion = "v3.5.21-k3s1-build20251017";
+  rke2Version = "1.33.8+rke2r1";
+  rke2Commit = "eb75e3c1774cee5a584259d6fee77eb8cfa9b430";
+  rke2TarballHash = "sha256-lurKGrJYKyNVU+MF6k7LFLM+FDnRk0QErcSrookZm7M=";
+  rke2VendorHash = "sha256-vobzaY0eyTSEaZ1AwWaPuK6VhTcRW1YO9gIpMgsQo0g=";
+  k8sImageTag = "v1.33.8-rke2r1-build20260210";
+  etcdVersion = "v3.5.26-k3s1-build20260126";
   pauseVersion = "3.6";
-  ccmVersion = "v1.33.6-0.20251010190850-d6b5244412d1-build20251017";
-  dockerizedVersion = "v1.33.6-rke2r1";
+  ccmVersion = "v1.33.8-0.20260211145912-3552cfc26032-build20260211";
+  dockerizedVersion = "v1.33.8-rke2r1";
+  helmJobVersion = "v0.9.14-build20260210";
   imagesVersions = with builtins; fromJSON (readFile ./images-versions.json);
 }

@@ -27,16 +27,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.10.0";
+  version = "25.12.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    hash = "sha256-SzDSeWTnsXy274H2mkGIHOsW26EoL7aony7Xcb+e+h4=";
+    hash = "sha256-d73izEdLWviOp0XcMbQ3goLWgLZupO4QtQv7WUxdfk8=";
   };
 
-  vendorHash = "sha256-OYQsgwbxsXsOM+sn0mJcABtyXVQAKBa6/ghfbZR1jX4=";
+  vendorHash = "sha256-34+srnXDto82xuITDSPEiNnbCgmZbijvpqpmwlszCEg=";
 
   php = phpPackage;
 
@@ -103,7 +103,8 @@ phpPackage.buildComposerProject2 rec {
     substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/app/Listeners/CommandStartingListener.php --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/app/Listeners/CommandStartingListener.php \
+      --replace-fail "! function_exists('posix_getpwuid') || ! function_exists('posix_geteuid')" "true"
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 
@@ -127,8 +128,10 @@ phpPackage.buildComposerProject2 rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ netali ];
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [
+      netali
+      johannwagner
+    ];
     platforms = lib.platforms.linux;
   };
 }

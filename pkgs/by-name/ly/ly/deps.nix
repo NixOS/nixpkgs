@@ -10,9 +10,6 @@
   name ? "zig-packages",
 }:
 
-with builtins;
-with lib;
-
 let
   unpackZigArtifact =
     { name, artifact }:
@@ -41,9 +38,9 @@ let
       rev ? throw "rev is required, remove and regenerate the zon2json-lock file",
     }:
     let
-      parts = splitString "#" url;
-      url_base = elemAt parts 0;
-      url_without_query = elemAt (splitString "?" url_base) 0;
+      parts = lib.splitString "#" url;
+      url_base = lib.elemAt parts 0;
+      url_without_query = lib.elemAt (lib.splitString "?" url_base) 0;
     in
     fetchgit {
       inherit name rev hash;
@@ -59,9 +56,9 @@ let
       ...
     }@args:
     let
-      parts = splitString "://" url;
-      proto = elemAt parts 0;
-      path = elemAt parts 1;
+      parts = lib.splitString "://" url;
+      proto = lib.elemAt parts 0;
+      path = lib.elemAt parts 1;
       fetcher = {
         "git+http" = fetchGitZig (
           args
@@ -113,12 +110,12 @@ linkFarm name [
     };
   }
   {
-    name = "N-V-__8AAGcUBQAa5vov1Yi_9AXEffFQ1e2KsXaK4dgygRKq";
+    name = "N-V-__8AAOEWBQDt5tNdIzIFY6n8DdZsCP-6MyLoNS20wgpA";
     path = fetchZigArtifact {
       name = "termbox2";
-      url = "git+https://github.com/AnErrupTion/termbox2?ref=master#290ac6b8225aacfd16851224682b851b65fcb918";
-      hash = "sha256-of95/wJeCTWI3p7NxvnUlb618qffUZv2YxgBgzp+crs=";
-      rev = "290ac6b8225aacfd16851224682b851b65fcb918";
+      url = "git+https://github.com/AnErrupTion/termbox2?ref=master#496730697c662893eec43192f48ff616c2539da6";
+      hash = "sha256-8XAPH1f1qQuOROBw/duF3Q7HNRgHbEDsKOgeEpG9ScY=";
+      rev = "496730697c662893eec43192f48ff616c2539da6";
     };
   }
 ]

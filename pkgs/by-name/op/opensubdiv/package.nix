@@ -5,7 +5,12 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  xorg,
+  libxxf86vm,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
   libGLU,
   libGL,
   glew,
@@ -18,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opensubdiv";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
-    hash = "sha256-/22SeMzNNnrUgmPGpgbQwoYthdAdhRa615VhVJOvP9o=";
+    hash = "sha256-yWi+SaJfyMHPnc8hhrMZ4W6cBRkFOhRehXg3BqSGPcM=";
   };
 
   outputs = [
@@ -48,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
       libGL
       # FIXME: these are not actually needed, but the configure script wants them.
       glew
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXxf86vm
-      xorg.libXcursor
-      xorg.libXinerama
-      xorg.libXi
+      libx11
+      libxrandr
+      libxxf86vm
+      libxcursor
+      libxinerama
+      libxi
     ]
     ++ lib.optionals (openclSupport && stdenv.hostPlatform.isLinux) [
       ocl-icd

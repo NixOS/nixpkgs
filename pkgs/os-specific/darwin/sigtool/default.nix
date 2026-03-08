@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/thefloweringash/sigtool";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+    mainProgram = "sigtool";
   };
 }

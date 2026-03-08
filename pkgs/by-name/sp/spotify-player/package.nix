@@ -47,18 +47,18 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
   "gstreamer"
 ];
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spotify-player";
-  version = "0.21.2";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
-    tag = "v${version}";
-    hash = "sha256-2LOsFcFZRdgH4TqtmVDqf8dxsPwZVQKsQbjyuDHwP/4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fULVQMVF+fDVNXj/qbwjBIG1EHfdlG/gTY+NJTWbwdk=";
   };
 
-  cargoHash = "sha256-JgPf68KpRE8z+2webU99cR0+6xmaplcVwgFcgvHiwrs=";
+  cargoHash = "sha256-12ccf5LT2XAq1SmcG6RnpECDS89ZJ/21MYp8dtBUnL8=";
 
   nativeBuildInputs = [
     pkg-config
@@ -131,7 +131,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal spotify player that has feature parity with the official client";
     homepage = "https://github.com/aome510/spotify-player";
-    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
+    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${finalAttrs.version}";
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
@@ -139,6 +139,7 @@ rustPlatform.buildRustPackage rec {
       xyven1
       _71zenith
       caperren
+      mattkang
     ];
   };
-}
+})

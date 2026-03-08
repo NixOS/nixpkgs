@@ -29,7 +29,7 @@
   wrapGAppsHook3,
   writeTextFile,
   xkeyboard_config,
-  xorg,
+  libxxf86vm,
   nixosTests,
   runCommand,
   buildEnv,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     libcanberra-gtk3
     libpulseaudio
     libxkbfile
-    xorg.libXxf86vm
+    libxxf86vm
     polkit
     gdm
     gnome-panel
@@ -98,8 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  PKG_CONFIG_LIBGNOME_PANEL_LAYOUTSDIR = "${placeholder "out"}/share/gnome-panel/layouts";
-  PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
+  env = {
+    PKG_CONFIG_LIBGNOME_PANEL_LAYOUTSDIR = "${placeholder "out"}/share/gnome-panel/layouts";
+    PKG_CONFIG_LIBGNOME_PANEL_MODULESDIR = "${placeholder "out"}/lib/gnome-panel/modules";
+  };
 
   passthru = {
     updateScript = gnome.updateScript {

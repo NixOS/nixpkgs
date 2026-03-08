@@ -4,29 +4,25 @@
   callPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
 
   setuptools,
   build,
   coloredlogs,
-  importlib-metadata,
   packaging,
   pip,
-  toml,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "bork";
-  version = "9.0.0";
+  version = "10.0.3";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = "bork";
     tag = "v${version}";
-    hash = "sha256-YqvtOwd00TXD4I3fIQolvjHnjREvQgbdrEO9Z96v1Kk=";
+    hash = "sha256-/euPRR6TRCAAl42CHePfUr+9Kh271iLjTayUR1S/FBg=";
   };
 
   build-system = [
@@ -45,9 +41,7 @@ buildPythonPackage rec {
     packaging
     pip
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ toml ]
-  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   pythonImportsCheck = [
     "bork"

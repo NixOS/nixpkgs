@@ -20,9 +20,9 @@
   boost,
   libGLU,
   libGL,
-  libX11,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxinerama,
+  libxrandr,
 }:
 
 stdenv.mkDerivation {
@@ -45,9 +45,9 @@ stdenv.mkDerivation {
 
   buildInputs =
     lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXinerama
-      libXrandr
+      libx11
+      libxinerama
+      libxrandr
       libGLU
       libGL
     ]

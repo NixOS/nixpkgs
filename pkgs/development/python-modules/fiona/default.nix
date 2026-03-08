@@ -42,6 +42,10 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "cython~=3.0.2" cython
+
+    # pyparsing deprecated parseString in favor of parse_string
+    substituteInPlace fiona/fio/features.py fiona/_vendor/snuggs.py \
+      --replace-fail parseString parse_string
   '';
 
   build-system = [

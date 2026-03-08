@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "asciinema";
   version = "2.4.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "asciinema";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-UegLwpJ+uc9cW3ozLQJsQBjIGD7+vzzwzQFRV5gmDmI=";
   };
 
@@ -33,4 +33,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.all;
     mainProgram = "asciinema";
   };
-}
+})

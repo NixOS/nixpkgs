@@ -1,13 +1,14 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchzip,
   autoreconfHook,
   pkg-config,
+  wrapQtAppsHook,
   qtbase,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "ofono-phonesim";
   version = "unstable-2019-11-18";
 
@@ -19,6 +20,7 @@ mkDerivation {
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -57,7 +57,7 @@ in
   };
 
   jetty_12 = common {
-    version = "12.1.4";
-    hash = "sha256-no5Ge4pdYKN+tXUJq10RKCTtRLFNdz5sOuw6o+ZxXdY=";
+    version = "12.1.7";
+    hash = "sha256-FjOoPqI3cibcND6gIkWltLERO+2bLIgGL5PyZl5zUg8=";
   };
 }

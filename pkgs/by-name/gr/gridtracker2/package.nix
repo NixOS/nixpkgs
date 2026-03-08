@@ -11,13 +11,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "gridtracker2";
-  version = "2.251106.7";
+  version = "2.260111.0";
 
   src = fetchFromGitLab {
     owner = "gridtracker.org";
     repo = "gridtracker2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g1njDFodCHvILZZNrI/exAqWLZsbNBGHy3jlzo3uLJ8=";
+    hash = "sha256-LcaIOzCMtJxeMs7kEqTYmgMlrV62+HOXmG5wk67NUoE=";
   };
 
   npmDepsHash = "sha256-8bhOfLLsNSK+/mXku5ukLr65bfk+RwC3SyOGRHndqVQ=";
@@ -85,7 +85,7 @@ buildNpmPackage (finalAttrs: {
     install -Dvm644 -t "$out/share/gridtracker2/locales" \
       ./dist/linux*/locales/*
     install -Dvm644 ./resources/icon.png \
-      "$out/share/pixmaps/gridtracker2.png"
+      "$out/share/icons/hicolor/256x256/apps/gridtracker2.png"
 
     makeWrapper ${lib.getExe electron} $out/bin/gridtracker2 \
       --add-flags $out/share/gridtracker2/resources/app.asar \

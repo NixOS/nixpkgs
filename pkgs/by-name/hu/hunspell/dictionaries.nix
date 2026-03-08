@@ -844,7 +844,12 @@ rec {
       license = with lib.licenses; [
         gpl3Plus
       ];
-      teams = [ lib.teams.uzinfocom ];
+      maintainers = with lib.maintainers; [
+        orzklv
+        shakhzodkudratov
+        bahrom04
+        bemeritus
+      ];
     };
   };
 
@@ -969,14 +974,14 @@ rec {
   th_TH = th-th;
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
-    version = "experimental-2024-04-15";
+    version = "0-unstable-2025-12-29";
     dictFileName = "th_TH";
     readmeFile = "README.md";
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
-      rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
-      sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
+      rev = "a23b0521438f2735dc73efaee61391c6106ae196";
+      sha256 = "sha256-fRHtglTVoUgeQ8v/+pBWxfk+EgZv/uAt9Ka6tK1GJgA=";
     };
     meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";

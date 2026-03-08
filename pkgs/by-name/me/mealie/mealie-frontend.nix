@@ -1,18 +1,14 @@
 src: version:
 {
   lib,
-  fetchFromGitHub,
   fetchYarnDeps,
   dart-sass,
-  nodePackages_latest,
+  nodejs,
   fixup-yarn-lock,
   stdenv,
   yarn,
   writableTmpDirAsHomeHook,
 }:
-let
-  nodejs = nodePackages_latest.nodejs;
-in
 stdenv.mkDerivation {
   name = "mealie-frontend";
   inherit version;
@@ -20,7 +16,7 @@ stdenv.mkDerivation {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/frontend/yarn.lock";
-    hash = "sha256-qwxsnl9xKzNJEomMB4p8eaiybmlpeUgSUpJtIRhF1Cw=";
+    hash = "sha256-sZk7OEkJdBZRU9ysRDCetzv09XrK5GhPaxxEBD8k5rw=";
   };
 
   nativeBuildInputs = [

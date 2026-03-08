@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "missidentify";
     homepage = "https://missidentify.sourceforge.net";
-    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     license = lib.licenses.gpl2Only;
   };

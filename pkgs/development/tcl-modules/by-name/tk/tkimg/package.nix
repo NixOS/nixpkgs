@@ -4,7 +4,7 @@
   tcl,
   tcllib,
   tk,
-  xorg,
+  libx11,
 }:
 
 tcl.mkTclDerivation rec {
@@ -24,7 +24,7 @@ tcl.mkTclDerivation rec {
   ];
 
   buildInputs = [
-    xorg.libX11
+    libx11
     tcllib
   ];
 

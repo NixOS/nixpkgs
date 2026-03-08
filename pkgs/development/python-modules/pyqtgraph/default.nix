@@ -3,12 +3,12 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
   setuptools,
 
   # dependencies
+  colorama,
   scipy,
   numpy,
   pyopengl,
@@ -28,32 +28,22 @@ let
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.13.7";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
     tag = "pyqtgraph-${version}";
-    hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
+    hash = "sha256-T5rhaBtcKP/sYjCmYNMYR0BGttkiLhWTfEbZNeAdJJ0=";
   };
-
-  patches = [
-    # Fixes a segmentation fault in tests with Qt 6.10. See:
-    # https://github.com/pyqtgraph/pyqtgraph/issues/3390
-    # The patch is the merge commit of:
-    # https://github.com/pyqtgraph/pyqtgraph/pull/3370
-    (fetchpatch {
-      url = "https://github.com/pyqtgraph/pyqtgraph/commit/bf38b8527e778c9c0bb653bc0df7bb36018dcbae.patch";
-      hash = "sha256-Tv4QK/OZvmDO3MOjswjch7DpF96U1uRN0dr8NIQ7+LY=";
-    })
-  ];
 
   build-system = [
     setuptools
   ];
 
   dependencies = [
+    colorama
     numpy
     scipy
     pyopengl
@@ -79,17 +69,22 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  disabledTests =
-    lib.optionals (!stdenv.hostPlatform.isx86) [
-      # small precision-related differences on other architectures,
-      # upstream doesn't consider it serious.
-      # https://github.com/pyqtgraph/pyqtgraph/issues/2110
-      "test_PolyLineROI"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # https://github.com/pyqtgraph/pyqtgraph/issues/2645
-      "test_rescaleData"
-    ];
+  disabledTests = [
+    # ZeroDivisionError: float division by zero
+    "test_maps_tick_values_to_local_times"
+    "test_maps_hour_ticks_to_local_times_when_skip_greater_than_one"
+
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # small precision-related differences on other architectures,
+    # upstream doesn't consider it serious.
+    # https://github.com/pyqtgraph/pyqtgraph/issues/2110
+    "test_PolyLineROI"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # https://github.com/pyqtgraph/pyqtgraph/issues/2645
+    "test_rescaleData"
+  ];
 
   meta = {
     description = "Scientific Graphics and GUI Library for Python";

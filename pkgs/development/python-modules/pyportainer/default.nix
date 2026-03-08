@@ -3,34 +3,36 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
   mashumaro,
   orjson,
-  poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
   syrupy,
+  tenacity,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyportainer";
-  version = "1.0.15";
+  version = "1.0.31";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
-    tag = "v${version}";
-    hash = "sha256-Lp2bX5+lsfSPEuc0q+tD8tBrMdKq7GZC+tG0cuieNOQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s+F+V6vJr1Y7Xark/XAthwrVi6prp8hK6vyAzpdm/54=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
     mashumaro
     orjson
+    tenacity
     yarl
   ];
 
@@ -44,10 +46,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/erwindouna/pyportainer/releases/tag/${src.tag}";
+    changelog = "https://github.com/erwindouna/pyportainer/releases/tag/${finalAttrs.src.tag}";
     description = "Asynchronous Python client for the Portainer API";
     homepage = "https://github.com/erwindouna/pyportainer";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.dotlambda ];
   };
-}
+})

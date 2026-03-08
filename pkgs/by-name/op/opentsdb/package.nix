@@ -266,14 +266,14 @@ let
     ];
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "opentsdb";
   version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "OpenTSDB";
     repo = "opentsdb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-899m1H0UCLsI/bnSrNFnnny4MxSw3XBzf7rgDuEajDs=";
   };
 
@@ -362,4 +362,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "tsdb";
   };
-}
+})

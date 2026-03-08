@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snpguest";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "virtee";
     repo = "snpguest";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-311divpV+c/3/7pP9R7wr+dKabVb1zu4QWDEPGHKZrE=";
   };
 
@@ -31,10 +31,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "CLI tool for interacting with SEV-SNP guest environment";
     homepage = "https://github.com/virtee/snpguest";
-    changelog = "https://github.com/virtee/snpguest/releases/tag/v${version}";
+    changelog = "https://github.com/virtee/snpguest/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "snpguest";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

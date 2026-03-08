@@ -6,14 +6,14 @@
   sphinx,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dex";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = "dex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-1fgSz4f6W+Dr3mo4vQY8buD2dNC8RBMGrwCTOIzH7rQ=";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "dex";
   };
-}
+})

@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "statsd";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jsocol";

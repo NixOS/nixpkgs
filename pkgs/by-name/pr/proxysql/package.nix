@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  GIT_VERSION = finalAttrs.version;
+  env.GIT_VERSION = finalAttrs.version;
 
   dontConfigure = true;
 
@@ -227,7 +227,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "proxysql";
     homepage = "https://proxysql.com/";
     license = with lib.licenses; [ gpl3Only ];
-    teams = [ lib.teams.helsinki-systems ];
     platforms = lib.platforms.unix;
   };
 })

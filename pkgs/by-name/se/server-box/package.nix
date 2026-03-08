@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter338,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -13,16 +13,16 @@
 }:
 
 let
-  version = "1.0.1276";
+  version = "1.0.1316";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-fmL03BNVi1aKhb0jV7MnEtRKTOEaLBGl6uMJtLr6cFk=";
+    hash = "sha256-yFBWFqTJJon6GeY6dQ0QL814/j1Y5ur4pz2uS7iIZCI=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter338.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
@@ -36,7 +36,7 @@ flutter335.buildFlutterApplication {
   ];
 
   # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
-  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   desktopItems = [
     (makeDesktopItem {

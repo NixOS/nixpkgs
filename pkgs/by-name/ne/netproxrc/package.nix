@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "netproxrc";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "netproxrc";
-    rev = "version-${version}";
+    rev = "version-${finalAttrs.version}";
     hash = "sha256-LyHFaT5kej1hy5z28XP+bOSCEj5DHqwMRkvrv/5inQU=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timbertson ];
   };
-}
+})

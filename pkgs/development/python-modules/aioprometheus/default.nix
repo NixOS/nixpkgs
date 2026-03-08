@@ -12,15 +12,12 @@
   httpx,
   fastapi,
   uvicorn,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aioprometheus";
   version = "unstable-2023-03-14";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "claws";
@@ -56,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/claws/aioprometheus";
     changelog = "https://github.com/claws/aioprometheus/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

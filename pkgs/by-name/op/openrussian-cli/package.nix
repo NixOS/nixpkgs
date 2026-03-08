@@ -21,14 +21,14 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openrussian-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "rhaberkorn";
     repo = "openrussian-cli";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-lu13Dd3D4P/7Yol1ixt86BHk86y8DMsbFzfi244+KuY=";
   };
 
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     mainProgram = "openrussian";
     platforms = lib.platforms.unix;
   };
-}
+})

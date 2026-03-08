@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pname = "gst-python";
   version = "1.26.0";
 
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"

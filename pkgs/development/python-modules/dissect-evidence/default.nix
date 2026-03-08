@@ -7,6 +7,7 @@
   setuptools,
   setuptools-scm,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # https://github.com/fox-it/dissect.evidence/issues/46
+    "test_ewf"
+  ];
 
   pythonImportsCheck = [ "dissect.evidence" ];
 

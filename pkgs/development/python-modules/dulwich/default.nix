@@ -11,35 +11,32 @@
   gnupg,
   gpgme,
   merge3,
+  openssh,
   paramiko,
   pytestCheckHook,
-  pythonOlder,
   rich,
   rustPlatform,
   rustc,
   setuptools,
   setuptools-rust,
-  typing-extensions,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "dulwich";
-  version = "0.24.1";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${version}";
-    hash = "sha256-GGVvTKDLWPcx1f28Esl9sDXj33157NhSssYD/C+fLy4=";
+    hash = "sha256-7/aXxwK6LmERD8CSo+b1uuNVBrXcbBvksZ1YY28vB8A=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-qGAvy0grueKI+A0nsXntf/EWtozSc138iFDhlfiktK8=";
+    hash = "sha256-O35g5LflL8ZF0HNWdsqg1mp09dKFNrryz23G1WZhhPE=";
   };
 
   nativeBuildInputs = [
@@ -55,9 +52,6 @@ buildPythonPackage rec {
 
   dependencies = [
     urllib3
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    typing-extensions
   ];
 
   optional-dependencies = {
@@ -77,6 +71,7 @@ buildPythonPackage rec {
     geventhttpclient
     git
     glibcLocales
+    openssh # for ssh-keygen
     pytestCheckHook
   ]
   ++ lib.concatAttrValues optional-dependencies;
@@ -84,21 +79,19 @@ buildPythonPackage rec {
   enabledTestPaths = [ "tests" ];
 
   disabledTests = [
-    # AssertionError: 'C:\\\\foo.bar\\\\baz' != 'C:\\foo.bar\\baz'
-    "test_file_win"
-    # dulwich.errors.NotGitRepository: No git repository was found at .
-    "WorktreeCliTests"
-    # 'SwiftPackData' object has no attribute '_file'
-    "test_iterobjects_subset_all_present"
-    "test_iterobjects_subset_missing_allowed"
-    "test_iterobjects_subset_missing_not_allowed"
-    # Adding a symlink to a directory outside the repo doesn't raise
-    "test_add_symlink_absolute_to_system"
+    # Depends on setuid which is not available in sandboxed environments
+    "SharedRepositoryTests"
   ];
 
+  preCheck = ''
+    export TMPDIR=$(mktemp -d)
+  '';
+
   disabledTestPaths = [
-    # requires swift config file
-    "tests/contrib/test_swift_smoke.py"
+    # "Code [in contrib] is not an official part of Dulwich, and may no longer work"
+    "tests/contrib"
+    # AssertionError: GPGMEError not raised
+    "tests/test_signature.py::GPGSignatureVendorTests::test_verify_invalid_signature"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -117,6 +110,9 @@ buildPythonPackage rec {
       asl20
       gpl2Plus
     ];
-    maintainers = with lib.maintainers; [ koral ];
+    maintainers = with lib.maintainers; [
+      koral
+      sarahec
+    ];
   };
 }

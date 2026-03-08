@@ -5,7 +5,7 @@
   graphviz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-graphviz";
   version = "0.2.1";
 
@@ -26,11 +26,11 @@ rustPlatform.buildRustPackage rec {
     description = "Preprocessor for mdbook, rendering Graphviz graphs to HTML at build time";
     mainProgram = "mdbook-graphviz";
     homepage = "https://github.com/dylanowen/mdbook-graphviz";
-    changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${version}";
+    changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       lovesegfault
       matthiasbeyer
     ];
   };
-}
+})

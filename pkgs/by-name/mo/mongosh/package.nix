@@ -2,20 +2,21 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
 }:
 
-buildNpmPackage (finalAttrs: {
+buildNpmPackage.override { nodejs = nodejs_22; } (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.10";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N1uAIgEX44RSFJTivOpASKiab+Jr0N0Mo+olt000uK4=";
+    hash = "sha256-M0GHLO+KZFGn0bGYpPMfMnM1tDBFGsAnTyFUH/CjAyw=";
   };
 
-  npmDepsHash = "sha256-/8qw9dVPHAuyQZWdDq+jhP7NMBwTbvMqv/PtwXJEQuo=";
+  npmDepsHash = "sha256-FP5Pzyu/ZEarUvcAEb5JuLugmnYdegsH2nL3p0RRTfE=";
 
   patches = [
     ./disable-telemetry.patch

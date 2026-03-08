@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wpm";
   version = "1.51.5";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-swT9E5Tto4yWnm0voowcJXtY3cIY3MNqAdfrTnuGbdg=";
   };
 
@@ -29,4 +29,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ alejandrosame ];
   };
-}
+})

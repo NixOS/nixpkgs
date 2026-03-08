@@ -6,7 +6,7 @@
   stdenv,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snowflake-cli";
   version = "3.11.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dJc5q3vE1G6oJq9V4JSPaSyODxKDyhprIwBo39Nu/bA=";
   };
 
@@ -119,4 +119,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ vtimofeenko ];
     mainProgram = "snow";
   };
-}
+})

@@ -11,7 +11,7 @@
   jre,
   gtk3,
   glib,
-  libXtst,
+  libxtst,
 }:
 
 let
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     gtk3
     glib
-    libXtst
+    libxtst
   ];
 
   dontWrapGApps = true;

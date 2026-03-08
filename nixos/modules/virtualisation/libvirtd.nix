@@ -530,7 +530,10 @@ in
           "nix-helpers"
           "nix-ovmf"
         ];
-        StateDirectory = subDirs [ "dnsmasq" ];
+        StateDirectory = subDirs [
+          "dnsmasq"
+          "secrets"
+        ];
       };
     };
 
@@ -573,7 +576,6 @@ in
 
     systemd.services.libvirt-guests = {
       wantedBy = [ "multi-user.target" ];
-      requires = [ "libvirtd.service" ];
       after = [ "libvirtd.service" ];
       path = with pkgs; [
         coreutils

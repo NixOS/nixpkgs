@@ -3,25 +3,30 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs,
+  nodejs_24,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   testers,
   xcbuild,
   nixosTests,
   nix-update-script,
   yq-go,
+  cctools,
 }:
-
+let
+  nodejs = nodejs_24;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "42.57.1";
+  version = "43.46.2";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
     tag = finalAttrs.version;
-    hash = "sha256-IMUnOk4D0CDKgrkM9geyaj80Pir6pORlWUPW2UIoKOM=";
+    hash = "sha256-DXPCYlXA1/uRLZWn1C0Kc7B+ETdbhqgmFjG8D09Aumc=";
   };
 
   postPatch = ''
@@ -32,16 +37,21 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     python3
     yq-go
   ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools # contains libtool, required by better-sqlite3
+  ];
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_10;
     fetcherVersion = 2;
-    hash = "sha256-WTShVxWhdAPbITBaSw6BrqSwSJ9pc2imB+ovjhTT6qY=";
+    hash = "sha256-KR2viYLxbWmymFsK/OWaOy0e2O+xC5TKq+6WZ5bqTJk=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -56,8 +66,9 @@ stdenv.mkDerivation (finalAttrs: {
     find -name 'node_modules' -type d -exec rm -rf {} \; || true
     pnpm install --offline --prod --ignore-scripts
   ''
-  # The optional dependency re2 is not built by pnpm and needs to be built manually.
+  # The optional dependencies re2 and better-sqlite3 are not built by pnpm and need to be built manually.
   # If re2 is not built, you will get an annoying warning when you run renovate.
+  # better-sqlite3 is required.
   + ''
     pushd node_modules/.pnpm/re2*/node_modules/re2
 
@@ -66,6 +77,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
     export npm_config_nodedir=${nodejs}
     npm run rebuild
+    rm -rf build/Release/{obj.target,.deps} vendor
+
+    popd
+
+    pushd node_modules/.pnpm/better-sqlite3*/node_modules/better-sqlite3
+    npm run build-release
+    rm -rf build/Release/{obj.target,sqlite3.a,.deps} deps
 
     popd
 

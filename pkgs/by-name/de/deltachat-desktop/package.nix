@@ -1,15 +1,16 @@
 {
   lib,
   copyDesktopItems,
-  electron_37,
+  electron_40,
   fetchFromGitHub,
-  fetchpatch,
   deltachat-rpc-server,
   makeDesktopItem,
   makeWrapper,
   nodejs,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   rustPlatform,
   stdenv,
@@ -20,46 +21,37 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "2.33.0";
+    version = "2.43.0";
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-4cnYTtm5bQ86BgMOOH5d881ahjuFFOxVuGffRp3Nbw4=";
+      hash = "sha256-3hpsc/IMBTVHH6Lun9R8Dx3s53sJOb9J1fU1O56MpIc=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
       pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-TOGSvvFKsWshfMqGNEOtjhHcpTJ0FAiK6RigmlT4AFA=";
+      hash = "sha256-kDYWu8QrVv1fAyNsPN5xY7QqExbdiM7C+Af0l9HVRDQ=";
     };
   };
-  electron = electron_37;
-  pnpm = pnpm_9;
+  electron = electron_40;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "2.33.0";
+  version = "2.43.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PA2Faq1AmFxxizN1+NDYRB3uFI2bXdGshtyfHwY2btM=";
+    hash = "sha256-OIRfh0/E0fg0LepWRREmpcLbUKRSdJA+RWO3vkOu6so=";
   };
 
-  patches = [
-    # https://github.com/deltachat/deltachat-desktop/pull/5854
-    (fetchpatch {
-      name = "dont-load-env-file-in-production.patch";
-      url = "https://github.com/deltachat/deltachat-desktop/commit/e0eca1672b2f0c951b96c1e921219d2a4a4dbcb0.patch";
-      hash = "sha256-/Dc8VjdF10qJOrEa0dJeBib+R+8kb5yD4/iKt9/VnBA=";
-    })
-  ];
-
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
+    pnpm = pnpm_9;
     fetcherVersion = 2;
-    hash = "sha256-4BAcCzPZbCjUfHTnJ98TzcfI5UnfMmGdbdvCFaQNNsk=";
+    hash = "sha256-auvoo1YhHptbhTfeRbOQjc8vADCJhByb9efQFyskZPM=";
   };
 
   nativeBuildInputs = [
@@ -67,7 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     python3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -141,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
+      "application/x-webxdc"
       "x-scheme-handler/openpgp4fpr"
       "x-scheme-handler/dcaccount"
       "x-scheme-handler/dclogin"

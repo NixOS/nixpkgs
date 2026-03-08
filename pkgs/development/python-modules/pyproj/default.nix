@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   replaceVars,
 
   certifi,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pyproj";
   version = "3.7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pyproj4";

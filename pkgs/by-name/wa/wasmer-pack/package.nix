@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmer-pack";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = "wasmer-pack";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+wqgYkdkuhPFkJBdQLnUKAGmUfGBU9mBfMRNBFmiT4E=";
   };
 
@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage rec {
     description = "Import your WebAssembly code just like any other dependency";
     mainProgram = "wasmer-pack";
     homepage = "https://github.com/wasmerio/wasmer-pack";
-    changelog = "https://github.com/wasmerio/wasmer-pack/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/wasmerio/wasmer-pack/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

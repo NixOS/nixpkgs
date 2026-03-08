@@ -15,12 +15,12 @@
   pkg-config,
   diffutils,
   versionCheckHook,
-  glibc ? !stdenv.hostPlatform.isDarwin,
+  glibc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpkg";
-  version = "1.22.21";
+  version = "1.23.5";
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf .git
       popd
     '';
-    hash = "sha256-LK6nOPewjRyKyHdwJgmLILoZ6sEfJzRtC7pIeWz01lA=";
+    hash = "sha256-Ug82hdskTvWSzMZ8l+EdWhWAmt9OhS2pUpwOYa/9FLw=";
   };
 
   configureFlags = [
@@ -91,10 +91,20 @@ stdenv.mkDerivation (finalAttrs: {
     # which makes some tests fail.
     sed -i '/opts normalize/a AT_SKIP_IF([true])' src/at/chdir.at
   ''
-  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace src/main/help.c \
-       --replace-fail '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
-  '';
+  +
+    lib.optionalString
+      (
+        stdenv.hostPlatform.libc == "glibc"
+        || stdenv.hostPlatform.libc == "uclibc"
+        || stdenv.hostPlatform.isFreeBSD
+        || stdenv.hostPlatform.isOpenBSD
+        || stdenv.hostPlatform.isNetBSD
+      )
+      ''
+        # See <https://github.com/guillemj/dpkg/blob/1.22.21/src/main/help.c#L93>
+        substituteInPlace src/main/help.c \
+           --replace-fail '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
+      '';
 
   buildInputs = [
     perl
@@ -125,7 +135,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   setupHook = ./setup-hook.sh;
 

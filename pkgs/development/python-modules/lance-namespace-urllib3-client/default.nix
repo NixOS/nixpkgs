@@ -16,19 +16,19 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "lance-namespace";
-  version = "0.3.2";
+buildPythonPackage (finalAttrs: {
+  pname = "lance-namespace-urllib3-client";
+  version = "0.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance-namespace";
-    tag = "v${version}";
-    hash = "sha256-tBInz9BEl6u7E8cAmtlHBqIG65kifPR+iv5/jNV3204=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6Vfy/A9ZrvHM4M/3ZCmq+xv/WxSh9eRaTlbk+ejvSUY=";
   };
 
-  sourceRoot = "${src.name}/python/lance_namespace_urllib3_client";
+  sourceRoot = "${finalAttrs.src.name}/python/lance_namespace_urllib3_client";
 
   build-system = [
     hatchling
@@ -53,4 +53,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

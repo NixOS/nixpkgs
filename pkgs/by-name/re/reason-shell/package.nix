@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reason";
   version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "jaywonchung";
     repo = "reason";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-oytRquZJgb1sfpZil1bSGwIIvm+5N4mkVmIMzWyzDco=";
   };
 
@@ -31,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     description = "Shell for research papers";
     mainProgram = "reason";
     homepage = "https://github.com/jaywonchung/reason";
-    changelog = "https://github.com/jaywonchung/reason/releases/tag/${src.rev}";
+    changelog = "https://github.com/jaywonchung/reason/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

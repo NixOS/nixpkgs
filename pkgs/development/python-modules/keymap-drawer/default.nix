@@ -59,7 +59,6 @@ buildPythonPackage {
   pythonImportsCheck = [ "keymap_drawer" ];
 
   versionCheckProgram = "${placeholder "out"}/bin/keymap";
-  versionCheckProgramArg = "--version";
 
   passthru.tests = callPackages ./tests {
     # Explicitly pass the correctly scoped package.

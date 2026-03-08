@@ -99,14 +99,16 @@ with haskellLib;
   timezone-series = doJailbreak super.timezone-series; # time <1.14
   timezone-olson = doJailbreak super.timezone-olson; # time <1.14
   cabal-plan = doJailbreak super.cabal-plan; # base <4.21
+  decimal-literals = doJailbreak super.decimal-literals; # base <4.21
+  matrix-client = doJailbreak super.matrix-client; # time <1.13
+  patat = doJailbreak super.patat; # time <1.13
+  puresat = doJailbreak super.puresat; # base <4.21
   dbus = doJailbreak super.dbus; # template-haskell <2.23
   xmobar = doJailbreak super.xmobar; # base <4.21
 
   #
   # Test suite issues
   #
-
-  call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
 
   relude = dontCheck super.relude;
 
@@ -126,7 +128,5 @@ with haskellLib;
   # Test failure because of GHC bug:
   #   https://gitlab.haskell.org/ghc/ghc/-/issues/25937
   #   https://github.com/sol/interpolate/issues/20
-  interpolate =
-    assert super.ghc.version == "9.12.2";
-    dontCheck super.interpolate;
+  interpolate = dontCheckIf (lib.versionOlder self.ghc.version "9.12.3") super.interpolate;
 }

@@ -8,7 +8,6 @@
   pkg-config,
   perl,
   texinfo,
-  texinfo6,
   nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
@@ -145,7 +144,7 @@
   withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Video 4 Linux support
   withV4l2M2m ? withV4l2,
   withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # Vaapi hardware acceleration
-  withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW, # Vdpau hardware acceleration
+  withVdpau ? withSmallDeps && (with stdenv; isLinux || isFreeBSD), # Vdpau hardware acceleration
   withVidStab ? withHeadlessDeps && withGPL, # Video stabilization
   withVmaf ? withFullDeps && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder
@@ -226,10 +225,10 @@
     || buildSwscale,
   # Documentation options
   withDocumentation ? withHtmlDoc || withManPages || withPodDoc || withTxtDoc,
-  withHtmlDoc ? withHeadlessDeps, # HTML documentation pages
-  withManPages ? withHeadlessDeps, # Man documentation pages
-  withPodDoc ? withHeadlessDeps, # POD documentation pages
-  withTxtDoc ? withHeadlessDeps, # Text documentation pages
+  withHtmlDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # HTML documentation pages
+  withManPages ? withHeadlessDeps && lib.versionAtLeast version "6", # Man documentation pages
+  withPodDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # POD documentation pages
+  withTxtDoc ? withHeadlessDeps && lib.versionAtLeast version "6", # Text documentation pages
   # Whether a "doc" output will be produced. Note that withManPages does not produce
   # a "doc" output because its files go to "man".
   withDoc ? withDocumentation && (withHtmlDoc || withPodDoc || withTxtDoc),
@@ -311,11 +310,11 @@
   libvpl,
   libvpx,
   libwebp,
-  libX11,
+  libx11,
   libxcb,
-  libXext,
+  libxext,
   libxml2,
-  libXv,
+  libxv,
   nv-codec-headers,
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
@@ -453,6 +452,11 @@ stdenv.mkDerivation (
       ]
       ++ optionals (lib.versionAtLeast version "5.1") [
         ./nvccflags-cpp14.patch
+        (fetchpatch2 {
+          name = "unbreak-hardcoded-tables.patch";
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/1d47ae65bf6df91246cbe25c997b25947f7a4d1d";
+          hash = "sha256-ulB5BujAkoRJ8VHou64Th3E94z6m+l6v9DpG7/9nYsM=";
+        })
       ]
       ++ optionals (lib.versionAtLeast version "6.1" && lib.versionOlder version "6.2") [
         (fetchpatch2 {
@@ -485,10 +489,18 @@ stdenv.mkDerivation (
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1" && lib.versionOlder version "8.0") [
         (fetchpatch2 {
           name = "lcevcdec-4.0.0-compat.patch";
           url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
           hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
+        })
+      ]
+      ++ optionals (lib.versionAtLeast version "7.1.1" && lib.versionOlder version "7.1.3") [
+        (fetchpatch2 {
+          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/d8ffec5bf9a2803f55cc0822a97b7815f24bee83";
+          hash = "sha256-lmSI5arShb2/W84FMnSNs3lb6rd5vWdUSzfU8oza0Ic=";
         })
       ]
       ++ optionals (lib.versionOlder version "7.1.2") [
@@ -826,7 +838,7 @@ stdenv.mkDerivation (
     ]
     ++ optionals stdenv.hostPlatform.isx86 [ nasm ]
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
-    ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
+    ++ optionals (lib.versionAtLeast version "6") [ texinfo ]
     ++ optionals withCudaLLVM [ clang ]
     ++ optionals withCudaNVCC [ cuda_nvcc ];
 
@@ -959,9 +971,9 @@ stdenv.mkDerivation (
       ++ optionals withXevd [ xevd ]
       ++ optionals withXeve [ xeve ]
       ++ optionals withXlib [
-        libX11
-        libXv
-        libXext
+        libx11
+        libxv
+        libxext
       ]
       ++ optionals withXml2 [ libxml2 ]
       ++ optionals withXvid [ xvidcore ]
@@ -979,7 +991,8 @@ stdenv.mkDerivation (
       ];
     };
 
-    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+    # tests linking broken with shaderc after https://github.com/NixOS/nixpkgs/pull/477464/changes/5a47b12dfcd1b909ba35778a866394430054319a
+    doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !withShaderc;
 
     # Fails with SIGABRT otherwise FIXME: Why?
     checkPhase =

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "heh";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "ndd7xv";
     repo = "heh";
     rev = "v${version}";
-    hash = "sha256-eqWBTylvXqGhWdSGHdTM1ZURSD5pkUBoBOvBJ5zmJ7w=";
+    hash = "sha256-Fo8hsa1+H97t/f90hDNyQOXKGbLVPv2/r5erlHXALbc=";
   };
 
-  cargoHash = "sha256-Sk/eL5Pza9L8GLBxqL9SqMT7KDWZenMjV+sGYaWUnzo=";
+  cargoHash = "sha256-xUhz9tKfqclYL6ztOA45lsQE+0MJAO+LNqy8B9c8MGw=";
 
   meta = {
     description = "Cross-platform terminal UI used for modifying file data in hex or ASCII";

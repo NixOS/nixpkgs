@@ -185,16 +185,16 @@ let
     ]
   );
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "manim";
   pyproject = true;
-  version = "0.19.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "ManimCommunity";
     repo = "manim";
-    tag = "v${version}";
-    hash = "sha256-VkMmIQNLUg6Epttze23vaAA8QOdlnAPQZ7UKpkFRzIk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rfPqKPbxT8UsxSin4DquDjPMAUEYmKixx2fBlr5mz8U=";
   };
 
   build-system = [
@@ -205,6 +205,9 @@ buildPythonPackage rec {
 
   buildInputs = [ cairo ];
 
+  pythonRelaxDeps = [
+    "skia-pathops"
+  ];
   dependencies = [
     av
     beautifulsoup4
@@ -263,7 +266,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;
@@ -271,8 +273,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "manim" ];
 
   meta = {
-    # https://github.com/ManimCommunity/manim/pull/4037
-    broken = lib.versionAtLeast av.version "14";
     description = "Animation engine for explanatory math videos - Community version";
     longDescription = ''
       Manim is an animation engine for explanatory math videos. It's used to
@@ -281,9 +281,12 @@ buildPythonPackage rec {
       manim.
     '';
     mainProgram = "manim";
-    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${src.tag}";
+    changelog = "https://github.com/ManimCommunity/manim/releases/tag/${finalAttrs.src.tag}";
     homepage = "https://github.com/ManimCommunity/manim";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ osbm ];
+    maintainers = with lib.maintainers; [
+      osbm
+      ivyfanchiang
+    ];
   };
-}
+})

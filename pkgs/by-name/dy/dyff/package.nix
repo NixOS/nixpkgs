@@ -6,18 +6,18 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dyff";
-  version = "1.10.2";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
-    rev = "v${version}";
-    sha256 = "sha256-kmL1WzsfuV6O3mFryQKnUeImisMlLd3K43/00l6Trvs=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-+z9AaoSu7FNRI+jPwW6s0qRHz2roPXq4/CTNDOQW77Y=";
   };
 
-  vendorHash = "sha256-8xXw2ITHqw6dPtRuO4aesJzeobb/QGI+z1tn1ebNdzQ=";
+  vendorHash = "sha256-vpmgSQKmnvaos4ZVuk4R419doAdULjtg95y5ORRwhZg=";
 
   subPackages = [
     "cmd/dyff"
@@ -30,13 +30,13 @@ buildGoModule rec {
   # test fails with the injected version
   postPatch = ''
     substituteInPlace internal/cmd/cmds_test.go \
-      --replace "version (development)" ${version}
+      --replace "version (development)" ${finalAttrs.version}
   '';
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/homeport/dyff/internal/cmd.version=${version}"
+    "-X=github.com/homeport/dyff/internal/cmd.version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -64,4 +64,4 @@ buildGoModule rec {
       jceb
     ];
   };
-}
+})

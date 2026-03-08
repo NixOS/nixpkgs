@@ -63,20 +63,6 @@ class BuildAttr:
         return cls(Path(file or "default.nix"), attr)
 
 
-def _get_hostname(target_host: Remote | None) -> str | None:
-    if target_host:
-        try:
-            return run_wrapper(
-                ["uname", "-n"],
-                capture_output=True,
-                remote=target_host,
-            ).stdout.strip()
-        except (AttributeError, subprocess.CalledProcessError):
-            return None
-    else:
-        return platform.node()
-
-
 @dataclass(frozen=True)
 class Flake:
     path: str
@@ -95,9 +81,7 @@ class Flake:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = (
-            f'nixosConfigurations."{attr or _get_hostname(target_host) or "default"}"'
-        )
+        nixos_attr = f'nixosConfigurations."{attr or cls._get_hostname(target_host) or "default"}"'
         path = m.group("path")
         return cls(path, nixos_attr)
 
@@ -126,6 +110,20 @@ class Flake:
         except FileNotFoundError:
             return self.path
 
+    @staticmethod
+    def _get_hostname(target_host: Remote | None) -> str | None:
+        if target_host:
+            try:
+                return run_wrapper(
+                    ["uname", "-n"],
+                    capture_output=True,
+                    remote=target_host,
+                ).stdout.strip()
+            except (AttributeError, subprocess.CalledProcessError):
+                return None
+        else:
+            return platform.node()
+
 
 @dataclass(frozen=True)
 class Generation:
@@ -150,8 +148,8 @@ class GroupedNixArgs:
     build_flags: Args
     common_flags: Args
     copy_flags: Args
+    flake_eval_flags: Args
     flake_build_flags: Args
-    flake_common_flags: Args
 
     @classmethod
     def from_parsed_args_groups(cls, args_groups: dict[str, Namespace]) -> Self:
@@ -159,6 +157,7 @@ class GroupedNixArgs:
         common_build_flags = common_flags | vars(args_groups["common_build_flags"])
         build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
         flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+        flake_eval_flags = vars(args_groups["flake_eval_flags"])
         flake_build_flags = common_build_flags | flake_common_flags
         copy_flags = common_flags | vars(args_groups["copy_flags"])
         # --no-build-output -> --no-link
@@ -169,8 +168,8 @@ class GroupedNixArgs:
             build_flags=build_flags,
             common_flags=common_flags,
             copy_flags=copy_flags,
+            flake_eval_flags=flake_eval_flags,
             flake_build_flags=flake_build_flags,
-            flake_common_flags=flake_common_flags,
         )
 
 

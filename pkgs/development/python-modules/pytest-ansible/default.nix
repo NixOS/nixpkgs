@@ -8,27 +8,22 @@
   fetchFromGitHub,
   packaging,
   pytest,
-  pytest-plus,
-  pytest-sugar,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-ansible";
-  version = "25.12.0";
+  version = "26.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "pytest-ansible";
     tag = "v${version}";
-    hash = "sha256-2mrz+DADelydnwNf3ytGa3igSTlybQdZ7kdlWfoG8Io=";
+    hash = "sha256-3pppBAgAfkwJNPRsI6CH4UDMqyZ45+mFNejlQwX5bCg=";
   };
 
   postPatch = ''
@@ -47,8 +42,6 @@ buildPythonPackage rec {
     ansible-core
     ansible-compat
     packaging
-    pytest-plus
-    pytest-sugar
     pytest-xdist
   ];
 

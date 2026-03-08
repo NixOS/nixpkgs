@@ -43,11 +43,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.0.44-35";
+  version = "8.0.45-36";
 
   src = fetchurl {
     url = "https://downloads.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4eiNKzXzc5TAhsdIKQvyhQknsOiVSSkbZXDFY+qInYE=";
+    hash = "sha256-E3zbJKH1uK+9H+84RXuY6tjXPjzHPCKjxvrMlKs4cd4=";
   };
 
   nativeBuildInputs = [
@@ -207,7 +207,10 @@ stdenv.mkDerivation (finalAttrs: {
       Long-term support release.
     '';
     license = lib.licenses.gpl2Only;
-    teams = [ lib.teams.flyingcircus ];
+    maintainers = [
+      lib.maintainers.leona
+      lib.maintainers.osnyx
+    ];
     platforms = lib.platforms.unix;
   };
 })

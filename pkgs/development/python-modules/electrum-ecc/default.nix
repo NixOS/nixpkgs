@@ -19,14 +19,14 @@ let
 in
 buildPythonPackage rec {
   pname = "electrum-ecc";
-  version = "0.0.5";
+  version = "0.0.6";
   pyproject = true;
   build-system = [ setuptools ];
 
   src = fetchPypi {
     pname = "electrum_ecc";
     inherit version;
-    hash = "sha256-9zO4WWoPeyXINx0Ir2Hvece4cdW0DwWluV0tBesvt9I=";
+    hash = "sha256-Y2DHH7CLUdgKRV6TjxJrpMeQvnS6ImRh1U16OqaJC4k=";
   };
 
   env = {

@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
   nixosTests,
@@ -11,23 +11,16 @@
   withVtGen ? false,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "VictoriaTraces";
-  version = "0.5.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaTraces";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RvP3hLM8SoDN91PATTI5RTKwnJsomBtWIakRlBprEPA=";
+    hash = "sha256-bm1hF4LqbSxxEOMtz4jdgJHMwrahGI4VZ9nj/VscFdc=";
   };
-
-  postPatch = ''
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.4" "go 1.25.3"
-    substituteInPlace vendor/modules.txt \
-      --replace-fail "go 1.25.4" "go 1.25.3"
-  '';
 
   vendorHash = null;
 

@@ -2,22 +2,25 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-spellcheck";
   version = "0.15.5";
 
   src = fetchFromGitHub {
     owner = "drahnr";
     repo = "cargo-spellcheck";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-saRr1xEBefLoCgCxU/pyQOmmt/di+DOQHMoVc4LgRm0=";
   };
 
   cargoHash = "sha256-MGjyoHejsUd6HCoZVlw1NDG6TE9Anh05IeObHmcnwg0=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-std=gnu17";
 
   preCheck = "HOME=$(mktemp -d)";
 
@@ -31,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     description = "Checks rust documentation for spelling and grammar mistakes";
     mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
-    changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20 # or
       mit
@@ -39,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       newam
       matthiasbeyer
+      chrjabs
     ];
   };
-}
+})

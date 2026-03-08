@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hikari-lightbulb";
-  version = "3.1.1";
+  version = "3.2.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tandemdude";
     repo = "hikari-lightbulb";
     tag = version;
-    hash = "sha256-hsd7K7VFXndQ3tE8UkIcFXADgG/Kjd2oNWdFvwAwUtw=";
+    hash = "sha256-u8RrvHaawCIwVN9n7m3Ti29tPr66GNkwpKf/oo5eMUQ=";
   };
 
   build-system = [ flit-core ];

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  pythonOlder,
   buildPythonPackage,
 
   # build-system
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
-  version = "6.1.0";
+  version = "6.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-debug-toolbar";
     tag = version;
-    hash = "sha256-gDBir6xf4BBo3KwfVGEUo+Ve5vsmuB12cQqy9sdXSUg=";
+    hash = "sha256-0NF71cuA55puEjJxd6I0xoeDQPWW+oxfWseDBmhis5k=";
   };
 
   postPatch = ''

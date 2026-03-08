@@ -10,14 +10,14 @@
   installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prevo-tools";
   version = "0.2";
 
   src = fetchFromGitHub {
     owner = "bpeel";
     repo = "prevodb";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TfgsZidwXewwqGkb31Qv0SrX8wQdPaK7JQA3nB5h2bs=";
   };
 
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

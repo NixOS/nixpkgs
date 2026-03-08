@@ -356,20 +356,6 @@ self: super:
     network = super.network.overrideAttrs (drv: {
       __darwinAllowLocalNetworking = true;
     });
-
-    # 2025-08-04: Some RNG tests fail only on Darwin
-    botan-low = overrideCabal (drv: {
-      testFlags =
-        drv.testFlags or [ ]
-        ++ (lib.concatMap (x: [ "--skip" ] ++ [ x ]) [
-          # botan-low-rng-tests
-          "/rdrand/rngInit/"
-          "/rdrand/rngGet/"
-          "/rdrand/rngReseed/"
-          "/rdrand/rngReseedFromRNGCtx/"
-          "/rdrand/rngAddEntropy/"
-        ]);
-    }) super.botan-low;
   }
   // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {
     # aarch64-darwin
@@ -401,6 +387,13 @@ self: super:
         ${old.postInstall or ""}
       '';
     }) super.cabal2nix-unstable;
+    happy = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${lib.getLib self.happy-lib} "''${!outputBin}/bin/happy"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.happy;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;
@@ -414,6 +407,10 @@ self: super:
         sed -i 's/\bit /xit /g' test/RIO/FileSpec.hs
       '';
     }) super.rio;
+
+    # Don't use homebrew icu on macOS
+    # https://github.com/NixOS/nixpkgs/issues/462046
+    text-icu = disableCabalFlag "homebrew" super.text-icu;
 
     # https://github.com/haskell-crypto/cryptonite/issues/360
     cryptonite = appendPatch ./patches/cryptonite-remove-argon2.patch super.cryptonite;

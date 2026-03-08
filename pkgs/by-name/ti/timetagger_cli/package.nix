@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "timetagger_cli";
   version = "25.5.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "timetagger_cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UklsHcVyCpWDHOxu+oB8RvwY+laEBFnDyjejS/GzgHE=";
   };
 
@@ -36,4 +36,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "timetagger";
   };
-}
+})

@@ -14,14 +14,14 @@
   desktop-file-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dippi";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "dippi";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-iA7ymByLVrkOatW4Y79pGV7GhlS8G2gHY6PHpOfMq8g=";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zendo ];
   };
-}
+})

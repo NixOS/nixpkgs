@@ -35,7 +35,7 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.6.1";
+  version = "3.6.2";
 
   outputs = [
     "out"
@@ -46,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     tag = finalAttrs.version;
-    hash = "sha256-WVS2TWKishTnCWJ87Vvdcb0i3VR+g/qSjcTDO1cx1s0=";
+    hash = "sha256-zdwfk2cWUF3l6Rao3kzXdMWFs12F5545Dxkjd/DyPcQ=";
   };
 
   buildInputs = [
@@ -168,7 +168,7 @@ postgresqlBuildExtension (finalAttrs: {
   meta = {
     description = "Geographic Objects for PostgreSQL";
     homepage = "https://postgis.net/";
-    changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
+    changelog = "https://git.osgeo.org/postgis/postgis/raw/tag/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ marcweber ];
     teams = [ lib.teams.geospatial ];

@@ -17,7 +17,7 @@
   libxkbcommon,
   pango,
   systemd,
-  xorg,
+  xkeyboard-config,
   fontconfig,
 }:
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pango
     systemd
-    xorg.xkeyboardconfig
+    xkeyboard-config
   ];
 
   mesonFlags =

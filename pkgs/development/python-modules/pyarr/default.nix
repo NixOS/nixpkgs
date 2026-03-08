@@ -4,7 +4,6 @@
   fetchFromGitHub,
   overrides,
   poetry-core,
-  pythonOlder,
   requests,
   pytestCheckHook,
   types-requests,
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "pyarr";
   version = "5.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "totaldebug";

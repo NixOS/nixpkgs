@@ -38,7 +38,7 @@ backendStdenv.mkDerivation {
         '#define COMPARE_KERNEL "${placeholder "out"}/share/compare.ptx"'
     substituteInPlace Makefile \
       --replace-fail \
-        '${''''${CUDAPATH}/bin/nvcc''}' \
+        '${"\${CUDAPATH}/bin/nvcc"}' \
         '${lib.getExe cuda_nvcc}'
   '';
 

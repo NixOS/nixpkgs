@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools-scm,
   more-itertools,
@@ -10,15 +9,12 @@
   lxml,
   mock,
   pytestCheckHook,
-  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "cssutils";
   version = "2.11.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
@@ -37,8 +33,7 @@ buildPythonPackage rec {
     lxml
     mock
     pytestCheckHook
-  ]
-  ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  ];
 
   disabledTests = [
     # access network

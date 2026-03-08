@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   applyPatches,
   bundlerEnv,
   callPackage,
@@ -12,7 +13,9 @@
   jq,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cacert,
   valkey,
   dataDir ? "/var/lib/zammad",
@@ -20,7 +23,7 @@
 
 let
   pname = "zammad";
-  version = "6.5.2";
+  version = "7.0.0";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -70,7 +73,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     valkey
     postgresql
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     procps
     cacert
@@ -78,11 +82,12 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname src;
+    pnpm = pnpm_10;
 
-    fetcherVersion = 1;
-    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
+    fetcherVersion = 3;
+    hash = "sha256-oqVlhOzkqv+2mj/nDUR/PBXkRy5O7gtx2msEchGywfo=";
   };
 
   buildPhase = ''
@@ -139,6 +144,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       taeer
       netali
+      meenzen
     ];
   };
 }

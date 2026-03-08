@@ -33,7 +33,6 @@ buildGoModule (finalAttrs: {
   ];
 
   versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   __darwinAllowLocalNetworking = true;

@@ -4,8 +4,8 @@
   fetchFromGitea,
   fetchYarnDeps,
   writableTmpDirAsHomeHook,
-  fixup-yarn-lock,
-  yarn,
+  yarnConfigHook,
+  yarnBuildHook,
   nodejs,
   jpegoptim,
   oxipng,
@@ -15,25 +15,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "akkoma-fe";
-  version = "3.15.0";
+  version = "3.12.0-unstable-2025-12-07";
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma-fe";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-VKYeJwAc4pMpF1dWBnx5D39ffNk7eGpJI2es+GAxdow=";
+    rev = "0da97ce1ea0255ddabe18537cfd78a4935237859";
+    hash = "sha256-fVItooES2PNoWGP8RfRo5Ibqi6d/ZyuRXUfud2uHg5Y=";
+
+    # upstream repository archive fetching is broken
+    forceFetchGit = true;
   };
 
-  offlineCache = fetchYarnDeps {
+  yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-QB523QZX8oBMHWBSFF7MpaWWXc+MgEUaw/2gsCPZ9a4=";
   };
 
   nativeBuildInputs = [
     writableTmpDirAsHomeHook
-    fixup-yarn-lock
-    yarn
+    yarnConfigHook
+    yarnBuildHook
     nodejs
     jpegoptim
     oxipng
@@ -46,27 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       builtins.substring 0 7 finalAttrs.src.rev
     }";' \
       build/webpack.prod.conf.js
-  '';
-
-  configurePhase = ''
-    runHook preConfigure
-
-    yarn config --offline set yarn-offline-mirror ${lib.escapeShellArg finalAttrs.offlineCache}
-    fixup-yarn-lock yarn.lock
-
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    export NODE_ENV="production"
-    export NODE_OPTIONS="--openssl-legacy-provider"
-    yarn run build --offline
-
-    runHook postBuild
   '';
 
   installPhase = ''
@@ -83,10 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      ''^v(\d+\.\d+\.\d+)$''
-    ];
+    extraArgs = [ "--version=branch=stable" ];
   };
 
   meta = {

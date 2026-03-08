@@ -25,7 +25,7 @@
   pkg-config,
   podofo_0_10,
   poppler-utils,
-  python3Packages,
+  python314Packages,
   qt6,
   speechd-minimal,
   sqlite,
@@ -35,30 +35,33 @@
   speechSupport ? true,
   unrarSupport ? false,
 }:
-
+let
+  python3Packages = python314Packages; # Calibre 9.0+ requires python3.14+
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.14.0";
+  version = "9.4.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-97kkjzjbrdmiWpNaz9nSt6BbgVvczsxunLrKVJvqxVQ=";
+    hash = "sha256-3anPEeVB5C7RuS5ZCFMvow5WhkIopgCpxpmcstsIgX4=";
   };
 
   patches =
     let
       debian-source = "ds+_0.10.5-1";
+      debian-tag = "${finalAttrs.version}+${debian-source}";
     in
     [
       #  allow for plugin update check, but no calibre version check
       (fetchpatch {
-        name = "0001-only-plugin-update.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
-        hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
+        name = "0001-only-plugin-update-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-/Hz8DSL1VC/wwQPOssM54MInLidfo7kJoR69yi2wAP4=";
       })
       (fetchpatch {
-        name = "0007-Hardening-Qt-code.patch";
-        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        name = "0007-Hardening-Qt-code-${debian-tag}.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${debian-tag}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
         hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
       })
     ]
@@ -79,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3Packages.python
     qt6.qmake
     qt6.wrapQtAppsHook
     wrapGAppsHook3
@@ -135,6 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
         regex
         sip
         setuptools
+        tzdata
+        tzlocal
         zeroconf
         jeepney
         pycryptodome
@@ -150,26 +156,37 @@ stdenv.mkDerivation (finalAttrs: {
       ]
       ++ lib.optional unrarSupport unrardll
     ))
-    piper-tts
     xdg-utils
   ]
-  ++ lib.optional speechSupport speechd-minimal;
+  ++ lib.optionals speechSupport [
+    piper-tts
+    (speechd-minimal.override { inherit python3Packages; })
+  ];
+
+  env = {
+    HOME = "/tmp";
+    MAGICK_INC = "${lib.getDev imagemagick}/include/ImageMagick";
+    MAGICK_LIB = "${lib.getLib imagemagick}/lib";
+    FC_INC_DIR = "${lib.getDev fontconfig}/include/fontconfig";
+    FC_LIB_DIR = "${lib.getLib fontconfig}/lib";
+    PODOFO_INC_DIR = "${lib.getDev podofo_0_10}/include/podofo";
+    PODOFO_LIB_DIR = "${lib.getLib podofo_0_10}/lib";
+    XDG_DATA_HOME = "${placeholder "out"}/share";
+    XDG_UTILS_INSTALL_MODE = "user";
+  }
+  // lib.optionalAttrs popplerSupport {
+    POPPLER_INC_DIR = "${lib.getDev poppler-utils}/include/poppler";
+    POPPLER_LIB_DIR = "${lib.getLib poppler-utils}/lib";
+  }
+  // lib.optionalAttrs speechSupport {
+    PIPER_TTS_DIR = "${lib.getBin piper-tts}/bin";
+  };
 
   installPhase = ''
     runHook preInstall
 
-    export HOME=$TMPDIR/fakehome
-    export POPPLER_INC_DIR=${poppler-utils.dev}/include/poppler
-    export POPPLER_LIB_DIR=${poppler-utils.out}/lib
-    export MAGICK_INC=${imagemagick.dev}/include/ImageMagick
-    export MAGICK_LIB=${imagemagick.out}/lib
-    export FC_INC_DIR=${fontconfig.dev}/include/fontconfig
-    export FC_LIB_DIR=${fontconfig.lib}/lib
-    export PODOFO_INC_DIR=${podofo_0_10.dev}/include/podofo
-    export PODOFO_LIB_DIR=${podofo_0_10}/lib
-    export XDG_DATA_HOME=$out/share
-    export XDG_UTILS_INSTALL_MODE="user"
-    export PIPER_TTS_DIR=${piper-tts}/bin
+    # Work around #493843 until #493988 lands on master.
+    export QMAKE="${qt6.qtbase}/bin/qmake"
 
     python setup.py install --root=$out \
       --prefix=$out \
@@ -204,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --set QTWEBENGINE_CHROMIUM_FLAGS "--disable-gpu" \
           --prefix PATH : ${
             lib.makeBinPath [
               libjpeg
@@ -211,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
               optipng
             ]
           } \
-          ${if popplerSupport then popplerArgs else ""}
+          ${lib.optionalString popplerSupport popplerArgs}
       done
     '';
 
@@ -242,6 +260,9 @@ stdenv.mkDerivation (finalAttrs: {
         # static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger()
         # Attempt to use DefaultLogger but none has been registered.
         "test_plugins"
+      ]
+      ++ lib.optionals (!speechSupport) [
+        "test_speech_dispatcher"
       ]
       ++ lib.optionals (!unrarSupport) [
         "test_unrar"

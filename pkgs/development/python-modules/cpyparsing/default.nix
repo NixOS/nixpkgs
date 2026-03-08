@@ -5,20 +5,17 @@
   cython,
   pexpect,
   python,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cpyparsing";
-  version = "2.4.7.2.4.1";
+  version = "2.4.7.2.4.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2RfwGnSz/GFPk565n8MooIybHeWAlWYMDylZd0S/HTA=";
+    hash = "sha256-5pSZ+fhMiUIe1kLAvlyyfmcKWxtO2m0h9kQY2LrxOjg=";
   };
 
   nativeBuildInputs = [

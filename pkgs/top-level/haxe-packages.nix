@@ -43,7 +43,8 @@ let
     stdenv.mkDerivation (
       attrs
       // {
-        name = "${libname}-${version}";
+        pname = libname;
+        inherit version;
 
         buildInputs = (attrs.buildInputs or [ ]) ++ [
           haxe

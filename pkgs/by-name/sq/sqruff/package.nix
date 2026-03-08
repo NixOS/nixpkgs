@@ -6,18 +6,18 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqruff";
-  version = "0.29.3";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
-    tag = "v${version}";
-    hash = "sha256-bJmkHOACjdSXHE56okrIFERs1wK00XeyipdIFbRjIFI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Yk4ejrIs8/8RVvXS2V2ZTBn6zawVO502Xeeb8rjU6e4=";
   };
 
-  cargoHash = "sha256-TxADMtapo6Pc4Z0MUkzkzUIrLnGa1DdZFzfTq4buF4g=";
+  cargoHash = "sha256-4jB1chciQaR/RYhRTfwWOOUIZgePezl8lAngpfoSuJc=";
 
   # Disable the `python` feature which doesn't work on Nix yet
   buildNoDefaultFeatures = true;
@@ -28,18 +28,20 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace \
       crates/cli/tests/config_not_found.rs \
       crates/cli/tests/configure_rule.rs \
+      crates/cli/tests/dialect_override.rs \
       crates/cli/tests/fix_parse_errors.rs \
       crates/cli/tests/fix_return_code.rs \
+      crates/cli/tests/ignore_data_directory.rs \
+      crates/cli/tests/verbose_logging_ignore.rs \
       crates/cli/tests/ui_github.rs \
       crates/cli/tests/ui_json.rs \
       crates/cli/tests/ui.rs \
       --replace-fail \
-      'sqruff_path.push(format!("../../target/{}/sqruff", profile));' \
-      'sqruff_path.push(format!("../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/{}/sqruff", profile));'
+      '"../../target/{}/sqruff"' \
+      '"../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/{}/sqruff"'
   '';
 
   nativeCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -49,9 +51,12 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast SQL formatter/linter";
     homepage = "https://github.com/quarylabs/sqruff";
-    changelog = "https://github.com/quarylabs/sqruff/releases/tag/${version}";
+    changelog = "https://github.com/quarylabs/sqruff/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "sqruff";
-    maintainers = with lib.maintainers; [ hasnep ];
+    maintainers = with lib.maintainers; [
+      hasnep
+      pyrox0
+    ];
   };
-}
+})

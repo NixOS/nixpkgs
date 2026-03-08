@@ -6,7 +6,7 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pietrasanta-traceroute";
   version = "0.0.5-unstable-2024-09-06";
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       - Enhanced ToS (DSCP/ECN) field report.
     '';
     homepage = "https://github.com/catchpoint/Networking.traceroute/";
-    changelog = "https://github.com/catchpoint/Networking.traceroute/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/catchpoint/Networking.traceroute/blob/${finalAttrs.src.rev}/ChangeLog";
     license = with lib.licenses; [
       gpl2Only
       lgpl21Only
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdbook-toc";
-  version = "0.15.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = "mdbook-toc";
-    tag = version;
-    sha256 = "sha256-FPbZH8cEYQ9wbSm6jA5/uiX8Wgx/FyuIJ/gPgSKUhBA=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-nQMVba6jwfatGpV1jhwzdNlMY7XUGpHU3TqZ1yMy6Q0=";
   };
 
-  cargoHash = "sha256-haHJkyYAc4+ODJNEWiXzbl1xbJ7pyrtnPX/+ubjvX44=";
+  cargoHash = "sha256-ksLapG9MDGDgKNZIg7Kx9CpzCTchkQdmMlWAEczdbRg=";
 
   meta = {
     description = "Preprocessor for mdbook to add inline Table of Contents support";
@@ -24,4 +24,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})

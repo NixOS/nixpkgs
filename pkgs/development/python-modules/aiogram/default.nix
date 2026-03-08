@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.23.0";
+  version = "3.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
     tag = "v${version}";
-    hash = "sha256-vk77HsZT/BwQHAWwgMpKJQSN6HUfIycl7GCFbZ5Fbr8=";
+    hash = "sha256-zhI84vLvL9enC5SGeK5u7OnFDxvlZDNkZ3MyVMFZTSU=";
   };
 
   build-system = [ hatchling ];
@@ -75,6 +75,11 @@ buildPythonPackage rec {
     pytz
   ]
   ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slate...
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "aiogram" ];
 

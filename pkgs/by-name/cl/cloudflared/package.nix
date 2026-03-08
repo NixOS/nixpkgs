@@ -7,15 +7,15 @@
   gitUpdater,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cloudflared";
-  version = "2025.11.1";
+  version = "2026.2.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
-    tag = version;
-    hash = "sha256-OspDwmh8rzGaHlLfQiUxQzDNxBdzkBJbPrmL1YN7BtM=";
+    tag = finalAttrs.version;
+    hash = "sha256-UYMFajks3KThWq36BrRnKJk8y8H9s4hIRuYEnftcm50=";
   };
 
   vendorHash = null;
@@ -23,7 +23,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-X github.com/cloudflare/cloudflared/cmd/cloudflared/updater.BuiltForPackageManager=nixpkgs"
   ];
 
@@ -73,7 +73,7 @@ buildGoModule rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    tests = callPackage ./tests.nix { inherit version; };
+    tests = callPackage ./tests.nix { inherit (finalAttrs) version; };
     updateScript = gitUpdater { };
   };
 
@@ -95,7 +95,7 @@ buildGoModule rec {
     '';
     homepage = "https://www.cloudflare.com/products/tunnel";
     downloadPage = "https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/downloads/";
-    changelog = "https://raw.githubusercontent.com/cloudflare/cloudflared/refs/tags/${version}/RELEASE_NOTES";
+    changelog = "https://raw.githubusercontent.com/cloudflare/cloudflared/refs/tags/${finalAttrs.version}/RELEASE_NOTES";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [
@@ -108,4 +108,4 @@ buildGoModule rec {
     ];
     mainProgram = "cloudflared";
   };
-}
+})

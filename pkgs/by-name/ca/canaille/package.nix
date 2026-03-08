@@ -15,12 +15,10 @@ python.pkgs.buildPythonApplication rec {
   version = "0.0.74";
   pyproject = true;
 
-  disabled = python.pythonOlder "3.10";
-
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FL02ADM7rUU43XR71UWr4FLr/NeUau7zRwTMOSFm1T4=";
   };
 

@@ -6,21 +6,27 @@
   stdenv,
   pkg-config,
   fontconfig,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   libxkbcommon,
   wayland,
   libGL,
   openssl,
+  oniguruma,
+  vulkan-loader,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "inlyne";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Inlyne-Project";
     repo = "inlyne";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ueE1NKbCMBUBrrdsHkwZ5Yv6LD3tQL3ZAk2O4xoYOcw=";
   };
 
@@ -28,21 +34,25 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+  buildInputs = [
+    oniguruma
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
+    libxcursor
+    libxi
+    libxrandr
+    libxcb
     wayland
     libxkbcommon
     openssl
   ];
+
+  # use system oniguruma since the bundled one fails to build with gcc15
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
@@ -63,10 +73,11 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
+      --add-needed ${lib.getLib vulkan-loader}/lib/libvulkan.so \
       --add-rpath ${
         lib.makeLibraryPath [
           libGL
-          xorg.libX11
+          libx11
         ]
       }
   '';
@@ -74,9 +85,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "GPU powered browserless markdown viewer";
     homepage = "https://github.com/Inlyne-Project/inlyne";
-    changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
+    changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "inlyne";
   };
-}
+})

@@ -6,7 +6,7 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnscrypt-proxy";
   version = "2.1.15";
 
@@ -17,7 +17,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "DNSCrypt";
     repo = "dnscrypt-proxy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-o6XZR3w1LfyCGOcF6Gzp39neMp5QjbTxQdL8A81AakM=";
   };
 
@@ -47,4 +47,4 @@ buildGoModule rec {
     mainProgram = "dnscrypt-proxy";
     platforms = with lib.platforms; unix;
   };
-}
+})

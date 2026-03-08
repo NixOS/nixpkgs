@@ -12,14 +12,14 @@
   wrapGAppsHook4,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "szyszka";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "qarmin";
     repo = "szyszka";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-LkXGKDFKaY+mg53ZEO4h2br/4eRle/QbSQJTVEMpAoY=";
   };
 
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
     mainProgram = "szyszka";
   };
-}
+})

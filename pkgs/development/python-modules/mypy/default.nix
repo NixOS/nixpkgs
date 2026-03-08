@@ -6,7 +6,6 @@
   fetchpatch,
   gitUpdater,
   pythonAtLeast,
-  pythonOlder,
   isPyPy,
 
   # build-system
@@ -16,6 +15,7 @@
   types-setuptools,
 
   # propagates
+  librt,
   mypy-extensions,
   tomli,
   typing-extensions,
@@ -34,7 +34,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.17.1";
+  version = "1.19.1";
   pyproject = true;
 
   # relies on several CPython internals
@@ -44,17 +44,8 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     tag = "v${version}";
-    hash = "sha256-FfONUCCMU1bJXHx3GHH46Tu+wYU5FLPOqeCSCi1bRSs=";
+    hash = "sha256-REUJgYd00qr36hoHevkJEWK/+2hE/caymjD/asqa6eI=";
   };
-
-  patches = [
-    # Fix the build on Darwin with a case‐sensitive store.
-    # Remove on next release.
-    (fetchpatch {
-      url = "https://github.com/python/mypy/commit/7534898319cb7f16738c11e4bc1bdcef0eb13c38.patch";
-      hash = "sha256-5jD0JBRnirmoMlUz9+n8G4AqHqCi8BaUX5rEl9NnLts=";
-    })
-  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
@@ -70,11 +61,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    librt
     mypy-extensions
     pathspec
     typing-extensions
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     dmypy = [ psutil ];

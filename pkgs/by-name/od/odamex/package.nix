@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
 
   cmake,
   copyDesktopItems,
@@ -31,8 +30,9 @@
   portmidi,
   wayland-scanner,
   waylandpp,
-  wxGTK32,
-  xorg,
+  wxwidgets_3_2,
+  libx11,
+  xorgproto,
   zstd,
 
   nix-update-script,
@@ -41,36 +41,17 @@
   withWayland ? stdenv.hostPlatform.isLinux,
 }:
 
-let
-  # TODO: remove when this is resolved, likely at the next cpptrace bump
-  cpptrace' = cpptrace.overrideAttrs {
-    # tests are failing on darwin
-    # https://hydra.nixos.org/build/310535948
-    doCheck = !stdenv.hostPlatform.isDarwin;
-  };
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "odamex";
-  version = "11.2.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "odamex";
     repo = "odamex";
     tag = finalAttrs.version;
-    hash = "sha256-f9st852Sqmdmb/qNP1ioBY9MApt9Ruw8dBjkkyGM5Qs=";
+    hash = "sha256-kLI1gdGH5NXJ8YI1tR0N5W6yvGZ+7302z0QLl2j+b0k=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # fix file-open panel on Darwin
-    # https://github.com/odamex/odamex/pull/1402
-    # TODO: remove on next release
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/odamex/odamex/pull/1402.patch";
-      hash = "sha256-JrcQ0rYkaFP5aKNWeXbrY2TN4r8nHpue19qajNXJXg4=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -87,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_mixer
     SDL2_net
-    cpptrace'
+    cpptrace
     curl
     expat
     fltk
@@ -95,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsysprof-capture
     pcre2
     portmidi
-    wxGTK32
+    wxwidgets_3_2
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -106,8 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
   ]
   ++ lib.optionals withX11 [
-    xorg.libX11
-    xorg.xorgproto
+    libx11
+    xorgproto
   ]
   ++ lib.optionals withWayland [
     libxkbcommon
@@ -150,11 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
           for name in odamex odalaunch odasrv; do
             for size in 96 128 256 512; do
               install -Dm644 ../media/icon_"$name"_"$size".png \
-                $out/share/icons/hicolor/"$size"x"$size"/"$name".png
+                $out/share/icons/hicolor/"$size"x"$size"/apps/"$name".png
             done
-
-            install -Dm644 ../media/icon_"$name"_128.png \
-              $out/share/pixmaps/"$name".png
           done
         ''
     }
@@ -208,10 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "http://odamex.net/";
+    homepage = "https://odamex.net";
     description = "Client/server port for playing old-school Doom online";
+    changelog = "https://github.com/odamex/odamex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ eljamm ];
     mainProgram = "odalaunch";
   };

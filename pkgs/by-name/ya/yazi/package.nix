@@ -51,6 +51,7 @@ let
     "yazi"
     "theme"
     "keymap"
+    "vfs"
   ];
 
   configHome =
@@ -92,7 +93,17 @@ let
 in
 runCommand yazi-unwrapped.name
   {
-    inherit (yazi-unwrapped) pname version meta;
+    inherit (yazi-unwrapped) pname version;
+
+    meta = {
+      inherit (yazi-unwrapped.meta)
+        description
+        homepage
+        license
+        maintainers
+        mainProgram
+        ;
+    };
 
     nativeBuildInputs = [ makeWrapper ];
   }

@@ -8,14 +8,14 @@
   org-stats,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "org-stats";
   version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "org-stats";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QTjJ+4Qu5u+5ZCoIAQBxqdhjNI2CXUB8r2Zx8xfIiGw=";
   };
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     # patch in version information
     # since `debug.ReadBuildInfo` does not work with `go build
     (replaceVars ./version.patch {
-      inherit version;
+      inherit (finalAttrs) version;
     })
   ];
 
@@ -58,9 +58,9 @@ buildGoModule rec {
   meta = {
     description = "Get the contributor stats summary from all repos of any given organization";
     homepage = "https://github.com/caarlos0/org-stats";
-    changelog = "https://github.com/caarlos0/org-stats/releases/tag/${src.rev}";
+    changelog = "https://github.com/caarlos0/org-stats/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "org-stats";
   };
-}
+})

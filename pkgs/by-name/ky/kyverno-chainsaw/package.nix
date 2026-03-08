@@ -9,15 +9,15 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kyverno-chainsaw";
   version = "0.2.14";
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "chainsaw";
-    rev = "v${version}";
-    hash = "sha256-HcBRipJGSHPms2qL63vIVVmiq+k1mL8dJo5kW7W6ykE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wHwjcpcum3ByBGYUxJ38Qi0RliQUmAIBYmE7t3gEonI=";
   };
 
   vendorHash = "sha256-lG+odKD1TGQ7GTh/y9ogREtY59T8fvN/6FyKsdgsU0M=";
@@ -27,7 +27,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${version}"
+    "-X github.com/kyverno/chainsaw/pkg/version.BuildVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -44,13 +44,13 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = kyverno-chainsaw;
     command = "chainsaw version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${version}";
+    changelog = "https://github.com/kyverno/chainsaw/releases/tag/v${finalAttrs.version}";
     description = "Declarative approach to test Kubernetes operators and controllers";
     homepage = "https://kyverno.github.io/chainsaw/";
     license = lib.licenses.asl20;
@@ -62,4 +62,4 @@ buildGoModule rec {
     mainProgram = "chainsaw";
     maintainers = [ ];
   };
-}
+})

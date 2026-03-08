@@ -7,7 +7,6 @@
   pbr,
   pygments,
   pytestCheckHook,
-  pythonOlder,
   restructuredtext-lint,
   setuptools-scm,
   stevedore,
@@ -19,12 +18,12 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EmetMnWJcfvPmRRCQXo5Nce8nlJVDnNiLg5WulXqHUA=";
   };
+
+  pythonRelaxDeps = [ "docutils" ];
 
   build-system = [
     setuptools-scm
@@ -42,6 +41,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlags = [
+    "-Wignore::PendingDeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "doc8" ];
 

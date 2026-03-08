@@ -7,14 +7,14 @@
   replaceVars,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ent-go";
   version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "ent";
     repo = "ent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rKGzYOdNaSbFyHIuytuppYjpiTz1/tcvXel1SjtwEhA=";
   };
 
@@ -23,8 +23,8 @@ buildGoModule rec {
   patches = [
     # patch in version information so we don't get "version = "(devel)";"
     (replaceVars ./ent_version.patch {
-      inherit version;
-      sum = src.outputHash;
+      inherit (finalAttrs) version;
+      sum = finalAttrs.src.outputHash;
     })
   ];
 
@@ -47,10 +47,10 @@ buildGoModule rec {
   meta = {
     description = "Entity framework for Go";
     homepage = "https://entgo.io/";
-    changelog = "https://github.com/ent/ent/releases/tag/v${version}";
+    changelog = "https://github.com/ent/ent/releases/tag/v${finalAttrs.version}";
     downloadPage = "https://github.com/ent/ent";
     license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "ent";
   };
-}
+})

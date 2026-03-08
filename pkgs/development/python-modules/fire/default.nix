@@ -9,15 +9,13 @@
   levenshtein,
   pytestCheckHook,
   termcolor,
-  pythonOlder,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "fire";
   version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "google";
@@ -38,6 +36,11 @@ buildPythonPackage rec {
     mock
     levenshtein
     pytestCheckHook
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'
+    "testFireAsyncio"
   ];
 
   pythonImportsCheck = [ "fire" ];

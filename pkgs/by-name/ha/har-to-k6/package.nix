@@ -8,21 +8,20 @@
 
 buildNpmPackage rec {
   pname = "har-to-k6";
-  version = "0.14.11";
+  version = "0.14.13";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "har-to-k6";
     tag = "v${version}";
-    hash = "sha256-ACt9MNxcEyfg7lkeFBK/KnssbI4jkER0Ua/llQWLpxU=";
+    hash = "sha256-RKg8ShzxxIaK6mmcmLjYT8Ofe2CM3U5/Lg/UEIRi30Q=";
   };
 
   dontNpmBuild = true;
 
-  npmDepsHash = "sha256-RuK3CzcMkPt5MFEZpYBDtMMShHTT/115pRk1CmRkiek=";
+  npmDepsHash = "sha256-Z5aq9apwz1wvm0uam2pxzX+T+hKkk/kmXPy7IyrUHFM=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

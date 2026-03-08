@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   flit-core,
   nix-update-script,
   httpx,
@@ -17,6 +18,7 @@ buildPythonPackage rec {
   pname = "gotify";
   version = "0.6.0";
   pyproject = true;
+  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "d-k-bo";
@@ -64,5 +66,7 @@ buildPythonPackage rec {
     maintainers = [
       lib.maintainers.joblade
     ];
+    # https://github.com/d-k-bo/python-gotify/issues/6
+    broken = lib.versionAtLeast gotify-server.version "2.9.0";
   };
 }

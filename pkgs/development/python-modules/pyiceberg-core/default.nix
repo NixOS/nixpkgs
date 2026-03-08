@@ -6,32 +6,38 @@
 
   # tests
   datafusion,
+  fastavro,
   pyarrow,
+  pydantic-core,
+  pyiceberg,
   pytestCheckHook,
+
+  # passthru
+  pyiceberg-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyiceberg-core";
-  version = "0.6.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "iceberg-rust";
-    tag = "v${version}";
-    hash = "sha256-vRSZnMkZptGkLZBN1RRu0YGRQCOgJioBIghXnvU9UXc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q5eghj469gT9FkbBMgrHcV1bMCTAgAzz1ir7zEx1DAk=";
   };
 
-  sourceRoot = "${src.name}/bindings/python";
+  sourceRoot = "${finalAttrs.src.name}/bindings/python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit
+    inherit (finalAttrs)
       pname
       version
       src
       sourceRoot
       ;
-    hash = "sha256-QfNVqyZ/O3vZAf689Fg5qPY6jcN4G1zo2eS2AEcdIL4=";
+    hash = "sha256-R/SgYjlxRvlkgn/n8O87Nko0BxenioACqonGa1c9h9E=";
   };
 
   nativeBuildInputs = [
@@ -42,20 +48,32 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyiceberg_core" ];
 
   nativeCheckInputs = [
+    datafusion
+    fastavro
+    pyiceberg
     pyarrow
     pytestCheckHook
+  ]
+  ++ pyiceberg.optional-dependencies.pyarrow
+  ++ pyiceberg.optional-dependencies.sql-sqlite;
+
+  disabledTests = [
+    # AttributeError: 'function' object has no attribute 'cache_clear'
+    "test_read_manifest_entry"
   ];
 
-  disabledTestPaths = [
-    # Circular dependency on pyiceberg
-    "tests/test_datafusion_table_provider.py"
-  ];
+  # Circular dependency on pyiceberg
+  doCheck = false;
+
+  passthru.tests.pytest = pyiceberg-core.overridePythonAttrs {
+    doCheck = true;
+  };
 
   meta = {
     description = "Iceberg-rust powered core for pyiceberg";
     homepage = "https://github.com/apache/iceberg-rust/tree/main/bindings/python";
-    changelog = "https://github.com/apache/iceberg-rust/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/apache/iceberg-rust/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

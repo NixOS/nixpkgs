@@ -22,7 +22,6 @@
   pyopenssl,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   requests,
   setuptools,
@@ -33,16 +32,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "3.16.0";
+  version = "4.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-connector-python";
     tag = "v${version}";
-    hash = "sha256-mow8TxmkeaMkgPTLUpx5Gucn4347gohHPyiBYjI/cDs=";
+    hash = "sha256-u2DIgW0W9oXSif2lIDqhlIopaXzQRS0x6tyHiYPGFLM=";
   };
 
   build-system = [

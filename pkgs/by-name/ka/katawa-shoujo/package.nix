@@ -15,10 +15,10 @@
   devendorImageLibs ? !stdenvNoCC.hostPlatform.isDarwin,
   libjpeg,
   libpng12,
-  libX11,
-  libXext,
-  libXi,
-  libXmu,
+  libx11,
+  libxext,
+  libxi,
+  libxmu,
   runtimeShell,
   SDL_compat,
   SDL_image,
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
     libpng12
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXext
-    libXi
-    libXmu
+    libx11
+    libxext
+    libxi
+    libxmu
     libGL
     libGLU
   ];

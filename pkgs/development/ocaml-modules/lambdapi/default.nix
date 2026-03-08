@@ -1,6 +1,7 @@
 {
   lib,
   fetchurl,
+  fetchpatch,
   buildDunePackage,
   alcotest,
   dedukti,
@@ -27,6 +28,14 @@ buildDunePackage rec {
     url = "https://github.com/Deducteam/lambdapi/releases/download/${version}/lambdapi-${version}.tbz";
     hash = "sha256-EGau0mGP2OakAMUUfb9V6pd86NP+LlGKxnhcZ3WhuL4=";
   };
+
+  patches = [
+    # Compatibility with cmdliner ≥ 2
+    (fetchpatch {
+      url = "https://github.com/Deducteam/lambdapi/commit/8e27c0f668915fbd49e32bdac246d6d515a64dd0.patch";
+      hash = "sha256-9CkvH1o81T9LP+IPogKGhoiIDP76/nRfq59ttU7r0fI=";
+    })
+  ];
 
   nativeBuildInputs = [
     dream

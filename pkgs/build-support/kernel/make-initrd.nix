@@ -81,48 +81,44 @@ in
     _compressorMeta.ubootName
       or (throw "Unrecognised compressor ${_compressorName}, please specify uInitrdCompression"),
 }:
-let
-  # !!! Move this into a public lib function, it is probably useful for others
-  toValidStoreName =
-    x: with builtins; lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
+stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
 
-in
-stdenvNoCC.mkDerivation (
-  rec {
-    inherit
-      name
-      makeUInitrd
-      extension
-      uInitrdArch
-      prepend
-      ;
+  # the initrd will be self-contained so we can drop references
+  # to the closure that was used to build it
+  unsafeDiscardReferences.out = true;
 
-    builder = ./make-initrd.sh;
+  inherit
+    name
+    extension
+    makeUInitrd
+    uInitrdArch
+    prepend
+    ;
+  ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
-    nativeBuildInputs = [
-      cpio
-    ]
-    ++ lib.optional makeUInitrd ubootTools;
+  builder = ./make-initrd.sh;
 
-    compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
+  nativeBuildInputs = [
+    cpio
+  ]
+  ++ lib.optional makeUInitrd ubootTools;
 
-    # Pass the function through, for reuse in append-initrd-secrets. The
-    # function is used instead of the string, in order to support
-    # cross-compilation (append-initrd-secrets running on a different
-    # architecture than what the main initramfs is built on).
-    passthru = {
-      compressorExecutableFunction = _compressorFunction;
-      compressorArgs = _compressorArgsReal;
-    };
+  compress = "${_compressorExecutable} ${lib.escapeShellArgs _compressorArgsReal}";
 
-    # !!! should use XML.
-    objects = map (x: x.object) contents;
-    symlinks = map (x: x.symlink) contents;
-    suffices = map (x: if x ? suffix then x.suffix else "none") contents;
+  # !!! should use XML.
+  objects = map (x: x.object) contents;
+  symlinks = map (x: x.symlink) contents;
+  suffices = map (x: if x ? suffix then x.suffix else "none") contents;
 
-    closureInfo = "${pkgsBuildHost.closureInfo { rootPaths = objects; }}";
-  }
-  // lib.optionalAttrs makeUInitrd {
-    uInitrdCompression = uInitrdCompression;
-  }
-)
+  closureInfo = "${pkgsBuildHost.closureInfo { rootPaths = finalAttrs.objects; }}";
+
+  # Pass the function through, for reuse in append-initrd-secrets. The
+  # function is used instead of the string, in order to support
+  # cross-compilation (append-initrd-secrets running on a different
+  # architecture than what the main initramfs is built on).
+  passthru = {
+    compressorExecutableFunction = _compressorFunction;
+    compressorArgs = _compressorArgsReal;
+  };
+})

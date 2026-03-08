@@ -7,7 +7,6 @@
   fetchFromGitHub,
   lxml,
   pyjwt,
-  pythonOlder,
   setuptools-scm,
   xmltodict,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "seatconnect";
   version = "1.1.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "farfar";

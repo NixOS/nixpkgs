@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "filtron";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "filtron";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-RihxlJvbHq5PaJz89NHl/wyXrKjSiC4XYAs7LSKAo6E=";
   };
 
@@ -44,4 +44,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "filtron";
   };
-}
+})

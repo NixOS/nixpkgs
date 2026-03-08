@@ -10,10 +10,10 @@
   intel-gpu-tools,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
-  libXext,
+  libxext,
   enableHybridCodec ? false,
   vaapi-intel-hybrid,
   enableGui ? true,
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   };
 
   # Set the correct install path:
-  LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
+  env.LIBVA_DRIVERS_PATH = "${placeholder "out"}/lib/dri";
 
   postInstall = lib.optionalString enableHybridCodec ''
     ln -s ${vaapi-intel-hybrid}/lib/dri/* $out/lib/dri/
@@ -58,8 +58,8 @@ stdenv.mkDerivation {
     libva
   ]
   ++ lib.optionals enableGui [
-    libX11
-    libXext
+    libx11
+    libxext
     libGL
     wayland
   ]

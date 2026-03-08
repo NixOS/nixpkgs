@@ -11,14 +11,14 @@
   qttools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chewing-editor";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "chewing";
     repo = "chewing-editor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-gF3OotO/xb3Dc0YjVwAKIYnuEPIrgjpGR2tdjOBT4aI=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -5,22 +5,19 @@
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioslimproto";
-  version = "3.1.2";
+  version = "3.1.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aioslimproto";
     tag = version;
-    hash = "sha256-NrMcM3pIzTw9FkfVDptIIdIya7jHtwwzT7RRJTmB40c=";
+    hash = "sha256-mbzc3Td9XkxDrtPeIbrZdxn8YLV6yjQ+KXgaRC1GdFc=";
   };
 
   postPatch = ''

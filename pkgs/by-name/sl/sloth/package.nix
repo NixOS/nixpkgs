@@ -4,14 +4,14 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sloth";
   version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "slok";
     repo = "sloth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VwktgkJjJ1tMlGZwhr1bvaCDiatZKlylFY//8YpXPYw=";
   };
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "sloth";
   };
-}
+})

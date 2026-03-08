@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "python-flirt";
-  version = "0.9.7";
+  version = "0.9.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "lancelot";
     rev = "v${version}";
-    hash = "sha256-IgkfUkVsJyAsqH+L9GBdTQI1ure4k8mVLLWHj7AFDj8=";
+    hash = "sha256-fZZTEBkpCE5L4efcNGzAuxCWgOSqc2r77F5U6kpMU6M=";
   };
 
   postPatch = ''

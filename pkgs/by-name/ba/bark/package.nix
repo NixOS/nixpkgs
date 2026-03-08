@@ -11,13 +11,13 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bark";
   version = "0.6.0";
   src = fetchFromGitHub {
     owner = "haileys";
     repo = "bark";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-JaUIWGCYhasM0DgqL+DiG2rE1OWVg/N66my/4RWDN1E=";
   };
 
@@ -45,7 +45,6 @@ rustPlatform.buildRustPackage (final: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

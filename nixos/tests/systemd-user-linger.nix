@@ -19,7 +19,7 @@ rec {
 
   testScript =
     let
-      uidStrings = builtins.mapAttrs (k: v: builtins.toString v.uid) nodes.machine.users.users;
+      uidStrings = builtins.mapAttrs (k: v: toString v.uid) nodes.machine.users.users;
     in
     ''
       machine.wait_for_file("/var/lib/systemd/linger/alice")

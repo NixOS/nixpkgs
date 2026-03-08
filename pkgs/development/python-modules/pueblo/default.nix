@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   versioningit,
@@ -12,10 +11,8 @@
 
 buildPythonPackage rec {
   pname = "pueblo";
-  version = "0.0.12";
+  version = "0.0.15";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   # This tarball doesn't include tests unfortunately, and the GitHub tarball
   # could have been an alternative, but versioningit fails to detect the
@@ -25,7 +22,7 @@ buildPythonPackage rec {
   # should work for us as well.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oo2RNJQUVDqxhfBI6h1KCAgsMjDe7ns3F9qD4eKLVic=";
+    hash = "sha256-bz4ZxKp5oUfhLDMv0etJfDIPCoMcDtwCcA2hw+DAS8I=";
   };
 
   build-system = [

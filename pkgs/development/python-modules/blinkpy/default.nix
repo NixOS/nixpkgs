@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
-  version = "0.25.2";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
     tag = "v${version}";
-    hash = "sha256-pjOs9OLBXzhoQm2p0Kicw5BdobZIIEY7/RHX/2bj3qY=";
+    hash = "sha256-1MROZbA6NDZ5mKmvcjyrYAx+tEP6Cyj2k1754v2W1Mw=";
   };
 
   postPatch = ''

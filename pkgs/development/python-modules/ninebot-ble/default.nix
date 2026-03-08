@@ -7,7 +7,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   miauth,
-  pythonOlder,
   setuptools,
   wheel,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "ninebot-ble";
   version = "0.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "ownbee";

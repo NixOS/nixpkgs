@@ -5,6 +5,7 @@
 
   # dependencies
   hass-web-proxy-lib,
+  titlecase,
 
   # tests
   homeassistant,
@@ -18,16 +19,19 @@
 buildHomeAssistantComponent rec {
   owner = "blakeblackshear";
   domain = "frigate";
-  version = "5.11.0";
+  version = "5.14.2";
 
   src = fetchFromGitHub {
     owner = "blakeblackshear";
     repo = "frigate-hass-integration";
     tag = "v${version}";
-    hash = "sha256-cXjf5e4gbkvRS43xnpmL1lSaSvhts4eMetEqTP/RCOo=";
+    hash = "sha256-fgsYznTqJrEh4niyGfksnflRp1PpljrlzJBvs8gKn54=";
   };
 
-  dependencies = [ hass-web-proxy-lib ];
+  dependencies = [
+    hass-web-proxy-lib
+    titlecase
+  ];
 
   nativeCheckInputs = [
     homeassistant

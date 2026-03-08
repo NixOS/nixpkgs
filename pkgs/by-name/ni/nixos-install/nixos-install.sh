@@ -36,7 +36,7 @@ while [ "$#" -gt 0 ]; do
         --root)
             mountPoint="$1"; shift 1
             ;;
-        --system|--closure)
+        --system|--closure|--store-path)
             system="$1"; shift 1
             ;;
         --flake)

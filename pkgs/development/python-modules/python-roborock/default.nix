@@ -21,16 +21,16 @@
   syrupy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-roborock";
-  version = "3.16.1";
+  version = "4.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Python-roborock";
     repo = "python-roborock";
-    tag = "v${version}";
-    hash = "sha256-fg5dWPW3z7PxFdLIVRvmnOS0FndAm5gMyUFZPXjEn00=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5ckpRKwrLkjIAUJiXIRN2N9268pzjEjwVPVK/wSolgE=";
   };
 
   pythonRelaxDeps = [ "pycryptodome" ];
@@ -65,9 +65,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python library & console tool for controlling Roborock vacuum";
     homepage = "https://github.com/Python-roborock/python-roborock";
-    changelog = "https://github.com/Python-roborock/python-roborock/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Python-roborock/python-roborock/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "roborock";
   };
-}
+})

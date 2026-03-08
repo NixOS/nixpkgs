@@ -5,14 +5,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sigslot";
   version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "palacaze";
     repo = "sigslot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8JBZ6Xid/uAOfiPKgJKetpj/oBb8lRLPgjkMnrfTKaM=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ azahi ];
     platforms = lib.platforms.all;
   };
-}
+})

@@ -24,11 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns";
-  version = "4.9.8";
+  version = "5.0.3";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-GAtmrjMtMWaWjgE7/3y/bwxyhp1r5pfbdKAt86xuipE=";
+    hash = "sha256-7DEgUBlQp3LHhcYA9Zno9NcR9wOgLL0b7ELtwaBfgcw=";
   };
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature stdenv.hostPlatform.is32bit "experimental-64bit-time_t-support-on-glibc")
     (lib.enableFeature false "silent-rules")
     (lib.enableFeature true "dns-over-tls")
-    (lib.enableFeature true "unit-tests")
+    (lib.enableFeature finalAttrs.finalPackage.doCheck "unit-tests")
     (lib.enableFeature true "reproducible")
     (lib.enableFeature true "tools")
     (lib.enableFeature true "ixfrdist")
@@ -108,7 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       mic92
-      disassembler
       nickcao
     ];
   };

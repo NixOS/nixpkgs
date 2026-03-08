@@ -16,7 +16,7 @@
   cunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libinsane";
   version = "1.0.10";
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     repo = "libinsane";
     group = "World";
     owner = "OpenPaperwork";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-2BLg8zB0InPJqK9JypQIMVXIJndo9ZuNB4OeOAo/Hsc=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3Plus;
     maintainers = [ lib.maintainers.symphorien ];
   };
-}
+})

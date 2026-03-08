@@ -17,6 +17,7 @@
   # undeclared cli dependencies
   docopt,
   tabulate,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -57,6 +58,8 @@ buildPythonPackage rec {
     # Imported in pyannote/metrics/cli.py
     docopt
     tabulate
+    # Imporrted in pyannote/metrics/types.py
+    typing-extensions
   ];
 
   pythonImportsCheck = [ "pyannote.metrics" ];
@@ -65,7 +68,6 @@ buildPythonPackage rec {
     pytestCheckHook
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Toolkit for reproducible evaluation, diagnostic, and error analysis of speaker diarization systems";

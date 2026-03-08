@@ -5,14 +5,14 @@
   containers,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "decoders";
   version = "1.0.0";
 
   minimalOCamlVersion = "4.03.0";
 
   src = fetchurl {
-    url = "https://github.com/mattjbray/ocaml-decoders/releases/download/v${version}/${pname}-${version}.tbz";
+    url = "https://github.com/mattjbray/ocaml-decoders/releases/download/v${finalAttrs.version}/decoders-${finalAttrs.version}.tbz";
     hash = "sha256-R/55xBAtD3EO/zzq7zExANnfPHlFg00884o5dCpXNZc=";
   };
 
@@ -24,8 +24,8 @@ buildDunePackage rec {
   meta = {
     description = "Elm-inspired decoders for Ocaml";
     homepage = "https://github.com/mattjbray/ocaml-decoders";
-    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/mattjbray/ocaml-decoders/blob/${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ infinidoge ];
   };
-}
+})

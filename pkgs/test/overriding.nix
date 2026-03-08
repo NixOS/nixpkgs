@@ -68,6 +68,16 @@ let
           }).pname;
         expected = "hello-no-final-attrs-overridden";
       };
+      structuredAttrs-allowedRequisites-nullability = {
+        expr =
+          lib.hasPrefix builtins.storeDir
+            (pkgs.stdenv.mkDerivation {
+              __structuredAttrs = true;
+              inherit (pkgs.hello) pname version src;
+              allowedRequisites = null;
+            }).drvPath;
+        expected = true;
+      };
     };
 
   test-extendMkDerivation =
@@ -445,20 +455,6 @@ let
       buildPythonPackage-override-libcxxStdenv = {
         expr = package-stub-libcxx.stdenv;
         expected = pkgs.libcxxStdenv;
-      };
-      overridePythonAttrs-stdenv-deprecated = {
-        expr =
-          (package-stub.overridePythonAttrs (_: {
-            stdenv = pkgs.clangStdenv;
-          })).stdenv;
-        expected = pkgs.clangStdenv;
-      };
-      overridePythonAttrs-override-clangStdenv-deprecated-nested = {
-        expr =
-          (package-stub-gcc.overridePythonAttrs {
-            stdenv = pkgs.clangStdenv;
-          }).stdenv;
-        expected = pkgs.clangStdenv;
       };
 
       overridePythonAttrs = {

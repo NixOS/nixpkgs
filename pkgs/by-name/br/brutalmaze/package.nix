@@ -1,30 +1,34 @@
 {
   lib,
   fetchFromSourcehut,
-  python3Packages,
+  python312Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python312Packages.buildPythonApplication (finalAttrs: {
   pname = "brutalmaze";
   version = "1.1.1";
-  format = "pyproject";
-  disabled = python3Packages.pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~cnx";
     repo = "brutalmaze";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "1m105iq378mypj64syw59aldbm6bj4ma4ynhc50gafl656fabg4y";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pygame" "pygame-ce"
+  '';
+
+  nativeBuildInputs = with python312Packages; [
     flit-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python312Packages; [
     loca
     palace
-    pygame
+    pygame-ce
   ];
 
   doCheck = false; # there's no test
@@ -36,4 +40,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.agpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
   };
-}
+})

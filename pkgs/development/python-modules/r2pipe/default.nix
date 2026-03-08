@@ -6,15 +6,12 @@
   fetchPypi,
   radare2,
   coreutils,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "r2pipe";
   version = "1.9.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   postPatch =
     let

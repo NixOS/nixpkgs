@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "session-info2";
-  version = "0.2.3";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "session-info2";
     tag = "v${version}";
-    hash = "sha256-fw5FG22MzxPibC9GrWZsRLnhMcuo/eBPNRggvkkz8ms=";
+    hash = "sha256-zm0UpbKKPKEAF2iq1ZVu7hGOU6vlfd7+liUVJauaD98=";
   };
 
   build-system = [

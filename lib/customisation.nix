@@ -20,7 +20,6 @@ let
     take
     length
     filterAttrs
-    optionalString
     flip
     head
     pipe
@@ -156,8 +155,25 @@ rec {
     let
       # Creates a functor with the same arguments as f
       mirrorArgs = mirrorFunctionArgs f;
+      # Recover overrider and additional attributes for f
+      # When f is a callable attribute set,
+      # it may contain its own `f.override` and additional attributes.
+      # This helper function recovers those attributes and decorate the overrider.
+      recoverMetadata =
+        if isAttrs f then
+          fDecorated:
+          # Preserve additional attributes for f
+          f
+          // fDecorated
+          # Decorate f.override if presented
+          // lib.optionalAttrs (f ? override) {
+            override = fdrv: makeOverridable (f.override fdrv);
+          }
+        else
+          id;
+      decorate = f': recoverMetadata (mirrorArgs f');
     in
-    mirrorArgs (
+    decorate (
       origArgs:
       let
         result = f origArgs;
@@ -609,7 +625,7 @@ rec {
     # Type
 
     ```
-    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> scope
+    makeScope :: (AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a) -> (AttrSet -> AttrSet) -> Scope
     ```
   */
   makeScope =
@@ -672,20 +688,20 @@ rec {
 
     ```
     makeScopeWithSplicing' ::
-      { splicePackages :: Splice -> AttrSet
-      , newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a
+      { splicePackages :: Splice -> AttrSet;
+        newScope :: AttrSet -> ((AttrSet -> a) | Path) -> AttrSet -> a;
       }
-      -> { otherSplices :: Splice, keep :: AttrSet -> AttrSet, extra :: AttrSet -> AttrSet }
+      -> { otherSplices :: Splice; keep :: AttrSet -> AttrSet; extra :: AttrSet -> AttrSet; }
       -> AttrSet
 
-    Splice ::
-      { pkgsBuildBuild :: AttrSet
-      , pkgsBuildHost :: AttrSet
-      , pkgsBuildTarget :: AttrSet
-      , pkgsHostHost :: AttrSet
-      , pkgsHostTarget :: AttrSet
-      , pkgsTargetTarget :: AttrSet
-      }
+    Splice :: {
+      pkgsBuildBuild :: AttrSet;
+      pkgsBuildHost :: AttrSet;
+      pkgsBuildTarget :: AttrSet;
+      pkgsHostHost :: AttrSet;
+      pkgsHostTarget :: AttrSet;
+      pkgsTargetTarget :: AttrSet;
+    }
     ```
   */
   makeScopeWithSplicing' =
@@ -789,17 +805,16 @@ rec {
     ```
     extendMkDerivation ::
       {
-        constructDrv :: ((FixedPointArgs | AttrSet) -> a)
-        excludeDrvArgNames :: [ String ],
-        excludeFunctionArgNames :: [ String ]
-        extendDrvArgs :: (AttrSet -> AttrSet -> AttrSet)
-        inheritFunctionArgs :: Bool,
-        transformDrv :: a -> a,
+        constructDrv :: (FixedPointArgs | AttrSet) -> Derivation;
+        excludeDrvArgNames :: [String];
+        excludeFunctionArgNames :: [String];
+        extendDrvArgs :: AttrSet -> AttrSet -> AttrSet;
+        inheritFunctionArgs :: Bool;
+        transformDrv :: Derivation -> Derivation;
       }
-      -> (FixedPointArgs | AttrSet) -> a
+      -> ((FixedPointArgs | AttrSet) -> Derivation)
 
-    FixedPointArgs = AttrSet -> AttrSet
-    a = Derivation when defining a build helper
+    FixedPointArgs :: AttrSet -> AttrSet
     ```
 
     # Examples
@@ -981,7 +996,21 @@ rec {
     # Type
 
     ```
-    mapCrossIndex :: (a -> b) -> AttrSet -> AttrSet
+    mapCrossIndex :: (a -> b) -> {
+      buildBuild :: a;
+      buildHost :: a;
+      buildTarget :: a;
+      hostHost :: a;
+      hostTarget :: a;
+      targetTarget :: a;
+    } -> {
+      buildBuild :: b;
+      buildHost :: b;
+      buildTarget :: b;
+      hostHost :: b;
+      hostTarget :: b;
+      targetTarget :: b;
+    }
     ```
 
     # Examples

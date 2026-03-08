@@ -10,22 +10,19 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
-  version = "2.7.2";
+  version = "2.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_resumable_media";
     inherit version;
-    hash = "sha256-UoCu1GKfK2C4R7DUL5hX/Uk1wRryZnRN8z2AdMrpL+A=";
+    hash = "sha256-8RV+2LRplNYKG8QyVE22I1IEMRNoTU4DDuAud+vpoa4=";
   };
 
   build-system = [ setuptools ];

@@ -48,5 +48,6 @@ stdenvNoCC.mkDerivation rec {
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ zraexy ];
+    sourceProvenance = with lib.sourceTypes; [ binaryFirmware ];
   };
 }

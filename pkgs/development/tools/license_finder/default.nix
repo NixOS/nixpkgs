@@ -7,7 +7,6 @@
 
 bundlerEnv {
   pname = "license_finder";
-  version = "7.0.1";
 
   inherit ruby;
   gemdir = ./.;

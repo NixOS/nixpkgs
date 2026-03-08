@@ -47,13 +47,9 @@ let
 
   inherit (lib.types)
     enum
-    float
     isType
     mkOptionType
-    number
     setType
-    string
-    types
     ;
 
   setTypes =
@@ -634,6 +630,10 @@ rec {
         execFormat = unknown;
         families = { };
       };
+      uefi = {
+        execFormat = pe;
+        families = { };
+      };
     }
     // {
       # aliases
@@ -662,15 +662,19 @@ rec {
     # On ARM, this corresponds to ARMEABI.
     eabi = {
       float = "soft";
+      eabi = true;
     };
     eabihf = {
       float = "hard";
+      eabi = true;
     };
 
     # Other architectures should use ELF in embedded situations.
     elf = { };
 
-    androideabi = { };
+    androideabi = {
+      eabi = true;
+    };
     android = {
       assertions = [
         {
@@ -684,9 +688,11 @@ rec {
 
     gnueabi = {
       float = "soft";
+      eabi = true;
     };
     gnueabihf = {
       float = "hard";
+      eabi = true;
     };
     gnu = {
       assertions = [
@@ -730,17 +736,21 @@ rec {
 
     musleabi = {
       float = "soft";
+      eabi = true;
     };
     musleabihf = {
       float = "hard";
+      eabi = true;
     };
     musl = { };
 
     uclibceabi = {
       float = "soft";
+      eabi = true;
     };
     uclibceabihf = {
       float = "hard";
+      eabi = true;
     };
     uclibc = { };
 
@@ -839,6 +849,7 @@ rec {
             "mmixware"
             "ghcjs"
             "mingw32"
+            "uefi"
           ]
           || hasPrefix "freebsd" (elemAt l 2)
           || hasPrefix "netbsd" (elemAt l 2)
@@ -963,6 +974,41 @@ rec {
       cpuName = if kernel.families ? darwin then darwinArch cpu else cpu.name;
     in
     "${cpuName}-${vendor.name}-${kernelName kernel}${optExecFormat}${optAbi}";
+
+  # This is a function from parsed platforms (like stdenv.hostPlatform.parsed)
+  # to parsed platforms.
+  mkMuslSystem =
+    parsed:
+    # The following line guarantees that the output of this function
+    # is a well-formed platform with no missing fields.
+    (
+      x:
+      lib.trivial.pipe x [
+        (x: removeAttrs x [ "_type" ])
+        mkSystem
+      ]
+    )
+      (
+        parsed
+        // {
+          abi =
+            {
+              gnu = abis.musl;
+              gnueabi = abis.musleabi;
+              gnueabihf = abis.musleabihf;
+              gnuabin32 = abis.muslabin32;
+              gnuabi64 = abis.muslabi64;
+              gnuabielfv2 = abis.musl;
+              gnuabielfv1 = abis.musl;
+              # The following entries ensure that this function is idempotent.
+              musleabi = abis.musleabi;
+              musleabihf = abis.musleabihf;
+              muslabin32 = abis.muslabin32;
+              muslabi64 = abis.muslabi64;
+            }
+            .${parsed.abi.name} or abis.musl;
+        }
+      );
 
   ################################################################################
 

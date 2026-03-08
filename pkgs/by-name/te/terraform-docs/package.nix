@@ -12,16 +12,16 @@
 
 buildGo124Module (finalAttrs: {
   pname = "terraform-docs";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
     repo = "terraform-docs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
+    hash = "sha256-vucMB0S8fYVTCqX+H29XdJTG9uQOMJii8aLAhiIGilg=";
   };
 
-  vendorHash = "sha256-ynyYpX41LJxGhf5kF2AULj+VKROjsvTjVPBnqG+JGSg=";
+  vendorHash = "sha256-jk5NjGxFK8iSOK1RoqeIqFC52BLRDi2vhmYJwm94IUY=";
 
   ldflags = [
     "-s"

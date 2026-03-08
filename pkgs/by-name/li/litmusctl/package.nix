@@ -7,9 +7,9 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "litmusctl";
-  version = "1.20.0";
+  version = "1.23.0";
 
   nativeBuildInputs = [
     installShellFiles
@@ -22,8 +22,8 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "litmuschaos";
     repo = "litmusctl";
-    rev = "${version}";
-    hash = "sha256-AXfBUwDBekNmsAXaDKMmgTTu0sCIHaVDfrFrRyx7Bl8=";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-F0WRA9wDvUibJQdBTXz0Vhw1m0B0cuwG2e1l6kpolkE=";
   };
 
   vendorHash = "sha256-7FYOQ89aUFPX+5NCPYKg+YGCXstQ6j9DK4V2mCgklu0=";
@@ -45,4 +45,4 @@ buildGoModule rec {
       sailord
     ];
   };
-}
+})

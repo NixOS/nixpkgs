@@ -5,14 +5,14 @@
   godot3-headless,
   godot3-export-templates,
   libglvnd,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   nix-update-script,
 }:
 
@@ -32,14 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libglvnd
 
-    libXinerama
-    libXcursor
-    libXext
-    libXrandr
-    libXrender
-    libX11
-    libXi
-    libXfixes
+    libxinerama
+    libxcursor
+    libxext
+    libxrandr
+    libxrender
+    libx11
+    libxi
+    libxfixes
   ];
 
   buildPhase = ''

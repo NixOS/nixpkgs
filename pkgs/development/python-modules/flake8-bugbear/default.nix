@@ -5,7 +5,6 @@
   attrs,
   flake8,
   pytestCheckHook,
-  pythonOlder,
   hypothesis,
   hypothesmith,
   setuptools,

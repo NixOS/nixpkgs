@@ -5,16 +5,16 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "protoc-gen-prost-crate";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-9rIFDZbI6XGDsNzFMnMYY4loJxojdz6vnQKAz9eDAyQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-FBgvDhlyVAegF5n9U6Tunn+MpXdek4f1xWIS3sJ4soI=";
   };
 
-  cargoHash = "sha256-DjxoORk/DNXQ7ht7L4lxzMfst1i3m/cT7sqn2HoRN9U=";
+  cargoHash = "sha256-29sM+d6+yaIsZKyxieHP4Q7mB2HAyWEwuBIgFCF281U=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -29,4 +29,4 @@ rustPlatform.buildRustPackage rec {
       sitaaax
     ];
   };
-}
+})
