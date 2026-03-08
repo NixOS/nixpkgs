@@ -12836,7 +12836,7 @@ self: super: with self; {
 
   # Protobuf 6.x
   protobuf6 = callPackage ../development/python-modules/protobuf/6.nix {
-    inherit (pkgs.__splicedPackages) protobuf;
+    protobuf = pkgs.__splicedPackages.protobuf_33;
   };
 
   # Protobuf 7.x
