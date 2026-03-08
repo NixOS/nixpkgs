@@ -18452,6 +18452,8 @@ self: super: with self; {
 
   steamodd = callPackage ../development/python-modules/steamodd { };
 
+  steampy = callPackage ../development/python-modules/steampy { };
+
   steamship = callPackage ../development/python-modules/steamship { };
 
   steamworkspy = callPackage ../development/python-modules/steamworkspy { };
