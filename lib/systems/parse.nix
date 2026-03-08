@@ -977,7 +977,7 @@ rec {
 
   # This is a function from parsed platforms (like stdenv.hostPlatform.parsed)
   # to parsed platforms.
-  makeMuslParsedPlatform =
+  mkMuslSystem =
     parsed:
     # The following line guarantees that the output of this function
     # is a well-formed platform with no missing fields.

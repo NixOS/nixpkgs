@@ -36,7 +36,6 @@ python3.pkgs.buildPythonApplication {
     mkdir -p $out/share/icons
     cp -r setup/data/hicolor $out/share/icons
 
-    install -Dm644 setup/data/novelwriter.png -t $out/share/pixmaps
     install -Dm644 setup/data/novelwriter.desktop -t $out/share/applications
     install -Dm644 setup/data/x-novelwriter-project.xml -t $out/share/mime/packages
   '';
