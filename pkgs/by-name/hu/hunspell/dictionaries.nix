@@ -88,7 +88,7 @@ let
            --replace /dev/stderr stderr.log
 
         substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash ${bash}/bin/bash \
+           --replace /bin/bash ${bash}/bin/bash
       '';
       buildPhase = ''
         cd ortograf/herramientas

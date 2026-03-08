@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/ls_parse.py $out/share/cbmc/ls_parse.py
     chmod +x $out/share/cbmc/ls_parse.py
     wrapProgram $out/bin/goto-cc \
-      --prefix PATH : "$out/share/cbmc" \
+      --prefix PATH : "$out/share/cbmc"
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
