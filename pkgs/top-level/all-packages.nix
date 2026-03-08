@@ -3399,10 +3399,6 @@ with pkgs;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
 
-  stirling-pdf = callPackage ../by-name/st/stirling-pdf/package.nix {
-    isDesktopVariant = false;
-  };
-
   stirling-pdf-desktop = callPackage ../by-name/st/stirling-pdf/package.nix {
     isDesktopVariant = true;
   };
