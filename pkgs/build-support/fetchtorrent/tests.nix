@@ -75,7 +75,7 @@ let
     );
 in
 # Seems almost but not quite worth using lib.mapCartesianProduct...
-builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash v) {
+(builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash v) {
   http-link = {
     inherit (http) url;
     inherit (flattened) postFetch;
@@ -140,4 +140,20 @@ builtins.mapAttrs (n: v: testers.invalidateFetcherByDrvHash fetchtorrentWithHash
   #  flatten = false;
   #  inherit (unflattened) postFetch;
   #};
+})
+// {
+  # Make sure we can download and "flatten" single-file torrents.
+  # We only test with transmission because we use a web-seed and rqbit
+  # doesn't support web-seeds.
+  single-file = fetchtorrent {
+    hash = "sha256-u5c/ZN5V79Jg1aN6spbui4OdhExsXjofk1JpvUdW7Ro=";
+    backend = "transmission";
+    flatten = true;
+    url = "${./test-single-file.torrent}";
+    meta = {
+      hydraPlatforms = [ ];
+      license = lib.licenses.mit;
+      description = "The license file for the Nixpkgs repository as of 7 March 2026";
+    };
+  };
 }
