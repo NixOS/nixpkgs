@@ -3,6 +3,7 @@
   stdenv,
   a2wsgi,
   aiohttp,
+  aiohttp-asgi-connector,
   aiosqlite,
   attrs,
   buildPythonPackage,
@@ -158,6 +159,7 @@ buildPythonPackage {
   dependencies = [
     a2wsgi
     aiohttp
+    aiohttp-asgi-connector
     aiosqlite
     attrs
     cattrs

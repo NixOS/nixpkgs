@@ -80,6 +80,7 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # NameResolutionError: Failed to resolve 'localhost'
+    "tests/test_rate_limiters.py"
     "tests/test_lowlevel.py"
     "tests/test_testserver.py"
   ];

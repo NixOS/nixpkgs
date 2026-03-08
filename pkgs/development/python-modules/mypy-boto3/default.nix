@@ -103,8 +103,8 @@ in
       "sha256-JUvz8VRO/t7KlrvFYWb53Qj8uXDOwHFtT16QCxO/ubw=";
 
   mypy-boto3-appintegrations =
-    buildMypyBoto3Package "appintegrations" "1.42.3"
-      "sha256-VCD5PLHXJvusiSh9uIN9mrAHA1jwklF4SU7h6AWxzG0=";
+    buildMypyBoto3Package "appintegrations" "1.42.63"
+      "sha256-8/3+GHPdEo8uJx0XLN+V4MUx9fw6eo0blTjBc50q13o=";
 
   mypy-boto3-application-autoscaling =
     buildMypyBoto3Package "application-autoscaling" "1.42.3"
@@ -335,8 +335,8 @@ in
       "sha256-HQUL0R1NWP6DXQ26iS9k6lIAVdwK899fwLGH4/Z4U8Q=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.42.61"
-      "sha256-8e1DNRsPNsPAMWYA2wlDGyLySvX7ow5QkZu/i0F4FJk=";
+    buildMypyBoto3Package "connect" "1.42.63"
+      "sha256-dZUnInRs0ndWy4jNbZLmUUswZZPC4GwUeBlTqm6JxJI=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.42.3"
@@ -1250,8 +1250,8 @@ in
       "sha256-gGSjHXCQf4jHTYaJQWRRQfdpr82gGklxWeWBrLx5/Is=";
 
   mypy-boto3-sesv2 =
-    buildMypyBoto3Package "sesv2" "1.42.13"
-      "sha256-NYkCDx1U7URYhRws0bM5/E8eSdWpBKZgydeLEKlBaqI=";
+    buildMypyBoto3Package "sesv2" "1.42.63"
+      "sha256-GlrB1mkbgd6cbnC1O2dKPdyUsKqWgMR7A5UCsXbInSc=";
 
   mypy-boto3-shield =
     buildMypyBoto3Package "shield" "1.42.3"

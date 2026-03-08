@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   setuptools,
 }:
@@ -17,6 +18,14 @@ buildPythonPackage (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-WHLvfAlwhcA0JFSWfwUPsJ9dWmadIjyonXEP3Bb6WKE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "python-3.14.patch";
+      url = "https://github.com/marcelblijleven/goodwe/commit/3a1e57109e61860f59a03626a7e21ee44bbb3639.patch";
+      hash = "sha256-ZYmEdWpOjrU61HAyhNG04oTrSH8F+LUEUskxKkoufu4=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

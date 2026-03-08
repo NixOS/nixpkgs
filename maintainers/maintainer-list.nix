@@ -7576,6 +7576,12 @@
     githubId = 20847625;
     name = "Elizabeth Paź";
   };
+  ehrenschwan-gh = {
+    email = "luca@ehrenschwan.dev";
+    github = "ehrenschwan-gh";
+    githubId = 25820532;
+    name = "Luca Schwan";
+  };
   eigengrau = {
     email = "seb@schattenkopie.de";
     name = "Sebastian Reuße";
@@ -24497,6 +24503,11 @@
     githubId = 46294732;
     name = "Sharzy";
   };
+  shaunren = {
+    name = "Shaun Ren";
+    github = "shaunren";
+    githubId = 388428;
+  };
   shavyn = {
     name = "Marco Desiderati";
     email = "desideratimarco@gmail.com";
@@ -25779,6 +25790,11 @@
     github = "struan-robertson";
     githubId = 7543617;
     name = "Struan Robertson";
+  };
+  structix = {
+    github = "STRUCTiX";
+    githubId = 15931333;
+    name = "Janek";
   };
   stteague = {
     email = "stteague505@yahoo.com";
@@ -28332,6 +28348,12 @@
     github = "virusdave";
     githubId = 6148271;
     name = "Dave Nicponski";
+  };
+  vitorpavani = {
+    email = "vipavani@hotmail.com";
+    github = "vitorpavani";
+    githubId = 59029586;
+    name = "Vitor Pavan";
   };
   vizanto = {
     email = "danny@prime.vc";

@@ -110,11 +110,9 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/share/pixmaps
     mkdir -p $out/share/icons/hicolor/64x64/apps/
 
     cp -r dist/pyfa $out/share/
-    cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
     cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/pyfa.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
 

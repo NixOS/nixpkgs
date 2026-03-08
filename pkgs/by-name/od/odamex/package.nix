@@ -131,11 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
           for name in odamex odalaunch odasrv; do
             for size in 96 128 256 512; do
               install -Dm644 ../media/icon_"$name"_"$size".png \
-                $out/share/icons/hicolor/"$size"x"$size"/"$name".png
+                $out/share/icons/hicolor/"$size"x"$size"/apps/"$name".png
             done
-
-            install -Dm644 ../media/icon_"$name"_128.png \
-              $out/share/pixmaps/"$name".png
           done
         ''
     }

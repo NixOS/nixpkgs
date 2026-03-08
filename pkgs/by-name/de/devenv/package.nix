@@ -23,16 +23,16 @@
 }:
 
 let
-  version = "2.0.2";
+  version = "2.0.3";
   devenvNixVersion = "2.32";
-  devenvNixRev = "7eb6c427c7a86fdc3ebf9e6cbf2a84e80e8974fd";
+  devenvNixRev = "41eee9d3b1f611b1b90d51caa858b6d83834c44a";
 
   nix_components =
     (nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
       owner = "cachix";
       repo = "nix";
       rev = devenvNixRev;
-      hash = "sha256-H26FQmOyvIGnedfAioparJQD8Oe+/byD6OpUpnI/hkE=";
+      hash = "sha256-vtf03lfgQKNkPH9FdXdboBDS5DtFkXB8xRw5EBpuDas=";
     })).overrideScope
       (
         finalScope: prevScope: {
@@ -48,16 +48,15 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-38crLoAfEOdnEDDZD2NyAEDVlBSFn+MlZyLwztAsC8Q=";
+    hash = "sha256-1DpF5F7zgOZ7QrRjz23315pUoF532dHnsU/V4UQithk=";
   };
 
-  cargoHash = "sha256-e56HmkS+p8P/X7vS+hTT78lfQ2YDCuONM+6yW0RIfSE=";
+  cargoHash = "sha256-gZFRbTDPQNKf2msBv9wOavaH1iB1Tk3shYf0/4TSZBQ=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
     LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
-    VERGEN_IDEMPOTENT = "1";
-    DEVENV_ON_RELEASE_TAG = true;
+    DEVENV_IS_RELEASE = true;
   };
 
   cargoBuildFlags = [

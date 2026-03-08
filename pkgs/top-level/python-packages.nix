@@ -318,6 +318,8 @@ self: super: with self; {
 
   aiohttp-apispec = callPackage ../development/python-modules/aiohttp-apispec { };
 
+  aiohttp-asgi-connector = callPackage ../development/python-modules/aiohttp-asgi-connector { };
+
   aiohttp-asyncmdnsresolver = callPackage ../development/python-modules/aiohttp-asyncmdnsresolver { };
 
   aiohttp-basicauth = callPackage ../development/python-modules/aiohttp-basicauth { };
@@ -831,6 +833,8 @@ self: super: with self; {
   aocd-example-parser = callPackage ../development/python-modules/aocd-example-parser { };
 
   apache-beam = callPackage ../development/python-modules/apache-beam { };
+
+  apache-tvm-ffi = callPackage ../development/python-modules/apache-tvm-ffi { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
 
@@ -3381,6 +3385,8 @@ self: super: with self; {
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
 
   cuda-bindings = callPackage ../development/python-modules/cuda-bindings { };
+
+  cuda-pathfinder = callPackage ../development/python-modules/cuda-pathfinder { };
 
   cupy = callPackage ../development/python-modules/cupy {
     cudaPackages =
@@ -13722,6 +13728,8 @@ self: super: with self; {
 
   pygetwindow = callPackage ../development/python-modules/pygetwindow { };
 
+  pyghidra = callPackage ../development/python-modules/pyghidra { };
+
   pyghmi = callPackage ../development/python-modules/pyghmi { };
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
@@ -14429,6 +14437,8 @@ self: super: with self; {
   pypca = callPackage ../development/python-modules/pypca { };
 
   pypck = callPackage ../development/python-modules/pypck { };
+
+  pypcode = callPackage ../development/python-modules/pypcode { };
 
   pypdf = callPackage ../development/python-modules/pypdf { };
 
@@ -15202,6 +15212,8 @@ self: super: with self; {
   pytest-icdiff = callPackage ../development/python-modules/pytest-icdiff { };
 
   pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
+
+  pytest-insta = callPackage ../development/python-modules/pytest-insta { };
 
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
@@ -20241,6 +20253,8 @@ self: super: with self; {
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs) libx11 libxext;
   };
+
+  uefi-firmware-parser = callPackage ../development/python-modules/uefi-firmware-parser { };
 
   ufal-chu-liu-edmonds = callPackage ../development/python-modules/ufal-chu-liu-edmonds { };
 

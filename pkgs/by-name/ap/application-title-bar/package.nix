@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "application-title-bar";
-  version = "0.8.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "antroids";
     repo = "application-title-bar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zcxZlQCLLtY5swqPpe0OvpJMykPEWPD4jrGslW7snP8=";
+    hash = "sha256-bnuMlssXALcFBnBY0iXhZO4QqW2hM9r0y8Ywe2X2/wA=";
   };
 
   propagatedUserEnvPkgs = with kdePackages; [ kconfig ];

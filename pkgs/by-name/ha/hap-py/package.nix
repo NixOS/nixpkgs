@@ -8,6 +8,7 @@
   fetchFromGitHub,
   htslib,
   lib,
+  libdeflate,
   makeWrapper,
   perl,
   python3,
@@ -56,6 +57,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail \
         "cmake_minimum_required (VERSION 2.8)" \
         "cmake_minimum_required (VERSION 3.10)"
+
+
+    # Boost 1.89 no longer provides a boost_system CMake component package,
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "filesystem system program_options" \
+        "filesystem program_options"
+
+    # Insert missing include for uint64_t
+    sed -i '/#include <vector>/a #include <cstdint>' src/c++/include/helpers/Roc.hh
   '';
 
   patches = [
@@ -64,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Update to python3
     ./python3.patch
   ];
+
+  env.NIX_LDFLAGS = toString [ "-ldeflate" ];
+
   nativeBuildInputs = [
     autoconf
     cmake
@@ -74,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     curl
     htslib
+    libdeflate
     my-python
     rtg-tools
     xz

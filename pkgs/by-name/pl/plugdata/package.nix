@@ -131,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r Plugins/VST3/plugdata{,-fx}.vst3 $out/lib/vst3
     cp -r Plugins/LV2/plugdata{,-fx}.lv2   $out/lib/lv2
 
-    install -Dm444 $src/Resources/Icons/plugdata_logo_linux.png $out/share/pixmaps/plugdata_logo.png
+    install -Dm444 $src/Resources/Icons/plugdata_logo_linux.png $out/share/icons/hicolor/512x512/apps/plugdata_logo.png
 
     runHook postInstall
   '';

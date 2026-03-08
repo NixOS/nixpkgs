@@ -171,5 +171,10 @@ in
         shadow.wait_for_file("/tmp/leo")
         assert "leo" in shadow.succeed("cat /tmp/leo")
         shadow.send_chars("logout\n")
+
+    with subtest("su wrapper should point to shadow by default"):
+        output = shadow.succeed("grep -aoP '/nix/store/[a-z0-9]{32}-[^\\x00]+' /run/wrappers/bin/su | head -1").strip()
+        assert "shadow" in output, \
+            f"su should come from shadow, but points to: {output}"
   '';
 }

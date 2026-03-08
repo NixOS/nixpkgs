@@ -45,6 +45,7 @@
   scikit-misc,
 
   # tests
+  dependency-groups,
   jinja2,
   pytest-cov-stub,
   pytest-mock,
@@ -156,6 +157,7 @@ buildPythonPackage (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    dependency-groups
     jinja2
     pytest-cov-stub
     pytest-mock
@@ -171,6 +173,12 @@ buildPythonPackage (finalAttrs: {
   preCheck = ''
     export NUMBA_CACHE_DIR=$(mktemp -d);
   '';
+
+  pytestFlagsArray = [
+    # UserWarning: 'where' used without 'out', expect unitialized memory in output.
+    # If this is intentional, use out=None.
+    "-Wignore::UserWarning"
+  ];
 
   disabledTestPaths = [
     # try to download data:
@@ -221,6 +229,11 @@ buildPythonPackage (finalAttrs: {
     # 'write/test.h5ad', errno = 2, error message = 'No such file or directory', flags = 13, o_flags
     # = 242)
     "test_write"
+
+    # Snapshot tests failing because of warnings in output
+    "scanpy.datasets._datasets.krumsiek11"
+    "scanpy.datasets._datasets.toggleswitch"
+    "scanpy.preprocessing._simple.filter_cells"
   ];
 
   pythonImportsCheck = [ "scanpy" ];

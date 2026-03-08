@@ -12,6 +12,10 @@
   numpy,
   pydantic,
 
+  # optional-dependencies
+  langchain-anthropic,
+  anthropic,
+
   # tests
   langchain-tests,
   pytest-asyncio,
@@ -22,16 +26,16 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "1.2.5";
+  version = "1.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "langchain-aws==${version}";
-    hash = "sha256-mOK7rTDJPU4eS5jCzQ+yUDl2fkY3x4Mpl5bGEF3eLFc=";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-hKMTzN2NVMSMCVsFroFFUM0embz8KHbDnmunwOb9ofw=";
   };
 
   postPatch = ''
@@ -39,7 +43,7 @@ buildPythonPackage rec {
       --replace-fail "--snapshot-warn-unused" ""
   '';
 
-  sourceRoot = "${src.name}/libs/aws";
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
 
   build-system = [ hatchling ];
 
@@ -51,19 +55,25 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    # Boto @ 1.35 has outstripped the version requirement
+    # Boto3 spec has outstripped the version requirement
     "boto3"
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individual components.
-    "langchain-core"
   ];
 
+  optional-dependencies = {
+    anthropic = [
+      anthropic.optional-dependencies.bedrock
+      langchain-anthropic
+    ];
+  };
+
   nativeCheckInputs = [
+    anthropic
     langchain-tests
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ];
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
@@ -83,7 +93,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
@@ -92,4 +102,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchurl,
-  flex,
   db,
+  flex,
+  gnugrep,
   makeWrapper,
   pax,
   perl,
+  valgrind,
   database ? db,
 }:
 
@@ -22,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MkihNzv/VSxQCDStvqS2yu4EIkUWrlgfslpMam3uieo=";
   };
 
+  # bogofilter's test-cases hard-code the search path for grep.
+  postPatch = ''
+    substituteInPlace ./src/tests/t.frame \
+      --replace-fail 'GREP=/bin/grep' 'GREP=${lib.getExe gnugrep}'
+  '';
+
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
@@ -34,7 +42,16 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-database=${dbName}"
   ];
 
-  doCheck = false; # needs "y" tool
+  nativeCheckInputs = [
+    valgrind
+  ];
+
+  doCheck = true;
+  checkFlags = [
+    "BF_RUN_VALGRIND=1"
+    "BF_CHECKTOOL=glibc"
+    "VERBOSE=-x"
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/bf_tar" --prefix PATH : "${lib.makeBinPath [ pax ]}"
@@ -56,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     mainProgram = "bogofilter";
+    maintainers = with lib.maintainers; [ Stebalien ];
     platforms = lib.platforms.linux;
   };
 })

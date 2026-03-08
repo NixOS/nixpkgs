@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "taterclient-ddnet";
-  version = "10.8.5";
+  version = "10.8.6";
 
   src = fetchFromGitHub {
     owner = "TaterClient";
     repo = "TClient";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-wdX7AZG4hDzRDUl6XjzL2bTMwBxMWdRt4geE7NuqpdQ=";
+    hash = "sha256-7NhRJMQjap+9ppGeCYRSGgB+D3H/THmJ/PgZ4mTPls0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Since we are not building the server executable, the `run_tests` Makefile target
   # will not be generated.
   #
-  # See https://github.com/TaterClient/TClient/blob/V10.7.0/CMakeLists.txt#L3207
+  # See https://github.com/TaterClient/TClient/blob/V10.8.6/CMakeLists.txt#L3260
   doCheck = false;
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''

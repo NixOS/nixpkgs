@@ -20,6 +20,8 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-gEKCgLS8+VRh1B0UkKIjYLi2fRgpvx6zj3T6vMaT8bM=";
   };
 
+  pythonRelaxDeps = [ "aiofiles" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -36,7 +38,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Aliyun Credentials Library for Python";
-    homepage = "https://pypi.org/project/alibabacloud-credentials/";
+    homepage = "https://github.com/aliyun/credentials-python";
+    changelog = "https://github.com/aliyun/credentials-python/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

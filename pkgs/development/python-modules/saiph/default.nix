@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  poetry-core,
+  hatchling,
   fetchFromGitHub,
   pytestCheckHook,
   doubles,
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   dependencies = [

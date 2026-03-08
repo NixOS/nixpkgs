@@ -59,6 +59,9 @@ buildPythonPackage rec {
     "test__convert_dict_to_message_tool_call"
     # Fails when langchain-core gets ahead of this package
     "test_serdes"
+    # RuntimeError: Cannot send a request, as the client has been closed.
+    # Tries to download from huggingface hub
+    "test_mistral_init"
   ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];

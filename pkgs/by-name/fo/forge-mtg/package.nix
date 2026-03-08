@@ -16,13 +16,13 @@
 }:
 
 let
-  version = "2.0.10";
+  version = "2.0.11";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-+HMR5fI5Ho6KyfO/IZab2cZ2N7At4Vz8vKnYXlF9Dvg=";
+    hash = "sha256-72BeLmX6TDz/Z3LwnKsEEK4BntE4dp9DsbsrAkh1K2U=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -33,7 +33,7 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-pa6OMCN1j1l4Kb0oiRQ8ocLLNMeV3ujOeXNpWcODArA=";
+  mvnHash = "sha256-OnxgoJhpJndYpkSmFdM+aniwrArPjPtn2E/4McU6J2k=";
 
   doCheck = false; # Needs a running Xorg
 

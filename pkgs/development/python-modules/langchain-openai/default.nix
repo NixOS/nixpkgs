@@ -31,19 +31,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-openai";
-  version = "1.1.6";
+  version = "1.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-openai==${version}";
-    hash = "sha256-Y+GV48rlqMfT4TrmoJFGqbHKfc8gxq61NhcUpwSsOwk=";
+    tag = "langchain-openai==${finalAttrs.version}";
+    hash = "sha256-k0JpzgF+2UaYUbtzOB+NFxq7Ge/eRbT8M4PgvDpRG2g=";
   };
 
-  sourceRoot = "${src.name}/libs/partners/openai";
+  sourceRoot = "${finalAttrs.src.name}/libs/partners/openai";
 
   build-system = [ hatchling ];
 
@@ -100,7 +100,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${finalAttrs.src.tag}";
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
@@ -109,4 +109,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

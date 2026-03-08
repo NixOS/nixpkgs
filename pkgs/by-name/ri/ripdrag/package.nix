@@ -5,6 +5,8 @@
   pkg-config,
   wrapGAppsHook4,
   gtk4,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -14,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nik012003";
     repo = "ripdrag";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1IUS0PNzIoSrlBXQrUmw/lXUD8auVVKhu/irSoYoK6w=";
   };
 
@@ -27,12 +29,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ gtk4 ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Application that lets you drag and drop files from and to the terminal";
     homepage = "https://github.com/nik012003/ripdrag";
-    changelog = "https://github.com/nik012003/ripdrag/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/nik012003/ripdrag/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "ripdrag";
   };
 })

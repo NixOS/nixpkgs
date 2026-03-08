@@ -42,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "faiss";
-  version = "1.13.2";
+  version = "1.14.1";
 
   outputs = [ "out" ] ++ lib.optionals pythonSupport [ "dist" ];
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookresearch";
     repo = "faiss";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EiqkOkMI65T2kNNMQvjl51GIN4XGzTKpkpQ3ImFa3rs=";
+    hash = "sha256-+7BgxSvVEqdwT3fGqK62nysFLZMpLXeQwVXcvP9pgqQ=";
   };
 
   nativeBuildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
     mainProgram = "demo_ivfpq_indexing";
     homepage = "https://github.com/facebookresearch/faiss";
-    changelog = "https://github.com/facebookresearch/faiss/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/facebookresearch/faiss/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ SomeoneSerge ];

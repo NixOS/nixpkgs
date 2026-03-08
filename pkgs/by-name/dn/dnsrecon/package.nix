@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dnsrecon";
-  version = "1.5.3";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darkoperator";
     repo = "dnsrecon";
     tag = finalAttrs.version;
-    hash = "sha256-MkeHQZXWCqZ9/Z8WEVZIkDeLB/bnSxi8NBpgrcxAo+s=";
+    hash = "sha256-3o3UOEvaUVtfqZNAXzos7mtsAeUxJXtwNDw1MCKZ0YM=";
   };
 
   pythonRelaxDeps = true;

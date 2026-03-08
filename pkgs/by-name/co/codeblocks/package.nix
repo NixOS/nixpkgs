@@ -10,10 +10,12 @@
   gtk3,
   contribPlugins ? false,
   hunspell,
-  boost,
+  boost187,
   wrapGAppsHook3,
 }:
-
+let
+  boost' = boost187;
+in
 stdenv.mkDerivation rec {
   name = "${pname}-${lib.optionalString contribPlugins "full-"}${version}";
   pname = "codeblocks";
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals contribPlugins [
     hunspell
-    boost
+    boost'
   ];
 
   enableParallelBuilding = true;
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
       "--with-contrib-plugins=all,-FileManager"
       + lib.optionalString stdenv.hostPlatform.isDarwin ",-NassiShneiderman"
     )
-    "--with-boost-libdir=${boost}/lib"
+    "--with-boost-libdir=${boost'}/lib"
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

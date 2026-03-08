@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
     updateScript = gitUpdater {
       rev-prefix = "v";
-      ignoredVersions = "rc$";
+      ignoredVersions = "(a|rc)$";
     };
   };
 
