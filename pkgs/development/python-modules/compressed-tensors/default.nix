@@ -25,7 +25,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "compressed-tensors";
-  version = "0.13.0";
+  version = "0.14.0";
   pyproject = true;
 
   # Release on PyPI is missing the `utils` directory, which `setup.py` wants to import
@@ -33,11 +33,8 @@ buildPythonPackage (finalAttrs: {
     owner = "neuralmagic";
     repo = "compressed-tensors";
     tag = finalAttrs.version;
-    hash = "sha256-XsQRP186ISarMMES3P+ov4t/1KKJdl0tXBrfpjyM3XA=";
+    hash = "sha256-auiVCTL4WpfaD2cwdG3kt08+nW77T/txWZP4SAW00mk=";
   };
-
-  #  RuntimeError("torch.compile is not supported on Python 3.14+")
-  disabled = pythonAtLeast "3.14";
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -58,6 +55,8 @@ buildPythonPackage (finalAttrs: {
     torch
     transformers
   ];
+
+  pythonRelaxDeps = [ "transformers" ];
 
   doCheck = true;
 
@@ -83,6 +82,13 @@ buildPythonPackage (finalAttrs: {
     "test_save_compressed_model"
     "test_target_prioritization"
     "test_expand_targets_with_llama_stories"
+
+    # AssertionError: Torch not compiled with CUDA enabled
+    "test_register_parameter"
+    "test_register_parameter_invalidates"
+    "test_set_item"
+    "test_set_item_buffers"
+    "test_update_offload_parameter_with_grad"
   ];
 
   disabledTestPaths = [
@@ -93,6 +99,16 @@ buildPythonPackage (finalAttrs: {
     "tests/test_transform/factory/test_serialization.py::test_serialization[True-random-hadamard]"
     "tests/test_transform/factory/test_serialization.py::test_serialization[False-hadamard]"
     "tests/test_transform/factory/test_serialization.py::test_serialization[False-random-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[False-True-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[False-True-random-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[False-False-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[False-False-random-hadamard]"
+
+    # AssertionError: Torch not compiled with CUDA enabled
+    "tests/test_transform/factory/test_serialization.py::test_serialization[True-True-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[True-True-random-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[True-False-hadamard]"
+    "tests/test_transform/factory/test_serialization.py::test_serialization[True-False-random-hadamard]"
   ];
 
   meta = {

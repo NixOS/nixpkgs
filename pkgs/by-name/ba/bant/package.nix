@@ -14,19 +14,19 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "1f55d91e1be0e4863a698b9d7582cf097ad456ee";
-    hash = "sha256-ESHF5FhLvn4u4j//6AFiSJRJYSKrI4EKr4oDwvsrcPM=";
+    rev = "dc643526b97838ffe421b833dd8b9c95e71702e8";
+    hash = "sha256-SLtrNU5uEt8rRJDUdV/IaI37CujsTHLlE31l2zYoRss=";
   };
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-A+qaFTfAAU2k4AnFB+0ahw1udmJ+BIOK8Af0OQ+4LMY=";
+    hash = "sha256-qS2oKQ9/vNX58PftEjHD+3ApXtWL90YVBHnifLtDTcU=";
   };
 
   bazelFlags = [
@@ -47,8 +47,8 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-aGfFbeosrWhNqiHV9ng59DeMZSGjaylPRfolxatauJE";
-        x86_64-linux = "sha256-nbHHkgN4O8bWZzrpQUMZbm4+iRffqdfu7C1kkLJ3GDQ=";
+        aarch64-linux = "sha256-vg2U7v68Tn6cxPakeWir8TpHL3oMxZ2AzJ68TMR1+/E=";
+        x86_64-linux = "sha256-jIffzBTO+5VMX73vV4XPlGv7/26oMLXpYdb0vzFgulc=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
