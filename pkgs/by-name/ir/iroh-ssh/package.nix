@@ -40,7 +40,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "SSH to any machine without IP";
     homepage = "https://github.com/rustonbsd/iroh-ssh";
-    maintainers = with lib.maintainers; [ luke ];
+    maintainers = with lib.maintainers; [
+      luke
+      rvdp
+    ];
     license = lib.licenses.mit;
     mainProgram = "iroh-ssh";
   };
