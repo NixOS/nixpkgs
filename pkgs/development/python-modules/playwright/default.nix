@@ -19,7 +19,7 @@ let
 in
 buildPythonPackage rec {
   pname = "playwright";
-  # run ./pkgs/development/python-modules/playwright/update.sh to update
+  # run ./pkgs/development/web/playwright/update.sh to update
   version = "1.57.0";
   pyproject = true;
 
@@ -97,7 +97,6 @@ buildPythonPackage rec {
     # Package and playwright driver versions are tightly coupled.
     # Use the update script to ensure synchronized updates.
     skipBulkUpdate = true;
-    updateScript = ./update.sh;
   };
 
   meta = {

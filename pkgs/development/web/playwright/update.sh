@@ -15,8 +15,7 @@ driver_version=$(curl -Ls "$setup_py_url" | grep '^driver_version =' | grep -Eo 
 update-source-version playwright-driver "$driver_version"
 update-source-version python3Packages.playwright "$version"
 
-playwright_dir="$root/../../web/playwright"
-driver_file="$playwright_dir/driver.nix"
+driver_file="$root/driver.nix"
 repo_url_prefix="https://github.com/microsoft/playwright/raw"
 
 temp_dir=$(mktemp -d)
@@ -78,10 +77,10 @@ update_browser() {
         buildname="$name"
     fi
 
-    revision="$(jq -r ".browsers[\"$buildname\"].revision" "$playwright_dir/browsers.json")"
-    replace_sha "$playwright_dir/$name.nix" "x86_64-$platform" \
+    revision="$(jq -r ".browsers[\"$buildname\"].revision" "$root/browsers.json")"
+    replace_sha "$root/$name.nix" "x86_64-$platform" \
         "$(prefetch_browser "https://playwright.azureedge.net/builds/$buildname/$revision/$name-$suffix.zip" $stripRoot)"
-    replace_sha "$playwright_dir/$name.nix" "aarch64-$platform" \
+    replace_sha "$root/$name.nix" "aarch64-$platform" \
         "$(prefetch_browser "https://playwright.azureedge.net/builds/$buildname/$revision/$name-$aarch64_suffix.zip" $stripRoot)"
 }
 
@@ -95,7 +94,7 @@ curl -fsSl \
           | map({(.name): . | del(.name)})
           | add
       )
-    ' > "$playwright_dir/browsers.json"
+    ' > "$root/browsers.json"
 
 update_browser "chromium" "linux"
 update_browser "chromium-headless-shell" "linux"
