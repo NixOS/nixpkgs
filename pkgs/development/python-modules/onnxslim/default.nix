@@ -13,7 +13,7 @@
   sympy,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "onnxslim";
   version = "0.1.82";
   pyproject = true;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "inisis";
     repo = "OnnxSlim";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-hrrCodLaHVo/YRq0HczxogcZQSwZKxZthyLYxz/+XJ0=";
   };
 
@@ -46,4 +46,4 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/onnxslim/";
     license = lib.licenses.mit;
   };
-}
+})
