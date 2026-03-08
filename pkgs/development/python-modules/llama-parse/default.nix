@@ -6,14 +6,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-parse";
   version = "0.6.94";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_parse";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-2eQ0fsbKoenVJmzF1NiymimqDQlI2SGibHPT5Kr1unI=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
