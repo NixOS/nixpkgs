@@ -30,7 +30,7 @@
   extraPackages ? _: [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ansible-core";
   version = "2.20.3";
   pyproject = true;
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WLfLbQYYJOdMHApNnFZYiET4es3z2SeeLP0jbrFqxrU=";
   };
 
@@ -102,7 +102,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
+    changelog = "https://github.com/ansible/ansible/blob/v${finalAttrs.version}/changelogs/CHANGELOG-v${lib.versions.majorMinor finalAttrs.version}.rst";
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = lib.licenses.gpl3Plus;
@@ -111,4 +111,4 @@ buildPythonPackage rec {
       robsliwi
     ];
   };
-}
+})
