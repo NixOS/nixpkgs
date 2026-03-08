@@ -337,7 +337,7 @@ A readonly attribute containing the list of guesses for what CPE for this packag
 
 ### Package URL {#sec-meta-identifiers-purl}
 
-[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages. Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management. Package URL's shall default to the mkDerivation.src, as the original consumed software package is the single point of truth. The default inheritance must get enabled explicitly through the nixpkgs config parameter `allowSrcEvalForDrvMeta`.
+[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages. Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management. Package URL's shall default to the mkDerivation.src, as the original consumed software package is the single point of truth.
 
 #### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
 
