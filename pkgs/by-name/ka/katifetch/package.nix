@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, pciutils, coreutils }:
 
 stdenv.mkDerivation {
   pname = "katifetch";
@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     rev = "13.1";
     sha256 = "1y4arp28807z28k9p69qsm0afn71cbwrpx2s3a9g7bxcpqbrnkzy";
   };
+
+  buildInputs = [ pciutils coreutils ];
 
   installPhase = ''
     mkdir -p $out/bin
