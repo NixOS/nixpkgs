@@ -1,21 +1,18 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
-  uv-build,
   httpx,
-  pydantic,
-  yarl,
-  strenum,
-  deprecation,
+  lib,
+  pyjwt,
   pytest-asyncio,
-  pytest-cov-stub,
   pytestCheckHook,
-  unasync,
+  strenum,
+  uv-build,
+  yarl,
 }:
 
 buildPythonPackage rec {
-  pname = "postgrest";
+  pname = "supabase-functions";
   version = "2.28.0";
   pyproject = true;
 
@@ -26,19 +23,20 @@ buildPythonPackage rec {
     hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
   };
 
-  sourceRoot = "${src.name}/src/postgrest";
+  sourceRoot = "${src.name}/src/functions";
 
   build-system = [ uv-build ];
 
   dependencies = [
-    httpx
-    deprecation
-    pydantic
     strenum
     yarl
+    httpx
   ]
   ++ httpx.optional-dependencies.http2;
 
+  # Upstream pins `uv_build>=0.8.3,<0.9.0`, but nixpkgs ships `uv-build` 0.9.x.
+  # Relax the upper bound to accept the 0.9 series, consistent with uv’s documentation examples:
+  # https://docs.astral.sh/uv/concepts/build-backend/#using-the-uv-build-backend
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail 'uv_build>=0.8.3,<0.9.0' 'uv_build>=0.8.3'
@@ -46,17 +44,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pyjwt
     pytest-asyncio
-    pytest-cov-stub
-    unasync
   ];
 
-  pythonImportsCheck = [ "postgrest" ];
-
-  disabledTestPaths = [
-    "tests/_sync/"
-    "tests/_async/"
-  ];
+  pythonImportsCheck = [ "supabase_functions" ];
 
   meta = {
     description = "Client library for Supabase Functions";
