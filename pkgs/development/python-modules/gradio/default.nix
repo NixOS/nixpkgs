@@ -422,7 +422,9 @@ buildPythonPackage (finalAttrs: {
     # enough tags for the ones we're looking for to show up.
     updateScript = writeScript "update-python3Packages.gradio" ''
       #! /usr/bin/env nix-shell
-      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update
+      #! nix-shell -i bash -p common-updater-scripts coreutils gnugrep gnused nix-update jq curl
+      set -euo pipefail
+      set -x
 
       tag=$(list-git-tags \
             | grep "^gradio@" \
@@ -432,7 +434,10 @@ buildPythonPackage (finalAttrs: {
             | head -n 1 \
             | tr -d '\n' \
            )
-      nix-update --version="$tag"
+      nix-update python3Packages.gradio --version="$tag"
+
+      gradio_client_version="$(curl https://raw.githubusercontent.com/gradio-app/gradio/gradio@"$tag"/client/python/gradio_client/package.json | jq ".version" -r)"
+      nix-update python3Packages.gradio-client --version="$gradio_client_version" --no-src
     '';
   };
 
