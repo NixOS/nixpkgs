@@ -2688,12 +2688,6 @@
     githubId = 2530548;
     name = "Aaron VerDow";
   };
-  averelld = {
-    email = "averell+nixos@rxd4.com";
-    github = "averelld";
-    githubId = 687218;
-    name = "averelld";
-  };
   avery = {
     email = "nixpkgs@avery.cafe";
     github = "coolavery";
