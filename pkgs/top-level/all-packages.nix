@@ -1745,6 +1745,8 @@ with pkgs;
     texliveSmall
     texliveTeTeX
     ;
+  # alias to trigger a build of all texdoc containers
+  texliveFullWithDocs = texliveFull.withDocs;
   texlivePackages = recurseIntoAttrs (lib.mapAttrs (_: v: v.build) texlive.pkgs);
 
   futhark = haskell.lib.compose.justStaticExecutables haskellPackages.futhark;
