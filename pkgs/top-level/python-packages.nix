@@ -18626,7 +18626,9 @@ self: super: with self; {
 
   supabase = callPackage ../development/python-modules/supabase { };
 
-  supabase-functions = self.supafunc;
+  supabase-auth = callPackage ../development/python-modules/supabase-auth { };
+
+  supabase-functions = callPackage ../development/python-modules/supabase-functions { };
 
   supafunc = callPackage ../development/python-modules/supafunc { };
 

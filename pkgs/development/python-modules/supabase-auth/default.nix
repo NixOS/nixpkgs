@@ -1,21 +1,19 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   uv-build,
   httpx,
   pydantic,
-  yarl,
-  strenum,
-  deprecation,
-  pytest-asyncio,
-  pytest-cov-stub,
+  pyjwt,
   pytestCheckHook,
-  unasync,
+  faker,
+  respx,
+  pytest-mock,
+  pytest-asyncio,
 }:
-
 buildPythonPackage rec {
-  pname = "postgrest";
+  pname = "supabase-auth";
   version = "2.28.0";
   pyproject = true;
 
@@ -26,18 +24,17 @@ buildPythonPackage rec {
     hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
   };
 
-  sourceRoot = "${src.name}/src/postgrest";
+  sourceRoot = "${src.name}/src/auth";
 
   build-system = [ uv-build ];
 
   dependencies = [
     httpx
-    deprecation
     pydantic
-    strenum
-    yarl
+    pyjwt
   ]
-  ++ httpx.optional-dependencies.http2;
+  ++ httpx.optional-dependencies.http2
+  ++ pyjwt.optional-dependencies.crypto;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -46,23 +43,24 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    faker
+    respx
+    pytest-mock
     pytest-asyncio
-    pytest-cov-stub
-    unasync
   ];
-
-  pythonImportsCheck = [ "postgrest" ];
 
   disabledTestPaths = [
     "tests/_sync/"
     "tests/_async/"
   ];
 
+  pythonImportsCheck = [ "supabase_auth" ];
+
   meta = {
-    description = "Client library for Supabase Functions";
-    homepage = "https://github.com/supabase/supabase-py";
+    description = "Client library for Supabase Auth";
+    homepage = "https://github.com/supabase/supabase-py/";
     changelog = "https://github.com/supabase/supabase-py/blob/v${src.tag}/CHANGELOG.md";
-    maintainers = with lib.maintainers; [ macbucheron ];
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ macbucheron ];
   };
 }
