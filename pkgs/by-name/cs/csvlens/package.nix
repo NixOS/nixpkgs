@@ -26,7 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/YS-L/csvlens";
     changelog = "https://github.com/YS-L/csvlens/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      starsep
+    ];
     mainProgram = "csvlens";
   };
 })
