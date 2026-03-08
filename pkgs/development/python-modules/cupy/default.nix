@@ -1,17 +1,24 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   cython,
-  fastrlock,
-  numpy,
-  pytestCheckHook,
-  mock,
   setuptools,
+
+  # nativeBuildInputs
   cudaPackages,
-  addDriverRunpath,
   symlinkJoin,
+  addDriverRunpath,
+
+  # dependencies
+  numpy,
+  cuda-pathfinder,
+
+  # tests
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 let
@@ -39,8 +46,7 @@ let
       libcurand
       libcusolver
       libcusparse
-      # NOTE: libcusparse_lt is too new for CuPy, so we must do without.
-      # libcusparse_lt
+      libcusparse_lt # cusparseLt.h
     ]
   );
   cudatoolkit-joined = symlinkJoin {
@@ -49,18 +55,25 @@ let
       outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
   };
 in
-buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
+buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } (finalAttrs: {
   pname = "cupy";
-  version = "13.6.0";
+  version = "14.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
-    tag = "v${version}";
-    hash = "sha256-nU3VL0MSCN+mI5m7C5sKAjBSL6ybM6YAk5lJiIDY0ck=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-TaEJ0BveUCXCRrNq9L49Tfbu0334+cANcVm5qnSOE1Q=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "Cython>=3.1,<3.2" \
+        "Cython"
+  '';
 
   env = {
     LDFLAGS = toString [
@@ -83,7 +96,6 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
 
   build-system = [
     cython
-    fastrlock
     setuptools
   ];
 
@@ -100,13 +112,13 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
   ];
 
   dependencies = [
-    fastrlock
+    cuda-pathfinder
     numpy
   ];
 
   nativeCheckInputs = [
+    pytest-mock
     pytestCheckHook
-    mock
   ];
 
   # Won't work with the GPU, whose drivers won't be accessible from the build
@@ -124,12 +136,12 @@ buildPythonPackage.override { stdenv = cudaPackages.backendStdenv; } rec {
   meta = {
     description = "NumPy-compatible matrix library accelerated by CUDA";
     homepage = "https://cupy.chainer.org/";
-    changelog = "https://github.com/cupy/cupy/releases/tag/${src.tag}";
+    changelog = "https://github.com/cupy/cupy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
