@@ -199,6 +199,7 @@ in
         gammastep
         grim
         killall
+        mesa-demos # eglinfo
         slurp
         swaybg
         swayidle
