@@ -19,6 +19,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "radixtarget"
     "regex"
     "tabulate"
+    "websockets"
   ];
 
   build-system = with python3.pkgs; [
