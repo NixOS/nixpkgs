@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Dm9NsSe6+V1bBgtANl1R9Rvir4QkiQUCi0jdYBqevPA=";
   };
 
-  sourceRoot = "source/Quake";
+  sourceRoot = "${finalAttrs.src.name}/Quake";
 
   nativeBuildInputs = [
     copyDesktopItems
