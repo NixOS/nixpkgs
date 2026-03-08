@@ -179,7 +179,7 @@ let
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-stdenv.mkDerivation(finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
   version = "0.3.31";
 
