@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gradio-client";
-  version = "2.2.0";
+  version = "2.3.0";
   pyproject = true;
 
   # no tests on pypi
