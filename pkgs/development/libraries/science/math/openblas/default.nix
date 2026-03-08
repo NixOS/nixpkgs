@@ -179,7 +179,7 @@ let
   shlibExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openblas";
   version = "0.3.31";
 
@@ -191,7 +191,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenMathLib";
     repo = "OpenBLAS";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YBR81GOLnTsc0g1SZL+j31/OFucJrBRFqtOTV8lcy8U=";
   };
 
@@ -288,7 +288,7 @@ stdenv.mkDerivation rec {
   );
 
   # The default "all" target unconditionally builds the "tests" target.
-  buildFlags = lib.optionals (!doCheck) [ "shared" ];
+  buildFlags = lib.optionals (!finalAttrs.doCheck) [ "shared" ];
 
   doCheck = true;
   checkTarget = "tests";
@@ -299,7 +299,7 @@ stdenv.mkDerivation rec {
         for alias in blas cblas lapack; do
           cat <<EOF > $out/lib/pkgconfig/$alias.pc
     Name: $alias
-    Version: ${version}
+    Version: ${finalAttrs.version}
     Description: $alias provided by the OpenBLAS package.
     Cflags: -I$dev/include
     Libs: -L$out/lib -lopenblas
@@ -347,4 +347,4 @@ stdenv.mkDerivation rec {
     platforms = lib.attrNames configs;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
-}
+})
