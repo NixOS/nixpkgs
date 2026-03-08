@@ -27,6 +27,8 @@
 
   # dependencies
   aioprometheus,
+  amd-aiter,
+  amd-quark,
   amdsmi,
   anthropic,
   bitsandbytes,
@@ -43,6 +45,7 @@
   grpcio-reflection,
   ijson,
   importlib-metadata,
+  kaldi-native-fbank,
   llguidance,
   lm-format-enforcer,
   mcp,
@@ -57,6 +60,7 @@
   opentelemetry-api,
   opentelemetry-exporter-otlp,
   opentelemetry-sdk,
+  opentelemetry-semantic-conventions-ai,
   outlines,
   pandas,
   partial-json-parser,
@@ -335,14 +339,14 @@ in
 
 buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pname = "vllm";
-  version = "0.16.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7E67xVRlKmm+Hbp5nphhwH8SQC9LpCFNBfF2ZAOt79k=";
+    hash = "sha256-lVgzo6R+l86IH5yxCtfJckVCP86jlgN7ufF5i0Pn2/A=";
   };
 
   patches = [
@@ -367,8 +371,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     # pythonRelaxDeps does not cover build-system
     substituteInPlace pyproject.toml \
       --replace-fail "torch ==" "torch >=" \
-      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools" \
-      --replace-fail "grpcio-tools==1.78.0" "grpcio"
+      --replace-fail "setuptools>=77.0.3,<81.0.0" "setuptools"
 
     # Ignore the python version check because it hard-codes minor versions and
     # lags behind `ray`'s python interpreter support
@@ -444,6 +447,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
 
   dependencies = [
     aioprometheus
+    amd-quark
     anthropic
     bitsandbytes
     blake3
@@ -458,6 +462,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     grpcio-reflection
     ijson
     importlib-metadata
+    kaldi-native-fbank
     llguidance
     lm-format-enforcer
     mcp
@@ -472,6 +477,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     opentelemetry-api
     opentelemetry-exporter-otlp
     opentelemetry-sdk
+    opentelemetry-semantic-conventions-ai
     outlines
     pandas
     partial-json-parser
@@ -510,6 +516,7 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     nvidia-ml-py
   ]
   ++ lib.optionals rocmSupport [
+    amd-aiter
     rocmPackages.rocminfo
     amdsmi
     datasets
@@ -603,11 +610,6 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
       # find_isa Function invoked with incorrect arguments for function named:
       # find_isa
       "x86_64-darwin"
-    ];
-    knownVulnerabilities = [
-      "CVE-2026-27893"
-      "CVE-2026-44222"
-      "CVE-2026-44223"
     ];
   };
 })
