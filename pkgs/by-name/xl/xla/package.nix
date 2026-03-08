@@ -1,34 +1,21 @@
 {
   bazel_7,
   buildBazelPackage,
-  cctools,
-  curl,
-  double-conversion,
   fetchFromGitHub,
-  flatbuffers,
-  giflib,
   gitMinimal,
-  grpc,
-  jsoncpp,
   lib,
-  libjpeg_turbo,
-  libpng,
   llvmPackages_18,
-  nsync,
-  protobuf,
+  patchelf,
   python3,
-  snappy,
-  sqlite,
   stdenv,
   which,
-  zlib,
 }:
 
 let
   # XLA requires clang 18 -- gcc and newer clang versions (e.g., 21) fail with
   # stricter template syntax checks in xla/tsl/concurrency/async_value_ref.h
   #
-  # ABI comptability with other Nixpkgs stdenv-built packages can be confirmed
+  # ABI compatibility with other Nixpkgs stdenv-built packages can be confirmed
   # by seeing that
   #
   #   ldd $(nix-build -A xla)/lib/libservice.so 2>/dev/null | grep -E '(libstdc\+\+|libc\+\+)'
@@ -37,70 +24,85 @@ let
   clangStdenv = llvmPackages_18.stdenv;
 
   pythonEnv = python3.withPackages (ps: with ps; [ numpy ]);
-
-  # List of system libraries to use instead of bundled versions
-  # Based on TensorFlow and JAX derivations
-  # Note: Excluding com_google_absl due to version incompatibilities
-  # (XLA expects older abseil with string_view target)
-  system_libs = [
-    "curl"
-    "double_conversion"
-    "flatbuffers"
-    "gif"
-    "jsoncpp_git"
-    "libjpeg_turbo"
-    "nsync"
-    "org_sqlite"
-    "png"
-    "snappy"
-    "zlib"
-  ];
 in
 (buildBazelPackage.override { stdenv = clangStdenv; }) {
   pname = "xla";
-  version = "0-unstable-2025-01-21";
+  version = "0-unstable-2026-02-21";
 
   src = fetchFromGitHub {
     owner = "openxla";
     repo = "xla";
-    rev = "e8247c3ea1d4d7f31cf27def4c7ac6f2ce64ecd4";
-    hash = "sha256-ZhgMIVs3Z4dTrkRWDqaPC/i7yJz2dsYXrZbjzqvPX3E=";
+    rev = "964a0a45a0c3090cd484a3c51e8f9d05ed10b968";
+    hash = "sha256-K0lveAY1nXeFA9FIV3nXhEJ0r589CNaVp/M5heUo1BY=";
   };
 
   bazel = bazel_7; # from .bazelversion
 
   nativeBuildInputs = [
     gitMinimal
-    pythonEnv # necessary for some patchShebang'ing
+    patchelf
+    pythonEnv
     which
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin cctools.libtool;
-
-  buildInputs = [
-    curl
-    double-conversion
-    flatbuffers
-    giflib
-    grpc
-    jsoncpp
-    libjpeg_turbo
-    libpng
-    nsync
-    protobuf
-    snappy
-    sqlite
-    zlib
   ];
 
-  # Remove the .bazelversion file to allow our Bazel version
-  postPatch = ''
-    rm -f .bazelversion
-    patchShebangs .
-  '';
+  postPatch =
+    # Remove the .bazelversion file to allow our Bazel version
+    ''
+      rm -f .bazelversion
+      patchShebangs .
+    ''
+    # Remove rules_ml_toolchain's hermetic CC toolchain registrations.
+    # These try to lazily download LLVM binaries (llvm18_linux_x86_64,
+    # sysroot_linux_x86_64_glibc_2_27) during analysis, which fails in the
+    # sandboxed build phase. We use our own clang from nixpkgs instead.
+    + ''
+      sed -i '/^register_toolchains("@rules_ml_toolchain/d' WORKSPACE
+    ''
+    # Remove @pypi//lit dependencies that trigger rules_python's hermetic
+    # Python download for lit test targets (only needed for running lit tests,
+    # not building)
+    + ''
+      substituteInPlace xla/lit.bzl \
+        --replace-fail '"@pypi//lit",' "" \
+        --replace-fail 'if_oss(["@pypi//lit"])' "[]"
+      substituteInPlace xla/mlir_hlo/tests/BUILD \
+        --replace-fail 'deps = ["@pypi//lit"],' ""
+    ''
+    # Hermetic Python patchelf workaround:
+    #
+    # XLA uses rules_python's hermetic Python toolchain, which downloads a
+    # pre-built CPython binary (from python-build-standalone). This binary
+    # hardcodes /lib64/ld-linux-x86-64.so.2 as its dynamic linker, which
+    # doesn't exist in the nix sandbox.
+    #
+    # During the deps fetch phase, Bazel's `python_repository` rule downloads
+    # the binary, and then a separate `host_toolchain` rule (creating
+    # python_3_X_host) tries to *execute* it to verify it works. This fails
+    # without patchelf.
+    #
+    # The patchelf must happen inside the `python_repository` rule itself
+    # (between download and verification) -- there is no Bazel hook or nix
+    # phase we can use between these two repository rules. So we patch
+    # rules_python's python_repository.bzl to run patchelf right after
+    # extracting the binary, using NIX_DYNAMIC_LINKER from --repo_env.
+    #
+    # In the build phase, fetchAttrs.preInstall normalizes all /nix/store
+    # paths for reproducibility (breaking the patchelf), so
+    # buildAttrs.preConfigure re-patchelfs the binary for the actual build.
+    + ''
+      cp ${./rules-python-nix-patchelf.patch} third_party/py/rules_python_nix_patchelf.patch
+      substituteInPlace third_party/py/python_init_rules.bzl \
+        --replace-fail \
+          '] + extra_patches,' \
+          '"@xla//third_party/py:rules_python_nix_patchelf.patch",
+          ] + extra_patches,'
+    '';
 
   # Configure XLA for CPU-only build using the official configure.py script.
   # This creates a xla_configure.bazelrc file with the appropriate options.
   # Using clang which matches XLA CI environment.
+  # Note: --python_bin_path only sets PYTHON_BIN_PATH; it does not disable
+  # rules_python's hermetic Python download (triggered by python_init_toolchains).
   preConfigure = ''
     ${lib.getExe pythonEnv} ./configure.py \
       --backend=CPU \
@@ -108,16 +110,8 @@ in
       --clang_path=${lib.getExe clangStdenv.cc}
   '';
 
-  # Use system libraries where possible
-  env.TF_SYSTEM_LIBS = lib.concatStringsSep "," system_libs;
-
-  # Cannot build all of //xla/... due to missing internal-only proto targets.
-  # See https://github.com/openxla/xla/issues/36720.
   bazelTargets = [
-    "//xla/service:service" # Core compiler and execution service
-    "//xla/client:xla_builder" # Client API for building computations
-    "//xla/pjrt:pjrt_client" # PJRT runtime interface (used by JAX)
-    "//xla/tools:run_hlo_module" # CLI tool for running HLO modules
+    "//xla/..."
   ];
 
   # Tests are disabled - most XLA tests are skipped in OSS builds due to tag
@@ -128,7 +122,7 @@ in
     # Use sandboxed strategy for most actions, but allow local for genrules
     # and copy actions that have issues with strict sandboxing
     "--spawn_strategy=sandboxed,local"
-    "--genrule_strategy=local"
+    "--genrule_strategy=sandboxed,local"
     # Disable bzlmod - XLA uses WORKSPACE for deps and bzlmod would try to
     # access the Bazel Central Registry during the build phase
     "--noenable_bzlmod"
@@ -137,44 +131,72 @@ in
     "--cxxopt=cstdint"
     "--host_cxxopt=-include"
     "--host_cxxopt=cstdint"
-    # Exclude mobile/iOS targets that have Bazel incompatibilities
-    "--build_tag_filters=-mobile,-ios"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Set macOS deployment target to suppress availability errors (e.g.
-    # futimens requires 10.13+) in both target and host-tool builds.
-    "--copt=-mmacosx-version-min=11.0"
-    "--host_copt=-mmacosx-version-min=11.0"
-    "--linkopt=-mmacosx-version-min=11.0"
-    "--host_linkopt=-mmacosx-version-min=11.0"
+    # Exclude targets that have incompatibilities
+    "--build_tag_filters=-mobile,-ios,-no_oss,-gpu"
+    # Dynamic linker path for patchelf in rules-python-nix-patchelf.patch
+    "--repo_env=NIX_DYNAMIC_LINKER=${clangStdenv.cc.libc}/lib/ld-linux-x86-64.so.2"
+
   ];
 
   removeRulesCC = false;
-  # Keep most local_config_* repos (CUDA, ROCm, TensorRT stubs needed at load
-  # time), but remove the ones containing machine-specific /nix/store paths
-  # that make the fixed-output deps hash non-reproducible. See
-  # `fetchAttrs.preInstall` below.
+  # We need some local_config_* repos (CUDA, ROCm, TensorRT stubs) in the build
+  # phase.
   removeLocal = false;
 
   fetchAttrs = {
     sha256 =
       {
-        x86_64-linux = "sha256-OJfSqDlEC+yhWwwMwaD5HGvuHm8OWk+yQxmbH0/gZ88=";
-        aarch64-darwin = "sha256-sKxtdgozCV1on1gd+bm8FKyFxP0u70Hs24OdLNA3jh0=";
-        aarch64-linux = "sha256-Ex0tbTF+EdISPKvy6K2zas8A+MofLmaLDN0Xvz7JI/o=";
+        x86_64-linux = "sha256-QTUqcP5t91Z4s+esxxFz2tGJAJplWXWZuYPqcC7ld+E=";
       }
       .${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
-    preInstall = ''
-      rm -rf $bazelOut/external/{local_config_python,\@local_config_python.marker}
-      rm -rf $bazelOut/external/{local_config_sh,\@local_config_sh.marker}
-      rm -rf $bazelOut/external/{local_config_xcode,\@local_config_xcode.marker}
-      rm -rf $bazelOut/external/{local_execution_config_python,\@local_execution_config_python.marker}
-      rm -rf $bazelOut/external/{local_jdk,\@local_jdk.marker}
-    '';
+    preInstall =
+      # Note: $bazelOut/external is the entire contents of the deps archive (see
+      # `deps.installPhase` in buildBazelPackage).
+      ''
+        chmod -R +w $bazelOut/external
+        rm -rf $bazelOut/external/{local_config_python,\@local_config_python.marker}
+        rm -rf $bazelOut/external/{local_config_sh,\@local_config_sh.marker}
+        rm -rf $bazelOut/external/{local_config_xcode,\@local_config_xcode.marker}
+        rm -rf $bazelOut/external/{local_execution_config_python,\@local_execution_config_python.marker}
+        rm -rf $bazelOut/external/{local_jdk,\@local_jdk.marker}
+      ''
+      # Normalize all /nix/store hashes to a fixed value so the deps archive is
+      # reproducible regardless of which nixpkgs revision built it. Somehow this
+      # does not break the build (yet).
+      + ''
+        find $bazelOut/external -type f -exec \
+          sed -i 's|/nix/store/[a-z0-9]\{32\}-|/nix/store/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-|g' {} +
+      ''
+      # Delete non-deterministic Python bytecode (contains timestamps)
+      + ''
+        find $bazelOut/external -name '*.pyc' -delete
+      '';
   };
 
   buildAttrs = {
     outputs = [ "out" ];
+
+    preConfigure =
+      # Fix #!/usr/bin/env shebangs in rules_python -- Bazel-generated Python
+      # stubs use #!/usr/bin/env which doesn't exist in the nix sandbox
+      ''
+        substituteInPlace $bazelOut/external/rules_python/python/private/py_runtime_info.bzl \
+          --replace-fail '"#!/usr/bin/env python3"' '"#!${pythonEnv}/bin/python3"'
+        substituteInPlace $bazelOut/external/rules_python/python/private/stage1_bootstrap_template.sh \
+          --replace-fail '#!/usr/bin/env bash' '#!${clangStdenv.shell}'
+        substituteInPlace $bazelOut/external/rules_python/python/private/runtime_env_toolchain.bzl \
+          --replace-fail '"#!/usr/bin/env python3"' '"#!${pythonEnv}/bin/python3"'
+      ''
+      # Re-patchelf hermetic Python binary with the nix dynamic linker
+      # (was normalized in fetchAttrs for reproducibility)
+      + ''
+        for py_dir in $bazelOut/external/python_3_*; do
+          if [ -d "$py_dir" ]; then
+            find "$py_dir" -type f -executable \
+              -exec patchelf --set-interpreter ${clangStdenv.cc.libc}/lib/ld-linux-x86-64.so.2 {} \; 2>/dev/null || true
+          fi
+        done
+      '';
 
     installPhase = ''
       runHook preInstall
@@ -207,8 +229,7 @@ in
     maintainers = with lib.maintainers; [ samuela ];
     platforms = [
       "x86_64-linux"
-      "aarch64-linux"
-      "aarch64-darwin"
+
     ];
   };
 }
