@@ -6,13 +6,13 @@
   fetchPypi,
   od,
   pygments,
+  pythonAtLeast,
   python-dateutil,
   repeated-test,
   setuptools-scm,
   sigtools,
   unittestCheckHook,
 }:
-
 buildPythonPackage rec {
   pname = "clize";
   version = "5.0.2";
@@ -42,6 +42,24 @@ buildPythonPackage rec {
     python-dateutil
     repeated-test
   ];
+
+  unittestFlags =
+    let
+      disabledTests = [
+        "test_help.ElementsFromAutodetectedDocstringTests.test_sphinx_has_sphinx_error_in_param_desc"
+        "test_help.ElementsFromAutodetectedDocstringTests.test_sphinx_has_sphinx_error_in_free_text"
+        "test_help.ElementsFromAutodetectedDocstringTests.test_clize_sphinx_error"
+        "test_help.ElementsFromAutodetectedDocstringTests.test_clize_has_sphinx_error"
+      ]
+      ++ lib.optionals (pythonAtLeast "3.14") [
+        "test_help.ClizeWholeHelpTests.test_custom_param_help"
+      ];
+      matchingPattern = builtins.concatStringsSep "|" disabledTests;
+    in
+    [
+      "-s clize/tests"
+      "-k [!(${matchingPattern})]"
+    ];
 
   pythonImportsCheck = [ "clize" ];
 
