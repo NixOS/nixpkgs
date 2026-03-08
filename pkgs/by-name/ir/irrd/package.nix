@@ -40,14 +40,14 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
-  version = "4.5.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     tag = "v${version}";
-    hash = "sha256-6z94Ha2QQ0LE4o3hzsNl4y/nPv849cSP8on3UeegE4c=";
+    hash = "sha256-98DXooabwJtjI+m/HNMGBkZKT843bEbTaXJgflVdx/A=";
   };
 
   pythonRelaxDeps = true;
@@ -116,6 +116,7 @@ py.pkgs.buildPythonPackage rec {
       jinja2
       joserfc
       time-machine
+      service-identity
     ]
     ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
