@@ -42,13 +42,13 @@ in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "sparkle";
-  version = "1.26.2";
+  version = "pre-release";
 
   src = fetchFromGitHub {
     owner = "xishang0128";
     repo = "sparkle";
     tag = finalAttrs.version;
-    hash = "sha256-6/VdWVobiBjjggC215g/zZmVAx1EzGbPE6+xp6ekcJw=";
+    hash = "sha256-vWqWglkOvi/deAoub1wwiGUIIbbIxa34X8Fuh9wjIfg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
