@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   npmDeps =
     if withUI then
       fetchNpmDeps {
-        name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+        name = "exatorrent-${finalAttrs.version}-npm-deps";
         inherit (finalAttrs) src;
         sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
         hash = "sha256-eNrBKTW4KlLNf/Y9NTvGt5r28MG7SLGzUi+p9mOyrmI=";
