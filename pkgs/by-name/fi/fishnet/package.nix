@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
-      name = "update-${finalAttrs.pname}";
+      name = "update-fishnet";
 
       runtimeInputs = [
         curl
