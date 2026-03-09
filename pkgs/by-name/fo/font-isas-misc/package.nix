@@ -23,13 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-font-isas-misc" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname font-isas-misc \
         --url https://xorg.freedesktop.org/releases/individual/font/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version font-isas-misc "$version"
     '';
   };
 
