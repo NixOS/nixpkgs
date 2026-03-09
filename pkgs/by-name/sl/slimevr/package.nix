@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-X5IgWZlkvsstMN3YS4r+NJl6RVfREfZqKUrfsrUPQuU=";
 
   pnpmDeps = fetchPnpmDeps {
-    pname = "${finalAttrs.pname}-pnpm-deps";
+    pname = "slimevr-pnpm-deps";
     inherit (finalAttrs) version src;
     pnpm = pnpm_9;
     fetcherVersion = 3;
