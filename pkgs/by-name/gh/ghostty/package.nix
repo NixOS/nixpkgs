@@ -87,18 +87,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontSetZigDefaultFlags = true;
 
-  zigBuildFlags = [
+  zigCheckFlags = [
     "--system"
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
     "-Dcpu=baseline"
-    "-Doptimize=${optimizeLevel}"
   ]
   ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
     inherit glslang;
   };
 
-  zigCheckFlags = finalAttrs.zigBuildFlags;
+  # Only specify the optimization level for the actual build.
+  # Tests do not work on ReleaseFast as they rely on triggering
+  # specific integrity violations within the internal data structures.
+  zigBuildFlags = finalAttrs.zigCheckFlags ++ [
+    "-Doptimize=${optimizeLevel}"
+  ];
 
   doCheck = true;
 
