@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     # We can't run any actual tests without hardware, but we can at least check the binary.
-    run-only = runCommand "${finalAttrs.pname}-test" ''
+    run-only = runCommand "ykushcmd-test" ''
       ${finalAttrs}/bin/ykushcmd -h | grep YKUSHCMD
     '';
   };
