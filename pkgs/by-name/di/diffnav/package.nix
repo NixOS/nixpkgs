@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   makeBinaryWrapper,
@@ -32,10 +33,12 @@ buildGoModule (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/diffnav \
       --prefix PATH : ${lib.makeBinPath [ delta ]}
-     installShellCompletion --cmd diffnav \
-      --bash <($out/bin/diffnav completion bash) \
-      --fish <($out/bin/diffnav completion fish) \
-      --zsh <($out/bin/diffnav completion zsh)
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd diffnav \
+     --bash <($out/bin/diffnav completion bash) \
+     --fish <($out/bin/diffnav completion fish) \
+     --zsh <($out/bin/diffnav completion zsh)
   '';
 
   meta = {
