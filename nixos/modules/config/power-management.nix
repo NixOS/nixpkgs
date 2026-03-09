@@ -91,6 +91,7 @@ in
     '';
 
     systemd.targets.post-resume = {
+      enable = config.systemd.services.post-resume.enable;
       description = "Post-Resume Actions";
       requires = [ "post-resume.service" ];
       after = [ "post-resume.service" ];
@@ -101,6 +102,7 @@ in
     systemd.services = {
       # Service executed before suspending/hibernating.
       pre-sleep = {
+        enable = cfg.powerDownCommands != "";
         description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
@@ -110,6 +112,7 @@ in
 
       # Service executed after resuming from suspend/hibernate
       post-resume = {
+        enable = cfg.powerUpCommands != "" || cfg.resumeCommands != "";
         description = "Post-Resume Actions";
         # Pulled in by post-resume.service above
         after = [ "sleep.target" ];
@@ -123,6 +126,7 @@ in
 
       # Service executed before shutdown
       pre-shutdown = {
+        enable = cfg.powerDownCommands != "";
         description = "Pre-Shutdown Actions";
         wantedBy = [
           "shutdown.target"
@@ -137,6 +141,7 @@ in
 
       # Service executed after boot
       post-boot = {
+        enable = cfg.bootCommands != "" || cfg.powerUpCommands != "";
         description = "Post-Boot Actions";
         # It's not well defined at what point in the bootup sequence this should run
         # we should eventually just remove this.
