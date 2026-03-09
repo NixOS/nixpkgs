@@ -72,10 +72,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail ./share/policy.wasm "$out/share/$pname/policy.wasm"
   '';
 
-  preBuild = ''
-    make -C policies
-    (cd "$npmRoot" && npm run build)
-  '';
+  preBuild =
+    let
+      rustTarget = stdenv.hostPlatform.rust.rustcTarget;
+      rustTargetUnderscore = builtins.replaceStrings [ "-" ] [ "_" ] rustTarget;
+    in
+    ''
+      make -C policies
+      (cd "$npmRoot" && npm run build)
+
+      # Fix aws-lc-sys cross-compilation:
+      # The cc crate looks for "aarch64-linux-gnu-gcc")
+      # when CC is unset and TARGET != HOST, but Nix's cross-compiler is
+      # named "aarch64-unknown-linux-gnu-gcc" (with vendor).
+      # We set the target-specific CC_<target> variable so the cc crate
+      # and aws-lc-sys find the correct cross-compiler, then unset the
+      # generic CC so aws-lc-sys doesn't misassign it.
+      export CC_${rustTargetUnderscore}=$CC
+      export CXX_${rustTargetUnderscore}=$CXX
+      unset CC CXX
+    '';
 
   # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
   postInstall = ''
