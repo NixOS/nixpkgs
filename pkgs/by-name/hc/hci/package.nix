@@ -56,8 +56,3 @@ let
       );
 in
 pkg
-// {
-  meta = pkg.meta // {
-    position = toString ./package.nix + ":1";
-  };
-}
