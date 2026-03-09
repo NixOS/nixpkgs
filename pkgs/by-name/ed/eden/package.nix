@@ -185,8 +185,8 @@ stdenv.mkDerivation (finalAttrs: {
     # We dont want to bother upstream with potentially outdated compat reports
     (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
 
-    (lib.cmakeFeature "TITLE_BAR_FORMAT_IDLE" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) {}")
-    (lib.cmakeFeature "TITLE_BAR_FORMAT_RUNNING" "${finalAttrs.pname} | ${finalAttrs.version} (nixpkgs) | {}")
+    (lib.cmakeFeature "TITLE_BAR_FORMAT_IDLE" "eden | ${finalAttrs.version} (nixpkgs) {}")
+    (lib.cmakeFeature "TITLE_BAR_FORMAT_RUNNING" "eden | ${finalAttrs.version} (nixpkgs) | {}")
   ];
 
   postConfigure = ''
