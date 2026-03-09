@@ -6107,6 +6107,12 @@
     githubId = 10701143;
     name = "David Crompton";
   };
+  davidkern = {
+    email = "nixpkgs-davidkern@proton.me";
+    github = "davidkern";
+    githubId = 1548554;
+    name = "David Kern";
+  };
   davidlghellin = {
     email = "hola@devel0pez.com";
     github = "davidlghellin";
