@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tracexec";
-  version = "0.13.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "dbb9b733370f5200df2a0de7f007312c23431480";
-    hash = "sha256-M2ZIfWupnFxQZvr5cl8V0xtLgh+xBcaHHVsHIoio7nI=";
+    rev = "ecbda651a4006789debf565376cd6f37241dec3e";
+    hash = "sha256-wP7jAGoWgvm3/4XBHr27MD8M9qwyVpuDVR96S8+I3eo=";
   };
 
-  cargoHash = "sha256-cyzSxibLw6sb0V3ueNcp55OhFQ5jUNJWcSF8uYnzG2M=";
+  cargoHash = "sha256-kJrWAyRcU5eEfTwaAxcN6oE5KHgBdjznWeI21/3c/UE=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   checkFlags = [
-    "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
+    "--skip=log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
   ];
 
   postInstall = ''
