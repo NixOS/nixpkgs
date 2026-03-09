@@ -34,7 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-npm-deps";
+    name = "kilocode-cli-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/cli";
     postPatch = ''
