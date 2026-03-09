@@ -11,7 +11,6 @@ let
     concatMapStringsSep
     concatStringsSep
     filterAttrs
-    flatten
     getAttr
     isAttrs
     literalExpression
@@ -184,6 +183,24 @@ in
                   How often this btrbk instance is started. See {manpage}`systemd.time(7)` for more information about the format.
                   Setting it to null disables the timer, thus this instance can only be started manually.
                 '';
+              };
+              options = mkOption {
+                description = ''
+                  Command line options to pass to {command}`btrbk`. See {manpage}`btrbk(1)` for the available
+                  options.
+                '';
+                example = {
+                  format = "table";
+                  preserve = true;
+                };
+                default = { };
+                type =
+                  with types;
+                  attrsOf (oneOf [
+                    bool
+                    int
+                    str
+                  ]);
               };
               snapshotOnly = mkOption {
                 type = types.bool;
@@ -365,9 +382,13 @@ in
           User = "btrbk";
           Group = "btrbk";
           Type = "oneshot";
-          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf ${
-            if instance.snapshotOnly then "snapshot" else "run"
-          }";
+          ExecStart = lib.concatStringsSep " " (
+            [
+              "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf"
+              (if instance.snapshotOnly then "snapshot" else "run")
+            ]
+            ++ lib.optional (instance.options != { }) (lib.cli.toCommandLineShellGNU { } instance.options)
+          );
           Nice = cfg.niceness;
           IOSchedulingClass = cfg.ioSchedulingClass;
           StateDirectory = "btrbk";
