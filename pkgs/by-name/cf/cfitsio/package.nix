@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "${finalAttrs.pname}-"; };
+    updateScript = gitUpdater { rev-prefix = "cfitsio-"; };
   };
 
   meta = {
