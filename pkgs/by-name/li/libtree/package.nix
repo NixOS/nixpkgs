@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       version = finalAttrs.version;
     };
     checkCoreUtils =
-      runCommand "${finalAttrs.pname}-ls-test"
+      runCommand "libtree-ls-test"
         {
           nativeBuildInputs = [
             finalAttrs.finalPackage
