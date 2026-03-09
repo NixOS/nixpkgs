@@ -11,7 +11,7 @@
 }:
 buildPythonPackage rec {
   pname = "comfyui-frontend-package";
-  version = "1.41.9";
+  version = "1.42.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Comfy-Org";
     repo = "ComfyUI_frontend";
     rev = "v${version}";
-    hash = "sha256-2gr4fOIGYSXZfyTraPgNL7NY2WeDsCvHEKOc31qAb2E=";
+    hash = "sha256-2aPnZf9sCx1oi/kiN4XPretV8Zhz2KJFw5vvXnBpUv4=";
   };
 
   # used by setup.py
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pnpmDeps = fetchPnpmDeps {
     inherit pname version src;
     fetcherVersion = 2;
-    hash = "sha256-mUE6G0dBwPjzjbITVwNzWQyxyoMiGL2H7VTECUazdsY=";
+    hash = "sha256-jt7uv86j7KGpS8IqZz/T6HFLzvcNh9aOvVoSHxRR91M=";
   };
 
   nativeBuildInputs = [
