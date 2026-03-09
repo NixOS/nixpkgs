@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-xrefresh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname xrefresh \
         --url https://xorg.freedesktop.org/releases/individual/app/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version xrefresh "$version"
     '';
   };
 
