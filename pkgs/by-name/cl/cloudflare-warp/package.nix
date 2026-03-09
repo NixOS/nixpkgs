@@ -200,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
         )"
 
         for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-          update-source-version "${finalAttrs.pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
+          update-source-version "cloudflare-warp" + lib.optionalString headless "-headless" "$new_version" --ignore-same-version --source-key="sources.$platform"
         done
       '';
     });
