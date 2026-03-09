@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   srcs = [
     (fetchurl {
-      url = "https://icculus.org/rott/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+      url = "https://icculus.org/rott/releases/rott-${finalAttrs.version}.tar.gz";
       hash = "sha256-ECUW6MMS9rC79sYj4fAcv7vDFKzorf4fIB1HsVvZJ/8=";
     })
   ]
