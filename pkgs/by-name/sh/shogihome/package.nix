@@ -136,7 +136,7 @@ buildNpmPackage (finalAttrs: {
         ];
       })
       (lib.getExe (writeShellApplication {
-        name = "${finalAttrs.pname}-electron-updater";
+        name = "shogihome-electron-updater";
         runtimeInputs = [
           nix
           jq
