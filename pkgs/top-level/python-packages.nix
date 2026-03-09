@@ -4174,6 +4174,8 @@ self: super: with self; {
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
+  django-extra-views = callPackage ../development/python-modules/django-extra-views { };
+
   django-filer = callPackage ../development/python-modules/django-filer { };
 
   django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
