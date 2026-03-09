@@ -121,6 +121,7 @@ rec {
 
     let
       matches = builtins.match "/bin/([^/]+)" destination;
+      __structuredAttrs = !(derivationArgs ? passAsFile);
     in
     runCommand name
       (
@@ -132,8 +133,8 @@ rec {
             checkPhase
             allowSubstitutes
             preferLocalBuild
+            __structuredAttrs
             ;
-          passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
           meta =
             lib.optionalAttrs (executable && matches != null) {
               mainProgram = lib.head matches;
@@ -141,6 +142,9 @@ rec {
             // meta
             // derivationArgs.meta or { };
           passthru = passthru // derivationArgs.passthru or { };
+        }
+        // optionalAttrs (!__structuredAttrs) {
+          passAsFile = [ "text" ] ++ derivationArgs.passAsFile;
         }
         // removeAttrs derivationArgs [
           "passAsFile"
@@ -400,10 +404,10 @@ rec {
       {
         inherit pname code;
         executable = true;
-        passAsFile = [ "code" ];
         # Pointless to do this on a remote machine.
         preferLocalBuild = true;
         allowSubstitutes = false;
+        __structuredAttrs = true;
         meta = {
           mainProgram = pname;
         };
@@ -411,7 +415,7 @@ rec {
       ''
         n=$out/bin/${pname}
         mkdir -p "$(dirname "$n")"
-        mv "$codePath" code.c
+        echo -n "$code" > code.c
         $CC -x c code.c -o "$n"
       '';
 
