@@ -18,7 +18,7 @@ renode-bin.overrideAttrs (
       let
         versionRegex = "[0-9\\.\\+]+[^\\+]*.";
       in
-      writeScript "${finalAttrs.pname}-updater" ''
+      writeScript "renode-unstable-updater" ''
         #!/usr/bin/env nix-shell
         #!nix-shell -i bash -p common-updater-scripts curl gnugrep gnused pup
 
@@ -30,8 +30,8 @@ renode-bin.overrideAttrs (
             | sed -e 's,renode-\(.*\)\.linux-dotnet\.tar\.gz,\1,g'
         )
 
-        update-source-version ${finalAttrs.pname} "$latestVersion" \
-          --file=pkgs/by-name/re/${finalAttrs.pname}/package.nix \
+        update-source-version renode-unstable "$latestVersion" \
+          --file=pkgs/by-name/re/renode-unstable/package.nix \
           --system=x86_64-linux
       '';
   }
