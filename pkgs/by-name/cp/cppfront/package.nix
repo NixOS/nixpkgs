@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
 
     tests.hello-world = stdenv.mkDerivation (finalAttrs': {
-      pname = "${finalAttrs.pname}-hello-world-test";
+      pname = "cppfront-hello-world-test";
       inherit (finalAttrs) version src;
 
       sourceRoot = "${finalAttrs'.src.name}/regression-tests";
