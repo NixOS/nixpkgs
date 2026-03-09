@@ -85,7 +85,7 @@ import ../make-test-python.nix (
 
       with subtest("locks survive server reboot"):
           client1.wait_for_unit("data.mount")
-          server.shutdown()
+          server.crash()
           server.start()
           client1.succeed("touch /data/xyzzy")
           client1.fail("time flock -n -s /data/lock true")
