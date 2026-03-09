@@ -46,13 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-libxcb" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname libxcb \
         --url https://xorg.freedesktop.org/releases/individual/lib/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version libxcb "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
