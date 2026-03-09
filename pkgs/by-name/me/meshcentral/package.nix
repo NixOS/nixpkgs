@@ -2,6 +2,7 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nodejs_22,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -15,7 +16,11 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-tXv4AWFLBoaHraSTYbEuNjdxnB3tYyAYq5xPe4jRcmw=";
   };
 
-  npmDepsHash = "sha256-Etpf964Rb4fOty7RdyClQelyLMLVJhSQQB4fLgnf6AE=";
+  npmDepsHash = "sha256-vWCd+7SnQCf6iBhQboqMKL7TQRPxvt4DOe9+XJ8XJ1Y=";
+  # Using the npmDeps with a newer nodejs causes `npm ci` errors, also upstream
+  # states they stick to the LTS version of nodejs:
+  # https://meshcentral.com/docs/MeshCentral2InstallGuide.pdf
+  nodejs = nodejs_22;
 
   patches = [
     ./fix-js-include-paths.patch
@@ -24,6 +29,9 @@ buildNpmPackage (finalAttrs: {
     # main file as a module, and thus nothing happens when it runs. We remove
     # this conditional since we never use this as a module.
     ./run.patch
+    # Add `optionalDependencies` that are used during runtime, to
+    # `package{,-lock}.json`.
+    ./optionalDependencies.patch
   ];
 
   dontNpmBuild = true;
