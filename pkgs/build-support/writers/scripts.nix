@@ -108,65 +108,70 @@ rec {
       # at least two files: the executable and the wrapper.
       inner =
         pkgs.runCommandLocal name
-          (
-            {
-              inherit makeWrapperArgs;
-              nativeBuildInputs = [ makeBinaryWrapper ];
-              meta.mainProgram = name;
-            }
-            // (
-              if (types.str.check content) then
-                {
-                  inherit content interpreter;
-                  passAsFile = [ "content" ];
-                }
-              else
-                {
-                  inherit interpreter;
-                  contentPath = content;
-                }
-            )
-          )
-          ''
-            # On darwin a script cannot be used as an interpreter in a shebang but
-            # there doesn't seem to be a limit to the size of shebang and multiple
-            # arguments to the interpreter are allowed.
-            if [[ -n "${toString pkgs.stdenvNoCC.hostPlatform.isDarwin}" ]] && isScript $interpreter
-            then
-              wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
-              # Get first word from the line (note: xargs echo remove leading spaces)
-              wrapperInterpreter=$(echo "$wrapperInterpreterLine" | xargs echo | cut -d " " -f1)
+          {
+            inherit makeWrapperArgs content interpreter;
+            nativeBuildInputs = [ makeBinaryWrapper ];
+            __structuredAttrs = true;
+            meta.mainProgram = name;
+          }
 
-              if isScript $wrapperInterpreter
+          (
+            ''
+              # On darwin a script cannot be used as an interpreter in a shebang but
+              # there doesn't seem to be a limit to the size of shebang and multiple
+              # arguments to the interpreter are allowed.
+              if [[ -n "${toString pkgs.stdenvNoCC.hostPlatform.isDarwin}" ]] && isScript $interpreter
               then
-                echo "error: passed interpreter ($interpreter) is a script which has another script ($wrapperInterpreter) as an interpreter, which is not supported."
-                exit 1
+                wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
+                # Get first word from the line (note: xargs echo remove leading spaces)
+                wrapperInterpreter=$(echo "$wrapperInterpreterLine" | xargs echo | cut -d " " -f1)
+
+                if isScript $wrapperInterpreter
+                then
+                  echo "error: passed interpreter ($interpreter) is a script which has another script ($wrapperInterpreter) as an interpreter, which is not supported."
+                  exit 1
+                fi
+
+                # This should work as long as wrapperInterpreter is a shell, which is
+                # the case for programs wrapped with makeWrapper, like
+                # python3.withPackages etc.
+                interpreterLine="$wrapperInterpreterLine $interpreter"
+              else
+                interpreterLine=$interpreter
               fi
 
-              # This should work as long as wrapperInterpreter is a shell, which is
-              # the case for programs wrapped with makeWrapper, like
-              # python3.withPackages etc.
-              interpreterLine="$wrapperInterpreterLine $interpreter"
-            else
-              interpreterLine=$interpreter
-            fi
-
-            echo "#! $interpreterLine" > $out
-            cat "$contentPath" >> $out
-            ${optionalString (check != "") ''
+              echo "#! $interpreterLine" > $out
+            ''
+            + (
+              if (types.str.check content) then
+                ''
+                  contentPath="/build/content"
+                  printf "%s" "$content" > "$contentPath"
+                ''
+              else
+                ''
+                  contentPath="$content"
+                ''
+            )
+            + ''
+              cat "$contentPath" >> $out
+            ''
+            + optionalString (check != "") ''
               ${check} $out
-            ''}
-            chmod +x $out
+            ''
+            + ''
+              chmod +x $out
 
-            # Relocate executable
-            # Wrap it if makeWrapperArgs are specified
-            mv $out tmp
+              # Relocate executable
+              # Wrap it if makeWrapperArgs are specified
+              mv $out tmp
               mkdir -p $out/$(dirname "${path}")
               mv tmp $out/${path}
-            if [ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]; then
-                wrapProgram $out/${path} ''${makeWrapperArgs[@]}
-            fi
-          '';
+              if [ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]; then
+                  wrapProgram $out/${path} ''${makeWrapperArgs[@]}
+              fi
+            ''
+          );
     in
     if nameIsPath then
       inner
@@ -255,36 +260,39 @@ rec {
       # This is required in order to support wrapping, as wrapped programs consist of at least two files: the executable and the wrapper.
       inner =
         pkgs.runCommandLocal name
+          {
+            inherit makeWrapperArgs;
+            nativeBuildInputs = [ makeBinaryWrapper ];
+            __structuredAttrs = true;
+            meta.mainProgram = name;
+          }
           (
-            {
-              inherit makeWrapperArgs;
-              nativeBuildInputs = [ makeBinaryWrapper ];
-              meta.mainProgram = name;
-            }
-            // (
+            (
               if (types.str.check content) then
-                {
-                  inherit content;
-                  passAsFile = [ "content" ];
-                }
+                ''
+                  contentPath="/build/content"
+                  printf "%s" "$content" > "$contentPath"
+                ''
               else
-                { contentPath = content; }
+                ''
+                  contentPath="$content"
+                ''
             )
-          )
-          ''
-            ${compileScript}
-            ${lib.optionalString strip "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
-            # Sometimes binaries produced for darwin (e. g. by GHC) won't be valid
-            # mach-o executables from the get-go, but need to be corrected somehow
-            # which is done by fixupPhase.
-            ${lib.optionalString pkgs.stdenvNoCC.hostPlatform.isDarwin "fixupPhase"}
-            mv $out tmp
-            mkdir -p $out/$(dirname "${path}")
-            mv tmp $out/${path}
-            if [ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]; then
-              wrapProgram $out/${path} ''${makeWrapperArgs[@]}
-            fi
-          '';
+            + ''
+              ${compileScript}
+              ${lib.optionalString strip "${lib.getBin buildPackages.bintools-unwrapped}/bin/${buildPackages.bintools-unwrapped.targetPrefix}strip -S $out"}
+              # Sometimes binaries produced for darwin (e. g. by GHC) won't be valid
+              # mach-o executables from the get-go, but need to be corrected somehow
+              # which is done by fixupPhase.
+              ${lib.optionalString pkgs.stdenvNoCC.hostPlatform.isDarwin "fixupPhase"}
+              mv $out tmp
+              mkdir -p $out/$(dirname "${path}")
+              mv tmp $out/${path}
+              if [ -n "''${makeWrapperArgs+''${makeWrapperArgs[@]}}" ]; then
+                wrapProgram $out/${path} ''${makeWrapperArgs[@]}
+              fi
+            ''
+          );
     in
     if nameIsPath then
       inner
@@ -1107,12 +1115,12 @@ rec {
     pkgs.runCommandLocal name
       {
         inherit text;
-        passAsFile = [ "text" ];
         nativeBuildInputs = [ gixy ];
+        __structuredAttrs = true;
       } # sh
       ''
         # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
-        awk -f ${awkFormatNginx} "$textPath" | sed '/^\s*$/d' > $out
+        printf "%s" "$text" | awk -f ${awkFormatNginx} | sed '/^\s*$/d' > $out
         gixy $out || (echo "\n\nThis can be caused by combining multiple incompatible services on the same hostname.\n\nFull merged config:\n\n"; cat $out; exit 1)
       '';
 
