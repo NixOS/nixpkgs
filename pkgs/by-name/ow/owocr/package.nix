@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "owocr";
-  version = "1.7.5-unstable-2024-06-26";
+  version = "1.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
