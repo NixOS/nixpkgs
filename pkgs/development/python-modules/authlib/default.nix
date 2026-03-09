@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cacert,
   cachelib,
   cryptography,
   fetchFromGitHub,
@@ -11,6 +10,7 @@
   mock,
   pytest-asyncio,
   pytestCheckHook,
+  python-multipart,
   pythonOlder,
   requests,
   setuptools,
@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.6.3";
+  version = "1.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "authlib";
     tag = "v${version}";
-    hash = "sha256-AzIjfUH89tYZwVnOpdSwEzaGNpedfQ50k9diKUfH+Fg=";
+    hash = "sha256-Socbm6jZW5sywU7TRiSELnkWSDZ/94g3+XLRTO1ln48=";
   };
 
   build-system = [ setuptools ];
@@ -46,6 +46,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    python-multipart
     requests
     starlette
     werkzeug

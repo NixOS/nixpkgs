@@ -3,7 +3,6 @@
   python3,
   fetchPypi,
   fetchFromGitHub,
-  fetchpatch,
   git,
   postgresql,
   postgresqlTestHook,
@@ -41,20 +40,15 @@ in
 
 py.pkgs.buildPythonPackage rec {
   pname = "irrd";
-  version = "4.5.0b2";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
-    rev = "v${version}";
-    hash = "sha256-MMacxjF0LLSdInSwXwpHJUTdUQJ6sl4yu83vWR/A4Jc=";
+    tag = "v${version}";
+    hash = "sha256-98DXooabwJtjI+m/HNMGBkZKT843bEbTaXJgflVdx/A=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail py-radix py-radix-sr
-  '';
 
   pythonRelaxDeps = true;
 
@@ -122,6 +116,7 @@ py.pkgs.buildPythonPackage rec {
       jinja2
       joserfc
       time-machine
+      service-identity
     ]
     ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
@@ -153,7 +148,7 @@ py.pkgs.buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://irrd.readthedocs.io/en/v${version}/releases/";
+    changelog = "https://irrd.readthedocs.io/en/${src.tag}/releases/";
     description = "Internet Routing Registry database server, processing IRR objects in the RPSL format";
     license = lib.licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";

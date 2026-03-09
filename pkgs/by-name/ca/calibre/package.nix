@@ -94,6 +94,42 @@ stdenv.mkDerivation (finalAttrs: {
       # Manually ported to the current release version from the patch:
       # https://github.com/kovidgoyal/calibre/commit/f0649b27512e987b95fcab2e1e0a3bcdafc23379.patch
       ./CVE-2026-25731.patch
+      # Fix CVE-2026-26064
+      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0326
+      # https://github.com/NixOS/nixpkgs/issues/494339
+      # Fixed upstream in 9.3.0.
+      (fetchpatch {
+        name = "CVE-2026-26064.patch";
+        url = "https://github.com/kovidgoyal/calibre/commit/e1b5f9b45a5e8fa96c136963ad9a1d35e6adac62.patch";
+        hash = "sha256-C7DBSuaL5VpLbjh/jMar+QdoqaobKcpEWJIIbpxMwjE=";
+      })
+      # Fix CVE-2026-26065
+      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0327
+      # https://github.com/NixOS/nixpkgs/issues/494340
+      # Fixed upstream in 9.3.0.
+      (fetchpatch {
+        name = "CVE-2026-26065.patch";
+        url = "https://github.com/kovidgoyal/calibre/commit/b6da1c3878c06eb1356cb0ec1106cb66e0e9bfb8.patch";
+        hash = "sha256-zYC2A5qNsCWycygnD+SjtgSE5kclWXIe/etfZAL3Mek=";
+      })
+      # Fix CVE-2026-27810
+      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0485
+      # https://github.com/NixOS/nixpkgs/issues/495148
+      # Fixed upstream in 9.4.0.
+      (fetchpatch {
+        name = "CVE-2026-27810.patch";
+        url = "https://github.com/kovidgoyal/calibre/commit/a468ce0f268032eea1f7431853248148ffa2e06a.patch";
+        hash = "sha256-98htxrV0Wc2UmZOgEjoj6JDWmUbvS0GoC7svUhv4+ns=";
+      })
+      # Fix CVE-2026-27824
+      # http://tracker.security.nixos.org/issues/NIXPKGS-2026-0504
+      # https://github.com/NixOS/nixpkgs/issues/496127
+      # Fixed upstream in 9.4.0.
+      (fetchpatch {
+        name = "CVE-2026-27824.patch";
+        url = "https://github.com/kovidgoyal/calibre/commit/2f273444460d06f72f7a8f390f5f9ff325d1f836.patch";
+        hash = "sha256-xKkt8v/HFB3swY6dKlMrycPt5NCFN4FRH3iRO/1aokQ=";
+      })
     ]
     ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
