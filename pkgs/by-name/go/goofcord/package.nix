@@ -17,24 +17,16 @@
 let
   venbindAddon = callPackage ./venbind-addon.nix { };
   venmicAddon = callPackage ./venmic-addon.nix { };
-
-  venmicPrebuildDir =
-    if stdenv.hostPlatform.isAarch64 then "venmic-addon-linux-arm64" else "venmic-addon-linux-x64";
-
-  venbindPrebuildDir = if stdenv.hostPlatform.isAarch64 then "linux-aarch64" else "linux-x86_64";
-
-  venbindPrebuildFile =
-    if stdenv.hostPlatform.isAarch64 then "venbind-linux-aarch64.node" else "venbind-linux-x86_64.node";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "goofcord";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "Milkshiift";
     repo = "GoofCord";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-c/NDju5K4DnKLZjE0ZD0TSpm5YWhZUXGmZs/AJhF7Jk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BC+Fu/sf1MO/zHkiDvKeoRhfUniWRpLPkyeEXTkYlkY=";
   };
 
   nativeBuildInputs = [
@@ -56,6 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
+    GOOFCORD_VENMIC_PATH = "${venmicAddon}/venmic.node";
+    GOOFCORD_VENBIND_PATH = "${venbindAddon}/venbind.node";
   };
 
   configurePhase = ''
@@ -65,17 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     chmod -R u+w node_modules
     patchShebangs node_modules/.bin
     patchShebangs node_modules/@typescript/native-preview/bin
-
-    # Replace vendored venmic prebuilds with Nix-built addon
-    rm -rf node_modules/@vencord/venmic/prebuilds
-    mkdir -p node_modules/@vencord/venmic/prebuilds/${venmicPrebuildDir}
-    cp ${venmicAddon}/venmic.node \
-      node_modules/@vencord/venmic/prebuilds/${venmicPrebuildDir}/node-napi-v7.node
-
-    rm -rf node_modules/venbind/prebuilds
-    mkdir -p node_modules/venbind/prebuilds/${venbindPrebuildDir}
-    cp ${venbindAddon}/venbind.node \
-      node_modules/venbind/prebuilds/${venbindPrebuildDir}/${venbindPrebuildFile}
 
     runHook postConfigure
   '';
@@ -88,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    bun run build
+    bun run build -- --skipTypecheck
 
     node node_modules/electron-builder/out/cli/cli.js \
       --dir \
