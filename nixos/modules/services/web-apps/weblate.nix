@@ -247,7 +247,6 @@ in
         locations = {
           "= /favicon.ico".alias = "${finalPackage}/${python.sitePackages}/weblate/static/favicon.ico";
           "/static/".alias = "${finalPackage.static}/";
-          "/media/".alias = "/var/lib/weblate/media/";
           "/".proxyPass = "http://unix:///run/weblate.socket";
         };
       };
