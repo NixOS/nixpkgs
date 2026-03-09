@@ -23,7 +23,6 @@
   ninja,
   meson,
   perl,
-  sigtool,
   makeWrapper,
   removeReferencesTo,
   attr,
@@ -32,6 +31,7 @@
   socat,
   libslirp,
   libcbor,
+  darwin,
   guestAgentSupport ?
     (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal,
   numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal,
@@ -174,7 +174,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals hexagonSupport [ glib ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    sigtool
+    darwin.sigtool
   ]
   ++ lib.optionals (!userOnly) [ dtc ];
 

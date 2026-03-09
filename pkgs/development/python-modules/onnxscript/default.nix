@@ -246,6 +246,8 @@ buildPythonPackage (finalAttrs: {
     "tests/ir/graph_view_test.py"
     "tests/ir/serde_roundtrip_test.py"
     "tests/optimizer/test_models.py"
+    # Wants GPU on ROCm
+    "tests/function_libs/torch_lib/ops_test.py"
   ];
 
   # Importing onnxruntime in the sandbox crashes on aarch64-linux:

@@ -1672,7 +1672,13 @@ with pkgs;
     plugins = lib.filter (p: p ? pluginName) (builtins.attrValues discourse.plugins);
   };
 
-  dino = callPackage ../applications/networking/instant-messengers/dino { };
+  dino = callPackage ../applications/networking/instant-messengers/dino {
+    inherit (gst_all_1)
+      gstreamer
+      gst-plugins-base
+      ;
+    gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
+  };
 
   inherit (ocamlPackages) dot-merlin-reader;
 
@@ -3398,10 +3404,6 @@ with pkgs;
   spire-server = spire.server;
 
   spoof-mac = python3Packages.callPackage ../tools/networking/spoof-mac { };
-
-  stirling-pdf = callPackage ../by-name/st/stirling-pdf/package.nix {
-    isDesktopVariant = false;
-  };
 
   stirling-pdf-desktop = callPackage ../by-name/st/stirling-pdf/package.nix {
     isDesktopVariant = true;
@@ -9726,7 +9728,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/libraries/wlroots { })
-    wlroots_0_17
     wlroots_0_18
     wlroots_0_19
     ;
@@ -10321,10 +10322,6 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin) sigtool;
-  };
-
   qemu-python-utils = python3Packages.toPythonApplication (
     python3Packages.qemu.override {
       fuseSupport = true;
@@ -10341,9 +10338,7 @@ with pkgs;
     userOnly = true;
   };
 
-  canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
-
-  wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
+  wrapQemuBinfmtP = callPackage ../by-name/qe/qemu/binfmt-p-wrapper.nix { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
