@@ -22,7 +22,7 @@
   distutils,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "cassandra-driver";
   version = "3.29.3";
   pyproject = true;
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "datastax";
     repo = "python-driver";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage rec {
     pyyaml
     sure
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   # This is used to determine the version of cython that can be used
   env.CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
@@ -121,8 +121,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
-    changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/datastax/python-driver/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ris ];
   };
-}
+})
