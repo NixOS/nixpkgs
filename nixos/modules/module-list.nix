@@ -947,6 +947,7 @@
   ./services/misc/rsync.nix
   ./services/misc/rumno.nix
   ./services/misc/safeeyes.nix
+  ./services/misc/scrobblex.nix
   ./services/misc/sdrplay.nix
   ./services/misc/servarr/lidarr.nix
   ./services/misc/servarr/prowlarr.nix
