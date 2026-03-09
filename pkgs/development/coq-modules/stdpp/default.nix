@@ -58,7 +58,7 @@ in
 # this is just a wrapper for rocqPackages.stdpp for Rocq >= 9.0
 if coq.rocqPackages ? stdpp then
   coq.rocqPackages.stdpp.override {
-    inherit version;
+    inherit version stdlib;
     inherit (coq.rocqPackages) rocq-core;
   }
 else
