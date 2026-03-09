@@ -3617,6 +3617,12 @@
     githubId = 535135;
     name = "Brennon Loveless";
   };
+  blsalin = {
+    name = "Alin Andrei Balasa";
+    email = "alin.andrei.balasa@blsalin.dev";
+    github = "blsalin";
+    githubId = 39619013;
+  };
   Blu3 = {
     name = "Blu3";
     email = "Blu3SoulsIT@gmail.com";
