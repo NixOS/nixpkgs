@@ -28,12 +28,10 @@ let
       }
       .${region};
   };
-  result = runCommand "baserom-${region}-safety-dir" { } ''
+  result = runCommand "baserom-${region}-safety-dir" { passthru = { inherit romPath; }; } ''
     mkdir $out
     ln -s ${file} $out/${file.name}
   '';
+  romPath = "${result.outPath}/${file.name}";
 in
 result
-// {
-  romPath = "${result.outPath}/${file.name}";
-}
