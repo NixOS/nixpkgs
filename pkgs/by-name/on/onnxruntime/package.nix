@@ -253,6 +253,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
+    # leads to failing builds, which isn't particularly useful for Nixpkgs
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=unused-variable")
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202407.src}")
