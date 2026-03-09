@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.32.6.0";
 
   src = fetchFromGitHub {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-src";
+    name = "qcad-${finalAttrs.version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${finalAttrs.version}";
