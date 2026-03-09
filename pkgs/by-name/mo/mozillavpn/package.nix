@@ -4,7 +4,6 @@
   cargo,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   go,
   lib,
   libcap,
@@ -36,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   netfilter = buildGoModule {
-    pname = "${finalAttrs.pname}-netfilter";
+    pname = "mozillavpn-netfilter";
     inherit (finalAttrs)
       version
       src
