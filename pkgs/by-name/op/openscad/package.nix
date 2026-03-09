@@ -30,7 +30,6 @@
   wayland-protocols,
   wrapGAppsHook3,
   cairo,
-  openscad,
   runCommand,
   versionCheckHook,
 }:
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "${finalAttrs.pname}-${finalAttrs.version}";
+    rev = "openscad-${finalAttrs.version}";
     sha256 = "sha256-2tOLqpFt5klFPxHNONnHVzBKEFWn4+ufx/MU+eYbliA=";
   };
 
@@ -209,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = {
     lib3mf_support =
-      runCommand "${finalAttrs.pname}-lib3mf-support-test"
+      runCommand "openscad-lib3mf-support-test"
         {
           nativeBuildInputs = [ finalAttrs.finalPackage ];
         }
