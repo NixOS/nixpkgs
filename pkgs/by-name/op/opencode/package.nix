@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   node_modules = stdenvNoCC.mkDerivation {
-    pname = "${finalAttrs.pname}-node_modules";
+    pname = "opencode-node_modules";
     inherit (finalAttrs) version src;
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
