@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-/EgSr46mJV84s/MG/3nUnU6XQ8RtEWiWo0gFtegblEQ=";
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-npm-deps-${finalAttrs.version}";
+    name = "restic-browser-npm-deps-${finalAttrs.version}";
     inherit (finalAttrs) src;
     hash = "sha256-uyn5cXMKm7+LLuF+n94pBTypLiPvfAs5INDEtd9cHs0=";
   };
