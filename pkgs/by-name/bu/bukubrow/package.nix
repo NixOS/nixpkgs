@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SamHH";
     repo = "bukubrow-host";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xz5Agsm+ATQXXgpPGN4EQ00i1t8qUlrviNHauVdCu4U=";
   };
 
   cargoHash = "sha256-mCPJE9WW14NtahbMnDcE+0xXl5w25dzerPy3wv78l20=";
