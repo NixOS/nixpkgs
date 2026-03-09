@@ -47,20 +47,32 @@ let
         doCheck = false;
       });
 
+      # ariadne 0.29+ is missing 'convert_kwargs_to_snake_case'
+      ariadne = prev.ariadne.overridePythonAttrs (oldAttrs: rec {
+        version = "0.28.0";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-gW66L7djPo4nHjd/UN18IPYFo956wzSqM+p1AZF/qnw=";
+        };
+        patches = [ ];
+        doCheck = false;
+      });
+
     };
   };
 in
 
 py.pkgs.buildPythonPackage (finalAttrs: {
   pname = "irrd";
-  version = "4.5.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6z94Ha2QQ0LE4o3hzsNl4y/nPv849cSP8on3UeegE4c=";
+    hash = "sha256-98DXooabwJtjI+m/HNMGBkZKT843bEbTaXJgflVdx/A=";
   };
 
   pythonRelaxDeps = true;
@@ -129,6 +141,7 @@ py.pkgs.buildPythonPackage (finalAttrs: {
       jinja2
       joserfc
       time-machine
+      service-identity
     ]
     ++ py.pkgs.uvicorn.optional-dependencies.standard;
 

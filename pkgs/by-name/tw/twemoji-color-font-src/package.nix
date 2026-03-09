@@ -6,9 +6,9 @@
   twemoji-color-font,
   imagemagick,
   inkscape,
-  nodePackages,
   potrace,
   scfbuild,
+  svgo,
   which,
 }:
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     imagemagick
     inkscape
-    nodePackages.svgo
     potrace
     scfbuild
+    svgo
     which
   ];
 
