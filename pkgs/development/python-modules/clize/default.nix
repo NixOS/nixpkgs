@@ -13,13 +13,13 @@
   sigtools,
   unittestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "clize";
   version = "5.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BH9aRHNgJxirG4VnKn4VMDOHF41agcJ13EKd+sHstRA=";
   };
 
@@ -66,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Command-line argument parsing for Python";
     homepage = "https://github.com/epsy/clize";
-    changelog = "https://github.com/epsy/clize/releases/tag/v${version}";
+    changelog = "https://github.com/epsy/clize/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
