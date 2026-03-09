@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash_base16="$(echo "$release_notes" | grep -oP "SHA(2-)?256\(\S+\)\= \K[0-9a-f]{64}" -m 1)"
     hash="$(nix-hash --to-sri --type sha256 "$hash_base16")"
 
-    update-source-version ${finalAttrs.pname} "$version" "$hash" --print-changes
+    update-source-version arq "$version" "$hash" --print-changes
   '';
 
   meta = {
