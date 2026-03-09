@@ -22896,6 +22896,13 @@
     githubId = 61013287;
     name = "Ricardo Steijn";
   };
+  ricardomaps = {
+    email = "ricardomapurungajunior@gmail.com";
+    github = "ricardomaps";
+    githubId = 49507078;
+    name = "Ricardo Mapurunga Junior";
+    matrix = "@ricmaps:matrix.org";
+  };
   richar = {
     github = "ri-char";
     githubId = 17962023;
