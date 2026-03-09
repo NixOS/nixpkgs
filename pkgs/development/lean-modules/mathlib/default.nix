@@ -9,6 +9,7 @@
   plausible,
   LeanSearchClient,
   importGraph,
+  tests,
 }:
 
 buildLakePackage {
@@ -32,6 +33,10 @@ buildLakePackage {
     LeanSearchClient
     importGraph
   ];
+
+  passthru.tests = {
+    inherit (tests.lake) weak-minimax;
+  };
 
   meta = {
     description = "Mathematical library for Lean 4";
