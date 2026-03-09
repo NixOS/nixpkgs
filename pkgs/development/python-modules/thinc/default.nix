@@ -76,6 +76,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/explosion/thinc";
     changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aborsu ];
+    maintainers = [ ];
   };
 }
