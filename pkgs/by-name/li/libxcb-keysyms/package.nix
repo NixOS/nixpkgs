@@ -34,13 +34,13 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [ libxcb ];
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-libxcb-keysyms" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
       version="$(list-directory-versions --pname xcb-util-keysyms \
         --url https://xorg.freedesktop.org/releases/individual/lib/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version libxcb-keysyms "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
