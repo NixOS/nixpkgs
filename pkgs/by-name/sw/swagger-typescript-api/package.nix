@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHash =
       node-modules-hash.${stdenv.hostPlatform.system}
-        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux.");
+        or (throw "swagger-typescript-api: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux.");
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
   };
