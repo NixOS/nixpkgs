@@ -28,8 +28,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     urls = [
-      "https://invisible-island.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
-      "https://invisible-mirror.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
+      "https://invisible-island.net/archives/xterm/xterm-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/xterm-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-ITbrpTAGiht1Zau/F4IydPXO+3/jYYNVy8idxVyLe2o=";
   };
