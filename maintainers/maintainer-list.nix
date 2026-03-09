@@ -7298,6 +7298,12 @@
     githubId = 60694691;
     keys = [ { fingerprint = "A7C9 3DC7 E891 046A 980F  2063 F222 A13B 2053 27A5"; } ];
   };
+  duvallj = {
+    name = "Jack Duvall";
+    email = "theduvallj@gmail.com";
+    github = "duvallj";
+    githubId = 10897431;
+  };
   dvaerum = {
     email = "nixpkgs-maintainer@varum.dk";
     github = "dvaerum";
