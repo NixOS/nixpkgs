@@ -13,10 +13,16 @@
   mpiCheckPhaseHook,
   isILP64 ? false,
   mpiSupport ? true,
+  scalarType ? "real",
   precision ? "double",
   testers,
   hypre,
 }:
+
+assert lib.elem scalarType [
+  "real"
+  "complex"
+];
 
 assert lib.elem precision [
   "single"
@@ -75,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "HYPRE_ENABLE_HYPRE_LAPACK" false)
     (lib.cmakeBool "HYPRE_ENABLE_FORTRAN" true)
     (lib.cmakeBool "HYPRE_ENABLE_BIGINT" isILP64)
+    (lib.cmakeBool "HYPRE_ENABLE_COMPLEX" (scalarType == "complex"))
     (lib.cmakeBool "HYPRE_ENABLE_SINGLE" (precision == "single"))
     (lib.cmakeBool "HYPRE_ENABLE_LONG_DOUBLE" (precision == "long-double"))
     (lib.cmakeBool "HYPRE_ENABLE_OPENMP" true)
