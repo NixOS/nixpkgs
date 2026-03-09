@@ -37,6 +37,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/idursun/jjui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      adamcstephens
       adda
     ];
     mainProgram = "jjui";
