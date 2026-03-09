@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests.convert = testers.runCommand {
-      name = "${finalAttrs.pname}-convert-test";
+      name = "yaml2nix-convert-test";
       nativeBuildInputs = [ finalAttrs.finalPackage ];
       script = ''
         cat <<EOF > test.yaml
