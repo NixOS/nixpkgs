@@ -47,8 +47,8 @@ buildDotnetModule (finalAttrs: {
   fixupPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     runHook preFixup
 
-    autoPatchelf $out/lib/${finalAttrs.pname}/libnfd.so
-    autoPatchelf $out/lib/${finalAttrs.pname}/libTexture2DDecoderNative.so
+    autoPatchelf $out/lib/assetripper/libnfd.so
+    autoPatchelf $out/lib/assetripper/libTexture2DDecoderNative.so
 
     runHook postFixup
   '';
