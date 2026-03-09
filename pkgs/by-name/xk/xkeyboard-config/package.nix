@@ -48,15 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-xkeyboard-config" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
 
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname xkeyboard-config \
         --url https://xorg.freedesktop.org/releases/individual/data/xkeyboard-config/ \
         | sort -V | tail -n1)"
 
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version xkeyboard-config "$version"
     '';
   };
 
