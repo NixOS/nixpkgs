@@ -504,6 +504,8 @@ self: super: with self; {
 
   aiosendspin = callPackage ../development/python-modules/aiosendspin { };
 
+  aiosendspin-mpris = callPackage ../development/python-modules/aiosendspin-mpris { };
+
   aioserial = callPackage ../development/python-modules/aioserial { };
 
   aioshelly = callPackage ../development/python-modules/aioshelly { };
@@ -10214,6 +10216,8 @@ self: super: with self; {
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
+  mpris-api = callPackage ../development/python-modules/mpris-api { };
+
   mprisify = callPackage ../development/python-modules/mprisify { };
 
   mpv = callPackage ../development/python-modules/mpv { inherit (pkgs) mpv; };
@@ -19658,6 +19662,8 @@ self: super: with self; {
   tuf = callPackage ../development/python-modules/tuf { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
+
+  tunit = callPackage ../development/python-modules/tunit { };
 
   turnt = callPackage ../development/python-modules/turnt { };
 
