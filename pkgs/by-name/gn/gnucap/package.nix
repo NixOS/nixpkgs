@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
         '';
       in
       stdenv.mkDerivation {
-        pname = "${finalAttrs.pname}-with-plugins";
+        pname = "gnucap-with-plugins";
         inherit (finalAttrs) version;
 
         propagatedBuildInputs = selectedPlugins;
