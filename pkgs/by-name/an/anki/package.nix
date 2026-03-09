@@ -44,10 +44,6 @@ let
   srcHash = "sha256-0hLTQR7f7s58DUgAZbDeREMee6VrqAKHyhS1Hs/Em1A=";
   cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
   yarnHash = "sha256-EmKeHORr/+qsDzAwtearMi7qodcCgjeAQcy+79HL7Vg=";
-  pythonDeps = map (meta: {
-    url = meta.url;
-    path = toString (fetchurl meta);
-  }) (lib.importJSON ./uv-deps.json);
 
   src = fetchFromGitHub {
     owner = "ankitects";
@@ -75,31 +71,6 @@ let
     [[ "$1" == "install" ]] && exit 0
     exec ${yarn}/bin/yarn "$@"
   '';
-
-  uvWheels = runCommand "uv-wheels" {
-    # otherwise, it's too long of a string
-    passAsFile = [ "installCommand" ];
-    installCommand = ''
-      #!${stdenv.shell}
-      mkdir -p $out
-      # note: uv.lock doesn't contain build deps?? https://github.com/astral-sh/uv/issues/5190
-      # link them in manually
-      ln -vsf ${python3Packages.setuptools.dist}/*.whl $out
-      ln -vsf ${python3Packages.editables.dist}/*.whl $out
-      # we also force nixpkgs pyqt6 stuff because that needs to match the
-      # nixpkgs qt6 version, otherwise we get linker errors
-      ln -vsf ${python3Packages.pyqt6.dist}/*.whl $out
-      ln -vsf ${python3Packages.pyqt6-webengine.dist}/*.whl $out
-      ln -vsf ${python3Packages.pyqt6-sip.dist}/*.whl $out
-    ''
-    + (lib.strings.concatStringsSep "\n" (
-      map (dep: ''
-        if ! [[ "${baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
-          ln -vsf ${dep.path} "$out/${baseNameOf dep.url}"
-        fi
-      '') pythonDeps
-    ));
-  } "bash $installCommandPath";
 in
 
 python3Packages.buildPythonApplication rec {
@@ -191,7 +162,6 @@ python3Packages.buildPythonApplication rec {
     UV_SYSTEM_PYTHON = true;
     UV_PYTHON_DOWNLOADS = "never";
     UV_OFFLINE = "1";
-    UV_FIND_LINKS = "${uvWheels}";
   };
 
   buildPhase = ''
