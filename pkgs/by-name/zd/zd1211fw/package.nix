@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "1.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zd1211/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "mirror://sourceforge/zd1211/zd1211-firmware-${finalAttrs.version}.tar.bz2";
     hash = "sha256-8R04ENf3KDOZf2NFhKWG3M7XGjU/llq/gQYuxDHQKxI=";
   };
 
