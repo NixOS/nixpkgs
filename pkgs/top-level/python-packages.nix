@@ -9630,6 +9630,8 @@ self: super: with self; {
 
   mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
 
+  mdx-wikilink-plus = callPackage ../development/python-modules/mdx-wikilink-plus { };
+
   mean-average-precision = callPackage ../development/python-modules/mean-average-precision { };
 
   measurement = callPackage ../development/python-modules/measurement { };
@@ -9913,9 +9915,17 @@ self: super: with self; {
 
   mkdocs-build-plantuml = callPackage ../development/python-modules/mkdocs-build-plantuml { };
 
+  mkdocs-callouts = callPackage ../development/python-modules/mkdocs-callouts { };
+
+  mkdocs-custom-tags-attributes =
+    callPackage ../development/python-modules/mkdocs-custom-tags-attributes
+      { };
+
   mkdocs-drawio-exporter = callPackage ../development/python-modules/mkdocs-drawio-exporter { };
 
   mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
+
+  mkdocs-embed-file-plugin = callPackage ../development/python-modules/mkdocs-embed-file-plugin { };
 
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
 
@@ -9964,6 +9974,8 @@ self: super: with self; {
   mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
 
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
+
+  mkdocs-obsidian-bridge = callPackage ../development/python-modules/mkdocs-obsidian-bridge { };
 
   mkdocs-puml = callPackage ../development/python-modules/mkdocs-puml { };
 
@@ -11276,6 +11288,10 @@ self: super: with self; {
   objprint = callPackage ../development/python-modules/objprint { };
 
   objsize = callPackage ../development/python-modules/objsize { };
+
+  obsidian-callouts = callPackage ../development/python-modules/obsidian-callouts { };
+
+  obsidian-media = callPackage ../development/python-modules/obsidian-media { };
 
   obspy = callPackage ../development/python-modules/obspy { };
 
