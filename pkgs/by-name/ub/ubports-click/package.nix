@@ -148,6 +148,9 @@ let
 
     passthru = {
       updateScript = gitUpdater { };
+      tests.pkg-config = testers.hasPkgConfigModules {
+        package = self;
+      };
     };
 
     meta = {
@@ -168,10 +171,3 @@ let
   };
 in
 self
-// {
-  passthru = self.passthru // {
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = self;
-    };
-  };
-}
