@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   node_modules = stdenv.mkDerivation {
     inherit (finalAttrs) src version;
-    pname = "${finalAttrs.pname}-node_modules";
+    pname = "atuin-desktop-node_modules";
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         x86_64-linux = "sha256-w8fMS6f+F+23EtMjjl0RsHMm6b5jOXSwUDAc21vqLAg=";
       }
       .${stdenv.hostPlatform.system}
-        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet.");
+        or (throw "atuin-desktop: Platform ${stdenv.hostPlatform.system} is not packaged yet.");
     outputHashMode = "recursive";
   };
 
