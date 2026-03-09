@@ -8286,6 +8286,11 @@
     githubId = 2512008;
     name = "Even Brenden";
   };
+  everettjf = {
+    github = "everettjf";
+    githubId = 1665109;
+    name = "Everett Jia";
+  };
   evey = {
     email = "nix@lubdub.nl";
     github = "lub-dub";
