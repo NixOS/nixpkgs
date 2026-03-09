@@ -19935,6 +19935,11 @@
     githubId = 7397786;
     name = "Odysseas Georgoudis";
   };
+  oenu = {
+    github = "oenu";
+    githubId = 51684443;
+    name = "Adam Newton-Blows";
+  };
   ofalvai = {
     email = "ofalvai@gmail.com";
     github = "ofalvai";
