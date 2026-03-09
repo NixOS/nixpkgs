@@ -123,7 +123,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   npmRoot = "tools/server/webui";
   npmDepsHash = "sha256-DxgUDVr+kwtW55C4b89Pl+j3u2ILmACcQOvOBjKWAKQ=";
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "llama-cpp-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src patches;
     preBuild = ''
       pushd ${finalAttrs.npmRoot}
