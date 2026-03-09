@@ -9,6 +9,7 @@
   libsodium,
   libuv,
   nix-update-script,
+  nixosTests,
   openssl,
   pkg-config,
   zeromq,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    tests = { inherit (nixosTests) p2pool; };
     updateScript = nix-update-script { };
   };
 

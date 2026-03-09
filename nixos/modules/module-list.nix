@@ -919,6 +919,7 @@
   ./services/misc/osrm.nix
   ./services/misc/overseerr.nix
   ./services/misc/owncast.nix
+  ./services/misc/p2pool.nix
   ./services/misc/packagekit.nix
   ./services/misc/paisa.nix
   ./services/misc/paperless.nix
