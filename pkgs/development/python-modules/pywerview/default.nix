@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pywerview";
-  version = "0.7.5";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "the-useless-one";
     repo = "pywerview";
     tag = "v${version}";
-    hash = "sha256-wl7/u9Uja/FflO3tN3UyanX2LIRG417RfWdyZCtUtGs=";
+    hash = "sha256-i4YV6PfcazoW8z2Awbn8ake4qhA/m43UzECqiEO4QLg=";
   };
 
   build-system = [ setuptools ];
