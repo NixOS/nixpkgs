@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
           install -Dt "$out/bin" -m0755 GccUnixR/uasm
         ''
     }
-    install -Dt "$out/share/doc/${finalAttrs.pname}" -m0644 {Readme,History}.txt Doc/*
+    install -Dt "$out/share/doc/uasm" -m0644 {Readme,History}.txt Doc/*
 
     runHook postInstall
   '';
