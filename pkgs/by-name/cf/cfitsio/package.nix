@@ -68,14 +68,14 @@ stdenv.mkDerivation (finalAttrs: {
   # Fixup installation
   # Remove installed test tools and benchmark
   postInstall = ''
-    install -Dm644 -t "$out/share/doc/${finalAttrs.pname}" ../docs/*.pdf
+    install -Dm644 -t "$out/share/doc/cfitsio" ../docs/*.pdf
     rm "$out/bin/cookbook"
     rmdir "$out/bin"
     rm "$bin/bin/smem" "$bin/bin/speed"
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "${finalAttrs.pname}-"; };
+    updateScript = gitUpdater { rev-prefix = "cfitsio-"; };
   };
 
   meta = {
