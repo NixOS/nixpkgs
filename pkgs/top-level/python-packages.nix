@@ -6757,6 +6757,8 @@ self: super: with self; {
 
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
+  gtfs-station-stop = callPackage ../development/python-modules/gtfs-station-stop { };
+
   gto = callPackage ../development/python-modules/gto { };
 
   gtts = callPackage ../development/python-modules/gtts { };
