@@ -71,6 +71,10 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
+
   dependencies = [
     attrs
     cmarkgfm
