@@ -23,13 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = "mkdir $out/bin";
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-xorg-docs" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname xorg-docs \
         --url https://xorg.freedesktop.org/releases/individual/doc/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version xorg-docs "$version"
     '';
   };
 
