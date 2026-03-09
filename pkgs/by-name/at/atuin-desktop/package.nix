@@ -125,8 +125,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # Otherwise tauri will look for a private key we don't have.
   tauriConf = builtins.toJSON { bundle.createUpdaterArtifacts = false; };
-  passAsFile = [ "tauriConf" ];
   preBuild = ''
+    tauriConfPath="tauriConf"
+    printf "%s" "$tauriConf" > "$tauriConfPath"
     tauriBuildFlags+=(
       "--config"
       "$tauriConfPath"
@@ -163,6 +164,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=ui::viewport::tests::test_line_wrapping"
   ];
   doCheck = !stdenv.isDarwin;
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Local-first, executable runbook editor";
