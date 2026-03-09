@@ -643,6 +643,22 @@ let
 
   configFile = pkgs.writeText "mosquitto.conf" (lib.concatStringsSep "\n" (formatGlobal cfg));
 
+  aclFiles = lib.listToAttrs (
+    lib.imap0 (idx: listener: {
+      name = "mosquitto/acl-${toString idx}.conf";
+      value = {
+        user = config.users.users.mosquitto.name;
+        group = config.users.users.mosquitto.group;
+        mode = "0400";
+        text = lib.concatStringsSep "\n" (
+          lib.flatten [
+            listener.acl
+            (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
+          ]
+        );
+      };
+    }) cfg.listeners
+  );
 in
 
 {
@@ -662,6 +678,7 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
+      restartTriggers = lib.mapAttrsToList (n: v: lib.hashString "sha1" v.text) aclFiles;
       serviceConfig = {
         Type = "notify";
         NotifyAccess = "main";
@@ -769,24 +786,7 @@ in
       );
     };
 
-    environment.etc = lib.listToAttrs (
-      lib.imap0 (idx: listener: {
-        name = "mosquitto/acl-${toString idx}.conf";
-        value = {
-          user = config.users.users.mosquitto.name;
-          group = config.users.users.mosquitto.group;
-          mode = "0400";
-          text = (
-            lib.concatStringsSep "\n" (
-              lib.flatten [
-                listener.acl
-                (lib.mapAttrsToList (n: u: [ "user ${n}" ] ++ map (t: "topic ${t}") u.acl) listener.users)
-              ]
-            )
-          );
-        };
-      }) cfg.listeners
-    );
+    environment.etc = aclFiles;
 
     users.users.mosquitto = {
       description = "Mosquitto MQTT Broker Daemon owner";
@@ -797,7 +797,6 @@ in
     };
 
     users.groups.mosquitto.gid = config.ids.gids.mosquitto;
-
   };
 
   meta = {
