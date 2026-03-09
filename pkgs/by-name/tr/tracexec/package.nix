@@ -51,9 +51,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  checkFlags = [
-    "--skip=log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-  ];
+  # tracexec uses $XDG_DATA_HOME/tracexec for storing temporary files and logs.
+  # Set this directory to $TMPDIR because integration tests needs to access it.
+  preCheck = ''
+    export TRACEXEC_DATA="$TMPDIR"
+  '';
 
   postInstall = ''
     # Remove test binaries (e.g. `empty-argv`, `corrupted-envp`) and only retain `tracexec`
