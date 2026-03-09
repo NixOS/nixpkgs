@@ -21,7 +21,7 @@ tectonic-unwrapped.overrideAttrs (
     # does not reconstruct cargoDeps (a known limitation):
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (finalAttrs) src;
-      name = "${finalAttrs.pname}-${finalAttrs.version}";
+      name = "texpresso-tonic-${finalAttrs.version}";
       hash = finalAttrs.cargoHash;
       patches = finalAttrs.cargoPatches;
     };
