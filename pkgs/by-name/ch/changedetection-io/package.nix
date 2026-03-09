@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.53.6";
+  version = "0.54.4";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     tag = version;
-    hash = "sha256-j7Dw6PLGt955wfQNriRHGtsJzCd50xpHJK0fqVvzIY4=";
+    hash = "sha256-Bn4o6/fVaf7BfpZm9HIP4ApAu8s3fvNcIutGlsEtCKk=";
   };
 
   pythonRelaxDeps = true;
@@ -23,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     with python3.pkgs;
     [
       apprise
+      arrow
       babel
       beautifulsoup4
       blinker
@@ -33,11 +34,11 @@ python3.pkgs.buildPythonApplication rec {
       elementpath
       extruct
       feedgen
+      feedparser
       flask
       flask-babel
       flask-compress
       flask-cors
-      flask-expects-json
       flask-login
       flask-paginate
       flask-restful
@@ -46,26 +47,23 @@ python3.pkgs.buildPythonApplication rec {
       gevent
       greenlet
       inscriptis
-      janus
       jinja2
-      jinja2-time
       jq
       jsonpath-ng
-      jsonschema
       levenshtein
+      linkify-it-py
       loguru
       lxml
       openapi-core
       openpyxl
+      orjson
       paho-mqtt
       panzi-json-logic
-      playwright
       pluggy
       price-parser
-      psutil
       puremagic
       pyppeteer-ng
-      # pyppeteerstealth
+      # pyppeteerstealth # Optional for changedetection-io and not packaged.
       python-engineio
       python-socketio
       pytz
@@ -82,8 +80,31 @@ python3.pkgs.buildPythonApplication rec {
     ++ requests.optional-dependencies.socks
     ++ openapi-core.optional-dependencies.flask;
 
-  # tests can currently not be run in one pytest invocation and without docker
-  doCheck = false;
+  nativeInstallCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    psutil
+    pytest
+    pytest-flask
+    pytest-mock
+    pytest-xdist
+  ];
+
+  # Some simple tests can be run without network IO.
+  # Namely tests that don't have a dependency on the `live_server` fixture.
+  enabledTestPaths = [
+    "changedetectionio/tests/unit/test_html_to_text.py"
+    "changedetectionio/tests/unit/test_jinja2_security.py"
+    "changedetectionio/tests/unit/test_notification_diff.py"
+    "changedetectionio/tests/unit/test_restock_logic.py"
+    "changedetectionio/tests/unit/test_scheduler.py"
+    "changedetectionio/tests/unit/test_semver.py"
+    "changedetectionio/tests/unit/test_time_extension.py"
+    "changedetectionio/tests/unit/test_time_handler.py"
+    "changedetectionio/tests/unit/test_watch_model.py"
+    "changedetectionio/tests/test_html_to_text.py"
+    "changedetectionio/tests/test_xpath_default_namespace.py"
+    "changedetectionio/tests/test_xpath_selector_unit.py"
+  ];
 
   pythonImportsCheck = [ "changedetectionio" ];
 
