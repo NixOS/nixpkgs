@@ -44,6 +44,7 @@ python3Packages.buildPythonPackage {
     prometheus-client
     supervisor
     typing-extensions
+    watchdog
   ];
 
   # set up (additional) Lua dependencies
