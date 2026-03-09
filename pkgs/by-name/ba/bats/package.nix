@@ -191,9 +191,11 @@ resholve.mkDerivation rec {
               assert_output "hi"
             }
           '';
-          passAsFile = [ "testScript" ];
+          __structuredAttrs = true;
         }
         ''
+          testScriptPath="testScript"
+          printf "%s" "$testScript" > "$testScriptPath"
           ${
             bats.withLibraries (p: [
               p.bats-support
