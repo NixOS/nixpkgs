@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   deps = callPackage ./deps.nix {
-    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+    name = "ghostty-cache-${finalAttrs.version}";
   };
 
   strictDeps = true;
