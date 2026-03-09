@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.3.7";
 
   src = fetchurl {
-    url = "https://downloads.xvid.com/downloads/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://downloads.xvid.com/downloads/xvidcore-${finalAttrs.version}.tar.bz2";
     hash = "sha256-ruqulS1Ns5UkmDmjvQOEHWhEhD9aT4TCcf+I96oaz/c=";
   };
 
