@@ -14285,6 +14285,12 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kosumi = {
+    email = "i@kosumi.dev";
+    github = "KaminariOS";
+    githubId = 74843779;
+    name = "kosumi";
+  };
   kotatsuyaki = {
     email = "kotatsuyaki@mail.kotatsu.dev";
     github = "kotatsuyaki";
