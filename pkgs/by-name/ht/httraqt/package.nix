@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/httraqt/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/httraqt/httraqt-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-HfnUlJifpzWiP1rb+Kn3I/H6nYBeEB6cXVI5pu28K5E=";
   };
 
