@@ -388,7 +388,7 @@ stdenv'.mkDerivation (finalAttrs: {
       };
 
     tests = {
-      render = runCommand "${finalAttrs.pname}-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; } ''
+      render = runCommand "blender-test" { nativeBuildInputs = [ mesa.llvmpipeHook ]; } ''
         set -euo pipefail
         cat <<'PYTHON' > scene-config.py
         import bpy
