@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
   ];
 
   passthru.tests = {
-    hello-world = runCommand "${finalAttrs.pname}-test" { } ''
+    hello-world = runCommand "super-test" { } ''
       echo \"'hello, world'\" | ${super}/bin/super -color=false -f=line - > $out
       [ "$(cat $out)" = 'hello, world' ]
     '';
