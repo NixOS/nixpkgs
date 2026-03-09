@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://crypto.stanford.edu/pbc/files/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "https://crypto.stanford.edu/pbc/files/pbc-${finalAttrs.version}.tar.gz";
     hash = "sha256-GCdaNnKDB3uv419EMgBJnjsZxKN1SVPaKhsvDWtZItw=";
   };
 
