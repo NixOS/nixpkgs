@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = ./update.sh;
     ld-preload-tests = stdenv.mkDerivation {
-      name = "${finalAttrs.pname}-ld-preload-tests";
+      name = "graphene-hardened-malloc-ld-preload-tests";
       inherit (finalAttrs) src;
 
       nativeBuildInputs = [ makeWrapper ];
