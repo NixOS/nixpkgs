@@ -55,13 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-libx11" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
       version="$(list-directory-versions --pname libX11 \
         --url https://xorg.freedesktop.org/releases/individual/lib/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version libx11 "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
