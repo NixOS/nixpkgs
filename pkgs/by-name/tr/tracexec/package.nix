@@ -75,6 +75,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "tracexec";
     maintainers = with lib.maintainers; [
       fpletz
+      kxxt
       nh2
     ];
     platforms = lib.platforms.linux;
