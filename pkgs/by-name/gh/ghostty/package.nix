@@ -22,23 +22,25 @@
   removeReferencesTo,
   versionCheckHook,
   wrapGAppsHook4,
-  zig_0_14,
+  zig_0_15,
 
   # Usually you would override `zig.hook` with this, but we do that internally
   # since upstream recommends a non-default level
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
   optimizeLevel ? "ReleaseFast",
 }:
+
 let
-  zig = zig_0_14;
+  zig = zig_0_15;
 
   zig_hook = zig.hook.overrideAttrs {
     zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
   };
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.2.3";
+  version = "1.3.0";
 
   outputs = [
     "out"
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0tmLOJCrrEnVc/ZCp/e646DTddXjv249QcSwkaukL30=";
+    hash = "sha256-44bF0MtsaoF0EgUI1TbGUz4NUH6psIRMCZgZJ0GtSaU=";
   };
 
   deps = callPackage ./deps.nix {
