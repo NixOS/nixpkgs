@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ## workaround for overrideAttrs on buildRustPackage
   ## see https://discourse.nixos.org/t/is-it-possible-to-override-cargosha256-in-buildrustpackage/4393/3
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${finalAttrs.pname}-cargo-deps";
+    name = "lldap-cargo-deps";
     inherit (finalAttrs) src patches;
     hash = finalAttrs.cargoHash;
   };
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         cargoDeps
         patches
         ;
-      pname = finalAttrs.pname + "-frontend";
+      pname = "lldap" + "-frontend";
       nativeBuildInputs = [
         wasm-pack
         wasm-bindgen-cli_0_2_100
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
 
     staticAssets =
-      runCommand "${finalAttrs.pname}-static-assets"
+      runCommand "lldap-static-assets"
         {
           outputHash = staticAssetsHash;
           outputHashAlgo = "sha256";
