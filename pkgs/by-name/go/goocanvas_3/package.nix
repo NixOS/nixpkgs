@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      attrPath = "${finalAttrs.pname}${lib.versions.major finalAttrs.version}";
+      attrPath = "goocanvas${lib.versions.major finalAttrs.version}";
       packageName = finalAttrs.pname;
       versionPolicy = "odd-unstable";
     };
