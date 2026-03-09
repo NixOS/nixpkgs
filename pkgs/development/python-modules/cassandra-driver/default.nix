@@ -28,8 +28,8 @@ buildPythonPackage (finalAttrs: {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "datastax";
-    repo = "python-driver";
+    owner = "apache";
+    repo = "cassandra-python-driver";
     tag = finalAttrs.version;
     hash = "sha256-VynrUc7gqAi061FU2ln4B1fK4NaSUcjSgH1i1JQpmvk=";
   };
@@ -120,8 +120,8 @@ buildPythonPackage (finalAttrs: {
 
   meta = {
     description = "Python client driver for Apache Cassandra";
-    homepage = "http://datastax.github.io/python-driver";
-    changelog = "https://github.com/datastax/python-driver/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
+    homepage = "https://github.com/apache/cassandra-python-driver";
+    changelog = "https://github.com/apache/cassandra-python-driver/blob/${finalAttrs.src.tag}/CHANGELOG.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ris ];
   };
