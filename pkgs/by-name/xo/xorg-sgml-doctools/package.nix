@@ -20,13 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-xorg-sgml-doctools" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname xorg-sgml-doctools \
         --url https://xorg.freedesktop.org/releases/individual/doc \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version xorg-sgml-doctools "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
