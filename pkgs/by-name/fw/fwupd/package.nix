@@ -310,7 +310,7 @@ stdenv.mkDerivation (finalAttrs: {
     addToSearchPath XDG_DATA_DIRS "${shared-mime-info}/share"
 
     echo "12345678901234567890123456789012" > machine-id
-    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id) \
+    export NIX_REDIRECTS=/etc/machine-id=$(realpath machine-id)
   '';
 
   postInstall = ''

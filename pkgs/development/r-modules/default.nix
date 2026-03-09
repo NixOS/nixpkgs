@@ -2970,7 +2970,7 @@ let
       postPatch = ''
         substituteInPlace src/Makefile --replace-fail \
           "all:\$(PROG) ../inst/bwa clean" \
-          "all:\$(PROG) ../inst/bwa" \
+          "all:\$(PROG) ../inst/bwa"
       '';
     });
 
