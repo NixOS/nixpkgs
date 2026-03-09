@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/share
-    cp usr/lib/ipscan/ipscan-linux64-${finalAttrs.version}.jar $out/share/${finalAttrs.pname}-${finalAttrs.version}.jar
+    cp usr/lib/ipscan/ipscan-linux64-${finalAttrs.version}.jar $out/share/ipscan-${finalAttrs.version}.jar
 
     makeWrapper ${jre}/bin/java $out/bin/ipscan \
       --prefix LD_LIBRARY_PATH : "$out/lib/:${
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
           glib
         ]
       }" \
-      --add-flags "-Xmx256m -cp $out/share/${finalAttrs.pname}-${finalAttrs.version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
+      --add-flags "-Xmx256m -cp $out/share/ipscan-${finalAttrs.version}.jar:${swt}/jars/swt.jar net.azib.ipscan.Main"
 
     install -D usr/share/applications/ipscan.desktop -t $out/share/applications/
     substituteInPlace $out/share/applications/ipscan.desktop --replace-fail "Exec=sh /usr/bin/ipscan" "Exec=ipscan"
