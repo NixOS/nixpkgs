@@ -173,13 +173,19 @@ let
           };
         in
         python;
-    in
-    passthruFun rec {
-      inherit self sourceVersion packageOverrides;
-      implementation = "cpython";
-      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
-      executable = libPrefix;
       pythonVersion = with sourceVersion; "${major}.${minor}";
+      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
+    in
+    passthruFun {
+      inherit
+        self
+        sourceVersion
+        packageOverrides
+        libPrefix
+        pythonVersion
+        ;
+      implementation = "cpython";
+      executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
       inherit (splices)
