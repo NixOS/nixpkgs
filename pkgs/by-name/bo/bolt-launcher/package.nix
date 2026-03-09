@@ -84,12 +84,12 @@ let
     '';
 
     postFixup = ''
-      makeWrapper "$out/opt/bolt-launcher/bolt" "$out/bin/${finalAttrs.pname}-${finalAttrs.version}" \
+      makeWrapper "$out/opt/bolt-launcher/bolt" "$out/bin/bolt-launcher-${finalAttrs.version}" \
       --set JAVA_HOME ${jdk17}
       mkdir -p $out/lib
       cp $out/usr/local/lib/libbolt-plugin.so $out/lib
       mkdir -p $out/share/icons/hicolor/256x256/apps
-      cp ../icon/256.png $out/share/icons/hicolor/256x256/apps/${finalAttrs.pname}.png
+      cp ../icon/256.png $out/share/icons/hicolor/256x256/apps/bolt-launcher.png
     '';
 
     desktopItems = [
