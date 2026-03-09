@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   deps = callPackage ./deps.nix {
-    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+    name = "zf-cache-${finalAttrs.version}";
   };
 
   dontSetZigDefaultFlags = true;
