@@ -46,10 +46,6 @@ buildPythonPackage {
     ];
   };
 
-  pythonRelaxDeps = [
-    "multimethod"
-  ];
-
   pythonImportsCheck = [
     "rich_tables"
   ];
@@ -62,5 +58,12 @@ buildPythonPackage {
       lib.maintainers._9999years
     ];
     mainProgram = "table";
+    # Putting "multimethod" in `pythonRelaxDeps` makes this package build, but
+    # it breaks dependent packages like `beetcamp` that depend on
+    # `rich-tables`. The following upstream issue asks upstream to support
+    # multimethod>=2:
+    #
+    # https://github.com/snejus/rich-tables/issues/10:
+    broken = lib.versionAtLeast multimethod.version "2";
   };
 }
