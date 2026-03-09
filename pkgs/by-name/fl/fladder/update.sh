@@ -3,7 +3,7 @@
 
 set -eou pipefail
 
-PACKAGE_DIR=$(realpath "$(dirname "$0")")
+PACKAGE_DIR="$(realpath "$(dirname "$0")")"
 cd "$PACKAGE_DIR"
 while ! test -f flake.nix; do cd ..; done
 NIXPKGS_DIR="$PWD"
