@@ -116,6 +116,7 @@ buildPythonPackage (finalAttrs: {
     "test_connection_initialization"
     # time-sensitive
     "test_nts_token_performance"
+    "test_empty_connections"
   ];
 
   meta = {
