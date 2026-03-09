@@ -18,6 +18,7 @@
   symlinkJoin,
   makeWrapper,
   runCommand,
+  writeText,
   doInstallCheck ? true,
   # packages that use bats (for update testing)
   bash-preexec,
@@ -157,7 +158,7 @@ resholve.mkDerivation rec {
     libraries =
       runCommand "${bats.name}-with-libraries-test"
         {
-          testScript = ''
+          testScript = writeText "bats-libraries-test-script" ''
             setup() {
               bats_load_library bats-support
               bats_load_library bats-assert
@@ -191,7 +192,6 @@ resholve.mkDerivation rec {
               assert_output "hi"
             }
           '';
-          passAsFile = [ "testScript" ];
         }
         ''
           ${
@@ -201,7 +201,7 @@ resholve.mkDerivation rec {
               p.bats-file
               p.bats-detik
             ])
-          }/bin/bats "$testScriptPath"
+          }/bin/bats "$testScript"
           touch "$out"
         '';
 
