@@ -60,6 +60,7 @@ python3Packages.buildPythonApplication rec {
       safetensors
       scipy
       sentencepiece
+      simpleeval
       soundfile
       spandrel
       sqlalchemy
