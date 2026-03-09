@@ -20935,6 +20935,11 @@
     githubId = 9267430;
     name = "Philipp Mildenberger";
   };
+  philipp-tty = {
+    github = "philipp-tty";
+    githubId = 19515917;
+    name = "Philipp";
+  };
   philiptaron = {
     email = "philip.taron@gmail.com";
     github = "philiptaron";
