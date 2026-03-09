@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # IDA depends on quite some things extracted by the runfile, so first extract everything
     # into $out/opt, then remove the unnecessary files and directories.
-    IDADIR=$out/opt/${finalAttrs.pname}-${finalAttrs.version}
+    IDADIR=$out/opt/ida-free-${finalAttrs.version}
 
     # The installer doesn't honor `--prefix` in all places,
     # thus needing to set `HOME` here.
