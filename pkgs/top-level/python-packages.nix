@@ -9965,6 +9965,8 @@ self: super: with self; {
 
   mkdocs-minify-plugin = callPackage ../development/python-modules/mkdocs-minify-plugin { };
 
+  mkdocs-obsidian-bridge = callPackage ../development/python-modules/mkdocs-obsidian-bridge { };
+
   mkdocs-puml = callPackage ../development/python-modules/mkdocs-puml { };
 
   mkdocs-redirects = callPackage ../development/python-modules/mkdocs-redirects { };
@@ -11276,6 +11278,10 @@ self: super: with self; {
   objprint = callPackage ../development/python-modules/objprint { };
 
   objsize = callPackage ../development/python-modules/objsize { };
+
+  obsidian-callouts = callPackage ../development/python-modules/obsidian-callouts { };
+
+  obsidian-media = callPackage ../development/python-modules/obsidian-media { };
 
   obspy = callPackage ../development/python-modules/obspy { };
 
