@@ -34,7 +34,7 @@ let
   zig = zig_0_15;
 
   zig_hook = zig.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
+    zig_default_flags = "-Dcpu=baseline --color off";
   };
 in
 
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     harfbuzz
   ];
 
-  zigBuildFlags = [
+  zigCheckFlags = [
     "--system"
     "${finalAttrs.deps}"
     "-Dversion-string=${finalAttrs.version}"
@@ -104,7 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     inherit glslang;
   };
 
-  zigCheckFlags = finalAttrs.zigBuildFlags;
+  # Only specify the optimization level for the actual build.
+  # Tests do not work on ReleaseFast as they rely on triggering
+  # specific integrity violations within the internal data structures.
+  zigBuildFlags = finalAttrs.zigCheckFlags ++ [
+    "-Doptimize=${optimizeLevel}"
+  ];
 
   doCheck = true;
 
