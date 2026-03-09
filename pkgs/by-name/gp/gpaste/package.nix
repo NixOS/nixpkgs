@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/NixOS/nix/issues/1846
   postPatch = ''
     substituteInPlace src/libgpaste/gpaste/gpaste-settings.c \
-      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "${finalAttrs.pname}-${finalAttrs.version}"}
+      --subst-var-by gschemasCompiled ${glib.makeSchemaPath (placeholder "out") "gpaste-${finalAttrs.version}"}
 
     substituteInPlace src/gnome-shell/metadata.json.in --replace-fail \
       '"shell-version": [ "45", "46", "47", "48" ],' \
