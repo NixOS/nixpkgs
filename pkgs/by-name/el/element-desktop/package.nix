@@ -32,7 +32,7 @@ stdenv.mkDerivation (
   removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
+    name = "element-desktop-${finalAttrs.version}";
     src = fetchFromGitHub {
       owner = "element-hq";
       repo = "element-desktop";
