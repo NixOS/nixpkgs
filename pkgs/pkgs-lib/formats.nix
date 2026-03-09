@@ -141,10 +141,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ jq ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               jq . "$valuePath" > $out
             ''
         ) { };
@@ -164,10 +166,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ remarshal_0_17 ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
@@ -187,10 +191,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ remarshal ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2yaml "$valuePath" "$out"
             ''
         ) { };
@@ -466,10 +472,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ yj ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               yj -jt < "$valuePath" > "$out"
             ''
         ) { };
@@ -499,10 +507,12 @@ optionalAttrs allowAliases aliases
             {
               nativeBuildInputs = [ json2cdn ];
               value = builtins.toJSON value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               json2cdn "$valuePath" > $out
             ''
         ) { };
@@ -734,12 +744,12 @@ optionalAttrs allowAliases aliases
         pkgs.runCommand name
           {
             value = toConf value;
-            passAsFile = [ "value" ];
             nativeBuildInputs = [ elixir ];
             preferLocalBuild = true;
+            __structuredAttrs = true;
           }
           ''
-            cp "$valuePath" "$out"
+            printf "%s" "$value" > "$out"
             mix format "$out"
           '';
     };
@@ -783,14 +793,14 @@ optionalAttrs allowAliases aliases
               inherit indentWidth;
               indentType = if indentUsingTabs then "Tabs" else "Spaces";
               value = toLua { inherit asBindings multiline; } value;
-              passAsFile = [ "value" ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
               ${optionalString (!asBindings) ''
                 echo -n 'return ' >> $out
               ''}
-              cat $valuePath >> $out
+              printf "%s" "$value" >> $out
               stylua \
                 --no-editorconfig \
                 --line-endings Unix \
@@ -931,7 +941,7 @@ optionalAttrs allowAliases aliases
               ];
               imports = builtins.toJSON (value._imports or [ ]);
               value = builtins.toJSON (removeAttrs value [ "_imports" ]);
-              pythonGen = ''
+              pythonGen = pkgs.writeText "pythonGen" ''
                 import json
                 import os
 
@@ -964,16 +974,16 @@ optionalAttrs allowAliases aliases
                     for key, value in json.load(f).items():
                         print(f"{key} = {recursive_repr(value)}")
               '';
-              passAsFile = [
-                "imports"
-                "value"
-                "pythonGen"
-              ];
               preferLocalBuild = true;
+              __structuredAttrs = true;
             }
             ''
+              importsPath="$TMPDIR/imports"
+              printf "%s" "$imports" > "$importsPath"
+              valuePath="$TMPDIR/value"
+              printf "%s" "$value" > "$valuePath"
               cat "$valuePath"
-              python3 "$pythonGenPath" > $out
+              python3 "$pythonGen" > $out
               black $out
             ''
         ) { };
@@ -1003,7 +1013,7 @@ optionalAttrs allowAliases aliases
                   libxml2Python
                 ];
                 value = builtins.toJSON value;
-                pythonGen = ''
+                pythonGen = pkgs.writeText "pythonGen" ''
                   import json
                   import os
                   import xmltodict
@@ -1013,14 +1023,13 @@ optionalAttrs allowAliases aliases
                         if withHeader then "True" else "False"
                       }, pretty=True, indent=" " * 2))
                 '';
-                passAsFile = [
-                  "value"
-                  "pythonGen"
-                ];
                 preferLocalBuild = true;
+                __structuredAttrs = true;
               }
               ''
-                python3 "$pythonGenPath" > $out
+                valuePath="$TMPDIR/value"
+                printf "%s" "$value" > "$valuePath"
+                python3 "$pythonGen" > $out
                 xmllint $out > /dev/null
               ''
           ) { };
