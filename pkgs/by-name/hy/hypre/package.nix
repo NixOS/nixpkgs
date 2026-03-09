@@ -26,13 +26,13 @@ assert lib.elem precision [
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypre";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "hypre-space";
     repo = "hypre";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zu9YWfBT2WJxPg6JHrXjZWRM9Ai1p28EpvAx6xfdPsY=";
+    hash = "sha256-U+6PUlrTY4ewS6vOSusRerqh9Jw6TX5A+Y08pfcIvZU=";
   };
 
   outputs = [
