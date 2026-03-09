@@ -275,7 +275,7 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
     "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
 
-    "XEN_WHOAMI=${finalAttrs.pname}"
+    "XEN_WHOAMI=xen"
     "XEN_DOMAIN=${finalAttrs.vendor}"
 
     "GIT=${getExe' coreutils "false"}"
