@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
   };
 
   frontend = stdenv.mkDerivation (finalAttrs': {
-    pname = "${finalAttrs.pname}-frontend";
+    pname = "garage-webui-frontend";
     inherit (finalAttrs) version src;
 
     nativeBuildInputs = [
