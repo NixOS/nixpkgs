@@ -12,7 +12,7 @@ let
     owner = "Comfy-Org";
     repo = "workflow_templates";
     rev = "v${version}";
-    hash = "sha256-d78HMrQtKzUHGsYfaaJbIrIe/FhV3VBxFR4g8cQC5vE=";
+    hash = "sha256-/Nxvfmxopq1TzASOS8o8lDKY+wqZuw6cfmAlvEaGOg0=";
   };
 
   # TODO: cleanup, de-dupe
@@ -55,14 +55,14 @@ let
 in
 buildPythonPackage rec {
   pname = "comfyui-workflow-templates";
-  version = "0.9.4";
+  version = "0.9.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Comfy-Org";
     repo = "workflow_templates";
     rev = "v${version}";
-    hash = "sha256-d78HMrQtKzUHGsYfaaJbIrIe/FhV3VBxFR4g8cQC5vE=";
+    hash = "sha256-/Nxvfmxopq1TzASOS8o8lDKY+wqZuw6cfmAlvEaGOg0=";
   };
 
   build-system = [
