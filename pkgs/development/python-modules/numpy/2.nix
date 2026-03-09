@@ -35,7 +35,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildPythonPackage (finalAttrs: {
   pname = "numpy";
-  version = "2.4.2";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildPythonPackage (finalAttrs: {
     repo = "numpy";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-HFNa7siXRIBBjWrkqQd8QAPWQQsTrYFXNq2DRzVmkQk=";
+    hash = "sha256-S/mP/K4GSAmqks2UbOa2Y4f1oT5RJBg3RLlA7WsVOOU=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
