@@ -10,25 +10,19 @@
 }:
 
 let
-  python = python3.override {
-    self = python3;
-    packageOverrides = self: super: {
-      pyrate-limiter = super.pyrate-limiter_2;
-    };
-  };
-
+  python = python3;
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "sbomnix";
-  version = "1.7.4";
+  version = "1.7.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiiuae";
     repo = "sbomnix";
     tag = "v${version}";
-    hash = "sha256-s7mmtbELRcl/7ab5A3fU7f8m4rIm+mBLmXMeYHa7/n4=";
+    hash = "sha256-DzUg9H/7DD5ftNZqtQrpvkfF9wcH23uEolAaTVLoVM0=";
 
     # Remove documentation as it contains references to nix store
     postFetch = ''
