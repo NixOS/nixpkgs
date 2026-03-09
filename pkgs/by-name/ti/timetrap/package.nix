@@ -9,8 +9,10 @@
 }:
 
 let
+  pname = "timetrap";
+
   ttBundlerApp = (bundlerApp.override { ruby = ruby_3_4; }) {
-    pname = "timetrap";
+    inherit pname;
     gemdir = ./.;
     exes = [
       "t"
@@ -21,14 +23,15 @@ let
   };
 
   ttGem = (bundlerEnv.override { ruby = ruby_3_4; }) {
-    pname = "timetrap";
+    inherit pname;
     gemdir = ./.;
   };
 
 in
 
 stdenv.mkDerivation {
-  name = "timetrap";
+  inherit pname;
+  inherit (ttBundlerApp) version;
 
   dontUnpack = true;
 

@@ -79,33 +79,33 @@
   },
   {
     "pname": "Microsoft.Identity.Client",
-    "version": "4.64.0",
-    "hash": "sha256-VsB72O+EJaxCrc5K2w2XdxThVhIDPVmZw3l86w6O1PU=",
-    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client/4.64.0/microsoft.identity.client.4.64.0.nupkg"
+    "version": "4.77.1",
+    "hash": "sha256-Kj+pzEEhnr+ulzETuvOKmxmRfdYv5ZfToHc3AvyQEr0=",
+    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client/4.77.1/microsoft.identity.client.4.77.1.nupkg"
   },
   {
     "pname": "Microsoft.Identity.Client.Broker",
-    "version": "4.64.0",
-    "hash": "sha256-FdShbdlstMuT3CPL4J2+1Qym1aPz+H86SHyS/hi5+iM=",
-    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client.broker/4.64.0/microsoft.identity.client.broker.4.64.0.nupkg"
+    "version": "4.77.1",
+    "hash": "sha256-ZttD8DujZB3HUx+oeADnkiMDLe8Wb2eFw03vlAtOLz4=",
+    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client.broker/4.77.1/microsoft.identity.client.broker.4.77.1.nupkg"
   },
   {
     "pname": "Microsoft.Identity.Client.Extensions.Msal",
-    "version": "4.64.0",
-    "hash": "sha256-dDYIEbSuV4ijb9fn3diOaz+TEs8cJMP1Tb5/mD+DAGg=",
-    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client.extensions.msal/4.64.0/microsoft.identity.client.extensions.msal.4.64.0.nupkg"
+    "version": "4.77.1",
+    "hash": "sha256-s1JeDN3H3auUz2Js+ladXfwz0Z0AKIWxLPTb5+zE1TM=",
+    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client.extensions.msal/4.77.1/microsoft.identity.client.extensions.msal.4.77.1.nupkg"
   },
   {
     "pname": "Microsoft.Identity.Client.NativeInterop",
-    "version": "0.16.2",
-    "hash": "sha256-hlLFLp6a+vnQT1urt3GlIo94G3AoawczYgooaCkvfNU=",
-    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client.nativeinterop/0.16.2/microsoft.identity.client.nativeinterop.0.16.2.nupkg"
+    "version": "0.19.4",
+    "hash": "sha256-f4FmUEUZ5O20itkik7noUzQdawKKVlmVsgebFE4PvWA=",
+    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identity.client.nativeinterop/0.19.4/microsoft.identity.client.nativeinterop.0.19.4.nupkg"
   },
   {
     "pname": "Microsoft.IdentityModel.Abstractions",
-    "version": "6.35.0",
-    "hash": "sha256-bxyYu6/QgaA4TQYBr5d+bzICL+ktlkdy/tb/1fBu00Q=",
-    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identitymodel.abstractions/6.35.0/microsoft.identitymodel.abstractions.6.35.0.nupkg"
+    "version": "8.14.0",
+    "hash": "sha256-bkCuz1Wj56N+LHWLvHKLcCtIRqBK+3k5vD2qfB7xXKk=",
+    "url": "https://pkgs.dev.azure.com/mseng/c86767d8-af79-4303-a7e6-21da0ba435e2/_packaging/a319f538-6c19-4e2e-9df3-0222939da271/nuget/v3/flat2/microsoft.identitymodel.abstractions/8.14.0/microsoft.identitymodel.abstractions.8.14.0.nupkg"
   },
   {
     "pname": "Microsoft.NET.Test.Sdk",
