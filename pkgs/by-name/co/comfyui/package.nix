@@ -4,14 +4,17 @@
   fetchFromGitHub,
   makeWrapper,
 
-  additionalDependencies ? [],
+  additionalDependencies ? [ ],
 
   callPackage,
 }:
 
+let
+  inherit (python3Packages.torch) cudaSupport;
+in
 python3Packages.buildPythonApplication rec {
   pname = "comfyui";
-  version = "0.15.1";
+  version = "0.16.4";
   # wrapping the source since it's designed to be ran by hand
   # as `python ./main.py`
   format = "other";
@@ -20,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     owner = "comfyanonymous";
     repo = "ComfyUI";
     rev = "v${version}";
-    hash = "sha256-u24WmS9JgKqPvAv+wEIp/OgO5TurTc8dmpHoHC4pWIU=";
+    hash = "sha256-wPPsXQytzpb7gSzE4dUT5JME/q03Z2g6pk9RidHNy8A=";
   };
 
   patches = [
@@ -33,41 +36,44 @@ python3Packages.buildPythonApplication rec {
 
   dontBuild = true;
 
-  dependencies = with python3Packages; [
-    aiohttp
-    alembic
-    av
-    comfy-aimdo
-    comfy-kitchen
-    comfyui-embedded-docs
-    comfyui-frontend-package
-    comfyui-workflow-templates
-    einops
-    glfw
-    kornia
-    numpy
-    pillow
-    psutil
-    pydantic
-    pydantic-settings
-    pyopengl
-    pyyaml
-    requests
-    safetensors
-    scipy
-    sentencepiece
-    soundfile
-    spandrel
-    sqlalchemy
-    tokenizers
-    torch
-    torchaudio
-    torchsde
-    torchvision
-    tqdm
-    transformers
-    yarl
-  ] ++ additionalDependencies;
+  dependencies =
+    with python3Packages;
+    [
+      aiohttp
+      alembic
+      av
+      comfy-aimdo
+      comfyui-embedded-docs
+      comfyui-frontend-package
+      comfyui-workflow-templates
+      einops
+      glfw
+      kornia
+      numpy
+      pillow
+      psutil
+      pydantic
+      pydantic-settings
+      pyopengl
+      pyyaml
+      requests
+      safetensors
+      scipy
+      sentencepiece
+      soundfile
+      spandrel
+      sqlalchemy
+      tokenizers
+      torch
+      torchaudio
+      torchsde
+      torchvision
+      tqdm
+      transformers
+      yarl
+    ]
+    ++ lib.optional cudaSupport comfy-kitchen
+    ++ additionalDependencies;
 
   installPhase = ''
     runHook preInstall
