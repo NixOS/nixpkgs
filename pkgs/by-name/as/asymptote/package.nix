@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir "$info"/share/info/asymptote
       rm -f "$info"/share/info/dir
     fi
-    install -Dt $out/share/emacs/site-lisp/${finalAttrs.pname} $out/share/asymptote/*.el
+    install -Dt $out/share/emacs/site-lisp/asymptote $out/share/asymptote/*.el
   '';
 
   # fixupPhase crashes if the outputs are not directories
