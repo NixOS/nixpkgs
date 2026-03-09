@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [ "--with-cursordir=$(out)/share/icons" ];
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-xdriinfo" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname xdriinfo \
         --url https://xorg.freedesktop.org/releases/individual/data/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version xdriinfo "$version"
     '';
   };
 
