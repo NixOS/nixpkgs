@@ -74,8 +74,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/qgroundcontrol
     cp -rv resources/ $out/share/qgroundcontrol
 
-    mkdir -p $out/share/pixmaps
-    cp -v resources/icons/qgroundcontrol.png $out/share/pixmaps
+    install -D resources/icons/qgroundcontrol.png -t $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';

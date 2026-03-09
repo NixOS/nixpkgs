@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 "50-goxlr.rules" "$out/etc/udev/rules.d/50-goxlr.rules"
     install -Dm644 "daemon/resources/goxlr-utility.png" "$out/share/icons/hicolor/48x48/apps/goxlr-utility.png"
     install -Dm644 "daemon/resources/goxlr-utility.svg" "$out/share/icons/hicolor/scalable/apps/goxlr-utility.svg"
-    install -Dm644 "daemon/resources/goxlr-utility-large.png" "$out/share/pixmaps/goxlr-utility.png"
+    install -Dm644 "daemon/resources/goxlr-utility-large.png" "$out/share/icons/hicolor/128x128/apps/goxlr-utility.png"
     install -Dm644 "daemon/resources/goxlr-utility.desktop" "$out/share/applications/goxlr-utility.desktop"
     substituteInPlace $out/share/applications/goxlr-utility.desktop \
       --replace-fail /usr/bin $out/bin
