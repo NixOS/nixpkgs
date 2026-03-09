@@ -2,7 +2,7 @@
 fetchurl (finalAttrs: {
   pname = "prototype";
   version = "1.7.3.0";
-  name = "${finalAttrs.pname}-${finalAttrs.version}.js";
+  name = "prototype-${finalAttrs.version}.js";
 
   url = "https://ajax.googleapis.com/ajax/libs/prototype/${finalAttrs.version}/prototype.js";
   sha256 = "0q43vvrsb22h4jvavs1gk3v4ps61yx9k85b5n6q9mxivhmxprg26";
