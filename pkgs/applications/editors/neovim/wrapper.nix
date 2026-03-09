@@ -15,6 +15,7 @@
   perl,
   lndir,
   vimUtils,
+  runCommand,
 }:
 
 neovim-unwrapped:
@@ -154,14 +155,33 @@ let
           (lib.makeBinPath finalAttrs.runtimeDeps)
         ];
 
-        providerLuaRc = neovimUtils.generateProviderRc {
-          inherit (finalAttrs)
-            withPython3
-            withNodeJs
-            withPerl
-            withRuby
-            ;
-        };
+        providerLuaRc =
+          let
+            hostPython3 =
+              runCommand "nvim-host-${python3Env.name}"
+                {
+                  nativeBuildInputs = [
+                    makeWrapper
+                  ];
+                }
+                ''
+                  makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH --unset PYTHONSAFEPATH
+                '';
+
+            genProviderCommand =
+              prog: withProg: exec:
+              if withProg then
+                "vim.g.${prog}_host_prog='${exec}'"
+              else
+                # speeds up neovim by bypassing provider discovery
+                "vim.g.loaded_${prog}_provider=0";
+          in
+          lib.concatStringsSep ";" [
+            (genProviderCommand "node" finalAttrs.withNodeJs "${neovim-node-client}/bin/neovim-node-host")
+            (genProviderCommand "perl" finalAttrs.withPerl "${perlEnv}/bin/perl")
+            (genProviderCommand "ruby" finalAttrs.withRuby "${finalAttrs.rubyEnv}/bin/neovim-ruby-host")
+            (genProviderCommand "python3" finalAttrs.withPython3 "${hostPython3}/bin/nvim-python3")
+          ];
 
         # If `configure` != {}, we can't generate the rplugin.vim file with e.g
         # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -235,18 +255,6 @@ let
             rm $out/share/applications/nvim.desktop
             substitute ${neovim-unwrapped}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
               --replace-warn 'Name=Neovim' 'Name=Neovim wrapper'
-          ''
-          + lib.optionalString finalAttrs.withPython3 ''
-            makeWrapper ${python3Env.interpreter} $out/bin/nvim-python3 --unset PYTHONPATH --unset PYTHONSAFEPATH
-          ''
-          + lib.optionalString (finalAttrs.withRuby) ''
-            ln -s ${finalAttrs.rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
-          ''
-          + lib.optionalString finalAttrs.withNodeJs ''
-            ln -s ${neovim-node-client}/bin/neovim-node-host $out/bin/nvim-node
-          ''
-          + lib.optionalString finalAttrs.withPerl ''
-            ln -s ${perlEnv}/bin/perl $out/bin/nvim-perl
           ''
           + lib.optionalString finalAttrs.vimAlias ''
             ln -s $out/bin/nvim $out/bin/vim

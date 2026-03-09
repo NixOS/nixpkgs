@@ -45,11 +45,11 @@
     "vendorHash": "sha256-btxzZZtvgeih+OUhc5QnF8ac22TxpGibffGNkljjq6c="
   },
   "aliyun_alicloud": {
-    "hash": "sha256-XSXK7PH5MezbtQfrDh+z7nRUFsgiXwCtNbI4clbtozU=",
+    "hash": "sha256-5KqzbCVLtpLo22BPOuZexkOS8Qv9i3/B9UCBWtGI5G8=",
     "homepage": "https://registry.terraform.io/providers/aliyun/alicloud",
     "owner": "aliyun",
     "repo": "terraform-provider-alicloud",
-    "rev": "v1.271.0",
+    "rev": "v1.272.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-Hvk2jckla1LcMankcdUTct8Kea0OznyxDxTJ+UrJHy0="
   },
@@ -778,13 +778,13 @@
     "vendorHash": "sha256-mnKXYT0GfIS+ODzBCS9l4rLF1ugadesmpgdOgj74nLg="
   },
   "jianyuan_sentry": {
-    "hash": "sha256-sZdF4YnrsjTt8wsgdDdocHciRZbv2+l+b8zOr/WZYiQ=",
+    "hash": "sha256-iiFDZfTM3DoYEd33P3YFjwsnEJ1klVrIyWIB4vVRIB0=",
     "homepage": "https://registry.terraform.io/providers/jianyuan/sentry",
     "owner": "jianyuan",
     "repo": "terraform-provider-sentry",
-    "rev": "v0.14.10",
+    "rev": "v0.14.11",
     "spdx": "MIT",
-    "vendorHash": "sha256-vJmzsdY2Yt09X2ZQgC5SA0mntjH/rIanaxQfBuivE7M="
+    "vendorHash": "sha256-LGqH/XLNbU31acdzTO4RB5+LBxlNH2jEiK6SujUfX5U="
   },
   "joneshf_openwrt": {
     "hash": "sha256-z78IceF2VJtiQpVqC+rTUDsph73LZawIK+az3rEhljA=",
@@ -896,13 +896,13 @@
     "vendorHash": "sha256-2IlD9IdiN+TBk/Eng2K4jZD8GB91IvQPeVAKhxI/6aY="
   },
   "metio_migadu": {
-    "hash": "sha256-FPUWuQnklyy66SXUY3QpCHza5f0oVMrticd+j/YwKNc=",
+    "hash": "sha256-z3xHms9rHbPa6pTspOwXNOrNG4i03yQCfLOR/Q0g0+Y=",
     "homepage": "https://registry.terraform.io/providers/metio/migadu",
     "owner": "metio",
     "repo": "terraform-provider-migadu",
-    "rev": "2026.2.26",
+    "rev": "2026.3.5",
     "spdx": "0BSD",
-    "vendorHash": "sha256-sxOopd49N1ABIZkp9XpP03N2BMIA5FO9reZPl8aSomU="
+    "vendorHash": "sha256-L1Pund4PgtvEu+76GWgfsPP6lUlN1xiDydW+n6nKNHE="
   },
   "mongey_kafka": {
     "hash": "sha256-rTa6c7jAMH027V7h/yUGVGz6TS0PDdObilxU0Vpr6FI=",
@@ -1004,13 +1004,13 @@
     "vendorHash": "sha256-ucXmHK7jrahc78nE2cf5p5PPCSNV5DAQ53KM2SfJnjo="
   },
   "okta_okta": {
-    "hash": "sha256-rWmlXxWijaaoeU7Yo4xeBFNfdt+Jd+Byt75Ah7dXkxI=",
+    "hash": "sha256-2uQgmzz2dRkOb6OgM3w+IKe1/AY435wZbNmQmkiy8dM=",
     "homepage": "https://registry.terraform.io/providers/okta/okta",
     "owner": "okta",
     "repo": "terraform-provider-okta",
-    "rev": "v6.5.5",
+    "rev": "v6.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-7oOk9M92RuEZbVdV4eVvgkF7pndR/QI3A5/ao3A8H2U="
+    "vendorHash": "sha256-EqXLfVayaOG/G3c6EkgQoPGNwnG2qKSlDo2ai/onmQE="
   },
   "oktadeveloper_oktaasa": {
     "hash": "sha256-2LhxgowqKvDDDOwdznusL52p2DKP+UiXALHcs9ZQd0U=",

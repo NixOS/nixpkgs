@@ -690,6 +690,8 @@ self: super: with self; {
 
   alpha-vantage = callPackage ../development/python-modules/alpha-vantage { };
 
+  alphaessopenapi = callPackage ../development/python-modules/alphaessopenapi { };
+
   altair = callPackage ../development/python-modules/altair { };
 
   altcha = callPackage ../development/python-modules/altcha { };
@@ -7272,6 +7274,8 @@ self: super: with self; {
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
+  hypothesis_6_136 = callPackage ../development/python-modules/hypothesis/hypothesis_6_136.nix { };
+
   hypothesmith = callPackage ../development/python-modules/hypothesmith { };
 
   hyppo = callPackage ../development/python-modules/hyppo { };
@@ -11272,6 +11276,8 @@ self: super: with self; {
   objsize = callPackage ../development/python-modules/objsize { };
 
   obspy = callPackage ../development/python-modules/obspy { };
+
+  obstore = callPackage ../development/python-modules/obstore { };
 
   oca-port = callPackage ../development/python-modules/oca-port { };
 
@@ -18450,6 +18456,8 @@ self: super: with self; {
 
   steamodd = callPackage ../development/python-modules/steamodd { };
 
+  steampy = callPackage ../development/python-modules/steampy { };
+
   steamship = callPackage ../development/python-modules/steamship { };
 
   steamworkspy = callPackage ../development/python-modules/steamworkspy { };
@@ -18624,7 +18632,9 @@ self: super: with self; {
 
   supabase = callPackage ../development/python-modules/supabase { };
 
-  supabase-functions = self.supafunc;
+  supabase-auth = callPackage ../development/python-modules/supabase-auth { };
+
+  supabase-functions = callPackage ../development/python-modules/supabase-functions { };
 
   supafunc = callPackage ../development/python-modules/supafunc { };
 
@@ -19396,6 +19406,8 @@ self: super: with self; {
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
 
   torchsummary = callPackage ../development/python-modules/torchsummary { };
+
+  torchtitan = callPackage ../development/python-modules/torchtitan { };
 
   torchtnt = callPackage ../development/python-modules/torchtnt { };
 
@@ -20866,6 +20878,8 @@ self: super: with self; {
   webidl = callPackage ../development/python-modules/webidl { };
 
   webio-api = callPackage ../development/python-modules/webio-api { };
+
+  weblate-fonts = callPackage ../development/python-modules/weblate-fonts { };
 
   weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
 

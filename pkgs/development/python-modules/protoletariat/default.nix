@@ -51,6 +51,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   meta = {
+    broken = true;
     description = "Python protocol buffers for the rest of us";
     changelog = "https://github.com/cpcloud/protoletariat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   openssl,
   pkgsCross,
   buildPackages,
@@ -39,13 +38,13 @@ let
       rec {
 
         pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-        version = "2.13.0";
+        version = "2.14.0";
 
         src = fetchFromGitHub {
           owner = "ARM-software";
           repo = "arm-trusted-firmware";
           tag = "v${version}";
-          hash = "sha256-rxm5RCjT/MyMCTxiEC8jQeFMrCggrb2DRbs/qDPXb20=";
+          hash = "sha256-7imeQocGMSyGXTEhNs4s0bcDxZpbLSSkOyI7c5UxqVs=";
         };
 
         patches = lib.optionals deleteHDCPBlobBeforeBuild [

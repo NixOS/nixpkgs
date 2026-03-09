@@ -27,16 +27,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.12.0";
+  version = "26.2.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    hash = "sha256-d73izEdLWviOp0XcMbQ3goLWgLZupO4QtQv7WUxdfk8=";
+    hash = "sha256-cFFAUgUq+AxOdmHI92WYY6h9jSubXRUL4Jp8q+mDdHg=";
   };
 
-  vendorHash = "sha256-34+srnXDto82xuITDSPEiNnbCgmZbijvpqpmwlszCEg=";
+  vendorHash = "sha256-73E3fH1JUHxjphF6aPrmNJu3P1DZd28blmBxSiyuCTc=";
 
   php = phpPackage;
 
@@ -84,12 +84,10 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
       --replace-fail '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
       --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
-      --replace-fail '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
       --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
       --replace-fail '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
       --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
       --replace-fail '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
-      --replace-fail '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
       --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
       --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
       --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \

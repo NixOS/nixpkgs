@@ -35,6 +35,7 @@ let
       django = prev.django_5;
     };
   };
+  python3Packages = python3.pkgs;
 
   GI_TYPELIB_PATH = lib.makeSearchPathOutput "out" "lib/girepository-1.0" [
     pango
@@ -45,10 +46,9 @@ let
     gobject-introspection
   ];
 in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "weblate";
-  version = "5.15.2";
-
+  version = "5.16.2";
   pyproject = true;
 
   outputs = [
@@ -59,15 +59,15 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "WeblateOrg";
     repo = "weblate";
-    tag = "weblate-${version}";
-    hash = "sha256-qNv3aaPyQ/bOrPbK7u9vtq8R1MFqXLJzvLUZfVgjMK0=";
+    tag = "weblate-${finalAttrs.version}";
+    hash = "sha256-er3KtCAFtHh3UtM58Kni/PTBfXpWW/GOarRGJeAanL8=";
   };
 
   postPatch = ''
     sed -i 's|/bin/true|true|g' weblate/addons/example_pre.py
   '';
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   nativeBuildInputs = [ gettext ];
 
@@ -93,11 +93,12 @@ python.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "certifi"
+    "crispy-bootstrap5"
     "urllib3"
   ];
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     [
       aeidon
       ahocorasick-rs
@@ -168,6 +169,7 @@ python.pkgs.buildPythonApplication rec {
       unidecode
       urllib3
       user-agents
+      weblate-fonts
       weblate-language-data
       weblate-schemas
     ]
@@ -180,7 +182,7 @@ python.pkgs.buildPythonApplication rec {
     ++ urllib3.optional-dependencies.zstd;
 
   # Commented entries are not packaged yet
-  optional-dependencies = with python.pkgs; {
+  optional-dependencies = with python3Packages; {
     alibaba = [
       aliyun-python-sdk-alimt
       aliyun-python-sdk-core
@@ -213,7 +215,7 @@ python.pkgs.buildPythonApplication rec {
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" ];
 
   nativeCheckInputs =
-    with python.pkgs;
+    with python3Packages;
     [
       pytestCheckHook
       postgresqlTestHook
@@ -241,7 +243,7 @@ python.pkgs.buildPythonApplication rec {
       openssh
     ]
     ++ social-auth-core.optional-dependencies.saml
-    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
+    ++ (lib.concatLists (builtins.attrValues finalAttrs.passthru.optional-dependencies));
 
   env = {
     CI_DATABASE = "postgresql";
@@ -287,7 +289,7 @@ python.pkgs.buildPythonApplication rec {
   meta = {
     description = "Web based translation tool with tight version control integration";
     homepage = "https://weblate.org/";
-    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${src.tag}";
+    changelog = "https://github.com/WeblateOrg/weblate/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [
       gpl3Plus
       mit
@@ -296,4 +298,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "weblate";
   };
-}
+})

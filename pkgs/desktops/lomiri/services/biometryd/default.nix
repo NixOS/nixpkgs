@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.3.3";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-MIyWGd4No4Qj8oEH1FQYCE4rQhyetwiAf1y6em4zk2A=";
+    hash = "sha256-3igUyiTI47I0lf5byypmHLigyopgEQQUYURiCb6HFeg=";
   };
 
   outputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace data/biometryd.pc.in \
@@ -96,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    # maybe-uninitialized warnings
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_WERROR" true)
     (lib.cmakeBool "WITH_HYBRIS" false)
   ];
 

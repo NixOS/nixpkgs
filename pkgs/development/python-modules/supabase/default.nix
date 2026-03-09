@@ -2,49 +2,59 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  gotrue,
-  postgrest,
+  uv-build,
   realtime,
-  storage3,
-  supafunc,
+  supabase-functions,
+  supabase-auth,
+  postgrest,
   httpx,
+  yarl,
+  storage3,
   pytestCheckHook,
   python-dotenv,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "supabase";
-  version = "2.27.2";
+  version = "2.28.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-TRATa+lDRm2MDuARXfBRWnWYUak8i1fW7rr5ujWN8TY=";
+    hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
   };
 
-  build-system = [ poetry-core ];
+  sourceRoot = "${src.name}/src/supabase";
 
-  # FIXME remove for supabase >= 2.18.0
-  pythonRelaxDeps = true;
+  build-system = [ uv-build ];
+
+  doCheck = true;
 
   dependencies = [
-    postgrest
     realtime
-    gotrue
+    supabase-auth
+    supabase-functions
+    postgrest
     httpx
+    yarl
     storage3
-    supafunc
   ];
 
   nativeBuildInputs = [
     pytestCheckHook
     python-dotenv
     pytest-asyncio
+    pytest-cov-stub
   ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.8.3,<0.9.0' 'uv_build>=0.8.3'
+  '';
 
   pythonImportsCheck = [ "supabase" ];
 

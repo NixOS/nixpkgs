@@ -3,12 +3,20 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
   django,
   django-stubs-ext,
   typing-extensions,
+
+  # optional-dependencies
   mysqlclient,
   psycopg,
+
+  # tests
   dj-database-url,
   django-rq,
   fakeredis,
@@ -17,16 +25,16 @@
   redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-tasks";
-  version = "0.11.0";
+  version = "0.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RealOrangeOne";
     repo = "django-tasks";
-    tag = version;
-    hash = "sha256-WU2TQa4FMEqtNtetH4qAyXqkrP/9PTw/K63MfUWEWGw=";
+    tag = finalAttrs.version;
+    hash = "sha256-pAVpsQXoiqneQaXrHNbBW7LumyYeJ4/9b0dg2qx7LZo=";
   };
 
   build-system = [
@@ -84,8 +92,8 @@ buildPythonPackage rec {
   meta = {
     description = "Reference implementation and backport of background workers and tasks in Django";
     homepage = "https://github.com/RealOrangeOne/django-tasks";
-    changelog = "https://github.com/RealOrangeOne/django-tasks/releases/tag/${src.tag}";
+    changelog = "https://github.com/RealOrangeOne/django-tasks/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

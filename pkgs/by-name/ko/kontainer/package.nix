@@ -4,16 +4,16 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  qt6,
   kdePackages,
   nix-update-script,
   git,
   distrobox,
-  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kontainer";
   version = "1.4.1";
+
+  strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "DenysMb";
@@ -30,35 +30,33 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    kdePackages.extra-cmake-modules
-    qt6.wrapQtAppsHook
-  ];
-
-  qtWrapperArgs = [
-    "--prefix PATH : ${
-      lib.makeBinPath [
-        distrobox
-      ]
-    }"
-  ];
+  ]
+  ++ (with kdePackages; [
+    extra-cmake-modules
+    wrapQtAppsHook
+  ]);
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtdeclarative
-    kdePackages.kirigami
-    kdePackages.kirigami-addons
-    kdePackages.ki18n
-    kdePackages.kcoreaddons
-    kdePackages.qqc2-desktop-style
-    kdePackages.kiconthemes
-    kdePackages.kio
     git
-  ];
+  ]
+  ++ (with kdePackages; [
+    qtbase
+    qtdeclarative
+    kirigami
+    kirigami-addons
+    ki18n
+    kcoreaddons
+    qqc2-desktop-style
+    kiconthemes
+    kio
+  ]);
+
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ distrobox ]}" ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Manage Distrobox containers";
+    description = "Graphical management application for Distrobox containers";
     longDescription = ''
       Kontainer is a graphical user interface (GUI) application built with KDE Kirigami that provides a user-friendly way to manage Distrobox containers.
 
@@ -76,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       griffi-gh
+      sigmasquadron
     ];
     platforms = lib.platforms.linux;
   };

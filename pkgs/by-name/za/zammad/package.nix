@@ -13,7 +13,7 @@
   jq,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   fetchPnpmDeps,
   pnpmConfigHook,
   cacert,
@@ -23,18 +23,12 @@
 
 let
   pname = "zammad";
-  version = "6.5.2";
+  version = "7.0.0";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
     patches = [
       ./fix-sendmail-location.diff
-      # Fix mail fetch failing with OpenSSL 3.6
-      # https://github.com/zammad/zammad/pull/5888
-      (fetchpatch {
-        url = "https://github.com/zammad/zammad/commit/01376d45f48df057e4377518e6f7e4a0db7de624.patch";
-        hash = "sha256-uH1/t0dP5nvh12GsJz6Yf/RXpf8+hkYoVJnLJAXqpuc=";
-      })
     ];
 
     postPatch = ''
@@ -80,7 +74,7 @@ stdenvNoCC.mkDerivation {
     valkey
     postgresql
     pnpmConfigHook
-    pnpm_9
+    pnpm_10
     nodejs
     procps
     cacert
@@ -90,10 +84,10 @@ stdenvNoCC.mkDerivation {
 
   pnpmDeps = fetchPnpmDeps {
     inherit pname src;
-    pnpm = pnpm_9;
+    pnpm = pnpm_10;
 
-    fetcherVersion = 1;
-    hash = "sha256-mfdzb/LXQYL8kaQpWi9wD3OOroOOonDlJrhy9Dwl1no";
+    fetcherVersion = 3;
+    hash = "sha256-oqVlhOzkqv+2mj/nDUR/PBXkRy5O7gtx2msEchGywfo=";
   };
 
   buildPhase = ''
@@ -150,6 +144,7 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [
       taeer
       netali
+      meenzen
     ];
   };
 }

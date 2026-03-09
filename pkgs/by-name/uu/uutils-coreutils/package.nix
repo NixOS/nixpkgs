@@ -21,13 +21,13 @@ assert selinuxSupport -> lib.meta.availableOn stdenv.hostPlatform libselinux;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uutils-coreutils";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
     tag = finalAttrs.version;
-    hash = "sha256-/GLDcqbNRO2NV+tW5yRZ0BdGJ+R3S3CPBPuBXpCIWuU=";
+    hash = "sha256-mS1KjnMUQzRqsmy1GCLDlDh2kOSfPhc59RnR9abqtu4=";
   };
 
   # error: linker `aarch64-linux-gnu-gcc` not found
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname src version;
-    hash = "sha256-DrDfbf7UMEeNRvCHsu1Kbr+4PWkckmMvy8sEpjEgJfg=";
+    hash = "sha256-jNFZEafyW0DGpG0tPiI3lzANBiAXYxoOnTsKoGjeOK0=";
   };
 
   buildInputs =
@@ -113,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/uutils/coreutils";
     changelog = "https://github.com/uutils/coreutils/releases/tag/${finalAttrs.version}";
     maintainers = with lib.maintainers; [
+      GaetanLepage
       siraben
       matthiasbeyer
     ];

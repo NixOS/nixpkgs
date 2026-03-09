@@ -11,14 +11,14 @@
 
 buildGoModule (finalAttrs: {
   pname = "tinyauth";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "steveiliop56";
     repo = "tinyauth";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ypM56yrUWF1OzCj5RBGyEhZzjyDcko7SPQ+eVhHEzmA=";
+    hash = "sha256-i074facoWTg7+c9OdGhcOEknP/GZ6st0IIdwwvHC7IQ=";
   };
 
   vendorHash = "sha256-qELLarAR78WkDoJKtqaqzIZaTBCuHP41JCyjLZ4aMtM=";

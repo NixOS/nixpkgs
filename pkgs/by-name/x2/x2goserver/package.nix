@@ -172,6 +172,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://x2go.org/";
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ averelld ];
+    maintainers = [ ];
   };
 })

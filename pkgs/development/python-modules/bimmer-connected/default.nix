@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.17.3";
+  version = "0.17.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     tag = version;
-    hash = "sha256-XKKMOKvZO6CrAioflyhTWZrNJv1+5yqYPFL4Al8YPY8=";
+    hash = "sha256-wNrUZepfkEFPvU3HWop9JAjCHlK3v+xTuAUIZ0P4YtA=";
   };
 
   build-system = [

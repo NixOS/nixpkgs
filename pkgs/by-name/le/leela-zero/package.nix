@@ -42,9 +42,8 @@ stdenv.mkDerivation {
     description = "Go engine modeled after AlphaGo Zero";
     homepage = "https://github.com/gcp/leela-zero";
     license = lib.licenses.gpl3Plus;
-    maintainers = [
-      lib.maintainers.averelld
-      lib.maintainers.omnipotententity
+    maintainers = with lib.maintainers; [
+      omnipotententity
     ];
     platforms = lib.platforms.linux;
   };

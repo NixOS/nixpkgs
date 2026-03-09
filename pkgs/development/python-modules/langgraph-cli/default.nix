@@ -22,19 +22,19 @@
   gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-cli";
-  version = "0.4.11";
+  version = "0.4.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "cli==${version}";
-    hash = "sha256-sr3AtcrG9V0c5UBdSXyaX3bCxzrSONpY28L5jlomZuM=";
+    tag = "cli==${finalAttrs.version}";
+    hash = "sha256-DtIIGNcpgcYMvvihH9GwgCn2PRWq+LEcHVtitA71T04=";
   };
 
-  sourceRoot = "${src.name}/libs/cli";
+  sourceRoot = "${finalAttrs.src.name}/libs/cli";
 
   build-system = [ hatchling ];
 
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     docker-compose
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests/unit_tests" ];
 
@@ -91,9 +91,9 @@ buildPythonPackage rec {
   meta = {
     description = "Official CLI for LangGraph API";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/cli";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "langgraph";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

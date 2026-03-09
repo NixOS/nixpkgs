@@ -51,7 +51,7 @@ in
         with pkgs;
         [
           # `which` is used to test command availability
-          # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L42
+          # See https://github.com/Stirling-Tools/Stirling-PDF/blob/main/app/core/src/main/java/stirling/software/SPDF/config/ExternalAppDepConfig.java#L262
           which
           unpaper
           libreoffice
@@ -117,5 +117,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ DCsunset ];
+  meta.maintainers = with lib.maintainers; [
+    DCsunset
+    timhae
+  ];
 }

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   wrapGAppsHook3,
+  glib,
   glew,
   gtk3,
   libxrandr,
@@ -56,6 +57,8 @@ buildDotnetModule rec {
     libxcursor
     # For file dialogs
     gtk3
+    # For web view (login dialog); loaded via P/Invoke at runtime
+    glib
   ];
 
   postInstall = ''
