@@ -23,7 +23,7 @@ buildGoModule (finalAttrs: {
   };
 
   qui-web = stdenvNoCC.mkDerivation (finalAttrs': {
-    pname = "${finalAttrs.pname}-web";
+    pname = "qui-web";
     inherit (finalAttrs) src version;
 
     nativeBuildInputs = [
