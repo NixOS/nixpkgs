@@ -6107,6 +6107,12 @@
     githubId = 10701143;
     name = "David Crompton";
   };
+  davidkern = {
+    email = "nixpkgs-davidkern@proton.me";
+    github = "davidkern";
+    githubId = 1548554;
+    name = "David Kern";
+  };
   davidlghellin = {
     email = "hola@devel0pez.com";
     github = "davidlghellin";
@@ -14278,6 +14284,13 @@
     github = "koslambrou";
     githubId = 2037002;
     name = "Konstantinos";
+  };
+  kosslan = {
+    email = "kosslan@kosslan.dev";
+    matrix = "@kosslan:kosslan.dev";
+    github = "kosslan";
+    githubId = 98048456;
+    name = "kosslan";
   };
   kotatsuyaki = {
     email = "kotatsuyaki@mail.kotatsu.dev";

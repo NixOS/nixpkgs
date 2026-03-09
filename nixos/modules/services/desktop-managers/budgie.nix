@@ -185,6 +185,7 @@ in
       ]
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
+        bluejay
         nemo
         eom
         pluma
@@ -199,6 +200,7 @@ in
         gammastep
         grim
         killall
+        mesa-demos # eglinfo
         slurp
         swaybg
         swayidle
@@ -247,7 +249,7 @@ in
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
     programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
-    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
+    hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and Bluejay.
 
     xdg.portal.enable = mkDefault true; # for BCC's Applications panel.
     xdg.portal.extraPortals = with pkgs; [
