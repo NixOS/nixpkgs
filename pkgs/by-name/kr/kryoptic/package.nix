@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -13,29 +12,21 @@
   withPostQuantum ? true,
 }:
 
-rustPlatform.buildRustPackage (finalPackage: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kryoptic";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "kryoptic";
-    tag = "v${finalPackage.version}";
-    hash = "sha256-tP2BZkGCZqfLNLZ/mYAVkICWKTM1EbL7lbw+Mnx4VTk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WOihUHFNqjQGObd+pfiNnjBq5GL/9NDeBiC7VzF/ZwE=";
   };
-
-  patches = [
-    # Support additional arguments for bindgen so it can find our glibc.
-    # https://github.com/latchset/kryoptic/pull/386
-    (fetchpatch {
-      url = "https://github.com/latchset/kryoptic/commit/54b3deeb4eb84ebd7c5b52ccb9401e319fb00294.patch";
-      hash = "sha256-QChVS/MnsGp6To4OWYA8Se6kgRCGABchLLnSHfrEj1E=";
-    })
-  ];
 
   env = {
     # Pass these include paths for bindgen in via the environment.
-    OSSL_BINDGEN_CLANG_ARGS = "-I${lib.getInclude glibc}/include";
+    ${if !stdenv.hostPlatform.isDarwin then "OSSL_BINDGEN_CLANG_ARGS" else null} =
+      "-I${lib.getInclude glibc}/include";
     LIBCLANG_PATH = "${lib.getLib clang.cc}/lib";
   };
 
@@ -50,7 +41,7 @@ rustPlatform.buildRustPackage (finalPackage: {
     ./0001-Add-Cargo.lock.patch
   ];
 
-  cargoHash = "sha256-eekiW9HCKwx7/y2WSqQH6adgAeAnQojM3QcNTc3kx2I=";
+  cargoHash = "sha256-Kr2tvxPIcWS47ljH9l0qQTacX9BIV9vMmQyE8EG6qVE=";
 
   cargoBuildFlags = [
     "--no-default-features"
