@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-3n/Zp+uEmaFuBTgRtXYM6BGpmum9/SLJ0j90DH9inbo=";
+    hash = "sha256-RNVmPg2//z/djARWgbTbKbdYmDwAcTSYjiSuZHV88vM=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-beG7ktfSPGn6g3bVYi2loaS9PIwRNzIF3W77ltk1C04=";
+    npmDepsHash = "sha256-W3AquYTXffAW9T5R2Nn9Idpbh/EPDpJNIB7D0yFWezU=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -123,7 +123,6 @@ python3Packages.buildPythonApplication rec {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
-      google-generativeai
       googleapis-common-protos
       httpx
       itsdangerous
@@ -131,29 +130,28 @@ python3Packages.buildPythonApplication rec {
       langchain-classic
       langchain-community
       langchain-text-splitters
-      langdetect
       ldap3
       loguru
       markdown
-      msoffcrypto-tool
       mcp
+      msoffcrypto-tool
       nltk
       onnxruntime
       openai
       opencv-python-headless
-      openpyxl
-      opensearch-py
       opentelemetry-api
-      opentelemetry-sdk
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
+      opentelemetry-instrumentation-aiohttp-client
       opentelemetry-instrumentation-fastapi
-      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-instrumentation-httpx
+      opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-redis
       opentelemetry-instrumentation-requests
-      opentelemetry-instrumentation-logging
-      opentelemetry-instrumentation-httpx
-      opentelemetry-instrumentation-aiohttp-client
+      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-sdk
+      openpyxl
+      opensearch-py
       pandas
       peewee
       peewee-migrate
