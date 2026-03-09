@@ -14285,6 +14285,13 @@
     githubId = 2037002;
     name = "Konstantinos";
   };
+  kosslan = {
+    email = "kosslan@kosslan.dev";
+    matrix = "@kosslan:kosslan.dev";
+    github = "kosslan";
+    githubId = 98048456;
+    name = "kosslan";
+  };
   kotatsuyaki = {
     email = "kotatsuyaki@mail.kotatsu.dev";
     github = "kotatsuyaki";
