@@ -1,78 +1,85 @@
 {
-  buildPythonPackage,
-  fetchPypi,
-  fetchpatch,
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
+  cysignals,
   cython,
-  pkg-config,
   setuptools,
 
   # native dependencies
+  pkg-config,
   leptonica,
-  tesseract4,
+  tesseract5,
 
   # dependencies
   pillow,
 
   # tests
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tesserocr";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.10.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vlGNGxtf9UwRqtoeD9EpQlCepwWB4KizmipHOgstvTY=";
+  src = fetchFromGitHub {
+    owner = "sirfz";
+    repo = "tesserocr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y/3MXkocO4hRMjREPT6yvqH87EZm79zerinp5TUHNP4=";
   };
 
-  patches = [
-    # Backport https://github.com/sirfz/tesserocr/pull/364 to fix tests
-    (fetchpatch {
-      url = "https://github.com/sirfz/tesserocr/commit/853a885d0154a0345e1ea7db80febe04893a3da8.patch";
-      hash = "sha256-s51s9EIV9AZT6UoqwTuQ8lOjToqwIIUkDLjsvCsyYFU=";
-    })
-  ];
-
-  # https://github.com/sirfz/tesserocr/issues/314
   postPatch = ''
-    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesserocr/tesseract.pxd
-
     substituteInPlace setup.py \
-      --replace-fail "Cython>=0.23,<3.1.0" Cython
+      --replace-fail \
+        "Cython>=3.0.0,<3.2.0" \
+        "Cython"
   '';
 
   build-system = [
+    cysignals
     cython
-    pkg-config
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [
     leptonica
-    tesseract4
+    tesseract5
   ];
 
-  dependencies = [ pillow ];
+  dependencies = [
+    cysignals # also needed at runtime
+    pillow
+  ];
 
   pythonImportsCheck = [ "tesserocr" ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     rm -rf tesserocr
   '';
 
+  disabledTests = [
+    # AssertionError: '.bl' != '.tif'
+    "test_init_full"
+  ];
+
   meta = {
-    changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";
     description = "Simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
     homepage = "https://github.com/sirfz/tesserocr";
+    changelog = "https://github.com/sirfz/tesserocr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mtrsk ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -11277,6 +11277,8 @@ self: super: with self; {
 
   obspy = callPackage ../development/python-modules/obspy { };
 
+  obstore = callPackage ../development/python-modules/obstore { };
+
   oca-port = callPackage ../development/python-modules/oca-port { };
 
   ochre = callPackage ../development/python-modules/ochre { };
@@ -20876,6 +20878,8 @@ self: super: with self; {
   webidl = callPackage ../development/python-modules/webidl { };
 
   webio-api = callPackage ../development/python-modules/webio-api { };
+
+  weblate-fonts = callPackage ../development/python-modules/weblate-fonts { };
 
   weblate-language-data = callPackage ../development/python-modules/weblate-language-data { };
 

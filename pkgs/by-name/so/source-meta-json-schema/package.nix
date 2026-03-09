@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "source-meta-json-schema";
-  version = "14.7.1";
+  version = "14.13.4";
 
   src = fetchFromGitHub {
     owner = "sourcemeta";
     repo = "jsonschema";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zQ9GyJBaSzDL7i/PurOW4yJR59pX/0CLZ2DgDJmA6+s=";
+    hash = "sha256-APrlrYG6QTJqrI6+TBUd34x6Di1fCm15FqDGWrukhkQ=";
   };
 
   nativeBuildInputs = [

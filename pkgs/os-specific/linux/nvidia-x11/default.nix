@@ -118,14 +118,25 @@ rec {
   };
 
   # data center driver compatible with current default cudaPackages
-  dc = dc_570;
+  dc = dc_580;
 
-  dc_535 = generic rec {
-    version = "535.288.01";
+  dc_590 = generic rec {
+    version = "590.48.01";
     url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
-    sha256_64bit = "sha256-8gwy/W7NH3BcbfJ5fAwIQlPs9/9I8sNH+Co5YZiC7OE=";
-    persistencedSha256 = "sha256-q061VN6om3UzbpWD7+tJJVgU/e2YCJF4IgEv53qx9ZA=";
-    fabricmanagerSha256 = "sha256-bVOnPmAa2ADGC1FCIz0TAyS9lccNPa3K5pJQhgX45pQ=";
+    sha256_64bit = "sha256-ueL4BpN4FDHMh/TNKRCeEz3Oy1ClDWto1LO/LWlr1ok=";
+    persistencedSha256 = "sha256-wsNeuw7IaY6Qc/i/AzT/4N82lPjkwfrhxidKWUtcwW8=";
+    fabricmanagerSha256 = "sha256-f/AQ8HrgoqBQyXNrXA/UaI4OMQ9QcjjYWIhr1/5uM74=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
+  };
+
+  dc_580 = generic rec {
+    version = "580.126.09";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-TKxT5I+K3/Zh1HyHiO0kBZokjJ/YCYzq/QiKSYmG7CY=";
+    persistencedSha256 = "sha256-J1UwS0o/fxz45gIbH9uaKxARW+x4uOU1scvAO4rHU5Y=";
+    fabricmanagerSha256 = "sha256-tyCHKIr8nxVfZIqcWKAwRoMLzmGlsOUhDlO5V/9W97Y=";
     useSettings = false;
     usePersistenced = true;
     useFabricmanager = true;
