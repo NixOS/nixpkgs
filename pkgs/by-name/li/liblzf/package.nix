@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     exeTest = testers.runCommand {
-      name = "${finalAttrs.pname}-exe-test";
+      name = "liblzf-exe-test";
       buildInputs = [ finalAttrs.finalPackage ];
       script = ''
         lzf -h 2> /dev/null
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     shlibTest = testers.runCommand {
-      name = "${finalAttrs.pname}-shlib-test";
+      name = "liblzf-shlib-test";
       inherit stdenv; # with CC
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [
