@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${finalAttrs.pname} $out/bin/
+    cp ks $out/bin/
 
     runHook postInstall
   '';
