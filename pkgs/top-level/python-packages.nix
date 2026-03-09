@@ -10735,6 +10735,8 @@ self: super: with self; {
 
   mypy-protobuf = callPackage ../development/python-modules/mypy-protobuf { };
 
+  mypy-protobuf_3_6 = callPackage ../development/python-modules/mypy-protobuf_3_6 { };
+
   mypyllant = callPackage ../development/python-modules/mypyllant { };
 
   mysql-connector = callPackage ../development/python-modules/mysql-connector { };
