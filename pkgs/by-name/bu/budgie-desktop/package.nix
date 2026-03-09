@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   accountsservice,
   alsa-lib,
   budgie-desktop-services,
@@ -39,11 +38,13 @@
   vala,
   validatePkgConfig,
   wrapGAppsHook3,
+  xdg-desktop-portal,
 }:
 
 let
   pythonEnv = python3.withPackages (
     pp: with pp; [
+      dbus-python
       psutil
       pygobject3
       systemd-python
@@ -52,14 +53,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.10.1";
+  version = "10.10.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-6SRnub0FMRE9AcHwsnYH4WMdG2kqEpl5dfHy56FwrGU=";
+    hash = "sha256-Eaq7/LY65HpyPRfR57FWDPqkVqBbymlHHQHFUvxER20=";
   };
 
   outputs = [
@@ -70,13 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./plugins.patch
-
-    # Don't use scaling factors
-    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/864
-    (fetchpatch {
-      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/03d18336c3d50d14e3e81ef03ef8ebd548d8e00c.patch";
-      hash = "sha256-pO1t3nnyYX2XDqH6wr+00MHsM0fAT0MOSuk+lN+2CNY=";
-    })
   ];
 
   nativeBuildInputs = [
@@ -130,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace src/session/budgie-desktop.in \
       --replace-fail "@bindir@/org.buddiesofbudgie.Services" "${lib.getExe budgie-desktop-services}" \
+      --replace-fail "@libexecdirroot@/xdg-desktop-portal" "${xdg-desktop-portal}/libexec/xdg-desktop-portal" \
       --replace-fail "@gsd_libexecdir@/budgie-session-compositor-ready" "${budgie-session}/libexec/budgie-session-compositor-ready"
 
     chmod +x src/bridges/labwc/labwc_bridge.py

@@ -175,20 +175,9 @@ let
 
       rpp = self.callPackage ./rpp { };
 
-      rpp-hip = self.rpp.override {
-        useOpenCL = false;
-        useCPU = false;
-      };
+      rpp-hip = self.rpp.override { useCPU = false; };
 
-      rpp-opencl = self.rpp.override {
-        useOpenCL = true;
-        useCPU = false;
-      };
-
-      rpp-cpu = self.rpp.override {
-        useOpenCL = false;
-        useCPU = true;
-      };
+      rpp-cpu = self.rpp.override { useCPU = true; };
 
       mivisionx = self.callPackage ./mivisionx {
         stdenv = origStdenv;
@@ -256,6 +245,11 @@ let
       };
     }
     // lib.optionalAttrs config.allowAliases {
+      rpp-opencl = throw ''
+        'rpp-opencl' has been removed as it has been broken for a year and has no consuming packages.
+        Use 'rpp' or 'rpp-cpu' instead.
+      ''; # Added 2026-03-08
+
       rocmPath = throw ''
         'rocm-path' has been removed. If a ROCM_PATH value is required in nixpkgs please
         construct one with the minimal set of required deps.

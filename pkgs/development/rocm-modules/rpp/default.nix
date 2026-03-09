@@ -12,22 +12,12 @@
   boost,
   python3Packages,
   buildDocs ? false, # Needs internet
-  useOpenCL ? false,
   useCPU ? false,
   gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname =
-    "rpp-"
-    + (
-      if (!useOpenCL && !useCPU) then
-        "hip"
-      else if (!useOpenCL && !useCPU) then
-        "opencl"
-      else
-        "cpu"
-    );
+  pname = "rpp-${if useCPU then "cpu" else "hip"}";
 
   version = "7.2.0";
 
@@ -59,21 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DBACKEND=${if useCPU then "CPU" else "HIP"}"
   ]
   ++ lib.optionals (gpuTargets != [ ]) [
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ]
-  ++ lib.optionals (!useOpenCL && !useCPU) [
-    "-DBACKEND=HIP"
-  ]
-  ++ lib.optionals (useOpenCL && !useCPU) [
-    "-DBACKEND=OCL"
-  ]
-  ++ lib.optionals useCPU [
-    "-DBACKEND=CPU"
   ];
 
-  postPatch = lib.optionalString (!useOpenCL && !useCPU) ''
+  postPatch = lib.optionalString (!useCPU) ''
     # Bad path
     substituteInPlace CMakeLists.txt \
       --replace "COMPILER_FOR_HIP \''${ROCM_PATH}/llvm/bin/clang++" "COMPILER_FOR_HIP ${clr}/bin/hipcc"
@@ -95,6 +77,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
-    broken = useOpenCL;
   };
 })
