@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      ls-color = runCommand "${finalAttrs.pname}-test-ls-color" { } ''
+      ls-color = runCommand "stdoutisatty-test-ls-color" { } ''
         set -x
         mkdir somedir
         ln -s somedir somelink
