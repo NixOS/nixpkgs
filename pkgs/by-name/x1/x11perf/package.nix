@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-x11perf" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname x11perf \
         --url https://xorg.freedesktop.org/releases/individual/test/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version x11perf "$version"
     '';
   };
 
