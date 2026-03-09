@@ -143,6 +143,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.alpinelinux.org/alpine/aports/-/raw/462dfe0eb4b66948fe48de44545cc22bb64fdf9f/community/onnxruntime/0001-Remove-MATH_NO_EXCEPT-macro.patch";
       hash = "sha256-BdeGYevZExWWCuJ1lSw0Roy3h+9EbJgFF8qMwVxSn1A=";
     })
+
+    # Fix build of ignored outputs after Protobuf 34 added `[[nodiscard]]` to
+    # many functions.
+    ./protobuf34-nodiscard.patch
   ];
 
   nativeBuildInputs = [
