@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vm-curator";
-  version = "0.4.6";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "mroboff";
     repo = "vm-curator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IpG1/GhXvbpdxd6MU2DiYcnXYyVNrtHWvj8HEWk8+Lw=";
+    hash = "sha256-Nyq/i/MS24+5AaKs6mrsdmjO2BttqVzlLqIL6QEy1OA=";
   };
 
-  cargoHash = "sha256-SMC6qUWYp8icMNhcn+4Dll1u5Jutz8WDFsohbW6WheM=";
+  cargoHash = "sha256-ov6Sby916opRxsEas6DCPmcI6Dkqx00lvJII/o45oEI=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
