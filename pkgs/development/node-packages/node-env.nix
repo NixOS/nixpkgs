@@ -38,7 +38,10 @@ let
     stdenv.mkDerivation {
       name = "node-tarball-${name}-${version}";
       inherit src;
-      buildInputs = [ nodejs ];
+      buildInputs = [
+        nodejs
+        nodejs.npm
+      ];
       buildPhase = ''
         export HOME=$TMPDIR
         tgzFile=$(npm pack | tail -n 1) # Hooks to the pack command will add output (https://docs.npmjs.com/misc/scripts)
@@ -546,6 +549,7 @@ let
           tarWrapper
           python
           nodejs
+          nodejs.npm
         ]
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
@@ -668,6 +672,7 @@ let
           tarWrapper
           python
           nodejs
+          nodejs.npm
         ]
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
