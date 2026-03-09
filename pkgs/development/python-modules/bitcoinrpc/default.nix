@@ -5,6 +5,7 @@
   orjson,
   httpx,
   typing-extensions,
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -26,7 +27,14 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
+
+  pytestFlagsArray = [
+    "-m='not integration'"
+  ];
 
   pythonImportsCheck = [ "bitcoinrpc" ];
 
