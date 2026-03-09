@@ -101,11 +101,6 @@ in
         ];
         overrideStrategy = "asDropin";
       };
-
-      # open DHCP for container
-      networking.firewall.extraCommands = ''
-        ${pkgs.iptables}/bin/iptables -A nixos-fw -i ve-+ -p udp -m udp --dport 67 -j nixos-fw-accept
-      '';
     };
 
   testScript = ''
