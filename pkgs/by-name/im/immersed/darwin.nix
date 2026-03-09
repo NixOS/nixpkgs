@@ -4,6 +4,7 @@
   version,
   src,
   meta,
+  passthru,
   undmg,
 }:
 
@@ -13,6 +14,7 @@ stdenv.mkDerivation {
     version
     src
     meta
+    passthru
     ;
 
   nativeBuildInputs = [ undmg ];

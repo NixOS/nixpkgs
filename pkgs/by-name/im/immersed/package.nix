@@ -36,30 +36,16 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-in
-
-(
-  if stdenv.hostPlatform.isDarwin then
-    callPackage ./darwin.nix {
-      inherit
-        pname
-        version
-        src
-        meta
-        ;
-    }
-  else
-    callPackage ./linux.nix {
-      inherit
-        pname
-        version
-        src
-        meta
-        ;
-    }
-)
-// {
   passthru = {
     inherit sources;
   };
+in
+callPackage (if stdenv.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
+  inherit
+    pname
+    version
+    src
+    meta
+    passthru
+    ;
 }

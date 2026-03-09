@@ -3,6 +3,7 @@
   version,
   src,
   meta,
+  passthru,
   appimageTools,
   libgpg-error,
 }:
@@ -20,7 +21,12 @@ let
 in
 
 appimageTools.wrapAppImage {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    meta
+    passthru
+    ;
   src = src';
 
   extraPkgs =
