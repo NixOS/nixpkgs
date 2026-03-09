@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "rclone-ui-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     forceGitDeps = true;
     hash = "sha256-omZprG5ozCrwkxB7G9n82wvpF7wXz+IWPEI8FEnOJvk=";
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src-tauri/tauri.conf.json \
       --replace-fail '"mainBinaryName": "Rclone UI"' '"mainBinaryName": "${finalAttrs.meta.mainProgram}"'
     substituteInPlace src-tauri/Cargo.toml \
-       --replace-fail 'name = "app"' 'name = "${finalAttrs.pname}"'
+       --replace-fail 'name = "app"' 'name = "rclone-ui"'
   '';
 
   nativeBuildInputs = [
