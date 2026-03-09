@@ -16,18 +16,20 @@
 
   # meta
   music-assistant,
+
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "aiosendspin";
-  version = "2.1.0";
+  version = "4.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Sendspin";
     repo = "aiosendspin";
     tag = version;
-    hash = "sha256-9VhNtfXH2r/cGkscz51PIK2/66pPOGv0S0IpO0wFvO4=";
+    hash = "sha256-XIrDQbM0UR7YPf00MlEcR5Wq1Cj1niVOF8fudSfd2to=";
   };
 
   # https://github.com/Sendspin/aiosendspin/blob/1.2.0/pyproject.toml#L7
@@ -56,7 +58,9 @@ buildPythonPackage rec {
   ];
 
   # needs manual compat testing with music-assistant (sendspin provider)
-  passthru.skipBulkUpdate = true; # nixpkgs-update: no auto update
+  passthru = {
+    tests = nixosTests.music-assistant;
+  };
 
   meta = {
     changelog = "https://github.com/Sendspin/aiosendspin/releases/tag/${src.tag}";
