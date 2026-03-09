@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     };sf=tgz";
     hash = "sha256-VGftEr3xzCp8O3oqCjIZozlq599gxN5IsHBRaG37GP4=";
-    name = "${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    name = "libtirpc-${finalAttrs.version}.tar.gz";
   };
 
   outputs = [
