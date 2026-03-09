@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
       alembic
       av
       comfy-aimdo
+      comfy-kitchen
       comfyui-embedded-docs
       comfyui-frontend-package
       comfyui-workflow-templates
@@ -73,7 +74,6 @@ python3Packages.buildPythonApplication rec {
       transformers
       yarl
     ]
-    ++ lib.optional cudaSupport comfy-kitchen
     ++ additionalDependencies;
 
   installPhase = ''
