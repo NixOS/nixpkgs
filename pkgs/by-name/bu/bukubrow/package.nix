@@ -29,10 +29,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ sqlite ];
 
-  passAsFile = [
-    "firefoxManifest"
-    "chromeManifest"
-  ];
   firefoxManifest = builtins.toJSON (
     manifest
     // {
@@ -46,13 +42,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     }
   );
   postBuild = ''
-    substituteAll $firefoxManifestPath firefox.json
-    substituteAll $chromeManifestPath chrome.json
+    printf "%s" "$firefoxManifest" > firefox.json
+    substituteInPlace firefox.json \
+      --replace-fail "@out@" "$out"
+    printf "%s" "$chromeManifest" > chrome.json
+    substituteInPlace chrome.json \
+      --replace-fail "@out@" "$out"
   '';
   postInstall = ''
     install -Dm0644 firefox.json $out/lib/mozilla/native-messaging-hosts/com.samhh.bukubrow.json
     install -Dm0644 chrome.json $out/etc/chromium/native-messaging-hosts/com.samhh.bukubrow.json
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "WebExtension for Buku, a command-line bookmark manager";
