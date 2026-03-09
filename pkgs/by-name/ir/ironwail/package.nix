@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-TlEMuwmpQIoIyjyQo9T/h3T7rPHX+K8TqHKSt+UtMBg=";
   };
 
-  sourceRoot = "${finalAttrs.pname}-${finalAttrs.version}/Quake";
+  sourceRoot = "ironwail-${finalAttrs.version}/Quake";
 
   nativeBuildInputs = [
     copyDesktopItems
