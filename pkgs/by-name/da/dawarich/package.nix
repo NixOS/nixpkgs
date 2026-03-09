@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dawarichGems = bundlerEnv {
-    name = "${finalAttrs.pname}-gems-${finalAttrs.version}";
+    name = "dawarich-gems-${finalAttrs.version}";
     inherit gemset ruby;
     inherit (finalAttrs) version;
     gemdir = finalAttrs.src;
