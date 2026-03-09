@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications/SensibleSideButtons.app"
     cp -R . "$out/Applications/SensibleSideButtons.app"
     mkdir "$out/bin"
-    ln -s "$out/Applications/SensibleSideButtons.app/Contents/MacOS/SensibleSideButtons" "$out/bin/${finalAttrs.pname}"
+    ln -s "$out/Applications/SensibleSideButtons.app/Contents/MacOS/SensibleSideButtons" "$out/bin/sensible-side-buttons-bin"
 
     runHook postInstall
   '';
