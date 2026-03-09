@@ -22,7 +22,7 @@ stdenv.mkDerivation (
         buildPackages.bundlerEnv finalAttrs.passthru.bundlerEnvArgs;
 
     bundlerEnvArgs = {
-      name = "${finalAttrs.pname}-${finalAttrs.version}-gems";
+      name = "pghero-${finalAttrs.version}-gems";
       gemdir = ./.;
     };
   in
