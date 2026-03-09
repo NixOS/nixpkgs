@@ -28,6 +28,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.13,<0.10.0" "uv_build"
+  '';
+
   build-system = [ uv-build ];
 
   dependencies = [ construct ];
