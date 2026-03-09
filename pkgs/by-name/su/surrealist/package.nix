@@ -99,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "sha256-6nB8wcXIYR1WcYqZrNFl0Jfdz/Z3PttULQHsQcfAsOk=";
       }
       .${stdenv.hostPlatform.system}
-        or (throw "${finalAttrs.pname}: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
+        or (throw "surrealist: Platform ${stdenv.hostPlatform.system} is not packaged yet. Supported platforms: x86_64-linux, aarch64-linux.");
     outputHashMode = "recursive";
   };
 
