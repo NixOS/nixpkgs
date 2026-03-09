@@ -341,6 +341,12 @@
     githubId = 65275785;
     name = "Alexander Kenji Berthold";
   };
+  a-peirogon = {
+    email = "ainfanthe@gmail.com";
+    github = "a-peirogon";
+    githubId = 105471058;
+    name = "Andrés D'Infante";
+  };
   A1ca7raz = {
     email = "aya@wtm.moe";
     github = "A1ca7raz";
