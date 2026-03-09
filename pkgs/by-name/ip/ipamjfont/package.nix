@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
-      name = "${finalAttrs.pname}-updater";
+      name = "ipamjfont-updater";
 
       runtimeInputs = [
         curl
@@ -41,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             grep --perl-regexp --only-matching 'meta.+?ipamjm\K[0-9]+'
         )"
         version="''${suffix:0:3}.''${suffix:3:2}"
-        update-source-version '${finalAttrs.pname}' "$version" --ignore-same-version --print-changes
+        update-source-version 'ipamjfont' "$version" --ignore-same-version --print-changes
       '';
     });
   };
