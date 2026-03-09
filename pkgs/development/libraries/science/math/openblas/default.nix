@@ -201,6 +201,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/OpenMathLib/OpenBLAS/commit/874243421298866d116e1e8bdbd7e0ed4e31e4f6.diff";
       hash = "sha256-+L98AjuMaDdmEdF8yruvBpljQ+hGmsfNuJSLxB4quDU=";
     })
+    (fetchpatch {
+      url = "https://github.com/OpenMathLib/OpenBLAS/commit/d2906e8787ccc50051505f97262027bae6b55258.diff";
+      hash = "sha256-jYYMDr2rDJjM8ESO7/yPDl7Z/Y1MsrFBB4HsNOuFL9M=";
+    })
   ];
 
   inherit blas64;

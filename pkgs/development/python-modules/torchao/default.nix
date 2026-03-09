@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "torchao";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-N5s2AzkK9HmUT+qVq2owrB/53izDlzd25fqThjA3hPQ=";
+    hash = "sha256-FyBsIVb3zdKtA8Vqjt301bRrGIoyeqiOUADVFGxiRPY=";
   };
 
   # AttributeError: 'typing.Union' object has no attribute '__module__' and no __dict__ for setting
@@ -304,6 +304,16 @@ buildPythonPackage (finalAttrs: {
     "test/quantization/pt2e/test_arm_inductor_quantizer.py"
     "test/quantization/pt2e/test_x86inductor_fusion.py"
     "test/quantization/pt2e/test_x86inductor_quantizer.py"
+
+    # TypeError: Trying to convert Float8_e4m3fn to the MPS backend but it does not have support for that dtype.
+    "test/quantization/quantize_/workflows/float8/test_float8_tensor.py"
+
+    # AssertionError: Torch not compiled with CUDA enabled
+    "test/integration/test_integration.py"
+
+    # Wants network access
+    "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_False"
+    "test/test_low_bit_optim.py::TestQuantize::test_bf16_stochastic_round_dtensor_device_mps_compile_True"
   ];
 
   meta = {
