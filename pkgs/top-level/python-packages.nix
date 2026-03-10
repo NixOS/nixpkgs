@@ -7919,6 +7919,8 @@ self: super: with self; {
 
   json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
 
+  json-timeseries = callPackage ../development/python-modules/json-timeseries { };
+
   json-tricks = callPackage ../development/python-modules/json-tricks { };
 
   json2html = callPackage ../development/python-modules/json2html { };
