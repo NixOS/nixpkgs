@@ -235,6 +235,9 @@ stdenv.mkDerivation (finalAttrs: {
       return()'
 
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
+
+    substituteInPlace src/comgr.cpp \
+      --replace-fail '"/opt/rocm"' '"${clr}"'
   ''
   + linkKDBsTo "src/kernels"
   + ''
