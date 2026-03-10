@@ -126,6 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
     (lib.cmakeBool "LLVM_INSTALL_UTILS" true)
     (lib.cmakeBool "LLVM_INCLUDE_BENCHMARKS" false)
+    (lib.cmakeBool "LLVM_TOOL_LLVM_DRIVER_BUILD" true)
     (lib.cmakeBool "LLVM_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "MLIR_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_BUILD_DOCS" (buildDocs || buildMan))
