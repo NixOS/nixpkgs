@@ -93,7 +93,7 @@
   proprietaryCodecs ? true,
   pulseSupport ? false,
   libpulseaudio ? null,
-  ungoogled ? false,
+  variant ? "chromium", # Can be chromium or ungoogled
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
@@ -104,6 +104,8 @@
 buildFun:
 
 let
+  isUngoogled = lib.elem variant ["ungoogled"];
+
   python3WithPackages = python3.pythonOnBuildForHost.withPackages (
     ps: with ps; [
       ply
@@ -283,7 +285,7 @@ let
   );
 
   base = rec {
-    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
+    pname = ((import ./variants/meta.nix lib).${variant}).pname + "-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -560,7 +562,7 @@ let
       # https://chromium-review.googlesource.com/c/chromium/src/+/7022369
       ./patches/chromium-144-rustc_nightly_capability.patch
     ]
-    ++ lib.optionals (versionRange "144.0.7559.132" "145" && !ungoogled) [
+    ++ lib.optionals (versionRange "144.0.7559.132" "145" && !isUngoogled) [
       # Rollup was swapped with esbuild because of compile failures on Windows,
       # which is not compatible with our build yet. So let's revert it for now.
       # Ungoogled ships its own variant of this patch upstream.
@@ -576,7 +578,7 @@ let
         hash = "sha256-k+xCfhDuHxtuGhY7LVE8HvbDJt8SEFkslBcJe7t5CAg=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "145" && !ungoogled) [
+    ++ lib.optionals (chromiumVersionAtLeast "145" && !isUngoogled) [
       # Non-backported variant of the patch above for M145
       (fetchpatch {
         name = "revert-devtools-frontend-esbuild-instead-of-rollup.patch";
@@ -702,7 +704,7 @@ let
       # We cannot use fetchpatch{,2} because it silently drops blobs and messes up symlinks.
       # We cannot use GNU patch (patchPhase) because it does not support git binary diffs.
       # We cannot use Gerrit/Gitiles because the git sha lengths may change as the repo grows.
-      + lib.optionalString (chromiumVersionAtLeast "145" && !ungoogled) ''
+      + lib.optionalString (chromiumVersionAtLeast "145" && !isUngoogled) ''
         ${lib.getExe buildPackages.git} apply --reverse --directory=third_party/devtools-frontend/src/ ${
           fetchurl {
             name = "revert-devtools-frontend-remove-rollup-wasm.patch";
@@ -723,13 +725,13 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString isUngoogled ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
+        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString isUngoogled " third_party/jdk/current/bin/"}
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
@@ -743,7 +745,7 @@ let
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
           ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString isUngoogled ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
       '';
@@ -868,7 +870,7 @@ let
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
-      // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
+      // lib.optionalAttrs (variant == "ungoogled") (lib.importTOML ./variants/ungoogled/flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 
