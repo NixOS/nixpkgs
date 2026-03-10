@@ -113,7 +113,5 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
-    # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
