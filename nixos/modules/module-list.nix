@@ -496,6 +496,7 @@
   ./services/cluster/temporal/default.nix
   ./services/computing/boinc/client.nix
   ./services/computing/foldingathome/client.nix
+  ./services/computing/graphhopper/graphhopper.nix
   ./services/computing/slurm/slurm.nix
   ./services/computing/torque/mom.nix
   ./services/computing/torque/server.nix
