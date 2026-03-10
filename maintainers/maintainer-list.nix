@@ -23431,6 +23431,11 @@
     githubId = 6445619;
     name = "Ruben Cano Diaz";
   };
+  rupurt = {
+    name = "Alex Kwiatkowski";
+    github = "rupurt";
+    githubId = 680789;
+  };
   RudiOnTheAir = {
     name = "Rüdiger Schwoon";
     email = "wolf@schwoon.info";
