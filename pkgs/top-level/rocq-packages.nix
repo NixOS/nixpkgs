@@ -51,6 +51,7 @@ let
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
+      rocq-navi = callPackage ../development/rocq-modules/rocq-navi { };
       stdlib = callPackage ../development/rocq-modules/stdlib { };
       vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
 
