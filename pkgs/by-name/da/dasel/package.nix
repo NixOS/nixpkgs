@@ -3,43 +3,33 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "dasel";
-  version = "2.8.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "TomWright";
     repo = "dasel";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vq4lRCsqD2hmQw0yH84Wji5LeJ/aiMGJJIyCDvATA+I=";
+    hash = "sha256-3gLOAca5C4HfLqmF+1c1fDytA58JNml+18FYsWUhIQ0=";
   };
 
-  vendorHash = "sha256-edyFs5oURklkqsTF7JA1in3XteSBx/6YEVu4MjIcGN4=";
+  vendorHash = "sha256-hHxEE0xNSP4wnT5B13BAxUPpdIWs8v7KF1MuISfaYBE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/tomwright/dasel/v2/internal.Version=${finalAttrs.version}"
+    "-X github.com/tomwright/dasel/v3/internal.Version=v${finalAttrs.version}"
   ];
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd dasel \
-      --bash <($out/bin/dasel completion bash) \
-      --fish <($out/bin/dasel completion fish) \
-      --zsh <($out/bin/dasel completion zsh)
-  '';
 
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
     runHook preInstallCheck
-    if [[ $($out/bin/dasel --version) == "dasel version ${finalAttrs.version}" ]]; then
+    if [[ $($out/bin/dasel version) == "v${finalAttrs.version}" ]]; then
       echo '{ "my": { "favourites": { "colour": "blue" } } }' \
-        | $out/bin/dasel put -t json -r json -t string -v "red" "my.favourites.colour" \
+        | $out/bin/dasel -i json 'my.favourites.colour = "red"' \
         | grep "red"
     else
       return 1
