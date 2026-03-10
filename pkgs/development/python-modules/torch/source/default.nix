@@ -764,6 +764,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     homepage = "https://pytorch.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      caniko
       GaetanLepage
       LunNova # esp. for ROCm
       teh
