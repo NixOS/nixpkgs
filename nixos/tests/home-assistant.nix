@@ -55,6 +55,7 @@ in
 
         # test loading custom components
         customComponents = with pkgs.home-assistant-custom-components; [
+          gtfs-realtime
           prometheus_sensor
           # tests loading multiple components from a single package
           spook
@@ -217,8 +218,8 @@ in
           hass.succeed("curl --fail http://localhost:8123/lovelace")
 
       with subtest("Check that custom components get installed"):
-          hass.succeed("test -f ${configDir}/custom_components/prometheus_sensor/manifest.json")
-          for integration in ("prometheus_sensor", "spook", "spook_inverse"):
+          for integration in ("prometheus_sensor", "spook", "spook_inverse", "gtfs_realtime"):
+              hass.succeed(f"test -f ${configDir}/custom_components/{integration}/manifest.json")
               hass.wait_until_succeeds(f"journalctl -u home-assistant.service | grep -q 'We found a custom integration {integration} which has not been tested by Home Assistant'")
 
       with subtest("Check that lovelace modules are referenced and fetchable"):
