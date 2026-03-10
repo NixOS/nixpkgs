@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     "libk.so"
   ];
   checkTarget = "t";
+  doCheck = true;
 
   outputs = [
     "out"
