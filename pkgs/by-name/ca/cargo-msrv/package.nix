@@ -7,7 +7,7 @@
   openssl,
   stdenv,
   makeWrapper,
-  gitUpdater,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,11 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-cIyoGFIxtX4/Dn4RbtMB75WQj+UO44V182u6C5smgSw=";
 
-  passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
   };
 
   # Integration tests fail
