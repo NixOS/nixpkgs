@@ -85,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail \
           '#define UPB_LINKARR_SENTINEL UPB_RETAIN __attribute__((weak, used))' \
           '#define UPB_LINKARR_SENTINEL            __attribute__((weak, used))'
+    ''
+    # Fix gcc15 build failures due to missing <cstring>
+    + lib.optionalString ((lib.versions.major version) == "25") ''
+      sed -i '1i #include <cstring>' third_party/utf8_range/utf8_validity.cc
     '';
 
   preHook = ''
