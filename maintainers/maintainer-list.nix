@@ -23431,11 +23431,6 @@
     githubId = 6445619;
     name = "Ruben Cano Diaz";
   };
-  rupurt = {
-    name = "Alex Kwiatkowski";
-    github = "rupurt";
-    githubId = 680789;
-  };
   RudiOnTheAir = {
     name = "Rüdiger Schwoon";
     email = "wolf@schwoon.info";
@@ -23472,6 +23467,11 @@
     github = "running-grass";
     githubId = 17241154;
     keys = [ { fingerprint = "5156 0FAB FF32 83EC BC8C  EA13 9344 3660 9397 0138"; } ];
+  };
+  rupurt = {
+    name = "Alex Kwiatkowski";
+    github = "rupurt";
+    githubId = 680789;
   };
   rushmorem = {
     email = "rushmore@webenchanter.com";
