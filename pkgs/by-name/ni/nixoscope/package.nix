@@ -23,6 +23,16 @@ python3Packages.buildPythonPackage {
     graphviz
   ];
 
+  nativeCheckInputs = with python3Packages; [
+    unittestCheckHook
+  ];
+
+  unittestFlags = [
+    "-s"
+    "tests"
+    "-v"
+  ];
+
   meta = {
     description = "Visualize dependencies between NixOS modules";
     homepage = "https://github.com/giomf/NixoScope";
