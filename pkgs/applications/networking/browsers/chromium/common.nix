@@ -94,8 +94,9 @@
   proprietaryCodecs ? true,
   pulseSupport ? false,
   libpulseaudio ? null,
-  variant ? "chromium", # Can be chromium or ungoogled
+  variant ? "chromium", # Can be chromium, ungoogled, or helium
   ungoogled-chromium,
+  helium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
@@ -105,7 +106,10 @@
 buildFun:
 
 let
-  isUngoogled = lib.elem variant ["ungoogled"];
+  isUngoogled = lib.elem variant [
+    "ungoogled"
+    "helium"
+  ];
 
   python3WithPackages = python3.pythonOnBuildForHost.withPackages (
     ps: with ps; [
@@ -183,7 +187,12 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
+  ungooglers = {
+    ungoogled = ungoogled-chromium;
+    inherit helium;
+  };
+
+  ungoogler = ungooglers.${variant} {
     inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
@@ -766,6 +775,11 @@ let
       + lib.optionalString isUngoogled ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+      ''
+      + lib.optionalString (variant == "helium") ''
+        ${ungoogler}/utils/name_substitution.py --sub -t .
+        ${ungoogler}/utils/helium_version.py --tree ${ungoogler} --chromium-tree .
+        ${ungoogler}/utils/replace_resources.py ${ungoogler}/resources/helium_resources.txt ${ungoogler}/resources .
       '';
 
     # Sadly, Chromium is not even -fstrict-flex-array=1 clean
@@ -893,6 +907,7 @@ let
         link_pulseaudio = true;
       }
       // lib.optionalAttrs (variant == "ungoogled") (lib.importTOML ./variants/ungoogled/flags.toml)
+      // lib.optionalAttrs (variant == "helium") (lib.importTOML ./variants/helium/flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 
