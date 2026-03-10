@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
+              gtk3
               lame
               libxml2_13
               ffmpeg
