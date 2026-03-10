@@ -525,7 +525,12 @@ in
     ++
       # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598
       # and also https://github.com/openssl/openssl/pull/29321
-      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch;
+      lib.optional stdenv.hostPlatform.isCygwin ./openssl-3.0.18-skip-dllmain-detach.patch
+    ++
+      # https://github.com/openssl/openssl/pull/29827
+      # Fix ELFv2 .localentry directives in aes-gcm-ppc.pl breaking ppc64be (ELFv1) builds
+      # TODO(amaanq): Remove this when updating to >= 3.6.2
+      lib.optional stdenv.hostPlatform.isPower64 ./aes-gcm-ppc64be.patch;
 
     withDocs = true;
 
