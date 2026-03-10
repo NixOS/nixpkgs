@@ -6,6 +6,7 @@
   fetchpatch,
   stdenv,
   pkgsi686Linux,
+  kernel,
 }:
 
 let
@@ -18,19 +19,8 @@ let
       lib32 =
         (pkgsi686Linux.callPackage imported {
           libsOnly = true;
-          kernel = null;
         }).out;
     };
-
-  kernel =
-    # a hacky way of extracting parameters from callPackage
-    callPackage (
-      {
-        kernel,
-        libsOnly ? false,
-      }:
-      if libsOnly then { } else kernel
-    ) { };
 
   selectHighestVersion = a: b: if lib.versionOlder a.version b.version then b else a;
 
