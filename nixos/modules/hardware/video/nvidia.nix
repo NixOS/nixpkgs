@@ -678,7 +678,7 @@ in
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
           boot = {
-            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
             # nvidia-uvm is required by CUDA applications.
             kernelModules = lib.optionals config.services.xserver.enable [
               "nvidia"
@@ -728,7 +728,7 @@ in
         })
         # Data Center
         (lib.mkIf (cfg.datacenter.enable) {
-          boot.extraModulePackages = [ nvidia_x11.bin ];
+          boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
 
           systemd = {
             tmpfiles.rules =
