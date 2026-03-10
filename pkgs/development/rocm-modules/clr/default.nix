@@ -297,6 +297,10 @@ stdenv.mkDerivation (finalAttrs: {
           "amdgcnspirv"
         ];
       };
+      hiprtc-type-traits = callPackage ./test-hiprtc-type-traits.nix {
+        clr = finalAttrs.finalPackage;
+        inherit rocm-smi;
+      };
     };
 
     selectGpuTargets =
