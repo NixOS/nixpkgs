@@ -133,7 +133,7 @@ packages=(
   types-aiobotocore-entityresolution
   types-aiobotocore-es
   types-aiobotocore-events
-  types-aiobotocore-evidently
+  # types-aiobotocore-evidently
   types-aiobotocore-finspace
   types-aiobotocore-finspace-data
   types-aiobotocore-firehose
@@ -165,7 +165,7 @@ packages=(
   types-aiobotocore-iot
   types-aiobotocore-iot-data
   types-aiobotocore-iot-jobs-data
-  types-aiobotocore-iotanalytics
+  # types-aiobotocore-iotanalytics
   types-aiobotocore-iotdeviceadvisor
   types-aiobotocore-iotevents
   types-aiobotocore-iotevents-data
