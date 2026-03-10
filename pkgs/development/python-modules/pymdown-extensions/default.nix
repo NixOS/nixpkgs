@@ -60,11 +60,11 @@ buildPythonPackage rec {
   dependencies = [
     markdown
     pygments
+    pyyaml
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-    pyyaml
   ];
 
   disabledTests = [
