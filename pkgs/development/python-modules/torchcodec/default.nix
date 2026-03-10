@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -10,7 +9,6 @@
 
   # buildInputs
   ffmpeg,
-  cudaPackages,
 
   # build-system
   cmake,
@@ -21,7 +19,8 @@
   pytestCheckHook,
   torchvision,
 
-  cudaSupport ? config.cudaSupport,
+  cudaSupport ? torch.cudaSupport,
+  cudaPackages,
 }:
 
 buildPythonPackage rec {
