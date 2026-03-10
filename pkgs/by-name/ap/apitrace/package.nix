@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apitrace";
-  version = "13.0";
+  version = "14.0";
 
   src = fetchFromGitHub {
     owner = "apitrace";
     repo = "apitrace";
     rev = finalAttrs.version;
-    hash = "sha256-ZZ2RL9nvwvHBEuKSDr1tgRhxBeg+XJKPUvSiHz6g/cg=";
+    hash = "sha256-nZBs5j095p2GerRqeMjAuNVySkLAfWX3mS+9ICXPie4=";
     fetchSubmodules = true;
   };
 
