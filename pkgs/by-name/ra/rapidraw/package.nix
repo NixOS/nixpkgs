@@ -34,7 +34,7 @@
   gvfs,
   libheif,
   glib-networking,
-  nodejs_20,
+  nodejs_24,
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
@@ -69,14 +69,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     makeWrapper
     wrapGAppsHook4
-    nodejs_20
+    nodejs_24
     npmHooks.npmConfigHook
     cargo-tauri.hook
     writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    nodejs_20
+    nodejs_24
     glib-networking
     openssl
     gtk3
