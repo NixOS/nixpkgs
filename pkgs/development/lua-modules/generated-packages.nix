@@ -814,15 +814,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2516-1";
+      version = "0.0.2529-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2516-1.rockspec";
-          sha256 = "0w4f1srklkg3jarl6nyp0inp31sl3ha7vz46jfiw632kkxwsmbnl";
+          url = "mirror://luarocks/fzf-lua-0.0.2529-1.rockspec";
+          sha256 = "0m2p1m9b62j0v97ys12gz0rlwp2rc6cmbdmh01cjpr4bi1fha8v9";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/29ee11c06e1b8c354cc5a3212e6d24c9b8ed4f22.zip";
-        sha256 = "1fv0jwyw8lic4zbz0wmvlj9j5xs07f9pr18wr74h0zc1brr8y9c9";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/d9508cc1d05ffcdc91a32dfd38fc1013a56b20da.zip";
+        sha256 = "04h6ym8sxvcfj7vnmn9ykn192ycv04fbdmg74lh5vadr4vn20vvg";
       };
 
       disabled = luaOlder "5.1";
@@ -906,15 +906,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "grug-far.nvim";
-      version = "1.6.61-1";
+      version = "1.6.62-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/grug-far.nvim-1.6.61-1.rockspec";
-          sha256 = "1ray8bpww38rnbmxhs6sd62j5gxhv3d6xjmh0fpgdw0cmbsvb3qz";
+          url = "mirror://luarocks/grug-far.nvim-1.6.62-1.rockspec";
+          sha256 = "1n9y8azrzpqhp9qalh2fcsvcfhplbaqgc3xzva6v3y67rsklbxxa";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/MagicDuck/grug-far.nvim/archive/9370422e5cdd55321c0b8c4880082c5fd4e52e99.zip";
-        sha256 = "1isd7jgm8wsc05fqp2srgyk3ikqsdb271x17dv8yky9p1j20gq52";
+        url = "https://github.com/MagicDuck/grug-far.nvim/archive/ac52ee2d87399dfd7b0d59d5b1d2bbaf2a4028f1.zip";
+        sha256 = "0zabm0yzgnd7a3zf7wqd1qhhk5ws8xvqpc6vzl0y40n95i4m7ba2";
       };
 
       disabled = luaOlder "5.1";
@@ -1908,17 +1908,17 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-resty-jwt";
-      version = "0.2.3-0";
+      version = "0.3.2-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/lua-resty-jwt-0.2.3-0.rockspec";
-          sha256 = "1fxdwfr4pna3fdfm85kin97n53caq73h807wjb59wpqiynbqzc8c";
+          url = "mirror://luarocks/lua-resty-jwt-0.3.2-1.rockspec";
+          sha256 = "0r870630jzpdr41gyc1myn6zn1qpid4whx2abn0v8qaqyg0j825y";
         }).outPath;
       src = fetchFromGitHub {
         owner = "cdbattags";
         repo = "lua-resty-jwt";
-        tag = "v0.2.3";
-        hash = "sha256-m8UbvKk2DR8yCYX9Uv5HjXcZDVyVeRlUKp7UiaN/SkA=";
+        rev = "3973e402d835631de292c6e4cca52e728f02c24a";
+        hash = "sha256-KJvHwN8R2t8aJS/wMdVDJh5Mld1fF3FhYAOPk2njTu8=";
       };
 
       disabled = luaOlder "5.1";
@@ -4643,21 +4643,21 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "rustaceanvim";
-      version = "8.0.3-2";
+      version = "8.0.4-2";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/rustaceanvim-8.0.3-2.rockspec";
-          sha256 = "0a8w3j7wibrj94cb10x2nnvkcjs2cn8vag1mnrh32f2cr6cwjg0y";
+          url = "mirror://luarocks/rustaceanvim-8.0.4-2.rockspec";
+          sha256 = "12c711xrr0chsmx86w0zf4z3fg10nn53cv1dqdhq64a6vi5gjd4g";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.3.zip";
-        sha256 = "1gq26185qagx9p3al6zamsbpkvfy1kgg4yks7jxxnmhz4ydylbmg";
+        url = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.4.zip";
+        sha256 = "0nhbl28bxgbkd2jlhb5v9na29972djgmhd9kczma66mf0bwfwi7d";
       };
 
       disabled = lua.luaversion != "5.1";
 
       meta = {
-        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.3.zip";
+        homepage = "https://github.com/mrcjkb/rustaceanvim/archive/refs/tags/v8.0.4.zip";
         description = "🦀 Supercharge your Rust experience in Neovim! A heavily modified fork of rust-tools.nvim";
         maintainers = with lib.maintainers; [ mrcjkb ];
         license.fullName = "GPL-2.0-only";
