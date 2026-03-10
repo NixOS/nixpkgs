@@ -88,7 +88,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.6.0";
+  version = "1.6.1";
 
   outputs = [
     "out"
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     tag = finalAttrs.version;
-    hash = "sha256-Xc5ouBvT8v0hA3lPfCjhCicoem0jk4knevj7LJJipJ4=";
+    hash = "sha256-xvdeswj58w54ZR7LDhVHe01o30U+zeK5ODb1HYI5iUQ=";
   };
 
   patches = [
