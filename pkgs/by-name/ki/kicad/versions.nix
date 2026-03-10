@@ -25,14 +25,14 @@
   };
   "kicad-testing" = {
     kicadVersion = {
-      version = "9.0-2026-02-08";
+      version = "9.0-2026-02-22";
       src = {
-        rev = "05004b802679b8cca354ff36618be3aece49fbd6";
-        sha256 = "1w6pm243plbql1ylyjb2x8hvkcbbs7ijdh4r8ivlc2dhhr9pihb9";
+        rev = "662b7daf00a5c45d21c7fd2b05ebd50f19da8383";
+        sha256 = "0gff6ndb4z8nq8zivfwmppx926q53yfwc9rqjng4xixyj9qkqs7a";
       };
     };
     libVersion = {
-      version = "9.0-2026-02-08";
+      version = "9.0-2026-02-22";
       libSources = {
         symbols.rev = "65d897cc92950ff2af888eb67e527ba7a2b99fe8";
         symbols.sha256 = "08qb4rqxsyhrcvj1k200m2c06jjy7jwjmf9n1qkcm0biqqc5dba4";
