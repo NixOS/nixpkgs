@@ -15,19 +15,19 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
-    version = "17.8.1";
+    version = "17.10.2";
 
     src = fetchFromGitHub {
       owner = "gitkraken";
       repo = "vscode-gitlens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-ma+2HusIdhQ2Xy9rKs9fzJYSZ2YKa0taqv7ZzitNEUo=";
+      hash = "sha256-ISSvb8teH4CMN0rPc/Nqs67UJUCci4rcLAo+XkpAECE=";
     };
 
     pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
       fetcherVersion = 2;
-      hash = "sha256-MosT/2dmYomhRXtAeAZS2AMljiVDx+K3t5lLNii2a64=";
+      hash = "sha256-lLq/HMCYDYN0DffW64O+gUaxiO4yK7GPncRkv8rLfTw=";
     };
 
     postPatch = ''
