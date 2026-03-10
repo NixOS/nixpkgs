@@ -6,6 +6,7 @@
   zstd,
   fetchFromGitiles,
   fetchNpmDeps,
+  fetchzip,
   buildPackages,
   pkgsBuildBuild,
   # Channel data:
@@ -239,27 +240,30 @@ let
 
   chromiumDeps = lib.mapAttrs (
     path: args:
-    fetchFromGitiles (
-      removeAttrs args [ "recompress" ]
-      // lib.optionalAttrs args.recompress or false {
-        name = "source.tar.zstd";
-        downloadToTemp = false;
-        passthru.unpack = true;
-        nativeBuildInputs = [ zstd ];
-        postFetch = ''
-          tar \
-            --use-compress-program="zstd -T$NIX_BUILD_CORES" \
-            --sort=name \
-            --mtime="1970-01-01" \
-            --owner=root --group=root \
-            --numeric-owner --mode=go=rX,u+rw,a-s \
-            --remove-files \
-            --directory="$out" \
-            -cf "$TMPDIR/source.zstd" .
-          mv "$TMPDIR/source.zstd" "$out"
-        '';
-      }
-    )
+    if lib.hasAttr "rev" args then
+      fetchFromGitiles (
+        removeAttrs args [ "recompress" ]
+        // lib.optionalAttrs args.recompress or false {
+          name = "source.tar.zstd";
+          downloadToTemp = false;
+          passthru.unpack = true;
+          nativeBuildInputs = [ zstd ];
+          postFetch = ''
+            tar \
+              --use-compress-program="zstd -T$NIX_BUILD_CORES" \
+              --sort=name \
+              --mtime="1970-01-01" \
+              --owner=root --group=root \
+              --numeric-owner --mode=go=rX,u+rw,a-s \
+              --remove-files \
+              --directory="$out" \
+              -cf "$TMPDIR/source.zstd" .
+            mv "$TMPDIR/source.zstd" "$out"
+          '';
+        }
+      )
+    else
+      fetchzip args
   ) upstream-info.DEPS;
 
   unpackPhaseSnippet = lib.concatStrings (
