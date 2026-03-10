@@ -10570,7 +10570,7 @@ with pkgs;
   ungoogled-chromium = callPackage ../applications/networking/browsers/chromium (
     (config.chromium or { })
     // {
-      ungoogled = true;
+      variant = "ungoogled";
     }
   );
 
