@@ -401,10 +401,52 @@ in
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
           '';
-          hardware.graphics = {
-            extraPackages = [ nvidia_x11.out ];
-            extraPackages32 = [ nvidia_x11.lib32 ];
-          };
+          hardware.graphics =
+            let
+              icd = [
+                "egl-wayland"
+              ]
+              # GBM support was added in 495.
+              ++ lib.optionals (lib.versionAtLeast nvidia_x11.version "495") [
+                "egl-gbm"
+              ]
+              # ICDs below use a new driver interface, which is added in the 560 series drivers.
+              ++ lib.optionals (lib.versionAtLeast nvidia_x11.version "560") [
+                "egl-wayland2"
+                "egl-x11"
+              ];
+              combineIcdPkgs =
+                icd: pkgs:
+                pkgs.symlinkJoin {
+                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.is32bit "-x32"}";
+                  paths = lib.attrVals icd pkgs;
+                  # Remediate reversed priorities in pre-595 drivers,
+                  # https://github.com/NixOS/nixpkgs/pull/497342#issuecomment-4034876793
+                  postBuild = lib.optionalString (lib.versionOlder nvidia_x11.version "595") ''
+                    pushd $out/share/egl/egl_external_platform.d
+                    for f in [0-9][0-9]_*; do
+                      num=''${f:0:2}
+                      rest=''${f:2}
+                      new=$(printf "%02d" $((99 - 10#$num)))
+                      mv -- "$f" "tmp-$new$rest"
+                    done
+                    for f in tmp-*; do
+                      mv -- "$f" "''${f#tmp-}"
+                    done
+                    popd
+                  '';
+                };
+            in
+            {
+              extraPackages = [
+                nvidia_x11.out
+                (combineIcdPkgs icd pkgs)
+              ];
+              extraPackages32 = [
+                nvidia_x11.lib32
+                (combineIcdPkgs icd pkgs.pkgsi686Linux)
+              ];
+            };
           environment.systemPackages = [ nvidia_x11.bin ];
         }
 

@@ -51,6 +51,7 @@ installPhase() {
         rm -f $i/lib/lib{glx,nvidia-wfb}.so.* # handled separately
         rm -f $i/lib/libnvidia-gtk* # built from source
         rm -f $i/lib/libnvidia-wayland-client* # built from source
+        rm -f $i/lib/libnvidia-egl-* # built from source
         if [ "$useGLVND" = "1" ]; then
             # Pre-built libglvnd
             rm $i/lib/lib{GL,GLX,EGL,GLESv1_CM,GLESv2,OpenGL,GLdispatch}.so.*
@@ -79,13 +80,7 @@ installPhase() {
             else
                 sed -E "s#(libGLX_nvidia)#$i/lib/\\1#" nvidia_icd.json > nvidia_icd.json.fixed
             fi
-
-            # nvidia currently only supports x86_64 and i686
-            if [ "$i" == "$lib32" ]; then
-                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.i686.json
-            else
-                install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.x86_64.json
-            fi
+            install -Dm644 nvidia_icd.json.fixed $i/share/vulkan/icd.d/nvidia_icd.json
         fi
 
         if [ -e nvidia_layers.json ]; then
@@ -95,17 +90,14 @@ installPhase() {
 
         # EGL
         if [ "$useGLVND" = "1" ]; then
-            mkdir -p "$i/share/egl/egl_external_platform.d"
-            for icdname in $(find . -name '*_nvidia*.json')
-            do
-                cat "$icdname" | jq ".ICD.library_path |= \"$i/lib/\(.)\"" | tee "$i/share/egl/egl_external_platform.d/$icdname"
-            done
-
             # glvnd icd
             mkdir -p "$i/share/glvnd/egl_vendor.d"
-            mv "$i/share/egl/egl_external_platform.d/10_nvidia.json" "$i/share/glvnd/egl_vendor.d/10_nvidia.json"
+            for icdname in "10_nvidia.json";
+            do
+                cat "$icdname" | jq ".ICD.library_path |= \"$i/lib/\(.)\"" | tee "$i/share/glvnd/egl_vendor.d/$icdname"
+            done
 
-            if [[ -f "$i/share/egl/egl_external_platform.d/15_nvidia_gbm.json" ]]; then
+            if [[ -f "15_nvidia_gbm.json" ]]; then
               mkdir -p $i/lib/gbm
               ln -s $i/lib/libnvidia-allocator.so $i/lib/gbm/nvidia-drm_gbm.so
             fi
