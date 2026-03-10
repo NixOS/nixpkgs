@@ -7,11 +7,12 @@
   meson,
   ninja,
   wayland-scanner,
+  jq,
   libGL,
-  libx11,
   libdrm,
   wayland,
   wayland-protocols,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,9 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   src = fetchFromGitHub {
-    owner = "Nvidia";
+    owner = "NVIDIA";
     repo = "egl-wayland";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-a98DzmzCG6DlLJ1HCl/LeD21Q7yyNbTce1poOoAnTjA=";
   };
 
@@ -45,11 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     wayland-scanner
+    jq
   ];
 
   buildInputs = [
     libGL
-    libx11
     libdrm
     wayland
     wayland-protocols
@@ -59,11 +60,26 @@ stdenv.mkDerivation (finalAttrs: {
     eglexternalplatform
   ];
 
+  postFixup = ''
+    pushd $out/share/egl/egl_external_platform.d
+    for f in *.json; do
+      jq --arg lib "$out" \
+        '.ICD.library_path |= $lib + "/lib/" + .' \
+        "$f" > "$f.tmp" && mv "$f.tmp" "$f"
+    done
+    popd
+  '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
   meta = {
     description = "EGLStream-based Wayland external platform";
     homepage = "https://github.com/NVIDIA/egl-wayland/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers = with lib.maintainers; [ hedning ];
+    maintainers = with lib.maintainers; [
+      hedning
+      ccicnce113424
+    ];
   };
 })
