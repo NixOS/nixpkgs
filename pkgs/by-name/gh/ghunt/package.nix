@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ghunt";
-  version = "2.3.3";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
