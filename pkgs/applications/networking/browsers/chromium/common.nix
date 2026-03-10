@@ -93,7 +93,7 @@
   cups ? null,
   proprietaryCodecs ? true,
   libpulseaudio ? null,
-  ungoogled ? false,
+  variant ? "chromium", # Can be chromium or ungoogled
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
@@ -104,6 +104,8 @@
 buildFun:
 
 let
+  isUngoogled = lib.elem variant ["ungoogled"];
+
   python3WithPackages = python3.pythonOnBuildForHost.withPackages (
     ps: with ps; [
       ply
@@ -276,7 +278,7 @@ let
   );
 
   base = rec {
-    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
+    pname = ((import ./variants/meta.nix lib).${variant}).pname + "-unwrapped";
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -515,7 +517,7 @@ let
         hash = "sha256-xf1Jq5v3InXkiVH0uT7+h1HPwZse5MDcHKuJNjSLR6k=";
       })
     ]
-    ++ lib.optionals (!ungoogled) [
+    ++ lib.optionals (!isUngoogled) [
       # Same as the patch above, but from ungoogled-chromium and much
       # cleaner (and smaller) than reverting an endless chain of CLs.
       (fetchpatch {
@@ -525,7 +527,7 @@ let
         hash = "sha256-Ho5I33FOgtYHvKSZlWXWuBaqnSHqy4+f6EZdiL+/rRQ=";
       })
     ]
-    ++ lib.optionals (!ungoogled) [
+    ++ lib.optionals (!isUngoogled) [
       # Revert CL 7457194 to fix the following error:
       #  ERROR at //chrome/test/BUILD.gn:6355:9: Unable to load "/build/src/components/variations/test_data/cipd/BUILD.gn".
       #  "//components/variations/test_data/cipd:single_group_per_study_prefer_existing_behavior_seed",
@@ -657,7 +659,7 @@ let
       # both (all) architectures instead.
       ./patches/chromium-151-dawn-use-Go-from-PATH.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !ungoogled) [
+    ++ lib.optionals (chromiumVersionAtLeast "151.0.7922.169" && !isUngoogled) [
       # Don't show misleading Terms of Service dialog on first run that literally says [^1]
       #
       # > This Space Intentionally Blank
@@ -789,13 +791,13 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString isUngoogled ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
+        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString isUngoogled " third_party/jdk/current/bin/"}
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
@@ -821,7 +823,7 @@ let
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
           ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString isUngoogled ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
       '';
@@ -954,7 +956,7 @@ let
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
-      // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
+      // lib.optionalAttrs (variant == "ungoogled") (lib.importTOML ./variants/ungoogled/flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 
