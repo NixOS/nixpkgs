@@ -56,10 +56,18 @@ builtins.intersectAttrs super {
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
-  cabal-add = overrideCabal (drv: {
-    # tests depend on executable
-    preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
-  }) super.cabal-add;
+  cabal-add =
+    # Can't find executable without https://github.com/haskell/cabal/pull/9912
+    if lib.versionOlder self.ghc.version "9.12" then
+      overrideCabal (drv: {
+        # tests depend on executable
+        preCheck = ''
+          ${drv.preCheck or ""}
+          export PATH="$PWD/dist/build/cabal-add:$PATH"
+        '';
+      }) super.cabal-add
+    else
+      super.cabal-add;
 
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
@@ -1817,11 +1825,16 @@ builtins.intersectAttrs super {
   inherit
     (
       let
-        fourmoluTestFix = overrideCabal (drv: {
-          preCheck = drv.preCheck or "" + ''
-            export PATH="$PWD/dist/build/fourmolu:$PATH"
-          '';
-        });
+        fourmoluTestFix =
+          # Can't find executable without https://github.com/haskell/cabal/pull/9912
+          if lib.versionOlder self.ghc.version "9.12" then
+            overrideCabal (drv: {
+              preCheck = drv.preCheck or "" + ''
+                export PATH="$PWD/dist/build/fourmolu:$PATH"
+              '';
+            })
+          else
+            lib.id;
       in
       builtins.mapAttrs (_: fourmoluTestFix) super
     )
