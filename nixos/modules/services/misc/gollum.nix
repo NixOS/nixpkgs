@@ -70,6 +70,12 @@ in
       description = "Enable uploads of external files";
     };
 
+    base-path = lib.mkOption {
+      type = lib.types.str;
+      default = null;
+      description = "Enable specifying base path";
+    };
+
     user-icons = lib.mkOption {
       type = lib.types.nullOr (
         lib.types.enum [
@@ -167,6 +173,7 @@ in
             ${lib.optionalString cfg.no-edit "--no-edit"} \
             ${lib.optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${lib.optionalString (cfg.user-icons != null) "--user-icons ${cfg.user-icons}"} \
+            ${lib.optionalString (cfg.base-path != null) "--base-path ${cfg.base-path}"} \
             ${cfg.stateDir}
         '';
       };
