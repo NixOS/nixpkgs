@@ -5,12 +5,12 @@
   autogen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "complexity";
   version = "1.10";
 
   src = fetchurl {
-    url = "mirror://gnu/complexity/complexity-${version}.tar.gz";
+    url = "mirror://gnu/complexity/complexity-${finalAttrs.version}.tar.gz";
     sha256 = "1vfns9xm7w0wrz12a3w15slrqnrfh6qxk15nv7qkj3irll3ff522";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

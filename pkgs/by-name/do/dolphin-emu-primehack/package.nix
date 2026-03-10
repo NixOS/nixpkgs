@@ -17,11 +17,11 @@
   libGL,
   libGLU,
   libsm,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXxf86vm,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxxf86vm,
   libao,
   libpthread-stubs,
   libpulseaudio,
@@ -87,11 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libGLU
     libsm
-    libXdmcp
-    libXext
-    libXinerama
-    libXrandr
-    libXxf86vm
+    libxdmcp
+    libxext
+    libxinerama
+    libxrandr
+    libxxf86vm
     libao
     libpthread-stubs
     libpulseaudio

@@ -111,8 +111,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       pname = "airflow-ui";
       inherit sourceRoot src version;
-      fetcherVersion = 1;
-      hash = "sha256-UcEFQkDZ9Ye+VfyJ9rdZKe0wilTgO4dMsULABWfL2Co=";
+      fetcherVersion = 3;
+      hash = "sha256-jpv47+DAAoMB4pJBcv5G6zTGQ+/qdg86iQ/H22gwpro=";
     };
 
     buildPhase = ''
@@ -140,8 +140,8 @@ let
     pnpmDeps = fetchPnpmDeps {
       pname = "simple-auth-manager-ui";
       inherit sourceRoot src version;
-      fetcherVersion = 1;
-      hash = "sha256-8nZdWnhERUkiaY8USyy/a/j+dMksjmEzCabSkysndSE=";
+      fetcherVersion = 3;
+      hash = "sha256-ccLGYaAYJWSgegO+IfVZv1WdZ5YjhYYTZivqtDjdoOk=";
     };
 
     buildPhase = ''
@@ -200,6 +200,7 @@ let
       sed -i -E 's/"apache-airflow-task-sdk[^"]+",//' pyproject.toml
 
       substituteInPlace pyproject.toml \
+        --replace-fail "GitPython==3.1.45" "GitPython" \
         --replace-fail "hatchling==1.27.0" "hatchling" \
         --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
 
@@ -286,6 +287,7 @@ let
       # Temporary to fix CI only:
       # https://github.com/apache/airflow/commit/c474be9ff06cf16bf96f93de9a09e30ffc476bee
       "fastapi"
+      "universal-pathlib"
     ];
   };
 
@@ -337,6 +339,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail "GitPython==3.1.45" "GitPython" \
       --replace-fail "hatchling==1.27.0" "hatchling" \
       --replace-fail "trove-classifiers==2025.9.11.17" "trove-classifiers"
   '';

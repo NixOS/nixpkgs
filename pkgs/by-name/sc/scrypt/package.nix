@@ -7,12 +7,12 @@
   util-linux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scrypt";
   version = "1.3.3";
 
   src = fetchurl {
-    url = "https://www.tarsnap.com/scrypt/scrypt-${version}.tgz";
+    url = "https://www.tarsnap.com/scrypt/scrypt-${finalAttrs.version}.tgz";
     sha256 = "sha256-HCcQUX6ZjqrC6X2xHwkuNxOeaYhrIaGyZh9k4TAhWuk=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ytalk";
   version = "3.3.0";
 
   src = fetchurl {
-    url = "ftp://ftp.ourproject.org/pub/ytalk/ytalk-${version}.tar.gz";
+    url = "ftp://ftp.ourproject.org/pub/ytalk/ytalk-${finalAttrs.version}.tar.gz";
     sha256 = "1d3jhnj8rgzxyxjwfa22vh45qwzjvxw1qh8fz6b7nfkj3zvk9jvf";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ taeer ];
     license = lib.licenses.gpl2Plus;
   };
-}
+})

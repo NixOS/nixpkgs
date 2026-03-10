@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpxsee";
-  version = "15.10";
+  version = "15.11";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     tag = finalAttrs.version;
-    hash = "sha256-lXyxArPctaS9q+xeSpYBWPd9fdTffGNIBO39bMxZBCE=";
+    hash = "sha256-OZC4ClQUbOKb1nZD6kmZ2s6oHudhkLLW0HSrYiFCJfg=";
   };
 
   buildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preConfigure = ''
-    lrelease gpxsee.pro
+    lrelease lang/*.ts
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://build.opensuse.org/package/view_file/home:tumic:GPXSee/gpxsee/gpxsee.changes";
+    changelog = "https://github.com/tumic0/GPXSee/releases/tag/${finalAttrs.src.tag}";
     description = "GPS log file viewer and analyzer";
     mainProgram = "gpxsee";
     homepage = "https://www.gpxsee.org/";

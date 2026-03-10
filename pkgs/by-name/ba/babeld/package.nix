@@ -5,12 +5,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "babeld";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "https://www.irif.fr/~jch/software/files/babeld-${version}.tar.gz";
+    url = "https://www.irif.fr/~jch/software/files/babeld-${finalAttrs.version}.tar.gz";
     hash = "sha256-FfJNJtoMz8Bzq83vAwnygeRoTyqnESb4JlcsTIRejdk=";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "babeld";
   };
-}
+})

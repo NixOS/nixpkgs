@@ -8,7 +8,7 @@
   libxcb-keysyms,
   libxcb-image,
   pam,
-  libX11,
+  libx11,
   libev,
   cairo,
   libxkbcommon,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libxcb-keysyms
     libxcb-image
     pam
-    libX11
+    libx11
     libev
     cairo
     libxkbcommon

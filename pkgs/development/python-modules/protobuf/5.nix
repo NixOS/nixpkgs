@@ -10,6 +10,7 @@ buildPythonPackage rec {
   pname = "protobuf";
   version = "5.29.6";
   pyproject = true;
+  # nixpkgs-update: no auto update
 
   src = fetchPypi {
     inherit pname version;

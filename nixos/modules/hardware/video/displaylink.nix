@@ -23,6 +23,8 @@ in
     boot.extraModulePackages = [ evdi ];
     boot.kernelModules = [ "evdi" ];
 
+    services.xserver.externallyConfiguredDrivers = [ "displaylink" ];
+
     environment.etc."X11/xorg.conf.d/40-displaylink.conf".text = ''
       Section "OutputClass"
         Identifier  "DisplayLink"

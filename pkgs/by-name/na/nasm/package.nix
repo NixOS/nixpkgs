@@ -7,12 +7,12 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nasm";
   version = "3.01";
 
   src = fetchurl {
-    url = "https://www.nasm.us/pub/nasm/releasebuilds/${version}/nasm-${version}.tar.xz";
+    url = "https://www.nasm.us/pub/nasm/releasebuilds/${finalAttrs.version}/nasm-${finalAttrs.version}.tar.xz";
     hash = "sha256-tzJMvobnZ7ZfJvRn7YsSrYDhJOPMuJB2hVyY5Dqe3dQ=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nasm";
     license = lib.licenses.bsd2;
   };
-}
+})

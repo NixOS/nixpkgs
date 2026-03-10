@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "0.43.3";
+  version = "0.43.5";
 in
 buildGoModule {
   pname = "geesefs";
@@ -15,7 +15,7 @@ buildGoModule {
     owner = "yandex-cloud";
     repo = "geesefs";
     rev = "v${version}";
-    hash = "sha256-EwCWyN1wpG0CVt6vAjxNX0AYbHqblTtwKkbBIVDSJa0=";
+    hash = "sha256-cfeL7fnxS+UFUlRVLiO09GHuEOvkiH5PkKcoH+jNRhY=";
   };
 
   # hashes differ per architecture otherwise.

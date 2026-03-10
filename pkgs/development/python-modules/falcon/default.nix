@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "falcon";
-  version = "4.0.2";
+  version = "4.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "falconry";
     repo = "falcon";
     tag = version;
-    hash = "sha256-umNuHyZrdDGyrhQEG9+f08D4Wwrz6bVJ6ysw8pfbHv4=";
+    hash = "sha256-Vi7J607PsjwxAKYNCiVGxSRYIbKHgrGvRX9Ent3+LQo=";
   };
 
   build-system = [ setuptools ] ++ lib.optionals (!isPyPy) [ cython ];
@@ -84,7 +84,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://falcon.readthedocs.io/en/stable/changes/${version}.html";
+    changelog = "https://falcon.readthedocs.io/en/stable/changes/${src.tag}.html";
     description = "Ultra-reliable, fast ASGI+WSGI framework for building data plane APIs at scale";
     homepage = "https://falconframework.org/";
     license = lib.licenses.asl20;

@@ -15,12 +15,12 @@
   flacSupport ? true,
   flac,
   opusSupport ? false,
-  opusTools,
+  opus-tools,
   wavpackSupport ? false,
   wavpack,
   #, musepackSupport ? false, TODO: mpcenc
   monkeysAudioSupport ? false,
-  monkeysAudio,
+  monkeys-audio,
   #, aacSupport ? false, TODO: neroAacEnc
 }:
 
@@ -29,9 +29,9 @@ let
     lib.optional mp3Support lame
     ++ lib.optional oggSupport vorbis-tools
     ++ lib.optional flacSupport flac
-    ++ lib.optional opusSupport opusTools
+    ++ lib.optional opusSupport opus-tools
     ++ lib.optional wavpackSupport wavpack
-    ++ lib.optional monkeysAudioSupport monkeysAudio
+    ++ lib.optional monkeysAudioSupport monkeys-audio
     ++ [ cdparanoia ];
 in
 

@@ -14,14 +14,14 @@
   libGL,
   libGLU,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   zlib,
   udev, # for libudev
 }:
@@ -56,14 +56,14 @@ stdenv.mkDerivation rec {
     alsa-lib
     libGL
     libGLU
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     zlib
     udev
   ];
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       --set-rpath ${lib.makeLibraryPath buildInputs} \
       $out/share/lorien/lorien
 
-    install -Dm644 images/lorien.png $out/share/pixmaps/lorien.png
+    install -Dm644 images/lorien.png -t $out/share/icons/hicolor/64x64/apps
 
     runHook postInstall
   '';

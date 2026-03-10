@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "crab-hole";
   version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "LuckyTurtleDev";
     repo = "crab-hole";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HJQpzUdvjGhZnH5+qlgaekDpqSUmOhR30VPzg1lZIl0=";
   };
 
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

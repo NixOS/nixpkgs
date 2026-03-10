@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
         install -dpm755 $out/share/doc/${pname}-${version} $out/share/licenses/${pname}-${version} $out/share/icons $out/share/pixmaps $out/share/applications
         install -Dpm644 CHANGES README help.html $out/share/doc/${pname}-${version}/
         install -Dpm644 gpl-2.0.txt $out/share/licenses/${pname}-${version}/
-        install -Dpm644 images/icon.png $out/share/pixmaps/diffpdf.png
+        install -Dpm644 images/icon.png $out/share/icons/hicolor/64x64/apps/diffpdf.png
 
         cat > $out/share/applications/diffpdf.desktop <<EOF
         [Desktop Entry]

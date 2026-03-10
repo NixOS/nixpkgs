@@ -7,18 +7,19 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  msrest,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-mysqlflexibleservers";
-  version = "1.0.0b3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_mysqlflexibleservers";
     inherit version;
-    hash = "sha256-YR/Yjz2x4KhHehYz/pTEYdFyE+IVFw61PB7qm4I71MM=";
+    hash = "sha256-0HemVoiKXFl39HmiRKZKxKHTUQAumaft2vakmoIZLlY=";
   };
 
   build-system = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
     typing-extensions
   ];
 

@@ -12,12 +12,12 @@ let
     sha256 = "0y132xmjl02vw41k794psa4nmjpdyky9f6sf0h4f7rvf83z3zy4k";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zerofree";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "https://frippery.org/uml/zerofree-${version}.tgz";
+    url = "https://frippery.org/uml/zerofree-${finalAttrs.version}.tgz";
     sha256 = "0rrqfa5z103ws89vi8kfvbks1cfs74ix6n1wb6vs582vnmhwhswm";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.theuni ];
     mainProgram = "zerofree";
   };
-}
+})

@@ -10,7 +10,7 @@
   replaceVars,
   # Language dependencies
   fetchYarnDeps,
-  mkYarnModules,
+  yarnConfigHook,
   python3,
   # Misc dependencies
   charm-freeze,
@@ -72,6 +72,7 @@
   gitMinimal,
   # opencode-nvim,
   opencode,
+  lsof,
   # Preview-nvim dependencies
   md-tui,
   # sidekick-nvim dependencies
@@ -299,6 +300,10 @@ assertNoAdditions {
       "nvchad.configs.nvimtree"
       "nvchad.configs.telescope"
     ];
+  };
+
+  blink-cmp-conventional-commits = super.blink-cmp-conventional-commits.overrideAttrs {
+    dependencies = [ self.blink-cmp ];
   };
 
   blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
@@ -942,14 +947,6 @@ assertNoAdditions {
   };
 
   cpsm = super.cpsm.overrideAttrs (old: {
-    # CMake 4 dropped support of versions lower than 3.5, and versions
-    # lower than 3.10 are deprecated.
-    postPatch = (old.postPatch or "") + ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail \
-          "cmake_minimum_required(VERSION 2.8.12)" \
-          "cmake_minimum_required(VERSION 3.10)"
-    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       python3
@@ -1256,6 +1253,13 @@ assertNoAdditions {
 
   floaterm = super.floaterm.overrideAttrs {
     dependencies = [ self.nvzone-volt ];
+  };
+
+  flow-nvim = super.flow-nvim.overrideAttrs {
+    nvimSkipModules = [
+      # Optional barbecue integration requires flow.setup() first.
+      "barbecue.theme.flow"
+    ];
   };
 
   flutter-tools-nvim = super.flutter-tools-nvim.overrideAttrs {
@@ -1612,6 +1616,13 @@ assertNoAdditions {
     dependencies = [ self.lush-nvim ];
   };
 
+  jj-nvim = super.jj-nvim.overrideAttrs {
+    # Don't install 30 MB of GIFs
+    postPatch = ''
+      rm -rf assets/
+    '';
+  };
+
   jupytext-nvim = super.jupytext-nvim.overrideAttrs {
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
@@ -1947,14 +1958,18 @@ assertNoAdditions {
   markdown-preview-nvim =
     let
       # We only need its dependencies `node-modules`.
-      nodeDep = mkYarnModules rec {
-        inherit (super.markdown-preview-nvim) pname version;
-        packageJSON = ./patches/markdown-preview-nvim/package.json;
-        yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
-        offlineCache = fetchYarnDeps {
-          inherit yarnLock;
+      nodeDep = stdenv.mkDerivation {
+        inherit (super.markdown-preview-nvim) pname version src;
+        nativeBuildInputs = [
+          yarnConfigHook
+        ];
+        yarnOfflineCache = fetchYarnDeps {
+          yarnLock = "${super.markdown-preview-nvim.src}/yarn.lock";
           hash = "sha256-kzc9jm6d9PJ07yiWfIOwqxOTAAydTpaLXVK6sEWM8gg=";
         };
+        installPhase = ''
+          cp -r node_modules $out
+        '';
       };
     in
     super.markdown-preview-nvim.overrideAttrs {
@@ -1964,7 +1979,7 @@ assertNoAdditions {
         })
       ];
       postInstall = ''
-        ln -s ${nodeDep}/node_modules $out/app
+        cp -r ${nodeDep} $out/app/node_modules
       '';
 
       nativeBuildInputs = [ nodejs ];
@@ -2015,6 +2030,19 @@ assertNoAdditions {
   material-vim = super.material-vim.overrideAttrs {
     # Optional integration
     checkInputs = [ self.lualine-nvim ];
+  };
+
+  mcphub-nvim = super.mcphub-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    checkInputs = [
+      # Required by mcphub.extensions.luali
+      self.lualine-nvim
+    ];
+
+    nvimSkipModules = [
+      # ENOENT: no such file or directory (cmd): 'npm'
+      "bundled_build"
+    ];
   };
 
   mind-nvim = super.mind-nvim.overrideAttrs {
@@ -2782,6 +2810,8 @@ assertNoAdditions {
       # Meta can't be required
       "nvim-tree._meta.api"
       "nvim-tree._meta.api_decorator"
+      "nvim-tree._meta.api.decorator_example"
+      "nvim-tree._meta.classes"
       "nvim-tree._meta.config.filters"
       "nvim-tree._meta.config.actions"
       "nvim-tree._meta.config.git"
@@ -2978,6 +3008,7 @@ assertNoAdditions {
     runtimeDeps = [
       curl
       opencode
+      lsof
     ];
   };
 
@@ -3272,6 +3303,14 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
   };
 
+  screensaver-nvim = super.screensaver-nvim.overrideAttrs (old: {
+    meta = old.meta // {
+      description = "Screensaver plugin for Neovim";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ m3l6h ];
+    };
+  });
+
   scretch-nvim = super.scretch-nvim.overrideAttrs {
   };
 
@@ -3474,6 +3513,13 @@ assertNoAdditions {
         description = "synctex support between vim/neovim and evince";
       };
     });
+
+  switcher-nvim = super.switcher-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      nvim-web-devicons
+    ];
+  };
 
   tardis-nvim = super.tardis-nvim.overrideAttrs (old: {
     dependencies = [ self.plenary-nvim ];
@@ -4084,6 +4130,10 @@ assertNoAdditions {
 
   vim-hier = super.vim-hier.overrideAttrs {
     buildInputs = [ vim ];
+  };
+
+  vim-hypr-nav = super.vim-hypr-nav.overrideAttrs {
+    runtimeDeps = [ jq ];
   };
 
   vim-isort = super.vim-isort.overrideAttrs {

@@ -8,12 +8,12 @@
   lcms2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmng";
   version = "2.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libmng/libmng-${version}.tar.xz";
+    url = "mirror://sourceforge/libmng/libmng-${finalAttrs.version}.tar.xz";
     sha256 = "1lvxnpds0vcf0lil6ia2036ghqlbl740c4d2sz0q5g6l93fjyija";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ marcweber ];
     platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchurl,
   tcl,
   tk,
-  libX11,
+  libx11,
   makeWrapper,
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     tcl
     tk
-    libX11
+    libx11
   ];
 
   makeFlags = [

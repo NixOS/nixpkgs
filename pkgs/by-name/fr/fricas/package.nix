@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   sbcl,
-  libX11,
-  libXpm,
+  libx11,
+  libxpm,
   libice,
   libsm,
-  libXt,
-  libXau,
-  libXdmcp,
+  libxt,
+  libxau,
+  libxdmcp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,13 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     sbcl
-    libX11
-    libXpm
+    libx11
+    libxpm
     libice
     libsm
-    libXt
-    libXau
-    libXdmcp
+    libxt
+    libxau
+    libxdmcp
   ];
 
   # Remove when updating to next version

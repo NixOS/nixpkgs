@@ -9,9 +9,9 @@
   libice,
   libsm,
   libxcrypt,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxinerama,
+  libxrandr,
+  libxtst,
   librep,
   makeWrapper,
   pango,
@@ -49,9 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libsm
     libxcrypt
-    libXinerama
-    libXrandr
-    libXtst
+    libxinerama
+    libxrandr
+    libxtst
     librep
     pango
     rep-gtk
@@ -76,6 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
         --set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
+
+  # fixes:
+  # sawfish.h:52:13: error: 'bool' cannot be defined via 'typedef'
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   nativeInstallCheckInputs = [
     versionCheckHook

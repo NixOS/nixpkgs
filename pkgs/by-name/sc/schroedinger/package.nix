@@ -9,12 +9,12 @@
   gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "schroedinger";
   version = "1.0.11";
 
   src = fetchurl {
-    url = "https://download.videolan.org/contrib/schroedinger-${version}.tar.gz";
+    url = "https://download.videolan.org/contrib/schroedinger-${finalAttrs.version}.tar.gz";
     sha256 = "04prr667l4sn4zx256v1z36a0nnkxfdqyln48rbwlamr6l3jlmqy";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

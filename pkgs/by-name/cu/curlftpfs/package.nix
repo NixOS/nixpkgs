@@ -39,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D__off_t=off_t";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CFLAGS = "-D__off_t=off_t";
+  };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook for

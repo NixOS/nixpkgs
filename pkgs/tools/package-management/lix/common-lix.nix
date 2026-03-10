@@ -50,7 +50,6 @@ assert lib.assertMsg (
   lsof,
   mercurial,
   mdbook,
-  mdbook-linkcheck,
   nlohmann_json,
   ninja,
   openssl,
@@ -116,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lix";
 
   version = "${version}${suffix}";
-  VERSION_SUFFIX = suffix;
+  env.VERSION_SUFFIX = suffix;
 
   inherit src patches;
 
@@ -179,7 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableDocumentation [
     (lib.getBin lowdown-unsandboxed)
     mdbook
-    mdbook-linkcheck
     doxygen
   ]
   ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]

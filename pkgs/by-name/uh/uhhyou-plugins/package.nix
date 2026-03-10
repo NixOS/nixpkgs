@@ -13,10 +13,10 @@
   libxcb-cursor,
   libxcb-keysyms,
   libxkbcommon,
-  libX11,
-  libXrandr,
-  libXinerama,
-  libXcursor,
+  libx11,
+  libxrandr,
+  libxinerama,
+  libxcursor,
   pango,
   gtkmm3,
   sqlite,
@@ -48,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-cursor
     libxcb-keysyms
     libxkbcommon
-    libX11
-    libXrandr
-    libXinerama
-    libXcursor
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
     pango
     gtkmm3
     sqlite

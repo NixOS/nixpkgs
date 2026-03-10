@@ -209,7 +209,7 @@ stdenv.mkDerivation (finalAttrs: {
       lib.strings.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

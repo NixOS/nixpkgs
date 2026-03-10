@@ -13,12 +13,12 @@
   plib,
   libsm,
   libunwind,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXi,
-  libXmu,
-  libXt,
+  libxext,
+  libxi,
+  libxmu,
+  libxt,
   simgear,
   zlib,
   boost,
@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     plib
     libsm
     libunwind
-    libX11
+    libx11
     xorgproto
-    libXext
-    libXi
-    libXmu
-    libXt
+    libxext
+    libxi
+    libxmu
+    libxt
     (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost

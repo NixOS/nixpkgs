@@ -7,14 +7,14 @@
   fetchFromGitHub,
   nixosTests,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thin-provisioning-tools";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hOwW2zda/KdA22A+94A5r2LIezQTZ71eewhkc72u5kI=";
   };
 
@@ -73,4 +73,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

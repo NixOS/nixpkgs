@@ -9,12 +9,12 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "g-wrap";
   version = "1.9.15";
 
   src = fetchurl {
-    url = "mirror://savannah/g-wrap/g-wrap-${version}.tar.gz";
+    url = "mirror://savannah/g-wrap/g-wrap-${finalAttrs.version}.tar.gz";
     sha256 = "0ak0bha37dfpj9kmyw1r8fj8nva639aw5xr66wr5gd3l1rqf5xhg";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

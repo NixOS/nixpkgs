@@ -8,14 +8,14 @@
   roxctl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "roxctl";
   version = "4.9.3";
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-awu4KWcljQAMm/zHA4bDguwngRIosNjHPJZvBnxXGjE=";
   };
 
@@ -28,7 +28,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${version}"
+    "-X github.com/stackrox/rox/pkg/version/internal.MainVersion=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -50,4 +50,4 @@ buildGoModule rec {
     homepage = "https://www.stackrox.io";
     maintainers = with lib.maintainers; [ stehessel ];
   };
-}
+})

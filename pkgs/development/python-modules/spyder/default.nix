@@ -4,7 +4,7 @@
   fetchPypi,
 
   # nativeBuildInputs
-  pyqtwebengine,
+  pyqt6-webengine,
 
   # build-system
   setuptools,
@@ -36,6 +36,7 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
+  pyqt6,
   python-lsp-black,
   python-lsp-ruff,
   python-lsp-server,
@@ -55,6 +56,7 @@
   three-merge,
   watchdog,
   yarl,
+  qt6,
 }:
 
 buildPythonPackage rec {
@@ -69,13 +71,18 @@ buildPythonPackage rec {
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "ipython"
     "python-lsp-server"
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   dependencies = [
@@ -105,7 +112,7 @@ buildPythonPackage rec {
     pylint-venv
     pyls-spyder
     pyopengl
-    pyqtwebengine
+    pyqt6-webengine
     python-lsp-black
     python-lsp-ruff
     python-lsp-server
@@ -125,11 +132,14 @@ buildPythonPackage rec {
     three-merge
     watchdog
     yarl
+    pyqt6
   ]
   ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
+
+  env.SPYDER_QT_BINDING = "pyqt6";
 
   postInstall = ''
     # Add Python libs to env so Spyder subprocesses

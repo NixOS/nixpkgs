@@ -23,7 +23,7 @@
   libGL,
   libGLU,
   libpng,
-  libX11,
+  libx11,
   libxml2,
   protobuf,
   xvfb-run,
@@ -60,7 +60,7 @@ let
           extraBuildInputs = lib.optionals (!dedicatedServer) [
             libGL
             libGLU
-            libX11
+            libx11
             libpng
             SDL
             SDL_image
@@ -87,7 +87,7 @@ let
             freetype
             libGL
             libGLU
-            libX11
+            libx11
             SDL2
             SDL2_image
             SDL2_mixer
@@ -107,7 +107,7 @@ let
           extraBuildInputs = lib.optionals (!dedicatedServer) [
             libGL
             libGLU
-            libX11
+            libx11
             libpng
             SDL
             SDL_image

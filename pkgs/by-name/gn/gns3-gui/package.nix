@@ -10,7 +10,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gns3-gui";
   version = "2.2.56.1";
   pyproject = true;
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-gui";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-HBTBwn7jAW/SXFTfPbO08bDG5NfS3tuic/Z0ib1/Uo8=";
   };
 
@@ -85,10 +85,10 @@ python3Packages.buildPythonApplication rec {
       download the official GNS3 VM).
     '';
     homepage = "https://www.gns3.com/";
-    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${version}";
+    changelog = "https://github.com/GNS3/gns3-gui/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3";
   };
-}
+})

@@ -2,76 +2,98 @@
   lib,
   fetchFromGitHub,
   flutter335,
+  copyDesktopItems,
+  makeDesktopItem,
 
   alsa-lib,
   libdisplay-info,
-  libXpresent,
-  libXScrnSaver,
+  libxpresent,
+  libxscrnsaver,
   libepoxy,
   mpv-unwrapped,
 
-  targetFlutterPlatform ? "web",
+  targetFlutterPlatform ? "linux",
   baseUrl ? null,
 }:
 
 let
   flutter = flutter335;
-
-  media_kit_hash = "sha256-oJQ9sRQI4HpAIzoS995yfnzvx5ZzIubVANzbmxTt6LE=";
 in
 
-flutter.buildFlutterApplication rec {
+flutter.buildFlutterApplication (finalAttrs: {
   pname = "fladder";
-  version = "0.9.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "DonutWare";
     repo = "Fladder";
-    tag = "v${version}";
-    hash = "sha256-IX3qbIgfi9d8rP24yIGlBzi5l28YQWnvLD+dD+7uIZc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D2FFIBRWi66TRB4LkUWZu/jc+edVXo70FZDzGFh11Wk=";
   };
 
   inherit targetFlutterPlatform;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    media_kit = media_kit_hash;
-    media_kit_video = media_kit_hash;
-    media_kit_libs_linux = media_kit_hash;
-    media_kit_libs_video = media_kit_hash;
-    media_kit_libs_android_video = media_kit_hash;
-    media_kit_libs_ios_video = media_kit_hash;
-    media_kit_libs_macos_video = media_kit_hash;
-    media_kit_libs_windows_video = media_kit_hash;
-  };
+  gitHashes = lib.importJSON ./git-hashes.json;
+
+  nativeBuildInputs = lib.optionals (targetFlutterPlatform == "linux") [
+    copyDesktopItems
+  ];
 
   buildInputs = [
     alsa-lib
     libdisplay-info
     mpv-unwrapped
-    libXpresent
-    libXScrnSaver
+    libxpresent
+    libxscrnsaver
   ]
   ++ lib.optionals (targetFlutterPlatform == "linux") [
     libepoxy
   ];
 
-  postInstall = lib.optionalString (targetFlutterPlatform == "web") (
-    ''
-      sed -i 's;base href="/";base href="$out";' $out/index.html
-    ''
-    + lib.optionalString (baseUrl != null) ''
-      echo '{"baseUrl": "${baseUrl}"}' > $out/assets/config/config.json
-    ''
-  );
+  postInstall =
+    lib.optionalString (targetFlutterPlatform == "web") (
+      ''
+        sed -i 's;base href="/";base href="$out";' $out/index.html
+      ''
+      + lib.optionalString (baseUrl != null) ''
+        echo '{"baseUrl": "${baseUrl}"}' > $out/assets/config/config.json
+      ''
+    )
+    + lib.optionalString (targetFlutterPlatform == "linux") ''
+      # Install SVG icon
+      install -Dm644 icons/fladder_icon.svg \
+        $out/share/icons/hicolor/scalable/apps/fladder.svg
+    '';
+
+  desktopItems = lib.optionals (targetFlutterPlatform == "linux") [
+    (makeDesktopItem {
+      name = "fladder";
+      desktopName = "Fladder";
+      genericName = "Jellyfin Client";
+      exec = "Fladder";
+      icon = "fladder";
+      comment = "Simple Jellyfin Frontend built on top of Flutter";
+      categories = [
+        "AudioVideo"
+        "Video"
+        "Player"
+      ];
+    })
+  ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Simple Jellyfin Frontend built on top of Flutter";
     homepage = "https://github.com/DonutWare/Fladder";
     downloadPage = "https://github.com/DonutWare/Fladder/releases";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ratcornu ];
+    maintainers = with lib.maintainers; [
+      ratcornu
+      schembriaiden
+    ];
     mainProgram = "Fladder";
   };
-}
+})

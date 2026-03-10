@@ -6,7 +6,7 @@
   gtk3,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   pkg-config,
   upx,
   libxcb-util,
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     gtk3
     libGL
     libGLU
-    libX11
+    libx11
     libxcb-util
   ];
 

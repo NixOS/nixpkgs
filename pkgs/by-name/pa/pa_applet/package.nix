@@ -9,7 +9,7 @@
   autoconf,
   automake,
   libnotify,
-  libX11,
+  libx11,
   xf86-input-evdev,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     libpulseaudio
     glibc
     libnotify
-    libX11
+    libx11
     xf86-input-evdev
   ];
 

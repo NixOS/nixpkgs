@@ -8,6 +8,7 @@
 
   # dependencies
   pyyaml,
+  typing-extensions,
 
   # tests
   pytestCheckHook,
@@ -15,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "confuse";
     rev = "v${version}";
-    hash = "sha256-RKiHYAFEvksRLsXC1VrlrKzkPl72dDI4O0Y+X3MrpSs=";
+    hash = "sha256-b3wwDa33fX0hkyact4v/ET0UN0PoOJ/PFaqyMRC7Q1Q=";
   };
 
   build-system = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   dependencies = [
     pyyaml
+    typing-extensions
   ];
 
   nativeCheckInputs = [

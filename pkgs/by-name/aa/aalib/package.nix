@@ -31,16 +31,24 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./darwin.patch ];
 
-  # The fuloong2f is not supported by aalib still
-  preConfigure = ''
+  preConfigure =
     # The configure script does the correct thing when 'system' is already set
     # Export it explicitly in case __structuredAttrs is true.
-    export system
-    appendToVar configureFlags \
-      "--bindir=$bin/bin" \
-      "--includedir=$dev/include" \
-      "--libdir=$out/lib"
-  '';
+    ''
+      export system
+      appendToVar configureFlags \
+        "--bindir=$bin/bin" \
+        "--includedir=$dev/include" \
+        "--libdir=$out/lib"
+    ''
+    # There is a check for linux-gnu on POWER that disables shared library creation if /lib/ld.so.1 doesn't exists
+    # (which it never does for us), because it assumes that it is then running on / targeting MkLinux, which supposedly
+    # didn't support shared libraries.
+    # MkLinux is discontinued, regular Linux supports POWER now. Delete the case and allow shared libraries to be made.
+    + ''
+      substituteInPlace ltconfig \
+        --replace-fail 'powerpc*) dynamic_linker=no ;;' ""
+    '';
 
   buildInputs = [ ncurses ];
 

@@ -8,22 +8,22 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "psitransfer";
-  version = "2.3.2";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "psi-4ward";
     repo = "psitransfer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i2W3sOOxXM5UHxB20EjpOhmu08PQvaflIC4+Qk+ZnIQ=";
+    hash = "sha256-AOWtKfg7qdZhoUk6G1FphIu+7Uwaqq9dSGlV2NX+sX4=";
   };
 
-  npmDepsHash = "sha256-cd9Qkw3uOvpQVoLRPphjKjPsBomxaBwdM+ZlhLwJqYM=";
+  npmDepsHash = "sha256-L4VdKymQuoGXen50PW/ewsvhaQIkUuBOsjYA0HfhTYc=";
 
   app = buildNpmPackage {
     pname = "psitransfer-app";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-j8eUi3HP6gfjIDD5lli5ypHcpWaOaFLKENe5IYQzchk=";
+    npmDepsHash = "sha256-PpUO1u7TcH8ZcTekLcGOn07EnCHqUlbEMS/YzMLSMAs=";
 
     postPatch = ''
       # https://github.com/psi-4ward/psitransfer/pull/284

@@ -15,7 +15,7 @@
   procps,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloud-init";
   version = "25.2";
   pyproject = true;
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Ww76dhfoGrIbxPiXHxDjpgPsinmfrs42NnGmzhBeGC0=";
   };
 
@@ -142,7 +142,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
-    changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
+    changelog = "https://github.com/canonical/cloud-init/raw/${finalAttrs.version}/ChangeLog";
     license = with lib.licenses; [
       asl20
       gpl3Plus
@@ -153,4 +153,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

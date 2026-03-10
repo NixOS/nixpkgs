@@ -6,7 +6,7 @@
   pkgs,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "deface";
   version = "1.5.0";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ORB-HD";
     repo = "deface";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/mXWeL6OSgW4BMXtAZD/3UxQUGt7UE5ZvH8CXNCueJo=";
   };
 
@@ -47,11 +47,11 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Video anonymization by face detection";
     homepage = "https://github.com/ORB-HD/deface";
-    changelog = "https://github.com/ORB-HD/deface/releases/tag/v${version}";
+    changelog = "https://github.com/ORB-HD/deface/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lurkki ];
     mainProgram = "deface";
     # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
     broken = stdenv.hostPlatform.system == "aarch64-linux";
   };
-}
+})

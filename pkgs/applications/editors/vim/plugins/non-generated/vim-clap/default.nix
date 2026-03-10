@@ -33,6 +33,8 @@ let
     pname = "maple";
     inherit version src meta;
 
+    strictDeps = false;
+
     cargoHash = "sha256-RMDlLpPWDLHCRWLz7NAAQhp6FhKA7aNYqx9MCqR8vYM=";
 
     cargoPatches = [
@@ -58,6 +60,8 @@ in
 vimUtils.buildVimPlugin {
   pname = "vim-clap";
   inherit version src meta;
+
+  strictDeps = false;
 
   postInstall = ''
     ln -s ${maple}/bin/maple $out/bin/maple

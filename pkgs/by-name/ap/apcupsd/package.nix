@@ -17,12 +17,12 @@
 
 assert enableCgiScripts -> gd != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "apcupsd";
   version = "3.14.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/apcupsd/apcupsd-${version}.tar.gz";
+    url = "mirror://sourceforge/apcupsd/apcupsd-${finalAttrs.version}.tar.gz";
     sha256 = "0rwqiyzlg9p0szf3x6q1ppvrw6f6dbpn2rc5z623fk3bkdalhxyv";
   };
 
@@ -105,4 +105,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

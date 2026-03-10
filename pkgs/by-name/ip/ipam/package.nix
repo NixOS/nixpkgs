@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ipam";
   version = "0.3.0-1";
 
   src = fetchFromCodeberg {
     owner = "lauralani";
     repo = "ipam";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6gOkBjXgaMMWFRXFTSBY9YaNPdMRyLl8wy7BT/5vHio=";
   };
 
@@ -38,9 +38,9 @@ buildGoModule rec {
   meta = {
     description = "Cli based IPAM written in Go with PowerDNS support";
     homepage = "https://ipam.lauka.net/";
-    changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
+    changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     mainProgram = "ipam";
   };
-}
+})

@@ -10,14 +10,14 @@
   intel-gmmlib,
   libdrm,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  libX11,
+  libx11,
   # for passhtru.tests
   pkgsi686Linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "intel-media-driver";
-  version = "25.3.4";
+  version = "26.1.2";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "media-driver";
-    rev = "intel-media-${finalAttrs.version}";
-    hash = "sha256-76FBaeTXSRbUN63AaV0XSj/QFi0UF+K/ig+LFjQQgFQ=";
+    tag = "intel-media-${finalAttrs.version}";
+    hash = "sha256-Vy489YYuaI+atWiNiVyN/JXIMhSCWC5murJcn/qVb74=";
   };
 
   patches = [
@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     intel-gmmlib
     libdrm
   ]
-  ++ lib.optional enableX11 libX11;
+  ++ lib.optional enableX11 libx11;
 
   postFixup = lib.optionalString enableX11 ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libX11 ]}" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libx11 ]}" \
       $out/lib/dri/iHD_drv_video.so
   '';
 

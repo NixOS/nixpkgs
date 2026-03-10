@@ -5,12 +5,12 @@
   elf-header,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "paxctl";
   version = "0.9";
 
   src = fetchurl {
-    url = "https://pax.grsecurity.net/paxctl-${version}.tar.gz";
+    url = "https://pax.grsecurity.net/paxctl-${finalAttrs.version}.tar.gz";
     sha256 = "0biw882fp1lmgs6kpxznp1v6758r7dg9x8iv5a06k0b82bcdsc53";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

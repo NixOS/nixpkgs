@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typos-lsp";
   # Please update the corresponding VSCode extension too.
   # See pkgs/applications/editors/vscode/extensions/tekumara.typos-vscode/default.nix
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tekumara";
     repo = "typos-lsp";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Sv11I2HdPwgxA1SV1/bo9MS2aanzqjtm4KtnMl6iiqU=";
   };
 
@@ -27,9 +27,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Source code spell checker";
     homepage = "https://github.com/tekumara/typos-lsp";
-    changelog = "https://github.com/tekumara/typos-lsp/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/tekumara/typos-lsp/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tarantoj ];
     mainProgram = "typos-lsp";
   };
-}
+})

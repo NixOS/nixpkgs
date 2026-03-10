@@ -4,14 +4,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "audion";
   version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "audion";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-NtAzh7n5bJXMt73L+FJU3vuNoNgga3wYXdZ2TY8AjIA=";
   };
 
@@ -20,9 +20,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Ping the host continuously and write results to a file";
     homepage = "https://github.com/audiusGmbH/audion";
-    changelog = "https://github.com/audiusGmbH/audion/releases/tag/${version}";
+    changelog = "https://github.com/audiusGmbH/audion/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "audion";
   };
-}
+})

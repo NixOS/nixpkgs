@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xsuspender";
     homepage = "https://kernc.github.io/xsuspender/";
     license = lib.licenses.wtfpl;
-    maintainers = with lib.maintainers; [ offline ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

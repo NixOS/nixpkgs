@@ -181,10 +181,12 @@ let
         nativeBuildInputs = [ buildPackages.cabal2nix-unwrapped ];
         preferLocalBuild = true;
         allowSubstitutes = false;
-        LANG = "en_US.UTF-8";
-        LOCALE_ARCHIVE = pkgs.lib.optionalString (
-          buildPlatform.libc == "glibc"
-        ) "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        env = {
+          LANG = "en_US.UTF-8";
+        }
+        // lib.optionalAttrs (buildPlatform.libc == "glibc") {
+          LOCALE_ARCHIVE = "${buildPackages.glibcLocales}/lib/locale/locale-archive";
+        };
       }
       ''
         export HOME="$TMP"

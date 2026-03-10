@@ -13,8 +13,6 @@
   protobuf,
   types-protobuf,
   typing-extensions,
-  pythonOlder,
-  python-dateutil,
 
   # nativeBuildInputs
   cargo,
@@ -27,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "temporalio";
-  version = "1.21.1";
+  version = "1.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -35,7 +33,7 @@ buildPythonPackage rec {
     repo = "sdk-python";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-eOhaT5phQdHpaZB+TefJObAWgrO3vLgFkjH0XZW4rWU=";
+    hash = "sha256-AV9kpy6EpfwLm3yx+xf9PRUcti+KJsOizPsf6YqIYws=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -45,7 +43,7 @@ buildPythonPackage rec {
       src
       cargoRoot
       ;
-    hash = "sha256-d/mrBcItzKCQx27HyZ2q4f9r/XI0oXc+M7Hwfm98csc=";
+    hash = "sha256-uVSC4CPuoDw1JuZ6sCTErre1gYBov70qSvD4tQqKvl0=";
   };
 
   cargoRoot = "temporalio/bridge";
@@ -61,8 +59,7 @@ buildPythonPackage rec {
     protobuf
     types-protobuf
     typing-extensions
-  ]
-  ++ lib.optional (pythonOlder "3.11") python-dateutil;
+  ];
 
   nativeBuildInputs = [
     cargo

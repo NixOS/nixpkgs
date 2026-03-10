@@ -96,6 +96,14 @@ stdenv.mkDerivation (
       substituteInPlace src/platform/graphics/CMakeLists.txt \
         --replace-fail "/usr/include/drm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h" \
         --replace-fail "/usr/include/libdrm/drm_fourcc.h" "${lib.getDev libdrm}/include/libdrm/drm_fourcc.h"
+    ''
+    # Boost.System was deprecated & dropped
+    + lib.optionalString (lib.strings.versionOlder version "2.23.0") ''
+      substituteInPlace \
+        tests/CMakeLists.txt \
+        tests/unit-tests/CMakeLists.txt \
+        tests/mir_test_framework/CMakeLists.txt \
+        --replace-fail 'Boost::system' ""
     '';
 
     strictDeps = true;

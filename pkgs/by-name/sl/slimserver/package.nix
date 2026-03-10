@@ -5,7 +5,7 @@
   lame,
   lib,
   makeWrapper,
-  monkeysAudio,
+  monkeys-audio,
   nixosTests,
   perlPackages,
   sox,
@@ -24,7 +24,7 @@ let
       sox
       wavpack
     ]
-    ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
+    ++ (lib.optional stdenv.hostPlatform.isLinux monkeys-audio)
   );
 
   libPath = lib.makeLibraryPath [
@@ -34,13 +34,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "9.0.3";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     tag = version;
-    hash = "sha256-Yc/XBINSX1JN7lJn4fin4qcTUSF8Bg+FbFe23KlYkfs=";
+    hash = "sha256-Df7v1oxc1NYiVApU5p1CzB0UxlLqia1RtytgttKdSJo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

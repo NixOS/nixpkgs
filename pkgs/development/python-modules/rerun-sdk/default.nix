@@ -101,6 +101,7 @@ buildPythonPackage {
     # ConnectionError: Connection: connecting to server: transport error
     "test_isolated_streams"
     "test_send_dataframe_roundtrip"
+    "test_server_failed_table_creation_does_not_leak_entry"
     "test_server_with_dataset_files"
     "test_server_with_dataset_prefix"
     "test_server_with_multiple_datasets"

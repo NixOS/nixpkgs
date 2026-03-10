@@ -10,12 +10,12 @@
   libglut,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gl2ps";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "http://geuz.org/gl2ps/src/gl2ps-${version}.tgz";
+    url = "http://geuz.org/gl2ps/src/gl2ps-${finalAttrs.version}.tgz";
     sha256 = "1sgzv547h7hrskb9qd0x5yp45kmhvibjwj2mfswv95lg070h074d";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
       twhitehead
     ];
   };
-}
+})

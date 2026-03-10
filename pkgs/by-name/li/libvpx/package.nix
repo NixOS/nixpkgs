@@ -249,7 +249,7 @@ stdenv.mkDerivation (finalAttrs: {
       curl
     ];
 
-  NIX_LDFLAGS = [
+  env.NIX_LDFLAGS = toString [
     "-lpthread" # fixes linker errors
   ];
 
@@ -267,7 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.webmproject.org/";
     changelog = "https://github.com/webmproject/libvpx/raw/v${finalAttrs.version}/CHANGELOG";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

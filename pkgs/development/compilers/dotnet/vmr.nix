@@ -142,7 +142,13 @@ stdenv.mkDerivation {
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
-    ];
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "11") (
+      [
+        ./fix-skiperroronprebuilts.patch
+      ]
+      ++ lib.optional isDarwin ./fix-cmake-darwin.patch
+    );
 
   postPatch = ''
     # set the sdk version in global.json to match the bootstrap sdk

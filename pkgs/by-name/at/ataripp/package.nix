@@ -7,8 +7,8 @@
   gcc-unwrapped,
   libice,
   libsm,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     gcc-unwrapped
     libice
     libsm
-    libX11
-    libXext
+    libx11
+    libxext
   ];
 
   postFixup = ''

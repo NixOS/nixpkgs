@@ -119,6 +119,12 @@
   "ex-testEqualArrayOrMap-test-function-add-cowbell": [
     "index.html#ex-testEqualArrayOrMap-test-function-add-cowbell"
   ],
+  "friction-graphics": [
+    "index.html#friction-graphics"
+  ],
+  "friction-graphics-wayland": [
+    "index.html#friction-graphics-wayland"
+  ],
   "ghc-deprecation-policy": [
     "index.html#ghc-deprecation-policy"
   ],
@@ -623,6 +629,9 @@
   "chap-stdenv": [
     "index.html#chap-stdenv"
   ],
+  "sec-problems": [
+    "index.html#sec-problems"
+  ],
   "sec-using-llvm": [
     "index.html#sec-using-llvm"
   ],
@@ -859,6 +868,9 @@
   ],
   "tar-files": [
     "index.html#tar-files"
+  ],
+  "x86_64-darwin-26.05": [
+    "release-notes.html#x86_64-darwin-26.05"
   ],
   "zip-files": [
     "index.html#zip-files"
@@ -1812,6 +1824,9 @@
   "fetchtorrent-parameters": [
     "index.html#fetchtorrent-parameters"
   ],
+  "fetchitchio": [
+    "index.html#fetchitchio"
+  ],
   "chap-trivial-builders": [
     "index.html#chap-trivial-builders"
   ],
@@ -2761,6 +2776,9 @@
   "zig-exclusive-variables": [
     "index.html#zig-exclusive-variables",
     "index.html#zig-hook-exclusive-variables"
+  ],
+  "dont-use-zig-configure": [
+    "index.html#dont-use-zig-configure"
   ],
   "dont-use-zig-build": [
     "index.html#dont-use-zig-build"
@@ -4292,6 +4310,18 @@
   "neovim-plugin-treesitter": [
     "index.html#neovim-plugin-treesitter",
     "index.html#vim-plugin-treesitter"
+  ],
+  "neovim-plugin-nvim-treesitter": [
+    "index.html#neovim-plugin-nvim-treesitter",
+    "index.html#vim-plugin-nvim-treesitter"
+  ],
+  "neovim-plugin-treesitter-standalone": [
+    "index.html#neovim-plugin-treesitter-standalone",
+    "index.html#vim-plugin-treesitter-standalone"
+  ],
+  "neovim-plugin-treesitter-grammar-dependencies": [
+    "index.html#neovim-plugin-treesitter-grammar-dependencies",
+    "index.html#vim-plugin-treesitter-grammar-dependencies"
   ],
   "managing-plugins-with-vim-plug": [
     "index.html#managing-plugins-with-vim-plug"

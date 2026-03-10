@@ -6,17 +6,14 @@
   versionCheckHook,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "erigon";
   version = "3.3.7";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "erigontech";
     repo = "erigon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-pvwZ71/68jrRqTIPQdmlhJ/BLFhsNjmtcVfiqIC274c=";
     fetchSubmodules = true;
   };
@@ -66,4 +63,4 @@ buildGoModule {
       pmw
     ];
   };
-}
+})

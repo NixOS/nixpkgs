@@ -18,7 +18,7 @@
   gst_all_1,
   gtk3,
   libappindicator,
-  libfakeXinerama,
+  libfakexinerama,
   librsvg,
   libvpx,
   libwebp,
@@ -126,7 +126,12 @@ effectiveBuildPythonApplication rec {
     patchShebangs --build fs/bin/build_cuda_kernels.py
   '';
 
-  INCLUDE_DIRS = "${pam}/include";
+  env = {
+    # error: 'import_cairo' defined but not used
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+
+    INCLUDE_DIRS = "${pam}/include";
+  };
 
   nativeBuildInputs = [
     clang
@@ -224,9 +229,6 @@ effectiveBuildPythonApplication rec {
       ]
     );
 
-  # error: 'import_cairo' defined but not used
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
-
   setupPyBuildFlags = [
     "--with-Xdummy"
     "--without-Xdummy_wrapper"
@@ -250,7 +252,7 @@ effectiveBuildPythonApplication rec {
       --set XPRA_COMMAND "$out/bin/xpra"
       --set XPRA_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
       --set XORG_CONFIG_PREFIX ""
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix LD_LIBRARY_PATH : ${libfakexinerama}/lib
       --prefix PATH : ${
         lib.makeBinPath [
           getopt
@@ -300,7 +302,6 @@ effectiveBuildPythonApplication rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      offline
       numinit
       mvnetbiz
       lucasew

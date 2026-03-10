@@ -10,12 +10,12 @@ let
   major = "1.1";
   version = "${major}.13";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pbzip2";
   inherit version;
 
   src = fetchurl {
-    url = "https://launchpad.net/pbzip2/${major}/${version}/+download/pbzip2-${version}.tar.gz";
+    url = "https://launchpad.net/pbzip2/${major}/${finalAttrs.version}/+download/pbzip2-${finalAttrs.version}.tar.gz";
     sha256 = "1rnvgcdixjzbrmcr1nv9b6ccrjfrhryaj7jwz28yxxv6lam3xlcg";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

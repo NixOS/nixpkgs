@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tudu";
   version = "0.10.4";
 
   src = fetchurl {
-    url = "https://code.meskio.net/tudu/tudu-${version}.tar.gz";
+    url = "https://code.meskio.net/tudu/tudu-${finalAttrs.version}.tar.gz";
     sha256 = "14srqn968ii3sr4v6xc5zzs50dmm9am22lrm57j7n0rhjclwbssy";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "tudu";
   };
-}
+})

@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   torch,
   buildPythonPackage,
-  darwinMinVersionHook,
   fetchFromGitHub,
 
   # nativeBuildInputs
@@ -27,18 +25,17 @@
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
 
-  pname = "torchvision";
-  version = "0.24.1";
 in
-buildPythonPackage.override { stdenv = torch.stdenv; } {
-  format = "setuptools";
-  inherit pname version;
+buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
+  pname = "torchvision";
+  version = "0.25.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "vision";
-    tag = "v${version}";
-    hash = "sha256-ddJWD2xjoNAuyZIaZD7ctcuSQZ9lSUGExWCq1W5prI8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oktJHcT6T4f58pUO+HSBpbyS1ISH3zDlTsXQh6PcMy4=";
   };
 
   nativeBuildInputs = [
@@ -87,9 +84,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } {
   meta = {
     description = "PyTorch vision library";
     homepage = "https://pytorch.org/";
-    changelog = "https://github.com/pytorch/vision/releases/tag/v${version}";
+    changelog = "https://github.com/pytorch/vision/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux ++ lib.optionals (!cudaSupport) darwin;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

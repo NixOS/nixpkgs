@@ -11,12 +11,12 @@
   libmikmod,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bb";
   version = "1.3rc1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/aa-project/bb/${version}/bb-${version}.tar.gz";
+    url = "mirror://sourceforge/aa-project/bb/${finalAttrs.version}/bb-${finalAttrs.version}.tar.gz";
     sha256 = "1i411glxh7g4pfg4gw826lpwngi89yrbmxac8jmnsfvrfb48hgbr";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "bb";
   };
-}
+})

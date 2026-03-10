@@ -15,7 +15,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   tabulate,
 }:

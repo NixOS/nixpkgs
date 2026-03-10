@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "kanidm";
-  version = "1.2.0";
+  version = "1.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kanidm";
     repo = "kanidm";
-    rev = "1774f9428ccdc357d514652acbcae49f6b16687a";
-    hash = "sha256-SE3b9Ug0EZFygGf9lsmVsQzmop9qOMiCUsbO//1QWF8=";
+    tag = "v${version}";
+    hash = "sha256-lJX/eObXi468iFOzeFjAnNkPiQ8VbBnfqD1518LDm2s=";
   };
 
   sourceRoot = "${src.name}/pykanidm";

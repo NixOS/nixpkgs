@@ -31,23 +31,23 @@
   },
   {
     "pname": "Microsoft.ComponentDetection.Common",
-    "version": "6.2.6",
-    "hash": "sha256-ItHNgemiRUciaYs17dwbUI+pawOl3ftfcEfo1QMc5oM="
+    "version": "6.3.0",
+    "hash": "sha256-P6AYdDTSWT7X16XSzH9YxbFESg0R8BndWMfsfLPhZ9I="
   },
   {
     "pname": "Microsoft.ComponentDetection.Contracts",
-    "version": "6.2.6",
-    "hash": "sha256-eAUYM3C2PJ9ERbiYDMqpnDcXGH8r80Y6WJ1xdBRYKME="
+    "version": "6.3.0",
+    "hash": "sha256-30RcpyFQ0LW/TlwTux8k+O+suuf9HPemyZ2LeCy+Nrw="
   },
   {
     "pname": "Microsoft.ComponentDetection.Detectors",
-    "version": "6.2.6",
-    "hash": "sha256-MkQQgeSWMlUJPKmFaCHpfFHwAW6IzQL+n4JJWtmLF24="
+    "version": "6.3.0",
+    "hash": "sha256-Ztg8wQHOnJjAKYRDJfXOmrndeDjplMRGMH4hdmZZehY="
   },
   {
     "pname": "Microsoft.ComponentDetection.Orchestrator",
-    "version": "6.2.6",
-    "hash": "sha256-BtX97RDa1MbMD1IhZ9QmKFL5eXKmzrDumPJXNwpHhcU="
+    "version": "6.3.0",
+    "hash": "sha256-vlB4uWMIVMgaPYYkHvDRR77DCxLQbNl6M0TQiDV6ZoE="
   },
   {
     "pname": "Microsoft.CSharp",

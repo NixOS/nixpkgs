@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "joe";
   version = "4.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/joe-editor/joe-${version}.tar.gz";
+    url = "mirror://sourceforge/joe-editor/joe-${finalAttrs.version}.tar.gz";
     sha256 = "1pmr598xxxm9j9dl93kq4dv36zyw0q2dh6d7x07hf134y9hhlnj9";
   };
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

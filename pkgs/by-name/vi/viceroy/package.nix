@@ -4,14 +4,14 @@
   lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "viceroy";
   version = "0.16.4";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KeFKh8ZAUJXBUo0MRw/jU0HnBrehX0YkvbvMUX8ovcA=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

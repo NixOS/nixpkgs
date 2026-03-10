@@ -5,10 +5,10 @@
   autoreconfHook,
   pkg-config,
   util-macros,
-  libX11,
-  libXaw,
-  libXmu,
-  libXt,
+  libx11,
+  libxaw,
+  libxmu,
+  libxt,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     util-macros
   ];
   buildInputs = [
-    libX11
-    libXaw
-    libXmu
-    libXt
+    libx11
+    libxaw
+    libxmu
+    libxt
   ];
 
   configureFlags = [

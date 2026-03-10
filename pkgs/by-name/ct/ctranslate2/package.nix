@@ -13,7 +13,7 @@
   # Enabling both withOneDNN and withOpenblas is broken
   # https://github.com/OpenNMT/CTranslate2/issues/1294
   withOneDNN ? false,
-  oneDNN,
+  onednn,
   withOpenblas ? true,
   openblas,
   withRuy ? true,
@@ -93,7 +93,7 @@ stdenv'.mkDerivation (finalAttrs: {
       cudaPackages.cudnn
     ]
     ++ lib.optionals withOneDNN [
-      oneDNN
+      onednn
     ]
     ++ lib.optionals withOpenblas [
       openblas

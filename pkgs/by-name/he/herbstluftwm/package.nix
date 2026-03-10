@@ -5,14 +5,14 @@
   cmake,
   pkg-config,
   python3,
-  libX11,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXft,
-  libXrender,
-  libXdmcp,
-  libXfixes,
+  libx11,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxft,
+  libxrender,
+  libxdmcp,
+  libxfixes,
   freetype,
   asciidoc,
   xdotool,
@@ -53,14 +53,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libX11
-    libXext
-    libXinerama
-    libXrandr
-    libXft
-    libXrender
-    libXdmcp
-    libXfixes
+    libx11
+    libxext
+    libxinerama
+    libxrandr
+    libxft
+    libxrender
+    libxdmcp
+    libxfixes
     freetype
   ];
 

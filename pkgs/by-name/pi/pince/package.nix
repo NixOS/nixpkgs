@@ -74,7 +74,7 @@ let
   ];
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pince";
   version = "0.4.5";
   pyproject = false;
@@ -82,7 +82,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "korcankaraokcu";
     repo = "PINCE";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NgoZmmcMEPGpIF3IPEIoeRPOwwuxdinBlkeP0P5eVmU=";
     fetchSubmodules = true;
   };
@@ -183,4 +183,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ yuannan ];
   };
-}
+})

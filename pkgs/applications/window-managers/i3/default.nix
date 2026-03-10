@@ -13,7 +13,7 @@
   libxcb-wm,
   xcbutilxrm,
   libstartup_notification,
-  libX11,
+  libx11,
   pcre2,
   libev,
   yajl,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilxrm
     libxkbcommon
     libstartup_notification
-    libX11
+    libx11
     pcre2
     libev
     yajl

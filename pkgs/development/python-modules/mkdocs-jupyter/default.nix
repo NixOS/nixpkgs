@@ -11,6 +11,7 @@
   pygments,
   pytestCheckHook,
   pytest-cov-stub,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,16 @@ buildPythonPackage rec {
     hash = "sha256-DpJy/0lH4OxoPJJCOkv7QqJkd8EDqxpquCd+LcyPev4=";
   };
 
-  pythonRelaxDeps = [ "nbconvert" ];
+  pythonRelaxDeps = [
+    "ipykernel"
+    "nbconvert"
+  ];
 
   build-system = [ hatchling ];
+
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
 
   dependencies = [
     ipykernel

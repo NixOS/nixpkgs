@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "snakemake";
   version = "9.16.3";
   pyproject = true;
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = "snakemake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+eEzpRY6ZEKB3v1/AkHDg4bOcM2Y6pt4UMrdKF6soac=";
   };
 
@@ -185,7 +185,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://snakemake.github.io";
     license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
-    changelog = "https://github.com/snakemake/snakemake/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/snakemake/snakemake/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
@@ -200,4 +200,4 @@ python3Packages.buildPythonApplication rec {
       veprbl
     ];
   };
-}
+})

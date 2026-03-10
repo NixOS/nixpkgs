@@ -10,12 +10,12 @@
   removeReferencesTo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lldpd";
   version = "1.0.20";
 
   src = fetchurl {
-    url = "https://media.luffy.cx/files/lldpd/lldpd-${version}.tar.gz";
+    url = "https://media.luffy.cx/files/lldpd/lldpd-${finalAttrs.version}.tar.gz";
     hash = "sha256-YbjLItSHnmj3glovuOHpKrtKukdzl3zwJYvDLtn1VFA=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ fpletz ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fixtures,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-mock,
   rich,

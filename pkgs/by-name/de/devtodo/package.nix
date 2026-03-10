@@ -6,12 +6,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "devtodo";
   version = "0.1.20";
 
   src = fetchurl {
-    url = "https://swapoff.org/files/devtodo/devtodo-${version}.tar.gz";
+    url = "https://swapoff.org/files/devtodo/devtodo-${finalAttrs.version}.tar.gz";
     sha256 = "029y173njydzlznxmdizrrz4wcky47vqhl87fsb7xjcz9726m71p";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.woffs ];
     platforms = lib.platforms.linux;
   };
-}
+})

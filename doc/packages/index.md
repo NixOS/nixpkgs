@@ -10,6 +10,7 @@ eclipse.section.md
 elm.section.md
 emacs.section.md
 firefox.section.md
+friction-graphics.section.md
 fish.section.md
 fuse.section.md
 geant4.section.md

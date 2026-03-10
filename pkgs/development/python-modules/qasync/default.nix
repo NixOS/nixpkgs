@@ -4,12 +4,12 @@
   fetchFromGitHub,
   pyqt5,
   pytestCheckHook,
-  poetry-core,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "qasync";
-  version = "0.27.1";
+  version = "0.28.0";
 
   pyproject = true;
 
@@ -17,22 +17,27 @@ buildPythonPackage rec {
     owner = "CabbageDevelopment";
     repo = "qasync";
     tag = "v${version}";
-    hash = "sha256-oXzwilhJ1PhodQpOZjnV9gFuoDy/zXWva9LhhK3T00g=";
+    hash = "sha256-eQJ1Yszl95IycggSyWcD3opAO1rfBdNp14y8eHDMJY4=";
   };
 
   postPatch = ''
-    rm qasync/_windows.py # Ignoring it is not taking effect and it will not be used on Linux
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.3,<0.9.0" uv_build
   '';
 
-  buildInputs = [ poetry-core ];
+  build-system = [ uv-build ];
 
-  propagatedBuildInputs = [ pyqt5 ];
+  dependencies = [ pyqt5 ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "qasync" ];
 
-  disabledTestPaths = [ "tests/test_qeventloop.py" ];
+  # crashes the interpreter
+  disabledTestPaths = [
+    "tests/test_qeventloop.py"
+    "tests/test_run.py"
+  ];
 
   meta = {
     description = "Allows coroutines to be used in PyQt/PySide applications by providing an implementation of the PEP 3156 event-loop";

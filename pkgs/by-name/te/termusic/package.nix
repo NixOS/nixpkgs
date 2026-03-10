@@ -16,14 +16,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "termusic";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "tramhao";
     repo = "termusic";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-e+D7ykqGX2UprakCZc9Gmaxct+b19DMfTRMkeIANXqg=";
   };
 
@@ -63,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "termusic";
   };
-}
+})

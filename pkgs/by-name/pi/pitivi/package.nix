@@ -20,14 +20,14 @@
   hicolor-icon-theme,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "pitivi";
   version = "2023.03";
 
   pyproject = false;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/pitivi/${lib.versions.major version}/pitivi-${version}.tar.xz";
+    url = "mirror://gnome/sources/pitivi/${lib.versions.major finalAttrs.version}/pitivi-${finalAttrs.version}.tar.xz";
     sha256 = "PX1OFEeavqMPvF613BKgxwErxqW2huw6mQxo8YpBS/M=";
   };
 
@@ -108,4 +108,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     mainProgram = "pitivi";
   };
-}
+})

@@ -92,17 +92,17 @@
   lirc,
   mesa-gl-headers,
   x11Support ? true,
-  libX11,
+  libx11,
   xorgproto,
-  libXt,
-  libXmu,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
-  libXfixes,
+  libxt,
+  libxmu,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
+  libxfixes,
   xdpyinfo,
-  libXdmcp,
+  libxdmcp,
   dbusSupport ? true,
   dbus,
   joystickSupport ? true,
@@ -350,16 +350,16 @@ stdenv.mkDerivation (
       zlib
     ]
     ++ lib.optionals x11Support [
-      libX11
+      libx11
       xorgproto
-      libXt
-      libXmu
-      libXext.dev
-      libXdmcp
-      libXinerama
-      libXrandr.dev
-      libXtst
-      libXfixes
+      libxt
+      libxmu
+      libxext.dev
+      libxdmcp
+      libxinerama
+      libxrandr.dev
+      libxtst
+      libxfixes
     ]
     ++ lib.optional dbusSupport dbus
     ++ lib.optional joystickSupport cwiid

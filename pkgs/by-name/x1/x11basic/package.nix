@@ -5,7 +5,7 @@
   autoreconfHook,
   fig2dev,
   readline,
-  libX11,
+  libx11,
   bluez,
   SDL2,
 }:
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     readline
-    libX11
+    libx11
     SDL2
     bluez
   ];

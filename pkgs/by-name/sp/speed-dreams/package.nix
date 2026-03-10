@@ -4,19 +4,19 @@
   libGLU,
   libGL,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
-  libXrandr,
+  libxrandr,
   xorgproto,
-  libXext,
+  libxext,
   libsm,
   libice,
-  libXi,
-  libXt,
-  libXrender,
-  libXxf86vm,
+  libxi,
+  libxt,
+  libxrender,
+  libxxf86vm,
   openscenegraph,
   expat,
   libpng12,
@@ -45,18 +45,18 @@ let
     libglut
   ];
   runtimeLibs = glLibs ++ [
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
-    libXext
+    libxrandr
+    libxext
     libsm
     libice
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     openscenegraph
     expat
     libpng12
@@ -100,13 +100,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     substituteInPlace "$out/share/applications/speed-dreams.desktop" \
-      --replace-fail "Exec=$out/games/speed-dreams-2" "Exec=$out/bin/speed-dreams"
+      --replace-fail "Exec=$out/games/speed-dreams-2" "Exec=speed-dreams"
     ${lib.optionalString stdenv.isLinux ''
       # Symlink for desktop icon
-      mkdir -p $out/share/pixmaps/
-      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.png" "$out/share/pixmaps/speed-dreams-2.png"
+      mkdir -p $out/share/icons/hicolor/{96x96,scalable}/apps
+      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.png" "$out/share/icons/hicolor/96x96/apps/speed-dreams-2.png"
+      ln -s "$out/share/games/speed-dreams-2/data/icons/icon.svg" "$out/share/icons/hicolor/scalable/apps/speed-dreams-2.svg"
       substituteInPlace "$out/share/applications/speed-dreams.desktop" \
-        --replace-fail "Icon=/build/speed-dreams-code/speed-dreams-data/data/data/icons/icon.png" "Icon=$out/share/pixmaps/speed-dreams-2.png"
+        --replace-fail "Icon=/build/speed-dreams-code/speed-dreams-data/data/data/icons/icon.png" "Icon=speed-dreams-2"
     ''}
   '';
 
@@ -133,19 +134,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libpng12
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
+    libxrandr
     xorgproto
-    libXext
+    libxext
     libsm
     libice
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     zlib
     bash
     expat

@@ -1,132 +1,85 @@
 {
+  erlang,
+  beamCopySourceHook,
+  beamModuleInstallHook,
+  rebar3CompileHook,
+  rebar3WithPlugins,
+  rebarDevendorPatchHook,
+
+  libyaml,
+  openssl,
+
+  lib,
   stdenv,
   writeText,
-  erlang,
-  rebar3WithPlugins,
-  openssl,
-  libyaml,
-  lib,
 }:
 
-{
-  name,
-  version,
-  src,
-  setupHook ? null,
-  buildInputs ? [ ],
-  beamDeps ? [ ],
-  buildPlugins ? [ ],
-  postPatch ? "",
-  installPhase ? null,
-  buildPhase ? null,
-  configurePhase ? null,
-  meta ? { },
-  erlangCompilerOptions ? [ ],
-  # Deterministic Erlang builds remove full system paths from debug information
-  # among other things to keep builds more reproducible. See their docs for more:
-  # https://www.erlang.org/doc/man/compile
-  erlangDeterministicBuilds ? true,
-  ...
-}@attrs:
+lib.extendMkDerivation {
+  constructDrv = stdenv.mkDerivation;
+  excludeDrvArgNames = [
+    "beamDeps"
+    "buildPlugins"
+  ];
+  extendDrvArgs =
+    finalAttrs:
+    {
+      beamDeps ? [ ],
+      buildPlugins ? [ ],
 
-let
-  rebar3 = rebar3WithPlugins {
-    plugins = buildPlugins;
-  };
+      enableDebugInfo ? false,
+      erlangCompilerOptions ? [ ],
+      # Deterministic Erlang builds remove full system paths from debug information
+      # among other things to keep builds more reproducible. See their docs for more:
+      # https://www.erlang.org/doc/man/compile
+      erlangDeterministicBuilds ? true,
+      ...
+    }@args:
+    let
+      rebar3Custom = rebar3WithPlugins {
+        plugins = buildPlugins;
+      };
+    in
+    {
+      pname = args.name;
+      name = "erlang${erlang.version}-${args.name}-${finalAttrs.version}";
 
-  shell =
-    drv:
-    stdenv.mkDerivation {
-      name = "interactive-shell-${drv.name}";
-      buildInputs = [ drv ];
-    };
+      nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
+        rebarDevendorPatchHook
+        beamCopySourceHook
+        beamModuleInstallHook
+        rebar3CompileHook
+      ];
 
-  customPhases = lib.filterAttrs (_: v: v != null) {
-    inherit
-      setupHook
-      configurePhase
-      buildPhase
-      installPhase
-      ;
-  };
+      buildInputs = (args.buildInputs or [ ]) ++ [
+        erlang
+        rebar3Custom
+        openssl
+        libyaml
+      ];
 
-  pkg =
-    self:
-    stdenv.mkDerivation (
-      attrs
-      // {
+      propagatedBuildInputs = lib.unique beamDeps;
 
-        pname = name;
-        name = "${name}-${version}";
-        inherit version;
-
-        buildInputs = buildInputs ++ [
-          erlang
-          rebar3
-          openssl
-          libyaml
-        ];
-        propagatedBuildInputs = lib.unique beamDeps;
-
-        inherit src;
-
+      env = {
         ERL_COMPILER_OPTIONS =
           let
             options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
           in
           "[${lib.concatStringsSep "," options}]";
 
-        # stripping does not have any effect on beam files
-        # it is however needed for dependencies with NIFs
-        # false is the default but we keep this for readability
-        dontStrip = false;
+        beamModuleName = args.name;
+      };
 
-        setupHook = writeText "setupHook.sh" ''
-          addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
-        '';
+      setupHook = writeText "setupHook.sh" ''
+        addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      '';
 
-        postPatch = ''
-          rm -f rebar rebar3
-        ''
-        + postPatch;
-
-        preConfigure = ''
-          # Copy the source so it can be used by mix projects
-          # do this before building to avoid build artifacts but after patching
-          # to include any modifications
-          mkdir -p $out/src
-          cp -r "." "$out/src"
-        '';
-
-        buildPhase = ''
-          runHook preBuild
-          HOME=. rebar3 bare compile --paths "."
-          runHook postBuild
-        '';
-
-        installPhase = ''
-          runHook preInstall
-          mkdir -p "$out/lib/erlang/lib/${name}-${version}"
-          for reldir in src ebin priv include; do
-            [ -d "$reldir" ] || continue
-            # $out/lib/erlang/lib is a convention used in nixpkgs for compiled BEAM packages
-            cp -Hrt "$out/lib/erlang/lib/${name}-${version}" "$reldir"
-          done
-          runHook postInstall
-        '';
-
-        meta = {
-          inherit (erlang.meta) platforms;
-        }
-        // meta;
-
-        passthru = {
-          packageName = name;
-          env = shell self;
-          inherit beamDeps;
-        };
+      meta = {
+        inherit (erlang.meta) platforms;
       }
-      // customPhases
-    );
-in
-lib.fix pkg
+      // (args.meta or { });
+
+      passthru = {
+        inherit beamDeps;
+      };
+    };
+}

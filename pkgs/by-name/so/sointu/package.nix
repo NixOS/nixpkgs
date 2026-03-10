@@ -15,14 +15,14 @@
   libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sointu";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "vsariola";
     repo = "sointu";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xHKD+zArsdQVffwbbSOOdzC6o5sxpez8VLAwIzV5X4E=";
   };
 
@@ -60,4 +60,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ martinimoe ];
   };
-}
+})

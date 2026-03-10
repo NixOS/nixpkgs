@@ -22,8 +22,8 @@
   lame,
   fdk_aac,
   libass,
-  libXext,
-  libXfixes,
+  libxext,
+  libxfixes,
 }:
 
 let
@@ -39,13 +39,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openboard";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "OpenBoard-org";
     repo = "OpenBoard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mu7bhJx+Mv6Megq2jYK1s8oVt8QCMvD6sd2nnxI3VsA=";
+    hash = "sha256-Jx6UKPOkFucmeeWx3XR0p2bAvRG6VNlVGU/YNLu4NEY=";
   };
 
   postPatch = ''
@@ -89,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     fdk_aac
     libass
     quazip
-    libXext
-    libXfixes
+    libxext
+    libxfixes
   ];
 
   meta = {

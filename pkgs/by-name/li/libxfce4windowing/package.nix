@@ -13,8 +13,8 @@
   gtk3,
   libdisplay-info,
   libwnck,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   wayland,
   wayland-protocols,
   wlr-protocols,
@@ -71,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     libdisplay-info
     libwnck
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     wayland
     wayland-protocols
     wlr-protocols

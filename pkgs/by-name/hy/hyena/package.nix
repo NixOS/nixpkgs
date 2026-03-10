@@ -8,12 +8,12 @@
   monoDLLFixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyena";
   version = "0.5";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/hyena/${lib.versions.majorMinor version}/hyena-${version}.tar.bz2";
+    url = "mirror://gnome/sources/hyena/${lib.versions.majorMinor finalAttrs.version}/hyena-${finalAttrs.version}.tar.bz2";
     sha256 = "eb7154a42b6529bb9746c39272719f3168d6363ed4bad305a916ed7d90bc8de9";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ obadz ];
     license = lib.licenses.mit;
   };
-}
+})

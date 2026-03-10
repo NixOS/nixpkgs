@@ -23,6 +23,7 @@
   wlroots_0_19,
   wayland-protocols,
   libdrm,
+  evdev-proto,
   nixosTests,
   # Used by the NixOS module:
   isNixOS ? false,
@@ -97,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
   ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    evdev-proto
+  ]
   ++ lib.optionals finalAttrs.enableXWayland [
     libxcb-wm
   ];
@@ -134,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://swaywm.org";
     changelog = "https://github.com/swaywm/sway/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [
       synthetica
     ];

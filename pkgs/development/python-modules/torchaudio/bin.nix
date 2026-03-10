@@ -4,7 +4,6 @@
   buildPythonPackage,
   python,
   fetchurl,
-  pythonOlder,
   pythonAtLeast,
 
   # buildInputs
@@ -34,7 +33,7 @@ buildPythonPackage (finalAttrs: {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
+  disabled = pythonAtLeast "3.15";
 
   buildInputs = [
     # We need to patch lib/torio/_torio_ffmpeg6

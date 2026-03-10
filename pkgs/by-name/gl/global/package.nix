@@ -15,12 +15,12 @@
 let
   pygments = python3Packages.pygments;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "global";
   version = "6.6.14";
 
   src = fetchurl {
-    url = "mirror://gnu/global/global-${version}.tar.gz";
+    url = "mirror://gnu/global/global-${finalAttrs.version}.tar.gz";
     hash = "sha256-9uf9C2iu0pLoW7aGYWuvZVHVyUJK3N3KEdgIujGMsyA=";
   };
 
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
     changelog = "https://cvs.savannah.gnu.org/viewvc/global/global/NEWS?view=markup&pathrev=VERSION-${
-      lib.replaceStrings [ "." ] [ "_" ] version
+      lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
   };
-}
+})

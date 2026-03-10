@@ -4,12 +4,12 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana-dash-n-grab";
   version = "0.9.2";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "esnet";
     repo = "gdg";
     sha256 = "sha256-fKLyUaKcZfrBarKumjLmK+g9C0VZOYixxNXP7rU83co=";
@@ -20,8 +20,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
-    "-X github.com/esnet/gdg/version.GitCommit=${src.rev}"
+    "-X main.Version=${finalAttrs.version}"
+    "-X github.com/esnet/gdg/version.GitCommit=${finalAttrs.src.rev}"
   ];
 
   # The test suite tries to communicate with a running version of grafana locally. This fails if
@@ -37,6 +37,6 @@ buildGoModule rec {
       wraithm
     ];
     mainProgram = "gdg";
-    changelog = "https://github.com/esnet/gdg/releases/tag/v${version}";
+    changelog = "https://github.com/esnet/gdg/releases/tag/v${finalAttrs.version}";
   };
-}
+})

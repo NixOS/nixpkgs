@@ -13,12 +13,12 @@
   libnsl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argus-clients";
   version = "3.0.8.3";
 
   src = fetchurl {
-    url = "http://qosient.com/argus/src/argus-clients-${version}.tar.gz";
+    url = "http://qosient.com/argus/src/argus-clients-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-uNTvi6zbrYHAivQMPkhlNCoqRW9GOkgKvCf3mInds80=";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -9,9 +9,9 @@
   glib,
   libice,
   libsm,
-  libX11,
-  libXext,
-  libXrender,
+  libx11,
+  libxext,
+  libxrender,
   zlib,
 }:
 
@@ -24,9 +24,9 @@ let
     glib
     libice
     libsm
-    libX11
-    libXext
-    libXrender
+    libx11
+    libxext
+    libxrender
     zlib
   ];
 

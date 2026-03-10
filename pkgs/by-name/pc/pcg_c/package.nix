@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.94";
   pname = "pcg-c";
 
   src = fetchzip {
-    url = "http://www.pcg-random.org/downloads/pcg-c-${version}.zip";
+    url = "http://www.pcg-random.org/downloads/pcg-c-${finalAttrs.version}.zip";
     sha256 = "0smm811xbvs03a5nc2668zd0178wnyri2h023pqffy767bpy1vlv";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.linus ];
     broken = stdenv.hostPlatform.isi686; # https://github.com/imneme/pcg-c/issues/11
   };
-}
+})

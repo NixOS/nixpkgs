@@ -7,7 +7,7 @@
   libtool,
   gettext,
   pkg-config,
-  wxGTK32,
+  wxwidgets_3_2,
   boost,
   icu,
   lucenepp,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     lucenepp
     nlohmann_json
-    wxGTK32
+    wxwidgets_3_2
     icu
     pugixml
     gtk3

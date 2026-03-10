@@ -7,14 +7,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "boxxy";
   version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "queer";
     repo = "boxxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6pb3yyC4/kpe8S67B3pzsSu3PfQyOWpiYi0JTBQk3lU=";
   };
 
@@ -43,4 +43,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "boxxy";
   };
-}
+})

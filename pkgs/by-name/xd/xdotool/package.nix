@@ -3,14 +3,14 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
+  libx11,
   perl,
-  libXtst,
+  libxtst,
   xorgproto,
-  libXi,
-  libXinerama,
+  libxi,
+  libxinerama,
   libxkbcommon,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
   buildInputs = [
-    libX11
-    libXtst
+    libx11
+    libxtst
     xorgproto
-    libXi
-    libXinerama
+    libxi
+    libxinerama
     libxkbcommon
-    libXext
+    libxext
   ];
 
   preBuild = ''

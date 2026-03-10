@@ -12,12 +12,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "klavaro";
   version = "3.14";
 
   src = fetchurl {
-    url = "mirror://sourceforge/klavaro/klavaro-${version}.tar.bz2";
+    url = "mirror://sourceforge/klavaro/klavaro-${finalAttrs.version}.tar.bz2";
     hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
       davidak
     ];
   };
-}
+})

@@ -3,15 +3,15 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ssm-session-manager-plugin";
-  version = "1.2.764.0";
+  version = "1.2.779.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "session-manager-plugin";
-    rev = version;
-    hash = "sha256-QJYKkEb70G/cmhZ1Wj4GKJaJLRothkeq0bijGkdazt0=";
+    rev = finalAttrs.version;
+    hash = "sha256-QLr/G82uinbz21z5FswSh0UKWZE4FWjKaVQFQJOYSdw=";
   };
 
   patches = [
@@ -47,7 +47,7 @@ buildGoModule rec {
   subPackages = [ "src/sessionmanagerplugin-main" ];
 
   preBuild = ''
-    echo -n ${lib.escapeShellArg version} > VERSION
+    echo -n ${lib.escapeShellArg finalAttrs.version} > VERSION
     go run src/version/versiongenerator/version-gen.go
   '';
 
@@ -57,11 +57,11 @@ buildGoModule rec {
   # The AWS CLI is expecting the binary name to be 'session-manager-plugin' and
   # since the outfile is different the following workaround is renaming the binary.
   postBuild = ''
-    mv $GOPATH/bin/sessionmanagerplugin-main $GOPATH/bin/${meta.mainProgram}
+    mv $GOPATH/bin/sessionmanagerplugin-main $GOPATH/bin/${finalAttrs.meta.mainProgram}
   '';
 
   preCheck = ''
-    if ! [[ $($GOPATH/bin/${meta.mainProgram} --version) = ${lib.escapeShellArg version} ]]; then
+    if ! [[ $($GOPATH/bin/${finalAttrs.meta.mainProgram} --version) = ${lib.escapeShellArg finalAttrs.version} ]]; then
       echo 'wrong version'
       exit 1
     fi
@@ -78,4 +78,4 @@ buildGoModule rec {
       ryan4yin
     ];
   };
-}
+})

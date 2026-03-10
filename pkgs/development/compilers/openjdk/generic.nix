@@ -29,16 +29,16 @@
   giflib,
   libpng,
   lcms2,
-  libX11,
+  libx11,
   libice,
-  libXext,
-  libXrender,
-  libXtst,
-  libXt,
-  libXi,
-  libXinerama,
-  libXcursor,
-  libXrandr,
+  libxext,
+  libxrender,
+  libxtst,
+  libxt,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libxrandr,
   fontconfig,
 
   setJavaClassPath,
@@ -276,16 +276,16 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     libjpeg
     giflib
-    libX11
+    libx11
     libice
-    libXext
-    libXrender
-    libXtst
-    libXt
-    libXi
-    libXinerama
-    libXcursor
-    libXrandr
+    libxext
+    libxrender
+    libxtst
+    libxt
+    libxi
+    libxinerama
+    libxcursor
+    libxrandr
     fontconfig
   ]
   ++ lib.optionals (atLeast11 && !atLeast21) [

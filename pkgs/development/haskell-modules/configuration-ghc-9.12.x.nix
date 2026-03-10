@@ -99,6 +99,10 @@ with haskellLib;
   timezone-series = doJailbreak super.timezone-series; # time <1.14
   timezone-olson = doJailbreak super.timezone-olson; # time <1.14
   cabal-plan = doJailbreak super.cabal-plan; # base <4.21
+  decimal-literals = doJailbreak super.decimal-literals; # base <4.21
+  matrix-client = doJailbreak super.matrix-client; # time <1.13
+  patat = doJailbreak super.patat; # time <1.13
+  puresat = doJailbreak super.puresat; # base <4.21
   dbus = doJailbreak super.dbus; # template-haskell <2.23
   xmobar = doJailbreak super.xmobar; # base <4.21
 

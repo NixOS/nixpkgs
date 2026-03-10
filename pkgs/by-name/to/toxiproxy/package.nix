@@ -6,14 +6,14 @@
   toxiproxy,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "toxiproxy";
   version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "Shopify";
     repo = "toxiproxy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-CqJr3h2n+fzN6Ves38H7fYXd5vlpDVfF3kg4Tr8ThPc=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/Shopify/toxiproxy/v2.Version=${version}"
+    "-X github.com/Shopify/toxiproxy/v2.Version=${finalAttrs.version}"
   ];
 
   # Fixes tests on Darwin
@@ -42,22 +42,22 @@ buildGoModule rec {
 
   passthru.tests = {
     cliVersion = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = toxiproxy;
       command = "${toxiproxy}/bin/toxiproxy-cli -version";
     };
     serverVersion = testers.testVersion {
-      inherit version;
+      inherit (finalAttrs) version;
       package = toxiproxy;
       command = "${toxiproxy}/bin/toxiproxy-server -version";
     };
   };
 
   meta = {
-    changelog = "https://github.com/Shopify/toxiproxy/releases/tag/v${version}";
+    changelog = "https://github.com/Shopify/toxiproxy/releases/tag/v${finalAttrs.version}";
     description = "Proxy for for simulating network conditions";
     homepage = "https://github.com/Shopify/toxiproxy";
     maintainers = with lib.maintainers; [ avnik ];
     license = lib.licenses.mit;
   };
-}
+})

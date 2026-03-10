@@ -108,7 +108,6 @@ buildPythonPackage (finalAttrs: {
       pytest-doctestplus
       pytest-xdist
     ]
-    ++ coverage.optional-dependencies.toml
     ++ self.sparse
     ++ self.testing;
     testing = [

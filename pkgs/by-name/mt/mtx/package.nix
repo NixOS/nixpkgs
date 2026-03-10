@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mtx";
   version = "1.3.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mtx/mtx-stable/${version}/mtx-${version}.tar.gz";
+    url = "mirror://sourceforge/mtx/mtx-stable/${finalAttrs.version}/mtx-${finalAttrs.version}.tar.gz";
     sha256 = "0261c5e90b98b6138cd23dadecbc7bc6e2830235145ed2740290e1f35672d843";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.redvers ];
     platforms = lib.platforms.linux;
   };
-}
+})

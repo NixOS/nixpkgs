@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nginx-sso";
   version = "0.27.6";
 
   src = fetchFromGitHub {
     owner = "Luzifer";
     repo = "nginx-sso";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-nYqk1VK6R9HH67NLQDUifW3AjIW5pjD1Jmf+cYH3SQo=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "nginx-sso";
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "peg";
   version = "0.1.20";
 
   src = fetchurl {
-    url = "${meta.homepage}/peg-${version}.tar.gz";
+    url = "${finalAttrs.meta.homepage}/peg-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-uLcXvJOll2ijXWUlZ5pODOlOa/ZvkrrPKXnGR0VytFo=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lil-pwny";
   version = "2.0.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "PaperMtn";
     repo = "lil-pwny";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-EE6+PQTmvAv5EvxI9QR/dQcPby13BBk66KSc7XDNAZA=";
   };
 
@@ -29,8 +29,8 @@ python3.pkgs.buildPythonApplication rec {
     description = "Offline auditing of Active Directory passwords";
     mainProgram = "lil-pwny";
     homepage = "https://github.com/PaperMtn/lil-pwny";
-    changelog = "https://github.com/PaperMtn/lil-pwny/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/PaperMtn/lil-pwny/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -10,15 +10,15 @@
   net-tools,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-ios";
-  version = "1.0.193";
+  version = "1.0.204";
 
   src = fetchFromGitHub {
     owner = "danielpaulus";
     repo = "go-ios";
-    rev = "v${version}";
-    sha256 = "sha256-l5ob2wnUOHgR8awPkCBKPCFBEQhrDflN+scUXm7290o=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-G/CFG+glZ5DGIux3FJSe2wdfRl++GFr3JB8bHLOq+KY=";
   };
 
   proxyVendor = true;
@@ -69,4 +69,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ eyjhb ];
     mainProgram = "ios";
   };
-}
+})

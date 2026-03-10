@@ -20,8 +20,8 @@
   readline,
   sqlite,
   autoAwaySupport ? true,
-  libXScrnSaver,
-  libX11,
+  libxscrnsaver,
+  libx11,
   notifySupport ? true,
   libnotify,
   gdk-pixbuf,
@@ -77,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals autoAwaySupport [
-    libXScrnSaver
-    libX11
+    libxscrnsaver
+    libx11
   ]
   ++ lib.optionals notifySupport [
     libnotify
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  LC_ALL = "en_US.utf8";
+  env.LC_ALL = "en_US.utf8";
 
   meta = {
     homepage = "https://profanity-im.github.io";

@@ -7,14 +7,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flitter";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "alexozer";
     repo = "flitter";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-aXTQeUKhwa2uVipKIs8n0XBiWa5o7U6UMlAUlnzXyzE=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "flitter";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

@@ -9,12 +9,12 @@
 let
   version = "1.5c";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zssh";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/zssh/zssh-${version}.tgz";
+    url = "mirror://sourceforge/zssh/zssh-${finalAttrs.version}.tgz";
     sha256 = "06z73iq59lz8ibjrgs7d3xl39vh9yld1988yx8khssch4pw41s52";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ]; # required by deepin-terminal
     platforms = lib.platforms.linux;
   };
-}
+})

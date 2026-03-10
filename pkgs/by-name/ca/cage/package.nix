@@ -16,7 +16,7 @@
   libxkbcommon,
   libxcb-wm,
   libGL,
-  libX11,
+  libx11,
   xwayland ? null,
   nixosTests,
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     libxcb-wm
     libGL
-    libX11
+    libx11
   ];
 
   postFixup = lib.optionalString wlroots_0_19.enableXWayland ''

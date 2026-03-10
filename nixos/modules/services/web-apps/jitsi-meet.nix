@@ -25,7 +25,7 @@ let
       userJson = pkgs.writeText "user.json" (builtins.toJSON userCfg);
     in
     (pkgs.runCommand "${varName}.js" { } ''
-      ${pkgs.nodejs}/bin/node ${extractor} ${source} ${varName} > default.json
+      ${pkgs.lib.getExe pkgs.nodejs-slim} ${extractor} ${source} ${varName} > default.json
       (
         echo "var ${varName} = "
         ${pkgs.jq}/bin/jq -s '.[0] * .[1]' default.json ${userJson}

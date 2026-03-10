@@ -5,7 +5,7 @@
   perl, # used to generate help tags
   pkg-config,
   ncurses,
-  libX11,
+  libx11,
   file,
   which,
   groff,
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     ncurses
-    libX11
+    libx11
     file
     which
     groff

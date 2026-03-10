@@ -5,19 +5,19 @@
   stdenv,
   libGLU,
   libglut,
-  libX11,
+  libx11,
   plib,
   openal,
   freealut,
-  libXrandr,
+  libxrandr,
   xorgproto,
-  libXext,
+  libxext,
   libsm,
   libice,
-  libXi,
-  libXt,
-  libXrender,
-  libXxf86vm,
+  libxi,
+  libxt,
+  libxrender,
+  libxxf86vm,
   libvorbis,
   libpng,
   zlib,
@@ -46,19 +46,19 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGLU
     libglut
-    libX11
+    libx11
     plib
     openal
     freealut
-    libXrandr
+    libxrandr
     xorgproto
-    libXext
+    libxext
     libsm
     libice
-    libXi
-    libXt
-    libXrender
-    libXxf86vm
+    libxi
+    libxt
+    libxrender
+    libxxf86vm
     libpng
     zlib
     libvorbis

@@ -23,7 +23,7 @@
   libGL,
   libuuid,
   libselinux,
-  libXdmcp,
+  libxdmcp,
   libsepol,
   libxkbcommon,
   libthai,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     libuuid
     libselinux
     libsepol
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libxcb-util
     libxcb-wm

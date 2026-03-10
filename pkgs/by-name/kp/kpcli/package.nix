@@ -7,12 +7,12 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "4.1.3";
   pname = "kpcli";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kpcli/kpcli-${version}.pl";
+    url = "mirror://sourceforge/kpcli/kpcli-${finalAttrs.version}.pl";
     hash = "sha256-yRNj5OB/NSGoZ/aNtgLJW1PcFn5DZu5/8lQlK0F2xi8=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/{bin,share}
-    cp ${src} $out/share/kpcli.pl
+    cp ${finalAttrs.src} $out/share/kpcli.pl
     chmod +x $out/share/kpcli.pl
 
     makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ lib.maintainers.j-keck ];
   };
-}
+})

@@ -6,7 +6,7 @@
 }:
 
 with python3.pkgs;
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "poetry2conda";
   version = "0.3.0";
 
@@ -15,7 +15,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dojeda";
     repo = "poetry2conda";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UqNoEGgStvqtxhYwExk7wO4SvATaM2kGaFbB5ViJa7U=";
   };
 
@@ -47,4 +47,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ cpcloud ];
     mainProgram = "poetry2conda";
   };
-}
+})

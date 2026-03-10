@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "image";
-  version = "2.18.1";
+  version = "2.18.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-1O7QV5eCwu+qCBjeLyDxOydus9S0s9YzR8cxfYTilTE=";
+    sha256 = "sha256-pYY8E5LZd+pPNwzFVH4EsXY8K3fXs6Hyz2zYweXkmRk=";
   };
 
   meta = {

@@ -7,7 +7,7 @@
   versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mbake";
   version = "1.4.5";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EbodShojaei";
     repo = "bake";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZUcSEWwPR9w/xD+xbaQcKf+4QNwUu3WXMxXvkUm4+SQ=";
   };
 
@@ -46,9 +46,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Makefile formatter and linter";
     homepage = "https://github.com/EbodShojaei/bake";
-    changelog = "https://github.com/EbodShojaei/bake/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/EbodShojaei/bake/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "mbake";
     maintainers = [ lib.maintainers.amadejkastelic ];
   };
-}
+})

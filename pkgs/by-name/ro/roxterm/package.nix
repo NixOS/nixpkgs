@@ -9,8 +9,8 @@
   gtk3,
   harfbuzz,
   lib,
-  libXdmcp,
-  libXtst,
+  libxdmcp,
+  libxtst,
   libepoxy,
   libpthread-stubs,
   libselinux,
@@ -55,8 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     harfbuzz
-    libXdmcp
-    libXtst
+    libxdmcp
+    libxtst
     libepoxy
     libpthread-stubs
     libselinux

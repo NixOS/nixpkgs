@@ -5,10 +5,10 @@
   gitUpdater,
   pkg-config,
   autoreconfHook,
-  libX11,
+  libx11,
   pam,
   libgcrypt,
-  libXrender,
+  libxrender,
   imlib2,
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xfPhsXZrTlEqea75SvacDfjM9o21MTudrqfNN9xtdcg=";
   };
 
-  PAM_DEFAULT_SERVICE = "login";
+  env.PAM_DEFAULT_SERVICE = "login";
 
   configureFlags = [
     "--enable-pam"
@@ -37,10 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
   buildInputs = [
-    libX11
+    libx11
     pam
     libgcrypt
-    libXrender
+    libxrender
     imlib2
   ];
 

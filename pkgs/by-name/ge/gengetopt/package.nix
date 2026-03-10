@@ -6,12 +6,12 @@
   help2man,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gengetopt";
   version = "2.23";
 
   src = fetchurl {
-    url = "mirror://gnu/gengetopt/gengetopt-${version}.tar.xz";
+    url = "mirror://gnu/gengetopt/gengetopt-${finalAttrs.version}.tar.xz";
     sha256 = "1b44fn0apsgawyqa4alx2qj5hls334mhbszxsy6rfr0q074swhdr";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

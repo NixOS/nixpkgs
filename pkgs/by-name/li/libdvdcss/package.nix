@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdvdcss";
   version = "1.4.3";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdcss/${version}/libdvdcss-${version}.tar.bz2";
+    url = "http://get.videolan.org/libdvdcss/${finalAttrs.version}/libdvdcss-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-IzzJL13AHF06lvWzWCvn1c7lo1pS06CBWHRdPYYHAHk=";
   };
 
@@ -19,4 +19,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
   };
-}
+})

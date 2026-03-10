@@ -6,14 +6,14 @@
   piknik,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "piknik";
   version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "jedisct1";
     repo = "piknik";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Kdqh3sQuO0iT0RW2hU+nrmBltxCFiqOSL00cbDHZJjc=";
   };
 
@@ -27,16 +27,16 @@ buildGoModule rec {
   passthru.tests = {
     version = testers.testVersion {
       package = piknik;
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Copy/paste anything over the network";
     homepage = "https://github.com/jedisct1/piknik";
-    changelog = "https://github.com/jedisct1/piknik/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/jedisct1/piknik/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "piknik";
   };
-}
+})

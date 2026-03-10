@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmm";
   version = "5.4.4";
 
   src = fetchurl {
-    url = "mirror://savannah/getfem/stable/gmm-${version}.tar.gz";
+    url = "mirror://savannah/getfem/stable/gmm-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-FesZQwEbkmZaqzsC7PPO3hz4nqFakAb4HyuizWYqoCs=";
   };
 
@@ -19,4 +19,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

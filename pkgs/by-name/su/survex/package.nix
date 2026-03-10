@@ -6,7 +6,7 @@
   glib,
   libGLU,
   libice,
-  libX11,
+  libx11,
   libgbm,
   perl,
   pkg-config,
@@ -14,16 +14,16 @@
   gdal,
   python3,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "survex";
-  version = "1.4.19";
+  version = "1.4.20";
 
   src = fetchurl {
-    url = "https://survex.com/software/${version}/survex-${version}.tar.gz";
-    hash = "sha256-X8FZCZTJ7DkZeYnrzaLCukRhs/kTHwre9F1TTRlK2ro=";
+    url = "https://survex.com/software/${finalAttrs.version}/survex-${finalAttrs.version}.tar.gz";
+    hash = "sha256-mSq/O5nsjHqypTUg/P/dAeIMZKyi5QcCtiydkOhh4N0=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     glib
     proj
     gdal
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # TODO: libGLU doesn't build for macOS because of Mesa issues
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libGLU
     libgbm
     libice
-    libX11
+    libx11
   ];
 
   strictDeps = true;
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "WX_CONFIG=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "WX_CONFIG=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   enableParallelBuilding = true;
@@ -71,9 +71,9 @@ stdenv.mkDerivation rec {
       variety of platforms, including Linux/Unix, macOS, and Microsoft Windows.
     '';
     homepage = "https://survex.com/";
-    changelog = "https://github.com/ojwb/survex/raw/v${version}/NEWS";
+    changelog = "https://github.com/ojwb/survex/raw/v${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.matthewcroughan ];
     platforms = lib.platforms.all;
   };
-}
+})

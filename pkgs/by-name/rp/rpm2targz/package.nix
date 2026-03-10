@@ -11,13 +11,13 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rpm2targz";
   version = "2021.03.16";
 
   # git repo: https://gitweb.gentoo.org/proj/rpm2targz.git/
   src = fetchurl {
-    url = "https://dev.gentoo.org/~vapier/dist/rpm2targz-${version}.tar.xz";
+    url = "https://dev.gentoo.org/~vapier/dist/rpm2targz-${finalAttrs.version}.tar.xz";
     hash = "sha256-rcV+o9V2wWKznqSW2rA8xgnpQ02kpK4te6mYvLRC5vQ=";
   };
 
@@ -50,4 +50,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

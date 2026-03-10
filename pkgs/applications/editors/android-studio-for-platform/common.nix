@@ -25,12 +25,12 @@
   fontsConf,
   fontconfig,
   freetype,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   makeFontsConf,
   makeWrapper,
   ncurses5,
@@ -107,14 +107,14 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
-            libXi
-            libXrender
-            libXtst
-            libX11
+            libxext
+            libxi
+            libxrender
+            libxtst
+            libx11
 
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For GTKLookAndFeel
             gtk2

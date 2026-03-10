@@ -7,12 +7,12 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "treemix";
   version = "1.13";
 
   src = fetchurl {
-    url = "https://bitbucket.org/nygcresearch/treemix/downloads/treemix-${version}.tar.gz";
+    url = "https://bitbucket.org/nygcresearch/treemix/downloads/treemix-${finalAttrs.version}.tar.gz";
     sha256 = "1nd3rzsdgk47r8b8k43mdfvaagln533sm08s1jr0dz8km8nlym7y";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.bzizou ];
     platforms = lib.platforms.linux;
   };
-}
+})

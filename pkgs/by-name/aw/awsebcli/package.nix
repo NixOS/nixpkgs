@@ -46,6 +46,7 @@ python.pkgs.buildPythonApplication rec {
     "six"
     "termcolor"
     "urllib3"
+    "wcwidth"
   ];
 
   dependencies = with python.pkgs; [
@@ -62,6 +63,7 @@ python.pkgs.buildPythonApplication rec {
     setuptools
     tabulate
     termcolor
+    wcwidth
     websocket-client
   ];
 

@@ -18,12 +18,12 @@
 let
   version = "0.2.99.4";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "synapse";
   inherit version;
 
   src = fetchurl {
-    url = "https://launchpad.net/synapse-project/0.3/${version}/+download/synapse-${version}.tar.xz";
+    url = "https://launchpad.net/synapse-project/0.3/${finalAttrs.version}/+download/synapse-${finalAttrs.version}.tar.xz";
     sha256 = "1g6x9knb4jy1d8zgssjhzkgac583137pibisy9whjs8mckaj4k1j";
   };
 
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; all;
     mainProgram = "synapse";
   };
-}
+})

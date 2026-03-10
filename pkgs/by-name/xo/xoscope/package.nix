@@ -11,12 +11,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xoscope";
   version = "2.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xoscope/xoscope-${version}.tar.gz";
+    url = "mirror://sourceforge/xoscope/xoscope-${finalAttrs.version}.tar.gz";
     sha256 = "0a5ycfc1qdmibvagc82r2mhv2i99m6pndy5i6ixas3j2297g6pgq";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
-}
+})

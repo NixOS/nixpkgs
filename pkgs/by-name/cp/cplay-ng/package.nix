@@ -7,7 +7,7 @@
   pulseaudio,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cplay-ng";
   version = "5.4.0";
   pyproject = true;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "xi";
     repo = "cplay-ng";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ob5wX+Q5XKB/fTYG5phLU61imonpk2A/fk5cg/dfr1Y=";
   };
 
@@ -53,4 +53,4 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

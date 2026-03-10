@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autotalent";
   version = "0.2";
 
   src = fetchzip {
-    url = "http://tombaran.info/autotalent-${version}.tar.gz";
+    url = "http://tombaran.info/autotalent-${finalAttrs.version}.tar.gz";
     sha256 = "19srnkghsdrxxlv2c7qimvyslxz63r97mkxfq78vbg654l3qz1a6";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.michalrus ];
     platforms = lib.platforms.linux;
   };
-}
+})

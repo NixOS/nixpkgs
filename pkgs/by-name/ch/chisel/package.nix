@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chisel";
-  version = "1.11.3";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "jpillora";
     repo = "chisel";
-    tag = "v${version}";
-    hash = "sha256-JrDRcp0gImG/5b/BC0KWM2IqJrS2mzO+ZX6kbTtQYlM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9b4y09eStfVLGRGUHw1GicBWsWHy7j9nwhQ3kfmB8Wc=";
   };
 
-  vendorHash = "sha256-2H+YHqYE1xm+7qDG3jfFpwS9FbYkbwJ6uso2At2BZcU=";
+  vendorHash = "sha256-hqHd+62csVjHY2oAvi5fwlI0LbjR/LSDg6b1SMwe8Fw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/jpillora/chisel/share.BuildVersion=${version}"
+    "-X=github.com/jpillora/chisel/share.BuildVersion=${finalAttrs.version}"
   ];
 
   # Tests require access to the network
@@ -35,8 +35,8 @@ buildGoModule rec {
       used to provide a secure endpoint into your network.
     '';
     homepage = "https://github.com/jpillora/chisel";
-    changelog = "https://github.com/jpillora/chisel/releases/tag/${src.tag}";
+    changelog = "https://github.com/jpillora/chisel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -31,7 +31,7 @@ buildNpmPackage (finalAttrs: {
     description = "Flexible dev server for Elm with live-reload";
     homepage = "https://www.elm-live.com";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "elm-live";
   };
 })

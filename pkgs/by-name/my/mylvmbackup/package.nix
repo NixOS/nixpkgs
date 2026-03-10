@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mylvmbackup";
   version = "0.16";
 
   src = fetchurl {
-    url = "https://www.lenzg.net/mylvmbackup/mylvmbackup-${version}.tar.gz";
+    url = "https://www.lenzg.net/mylvmbackup/mylvmbackup-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-vb7M3EPIrxIz6jUwm241fzaEz2czqdCObrFgSOSgJRU=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ryantm ];
     platforms = with lib.platforms; linux;
   };
-}
+})

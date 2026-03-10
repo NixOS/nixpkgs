@@ -6,11 +6,11 @@
   flex,
   gccmakedep,
   imake,
-  libXau,
-  libXaw,
-  libXext,
-  libXpm,
-  libXt,
+  libxau,
+  libxaw,
+  libxext,
+  libxpm,
+  libxt,
   xorg-cf-files,
   xorgproto,
 }:
@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXau
-    libXaw
-    libXext
-    libXpm
-    libXt
+    libxau
+    libxaw
+    libxext
+    libxpm
+    libxt
     xorgproto
   ];
 

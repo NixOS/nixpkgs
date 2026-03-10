@@ -107,8 +107,7 @@ let
       # Projects providing a lockfile from upstream can be automatically updated.
       passthru = passthru // {
         updateScript =
-          args.passthru.updateScript
-            or (if finalAttrs.composerVendor.composerLock == null then nix-update-script { } else null);
+          args.passthru.updateScript or (if composerLock == null then nix-update-script { } else null);
       };
 
       meta = meta // {

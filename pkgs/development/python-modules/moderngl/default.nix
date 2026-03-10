@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   libGL,
-  libX11,
+  libx11,
   setuptools,
   glcontext,
   pkgs,
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
     libGL
-    libX11
+    libx11
   ];
 
   dependencies = [ glcontext ];

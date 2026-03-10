@@ -23,7 +23,7 @@
   gst_all_1,
   libgee,
   libsoup_3,
-  libX11,
+  libx11,
   withGtk ? true,
   gtk4,
   libmediaart,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Move this to withGtk when it's not unconditionally included
     # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
     # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
-    libX11
+    libx11
     sqlite
     systemd
     tinysparql

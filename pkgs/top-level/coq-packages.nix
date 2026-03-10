@@ -214,7 +214,9 @@ let
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
-      ssprove = callPackage ../development/coq-modules/ssprove { };
+      ssprove = callPackage ../development/coq-modules/ssprove {
+        mathcomp-word = self.mathcomp-word.override { version = "3.2"; };
+      };
       stalmarck-tactic = callPackage ../development/coq-modules/stalmarck { };
       stalmarck = self.stalmarck-tactic.stalmarck;
       stdlib = callPackage ../development/coq-modules/stdlib { };
@@ -223,6 +225,11 @@ let
       tlc = callPackage ../development/coq-modules/tlc { };
       topology = callPackage ../development/coq-modules/topology { };
       trakt = callPackage ../development/coq-modules/trakt { };
+      TypedExtraction = callPackage ../development/coq-modules/TypedExtraction { };
+      TypedExtraction-common = self.TypedExtraction.common;
+      TypedExtraction-elm = self.TypedExtraction.elm;
+      TypedExtraction-rust = self.TypedExtraction.rust;
+      TypedExtraction-plugin = self.TypedExtraction.plugin;
       unicoq = callPackage ../development/coq-modules/unicoq { };
       validsdp = callPackage ../development/coq-modules/validsdp { };
       vcfloat = callPackage ../development/coq-modules/vcfloat (

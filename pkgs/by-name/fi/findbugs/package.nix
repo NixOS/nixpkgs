@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "findbugs";
   version = "3.0.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/findbugs/findbugs-${version}.tar.gz";
+    url = "mirror://sourceforge/findbugs/findbugs-${finalAttrs.version}.tar.gz";
     sha256 = "06b46fz4nid7qvm36r66zw01fr87y4jyz21ixw27b8hkqah0s3p8";
   };
 
@@ -47,4 +47,4 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.lgpl3;
   };
-}
+})

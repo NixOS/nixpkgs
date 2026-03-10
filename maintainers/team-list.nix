@@ -386,7 +386,6 @@ with lib.maintainers;
     members = [
       leona
       theCapypara
-      thiagokokada
       jamesward
     ];
     shortName = "Jetbrains";
@@ -574,7 +573,6 @@ with lib.maintainers;
     members = [
       eljamm
       ethancedwards8
-      OPNA2608
       phanirithvij
       prince213
       wegank
@@ -688,6 +686,7 @@ with lib.maintainers;
     members = [
       b-rodrigues
       bcdarwin
+      jamespeapen
       jbedo
       kupac
     ];

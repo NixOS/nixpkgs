@@ -83,21 +83,21 @@ let
     ln -s ${quarto}/share $out/share
   '';
 in
-stdenv.mkDerivation rec {
-  pname = "RStudio";
-  version = "2026.01.0+392";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "rstudio";
+  version = "2026.01.1+403";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    tag = "v${version}";
-    hash = "sha256-Q79uoNKh4plRFTe3uOTr27Hh/fMMkCbRPveZyq7cHQk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-s+t48LLvxdit6US6MB4DvpEZtUY6SSK5Qha1k4VW0Qk=";
   };
 
   # sources fetched into _deps via cmake's FetchContent
   extSrcs = stdenv.mkDerivation {
-    name = "${pname}-${version}-ext-srcs";
-    inherit src;
+    name = "rstudio-${finalAttrs.version}-ext-srcs";
+    inherit (finalAttrs) src;
 
     nativeBuildInputs = [
       cacert
@@ -192,10 +192,10 @@ stdenv.mkDerivation rec {
     # on Darwin, cmake uses find_library to locate R instead of using the PATH
     NIX_LDFLAGS = "-L${R}/lib/R/lib";
 
-    RSTUDIO_VERSION_MAJOR = lib.versions.major version;
-    RSTUDIO_VERSION_MINOR = lib.versions.minor version;
-    RSTUDIO_VERSION_PATCH = lib.versions.patch version;
-    RSTUDIO_VERSION_SUFFIX = "+" + toString (lib.tail (lib.splitString "+" version));
+    RSTUDIO_VERSION_MAJOR = lib.versions.major finalAttrs.version;
+    RSTUDIO_VERSION_MINOR = lib.versions.minor finalAttrs.version;
+    RSTUDIO_VERSION_PATCH = lib.versions.patch finalAttrs.version;
+    RSTUDIO_VERSION_SUFFIX = "+" + toString (lib.tail (lib.splitString "+" finalAttrs.version));
   };
 
   patches = [
@@ -246,9 +246,9 @@ stdenv.mkDerivation rec {
   makeCacheWritable = true;
 
   npmDeps = fetchNpmDeps {
-    name = "rstudio-${version}-npm-deps";
-    inherit src;
-    postPatch = "cd ${npmRoot}";
+    name = "rstudio-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    postPatch = "cd ${finalAttrs.npmRoot}";
     hash = "sha256-7gXLCFhan/TCTlc2okMWuWzfRYXmuwcqhmGKAqJOEM0=";
   };
 
@@ -359,7 +359,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://github.com/rstudio/rstudio/tree/${src.rev}/version/news";
+    changelog = "https://github.com/rstudio/rstudio/tree/${finalAttrs.src.rev}/version/news";
     description = "Set of integrated tools for the R language";
     homepage = "https://www.rstudio.com/";
     license = lib.licenses.agpl3Only;
@@ -371,4 +371,4 @@ stdenv.mkDerivation rec {
     # rstudio-server on darwin is only partially supported by upstream
     platforms = lib.platforms.linux ++ lib.optionals (!server) lib.platforms.darwin;
   };
-}
+})

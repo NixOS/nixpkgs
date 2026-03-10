@@ -6,12 +6,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sshoogr";
   version = "0.9.26";
 
   src = fetchzip {
-    url = "mirror://maven/com/aestasit/infrastructure/sshoogr/sshoogr/${version}/sshoogr-${version}.zip";
+    url = "mirror://maven/com/aestasit/infrastructure/sshoogr/sshoogr/${finalAttrs.version}/sshoogr-${finalAttrs.version}.zip";
     sha256 = "134qlx90y82g1rfxhyn12z9r2imm1l3fz09hrrn3pgcdcq5jz2s1";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moaxcp ];
   };
-}
+})

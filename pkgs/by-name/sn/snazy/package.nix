@@ -6,14 +6,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "snazy";
   version = "0.58.1";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "snazy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sm3FTQ3+cILoKkMe3qvZg2K+rspvJI3SXpDFD3YPXXk=";
   };
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/snazy --help
-    $out/bin/snazy --version | grep "snazy ${version}"
+    $out/bin/snazy --version | grep "snazy ${finalAttrs.version}"
     runHook postInstallCheck
   '';
 
@@ -44,10 +44,10 @@ rustPlatform.buildRustPackage rec {
       with nice colors.
     '';
     homepage = "https://github.com/chmouel/snazy/";
-    changelog = "https://github.com/chmouel/snazy/releases/tag/${src.rev}";
+    changelog = "https://github.com/chmouel/snazy/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       jk
     ];
   };
-}
+})

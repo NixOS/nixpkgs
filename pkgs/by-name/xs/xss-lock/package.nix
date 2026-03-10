@@ -7,8 +7,8 @@
   pkg-config,
   glib,
   libpthread-stubs,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   libxcb-util,
   nixosTests,
 }:
@@ -38,8 +38,8 @@ stdenv.mkDerivation {
   buildInputs = [
     glib
     libpthread-stubs
-    libXau
-    libXdmcp
+    libxau
+    libxdmcp
     libxcb-util
   ];
 
@@ -51,7 +51,6 @@ stdenv.mkDerivation {
     mainProgram = "xss-lock";
     maintainers = with lib.maintainers; [
       malyn
-      offline
     ];
     platforms = lib.platforms.linux;
   };

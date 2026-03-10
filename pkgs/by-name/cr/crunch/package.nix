@@ -5,12 +5,12 @@
   which,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crunch";
   version = "3.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/crunch-wordlist/crunch-${version}.tgz";
+    url = "mirror://sourceforge/crunch-wordlist/crunch-${finalAttrs.version}.tgz";
     sha256 = "0mgy6ghjvzr26yrhj1bn73qzw6v9qsniskc5wqq1kk0hfhy6r3va";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ lnl7 ];
   };
-}
+})

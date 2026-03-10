@@ -4,13 +4,13 @@
   patchelf,
   lib,
   stdenv,
-  libXft,
-  libX11,
+  libxft,
+  libx11,
   freetype,
   fontconfig,
-  libXrender,
-  libXScrnSaver,
-  libXext,
+  libxrender,
+  libxscrnsaver,
+  libxext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     let
       interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
       libPath = lib.makeLibraryPath [
-        libXft
-        libX11
+        libxft
+        libx11
         freetype
         fontconfig
-        libXrender
-        libXScrnSaver
-        libXext
+        libxrender
+        libxscrnsaver
+        libxext
       ];
     in
     ''

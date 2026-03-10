@@ -5,12 +5,12 @@
   file,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openpa";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "https://trac.mpich.org/projects/openpa/raw-attachment/wiki/Downloads/openpa-${version}.tar.gz";
+    url = "https://trac.mpich.org/projects/openpa/raw-attachment/wiki/Downloads/openpa-${finalAttrs.version}.tar.gz";
     sha256 = "0flyi596hm6fv7xyw2iykx3s65p748s62bf15624xcnwpfrh8ncy";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
       portability.
     '';
   };
-}
+})

@@ -5,7 +5,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cwltool";
   version = "3.1.20251031082601";
   pyproject = true;
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "common-workflow-language";
     repo = "cwltool";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-avRNOdL4Ig2cYQWh8SqX/KWfgXyVg0TVfVFrlqzUCLA=";
   };
 
@@ -84,9 +84,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Common Workflow Language reference implementation";
     homepage = "https://www.commonwl.org";
-    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${version}";
+    changelog = "https://github.com/common-workflow-language/cwltool/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
     mainProgram = "cwltool";
   };
-}
+})

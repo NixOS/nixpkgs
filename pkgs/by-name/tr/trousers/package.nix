@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "trousers";
   version = "0.3.15";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trousers/trousers/${version}/trousers-${version}.tar.gz";
+    url = "mirror://sourceforge/trousers/trousers/${finalAttrs.version}/trousers-${finalAttrs.version}.tar.gz";
     sha256 = "0zy7r9cnr2gvwr2fb1q4fc5xnvx405ymcbrdv7qsqwl3a4zfjnqy";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.ak ];
     platforms = lib.platforms.linux;
   };
-}
+})

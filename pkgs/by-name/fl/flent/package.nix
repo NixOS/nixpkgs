@@ -6,13 +6,13 @@
   qt5,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flent";
   version = "2.2.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-BPwh3oWIY1YEI+ecgi9AUiX4Ka/Y5dYikwmfvvNB+eg=";
   };
 
@@ -56,4 +56,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "flent";
     badPlatforms = lib.platforms.darwin;
   };
-}
+})

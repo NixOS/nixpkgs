@@ -4,13 +4,13 @@
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
-  libX11,
+  libx11,
   libice,
   libsm,
-  libXi,
-  libXcursor,
-  libXext,
-  libXrandr,
+  libxi,
+  libxcursor,
+  libxext,
+  libxrandr,
   fontconfig,
   glew,
   makeDesktopItem,
@@ -59,13 +59,13 @@ buildDotnetModule rec {
 
   runtimeDeps = [
     # Avalonia UI
-    libX11
+    libx11
     libice
     libsm
-    libXi
-    libXcursor
-    libXext
-    libXrandr
+    libxi
+    libxcursor
+    libxext
+    libxrandr
     fontconfig
     glew
   ];

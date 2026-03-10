@@ -6,12 +6,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hoppet";
   version = "1.2.0";
 
   src = fetchurl {
-    url = "https://hoppet.hepforge.org/downloads/hoppet-${version}.tgz";
+    url = "https://hoppet.hepforge.org/downloads/hoppet-${finalAttrs.version}.tgz";
     sha256 = "0j7437rh4xxbfzmkjr22ry34xm266gijzj6mvrq193fcsfzipzdz";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

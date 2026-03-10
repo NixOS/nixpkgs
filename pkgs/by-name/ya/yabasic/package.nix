@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   libsm,
-  libX11,
-  libXt,
+  libx11,
+  libxt,
   libffi,
   ncurses,
 }:
@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libsm
-    libX11
-    libXt
+    libx11
+    libxt
     libffi
     ncurses
   ];

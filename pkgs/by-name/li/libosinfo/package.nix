@@ -23,12 +23,12 @@
   vala ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libosinfo";
   version = "1.12.0";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/libosinfo/libosinfo-${version}.tar.xz";
+    url = "https://releases.pagure.org/libosinfo/libosinfo-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-rYVX7OJnk9pD0m3lZePWjOLua/uNARO3zH3+B/a/xrY=";
   };
 
@@ -88,9 +88,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "GObject based library API for managing information about operating systems, hypervisors and the (virtual) hardware devices they can support";
     homepage = "https://libosinfo.org/";
-    changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${version}/NEWS";
+    changelog = "https://gitlab.com/libosinfo/libosinfo/-/blob/v${finalAttrs.version}/NEWS";
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.bjornfor ];
   };
-}
+})

@@ -6,13 +6,13 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "infracost";
   version = "0.10.43";
 
   src = fetchFromGitHub {
     owner = "infracost";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "infracost";
     sha256 = "sha256-02HQp11MfUKK0tXcBRmGqatG5C7462VEWtHHCjLv32I=";
   };
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/infracost/infracost/internal/version.Version=v${version}"
+    "-X github.com/infracost/infracost/internal/version.Version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/infracost" ];
@@ -58,14 +58,14 @@ buildGoModule rec {
 
     export INFRACOST_SKIP_UPDATE_CHECK=true
     $out/bin/infracost --help
-    $out/bin/infracost --version | grep "v${version}"
+    $out/bin/infracost --version | grep "v${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
 
   meta = {
     homepage = "https://infracost.io";
-    changelog = "https://github.com/infracost/infracost/releases/tag/v${version}";
+    changelog = "https://github.com/infracost/infracost/releases/tag/v${finalAttrs.version}";
     description = "Cloud cost estimates for Terraform in your CLI and pull requests";
     longDescription = ''
       Infracost shows hourly and monthly cost estimates for a Terraform project.
@@ -80,4 +80,4 @@ buildGoModule rec {
     ];
     mainProgram = "infracost";
   };
-}
+})

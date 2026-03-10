@@ -13,12 +13,12 @@
   libnma-gtk4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "NetworkManager-strongswan";
   version = "1.6.4";
 
   src = fetchurl {
-    url = "https://download.strongswan.org/NetworkManager/NetworkManager-strongswan-${version}.tar.bz2";
+    url = "https://download.strongswan.org/NetworkManager/NetworkManager-strongswan-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-X9ftnoogw2W+p9ZTdgoECfmyEkRABtQ2UzK7zFGPbBU=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     inherit (networkmanager.meta) platforms;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

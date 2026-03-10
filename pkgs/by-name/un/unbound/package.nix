@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-libhiredis=${hiredis}"
   ];
 
-  PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
+  env.PROTOC_C = lib.optionalString withDNSTAP "${protobufc}/bin/protoc-c";
 
   # Remove references to compile-time dependencies that are included in the configure flags
   postConfigure =

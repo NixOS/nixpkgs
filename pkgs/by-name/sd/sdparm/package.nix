@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sdparm";
   version = "1.12";
 
   src = fetchurl {
-    url = "http://sg.danny.cz/sg/p/sdparm-${version}.tar.xz";
+    url = "http://sg.danny.cz/sg/p/sdparm-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-xMnvr9vrZi4vlxJwfsSQkyvU0BC7ESmueplSZUburb4=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = with lib.platforms; linux;
   };
-}
+})

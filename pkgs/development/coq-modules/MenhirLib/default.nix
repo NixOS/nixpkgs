@@ -18,7 +18,7 @@ let
       in
       with lib.versions;
       lib.switch coq.coq-version [
-        (case (range "8.12" "9.1") "20250903")
+        (case (range "8.12" "9.2") "20250903")
         (case (range "8.7" "8.11") "20200624")
       ] null;
     release = {

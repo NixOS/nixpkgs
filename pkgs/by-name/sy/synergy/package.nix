@@ -15,12 +15,12 @@
   libnotify,
   libice,
   libsm,
-  libX11,
+  libx11,
   libxkbfile,
-  libXi,
-  libXtst,
-  libXrandr,
-  libXinerama,
+  libxi,
+  libxtst,
+  libxrandr,
+  libxinerama,
   xkeyboard-config,
   xinput,
   avahi-compat,
@@ -42,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Without this OpenSSL from nixpkgs is not detected
     ./darwin-non-static-openssl.patch
+
+    # This missing include broke the build on GCC 15
+    # This can be removed once we switch to a newer version
+    ./include_cstdint.patch
   ];
 
   postPatch = ''
@@ -73,11 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
     libsepol
     libice
     libsm
-    libX11
-    libXi
-    libXtst
-    libXrandr
-    libXinerama
+    libx11
+    libxi
+    libxtst
+    libxrandr
+    libxinerama
     libxkbfile
     xinput
     avahi-compat

@@ -7,11 +7,11 @@
   xz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "avfs";
   version = "1.2.0";
   src = fetchurl {
-    url = "mirror://sourceforge/avf/${version}/avfs-${version}.tar.bz2";
+    url = "mirror://sourceforge/avf/${finalAttrs.version}/avfs-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-olqOxDwe4XJiThpMec5mobkwhBzbVFtyXx7GS8q+iJw=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

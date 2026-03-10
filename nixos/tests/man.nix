@@ -88,6 +88,8 @@ in
       ${machine}.succeed("man 3 libunwind > /dev/null")
       # NixOS configuration man page is installed
       ${machine}.succeed("man configuration.nix > /dev/null")
+      # Linux `man-pages` work
+      ${machine}.succeed("man 5 proc_vmstat > /dev/null")
 
     with subtest("Test generateCaches via man -k in ${machine}"):
       expected = [
@@ -97,6 +99,7 @@ in
         ("user", "userdel", 8),
         ("mem", "free", 3),
         ("mem", "free", 1),
+        ("statistics", "proc_vmstat", 5),
       ]
 
       for (keyword, page, section) in expected:

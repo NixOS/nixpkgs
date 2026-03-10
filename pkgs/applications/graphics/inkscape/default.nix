@@ -32,7 +32,7 @@
   libsigcxx,
   libvisio,
   libwpg,
-  libXft,
+  libxft,
   libxml2,
   libxslt,
   readline,
@@ -160,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsigcxx
     libvisio
     libwpg
-    libXft
+    libxft
     libxml2
     libxslt
     readline

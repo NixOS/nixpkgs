@@ -5,6 +5,7 @@
   deprecated,
   eval-type-backport,
   fetchFromGitHub,
+  filetype,
   griffe,
   hatchling,
   jinja2,
@@ -16,25 +17,26 @@
   redis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "banks";
-  version = "2.3.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "masci";
     repo = "banks";
-    tag = "v${version}";
-    hash = "sha256-6+BQS9srj2VT2XcGe9g5Ios6g/vk3GcOXgCWEKq6YHI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wa3refEIYQIPmtl8NGtoyg2PTY3zQt6R4EgXUbcUgrk=";
   };
 
-  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+  env.SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   build-system = [ hatchling ];
 
   dependencies = [
     deprecated
     eval-type-backport
+    filetype
     griffe
     jinja2
     platformdirs
@@ -52,15 +54,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "banks" ];
 
   meta = {
     description = "Module that provides tools and functions to build prompts text and chat messages from generic blueprints";
     homepage = "https://github.com/masci/banks";
-    changelog = "https://github.com/masci/banks/releases/tag/${src.tag}";
+    changelog = "https://github.com/masci/banks/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

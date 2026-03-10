@@ -6,12 +6,12 @@
   ghostscript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flpsed";
   version = "0.7.3";
 
   src = fetchurl {
-    url = "http://www.flpsed.org/flpsed-${version}.tar.gz";
+    url = "http://www.flpsed.org/flpsed-${finalAttrs.version}.tar.gz";
     sha256 = "0vngqxanykicabhfdznisv82k5ypkxwg0s93ms9ribvhpm8vf2xp";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "flpsed";
   };
-}
+})

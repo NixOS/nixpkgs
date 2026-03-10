@@ -10,7 +10,7 @@
   libiconv,
   pcsclite,
   libassuan,
-  libXt,
+  libxt,
   docbook_xsl,
   libxslt,
   docbook_xml_dtd_412,
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     openssl
     libassuan
-    libXt
+    libxt
     libiconv
     docbook_xml_dtd_412
   ]
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     "completiondir=$(out)/etc"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\\.]+)$" ]; };
 
   meta = {
     description = "Set of libraries and utilities to access smart cards";

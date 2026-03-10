@@ -15,14 +15,14 @@
 let
   rocksdb = rocksdb_8_3;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "polkadot";
   version = "2509-1";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    rev = "polkadot-stable${version}";
+    rev = "polkadot-stable${finalAttrs.version}";
     hash = "sha256-XisQA5WNmFaFfY7T4EMcwlOD8FUfAjmLDV7NSWsh3vA=";
 
     # the build process of polkadot requires a .git folder in order to determine
@@ -89,4 +89,4 @@ rustPlatform.buildRustPackage rec {
       lib.platforms.aarch64 ++ lib.platforms.s390x ++ lib.platforms.riscv64 ++ lib.platforms.x86
     );
   };
-}
+})

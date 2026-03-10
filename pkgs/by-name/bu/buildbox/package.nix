@@ -18,17 +18,18 @@
   libuuid,
   tomlplusplus,
   fuse3,
+  curl,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "buildbox";
-  version = "1.3.21";
+  version = "1.3.54";
 
   src = fetchFromGitLab {
     owner = "BuildGrid";
     repo = "buildbox/buildbox";
     tag = finalAttrs.version;
-    hash = "sha256-gZ4PnaIiMPh18Yy2120yIEaQaFpzGNnWXzS7Uw+n/+k=";
+    hash = "sha256-5IJHXgDeedh0FMxupokB0BRo0ZrchEo/Lba6ifeeFBg=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bubblewrap
+    curl
     fuse3
     gbenchmark
     glog

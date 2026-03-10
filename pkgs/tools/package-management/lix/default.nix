@@ -25,6 +25,7 @@
   colmena,
   nix-update,
   nix-init,
+  nurl,
 
   storeDir ? "/nix/store",
   stateDir ? "/nix/var",
@@ -142,6 +143,11 @@ let
           };
 
           nix-init = nix-init.override {
+            nix = self.lix;
+            inherit (self) nurl;
+          };
+
+          nurl = nurl.override {
             nix = self.lix;
           };
         };

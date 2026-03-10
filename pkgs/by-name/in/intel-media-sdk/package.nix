@@ -8,9 +8,9 @@
   libdrm,
   libpciaccess,
   libva,
-  libX11,
-  libXau,
-  libXdmcp,
+  libx11,
+  libxau,
+  libxdmcp,
   libpthread-stubs,
   fetchpatch,
 }:
@@ -46,9 +46,9 @@ stdenv.mkDerivation rec {
     libdrm
     libva
     libpciaccess
-    libX11
-    libXau
-    libXdmcp
+    libx11
+    libxau
+    libxdmcp
     libpthread-stubs
   ];
   nativeCheckInputs = [ gtest ];

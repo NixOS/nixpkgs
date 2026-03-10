@@ -10,10 +10,10 @@
   pango,
   atk,
   gdk-pixbuf,
-  libXi,
+  libxi,
   xorgproto,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   gdb,
   gnumake,
   binutils,
@@ -43,6 +43,8 @@ let
     )
   );
 
+  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
+
   qtVersion = lib.versions.major qtbase.version;
 in
 stdenv.mkDerivation rec {
@@ -63,10 +65,10 @@ stdenv.mkDerivation rec {
     fpc
     gtk2
     glib
-    libXi
+    libxi
     xorgproto
-    libX11
-    libXext
+    libx11
+    libxext
     pango
     atk
     stdenv.cc
@@ -95,29 +97,30 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
-
-  NIX_LDFLAGS = lib.concatStringsSep " " (
-    [
-      "-L${lib.getLib stdenv.cc.cc}/lib"
-      "-lX11"
-      "-lXext"
-      "-lXi"
-      "-latk-1.0"
-      "-lc"
-      "-lcairo"
-      "-lgcc_s"
-      "-lgdk-x11-2.0"
-      "-lgdk_pixbuf-2.0"
-      "-lglib-2.0"
-      "-lgtk-x11-2.0"
-      "-lpango-1.0"
-    ]
-    ++ lib.optionals withQt [
-      "-L${lib.getLib libqtpas}/lib"
-      "-lQt${qtVersion}Pas"
-    ]
-  );
+  env = {
+    inherit LCL_PLATFORM;
+    NIX_LDFLAGS = toString (
+      [
+        "-L${lib.getLib stdenv.cc.cc}/lib"
+        "-lX11"
+        "-lXext"
+        "-lXi"
+        "-latk-1.0"
+        "-lc"
+        "-lcairo"
+        "-lgcc_s"
+        "-lgdk-x11-2.0"
+        "-lgdk_pixbuf-2.0"
+        "-lglib-2.0"
+        "-lgtk-x11-2.0"
+        "-lpango-1.0"
+      ]
+      ++ lib.optionals withQt [
+        "-L${lib.getLib libqtpas}/lib"
+        "-lQt${qtVersion}Pas"
+      ]
+    );
+  };
 
   preBuild = ''
     mkdir -p $out/share "$out/lazarus"

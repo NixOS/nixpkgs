@@ -6,25 +6,25 @@
   nix-update-script,
   pkg-config,
   libGL,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXinerama,
-  libXi,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxinerama,
+  libxi,
+  libxxf86vm,
   mupdf,
   fontconfig,
   freetype,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gcs";
   version = "5.42.0";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eCWMaO1iv917aHcdln2B10oCSbmzpXvQIF/luztHwRc=";
   };
 
@@ -42,12 +42,12 @@ buildGoModule rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
-    libX11
-    libXcursor
-    libXrandr
-    libXinerama
-    libXi
-    libXxf86vm
+    libx11
+    libxcursor
+    libxrandr
+    libxinerama
+    libxi
+    libxxf86vm
     fontconfig
     freetype
   ];
@@ -57,7 +57,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}"
+    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${finalAttrs.version}"
   ];
 
   installPhase = ''
@@ -69,7 +69,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";
+    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${finalAttrs.version}";
     description = "Stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
     homepage = "https://gurpscharactersheet.com/";
     license = lib.licenses.mpl20;
@@ -79,4 +79,4 @@ buildGoModule rec {
     # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
-}
+})

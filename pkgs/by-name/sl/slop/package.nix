@@ -8,9 +8,9 @@
   glm,
   libGLU,
   libGL,
-  libX11,
-  libXext,
-  libXrender,
+  libx11,
+  libxext,
+  libxrender,
   icu74,
   libsm,
 }:
@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
     glm
     libGLU
     libGL
-    libX11
-    libXext
-    libXrender
+    libx11
+    libxext
+    libxrender
     icu74
     libsm
   ];

@@ -11,7 +11,7 @@
   libjpeg,
   libpng,
   libpthread-stubs,
-  libX11,
+  libx11,
   glib,
 }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     openimageio
     libjpeg
     libpng
-    libX11
+    libx11
     libpthread-stubs
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
@@ -61,9 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "High performance ray tracing kernels from Intel";
     homepage = "https://embree.github.io/";
-    maintainers = with lib.maintainers; [
-      hodapp
-    ];
+    maintainers = [ ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
   };

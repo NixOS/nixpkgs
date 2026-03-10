@@ -18,12 +18,12 @@
 
 buildPythonPackage rec {
   pname = "cantools";
-  version = "41.0.2";
+  version = "41.1.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XJGmbl4DpKxXJ/ICB98dpWgXSKFUwryF71Mv754BCdE=";
+    hash = "sha256-cMZk7kpca7JqbC/o3GjKCYbJowQdRD1NZwL14vLeXeg=";
   };
 
   build-system = [

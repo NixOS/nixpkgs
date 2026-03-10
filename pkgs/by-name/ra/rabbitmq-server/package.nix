@@ -46,12 +46,12 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rabbitmq-server";
-  version = "4.2.3";
+  version = "4.2.4";
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
-    hash = "sha256-R1PtbkZs0aaJYUN8vZnJHG9Z+2SPOIRiaFOTz703LcA=";
+    hash = "sha256-XIBsD1xmRF4me4byAtiDqInmQ4y5dxKSezc2tZuapLU=";
   };
 
   nativeBuildInputs = [

@@ -9,12 +9,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "applgrid";
   version = "1.6.27";
 
   src = fetchurl {
-    url = "https://www.hepforge.org/archive/applgrid/applgrid-${version}.tgz";
+    url = "https://www.hepforge.org/archive/applgrid/applgrid-${finalAttrs.version}.tgz";
     hash = "sha256-h+ZNGj33FIwg4fOCyfGJrUKM2vDDQl76JcLhtboAOtc=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

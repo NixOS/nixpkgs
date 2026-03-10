@@ -1,8 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  unzip,
+  fetchzip,
   boost,
   curl,
   hwloc,
@@ -27,29 +26,39 @@ let
       x86_64-darwin = "makemac";
     }
     ."${stdenv.hostPlatform.system}" or throwSystem;
-in
 
-stdenv.mkDerivation rec {
+  docDir = "share/mprime/doc";
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "mprime";
-  version = "30.19b21";
-  src = fetchurl {
-    url = "https://download.mersenne.ca/gimps/v30/30.19/p95v${
-      lib.replaceStrings [ "." ] [ "" ] version
+  version = "31.04b02";
+
+  src = fetchzip {
+    url = "https://download.mersenne.ca/gimps/v31/31.04/p95v${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }.source.zip";
-    hash = "sha256-vchDpUem+R3GcASj77zZmFivfbB17Nd7cYiyPlrCzio=";
+    hash = "sha256-W8ic709bgm9KbVxe1fvIEC8J8LrwwMfAajX1bKhv6EM=";
+    stripRoot = false;
   };
 
   postPatch = ''
     sed -i ${srcDir}/makefile \
       -e 's/^LFLAGS =.*//'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace ${srcDir}/makefile \
-      --replace '-Wl,-Bstatic'  "" \
-      --replace '-Wl,-Bdynamic' ""
+      --replace-fail '-Wl,-Bstatic'  "" \
+      --replace-fail '-Wl,-Bdynamic' ""
+  ''
+  + ''
+    # The program refers the user to these files, make them easier to find and open
+    substituteInPlace ${srcDir}/menu.c \
+      --replace-fail "stress.txt" "$out/${docDir}/stress.txt" \
+      --replace-fail "readme.txt" "$out/${docDir}/readme.txt"
+    substituteInPlace commonb.c \
+      --replace-fail "stress.txt" "$out/${docDir}/stress.txt" \
+      --replace-fail "readme.txt" "$out/${docDir}/readme.txt"
   '';
-
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ unzip ];
 
   buildInputs = [
     boost
@@ -61,12 +70,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildPhase = ''
-    make -C gwnum -f ${gwnum}
-    make -C ${srcDir}
+    make -C gwnum -f ${gwnum} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
+    make -C ${srcDir} ''${enableParallelBuilding:+-j$NIX_BUILD_CORES}
   '';
 
   installPhase = ''
     install -Dm555 -t $out/bin ${srcDir}/mprime
+
+    install -Dm444 -t $out/${docDir} license.txt readme.txt stress.txt undoc.txt
   '';
 
   meta = {
@@ -90,4 +101,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dstremur ];
     mainProgram = "mprime";
   };
-}
+})

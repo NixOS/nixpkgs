@@ -8,16 +8,16 @@
   copyDesktopItems,
   nix-update-script,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pixelflasher";
-  version = "8.14.1.0";
+  version = "8.14.3.1";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "badabing2005";
     repo = "PixelFlasher";
-    tag = "v${version}";
-    hash = "sha256-AQf7y+SRxbd16TX+bObrRr8ked5vUKy8B/V5O2IsY7w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ey6wUl/9OaXxnQ17PvnhpBFB21++WbUsRhkGlrr7Yuk=";
   };
 
   desktopItems = [
@@ -91,10 +91,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Pixel™ phone flashing GUI utility with features";
     homepage = "https://github.com/badabing2005/PixelFlasher";
-    changelog = "https://github.com/badabing2005/PixelFlasher/releases/tag/v${version}";
+    changelog = "https://github.com/badabing2005/PixelFlasher/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ cything ];
     mainProgram = "pixelflasher";
     platforms = lib.platforms.linux;
   };
-}
+})

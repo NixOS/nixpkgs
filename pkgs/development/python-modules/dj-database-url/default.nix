@@ -3,22 +3,27 @@
   buildPythonPackage,
   fetchFromGitHub,
   django,
-  setuptools,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "3.0.1";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "dj-database-url";
     tag = "v${version}";
-    hash = "sha256-wiPTszgix4QjF82f5mmNvDKGspYl15jScK2TAsP5zP8=";
+    hash = "sha256-zQiyEtDTFZHwuEIfRZHdgszyfsRSayFqPv9MIS4Ip6s=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.17,<0.10.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ django ];
 

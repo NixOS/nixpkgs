@@ -8,12 +8,12 @@
   gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-icon-theme";
   version = "3.12.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-icon-theme/${lib.versions.majorMinor version}/gnome-icon-theme-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-icon-theme/${lib.versions.majorMinor finalAttrs.version}/gnome-icon-theme-${finalAttrs.version}.tar.xz";
     sha256 = "0fjh9qmmgj34zlgxb09231ld7khys562qxbpsjlaplq2j85p57im";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.romildo ];
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-icon-theme.x86_64-darwin
   };
-}
+})

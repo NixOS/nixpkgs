@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "csv2odf";
   version = "2.09";
   pyproject = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/csv2odf/csv2odf-${version}/csv2odf-${version}.tar.gz";
+    url = "mirror://sourceforge/project/csv2odf/csv2odf-${finalAttrs.version}/csv2odf-${finalAttrs.version}.tar.gz";
     sha256 = "09l0yfay89grjdzap2h11f0hcyn49np5zizg2yyp2aqgjs8ki57p";
   };
 
@@ -35,4 +35,4 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = lib.licenses.gpl3;
   };
-}
+})

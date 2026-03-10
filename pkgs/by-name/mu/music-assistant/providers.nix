@@ -1,7 +1,7 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.7.6";
+  version = "2.7.9";
   providers = {
     airplay =
       ps: with ps; [
@@ -155,8 +155,10 @@
         defusedxml
         soco
       ];
-    soundcloud = ps: [
-    ]; # missing soundcloudpy
+    soundcloud =
+      ps: with ps; [
+        soundcloudpy
+      ];
     spotify =
       ps: with ps; [
         pkce

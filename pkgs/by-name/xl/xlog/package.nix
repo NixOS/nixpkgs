@@ -7,12 +7,12 @@
   pkg-config,
   hamlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xlog";
   version = "2.0.25";
 
   src = fetchurl {
-    url = "mirror://savannah/xlog/xlog-${version}.tar.gz";
+    url = "mirror://savannah/xlog/xlog-${finalAttrs.version}.tar.gz";
     hash = "sha256-NYC3LgoLXnJQURcZTc2xHOzOleotrWtOETMBgadf2qU=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xlog";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

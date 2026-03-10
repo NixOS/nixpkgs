@@ -12,12 +12,12 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oddjob";
   version = "0.34.7";
 
   src = fetchurl {
-    url = "https://pagure.io/oddjob/archive/oddjob-${version}/oddjob-oddjob-${version}.tar.gz";
+    url = "https://pagure.io/oddjob/archive/oddjob-${finalAttrs.version}/oddjob-oddjob-${finalAttrs.version}.tar.gz";
     hash = "sha256-SUOsMH55HtEsk5rX0CXK0apDObTj738FGOaL5xZRnIM=";
   };
 
@@ -62,11 +62,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    changelog = "https://pagure.io/oddjob/blob/oddjob-${version}/f/ChangeLog";
+    changelog = "https://pagure.io/oddjob/blob/oddjob-${finalAttrs.version}/f/ChangeLog";
     description = "Odd Job Daemon";
     homepage = "https://pagure.io/oddjob";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ SohamG ];
     platforms = lib.platforms.linux;
   };
-}
+})

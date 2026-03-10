@@ -4,11 +4,11 @@
   fetchurl,
   libusb-compat-0_1,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "garmintools";
   version = "0.10";
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/garmintools/garmintools-${version}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/garmintools/garmintools-${finalAttrs.version}.tar.gz";
     sha256 = "1vjc8h0z4kx2h52yc3chxn3wh1krn234fg12sggbia9zjrzhpmgz";
   };
   buildInputs = [ libusb-compat-0_1 ];
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

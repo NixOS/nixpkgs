@@ -7,12 +7,12 @@
   gtkmm2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nitrogen";
   version = "1.6.1";
 
   src = fetchurl {
-    url = "http://projects.l3ib.org/nitrogen/files/nitrogen-${version}.tar.gz";
+    url = "http://projects.l3ib.org/nitrogen/files/nitrogen-${finalAttrs.version}.tar.gz";
     sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.auntie ];
     mainProgram = "nitrogen";
   };
-}
+})

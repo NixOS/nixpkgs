@@ -21,11 +21,11 @@ let
     else
       throw "unsupported platform";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sagittarius-scheme";
   version = "0.9.12";
   src = fetchurl {
-    url = "https://bitbucket.org/ktakashi/sagittarius-scheme/downloads/sagittarius-${version}.tar.gz";
+    url = "https://bitbucket.org/ktakashi/sagittarius-scheme/downloads/sagittarius-${finalAttrs.version}.tar.gz";
     hash = "sha256-w6aQkC7/vKO8exvDpsSsLyLXrm4FSKh8XYGJgseEII0=";
   };
   preBuild = ''
@@ -81,4 +81,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ abbe ];
   };
-}
+})

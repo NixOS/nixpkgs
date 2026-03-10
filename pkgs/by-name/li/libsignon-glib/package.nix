@@ -17,7 +17,7 @@
   gobject-introspection,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsignon-glib";
   version = "2.1";
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://gitlab.com/accounts-sso/libsignon-glib";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "0gnx9gqsh0hcfm1lk7w60g64mkn1iicga5f5xcy1j9a9byacsfd0";
     fetchSubmodules = true;
   };
@@ -75,4 +75,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

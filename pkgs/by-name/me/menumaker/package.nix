@@ -4,12 +4,12 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "menumaker";
   version = "0.99.13";
 
   src = fetchurl {
-    url = "mirror://sourceforge/menumaker/menumaker-${version}.tar.gz";
+    url = "mirror://sourceforge/menumaker/menumaker-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-JBXs5hnt1snbnB1hi7q7HBI7rNp0OoalLeIM0uJCdkE=";
   };
 
@@ -23,4 +23,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

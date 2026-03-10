@@ -65,23 +65,27 @@ stdenv.mkDerivation (finalAttrs: {
     tkinter
   ]);
 
-  RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (
-    [
-      ffmpeg.lib
-      freetype
-      fribidi
-      glew.dev
-      harfbuzz.dev
-      libpng
-      SDL2
-      (lib.getDev SDL2)
-      zlib
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-    ]
-  );
+  env = {
+    NIX_CFLAGS_COMPILE = "-I${python.pkgs.pygame-sdl2}/include";
+
+    RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (
+      [
+        ffmpeg.lib
+        freetype
+        fribidi
+        glew.dev
+        harfbuzz.dev
+        libpng
+        SDL2
+        (lib.getDev SDL2)
+        zlib
+      ]
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+        libGL
+        libGLU
+      ]
+    );
+  };
 
   enableParallelBuilding = true;
 
@@ -121,10 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
-
-  env = {
-    NIX_CFLAGS_COMPILE = "-I${python.pkgs.pygame-sdl2}/include";
-  };
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -4,13 +4,13 @@
   writeScript,
   fetchFromGitHub,
   libGL,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   python3,
-  libXrandr,
-  libXrender,
+  libxrandr,
+  libxrender,
   libpulseaudio,
-  libXcomposite,
+  libxcomposite,
   enableGlfw ? false,
   glfw,
   runtimeShell,
@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
-    libXext
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxrandr
+    libxrender
     libpulseaudio
-    libXcomposite
+    libxcomposite
   ]
   ++ optional enableGlfw glfw;
 

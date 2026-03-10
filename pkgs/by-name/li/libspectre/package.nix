@@ -7,12 +7,12 @@
   cairo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libspectre";
   version = "0.2.12";
 
   src = fetchurl {
-    url = "https://libspectre.freedesktop.org/releases/libspectre-${version}.tar.gz";
+    url = "https://libspectre.freedesktop.org/releases/libspectre-${finalAttrs.version}.tar.gz";
     hash = "sha256-VadRfNNXK9JWXfDPRQlEoE1Sc7J567NpqJU5GVfw+WA=";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

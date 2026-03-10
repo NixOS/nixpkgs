@@ -9,14 +9,14 @@
   pandoc,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dogedns";
   version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "Dj-Codeman";
     repo = "doge";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-SeC/GZ1AeEqRzxWc4oJ6JOvXfn3/LRcQz9uWXXqdTqU=";
   };
 
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "doge";
     maintainers = with lib.maintainers; [ aktaboot ];
   };
-}
+})

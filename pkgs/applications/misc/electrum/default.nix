@@ -23,12 +23,12 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.6.2";
+  version = "4.7.1";
   pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-ZrwzAeeMNrs6KzLGDg5oBF7E+GGLYCVczO6R18TKRuE=";
+    hash = "sha256-kKxjMhfjF1wVYDiEZ6t9PgAyFQLuUeS+2lZulEv2BR8=";
   };
 
   build-system = with python3.pkgs; [
@@ -169,9 +169,9 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      joachifm
       np
       prusnak
+      ryand56
     ];
     mainProgram = "electrum";
   };

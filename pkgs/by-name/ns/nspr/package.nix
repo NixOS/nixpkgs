@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.in --replace '@executable_path/' "$out/lib/"
   '';
 
-  HOST_CC = "cc";
+  env.HOST_CC = "cc";
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   configureFlags = [
     "--enable-optimize"

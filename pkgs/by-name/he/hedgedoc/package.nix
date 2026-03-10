@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hedgedoc";
-  version = "1.10.6";
+  version = "1.10.7";
 
   src = fetchFromGitHub {
     owner = "hedgedoc";
     repo = "hedgedoc";
     tag = finalAttrs.version;
-    hash = "sha256-Utun/xGSYV20HJNwvV8q4iekRNE+oBx1kSo3rx5IZTQ=";
+    hash = "sha256-9HbvnnvC1eWoOxPE6yW2GcULgIrXDZ4B+mt7ZYz4j/Q=";
   };
 
   # Generate this file with:

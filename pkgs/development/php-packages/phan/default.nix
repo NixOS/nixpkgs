@@ -8,16 +8,16 @@
 (php.withExtensions ({ enabled, all }: enabled ++ (with all; [ ast ]))).buildComposerProject2
   (finalAttrs: {
     pname = "phan";
-    version = "6.0.0";
+    version = "6.0.2";
 
     src = fetchFromGitHub {
       owner = "phan";
       repo = "phan";
       tag = finalAttrs.version;
-      hash = "sha256-1qRGNDptiAdcGc1x+iLrxe9TjLGaL8EM8xuTOUNB+Ww=";
+      hash = "sha256-GwiCyek+XuiXMd8LcKy79u19wySee6aRpG0e6dP44LU=";
     };
 
-    vendorHash = "sha256-Ro5/lA72xVIkZyuRNix77Cpeyyj1GbW5J4DzjQMq0Rc=";
+    vendorHash = "sha256-+7U2PfjagpIOaeG+8pYAgEyqh6sZT5c+knoKX/S6L0M=";
 
     composerStrictValidation = false;
     doInstallCheck = true;

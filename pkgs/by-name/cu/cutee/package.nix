@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cutee";
   version = "0.4.2";
 
   src = fetchurl {
-    url = "http://www.codesink.org/download/cutee-${version}.tar.gz";
+    url = "http://www.codesink.org/download/cutee-${finalAttrs.version}.tar.gz";
     sha256 = "18bzvhzx8k24mpcim5669n3wg9hd0sfsxj8zjpbr24hywrlppgc2";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

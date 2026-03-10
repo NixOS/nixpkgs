@@ -30,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     texinfo
   ];
 
-  NIX_LDFLAGS = "-lre2 -lpthread";
+  env.NIX_LDFLAGS = toString [
+    "-lre2"
+    "-lpthread"
+  ];
 
   configureFlags = [
     "--enable-maintainer-mode"

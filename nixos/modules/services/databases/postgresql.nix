@@ -570,7 +570,7 @@ in
         description = ''
           PostgreSQL configuration. Refer to
           <https://www.postgresql.org/docs/current/config-setting.html#CONFIG-SETTING-CONFIGURATION-FILE>
-          for an overview of `postgresql.conf`.
+          for an overview of {file}`postgresql.conf`.
 
           ::: {.note}
           String values will automatically be enclosed in single quotes. Single quotes will be

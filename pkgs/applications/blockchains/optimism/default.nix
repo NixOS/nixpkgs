@@ -5,14 +5,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "optimism";
   version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "ethereum-optimism";
     repo = "optimism";
-    rev = "op-node/v${version}";
+    rev = "op-node/v${finalAttrs.version}";
     hash = "sha256-pAmstWA6up0CvHEQW5RnDYumdwKP0i6fpz59EYTBsmU=";
     fetchSubmodules = true;
   };
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "cmd";
   };
-}
+})

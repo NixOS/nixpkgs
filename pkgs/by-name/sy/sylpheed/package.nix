@@ -14,12 +14,12 @@
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sylpheed";
   version = "3.7.0";
 
   src = fetchurl {
-    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/sylpheed-${version}.tar.xz";
+    url = "https://sylpheed.sraoss.jp/sylpheed/v3.7/sylpheed-${finalAttrs.version}.tar.xz";
     sha256 = "0j9y5vdzch251s264diw9clrn88dn20bqqkwfmis9l7m8vmwasqd";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl2;
   };
-}
+})

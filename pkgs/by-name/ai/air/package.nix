@@ -4,15 +4,15 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "air";
-  version = "1.64.4";
+  version = "1.64.5";
 
   src = fetchFromGitHub {
     owner = "air-verse";
     repo = "air";
-    tag = "v${version}";
-    hash = "sha256-m2NIRf/dZQKB3IeEChEBfJ7GJkxiyuWSRvMoHfbsLeI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vaNXG+bS+RB0Qi0kI9lBGyr8FcUxm5igG982+cOZwqw=";
   };
 
   vendorHash = "sha256-03xZ3P/7xjznYdM9rv+8ZYftQlnjJ6ZTq0HdSvGpaWw=";
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=main.airVersion=${version}"
+    "-X=main.airVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Gonzih ];
   };
-}
+})

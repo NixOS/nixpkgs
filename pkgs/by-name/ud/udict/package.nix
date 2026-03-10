@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "udict";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "lsmb";
     repo = "udict";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vcyzMw2tWil4MULEkf25S6kXzqMG6JXIx6GibxxspkY=";
   };
 
@@ -38,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "udict";
   };
-}
+})

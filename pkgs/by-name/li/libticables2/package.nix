@@ -9,11 +9,11 @@
   libusb1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libticables2";
   version = "1.3.5";
   src = fetchurl {
-    url = "mirror://sourceforge/tilp/libticables2-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilp/libticables2-${finalAttrs.version}.tar.bz2";
     sha256 = "08j5di0cgix9vcpdv7b8xhxdjkk9zz7fqfnv3l4apk3jdr8vcvqc";
   };
 
@@ -74,4 +74,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

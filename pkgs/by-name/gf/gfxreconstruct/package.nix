@@ -7,7 +7,7 @@
   pkg-config,
   python3,
   wayland,
-  libX11,
+  libx11,
   libxcb,
   lz4,
   vulkan-loader,
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libX11
+    libx11
     libxcb
     lz4
     python3

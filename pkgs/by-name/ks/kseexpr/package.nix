@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://invent.kde.org/graphics/kseexpr";
     description = "Embeddable expression evaluation engine";
-    maintainers = with lib.maintainers; [ nek0 ];
+    maintainers = [ ];
     license = lib.licenses.lgpl3Plus;
   };
 })

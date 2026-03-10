@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   autoreconfHook,
   libtool,
   openssl,
@@ -24,8 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Newer GCC rejects implicitly weak-typed pointer casting.
-    # Upstream PR: https://github.com/strophe/libstrophe/pull/267
-    ./pointer-cast.patch
+    (fetchpatch2 {
+      name = "pointer-cast.patch";
+      url = "https://github.com/strophe/libstrophe/commit/dfb3e868248d86fc0f5553dffbb6f7c367c3c383.patch?full_index=1";
+      hash = "sha256-ALr2I53hGHW3OycKDdoXkNgANSYw1kUSYGqmAHkMq5E=";
+    })
   ];
 
   nativeBuildInputs = [

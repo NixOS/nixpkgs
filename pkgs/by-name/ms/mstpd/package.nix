@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mstpd";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "mstpd";
     repo = "mstpd";
     rev = finalAttrs.version;
-    hash = "sha256-m4gbVXAPIYGQvTFaSziFuOO6say5kgUsk7NSdqXgKmA=";
+    hash = "sha256-6Pc7/JnZ04vcLI30/5LBmN+hBmjD2k9kcE8g6127x0M=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

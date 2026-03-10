@@ -8,12 +8,12 @@
   cairo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtkdatabox";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkdatabox/gtkdatabox-${version}.tar.gz";
+    url = "mirror://sourceforge/gtkdatabox/gtkdatabox-${finalAttrs.version}.tar.gz";
     sha256 = "1qykm551bx8j8pfgxs60l2vhpi8lv4r8va69zvn2594lchh71vlb";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ yl3dy ];
   };
-}
+})

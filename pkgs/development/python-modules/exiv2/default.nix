@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Low level Python interface to the Exiv2 C++ library";
     homepage = "https://github.com/jim-easterbrook/python-exiv2";
-    changelog = "https://python-exiv2.readthedocs.io/en/release-${version}/misc/changelog.html";
+    changelog = "https://python-exiv2.readthedocs.io/en/release-${src.tag}/misc/changelog.html";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ zebreus ];
   };

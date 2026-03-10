@@ -15,6 +15,7 @@
   qtlocation,
   qtpositioning,
   qtsvg,
+  qtvirtualkeyboard,
   qtwayland,
   libcanberra,
   libqalculate,
@@ -43,6 +44,11 @@ mkKdeDerivation {
     chmod -x $out/libexec/plasma-sourceenv.sh
   '';
 
+  extraCmakeFlags = [
+    "-DGLIBC_LOCALE_GEN=OFF"
+    "-DGLIBC_LOCALE_PREGENERATED=ON"
+  ];
+
   extraNativeBuildInputs = [
     pkg-config
     spirv-tools
@@ -65,6 +71,10 @@ mkKdeDerivation {
     libxft
 
     gpsd
+  ];
+
+  extraPropagatedBuildInputs = [
+    qtvirtualkeyboard
   ];
 
   qtWrapperArgs = [ "--inherit-argv0" ];

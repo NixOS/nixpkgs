@@ -22,9 +22,9 @@
   kiconthemes,
   libpthread-stubs,
   pcre,
-  libXdmcp,
-  libX11,
-  libXau, # X11 dependencies
+  libxdmcp,
+  libx11,
+  libxau, # X11 dependencies
   fetchpatch,
 }:
 
@@ -78,9 +78,9 @@ mkDerivation rec {
     frameworkintegration
     libpthread-stubs
     pcre
-    libXdmcp
-    libX11
-    libXau
+    libxdmcp
+    libx11
+    libxau
   ]
   ++ lib.optional gtk2Support gtk2;
 

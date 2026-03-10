@@ -8,6 +8,7 @@
   makeDesktopItem,
   copyDesktopItems,
   autoPatchelfHook,
+  imagemagick,
 }:
 
 let
@@ -64,6 +65,7 @@ flutter335.buildFlutterApplication {
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
+    imagemagick
   ];
 
   buildInputs = [
@@ -96,7 +98,8 @@ flutter335.buildFlutterApplication {
   '';
 
   postInstall = ''
-    install -D --mode=0644 assets/images/icon.png $out/share/pixmaps/flclash.png
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    magick assets/images/icon.png -resize 512x512 $out/share/icons/hicolor/512x512/apps/flclash.png
   '';
 
   passthru = {

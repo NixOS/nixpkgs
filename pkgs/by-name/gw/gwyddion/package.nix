@@ -15,7 +15,7 @@
   libxml2,
   libwebpSupport ? true,
   libwebp,
-  # libXmu is not used if libunique is.
+  # libxmu is not used if libunique is.
   libXmuSupport ? false,
   libxmu,
   libxsltSupport ? true,

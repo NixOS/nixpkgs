@@ -11,30 +11,33 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.6.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ch00k";
     repo = "ffmpy";
     tag = version;
-    hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
+    hash = "sha256-TDE/r6qoWpkIU47+FPLqWgZAJd9FxSbZthhLh9g4evo=";
   };
 
-  postPatch =
-    # Default to store ffmpeg.
-    ''
-      substituteInPlace ffmpy/ffmpy.py \
-        --replace-fail \
-          'executable: str = "ffmpeg",' \
-          'executable: str = "${lib.getExe ffmpeg-headless}",'
-    ''
-    # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
-    + ''
-      for fname in tests/*.py; do
-        echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
-      done
-    '';
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.7.9,<0.10.0" uv_build
+  ''
+  # Default to store ffmpeg.
+  + ''
+    substituteInPlace ffmpy/ffmpy.py \
+      --replace-fail \
+        'executable: str = "ffmpeg",' \
+        'executable: str = "${lib.getExe ffmpeg-headless}",'
+  ''
+  # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+  + ''
+    for fname in tests/*.py; do
+      echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
+    done
+  '';
 
   pythonImportsCheck = [ "ffmpy" ];
 

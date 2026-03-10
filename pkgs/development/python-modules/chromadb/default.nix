@@ -68,22 +68,23 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.4.1";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = finalAttrs.version;
-    hash = "sha256-mtUxyuLiwA4l9u+pTPVIsYcvsLPPCI6c8iWK6Lgbwjc=";
+    hash = "sha256-fIlev0B1PapZAO9PgrFIfIh429lcmh/dQ9aGHSNJSLw=";
   };
 
   # https://github.com/chroma-core/chroma/issues/5996
+  # https://github.com/chroma-core/chroma/issues/6546
   disabled = pythonAtLeast "3.14";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-WdWc/8vNzcEtdxmAAbBDWxhMamxSnK2YaZPWwQ2zzU4=";
+    hash = "sha256-zoyn2IBeM5FlDpA0blYU5tpu8KFXHLG/KzvQN6Hsf2I=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -221,6 +222,13 @@ buildPythonPackage (finalAttrs: {
 
     # https://github.com/chroma-core/chroma/issues/6029
     "test_embedding_function_config_roundtrip"
+
+    # Requires network access
+    "test_persistent_client_close"
+    "test_persistent_client_context_manager"
+    "test_ephemeral_client_close"
+    "test_ephemeral_client_context_manager"
+    "test_client_close_idempotent"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.

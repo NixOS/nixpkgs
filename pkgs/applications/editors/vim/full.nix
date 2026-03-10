@@ -16,14 +16,14 @@
   perl,
   tcl,
   ruby,
-  libX11,
-  libXext,
+  libx11,
+  libxext,
   libsm,
-  libXpm,
-  libXt,
-  libXaw,
-  libXau,
-  libXmu,
+  libxpm,
+  libxt,
+  libxaw,
+  libxau,
+  libxmu,
   libsodium,
   libice,
   wayland-scanner,
@@ -179,13 +179,13 @@ stdenv.mkDerivation {
   ++ lib.optionals (guiSupport == "gtk2" || guiSupport == "gtk3") [
     libsm
     libice
-    libX11
-    libXext
-    libXpm
-    libXt
-    libXaw
-    libXau
-    libXmu
+    libx11
+    libxext
+    libxpm
+    libxt
+    libxaw
+    libxau
+    libxmu
   ]
   ++ lib.optional (guiSupport == "gtk2") gtk2-x11
   ++ lib.optional (guiSupport == "gtk3") gtk3-x11

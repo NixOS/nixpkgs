@@ -14,13 +14,13 @@
   pcsclite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfido2";
   version = "1.16.0";
 
   # releases on https://developers.yubico.com/libfido2/Releases/ are signed
   src = fetchurl {
-    url = "https://developers.yubico.com/libfido2/Releases/libfido2-${version}.tar.gz";
+    url = "https://developers.yubico.com/libfido2/Releases/libfido2-${finalAttrs.version}.tar.gz";
     hash = "sha256-jCtvsnm1tC6aySrecYMuSFhSZHtTYHxDuqr7vOzqBOQ=";
   };
 
@@ -80,4 +80,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ prusnak ];
     platforms = lib.platforms.unix;
   };
-}
+})

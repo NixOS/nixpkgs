@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
   httpx,
-  typing-extensions,
 }:
 buildPythonPackage rec {
   pname = "gotenberg-client";
@@ -24,7 +22,6 @@ buildPythonPackage rec {
   dependencies = [
     httpx
   ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ]
   ++ httpx.optional-dependencies.http2;
 
   # requires running gotenberg service

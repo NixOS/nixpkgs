@@ -6,14 +6,14 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "platform-folders";
   version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "sago007";
     repo = "PlatformFolders";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-8dKW9nmxiqt47Z9RBNuHjFRyOhwmi+9mR7prUOxXIRE=";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
-}
+})

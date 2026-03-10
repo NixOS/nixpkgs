@@ -17,7 +17,7 @@ let
   };
   python3Packages = python.pkgs;
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "octodns";
   version = "1.15.0";
   pyproject = true;
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wVUMj47Ex2GrCytV0JhmXUKuIwAw59X7+ce/0LhwmkE=";
   };
 
@@ -70,8 +70,8 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Tools for managing DNS across multiple providers";
     homepage = "https://github.com/octodns/octodns";
-    changelog = "https://github.com/octodns/octodns/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/octodns/octodns/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = [ lib.teams.octodns ];
   };
-}
+})

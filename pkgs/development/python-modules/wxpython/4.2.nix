@@ -26,9 +26,9 @@
   libGL,
   libGLU,
   libsm,
-  libXinerama,
-  libXtst,
-  libXxf86vm,
+  libxinerama,
+  libxtst,
+  libxxf86vm,
   libglvnd,
   libgbm,
   pango,
@@ -103,9 +103,9 @@ buildPythonPackage rec {
     libGL
     libGLU
     libsm
-    libXinerama
-    libXtst
-    libXxf86vm
+    libxinerama
+    libxtst
+    libxxf86vm
     libglvnd
     libgbm
     webkitgtk_4_1

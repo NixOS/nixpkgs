@@ -5,15 +5,15 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "templ";
-  version = "0.3.977";
+  version = "0.3.1001";
 
   src = fetchFromGitHub {
     owner = "a-h";
     repo = "templ";
-    rev = "v${version}";
-    hash = "sha256-KABEveISMy31B4kXoYY5IwFouoI4L9Jco5qMcnpeL2s=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-146QxN+osvlzp8NTGm5TN2yvbu3cOodXfIVeIKsS+7I=";
   };
 
   vendorHash = "sha256-pVZjZCXT/xhBCMyZdR7kEmB9jqhTwRISFp63bQf6w5A=";
@@ -37,4 +37,4 @@ buildGoModule rec {
     mainProgram = "templ";
     maintainers = with lib.maintainers; [ luleyleo ];
   };
-}
+})

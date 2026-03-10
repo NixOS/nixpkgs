@@ -9,10 +9,8 @@
   pyproject-hooks,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
-  tomli,
   tomli-w,
   wheel,
 }:
@@ -42,8 +40,7 @@ buildPythonPackage rec {
     pyproject-hooks
     setuptools
     wheel
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   __darwinAllowLocalNetworking = true;
 

@@ -12,7 +12,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxrandr";
-  version = "1.5.4";
+  version = "1.5.5";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://xorg/individual/lib/libXrandr-${finalAttrs.version}.tar.xz";
-    hash = "sha256-GtWwZTdfSoWRWqYGEcxkB8BgSSohTX+dryFL51LDtNM=";
+    hash = "sha256-crkiwudlQ06enwlgFIBwvUUEsogmPihopMzOG3zydno=";
   };
 
   strictDeps = true;

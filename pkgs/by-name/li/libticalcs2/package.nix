@@ -13,11 +13,11 @@
   acl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libticalcs2";
   version = "1.1.9";
   src = fetchurl {
-    url = "mirror://sourceforge/tilp/libticalcs2-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilp/libticalcs2-${finalAttrs.version}.tar.bz2";
     sha256 = "08c9wgrdnyqcs45mx1bjb8riqq81bzfkhgaijxzn96rhpj40fy3n";
   };
 
@@ -46,4 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ siraben ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

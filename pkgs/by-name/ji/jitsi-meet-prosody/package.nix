@@ -6,11 +6,11 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jitsi-meet-prosody";
   version = "1.0.8737";
   src = fetchurl {
-    url = "https://download.jitsi.org/stable/jitsi-meet-prosody_${version}-1_all.deb";
+    url = "https://download.jitsi.org/stable/jitsi-meet-prosody_${finalAttrs.version}-1_all.deb";
     sha256 = "fZs1ng1mtxwXgJAQqxAlrNrqUQJc9fGlxJKwuTJLENc=";
   };
 
@@ -41,4 +41,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.jitsi ];
     platforms = lib.platforms.linux;
   };
-}
+})

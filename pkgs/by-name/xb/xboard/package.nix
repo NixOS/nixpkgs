@@ -3,17 +3,17 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  libX11,
+  libx11,
   xorgproto,
-  libXt,
-  libXaw,
+  libxt,
+  libxaw,
   libsm,
   libice,
-  libXmu,
-  libXext,
+  libxmu,
+  libxext,
   gnuchess,
   texinfo,
-  libXpm,
+  libxpm,
   pkg-config,
   librsvg,
   cairo,
@@ -42,17 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
+    libx11
     xorgproto
-    libXt
-    libXaw
+    libxt
+    libxaw
     libsm
     libice
-    libXmu
-    libXext
+    libxmu
+    libxext
     gnuchess
     texinfo
-    libXpm
+    libxpm
     librsvg
     cairo
     pango

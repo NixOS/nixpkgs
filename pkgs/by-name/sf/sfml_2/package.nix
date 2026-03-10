@@ -14,10 +14,10 @@
   libvorbis,
   openal,
   udev,
-  libX11,
-  libXcursor,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxrandr,
+  libxrender,
   libxcb-image,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -42,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux udev
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    libX11
-    libXcursor
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxrandr
+    libxrender
     libxcb-image
   ];
 

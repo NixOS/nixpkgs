@@ -8,14 +8,14 @@
   gitsign,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gitsign";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "gitsign";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-jqWMZATeimmgyb0yD5dzp9h31c9RaClpH2cA+bvhxpg=";
   };
   vendorHash = "sha256-NZvJGexfCjxCQI8R/thv0Z2PaMNSkkGmyPUFJyYxdgM=";
@@ -31,7 +31,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${version}"
+    "-X github.com/sigstore/gitsign/pkg/version.gitVersion=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -49,7 +49,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/sigstore/gitsign";
-    changelog = "https://github.com/sigstore/gitsign/releases/tag/v${version}";
+    changelog = "https://github.com/sigstore/gitsign/releases/tag/v${finalAttrs.version}";
     description = "Keyless Git signing using Sigstore";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
@@ -58,4 +58,4 @@ buildGoModule rec {
     ];
     mainProgram = "gitsign";
   };
-}
+})

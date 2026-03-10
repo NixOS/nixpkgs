@@ -6,12 +6,12 @@
   libcxx,
   stdenv,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "edgetpu-compiler";
   version = "15.0";
 
   src = fetchurl rec {
-    url = "https://packages.cloud.google.com/apt/pool/edgetpu-compiler_${version}_amd64_${sha256}.deb";
+    url = "https://packages.cloud.google.com/apt/pool/edgetpu-compiler_${finalAttrs.version}_amd64_${sha256}.deb";
     sha256 = "ce03822053c2bddbb8640eaa988396ae66f9bc6b9d6d671914acd1727c2b445a";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ cpcloud ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

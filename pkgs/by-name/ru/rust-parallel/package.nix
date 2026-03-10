@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rust-parallel";
   version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "aaronriekenberg";
     repo = "rust-parallel";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-86CUFtq6XpTYL7zpDBBfbSXlPYhWofwMjJSK698lclI=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rust-parallel";
     maintainers = with lib.maintainers; [ sedlund ];
   };
-}
+})

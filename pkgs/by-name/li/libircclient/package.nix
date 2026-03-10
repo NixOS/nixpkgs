@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.10";
   pname = "libircclient";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libircclient/libircclient/${version}/libircclient-${version}.tar.gz";
+    url = "mirror://sourceforge/libircclient/libircclient/${finalAttrs.version}/libircclient-${finalAttrs.version}.tar.gz";
     sha256 = "0b9wa0h3xc31wpqlvgxgnvqp5wgx3kwsf5s9432m5cj8ycx6zcmv";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ obadz ];
     platforms = lib.platforms.linux;
   };
-}
+})

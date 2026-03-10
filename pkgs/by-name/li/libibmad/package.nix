@@ -5,12 +5,12 @@
   libibumad,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libibmad";
   version = "1.3.13";
 
   src = fetchurl {
-    url = "https://www.openfabrics.org/downloads/management/libibmad-${version}.tar.gz";
+    url = "https://www.openfabrics.org/downloads/management/libibmad-${finalAttrs.version}.tar.gz";
     sha256 = "02sj8k2jpcbiq8s0l2lqk4vwji2dbb2lc730cv1yzv0zr0hxgk8p";
   };
 
@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})

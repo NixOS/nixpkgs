@@ -91,6 +91,15 @@
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
+  "sec-wireless-declarative": [
+    "index.html#sec-wireless-declarative"
+  ],
+  "sec-wireless-enterprise": [
+    "index.html#sec-wireless-enterprise"
+  ],
+  "sec-wireless-imperative": [
+    "index.html#sec-wireless-imperative"
+  ],
   "test-opt-rawTestDerivationArg": [
     "index.html#test-opt-rawTestDerivationArg"
   ],

@@ -187,6 +187,11 @@ in
 
   texlive = recurseIntoAttrs (callPackage ./texlive { });
 
+  # TODO: Temporarily disabled recursion so we can see the performance comparison in the PR,
+  # which only runs if there's exactly the same packages before and after, and this would add packages
+  #problems = recurseIntoAttrs (callPackage ./problems { });
+  problems = callPackage ./problems { };
+
   cuda = callPackage ./cuda { };
 
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix { };
@@ -226,6 +231,8 @@ in
   pkgs-lib = recurseIntoAttrs (callPackage ../pkgs-lib/tests { });
 
   buildFHSEnv = recurseIntoAttrs (callPackages ./buildFHSEnv { });
+
+  auto-patchelf-structured-log = callPackage ./auto-patchelf-structured-log { };
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 

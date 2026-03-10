@@ -2,48 +2,51 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   docutils,
   sphinx,
-  readthedocs-sphinx-ext,
   sphinxcontrib-jquery,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-rtd-theme";
-  version = "3.0.2";
-  format = "setuptools";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_rtd_theme";
     inherit version;
-    hash = "sha256-t0V7wl3acjsgsIamcLmVPIWeq2CioD7o6yuyPhduX4U=";
+    hash = "sha256-tEJ28sJ26Qkjmk9slVqmZ6qv63hZeSOxxgurx223jkw=";
   };
+
+  build-system = [ setuptools ];
 
   preBuild = ''
     # Don't use NPM to fetch assets. Assets are included in sdist.
     export CI=1
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     docutils
     sphinx
     sphinxcontrib-jquery
   ];
 
+  pythonRelaxDeps = [
+    "docutils"
+    "sphinxcontrib-jquery"
+    # https://github.com/readthedocs/sphinx_rtd_theme/pull/1666
+    "sphinx"
+  ];
+
   nativeCheckInputs = [
     pytestCheckHook
-    readthedocs-sphinx-ext
   ];
 
   disabledTests = [
     # docutils 0.21 compat
     "test_basic"
-  ];
-
-  pythonRelaxDeps = [
-    "docutils"
-    "sphinxcontrib-jquery"
   ];
 
   pythonImportsCheck = [ "sphinx_rtd_theme" ];

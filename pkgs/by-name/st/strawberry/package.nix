@@ -10,7 +10,7 @@
   gst_all_1,
   kdsingleapplication,
   lib,
-  libXdmcp,
+  libxdmcp,
   libcdio,
   libebur128,
   libidn2,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     fftw
     gnutls
     kdsingleapplication
-    libXdmcp
+    libxdmcp
     libcdio
     libebur128
     libidn2

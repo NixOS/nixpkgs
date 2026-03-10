@@ -6,14 +6,14 @@
   jid,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "jid";
   version = "0.7.6";
 
   src = fetchFromGitHub {
     owner = "simeji";
     repo = "jid";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fZzEbVNGsDNQ/FhII+meQvKeyrgxn3wtFW8VfNmJz5U=";
   };
 
@@ -31,7 +31,7 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = jid;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -41,4 +41,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

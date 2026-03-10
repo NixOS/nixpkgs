@@ -9,12 +9,12 @@
   sqlite ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hostapd";
   version = "2.11";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/hostapd-${version}.tar.gz";
+    url = "https://w1.fi/releases/hostapd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Kz+stjL9T2XjL0v4Kna0tyxQH5laT2LjMCGf567RdHo=";
   };
 
@@ -131,4 +131,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ oddlama ];
     platforms = lib.platforms.linux;
   };
-}
+})

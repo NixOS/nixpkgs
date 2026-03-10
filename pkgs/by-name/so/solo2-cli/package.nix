@@ -10,14 +10,14 @@
   udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "solo2-cli";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "solokeys";
     repo = "solo2-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7tpO5ir42mIKJXD0NJzEPXi/Xe6LdyEeBQWNfOdgX5I=";
   };
 
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lukegb ];
     mainProgram = "solo2";
   };
-}
+})

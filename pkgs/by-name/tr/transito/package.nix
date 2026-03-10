@@ -15,14 +15,14 @@
   sqlite,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "transito";
   version = "0.10.0";
 
   src = fetchFromSourcehut {
     owner = "~mil";
     repo = "transito";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-87U9RdlP260ApkGJB3dLitxAdY3I9nWrukxzRnwuJ2E=";
   };
   vendorHash = "sha256-mgvfrNKvdjLa7O0oTSec8u3eHHU66ZDqpKzNeeyy2J0=";
@@ -41,15 +41,13 @@ buildGoModule rec {
   ];
 
   tags = [ "sqlite_math_functions" ];
-  ldflags = [ "-X git.sr.ht/~mil/transito/src/uipages/pageconfig.Commit=${version}" ];
+  ldflags = [ "-X git.sr.ht/~mil/transito/src/uipages/pageconfig.Commit=${finalAttrs.version}" ];
 
   postInstall = ''
     install -Dm644 -t $out/share/applications assets/transito.desktop
-    install -Dm644 -t $out/share/pixmaps assets/transito.png
-    for icon in assets/transito_*.png
-    do
+    for icon in assets/transito_*.png; do
       name=$(basename $icon .png)
-      install -Dm644 -t $out/share/icons/hicolor/''${name#transito_}/apps $icon
+      install -Dm644 $icon $out/share/icons/hicolor/''${name#transito_}/apps/transito.png
     done
   '';
 
@@ -71,11 +69,11 @@ buildGoModule rec {
       GTFS data, to name a few: Lisbon, NYC, Brussels, Krakow, and Bourges.
     '';
     homepage = "https://git.sr.ht/~mil/transito";
-    changelog = "https://git.sr.ht/~mil/transito/refs/v${version}";
+    changelog = "https://git.sr.ht/~mil/transito/refs/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.McSinyx ];
     mainProgram = "transito";
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };
-}
+})

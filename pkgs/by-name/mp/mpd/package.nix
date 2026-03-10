@@ -257,9 +257,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (builtins.elem "documentation" features_) "man";
 
-  CXXFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CXXFLAGS = toString [
+      "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+    ];
+  };
 
   mesonFlags = [
     (lib.mesonBool "test" true)

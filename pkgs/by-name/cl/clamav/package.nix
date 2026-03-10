@@ -24,12 +24,12 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clamav";
   version = "1.4.3";
 
   src = fetchurl {
-    url = "https://www.clamav.net/downloads/production/clamav-${version}.tar.gz";
+    url = "https://www.clamav.net/downloads/production/clamav-${finalAttrs.version}.tar.gz";
     hash = "sha256-2HTKvz1HZbNbUY71NWWKHm7HSAIAah1hP58SSqE0MhA=";
   };
 
@@ -87,4 +87,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

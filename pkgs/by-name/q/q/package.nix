@@ -4,23 +4,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "q";
-  version = "0.19.11";
+  version = "0.19.12";
 
   src = fetchFromGitHub {
     owner = "natesales";
     repo = "q";
-    tag = "v${version}";
-    hash = "sha256-8/pUkkG43y07XQVrlrVuXtbXJw5ueokOFngWK6N7qHQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0m6xcmnHh6qn2spcJxlcjdO4Fd2U0UZE/ZHMq6HXW3M=";
   };
 
-  vendorHash = "sha256-4W0lS7qh3CCSbAtohc/1EbwdiO75tELTp1aBMyPeh/o=";
+  vendorHash = "sha256-gY3o5rkHLptrq7IEJ3AVhKY+PONJw6WC1yM3fu2ZB38=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   doCheck = false; # tries to resolve DNS
@@ -32,4 +32,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.das_j ];
     mainProgram = "q";
   };
-}
+})

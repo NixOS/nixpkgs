@@ -12,12 +12,12 @@
   cppunit,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libzmf";
   version = "0.0.2";
 
   src = fetchurl {
-    url = "http://dev-www.libreoffice.org/src/libzmf/libzmf-${version}.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libzmf/libzmf-${finalAttrs.version}.tar.xz";
     sha256 = "08mg5kmkjrmqrd8j5rkzw9vdqlvibhb1ynp6bmfxnzq5rcq1l197";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libzmf";
     downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";
   };
-}
+})

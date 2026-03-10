@@ -5,12 +5,12 @@
   nettle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rdfind";
   version = "1.7.0";
 
   src = fetchurl {
-    url = "https://rdfind.pauldreik.se/rdfind-${version}.tar.gz";
+    url = "https://rdfind.pauldreik.se/rdfind-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-eMRjFS4dnk/Rv+uDuckt9ef8TF+Tx9Qm+x9++ivk3yk=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "rdfind";
   };
-}
+})

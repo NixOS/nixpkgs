@@ -13,7 +13,7 @@
   webkitgtk_4_1,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "formiko";
   version = "1.5.0";
   format = "setuptools";
@@ -21,7 +21,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ondratu";
     repo = "formiko";
-    tag = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-slfpkckCvxHJ/jlBP7QAhzaf9TAcS6biDQBZcBTyTKI=";
   };
 
@@ -50,4 +50,4 @@ buildPythonApplication rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
   };
-}
+})

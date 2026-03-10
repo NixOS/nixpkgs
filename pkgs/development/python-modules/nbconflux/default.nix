@@ -47,7 +47,7 @@ buildPythonPackage rec {
     rm versioneer.py
   '';
 
-  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  env.JUPYTER_PATH = "${nbconvert}/share/jupyter";
   disabledTests = [
     "test_post_to_confluence"
     "test_optional_components"

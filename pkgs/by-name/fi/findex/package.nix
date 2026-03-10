@@ -7,14 +7,14 @@
   keybinder3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "findex";
   version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "mdgaziur";
     repo = "findex";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fsudE6eXThbN9Cz8cYATcYMXT3BJ3xCw6wrXYhxro2I=";
   };
 
@@ -45,4 +45,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

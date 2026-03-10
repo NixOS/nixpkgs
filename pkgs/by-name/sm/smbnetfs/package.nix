@@ -11,11 +11,11 @@
   libsecret,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smbnetfs";
   version = "0.6.3";
   src = fetchurl {
-    url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${version}/smbnetfs-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/smbnetfs/smbnetfs/SMBNetFS-${finalAttrs.version}/smbnetfs-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-6sN7l2n76cP0uvPrZMYaa1mtTyqgXf3culoaxK301WA=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/smbnetfs/";
     mainProgram = "smbnetfs";
   };
-}
+})

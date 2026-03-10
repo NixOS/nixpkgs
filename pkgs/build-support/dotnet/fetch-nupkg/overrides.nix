@@ -5,7 +5,7 @@
   lib,
   libice,
   libsm,
-  libX11,
+  libx11,
   stdenv,
   writeText,
 }:
@@ -58,7 +58,7 @@
           prependToVar dotnetRuntimeDeps \
             "${lib.getLib libice}" \
             "${lib.getLib libsm}" \
-            "${lib.getLib libX11}"
+            "${lib.getLib libx11}"
         '';
       }
     );

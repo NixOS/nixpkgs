@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  cython,
+  cython_3_1,
   meson-python,
   meson,
   pkg-config,
@@ -90,15 +90,14 @@ let
     '';
 
     build-system = [
-      cython
+      cython_3_1
       meson-python
       meson
       numpy
       pkg-config
       versioneer
       wheel
-    ]
-    ++ versioneer.optional-dependencies.toml;
+    ];
 
     enableParallelBuilding = true;
 

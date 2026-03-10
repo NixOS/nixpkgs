@@ -19,13 +19,13 @@
   libsamplerate,
   libbluray,
   lzo,
-  libX11,
-  libXv,
-  libXrandr,
-  libXvMC,
-  libXinerama,
-  libXxf86vm,
-  libXmu,
+  libx11,
+  libxv,
+  libxrandr,
+  libxvmc,
+  libxinerama,
+  libxxf86vm,
+  libxmu,
   yasm,
   libuuid,
   taglib,
@@ -75,14 +75,14 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpulseaudio
     fftwSinglePrec
-    libX11
-    libXv
-    libXrandr
-    libXvMC
-    libXmu
-    libXinerama
-    libXxf86vm
-    libXmu
+    libx11
+    libxv
+    libxrandr
+    libxvmc
+    libxmu
+    libxinerama
+    libxxf86vm
+    libxmu
     libuuid
     taglib
     exiv2

@@ -5,7 +5,7 @@ index 56875b5..3216e79 100755
 @@ -1,4 +1,4 @@
 -#!/usr/bin/gjs
 +#!@gjs@/bin/gjs
-
+ 
  /* DING: Desktop Icons New Generation for GNOME Shell
   *
 diff --git a/app/ding.js b/app/ding.js
@@ -15,7 +15,7 @@ index 9a1550a..7bd25fc 100755
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env gjs
 +#!@gjs@/bin/gjs
-
+ 
  /* DING: Desktop Icons New Generation for GNOME Shell
   *
 @@ -18,6 +18,7 @@
@@ -40,21 +40,20 @@ index 4fae9ef..5127eff 100644
              fileItem.unsetSelected();
              xdgEmailCommand.push('--attach');
 diff --git a/app/preferences.js b/app/preferences.js
-index c6517a3..1379a0e 100644
+index 94ec3c7..823dd5c 100644
 --- a/app/preferences.js
 +++ b/app/preferences.js
-@@ -46,9 +46,12 @@ var prefsWindow;
+@@ -46,9 +46,11 @@ var prefsWindow;
   */
  function init(path) {
-     let schemaSource = GioSSS.get_default();
--    let schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
+     const schemaSource = GioSSS.get_default();
+-    const schemaGtk = schemaSource.lookup(Enums.SCHEMA_GTK, true);
 +    const schemaSourceGtk = Gio.SettingsSchemaSource.new_from_directory('@gtk3_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
 +    let schemaGtk = schemaSourceGtk.lookup(Enums.SCHEMA_GTK, true);
-+    console.log('schemaGtk: ' + schemaGtk);
      gtkSettings = new Gio.Settings({settings_schema: schemaGtk});
--    let schemaObj = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
+-    const schemaObj = schemaSource.lookup(Enums.SCHEMA_NAUTILUS, true);
 +    const schemaSourceNautilus = Gio.SettingsSchemaSource.new_from_directory('@nautilus_gsettings_path@', Gio.SettingsSchemaSource.get_default(), true);
-+    let schemaObj = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
++    const schemaObj = schemaSourceNautilus.lookup(Enums.SCHEMA_NAUTILUS, true);
      if (!schemaObj) {
          nautilusSettings = null;
      } else {
@@ -68,7 +67,7 @@ index c6517a3..1379a0e 100644
          nautilusCompression = null;
      } else {
 diff --git a/extension.js b/extension.js
-index 774fbef..3f2023b 100644
+index 0f8a317..c768649 100644
 --- a/extension.js
 +++ b/extension.js
 @@ -17,6 +17,7 @@
@@ -79,7 +78,7 @@ index 774fbef..3f2023b 100644
  import GLib from 'gi://GLib'
  import Gio from 'gi://Gio'
  import Meta from 'gi://Meta'
-@@ -391,9 +392,9 @@ export default class DING extends Extension {
+@@ -396,9 +397,9 @@ export default class DING extends Extension {
                      contents += String.fromCharCode(readData[i]);
                  }
              }

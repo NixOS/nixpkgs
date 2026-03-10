@@ -3,10 +3,10 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
-  libXft,
-  libXinerama,
-  libXpm,
+  libx11,
+  libxft,
+  libxinerama,
+  libxpm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,10 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libX11
-    libXft
-    libXinerama
-    libXpm
+    libx11
+    libxft
+    libxinerama
+    libxpm
   ];
 
   src = fetchurl {

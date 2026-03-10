@@ -10,10 +10,8 @@
   # dependencies
   filelock,
   packaging,
-  tomli,
 
   distutils,
-  pythonOlder,
   ncurses,
   patchelf,
   dmgbuild,
@@ -28,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "8.3.0";
+  version = "8.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marcelotduarte";
     repo = "cx_Freeze";
     tag = version;
-    hash = "sha256-PhUzHSn9IqUcb11D0kRT8zhmZ/KusTBDpAempiDN4Rc=";
+    hash = "sha256-tV2i0o6D/Cz0ePYgJN+c4VgMkhVhO/2xhPX8vsasFPs=";
   };
 
   patches = [
@@ -64,9 +62,6 @@ buildPythonPackage rec {
     filelock
     packaging
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     dmgbuild

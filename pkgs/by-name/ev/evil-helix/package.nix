@@ -7,14 +7,14 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage (final: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "evil-helix";
   version = "20250915";
 
   src = fetchFromGitHub {
     owner = "usagi-flow";
     repo = "evil-helix";
-    tag = "release-${final.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-6kqKTZNS1RZwfxcFoa2uC7fUKcQ+KhT5KXusyCt59YQ=";
   };
 
@@ -25,15 +25,11 @@ rustPlatform.buildRustPackage (final: {
   env = {
     # disable fetching and building of tree-sitter grammars in the helix-term build.rs
     HELIX_DISABLE_AUTO_GRAMMAR_BUILD = "1";
-    HELIX_DEFAULT_RUNTIME = "${placeholder "out"}/lib/runtime";
+    HELIX_DEFAULT_RUNTIME = helix.runtime;
   };
 
   postInstall = ''
     mkdir -p $out/lib
-    cp -r runtime $out/lib
-    # copy tree-sitter grammars from helix package
-    # TODO: build it from source instead
-    cp -r ${helix}/lib/runtime/grammars/* $out/lib/runtime/grammars/
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications

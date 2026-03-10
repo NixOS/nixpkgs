@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libXdmcp,
+  libxdmcp,
   libexif,
   libfm-qt,
   libpthread-stubs,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXdmcp
+    libxdmcp
     libexif
     libfm-qt
     libpthread-stubs

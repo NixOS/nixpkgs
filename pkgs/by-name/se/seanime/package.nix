@@ -1,18 +1,17 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
   buildNpmPackage,
-  inter,
   ffmpeg,
 }:
 let
-  version = "3.4.3";
+  version = "3.5.0";
   src = fetchFromGitHub {
     owner = "5rahim";
     repo = "seanime";
     rev = "v${version}";
-    hash = "sha256-MrO8SuS6d1v3SKmnGBDXGHmxhYdPxr11FdKKZrGU9Hc=";
+    hash = "sha256-5A2gg0ZFy9JP42I6fh9dcVUkS7P+0aH7arT4gdjAYHM=";
   };
 
   seanime-web = buildNpmPackage {
@@ -24,20 +23,7 @@ let
 
     patches = [ ./default-disable-update-check.patch ];
 
-    npmDepsHash = "sha256-rRgp8nXuRvCSOLo040i4ZL+0GCYkEEnkxpgwqDBt/EY=";
-
-    # nextjs seems to require relative paths
-    postPatch = ''
-      cp "${inter}/share/fonts/truetype/InterVariable.ttf" src/app/Inter.ttf
-
-      substituteInPlace ./src/app/layout.tsx \
-        --replace-fail 'import { Inter } from "next/font/google"' 'import localFont from "next/font/local"' \
-        --replace-fail 'const inter = Inter({ subsets: ["latin"] })' 'const inter = localFont({ src: "./Inter.ttf" })'
-
-      substituteInPlace './src/app/(main)/entry/_containers/torrent-stream/torrent-stream-overlay.tsx' \
-        --replace-fail 'import { Inter } from "next/font/google"' 'import localFont from "next/font/local"' \
-        --replace-fail 'const inter = Inter({ subsets: ["latin"] })' 'const inter = localFont({ src: "../../../../Inter.ttf" })'
-    '';
+    npmDepsHash = "sha256-kO5k4B5mKoIfhhujNM0jw+/ErVwxm9/nZ5eBTWnA7HQ=";
 
     installPhase = ''
       runHook preInstall
@@ -49,12 +35,12 @@ let
     '';
   };
 in
-buildGoModule {
+buildGo126Module {
   pname = "seanime";
 
   inherit src version;
 
-  vendorHash = "sha256-LFilsAAuPbNg2KI4aPUbNYjufPk1P3VLcAv1qfMu0p0=";
+  vendorHash = "sha256-jdGkrU4WGgqkWN0FIaxVhtYfFnS+/ZnAY6dWB+gOmNQ=";
 
   preBuild = ''
     cp -r ${seanime-web}/web .

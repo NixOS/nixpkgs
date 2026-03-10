@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grepcidr";
   version = "2.0";
 
   src = fetchurl {
-    url = "http://www.pc-tools.net/files/unix/grepcidr-${version}.tar.gz";
+    url = "http://www.pc-tools.net/files/unix/grepcidr-${finalAttrs.version}.tar.gz";
     sha256 = "1yzpa1nigmmp4hir6377hrkpp0z6jnxgccaw2jbqgydbglvnm231";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "grepcidr";
   };
-}
+})

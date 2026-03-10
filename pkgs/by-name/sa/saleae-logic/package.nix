@@ -15,17 +15,17 @@
   libsm,
   libice,
   gtk2,
-  libXext,
-  libXft,
+  libxext,
+  libxft,
   fontconfig,
-  libXrender,
-  libXfixes,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libxrender,
+  libxfixes,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   freetype,
-  libXinerama,
+  libxinerama,
   libxcb,
   zlib,
   pciutils,
@@ -43,17 +43,17 @@ let
     libsm
     libice
     gtk2
-    libXext
-    libXft
+    libxext
+    libxft
     fontconfig
-    libXrender
-    libXfixes
-    libX11
-    libXi
-    libXrandr
-    libXcursor
+    libxrender
+    libxfixes
+    libx11
+    libxi
+    libxrandr
+    libxcursor
     freetype
-    libXinerama
+    libxinerama
     libxcb
     zlib
     stdenv.cc.cc

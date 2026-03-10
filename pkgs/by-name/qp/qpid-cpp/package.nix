@@ -10,12 +10,12 @@
   ruby,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qpid-cpp";
   version = "1.39.0";
 
   src = fetchurl {
-    url = "mirror://apache/qpid/cpp/${version}/qpid-cpp-${version}.tar.gz";
+    url = "mirror://apache/qpid/cpp/${finalAttrs.version}/qpid-cpp-${finalAttrs.version}.tar.gz";
     hash = "sha256-eYDQ6iHVV1WUFFdyHGnbqGIjE9CrhHzh0jP7amjoDSE=";
   };
 
@@ -66,4 +66,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

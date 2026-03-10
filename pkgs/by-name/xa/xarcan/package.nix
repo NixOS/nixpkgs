@@ -9,10 +9,10 @@
   libepoxy,
   font-util,
   libGL,
-  libX11,
-  libXau,
-  libXdmcp,
-  libXfont2,
+  libx11,
+  libxau,
+  libxdmcp,
+  libxfont_2,
   libdrm,
   libgcrypt,
   libmd,
@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalPackages: rec {
     libepoxy
     font-util
     libGL
-    libX11
-    libXau
-    libXdmcp
-    libXfont2
+    libx11
+    libxau
+    libxdmcp
+    libxfont_2
     libdrm
     libgcrypt
     libmd

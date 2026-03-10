@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gh-poi";
   version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "seachicken";
     repo = "gh-poi";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HwFmSeDPpX1zbJh+0laekphmpnAsEdFBhgoLfT7CCYY=";
   };
 
@@ -27,11 +27,11 @@ buildGoModule rec {
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/seachicken/gh-poi/releases/tag/${src.rev}";
+    changelog = "https://github.com/seachicken/gh-poi/releases/tag/${finalAttrs.src.rev}";
     description = "GitHub CLI extension to safely clean up your local branches";
     homepage = "https://github.com/seachicken/gh-poi";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aspulse ];
     mainProgram = "gh-poi";
   };
-}
+})

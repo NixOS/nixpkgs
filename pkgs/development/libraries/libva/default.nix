@@ -8,10 +8,10 @@
   wayland-scanner,
   libdrm,
   minimal ? false,
-  libX11,
+  libx11,
   libxcb,
-  libXext,
-  libXfixes,
+  libxext,
+  libxfixes,
   wayland,
   libffi,
   libGL,
@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
   ]
   ++ lib.optionals (!minimal) [
-    libX11
+    libx11
     libxcb
-    libXext
-    libXfixes
+    libxext
+    libxfixes
     wayland
     libffi
     libGL

@@ -7,12 +7,12 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gcal";
   version = "4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gcal/gcal-${version}.tar.xz";
+    url = "mirror://gnu/gcal/gcal-${finalAttrs.version}.tar.xz";
     sha256 = "1av11zkfirbixn05hyq4xvilin0ncddfjqzc4zd9pviyp506rdci";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.romildo ];
     mainProgram = "gcal";
   };
-}
+})

@@ -13,7 +13,7 @@
   buildDocs ? true,
   mesonEmulatorHook,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgnt";
   version = "2.14.4-dev";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional buildDocs "devdoc";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pidgin/libgnt-${version}.tar.xz";
+    url = "mirror://sourceforge/pidgin/libgnt-${finalAttrs.version}.tar.xz";
     hash = "sha256-GVkzqacx01dXkbiBulzArSpxXh6cTCPMqqKhfhZMluw=";
   };
 
@@ -65,4 +65,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ony ];
   };
-}
+})

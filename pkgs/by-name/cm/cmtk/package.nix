@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       biomedical images, CMTK comprises a set of command line tools and a
       back-end general-purpose library for processing and I/O
     '';
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
     homepage = "https://www.nitrc.org/projects/cmtk/";

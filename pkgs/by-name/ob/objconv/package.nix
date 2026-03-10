@@ -5,13 +5,13 @@
   unzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "objconv";
   version = "2.54.1";
 
   src = fetchurl {
     # Versioned archive of objconv sources maintained by orivej.
-    url = "https://archive.org/download/objconv/objconv-${version}.zip";
+    url = "https://archive.org/download/objconv/objconv-${finalAttrs.version}.zip";
     sha256 = "sha256-DFyo+8fvHEr+PMfMkBhxGliFr6y+i868SAKNHskMzHw=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

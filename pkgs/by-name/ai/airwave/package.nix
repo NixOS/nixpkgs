@@ -2,17 +2,17 @@
   lib,
   multiStdenv,
   fetchFromGitHub,
-  wineWowPackages,
+  wineWow64Packages,
   cmake,
   makeWrapper,
   file,
-  libX11,
+  libx11,
   qt5,
   vst2-sdk,
 }:
 
 let
-  wine-wow64 = wineWowPackages.stableFull;
+  wine-wow64 = wineWow64Packages.stableFull;
 in
 multiStdenv.mkDerivation (finalAttrs: {
   pname = "airwave";
@@ -33,7 +33,7 @@ multiStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     file
-    libX11
+    libx11
     qt5.qtbase
     wine-wow64
   ];
@@ -65,7 +65,7 @@ multiStdenv.mkDerivation (finalAttrs: {
     mkdir $out/bin
     mv $out/libexec/airwave-manager $out/bin
     wrapProgram $out/libexec/airwave-host-32.exe --set WINELOADER ${lib.getExe' wine-wow64 "wine"}
-    wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${lib.getExe' wine-wow64 "wine64"}
+    wrapProgram $out/libexec/airwave-host-64.exe --set WINELOADER ${lib.getExe' wine-wow64 "wine"}
   '';
 
   meta = {

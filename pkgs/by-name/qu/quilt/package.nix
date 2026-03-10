@@ -16,13 +16,13 @@
   unixtools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "quilt";
   version = "0.69";
 
   src = fetchurl {
-    url = "mirror://savannah/quilt/quilt-${version}.tar.gz";
+    url = "mirror://savannah/quilt/quilt-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-VV3f/eIto8htHK9anB+4oVKsK4RzBDe9OcwIhJyfSFI=";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath buildInputs}
+    wrapProgram $out/bin/quilt --prefix PATH : ${lib.makeBinPath finalAttrs.buildInputs}
   '';
 
   meta = {
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
   };
 
-}
+})

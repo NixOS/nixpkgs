@@ -7,14 +7,14 @@
   courier-prime,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wrap";
   version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Wraparound";
     repo = "wrap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-58wsH/e3X72S7tJUObazyvvkI8+B7DLPTBmQO9A+jmk=";
   };
 
@@ -45,4 +45,4 @@ buildGoModule rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.austinbutler ];
   };
-}
+})

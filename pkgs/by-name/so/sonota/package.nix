@@ -17,7 +17,7 @@ let
   };
 
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "sonota-unstable";
   version = "2018-10-07";
 
@@ -57,9 +57,9 @@ buildPythonApplication rec {
 
   meta = {
     description = "Flash Itead Sonoff devices with custom firmware via original OTA mechanism";
-    homepage = src.meta.homepage;
+    homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
     mainProgram = "sonota";
   };
-}
+})

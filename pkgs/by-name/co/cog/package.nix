@@ -7,25 +7,25 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "cog";
-  version = "0.0.51";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "cog";
-    tag = "v${version}";
-    hash = "sha256-Z6UegaM4+OXOo6sjfLN1tGVbeYCN9nYKRqDlOpz4NPU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cx9ztZufX199jiVT4ZB5qNUR5W2bfN3jzYhUmdAi+80=";
   };
 
-  vendorHash = "sha256-AcBsXkXwXCtmJ5k+YBnQnmFZCrfarhuOygmqFJQ1CZk=";
+  vendorHash = "sha256-rz/qL5kEryIV2SMQKoVav4C6scIKaxIFuwtTjqBaF4g=";
 
   subPackages = [ "cmd/cli" ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   env.CGO_ENABLED = 0;
@@ -37,7 +37,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/grafana/cog/releases/tag/v${version}";
+    changelog = "https://github.com/grafana/cog/releases/tag/v${finalAttrs.version}";
     description = "Grafana's code generation tool";
     license = lib.licenses.asl20;
     homepage = "https://github.com/grafana/cog";
@@ -46,4 +46,4 @@ buildGoModule rec {
     ];
     mainProgram = "cog";
   };
-}
+})

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   replaceVars,
-  isPy310,
   isPyPy,
   pythonOlder,
 
@@ -96,9 +95,6 @@ buildPythonPackage rec {
     propcache
     yarl
   ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    async-timeout
-  ]
   ++ optional-dependencies.speedups;
 
   optional-dependencies.speedups = [
@@ -140,11 +136,6 @@ buildPythonPackage rec {
     "test_uvloop_secure_https_proxy"
     # Cannot connect to host example.com:443 ssl:default [Could not contact DNS servers]
     "test_tcp_connector_ssl_shutdown_timeout_passed_to_create_connection"
-  ]
-  # these tests fail with python310 but succeeds with 11+
-  ++ lib.optionals isPy310 [
-    "test_https_proxy_unsupported_tls_in_tls"
-    "test_tcp_connector_raise_connector_ssl_error"
   ]
   ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [

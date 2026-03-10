@@ -5,12 +5,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vdmfec";
   version = "1.0";
 
   src = fetchurl {
-    url = "http://members.tripod.com/professor_tom/archives/vdmfec-${version}.tgz";
+    url = "http://members.tripod.com/professor_tom/archives/vdmfec-${finalAttrs.version}.tgz";
     sha256 = "0i7q4ylx2xmzzq778anpkj4nqir5gf573n1lbpxnbc10ymsjq2rm";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

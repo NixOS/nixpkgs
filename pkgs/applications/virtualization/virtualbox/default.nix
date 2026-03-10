@@ -10,12 +10,12 @@
   pam,
   libxslt,
   libxml2,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXcursor,
-  libXfixes,
-  libXmu,
+  libxext,
+  libxcursor,
+  libxfixes,
+  libxmu,
   SDL2,
   libcap,
   libGL,
@@ -23,8 +23,8 @@
   libpng,
   glib,
   lvm2,
-  libXrandr,
-  libXinerama,
+  libxrandr,
+  libxinerama,
   libopus,
   libtpms,
   qt6,
@@ -76,9 +76,9 @@ let
   virtualboxSubVersion = "";
   virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
 
-  kvmPatchVboxVersion = "7.2.4";
-  kvmPatchVersion = "20251103";
-  kvmPatchHash = "sha256-VhSuRYiZLg8hIGatf27u/nBBBtB1zz4ePxtiRYy84Hw=";
+  kvmPatchVboxVersion = "7.2.6";
+  kvmPatchVersion = "20260201";
+  kvmPatchHash = "sha256-pq4DPLwHRRAMJjmfXympDxJK9+d+LwTOxBqxAm0pl3o=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -144,9 +144,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     xorgproto
-    libX11
-    libXext
-    libXcursor
+    libx11
+    libxext
+    libxcursor
     libcap
     glib
     lvm2
@@ -156,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     makeself
     perl
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
     libpng
     libopus
     libtpms
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
     qtscxml
-    libXinerama
+    libxinerama
     SDL2
     libGLU
   ]
@@ -208,7 +208,7 @@ stdenv.mkDerivation (finalAttrs: {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libXfixes\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libXfixes\.so\.3"@"${libXfixes.out}/lib/libXfixes.so.3"@g'
+      s@"libXfixes\.so\.3"@"${libxfixes.out}/lib/libXfixes.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
@@ -415,7 +415,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
       friedrichaltheide
-      blitz
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";

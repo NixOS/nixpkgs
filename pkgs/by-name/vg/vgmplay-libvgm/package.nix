@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "vgmplay-libvgm";
-  version = "0.51.1-unstable-2025-12-31";
+  version = "0.52.0-unstable-2026-01-31";
 
   src = fetchFromGitHub {
     owner = "ValleyBell";
     repo = "vgmplay-libvgm";
-    rev = "e8f07455854053cb676967112c3ddf414bb8c1ea";
-    hash = "sha256-YNaswHUFcTXncj+TKXQq5AhCLrM0SZ/EaO7hXb0OQLM=";
+    rev = "2a8f3909bcfca4c595ca71c0f762ff495a29e130";
+    hash = "sha256-TJUhE4te/nZOsckgMksWcqawsWR8r3OInJoVrv+NVAQ=";
   };
 
   nativeBuildInputs = [

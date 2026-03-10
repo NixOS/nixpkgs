@@ -85,15 +85,14 @@ stdenv.mkDerivation rec {
     # Install Linux-specific files (desktop, mime, icons)
     mkdir -p $out/share/applications
     mkdir -p $out/share/mime/packages
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/icons/hicolor/scalable/mimetypes
+    mkdir -p $out/share/icons/hicolor/scalable/{apps,mimetypes}
 
     # Generate desktop file from template
     substitute $src/platform/unix/love.desktop.in $out/share/applications/love.desktop \
       --replace-fail '@bindir@' "$out/bin"
 
     cp $src/platform/unix/love.xml $out/share/mime/packages/
-    cp $src/platform/unix/love.svg $out/share/pixmaps/
+    cp $src/platform/unix/love.svg $out/share/icons/hicolor/scalable/apps
     cp $src/platform/unix/application-x-love-game.svg $out/share/icons/hicolor/scalable/mimetypes/
   ''
   + ''

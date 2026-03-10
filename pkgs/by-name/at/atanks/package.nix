@@ -5,12 +5,12 @@
   allegro,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "atanks";
   version = "6.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/atanks/atanks/atanks-${version}/atanks-${version}.tar.gz";
+    url = "mirror://sourceforge/project/atanks/atanks/atanks-${finalAttrs.version}/atanks-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-vGse/J/H52JPrR2DUtcuknvg+6IWC7Jbtri9bGNwv0M=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

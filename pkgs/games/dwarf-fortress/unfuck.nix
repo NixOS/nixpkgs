@@ -10,7 +10,7 @@
   SDL_image,
   SDL_ttf,
   glew,
-  openalSoft,
+  openal-soft,
   ncurses,
   glib,
   gtk2,
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     SDL_image
     SDL_ttf
     glew
-    openalSoft
+    openal-soft
     ncurses
     libsndfile
     zlib

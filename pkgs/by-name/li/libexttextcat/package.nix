@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libexttextcat";
   version = "3.4.6";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/libexttextcat/libexttextcat-${version}.tar.xz";
+    url = "https://dev-www.libreoffice.org/src/libexttextcat/libexttextcat-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-bXfqziDp6hBsEzDiaO3nDJpKiXRN3CVxVoJ1TsozaN8=";
   };
 
@@ -20,4 +20,4 @@ stdenv.mkDerivation rec {
     mainProgram = "createfp";
     platforms = lib.platforms.all;
   };
-}
+})

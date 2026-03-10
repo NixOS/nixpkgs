@@ -20,16 +20,16 @@
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rq";
-  version = "2.6.1";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
-    tag = "v${version}";
-    hash = "sha256-4+zP3pOiZ+r/dt9F2NyxgJsyGPIHgj9XokuPxlWyS1g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-332K+n3mWf+k7/QvIFJFhuDXqd1t2p8ZVv/l+Y167Bk=";
   };
 
   build-system = [ hatchling ];
@@ -48,6 +48,10 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  preCheck = ''
+    redisTestPort=6379
+  '';
+
   __darwinAllowLocalNetworking = true;
 
   # redisTestHook does not work on darwin-x86_64
@@ -64,8 +68,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
-    changelog = "https://github.com/rq/rq/releases/tag/${src.tag}";
+    changelog = "https://github.com/rq/rq/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ mrmebelman ];
   };
-}
+})

@@ -8,12 +8,12 @@
   rsync,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autobuild";
   version = "5.3";
 
   src = fetchurl {
-    url = "mirror://savannah/autobuild/autobuild-${version}.tar.gz";
+    url = "mirror://savannah/autobuild/autobuild-${finalAttrs.version}.tar.gz";
     sha256 = "0gv7g61ja9q9zg1m30k4snqwwy1kq7b4df6sb7d2qra7kbdq8af1";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     homepage = "https://josefsson.org/autobuild/";
     license = lib.licenses.gpl2Plus;
   };
-}
+})

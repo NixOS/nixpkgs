@@ -6,12 +6,12 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.6.5.640";
   pname = "fatsort";
 
   src = fetchurl {
-    url = "mirror://sourceforge/fatsort/fatsort-${version}.tar.xz";
+    url = "mirror://sourceforge/fatsort/fatsort-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Yw7OVtnrOlVSSvCuw6reeFQ2DrqUkXKmz7R2jLj75C4=";
   };
 
@@ -45,4 +45,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "fatsort";
   };
-}
+})

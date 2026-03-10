@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.0.2";
+  version = "2.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eZqNxibJ0Ps65tHT6msaizRxvUPNNq0OZ++aAYvUi0E=";
+    hash = "sha256-e5F4NZUQCgEYonQqC62+kWkHRWCJmMv+F2WOu9BRIFk=";
   };
 
   build-system = with python3Packages; [
@@ -30,16 +30,24 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonRelaxDeps = [
     "agent-client-protocol"
+    "cryptography"
+    "gitpython"
     "mistralai"
-    "pydantic"
     "pydantic-settings"
-    "watchfiles"
+    "zstandard"
   ];
   dependencies = with python3Packages; [
     agent-client-protocol
     anyio
+    cachetools
+    cryptography
+    gitpython
+    giturlparse
+    google-auth
     httpx
+    keyring
     mcp
+    markdownify
     mistralai
     packaging
     pexpect
@@ -48,13 +56,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyperclip
     python-dotenv
     pyyaml
+    requests
     rich
     textual
     textual-speedups
-    tree-sitter
-    tree-sitter-grammars.tree-sitter-bash
     tomli-w
+    tree-sitter
+    tree-sitter-bash
     watchfiles
+    zstandard
   ];
 
   pythonImportsCheck = [ "vibe" ];
@@ -79,11 +89,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "test_updates_index_on_file_deletion"
     "test_updates_index_on_file_rename"
     "test_updates_index_on_folder_rename"
+    "test_watcher_toggle_flow_off_on_off"
   ];
 
   disabledTestPaths = [
     # All snapshot tests fail with AssertionError
     "tests/snapshots/"
+
+    # Try to invoke `uv run vibe`
+    "tests/e2e/"
 
     # ACP tests require network access
     "tests/acp/test_acp.py"

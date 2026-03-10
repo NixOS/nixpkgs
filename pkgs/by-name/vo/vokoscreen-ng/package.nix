@@ -4,7 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   gst_all_1,
-  libX11,
+  libx11,
   pipewire,
   pulseaudio,
   qt6,
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gst_all_1.gstreamer
-    libX11
+    libx11
     pulseaudio
     qt6.qtbase
     qt6.qtmultimedia

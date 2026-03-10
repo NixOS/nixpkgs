@@ -7,8 +7,8 @@
   autoPatchelfHook,
   jetbrains, # Requird by upstream due to JCEF dependency
   fontconfig,
-  libXinerama,
-  libXrandr,
+  libxinerama,
+  libxrandr,
   file,
   gtk3,
   glib,
@@ -79,8 +79,8 @@
   boost,
   thrift,
   libGL,
-  libX11,
-  libXdamage,
+  libx11,
+  libxdamage,
   nss,
   nspr,
 }:
@@ -144,7 +144,10 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jetbrains.jdk;
+  env = {
+    JAVA_HOME = jetbrains.jdk;
+    ANDROID_SDK_HOME = "$(pwd)";
+  };
 
   gradleFlags = [
     "-Dorg.gradle.java.home=${jetbrains.jdk}"
@@ -157,8 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fontconfig
-    libXinerama
-    libXrandr
+    libxinerama
+    libxrandr
     file
     shine
     libmpeg2
@@ -230,8 +233,8 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     nspr
     libGL
-    libX11
-    libXdamage
+    libx11
+    libxdamage
   ];
 
   dontWrapQtApps = true;
@@ -256,8 +259,6 @@ stdenv.mkDerivation (finalAttrs: {
     rm -r $out/lib/app/resources/lib
     ln -sf ${libvlc}/lib $out/lib/app/resources/
   '';
-
-  ANDROID_SDK_HOME = "$(pwd)";
 
   passthru.updateScript = writeShellScript "update-animeko" ''
     ${lib.getExe nix-update} animeko

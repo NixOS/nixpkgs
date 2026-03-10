@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = map (n: "--bin=${n}") solanaPkgs;
 
   env = {
-    RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code -Aunused_parens";
+    RUSTFLAGS = "-Amismatched_lifetime_syntaxes -Adead_code -Aunused_parens -Aunused_imports";
     LIBCLANG_PATH = "${libclang.lib}/lib";
 
     # Used by build.rs in the rocksdb-sys crate. If we don't set these, it would

@@ -9,9 +9,9 @@
   kguiaddons,
   kwindowsystem,
   layer-shell-qt,
-  libXdamage,
-  libXdmcp,
-  libXtst,
+  libxdamage,
+  libxdmcp,
+  libxtst,
   libdbusmenu,
   liblxqt,
   libpthread-stubs,
@@ -58,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     kguiaddons
     kwindowsystem
     layer-shell-qt
-    libXdamage
-    libXdmcp
-    libXtst
+    libxdamage
+    libxdmcp
+    libxtst
     libdbusmenu
     liblxqt
     libpthread-stubs

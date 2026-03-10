@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddrutility";
   version = "2.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ddrutility/ddrutility-${version}.tar.gz";
+    url = "mirror://sourceforge/ddrutility/ddrutility-${finalAttrs.version}.tar.gz";
     sha256 = "023g7f2sfv5cqk3iyss4awrw3b913sy5423mn5zvlyrri5hi2cac";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

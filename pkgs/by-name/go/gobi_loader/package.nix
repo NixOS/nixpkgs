@@ -5,12 +5,12 @@
   udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gobi_loader";
   version = "0.7";
 
   src = fetchurl {
-    url = "https://www.codon.org.uk/~mjg59/gobi_loader/download/gobi_loader-${version}.tar.gz";
+    url = "https://www.codon.org.uk/~mjg59/gobi_loader/download/gobi_loader-${finalAttrs.version}.tar.gz";
     sha256 = "0jkmpqkiddpxrzl2s9s3kh64ha48m00nn53f82m1rphw8maw5gbq";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ _0x4A6F ];
     platforms = lib.platforms.linux;
   };
-}
+})

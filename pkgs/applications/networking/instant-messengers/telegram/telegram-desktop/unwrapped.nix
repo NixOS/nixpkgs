@@ -18,7 +18,7 @@
   xxHash,
   ffmpeg_6,
   protobuf,
-  openalSoft,
+  openal-soft,
   minizip,
   range-v3,
   tl-expected,
@@ -28,6 +28,9 @@
   microsoft-gsl,
   boost,
   ada,
+  libavif,
+  libheif,
+  libjxl,
   libicns,
   apple-sdk_15,
   nix-update-script,
@@ -42,14 +45,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "6.4.1";
+  version = "6.6.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-jmUj0kTyok5CsOe/to6bTN3jH/RMF7jE+AnFJi2nW90=";
+    hash = "sha256-sMg7h+he+mlqTu8wSLAsSJzCmwTX3t+suTEY77RH+aI=";
   };
 
   nativeBuildInputs = [
@@ -70,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
     xxHash
     ffmpeg_6
-    openalSoft
+    openal-soft
     minizip
     range-v3
     tl-expected
@@ -90,6 +93,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
     libicns
+    libavif
+    libheif
+    libjxl
   ];
 
   dontWrapQtApps = true;

@@ -5,11 +5,11 @@
   imlib2,
   autoreconfHook,
   autoconf-archive,
-  libX11,
-  libXext,
-  libXfixes,
-  libXcomposite,
-  libXinerama,
+  libx11,
+  libxext,
+  libxfixes,
+  libxcomposite,
+  libxinerama,
   pkg-config,
   libbsd,
 }:
@@ -33,11 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     imlib2
-    libX11
-    libXext
-    libXfixes
-    libXcomposite
-    libXinerama
+    libx11
+    libxext
+    libxfixes
+    libxcomposite
+    libxinerama
     libbsd
   ];
 

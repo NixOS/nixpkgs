@@ -16,7 +16,7 @@
   libgit2,
   libpulseaudio,
   libsodium,
-  libXtst,
+  libxtst,
   libvpx,
   libyuv,
   libopus,
@@ -38,17 +38,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustdesk";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-FRtYafsIKHnGPV8NaiaHxIHkon8/T2P83uq9taUD1Xc=";
+    hash = "sha256-2MZOM+SHDrjFhCIHcFB7zABpwC7hNtS0XNFx2FpaqIE=";
   };
 
-  cargoHash = "sha256-mEtTo1ony5w/dzJcHieG9WywHirBoQ/C0WpiAr7pUVc=";
+  cargoHash = "sha256-BYVqeuARE+B1AZLH0s5KlYz2/4qTB18LzzgiGBLXRYg=";
 
   patches = [
     ./make-build-reproducible.patch
@@ -93,7 +93,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libgit2
     libpulseaudio
     libsodium
-    libXtst
+    libxtst
     libvpx
     libyuv
     libopus

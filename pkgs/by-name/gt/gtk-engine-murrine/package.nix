@@ -7,12 +7,12 @@
   gtk2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-engine-murrine";
   version = "0.98.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-engine-murrine/${lib.versions.majorMinor version}/gtk-engine-murrine-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk-engine-murrine/${lib.versions.majorMinor finalAttrs.version}/gtk-engine-murrine-${finalAttrs.version}.tar.xz";
     sha256 = "129cs5bqw23i76h3nmc29c9mqkm9460iwc8vkl7hs4xr07h8mip9";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dpic";
   version = "2025.08.01";
 
   src = fetchurl {
-    url = "https://ece.uwaterloo.ca/~aplevich/dpic/dpic-${version}.tar.gz";
+    url = "https://ece.uwaterloo.ca/~aplevich/dpic/dpic-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-Dzj1wekVGIJsssbpViSzkNGAjvrcBAL4ORFRLwznJsM=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "dpic";
   };
-}
+})

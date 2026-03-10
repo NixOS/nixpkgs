@@ -4,12 +4,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cd-discid";
   version = "1.4";
 
   src = fetchurl {
-    url = "http://linukz.org/download/cd-discid-${version}.tar.gz";
+    url = "http://linukz.org/download/cd-discid-${finalAttrs.version}.tar.gz";
     sha256 = "0qrcvn7227qaayjcd5rm7z0k5q89qfy5qkdgwr5pd7ih0va8rmpz";
   };
 
@@ -31,4 +31,4 @@ stdenv.mkDerivation rec {
       abcde), but can be used for any purpose requiring CDDB data.
     '';
   };
-}
+})

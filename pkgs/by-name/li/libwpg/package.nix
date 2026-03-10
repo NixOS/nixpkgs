@@ -9,12 +9,12 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libwpg";
   version = "0.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwpg/libwpg-${version}.tar.xz";
+    url = "mirror://sourceforge/libwpg/libwpg-${finalAttrs.version}.tar.xz";
     hash = "sha256-tV/alEDR4HBjDrJIfYuGl89BLCFKJ8runfac7HwATeM=";
   };
 
@@ -35,4 +35,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})

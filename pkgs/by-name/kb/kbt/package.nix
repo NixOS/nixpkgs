@@ -7,14 +7,14 @@
   libx11,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kbt";
   version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "bloznelis";
     repo = "kbt";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ROCZDa5eyGF9yE+zdZ4snzdz8+jk+H6ZnqsnCe8JtJw=";
   };
 
@@ -35,4 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ ];
     mainProgram = "kbt";
   };
-}
+})

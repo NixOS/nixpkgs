@@ -5,10 +5,10 @@
   fetchurl,
   m4,
   expat,
-  libX11,
-  libXt,
-  libXaw,
-  libXmu,
+  libx11,
+  libxt,
+  libxaw,
+  libxmu,
   bdftopcf,
   mkfontdir,
   font-adobe-100dpi,
@@ -67,10 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     expat
-    libX11
-    libXt
-    libXaw
-    libXmu
+    libx11
+    libxt
+    libxaw
+    libxmu
     bdftopcf
     mkfontdir
     font-adobe-100dpi

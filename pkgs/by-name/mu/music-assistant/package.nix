@@ -47,14 +47,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.7.6";
+  version = "2.7.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-tAzCEU8jFWENOy0WaAchuhQGjmQl8BTW9TuGZPJByPw=";
+    hash = "sha256-c6WTalpjaZcUvppyYaTP03ErX5b+k7fUbphj58FVBS8=";
   };
 
   patches = [
@@ -99,9 +99,9 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+    "aiofiles"
     "aiohttp"
     "aiosqlite"
-    "aiovban" # PyPi and GitHub versioning is out of sync
     "certifi"
     "colorlog"
     "cryptography"
@@ -187,6 +187,7 @@ python.pkgs.buildPythonApplication rec {
     "tests/core/test_server_base.py::test_events"
     # provider is missing dependencies
     "tests/providers/nicovideo"
+    "tests/providers/apple_music"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];

@@ -12,13 +12,13 @@
   monoDLLFixer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtk-sharp";
   version = "2.99.3";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = "mirror://gnome/sources/gtk-sharp/${lib.versions.majorMinor version}/gtk-sharp-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtk-sharp/${lib.versions.majorMinor finalAttrs.version}/gtk-sharp-${finalAttrs.version}.tar.xz";
     sha256 = "18n3l9zcldyvn4lwi8izd62307mkhz873039nl6awrv285qzah34";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = lib.platforms.linux;
   };
-}
+})

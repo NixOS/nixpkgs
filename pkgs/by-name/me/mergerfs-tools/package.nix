@@ -8,13 +8,13 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mergerfs-tools";
   version = "20230912";
 
   src = fetchFromGitHub {
     owner = "trapexit";
-    repo = pname;
+    repo = "mergerfs-tools";
     rev = "80d6c9511da554009415d67e7c0ead1256c1fc41";
     hash = "sha256-9sn2ziIjes2squSGbjjXVch2zDFjQruWB4282p4jWcY=";
   };

@@ -14,7 +14,9 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-4uGS0LReq5dI7+Wel7ZWzFXx+utZWi93q4TUSw7AhNI=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
 
   preBuild = ''
     substituteInPlace src/Makefile --replace "CC=gcc" "CC?=gcc"
@@ -34,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.aescrypt.com/";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      lovek323
       qknight
     ];
     platforms = lib.platforms.all;

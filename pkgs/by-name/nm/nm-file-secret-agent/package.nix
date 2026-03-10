@@ -7,14 +7,14 @@
   pkg-config,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nm-file-secret-agent";
   version = "1.2.0";
 
   src = fetchFromCodeberg {
     owner = "lilly";
     repo = "nm-file-secret-agent";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-exU+9fN2Wt2+0lQoZS4TFPhCcoDPWEIZldRO9LKux3U=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ lilioid ];
     platforms = lib.lists.intersectLists dbus.meta.platforms networkmanager.meta.platforms;
   };
-}
+})

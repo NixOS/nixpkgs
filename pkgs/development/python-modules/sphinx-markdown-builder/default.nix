@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   nix-update-script,
-  fetchpatch2,
 
   # build system
   setuptools,
@@ -33,24 +32,15 @@
 
 buildPythonPackage rec {
   pname = "sphinx-markdown-builder";
-  version = "0.6.8";
+  version = "0.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liran-funaro";
     repo = "sphinx-markdown-builder";
     tag = version;
-    hash = "sha256-dPMOOG3myh9i2ez9uhasqLnlV0BEsE9CHEbZ57VWzAo=";
+    hash = "sha256-DTc+yVFOGLXFyrgkwfgY3X60chyU3UDs0GwuPCzff28=";
   };
-
-  patches = [
-    # FIX: tests (remove with the next release)
-    # https://github.com/liran-funaro/sphinx-markdown-builder/issues/32
-    (fetchpatch2 {
-      url = "https://github.com/liran-funaro/sphinx-markdown-builder/commit/967edca036a73f7644251abd52a5da8451a10dd4.patch";
-      hash = "sha256-FGMYzd5k3Q0UvOccCvUSW3y6gor+AUncj2qv38xyOp4=";
-    })
-  ];
 
   build-system = [
     setuptools

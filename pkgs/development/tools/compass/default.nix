@@ -7,7 +7,6 @@
 
 bundlerEnv {
   pname = "compass";
-  version = "1.0.3";
 
   inherit ruby;
   gemdir = ./.;
@@ -19,7 +18,6 @@ bundlerEnv {
     homepage = "https://github.com/Compass/compass";
     license = with lib.licenses; mit;
     maintainers = with lib.maintainers; [
-      offline
       nicknovitski
     ];
     mainProgram = "compass";

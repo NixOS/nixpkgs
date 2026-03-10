@@ -29,7 +29,9 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  NIX_LDFLAGS = optionalString stdenv.hostPlatform.isLinux "-lasound";
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_LDFLAGS = "-lasound";
+  };
 
   enableParallelBuilding = true;
 
@@ -42,8 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "libmikmod-config";
     homepage = "https://mikmod.shlomifish.org/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [
-      lovek323
+    maintainers = [
     ];
     platforms = lib.platforms.unix;
 

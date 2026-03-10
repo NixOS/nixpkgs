@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm644 ${desktop} $out/share/applications/groestlcoin-qt.desktop
     substituteInPlace $out/share/applications/groestlcoin-qt.desktop --replace "Icon=groestlcoin128" "Icon=groestlcoin"
-    install -Dm644 share/pixmaps/groestlcoin256.png $out/share/pixmaps/groestlcoin.png
+    install -Dm644 share/pixmaps/groestlcoin256.png $out/share/icons/hicolor/256x256/apps/groestlcoin.png
   '';
 
   cmakeFlags = [

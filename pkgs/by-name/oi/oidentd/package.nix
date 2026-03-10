@@ -6,7 +6,7 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "oidentd";
   version = "3.1.0";
   nativeBuildInputs = [
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://files.janikrabe.com/pub/oidentd/releases/${version}/oidentd-${version}.tar.gz";
+    url = "https://files.janikrabe.com/pub/oidentd/releases/${finalAttrs.version}/oidentd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-yyvcnabxNkcIMOiZBjvoOm/pEjrGXFt4W4SG5lprkbc=";
   };
 
@@ -26,4 +26,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
-}
+})

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lyto";
   version = "0.2.2";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eeriemyxi";
     repo = "lyto";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XCAM7vo4EcbIxFddggeqABru4epE2jW2YpF++I0mpdU=";
   };
 
@@ -34,9 +34,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Automatic wireless ADB connection using QR codes";
     homepage = "https://github.com/eeriemyxi/lyto";
-    changelog = "https://github.com/eeriemyxi/lyto/releases/tag/v${version}";
+    changelog = "https://github.com/eeriemyxi/lyto/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ atemu ];
     mainProgram = "lyto";
   };
-}
+})

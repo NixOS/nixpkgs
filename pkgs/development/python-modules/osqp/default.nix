@@ -49,14 +49,14 @@ in
 
 buildPythonPackage (finalAttrs: {
   pname = "osqp";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "osqp";
     repo = "osqp-python";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xdxQaL794rHQmdC0cua1C/IT1qQSzzhTEf7dLrjOV9o=";
+    hash = "sha256-v7Kyiu5L9/GvnJFx2e6G38hkQvFQeecZNy09NJRjuA0=";
   };
 
   patches = [
@@ -109,6 +109,8 @@ buildPythonPackage (finalAttrs: {
     downloadPage = "https://github.com/oxfordcontrol/osqp-python/releases";
     changelog = "https://github.com/osqp/osqp-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+    ];
   };
 })

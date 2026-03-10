@@ -9,7 +9,7 @@
   eigen,
   libepoxy,
   libGL,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  GTEST_DIR = "${gtest.src}/googletest";
-
   nativeBuildInputs = [
     pkg-config
   ];
@@ -37,7 +35,7 @@ stdenv.mkDerivation rec {
     fftw
     gtest
     libGL
-    libX11
+    libx11
   ];
 
   propagatedBuildInputs = [
@@ -45,13 +43,15 @@ stdenv.mkDerivation rec {
     libepoxy
   ];
 
-  env =
-    lib.optionalAttrs stdenv.cc.isGNU {
-      NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
-    }
-    // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-      NIX_LDFLAGS = "-framework OpenGL";
-    };
+  env = {
+    GTEST_DIR = "${gtest.src}/googletest";
+  }
+  // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
+  }
+  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-framework OpenGL";
+  };
 
   enableParallelBuilding = true;
 

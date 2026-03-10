@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildPythonPackage,
   rustPlatform,
 
@@ -33,6 +34,14 @@ buildPythonPackage (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-aBKGJwm9EmGwLOhIx6qTuDco5uNcnwUlZf3ztFzmIGs=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "networkx-3.6-test-compat.patch";
+      url = "https://github.com/Qiskit/rustworkx/commit/04780a59005d0a80bdc3e22427566aea86783eb8.patch";
+      hash = "sha256-oUosh1pu/I6Zpg2Di/Gnp5SCwetgs9HDY96Q2bQ7R6M=";
+    })
+  ];
 
   # Otherwise, `rust-src` is required
   # https://github.com/Qiskit/rustworkx/pull/1447

@@ -55,6 +55,9 @@ buildPythonPackage rec {
     "aiosendspin"
   ];
 
+  # needs manual compat testing with music-assistant (sendspin provider)
+  passthru.skipBulkUpdate = true; # nixpkgs-update: no auto update
+
   meta = {
     changelog = "https://github.com/Sendspin/aiosendspin/releases/tag/${src.tag}";
     description = "Async Python library implementing the Sendspin Protocol";

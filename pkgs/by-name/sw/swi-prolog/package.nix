@@ -34,12 +34,12 @@
   libyaml,
 
   withGui ? false,
-  libXpm,
-  libXext,
-  libXft,
-  libXinerama,
+  libxpm,
+  libxext,
+  libxft,
+  libxinerama,
   libjpeg,
-  libXt,
+  libxt,
   libsm,
   freetype,
   fontconfig,
@@ -102,11 +102,11 @@ let
     ++ (lib.optional withPython python3)
     ++ (lib.optional withYaml libyaml)
     ++ (lib.optionals withGui' [
-      libXt
-      libXext
-      libXpm
-      libXft
-      libXinerama
+      libxt
+      libxext
+      libxpm
+      libxft
+      libxinerama
       libjpeg
       libsm
       freetype

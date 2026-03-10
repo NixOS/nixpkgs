@@ -4,12 +4,12 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "consul-alerts";
   version = "0.6.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     owner = "AcalephStorage";
     repo = "consul-alerts";
     sha256 = "0836zicv76sd6ljhbbii1mrzh65pch10w3gfa128iynaviksbgn5";
@@ -32,4 +32,4 @@ buildGoModule rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ nh2 ];
   };
-}
+})

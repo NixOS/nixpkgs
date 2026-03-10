@@ -18,7 +18,6 @@
   pythonOlder,
   setuptools,
   structlog,
-  tomli,
   tornado,
   zstandard,
 }:
@@ -49,8 +48,7 @@ buildPythonPackage rec {
     platformdirs
     tornado
     pycurl
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     # vercmp = [ pyalpm ];

@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     "-fcommon"
     "-O2"
     "-Wno-implicit-int" # clang, gcc 14
+    "-std=gnu17" # gcc 15
   ];
 
   configureFlags = [

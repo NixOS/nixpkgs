@@ -6,10 +6,10 @@
   fontconfig,
   zlib,
   icu,
-  libX11,
-  libXext,
-  libXi,
-  libXrandr,
+  libx11,
+  libxext,
+  libxi,
+  libxrandr,
   libice,
   libsm,
   openssl,
@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = map lib.getLib [
     icu
-    libX11
-    libXext
-    libXi
-    libXrandr
+    libx11
+    libxext
+    libxi
+    libxrandr
     libice
     libsm
     openssl

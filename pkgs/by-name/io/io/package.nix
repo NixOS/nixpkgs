@@ -30,7 +30,7 @@
   glfw,
   pkg-config,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libmemcached,
 }:
 
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     glfw
     openssl
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libmemcached
     python3
   ];

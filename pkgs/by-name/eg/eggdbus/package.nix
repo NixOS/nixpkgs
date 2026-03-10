@@ -8,12 +8,12 @@
   dbus-glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eggdbus";
   version = "0.6";
 
   src = fetchurl {
-    url = "https://hal.freedesktop.org/releases/eggdbus-${version}.tar.gz";
+    url = "https://hal.freedesktop.org/releases/eggdbus-${finalAttrs.version}.tar.gz";
     sha256 = "118hj63ac65zlg71kydv4607qcg1qpdlql4kvhnwnnhar421jnq4";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl2;
   };
-}
+})

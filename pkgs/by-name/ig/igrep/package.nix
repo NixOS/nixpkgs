@@ -6,14 +6,14 @@
   igrep,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "igrep";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "konradsz";
     repo = "igrep";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ZZhzBGLpzd9+rok+S/ypKpWXVzXaA1CnviC7LfgP/CU=";
   };
 
@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Interactive Grep";
     homepage = "https://github.com/konradsz/igrep";
-    changelog = "https://github.com/konradsz/igrep/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/konradsz/igrep/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "ig";
   };
-}
+})

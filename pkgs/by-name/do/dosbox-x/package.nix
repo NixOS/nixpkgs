@@ -13,7 +13,7 @@
   libpng,
   libslirp,
   libxkbfile,
-  libXrandr,
+  libxrandr,
   makeWrapper,
   ncurses,
   pkg-config,
@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libxkbfile
-    libXrandr
+    libxrandr
   ];
 
   # Tests for SDL_net.h for modem & IPX support, not automatically picked up due to being in SDL2 subdirectory

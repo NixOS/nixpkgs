@@ -7,12 +7,12 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.7.4";
   pname = "nload";
 
   src = fetchurl {
-    url = "http://www.roland-riegel.de/nload/nload-${version}.tar.gz";
+    url = "http://www.roland-riegel.de/nload/nload-${finalAttrs.version}.tar.gz";
     sha256 = "1rb9skch2kgqzigf19x8bzk211jdfjfdkrcvaqyj89jy2pkm3h61";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.devhell ];
     mainProgram = "nload";
   };
-}
+})

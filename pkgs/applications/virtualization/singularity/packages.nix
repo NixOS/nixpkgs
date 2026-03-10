@@ -46,19 +46,19 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.3.7";
+        version = "4.4.0";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           tag = "v${version}";
-          hash = "sha256-0MTvOdSCTO6aElUYgj1YGECJDNRiz0Y/jpSIwQdaXJU=";
+          hash = "sha256-RYUsGAPDSbH3eYiCF25PEr1sI43y+MlXDq/ze2VICu4=";
         };
 
         # Override vendorHash with overrideAttrs.
         # See https://nixos.org/manual/nixpkgs/unstable/#buildGoModule-vendorHash
-        vendorHash = "sha256-Zu+TOQdT11AnB7Hjts24YOcS4IL73I7k/VJNDO8esa4=";
+        vendorHash = "sha256-Hs5t1N9oYodwLI6lrE+FMXRIQ3tpQCdZdUwO6FbxVH8=";
 
         extraConfigureFlags = [
           # Do not build squashfuse from the Git submodule sources, use Nixpkgs provided version

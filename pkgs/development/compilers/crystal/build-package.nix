@@ -108,9 +108,11 @@ stdenv.mkDerivation (
         ++ [ "runHook postConfigure" ]
       ));
 
-    CRFLAGS = lib.concatStringsSep " " defaultOptions;
+    env = args.env or { } // {
+      CRFLAGS = lib.concatStringsSep " " defaultOptions;
 
-    PREFIX = placeholder "out";
+      PREFIX = placeholder "out";
+    };
 
     inherit enableParallelBuilding;
     strictDeps = true;

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,fiji,share/pixmaps}
+    mkdir -p $out/{bin,fiji,share/icons/hicolor/256x256/apps}
 
     cp -R * $out/fiji
     rm -f $out/fiji/jars/imagej-updater-*.jar
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set JAVA_HOME ${jdk11.home} \
       ''${gappsWrapperArgs[@]}
 
-    ln $out/fiji/images/icon.png $out/share/pixmaps/fiji.png
+    ln $out/fiji/images/icon.png $out/share/icons/hicolor/256x256/apps/fiji.png
 
     runHook postInstall
   '';

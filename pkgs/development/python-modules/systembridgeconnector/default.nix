@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "5.3.1";
+  version = "5.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "timmo001";
     repo = "system-bridge-connector";
     tag = version;
-    hash = "sha256-VM5Or2IiLN+ceUyCaCRxys9B12JSaSfDwaoII2X6q/A=";
+    hash = "sha256-gkZRvS0abfXFEz2oRuaGJRmhFoxe92F3czNkahNdTm8=";
   };
 
   build-system = [

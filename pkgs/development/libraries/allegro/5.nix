@@ -19,17 +19,17 @@
   libtheora,
   libvorbis,
   libwebp,
-  libX11,
-  libXcursor,
-  libXdmcp,
-  libXext,
-  libXfixes,
-  libXi,
-  libXpm,
-  libXt,
-  libXxf86dga,
-  libXxf86misc,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxdmcp,
+  libxext,
+  libxfixes,
+  libxi,
+  libxpm,
+  libxt,
+  libxxf86dga,
+  libxxf86misc,
+  libxxf86vm,
   openal,
   physfs,
   pkg-config,
@@ -92,17 +92,17 @@ stdenv.mkDerivation rec {
     alsa-lib
     libpthread-stubs
     libpulseaudio
-    libX11
-    libXcursor
-    libXdmcp
-    libXext
-    libXfixes
-    libXi
-    libXpm
-    libXt
-    libXxf86dga
-    libXxf86misc
-    libXxf86vm
+    libx11
+    libxcursor
+    libxdmcp
+    libxext
+    libxfixes
+    libxi
+    libxpm
+    libxt
+    libxxf86dga
+    libxxf86misc
+    libxxf86vm
     xorgproto
   ]
   ++ lib.optionals useSDL [

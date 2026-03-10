@@ -4,18 +4,18 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "awsbck";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "beeb";
     repo = "awsbck";
-    rev = "v${version}";
-    hash = "sha256-WWYUMamMDtnvOR7vjoKd1Kn8vJBAAa9Jj8MFPRGQfEQ=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-DU806u9MsZHB+7LmjMgrkaHG+Hi4BJ9OGKkIdDGOhz8=";
   };
 
-  cargoHash = "sha256-eo7NBGDPhu+v07dUUw/k1O62gxbeXh1PdPogTjg6l8I=";
+  cargoHash = "sha256-kgPpT79XSMGtnPkl4xrX3sddJQHcNSZlNmCcrxKqzuk=";
 
   # tests run in CI on the source repo
   doCheck = false;
@@ -30,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ beeb ];
     mainProgram = "awsbck";
   };
-}
+})

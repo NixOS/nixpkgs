@@ -4,8 +4,8 @@
   fetchFromGitHub,
   lib,
   libGL,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   libpng,
   libjpeg,
   wayland,
@@ -37,8 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     wayland
     wayland-protocols
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     libGL
     libpng
     libjpeg

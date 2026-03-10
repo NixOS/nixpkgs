@@ -5,7 +5,7 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "resolve-march-native";
   version = "6.0.1";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hartwork";
     repo = "resolve-march-native";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-YJvKLHxn80RRVEOGeg9BwxhDZ8Hhg5Qa6ryLOXumY5w=";
   };
 
@@ -30,4 +30,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ lovesegfault ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -399,6 +399,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails 20 out of 58 tests, expensive
 
+  preFixup = ''
+    moveToOutput "lib/gstreamer-1.0/pkgconfig" "$dev"
+  '';
+
   passthru = {
     tests = {
       full = gst-plugins-bad.override {

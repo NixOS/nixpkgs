@@ -17,6 +17,7 @@
   xdg-utils,
   xdotool,
   which,
+  openssl,
 
   jackSupport ? stdenv.hostPlatform.isLinux,
   jackLibrary,
@@ -36,12 +37,12 @@ let
         builtins.replaceStrings [ "." ] [ "" ] version
       }_linux_${arch}.tar.xz";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
   version = "7.59";
 
   src = fetchurl {
-    url = url_for_platform version stdenv.hostPlatform.qemuArch;
+    url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
         "sha256-S4RAXWss1tPzmO0zzKfkXPrcgBqwNN5EE1jpjEZ5mYk="
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     which
     autoPatchelfHook
-    xdg-utils # Required for desktop integration
+    xdg-utils # Required for install script
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     undmg
@@ -112,6 +113,7 @@ stdenv.mkDerivation rec {
         # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
         # Note that libcurl and libxml2_13 are needed for ReaPack to run.
         wrapProgram $out/opt/REAPER/reaper \
+          --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
@@ -121,6 +123,7 @@ stdenv.mkDerivation rec {
               vlc
               xdotool
               stdenv.cc.cc
+              openssl
             ]
           }"
 
@@ -150,6 +153,7 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       ilian
       viraptor
+      pancaek
     ];
   };
-}
+})

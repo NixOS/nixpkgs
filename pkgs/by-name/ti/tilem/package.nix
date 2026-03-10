@@ -11,11 +11,11 @@
   libticalcs2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tilem";
   version = "2.0";
   src = fetchurl {
-    url = "mirror://sourceforge/tilem/tilem-${version}.tar.bz2";
+    url = "mirror://sourceforge/tilem/tilem-${finalAttrs.version}.tar.bz2";
     sha256 = "1ba38xzhp3yf21ip3cgql6jzy49jc34sfnjsl4syxyrd81d269zw";
   };
   nativeBuildInputs = [ pkg-config ];
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "tilem2";
   };
-}
+})

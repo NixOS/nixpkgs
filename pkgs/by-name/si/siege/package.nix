@@ -6,12 +6,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "siege";
   version = "4.1.7";
 
   src = fetchurl {
-    url = "http://download.joedog.org/siege/siege-${version}.tar.gz";
+    url = "http://download.joedog.org/siege/siege-${finalAttrs.version}.tar.gz";
     hash = "sha256-7BQM7dFZl5OD1g2+h6AVHCwSraeHkQlaj6hK5jW5MCY=";
   };
 
@@ -41,9 +41,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "HTTP load tester";
     homepage = "https://www.joedog.org/siege-home/";
-    changelog = "https://github.com/JoeDog/siege/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/JoeDog/siege/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.unix;
   };
-}
+})

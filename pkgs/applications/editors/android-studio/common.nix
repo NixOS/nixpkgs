@@ -34,7 +34,7 @@
   libpng,
   libuuid,
   libsecret,
-  libX11,
+  libx11,
   libxcb,
   libxkbcommon,
   mesa-demos,
@@ -44,15 +44,15 @@
   libxcb-image,
   libxcb-cursor,
   libxkbfile,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   makeWrapper,
   ncurses5,
   nspr,
@@ -141,10 +141,10 @@ let
             # Crash at startup without these
             fontconfig
             freetype
-            libXext
-            libXi
-            libXrender
-            libXtst
+            libxext
+            libxi
+            libxrender
+            libxtst
             libsecret
 
             # No crash, but attempted to load at startup
@@ -159,7 +159,7 @@ let
             zlib
             pkgsi686Linux.zlib
             # Support multiple monitors
-            libXrandr
+            libxrandr
 
             # For Android emulator
             alsa-lib
@@ -168,7 +168,7 @@ let
             libbsd
             libpulseaudio
             libuuid
-            libX11
+            libx11
             libxcb
             libxkbcommon
             libxcb-wm
@@ -179,10 +179,10 @@ let
             libice
             libsm
             libxkbfile
-            libXcomposite
-            libXcursor
-            libXdamage
-            libXfixes
+            libxcomposite
+            libxcursor
+            libxdamage
+            libxfixes
             libGL
             libdrm
             libpng

@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   imlib2,
-  libX11,
-  libXinerama,
+  libx11,
+  libxinerama,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,8 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     imlib2
-    libX11
-    libXinerama
+    libx11
+    libxinerama
   ];
 
   postPatch = lib.optionalString (!stdenv.cc.isGNU) ''

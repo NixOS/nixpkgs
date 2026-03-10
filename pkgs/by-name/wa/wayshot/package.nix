@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wayshot";
   version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "waycrate";
     repo = "wayshot";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-nUpIN4WTePtFZTmKAjv0tgj4VTdZeXjoQX6am9+M3ig=";
   };
 
@@ -26,8 +26,9 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       dit7ya
       id3v1669
+      Subserial
     ];
     platforms = lib.platforms.linux;
     mainProgram = "wayshot";
   };
-}
+})

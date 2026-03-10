@@ -5,12 +5,12 @@
   lynx,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ifmetric";
   version = "0.3";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/ifmetric/ifmetric-${version}.tar.gz";
+    url = "http://0pointer.de/lennart/projects/ifmetric/ifmetric-${finalAttrs.version}.tar.gz";
     sha256 = "1v0s5x81jzwnnl7hr254d4nkyc8qcv983pzr6vqmbr9l9q553a0g";
   };
 
@@ -39,4 +39,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "ifmetric";
   };
-}
+})

@@ -5,12 +5,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thttpd";
   version = "2.29";
 
   src = fetchurl {
-    url = "https://acme.com/software/thttpd/thttpd-${version}.tar.gz";
+    url = "https://acme.com/software/thttpd/thttpd-${finalAttrs.version}.tar.gz";
     sha256 = "15x3h4b49wgfywn82i3wwbf38mdns94mbi4ma9xiwsrjv93rzh4r";
   };
 
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
   };
-}
+})

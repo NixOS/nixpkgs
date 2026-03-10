@@ -1,23 +1,25 @@
 {
   lib,
   rustPlatform,
-  fetchgit,
+  fetchFromGitHub,
   rust-jemalloc-sys,
   tree-sitter,
   nodejs,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-language-server";
-  version = "0.19.0";
+  version = "0.21.0";
 
-  src = fetchgit {
-    url = "https://github.com/supabase-community/postgres-language-server";
+  src = fetchFromGitHub {
+    owner = "supabase-community";
+    repo = "postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-0zmH9hYwmKYTRR1MxaHZcm7B2SzgCxYjLM4GCK61c7s=";
+    hash = "sha256-E5HRNT4q0RJRJ5PW7uvvrni6jdBZYQCeEWgo0i/fmBQ=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-2PEyKjHWEkGEgRy0l6nIhARN0qoR4CIv/Qo+xHucgEc=";
+  cargoHash = "sha256-JRWe0D+H9MhVDva5rY8iRr/icLbVYGMjbwa3KSAori4=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -41,15 +43,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoBuildFlags = [ "-p=pgls_cli" ];
-  cargoTestFlags = finalAttrs.cargoBuildFlags;
-  checkFlags = [
-    # Tries to write to the file system relatively to the current path
-    "--skip=syntax_error"
-    # Requires a database connection
-    "--skip=test_cli_check_command"
-    "--skip=dblint_detects_issues_snapshot"
-    "--skip=dblint_empty_database_snapshot"
+  # Many tests are integration tests requiring a running Postgres instance
+  doCheck = false;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  doInstallCheck = true;
 
   meta = {
     description = "Tools and language server for Postgres";

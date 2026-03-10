@@ -8,8 +8,8 @@
   dri-pkgconfig-stub,
   libdrm,
   libGL,
-  libX11,
-  libXau,
+  libx11,
+  libxau,
   libxcb,
   libxcvt,
   libxdmcp,
@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     dri-pkgconfig-stub
     libdrm
     libGL
-    libX11
-    libXau
+    libx11
+    libxau
     libxcb
     libxcvt
     libxdmcp

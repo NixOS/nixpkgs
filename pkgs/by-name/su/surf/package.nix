@@ -90,6 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://surf.suckless.org";
     license = lib.licenses.mit;
     platforms = webkitgtk_4_1.meta.platforms;
-    maintainers = with lib.maintainers; [ joachifm ];
+    maintainers = [ ];
   };
 }

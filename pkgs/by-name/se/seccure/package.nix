@@ -5,12 +5,12 @@
   libgcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "seccure";
   version = "0.5";
 
   src = fetchurl {
-    url = "http://point-at-infinity.org/seccure/seccure-${version}.tar.gz";
+    url = "http://point-at-infinity.org/seccure/seccure-${finalAttrs.version}.tar.gz";
     sha256 = "0nwnk3hfhgvf5xr0xipbh6smfnya22wphc5rj0vgi5d0zr5cwrk5";
   };
 
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl3;
   };
-}
+})

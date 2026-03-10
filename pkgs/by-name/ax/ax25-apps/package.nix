@@ -29,6 +29,11 @@ stdenv.mkDerivation {
     hash = "sha256-RLeFndis2OhIkJPLD+YfEUrJdZL33huVzlHq+kGq7dA=";
   };
 
+  patches = [
+    # Fix build against glibc-2.42
+    ./glibc-2.42.patch
+  ];
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var/lib"

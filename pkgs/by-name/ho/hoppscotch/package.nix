@@ -8,22 +8,22 @@
 
 let
   pname = "hoppscotch";
-  version = "26.1.0-0";
+  version = "26.2.0-0";
 
   src =
     fetchurl
       {
         aarch64-darwin = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_aarch64.dmg";
-          hash = "sha256-ReLp+KxYzWmLWiCty/tgq9BNDF0iSDgoTHC6ExMaR2w=";
+          hash = "sha256-aSllZvfdx80MnqA7EyhaRoMWewtKg0mW53VRC9ITBnI=";
         };
         x86_64-darwin = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_mac_x64.dmg";
-          hash = "sha256-MRDgJSHPQ4gRwKj6jOhWZRFq/opd1RPT0xPhKBYEjbI=";
+          hash = "sha256-KpIfbgWlbPD09NgJd8jh6zhGB2GhWTM9C/Ko8AWtmKw=";
         };
         x86_64-linux = {
           url = "https://github.com/hoppscotch/releases/releases/download/v${version}/Hoppscotch_linux_x64.AppImage";
-          hash = "sha256-v99TjjDVqALwHhQjjZW1+/3FAR+kTb7Oj7udeewK/6Y=";
+          hash = "sha256-Dhj8FpRTUZineAIKYLHPzr7AiArce/Un+HfJ4PbjfSg=";
         };
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -92,7 +92,7 @@ else
       ''
         # Install .desktop files
         install -Dm444 ${appimageContents}/Hoppscotch.desktop $out/share/applications/hoppscotch.desktop
-        install -Dm444 ${appimageContents}/Hoppscotch.png $out/share/pixmaps/hoppscotch.png
+        install -Dm444 ${appimageContents}/Hoppscotch.png $out/share/icons/hicolor/256x256/apps/hoppscotch.png
         substituteInPlace $out/share/applications/hoppscotch.desktop \
           --replace-fail "hoppscotch-desktop" "hoppscotch"
       '';

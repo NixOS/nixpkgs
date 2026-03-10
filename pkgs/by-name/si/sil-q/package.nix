@@ -6,7 +6,7 @@
   writeScript,
   makeWrapper,
   ncurses,
-  libX11,
+  libx11,
 }:
 
 let
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     ncurses
-    libX11
+    libx11
   ];
 
   # Makefile(s) and config are not top-level

@@ -18,6 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = [ "format" ];
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   meta = {
     homepage = "https://ccrypt.sourceforge.net/";
     description = "Utility for encrypting and decrypting files and streams with AES-256";

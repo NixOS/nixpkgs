@@ -6,13 +6,13 @@
   freetype,
   imlib2,
   libsm,
-  libXcomposite,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXft,
-  libXinerama,
-  libXrandr,
+  libxcomposite,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxft,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libsndfile,
   pango,
@@ -38,13 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     imlib2
     libsm
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXft
-    libXinerama
-    libXrandr
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxft
+    libxinerama
+    libxrandr
     libpulseaudio
     libsndfile
     pango

@@ -20,6 +20,7 @@
   result,
   pp,
   cmdliner,
+  cmdliner_1,
   ordering,
   ocamlformat-rpc-lib,
   ocaml,
@@ -59,7 +60,7 @@ buildDunePackage {
   '';
 
   buildInputs =
-    if lib.versionAtLeast version "1.12.0" then
+    if lib.versionAtLeast version "1.17.0" then
       [
         pp
         re
@@ -73,6 +74,20 @@ buildDunePackage {
         stdune
         chrome-trace
       ]
+    else if lib.versionAtLeast version "1.12.0" then
+      [
+        pp
+        re
+        octavius
+        dune-build-info
+        dune-rpc
+        omd
+        cmdliner_1
+        ocamlformat-rpc-lib
+        dyn
+        stdune
+        chrome-trace
+      ]
     else if lib.versionAtLeast version "1.10.0" then
       [
         pp
@@ -81,7 +96,7 @@ buildDunePackage {
         dune-build-info
         dune-rpc
         omd
-        cmdliner
+        cmdliner_1
         ocamlformat-rpc-lib
         dyn
         stdune
@@ -92,7 +107,7 @@ buildDunePackage {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1
         ocamlformat-rpc-lib
       ]
     else
@@ -102,7 +117,7 @@ buildDunePackage {
         octavius
         dune-build-info
         omd
-        cmdliner
+        cmdliner_1
       ];
 
   nativeBuildInputs = lib.optional (lib.versionOlder version "1.7.0") cppo;

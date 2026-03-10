@@ -6,7 +6,7 @@
 # };
 # Make additional configurations on demand:
 # wine.override { wineBuild = "wine32"; wineRelease = "staging"; };
-{
+args@{
   lib,
   stdenv,
   callPackage,
@@ -48,48 +48,55 @@
 }:
 
 let
-  wine-build =
-    build:
-    lib.getAttr build (
-      callPackage ./packages.nix {
-        inherit wineRelease;
-        supportFlags = {
-          inherit
-            alsaSupport
-            cairoSupport
-            cupsSupport
-            cursesSupport
-            dbusSupport
-            embedInstallers
-            fontconfigSupport
-            gettextSupport
-            gphoto2Support
-            gstreamerSupport
-            gtkSupport
-            krb5Support
-            mingwSupport
-            netapiSupport
-            odbcSupport
-            openclSupport
-            openglSupport
-            pcapSupport
-            pulseaudioSupport
-            saneSupport
-            sdlSupport
-            tlsSupport
-            udevSupport
-            usbSupport
-            v4lSupport
-            vaSupport
-            vulkanSupport
-            waylandSupport
-            x11Support
-            ffmpegSupport
-            xineramaSupport
-            ;
-        };
-        inherit moltenvk;
-      }
-    );
+  sources = callPackage ./sources.nix { };
+
+  supportFlags = lib.filterAttrs (
+    name: _:
+    !builtins.elem name [
+      "lib"
+      "stdenv"
+      "callPackage"
+      "darwin"
+      "wineRelease"
+      "wineBuild"
+    ]
+  ) args;
+
+  # Map user-facing release names to sources, pname suffix, and staging flag
+  releaseInfo = {
+    stable = {
+      src = sources.stable;
+      useStaging = false;
+    };
+    unstable = {
+      src = sources.unstable;
+      useStaging = false;
+    };
+    # Many versions have a "staging" variant, but when we say "staging",
+    # the version we want to use is "unstable".
+    staging = {
+      src = sources.unstable;
+      pnameSuffix = "-staging";
+      useStaging = true;
+    };
+    # "yabridge" enables staging too --- we are not interested in
+    # yabridge without the staging patches applied.
+    yabridge = {
+      src = sources.yabridge;
+      pnameSuffix = "-yabridge";
+      useStaging = true;
+    };
+  };
+
+  baseWine = lib.getAttr wineBuild (
+    callPackage ./packages.nix (releaseInfo.${wineRelease} // supportFlags)
+  );
 in
-wine-build wineBuild
+if wineRelease == "yabridge" then
+  baseWine.overrideAttrs (old: {
+    env = old.env // {
+      NIX_CFLAGS_COMPILE = "-std=gnu17";
+    };
+  })
+else
+  baseWine

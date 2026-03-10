@@ -18,12 +18,12 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcanberra";
   version = "0.30";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/libcanberra/libcanberra-${version}.tar.xz";
+    url = "http://0pointer.de/lennart/projects/libcanberra/libcanberra-${finalAttrs.version}.tar.xz";
     sha256 = "0wps39h8rx2b00vyvkia5j40fkak3dpipp1kzilqla0cgvk73dn2";
   };
 
@@ -99,4 +99,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = lib.platforms.unix;
   };
-}
+})

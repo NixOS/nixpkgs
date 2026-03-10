@@ -5,14 +5,14 @@
   perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "managarr";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Dark-Alex-17";
     repo = "managarr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bKW67cpLbnBxF5gbpwfCNe2QkxKYvooWEM3yKrbj7Q8=";
   };
 
@@ -31,4 +31,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "managarr";
   };
-}
+})

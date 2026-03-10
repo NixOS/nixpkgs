@@ -13,14 +13,14 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flowblade";
   version = "2.24";
 
   src = fetchFromGitHub {
     owner = "jliljebl";
     repo = "flowblade";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-scUmE7wnelgpkaxh5tsNU6EVC9BbHR39embqk3enlIM=";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out
-    cp -a ${src}/flowblade-trunk $out/flowblade
+    cp -a ${finalAttrs.src}/flowblade-trunk $out/flowblade
 
     makeWrapper $out/flowblade/flowblade $out/bin/flowblade \
       --set FREI0R_PATH ${frei0r}/lib/frei0r-1 \
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ polygon ];
     mainProgram = "flowblade";
   };
-}
+})

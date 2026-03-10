@@ -86,6 +86,40 @@ in
           "-data=${cfg.dataDir}"
         ];
         Restart = "on-failure";
+
+        # Hardening
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectHome = true;
+        ProtectClock = true;
+        ProtectKernelLogs = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
+        UMask = "0022";
+        ProtectHostname = true;
+        ProtectProc = "invisible";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        LockPersonality = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@debug"
+          "~@mount"
+          "@chown"
+        ];
       }
       // lib.optionalAttrs (cfg.dataDir == "/var/lib/sonarr/.config/NzbDrone") {
         StateDirectory = "sonarr";

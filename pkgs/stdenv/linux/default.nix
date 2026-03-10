@@ -65,8 +65,6 @@
     let
       table = {
         glibc = {
-          i686-linux = import ./bootstrap-files/i686-unknown-linux-gnu.nix;
-          x86_64-linux = import ./bootstrap-files/x86_64-unknown-linux-gnu.nix;
           armv5tel-linux = import ./bootstrap-files/armv5tel-unknown-linux-gnueabi.nix;
           armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-gnueabihf.nix;
           armv7l-linux = import ./bootstrap-files/armv7l-unknown-linux-gnueabihf.nix;
@@ -92,7 +90,6 @@
         musl = {
           aarch64-linux = import ./bootstrap-files/aarch64-unknown-linux-musl.nix;
           armv6l-linux = import ./bootstrap-files/armv6l-unknown-linux-musleabihf.nix;
-          x86_64-linux = import ./bootstrap-files/x86_64-unknown-linux-musl.nix;
         };
       };
 
@@ -127,7 +124,8 @@ let
   inherit (localSystem) system;
 
   isFromNixpkgs = pkg: !(isFromBootstrapFiles pkg);
-  isFromBootstrapFiles = pkg: pkg.passthru.isFromBootstrapFiles or false;
+  isFromBootstrapFiles =
+    pkg: pkg.passthru.isFromBootstrapFiles or pkg.passthru.isFromMinBootstrap or false;
   isBuiltByNixpkgsCompiler = pkg: isFromNixpkgs pkg && isFromNixpkgs pkg.stdenv.cc.cc;
   isBuiltByBootstrapFilesCompiler = pkg: isFromNixpkgs pkg && isFromBootstrapFiles pkg.stdenv.cc.cc;
 
@@ -155,12 +153,13 @@ let
 
   # Create a standard environment by downloading pre-built binaries of
   # coreutils, GCC, etc.
-
-  # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
-  bootstrapTools = import ./bootstrap-tools {
-    inherit (localSystem) libc system;
-    inherit lib bootstrapFiles config;
-    isFromBootstrapFiles = true;
+  stage0 = import ./stage0.nix {
+    inherit
+      lib
+      config
+      localSystem
+      bootstrapFiles
+      ;
   };
 
   # This function builds the various standard environments used during
@@ -175,21 +174,20 @@ let
     }:
 
     let
-
       thisStdenv = import ../generic {
         name = "${name}-stdenv-linux";
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
         inherit config extraNativeBuildInputs;
+        inherit (stage0) initialPath;
         preHook = ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
           ${commonPreHook}
         '';
-        shell = "${bootstrapTools}/bin/bash";
-        initialPath = [ bootstrapTools ];
+        shell = "${stage0.bash}/bin/bash";
 
         fetchurlBoot = import ../../build-support/fetchurl/boot.nix {
           inherit system;
@@ -237,7 +235,6 @@ let
     };
 
 in
-assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 [
 
   (
@@ -254,60 +251,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
   # Build a dummy stdenv with no GCC or working fetchurl.  This is
   # because we need a stdenv to build the GCC wrapper and fetchurl.
-  (
-    prevStage:
-    stageFun prevStage {
-      name = "bootstrap-stage0";
-
-      overrides = self: super: {
-        # We thread stage0's stdenv through under this name so downstream stages
-        # can use it for wrapping gcc too. This way, downstream stages don't need
-        # to refer to this stage directly, which violates the principle that each
-        # stage should only access the stage that came before it.
-        ccWrapperStdenv = self.stdenv;
-        # The Glibc include directory cannot have the same prefix as the
-        # GCC include directory, since GCC gets confused otherwise (it
-        # will search the Glibc headers before the GCC headers).  So
-        # create a dummy Glibc here, which will be used in the stdenv of
-        # stage1.
-        ${localSystem.libc} = self.stdenv.mkDerivation {
-          pname = "bootstrap-stage0-${localSystem.libc}";
-          strictDeps = true;
-          version = "bootstrapFiles";
-          enableParallelBuilding = true;
-          buildCommand = ''
-            mkdir -p $out
-            ln -s ${bootstrapTools}/lib $out/lib
-          ''
-          + lib.optionalString (localSystem.libc == "glibc") ''
-            ln -s ${bootstrapTools}/include-glibc $out/include
-          ''
-          + lib.optionalString (localSystem.libc == "musl") ''
-            ln -s ${bootstrapTools}/include-libc $out/include
-          '';
-          passthru.isFromBootstrapFiles = true;
-        };
-        gcc-unwrapped = bootstrapTools;
-        binutils = import ../../build-support/bintools-wrapper {
-          name = "bootstrap-stage0-binutils-wrapper";
-          nativeTools = false;
-          nativeLibc = false;
-          expand-response-params = "";
-          inherit lib;
-          inherit (self)
-            stdenvNoCC
-            coreutils
-            gnugrep
-            libc
-            ;
-          bintools = bootstrapTools;
-          runtimeShell = "${bootstrapTools}/bin/bash";
-        };
-        coreutils = bootstrapTools;
-        gnugrep = bootstrapTools;
-      };
-    }
-  )
+  (prevStage: stageFun prevStage stage0.dummyStdenv)
 
   # Create the first "real" standard environment.  This one consists
   # of bootstrap tools only, and a minimal Glibc to keep the GCC
@@ -407,7 +351,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         # Historically, the wrapper didn't use runtimeShell, so the used shell had to be changed explicitly
         # (or stdenvNoCC.shell would be used) which happened in stage4.
         binutils = super.binutils.override {
-          runtimeShell = "${bootstrapTools}/bin/bash";
+          runtimeShell = "${stage0.bash}/bin/bash";
         };
         gcc-unwrapped =
           (super.gcc-unwrapped.override (
@@ -781,11 +725,17 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
         inherit (prevStage.stdenv) fetchurlBoot;
 
         extraAttrs = {
-          inherit bootstrapTools;
+          inherit stage0;
           shellPackage = prevStage.bash;
-        };
+        }
+        // (lib.optionalAttrs stage0.isMinimalBootstrap {
+          inherit (stage0) minimal-bootstrap;
+        })
+        // (lib.optionalAttrs (!stage0.isMinimalBootstrap) {
+          inherit (stage0) bootstrapTools;
+        });
 
-        disallowedRequisites = [ bootstrapTools.out ];
+        disallowedRequisites = stage0.disallowedInFinalStdenv;
 
         # Mainly avoid reference to bootstrap tools
         allowedRequisites =
@@ -875,7 +825,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           ++ lib.optionals (localSystem.libc == "musl") [ fortify-headers ]
           ++ [
             prevStage.updateAutotoolsGnuConfigScriptsHook
-            prevStage.gnu-config
+            prevStage.updateAutotoolsGnuConfigScriptsHook.gnu_config
           ]
           ++ [
             gcc-unwrapped.gmp

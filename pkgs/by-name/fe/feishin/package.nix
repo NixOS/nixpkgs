@@ -5,10 +5,10 @@
   fetchFromGitHub,
   electron_39,
   dart-sass,
-  mpv,
+  mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10_29_2,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -16,13 +16,13 @@
 }:
 let
   pname = "feishin";
-  version = "1.4.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-eXa4LD3lH82wKP9mMe2HK9pGm6lGfVxrOpaut+lOgNM=";
+    hash = "sha256-DVlZ1ucCr8nP/TMvS2GBxjimdm8cie155vWoYMx7gbM=";
   };
 
   electron = electron_39;
@@ -41,14 +41,15 @@ buildNpmPackage {
       version
       src
       ;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
-    hash = "sha256-K9mwEJA0fZXI2OnVo5y4Zmox3mwO8qLvgLiBaoyYAkg=";
+    hash = "sha256-LeoOksMWZjhVkEjTn5sS2xuX3QxGX8O7iC/3suVwiug=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm
+    pnpm_10_29_2
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
@@ -99,7 +100,7 @@ buildNpmPackage {
     mkdir -p $out/{Applications,bin}
     cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
-      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -113,12 +114,14 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
-      --prefix PATH : "${lib.makeBinPath [ mpv ]}" \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
+
+    install -Dm644 org.jeffvli.feishin.metainfo.xml $out/share/metainfo/org.jeffvli.feishin.metainfo.xml
 
     for size in 32 64 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps

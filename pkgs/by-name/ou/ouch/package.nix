@@ -16,14 +16,14 @@
   enableUnfree ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ouch";
   version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "ouch-org";
     repo = "ouch";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-vNeOJOyQsjDUzScA1a/W+SI1Z67HTLiHjwWZZpr1Paw=";
   };
 
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line utility for easily compressing and decompressing files and directories";
     homepage = "https://github.com/ouch-org/ouch";
-    changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ouch-org/ouch/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ] ++ lib.optionals enableUnfree [ unfreeRedistributable ];
     maintainers = with lib.maintainers; [
       psibi
@@ -76,4 +76,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "ouch";
   };
-}
+})

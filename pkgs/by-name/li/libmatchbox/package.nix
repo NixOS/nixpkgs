@@ -6,9 +6,9 @@
   libice,
   libjpeg,
   libpng,
-  libX11,
-  libXext,
-  libXft,
+  libx11,
+  libxext,
+  libxft,
   pango,
   pkg-config,
 }:
@@ -25,9 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     libice
     libjpeg
     libpng
-    libX11
-    libXext
-    libXft
+    libx11
+    libxext
+    libxft
     pango
   ];
 

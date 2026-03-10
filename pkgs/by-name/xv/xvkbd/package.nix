@@ -2,14 +2,14 @@
   lib,
   stdenv,
   fetchurl,
-  libXt,
-  libXaw,
-  libXtst,
-  libXi,
-  libXpm,
+  libxt,
+  libxaw,
+  libxtst,
+  libxi,
+  libxpm,
   pkg-config,
   xorgproto,
-  Xaw3d,
+  libxaw3d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,17 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libXt
-    libXaw
-    libXtst
+    libxt
+    libxaw
+    libxtst
     xorgproto
-    libXi
-    Xaw3d
-    libXpm
+    libxi
+    libxaw3d
+    libxpm
   ];
 
   makeFlags = [
-    # avoid default libXt location
+    # avoid default libxt location
     "appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
     "datarootdir=${placeholder "out"}/share"
   ];

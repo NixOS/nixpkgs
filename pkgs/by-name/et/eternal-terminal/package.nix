@@ -45,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optionals stdenv.cc.isClang [
-    "-std=c++17"
-  ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = toString [ "-std=c++17" ];
+  };
 
   doCheck = true;
 
@@ -57,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      dezgeg
       jshort
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pysyncthru";
-  version = "0.8.0";
+  version = "0.10.1";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nielstron";
     repo = "pysyncthru";
     tag = version;
-    hash = "sha256-Zije1WzfgIU9pT0H7T/Mx+5gEBCsRgMLkfsa/KB0YtI=";
+    hash = "sha256-IJfj65p80Q4LwWkGV0A0QPtK2+FPkNVz9/WaNGzgTy8=";
   };
 
   nativeBuildInputs = [ setuptools ];

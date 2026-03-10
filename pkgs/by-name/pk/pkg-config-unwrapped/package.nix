@@ -6,12 +6,12 @@
   vanilla ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pkg-config";
   version = "0.29.2";
 
   src = fetchurl {
-    url = "https://pkg-config.freedesktop.org/releases/pkg-config-${version}.tar.gz";
+    url = "https://pkg-config.freedesktop.org/releases/pkg-config-${finalAttrs.version}.tar.gz";
     sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
 
@@ -84,4 +84,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     mainProgram = "pkg-config";
   };
-}
+})

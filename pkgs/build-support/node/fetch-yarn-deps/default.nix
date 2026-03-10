@@ -31,7 +31,7 @@ in
 {
   prefetch-yarn-deps = stdenv.mkDerivation {
     pname = "prefetch-yarn-deps";
-    inherit (lib.trivial) version;
+    version = lib.trivial.release;
 
     dontUnpack = true;
     dontBuild = true;
@@ -68,7 +68,7 @@ in
 
   fixup-yarn-lock = stdenv.mkDerivation {
     pname = "fixup-yarn-lock";
-    inherit (lib.trivial) version;
+    version = lib.trivial.release;
 
     dontUnpack = true;
     dontBuild = true;
@@ -136,8 +136,11 @@ in
               prefetch-yarn-deps
               cacert
             ];
-            GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-            NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+            env = {
+              GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+              NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+            };
 
             buildPhase = ''
               runHook preBuild

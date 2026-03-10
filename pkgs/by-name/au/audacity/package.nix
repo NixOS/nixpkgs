@@ -40,8 +40,8 @@
   at-spi2-core,
   dbus,
   libepoxy,
-  libXdmcp,
-  libXtst,
+  libxdmcp,
+  libxtst,
   libpthread-stubs,
   libsbsms_2_3_0,
   libselinux,
@@ -49,7 +49,7 @@
   libxkbcommon,
   util-linux,
   wavpack,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   libpng,
   libjpeg,
@@ -129,15 +129,15 @@ stdenv.mkDerivation (finalAttrs: {
     twolame
     portaudio
     wavpack
-    wxGTK32
+    wxwidgets_3_2
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
     libepoxy
-    libXdmcp
-    libXtst
+    libxdmcp
+    libxtst
     libpthread-stubs
     libxkbcommon
     libselinux

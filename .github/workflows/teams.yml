@@ -38,7 +38,7 @@ jobs:
             maintainers/github-teams.json
 
       - name: Install dependencies
-        run: npm install bottleneck
+        run: npm install bottleneck@2.19.5
 
       - name: Synchronise teams
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0

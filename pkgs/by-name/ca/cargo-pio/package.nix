@@ -3,14 +3,14 @@
   fetchFromGitHub,
   rustPlatform,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-pio";
   version = "0.25.6";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "embuild";
-    rev = "cargo-pio-v${version}";
+    rev = "cargo-pio-v${finalAttrs.version}";
     hash = "sha256-YH2CPb3uBlPncd+KkP25xhCVvDB7HDxJuSqWOJ1LT3k=";
   };
 
@@ -28,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "cargo-pio";
   };
-}
+})

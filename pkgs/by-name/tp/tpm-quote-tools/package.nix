@@ -6,12 +6,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpm-quote-tools";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/tpmquotetools/${version}/tpm-quote-tools-${version}.tar.gz";
+    url = "mirror://sourceforge/project/tpmquotetools/${finalAttrs.version}/tpm-quote-tools-${finalAttrs.version}.tar.gz";
     sha256 = "1qjs83xb4np4yn1bhbjfhvkiika410v8icwnjix5ad96w2nlxp0h";
   };
 
@@ -38,4 +38,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ak ];
     platforms = lib.platforms.linux;
   };
-}
+})

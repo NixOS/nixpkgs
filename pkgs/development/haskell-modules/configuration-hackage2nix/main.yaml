@@ -29,6 +29,10 @@ default-package-overrides:
   # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
   - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2026-01-30: Needs to match hasql from Stackage LTS 24
+  - hasql-notifications < 0.2.5.0
+  # 2026-02-04: as requested by ghcide >= 2.13
+  - hiedb < 0.8.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
   - hnix-store-core < 0.7
@@ -47,6 +51,8 @@ default-package-overrides:
   - pandoc-crossref == 0.3.21
   # 2025-12-19: Needs to match Stackage version of rhine
   - rhine-bayes < 1.6
+  # 2026-02-08: compatibility with crypton-x509* in Stackage LTS 24
+  - x509-ocsp < 0.4.1.0
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -92,7 +98,6 @@ extra-packages:
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
-  - hpack == 0.38.1                     # 2025-09-18: to match exact version upstream stack-3.7.1 uses
   - language-javascript == 0.7.0.0      # required by purescript
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
@@ -492,6 +497,7 @@ package-maintainers:
     - irc-client
     - chatter
     - envy
+    - krank
   t4ccer:
     - aeson-better-errors
     - cheapskate

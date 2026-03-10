@@ -7,12 +7,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "m17n-db";
   version = "1.8.10";
 
   src = fetchurl {
-    url = "mirror://savannah/m17n/m17n-db-${version}.tar.gz";
+    url = "mirror://savannah/m17n/m17n-db-${finalAttrs.version}.tar.gz";
     hash = "sha256-MQJOBRNTNEi5sx6jKU01pkJuZpDrRGKGgHMaqVXAwWw=";
   };
 
@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
     description = "Multilingual text processing library (database)";
     mainProgram = "m17n-db";
     changelog = "https://git.savannah.nongnu.org/cgit/m17n/m17n-db.git/plain/NEWS?h=REL-${
-      lib.replaceStrings [ "." ] [ "-" ] version
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

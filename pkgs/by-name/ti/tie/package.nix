@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tie";
   version = "2.4";
 
   src = fetchurl {
-    url = "http://mirrors.ctan.org/web/tie/tie-${version}.tar.gz";
+    url = "http://mirrors.ctan.org/web/tie/tie-${finalAttrs.version}.tar.gz";
     sha256 = "1m5952kdfffiz33p1jw0wv7dh272mmw28mpxw9v7lkb352zv4xsj";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     license = lib.licenses.abstyles;
   };
-}
+})

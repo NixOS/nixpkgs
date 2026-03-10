@@ -41,19 +41,17 @@
   mediafile,
   munkres,
   musicbrainzngs,
+  packaging,
   platformdirs,
   pyyaml,
   unidecode,
   reflink,
+  requests-ratelimiter,
   typing-extensions,
   lap,
 
   # native
   gobject-introspection,
-  sphinxHook,
-  sphinx-design,
-  sphinx-copybutton,
-  pydata-sphinx-theme,
 
   # buildInputs
   gst_all_1,
@@ -80,6 +78,7 @@
   requests,
   requests-oauthlib,
   resampy,
+  titlecase,
   soco,
 
   # configurations
@@ -92,11 +91,13 @@
   # tests
   pytestCheckHook,
   pytest-cov-stub,
+  pytest-flask,
   mock,
   rarfile,
   responses,
   requests-mock,
   pillow,
+  tomli,
   writableTmpDirAsHomeHook,
 
   # preCheck
@@ -112,22 +113,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beets";
-  version = "2.5.1";
+  version = "2.6.2";
   src = fetchFromGitHub {
     owner = "beetbox";
     repo = "beets";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H3jcEHyK13+RHVlV4zp+8M3LZ0Jc2FdmAbLpekGozLA=";
+    hash = "sha256-1euYkoM66gnElCbgCgIpj1waq1QvHApUgioJTbSQJ0U=";
   };
   pyproject = true;
   # Waiting for https://github.com/beetbox/beets/pull/6267
   disabled = pythonAtLeast "3.14";
 
-  patches = [
-    # Bash completion fix for Nix
-    ./bash-completion-always-print.patch
-  ]
-  ++ extraPatches;
+  patches = extraPatches;
 
   build-system = [
     poetry-core
@@ -141,6 +138,7 @@ buildPythonPackage (finalAttrs: {
     mediafile
     munkres
     musicbrainzngs
+    packaging
     platformdirs
     pyyaml
     unidecode
@@ -148,6 +146,7 @@ buildPythonPackage (finalAttrs: {
     # add too much to the closure. See:
     # https://github.com/NixOS/nixpkgs/issues/437308
     reflink
+    requests-ratelimiter
     typing-extensions
     lap
   ]
@@ -157,10 +156,6 @@ buildPythonPackage (finalAttrs: {
 
   nativeBuildInputs = [
     gobject-introspection
-    sphinxHook
-    sphinx-design
-    sphinx-copybutton
-    pydata-sphinx-theme
   ]
   ++ extraNativeBuildInputs;
 
@@ -172,19 +167,7 @@ buildPythonPackage (finalAttrs: {
 
   outputs = [
     "out"
-    "doc"
-    "man"
   ];
-  sphinxBuilders = [
-    "html"
-    "man"
-  ];
-  # Causes an installManPage error. Not clear why this directory gets generated
-  # with the manpages. The same directory is observed correctly in
-  # $doc/share/doc/beets-${version}/html
-  preInstallSphinx = ''
-    rm -r .sphinx/man/man/_sphinx_design_static
-  '';
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -200,11 +183,13 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
+    pytest-flask
     mock
     rarfile
     responses
     requests-mock
     pillow
+    tomli
     writableTmpDirAsHomeHook
   ]
   ++ finalAttrs.finalPackage.passthru.plugins.wrapperBins;
@@ -213,30 +198,12 @@ buildPythonPackage (finalAttrs: {
 
   disabledTestPaths =
     finalAttrs.finalPackage.passthru.plugins.disabledTestPaths
-    ++ [
-      # touches network
-      "test/plugins/test_aura.py"
-    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Flaky: several tests fail randomly with:
       # if not self._poll(timeout):
       #   raise Empty
       #   _queue.Empty
       "test/plugins/test_bpd.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # fail on Hydra with `RuntimeError: image cannot be obtained without artresizer backend`
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio"
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_percent_margin"
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_px_margin"
-      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_minwidth"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced_and_resized"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_not_resized"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_and_scaled"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_but_not_scaled"
-      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_resize"
     ];
   disabledTests = extraDisabledTests ++ [
     # touches network
@@ -349,11 +316,11 @@ buildPythonPackage (finalAttrs: {
         fromfilename.testPaths = [ ];
         ftintitle = { };
         fuzzy.testPaths = [ ];
-        gmusic.testPaths = [ ];
         hook = { };
         ihate = { };
         importadded = { };
         importfeeds = { };
+        importsource = { };
         info = { };
         inline.testPaths = [ ];
         ipfs = { };
@@ -368,9 +335,7 @@ buildPythonPackage (finalAttrs: {
           testPaths = [ ];
         };
         limit = { };
-        listenbrainz = {
-          testPaths = [ ];
-        };
+        listenbrainz = { };
         loadext = {
           propagatedBuildInputs = [ requests ];
           testPaths = [ ];
@@ -383,6 +348,7 @@ buildPythonPackage (finalAttrs: {
         mbcollection.testPaths = [ ];
         mbsubmit = { };
         mbsync = { };
+        mbpseudo = { };
         metasync.testPaths = [ ];
         missing.testPaths = [ ];
         mpdstats.propagatedBuildInputs = [ mpd2 ];
@@ -420,6 +386,7 @@ buildPythonPackage (finalAttrs: {
           testPaths = [ ];
         };
         the = { };
+        titlecase.propagatedBuildInputs = [ titlecase ];
         thumbnails = {
           propagatedBuildInputs = [
             pillow

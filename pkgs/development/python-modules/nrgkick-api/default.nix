@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nrgkick-api";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "andijakl";
     repo = "nrgkick-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-q9mLX+DjNSyvjJ6hNPZckaHTNNelOsOlOe9XeVqutaU=";
+    hash = "sha256-ZOVSQOjFPVnm3xnkhp+KFC9YbASEfzB05VpSzKcXJiU=";
   };
 
   build-system = [ setuptools ];

@@ -24,12 +24,12 @@
 let
   inherit (lib) optional;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corosync";
   version = "3.1.9";
 
   src = fetchurl {
-    url = "http://build.clusterlabs.org/corosync/releases/corosync-${version}.tar.gz";
+    url = "http://build.clusterlabs.org/corosync/releases/corosync-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-IDNUu93uGpezxQoHbq6JxjX0Bt1nTMrvyUu5CSrNlTU=";
   };
 
@@ -112,4 +112,4 @@ stdenv.mkDerivation rec {
       ryantm
     ];
   };
-}
+})

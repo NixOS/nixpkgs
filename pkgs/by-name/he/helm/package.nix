@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  CXXFLAGS = [
+  env.CXXFLAGS = toString [
     "-DHAVE_LROUND"
     "-fpermissive"
   ];

@@ -13,8 +13,7 @@
   qemu,
   scribus,
   tigervnc,
-  wlroots_0_17,
-  wlroots_0_18,
+  wlroots_0_19,
   xwayland,
 
   gitUpdater,
@@ -78,8 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
         qemu
         scribus
         tigervnc
-        wlroots_0_17
-        wlroots_0_18
+        wlroots_0_19
         xwayland
         ;
       pkg-config = testers.hasPkgConfigModules {

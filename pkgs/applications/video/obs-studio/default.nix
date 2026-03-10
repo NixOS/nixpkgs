@@ -4,11 +4,13 @@
   callPackage,
   qt6Packages,
   ffmpeg-full,
+
 }:
 
 let
   pname = "obs-studio";
   version = "32.0.4";
+
   meta = {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''

@@ -8,7 +8,7 @@
   cmrt,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
 }:
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmrt
     libdrm
     libva
-    libX11
+    libx11
     libGL
     wayland
   ];

@@ -8,15 +8,15 @@
   kubevirt,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubevirt";
-  version = "1.6.3";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
-    rev = "v${version}";
-    hash = "sha256-PWy8RqAuu3VRryzwEcsk8Z/uPSfsil+lzbU8oay4Lig=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fG+iIWAbvgrtrUfDEXFWbxoJdNuQFN9grp4JHzSjlYs=";
   };
 
   vendorHash = null;
@@ -26,9 +26,9 @@ buildGoModule rec {
   tags = [ "selinux" ];
 
   ldflags = [
-    "-X kubevirt.io/client-go/version.gitCommit=v${version}"
+    "-X kubevirt.io/client-go/version.gitCommit=v${finalAttrs.version}"
     "-X kubevirt.io/client-go/version.gitTreeState=clean"
-    "-X kubevirt.io/client-go/version.gitVersion=v${version}"
+    "-X kubevirt.io/client-go/version.gitVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -43,7 +43,7 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = kubevirt;
     command = "virtctl version --client";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
@@ -56,4 +56,4 @@ buildGoModule rec {
     ];
     mainProgram = "virtctl";
   };
-}
+})

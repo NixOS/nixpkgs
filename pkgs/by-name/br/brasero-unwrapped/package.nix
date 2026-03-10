@@ -27,12 +27,12 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "${major}.${minor}";
   pname = "brasero";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/brasero/${major}/brasero-${version}.tar.xz";
+    url = "mirror://gnome/sources/brasero/${major}/brasero-${finalAttrs.version}.tar.xz";
     hash = "sha256-h3SerjOhQSB9GwC+IzttgEWYLtMkntS5ja4fOpdf6hU=";
   };
 
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "brasero";
   };
-}
+})

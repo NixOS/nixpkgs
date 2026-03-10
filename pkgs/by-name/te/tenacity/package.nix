@@ -4,7 +4,7 @@
   fetchFromCodeberg,
   cmake,
   ninja,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   pkg-config,
   python3,
@@ -39,8 +39,8 @@
   at-spi2-core,
   dbus,
   libepoxy,
-  libXdmcp,
-  libXtst,
+  libxdmcp,
+  libxtst,
   libpthread-stubs,
   libselinux,
   libsepol,
@@ -108,18 +108,20 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  # Tenacity only looks for ffmpeg at runtime, so we need to link it in manually.
-  # On darwin, these are ignored by the ffmpeg search even when linked.
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux (toString [
-    "-lavcodec"
-    "-lavdevice"
-    "-lavfilter"
-    "-lavformat"
-    "-lavutil"
-    "-lpostproc"
-    "-lswresample"
-    "-lswscale"
-  ]);
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    # Tenacity only looks for ffmpeg at runtime, so we need to link it in manually.
+    # On darwin, these are ignored by the ffmpeg search even when linked.
+    NIX_LDFLAGS = toString [
+      "-lavcodec"
+      "-lavdevice"
+      "-lavfilter"
+      "-lavformat"
+      "-lavutil"
+      "-lpostproc"
+      "-lswresample"
+      "-lswscale"
+    ];
+  };
 
   nativeBuildInputs = [
     cmake
@@ -158,7 +160,7 @@ stdenv.mkDerivation (finalAttrs: {
     sratom
     suil
     twolame
-    wxGTK32
+    wxwidgets_3_2
     gtk3
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
@@ -166,8 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
     at-spi2-core
     dbus
     libepoxy
-    libXdmcp
-    libXtst
+    libxdmcp
+    libxtst
     libpthread-stubs
     libxkbcommon
     libselinux

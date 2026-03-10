@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "bkyml";
   version = "1.4.3";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "01kpx35572mp4xl2fjyvfk39jfgfjcyzymbifk76891kaqkjb7r9";
   };
 
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail "use_pyscaffold=True"  ""
     substituteInPlace src/bkyml/__init__.py \
       --replace-fail "from pkg_resources" "# from pkg_resources" \
-      --replace-fail "get_distribution(dist_name).version" '"${version}"'
+      --replace-fail "get_distribution(dist_name).version" '"${finalAttrs.version}"'
   '';
 
   build-system = with python3.pkgs; [
@@ -46,4 +46,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ olebedev ];
   };
-}
+})

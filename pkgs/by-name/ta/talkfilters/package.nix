@@ -4,16 +4,12 @@
   fetchurl,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "talkfilters";
   version = "2.3.8";
-in
-
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchurl {
-    url = "http://www.hyperrealm.com/talkfilters/talkfilters-${version}.tar.gz";
+    url = "http://www.hyperrealm.com/talkfilters/talkfilters-${finalAttrs.version}.tar.gz";
     sha256 = "19nc5vq4bnkjvhk8srqddzhcs93jyvpm9r6lzjzwc1mgf08yg0a6";
   };
 
@@ -26,4 +22,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ ikervagyok ];
     platforms = with lib.platforms; unix;
   };
-}
+})

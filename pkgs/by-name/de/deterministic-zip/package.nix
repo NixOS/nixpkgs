@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "deterministic-zip";
-  version = "5.2.0";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "timo-reymann";
     repo = "deterministic-zip";
     tag = finalAttrs.version;
-    hash = "sha256-rvheo/DkQTfpVy8fVRRwRA4G9mdMNArptxNT0sxdqnc=";
+    hash = "sha256-yuwy3t2iWBXBwsj0Psy4/1YJ/V/vuNiBVzYzGQXUnkA=";
   };
 
-  vendorHash = "sha256-qLVeliB2+qRhF+iRE0zHyhBOTB7q31ZGCEH7kbSLSBA=";
+  vendorHash = "sha256-hEPZrS2D6YqlaaJXF8uyt+fJ38Adi3WvOq7v9dZuovI=";
 
   ldflags = [
     "-s"

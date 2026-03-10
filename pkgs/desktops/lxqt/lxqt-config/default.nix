@@ -5,9 +5,9 @@
   cmake,
   glib,
   kwindowsystem,
-  libXScrnSaver,
-  libXcursor,
-  libXdmcp,
+  libxscrnsaver,
+  libxcursor,
+  libxdmcp,
   libkscreen,
   liblxqt,
   libpthread-stubs,
@@ -26,15 +26,15 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-config";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "lxqt-config";
-    rev = version;
-    hash = "sha256-2CAQeX2X0DPmgOaAEJoCLtgjFT+Z6epc/dUCbaEIlB0=";
+    tag = finalAttrs.version;
+    hash = "sha256-2fviPhSBwUU9jg3217PLbREh8MkArd2Uc4bhFXo2J7U=";
   };
 
   nativeBuildInputs = [
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib.bin
     kwindowsystem
-    libXScrnSaver
-    libXcursor
-    libXdmcp
+    libxscrnsaver
+    libxcursor
+    libxdmcp
     libkscreen
     liblxqt
     libpthread-stubs
@@ -86,4 +86,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.lxqt ];
   };
 
-}
+})

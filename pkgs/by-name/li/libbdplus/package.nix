@@ -14,12 +14,12 @@
 # http://vlc-bluray.whoknowsmy.name/
 # https://wiki.archlinux.org/index.php/BluRay
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbdplus";
   version = "0.2.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libbdplus/${version}/libbdplus-${version}.tar.bz2";
+    url = "http://get.videolan.org/libbdplus/${finalAttrs.version}/libbdplus-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-uT7qPq7zPW6RVdLDSwaMUFSTqlpJNuYydPQ0KrD0Clg=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
-}
+})

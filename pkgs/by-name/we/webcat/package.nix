@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "webcat";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "rumpelsepp";
     repo = "webcat";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-JyZHH8JgS3uoNVicx1wj0SAzlrXyTrpwIBZuok6buRw=";
   };
 
@@ -36,4 +36,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ montag451 ];
     mainProgram = "webcat";
   };
-}
+})

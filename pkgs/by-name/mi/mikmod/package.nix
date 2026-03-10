@@ -7,12 +7,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mikmod";
   version = "3.2.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mikmod/mikmod-${version}.tar.gz";
+    url = "mirror://sourceforge/mikmod/mikmod-${finalAttrs.version}.tar.gz";
     sha256 = "1k54p8pn3jinha0f2i23ad15pf1pamibzcxjrbzjbklpcz1ipc6v";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     mainProgram = "mikmod";
   };
-}
+})

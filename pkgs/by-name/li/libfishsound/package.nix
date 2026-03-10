@@ -10,12 +10,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfishsound";
   version = "1.0.0";
 
   src = fetchurl {
-    url = "https://downloads.xiph.org/releases/libfishsound/libfishsound-${version}.tar.gz";
+    url = "https://downloads.xiph.org/releases/libfishsound/libfishsound-${finalAttrs.version}.tar.gz";
     sha256 = "1iz7mn6hw2wg8ljaw74f4g2zdj68ib88x4vjxxg3gjgc5z75f2rf";
   };
 
@@ -67,4 +67,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd3;
   };
-}
+})

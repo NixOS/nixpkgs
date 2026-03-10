@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.autoSignDarwinBinariesHook
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = true;
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
   configurePhase = ''
     runHook preConfigure

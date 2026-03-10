@@ -7,8 +7,8 @@
   glib,
   gtkmm3,
   harfbuzz,
-  libX11,
-  libXdmcp,
+  libx11,
+  libxdmcp,
   libxcb,
   makeWrapper,
   pcre2,
@@ -46,8 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtkmm3
     harfbuzz
-    libX11
-    libXdmcp
+    libx11
+    libxdmcp
     libxcb
     pcre2
     libxcb-cursor
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiling X11 window manager written in modern C++";
     license = lib.licenses.bsd3;
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
     mainProgram = "Hypr";
   };
 })

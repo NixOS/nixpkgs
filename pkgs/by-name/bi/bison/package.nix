@@ -12,12 +12,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bison";
   version = "3.8.2"; # Check the note above doInstallCheck before updating.
 
   src = fetchurl {
-    url = "mirror://gnu/bison/bison-${version}.tar.gz";
+    url = "mirror://gnu/bison/bison-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-BsnhO99+sk1M62tZIFpPZ8LH5yExGWREMP6C+9FKCrs=";
   };
 
@@ -71,4 +71,4 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.unix;
   };
-}
+})

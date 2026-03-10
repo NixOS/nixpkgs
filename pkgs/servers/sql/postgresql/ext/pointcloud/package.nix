@@ -14,6 +14,7 @@
   postgresqlTestExtension,
   postgresqlTestHook,
   sphinx,
+  stdenv,
   which,
   zlib,
 }:
@@ -49,7 +50,7 @@ postgresqlBuildExtension (finalAttrs: {
     zlib
   ];
 
-  doCheck = !(postgresqlTestHook.meta.broken);
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
   checkInputs = [
     cunit

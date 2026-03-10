@@ -233,6 +233,8 @@ let
 
   proxy_env = config.networking.proxy.envVars;
 
+  json = pkgs.formats.json { };
+
 in
 
 {
@@ -356,6 +358,28 @@ in
       '';
     };
 
+    generatorEnvironment = mkOption {
+      type = types.attrsOf types.str;
+      default = { };
+      example = {
+        MY_VAR = "my-value";
+      };
+      description = ''
+        Environment variables for systemd generators.
+
+        The `PATH` environment variable is populated via `systemd.generatorPath`.
+      '';
+    };
+
+    generatorPath = mkOption {
+      type = types.listOf types.package;
+      default = [ ];
+      example = lib.literalExpression "[ pkgs.hello ]";
+      description = ''
+        Packages added to the `PATH` environment variable of all systemd generators.
+      '';
+    };
+
     shutdown = mkOption {
       type = types.attrsOf types.path;
       default = { };
@@ -446,13 +470,17 @@ in
       '';
     };
 
-    sleep.extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "HibernateDelaySec=1h";
+    sleep.settings.Sleep = mkOption {
+      default = { };
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        HibernateDelaySec = "1h";
+      };
       description = ''
-        Extra config options for systemd sleep state logic.
-        See {manpage}`sleep.conf.d(5)` man page for available options.
+        Options for systemd sleep state logic. See {manpage}`sleep.conf.d(5)` man page
+        for available options.
       '';
     };
 
@@ -613,10 +641,7 @@ in
 
         "systemd/system.conf".text = settingsToSections cfg.settings;
 
-        "systemd/sleep.conf".text = ''
-          [Sleep]
-          ${cfg.sleep.extraConfig}
-        '';
+        "systemd/sleep.conf".text = settingsToSections cfg.sleep.settings;
 
         "systemd/user-generators" = {
           source = hooks "user-generators" cfg.user.generators;
@@ -636,6 +661,12 @@ in
         "systemd/user-preset/00-nixos.preset".text = ''
           ignore *
         '';
+
+        "systemd/generator-environment.json".source =
+          json.generate "systemd-generator-environment.json" cfg.generatorEnvironment;
+
+        "systemd/system-environment-generators/env-generator".source =
+          "${config.system.nixos-init.package}/bin/env-generator";
       };
 
     services.dbus.enable = true;
@@ -704,6 +735,16 @@ in
       DefaultIPAccounting = lib.mkDefault true;
     };
 
+    # These are needed for systemd-fstab-generator to schedule systemd-fsck@
+    # units.
+    systemd.generatorPath = config.system.fsPackages ++ [
+      cfg.package.util-linux
+    ];
+
+    systemd.generatorEnvironment = {
+      PATH = lib.makeBinPath cfg.generatorPath;
+    };
+
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "DEVTMPFS"
       "CGROUPS"
@@ -767,6 +808,31 @@ in
     # Don't bother with certain units in containers.
     systemd.services.systemd-remount-fs.unitConfig.ConditionVirtualization = "!container";
 
+    # When using the classic /etc mechanism, we set certain paths in /etc to
+    # /etc/static so that systemd cannot change them (as they are symlinks to
+    # the read-only Nix Store). This is only done so that these services cannot
+    # change the values. All other parts of systemd should read them from their
+    # canonical locations.
+    #
+    # If you use the overlay mechanism to manage /etc, this is unnecessary
+    # because either the overlay is mutable (and users can legitimately change
+    # values without them being overridden) or it is immutable and systemd will
+    # suggest to only make runtime changes.
+    systemd.services."systemd-localed".environment = lib.mkIf (!config.system.etc.overlay.enable) {
+      SYSTEMD_ETC_LOCALE_CONF = "/etc/static/locale.conf";
+      SYSTEMD_ETC_VCONSOLE_CONF = "/etc/static/vconsole.conf";
+    };
+    systemd.services."systemd-timedated".environment =
+      lib.mkIf (!config.system.etc.overlay.enable && config.time.timeZone != null)
+        {
+          SYSTEMD_ETC_LOCALTIME = "/etc/static/localtime";
+          SYSTEMD_ETC_ADJTIME = "/etc/static/adjtime";
+        };
+    systemd.services."systemd-hostnamed".environment = lib.mkIf (!config.system.etc.overlay.enable) {
+      SYSTEMD_ETC_HOSTNAME = "/etc/static/hostname";
+      SYSTEMD_ETC_MACHINE_INFO = "/etc/static/machine-info";
+    };
+
     # Increase numeric PID range (set directly instead of copying a one-line file from systemd)
     # https://github.com/systemd/systemd/pull/12226
     boot.kernel.sysctl."kernel.pid_max" = mkIf pkgs.stdenv.hostPlatform.is64bit (lib.mkDefault 4194304);
@@ -813,6 +879,11 @@ in
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
     (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.settings.Manager instead.")
+    (mkRemovedOptionModule [
+      "systemd"
+      "sleep"
+      "extraConfig"
+    ] "Use systemd.sleep.settings.Sleep instead.")
     (lib.mkRenamedOptionModule
       [ "systemd" "watchdog" "device" ]
       [ "systemd" "settings" "Manager" "WatchdogDevice" ]

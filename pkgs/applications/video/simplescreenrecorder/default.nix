@@ -5,11 +5,11 @@
   alsa-lib,
   ffmpeg,
   libjack2,
-  libX11,
-  libXext,
-  libXinerama,
+  libx11,
+  libxext,
+  libxinerama,
   qtx11extras,
-  libXfixes,
+  libxfixes,
   libGLU,
   libGL,
   pkg-config,
@@ -60,10 +60,10 @@ stdenv.mkDerivation {
     alsa-lib
     ffmpeg
     libjack2
-    libX11
-    libXext
-    libXfixes
-    libXinerama
+    libx11
+    libxext
+    libxfixes
+    libxinerama
     libGLU
     libGL
     libpulseaudio

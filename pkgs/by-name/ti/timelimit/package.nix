@@ -20,8 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   installFlags = [ "PREFIX=$(out)" ];
-  INSTALL_PROGRAM = "install -m755";
-  INSTALL_DATA = "install -m644";
+
+  env = {
+    INSTALL_PROGRAM = "install -m755";
+    INSTALL_DATA = "install -m644";
+  };
 
   meta = {
     description = "Execute a command and terminates the spawned process after a given time with a given signal";

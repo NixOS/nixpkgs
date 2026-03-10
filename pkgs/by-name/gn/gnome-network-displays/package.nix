@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     Hence, this is not necessarily an upstream issue, but could be something
     wrong with how our gst_all_1 depend on each other.
   */
-  CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   preConfigure = ''
     patchShebangs ./build-aux/meson/postinstall.py

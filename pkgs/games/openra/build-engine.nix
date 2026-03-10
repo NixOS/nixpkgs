@@ -35,6 +35,12 @@ buildDotnetModule {
 
   nugetDeps = engine.deps;
 
+  # Retarget from net6.0 to net8.0 (net6.0 is EOL)
+  postPatch = ''
+    substituteInPlace Directory.Build.props \
+      --replace-fail ">net6.0<" ">net8.0<"
+  '';
+
   useAppHost = false;
 
   dotnetFlags = [ "-p:Version=0.0.0.0" ]; # otherwise dotnet build complains, version is saved in VERSION file anyway

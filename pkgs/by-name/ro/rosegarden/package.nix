@@ -29,12 +29,12 @@
   libogg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rosegarden";
   version = "25.06";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/rosegarden-${version}.tar.xz";
+    url = "mirror://sourceforge/rosegarden/rosegarden-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-df5SsAWJlHHMSw5JVL5dNe4c6PQWWauO9IomF4qlw20=";
   };
 
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

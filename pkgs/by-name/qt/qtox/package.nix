@@ -8,8 +8,8 @@
   kdePackages,
   libtoxcore,
   libpthread-stubs,
-  libXdmcp,
-  libXScrnSaver,
+  libxdmcp,
+  libxscrnsaver,
   ffmpeg,
   filter-audio,
   libexif,
@@ -38,8 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.sonnet
     libtoxcore
     libpthread-stubs
-    libXdmcp
-    libXScrnSaver
+    libxdmcp
+    libxscrnsaver
     ffmpeg
     filter-audio
     libexif

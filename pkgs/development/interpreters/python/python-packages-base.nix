@@ -168,10 +168,6 @@ in
   inherit lib pkgs stdenv;
   inherit (python.passthru)
     isPy27
-    isPy37
-    isPy38
-    isPy39
-    isPy310
     isPy311
     isPy312
     isPy313

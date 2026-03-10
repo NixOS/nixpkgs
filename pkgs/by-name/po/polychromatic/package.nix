@@ -16,7 +16,7 @@
   psmisc,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "polychromatic";
   version = "0.9.3";
   pyproject = false;
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "polychromatic";
     repo = "polychromatic";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-fw4XLaivf8kRkNaemHvd9zcVKn87ZZhP+ZDJsCJHv/4=";
   };
 
@@ -94,4 +94,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ evanjs ];
     mainProgram = "polychromatic-controller";
   };
-}
+})

@@ -5,12 +5,12 @@
   ppp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pptpd";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/poptop/pptpd/pptpd-${version}/pptpd-${version}.tar.gz";
+    url = "mirror://sourceforge/poptop/pptpd/pptpd-${finalAttrs.version}/pptpd-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-anJChLHOAOoj99dgjQgYQ6EMio2H2VHLLqhucKobTnc=";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ obadz ];
     license = lib.licenses.gpl2Only;
   };
-}
+})

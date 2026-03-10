@@ -8,14 +8,14 @@
   fuse3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kio-fuse";
   version = "5.1.0";
 
   src = fetchgit {
     url = "https://invent.kde.org/system/kio-fuse.git";
     hash = "sha256-xVeDNkSeHCk86L07lPVokSgHNkye2tnLoCkdw4g2Jv0=";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
   };
 
   nativeBuildInputs = [
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ _1000teslas ];
   };
-}
+})

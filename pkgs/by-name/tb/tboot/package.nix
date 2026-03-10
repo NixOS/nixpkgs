@@ -8,12 +8,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tboot";
   version = "1.11.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tboot/tboot-${version}.tar.gz";
+    url = "mirror://sourceforge/tboot/tboot-${finalAttrs.version}.tar.gz";
     hash = "sha256-uCbJatmt1qYLuWdCATeCS4mNrpJ+UUBJa1rDgjE37Z0=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Pre-kernel/VMM module that uses Intel(R) TXT to perform a measured and verified launch of an OS kernel/VMM";
     homepage = "https://sourceforge.net/projects/tboot/";
-    changelog = "https://sourceforge.net/p/tboot/code/ci/v${version}/tree/CHANGELOG";
+    changelog = "https://sourceforge.net/p/tboot/code/ci/v${finalAttrs.version}/tree/CHANGELOG";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ak ];
     platforms = [
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
       "i686-linux"
     ];
   };
-}
+})

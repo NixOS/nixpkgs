@@ -10,12 +10,12 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calcurse";
   version = "4.8.2";
 
   src = fetchurl {
-    url = "https://calcurse.org/files/calcurse-${version}.tar.gz";
+    url = "https://calcurse.org/files/calcurse-${finalAttrs.version}.tar.gz";
     hash = "sha256-hJuoUsfze2dyNlywxCqUzeD+de+6kTY+lqDn73l7pWU=";
   };
 
@@ -44,9 +44,9 @@ stdenv.mkDerivation rec {
       be used to filter and format appointments, making it suitable for use in scripts.
     '';
     homepage = "https://calcurse.org/";
-    changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${version}";
+    changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.matthiasbeyer ];
   };
-}
+})

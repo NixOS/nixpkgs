@@ -17,13 +17,13 @@
   libjpeg,
   libpng,
   libwebp,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxxf86vm,
   libxcb,
-  libXrandr,
+  libxrandr,
   ninja,
   pcre2,
   pixman,
@@ -35,7 +35,7 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "aseprite";
-  version = "1.3.16.1";
+  version = "1.3.17";
 
   srcs = [
     (fetchFromGitHub {
@@ -44,7 +44,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       repo = "aseprite";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
-      hash = "sha256-s2lWg5udg/8pXjOcj2nXDS2uE3urkg1iC0Div7wkxUY=";
+      hash = "sha256-mBFwcf+Q/h1t7HDuiX6NTAiq0BCZZk6MUid1MuA67LY=";
     })
 
     # Translation strings
@@ -87,13 +87,13 @@ clangStdenv.mkDerivation (finalAttrs: {
     libjpeg
     libpng
     libwebp
-    libX11
-    libXcursor
-    libXext
-    libXi
-    libXxf86vm
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxxf86vm
     libxcb
-    libXrandr
+    libxrandr
     pcre2
     pixman
     skia-aseprite

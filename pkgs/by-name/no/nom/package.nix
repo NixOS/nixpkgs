@@ -5,21 +5,21 @@
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nom";
-  version = "3.1.1";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
-    tag = "v${version}";
-    hash = "sha256-4TZLMSqp6ZoDcRAnpABztBQ85sVkPWVsJtd9zOWtCTQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-l3p5eY6PbywD+ZSbMr4k3SfFKXQq16zdx5XsgB81dT8=";
   };
 
-  vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
+  vendorHash = "sha256-pPd7wpZ55thW0Xq2c/0qSAlGQ71tE8GptsEBJD839Bg=";
 
   ldflags = [
-    "-X 'main.version=${version}'"
+    "-X 'main.version=${finalAttrs.version}'"
   ];
 
   # only run xdg-specific test on linux
@@ -29,7 +29,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://github.com/guyfedwards/nom";
-    changelog = "https://github.com/guyfedwards/nom/releases/tag/v${version}";
+    changelog = "https://github.com/guyfedwards/nom/releases/tag/v${finalAttrs.version}";
     description = "RSS reader for the terminal";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     license = lib.licenses.gpl3Only;
@@ -39,4 +39,4 @@ buildGoModule rec {
     ];
     mainProgram = "nom";
   };
-}
+})

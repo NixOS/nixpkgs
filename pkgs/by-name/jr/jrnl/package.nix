@@ -6,7 +6,7 @@
   jrnl,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "jrnl";
   version = "4.2";
   pyproject = true;
@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = "jrnl";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-x0JoYJzD6RnuHbRsQMgrhHsNW6nVEVeoDjtPop2eg+w=";
   };
 
@@ -62,17 +62,17 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion {
     package = jrnl;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
   meta = {
     description = "Command line journal application that stores your journal in a plain text file";
     homepage = "https://jrnl.sh/";
-    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${version}";
+    changelog = "https://github.com/jrnl-org/jrnl/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       zalakain
     ];
     mainProgram = "jrnl";
   };
-}
+})

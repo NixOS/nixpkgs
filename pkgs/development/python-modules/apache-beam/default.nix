@@ -87,6 +87,7 @@ buildPythonPackage (finalAttrs: {
 
   pythonRelaxDeps = [
     "envoy-data-plane"
+    "httplib2"
     "jsonpickle"
     "objsize"
     "pyarrow"

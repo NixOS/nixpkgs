@@ -25,7 +25,7 @@
   zlib,
   libGL,
   libxml2,
-  libX11,
+  libx11,
   python3Packages,
   llvm,
   khronos-ocl-icd-loader,
@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.1.1";
+  version = "7.2.0";
 
   outputs = [
     "out"
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ofsq1uqMixtum5C6cp/UgTDpgGPfj+rAd6PoDx5iLLw=";
+    hash = "sha256-zz2O4Qsl1zXMC25L714azsFR2PROAvdpjgKhRolmt1w=";
   };
 
   nativeBuildInputs = [
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     numactl
     libGL
     libxml2
-    libX11
+    libx11
     khronos-ocl-icd-loader
     hipClang
     libffi
@@ -148,8 +148,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-find-x11-libgl.patch
     (fetchpatch {
       # [PATCH] rocclr: Extend HIP ISA compatibility checks
-      sha256 = "sha256-InUSIFI1MgkfocBEoZjO2BCgXNyfF10ehh9jkTtAPXs=";
-      url = "https://github.com/GZGavinZhao/rocm-systems/commit/937dcfdd316b589509c061809186fe5451d22431.patch";
+      hash = "sha256-3MsDL+OQg24wH1RDhbao74RuIbzEAmduwla9KOPzQ/M=";
+      url = "https://github.com/GZGavinZhao/rocm-systems/commit/039cb23b24d739adb8c0f9de8b550d9f557de031.patch";
       relative = "projects/clr";
     })
   ];
@@ -205,6 +205,14 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${rocm-core}/.info/ $out/.info
 
     ln -s ${hipClang} $out/llvm
+  '';
+
+  # libamdhip64.so dlopens its own bare name for hipGetProcAddress symbol resolution.
+  # Add its own directory to its RPATH so it can find itself
+  # Must be in postFixup so it runs after patchelf --shrink-rpath which removes
+  # the apparently useless rpath
+  postFixup = ''
+    patchelf --add-rpath "$out/lib" "$out/lib/libamdhip64.so"
   '';
 
   disallowedRequisites = [

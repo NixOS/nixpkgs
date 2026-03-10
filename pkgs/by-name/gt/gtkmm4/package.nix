@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Tests require fontconfig.
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ ];
   };
 

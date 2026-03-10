@@ -5,13 +5,13 @@
   intltool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sound-theme-freedesktop";
   version = "0.8";
 
   src = fetchurl {
     sha256 = "054abv4gmfk9maw93fis0bf605rc56dah7ys5plc4pphxqh8nlfb";
-    url = "https://people.freedesktop.org/~mccann/dist/sound-theme-freedesktop-${version}.tar.bz2";
+    url = "https://people.freedesktop.org/~mccann/dist/sound-theme-freedesktop-${finalAttrs.version}.tar.bz2";
   };
 
   nativeBuildInputs = [ intltool ];
@@ -28,4 +28,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = with lib.platforms; unix;
   };
-}
+})

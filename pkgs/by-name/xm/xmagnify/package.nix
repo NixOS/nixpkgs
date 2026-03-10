@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libX11,
+  libx11,
   xorgproto,
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   prePatch = "substituteInPlace ./Makefile --replace /usr $out";
 
   buildInputs = [
-    libX11
+    libx11
     xorgproto
   ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny screen magnifier for X11";
     homepage = "https://gitlab.com/amiloradovsky/magnify";
     license = lib.licenses.mit; # or GPL2+, optionally
-    maintainers = with lib.maintainers; [ amiloradovsky ];
+    maintainers = [ ];
     mainProgram = "magnify";
     platforms = lib.platforms.all;
   };

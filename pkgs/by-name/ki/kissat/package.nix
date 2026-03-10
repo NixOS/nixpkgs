@@ -66,6 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     ./configure
 
+    # Kissat's configure only detects cross-compilation for *-linux-gnu-gcc,
+    # missing other cross toolchains (e.g. musl). Fix AR in the generated makefile.
+    substituteInPlace build/makefile \
+      --replace-fail "AR=ar" "AR=${stdenv.cc.targetPrefix}ar"
+
     runHook postConfigure
   '';
 

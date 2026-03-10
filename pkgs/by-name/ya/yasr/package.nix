@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yasr";
 
   version = "0.6.9";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/yasr/files/yasr/${version}/yasr-${version}.tar.gz";
+    url = "https://sourceforge.net/projects/yasr/files/yasr/${finalAttrs.version}/yasr-${finalAttrs.version}.tar.gz";
     sha256 = "1prv9r9y6jb5ga5578ldiw507fa414m60xhlvjl29278p3x7rwa1";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     mainProgram = "yasr";
   };
-}
+})

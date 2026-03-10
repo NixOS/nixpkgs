@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdvbcsa";
   version = "1.1.0";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvbcsa/${version}/libdvbcsa-${version}.tar.gz";
+    url = "http://get.videolan.org/libdvbcsa/${finalAttrs.version}/libdvbcsa-${finalAttrs.version}.tar.gz";
     sha256 = "4db78af5cdb2641dfb1136fe3531960a477c9e3e3b6ba19a2754d046af3f456d";
   };
 
@@ -23,4 +23,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ melias122 ];
   };
 
-}
+})

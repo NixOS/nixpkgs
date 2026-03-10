@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yate";
   version = "6.4.0-1";
 
   src = fetchurl {
-    url = "http://voip.null.ro/tarballs/yate${lib.versions.major version}/yate-${version}.tar.gz";
+    url = "http://voip.null.ro/tarballs/yate${lib.versions.major finalAttrs.version}/yate-${finalAttrs.version}.tar.gz";
     hash = "sha256-jCPca/+/jUeNs6hZZLUBl3HI9sms9SIPNGVRanSKA7A=";
   };
 
@@ -48,4 +48,4 @@ stdenv.mkDerivation rec {
     ];
   };
 
-}
+})

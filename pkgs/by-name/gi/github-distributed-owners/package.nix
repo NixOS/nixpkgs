@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/andrewring/github-distributed-owners";
     changelog = "https://github.com/andrewring/github-distributed-owners/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ cameroncuttingedge ];
+    maintainers = [ ];
     mainProgram = "github-distributed-owners";
   };
 })

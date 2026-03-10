@@ -39,6 +39,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       zstd
     ];
 
+  patches = [
+    ./skip-icon-macos.patch
+  ];
+
   cargoBuildFlags = [
     "--package"
     "tauri-cli"

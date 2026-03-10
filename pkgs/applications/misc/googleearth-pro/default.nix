@@ -8,10 +8,10 @@
   libGLU,
   libsm,
 
-  libXcomposite,
-  libXi,
-  libXrender,
-  libX11,
+  libxcomposite,
+  libxi,
+  libxrender,
+  libx11,
 
   libxcb,
   sqlite,
@@ -65,10 +65,10 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     libsm
-    libX11
-    libXcomposite
-    libXi
-    libXrender
+    libx11
+    libxcomposite
+    libxi
+    libxrender
     libproxy
     libxcb
     libxml2_13

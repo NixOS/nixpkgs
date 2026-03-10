@@ -536,7 +536,7 @@ let
         ExecStartPre = [ "${preStartScript}/bin/pre-start" ];
         TimeoutStartSec = 0;
         TimeoutStopSec = 120;
-        Restart = "always";
+        Restart = "on-failure";
       }
       // optionalAttrs (cfg.backend == "podman") {
         Environment = "PODMAN_SYSTEMD_UNIT=%n";

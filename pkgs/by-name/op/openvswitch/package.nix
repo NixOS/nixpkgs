@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withDPDK then "openvswitch-dpdk" else "openvswitch";
-  version = "3.6.1";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "openvswitch";
     repo = "ovs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-I5ISLOu1MMT/mtyH4tcgdFe2zjSsutMWkJiPIbadbQI=";
+    hash = "sha256-3lbehoy3hbwuM4tXbtfQCXULFr1VQpjsSQ3fZzZcR4U=";
   };
 
   outputs = [
@@ -171,8 +171,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       adamcstephens
       booxter
-      kmcopper
-      netixx
       xddxdd
     ];
     platforms = lib.platforms.linux;

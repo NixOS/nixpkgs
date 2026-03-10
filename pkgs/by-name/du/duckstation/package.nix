@@ -22,7 +22,7 @@
   rapidjson,
   libzip,
   curl,
-  libX11,
+  libx11,
   wayland,
   shaderc,
   spirv-cross,
@@ -51,9 +51,7 @@ let
     '';
     homepage = "https://duckstation.org";
     license = lib.licenses.cc-by-nc-nd-40;
-    maintainers = with lib.maintainers; [
-      matteopacini
-    ];
+    maintainers = [ ];
   };
 
   pkgSources = lib.importJSON ./sources.json;
@@ -248,7 +246,7 @@ let
       cpuinfo
       libzip
       curl
-      libX11
+      libx11
       wayland
       spirv-cross
       qt6.qtbase

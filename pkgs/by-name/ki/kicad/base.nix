@@ -7,7 +7,7 @@
   zlib,
   wxGTK,
   gtk3,
-  libX11,
+  libx11,
   gettext,
   glew,
   glm,
@@ -19,7 +19,7 @@
   doxygen,
   graphviz,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   unixODBC,
   libgit2,
   libsecret,
@@ -37,7 +37,7 @@
   libepoxy,
   dbus,
   at-spi2-core,
-  libXtst,
+  libxtst,
   pcre2,
   libdeflate,
 
@@ -149,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     dbus
     at-spi2-core
-    libXtst
+    libxtst
     pcre2
   ];
 
@@ -157,10 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
     libGL
     zlib
-    libX11
+    libx11
     wxGTK
     gtk3
-    libXdmcp
+    libxdmcp
     gettext
     glew
     glm

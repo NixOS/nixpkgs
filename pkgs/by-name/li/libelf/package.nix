@@ -8,12 +8,12 @@
   netbsd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libelf";
   version = "0.8.13";
 
   src = fetchurl {
-    url = "https://fossies.org/linux/misc/old/libelf-${version}.tar.gz";
+    url = "https://fossies.org/linux/misc/old/libelf-${finalAttrs.version}.tar.gz";
     sha256 = "0vf7s9dwk2xkmhb79aigqm0x0yfbw1j0b9ksm51207qwr179n6jr";
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

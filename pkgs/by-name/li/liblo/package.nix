@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblo";
   version = "0.32";
 
   src = fetchurl {
-    url = "mirror://sourceforge/liblo/liblo/${version}/liblo-${version}.tar.gz";
+    url = "mirror://sourceforge/liblo/liblo/${finalAttrs.version}/liblo-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-XfBfKgOV/FrJD2tTi4yCuyGUFAb9GnCnZcczakfXAgg=";
   };
 
@@ -22,4 +22,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.marcweber ];
     platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

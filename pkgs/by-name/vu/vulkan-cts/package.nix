@@ -11,9 +11,9 @@
   libglvnd,
   libffi,
   libpng,
-  libX11,
-  libXau,
-  libXdmcp,
+  libx11,
+  libxau,
+  libxdmcp,
   libxcb,
   makeWrapper,
   mesa,
@@ -53,13 +53,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.4.5.0";
+  version = "1.4.5.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-cbXSelRPCCH52xczWaxqftbimHe4PyIKZqySQSFTHos=";
+    hash = "sha256-VlnKeZlf6oMROHfJ5cnvUXSQequosul6BhrjBP/IoUU=";
   };
 
   prePatch = ''
@@ -78,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libglvnd
     libpng
-    libX11
-    libXau
-    libXdmcp
+    libx11
+    libxau
+    libxdmcp
     libxcb
     vulkan-headers
     vulkan-utility-libraries

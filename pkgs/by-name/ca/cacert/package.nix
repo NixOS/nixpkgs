@@ -34,6 +34,9 @@ let
       lukegb
     ];
     license = lib.licenses.mpl20;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
+      product = "nss";
+    };
   };
   certdata = stdenv.mkDerivation {
     pname = "nss-cacert-certdata";

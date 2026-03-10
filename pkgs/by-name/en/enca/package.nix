@@ -6,12 +6,12 @@
   recode,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "enca";
   version = "1.19";
 
   src = fetchurl {
-    url = "https://dl.cihar.com/enca/enca-${version}.tar.xz";
+    url = "https://dl.cihar.com/enca/enca-${finalAttrs.version}.tar.xz";
     sha256 = "1f78jmrggv3jymql8imm5m9yc8nqjw5l99mpwki2245l8357wj1s";
   };
 
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
 
   };
-}
+})

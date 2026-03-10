@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "micropython";
-  version = "1.26.0";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "micropython";
     repo = "micropython";
     tag = "v${version}";
-    hash = "sha256-T0yaTXRQFEdx6lap+S68I2RRA2kQnjbKGz+YB6okJkY=";
+    hash = "sha256-q1lpWEZbguH9EbDKa121C1Rro2Rjn6duVKcwj8RZtdQ=";
     fetchSubmodules = true;
 
     # remove unused libraries from rp2 port's SDK. we leave this and the other
@@ -46,6 +46,13 @@ stdenv.mkDerivation rec {
     })
     ./fix-cross-compilation.patch
     ./fix-mpy-cross-path.patch
+    # fix CVE-2026-1998
+    # https://github.com/micropython/micropython/issues/18639
+    # https://github.com/micropython/micropython/pull/18671
+    (fetchpatch {
+      url = "https://github.com/dpgeorge/micropython/commit/570744d06c5ba9dba59b4c3f432ca4f0abd396b6.patch";
+      hash = "sha256-j8xr4oqmrsYumJvyA71bx+/dg2HiUxSxdjKUR/2sclI=";
+    })
   ];
 
   postPatch = ''

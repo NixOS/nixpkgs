@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "satellite";
   version = "0.9.1";
 
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromCodeberg {
     owner = "tpikonen";
     repo = "satellite";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-E/OKdVB+JDP/01ydEgA/B6+GMiVYB4jlPI70TW8HBDU=";
   };
 
@@ -58,4 +58,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ Luflosi ];
   };
-}
+})

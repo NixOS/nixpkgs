@@ -11,7 +11,7 @@
   nix-update-script,
   writableTmpDirAsHomeHook,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gaphor";
   version = "3.2.0";
   pyproject = true;
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gaphor";
     repo = "gaphor";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-0Z0RFQrN2g0beV2konZBfMroeNtbT+sPRsWlRvQFYBk=";
   };
 
@@ -135,11 +135,11 @@ python3Packages.buildPythonApplication rec {
       makes them accessible to beginners.
     '';
     homepage = "https://gaphor.org/";
-    changelog = "https://github.com/gaphor/gaphor/releases/tag/${version}";
+    changelog = "https://github.com/gaphor/gaphor/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = [ ];
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "gaphor";
     platforms = lib.platforms.linux;
   };
-}
+})

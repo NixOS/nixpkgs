@@ -45,7 +45,7 @@
   callPackage,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spacy";
   version = "3.8.11";
   pyproject = true;
@@ -53,9 +53,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
-    tag = "release-v${version}";
+    tag = "release-v${finalAttrs.version}";
     hash = "sha256-pLn3fq6SDstkRIv+1fj1yEGTlAd1IAiVgRu25CnEV8E=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements.txt setup.cfg \
+      --replace-fail typer-slim typer
+  '';
 
   build-system = [
     cymem
@@ -147,9 +152,9 @@ buildPythonPackage rec {
   meta = {
     description = "Industrial-strength Natural Language Processing (NLP)";
     homepage = "https://github.com/explosion/spaCy";
-    changelog = "https://github.com/explosion/spaCy/releases/tag/${src.tag}";
+    changelog = "https://github.com/explosion/spaCy/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
     mainProgram = "spacy";
   };
-}
+})

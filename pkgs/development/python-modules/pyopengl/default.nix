@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "pyopengl";
-  version = "3.1.9";
+  version = "3.1.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KOvYLF9EkaQYrsqWct/7Otvn0zs56tpFSKW06MA/YMg=";
+    hash = "sha256-xKAtaGa1TrEZyOmz+wT6g1qVq4At2WYHq0zbABLfgzU=";
   };
 
   build-system = [ setuptools ];
@@ -32,7 +32,6 @@ buildPythonPackage rec {
       # so pyopengl can find them at runtime.
       substituteInPlace OpenGL/platform/glx.py \
         --replace-fail "'OpenGL'"  '"${pkgs.libGL}/lib/libOpenGL${ext}"' \
-        --replace-fail '"GL",' '"${pkgs.libGL}/lib/libGL${ext}",' \
         --replace-fail "'GL'"  '"${pkgs.libGL}/lib/libGL${ext}"' \
         --replace-fail '"GLU",' '"${pkgs.libGLU}/lib/libGLU${ext}",' \
         --replace-fail "'GLX'" '"${pkgs.libglvnd}/lib/libGLX${ext}"' \

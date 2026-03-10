@@ -7,9 +7,9 @@
   makeDesktopItem,
   makeWrapper,
   libpng,
-  libX11,
-  libXi,
-  libXtst,
+  libx11,
+  libxi,
+  libxtst,
   zlib,
   electron,
 }:
@@ -35,9 +35,9 @@ buildNpmPackage rec {
   # robotjs node-gyp dependencies
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpng
-    libX11
-    libXi
-    libXtst
+    libx11
+    libxi
+    libxtst
     zlib
   ];
 

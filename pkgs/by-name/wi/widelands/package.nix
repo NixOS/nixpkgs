@@ -25,18 +25,18 @@
   asio,
   libsm,
   libice,
-  libXext,
+  libxext,
 }:
 
 stdenv.mkDerivation rec {
   pname = "widelands";
-  version = "1.3";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "widelands";
     repo = "widelands";
     rev = "v${version}";
-    sha256 = "sha256-943/pkxiIbhnZQMwMNpeu5KKkS+j58zU6r9i6mZGSMg=";
+    sha256 = "sha256-nNciOfE9fqd1CfljrELy2/I7+o1BLcpdngE3XGPQaSk=";
   };
 
   postPatch = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     libsm # XXX: these should be propagated by SDL2?
     libice
   ]
-  ++ lib.optional stdenv.hostPlatform.isLinux libXext;
+  ++ lib.optional stdenv.hostPlatform.isLinux libxext;
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isLinux ''

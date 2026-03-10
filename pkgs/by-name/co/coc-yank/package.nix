@@ -57,6 +57,6 @@ buildNpmPackage (finalAttrs: {
     description = "Yank highlight and persist yank history support for vim";
     homepage = "https://github.com/neoclide/coc-yank";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })

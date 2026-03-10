@@ -13,13 +13,13 @@
 buildGoModule (finalAttrs: {
   pname = "opengist";
 
-  version = "1.12.0";
+  version = "1.12.1";
 
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-18anU/D8EvwA8Ind+GGhw9nSdcbo1l5K98cFie8hBCk=";
+    hash = "sha256-vjNrcT4IaCB+QRvvPo0oeLtFgmYXk5DDs5gYvzk4ddo=";
   };
 
   frontend = buildNpmPackage {

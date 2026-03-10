@@ -70,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Fix-building-with-bison-3.7.patch
   ];
 
-  NIX_LDFLAGS = "-lz -lgsl -lblas";
+  env.NIX_LDFLAGS = toString [
+    "-lz"
+    "-lgsl"
+    "-lblas"
+  ];
 
   qtWrapperArgs = [
     "--prefix"
@@ -96,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
         mkdir -p $out/bin
         cp src/GoldenCheetah $out/bin
         install -Dm644 "${desktopItem}/share/applications/"* -t $out/share/applications/
-        install -Dm644 src/Resources/images/gc.png $out/share/pixmaps/goldencheetah.png
+        install -Dm644 src/Resources/images/gc.png $out/share/icons/hicolor/512x512/apps/goldencheetah.png
 
         runHook postInstall
       ''

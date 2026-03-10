@@ -1626,7 +1626,8 @@ in
         nodejs
         gnupg
 
-        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
+        # We currently use the bundled sidekiq, if we use upstream sidekiq again, this needs to include the version
+        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq"
 
         # Needed for GitLab project imports
         gnutar

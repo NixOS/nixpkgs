@@ -5,17 +5,16 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  ytt,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ytt";
-  version = "0.52.2";
+  version = "0.53.2";
 
   src = fetchFromGitHub {
     owner = "carvel-dev";
     repo = "ytt";
-    rev = "v${version}";
-    sha256 = "sha256-x+Lar/GYr+uGQ8PdG1ZyCovPpl/dj1m5UcPbHaH3IWw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QGb3lTeMiYN4+uml1x0tIGRf7EF96gXIsXgkxyWxL1Q=";
   };
 
   vendorHash = null;
@@ -25,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X carvel.dev/ytt/pkg/version.Version=${version}"
+    "-X carvel.dev/ytt/pkg/version.Version=${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -42,9 +41,9 @@ buildGoModule rec {
   doCheck = false;
 
   passthru.tests.version = testers.testVersion {
-    package = ytt;
-    command = "ytt --version";
-    inherit version;
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.meta.mainProgram} --version";
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -58,4 +57,4 @@ buildGoModule rec {
       gabyx
     ];
   };
-}
+})

@@ -2,27 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qt6,
-  poppler,
   libzip,
   pkg-config,
+  poppler,
+  qt6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kitsas";
-  version = "5.9";
+  version = "5.11.1";
 
   src = fetchFromGitHub {
     owner = "artoh";
     repo = "kitupiikki";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-4FCfpUFfi+N207SEAKz8nLpVS8MxfmDwM6r6i5pyqEM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZU6b7Yl/dE0vk8UfyEVXtpt4ANnuKInvJ/RZYbIZj+Y=";
   };
-
-  patches = [
-    # Fix Qt 6.10 compatibility: QString::arg() no longer accepts Euro type directly
-    ./fix-qt610-euro-arg.patch
-  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -62,11 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   meta = {
-    homepage = "https://github.com/artoh/kitupiikki";
+    changelog = "https://github.com/artoh/kitupiikki/releases/tag/v${finalAttrs.version}";
     description = "Accounting tool suitable for Finnish associations and small business";
+    homepage = "https://github.com/artoh/kitupiikki";
+    license = lib.licenses.gpl3Plus;
     mainProgram = "kitsas";
     maintainers = [ ];
-    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
   };
 })

@@ -21,12 +21,12 @@
   makeHardcodeGsettingsPatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evolution-ews";
   version = "3.58.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evolution-ews/${lib.versions.majorMinor version}/evolution-ews-${version}.tar.xz";
+    url = "mirror://gnome/sources/evolution-ews/${lib.versions.majorMinor finalAttrs.version}/evolution-ews-${finalAttrs.version}.tar.xz";
     hash = "sha256-+m/A39F+9hpjCtM8ZFuDWMQmZ2YSbxcWs8ef79KQyPs=";
   };
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
-      inherit src;
+      inherit (finalAttrs) src;
       schemaIdToVariableMapping = {
         "org.gnome.evolution.mail" = "evo";
         "org.gnome.evolution.calendar" = "evo";
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.dasj19 ];
     platforms = lib.platforms.linux;
   };
-}
+})

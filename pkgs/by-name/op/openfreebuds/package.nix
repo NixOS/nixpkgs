@@ -6,14 +6,14 @@
   qt6,
   qt6Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openfreebuds";
   version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "melianmiko";
     repo = "OpenFreebuds";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-y89BTKk14P/2kkYo63i9HgAdenzCVVnNArDsTmo4bPU=";
   };
 
@@ -60,11 +60,11 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/melianmiko/OpenFreebuds/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/melianmiko/OpenFreebuds/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Open source app for HUAWEI FreeBuds (Linux + Windows)";
     homepage = "https://github.com/melianmiko/OpenFreebuds";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.znaniye ];
     platforms = lib.platforms.linux;
   };
-}
+})

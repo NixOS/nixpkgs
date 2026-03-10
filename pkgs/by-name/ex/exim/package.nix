@@ -37,12 +37,12 @@
 let
   perl' = perl.withPackages (p: with p; [ FileFcntlLock ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "exim";
   version = "4.99.1";
 
   src = fetchurl {
-    url = "https://ftp.exim.org/pub/exim/exim4/exim-${version}.tar.xz";
+    url = "https://ftp.exim.org/pub/exim/exim4/exim-${finalAttrs.version}.tar.xz";
     hash = "sha256-6ulnvUml+HmTO4xuyIwwR1ocZkYjITXzfwW1XbxONEc=";
   };
 
@@ -205,6 +205,6 @@ stdenv.mkDerivation rec {
       helsinki-Jo
       tv
     ];
-    changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";
+    changelog = "https://github.com/Exim/exim/blob/exim-${finalAttrs.version}/doc/doc-txt/ChangeLog";
   };
-}
+})

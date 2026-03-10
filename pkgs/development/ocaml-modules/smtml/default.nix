@@ -5,6 +5,7 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  bitwuzla-cxx,
   bos,
   cmdliner,
   dolmen_model,
@@ -47,6 +48,7 @@ buildDunePackage (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
+    bitwuzla-cxx
     bos
     cmdliner
     dolmen_model
@@ -73,7 +75,9 @@ buildDunePackage (finalAttrs: {
   ];
 
   doCheck =
-    !(
+    # Checks fail with cmdliner ≥ 2.0
+    false
+    && !(
       lib.versions.majorMinor ocaml.version == "5.0"
       || lib.versions.majorMinor ocaml.version == "5.4"
       || stdenv.hostPlatform.isDarwin

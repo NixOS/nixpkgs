@@ -8,8 +8,8 @@
   libGL,
   libice,
   libsm,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
   zlib,
   alsa-lib,
 }:
@@ -35,8 +35,8 @@ stdenv.mkDerivation {
     libGL
     libice
     libsm
-    libX11
-    libXrandr
+    libx11
+    libxrandr
     stdenv.cc.cc
     zlib
   ];

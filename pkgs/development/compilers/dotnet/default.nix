@@ -41,6 +41,7 @@ let
             ./versions/8.0.nix
             ./versions/9.0.nix
             ./versions/10.0.nix
+            ./versions/11.0.nix
           ]
         );
 
@@ -94,6 +95,7 @@ let
         dotnet_8 = lib.recurseIntoAttrs (callPackage ./8 { });
         dotnet_9 = lib.recurseIntoAttrs (callPackage ./9 { });
         dotnet_10 = lib.recurseIntoAttrs (callPackage ./10 { });
+        dotnet_11 = lib.recurseIntoAttrs (callPackage ./11 { });
       }
     );
   };
@@ -168,9 +170,11 @@ in
 pkgs
 // rec {
   # use binary SDK here to avoid downgrading feature band
-  sdk_8_0_1xx = combineSdk pkgs.dotnet_8.sdk pkgs.sdk_8_0_1xx-bin;
+  # combining sdk_8 results in a broken ilcompiler
+  sdk_8_0_1xx = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0_1xx = combineSdk pkgs.dotnet_9.sdk pkgs.sdk_9_0_1xx-bin;
   sdk_10_0_1xx = combineSdk pkgs.dotnet_10.sdk pkgs.sdk_10_0_1xx-bin;
+  sdk_11_0_1xx = combineSdk pkgs.dotnet_11.sdk pkgs.sdk_11_0_1xx-bin;
   # source-built SDK only exists for _1xx feature band
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_4xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_4xx-bin;
@@ -178,14 +182,19 @@ pkgs
   sdk_8_0 = sdk_8_0_4xx;
   sdk_9_0 = sdk_9_0_3xx;
   sdk_10_0 = sdk_10_0_1xx;
+  sdk_11_0 = sdk_11_0_1xx;
   sdk_8_0-source = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0-source = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
   sdk_10_0-source =
     if !pkgs.dotnet_10.vmr.meta.broken then pkgs.dotnet_10.sdk else pkgs.sdk_10_0_1xx-bin;
+  sdk_11_0-source =
+    if !pkgs.dotnet_11.vmr.meta.broken then pkgs.dotnet_11.sdk else pkgs.sdk_11_0_1xx-bin;
   runtime_8_0 = sdk_8_0.runtime;
   runtime_9_0 = sdk_9_0.runtime;
   runtime_10_0 = sdk_10_0.runtime;
+  runtime_11_0 = sdk_11_0.runtime;
   aspnetcore_8_0 = sdk_8_0.aspnetcore;
   aspnetcore_9_0 = sdk_9_0.aspnetcore;
   aspnetcore_10_0 = sdk_10_0.aspnetcore;
+  aspnetcore_11_0 = sdk_11_0.aspnetcore;
 }

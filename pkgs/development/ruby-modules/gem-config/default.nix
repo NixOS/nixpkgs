@@ -31,7 +31,7 @@
   which,
   libiconv,
   libpq,
-  nodejs,
+  nodejs-slim,
   clang,
   sqlite,
   zlib,
@@ -338,7 +338,7 @@ in
 
   mini_racer = attrs: {
     buildFlags = [
-      "--with-v8-dir=\"${nodejs.libv8}\""
+      "--with-v8-dir=\"${nodejs-slim.libv8}\""
     ];
     dontBuild = false;
     postPatch = ''
@@ -476,57 +476,6 @@ in
   prettier = attrs: {
     meta.mainProgram = "rbprettier";
   };
-
-  prometheus-client-mmap =
-    attrs:
-    {
-      dontBuild = false;
-      postPatch =
-        let
-          getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
-        in
-        ''
-          substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
-        '';
-    }
-    // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-      cargoDeps = rustPlatform.fetchCargoVendor {
-        src = stdenv.mkDerivation {
-          inherit (buildRubyGem { inherit (attrs) gemName version source; })
-            name
-            src
-            unpackPhase
-            nativeBuildInputs
-            ;
-          dontBuilt = true;
-          installPhase = ''
-            cp -R ext/fast_mmaped_file_rs $out
-            rm $out/Cargo.lock
-            cp Cargo.lock $out
-          '';
-        };
-        hash = "sha256-mukk+tWWeG62q4GcDzkk8TyxVsDjShz30wEj82cElt4=";
-      };
-
-      nativeBuildInputs = [
-        cargo
-        rustc
-        rustPlatform.cargoSetupHook
-        rustPlatform.bindgenHook
-      ];
-
-      disallowedReferences = [
-        rustc.unwrapped
-      ];
-
-      preInstall = ''
-        export CARGO_HOME="$PWD/../.cargo/"
-      '';
-
-      postInstall = ''
-        find $out -type f -name .rustc_info.json -delete
-      '';
-    };
 
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
@@ -699,7 +648,7 @@ in
   };
 
   execjs = attrs: {
-    propagatedBuildInputs = [ nodejs.libv8 ];
+    propagatedBuildInputs = [ nodejs-slim.libv8 ];
   };
 
   libxml-ruby = attrs: {
@@ -1165,6 +1114,13 @@ in
 
   treetop = attrs: {
     meta.mainProgram = "tt";
+  };
+
+  trilogy = attrs: {
+    postInstall = ''
+      installPath=$(cat "$out/nix-support/gem-meta/install-path")
+      ln -s contrib/ruby/trilogy.gemspec "$installPath/trilogy.gemspec"
+    '';
   };
 
   typhoeus = attrs: {

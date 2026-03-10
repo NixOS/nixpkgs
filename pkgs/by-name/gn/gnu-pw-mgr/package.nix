@@ -5,11 +5,11 @@
   gnulib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-pw-mgr";
   version = "2.7.4";
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gnu-pw-mgr/gnu-pw-mgr-${version}.tar.xz";
+    url = "https://ftp.gnu.org/gnu/gnu-pw-mgr/gnu-pw-mgr-${finalAttrs.version}.tar.xz";
     sha256 = "0fhwvsmsqpw0vnivarfg63l8pgwqfv7d5wi6l80jpb41dj6qpjz8";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ qoelet ];
   };
-}
+})

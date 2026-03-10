@@ -6,14 +6,14 @@
   libpcap,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pwru";
   version = "1.0.9";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "pwru";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3lIKbzwPX6okJT9CeErX5/innUK3VqnnbWPpvlSN+6U=";
   };
 
@@ -43,4 +43,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
     mainProgram = "pwru";
   };
-}
+})

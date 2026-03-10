@@ -10,7 +10,6 @@
   graphql-core,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
   setuptools-scm,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "pydrawise";
   version = "2025.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dknowles2";

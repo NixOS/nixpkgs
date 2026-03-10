@@ -7,7 +7,6 @@
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
-  pythonOlder,
   typer,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "aiovlc";
   version = "0.6.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";

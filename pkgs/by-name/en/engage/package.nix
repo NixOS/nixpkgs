@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
+    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/engage/index.html";
   };
 
   src = fetchFromGitLab {
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     ${lib.getExe mdbook} build
     mkdir -p "$doc/share/doc"
-    mv public "$doc/share/doc/${finalAttrs.pname}"
+    mv public "$doc/share/doc/engage"
   '';
 
   meta = {

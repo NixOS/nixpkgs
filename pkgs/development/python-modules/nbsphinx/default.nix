@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q9KYpobVX6iU72l8UdRPJOU6oxLa2uOOgpIPJQpUVv4=";
+    hash = "sha256-0HZZCDmajuK1e+euiBzy6ljWbbOve78z5utI+DvqVJU=";
   };
   patches = [
     (fetchpatch {
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # The package has not tests
   doCheck = false;
 
-  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  env.JUPYTER_PATH = "${nbconvert}/share/jupyter";
 
   pythonImportsCheck = [ "nbsphinx" ];
 

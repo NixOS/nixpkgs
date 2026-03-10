@@ -9,12 +9,12 @@
 let
   dim = toString dimensions;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "palp";
   version = "2.21";
 
   src = fetchurl {
-    url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${version}.tar.gz";
+    url = "http://hep.itp.tuwien.ac.at/~kreuzer/CY/palp/palp-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-fkp78hmZioRMC8zgoXbknQdDy0tQWg4ZUym/LsGW3dc=";
   };
 
@@ -90,4 +90,4 @@ stdenv.mkDerivation rec {
     teams = [ lib.teams.sage ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "urllib3-future";
-  version = "2.15.902";
+  version = "2.17.900";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "urllib3.future";
     tag = version;
-    hash = "sha256-0ntDskOZX0T1k1avDiJ/xLiNMtHoWdLXMmSUAdSYsoQ=";
+    hash = "sha256-loZa+/eN1YP20y4svIYpstV/GtyUeD7PoAXYoJhfHEA=";
   };
 
   postPatch = ''

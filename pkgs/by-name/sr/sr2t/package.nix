@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "sr2t";
   version = "0.0.26";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "0bs1d1an";
     repo = "sr2t";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-BPsYnKBTxt5WUd2+WumMdVi8p6iryOWG2MjI97qbaCw=";
   };
 
@@ -37,4 +37,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sr2t";
   };
-}
+})

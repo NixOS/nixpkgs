@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.8.9";
+  version = "1.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ewels";
     repo = "rich-click";
     tag = "v${version}";
-    hash = "sha256-uFb4Pcor9o4BPM/xx/sAKu9DoXvGO/RZg/3dVhbjgk0=";
+    hash = "sha256-VSaPSC49icIB4z3ZPHtedh2gXkYBIODrG362T++i0Eo=";
   };
 
   build-system = [ setuptools ];

@@ -6,12 +6,12 @@
   cutee,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mimetic";
   version = "0.9.8";
 
   src = fetchurl {
-    url = "http://www.codesink.org/download/mimetic-${version}.tar.gz";
+    url = "http://www.codesink.org/download/mimetic-${finalAttrs.version}.tar.gz";
     sha256 = "003715lvj4nx23arn1s9ss6hgc2yblkwfy5h94li6pjz2a6xc1rs";
   };
 
@@ -32,4 +32,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
   };
-}
+})

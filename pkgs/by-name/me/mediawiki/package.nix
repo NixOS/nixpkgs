@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  fetchpatch,
   fetchurl,
   nixosTests,
 }:
@@ -13,6 +14,19 @@ stdenvNoCC.mkDerivation rec {
     url = "https://releases.wikimedia.org/mediawiki/${lib.versions.majorMinor version}/mediawiki-${version}.tar.gz";
     hash = "sha256-4vEmsZrsQiBRoKUODGq36QTzOzmIpHudqK+/0MCiUsw=";
   };
+
+  patches = [
+    # Fix installation with postgres
+    (fetchpatch {
+      url = "https://gerrit.wikimedia.org/r/changes/mediawiki%2Fcore~1231289/revisions/4/patch?download";
+      decode = "base64 -d";
+      postFetch = ''
+        substituteInPlace $out \
+          --replace "/Installer/" "/installer/"
+      '';
+      hash = "sha256-bhfw5CW4EEpr2GTGda3va+EmM/vK6AqBfyoCcsSiqNQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace includes/installer/CliInstaller.php \

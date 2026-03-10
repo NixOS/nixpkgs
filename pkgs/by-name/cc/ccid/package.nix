@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccid";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "CCID";
     tag = finalAttrs.version;
-    hash = "sha256-n7rOjnLZH4RLmddtBycr3FK2Bi/OLR+9IjWBRbWjnUw=";
+    hash = "sha256-6eaznSIQZl1bpIe1F9EtwotF9BjOruJ9g/c2QrTgfUg=";
   };
 
   postPatch = ''
@@ -33,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonBool "serial" true)
+    # Upstream tries to install udev outside of PREFIX. It's easier to disable
+    # this and install it ourself than to patch meson.build.
+    (lib.mesonBool "udev-rules" false)
   ];
 
   # error: call to undeclared function 'InterruptRead';
@@ -61,6 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm 0444 -t $out/lib/udev/rules.d ../src/92_pcscd_ccid.rules
     substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
       --replace-fail "/usr/sbin/pcscd" "${pcsclite}/bin/pcscd"
+    # Disable reference to binary that we don't build.
+    substituteInPlace $out/lib/udev/rules.d/92_pcscd_ccid.rules \
+      --replace-fail 'ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"' \
+                     '# disabled: ATTRS{idVendor}=="0d46", ATTRS{idProduct}=="4081", RUN+="/usr/sbin/Kobil_mIDentity_switch"'
   '';
 
   # The resulting shared object ends up outside of the default paths which are

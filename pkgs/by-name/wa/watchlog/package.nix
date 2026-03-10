@@ -4,18 +4,18 @@
   fetchFromGitLab,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchlog";
-  version = "1.252.0";
+  version = "1.254.0";
 
   src = fetchFromGitLab {
     owner = "kevincox";
     repo = "watchlog";
-    rev = "v${version}";
-    hash = "sha256-ZDT98pxtpoEenJPwz4Ws2kkTqJ0lTWvxv3LfjBsCvZo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gXglNyeIrLCarHwn0shSAOEcoVOW9yaCuXA/KGB1pdo=";
   };
 
-  cargoHash = "sha256-n1Pzuyf9EKHgvHqVlOO6bZNcD4KMHSh3jN9REtLulck=";
+  cargoHash = "sha256-aw5WRBnQJqn9zUzXir4HNNywcwX3yZW5RKkPZBa5XD0=";
 
   meta = {
     description = "Easier monitoring of live logs";
@@ -27,4 +27,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; linux ++ windows;
     mainProgram = "wl";
   };
-}
+})

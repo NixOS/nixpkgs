@@ -12,14 +12,14 @@
   plugins ? [ ],
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cura";
   version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-R88SdAxx3tkQCDInrFTKad1tPSDTSYaVAPUVmdk94Xk=";
   };
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DURANIUM_DIR=${python3.pkgs.uranium.src}"
-    "-DCURA_VERSION=${version}"
+    "-DCURA_VERSION=${finalAttrs.version}"
   ];
 
   makeWrapperArgs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mkdir -p $out/share/cura/resources/materials
-    cp ${materials}/*.fdm_material $out/share/cura/resources/materials/
+    cp ${finalAttrs.materials}/*.fdm_material $out/share/cura/resources/materials/
     mkdir -p $out/lib/cura/plugins
     for plugin in ${toString plugins}; do
       ln -s $plugin/lib/cura/plugins/* $out/lib/cura/plugins
@@ -93,4 +93,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

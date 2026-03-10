@@ -5,14 +5,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "monsoon";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vgwoW7jrcLVHDm1cYrIpFcfrgKImCAVOtHg8lMQ6aic=";
   };
 
@@ -29,8 +29,8 @@ buildGoModule rec {
       requests, filter the responses and display them in real-time.
     '';
     homepage = "https://github.com/RedTeamPentesting/monsoon";
-    changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${version}";
+    changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

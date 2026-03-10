@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
   pytestCheckHook,
   pytest-xdist,
   torchvision,
@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "ignite";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ignite";
     tag = "v${version}";
-    hash = "sha256-aWm+rj/9A7oNBW5jkMg/BRuEw2gQUJ88At1wB75FgNQ=";
+    hash = "sha256-0lQe5fWR4t3uAJVfGVebkxiWHx8TvgNQzJylKNmjjo0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     packaging

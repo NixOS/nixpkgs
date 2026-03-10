@@ -5,7 +5,7 @@
   unar,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "unrar-wrapper";
   version = "1.0.0";
   format = "setuptools";
@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "unrar_wrapper";
-    rev = "unrar_wrapper-${version}";
+    rev = "unrar_wrapper-${finalAttrs.version}";
     sha256 = "sha256-HjrUif8MrbtLjRQMAPZ/Y2o43rGSDj0HHY4fZQfKz5w=";
   };
 
@@ -42,4 +42,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

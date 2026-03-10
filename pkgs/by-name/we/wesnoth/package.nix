@@ -39,7 +39,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wesnoth${suffix}";
-  version = if enableDevel then "1.19.20" else "1.18.6";
+  version = if enableDevel then "1.19.21" else "1.18.6";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash =
       if enableDevel then
-        "sha256-G0MsCXZRwryGjl6h9KVtMBsQiljYVInPz6wxSQ0jSyw="
+        "sha256-6KCk5zVw2OBGJijiJbqJf3n40M0ASy8+7yYtbvgP+w0="
       else
         "sha256-y2ceN7rX8j+pNlaajw32ZxwFrUxqAuILADZvum03NhU=";
   };

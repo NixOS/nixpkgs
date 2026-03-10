@@ -8,24 +8,22 @@
   httptools,
   python-dotenv,
   pyyaml,
-  typing-extensions,
   uvloop,
   watchfiles,
   websockets,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "uvicorn";
-  version = "0.38.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "uvicorn";
     tag = version;
-    hash = "sha256-A0YpFA/Oug5a37+33ac8++lh30jzRl48IhC8pflZ0S0=";
+    hash = "sha256-YpmvMZJxxpMdwbhFQSu+0fo7kcM6w3zJ7jI5LVamV1E=";
   };
 
   outputs = [
@@ -38,8 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     click
     h11
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
+  ];
 
   optional-dependencies.standard = [
     httptools

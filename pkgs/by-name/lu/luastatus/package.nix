@@ -13,8 +13,8 @@
   glib,
   libnl,
   udev,
-  libXau,
-  libXdmcp,
+  libxau,
+  libxdmcp,
   pcre2,
   pcre,
   util-linux,
@@ -23,7 +23,7 @@
   lua5,
   docutils,
   libxcb,
-  libX11,
+  libx11,
   libxcb-util,
   libxcb-wm,
 }:
@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libX11
+    libx11
     libxcb-util
     libxcb-wm
-    libXdmcp
-    libXau
+    libxdmcp
+    libxau
     libpulseaudio
     libnl
     libselinux

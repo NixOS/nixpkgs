@@ -5,14 +5,14 @@
   fetchFromGitHub,
   installShellFiles,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "astartectl";
   version = "24.5.3";
 
   src = fetchFromGitHub {
     owner = "astarte-platform";
     repo = "astartectl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wziSP4mbUnAAPzmkl1qXbT95Ku/M9rMb63s/5ndCXrk=";
   };
 
@@ -34,4 +34,4 @@ buildGoModule rec {
     mainProgram = "astartectl";
     maintainers = with lib.maintainers; [ noaccos ];
   };
-}
+})

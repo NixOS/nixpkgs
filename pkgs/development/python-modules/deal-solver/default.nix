@@ -47,6 +47,7 @@ buildPythonPackage rec {
     # Flaky tests, sometimes it works sometimes it doesn't
     "test_expr_asserts_ok"
     "test_fuzz_math_floats"
+    "test_model_skip_helpers2"
   ];
 
   meta = {

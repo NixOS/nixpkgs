@@ -38,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./dont-create-system-paths.patch
+    # backport of an upstream fix for boost-1.89:
+    #   https://gitlab.isc.org/isc-projects/kea/-/merge_requests/2771
+    ./boost-1.89.patch
   ];
 
   postPatch = ''

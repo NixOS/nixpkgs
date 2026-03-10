@@ -6,12 +6,12 @@
   libGL,
   libice,
   libsm,
-  libX11,
-  libXcursor,
-  libXext,
-  libXi,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxi,
+  libxinerama,
+  libxrandr,
   libpulseaudio,
   libxkbcommon,
   makeDesktopItem,
@@ -244,12 +244,12 @@ let
         libGL
         libice
         libsm
-        libX11
-        libXcursor
-        libXext
-        libXi
-        libXinerama
-        libXrandr
+        libx11
+        libxcursor
+        libxext
+        libxi
+        libxinerama
+        libxrandr
         libpulseaudio
         libxkbcommon
         wayland

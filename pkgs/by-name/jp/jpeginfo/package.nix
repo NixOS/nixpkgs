@@ -5,12 +5,12 @@
   libjpeg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jpeginfo";
   version = "1.7.1";
 
   src = fetchurl {
-    url = "https://www.kokkonen.net/tjko/src/jpeginfo-${version}.tar.gz";
+    url = "https://www.kokkonen.net/tjko/src/jpeginfo-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-J09r4j/Qib2ehxW2dkOmbKL2OlAwKL3qPlcSKNULZp4=";
   };
 
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "jpeginfo";
   };
-}
+})

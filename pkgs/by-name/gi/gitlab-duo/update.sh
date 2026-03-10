@@ -38,7 +38,7 @@ commander_version=$(jaq -r '.packages["packages/cli"].devDependencies.commander'
 commander_version="${commander_version/^}"
 # Sync locked version and remove URL and hash, so they are fixed later
 jaq -i --arg ver "$commander_version" \
-  '.packages["packages/cli/node_modules/commander"].version = $ver | del(.packages["packages/cli/node_modules/commander"].integrity, .packages["packages/cli/node_modules/commander"].resolved)' \
+  '.packages["node_modules/commander"].version = $ver | del(.packages["node_modules/commander"].integrity, .packages["node_modules/commander"].resolved)' \
   ./package-lock.json
 
 npm install --package-lock-only --ignore-scripts

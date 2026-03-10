@@ -12,7 +12,7 @@
   writeScript,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gns3-server";
   version = "2.2.56.1";
   pyproject = true;
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "gns3-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-1eYUJtrOfe1DXzxJbT1HQ6oiiiS+xHRG/wg9gOs0uTU=";
   };
 
@@ -112,10 +112,10 @@ python3Packages.buildPythonApplication rec {
       API.
     '';
     homepage = "https://www.gns3.com/";
-    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${version}";
+    changelog = "https://github.com/GNS3/gns3-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ anthonyroussel ];
     mainProgram = "gns3server";
   };
-}
+})

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
@@ -11,14 +12,14 @@
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nixseparatedebuginfod2";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-INY9mLJ+7i3BoShqFZMELm9aXiDbZkuLyokgm42kEbo=";
   };
 
@@ -31,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+  doCheck = stdenv.hostPlatform.isLinux;
   nativeCheckInputs = [
     bubblewrap
     elfutils
@@ -48,8 +50,11 @@ rustPlatform.buildRustPackage rec {
     description = "Downloads and provides debug symbols and source code for nix derivations to gdb and other debuginfod-capable debuggers as needed";
     homepage = "https://github.com/symphorien/nixseparatedebuginfod2";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.symphorien ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      symphorien
+      feyorsh
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "nixseparatedebuginfod2";
   };
-}
+})

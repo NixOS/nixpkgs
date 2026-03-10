@@ -12,12 +12,12 @@ let
   mainVersion = "2.5";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sqsh";
   version = "${mainVersion}.16.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sqsh/sqsh/sqsh-${mainVersion}/sqsh-${version}.tgz";
+    url = "mirror://sourceforge/sqsh/sqsh/sqsh-${mainVersion}/sqsh-${finalAttrs.version}.tgz";
     sha256 = "1wi0hdmhk7l8nrz4j3kaa177mmxyklmzhj7sq1gj4q6fb8v1yr6n";
   };
 
@@ -61,4 +61,4 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/sqsh/";
     platforms = lib.platforms.all;
   };
-}
+})

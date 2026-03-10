@@ -8,30 +8,30 @@
 }:
 
 let
-  rev = "488f4e71073062de314c55a037ede7cf03a3324c";
+  rev = "e821bcbecdc997d71766836a200e16b27535a835";
   # git describe --tags
-  realVersion = "1.2.1-14-g${builtins.substring 0 7 rev}";
+  realVersion = "1.4-12-g${builtins.substring 0 7 rev}";
 
   main_src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "prjtrellis";
     inherit rev;
-    hash = "sha256-Blbu+0rlM/3izbF0XCvkNpSAND0IclWEwK7anzyrpvw=";
+    hash = "sha256-RyCZTdiF8kFBNGWJnwALjF0fXrZm3OvSM0sdL6ljlYU=";
     name = "trellis";
   };
 
   database_src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "prjtrellis-db";
-    rev = "35d900a94ff0db152679a67bf6e4fbf40ebc34aa";
-    hash = "sha256-r6viR8y9ZjURGNbsa0/YY8lzy9kGzjuu408ntxwpqm0=";
+    rev = "015e0330630d7c238c0e4f2cdd9c8157eb78c54a";
+    hash = "sha256-1VpxI0RHZSiWdQPCgsEWQ3hqzy5F1YV7ZOGL3kK18XM=";
     name = "trellis-database";
   };
 
 in
 stdenv.mkDerivation {
   pname = "trellis";
-  version = "unstable-2022-09-14";
+  version = "unstable-2025-01-30";
 
   srcs = [
     main_src
@@ -52,7 +52,6 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     rmdir database && ln -sfv ${database_src} ./database
-
     cd libtrellis
   '';
 

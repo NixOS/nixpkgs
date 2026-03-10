@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "endlessh-go";
   version = "2025.0914.0";
 
   src = fetchFromGitHub {
     owner = "shizunge";
     repo = "endlessh-go";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-ABrmvP8xfH1DWzepnzrIsNJDE9sDoXPQteA/ToyRtoo=";
   };
 
@@ -32,9 +32,9 @@ buildGoModule rec {
   meta = {
     description = "Implementation of endlessh exporting Prometheus metrics";
     homepage = "https://github.com/shizunge/endlessh-go";
-    changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${version}";
+    changelog = "https://github.com/shizunge/endlessh-go/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ azahi ];
     mainProgram = "endlessh-go";
   };
-}
+})

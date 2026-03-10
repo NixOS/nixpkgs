@@ -16,7 +16,7 @@
   libsm,
   libsndfile,
   libogg,
-  libX11,
+  libx11,
   nettle,
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     libogg
     libsm
-    libX11
+    libx11
     nettle
   ];
 

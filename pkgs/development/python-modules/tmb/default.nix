@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-XuRhRmeTXAplb14UwISyzaqEIrFeg8/aCdMxUccMUos=";
   };
 
-  VERSION = version;
+  env.VERSION = version;
 
   propagatedBuildInputs = [ requests ];
 

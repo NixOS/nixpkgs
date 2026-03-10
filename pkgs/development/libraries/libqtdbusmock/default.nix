@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqtdbusmock";
-  version = "0.9.1";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/libqtdbusmock";
     rev = finalAttrs.version;
-    hash = "sha256-hVw2HnIHlA7vvt0Sr6F2qVhvBZ33aCeqb9vgbu3rgBo=";
+    hash = "sha256-6xOTqynuYmSpFJ8FJwKcTxhoddlSJuHuvlXRWmSjdeI=";
   };
 
   postPatch = ''
@@ -67,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+  ];
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   enableParallelChecking = false;
@@ -83,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Library for mocking DBus interactions using Qt";
-    homepage = "https://launchpad.net/libqtdbusmock";
+    homepage = "https://gitlab.com/ubports/development/core/libqtdbusmock";
+    changelog = "https://gitlab.com/ubports/development/core/libqtdbusmock/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.unix;
     teams = [ lib.teams.lomiri ];

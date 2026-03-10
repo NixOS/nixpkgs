@@ -7,12 +7,12 @@
   nspr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "svrcore";
   version = "4.0.4";
 
   src = fetchurl {
-    url = "mirror://mozilla/directory/svrcore/releases/${version}/src/svrcore-${version}.tar.bz2";
+    url = "mirror://mozilla/directory/svrcore/releases/${finalAttrs.version}/src/svrcore-${finalAttrs.version}.tar.bz2";
     sha256 = "0n3alg6bxml8952fb6h0bi0l29farvq21q6k20gy2ba90m3znwj7";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl11;
     platforms = lib.platforms.all;
   };
-}
+})

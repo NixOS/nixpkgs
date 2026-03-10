@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.3.113";
   pname = "libaio";
 
   src = fetchurl {
-    url = "https://pagure.io/libaio/archive/libaio-${version}/libaio-libaio-${version}.tar.gz";
+    url = "https://pagure.io/libaio/archive/libaio-${finalAttrs.version}/libaio-libaio-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-cWxwWXAyRzROsGa1TsvDyiE08BAzBxkubCt9q1+VKKs=";
   };
 
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.lgpl21;
     maintainers = [ ];
   };
-}
+})

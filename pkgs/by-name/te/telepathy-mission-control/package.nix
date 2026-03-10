@@ -12,7 +12,7 @@
   gtk-doc,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "telepathy-mission-control";
   version = "5.16.6";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://telepathy.freedesktop.org/releases/telepathy-mission-control/telepathy-mission-control-${version}.tar.gz";
+    url = "https://telepathy.freedesktop.org/releases/telepathy-mission-control/telepathy-mission-control-${finalAttrs.version}.tar.gz";
     sha256 = "0ibs575pfr0wmhfcw6ln6iz7gw2y45l3bah11rksf6g9jlwsxy1d";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     # The last successful Darwin Hydra build was in 2024
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
-}
+})

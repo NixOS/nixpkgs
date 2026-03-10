@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXinerama,
+  libxinerama,
   libxcb-util,
   libxcb-keysyms,
   libxcb-wm,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXinerama
+    libxinerama
     libxcb-util
     libxcb-keysyms
     libxcb-wm

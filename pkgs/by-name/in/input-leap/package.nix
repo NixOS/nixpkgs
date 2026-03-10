@@ -6,12 +6,12 @@
   curl,
   libice,
   libsm,
-  libX11,
-  libXdmcp,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxdmcp,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   libei,
   libportal,
   openssl,
@@ -49,12 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     qt6.qtbase
     avahi'
-    libX11
-    libXext
-    libXtst
-    libXinerama
-    libXrandr
-    libXdmcp
+    libx11
+    libxext
+    libxtst
+    libxinerama
+    libxrandr
+    libxdmcp
     libice
     libsm
   ]

@@ -13,7 +13,7 @@
   gtk3,
   gettext,
   libxkbfile,
-  libX11,
+  libx11,
   python3,
   freerdp,
   libssh,
@@ -24,7 +24,7 @@
   libappindicator-gtk3,
   libvncserver,
   libpthread-stubs,
-  libXdmcp,
+  libxdmcp,
   libxkbcommon,
   libsecret,
   libsoup_3,
@@ -40,8 +40,6 @@
   wayland,
   # The themes here are soft dependencies; only icons are missing without them.
   adwaita-icon-theme,
-  withKf5Wallet ? stdenv.hostPlatform.isLinux,
-  libsForQt5,
   withLibsecret ? stdenv.hostPlatform.isLinux,
   withWebkitGtk ? false,
   webkitgtk_4_1,
@@ -75,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     gettext
     libxkbfile
-    libX11
+    libx11
     freerdp
     libssh
     libgcrypt
@@ -83,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
     libvncserver
     libpthread-stubs
-    libXdmcp
+    libxdmcp
     libxkbcommon
     libsoup_3
     spice-protocol
@@ -104,7 +102,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
   ]
   ++ lib.optionals withLibsecret [ libsecret ]
-  ++ lib.optionals withKf5Wallet [ libsForQt5.kwallet ]
   ++ lib.optionals withWebkitGtk [ webkitgtk_4_1 ]
   ++ lib.optionals withVte [ vte ];
 
@@ -115,7 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_VTE=${if withVte then "ON" else "OFF"}"
     "-DWITH_TELEPATHY=OFF"
     "-DWITH_AVAHI=OFF"
-    "-DWITH_KF5WALLET=${if withKf5Wallet then "ON" else "OFF"}"
     "-DWITH_LIBSECRET=${if withLibsecret then "ON" else "OFF"}"
     "-DWITH_WEBKIT2GTK=${if withWebkitGtk then "ON" else "OFF"}"
   ]
@@ -133,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     gappsWrapperArgs+=(
       --set-default SSL_CERT_DIR "/etc/ssl/certs/"
-      --prefix LD_LIBRARY_PATH : "${libX11.out}/lib"
+      --prefix LD_LIBRARY_PATH : "${libx11.out}/lib"
       ${lib.optionalString stdenv.hostPlatform.isDarwin ''
         --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
       ''}

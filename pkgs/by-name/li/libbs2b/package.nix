@@ -6,12 +6,12 @@
   libsndfile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libbs2b";
   version = "3.1.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bs2b/libbs2b-${version}.tar.bz2";
+    url = "mirror://sourceforge/bs2b/libbs2b-${finalAttrs.version}.tar.bz2";
     sha256 = "0vz442kkjn2h0dlxppzi4m5zx8qfyrivq581n06xzvnyxi5rg6a7";
   };
 
@@ -33,4 +33,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
   };
-}
+})

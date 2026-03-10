@@ -23,12 +23,12 @@
   libxmu,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pcb";
   version = "4.3.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/pcb/pcb-${version}.tar.gz";
+    url = "mirror://sourceforge/pcb/pcb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-roUvRq+Eq6f1HYE/uRb8f82+6kP3E08VBQcCThdD+14=";
   };
 
@@ -68,4 +68,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2;
   };
-}
+})

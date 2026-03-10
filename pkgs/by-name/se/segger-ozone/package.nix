@@ -8,11 +8,11 @@
   freetype,
   libice,
   libsm,
-  libX11,
-  libXcursor,
-  libXfixes,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxfixes,
+  libxrandr,
+  libxrender,
   makeDesktopItem,
 }:
 
@@ -37,11 +37,11 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     libice
     libsm
-    libX11
-    libXcursor
-    libXfixes
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxfixes
+    libxrandr
+    libxrender
     (lib.getLib stdenv.cc.cc)
   ];
 

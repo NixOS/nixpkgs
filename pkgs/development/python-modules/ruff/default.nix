@@ -20,7 +20,7 @@ buildPythonPackage {
     # Do not rely on path lookup at runtime to find the ruff binary.
     # Use the propagated binary instead.
     ''
-      substituteInPlace python/ruff/__main__.py \
+      substituteInPlace python/ruff/_find_ruff.py \
         --replace-fail \
           'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
           'return "${lib.getExe ruff}"'

@@ -6,12 +6,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnushogi";
   version = "1.4.2";
 
   src = fetchurl {
-    url = "mirror://gnu/gnushogi/gnushogi-${version}.tar.gz";
+    url = "mirror://gnu/gnushogi/gnushogi-${finalAttrs.version}.tar.gz";
     hash = "sha256-HsxIqGYwPGNlJVKzJdaF5+9emJMkQIApGmHZZQXVKyk=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.ciil ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -5,13 +5,13 @@
   plib,
   libglut,
   xorgproto,
-  libX11,
-  libXext,
-  libXi,
+  libx11,
+  libxext,
+  libxi,
   libice,
   libsm,
-  libXt,
-  libXmu,
+  libxt,
+  libxmu,
   libGLU,
   libGL,
   boost179,
@@ -46,13 +46,13 @@ stdenv.mkDerivation (finalAttrs: {
     plib
     libglut
     xorgproto
-    libX11
-    libXext
-    libXi
+    libx11
+    libxext
+    libxi
     libice
     libsm
-    libXt
-    libXmu
+    libxt
+    libxmu
     libGLU
     libGL
     boost179
