@@ -23,6 +23,8 @@
   os-prober,
   xkeyboard_config,
 
+  extraWrapperArgs ? [],
+
   # passthru.tests
   calamares-nixos,
 }:
@@ -84,10 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # this is called via pkexec, which does not resolve symlinks, so the policy
-    # needs to point at the symlinked path
     substituteInPlace io.calamares.calamares.policy \
-      --replace-fail /usr/bin/calamares /run/current-system/sw/bin/calamares
+      --replace-fail /usr/bin/calamares $out/bin/calamares
 
     substituteInPlace src/modules/locale/SetTimezoneJob.cpp src/libcalamares/locale/TimeZone.cpp \
       --replace-fail /usr/share/zoneinfo ${tzdata}/share/zoneinfo
@@ -110,7 +110,7 @@ stdenv.mkDerivation (finalAttrs: {
         xdg-open-nixos
       ]
     }"
-  ];
+  ] ++ extraWrapperArgs;
 
   passthru.tests = {
     inherit calamares-nixos;
