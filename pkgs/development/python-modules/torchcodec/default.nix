@@ -24,16 +24,16 @@
   cudaSupport ? config.cudaSupport,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "torchcodec";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "meta-pytorch";
     repo = "torchcodec";
-    tag = "v${version}";
-    hash = "sha256-HyEv3WVCnFSl+hpF2Kj/5yb5zkvI3ToyD4/oSkD47LQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2uo2HtA5hh8s7F1Z8SS78bMwyOvw2H2j4p0Znan552I=";
   };
 
   postPatch = ''
@@ -48,6 +48,11 @@ buildPythonPackage rec {
       --replace-fail \
         '"ffmpeg"' \
         '"${lib.getExe ffmpeg}"'
+
+    substituteInPlace test/test_transform_ops.py \
+      --replace-fail \
+        'ffmpeg_cli = "ffmpeg"' \
+        'ffmpeg_cli = "${lib.getExe ffmpeg}"'
   '';
 
   nativeBuildInputs = [
@@ -146,6 +151,7 @@ buildPythonPackage rec {
       "test_contiguit"
       "test_crf_valid_value"
       "test_encode_to_tensor_long_outpu"
+      "test_num_channels"
       "test_round_trip"
       "test_video_encoder_against_ffmpeg_cli"
       "test_video_encoder_round_trip"
@@ -159,8 +165,8 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch media decoding and encoding";
     homepage = "https://github.com/meta-pytorch/torchcodec";
-    changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${src.tag}";
+    changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})
