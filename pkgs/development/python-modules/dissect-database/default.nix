@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "dissect-database";
-  version = "1.0";
+  version = "1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.database";
     tag = version;
-    hash = "sha256-ZMiYPAiumPg9nd7+OAnrVAwrnx0I5reClRgIerStpfE=";
+    hash = "sha256-z3Ra8BjPGozcx5bF+FKcA/bnsO8F++UBUEQ2tBd+X5Q=";
   };
 
   build-system = [
