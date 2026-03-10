@@ -248,6 +248,7 @@ in
         // config.networking.proxy.envVars;
 
       path = with pkgs; [
+        bash
         coreutils
         gnutar
         xz.bin
