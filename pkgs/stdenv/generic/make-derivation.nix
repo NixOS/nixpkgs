@@ -88,29 +88,30 @@ let
       # NOTE: the above documentation had to be duplicated in `lib/customisation.nix`: `makeOverridable`.
       overrideAttrs =
         f0:
-        let
-          extends' =
-            overlay: f:
+        makeDerivationExtensible (
+          final:
+          let
+            prev = rattrs final;
+            thisOverlay = lib.toExtension f0 final prev;
+            warnForBadVersionOverride = (
+              thisOverlay ? version
+              && prev ? src
+              && prev ? version
+              # We could check that the version is actually distinct, but that
+              # would probably just delay the inevitable, or preserve tech debt.
+              # && prev.version != thisOverlay.version
+              && !(thisOverlay ? src)
+              && !(thisOverlay.__intentionallyOverridingVersion or false)
+            );
+          in
+          lib.warnIf warnForBadVersionOverride
             (
-              final:
               let
-                prev = f final;
-                thisOverlay = overlay final prev;
-                warnForBadVersionOverride = (
-                  prev ? src
-                  && thisOverlay ? version
-                  && prev ? version
-                  # We could check that the version is actually distinct, but that
-                  # would probably just delay the inevitable, or preserve tech debt.
-                  # && prev.version != thisOverlay.version
-                  && !(thisOverlay ? src)
-                  && !(thisOverlay.__intentionallyOverridingVersion or false)
-                );
                 pname = args.pname or "<unknown name>";
                 version = args.version or "<unknown version>";
                 pos = builtins.unsafeGetAttrPos "version" thisOverlay;
               in
-              lib.warnIf warnForBadVersionOverride ''
+              ''
                 ${
                   args.name or "${pname}-${version}"
                 } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
@@ -129,10 +130,22 @@ let
                 })
 
                 (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              '' (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
-            );
-        in
-        makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
+              ''
+            )
+            (
+              prev
+              // (
+                # The `if` is logically redundant with the `removeAttrs`, but
+                # this way is faster according to Nix stats, and this is a
+                # hotter path now that every pkgs/by-name package calls
+                # `overrideAttrs`.
+                if thisOverlay ? __intentionallyOverridingVersion then
+                  removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]
+                else
+                  thisOverlay
+              )
+            )
+        );
 
       finalPackage = mkDerivationSimple overrideAttrs args;
 
