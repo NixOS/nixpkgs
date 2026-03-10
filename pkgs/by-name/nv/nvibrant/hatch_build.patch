@@ -1,0 +1,63 @@
+diff --git a/hatch_build.py b/hatch_build.py
+index 036079a..18b12d6 100644
+--- a/hatch_build.py
++++ b/hatch_build.py
+@@ -1,6 +1,5 @@
+ import os
+ import subprocess
+-import sys
+ from pathlib import Path
+ from tempfile import TemporaryDirectory
+ 
+@@ -58,28 +57,27 @@ class BuildHook(BuildHookInterface):
+ 
+         # Configure the project
+         subprocess.check_call((
+-            sys.executable, "-m", "mesonbuild.mesonmain",
+-            "setup", Dirs.build,
++            "meson", "setup", Dirs.build,
+             "--buildtype", "release",
+             "--reconfigure", "--wipe",
+         ), cwd=Dirs.repository)
+ 
+         # Make binaries for all known driver version
+         for driver in subprocess.check_output(
+-            ("git", "tag"), cwd=Dirs.opengpu
++            ("cat", "./SOURCE_TAGS"), cwd=Dirs.opengpu
+         ).decode().strip().splitlines():
+ 
+             # Checkout driver version
+-            subprocess.check_call(
+-                ("git", "checkout", "-f", driver),
+-                cwd=Dirs.opengpu,
+-            )
++            if driver != "515.43.04":
++                subprocess.check_call(
++                    ("git", "apply", f"./PATCHES/{driver}.patch"),
++                    cwd=Dirs.opengpu,
++                )
+ 
+             # Compile an executable
+-            subprocess.check_call((
+-                sys.executable, "-m", "ninja",
+-                "-C", Dirs.build,
+-            ))
++            subprocess.check_call(
++                ("ninja", "-C", Dirs.build)
++            )
+ 
+             # Find and vendor the binary for this version
+             binary = Dirs.build.joinpath("nvibrant")
+@@ -91,12 +89,6 @@ class BuildHook(BuildHookInterface):
+             # Include in the wheel
+             build["force_include"][str(target)] = f"nvibrant/resources/{target.name}"
+ 
+-        # Revert back main branch
+-        subprocess.check_call(
+-            ("git", "checkout", "-f", "main"),
+-            cwd=Dirs.opengpu
+-        )
+-
+ # --------------------------------------------------------------------------- #
+ 
+ if __name__ == '__main__':
