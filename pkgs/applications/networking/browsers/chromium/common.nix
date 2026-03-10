@@ -99,8 +99,9 @@
   cups ? null,
   proprietaryCodecs ? true,
   libpulseaudio ? null,
-  variant ? "chromium", # Can be chromium or ungoogled
+  variant ? "chromium", # Can be chromium, ungoogled, or helium
   ungoogled-chromium,
+  helium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
@@ -110,7 +111,10 @@
 buildFun:
 
 let
-  isUngoogled = lib.elem variant ["ungoogled"];
+  isUngoogled = lib.elem variant [
+    "ungoogled"
+    "helium"
+  ];
 
   python3WithPackages = python3.pythonOnBuildForHost.withPackages (
     ps: with ps; [
@@ -183,7 +187,12 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
+  ungooglers = {
+    ungoogled = ungoogled-chromium;
+    inherit helium;
+  };
+
+  ungoogler = ungooglers.${variant} {
     inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
@@ -811,7 +820,7 @@ let
         hash = "sha256-MryWxSwBxSIONhl3X1cDxTWwNWy8a4yt/sqkrueSUNs=";
       })
     ]
-    ++ lib.optionals (versionRange "151" "152") [
+    ++ lib.optionals (versionRange "151" "152" && variant != "helium") [
       # ERROR Unresolved dependencies.
       # //tools/metrics:metrics_metadata(//build/toolchain/linux/unbundle:default)
       #   needs //tools/metrics:histograms_xml(//build/toolchain/linux/unbundle:default)
@@ -867,7 +876,7 @@ let
       # error: unknown argument: '-fno-experimental-lifetime-safety-tu-analysis'
       ./patches/chromium-152-dawn-llvm-22.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "153") [
+    ++ lib.optionals (chromiumVersionAtLeast "153" && variant != "helium") [
       (fetchpatch {
         name = "chromium-153-revert-DEPS-use-DEPS-provided-python-instead-of-a-system-one.patch";
         # https://chromium-review.googlesource.com/c/chromium/src/+/8160801
@@ -1081,6 +1090,11 @@ let
       + lib.optionalString isUngoogled ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+      ''
+      + lib.optionalString (variant == "helium") ''
+        ${ungoogler}/utils/name_substitution.py --sub -t .
+        ${ungoogler}/utils/helium_version.py --tree ${ungoogler} --chromium-tree .
+        ${ungoogler}/utils/replace_resources.py ${ungoogler}/resources/helium_resources.txt ${ungoogler}/resources .
       '';
 
     # Sadly, Chromium is not even -fstrict-flex-array=1 clean
@@ -1224,7 +1238,8 @@ let
         use_typescript_go = false;
         devtools_use_typescript_go = false;
       }
-      // lib.optionalAttrs variant == "ungoogled" (lib.importTOML ./variants/ungoogled/flags.toml)
+      // lib.optionalAttrs (variant == "ungoogled") (lib.importTOML ./variants/ungoogled/flags.toml)
+      // lib.optionalAttrs (variant == "helium") (lib.importTOML ./variants/helium/flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 
