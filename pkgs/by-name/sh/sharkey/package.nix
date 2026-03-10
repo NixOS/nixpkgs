@@ -23,14 +23,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharkey";
-  version = "2025.4.4";
+  version = "2025.4.6";
 
   src = fetchFromGitLab {
     domain = "activitypub.software";
     owner = "TransFem-org";
     repo = "Sharkey";
     tag = finalAttrs.version;
-    hash = "sha256-h6FkjwJ+TI5NZmGYOl/+yNP7gyc7FKmpdkfXmgqxh/s=";
+    hash = "sha256-TtwlveTIjzDYpFR+F5c0If6E1D2E5MI9I2IoDIV0u7E=";
     fetchSubmodules = true;
   };
 

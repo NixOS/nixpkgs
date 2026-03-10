@@ -15,6 +15,7 @@
   dataclasses-json,
   numpy,
   pandas,
+  pycryptodome,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "3.0.0";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-YjO8KfDx7lZOps+dG7CPsY7LOqhKIBdfCXexPsR2pB4=";
+    hash = "sha256-NJSmpVshj/x6ws+jFYXGarNKNztbk5OIIMA1neFOyIY=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
@@ -53,6 +54,7 @@ buildPythonPackage rec {
     dataclasses-json
     numpy
     pandas
+    pycryptodome
     pytest-asyncio
     pytest-mock
     pytestCheckHook
