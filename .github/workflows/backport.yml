@@ -52,6 +52,7 @@ jobs:
         uses: korthout/backport-action@4aaf0e03a94ff0a619c9a511b61aeb42adea5b02 # v4.2.0
         with:
           # Config README: https://github.com/korthout/backport-action#backport-action
+          add_author_as_reviewer: true
           copy_labels_pattern: 'severity:\ssecurity'
           github_token: ${{ steps.app-token.outputs.token }}
           pull_description: |-
