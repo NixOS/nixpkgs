@@ -862,7 +862,7 @@
       }
     }
   },
-  "ungoogled-chromium": {
+  "ungoogled": {
     "version": "156.0.8078.79",
     "deps": {
       "depot_tools": {
