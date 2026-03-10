@@ -7,19 +7,24 @@
   writableTmpDirAsHomeHook,
   nix-update-script,
   ripgrep,
+  makeWrapper,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.30.0";
+  version = "0.32.1";
 
   src = fetchurl {
     url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
-    hash = "sha256-N4pfjiaawx8kvaOFoQ53owJehD69fECJPpt5DxKVJ7k=";
+    hash = "sha256-9GpzzqY+5vvDhSsKnK1jOvx5QXWeG3y7QB2UYK/rZ28=";
   };
 
   dontUnpack = true;
 
   strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   buildInputs = [
     nodejs
@@ -29,16 +34,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D "$src" "$out/bin/gemini"
+    local dest="$out/lib/gemini/gemini.js"
+    install -Dm644 "$src" "$dest"
 
     # disable auto-update
-    sed -i '/enableAutoUpdate: {/,/}/ s/default: true/default: false/' "$out/bin/gemini"
+    sed -i '/enableAutoUpdate: {/,/}/ s/default: true/default: false/' "$dest"
 
     # use `ripgrep` from `nixpkgs`, more dependencies but prevent downloading incompatible binary on NixOS
     # this workaround can be removed once the following upstream issue is resolved:
     # https://github.com/google-gemini/gemini-cli/issues/11438
-    substituteInPlace $out/bin/gemini \
+    substituteInPlace "$dest" \
       --replace-fail 'const existingPath = await resolveExistingRgPath();' 'const existingPath = "${lib.getExe ripgrep}";'
+
+    makeWrapper "${lib.getExe nodejs}" "$out/bin/gemini" \
+      --add-flags "--no-warnings=DEP0040" \
+      --add-flags "$dest"
 
     runHook postInstall
   '';
