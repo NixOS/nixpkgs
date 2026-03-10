@@ -1,19 +1,29 @@
 {
   lib,
-  argcomplete,
   buildPythonPackage,
-  docstring-parser,
   fetchFromGitHub,
+  pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  pyyaml,
+
+  # optional-dependencies
+
+  # tests
+
+  argcomplete,
+  docstring-parser,
   fsspec,
   jsonnet,
   jsonschema,
   omegaconf,
   pytestCheckHook,
-  pyyaml,
   reconplogger,
   requests,
   ruyaml,
-  setuptools,
   toml,
   types-pyyaml,
   types-requests,
@@ -36,18 +46,18 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [ pyyaml ];
 
-  optional-dependencies = {
-    all = [
-      argcomplete
-      fsspec
-      jsonnet
-      jsonschema
-      omegaconf
-      ruyaml
-      docstring-parser
-      typeshed-client
-      requests
-    ];
+  optional-dependencies = lib.fix (self: {
+    all =
+      self.argcomplete
+      ++ self.fsspec
+      ++ self.jsonnet
+      ++ self.jsonschema
+      ++ self.omegaconf
+      ++ self.reconplogger
+      ++ self.ruyaml
+      ++ self.signatures
+      ++ self.toml
+      ++ self.urls;
     argcomplete = [ argcomplete ];
     fsspec = [ fsspec ];
     jsonnet = [
@@ -64,12 +74,18 @@ buildPythonPackage (finalAttrs: {
     ];
     toml = [ toml ];
     urls = [ requests ];
-  };
+  });
 
   nativeCheckInputs = [
     pytestCheckHook
     types-pyyaml
     types-requests
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # _pickle.PicklingError: Can't pickle local object ...
+    "test_get_argument_group_class_underscores_to_dashes"
+    "test_pickle_parser"
   ];
 
   pythonImportsCheck = [ "jsonargparse" ];
