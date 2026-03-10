@@ -286,11 +286,11 @@ let
               stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
                 --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
                 --raw-output \
-                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
+                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]|@uri'
               )"
               for id in ''${stale_${conf_type}_ids}; do
                 >&2 echo "Deleting stale device: $id"
-                curl -X DELETE ${s.baseAddress}/$id
+                curl -X DELETE "${s.baseAddress}/$id"
               done
             ''
           ))

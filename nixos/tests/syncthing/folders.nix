@@ -94,6 +94,7 @@ in
                 "notB"
               ];
             };
+            # Test how we handle white spaces in folder IDs
             folders."foo bar" = {
               path = "/var/lib/syncthing/foo-bar";
               devices = [
