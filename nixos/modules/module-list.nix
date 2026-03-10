@@ -1076,6 +1076,7 @@
   ./services/monitoring/vmagent.nix
   ./services/monitoring/vmalert.nix
   ./services/monitoring/vnstat.nix
+  ./services/monitoring/vudials.nix
   ./services/monitoring/watchdogd.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
