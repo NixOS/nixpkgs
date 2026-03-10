@@ -127,6 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INSTALL_UTILS" true)
     (lib.cmakeBool "LLVM_INCLUDE_BENCHMARKS" false)
     (lib.cmakeBool "LLVM_TOOL_LLVM_DRIVER_BUILD" true)
+    (lib.cmakeBool "MLIR_LINK_MLIR_DYLIB" true)
     (lib.cmakeBool "LLVM_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "MLIR_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_BUILD_DOCS" (buildDocs || buildMan))
