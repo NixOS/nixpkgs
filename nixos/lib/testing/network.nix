@@ -91,13 +91,24 @@ let
                     [ ]
                 ) remoteInterfaces
               );
+
+              # We also want to test router protocols that enable connections
+              # between nodes even if they don't share a VLAN, so we include
+              # the primary IPs of all machines in the hosts file.
+              primaryIPs = [
+                remoteConfig.networking.primaryIPAddress
+                remoteConfig.networking.primaryIPv6Address
+              ];
+
+              allReachableIps = lib.lists.uniqueStrings (sharedIps ++ primaryIPs);
+
               hostnames =
                 optionalString (
                   remoteConfig.networking.domain != null
                 ) "${remoteConfig.networking.hostName}.${remoteConfig.networking.domain} "
                 + "${remoteConfig.networking.hostName}\n";
             in
-            builtins.concatStringsSep "" (map (ip: "${ip} ${hostnames}") sharedIps)
+            builtins.concatStringsSep "" (map (ip: "${ip} ${hostnames}") allReachableIps)
           ) testModuleArgs.config.allMachines;
       };
     in
