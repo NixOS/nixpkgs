@@ -67,14 +67,18 @@ let
       id,
       not ? false,
     }:
+    let
+      # convert folder* to folder to allow adding multiple folders
+      ts = if lib.strings.hasInfix "folder" t then "folder" else t;
+    in
     ''
-      print("Searching for a ${t} with id ${id}")
-      configVal_${t} = machine.succeed(
+      print("Searching for a ${ts} with id ${id}")
+      configVal_${ts} = machine.succeed(
           "${pkgs.libxml2}/bin/xmllint "
-          "--xpath 'string(//${t}[@id=\"${id}\"]/@id)' ${configPath}"
+          "--xpath 'string(//${ts}[@id=\"${id}\"]/@id)' ${configPath}"
       )
-      print("${t}.id = {}".format(configVal_${t}))
-      assert "${id}" ${if not then "not" else ""} in configVal_${t}
+      print("${ts}.id = {}".format(configVal_${ts}))
+      assert "${id}" ${if not then "not" else ""} in configVal_${ts}
     '';
   # Same as checkSettingWithId, but for 'options' and 'gui'
   checkSettingWithoutId =
@@ -120,6 +124,7 @@ let
     # Intentionally this is a substring of the IDs of the 'test_folder's, as
     # explained in: https://github.com/NixOS/nixpkgs/issues/259256
     folder = "DeleteMe";
+    folderWithSpace = "Delete Me";
   };
   addDeviceToDeleteScript = pkgs.writers.writeBash "syncthing-add-device-to-delete.sh" ''
     set -euo pipefail
@@ -155,6 +160,15 @@ let
         builtins.toJSON {
           id = IDsToDelete.folder;
           path = "/var/lib/syncthing/DeleteMe";
+        }
+      )
+    } \
+        -X POST 127.0.0.1:8384/rest/config/folders
+    curl -d ${
+      lib.escapeShellArg (
+        builtins.toJSON {
+          id = IDsToDelete.folderWithSpace;
+          path = "/var/lib/syncthing/Delete\ Me";
         }
       )
     } \
