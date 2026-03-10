@@ -220,6 +220,15 @@ with haskellLib;
       lib.mapAttrs (_: pkg: pkg.overrideScope hls_overlay) (
         super
         // {
+          # Work around test suite not finding executable due to https://github.com/haskell/cabal/issues/11598
+          fourmolu = appendPatches [
+            (pkgs.fetchpatch {
+              name = "fourmolu-absolute-build-tool-paths.patch";
+              url = "https://github.com/fourmolu/fourmolu/commit/9217bc926ab80d20b815f0486be2184db07df4fc.patch";
+              hash = "sha256-ANzuKy5WfWCGZ7HFVBpTtuyUqzFfef/xR/v1KiyJEX4=";
+            })
+          ] super.fourmolu;
+
           # HLS 2.11: Too strict bound on Diff 1.0.
           haskell-language-server = lib.pipe super.haskell-language-server [
             dontCheck
