@@ -64,11 +64,9 @@ let
           optionalString (ipInterfaces != [ ])
             (head (head ipInterfaces).value.ipv6.addresses).address;
 
-        # Generate /etc/hosts by only including IP addresses from VLANs that
-        # both the local machine and the remote machine share. This prevents
-        # machines from trying to connect via unreachable interfaces (e.g.,
-        # a Management VLAN) and ensures name resolution matches the
-        # actual network topology of the test.
+        # Generate /etc/hosts including every remote's primary IP addresses
+        # (whichever VLAN they may belong to) as well as all IP addresses from
+        # VLANs that both the local machine and the remote machine share.
         networking.extraHosts =
           let
             localVlans = config.virtualisation.vlans;
@@ -91,13 +89,24 @@ let
                     [ ]
                 ) remoteInterfaces
               );
+
+              # We also want to test router protocols that enable connections
+              # between nodes even if they don't share a VLAN, so we include
+              # the primary IPs of all machines in the hosts file.
+              primaryIPs = [
+                remoteConfig.networking.primaryIPAddress
+                remoteConfig.networking.primaryIPv6Address
+              ];
+
+              allReachableIps = lib.lists.uniqueStrings (sharedIps ++ primaryIPs);
+
               hostnames =
                 optionalString (
                   remoteConfig.networking.domain != null
                 ) "${remoteConfig.networking.hostName}.${remoteConfig.networking.domain} "
                 + "${remoteConfig.networking.hostName}\n";
             in
-            builtins.concatStringsSep "" (map (ip: "${ip} ${hostnames}") sharedIps)
+            builtins.concatStringsSep "" (map (ip: "${ip} ${hostnames}") allReachableIps)
           ) testModuleArgs.config.allMachines;
       };
     in
