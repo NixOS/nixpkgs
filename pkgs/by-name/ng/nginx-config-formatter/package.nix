@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.3.0";
+  version = "1.4.0";
   pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-0jXm82a4bYpbOJnz+y7+dSg1LZy1Mu28IgBxd24Y5ck=";
+    sha256 = "sha256-HB1knL/q1G2z6RyVCsOyIKpp4O6x68/93ccvox1FKGQ=";
   };
 
   buildInputs = [ python3 ];
