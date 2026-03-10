@@ -7,7 +7,6 @@
   cmake,
   ninja,
   pkg-config,
-  m4,
   perl,
   bash,
   xdg-utils,
@@ -31,7 +30,6 @@
   libxml2,
   withMultiArc ? true,
   libarchive,
-  pcre,
   withNetRocks ? true,
   openssl,
   libssh,
@@ -57,7 +55,6 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
-    m4
     perl
     makeWrapper
   ];
@@ -72,7 +69,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withMultiArc [
       libarchive
-      pcre
     ]
     ++ lib.optionals withNetRocks [
       openssl
@@ -86,8 +82,6 @@ stdenv.mkDerivation rec {
       [
         python
         cffi
-        debugpy
-        pcpp
       ]
     );
 
