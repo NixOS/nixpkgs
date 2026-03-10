@@ -752,11 +752,13 @@ with pkgs;
   compressFirmwareZstd = callPackage ../build-support/kernel/compress-firmware.nix { type = "zstd"; };
 
   makeModulesClosure =
+    # Arguments documentation in `../build-support/kernel/modules-closure.nix`.
     {
       kernel,
       firmware,
       rootModules,
       allowMissing ? false,
+      allowEmpty ? false,
       extraFirmwarePaths ? [ ],
     }:
     callPackage ../build-support/kernel/modules-closure.nix {
@@ -765,6 +767,7 @@ with pkgs;
         firmware
         rootModules
         allowMissing
+        allowEmpty
         extraFirmwarePaths
         ;
     };
