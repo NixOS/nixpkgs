@@ -1,10 +1,10 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p yq nix bash coreutils nix-update common-updater-scripts ripgrep flutter
+#!nix-shell -i bash -p curl jq yq-go nix bash nix-update common-updater-scripts ripgrep
 
 set -eou pipefail
 
 PACKAGE_DIR="$(realpath "$(dirname "$0")")"
-cd "$PACKAGE_DIR"/..
+cd "$PACKAGE_DIR"
 while ! test -f flake.nix; do cd ..; done
 NIXPKGS_DIR="$PWD"
 
@@ -15,20 +15,15 @@ latestVersion=$(
     tail -n1
 )
 
-currentVersion=$(nix-instantiate --eval -E "with import ./. {}; fladder.version or (lib.getVersion fladder)" | tr -d '"')
+currentVersion=$(nix eval --raw --file . fladder.version)
 
 if [[ "$currentVersion" == "$latestVersion" ]]; then
     echo "package is up-to-date: $currentVersion"
     exit 0
 fi
 
-nix-update --version=$latestVersion fladder
+nix-update --version="$latestVersion" fladder
 
-export HOME="$(mktemp -d)"
-src="$(nix-build --no-link "$NIXPKGS_DIR" -A fladder.src)"
-TMPDIR="$(mktemp -d)"
-cp --recursive --no-preserve=mode "$src"/* $TMPDIR
-cd "$TMPDIR"
-flutter pub get
-yq . pubspec.lock >"$PACKAGE_DIR"/pubspec.lock.json
-rm -rf $TMPDIR
+curl --fail --silent "https://raw.githubusercontent.com/DonutWare/Fladder/v${latestVersion}/pubspec.lock" | yq eval --output-format=json --prettyPrint >"$PACKAGE_DIR"/pubspec.lock.json
+
+$(nix eval --file "$NIXPKGS_DIR" dart.fetchGitHashesScript) --input "$PACKAGE_DIR"/pubspec.lock.json --output "$PACKAGE_DIR"/git-hashes.json
