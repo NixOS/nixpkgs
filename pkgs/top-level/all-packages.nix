@@ -2810,6 +2810,7 @@ with pkgs;
 
   nodejs = nodejs_24;
   nodejs-slim = nodejs-slim_24;
+  nodejs-repackaged = callPackage ../development/web/nodejs/repackaged.nix { };
 
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs_20 = callPackage ../development/web/nodejs/symlink.nix { nodejs-slim = nodejs-slim_20; };
