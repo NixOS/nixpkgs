@@ -11574,6 +11574,8 @@ self: super: with self; {
 
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
 
+  openplantbook-sdk = callPackage ../development/python-modules/openplantbook-sdk { };
+
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
