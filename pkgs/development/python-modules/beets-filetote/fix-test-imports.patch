@@ -1,0 +1,15 @@
+--- a/tests/helper.py
++++ b/tests/helper.py
+@@ -111,6 +111,12 @@ def _load_module_from_path(module_name: str, module_path: str) -> types.ModuleTy
+ 
+     module = importlib.util.module_from_spec(spec)
+     sys.modules[module_name] = module
++    # Ensure the source tree's beetsplug/ is on beetsplug.__path__ so that
++    # relative imports (from .filetote_dataclasses) resolve correctly.
++    if module_name.startswith("beetsplug."):
++        _src_bp = str(Path(__file__).resolve().parent.parent / "beetsplug")
++        if _src_bp not in beetsplug.__path__:
++            beetsplug.__path__.insert(0, _src_bp)
+     spec.loader.exec_module(module)
+     return module
+ 
