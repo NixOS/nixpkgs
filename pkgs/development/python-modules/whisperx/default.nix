@@ -39,14 +39,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "whisperx";
-  version = "3.8.1";
+  version = "3.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2HjQtb8k3px0kqXowKtCXkiG2GuKLCuCtDOPYYa/tbc=";
+    hash = "sha256-tdTpXJvbOT+MDJ7J1eIHdQnrrSLvco1Q0sgJdUvCRvs=";
   };
 
   # As `makeWrapperArgs` does not apply to the module, and whisperx depends on `ffmpeg`,
