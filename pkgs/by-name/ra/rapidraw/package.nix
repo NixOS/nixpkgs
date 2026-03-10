@@ -42,13 +42,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PzPw7TJQK6ojsdw8cypS/drtc/ec93IYGIjTEdpIraI=";
+    hash = "sha256-C6U3xU/rL+Og6DgJTnPESf+LPlm+svTNS5bSGhrn7dQ=";
     fetchSubmodules = true;
 
     # darwin/linux hash mismatch in rawler submodule
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-4PbNSM4BIMOpmPcys/Vt5gzy/Pu9L6rPcG0lGnTDvGo=";
+    hash = "sha256-YpM/EQ4eFqziwEpSXpBNEO8A5fCmjVtCrgr11YxLKxY=";
   };
 
   nativeBuildInputs = [
