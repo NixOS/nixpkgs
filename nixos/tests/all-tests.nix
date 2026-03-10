@@ -733,6 +733,7 @@ in
   hitch = handleTest ./hitch { };
   hledger-web = runTest ./hledger-web.nix;
   hockeypuck = runTest ./hockeypuck.nix;
+  holo-daemon-modular-service = runTest ./holo-daemon-modular.nix;
   home-assistant = runTest ./home-assistant.nix;
   homebox = runTest ./homebox.nix;
   homebridge = runTest ./homebridge.nix;
