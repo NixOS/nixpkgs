@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  pnpm_10,
+  pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
-  nodejs_22,
+  nodejs,
   fetchFromGitHub,
   nix-update-script,
   discord,
@@ -12,32 +12,27 @@
   discord-canary,
   discord-development,
 }:
-let
-  pnpm' = pnpm_10.override { nodejs = nodejs_22; };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.33";
+  version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lQpl6ecQfQ7KzEIytH3k4hLtvq+KkTL+3IR2ZukdZWM=";
+    hash = "sha256-Tuv0IFhvZzvmf29EWNtrb5Y6YOCn+lIBzXpt7lfLVS8=";
   };
 
   nativeBuildInputs = [
-    nodejs_22
+    nodejs
     pnpmConfigHook
-    pnpm'
+    pnpm
   ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm';
-
-    fetcherVersion = 2;
-    hash = "sha256-PRlgwyePFpFdQRcojGDEC4ESZEGTJf1Ad9EFgm8hmKY=";
+    fetcherVersion = 3;
+    hash = "sha256-1jGEzTPPlwAFDKPbH92HvYg4rzFrUJLqhZRMNS+H6GI=";
   };
 
   env = {
