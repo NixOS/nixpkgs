@@ -60,24 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [
     "DO_USERDIRS=1"
-    # Makefile defaults
-    "USE_ZLIB=1"
-    "USE_GNUTLS=1"
-    "LINK_M=1"
-    "USE_CODEC_WAVE=1"
-    "USE_CODEC_MP3=1"
-    "USE_CODEC_VORBIS=1"
-    "USE_CODEC_FLAC=1"
-    "USE_CODEC_OPUS=1"
     "USE_CODEC_OPUS=0"
-    "USE_CODEC_MIKMOD=0"
-    "USE_CODEC_UMX=0"
-    "USE_CODEC_MODPLUG=0"
-    "USE_CODEC_XMP=0"
-    "MP3LIB=mad"
-    "VORBISLIB=vorbis"
-    "SDL_CONFIG=sdl2-config"
-    "USE_SDL2=1"
   ];
 
   preInstall = ''
