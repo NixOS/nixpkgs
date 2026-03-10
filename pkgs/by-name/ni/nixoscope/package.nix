@@ -5,14 +5,14 @@
 }:
 python3Packages.buildPythonPackage {
   pname = "nixoscope";
-  version = "0-unstable-2026-03-05";
+  version = "0-unstable-2026-03-09";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giomf";
     repo = "nixoscope";
-    rev = "71de2ff0b4c9376db759a05ad58ace87d2b52ccb";
-    hash = "sha256-5yNGtEWlSAfJcy4X8C3dHQ+4Xaawi6aX20C82bfZxG4=";
+    rev = "cd55aeb660deb823b17e6946e417fa14d966f8f7";
+    hash = "sha256-cyEzO2UJaCWfecWZAVke2u/1guUO6Hl+YAbVL9pSgqU=";
   };
 
   build-system = with python3Packages; [
