@@ -9,8 +9,6 @@
   libvorbis,
   libmad,
   flac,
-  libopus,
-  opusfile,
   libogg,
   libxmp,
   curlMinimal,
@@ -47,8 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvorbis
     libmad
     flac
-    libopus
-    opusfile
     libogg
     libxmp
     SDL2
