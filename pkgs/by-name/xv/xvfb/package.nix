@@ -20,6 +20,7 @@
   libxkbfile,
   libxshmfence,
   mesa-gl-headers,
+  mesa,
   openssl,
   pixman,
   libxcb-util,
@@ -47,9 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    dri-pkgconfig-stub
     font-util
-    libdrm
     libGL
     libx11
     libxau
@@ -70,6 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb-wm
     xorgproto
     xtrans
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    dri-pkgconfig-stub
+    libdrm
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    mesa
   ];
 
   mesonFlags = [
