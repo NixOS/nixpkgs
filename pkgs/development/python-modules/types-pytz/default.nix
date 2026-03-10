@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-pytz";
-  version = "2025.2.0.20251108";
+  version = "2026.1.1.20260304";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_pytz";
     inherit version;
-    hash = "sha256-/Kh5F4Nq6EPwcSlWe3TBkp8YcGEGgbTJLLhqPfWBe9s=";
+    hash = "sha256-DDVC2OmwFgtCQjNEDFK4PW9YyuS4UzPVTk+WHPAT4Rc=";
   };
 
   build-system = [ setuptools ];
