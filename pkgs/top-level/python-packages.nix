@@ -18257,6 +18257,8 @@ self: super: with self; {
 
   sqids = callPackage ../development/python-modules/sqids { };
 
+  sqlacodegen = callPackage ../development/python-modules/sqlacodegen { };
+
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
   sqlalchemy-citext = callPackage ../development/python-modules/sqlalchemy-citext { };
