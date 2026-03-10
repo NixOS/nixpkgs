@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "zipfile2";
-  version = "0.0.12-unstable-2024-09-28";
+  version = "0.0.12";
   pyproject = true;
 
   src = fetchFromGitHub {
