@@ -55,7 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
   ++ [
     (
-      if (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64) then
+      if
+        (
+          stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isPower64
+        )
+      then
         "--with-lg-page=16"
       else
         "--with-lg-page=12"
