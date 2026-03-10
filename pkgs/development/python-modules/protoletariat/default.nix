@@ -8,7 +8,7 @@
   click,
   pkgs,
   protobuf,
-  mypy-protobuf,
+  mypy-protobuf_3_6,
   pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -47,11 +47,10 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
-    mypy-protobuf
+    mypy-protobuf_3_6
   ];
 
   meta = {
-    broken = true;
     description = "Python protocol buffers for the rest of us";
     changelog = "https://github.com/cpcloud/protoletariat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 ];
