@@ -2,9 +2,11 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
+  go_1_26,
 }:
 
-buildGoModule rec {
+buildGoModule.override { go = go_1_26; } rec {
   pname = "autotitle";
   version = "1.13.0";
   meta = with lib; {
@@ -12,16 +14,17 @@ buildGoModule rec {
     homepage = "https://github.com/mydehq/autotitle";
     license = licenses.gpl3;
     mainProgram = "autotitle";
-    maintainers = with maintainers; [ ]; # Add your Nixpkgs username here
+    maintainers = with maintainers; [ soymadip ];
   };
 
   src = fetchFromGitHub {
     owner = "mydehq";
     repo = "autotitle";
     rev = "v${version}";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="; # TODO: replace with actual hash from nix build
+    hash = "sha256-Gt9QBms9DcErj1lKP0SRYJOo46LiVyTfpTYlDwPtx7M=";
   };
 
-  vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="; # TODO: replace with actual vendorHash from nix build
+  vendorHash = "sha256-Wgl6BluSEwwWvhI2TKM26DT2663Z95/5lGF9SVtSY40=";
 
+  passthru.updateScript = nix-update-script { };
 }
