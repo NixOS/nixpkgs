@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preInstall = ''
     mkdir -p "$out/bin"
-    substituteInPlace Makefile --replace "/usr/local/games/quake" "$out/bin/qss-m"
+    substituteInPlace Makefile --replace-fail "/usr/local/games/quake" "$out/bin/qss-m"
   '';
 
   enableParallelBuilding = true;
