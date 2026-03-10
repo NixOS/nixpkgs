@@ -108,7 +108,7 @@ stdenv.mkDerivation (
         ++ [ "runHook postConfigure" ]
       ));
 
-    env = {
+    env = args.env or { } // {
       CRFLAGS = lib.concatStringsSep " " defaultOptions;
 
       PREFIX = placeholder "out";
