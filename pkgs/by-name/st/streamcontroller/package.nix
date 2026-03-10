@@ -15,21 +15,17 @@
   xdg-desktop-portal-gtk,
   kdotool,
   udevCheckHook,
+  gitUpdater,
 }:
-let
-  # We have to hardcode revision because upstream often create multiple releases for the same version number.
-  # This is the commit hash that maps to 1.5.0-beta.12 released on 2025-10-11
-  rev = "73b7632ff2977d05763acd56e53bdc7a37d30c0c";
-in
-stdenv.mkDerivation {
-  pname = "streamcontroller";
 
+stdenv.mkDerivation (finalAttrs: {
+  pname = "streamcontroller";
   version = "1.5.0-beta.12";
 
   src = fetchFromGitHub {
-    repo = "StreamController";
     owner = "StreamController";
-    inherit rev;
+    repo = "StreamController";
+    rev = finalAttrs.version;
     hash = "sha256-6H0FPkvjKSfso1+E0JwseOnubDXwYys0RVBbyaGCXw0=";
   };
 
@@ -198,6 +194,8 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
+  passthru.updateScript = gitUpdater { };
+
   meta = {
     description = "Elegant Linux app for the Elgato Stream Deck with support for plugins";
     homepage = "https://core447.com/";
@@ -206,4 +204,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ sifmelcara ];
     platforms = lib.platforms.linux;
   };
-}
+})
