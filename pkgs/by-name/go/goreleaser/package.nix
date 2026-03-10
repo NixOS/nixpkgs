@@ -8,14 +8,14 @@
   testers,
   goreleaser,
 }:
-buildGo126Module rec {
+buildGo126Module (finalAttrs: {
   pname = "goreleaser";
   version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "goreleaser";
     repo = "goreleaser";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2zG7B6d+NZ1XJrObCfgBZyin5JDv6hKlvZ8C4ckAJ8Q=";
   };
 
@@ -24,7 +24,7 @@ buildGo126Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.builtBy=nixpkgs"
   ];
 
@@ -53,7 +53,7 @@ buildGo126Module rec {
   passthru.tests.version = testers.testVersion {
     package = goreleaser;
     command = "goreleaser -v";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
@@ -67,4 +67,4 @@ buildGo126Module rec {
     license = lib.licenses.mit;
     mainProgram = "goreleaser";
   };
-}
+})
