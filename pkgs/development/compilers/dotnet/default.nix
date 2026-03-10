@@ -95,6 +95,7 @@ let
         dotnet_8 = lib.recurseIntoAttrs (callPackage ./8 { });
         dotnet_9 = lib.recurseIntoAttrs (callPackage ./9 { });
         dotnet_10 = lib.recurseIntoAttrs (callPackage ./10 { });
+        dotnet_10_0_2xx = lib.recurseIntoAttrs (callPackage ./10_0_2xx { });
         dotnet_11 = lib.recurseIntoAttrs (callPackage ./11 { });
       }
     );
@@ -179,9 +180,10 @@ pkgs
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_4xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_4xx-bin;
   sdk_9_0_3xx = combineSdk sdk_9_0_1xx pkgs.sdk_9_0_3xx-bin;
+  sdk_10_0_2xx = combineSdk sdk_10_0_1xx pkgs.sdk_10_0_2xx-bin;
   sdk_8_0 = sdk_8_0_4xx;
   sdk_9_0 = sdk_9_0_3xx;
-  sdk_10_0 = sdk_10_0_1xx;
+  sdk_10_0 = sdk_10_0_2xx;
   sdk_11_0 = sdk_11_0_1xx;
   sdk_8_0-source = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0-source = if !pkgs.dotnet_9.vmr.meta.broken then pkgs.dotnet_9.sdk else pkgs.sdk_9_0_1xx-bin;
