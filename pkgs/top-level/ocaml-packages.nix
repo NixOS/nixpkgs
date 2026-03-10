@@ -817,6 +817,8 @@ let
 
         hpack = callPackage ../development/ocaml-modules/hpack { };
 
+        htmlit = callPackage ../development/ocaml-modules/htmlit { };
+
         http = callPackage ../development/ocaml-modules/cohttp/http.nix { };
 
         http-mirage-client = callPackage ../development/ocaml-modules/http-mirage-client { };

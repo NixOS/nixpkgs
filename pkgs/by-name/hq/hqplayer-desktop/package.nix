@@ -14,6 +14,7 @@
   mpfr,
   wavpack,
   kdePackages,
+  imagemagick,
 }:
 
 let
@@ -40,6 +41,7 @@ stdenv.mkDerivation {
     autoPatchelfHook
     dpkg
     kdePackages.wrapQtAppsHook
+    imagemagick
   ];
 
   buildInputs = [
@@ -79,10 +81,11 @@ stdenv.mkDerivation {
     mkdir -p "$out/share/applications"
     mv ./usr/share/applications/* "$out/share/applications"
 
-    # pixmaps
-    mkdir -p "$out/share/pixmaps"
-    mv ./usr/share/pixmaps/* "$out/share/pixmaps"
-
+    # icons
+    mkdir -p $out/share/icons/hicolor/96x96/apps
+    install -D ./usr/share/pixmaps/hqplayer5client.png -t $out/share/icons/hicolor/128x128/apps
+    install -D ./usr/share/pixmaps/hqplayer5desktop.png -t $out/share/icons/hicolor/128x128/apps
+    magick ./usr/share/pixmaps/hqplayer5desktop-manual.png -resize 96x96 $out/share/icons/hicolor/96x96/apps/hqplayer5desktop-manual.png
     runHook postInstall
   '';
 

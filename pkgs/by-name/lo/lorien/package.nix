@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       --set-rpath ${lib.makeLibraryPath buildInputs} \
       $out/share/lorien/lorien
 
-    install -Dm644 images/lorien.png $out/share/pixmaps/lorien.png
+    install -Dm644 images/lorien.png -t $out/share/icons/hicolor/64x64/apps
 
     runHook postInstall
   '';

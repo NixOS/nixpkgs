@@ -6,7 +6,7 @@
   extras ? [ "all" ],
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "browsr";
   version = "1.22.1";
   pyproject = true;
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eISOADs++ZF62qkWbhFZu6JkEVtTytg3q5nbwS2m+8g=";
   };
 
@@ -46,7 +46,7 @@ python3Packages.buildPythonApplication rec {
       textual
       textual-universal-directorytree
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.attrVals extras finalAttrs.passthru.optional-dependencies;
 
   optional-dependencies = with python3Packages; {
     all = [
@@ -77,6 +77,7 @@ python3Packages.buildPythonApplication rec {
     "rich-pixels"
     "rich"
     "textual"
+    "universal-pathlib"
   ];
 
   pythonImportsCheck = [
@@ -95,8 +96,8 @@ python3Packages.buildPythonApplication rec {
     description = "File explorer in your terminal";
     mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
-    changelog = "https://github.com/juftin/browsr/releases/tag/v${version}";
+    changelog = "https://github.com/juftin/browsr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})

@@ -202,7 +202,11 @@ let
 
             ssl_protocols ${cfg.sslProtocols};
             ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
-            ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
+            ${optionalString (cfg.sslDhparam != false)
+              "ssl_dhparam ${
+                if cfg.sslDhparam == true then config.security.dhparams.params.nginx.path else cfg.sslDhparam
+              };"
+            }
 
             ${optionalString cfg.recommendedTlsSettings ''
               # Consider https://ssl-config.mozilla.org/#server=nginx&config=intermediate as the lower bound
@@ -978,10 +982,10 @@ in
       };
 
       sslDhparam = mkOption {
-        type = types.nullOr types.path;
-        default = null;
+        type = types.either types.path types.bool;
+        default = false;
         example = "/path/to/dhparams.pem";
-        description = "Path to DH parameters file.";
+        description = "Path to DH parameters file, or `true` to generate with `security.dhparms.params.nginx`.";
       };
 
       proxyResolveWhileRunning = mkOption {
@@ -1652,6 +1656,8 @@ in
           ) (filter (vhostConfig: vhostConfig.useACMEHost != null) acmeEnabledVhosts);
       in
       listToAttrs acmePairs;
+
+    security.dhparams.params.nginx = lib.mkIf (cfg.sslDhparam == true) { };
 
     users.users = optionalAttrs (cfg.user == "nginx") {
       nginx = {

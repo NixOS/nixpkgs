@@ -8,7 +8,7 @@
   mpv-unwrapped,
   fetchPnpmDeps,
   pnpmConfigHook,
-  pnpm,
+  pnpm_10_29_2,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
@@ -16,13 +16,13 @@
 }:
 let
   pname = "feishin";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-PICVNItpMALffpJvQQXLlHcYu1yDtEUclGYjO25f6ew=";
+    hash = "sha256-DVlZ1ucCr8nP/TMvS2GBxjimdm8cie155vWoYMx7gbM=";
   };
 
   electron = electron_39;
@@ -41,14 +41,15 @@ buildNpmPackage {
       version
       src
       ;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
-    hash = "sha256-K9mwEJA0fZXI2OnVo5y4Zmox3mwO8qLvgLiBaoyYAkg=";
+    hash = "sha256-LeoOksMWZjhVkEjTn5sS2xuX3QxGX8O7iC/3suVwiug=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    pnpm
+    pnpm_10_29_2
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
@@ -119,6 +120,8 @@ buildNpmPackage {
       --set ELECTRON_FORCE_IS_PACKAGED 1 \
       --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
+
+    install -Dm644 org.jeffvli.feishin.metainfo.xml $out/share/metainfo/org.jeffvli.feishin.metainfo.xml
 
     for size in 32 64 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps

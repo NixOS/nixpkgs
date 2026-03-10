@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xnldorker";
-  version = "4.1";
+  version = "4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "xnldorker";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k0nTY3n5g7cNsVVWDcdFpCjQVJCErPp/21iz2R/TTGs=";
+    hash = "sha256-g5o2H5FqP+ytu5eqmGUyn0lD9NQcCJ4+xQCmTk0Qxrg=";
   };
 
   pythonRemoveDeps = [

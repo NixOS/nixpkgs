@@ -23,12 +23,12 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.7.0";
+  version = "4.7.1";
   pyproject = true;
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-1bC437EJWECmO+lmZVXbL2WQwxEIynlVmRJyEfsYLO8=";
+    hash = "sha256-kKxjMhfjF1wVYDiEZ6t9PgAyFQLuUeS+2lZulEv2BR8=";
   };
 
   build-system = with python3.pkgs; [

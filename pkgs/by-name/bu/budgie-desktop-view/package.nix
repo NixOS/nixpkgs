@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop-view";
-  version = "10.10.1";
+  version = "10.10.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop-view";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ro+/Aqsyr9py3SEdsRg+eiQLDkFI0wI4MMdCyH02E3U=";
+    hash = "sha256-XwfNbrK9+FCYtO2tiz5TfHsJmctFbcEaUORiVs/aynE=";
   };
 
   nativeBuildInputs = [

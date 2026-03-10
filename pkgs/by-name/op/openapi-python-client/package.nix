@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "openapi-python-client";
-  version = "0.28.2";
+  version = "0.28.3";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "openapi-generators";
     repo = "openapi-python-client";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-egeT/XTUTq+HbwX7PpfygDNNKgBkExM0neMEu/mfErw=";
+    hash = "sha256-09XqMy++lczQrbQWkj13WM98VDIOMPSMXAkgJWMfcKM=";
   };
 
   nativeBuildInputs = [

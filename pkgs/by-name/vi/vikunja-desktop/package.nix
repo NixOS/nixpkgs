@@ -3,7 +3,7 @@
   stdenv,
   makeWrapper,
   makeDesktopItem,
-  pnpm,
+  pnpm_10_29_2,
   pnpmConfigHook,
   nodejs,
   electron,
@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       pnpmInstallFlags
       ;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 1;
     hash = "sha256-yiVlEr1gi2g3m+hkYfDv6qd/wRlwwknM6lAaIeR58Ok=";
   };
@@ -50,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     nodejs
-    pnpm
+    pnpm_10_29_2
     pnpmConfigHook
     vikunja.passthru.frontend
   ];

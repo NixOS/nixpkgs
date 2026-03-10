@@ -306,6 +306,29 @@ overrideLlvmPackagesRocm (s: {
         stripLen = 1;
       })
       ./perf-increase-namestring-size.patch
+      # v64i8 shuffle lowering inf loop on VBMI targets, hangs whisper-cpp etc
+      # https://github.com/NixOS/nixpkgs/issues/497745
+      (fetchpatch {
+        # https://github.com/llvm/llvm-project/pull/182832
+        name = "llvm-x86-v64i8-add-test-coverage.patch";
+        url = "https://github.com/llvm/llvm-project/commit/0e3a96d0ec01e3575674d72c4e23bf98affdca28.patch";
+        relative = "llvm";
+        hash = "sha256-qhRkB8Fjz/fNacuGv1OFkiTNOQ0/QQ9p4pLFudwrTzM=";
+      })
+      (fetchpatch {
+        # https://github.com/llvm/llvm-project/pull/182852
+        name = "llvm-x86-v64i8-prefer-vpermv3-on-vbmi.patch";
+        url = "https://github.com/llvm/llvm-project/commit/8f5880d3ae4e5dfc748985d90e5413671028aa3e.patch";
+        relative = "llvm";
+        hash = "sha256-4DU6gu/1+iQpzvVYBlTTUKtw77QSRyTja4hdel4D5Cw=";
+      })
+      (fetchpatch {
+        # https://github.com/llvm/llvm-project/pull/183109
+        name = "llvm-x86-v64i8-skip-repeated-mask-lane-permute-on-vbmi.patch";
+        url = "https://github.com/llvm/llvm-project/commit/1b9fea021840f17c41ea980300d0fc45e7285909.patch";
+        relative = "llvm";
+        hash = "sha256-9Akm78QQr8BIMrVWwDG3poWS1HuQ0hpIQWfke3oADgg=";
+      })
       # TODO: consider reapplying "Don't include aliases in RegisterClassInfo::IgnoreCSRForAllocOrder"
       # it was reverted as it's a pessimization for non-GPU archs, but this compiler
       # is used mostly for amdgpu

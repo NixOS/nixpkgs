@@ -14,13 +14,15 @@
   morecantile,
   numexpr,
   numpy,
+  obstore,
   pydantic,
   pystac,
   rasterio,
   rioxarray,
+  zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "rio-tiler";
   version = "8.0.5";
   pyproject = true;
@@ -28,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-FOTwP4iTLfWl81KKarLOQQyp4gpi6Q+pjUXfZrXXsfo=";
   };
 
@@ -47,19 +49,26 @@ buildPythonPackage rec {
     rasterio
   ];
 
+  optional-dependencies = {
+    s3 = [ boto3 ];
+    xarray = [ rioxarray ];
+    zarr = [
+      obstore
+      zarr
+    ];
+  };
+
   nativeCheckInputs = [
-    boto3
     h5netcdf
     pytestCheckHook
-    rioxarray
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "rio_tiler" ];
 
   disabledTests = [
-    # Requires obstore
+    # Requires network access
     "test_dataset_reader"
-    "test_dataset_reader_variable"
   ];
 
   meta = {
@@ -68,4 +77,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})

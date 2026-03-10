@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DLUA_SUPPORT=on"
   ];
 
-  NIX_LDFLAGS = "-lcrypt";
+  env.NIX_LDFLAGS = "-lcrypt";
 
   postInstall = ''
     wrapProgram $out/bin/uhttpd \

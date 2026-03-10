@@ -46,12 +46,15 @@ function runChecklist({
       classify(pull_request.base.ref).type.includes('development'),
     'PR touches only files of packages in `pkgs/by-name/`.': allByName,
     'PR is at least one of:': {
-      'Approved by a committer.': committers.intersection(approvals).size > 0,
+      'Approved by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+        committers.intersection(approvals).size > 0,
       'Backported via label.':
         pull_request.user.login === 'nixpkgs-ci[bot]' &&
         pull_request.head.ref.startsWith('backport-'),
-      'Opened by a committer.': committers.has(pull_request.user.id),
-      'Opened by r-ryantm.': pull_request.user.login === 'r-ryantm',
+      'Opened by a [committer](https://github.com/orgs/NixOS/teams/nixpkgs-committers).':
+        committers.has(pull_request.user.id),
+      'Opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).':
+        pull_request.user.login === 'r-ryantm',
     },
   }
 

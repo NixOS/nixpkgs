@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/2c1e44fc3eacadcafdd4ada3e3184a092b6f26c5.patch";
       relative = "amd/comgr";
     })
+    # Fix: CCOB compat patch used coerced (featureless) name for output filename,
+    # causing CLR's code_obj_map key to miss when looking up device ISA with features
+    ./fix-ccob-compat-output-filename.patch
   ];
 
   postPatch = ''

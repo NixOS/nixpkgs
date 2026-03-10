@@ -29,15 +29,9 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-1zMIcr36VrNX3GT4k7w4sIhAwQSWUuuomf73fnCwueY=";
   };
 
-  postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pyo3-file-0.15.0" = "sha256-8OVShM+jWHOZ/bOXJI2PEDzmOAFY1MBwbkg5ita25cg=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-6kKTLU1YazLpE5V/LqCLC1m8futx8C/X3gkeg8yV3ac=";
   };
 
   build-system = [

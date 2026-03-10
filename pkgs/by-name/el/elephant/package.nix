@@ -74,13 +74,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "elephant";
-  version = "2.19.3";
+  version = "2.20.0";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "elephant";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-IyHoHbhLFuIgFG+n7dqHwJaXuNnRaEsxCfAsfudV1KY=";
+    hash = "sha256-r2ucLztXQFRu70VrGtNcL3PONyazxDPwq/hSn7opD+I=";
   };
 
   vendorHash = "sha256-tO+5x2FIY1UBvWl9x3ZSpHwTWUlw1VNDTi9+2uY7xdU=";

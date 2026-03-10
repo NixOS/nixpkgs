@@ -66,7 +66,10 @@ stdenvNoCC.mkDerivation {
     description = "Cloud-native edge and service proxy";
     license = lib.licenses.asl20;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    maintainers = with lib.maintainers; [ katexochen ];
+    maintainers = with lib.maintainers; [
+      katexochen
+      charludo
+    ];
     mainProgram = "envoy";
     platforms = [
       "x86_64-linux"

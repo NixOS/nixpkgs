@@ -7,17 +7,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "picoclaw";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "sipeed";
     repo = "picoclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zCeURNN152yL3Qi1UFDvSB85xflbLAMzQUTwGThALss=";
+    hash = "sha256-JvcvpaGPPBiABK28rQhe63chYm7MRdfU6uflZosNRKg=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-CsTGC5Ajo9RV6rJPQgnFqA+bQ2TEafI4tt3iXpVwaeY=";
+  vendorHash = "sha256-K9LssS1Hff19dv6oa8EaFOUZIRnOtAqC5jgnY5HuWTk=";
 
   preBuild = ''
     go generate ./...

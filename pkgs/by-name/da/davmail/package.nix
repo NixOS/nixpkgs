@@ -12,24 +12,22 @@
   libxtst,
   coreutils,
   gnugrep,
-  zulu,
   preferGtk3 ? true,
-  preferZulu ? true,
 }:
 
 let
-  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
+  jre' = jdk.override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
-  version = "6.4.0";
+  version = "6.5.1";
 
   src = fetchFromGitHub {
     owner = "mguessan";
     repo = "davmail";
     tag = finalAttrs.version;
-    hash = "sha256-dj+7e0b8GcyoDzEWGG1SEMijqRBo1IJUFtgxkt9XNRU=";
+    hash = "sha256-D/MEWq696PFXlarQZdSrTS9VFODg7u7yhUsbCwHV9qs=";
   };
 
   buildPhase = ''

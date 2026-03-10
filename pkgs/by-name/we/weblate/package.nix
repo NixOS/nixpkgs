@@ -94,7 +94,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "certifi"
     "crispy-bootstrap5"
-    "urllib3"
   ];
 
   dependencies =
@@ -123,9 +122,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
       django-cors-headers
       django-crispy-forms
       django-filter
-      django-redis
-      django-otp
       django-otp-webauthn
+      django-otp
+      django-redis
       django
       djangorestframework-csv
       djangorestframework
@@ -157,6 +156,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       qrcode
       rapidfuzz
       redis
+      regex
       requests
       ruamel-yaml
       sentry-sdk
@@ -188,7 +188,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
       aliyun-python-sdk-core
     ];
     amazon = [ boto3 ];
-    # antispam = [ python-akismet ];
     # gelf = [ logging-gelf ];
     # gerrit = [ git-review ];
     google = [

@@ -214,7 +214,9 @@ let
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
-      ssprove = callPackage ../development/coq-modules/ssprove { };
+      ssprove = callPackage ../development/coq-modules/ssprove {
+        mathcomp-word = self.mathcomp-word.override { version = "3.2"; };
+      };
       stalmarck-tactic = callPackage ../development/coq-modules/stalmarck { };
       stalmarck = self.stalmarck-tactic.stalmarck;
       stdlib = callPackage ../development/coq-modules/stdlib { };

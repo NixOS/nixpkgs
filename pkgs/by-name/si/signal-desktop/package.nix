@@ -2,7 +2,7 @@
   stdenv,
   lib,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   electron_40,
@@ -25,7 +25,7 @@
 }:
 let
   nodejs = nodejs_24;
-  pnpm = pnpm_10;
+  pnpm = pnpm_10_29_2;
   electron = electron_40;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
