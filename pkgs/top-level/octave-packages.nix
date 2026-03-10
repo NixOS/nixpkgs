@@ -84,6 +84,8 @@ makeScope newScope (
 
     dataframe = callPackage ../development/octave-modules/dataframe { };
 
+    datatypes = callPackage ../development/octave-modules/datatypes { };
+
     dicom = callPackage ../development/octave-modules/dicom { };
 
     divand = callPackage ../development/octave-modules/divand { };
