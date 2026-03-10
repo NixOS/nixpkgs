@@ -28,7 +28,7 @@
   upstream-info ? (lib.importJSON ./info.json).${variant},
   proprietaryCodecs ? true,
   enableWideVine ? false,
-  variant ? "chromium", # Can be chromium or ungoogled
+  variant ? "chromium", # Can be chromium, ungoogled, or helium
   cupsSupport ? true,
   commandLineArgs ? "",
   pkgsBuildBuild,
@@ -70,6 +70,9 @@ let
     # contains python scripts which get /nix/store/.../bin/python3
     # patched into their shebangs.
     ungoogled-chromium = pkgsBuildBuild.callPackage ./variants/ungoogled { };
+
+    # so is helium.
+    helium = pkgsBuildBuild.callPackage ./variants/helium { };
   };
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
