@@ -130,6 +130,7 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = [
+    "deprecated"
     "posthog"
     "prompt-toolkit"
   ];

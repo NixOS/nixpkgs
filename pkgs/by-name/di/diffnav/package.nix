@@ -1,33 +1,44 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   makeBinaryWrapper,
+  installShellFiles,
   delta,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "diffnav";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "diffnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EkJim0YCdImlf7cNELMwXMQEJPZxSBbmUH0rnNkCuOM=";
+    hash = "sha256-hoikRqhVjbd7hH4H+f5OGq0KdIX1etAJhrRL+QsAkx8=";
   };
 
-  vendorHash = "sha256-/GwIxSyH7maY2m9CcqUs3aeX/5OX0VsvUoOGWkBzJ9M=";
+  vendorHash = "sha256-VNpmcniSpeocl9B+aNwLh4XPyPnYC8SXowJPYWHyzWs=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+  ];
   postInstall = ''
     wrapProgram $out/bin/diffnav \
       --prefix PATH : ${lib.makeBinPath [ delta ]}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd diffnav \
+     --bash <($out/bin/diffnav completion bash) \
+     --fish <($out/bin/diffnav completion fish) \
+     --zsh <($out/bin/diffnav completion zsh)
   '';
 
   meta = {

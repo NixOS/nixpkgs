@@ -6107,6 +6107,12 @@
     githubId = 10701143;
     name = "David Crompton";
   };
+  davidkern = {
+    email = "nixpkgs-davidkern@proton.me";
+    github = "davidkern";
+    githubId = 1548554;
+    name = "David Kern";
+  };
   davidlghellin = {
     email = "hola@devel0pez.com";
     github = "davidlghellin";
@@ -10118,6 +10124,12 @@
     github = "guserav";
     githubId = 28863828;
     name = "guserav";
+  };
+  gustlik501 = {
+    email = "sevcnikar.gregor2@gmail.com";
+    github = "Gustlik501";
+    githubId = 36334538;
+    name = "Gustlik501";
   };
   guttermonk = {
     github = "guttermonk";
@@ -14278,6 +14290,13 @@
     github = "koslambrou";
     githubId = 2037002;
     name = "Konstantinos";
+  };
+  kosslan = {
+    email = "kosslan@kosslan.dev";
+    matrix = "@kosslan:kosslan.dev";
+    github = "kosslan";
+    githubId = 98048456;
+    name = "kosslan";
   };
   kotatsuyaki = {
     email = "kotatsuyaki@mail.kotatsu.dev";
@@ -19922,6 +19941,11 @@
     githubId = 7397786;
     name = "Odysseas Georgoudis";
   };
+  oenu = {
+    github = "oenu";
+    githubId = 51684443;
+    name = "Adam Newton-Blows";
+  };
   ofalvai = {
     email = "ofalvai@gmail.com";
     github = "ofalvai";
@@ -25406,6 +25430,12 @@
     email = "egibbons256@gmail.com";
     github = "spectre256";
     githubId = 72505298;
+  };
+  Sped0n = {
+    name = "Ryan Wen";
+    email = "hi@sped0n.com";
+    github = "Sped0n";
+    githubId = 197479310;
   };
   spencerjanssen = {
     email = "spencerjanssen@gmail.com";
