@@ -55,6 +55,7 @@ assert lib.assertMsg (
   openssl,
   pkgsStatic,
   rustc,
+  rust-cbindgen,
   toml11,
   pegtl,
   buildPackages,
@@ -171,6 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals isLLVMOnly [
     rustc
+    rust-cbindgen
     cargo
     rustPlatform.cargoSetupHook
   ]
