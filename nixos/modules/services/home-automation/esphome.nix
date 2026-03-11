@@ -79,6 +79,28 @@ in
       type = types.bool;
       description = "Use ping to check online status of devices instead of mDNS";
     };
+
+    environment = mkOption {
+      default = { };
+      type = types.attrsOf types.str;
+      description = ''
+        Extra environment variables to pass to ESPHome. Secrets should be passed
+        using the {option}`services.esphome.environmentFile` option.
+      '';
+      example = {
+        USERNAME = "reimu";
+        PASSWORD = "gensokyo9";
+      };
+    };
+
+    environmentFile = mkOption {
+      default = null;
+      type = types.nullOr types.path;
+      description = ''
+        Path to an environment file.
+        Use this option for setting the dashboard password.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -94,7 +116,8 @@ in
         # platformio fails to determine the home directory when using DynamicUser
         PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
       }
-      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
+      // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; }
+      // cfg.environment;
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
@@ -107,6 +130,7 @@ in
         Restart = "on-failure";
         RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
+        EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
 
         # Hardening
         CapabilityBoundingSet = "";
