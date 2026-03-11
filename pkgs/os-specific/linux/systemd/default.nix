@@ -557,6 +557,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
     (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
   ]
+  ++ lib.optionals withKexectools [
+    (lib.mesonOption "kexec-path" "${kexec-tools}/bin/kexec")
+  ]
   ++ lib.optionals withKmod [
     (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
