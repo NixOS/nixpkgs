@@ -1,0 +1,60 @@
+--- a/devito/arch/compiler.py
++++ b/devito/arch/compiler.py
+@@ -145,6 +145,14 @@
+ 
+ 
+ class Compiler(GCCToolchain):
++    # codepy >=2025.1 turned GCCToolchain into a frozen dataclass, which
++    # forbids attribute assignment.  Override the frozen __setattr__ /
++    # __delattr__ so that Compiler (and its subclasses) can keep setting
++    # attributes imperatively.
++    def __setattr__(self, name, value):
++        object.__setattr__(self, name, value)
++    def __delattr__(self, name):
++        object.__delattr__(self, name)
+     """
+     Base class for all compiler classes.
+ 
+@@ -196,7 +204,11 @@
+         else:
+             self._name = maybe_name
+ 
+-        super().__init__(**kwargs)
++        # codepy >=2025.1: GCCToolchain is a frozen dataclass whose __init__
++        # requires all fields as positional args.  Skip it entirely and
++        # initialise the fields that Compiler never sets itself.
++        self.o_ext = '.o'
++        self.features = set()
+ 
+         self.__lookup_cmds__()
+         self._cpp = kwargs.get('cpp', self._default_cpp)
+@@ -355,12 +367,12 @@
+                 ) from e
+         debug(f"Make <{' '.join(args)}>")
+ 
+-    def _cmdline(self, files, object=False):
++    def _cmdline(self, files, *, is_object=False):
+         """
+         Sanitize command line to remove all shell string escape such as
+         mpicc/mpicxx would add, e.g., `-Wl\\,-rpath,/path/to/lib`.
+         """
+-        cc_line = super()._cmdline(files, object=object)
++        cc_line = super()._cmdline(files, is_object=is_object)
+         return [s.replace('\\', '') for s in cc_line]
+ 
+     def jit_compile(self, soname, code):
+@@ -417,9 +429,11 @@
+         # when running the test suite in parallel)
+         with warnings.catch_warnings():
+             warnings.simplefilter('ignore')
+-            _, _, _, recompiled = compile_from_string(self, target, code, src_file,
+-                                                      cache_dir=cache_dir, debug=debug,
+-                                                      sleep_delay=sleep_delay)
++            # codepy >=2025.1: source_name is now keyword-only.
++            _, _, _, recompiled = compile_from_string(
++                self, target, code, source_name=src_file,
++                cache_dir=cache_dir, debug=debug,
++                sleep_delay=sleep_delay)
+ 
+         return recompiled, src_file
+ 
