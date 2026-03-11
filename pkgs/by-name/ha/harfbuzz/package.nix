@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   pkg-config,
   glib,
   freetype,
@@ -14,6 +13,8 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withRaster ? true,
+  cairo,
   icu,
   graphite2,
   harfbuzz, # The icu variant uses and propagates the non-icu one.
@@ -35,21 +36,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "12.3.0";
+  version = "13.1.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-hmDr08J9lAf8hDO10XK6+6XwMXywu0M58o5TcMk9Qrc=";
+    hash = "sha256-qZWaDbd1VNJmgD4eUkJJ7UUEaV/vY1JK68p0msYmCn8=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/harfbuzz/harfbuzz/security/advisories/GHSA-xvjr-f2r9-c7ww
-      name = "CVE-2026-22693.patch";
-      url = "https://github.com/harfbuzz/harfbuzz/commit/1265ff8d990284f04d8768f35b0e20ae5f60daae.patch";
-      hash = "sha256-mdgIhp1ndPSfzplBRB7s+BN2T5Z9dEYZ0bAmSDCUPSE=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs src/*.py test
@@ -69,10 +61,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     # upstream recommends cairo, but it is only used for development purposes
-    # and is not part of the library.
+    # and hb-raster and is not part of the main library.
     # Cairo causes transitive (build) dependencies on various X11 or other
     # GUI-related libraries, so it shouldn't be re-added lightly.
-    (lib.mesonEnable "cairo" false)
+    (lib.mesonEnable "cairo" withRaster)
+    (lib.mesonEnable "raster" withRaster)
+    # the fuzzing tests for raster/vector depend on hb-rasters
+    # but won't be disabled with the 'raster' option, below
+    # removes the subset of fuzzer patches to enable checks
+    # for builds with withRaster=false
+    (lib.mesonEnable "tests" withRaster)
     # chafa is only used in a development utility, not in the library
     (lib.mesonEnable "chafa" false)
     (lib.mesonEnable "coretext" withCoreText)
@@ -97,7 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
   ]
-  ++ lib.optional withIntrospection gobject-introspection;
+  ++ lib.optional withIntrospection gobject-introspection
+  ++ lib.optional withRaster cairo;
 
   buildInputs = [
     glib
