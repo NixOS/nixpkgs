@@ -71,6 +71,12 @@ with haskellLib;
   Win32 = null;
 
   #
+  # Only support GHC 9.14
+  #
+
+  scrod = doDistribute (unmarkBroken super.scrod);
+
+  #
   # Version upgrades
   #
 

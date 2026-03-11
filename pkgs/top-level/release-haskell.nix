@@ -560,6 +560,9 @@ let
       ] released;
       hashable = released;
       primitive = released;
+      scrod = [
+        compilerNames.ghc9141
+      ];
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
