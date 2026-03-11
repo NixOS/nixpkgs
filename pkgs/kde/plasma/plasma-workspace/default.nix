@@ -23,6 +23,7 @@
   qttools,
   qqc2-breeze-style,
   gpsd,
+  fetchpatch,
 }:
 mkKdeDerivation {
   pname = "plasma-workspace";
@@ -36,6 +37,12 @@ mkKdeDerivation {
       xrdb = lib.getExe xrdb;
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
+    })
+    # https://invent.kde.org/plasma/plasma-workspace/-/merge_requests/6372
+    (fetchpatch {
+      name = "mr6372-osd-wayland-race.patch";
+      url = "https://invent.kde.org/plasma/plasma-workspace/-/commit/9114115f5af2594de64477e38e8762ff8dddbbd7.patch";
+      hash = "sha256-QNCqHUaRro9Zdy2QFL1vhlD58Yx0y//cUOfsLgIxNBI=";
     })
   ];
 
