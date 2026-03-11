@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -26,6 +28,11 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
     "-X main.commit=v${finalAttrs.version}"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
     description = "Kubernetes YAML to Terraform HCL converter";
