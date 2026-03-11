@@ -220,6 +220,15 @@ with haskellLib;
       lib.mapAttrs (_: pkg: pkg.overrideScope hls_overlay) (
         super
         // {
+          # Work around test suite not finding executable due to https://github.com/haskell/cabal/issues/11598
+          fourmolu = appendPatches [
+            (pkgs.fetchpatch {
+              name = "fourmolu-absolute-build-tool-paths.patch";
+              url = "https://github.com/fourmolu/fourmolu/commit/9217bc926ab80d20b815f0486be2184db07df4fc.patch";
+              hash = "sha256-ANzuKy5WfWCGZ7HFVBpTtuyUqzFfef/xR/v1KiyJEX4=";
+            })
+          ] super.fourmolu;
+
           # HLS 2.11: Too strict bound on Diff 1.0.
           haskell-language-server = lib.pipe super.haskell-language-server [
             dontCheck
@@ -250,6 +259,15 @@ with haskellLib;
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
+
+  # Work around test suite not finding executable due to https://github.com/haskell/cabal/issues/11598
+  cabal-add = appendPatches [
+    (pkgs.fetchpatch {
+      name = "cabal-add-absolute-build-tool-paths.patch";
+      url = "https://github.com/Bodigrim/cabal-add/commit/3b94b0175c294c2d0a30b6d8da3f56189216816c.patch";
+      hash = "sha256-4Nbro9Gl+RC78yprO8fYG/IWS7QvJPd0dKqSZb5jq9k=";
+    })
+  ] super.cabal-add;
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
