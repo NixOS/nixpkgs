@@ -9,6 +9,7 @@
   docutils,
   ecdsa,
   gnupg,
+  pinentry-curses,
   semver,
   mnemonic,
   unidecode,
@@ -35,11 +36,12 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-JFHBE2o5VSJaz5yeCiXmBchm4/1gA+dZ/PRt3+WENdA=";
   };
 
-  # hardcode the path to gpgconf in the libagent library
+  # hardcode the path to gpgconf and pinentry in the libagent library
   postPatch = ''
     substituteInPlace libagent/gpg/keyring.py \
       --replace "util.which('gpgconf')" "'${gnupg}/bin/gpgconf'" \
-      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'"
+      --replace "'gpg-connect-agent'" "'${gnupg}/bin/gpg-connect-agent'" \
+      --replace "get_gnupg_components(sp=sp)['pinentry']" "'${(lib.getExe pinentry-curses)}'"
   '';
 
   build-system = [ setuptools ];
