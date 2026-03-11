@@ -2,7 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
-  metarocq,
+  metarocq-utils,
   stdlib,
   version ? null,
 }:
@@ -31,7 +31,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [
     coq.ocamlPackages.findlib
     stdlib
-    metarocq
+    metarocq-utils
   ];
 
   meta = {
