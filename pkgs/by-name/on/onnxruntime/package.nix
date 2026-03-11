@@ -270,6 +270,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "onnxruntime_USE_FULL_PROTOBUF" withFullProtobuf)
     (lib.cmakeBool "onnxruntime_USE_CUDA" cudaSupport)
     (lib.cmakeBool "onnxruntime_USE_NCCL" (cudaSupport && ncclSupport))
+    (lib.cmakeBool "onnxruntime_USE_ROCM" rocmSupport)
     (lib.cmakeBool "onnxruntime_USE_MIGRAPHX" rocmSupport)
     (lib.cmakeBool "onnxruntime_ENABLE_LTO" (!cudaSupport || cudaPackages.cudaOlder "12.8"))
   ]
