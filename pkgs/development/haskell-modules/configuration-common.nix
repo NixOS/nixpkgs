@@ -443,6 +443,15 @@ with haskellLib;
   # 2025-02-14: Too strict bounds on attoparsec < 0.14
   attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
 
+  # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
+  # https://github.com/haskell/attoparsec/issues/232
+  attoparsec = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.buf.t_iter\""
+    ];
+  }) super.attoparsec;
+
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = lib.pipe super.ghc-heap-view [
     disableLibraryProfiling
@@ -2723,12 +2732,12 @@ with haskellLib;
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "14.5";
+          version = "14.6";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-qeFBq+d8AjwXp4YleOa0hLnBppI5+Tm1OEgB1QHWqY8=";
+            hash = "sha256-VGEkb5Skq2u9MCJdz9xGJOoK0Dg22vAxXFRx2Xg9Dv8=";
           };
         })
       ];
