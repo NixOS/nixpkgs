@@ -6,23 +6,22 @@
   pkg-config,
   protobuf,
   pcre2,
+  pkgs,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "holo-daemon";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "holo-routing";
     repo = "holo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8cScq/6e9u3rDilnjT6mAbEudXybNj3YUicYiEgoCyE=";
+    hash = "sha256-zZrse46NJb8gD4BtM20FfdtRdxVNLZ+/51dy2nuiOd8=";
   };
 
-  passthru.updateScript = nix-update-script { };
-
-  cargoHash = "sha256-YZ2c6W6CCqgyN+6i7Vh5fWLKw8L4pUqvq/tDO/Q/kf0=";
+  cargoHash = "sha256-cHJzwI7FDVA1iwqg+x9sMlao22SGQoOuq+MB0XtYsEc=";
 
   # Use rust nightly features
   env.RUSTC_BOOTSTRAP = 1;
@@ -35,6 +34,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     pcre2
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix {
+          inherit pkgs;
+        })
+      ];
+      holo-daemon.package = lib.mkDefault finalAttrs.finalPackage;
+    };
+  };
 
   meta = {
     description = "`holo` daemon that provides the routing protocols, tools and policies";
