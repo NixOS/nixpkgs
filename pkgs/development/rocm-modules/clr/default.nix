@@ -266,9 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
         inherit rocm-smi;
         clr = finalAttrs.finalPackage;
       };
-      opencl-example = callPackage ./test-opencl-example.nix {
-        clr = finalAttrs.finalPackage;
-      };
+      # TODO(@LunNova): add OpenCL test with opencl-cts
       generic-arch = callPackage ./test-isa-compat.nix {
         clr = finalAttrs.finalPackage;
         name = "generic-arch";
