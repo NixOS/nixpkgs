@@ -14,14 +14,15 @@ in
 
   options = {
     hardware.xencelabs = {
-    enable = lib.mkOption {
+      enable = lib.mkOption {
         default = false;
         type = lib.types.bool;
         description = ''
           Enable Xencelabs hardware udev rules, and service.
         '';
+      };
+      package = lib.mkPackageOption pkgs "xencelabs" { };
     };
-    package = lib.mkPackageOption pkgs "xencelabs" { };
   };
 
   config = lib.mkIf cfg.enable {
