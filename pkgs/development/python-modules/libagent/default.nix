@@ -6,7 +6,7 @@
   buildPythonPackage,
   setuptools,
   cryptography,
-  ed25519,
+  docutils,
   ecdsa,
   gnupg,
   semver,
@@ -18,20 +18,21 @@
   python-daemon,
   pymsgbox,
   pynacl,
+  nix-update-script,
 }:
 
-# When changing this package, please test packages {keepkey,ledger,onlykey,trezor}-agent
+# When changing this package, please test packages {onlykey,trezor}-agent
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libagent";
-  version = "0.15.0";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "romanz";
     repo = "trezor-agent";
-    tag = "v${version}";
-    hash = "sha256-NmpFyLjLdR9r1tc06iDNH8Tc7isUelTg13mWPrQvxSc=";
+    tag = "libagent/${finalAttrs.version}";
+    hash = "sha256-JFHBE2o5VSJaz5yeCiXmBchm4/1gA+dZ/PRt3+WENdA=";
   };
 
   # hardcode the path to gpgconf in the libagent library
@@ -53,7 +54,7 @@ buildPythonPackage rec {
     python-daemon
     pymsgbox
     ecdsa
-    ed25519
+    docutils
     mnemonic
     semver
     pynacl
@@ -73,10 +74,14 @@ buildPythonPackage rec {
     "test_get_agent_sock_path"
   ];
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=libagent/(.*)" ];
+  };
+
   meta = {
     description = "Using hardware wallets as SSH/GPG agent";
     homepage = "https://github.com/romanz/trezor-agent";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ np ];
   };
-}
+})
