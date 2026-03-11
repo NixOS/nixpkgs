@@ -5,7 +5,7 @@
   gettext,
   pkg-config,
   wrapGAppsHook3,
-  anthy,
+  anthy-unicode,
   ibus,
   glib,
   gobject-introspection,
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    anthy
+    anthy-unicode
     glib
     gtk3
     ibus
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t"
+    "--with-anthy-zipcode=${anthy-unicode}/share/anthy/zipcode.t"
   ];
 
   postFixup = ''
