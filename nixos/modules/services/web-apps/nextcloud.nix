@@ -214,6 +214,7 @@ let
               'use_ssl' => ${lib.boolToString s3.useSsl},
               ${lib.optionalString (s3.region != null) "'region' => '${s3.region}',"}
               'use_path_style' => ${lib.boolToString s3.usePathStyle},
+              'use_presigned_url' => ${lib.boolToString s3.usePresignedUrl},
               ${lib.optionalString (s3.sseCKeyFile != null) "'sse_c_key' => nix_read_secret('s3_sse_c_key'),"}
             ],
           ]
@@ -765,6 +766,15 @@ in
               `http://hostname.domain/bucket` instead.
             '';
           };
+          usePresignedUrl = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = ''
+              Allow bypassing nextcloud instance and serve files
+              directly from the S3 server. Such a download is protected
+              with a presigned download link.
+            '';
+          };
           sseCKeyFile = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
             default = null;
@@ -1312,6 +1322,14 @@ in
             message = ''
               The option `services.nextcloud.settings.mail_smtppassword` must not be used, as it puts the password into the world-readable nix store.
               Use `services.nextcloud.secrets.mail_smtppassword` instead and set it to a file containing the password.
+            '';
+          }
+          {
+            assertion =
+              lib.versionAtLeast cfg.package.version "33.0.0"
+              || cfg.config.objectstore.s3.use_presigned_url == null;
+            message = ''
+              Presigned URLs are only available on Nextcloud >= 33.0.0.
             '';
           }
         ];
