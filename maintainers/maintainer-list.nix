@@ -6187,11 +6187,11 @@
     name = "Daylin Morgan";
   };
   db8le = {
-     name = "Leonard Fischer";
-     github = "db8le";
-     githubId = 200116483;
-     email = "db8le@darc.de";
-   };
+    name = "Leonard Fischer";
+    github = "db8le";
+    githubId = 200116483;
+    email = "db8le@darc.de";
+  };
   dbalan = {
     email = "nix@dbalan.in";
     github = "dbalan";
