@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     '';
     homepage = "https://pypi.org/project/python-ly";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ yiyu ];
     mainProgram = "ly";
   };
 })
