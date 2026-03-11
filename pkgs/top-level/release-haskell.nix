@@ -535,6 +535,9 @@ let
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+      haskell-debugger = [
+        compilerNames.ghc9141
+      ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
