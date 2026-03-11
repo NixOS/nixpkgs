@@ -20,14 +20,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "templateflow";
-  version = "25.1.1";
+  version = "25.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "templateflow";
     repo = "python-client";
     tag = finalAttrs.version;
-    hash = "sha256-QkscrnSURUnZp+42dtVK++EHbHklmWRixpDRhNhHM50=";
+    hash = "sha256-fpmpTvA0Q6VvXkTlALbzZl+fy4oJmnUF/WYzr2CFkFg=";
   };
 
   build-system = [
