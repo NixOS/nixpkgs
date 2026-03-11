@@ -175,12 +175,12 @@ pkgs
   sdk_8_0_1xx = if !pkgs.dotnet_8.vmr.meta.broken then pkgs.dotnet_8.sdk else pkgs.sdk_8_0_1xx-bin;
   sdk_9_0_1xx = combineSdk pkgs.dotnet_9.sdk pkgs.sdk_9_0_1xx-bin;
   sdk_10_0_1xx = combineSdk pkgs.dotnet_10.sdk pkgs.sdk_10_0_1xx-bin;
+  sdk_10_0_2xx = combineSdk pkgs.dotnet_10_0_2xx.sdk pkgs.sdk_10_0_2xx-bin;
   sdk_11_0_1xx = combineSdk pkgs.dotnet_11.sdk pkgs.sdk_11_0_1xx-bin;
   # source-built SDK only exists for _1xx feature band
   # https://github.com/dotnet/source-build/issues/3667
   sdk_8_0_4xx = combineSdk sdk_8_0_1xx pkgs.sdk_8_0_4xx-bin;
   sdk_9_0_3xx = combineSdk sdk_9_0_1xx pkgs.sdk_9_0_3xx-bin;
-  sdk_10_0_2xx = combineSdk sdk_10_0_1xx pkgs.sdk_10_0_2xx-bin;
   sdk_8_0 = sdk_8_0_4xx;
   sdk_9_0 = sdk_9_0_3xx;
   sdk_10_0 = sdk_10_0_2xx;
