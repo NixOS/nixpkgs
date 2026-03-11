@@ -16,7 +16,7 @@
   m17n_db,
   expat,
   withAnthy ? true,
-  anthy ? null,
+  anthy-unicode ? null,
   withGtk ? true,
   withGtk2 ? withGtk,
   gtk2 ? null,
@@ -49,7 +49,7 @@ in
 assert withGtk2 -> gtk2 != null;
 assert withGtk3 -> gtk3 != null;
 
-assert withAnthy -> anthy != null;
+assert withAnthy -> anthy-unicode != null;
 assert withLibnotify -> libnotify != null;
 assert withSqlite -> sqlite != null;
 assert withNetworking -> curl != null && openssl != null;
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     m17n_db
     expat
   ]
-  ++ lib.optional withAnthy anthy
+  ++ lib.optional withAnthy anthy-unicode
   ++ lib.optional withGtk2 gtk2
   ++ lib.optional withGtk3 gtk3
   ++ lib.optionals withQt5 [
