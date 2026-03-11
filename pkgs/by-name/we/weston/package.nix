@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch, # Added for applying patch
   meson,
   ninja,
   nix-update-script,
@@ -64,6 +65,15 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-7FbQkXazsf6FkkNbE+Q6ilKACFa/CoOL2Q1oXHuaVX8=";
   };
+
+  # Backport for https://gitlab.freedesktop.org/wayland/weston/-/issues/1100
+  patches = [
+    (fetchpatch {
+      name = "weston-upstream-assertion-fix.patch";
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1993.patch";
+      hash = "sha256-705GIM7drTzv0N5Hk5dO18LWBnhhi1VoX8sfITHRYc4=";
+    })
+  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [

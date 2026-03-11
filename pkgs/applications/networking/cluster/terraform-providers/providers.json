@@ -110,13 +110,13 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-pmYBfYmSI0NcClzG25GT+Z5cRQHGgnSsoj7cpAV31Uw=",
+    "hash": "sha256-1+Wix9BtKXgl4ZRlpdxgn+N+jhlHKKazBg04YN0PBJU=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.97.1",
+    "rev": "v0.98.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-jmjGvBjqetIZpOUk9mymLhmxtMSMRBQHlUnZ2U6vDpg="
+    "vendorHash": "sha256-bVBfkSGsoffu7auvMuhBLlVXMSR23sWu9P93zmFiASM="
   },
   "brightbox_brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
@@ -155,13 +155,13 @@
     "vendorHash": "sha256-iEQdSvQOCwvxhqh+veQ59uDVoXjCxsysxzkF4DHAf1E="
   },
   "checkly_checkly": {
-    "hash": "sha256-L0S/j+Rp3hOr7zKtP8P7zUk42/igdcJSwFxvMiPfKEc=",
+    "hash": "sha256-g4nFW+fNHkJO4ZbUM80KxWWt59Adx2eeHuUvD5FjwLI=",
     "homepage": "https://registry.terraform.io/providers/checkly/checkly",
     "owner": "checkly",
     "repo": "terraform-provider-checkly",
-    "rev": "v1.18.0",
+    "rev": "v1.19.0",
     "spdx": null,
-    "vendorHash": "sha256-RCvHX9AVCL/dRuNeIbFL4jLKUbj8ombGBJZHvHiKdq0="
+    "vendorHash": "sha256-R8VO1nmGXcqV12AeHaCFL0CA6OgAAcXR455oXDLAQbc="
   },
   "ciscodevnet_aci": {
     "hash": "sha256-MxcHtbuU2tMJpF8seEDqmsnamm58Lugi3Hw+l9wAcOU=",
@@ -724,13 +724,13 @@
     "vendorHash": null
   },
   "ibm-cloud_ibm": {
-    "hash": "sha256-xdQk+11X4q8xrLmkWOd0dqx38C/RscybdBqaTLDntP8=",
+    "hash": "sha256-AUXroRfQMbfmRGUpu4SoTjPfZq2yOQncKVaNIyaEpA4=",
     "homepage": "https://registry.terraform.io/providers/IBM-Cloud/ibm",
     "owner": "IBM-Cloud",
     "repo": "terraform-provider-ibm",
-    "rev": "v1.88.3",
+    "rev": "v1.89.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-rZ8SgbLQTpZWd6DfPZOzagqepQsnNxqVNUTFPafU870="
+    "vendorHash": "sha256-WFYO8S8AwXd7fOqFJ27LQ/OzweBiTK03a8zUDjsFInY="
   },
   "icinga_icinga2": {
     "hash": "sha256-Y/Oq0aTzP+oSKPhHiHY9Leal4HJJm7TNDpcdqkUsCmk=",
@@ -1481,11 +1481,11 @@
     "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
   },
   "vultr_vultr": {
-    "hash": "sha256-yV8J0SPM8P7HgDIiDfzy2bW8eEOGyls3e9+ADymPp98=",
+    "hash": "sha256-/lKhEoRNBsiQ2fTNaDFApSXgQp+jjtp8gLYRsKqzPv8=",
     "homepage": "https://registry.terraform.io/providers/vultr/vultr",
     "owner": "vultr",
     "repo": "terraform-provider-vultr",
-    "rev": "v2.30.0",
+    "rev": "v2.30.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-JIv3xfK3Pda/Y1IvTHR/Ypi9b51SOA9n3xVtxOkDMMo="
   },

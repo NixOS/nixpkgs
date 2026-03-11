@@ -9,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "talosctl";
-  version = "1.12.4";
+  version = "1.12.5";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "talos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-shXNd8Vz5YXpA9J6m4IDsRx8cTR7ZDPDfjm8kVssBqg=";
+    hash = "sha256-mGfaf64he6/eK8JMHOCUSKaAEnsxoceYWDHhsD8WQ9Q=";
   };
 
-  vendorHash = "sha256-74zQzCiqH9jCdPzgXIQqPHCslcKuD+kLxfiH/CjzhAY=";
+  vendorHash = "sha256-3po3MWqi2w2jEp+OlMQN53XUqMK4YVzv1K132TdV2bc=";
 
   ldflags = [
     "-s"
@@ -53,6 +53,9 @@ buildGoModule (finalAttrs: {
     mainProgram = "talosctl";
     homepage = "https://www.talos.dev/";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ flokli ];
+    maintainers = with lib.maintainers; [
+      flokli
+      johanot
+    ];
   };
 })

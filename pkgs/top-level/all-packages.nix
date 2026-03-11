@@ -2155,6 +2155,7 @@ with pkgs;
     cudaPackages_12_9
     cudaPackages_13_0
     cudaPackages_13_1
+    cudaPackages_13_2
     ;
 
   cudaPackages_12 = cudaPackages_12_8;
@@ -10410,10 +10411,6 @@ with pkgs;
     tag = "-xine-full";
     withGstreamerBackend = false;
     withXineBackend = true;
-  };
-
-  rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftwSinglePrec;
   };
 
   reaper = callPackage ../applications/audio/reaper {

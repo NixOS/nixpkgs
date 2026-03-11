@@ -1119,6 +1119,7 @@
   ./services/networking/atalkd.nix
   ./services/networking/atftpd.nix
   ./services/networking/atticd.nix
+  ./services/networking/autossh-ng.nix
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/ax25/axlisten.nix
