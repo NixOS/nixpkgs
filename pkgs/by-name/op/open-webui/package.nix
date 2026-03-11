@@ -203,7 +203,7 @@ python3Packages.buildPythonApplication rec {
     ];
 
     mariadb = [
-      mariadb
+      python3Packages.mariadb
     ];
 
     all = [
@@ -212,7 +212,6 @@ python3Packages.buildPythonApplication rec {
       elasticsearch
       firecrawl-py
       gcp-storage-emulator
-      mariadb
       moto
       oracledb
       pinecone-client
@@ -222,8 +221,9 @@ python3Packages.buildPythonApplication rec {
       qdrant-client
       weaviate-client
     ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
+    ++ mariadb
+    ++ postgres
+    ++ moto.optional-dependencies.s3;
   };
 
   pythonImportsCheck = [ "open_webui" ];
