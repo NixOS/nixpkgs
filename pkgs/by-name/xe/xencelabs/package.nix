@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "$out/lib/xencelabs/lib" \
       --set QT_PLUGIN_PATH "$out/lib/xencelabs/platforms" \
       --set XDG_DATA_DIRS "$out/share" \
-      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
+      --set QT_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
   '';
 
   meta = with lib; {
