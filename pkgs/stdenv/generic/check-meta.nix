@@ -662,7 +662,13 @@ let
               "Refusing to evaluate package '${getNameWithVersion attrs}' in ${pos_str meta} because it ${error.msg}"
               + lib.optionalString (!inHydra && error.remediation != "") "\n${error.remediation}";
           in
-          if config ? handleEvalIssue then config.handleEvalIssue error.reason msg else throw msg;
+          if config ? handleEvalIssue then
+            if error.reason == "problem" then
+              error.handleProblem config.handleEvalIssue
+            else
+              config.handleEvalIssue error.reason msg
+          else
+            throw msg;
 
       giveWarning =
         acc: warning:
