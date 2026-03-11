@@ -59,6 +59,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       free = false;
       url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
     };
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      caverav
+      fab
+    ];
   };
 })
