@@ -17,7 +17,7 @@ let
 
   cfg = config.services.esphome;
 
-  stateDir = "/var/lib/esphome";
+  stateDir = "esphome";
 
   esphomeParams =
     if cfg.enableUnixSocket then
@@ -114,17 +114,17 @@ in
 
       environment = {
         # platformio fails to determine the home directory when using DynamicUser
-        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+        PLATFORMIO_CORE_DIR = "%S/${stateDir}/.platformio";
       }
       // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; }
       // cfg.environment;
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
+        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} %S/${stateDir}";
         DynamicUser = true;
         User = "esphome";
         Group = "esphome";
-        WorkingDirectory = stateDir;
+        WorkingDirectory = "%S/${stateDir}";
         StateDirectory = "esphome";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
