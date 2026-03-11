@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "upx";
-  version = "5.1.0";
+  version = "5.1.1";
   src = fetchFromGitHub {
     owner = "upx";
     repo = "upx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FQtDHsbZ/JrgRLwc2Wd2F5ZcBdqrU0YIT9hGQ0k0D+w=";
+    hash = "sha256-+ugYimeeBFAUGdBUtwasYSOZzBqQEC00N6R+GNSp9uI=";
   };
 
   nativeBuildInputs = [ cmake ];
