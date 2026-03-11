@@ -69,7 +69,7 @@ let
     '';
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -196,7 +196,7 @@ python3Packages.buildPythonApplication rec {
     ++ pyjwt.optional-dependencies.crypto
     ++ starsessions.optional-dependencies.redis;
 
-  optional-dependencies = with python3Packages; rec {
+  optional-dependencies = with python3Packages; {
     postgres = [
       pgvector
       psycopg2-binary
@@ -212,7 +212,6 @@ python3Packages.buildPythonApplication rec {
       elasticsearch
       firecrawl-py
       gcp-storage-emulator
-      mariadb
       moto
       oracledb
       pinecone-client
@@ -222,8 +221,9 @@ python3Packages.buildPythonApplication rec {
       qdrant-client
       weaviate-client
     ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
+    ++ finalAttrs.passthru.optional-dependencies.mariadb
+    ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ moto.optional-dependencies.s3;
   };
 
   pythonImportsCheck = [ "open_webui" ];
@@ -265,4 +265,4 @@ python3Packages.buildPythonApplication rec {
       codgician
     ];
   };
-}
+})
