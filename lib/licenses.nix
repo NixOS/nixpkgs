@@ -970,6 +970,11 @@ lib.mapAttrs mkLicense (
       fullName = "libtiff License";
     };
 
+    liliq-p-11 = {
+      spdxId = "LiLiQ-P-1.1";
+      fullName = "Licence Libre du Québec – Permissive version 1.1";
+    };
+
     llgpl21 = {
       fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
       url = "https://opensource.franz.com/preamble.html";
