@@ -403,6 +403,14 @@ with haskellLib;
   # https://github.com/raehik/binrep/issues/14
   binrep = warnAfterVersion "1.1.0" (doJailbreak super.binrep);
 
+  # Does not support QuickCheck == 2.15.*
+  # https://codeberg.org/noiioiu/comonad-coactions/issues/1
+  comonad-coactions = dontCheck super.comonad-coactions;
+
+  # Needs QuickCheck >= 2.16
+  # https://github.com/input-output-hk/io-sim/issues/248
+  io-sim = dontCheck super.io-sim;
+
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
   # https://github.com/vincenthz/hs-hourglass/pull/56
