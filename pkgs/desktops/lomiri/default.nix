@@ -51,6 +51,7 @@ let
       u1db-qt = callPackage ./development/u1db-qt { };
 
       #### QML / QML-related
+      buteo-syncfw-qml = callPackage ./qml/buteo-syncfw-qml { };
       lomiri-action-api = callPackage ./qml/lomiri-action-api { };
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
