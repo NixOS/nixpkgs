@@ -53,7 +53,8 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     python3Packages.wrapPython
-  ];
+  ]
+  ++ lib.optionals vulkanSupport [ shaderc ];
 
   postPatch = ''
     nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
@@ -81,7 +82,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals vulkanSupport [
     vulkan-loader
-    shaderc
   ];
 
   pythonPath = finalAttrs.pythonInputs;
