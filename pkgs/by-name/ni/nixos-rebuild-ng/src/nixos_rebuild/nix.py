@@ -718,11 +718,11 @@ def _run_action_with_systemd(
 
     try:
         _run_action(
-            action,
-            path_to_config,
-            install_bootloader,
-            target_host,
-            sudo,
+            action=action,
+            path_to_config=path_to_config,
+            install_bootloader=install_bootloader,
+            target_host=target_host,
+            sudo=sudo,
             prefix=[*SYSTEMD_RUN_CMD_PREFIX, f"--unit={unique_unit_name}"],
         )
     except KeyboardInterrupt:
@@ -761,11 +761,11 @@ def switch_to_configuration(
 
     if _has_systemd(target_host):
         _run_action_with_systemd(
-            action,
-            path_to_config,
-            install_bootloader,
-            target_host,
-            sudo,
+            action=action,
+            path_to_config=path_to_config,
+            install_bootloader=install_bootloader,
+            target_host=target_host,
+            sudo=sudo,
         )
     else:
         logger.debug(
@@ -773,11 +773,11 @@ def switch_to_configuration(
             "not working in target host"
         )
         _run_action(
-            action,
-            path_to_config,
-            install_bootloader,
-            target_host,
-            sudo,
+            action=action,
+            path_to_config=path_to_config,
+            install_bootloader=install_bootloader,
+            target_host=target_host,
+            sudo=sudo,
         )
 
 
