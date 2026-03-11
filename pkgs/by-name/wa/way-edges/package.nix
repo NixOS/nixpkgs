@@ -11,15 +11,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "way-edges";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "way-edges";
     repo = "way-edges";
     tag = finalAttrs.version;
-    hash = "sha256-1P4iOsoQolxfVGZEe+x0DvcDwB5bdBqR0OsfL+y3qQM=";
+    hash = "sha256-3EP+Arp2+K1zjdGaQgub67G+AgvoTLlRTSGgFTqMX9k=";
   };
-  cargoHash = "sha256-RSCBQUZp6mxZcwsvr6OwQeXa5CmEhN8QUezv0By5j/s=";
+  cargoHash = "sha256-E1MmCUBZSXkV0oEJ7vHiO2YawnTteu24h2+IVgB71fc=";
 
   nativeBuildInputs = [
     pkg-config
