@@ -6650,7 +6650,9 @@ self: super: with self; {
 
   gradio = callPackage ../development/python-modules/gradio { };
 
-  gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
+  gradio-client = callPackage ../development/python-modules/gradio/client.nix {
+    inherit (pkgs) jq;
+  };
 
   gradio-pdf = callPackage ../development/python-modules/gradio-pdf { };
 
