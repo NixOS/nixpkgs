@@ -5,7 +5,10 @@
   autoPatchelfHook,
   makeBinaryWrapper,
   libusb1,
-  xorg,
+  libX11,
+  libXtst,
+  libXrandr,
+  xkeyboardconfig,
   libGL,
   qt5,
 }:
@@ -25,13 +28,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
-    xorg.libX11
-    xorg.libXtst
-    xorg.libXrandr
+    libX11
+    libXtst
+    libXrandr
+    xkeyboardconfig
     libGL
     qt5.qtbase
     qt5.qtsvg
-    xorg.xkeyboardconfig
   ];
 
   dontWrapQtApps = true;
@@ -116,7 +119,7 @@ stdenv.mkDerivation rec {
       --set LD_LIBRARY_PATH "$out/lib/xencelabs/lib" \
       --set QT_PLUGIN_PATH "$out/lib/xencelabs/platforms" \
       --set XDG_DATA_DIRS "$out/share" \
-      --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set QT_XKB_CONFIG_ROOT "${xkeyboardconfig}/share/X11/xkb"
   '';
 
   meta = with lib; {
