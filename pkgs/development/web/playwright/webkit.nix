@@ -19,7 +19,7 @@
   gst_all_1,
   harfbuzz,
   harfbuzzFull,
-  icu70,
+  icu74,
   lcms,
   libavif,
   libdrm,
@@ -67,20 +67,6 @@ let
       };
     }
   );
-  libavif' = libavif.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      version = "0.9.3";
-      src = fetchFromGitHub {
-        owner = "AOMediaCodec";
-        repo = finalAttrs.pname;
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-ME/mkaHhFeHajTbc7zhg9vtf/8XgkgSRu9I/mlQXnds=";
-      };
-      postPatch = "";
-      patches = [ ];
-    }
-  );
-
   libjxl' = libjxl.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "0.8.2";
@@ -133,8 +119,8 @@ let
       inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-h9dM6RR5WhUPHdZgn5yiJlM7QrhlDVaivnaHQCEZbXQ=";
-          aarch64-linux = "sha256-sOtPdOBmPLqApGGVhgH51OW3aoTv1Y40RfCSax7CyC4=";
+          x86_64-linux = "sha256-Ei08TuR+WedVAfKRSeRQq7ZhULgxXQIV0bQPcNFYhr4=";
+          aarch64-linux = "sha256-/+tven7ksYhXQxPYfazyZhNsgvE8rr3A28fZPwL4c9s=";
         }
         .${system} or throwSystem;
     };
@@ -158,9 +144,9 @@ let
       gst_all_1.gstreamer
       harfbuzz
       harfbuzzFull
-      icu70
+      icu74
       lcms
-      libavif'
+      libavif
       libdrm
       libepoxy
       libevent

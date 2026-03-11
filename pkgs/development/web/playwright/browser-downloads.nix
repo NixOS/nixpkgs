@@ -33,15 +33,15 @@ in
   };
 
   firefox = {
-    x86_64-linux = mk (registryUrl "firefox" "firefox-ubuntu-22.04.zip") true;
-    aarch64-linux = mk (registryUrl "firefox" "firefox-ubuntu-22.04-arm64.zip") true;
+    x86_64-linux = mk (registryUrl "firefox" "firefox-ubuntu-24.04.zip") true;
+    aarch64-linux = mk (registryUrl "firefox" "firefox-ubuntu-24.04-arm64.zip") true;
     x86_64-darwin = mk (registryUrl "firefox" "firefox-mac.zip") false;
     aarch64-darwin = mk (registryUrl "firefox" "firefox-mac-arm64.zip") false;
   };
 
   webkit = {
-    x86_64-linux = mk (registryUrl "webkit" "webkit-ubuntu-22.04.zip") false;
-    aarch64-linux = mk (registryUrl "webkit" "webkit-ubuntu-22.04-arm64.zip") false;
+    x86_64-linux = mk (registryUrl "webkit" "webkit-ubuntu-24.04.zip") false;
+    aarch64-linux = mk (registryUrl "webkit" "webkit-ubuntu-24.04-arm64.zip") false;
     x86_64-darwin = mk (registryUrl "webkit" "webkit-mac-15.zip") false;
     aarch64-darwin = mk (registryUrl "webkit" "webkit-mac-15-arm64.zip") false;
   };
