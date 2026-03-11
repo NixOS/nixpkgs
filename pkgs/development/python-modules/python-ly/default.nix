@@ -1,10 +1,11 @@
 {
   buildPythonPackage,
   fetchFromGitHub,
-  lib,
   hatchling,
+  lib,
   lxml,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -29,11 +30,25 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
-    changelog = "https://github.com/frescobaldi/python-ly/releases/tag/${src.tag}";
+    changelog = "https://github.com/frescobaldi/python-ly/blob/${src.tag}/CHANGELOG.md";
     description = "Tool and library for manipulating LilyPond files";
-    homepage = "https://github.com/frescobaldi/python-ly";
-    license = lib.licenses.gpl2;
+    longDescription = ''
+      This package provides a Python library ly containing various
+      Python modules to parse, manipulate or create documents in
+      LilyPond format.  A command line program ly is also provided
+      that can be used to do various manipulations with LilyPond
+      files.
+
+      The LilyPond format is a plain text input format that is used by
+      the GNU music typesetter [LilyPond](https://lilypond.org).
+    '';
+    homepage = "https://pypi.org/project/python-ly";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
+    mainProgram = "ly";
   };
 }
