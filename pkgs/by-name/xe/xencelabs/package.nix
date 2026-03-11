@@ -6,8 +6,8 @@
   makeBinaryWrapper,
   libusb1,
   libx11,
-  libXtst,
-  libXrandr,
+  libxtst,
+  libxrandr,
   xkeyboardconfig,
   libGL,
   qt5,
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     libx11
-    libXtst
-    libXrandr
+    libxtst
+    libxrandr
     xkeyboardconfig
     libGL
     qt5.qtbase
