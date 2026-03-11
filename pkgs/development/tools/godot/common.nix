@@ -774,8 +774,9 @@ let
             "aarch64-darwin"
           ];
           maintainers = with lib.maintainers; [
-            shiryel
             corngood
+            shiryel
+            superherointj
           ];
           mainProgram = "godot${suffix}";
         };

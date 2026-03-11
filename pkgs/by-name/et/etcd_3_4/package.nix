@@ -44,6 +44,6 @@ buildGo124Module rec {
     downloadPage = "https://github.com/etcd-io/etcd/";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ superherointj ];
   };
 }
