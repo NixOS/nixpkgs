@@ -14,8 +14,8 @@
 
 let
   debian-extras = fetchzip {
-    url = "mirror://debian/pool/main/k/koules/koules_1.4-27.debian.tar.xz";
-    hash = "sha256-g0Z6C1YSZL6N2eYUuZgXkPDoOLc4e9jAFL3ivk3OAS8=";
+    url = "mirror://debian/pool/main/k/koules/koules_1.4-29.debian.tar.xz";
+    hash = "sha256-8AQGU3uAu1nCKeu4nqCDOL7FcSJeYvD1pmidEPLLekY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
