@@ -11,7 +11,7 @@
   pkg-config,
 
   # Required dependencies
-  fftw,
+  fftwSinglePrec,
   liblo,
   minixml,
   zlib,
@@ -31,7 +31,7 @@
   sndio,
 
   # Optional GUI dependencies
-  guiModule ? "off",
+  guiModule ? "zest",
   cairo,
   fltk,
   libGL,
@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    fftw
+    fftwSinglePrec
     liblo
     minixml
     zlib
@@ -184,9 +184,12 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix LD_LIBRARY_PATH : ${mruby-zest}
   '';
 
+  passthru = {
+    inherit mruby-zest;
+  };
+
   meta = {
     description = "High quality software synthesizer (${guiName} GUI)";
-    mainProgram = "zynaddsubfx";
     homepage =
       if guiModule == "zest" then
         "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
@@ -196,6 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.all;
+    mainProgram = "zynaddsubfx";
 
     # On macOS:
     # - Tests don't compile (ld: unknown option: --no-as-needed)
