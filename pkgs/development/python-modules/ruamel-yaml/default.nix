@@ -19,6 +19,8 @@ buildPythonPackage rec {
     hash = "sha256-U+tmzSeEnv+Wjr+PC/YfRs2sLaHR81dt1MzumyXDGZM=";
   };
 
+  patches = [ ./loader-max-depth.patch ];
+
   nativeBuildInputs = [ setuptools ];
 
   # Tests use relative paths

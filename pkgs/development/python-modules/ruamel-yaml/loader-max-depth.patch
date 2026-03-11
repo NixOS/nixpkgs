@@ -1,0 +1,35 @@
+diff --git a/loader.py b/loader.py
+--- a/loader.py
++++ b/loader.py
+@@ -28,6 +28,7 @@ class BaseLoader(Reader, Scanner, Parser, Composer, BaseConstructor, VersionedRe
+         preserve_quotes: Optional[bool] = None,
+     ) -> None:
+         self.comment_handling = None
++        self.max_depth = 0
+         Reader.__init__(self, stream, loader=self)
+         Scanner.__init__(self, loader=self)
+         Parser.__init__(self, loader=self)
+@@ -43,6 +44,7 @@ class SafeLoader(Reader, Scanner, Parser, Composer, SafeConstructor, VersionedRe
+         preserve_quotes: Optional[bool] = None,
+     ) -> None:
+         self.comment_handling = None
++        self.max_depth = 0
+         Reader.__init__(self, stream, loader=self)
+         Scanner.__init__(self, loader=self)
+         Parser.__init__(self, loader=self)
+@@ -59,6 +61,7 @@ class Loader(Reader, Scanner, Parser, Composer, Constructor, VersionedResolver):
+         preserve_quotes: Optional[bool] = None,
+     ) -> None:
+         self.comment_handling = None
++        self.max_depth = 0
+         Reader.__init__(self, stream, loader=self)
+         Scanner.__init__(self, loader=self)
+         Parser.__init__(self, loader=self)
+@@ -82,6 +85,7 @@ class RoundTripLoader(
+     ) -> None:
+         # self.reader = Reader.__init__(self, stream)
+         self.comment_handling = None  # issue 385
++        self.max_depth = 0
+         Reader.__init__(self, stream, loader=self)
+         RoundTripScanner.__init__(self, loader=self)
+         RoundTripParser.__init__(self, loader=self)
