@@ -436,6 +436,38 @@ let
             router.wait_until_succeeds("ping -c 1 192.168.1.3")
       '';
     };
+    ipvlan = {
+      name = "IPVLAN";
+      nodes.client = {
+        virtualisation.interfaces.enp1s0.vlan = 1;
+        networking = {
+          useNetworkd = networkd;
+          useDHCP = false;
+          ipvlans = {
+            ipvlan1.interface = "enp1s0";
+            ipvlan2.interface = "enp1s0";
+          };
+        };
+      };
+      testScript = ''
+        with subtest("Wait for networking to come up"):
+            client.wait_for_unit("network.target")
+
+        with subtest("Can move IPVLANs to separate network namespaces"):
+            client.succeed("ip netns add ns1 && ip link set dev ipvlan1 netns ns1")
+            client.succeed("ip netns add ns2 && ip link set dev ipvlan2 netns ns2")
+
+        with subtest("Can configure the IPVLAN interfaces"):
+            client.succeed("ip netns exec ns1 ip addr add 192.168.1.1/24 dev ipvlan1")
+            client.succeed("ip netns exec ns2 ip addr add 192.168.1.2/24 dev ipvlan2")
+            client.succeed("ip netns exec ns1 ip link set dev ipvlan1 up")
+            client.succeed("ip netns exec ns2 ip link set dev ipvlan2 up")
+
+        with subtest("IPVLAN interfaces can ping each other"):
+            client.succeed("ip netns exec ns1 ping -c 1 192.168.1.2")
+            client.succeed("ip netns exec ns2 ping -c 1 192.168.1.1")
+      '';
+    };
     fou = {
       name = "foo-over-udp";
       nodes.machine = clientConfig {
