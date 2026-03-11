@@ -9,7 +9,7 @@
 
 buildDunePackage rec {
   pname = "iri";
-  version = "1.1.0";
+  version = "1.2.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -18,7 +18,7 @@ buildDunePackage rec {
     owner = "zoggy";
     repo = "ocaml-iri";
     rev = version;
-    hash = "sha256-fh5+0CWplDdGXCotZL2UzjOGil2LR4NppttaquO/ndE=";
+    hash = "sha256-+wBQBzRkN36T3zAQWmqq/VdhgLrCnbvOouEmVg37s/w=";
   };
 
   propagatedBuildInputs = [
