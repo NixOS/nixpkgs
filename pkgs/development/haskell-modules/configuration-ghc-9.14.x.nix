@@ -74,6 +74,9 @@ with haskellLib;
   # Version upgrades
   #
 
+  ghc-exactprint = doDistribute self.ghc-exactprint_1_14_0_0;
+  hedgehog = doDistribute self.hedgehog_1_7;
+  lifted-async = doDistribute self.lifted-async_0_11_0;
   parallel = doDistribute self.parallel_3_3_0_0;
   tagged = doDistribute self.tagged_0_8_10;
   unordered-containers = doDistribute self.unordered-containers_0_2_21;
@@ -85,6 +88,8 @@ with haskellLib;
   primitive = doJailbreak (dontCheck super.primitive); # base <4.22 and a lot of dependencies on packages not yet working.
   splitmix = doJailbreak super.splitmix; # base <4.22
 
+  # https://github.com/phadej/boring/issues/48
+  boring = doJailbreak super.boring;
   # https://github.com/haskellari/indexed-traversable/issues/49
   indexed-traversable = doJailbreak super.indexed-traversable;
   # https://github.com/haskellari/indexed-traversable/issues/50
@@ -120,6 +125,20 @@ with haskellLib;
 
   # https://github.com/sjakobi/newtype-generics/pull/28/files
   newtype-generics = warnAfterVersion "0.6.2" (doJailbreak super.newtype-generics);
+
+  # haskell-debugger only works with ghc 9.14+
+  haskell-debugger-view = doDistribute (unmarkBroken super.haskell-debugger-view);
+  haskell-debugger = doJailbreak super.haskell-debugger; # hie-bios < 0.18, random >=1.3.1
+
+  ghc-exactprint_1_14_0_0 = addBuildDepends [
+    # cabal2nix drops conditional block: impl (ghc >= 9.14)
+    self.Diff
+    self.extra
+    self.ghc-paths
+    self.silently
+    self.syb
+    self.HUnit
+  ] super.ghc-exactprint_1_14_0_0;
 
   #
   # Test suite issues

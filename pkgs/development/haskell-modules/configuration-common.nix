@@ -1162,6 +1162,20 @@ with haskellLib;
   # https://github.com/ndmitchell/shake/issues/804
   shake = dontCheck super.shake;
 
+  # https://github.com/martijnbastiaan/doctest-parallel/pull/99
+  doctest-parallel = lib.pipe super.doctest-parallel [
+    (appendPatch (fetchpatch {
+      name = "ghc-9.14-fixes";
+      url = "https://github.com/martijnbastiaan/doctest-parallel/commit/f3a40202ef8d2d4927dae706bf89f11b2800202d.patch";
+      sha256 = "sha256-mKF/hpMXWq5meiBHNbIKAz6c33DWE7zzHkS+Hgl5uX4";
+    }))
+    (overrideCabal (drv: {
+      # Revision change is not present in PR target branch
+      editedCabalFile = null;
+      revision = null;
+    }))
+  ];
+
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
