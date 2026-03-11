@@ -26,16 +26,16 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-init";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0dlcbjaClCa82sqHHW5nqLE2zcJdCsYFj6SxffHk1U=";
+    hash = "sha256-tjVdiKaa6mGIkjvG6NYnKef9VBJS26FXHGjZ+Zxb0s0=";
   };
 
-  cargoHash = "sha256-oiPjkPRd1P6THKAuZva6wJR1posXglK+emIYb4ruzU8=";
+  cargoHash = "sha256-PUD3c/YnxYCVf/4C++MWxejHsLSS1ysWwiTRZVOp8Vc=";
 
   nativeBuildInputs = [
     curl
@@ -55,7 +55,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildNoDefaultFeatures = true;
 
   checkFlags = [
-    # requires internet access
+    # require internet access
+    "--skip=e2e"
     "--skip=lang::rust::tests"
   ];
 
