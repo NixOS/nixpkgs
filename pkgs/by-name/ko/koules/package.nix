@@ -10,6 +10,7 @@
   libx11,
   libxext,
   makeDesktopItem,
+  imagemagick,
 }:
 
 let
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     gccmakedep
     installShellFiles
     copyDesktopItems
+    imagemagick
   ];
   buildInputs = [
     libx11
@@ -60,7 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm755 xkoules $out/bin/xkoules
     install -Dm755 koules.sndsrv.linux $out/lib/koules.sndsrv.linux
     install -m644 sounds/* $out/lib/
-    install -Dm644 Koules.xpm $out/share/pixmaps/koules.xpm
+    mkdir -p $out/share/icons/hicolor/32x32/apps
+    magick Koules.xpm -background none -extent 32x32-1 -gravity center $out/share/icons/hicolor/32x32/apps/koules.png
     installManPage xkoules.6
     runHook postInstall
   '';
