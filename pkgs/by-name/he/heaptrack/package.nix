@@ -8,6 +8,7 @@
   boost,
   libunwind,
   elfutils,
+  rustc-demangle,
   sparsehash,
   zstd,
   kdePackages,
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
     zlib
     boost
     libunwind
+    rustc-demangle
     sparsehash
     zstd
   ]
