@@ -76,8 +76,6 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
-  env.TCLLIBDIR = "${placeholder "out"}/lib";
-
   configureFlags = [
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
@@ -89,29 +87,37 @@ stdenv.mkDerivation rec {
   ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
   ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-DSQLITE_ENABLE_COLUMN_METADATA"
-    "-DSQLITE_ENABLE_DBSTAT_VTAB"
-    "-DSQLITE_ENABLE_JSON1"
-    "-DSQLITE_ENABLE_FTS3"
-    "-DSQLITE_ENABLE_FTS3_PARENTHESIS"
-    "-DSQLITE_ENABLE_FTS3_TOKENIZER"
-    "-DSQLITE_ENABLE_FTS4"
-    "-DSQLITE_ENABLE_FTS5"
-    "-DSQLITE_ENABLE_GEOPOLY"
-    "-DSQLITE_ENABLE_MATH_FUNCTIONS"
-    "-DSQLITE_ENABLE_PERCENTILE"
-    "-DSQLITE_ENABLE_PREUPDATE_HOOK"
-    "-DSQLITE_ENABLE_RBU"
-    "-DSQLITE_ENABLE_RTREE"
-    "-DSQLITE_ENABLE_SESSION"
-    "-DSQLITE_ENABLE_STMT_SCANSTATUS"
-    "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
-    "-DSQLITE_SOUNDEX"
-    "-DSQLITE_SECURE_DELETE"
-    "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
-    "-DSQLITE_MAX_EXPR_DEPTH=10000"
-  ];
+  env = {
+    TCLLIBDIR = "${placeholder "out"}/lib";
+    NIX_CFLAGS_COMPILE = toString [
+      "-DSQLITE_ENABLE_COLUMN_METADATA"
+      "-DSQLITE_ENABLE_DBSTAT_VTAB"
+      "-DSQLITE_ENABLE_JSON1"
+      "-DSQLITE_ENABLE_FTS3"
+      "-DSQLITE_ENABLE_FTS3_PARENTHESIS"
+      "-DSQLITE_ENABLE_FTS3_TOKENIZER"
+      "-DSQLITE_ENABLE_FTS4"
+      "-DSQLITE_ENABLE_FTS5"
+      "-DSQLITE_ENABLE_GEOPOLY"
+      "-DSQLITE_ENABLE_MATH_FUNCTIONS"
+      "-DSQLITE_ENABLE_PERCENTILE"
+      "-DSQLITE_ENABLE_PREUPDATE_HOOK"
+      "-DSQLITE_ENABLE_RBU"
+      "-DSQLITE_ENABLE_RTREE"
+      "-DSQLITE_ENABLE_SESSION"
+      "-DSQLITE_ENABLE_STMT_SCANSTATUS"
+      "-DSQLITE_ENABLE_UNLOCK_NOTIFY"
+      "-DSQLITE_SOUNDEX"
+      "-DSQLITE_SECURE_DELETE"
+      "-DSQLITE_MAX_VARIABLE_NUMBER=250000"
+      "-DSQLITE_MAX_EXPR_DEPTH=10000"
+    ];
+  }
+  # https://github.com/NixOS/nixpkgs/issues/495182
+  # https://github.com/NixOS/nixpkgs/blob/3604e3ae9d333cd7d468a8be4b277adfd9427f1b/nixos/doc/manual/release-notes/rl-2605.section.md?plain=1#L94-L130
+  // lib.optionalAttrs (stdenv.hostPlatform.isGnu && stdenv.hostPlatform.useLLVM or false) {
+    NIX_LDFLAGS = "-z,noexecstack";
+  };
 
   # Test for features which may not be available at compile time
   preBuild = ''
