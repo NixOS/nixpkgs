@@ -1374,9 +1374,14 @@ dont-distribute-packages:
  - haskgame
  - hasklepias
  - haskoin-bitcoind
+ - haskoin-core
  - haskoin-crypto
+ - haskoin-node
  - haskoin-protocol
  - haskoin-script
+ - haskoin-store
+ - haskoin-store-data
+ - haskoin-wallet
  - haskoon
  - haskoon-httpspec
  - haskoon-salvia
@@ -2609,6 +2614,7 @@ dont-distribute-packages:
  - piyo
  - pkgtreediff
  - planet-mitchell
+ - plexus-synapse
  - plocketed
  - Plot-ho-matic
  - PlslTools
@@ -3123,6 +3129,7 @@ dont-distribute-packages:
  - Shellac-haskeline
  - Shellac-readline
  - shellmate-extras
+ - shibuya-metrics
  - shibuya-pgmq-adapter
  - shine-varying
  - short-vec
@@ -3683,6 +3690,7 @@ dont-distribute-packages:
  - web3-polkadot
  - web3-provider
  - web3-solidity
+ - web3-tools
  - WebBits-Html
  - WebBits-multiplate
  - WebCont
