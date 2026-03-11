@@ -24,19 +24,19 @@
 
 buildPythonPackage rec {
   pname = "dulwich";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
     tag = "dulwich-${version}";
-    hash = "sha256-7/aXxwK6LmERD8CSo+b1uuNVBrXcbBvksZ1YY28vB8A=";
+    hash = "sha256-9y7+00M2Ib5j+1fHNsJBomkyNZWhihqcIvAgGpJ5AB8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-O35g5LflL8ZF0HNWdsqg1mp09dKFNrryz23G1WZhhPE=";
+    hash = "sha256-NEYauayn7laPLQUomQAFEskFP5m8546jYltazR/gn1A=";
   };
 
   nativeBuildInputs = [
