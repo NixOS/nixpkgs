@@ -131,6 +131,8 @@ in
         RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        ExecPaths = "%S/${stateDir}";
+        ReadWritePaths = "%S/${stateDir}";
 
         # Hardening
         CapabilityBoundingSet = "";
