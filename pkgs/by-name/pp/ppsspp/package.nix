@@ -40,14 +40,14 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString enableQt "-qt"
     + lib.optionalString (!enableQt) "-sdl"
     + lib.optionalString forceWayland "-wayland";
-  version = "1.19.3";
+  version = "1.20.2";
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-71oIjUXYGFNyhcXQP65Bd2gYF6golrPR4USwS7bTxFQ=";
+    hash = "sha256-oQ2EPnTu/0jpP4dlaNEHgD7r8gDdfhBOG9QDP20ig+E=";
   };
 
   patches = lib.optionals useSystemFfmpeg [
