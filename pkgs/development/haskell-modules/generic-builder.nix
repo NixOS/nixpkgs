@@ -261,6 +261,8 @@ in
   __onlyPropagateKnownPkgConfigModules ? false,
   enableExternalInterpreter ?
     isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
+  # iserv-proxy needs local network access
+  __darwinAllowLocalNetworking ? stdenv.hostPlatform.isDarwin && enableExternalInterpreter,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
@@ -1137,6 +1139,9 @@ lib.fix (
     // optionalAttrs (postPhases != [ ]) { inherit postPhases; }
     // optionalAttrs (disallowedRequisites != [ ] || disallowGhcReference) {
       disallowedRequisites = disallowedRequisites ++ (if disallowGhcReference then [ ghc ] else [ ]);
+    }
+    // optionalAttrs (__darwinAllowLocalNetworking || args ? __darwinLocalNetworking) {
+      __darwinAllowLocalNetworking = true;
     }
   )
 )
