@@ -10427,8 +10427,6 @@ with pkgs;
     withGui = false;
   };
 
-  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
-
   napari = with python312Packages; toPythonApplication napari;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
