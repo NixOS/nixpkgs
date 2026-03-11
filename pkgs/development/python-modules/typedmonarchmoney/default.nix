@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "typedmonarchmoney";
-  version = "0.5.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "monarchmoney-typed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pe/j6UnW9N3x/TYp4VyyVTwk2hTGHLTlnEYL6MNziuw=";
+    hash = "sha256-Tx5JxHAJeNWLzCSAXOvb2+QsS8PU5hK28141BnooZps=";
   };
 
   build-system = [ hatchling ];
