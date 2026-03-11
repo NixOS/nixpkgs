@@ -104,7 +104,12 @@ in
         description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
-        script = cfg.powerDownCommands;
+        script = ''
+          # NixOS pre-sleep script
+
+          # config.powerManagement.powerDownCommands
+          ${cfg.powerDownCommands}
+        '';
         serviceConfig.Type = "oneshot";
       };
 
@@ -114,8 +119,14 @@ in
         # Pulled in by post-resume.service above
         after = [ "sleep.target" ];
         script = ''
+          # NixOS pre-resume script
+
           /run/current-system/systemd/bin/systemctl try-restart --no-block post-resume.target
+
+          # config.powerManagement.resumeCommands
           ${cfg.resumeCommands}
+
+          # config.powerManagement.powerUpCommands
           ${cfg.powerUpCommands}
         '';
         serviceConfig.Type = "oneshot";
@@ -130,7 +141,12 @@ in
         before = [
           "shutdown.target"
         ];
-        script = cfg.powerDownCommands;
+        script = ''
+          # NixOS pre-shutdown script
+
+          # config.powerManagement.powerDownCommands
+          ${cfg.powerDownCommands}
+        '';
         serviceConfig.Type = "oneshot";
         unitConfig.DefaultDependencies = false;
       };
@@ -143,7 +159,12 @@ in
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
         script = ''
+          # NixOS post-boot script
+
+          # config.powerManagement.bootCommands
           ${cfg.bootCommands}
+
+          # config.powerManagement.powerUpCommands
           ${cfg.powerUpCommands}
         '';
         serviceConfig = {
