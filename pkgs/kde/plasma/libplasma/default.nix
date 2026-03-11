@@ -11,6 +11,7 @@ mkKdeDerivation {
   patches = [
     # https://invent.kde.org/plasma/libplasma/-/merge_requests/1406
     ./rb-extracomponents.patch
+    ./install-wayland-headers.patch
   ];
 
   extraNativeBuildInputs = [ pkg-config ];

@@ -1,0 +1,13 @@
+diff --git a/src/plasmaquick/CMakeLists.txt b/src/plasmaquick/CMakeLists.txt
+index 1f1ad3172..19bd8a713 100644
+--- a/src/plasmaquick/CMakeLists.txt
++++ b/src/plasmaquick/CMakeLists.txt
+@@ -157,6 +157,8 @@ ecm_generate_export_header(PlasmaQuick
+ 
+ set(plasmaquick_LIB_INCLUDES
+     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
++    ${CMAKE_CURRENT_BINARY_DIR}/qwayland-plasma-shell.h
++    ${CMAKE_CURRENT_BINARY_DIR}/wayland-plasma-shell-client-protocol.h
+ )
+ 
+ ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
