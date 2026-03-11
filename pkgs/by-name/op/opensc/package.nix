@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     "completiondir=$(out)/etc"
   ];
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\.]+)$" ]; };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=^([0-9\\.]+)$" ]; };
 
   meta = {
     description = "Set of libraries and utilities to access smart cards";

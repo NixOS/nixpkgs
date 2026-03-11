@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
   pkg-config,
   util-linux,
@@ -22,7 +22,7 @@
   libxdmcp,
   lcms2,
   libiptcdata,
-  fftw,
+  fftwSinglePrec,
   expat,
   pcre2,
   libsigcxx,
@@ -39,17 +39,21 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rawtherapee";
   version = "5.12";
 
-  src = fetchFromGitHub {
-    owner = "RawTherapee";
-    repo = "RawTherapee";
-    tag = finalAttrs.version;
-    hash = "sha256-h8eWnw9I1R0l9WAI/DylsdA241qU9NhYGEPYz+JlE18=";
+  src = fetchurl {
     # The developers ask not to use the tarball from Github releases, see
-    # https://www.rawtherapee.com/downloads/5.10/#news-relevant-to-package-maintainers
-    forceFetchGit = true;
+    # https://www.rawtherapee.com/downloads/5.12/#news-relevant-to-package-maintainers
+    url = "https://rawtherapee.com/shared/source/rawtherapee-${finalAttrs.version}.tar.xz";
+    hash = "sha256-2abBBTfWSihbxGVnX+WaqpTOMiOCPfvs8K4slZkILVc=";
   };
 
   postPatch = ''
+    # https://github.com/NixOS/nixpkgs/issues/475835
+    # https://github.com/RawTherapee/RawTherapee/issues/7443#issuecomment-3014132156
+    # remove for 5.13
+    substituteInPlace rtengine/procparams.cc --replace \
+      'outputProfile(options.rtSettings.srgb),' \
+      'outputProfile("RTv4_sRGB"),'
+
     cat <<EOF > ReleaseInfo.cmake
     set(GIT_DESCRIBE ${finalAttrs.version})
     set(GIT_BRANCH ${finalAttrs.version})
@@ -89,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxdmcp
     lcms2
     libiptcdata
-    fftw
+    fftwSinglePrec
     expat
     pcre2
     libsigcxx
