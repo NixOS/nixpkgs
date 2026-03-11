@@ -151,6 +151,7 @@ buildGoModule (
         "CVE-2026-30224: Session Fixation - Logout Fails to Invalidate Server-Side Session"
         "CVE-2026-30225: RestartAction always runs actions as guest"
         "CVE-2026-30233: View permission not being checked when returning dashboards"
+        "CVE-2026-31817: Unsafe parsing of UniqueTrackingId can be used to write files"
       ];
     };
   }
