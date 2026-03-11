@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "mruby-zest-build";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
+    hash = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
   };
 
   patches = [
