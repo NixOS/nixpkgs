@@ -485,6 +485,11 @@ rec {
           null
         else
           {
+            reason = "problem";
+            # Only there for PR CI evaluation
+            handleProblem =
+              handleEvalIssue:
+              lib.foldl' (result: problem: handleEvalIssue problem.kind (fullMessage problem)) true errorProblems;
             msg = ''
               has problems:
               ${concatMapStringsSep "\n" (x: "- ${fullMessage x}") errorProblems}

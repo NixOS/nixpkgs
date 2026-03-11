@@ -194,6 +194,7 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
+      log('merge', 'Queued for merge')
       return [
         `:heavy_check_mark: [Queued](${resp.enqueuePullRequest.mergeQueueEntry.mergeQueue.url}) for merge (#306934)`,
       ]
@@ -215,6 +216,7 @@ async function handleMerge({
         }`,
         { node_id: pull_request.node_id, sha: pull_request.head.sha },
       )
+      log('merge', 'Auto-merge enabled')
       return [
         `:heavy_check_mark: Enabled Auto Merge (#306934)`,
         '',
