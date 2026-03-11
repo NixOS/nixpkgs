@@ -1,0 +1,502 @@
+{
+    "codeium-nvim": {
+        "date": "2025-04-09",
+        "new": "windsurf-nvim"
+    },
+    "codeium-vim": {
+        "date": "2025-04-09",
+        "new": "windsurf-vim"
+    },
+    "coffee-script": {
+        "date": "2026-02-04",
+        "new": "vim-coffee-script"
+    },
+    "coffeeScript": {
+        "date": "2026-02-04",
+        "new": "vim-coffee-script"
+    },
+    "colors-solarized": {
+        "date": "2026-02-04",
+        "new": "vim-colors-solarized"
+    },
+    "colorsamplerpack": {
+        "date": "2026-02-04",
+        "new": "Colour-Sampler-Pack"
+    },
+    "command_T": {
+        "date": "2026-02-04",
+        "new": "command-t"
+    },
+    "commentary": {
+        "date": "2026-02-04",
+        "new": "vim-commentary"
+    },
+    "committia": {
+        "date": "2026-02-04",
+        "new": "committia-vim"
+    },
+    "compe-conjure": {
+        "date": "2024-11-19",
+        "new": "cmp-conjure"
+    },
+    "compe-latex-symbols": {
+        "date": "2024-11-19",
+        "new": "cmp-latex-symbols"
+    },
+    "compe-tabnine": {
+        "date": "2024-11-19",
+        "new": "cmp-tabnine"
+    },
+    "compe-zsh": {
+        "date": "2024-11-19",
+        "new": "cmp-zsh"
+    },
+    "concealedyank": {
+        "date": "2026-02-04",
+        "new": "concealedyank-vim"
+    },
+    "context-filetype": {
+        "date": "2026-02-04",
+        "new": "context_filetype-vim"
+    },
+    "css_color_5056": {
+        "date": "2026-02-04",
+        "new": "vim-css-color"
+    },
+    "csv": {
+        "date": "2026-02-04",
+        "new": "csv-vim"
+    },
+    "ctrlp": {
+        "date": "2026-02-04",
+        "new": "ctrlp-vim"
+    },
+    "cute-python": {
+        "date": "2026-02-04",
+        "new": "vim-cute-python"
+    },
+    "denite": {
+        "date": "2026-02-04",
+        "new": "denite-nvim"
+    },
+    "easy-align": {
+        "date": "2026-02-04",
+        "new": "vim-easy-align"
+    },
+    "easygit": {
+        "date": "2026-02-04",
+        "new": "vim-easygit"
+    },
+    "easymotion": {
+        "date": "2026-02-04",
+        "new": "vim-easymotion"
+    },
+    "echodoc": {
+        "date": "2026-02-04",
+        "new": "echodoc-vim"
+    },
+    "eighties": {
+        "date": "2026-02-04",
+        "new": "vim-eighties"
+    },
+    "ethersync": {
+        "date": "2025-10-31",
+        "new": "teamtype"
+    },
+    "extradite": {
+        "date": "2026-02-04",
+        "new": "vim-extradite"
+    },
+    "fern-vim": {
+        "date": "2024-05-12",
+        "new": "vim-fern"
+    },
+    "fugitive": {
+        "date": "2026-02-04",
+        "new": "vim-fugitive"
+    },
+    "fzfWrapper": {
+        "date": "2026-02-04",
+        "new": "fzf-wrapper"
+    },
+    "ghc-mod-vim": {
+        "date": "2026-02-04",
+        "new": "ghcmod-vim"
+    },
+    "ghcmod": {
+        "date": "2026-02-04",
+        "new": "ghcmod-vim"
+    },
+    "gina-vim": {
+        "date": "2024-05-12",
+        "new": "vim-gina"
+    },
+    "gitgutter": {
+        "date": "2026-02-04",
+        "new": "vim-gitgutter"
+    },
+    "goyo": {
+        "date": "2026-02-04",
+        "new": "goyo-vim"
+    },
+    "gundo": {
+        "date": "2026-02-04",
+        "new": "gundo-vim"
+    },
+    "haskellConceal": {
+        "date": "2026-02-04",
+        "new": "vim-haskellconceal"
+    },
+    "haskellConcealPlus": {
+        "date": "2026-02-04",
+        "new": "vim-haskellConcealPlus"
+    },
+    "haskellconceal": {
+        "date": "2026-02-04",
+        "new": "vim-haskellconceal"
+    },
+    "hier": {
+        "date": "2026-02-04",
+        "new": "vim-hier"
+    },
+    "hlint-refactor": {
+        "date": "2026-02-04",
+        "new": "hlint-refactor-vim"
+    },
+    "hoogle": {
+        "date": "2026-02-04",
+        "new": "vim-hoogle"
+    },
+    "indent-blankline-nvim-lua": {
+        "date": "2026-02-04",
+        "new": "indent-blankline-nvim"
+    },
+    "ipython": {
+        "date": "2026-02-04",
+        "new": "vim-ipython"
+    },
+    "latex-live-preview": {
+        "date": "2026-02-04",
+        "new": "vim-latex-live-preview"
+    },
+    "lua-async-await": {
+        "date": "2025-01-09",
+        "new": "lua-async"
+    },
+    "magma-nvim-goose": {
+        "date": "2024-10-28",
+        "new": "magma-nvim"
+    },
+    "nvim-base16": {
+        "date": "2024-02-15",
+        "new": "base16-nvim"
+    },
+    "nvim-compe": {
+        "date": "2024-11-19",
+        "new": "nvim-cmp"
+    },
+    "render-markdown": {
+        "date": "2024-09-16",
+        "new": "render-markdown-nvim"
+    },
+    "repeat": {
+        "date": "2026-02-04",
+        "new": "vim-repeat"
+    },
+    "rhubarb": {
+        "date": "2026-02-04",
+        "new": "vim-rhubarb"
+    },
+    "riv": {
+        "date": "2026-02-04",
+        "new": "riv-vim"
+    },
+    "sensible": {
+        "date": "2026-02-04",
+        "new": "vim-sensible"
+    },
+    "signature": {
+        "date": "2026-02-04",
+        "new": "vim-signature"
+    },
+    "sleuth": {
+        "date": "2026-02-04",
+        "new": "vim-sleuth"
+    },
+    "snipmate": {
+        "date": "2026-02-04",
+        "new": "vim-snipmate"
+    },
+    "solarized": {
+        "date": "2026-02-04",
+        "new": "vim-colors-solarized"
+    },
+    "solidity": {
+        "date": "2026-02-04",
+        "new": "vim-solidity"
+    },
+    "sourcemap": {
+        "date": "2026-02-04",
+        "new": "sourcemap-vim"
+    },
+    "sourcemap.vim": {
+        "date": "2026-02-04",
+        "new": "sourcemap-vim"
+    },
+    "ssr": {
+        "date": "2026-02-04",
+        "new": "ssr-nvim"
+    },
+    "stylish-haskell": {
+        "date": "2026-02-04",
+        "new": "vim-stylish-haskell"
+    },
+    "stylishHaskell": {
+        "date": "2026-02-04",
+        "new": "vim-stylish-haskell"
+    },
+    "suda-vim": {
+        "date": "2024-05-12",
+        "new": "vim-suda"
+    },
+    "surround": {
+        "date": "2026-02-04",
+        "new": "vim-surround"
+    },
+    "table-mode": {
+        "date": "2026-02-04",
+        "new": "vim-table-mode"
+    },
+    "tabpagebuffer": {
+        "date": "2026-02-04",
+        "new": "tabpagebuffer-vim"
+    },
+    "tabpagecd": {
+        "date": "2026-02-04",
+        "new": "vim-tabpagecd"
+    },
+    "taglist": {
+        "date": "2026-02-04",
+        "new": "taglist-vim"
+    },
+    "taskwarrior": {
+        "date": "2024-08-13",
+        "new": "taskwarrior2"
+    },
+    "thumbnail": {
+        "date": "2026-02-04",
+        "new": "thumbnail-vim"
+    },
+    "tlib": {
+        "date": "2026-02-04",
+        "new": "tlib_vim"
+    },
+    "tmux-navigator": {
+        "date": "2026-02-04",
+        "new": "vim-tmux-navigator"
+    },
+    "tmuxNavigator": {
+        "date": "2026-02-04",
+        "new": "vim-tmux-navigator"
+    },
+    "tslime": {
+        "date": "2026-02-04",
+        "new": "tslime-vim"
+    },
+    "unite": {
+        "date": "2026-02-04",
+        "new": "unite-vim"
+    },
+    "vim-addon-vim2nix": {
+        "date": "2026-02-04",
+        "new": "vim2nix"
+    },
+    "vim-fsharp": {
+        "date": "2024-03-16",
+        "new": "zarchive-vim-fsharp"
+    },
+    "vscode-diff-nvim": {
+        "date": "2026-01-10",
+        "new": "codediff-nvim"
+    },
+    "BufOnly": {
+        "date": "2026-02-04",
+        "new": "BufOnly-vim"
+    },
+    "CSApprox": {
+        "date": "2026-02-04",
+        "new": "csapprox"
+    },
+    "Colour_Sampler_Pack": {
+        "date": "2026-02-04",
+        "new": "Colour-Sampler-Pack"
+    },
+    "Cosco": {
+        "date": "2026-02-04",
+        "new": "cosco-vim"
+    },
+    "Gist": {
+        "date": "2026-02-04",
+        "new": "vim-gist"
+    },
+    "Gundo": {
+        "date": "2026-02-04",
+        "new": "gundo-vim"
+    },
+    "Hoogle": {
+        "date": "2026-02-04",
+        "new": "vim-hoogle"
+    },
+    "Solarized": {
+        "date": "2026-02-04",
+        "new": "vim-colors-solarized"
+    },
+    "Supertab": {
+        "date": "2026-02-04",
+        "new": "supertab"
+    },
+    "Syntastic": {
+        "date": "2026-02-04",
+        "new": "syntastic"
+    },
+    "SyntaxRange": {
+        "date": "2026-02-04",
+        "new": "vim-SyntaxRange"
+    },
+    "Tabular": {
+        "date": "2026-02-04",
+        "new": "tabular"
+    },
+    "Tagbar": {
+        "date": "2026-02-04",
+        "new": "tagbar"
+    },
+    "The_NERD_Commenter": {
+        "date": "2026-02-04",
+        "new": "nerdcommenter"
+    },
+    "The_NERD_tree": {
+        "date": "2026-02-04",
+        "new": "nerdtree"
+    },
+    "UltiSnips": {
+        "date": "2026-02-04",
+        "new": "ultisnips"
+    },
+    "WebAPI": {
+        "date": "2026-02-04",
+        "new": "webapi-vim"
+    },
+    "Yankring": {
+        "date": "2026-02-04",
+        "new": "YankRing-vim"
+    },
+    "airline": {
+        "date": "2026-02-04",
+        "new": "vim-airline"
+    },
+    "alternative": {
+        "date": "2026-02-04",
+        "new": "a-vim"
+    },
+    "bats": {
+        "date": "2026-02-04",
+        "new": "bats-vim"
+    },
+    "calendar": {
+        "date": "2026-02-04",
+        "new": "calendar-vim"
+    },
+    "caw": {
+        "date": "2026-02-04",
+        "new": "caw-vim"
+    },
+    "chad": {
+        "date": "2026-02-04",
+        "new": "chadtree"
+    },
+    "maktaba": {
+        "date": "2026-02-04",
+        "new": "vim-maktaba"
+    },
+    "multiple-cursors": {
+        "date": "2026-02-04",
+        "new": "vim-multiple-cursors"
+    },
+    "necoGhc": {
+        "date": "2026-02-04",
+        "new": "neco-ghc"
+    },
+    "neocomplete": {
+        "date": "2026-02-04",
+        "new": "neocomplete-vim"
+    },
+    "neoinclude": {
+        "date": "2026-02-04",
+        "new": "neoinclude-vim"
+    },
+    "neomru": {
+        "date": "2026-02-04",
+        "new": "neomru-vim"
+    },
+    "neosnippet": {
+        "date": "2026-02-04",
+        "new": "neosnippet-vim"
+    },
+    "open-browser": {
+        "date": "2026-02-04",
+        "new": "open-browser-vim"
+    },
+    "pathogen": {
+        "date": "2026-02-04",
+        "new": "vim-pathogen"
+    },
+    "polyglot": {
+        "date": "2026-02-04",
+        "new": "vim-polyglot"
+    },
+    "prettyprint": {
+        "date": "2026-02-04",
+        "new": "vim-prettyprint"
+    },
+    "quickrun": {
+        "date": "2026-02-04",
+        "new": "vim-quickrun"
+    },
+    "rainbow_parentheses": {
+        "date": "2026-02-04",
+        "new": "rainbow_parentheses-vim"
+    },
+    "vimproc": {
+        "date": "2026-02-04",
+        "new": "vimproc-vim"
+    },
+    "vimshell": {
+        "date": "2026-02-04",
+        "new": "vimshell-vim"
+    },
+    "vinegar": {
+        "date": "2026-02-04",
+        "new": "vim-vinegar"
+    },
+    "watchdogs": {
+        "date": "2026-02-04",
+        "new": "vim-watchdogs"
+    },
+    "wombat256": {
+        "date": "2026-02-04",
+        "new": "wombat256-vim"
+    },
+    "xterm-color-table": {
+        "date": "2026-02-04",
+        "new": "xterm-color-table-vim"
+    },
+    "yankring": {
+        "date": "2026-02-04",
+        "new": "YankRing-vim"
+    },
+    "zeavim": {
+        "date": "2026-02-04",
+        "new": "zeavim-vim"
+    }
+}

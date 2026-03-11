@@ -1,0 +1,14 @@
+diff --git a/src/virt-viewer-window.c b/src/virt-viewer-window.c
+index fe740ce..d45fd4f 100644
+--- a/src/virt-viewer-window.c
++++ b/src/virt-viewer-window.c
+@@ -1342,6 +1342,9 @@ virt_viewer_window_update_title(VirtViewerWindow *self)
+                                     grabhint,
+                                     g_get_application_name());
+         }
++    } else if (g_str_has_prefix(self->subtitle, "appvm_")) {
++        /* Use name of the application as a title */
++        title = g_strdup_printf(_("%s"), &self->subtitle[strlen("appvm_")]);
+     } else if (self->subtitle) {
+         /* translators:
+          * This is "<subtitle> - <appname>"

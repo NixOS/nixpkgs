@@ -1,0 +1,38 @@
+diff --git a/windmill-worker/nsjail/run.powershell.config.proto b/windmill-worker/nsjail/run.powershell.config.proto
+index 93a48d4fe..97dc236e5 100644
+--- a/windmill-worker/nsjail/run.powershell.config.proto
++++ b/windmill-worker/nsjail/run.powershell.config.proto
+@@ -15,10 +15,17 @@ keep_caps: false
+ keep_env: true
+ mount_proc: true
+ 
++mount {
++    src: "/nix/store"
++    dst: "/nix/store"
++	is_bind: true
++}
++
+ mount {
+     src: "/bin"
+     dst: "/bin"
+ 	is_bind: true
++    mandatory: false
+ }
+ 
+ mount {
+@@ -38,6 +45,7 @@ mount {
+     src: "/lib"
+     dst: "/lib"
+ 	is_bind: true
++    mandatory: false
+ }
+ 
+ 
+@@ -53,6 +61,7 @@ mount {
+     src: "/usr"
+     dst: "/usr"
+ 	is_bind: true
++    mandatory: false
+ }
+ 
+ mount {

@@ -1,0 +1,41 @@
+diff --git a/bin/opensfm b/bin/opensfm
+index b5ee4b15..f05c0d1c 100755
+--- a/bin/opensfm
++++ b/bin/opensfm
+@@ -1,12 +1,6 @@
+-#!/bin/bash
++#!/usr/bin/env bash
+ set -e
+ 
+ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+ 
+-if [ -x "$(command -v python3)" ]; then
+-    PYTHON=python3
+-else
+-    PYTHON=python
+-fi
+-
+-"$PYTHON" "$DIR"/opensfm_main.py "$@"
++exec "$DIR"/opensfm_main.py "$@"
+diff --git a/bin/opensfm_main.py b/bin/opensfm_main.py
+index 31249e12..cc71560c 100755
+--- a/bin/opensfm_main.py
++++ b/bin/opensfm_main.py
+@@ -1,3 +1,5 @@
++#!/usr/bin/env python
++
+ import sys
+ from os.path import abspath, join, dirname
+ 
+diff --git a/setup.py b/setup.py
+index 1120717f..438a16db 100644
+--- a/setup.py
++++ b/setup.py
+@@ -71,6 +71,7 @@ setuptools.setup(
+     scripts=[
+         "bin/opensfm_run_all",
+         "bin/opensfm",
++        "bin/opensfm_main.py",
+     ],
+     package_data={
+         "opensfm": [
