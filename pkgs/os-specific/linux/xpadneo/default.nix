@@ -36,11 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
-  passthru.tests = {
-    xpadneo = nixosTests.xpadneo;
+  passthru = {
+    tests.xpadneo = nixosTests.xpadneo;
+    updateScript = nix-update-script {
+      extraArgs = [
+        # Skips pre-releases
+        "--version-regex"
+        "^v([\\d.]+)$"
+      ];
+    };
   };
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Advanced Linux driver for Xbox One wireless controllers";
