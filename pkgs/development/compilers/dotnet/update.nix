@@ -18,7 +18,16 @@
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel tag;
+  inherit (lib.importJSON releaseManifestFile) channel tag sdkVersion;
+
+  # version including up to the sdk feature band
+  sdkVersionPrefix =
+    let
+      parts = lib.take 3 (lib.splitVersion sdkVersion);
+      patch = lib.elemAt parts 2;
+      band = lib.substring 0 (lib.stringLength patch - 2) patch;
+    in
+    lib.concatStringsSep "." (lib.replaceElemAt parts 2 band);
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -69,7 +78,7 @@ writeScript "update-dotnet-vmr.sh" ''
               select(
                   ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
                   .draft == false and
-                  (.tag_name | startswith("v${channel}")))) |
+                  (.tag_name | startswith("v${sdkVersionPrefix}")))) |
           first
   EOF
       )
