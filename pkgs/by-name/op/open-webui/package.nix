@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-RNVmPg2//z/djARWgbTbKbdYmDwAcTSYjiSuZHV88vM=";
+    hash = "sha256-wXkU3j0Bzpd2H5aVkqmKyUHxukRamBYQh8HBXB8tLpM=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-W3AquYTXffAW9T5R2Nn9Idpbh/EPDpJNIB7D0yFWezU=";
+    npmDepsHash = "sha256-ZiIEGeKee/qEhe44SGlPTDhwP+vL9K8RkFEOeUdzUI8=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -202,12 +202,17 @@ python3Packages.buildPythonApplication rec {
       psycopg2-binary
     ];
 
+    mariadb = [
+      mariadb
+    ];
+
     all = [
       azure-search-documents
       colbert-ai
       elasticsearch
       firecrawl-py
       gcp-storage-emulator
+      mariadb
       moto
       oracledb
       pinecone-client
