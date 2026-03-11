@@ -248,6 +248,7 @@ let
       && !(builtins.elem cudaPackages.cudaMajorVersion [
         "11"
         "12"
+        "13"
       ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
       MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
