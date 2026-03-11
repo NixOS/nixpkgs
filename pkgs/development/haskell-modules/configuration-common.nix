@@ -2377,6 +2377,12 @@ with haskellLib;
   # https://github.com/andrewufrank/uniform-fileio/issues/2
   uniform-fileio = dontCheck super.uniform-fileio;
 
+  # Waiting on https://github.com/mastratisi/railroad/commit/3fc1360ebec6337de3115968660361b1b7e92f0b
+  railroad = lib.pipe super.railroad [
+    (warnAfterVersion "0.1.1.1")
+    doJailbreak
+  ];
+
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
