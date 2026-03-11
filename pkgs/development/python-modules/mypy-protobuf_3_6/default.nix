@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mypy-protobuf";
-  version = "3.6.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nipunn1313";
     repo = "mypy-protobuf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YBm/qfmas0kPmzhlgAwCdT8nsnC45fj2bhK3cXpvANo=";
+    hash = "sha256-io28P01wvV9y9ool4RQUV7ODb/r5ZeBhZb5ZUsi3m4M=";
   };
 
   pythonRelaxDeps = [ "protobuf" ];
