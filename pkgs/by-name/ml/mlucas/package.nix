@@ -12,14 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlucas";
-  # A specific git commit is used because there are no official GitHub releases.
   version = "21.0.2";
 
   src = fetchFromGitHub {
     owner = "primesearch";
     repo = "Mlucas";
-    rev = "d082c2a00b42410d6d87605212c68be25f9f4d7d";
-    hash = "sha256-YD2Kt8SD5sxZH8Em8jDZ1qSfIhgLUklOdkORmVR588o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-AHzx7jfmBIzES9fJ9xhmRMD8NCucxhD2aEo8OYR25xs=";
   };
 
   enableParallelBuilding = true;

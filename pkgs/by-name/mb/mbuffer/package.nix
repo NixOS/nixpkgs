@@ -32,11 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   strictDeps = true;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Tool for buffering data streams with a large set of unique features";
     homepage = "https://www.maier-komor.de/mbuffer.html";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux; # Maybe other non-darwin Unix
+    platforms = lib.platforms.unix;
     mainProgram = "mbuffer";
   };
 })
