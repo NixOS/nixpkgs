@@ -9269,11 +9269,19 @@ with pkgs;
     libjpeg = libjpeg8;
   };
 
+  bitwig-studio6-unwrapped = callPackage ../applications/audio/bitwig-studio/bitwig-studio6.nix {
+    libjpeg = libjpeg8;
+  };
+
   bitwig-studio5 = callPackage ../applications/audio/bitwig-studio/bitwig-wrapper.nix {
     bitwig-studio-unwrapped = bitwig-studio5-unwrapped;
   };
 
-  bitwig-studio = bitwig-studio5;
+  bitwig-studio6 = callPackage ../applications/audio/bitwig-studio/bitwig-wrapper.nix {
+    bitwig-studio-unwrapped = bitwig-studio6-unwrapped;
+  };
+
+  bitwig-studio = bitwig-studio6;
 
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
