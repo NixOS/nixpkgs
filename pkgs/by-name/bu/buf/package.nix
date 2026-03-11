@@ -88,6 +88,7 @@ buildGoModule (finalAttrs: {
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
+      hythera
       jk
       lrewega
     ];
