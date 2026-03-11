@@ -263,6 +263,19 @@ in
     isCross && crossSupport.canProxyTH && crossSupport.needsExternalInterpreterSetup,
   # iserv-proxy needs local network access
   __darwinAllowLocalNetworking ? stdenv.hostPlatform.isDarwin && enableExternalInterpreter,
+  # Set the C standard for the C pre-processor output c2hs takes as its input. Use
+  # $CC's default if `null`.
+  #
+  # c2hs does not support relatively common elements of C23 syntax (e.g. the bool keyword),
+  # so we need to force the use of an older C standard if we're using GCC 15. Unfortunately,
+  # fixing c2hs without upstream involvement is hard since it probably requires a breaking
+  # change to language-c.
+  # This option will likely be removed after the upstream issue is solved.
+  # See https://github.com/haskell/c2hs/issues/300,
+  # https://github.com/visq/language-c/pull/104,
+  # https://github.com/NixOS/nixpkgs/issues/478368 (krank:ignore-line),
+  # https://github.com/NixOS/nixpkgs/issues/475479 (krank:ignore-line).
+  __c2hsCppStandard ? if stdenv.hasCC && stdenv.cc.isGNU then "gnu17" else null,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
@@ -388,6 +401,9 @@ let
   ]
   ++ optionals stdenv.hasCC [
     "--with-gcc=$CC" # Clang won't work without that extra information.
+  ]
+  ++ optionals (stdenv.hasCC && __c2hsCppStandard != null) [
+    "--c2hs-option=--cppopts=-std=${__c2hsCppStandard}"
   ]
   ++ [
     "--package-db=$packageConfDir"
