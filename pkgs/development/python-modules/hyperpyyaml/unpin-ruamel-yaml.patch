@@ -1,0 +1,9 @@
+diff --git a/setup.py b/setup.py
+--- a/setup.py
++++ b/setup.py
+@@ -18,5 +18,5 @@ setuptools.setup(
+     ],
+     packages=["hyperpyyaml"],
+-    install_requires=["pyyaml>=5.1", "ruamel.yaml>=0.17.28,<0.19.0"],
++    install_requires=["pyyaml>=5.1", "ruamel.yaml>=0.17.28"],
+ )

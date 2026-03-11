@@ -30,9 +30,15 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  patches = [ ./unpin-ruamel-yaml.patch ];
+
   dependencies = [
     pyyaml
     ruamel-yaml
+  ];
+
+  pythonRelaxDeps = [
+    "ruamel-yaml"
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -40,8 +46,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hyperpyyaml" ];
 
   meta = {
-    # https://github.com/speechbrain/HyperPyYAML/pull/32
-    broken = lib.versionAtLeast ruamel-yaml.version "0.19";
     description = "Extensions to YAML syntax for better python interaction";
     homepage = "https://github.com/speechbrain/HyperPyYAML";
     changelog = "https://github.com/speechbrain/HyperPyYAML/releases/tag/${src.tag}";
