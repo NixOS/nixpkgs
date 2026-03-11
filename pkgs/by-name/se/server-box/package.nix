@@ -1,6 +1,6 @@
 {
   lib,
-  flutter338,
+  flutter341,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -13,16 +13,17 @@
 }:
 
 let
-  version = "1.0.1316";
+  version = "1.0.1331";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-yFBWFqTJJon6GeY6dQ0QL814/j1Y5ur4pz2uS7iIZCI=";
+    fetchSubmodules = true;
+    hash = "sha256-fKwOAlGVrNKqb/eYRrDWAQ+B6R1OF10IXJ1cCk1IvNY=";
   };
 in
-flutter338.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
@@ -92,7 +93,8 @@ flutter338.buildFlutterApplication {
 
   meta = {
     description = "Server status & toolbox";
-    homepage = "https://github.com/lollipopkit/flutter_server_box";
+    homepage = "https://serverbox.lpkt.cn";
+    downloadPage = "https://serverbox.lpkt.cn/installation";
     changelog = "https://github.com/lollipopkit/flutter_server_box/releases/tag/${src.tag}";
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;
