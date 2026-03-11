@@ -5979,8 +5979,6 @@ with pkgs;
 
   reno = with python312Packages; toPythonApplication reno;
 
-  replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
-
   inherit (callPackage ../development/tools/replay-io { })
     replay-io
     replay-node-cli

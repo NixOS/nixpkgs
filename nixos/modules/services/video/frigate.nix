@@ -761,7 +761,7 @@ in
         ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
           # Extract libavformat version to enable version-dependent flags in ffmpeg
           (pkgs.writeShellScript "frigate-libavformat-major-version" ''
-            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | grep -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | ${lib.getExe pkgs.gnugrep} -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
             echo "Detected $(cat /run/frigate/ffmpeg-env)"
           '')
         ];
