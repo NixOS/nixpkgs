@@ -223,6 +223,7 @@ in
             ${getExe cfg.package}
           '';
           Restart = "always";
+          RestartSec = 1;
           EnvironmentFile = [
             cfg.environmentFile
             settingsFile

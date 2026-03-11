@@ -27,9 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   runtimeDependencies = [
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libxkbcommon
-    libGL
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -46,6 +48,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/eero-lehtinen/oklch-color-picker/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ videl ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

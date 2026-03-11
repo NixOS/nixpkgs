@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcb2gcode";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "pcb2gcode";
     repo = "pcb2gcode";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-PCBROFFo+yE6ojoNImk+9hdXzt/Y8JEvmvKwES2KBwM=";
+    hash = "sha256-Vjv80QPrJyEYqHFbXR2n68csAWfCMMmi4NEZYe8/DcY=";
   };
 
   configureFlags = [

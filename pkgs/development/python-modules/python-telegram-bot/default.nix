@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "22.5";
+  version = "22.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     tag = "v${version}";
-    hash = "sha256-++vDura+7AkqM7gV12O2CRRQ1H7G5G22VHGo4OdyffU=";
+    hash = "sha256-B7tG70Nzt7HKFD1n1Aq5DGGrcTyb4Df9LF31DGN4KQc=";
   };
 
   build-system = [

@@ -11,13 +11,13 @@
 }:
 
 let
-  # https://github.com/paradedb/paradedb/blob/v0.21.8/Cargo.lock#L3316-L3346
-  linderaVersion = "1.4.1";
+  # https://github.com/paradedb/paradedb/blob/v0.21.13/Cargo.lock#L3431-L3460
+  linderaVersion = "1.5.1";
   linderaWebsite = "https://lindera.dev";
 
   # pg_search's tokenizer uses several language dictionaries used by the Lindera crate
   dictionaries = {
-    # https://github.com/lindera/lindera/blob/v1.4.1/lindera-ko-dic/build.rs#L15-L22
+    # https://github.com/lindera/lindera/blob/v1.5.1/lindera-ko-dic/build.rs#L15-L22
     lindera-ko-dic = rec {
       language = "Korean";
       filename = "mecab-ko-dic-2.1.1-20180720.tar.gz";
@@ -27,7 +27,7 @@ let
       };
     };
 
-    # https://github.com/lindera/lindera/blob/v1.4.1/lindera-cc-cedict/build.rs#L15-L22
+    # https://github.com/lindera/lindera/blob/v1.5.1/lindera-cc-cedict/build.rs#L15-L22
     lindera-cc-cedict = rec {
       language = "Chinese";
       filename = "CC-CEDICT-MeCab-0.1.0-20200409.tar.gz";
@@ -37,7 +37,7 @@ let
       };
     };
 
-    # https://github.com/lindera/lindera/blob/v1.4.1/lindera-ipadic/build.rs#L15-L22
+    # https://github.com/lindera/lindera/blob/v1.5.1/lindera-ipadic/build.rs#L15-L22
     lindera-ipadic = rec {
       language = "Japanese";
       filename = "mecab-ipadic-2.7.0-20250920.tar.gz";
@@ -50,16 +50,16 @@ let
 in
 buildPgrxExtension (finalAttrs: {
   pname = "pg_search";
-  version = "0.21.8";
+  version = "0.21.13";
 
   src = fetchFromGitHub {
     owner = "paradedb";
     repo = "paradedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gvQOfyFU8SVtAJTGw0EuRatfDVZRqpv7WhIqYYZYbgc=";
+    hash = "sha256-OkZ4Li9FzpX4dE8aqbCUuCOMcXrw4NElOb4+2/lltS4=";
   };
 
-  cargoHash = "sha256-NRrDmswQ+oiVNeIbhfhDA7k4wOxotTLsOuT7WMewX6Y=";
+  cargoHash = "sha256-7EqEHQ8mHaqYc/vafFMmTWqTml/ox46Fjc+hk8QDaEw=";
 
   inherit postgresql;
 
@@ -79,10 +79,10 @@ buildPgrxExtension (finalAttrs: {
     echo "Lindera cache prepared at $LINDERA_CACHE"
   '';
 
-  # https://github.com/paradedb/paradedb/blob/v0.21.8/Cargo.toml#L38-L39
+  # https://github.com/paradedb/paradedb/blob/v0.21.13/Cargo.toml#L38-L39
   cargo-pgrx = cargo-pgrx_0_16_1;
 
-  # https://github.com/paradedb/paradedb/tree/v0.21.8/pg_search
+  # https://github.com/paradedb/paradedb/tree/v0.21.13/pg_search
   cargoPgrxFlags = [
     "--package"
     "pg_search"
@@ -103,7 +103,7 @@ buildPgrxExtension (finalAttrs: {
     changelog = "https://github.com/paradedb/paradedb/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.lucperkins ];
-    # https://github.com/paradedb/paradedb/blob/v0.21.8/pg_search/Cargo.toml#L14-L18
+    # https://github.com/paradedb/paradedb/blob/v0.21.13/pg_search/Cargo.toml#L14-L18
     broken = lib.versionOlder postgresql.version "14";
     platforms = postgresql.meta.platforms;
   };

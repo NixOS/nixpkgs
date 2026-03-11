@@ -12,7 +12,8 @@
   pybind11,
   pytest-httpserver,
   pytestCheckHook,
-  setuptools,
+  scikit-build-core,
+  ninja,
   shapely,
   werkzeug,
   isPyPy,
@@ -34,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-AkldgvZmn1CLa9Ze7RHBhL5wLLJ+mBnNj+yyV98nzZ8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    scikit-build-core
+    ninja
+  ];
 
   nativeBuildInputs = [ cmake ];
 

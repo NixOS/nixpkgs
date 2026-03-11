@@ -100,17 +100,12 @@
 
           nix.settings.trusted-users = [ "@wheel" ];
 
-          systemd.services."autossh-ng" = {
-            after = [ "network.target" ];
-            wantedBy = [ "multi-user.target" ];
-            serviceConfig = {
-              User = "root";
-              Restart = "always";
-              RestartSec = "10s";
-              ExecStart = "${pkgs.openssh}/bin/ssh -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o ExitOnForwardFailure=yes -N -R2222:localhost:22 deployer";
-            };
+          services.autossh-ng.sessions.will-be-interrupted-by-rebuild = {
+            user = "root";
+            destination = "deployer";
+            extraArguments = "-R2222:localhost:22";
+            hostKeyChecking = false;
           };
-
         };
       in
       {
@@ -167,6 +162,8 @@
               };
 
               # needed to make NIX_SSHOPTS work for nix-copy-closure
+              # 2.31.3 (current default) break, 2.32.6 and 2.33.3 (current latest) work
+              # let's use the default here again once the fix has made it there.
               nix.package = pkgs.nixVersions.latest;
 
               # We're changing the '-E' parameter to the new hostname here,
@@ -174,8 +171,7 @@
               # force the scenario where the connection is broken during the
               # deployment (because the autossh-ng service is stopped and
               # started):
-              systemd.services."autossh-ng".serviceConfig.ExecStart =
-                lib.mkForce "''${pkgs.openssh}/bin/ssh -o \"ServerAliveInterval 30\" -o \"ServerAliveCountMax 3\" -o ExitOnForwardFailure=yes -N -R2222:localhost:22 -E ${hostname} deployer";
+              services.autossh-ng.sessions.will-be-interrupted-by-rebuild.extraArguments = "-R2222:localhost:22 -E ${hostname}";
 
               # this will be asserted to validate the switch happened:
               networking.hostName = "${hostname}";
@@ -193,9 +189,8 @@
 
       target.succeed("nixos-generate-config")
       target.succeed("install -Dm 600 ${nodes.target.system.build.privateKey} ~root/.ssh/id_ecdsa")
-      target.succeed("install ${sshConfig} ~root/.ssh/config")
       deployer.succeed("scp alice@target:/etc/nixos/hardware-configuration.nix /root/hardware-configuration.nix")
-      target.wait_for_unit("autossh-ng.service")
+      target.wait_for_unit("autossh-ng-will-be-interrupted-by-rebuild.service")
 
       deployer.copy_from_host("${configFile "config-1-deployed"}", "/root/configuration-1.nix")
       deployer.copy_from_host("${configFile "config-2-deployed"}", "/root/configuration-2.nix")

@@ -45,10 +45,13 @@ buildBazelPackage rec {
   removeRulesCC = false;
 
   fetchAttrs = {
+    preInstall = ''
+      rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    '';
     hash =
       {
-        aarch64-linux = "sha256-vg2U7v68Tn6cxPakeWir8TpHL3oMxZ2AzJ68TMR1+/E=";
-        x86_64-linux = "sha256-jIffzBTO+5VMX73vV4XPlGv7/26oMLXpYdb0vzFgulc=";
+        aarch64-linux = "sha256-E70F3D7HGsyV0bPd0zbRTytx1UCHyEuNKObaG2eRy8A=";
+        x86_64-linux = "sha256-E9XAKrt16DOAne3/wY9PwWIM61YX0fWs8x1hqF3YJSU=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

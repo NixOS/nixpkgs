@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.7.12";
+  version = "0.7.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5BVQYlp/RMFN1Ja75gz9iFneqkSuoDpqXilHbyEAPdA=";
+    hash = "sha256-uoWevYxIjslOKzsbVaYc3KZjpG9703S/ucVaCK85R5M=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";

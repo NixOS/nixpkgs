@@ -136,7 +136,7 @@ stdenv.mkDerivation (
     deps = stdenv.mkDerivation (
       fFetchAttrs
       // {
-        name = "${name}-deps.tar.gz";
+        name = "${name}-deps.tar";
 
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ fFetchAttrs.impureEnvVars or [ ];
 
@@ -232,7 +232,7 @@ stdenv.mkDerivation (
 
               echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
 
-              (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
+              (cd $bazelOut/ && tar cf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/)
 
               runHook postInstall
             ''
@@ -261,7 +261,7 @@ stdenv.mkDerivation (
     preConfigure = ''
       mkdir -p "$bazelOut"
 
-      (cd $bazelOut && tar xfz $deps)
+      (cd $bazelOut && tar xf $deps)
 
       test "${bazel.name}" = "$(<$bazelOut/external/.nix-bazel-version)" || {
         echo "fixed output derivation was built for a different bazel version" >&2

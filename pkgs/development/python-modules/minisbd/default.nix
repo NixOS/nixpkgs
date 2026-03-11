@@ -11,14 +11,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "minisbd";
-  version = "0.9.3";
+  version = "0.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "MiniSBD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QAIuggOxoFeod4CaTDXDQj6UGwRpy4N1Pw0pTXHs7/A=";
+    hash = "sha256-qoST0w4XEbz67dHIe/qaTAm14SDY1Z9ldAHvNLqjzrU=";
   };
 
   build-system = [ hatchling ];
