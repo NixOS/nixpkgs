@@ -407,6 +407,10 @@ with haskellLib;
   # https://codeberg.org/noiioiu/comonad-coactions/issues/1
   comonad-coactions = dontCheck super.comonad-coactions;
 
+  # doctests don't evaluate properly
+  # https://github.com/morphismtech/distributors/issues/23
+  distributors = dontCheck super.distributors;
+
   # Needs QuickCheck >= 2.16
   # https://github.com/input-output-hk/io-sim/issues/248
   io-sim = dontCheck super.io-sim;
