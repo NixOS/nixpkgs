@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libusb1
-    libX11
+    libx11
     libXtst
     libXrandr
     xkeyboardconfig
