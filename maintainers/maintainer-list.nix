@@ -5697,6 +5697,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  cyrusknopf = {
+    email = "cyrus.knopf@gmail.com";
+    github = "cyrusknopf";
+    githubId = 26168196;
+    name = "Cyrus Knopf";
+  };
   cything = {
     name = "cy";
     email = "nix@cything.io";
