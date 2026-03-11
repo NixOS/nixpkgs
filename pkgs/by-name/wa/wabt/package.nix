@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wabt";
-  version = "1.0.39";
+  version = "1.0.40";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
     tag = finalAttrs.version;
-    hash = "sha256-Hwfk0wQ8Oz1XI/hIzVy0G+/FyWl+iiGYoFrgLbm27Tk=";
+    hash = "sha256-Lrdmx/JOiWJdzZeyP6HdZH1SEHJ0N5VfSCYxtMBCF74=";
     fetchSubmodules = true;
   };
 
