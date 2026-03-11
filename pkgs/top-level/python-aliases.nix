@@ -267,7 +267,8 @@ mapAliases {
   jupyterlab_server = throw "'jupyterlab_server' has been renamed to/replaced by 'jupyterlab-server'"; # Converted to throw 2025-10-29
   kafka-python = throw "'kafka-python' has been renamed to/replaced by 'kafka-python-ng'"; # Converted to throw 2025-10-29
   Kajiki = throw "'Kajiki' has been renamed to/replaced by 'kajiki'"; # Converted to throw 2025-10-29
-  keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-29
+  keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
+  keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   Keras = throw "'Keras' has been renamed to/replaced by 'keras'"; # Converted to throw 2025-10-29
   keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2025-05-25

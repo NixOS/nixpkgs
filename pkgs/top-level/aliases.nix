@@ -972,7 +972,8 @@ mapAliases {
   karing = throw "'karing' has been removed, as it is unmaintained in nixpkgs"; # Added 2026-01-31
   kbibtex = throw "'kbibtex' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   kcli = throw "kcli has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
-  keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-27
+  keepkey-agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
+  keepkey_agent = throw "keepkey-agent has been removed because upstream dropped KeepKey support"; # Added 2026-03-11
   keydb = throw "'keydb' has been removed as it was broken, vulnerable, and unmaintained upstream"; # Added 2025-11-08
   kgx = throw "'kgx' has been renamed to/replaced by 'gnome-console'"; # Converted to throw 2025-10-27
   khd = throw "'khd' has been removed as it has been pulled upstream"; # Added 2025-12-18

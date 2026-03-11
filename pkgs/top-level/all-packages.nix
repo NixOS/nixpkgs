@@ -2721,8 +2721,6 @@ with pkgs;
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
-  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
-
   keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
