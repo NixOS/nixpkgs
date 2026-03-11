@@ -8,7 +8,7 @@
   libx11,
   libxtst,
   libxrandr,
-  xkeyboardconfig,
+  xkeyboard-config,
   libGL,
   qt5,
 }:
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libx11
     libxtst
     libxrandr
-    xkeyboardconfig
+    xkeyboard-config
     libGL
     qt5.qtbase
     qt5.qtsvg
