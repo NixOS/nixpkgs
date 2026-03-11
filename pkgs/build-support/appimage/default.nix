@@ -8,16 +8,18 @@
   pv,
   squashfsTools,
   buildFHSEnv,
-  pkgs,
+  replaceVarsWith,
+  runtimeShell,
+  runCommand,
 }:
 
 rec {
-  appimage-exec = pkgs.replaceVarsWith {
+  appimage-exec = replaceVarsWith {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
     replacements = {
-      inherit (pkgs) runtimeShell;
+      inherit runtimeShell;
       path = lib.makeBinPath [
         bash
         binutils-unwrapped
@@ -42,7 +44,7 @@ rec {
     assert lib.assertMsg (
       name == null
     ) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
-    pkgs.runCommand "${pname}-${version}-extracted"
+    runCommand "${pname}-${version}-extracted"
       {
         nativeBuildInputs = [ appimage-exec ];
         strictDeps = true;
@@ -57,60 +59,55 @@ rec {
   extractType2 = extract;
   wrapType1 = wrapType2;
 
-  wrapAppImage =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      meta ? { },
-      ...
-    }:
-    buildFHSEnv (
+  wrapAppImage = lib.extendMkDerivation {
+    constructDrv = buildFHSEnv;
+    excludeDrvArgNames = [ "extraPkgs" ];
+    extendDrvArgs =
+      finalAttrs:
+      prev@{
+        contents ? prev.src,
+        extraPkgs ? pkgs: [ ],
+        meta ? { },
+        ...
+      }:
       defaultFhsEnvArgs
       // {
         targetPkgs = pkgs: [ appimage-exec ] ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-        runScript = "appimage-exec.sh -w ${src} --";
+        runScript = "appimage-exec.sh -w ${contents} --";
 
         meta = {
           sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
         }
         // meta;
-      }
-      // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage)))
-    );
+      };
+  };
 
-  wrapType2 =
-    args@{
-      src,
-      extraPkgs ? pkgs: [ ],
-      ...
-    }:
-    wrapAppImage (
-      args
-      // {
-        inherit extraPkgs;
-        src = extract (
-          lib.filterAttrs (
-            key: value:
-            builtins.elem key [
-              "pname"
-              "version"
-              "src"
-            ]
-          ) args
-        );
-
-        # passthru src to make nix-update work
-        # hack to keep the origin position (unsafeGetAttrPos)
-        passthru =
-          lib.pipe args [
-            lib.attrNames
-            (lib.remove "src")
-            (removeAttrs args)
+  wrapType2 = lib.extendMkDerivation {
+    constructDrv = wrapAppImage;
+    extendDrvArgs = finalAttrs: args: {
+      contents = extract (
+        lib.filterAttrs (
+          key: value:
+          builtins.elem key [
+            "pname"
+            "version"
+            "src"
           ]
-          // args.passthru or { };
-      }
-    );
+        ) finalAttrs
+      );
+
+      # passthru src to make nix-update work
+      # hack to keep the origin position (unsafeGetAttrPos)
+      passthru =
+        lib.pipe finalAttrs [
+          lib.attrNames
+          (lib.remove "src")
+          (removeAttrs finalAttrs)
+        ]
+        // args.passthru or { };
+    };
+  };
 
   defaultFhsEnvArgs = {
     # Most of the packages were taken from the Steam chroot
