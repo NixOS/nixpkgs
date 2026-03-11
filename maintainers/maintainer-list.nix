@@ -9493,7 +9493,7 @@
     githubId = 1362807;
     name = "Gautier Di Folco";
   };
-   gdinh = {
+  gdinh = {
     email = "nix@contact.dinh.ai";
     github = "gdinh";
     githubId = 34658064;
@@ -9505,7 +9505,7 @@
     githubId = 665024;
     name = "Greg Warner";
   };
-   genga898 = {
+  genga898 = {
     email = "genga898@gmail.com";
     github = "genga898";
     githubId = 84174227;
