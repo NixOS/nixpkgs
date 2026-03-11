@@ -12,7 +12,8 @@ usage() {
     echo "Usage: $scriptName <attr> <version> [<new-source-hash>] [<new-source-url>]"
     echo "                              [--version-key=<version-key>] [--source-key=<source-key>]"
     echo "                              [--system=<system>] [--file=<file-to-update>] [--rev=<revision>]"
-    echo "                              [--ignore-same-hash] [--ignore-same-version] [--print-changes]"
+    echo "                              [--source-date-epoch=<source-date-epoch>] [--ignore-same-hash]"
+    echo "                              [--ignore-same-version] [--print-changes]"
     echo ""
     echo "The <version> positional argument is also optional when passing --ignore-same-version."
 }
@@ -40,6 +41,9 @@ for arg in "$@"; do
         ;;
         --rev=*)
             newRevision="${arg#*=}"
+        ;;
+        --source-date-epoch=*)
+            newSourceDateEpoch="${arg#*=}"
         ;;
         --ignore-same-hash)
             ignoreSameHash="true"
@@ -170,6 +174,13 @@ if [[ -n "$newRevision" ]]; then
     fi
 fi
 
+if [[ -n "$newSourceDateEpoch" ]]; then
+    oldSourceDateEpoch=$(nix-instantiate $systemArg --eval -E "with $importTree; $attr.SOURCE_DATE_EPOCH" | tr -d '"')
+    if [[ -z "$oldSourceDateEpoch" ]]; then
+        die "Couldn't evaluate source SOURCE_DATE_EPOCH from '$attr'!"
+    fi
+fi
+
 # Escape regex metacharacter that are allowed in store path names
 oldVersionEscaped=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
 
@@ -249,6 +260,14 @@ if [[ -n "$newRevision" ]]; then
     sed -i.cmp "$nixFile" -re "s|\"$oldRevision\"|\"$newRevision\"|"
     if cmp -s "$nixFile" "$nixFile.cmp"; then
         die "Failed to replace source revision '$oldRevision' to '$newRevision' in '$attr'!"
+    fi
+fi
+
+# Replace new SOURCE_DATE_EPOCH, if given
+if [[ -n "$newSourceDateEpoch" ]]; then
+    sed -i.cmp "$nixFile" -re "s|$oldSourceDateEpoch|$newSourceDateEpoch|"
+    if cmp -s "$nixFile" "$nixFile.cmp"; then
+        die "Failed to replace source SOURCE_DATE_EPOCH '$oldSourceDateEpoch' to '$newSourceDateEpoch' in '$attr'!"
     fi
 fi
 
