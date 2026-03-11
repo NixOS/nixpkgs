@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
     # Correct desktop file `Exec`
     substituteInPlace $out/share/applications/cabal-desktop.desktop \
-      --replace-fail "/opt/Cabal/cabal-desktop" "$out/bin/cabal-desktop"
+      --replace-fail "/opt/Cabal/cabal-desktop" "cabal-desktop"
   '';
 
   meta = {
