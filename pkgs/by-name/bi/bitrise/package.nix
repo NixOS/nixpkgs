@@ -15,8 +15,22 @@ buildGoModule (finalAttrs: {
     hash = "sha256-yduH5UkBwcp41pCeFyoOYtaTwvINrbMaQQlvmeRAXCY=";
   };
 
-  # many tests rely on writable $HOME/.bitrise and require network access
-  doCheck = false;
+  preCheck = ''
+    export HOME=$TMPDIR
+    rm cli/run_test.go # these are all integration tests, depending on network access
+  '';
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestParseAndValidatePluginFromYML" # looking for `bitrise` in $PATH
+        "TestDownloadPluginBin" # network access
+        "TestClonePluginSrc" # network access
+        "TestStepmanJSONStepLibStepInfo" # network access
+        "TestMoveFileDifferentDevices" # macOS: requires /usr/bin/hdiutil
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   # resolves error: main module (github.com/bitrise-io/bitrise/v2) does not contain package github.com/bitrise-io/bitrise/v2/integrationtests/config
   excludedPackages = [
