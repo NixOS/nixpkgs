@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  hatchling,
+  fetchFromGitHub,
+  uv-build,
   scim2-filter-parser,
   scim2-models,
   werkzeug,
@@ -13,17 +13,23 @@
 
 buildPythonPackage rec {
   pname = "scim2-server";
-  version = "0.1.7";
+  version = "0.1.8";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "scim2_server";
-    hash = "sha256-nMS6vjMZ/Lyu0kiVH+IlmxZsuu7McY7AZS/xamfZSlk=";
+  src = fetchFromGitHub {
+    owner = "python-scim";
+    repo = "scim2-server";
+    tag = version;
+    hash = "sha256-7st/8KI8xWDkeUiID6TUKFdc2U8uFWe+xDUFbe9w22M=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.8.9,<0.9.0' 'uv_build'
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     scim2-filter-parser
