@@ -11,7 +11,6 @@
   defusedxml,
   gql,
   graphql-core,
-  marshmallow,
   pydantic,
   pydantic-extra-types,
   python-box,
@@ -22,6 +21,9 @@
   semver,
   typing-extensions,
 
+  # marshmallow build system
+  flit-core,
+
   # tests
   pytest-cov-stub,
   pytest-datafiles,
@@ -30,7 +32,26 @@
   requests-pkcs12,
   responses,
 }:
+let
+  marshmallow' = buildPythonPackage {
+    pname = "marshmallow";
+    version = "3.26.2";
+    pyproject = true;
 
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+
+    build-system = [ flit-core ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "marshmallow" ];
+  };
+in
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
   version = "1.9.0";
@@ -55,7 +76,7 @@ buildPythonPackage (finalAttrs: {
     defusedxml
     gql
     graphql-core
-    marshmallow
+    marshmallow'
     pydantic
     pydantic-extra-types
     python-box
@@ -109,4 +130,3 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ fab ];
   };
 })
-
