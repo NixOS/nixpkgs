@@ -14303,6 +14303,12 @@
     githubId = 913109;
     name = "Emil Fresk";
   };
+  korkutkardes7 = {
+    email = "korkutkardes7@hotmail.com";
+    github = "KorkutKardes7";
+    githubId = 148012191;
+    name = "Korkut Kardeşseven";
+  };
   kornholi = {
     email = "kornholijo@gmail.com";
     github = "kornholi";
