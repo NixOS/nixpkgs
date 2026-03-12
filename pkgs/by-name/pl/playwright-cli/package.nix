@@ -2,27 +2,31 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  makeWrapper,
+  playwright-driver,
 }:
 
 buildNpmPackage rec {
   pname = "playwright-cli";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-cli";
     rev = "v${version}";
-    hash = "sha256-9LuLQ2klYz91rEkxNDwcx0lYgE6GPoTJkwgxI/4EHgg=";
+    hash = "sha256-Ao3phIPinliFDK04u/V3ouuOfwMDVf/qBUpQPESziFQ=";
   };
 
-  npmDepsHash = "sha256-DvorQ40CCNQJNQdTPFyMBErFNicSWkNT/e6S8cfZlRA=";
+  npmDepsHash = "sha256-4x3ozVrST6LtLoHl9KtmaOKrkYwCK84fwEREaoNaESc=";
 
   dontNpmBuild = true;
 
-  passthru = {
-    # Newer upstream tags intentionally print a deprecation message and exit.
-    skipBulkUpdate = true;
-  };
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/playwright-cli \
+      --set-default PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}
+  '';
 
   meta = with lib; {
     description = "Playwright CLI for browser automation";
