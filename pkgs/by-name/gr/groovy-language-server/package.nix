@@ -55,12 +55,12 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/GroovyLanguageServer/groovy-language-server";
     description = "Groovy Language Server";
     longDescription = "Groovy Language Server";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.guilvareux ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib; [ maintainers.guilvareux ];
   };
 })
