@@ -87,19 +87,19 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "aarch64-linux" = fetchArtifact {
         suffix = "linux-aarch64.deb";
-        hash = "sha256-Wn+eE8nkHXRBZYVw+sm+Nxf75nK/JJ8bnVK7YZ0O47A=";
+        hash = "sha256-Wn+eE8nkHXRBZYVw+sm+Nxf75nK/JJ8bnVK7YZ0O47A="; 
       };
       "x86_64-linux" = fetchArtifact {
         suffix = "linux-x86_64.deb";
-        hash = "sha256-jzi1HPJErDhZwt1Eu1lzG29QaAw3vL+PVRNDVBxn7ZQ=";
+        hash = "sha256-jzi1HPJErDhZwt1Eu1lzG29QaAw3vL+PVRNDVBxn7ZQ="; 
       };
       "x86_64-darwin" = fetchArtifact {
         suffix = "macos-universal.dmg";
-        hash = "sha256-kUQdLWawtIVhzeO5NfUa435JOf7/SCVBhSKfQh3J96I=";
+        hash = "sha256-kUQdLWawtIVhzeO5NfUa435JOf7/SCVBhSKfQh3J96I="; 
       };
       "aarch64-darwin" = fetchArtifact {
         suffix = "macos-universal.dmg";
-        hash = "sha256-kUQdLWawtIVhzeO5NfUa435JOf7/SCVBhSKfQh3J96I=";
+        hash = "sha256-kUQdLWawtIVhzeO5NfUa435JOf7/SCVBhSKfQh3J96I="; 
       };
     };
 
