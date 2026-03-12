@@ -4,9 +4,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qtbase,
-  qtgraphicaleffects,
-  wrapQtAppsHook,
+  libsForQt5,
   udevCheckHook,
   versionCheckHook,
 }:
@@ -24,14 +22,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    qtbase
-    qtgraphicaleffects
+    libsForQt5.qtbase
+    libsForQt5.qtgraphicaleffects
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
     udevCheckHook
   ];
 

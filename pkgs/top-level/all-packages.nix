@@ -8563,8 +8563,6 @@ with pkgs;
   libkrun-sev = libkrun.override { variant = "sev"; };
   libkrun-tdx = libkrun.override { variant = "tdx"; };
 
-  projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
-
   lklWithFirewall = lkl.override { firewallSupport = true; };
 
   inherit (callPackages ../os-specific/linux/kernel-headers { inherit (pkgsBuildBuild) elf-header; })
