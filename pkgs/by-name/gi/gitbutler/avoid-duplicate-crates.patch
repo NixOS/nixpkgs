@@ -1,0 +1,68 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -3229,13 +3229,6 @@
+  "windows-sys 0.60.2",
+ ]
+ 
+-[[package]]
+-name = "file-id"
+-version = "0.2.3"
+-source = "git+https://github.com/notify-rs/notify?rev=978fe719b066a8ce76b9a9d346546b1569eecfb6#978fe719b066a8ce76b9a9d346546b1569eecfb6"
+-dependencies = [
+- "windows-sys 0.60.2",
+-]
+ 
+ [[package]]
+ name = "filedescriptor"
+@@ -3953,7 +3946,7 @@
+ version = "0.0.0"
+ dependencies = [
+  "anyhow",
+- "file-id 0.2.3 (git+https://github.com/notify-rs/notify?rev=978fe719b066a8ce76b9a9d346546b1569eecfb6)",
++ "file-id 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+  "futures",
+  "gix",
+  "nix 0.30.1",
+@@ -4831,7 +4824,7 @@
+ checksum = "7cb06c3e4f8eed6e24fd915fa93145e28a511f4ea0e768bae16673e05ed3f366"
+ dependencies = [
+  "bstr",
+- "gix-trace 0.1.18 (registry+https://github.com/rust-lang/crates.io-index)",
++ "gix-trace 0.1.18 (git+https://github.com/GitoxideLabs/gitoxide?branch=main)",
+  "gix-validate 0.10.1",
+  "thiserror 2.0.18",
+ ]
+@@ -5078,11 +5071,6 @@
+  "winnow 0.7.14",
+ ]
+ 
+-[[package]]
+-name = "gix-trace"
+-version = "0.1.18"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f69a13643b8437d4ca6845e08143e847a36ca82903eed13303475d0ae8b162e0"
+ 
+ [[package]]
+ name = "gix-trace"
+ 
+--- a/crates/gitbutler-git/Cargo.toml
++++ b/crates/gitbutler-git/Cargo.toml
+@@ -59,7 +59,7 @@
+ ] }
+ tokio = { workspace = true, optional = true, features = ["sync", "rt"] }
+ # TODO: use released version once published.
+-file-id = { git = "https://github.com/notify-rs/notify", rev = "978fe719b066a8ce76b9a9d346546b1569eecfb6", version = "0.2.3" }
++file-id = "0.2.3"
+ 
+ [dev-dependencies]
+ snapbox.workspace = true
+ 
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -340,3 +340,6 @@
+ [profile.release.package.but-installer]
+ opt-level = "z" # Optimize for size instead of speed
+ strip = true    # Strip symbols from binary
++
++[patch.crates-io]
++gix-trace = { git = "https://github.com/GitoxideLabs/gitoxide", branch = "main" }
