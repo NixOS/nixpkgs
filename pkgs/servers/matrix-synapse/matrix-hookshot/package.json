@@ -69,7 +69,7 @@
     "p-queue": "^6.6.2",
     "preact-render-to-string": "^6.3.1",
     "prom-client": "^15.1.0",
-    "quickjs-emscripten": "^0.26.0",
+    "quickjs-emscripten": "^0.31.0",
     "reflect-metadata": "^0.2.1",
     "source-map-support": "^0.5.21",
     "string-argv": "^0.3.1",
