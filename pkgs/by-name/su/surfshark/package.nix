@@ -37,16 +37,6 @@
   libxtst,
 }:
 let
-  xorgDeps = [
-    libx11
-    libxcb
-    libxcomposite
-    libxdamage
-    libxext
-    libxfixes
-    libxrandr
-    libxtst
-  ];
 
   deps = [
     glib
@@ -65,8 +55,15 @@ let
     libnotify
     mesa
     vulkan-loader
-  ]
-  ++ xorgDeps;
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxtst
+  ];
 
   libPath = lib.makeLibraryPath (deps ++ [ (lib.getLib systemd) ]);
   binPath = lib.makeBinPath [
@@ -88,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    gjs
     makeBinaryWrapper
   ];
 
@@ -97,7 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontConfigure = true;
   dontBuild = true;
-  dontStrip = true;
 
   installPhase = ''
     runHook preInstall
@@ -120,17 +117,15 @@ stdenv.mkDerivation (finalAttrs: {
     substitute usr/lib/systemd/user/surfsharkd.service $out/lib/systemd/user/surfsharkd.service \
       --replace-fail "/opt/Surfshark" "$out/share/surfshark"
 
-    # Patch GJS shebang and make daemon scripts executable
-    for js in surfsharkd.js surfsharkd2.js; do
-      daemon="$out/share/surfshark/resources/dist/resources/$js"
-      substituteInPlace "$daemon" \
-        --replace-fail "#!/usr/bin/gjs" "#!${gjs}/bin/gjs"
-      chmod +x "$daemon"
-    done
+    # Make daemon scripts executable
+    chmod +x $out/share/surfshark/resources/dist/resources/surfsharkd*.js
+
+    # Patch shebangs
+    patchShebangs $out/share/surfshark/resources/dist/resources
 
     # Fix .desktop Exec path
-    sed -i "s|Exec=/opt/Surfshark/surfshark|Exec=$out/bin/surfshark|" \
-      $out/share/applications/surfshark.desktop
+    substituteInPlace $out/share/applications/surfshark.desktop \
+      --replace-fail "Exec=/opt/Surfshark/surfshark" "Exec=$out/bin/surfshark"
 
     # Vulkan loader symlink (so bundled ANGLE finds libvulkan)
     ln -sf ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 \
