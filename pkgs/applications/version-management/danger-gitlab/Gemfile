@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'danger-gitlab'
+gem 'danger-gitlab', '>= 9.0.0'
