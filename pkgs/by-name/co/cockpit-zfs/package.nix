@@ -13,6 +13,7 @@
   makeWrapper,
   mbuffer,
   msmtp,
+  nix-update-script,
   nodejs,
   openssh,
   samba,
@@ -52,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry
     yarn-berry.yarnBerryConfigHook
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.cockpitPath = [
     acl
