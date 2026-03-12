@@ -153,6 +153,9 @@ in
     + optionalString (def.macvlan != [ ]) ''
       ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
     ''
+    + optionalString (def.ipvlan != [ ]) ''
+      ${concatStringsSep "\n" (map (s: "IPVLAN=${s}") def.ipvlan)}
+    ''
     + optionalString (def.macvtap != [ ]) ''
       ${concatStringsSep "\n" (map (s: "MACVTAP=${s}") def.macvtap)}
     ''

@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -10,7 +9,6 @@
 
   # buildInputs
   ffmpeg,
-  cudaPackages,
 
   # build-system
   cmake,
@@ -21,7 +19,8 @@
   pytestCheckHook,
   torchvision,
 
-  cudaSupport ? config.cudaSupport,
+  cudaSupport ? torch.cudaSupport,
+  cudaPackages,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -167,6 +166,9 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/meta-pytorch/torchcodec";
     changelog = "https://github.com/meta-pytorch/torchcodec/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      caniko
+    ];
   };
 })

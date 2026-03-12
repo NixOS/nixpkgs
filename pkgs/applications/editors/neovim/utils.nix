@@ -79,24 +79,29 @@ let
     plugins:
 
     let
+      neovimConfig =
+        structuredConfigure:
+        let
+          module = import ./module.nix;
+          # Generate init.vim configuration
+          cfg = (
+            lib.evalModules {
+              modules = [
+                module
+                structuredConfigure
+              ];
+            }
+          );
+        in
+        cfg.config;
+
+      checked_cfg = neovimConfig {
+        inherit plugins;
+      };
+
       pluginsNormalized = normalizePlugins plugins;
 
       vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
-
-      userPluginViml = lib.foldl (
-        acc: p: if p.config != null then acc ++ [ p.config ] else acc
-      ) [ ] pluginsNormalized;
-
-      pluginAdvisedLua =
-        let
-          op =
-            acc: normalizedPlugin:
-            acc
-            ++ lib.optional (
-              normalizedPlugin.plugin.passthru ? initLua
-            ) normalizedPlugin.plugin.passthru.initLua;
-        in
-        lib.foldl' op [ ] pluginsNormalized;
 
       getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
 
@@ -108,22 +113,17 @@ let
       inherit pluginPython3Packages;
 
       # viml config set by the user along with the plugin
-      inherit userPluginViml;
-
-      # recommended configuration set in vim plugins ".passthru.initLua"
-      inherit pluginAdvisedLua;
+      inherit (checked_cfg)
+        userPluginViml
+        runtimeDeps
+        pluginAdvisedLua
+        ;
 
       # A Vim "package", see ':h packages'
       # You most likely want to use vimPackage as follows:
       #     packpathDirs.myNeovimPackages = vimPackage;
       #     finalPackdir = neovimUtils.packDir packpathDirs;
       inherit vimPackage;
-
-      runtimeDeps =
-        let
-          op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [ ];
-        in
-        lib.foldl' op [ ] pluginsNormalized;
 
     };
 

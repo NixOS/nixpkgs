@@ -235,6 +235,9 @@ stdenv.mkDerivation (finalAttrs: {
       return()'
 
     patchShebangs test src/composable_kernel fin utils install_deps.cmake
+
+    substituteInPlace src/comgr.cpp \
+      --replace-fail '"/opt/rocm"' '"${clr}"'
   ''
   + linkKDBsTo "src/kernels"
   + ''
@@ -274,6 +277,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.impureTests = {
+    # bash $(nix-build -A rocmPackages.miopen.passthru.impureTests.conv)
+    conv = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "conv";
+      testScript = "MIOpenDriver conv -n 1 -c 1 -H 4 -W 4 -k 1 -y 3 -x 3 -p 0 -q 0 -V 0";
+    };
+    pool = callPackage ./test-runtime-compilation.nix {
+      miopen = finalAttrs.finalPackage;
+      name = "pool";
+      testScript = "MIOpenDriver pool -W 1x1x4x4 -y 2 -x 2 -p 0 -q 0 -F 1 -V 0";
+    };
+  };
   passthru.tests = {
     # Ensure all .tn.model files can be loaded by whatever version of frugally-deep we have
     # This is otherwise hard to verify as MIOpen will only use these models on specific,

@@ -31,6 +31,7 @@ let
     homepage = "https://etcd.io/";
     maintainers = with lib.maintainers; [
       dtomvan
+      superherointj
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
