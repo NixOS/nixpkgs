@@ -17,14 +17,14 @@
   libxcursor,
   libx11,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
   version = "0.2.13";
 
   src = fetchFromGitHub {
     owner = "meehl";
     repo = "rusty-path-of-building";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4lxMQfENucDaDZov82iZD5DMgksLuJ/2nXUKYYf/m/w=";
   };
 
@@ -46,8 +46,8 @@ rustPlatform.buildRustPackage rec {
     # this is weird and vendored and should probably stay that way
     (luajit.pkgs.buildLuaPackage {
       pname = "lzip";
-      inherit version;
-      src = "${src}/lua/libs/lzip";
+      inherit (finalAttrs) version;
+      src = "${finalAttrs.src}/lua/libs/lzip";
 
       nativeBuildInputs = [ pkg-config ];
       buildInputs = [ zlib ];
@@ -119,9 +119,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "A cross-platform runtime for Path of Building and Path of Building 2.";
     homepage = "https://github.com/meehl/rusty-path-of-building";
-    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/meehl/rusty-path-of-building/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ k900 ];
     mainProgram = "rusty-path-of-building";
   };
-}
+})
