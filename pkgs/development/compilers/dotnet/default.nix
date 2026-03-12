@@ -120,13 +120,6 @@ let
             ]).unwrapped.overrideAttrs
               (old: {
                 name = fallback.unwrapped.name;
-                # resolve symlinks so DOTNET_ROOT is self-contained
-                postBuild = ''
-                  mv "$out"/share/dotnet{,~}
-                  cp -Lr "$out"/share/dotnet{~,}
-                  rm -r "$out"/share/dotnet~
-                ''
-                + old.postBuild;
                 passthru = old.passthru // {
                   inherit (base)
                     runtime

@@ -36,6 +36,13 @@ mkWrapper "sdk" (
     ignoreCollisions = true;
     nativeBuildInputs = [ makeWrapper ];
     postBuild = ''
+      # resolve symlinks so DOTNET_ROOT is self-contained
+      # .NET SDK 10+ resolves symlinks when finding the muxer, bypassing
+      # the combined directory and finding only a single runtime version
+      mv "$out"/share/dotnet{,~}
+      cp -Lr "$out"/share/dotnet{~,}
+      rm -r "$out"/share/dotnet~
+
       mkdir -p "$out"/share/dotnet
       cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
