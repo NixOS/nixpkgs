@@ -401,6 +401,7 @@ EOF
     description = ".NET SDK 10 Android workload packs for NixOS";
     homepage = "https://github.com/dotnet/android";
     license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lostmsu ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
