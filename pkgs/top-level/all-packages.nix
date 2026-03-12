@@ -5386,6 +5386,10 @@ with pkgs;
     callPackage ../development/tools/language-servers/ansible-language-server
       { };
 
+  ufbt = callPackage ../by-name/uf/ufbt/package.nix {
+    inherit (python3Packages) buildPythonPackage setuptools setuptools-git-versioning;
+  };
+
   ansible-builder = with python3Packages; toPythonApplication ansible-builder;
 
   yakut = python3Packages.callPackage ../development/tools/misc/yakut { };
