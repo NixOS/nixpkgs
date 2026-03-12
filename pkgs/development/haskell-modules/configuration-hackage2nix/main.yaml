@@ -483,30 +483,31 @@ package-maintainers:
     - gopher-proxy
     # other packages I can help out for
     - cabal-install
-    - hledger
-    - pandoc
-    - systemd
+    - chatter
+    - citeproc
+    - diagrams
+    - envy
+    - Euterpea2
     - fast-logger
     - flat
-    - Euterpea2
-    - utc
-    - socket
     - gitit
-    - yarn-lock
-    - yarn2nix
-    - large-hashable
     - haskell-ci
-    - diagrams
-    - rel8
-    - regex-rure
-    - jacinda
-    - citeproc
-    - mighttpd2
-    # owothia
+    - hledger
     - irc-client
-    - chatter
-    - envy
+    - jacinda
     - krank
+    - large-hashable
+    - libriscv
+    - mighttpd2
+    - nix-serve-ng
+    - pandoc
+    - regex-rure
+    - rel8
+    - socket
+    - systemd
+    - utc
+    - yarn2nix
+    - yarn-lock
   t4ccer:
     - aeson-better-errors
     - cheapskate
