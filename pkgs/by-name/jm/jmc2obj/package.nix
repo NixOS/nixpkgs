@@ -4,6 +4,7 @@
   jre,
   makeWrapper,
   maven,
+  nix-update-script,
 }:
 
 maven.buildMavenPackage rec {
@@ -32,6 +33,8 @@ maven.buildMavenPackage rec {
       --add-flags "-jar $out/share/jMc2Obj/jMc2Obj-${version}.jar"
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/jmc2obj/j-mc-2-obj/releases/tag/${version}";
