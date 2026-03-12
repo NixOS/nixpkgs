@@ -3,9 +3,11 @@
   stdenv,
   fetchurl,
   fetchpatch,
-  lvm2,
+  lvm2_dmeventd,
 }:
-
+let
+  lvm2 = lvm2_dmeventd;
+in
 stdenv.mkDerivation rec {
   pname = "dmraid";
   version = "1.0.0.rc16";
