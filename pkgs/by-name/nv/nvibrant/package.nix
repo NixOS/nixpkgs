@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Tremeschin";
     repo = "nvibrant";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RZIi1V3hcwZdaI84Nd0YSQOjDng9/ZDg7aqfTL7GJIU=";
     fetchSubmodules = true;
   };
@@ -27,11 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonBuildType = "release";
 
-  meta = with lib; {
+  meta = {
     description = "Configure NVIDIA's Digital Vibrance on Wayland";
     homepage = "https://github.com/Tremeschin/nvibrant";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.mikaeladev ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ mikaeladev ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "nvibrant";
   };
