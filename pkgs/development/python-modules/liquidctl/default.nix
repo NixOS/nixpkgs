@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "liquidctl";
     repo = "liquidctl";
     tag = "v${version}";
-    hash = "sha256-ifYPUAF0lR9aCwiseNQZXbq+d+CXD/MwnZQhAM1TRLI=";
+    hash = "sha256-NN/LPcRwj1c9xIIBmNCSLkb+8LHPIqH/YuLPm3kxqEQ=";
   };
 
   nativeBuildInputs = [

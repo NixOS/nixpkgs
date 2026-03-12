@@ -330,7 +330,6 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [
-      justanotherariel
       mynacol
     ];
   };

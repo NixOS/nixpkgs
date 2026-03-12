@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  cacert,
   python3,
 }:
 
@@ -78,7 +79,11 @@ lib.extendMkDerivation {
         outputHashAlgo = if finalHashHasColon then lib.head finalHashColonMatch else null;
         outputHashMode = "flat";
 
-        nativeBuildInputs = [ python3 ] ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          cacert
+          python3
+        ]
+        ++ nativeBuildInputs;
 
         inherit preferLocalBuild;
 

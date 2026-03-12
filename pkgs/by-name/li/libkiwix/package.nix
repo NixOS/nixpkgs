@@ -53,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # Required for server tests on Darwin
+  __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     patchShebangs scripts
@@ -65,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/libkiwix/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ colinsane ];
   };
 })

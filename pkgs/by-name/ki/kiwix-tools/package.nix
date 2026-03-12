@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://kiwix.org";
     changelog = "https://github.com/kiwix/kiwix-tools/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = with lib.maintainers; [ colinsane ];
   };
 })
