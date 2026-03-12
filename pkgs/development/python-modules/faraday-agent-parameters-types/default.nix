@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   marshmallow,
   packaging,
   pytestCheckHook,
@@ -14,10 +14,11 @@ buildPythonPackage rec {
   version = "1.9.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "faraday_agent_parameters_types";
-    inherit version;
-    hash = "sha256-PWO4wufHGIgAi1BHoM/+6ZjsUDB4oY26NsHOdNYYTJc=";
+  src = fetchFromGitHub {
+    owner = "infobyte";
+    repo = "faraday_agent_parameters_types";
+    tag = version;
+    hash = "sha256-Oe/9/zKOoCLK3JHMacOhk2+d91MrhzkBTW3POoFm71M=";
   };
 
   pythonRelaxDeps = [ "validators" ];
