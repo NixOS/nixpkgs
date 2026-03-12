@@ -41,10 +41,10 @@ python3Packages.buildPythonPackage {
     aiohttp
     jinja2
     pyyaml
-    prometheus-client
+    prometheus-client # optional, for prometheus metrics
     supervisor
     typing-extensions
-    watchdog
+    watchdog # optional, watching changes in files (TLS certs, RPZs)
   ];
 
   # set up (additional) Lua dependencies
