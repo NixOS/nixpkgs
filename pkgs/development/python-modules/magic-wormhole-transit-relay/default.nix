@@ -10,13 +10,13 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-transit-relay";
   version = "0.4.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-kS2DXaIbESZsdxEdybXlgAJj/AuY8KF5liJn30GBnow=";
   };
 
@@ -61,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
-    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${version}/NEWS.md";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/refs/tags/${finalAttrs.version}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})
