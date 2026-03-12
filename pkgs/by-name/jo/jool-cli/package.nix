@@ -9,15 +9,16 @@
   iptables,
 }:
 
-let
-  sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jool-cli";
-  version = sourceAttrs.version;
+  version = "4.1.14";
 
-  src = sourceAttrs.src;
+  src = fetchFromGitHub {
+    owner = "NICMx";
+    repo = "Jool";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fAs289FFdUnddkikm4ceA9d/w1qqqaWuPXmAiq3cIA8=";
+  };
 
   patches = [ ./validate-config.patch ];
 
@@ -55,4 +56,4 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ fpletz ];
   };
-}
+})

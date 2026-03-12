@@ -8560,8 +8560,6 @@ with pkgs;
 
   iptables-nftables-compat = iptables;
 
-  jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
-
   libkrun-sev = libkrun.override { variant = "sev"; };
   libkrun-tdx = libkrun.override { variant = "tdx"; };
 
