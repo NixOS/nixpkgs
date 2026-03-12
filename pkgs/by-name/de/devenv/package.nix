@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
-    boehmgc
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c
