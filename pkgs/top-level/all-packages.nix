@@ -8526,10 +8526,6 @@ with pkgs;
     // config.conky or { }
   );
 
-  cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
-    inherit (pkgs) meson;
-  };
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
