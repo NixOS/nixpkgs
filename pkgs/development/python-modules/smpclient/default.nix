@@ -48,8 +48,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  patches = [ ./bleak-compat.patch ];
-
   pythonImportsCheck = [ "smpclient" ];
 
   meta = {
