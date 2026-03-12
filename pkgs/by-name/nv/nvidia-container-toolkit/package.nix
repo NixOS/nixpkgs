@@ -13,13 +13,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "nvidia-container-toolkit";
-  version = "1.18.2";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-container-toolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OMM7IQ65jPr9I5YUwVR3SXbuARnLjS2GSVq2j4J8uFY=";
+    hash = "sha256-IvjQAYLslNF+tDXnFaoGLISYDq9ieT/W4MVlEWnC8XQ=";
 
   };
 
@@ -30,14 +30,8 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  patches = [
-    # This patch causes library lookups to first attempt loading via dlopen
-    # before falling back to the regular symlink location and ldcache location.
-    ./0001-Add-dlopen-discoverer.patch
-  ];
-
   postPatch = ''
-    substituteInPlace internal/config/config.go \
+    substituteInPlace api/config/v1/config.go \
       --replace-fail '/usr/bin/nvidia-container-runtime-hook' "$tools/bin/nvidia-container-runtime-hook" \
       --replace-fail '/sbin/ldconfig' '${lib.getBin glibc}/sbin/ldconfig'
 
