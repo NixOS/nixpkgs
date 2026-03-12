@@ -11,23 +11,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.12";
+  version = "4.16";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
     tag = finalAttrs.version;
-    hash = "sha256-AiNtGepaNZ/1cGWp3SFQ7l4+mjpag9MNZb2IXKar9Qo=";
+    hash = "sha256-BRdI/50YxwdCdBj91w6OPgTcOb7JkshkVSD8b8bHcYA=";
   };
 
-  vendorHash = "sha256-P2wbXslmHF2dwNoXemuOscKUHrPrypRR+Ehv89tlVUM=";
+  vendorHash = "sha256-XbfKYftKfbJDkbp9DwVAs56w5lMvqdlW5cwhhivniBM=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
   subPackages = [ "weed" ];
 
   ldflags = [
-    "-w"
     "-s"
     "-X github.com/seaweedfs/seaweedfs/weed/util.COMMIT=N/A"
   ];
@@ -48,7 +47,7 @@ buildGoModule (finalAttrs: {
     # Test all targets.
     unset subPackages
     # Remove unmaintained tests and those that require additional services.
-    rm -rf unmaintained test/s3 test/fuse_integration test/kafka test/sftp
+    rm -rf unmaintained test/s3 test/fuse_integration test/kafka test/sftp test/tus test/volume_server
     # TestECEncodingVolumeLocationTimingBug, TestECEncodingMasterTimingRaceCondition: weed binary not found
     export PATH=$PATH:$NIX_BUILD_TOP/go/bin
   ''

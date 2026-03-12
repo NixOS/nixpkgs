@@ -34,8 +34,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # requires internet access
     "--skip=detects_target_dependencies"
     "--skip=query::tests_lints::feature_missing"
-    # platform specific tests
-    "--skip=target_feature"
   ];
 
   preCheck = ''

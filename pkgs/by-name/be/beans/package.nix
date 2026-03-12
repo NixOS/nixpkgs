@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "beans";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "hmans";
     repo = "beans";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3SgTqR5DGAb5r+VU3YknoWATqglq8G7QV3kTVUSL9u4=";
+    hash = "sha256-wJXdl4C9jwtEyKVgdXRU9GCBqjkdJ6N58pK5kEL9tnY=";
   };
 
   vendorHash = "sha256-TprfPZ/clb7PLMAkxF0y78bCef4XarhgHlIhIPn1nQA=";

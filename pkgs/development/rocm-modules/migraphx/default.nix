@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   rocmUpdateScript,
   pkg-config,
@@ -183,6 +184,12 @@ stdenv.mkDerivation (finalAttrs: {
       patchelf $test/bin/test_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
     '';
 
+  passthru.impureTests = {
+    # NIXPKGS_ALLOW_UNFREE=1 bash $(nix-build -A rocmPackages.migraphx.impureTests.migraphx-driver)
+    migraphx-driver = callPackage ./test-migraphx-driver.nix {
+      migraphx = finalAttrs.finalPackage;
+    };
+  };
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
     inherit (finalAttrs.src) owner;

@@ -431,8 +431,8 @@ in
     src = fetchFromGitHub {
       owner = "cdbattags";
       repo = "lua-resty-jwt";
-      rev = "v0.2.3";
-      hash = "sha256-5lnr0ka6ijfujiRjqwCPb6jzItXx45FIN8CvhR/KiB8=";
+      rev = "v0.3.2";
+      hash = "sha256-VCi5ge2jAldJQgecFeMZJkq5PqRQdUs+K8NsXWmK7IQ=";
       fetchSubmodules = true;
     };
   };

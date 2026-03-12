@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   alsa-lib,
   fftwSinglePrec,
@@ -10,15 +10,19 @@
   libvorbis,
   soundtouch,
   qt5,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nootka";
+  # drop patch when updating to next release
   version = "2.0.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/nootka/nootka-${finalAttrs.version}-source.tar.bz2";
-    hash = "sha256-ZHdyLZ3+TCpQ77tcNuDlN2124qLDZu9DdH5x7RI1HIs=";
+  src = fetchFromGitHub {
+    owner = "SeeLook";
+    repo = "nootka";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-lRgFCPeIBefwsHMsE8eHLxT9GQUT0iUCyIrJz+mltp0=";
   };
 
   nativeBuildInputs = [
@@ -50,13 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Application for practicing playing musical scores and ear training";
     mainProgram = "nootka";
     homepage = "https://nootka.sourceforge.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [
-      mmlb
+    maintainers = [
+      lib.maintainers.mmlb
     ];
     platforms = lib.platforms.linux;
   };

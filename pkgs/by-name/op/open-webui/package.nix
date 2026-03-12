@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-RNVmPg2//z/djARWgbTbKbdYmDwAcTSYjiSuZHV88vM=";
+    hash = "sha256-wXkU3j0Bzpd2H5aVkqmKyUHxukRamBYQh8HBXB8tLpM=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-W3AquYTXffAW9T5R2Nn9Idpbh/EPDpJNIB7D0yFWezU=";
+    npmDepsHash = "sha256-ZiIEGeKee/qEhe44SGlPTDhwP+vL9K8RkFEOeUdzUI8=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -69,7 +69,7 @@ let
     '';
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -196,10 +196,14 @@ python3Packages.buildPythonApplication rec {
     ++ pyjwt.optional-dependencies.crypto
     ++ starsessions.optional-dependencies.redis;
 
-  optional-dependencies = with python3Packages; rec {
+  optional-dependencies = with python3Packages; {
     postgres = [
       pgvector
       psycopg2-binary
+    ];
+
+    mariadb = [
+      mariadb
     ];
 
     all = [
@@ -217,8 +221,9 @@ python3Packages.buildPythonApplication rec {
       qdrant-client
       weaviate-client
     ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
+    ++ finalAttrs.passthru.optional-dependencies.mariadb
+    ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ moto.optional-dependencies.s3;
   };
 
   pythonImportsCheck = [ "open_webui" ];
@@ -260,4 +265,4 @@ python3Packages.buildPythonApplication rec {
       codgician
     ];
   };
-}
+})
