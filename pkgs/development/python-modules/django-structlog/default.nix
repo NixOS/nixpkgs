@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "django-structlog";
-  version = "9.1.1";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrobichaud";
     repo = "django-structlog";
     tag = version;
-    hash = "sha256-SEigOdlXZtfLAgRgGkv/eDNDAiiHd7YthRJ/H6e1v5U=";
+    hash = "sha256-BNZ+nk2NK5x2YsTDZjH5BVizXAyLZhKp8zRvkWi068k=";
   };
 
   disabled = pythonOlder "3.9";
