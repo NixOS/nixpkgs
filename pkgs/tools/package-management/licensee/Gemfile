@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'licensee'
+gem 'licensee', '>= 9.17.0'
