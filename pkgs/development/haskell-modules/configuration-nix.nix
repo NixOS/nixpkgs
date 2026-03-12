@@ -437,6 +437,14 @@ builtins.intersectAttrs super {
           )
       );
 
+  # Requires postgresql with postgis and predefined geometry type
+  esqueleto-postgis = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/roundtrip xy geometry/ && !/roundtrip xyz geometry/ && !/roundtryp xyzm geometry/ && !/function bindings/"
+    ];
+  }) super.esqueleto-postgis;
+
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
     preCheck = drv.preCheck or "" + ''
