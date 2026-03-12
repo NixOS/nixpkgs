@@ -79,18 +79,14 @@ buildNpmPackage {
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
       cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-
-      # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
-      sed -i "/afterSign/d" package.json
     ''
     + ''
       npm exec electron-builder -- \
         --dir \
         -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false
+        -c.npmRebuild=false \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
     '';
 
   installPhase = ''
