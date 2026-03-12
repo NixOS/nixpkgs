@@ -8545,8 +8545,6 @@ with pkgs;
   btop-cuda = btop.override { cudaSupport = true; };
   btop-rocm = btop.override { rocmSupport = true; };
 
-  i7z = qt5.callPackage ../os-specific/linux/i7z { };
-
   ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal { };
 
   ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
