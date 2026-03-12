@@ -2,13 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  marshmallow,
+  flit-core,
   packaging,
   pytestCheckHook,
   setuptools,
   validators,
 }:
+let
+  marshmallow' = buildPythonPackage {
+    pname = "marshmallow";
+    version = "3.26.2";
+    pyproject = true;
 
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+
+    build-system = [ flit-core ];
+
+    doCheck = false;
+
+    pythonImportsCheck = [ "marshmallow" ];
+  };
+in
 buildPythonPackage (finalAttrs: {
   pname = "faraday-agent-parameters-types";
   version = "1.9.1";
@@ -31,7 +50,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
-    marshmallow
+    marshmallow'
     packaging
     validators
   ];
