@@ -326,6 +326,9 @@ builtins.intersectAttrs super {
     ];
   }) super.arbtt;
 
+  # Needs to execute `git` while compiling the test suite?!
+  quick-process = addTestToolDepends [ pkgs.buildPackages.git ] super.quick-process;
+
   hzk = appendConfigureFlag "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" super.hzk;
 
   # Foreign dependency name clashes with another Haskell package.
