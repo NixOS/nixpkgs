@@ -32,10 +32,12 @@
 
   # for passthru.tests
   ceres-solver,
+  flint,
   giac,
   octave,
   opencv,
   python3,
+  R,
   openmp ? null,
   testers,
 }:
@@ -331,9 +333,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (python3.pkgs) numpy scipy scikit-learn;
     inherit
       ceres-solver
+      flint
       giac
       octave
       opencv
+      R
       ;
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
