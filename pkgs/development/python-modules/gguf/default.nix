@@ -11,7 +11,6 @@
   pyside6,
   pyyaml,
   requests,
-  sentencepiece,
   tqdm,
 
   # tests
@@ -36,12 +35,14 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     numpy
-    pyside6
     pyyaml
     requests
-    sentencepiece
     tqdm
   ];
+
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
