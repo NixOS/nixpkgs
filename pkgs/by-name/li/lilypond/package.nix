@@ -141,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       ofl # mf/
     ];
     maintainers = with lib.maintainers; [
+      eclairevoyant
       marcweber
       yurrriq
     ];
