@@ -15,14 +15,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rumno";
   version = "0.1.3";
 
   src = fetchFromGitLab {
     owner = "ivanmalison";
     repo = "rumno";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vR6+dNq0sdVtzdBL6GTzqAhl0fE6ulF6UCqIH1fSte4=";
   };
 
@@ -54,4 +54,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rumno";
     platforms = lib.platforms.linux;
   };
-}
+})
