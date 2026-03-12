@@ -641,7 +641,7 @@ let
         hash = "sha256-Ho5I33FOgtYHvKSZlWXWuBaqnSHqy4+f6EZdiL+/rRQ=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "146") [
+    ++ lib.optionals (chromiumVersionAtLeast "146" && !ungoogled) [
       # Revert CL 7457194 to fix the following error:
       #  ERROR at //chrome/test/BUILD.gn:6355:9: Unable to load "/build/src/components/variations/test_data/cipd/BUILD.gn".
       #  "//components/variations/test_data/cipd:single_group_per_study_prefer_existing_behavior_seed",
