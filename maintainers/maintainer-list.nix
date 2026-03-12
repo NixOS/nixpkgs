@@ -8757,6 +8757,12 @@
     githubId = 40620903;
     name = "figsoda";
   };
+  fin-w = {
+    email = "fin-w@tutanota.com";
+    github = "fin-w";
+    githubId = 41450706;
+    name = "fin-w";
+  };
   fionera = {
     email = "nix@fionera.de";
     github = "fionera";
