@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3,
   gitUpdater,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -108,7 +109,12 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "changedetectionio" ];
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    tests = {
+      inherit (nixosTests) changedetection-io;
+    };
+  };
 
   meta = {
     description = "Self-hosted free open source website change detection tracking, monitoring and notification service";
