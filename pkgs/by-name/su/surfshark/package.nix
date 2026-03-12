@@ -65,7 +65,6 @@ let
     libxtst
   ];
 
-  libPath = lib.makeLibraryPath (deps ++ [ (lib.getLib systemd) ]);
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surfshark";
@@ -84,8 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = deps;
-
-  runtimeDependencies = [ (lib.getLib systemd) ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -121,13 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/share/applications/surfshark.desktop \
       --replace-fail "Exec=/opt/Surfshark/surfshark" "Exec=$out/bin/surfshark"
 
-    # Vulkan loader symlink (so bundled ANGLE finds libvulkan)
-    ln -sf ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 \
-      $out/share/surfshark/libvulkan.so.1
-
-    # Patch bundled GL libs rpath
-    patchelf $out/share/surfshark/lib*GL* --set-rpath ${libPath} || true
-
     makeBinaryWrapper $out/share/surfshark/surfshark $out/bin/surfshark \
       --add-flags "--no-sandbox" \
       --prefix PATH : ${
@@ -138,7 +128,6 @@ stdenv.mkDerivation (finalAttrs: {
           iputils
         ]
       } \
-      --prefix LD_LIBRARY_PATH : ${libPath}
 
     runHook postInstall
   '';
