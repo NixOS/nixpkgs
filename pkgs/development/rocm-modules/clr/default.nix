@@ -263,11 +263,15 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     impureTests = {
+      # bash $(nix-build -A rocmPackages.clr.impureTests.rocm-smi)
       rocm-smi = callPackage ./test-rocm-smi.nix {
         inherit rocm-smi;
         clr = finalAttrs.finalPackage;
       };
-      # TODO(@LunNova): add OpenCL test with opencl-cts
+      # Simple subset of opencl-cts test_basic
+      opencl-cts = callPackage ./test-opencl-cts.nix {
+        clr = finalAttrs.finalPackage;
+      };
       generic-arch = callPackage ./test-isa-compat.nix {
         clr = finalAttrs.finalPackage;
         name = "generic-arch";
