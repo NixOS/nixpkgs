@@ -159,9 +159,6 @@ let
         + optionalString dev.allowDiscards " --allow-discards"
         + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
         + optionalString (dev.header != null) " --header=${dev.header}";
-      cschange = "cryptsetup luksChangeKey ${dev.device} ${
-        optionalString (dev.header != null) "--header=${dev.header}"
-      }";
       fido2luksCredentials =
         dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
     in
@@ -310,11 +307,6 @@ let
             local response
             local k_luks
             local opened
-            local new_salt
-            local new_iterations
-            local new_challenge
-            local new_response
-            local new_k_luks
 
             mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
               die "Failed to mount YubiKey salt storage device"
@@ -384,45 +376,6 @@ let
 
             [ "$opened" == false ] && die "Maximum authentication errors reached"
 
-            echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
-            for i in $(seq ${toString dev.yubikey.saltLength}); do
-                byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
-                new_salt="$new_salt$byte";
-                echo -n .
-            done;
-            echo "ok"
-
-            new_iterations="$iterations"
-            ${optionalString (dev.yubikey.iterationStep > 0) ''
-              new_iterations="$(($new_iterations + ${toString dev.yubikey.iterationStep}))"
-            ''}
-
-            new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-
-            new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
-
-            if [ -z "$new_response" ]; then
-                echo "Warning: Unable to generate new challenge response, current challenge persists!"
-                umount /crypt-storage
-                return
-            fi
-
-            if [ -n "$k_user" ]; then
-                echo -n $k_user
-            else
-                echo
-            fi | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response > /crypt-ramfs/new_key
-
-            echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
-
-            if [ $? == 0 ]; then
-                echo -ne "$new_salt\n$new_iterations" > /crypt-storage${dev.yubikey.storage.path}
-                sync /crypt-storage${dev.yubikey.storage.path}
-            else
-                echo "Warning: Could not update LUKS key, current challenge persists!"
-            fi
-
-            rm -f /crypt-ramfs/new_key
             umount /crypt-storage
         }
 
@@ -913,22 +866,10 @@ in
                           description = "Which slot on the YubiKey to challenge.";
                         };
 
-                        saltLength = mkOption {
-                          default = 16;
-                          type = types.int;
-                          description = "Length of the new salt in byte (64 is the effective maximum).";
-                        };
-
                         keyLength = mkOption {
                           default = 64;
                           type = types.int;
                           description = "Length of the LUKS slot key derived with PBKDF2 in byte.";
-                        };
-
-                        iterationStep = mkOption {
-                          default = 0;
-                          type = types.int;
-                          description = "How much the iteration count for PBKDF2 is increased at each successful authentication.";
                         };
 
                         gracePeriod = mkOption {
