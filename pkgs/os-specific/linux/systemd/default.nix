@@ -930,6 +930,7 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-nspawn-configfile
             systemd-oomd
             systemd-portabled
+            systemd-pstore
             systemd-resolved
             systemd-shutdown
             systemd-sysupdate
