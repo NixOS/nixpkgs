@@ -25,8 +25,8 @@ let
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "5f7d66929fb66869d96dfcbacf0d8a586b33766d";
-      hash = "sha256-G9jMWq8BxKvRGP4D2/tcogdLwmek4XGYESqepnZIlCw=";
+      rev = "5c55f5d4f45a1b09c5d98aa63a671993ebd42c69";
+      hash = "sha256-CChXn58cqam3d6Q61ZJMr5NFq1Ezc5uywA7FSPhk4GI=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -76,18 +76,12 @@ let
       rev = "f03a1b3ec29b1d7d865691ca8aea4f1eb2c2873d";
       hash = "sha256-90ei0lpJA8XuVGI0rGb3md0Qtq8/bdkU7dUCHpp88Bw=";
     };
-    trianglemeshdistance = fetchFromGitHub {
-      owner = "InteractiveComputerGraphics";
-      repo = "TriangleMeshDistance";
-      rev = "2cb643de1436e1ba8e2be49b07ec5491ac604457";
-      hash = "sha256-qG/8QKpOnUpUQJ1nLj+DFoLnUr+9oYkJPqUhwEQD2pc=";
-    };
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.5.0";
+  version = "3.6.0";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -95,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-5i+QQIwu8olwsMaYvO8b1vLkOkA4jZVR0xcFMuieF5w=";
+    hash = "sha256-Gxr8AH9grTjrMTHHOVseLuTC3rNuQEZRWhSvR4HgIc4=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -146,10 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
-  ''
-  # Mujoco's cmake apply a patch on the trianglemeshdistance source code. Requires write permission.
-  + ''
-    cp -r ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 
