@@ -42,13 +42,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "podman";
-  version = "5.8.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0rpEmdx/IUgIvsqCxVyydXZXUm/r7cJG7xlHlEIz1G8=";
+    hash = "sha256-Drji3FLi7peKauA0WnFToKmD4lawlWQr2qESaQFruvE=";
   };
 
   patches = [
