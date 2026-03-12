@@ -8522,8 +8522,6 @@ with pkgs;
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
   darwin = callPackage ./darwin-packages.nix { };
 
-  drbd = callPackage ../os-specific/linux/drbd/utils.nix { };
-
   # unstable until the first 1.x release
   fwts = callPackage ../os-specific/linux/fwts { };
 
