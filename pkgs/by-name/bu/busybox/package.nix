@@ -13,6 +13,7 @@
   useMusl ? stdenv.hostPlatform.libc == "musl",
   musl,
   extraConfig ? "",
+  overrideCC,
 }:
 
 assert stdenv.hostPlatform.libc == "musl" -> useMusl;
@@ -50,9 +51,15 @@ let
   };
   debianDispatcherScript = "${debianSource}/debian/tree/udhcpc/etc/udhcpc/default.script";
   outDispatchPath = "$out/default.script";
+  # Fixes libunwind from being dynamically linked to a static binary.
+  stdenv' =
+    if (stdenv.targetPlatform.useLLVM or false) then
+      overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
+    else
+      stdenv;
 in
 
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
   pname = "busybox";
   version = "1.37.0";
 
@@ -91,7 +98,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-Msm9sDZrVx7ofunnvnTS73SPKUUpR3Tv5xZ/wBd+rts=";
     })
   ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ./clang-cross.patch;
+  ++ lib.optional (stdenv'.hostPlatform != stdenv'.buildPlatform) ./clang-cross.patch;
 
   separateDebugInfo = true;
 
@@ -145,7 +152,7 @@ stdenv.mkDerivation rec {
     CONFIG_UDHCPC_DEFAULT_SCRIPT "${outDispatchPath}"
 
     ${extraConfig}
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv'.cc.targetPrefix}"
     ${libcConfig}
     EOF
 
@@ -154,8 +161,8 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  postConfigure = lib.optionalString (useMusl && stdenv.hostPlatform.libc != "musl") ''
-    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
+  postConfigure = lib.optionalString (useMusl && stdenv'.hostPlatform.libc != "musl") ''
+    makeFlagsArray+=("CC=${stdenv'.cc.targetPrefix}cc -isystem ${musl.dev}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   makeFlags = [ "SKIP_STRIP=y" ];
@@ -173,9 +180,9 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv.cc.libc ? static) [
-    stdenv.cc.libc
-    stdenv.cc.libc.static
+  buildInputs = lib.optionals (enableStatic && !useMusl && stdenv'.cc.libc != null) [
+    stdenv'.cc.libc
+    stdenv'.cc.libc.static
   ];
 
   enableParallelBuilding = true;
