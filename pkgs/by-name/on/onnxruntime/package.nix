@@ -403,6 +403,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      caniko
       puffnfresh
       ck3d
     ];
