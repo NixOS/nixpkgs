@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem "chef-cli"
+gem "chef-cli", ">= 5.6.11"
