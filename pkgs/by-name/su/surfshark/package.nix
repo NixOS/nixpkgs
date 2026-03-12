@@ -66,12 +66,6 @@ let
   ];
 
   libPath = lib.makeLibraryPath (deps ++ [ (lib.getLib systemd) ]);
-  binPath = lib.makeBinPath [
-    coreutils
-    procps
-    which
-    iputils
-  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "surfshark";
@@ -136,7 +130,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeBinaryWrapper $out/share/surfshark/surfshark $out/bin/surfshark \
       --add-flags "--no-sandbox" \
-      --prefix PATH : ${binPath} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          procps
+          which
+          iputils
+        ]
+      } \
       --prefix LD_LIBRARY_PATH : ${libPath}
 
     runHook postInstall
