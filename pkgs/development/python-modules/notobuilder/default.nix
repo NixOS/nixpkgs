@@ -17,8 +17,18 @@
   chevron,
   sh,
   ninja,
+  writers,
+  pyyaml,
+  replaceVars,
 }:
 
+let
+  patchConfig = writers.writePython3Bin "notobuilder-patch-config" {
+    libraries = [
+      pyyaml
+    ];
+  } (builtins.readFile ./patchConfig.py);
+in
 buildPythonPackage {
   pname = "notobuilder";
   version = "0-unstable-2026-02-25";
@@ -30,6 +40,10 @@ buildPythonPackage {
     rev = "5c15f266be1f24587adad807e2f1f3ff9ff537a8";
     hash = "sha256-Tw1riTHORtIpOq8PjSspIR044TBupYgXkI8fBiBkgJI=";
   };
+
+  patches = [
+    ./build-bin.patch
+  ];
 
   postPatch = ''
     substituteInPlace Lib/notobuilder/__main__.py \
@@ -62,7 +76,14 @@ buildPythonPackage {
     "notoqa"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  setupHook = replaceVars ./setup-hook.sh {
+    patchConfig = lib.getExe patchConfig;
+  };
+
+  passthru = {
+    inherit patchConfig;
+    updateScript = unstableGitUpdater { };
+  };
 
   meta = {
     description = "Python module for building Noto fonts";

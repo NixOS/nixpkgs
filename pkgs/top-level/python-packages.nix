@@ -11197,7 +11197,7 @@ self: super: with self; {
 
   notmuch2 = callPackage ../development/python-modules/notmuch2 { inherit (pkgs) notmuch; };
 
-  notobuilder = callPackage ../development/python-modules/notobuilder { };
+  notobuilder = callPackage ../development/python-modules/notobuilder { inherit (pkgs) ninja; };
 
   notus-scanner = callPackage ../development/python-modules/notus-scanner { };
 

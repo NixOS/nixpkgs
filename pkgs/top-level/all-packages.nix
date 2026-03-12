@@ -9102,6 +9102,8 @@ with pkgs;
 
   mplus-outline-fonts = recurseIntoAttrs (callPackage ../data/fonts/mplus-outline-fonts { });
 
+  notobuilder = with python3Packages; toPythonApplication notobuilder;
+
   noto-fonts-cjk-serif-static = callPackage ../by-name/no/noto-fonts-cjk-serif/package.nix {
     static = true;
   };
