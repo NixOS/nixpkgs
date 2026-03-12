@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rwpspread";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "0xk1f0";
     repo = "rwpspread";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lp9XvILpvNZtffJLyDUCo5Xyor4X4bwsfxAIqS8Hf7M=";
+    hash = "sha256-SWykTlj51lrPz7c9TfNOhMEZcpi8NMLDx50ZqnNlfsU=";
   };
 
-  cargoHash = "sha256-aGy29kGwCKHBNzszYR+w+1m8gZ/lFd0MOlFHtDDzjj4=";
+  cargoHash = "sha256-vrCxtbhCFtHRvqwDow7njz/V2QWzs7p/28MTZL4XsBc=";
 
   nativeBuildInputs = [ pkg-config ];
 
