@@ -41,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   gradleUpdateTask = finalAttrs.gradleBuildTask;
 
+  # fetch dependencies for all supported Linux architectures
+  postGradleUpdate = ''
+    gradle :desktopApp:nixDownloadDeps -Dos.family=linux -Dos.arch=amd64
+    gradle :desktopApp:nixDownloadDeps -Dos.family=linux -Dos.arch=aarch64
+  '';
+
   gradleInitScript = writeText "empty-init-script.gradle" "";
 
   mitmCache = gradle_9.fetchDeps {
