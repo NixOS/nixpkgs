@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  pkgs,
+  systemdStage1 ? false,
+  ...
+}:
+
 let
   pythonShebang = pkgs.writeScript "python-shebang" ''
     #!/usr/bin/python
@@ -12,7 +17,11 @@ let
 in
 {
   name = "envfs";
-  nodes.machine.services.envfs.enable = true;
+
+  nodes.machine = {
+    services.envfs.enable = true;
+    boot.initrd.systemd.enable = systemdStage1;
+  };
 
   testScript = ''
     start_all()
