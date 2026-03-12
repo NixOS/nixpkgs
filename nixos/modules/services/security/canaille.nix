@@ -40,7 +40,7 @@ let
       ++ old.optional-dependencies.otp
       ++ old.optional-dependencies.sms;
     makeWrapperArgs = (old.makeWrapperArgs or [ ]) ++ [
-      "--set CONFIG /etc/canaille/config.toml"
+      "--set CANAILLE_CONFIG /etc/canaille/config.toml"
       "--set SECRETS_DIR \"${secretsDir}\""
     ];
   });
@@ -303,7 +303,7 @@ in
       ];
       environment = {
         PYTHONPATH = "${pythonEnv}/${python.sitePackages}/";
-        CONFIG = "/etc/canaille/config.toml";
+        CANAILLE_CONFIG = "/etc/canaille/config.toml";
         SECRETS_DIR = secretsDir;
       };
       serviceConfig = commonServiceConfig // {

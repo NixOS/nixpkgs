@@ -83,6 +83,7 @@ buildGoModule.override { go = go_1_26; } rec {
       jlesquembre
       ryan4yin
       SchahinRohani
+      superherointj
     ];
     mainProgram = "flux";
   };
