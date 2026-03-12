@@ -25,6 +25,15 @@ update-source-version keyguard $latestVersion $hash
 
 sed -i 's/tag = "r[0-9]\+\(\.[0-9]\+\)\?";/tag = "'"$latestTag"'";/g' "$ROOT/package.nix"
 
+# Update cargoHash for ssh-agent
+sed -i -E 's|cargoHash = "[^"]*"|cargoHash = ""|' "$ROOT/ssh-agent.nix"
+cargoHash=$( (nix-build -A keyguard.passthru.sshAgent 2>&1 || true) | awk '/got/{print $2}')
+if [ -n "$cargoHash" ]; then
+  sed -i -E 's|cargoHash = "[^"]*"|cargoHash = "'"$cargoHash"'"|' "$ROOT/ssh-agent.nix"
+else
+  echo "Failed to get cargoHash for ssh-agent, please update it manually"
+fi
+
 # Full build for host arch — captures all deps including build-time-only ones
 "$(nix-build -A keyguard.mitmCache.updateScript)"
 

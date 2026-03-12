@@ -1,22 +1,23 @@
 {
   lib,
   stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  callPackage,
+  copyDesktopItems,
+  cups,
   fetchFromGitHub,
-  gradle_9,
-  jdk21,
+  file,
   fontconfig,
+  glib,
+  gradle_9,
+  gtk3,
+  jdk21,
+  lcms2,
+  libglvnd,
   libxinerama,
   libxrandr,
-  file,
-  gtk3,
-  glib,
-  cups,
-  lcms2,
-  alsa-lib,
   makeDesktopItem,
-  copyDesktopItems,
-  libglvnd,
-  autoPatchelfHook,
   writeText,
 }:
 
@@ -89,11 +90,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp --recursive desktopApp/build/compose/binaries/main-release/app/Keyguard $out
     install -D --mode=0644 $out/lib/Keyguard.png $out/share/icons/hicolor/512x512/apps/keyguard.png
+    install -D --mode=0755 ${finalAttrs.passthru.sshAgent}/bin/keyguard-ssh-agent \
+      $out/lib/app/resources/keyguard-ssh-agent
 
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    sshAgent = callPackage ./ssh-agent.nix { inherit (finalAttrs) src version; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Alternative client for the Bitwarden platform, created to provide the best user experience possible";
