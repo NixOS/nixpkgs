@@ -1,6 +1,7 @@
 {
   php,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   nixosTests,
 }:
@@ -15,6 +16,18 @@ php.buildComposerProject2 (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-sZjDl3nQ4i5KVnM2fLVvaQxMlE225q7EBkgFmTn+ugc=";
   };
+
+  patches = [
+    # https://github.com/kimai/kimai/pull/5849
+    (fetchpatch {
+      name = "CVE-2026-28685.patch";
+      url = "https://github.com/kimai/kimai/commit/a0601c8cb28fed1cca19051a8272425069ab758f.patch";
+      # Kimai specifies `tests export-ignore` in its `.gitattributes`, and
+      # `fetchFromGitHub` uses export archive from GitHub.
+      excludes = [ "tests/*" ];
+      hash = "sha256-i0+OufL1uI0+t5elo1REZq7omEox947jvErS9pHhBtA=";
+    })
+  ];
 
   php = php.buildEnv {
     extensions = (
