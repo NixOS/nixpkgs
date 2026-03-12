@@ -77,6 +77,7 @@ let
     #        ],
     #     )
     [
+      bash # see https://github.com/NixOS/nixpkgs/pull/489519
       coreutils
       diffutils
       file
@@ -87,6 +88,7 @@ let
       gnused
       gnutar
       gzip
+      python3 # see https://github.com/NixOS/nixpkgs/pull/489519
       unzip
       which
       zip
