@@ -97,6 +97,10 @@ buildPythonPackage (finalAttrs: {
     responses
   ];
 
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
+  ];
+
   disabledTestPaths = [
     # Disable tests that requires network access
     "tests/io/"
