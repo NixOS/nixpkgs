@@ -2667,8 +2667,6 @@ self: super: with self; {
 
   charset-normalizer = callPackage ../development/python-modules/charset-normalizer { };
 
-  chart-studio = callPackage ../development/python-modules/chart-studio { };
-
   chat-downloader = callPackage ../development/python-modules/chat-downloader { };
 
   chatlas = callPackage ../development/python-modules/chatlas { };
