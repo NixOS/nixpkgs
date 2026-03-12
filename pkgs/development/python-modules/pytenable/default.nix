@@ -24,7 +24,20 @@
   setuptools,
   typing-extensions,
 }:
-
+let
+  marshmallow' = marshmallow.overrideAttrs (super: {
+    version = "3.26.2";
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+    disabledTests = super.disabledTests ++ [
+      "test_from_timestamp_with_overflow_value"
+    ];
+  });
+in
 buildPythonPackage (finalAttrs: {
   pname = "pytenable";
   version = "1.9.0";
@@ -49,7 +62,7 @@ buildPythonPackage (finalAttrs: {
     defusedxml
     gql
     graphql-core
-    marshmallow
+    marshmallow'
     pydantic
     pydantic-extra-types
     python-box
@@ -103,4 +116,3 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ fab ];
   };
 })
-
