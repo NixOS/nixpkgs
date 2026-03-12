@@ -28,13 +28,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Upstream has a failing test :<
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Alternative TUI for gdb";
     homepage = "https://github.com/ftilde/ugdb";
     changelog = "https://github.com/ftilde/ugdb/blob/master/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = [ maintainers.justdeeevin ];
+    license = lib.licenses.mit;
+    maintainers = with lib; [ maintainers.justdeeevin ];
     mainProgram = "ugdb";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })
