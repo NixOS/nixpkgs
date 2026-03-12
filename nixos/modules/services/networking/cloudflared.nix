@@ -277,18 +277,6 @@ in
                 '';
               };
 
-              warp-routing = {
-                enabled = lib.mkOption {
-                  type = with lib.types; nullOr bool;
-                  default = null;
-                  description = ''
-                    Enable warp routing.
-
-                    See [Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/).
-                  '';
-                };
-              };
-
               edgeIPVersion = lib.mkOption {
                 type = lib.types.enum [
                   "auto"
