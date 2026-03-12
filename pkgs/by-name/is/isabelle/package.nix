@@ -102,16 +102,6 @@ let
     '';
   };
 
-  cvc5' = cvc5.overrideAttrs {
-    version = "1.2.0";
-    src = fetchFromGitHub {
-      owner = "cvc5";
-      repo = "cvc5";
-      tag = "cvc5-1.2.0";
-      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
-    };
-  };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "isabelle";
@@ -144,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     vampire'
     eprover-ho
     net-tools
-    cvc5'
+    cvc5
     csdp
   ];
 
@@ -188,9 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
 
     cat >contrib/cvc5-*/etc/settings <<EOF
-      CVC5_HOME=${cvc5'}
-      CVC5_VERSION=${cvc5'.version}
-      CVC5_SOLVER=${cvc5'}/bin/cvc5
+      CVC5_HOME=${cvc5}
+      CVC5_VERSION=${cvc5.version}
+      CVC5_SOLVER=${cvc5}/bin/cvc5
       CVC5_INSTALLED=yes
     EOF
 
@@ -349,7 +339,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     vampire = vampire';
     polyml = polyml';
-    cvc5 = cvc5';
+    cvc5 = cvc5;
     sha1 = sha1;
     withComponents =
       f:
