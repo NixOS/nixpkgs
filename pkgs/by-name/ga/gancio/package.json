@@ -70,7 +70,7 @@
     "microformat-node": "^2.0.4",
     "minify-css-string": "^1.0.0",
     "mkdirp": "^3.0.1",
-    "multer": "^1.4.5-lts.1",
+    "multer": "^2.1.1",
     "nuxt-edge": "2.17.2-28258581.6132947",
     "oauth2orize": "^1.12.0",
     "passport": "^0.7.0",
