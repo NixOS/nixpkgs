@@ -29872,6 +29872,12 @@
     githubId = 22890520;
     matrix = "@yusufraji49:matrix.org";
   };
+  yutaura = {
+    email = "yuuta3594@gmail.com";
+    github = "YutaUra";
+    githubId = 45471709;
+    name = "Yuta Ura";
+  };
   yvan-sraka = {
     email = "yvan@sraka.xyz";
     github = "yvan-sraka";
