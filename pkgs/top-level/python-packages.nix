@@ -3878,7 +3878,9 @@ self: super: with self; {
 
   devpi-ldap = callPackage ../development/python-modules/devpi-ldap { };
 
-  devpi-server = callPackage ../development/python-modules/devpi-server { };
+  devpi-server = callPackage ../by-name/de/devpi-server/unwrapped.nix { };
+
+  devpi-web = callPackage ../development/python-modules/devpi-web { };
 
   devtools = callPackage ../development/python-modules/devtools { };
 
@@ -6591,8 +6593,6 @@ self: super: with self; {
   gotenberg-client = callPackage ../development/python-modules/gotenberg-client { };
 
   gotify = callPackage ../development/python-modules/gotify { };
-
-  gotrue = callPackage ../development/python-modules/gotrue { };
 
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
@@ -18708,8 +18708,6 @@ self: super: with self; {
   supabase-auth = callPackage ../development/python-modules/supabase-auth { };
 
   supabase-functions = callPackage ../development/python-modules/supabase-functions { };
-
-  supafunc = callPackage ../development/python-modules/supafunc { };
 
   super-collections = callPackage ../development/python-modules/super-collections { };
 
