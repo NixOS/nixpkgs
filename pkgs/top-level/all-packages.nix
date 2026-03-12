@@ -8498,10 +8498,6 @@ with pkgs;
     enableUnstable = true;
   };
 
-  b43Firmware_6_30_163_46 =
-    callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix
-      { };
-
   batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
 
   bluez5 = bluez;
