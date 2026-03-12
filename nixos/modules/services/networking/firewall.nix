@@ -302,13 +302,22 @@ in
         '';
       };
 
+      defaultInterfaces = lib.mkOption {
+        type = with lib.types; either (enum [ "all" ]) (listOf str);
+        default = "all";
+        example = [ "eno1" ];
+        description = ''
+          Restricts the {option}`networking.firewall.allowed*` rules to a
+          specific list of network interfaces.
+
+          By default, the rules will apply to all interfaces.
+        '';
+      };
+
       allInterfaces = lib.mkOption {
         internal = true;
         visible = false;
-        default = {
-          default = lib.mapAttrs (name: value: cfg.${name}) commonOptions;
-        }
-        // cfg.interfaces;
+        readOnly = true;
         type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
         description = ''
           All open ports.
@@ -329,7 +338,26 @@ in
           cfg.autoLoadConntrackHelpers -> lib.versionOlder config.boot.kernelPackages.kernel.version "6";
         message = "conntrack helper autoloading has been removed from kernel 6.0 and newer";
       }
+      {
+        assertion = cfg.defaultInterfaces != [ ];
+        message = ''
+          `networking.firewall.defaultInterfaces` cannot be empty.
+          If you want to apply `networking.firewall.allowed*` rules to all interfaces, set it to "all".
+        '';
+      }
     ];
+
+    networking.firewall.allInterfaces =
+      let
+        defaultConfig = lib.mapAttrs (option: _: cfg.${option}) commonOptions;
+      in
+      lib.mkMerge (
+        lib.optional (cfg.defaultInterfaces == "all") { default = defaultConfig; }
+        ++ [ cfg.interfaces ]
+        ++ lib.optional (cfg.defaultInterfaces != "all") (
+          lib.genAttrs cfg.defaultInterfaces (_: defaultConfig)
+        )
+      );
 
     networking.firewall.trustedInterfaces = [ "lo" ];
 
