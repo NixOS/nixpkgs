@@ -564,6 +564,7 @@ dont-distribute-packages:
  - container
  - containers-accelerate
  - content-store
+ - control
  - control-invariants
  - control-monad-attempt
  - control-monad-exception
@@ -577,6 +578,7 @@ dont-distribute-packages:
  - convertible-ascii
  - convertible-text
  - coordinate
+ - copilot-cbmc
  - CoreFoundation
  - coroutine-enumerator
  - coroutine-iteratee
@@ -2042,6 +2044,7 @@ dont-distribute-packages:
  - libraft
  - librarian
  - libxml-enumerator
+ - lifted-base-tf
  - lightning-haskell
  - lightstep-haskell
  - lighttpd-conf
@@ -3599,6 +3602,8 @@ dont-distribute-packages:
  - usb-iteratee
  - usb-safe
  - UTFTConverter
+ - util-exception
+ - util-primitive-control
  - util-universe
  - utxorpc-client
  - utxorpc-server
