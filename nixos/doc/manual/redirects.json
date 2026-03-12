@@ -1091,6 +1091,54 @@
   "module-services-netbird-customization": [
     "index.html#module-services-netbird-customization"
   ],
+  "module-services-netbird-dns": [
+    "index.html#module-services-netbird-dns"
+  ],
+  "module-services-netbird-routing": [
+    "index.html#module-services-netbird-routing"
+  ],
+  "module-services-netbird-security": [
+    "index.html#module-services-netbird-security"
+  ],
+  "module-services-netbird-rosenpass": [
+    "index.html#module-services-netbird-rosenpass"
+  ],
+  "module-services-netbird-ssh": [
+    "index.html#module-services-netbird-ssh"
+  ],
+  "module-services-netbird-connection": [
+    "index.html#module-services-netbird-connection"
+  ],
+  "module-services-netbird-selfhosted": [
+    "index.html#module-services-netbird-selfhosted"
+  ],
+  "module-services-netbird-advanced": [
+    "index.html#module-services-netbird-advanced"
+  ],
+  "module-services-netbird-server-quickstart-coturn": [
+    "index.html#module-services-netbird-server-quickstart-coturn"
+  ],
+  "module-services-netbird-server-quickstart-relay": [
+    "index.html#module-services-netbird-server-quickstart-relay"
+  ],
+  "module-services-netbird-server-relay-vs-coturn": [
+    "index.html#module-services-netbird-server-relay-vs-coturn"
+  ],
+  "module-services-netbird-server-embedded-idp": [
+    "index.html#module-services-netbird-server-embedded-idp"
+  ],
+  "module-services-netbird-server-database": [
+    "index.html#module-services-netbird-server-database"
+  ],
+  "module-services-netbird-server-database-postgres": [
+    "index.html#module-services-netbird-server-database-postgres"
+  ],
+  "module-services-netbird-server-relay-config": [
+    "index.html#module-services-netbird-server-relay-config"
+  ],
+  "module-services-netbird-server-complete-example": [
+    "index.html#module-services-netbird-server-complete-example"
+  ],
   "module-services-mosquitto": [
     "index.html#module-services-mosquitto"
   ],

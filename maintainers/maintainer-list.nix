@@ -24775,6 +24775,12 @@
     github = "shunueda";
     githubId = 62182668;
   };
+  shuuri-labs = {
+    name = "Ashley Mensah";
+    email = "ashley@netbird.io";
+    github = "shuuri-labs";
+    githubId = 61762328;
+  };
   shved = {
     name = "Yury Shvedov";
     email = "mestofel13@gmail.com";

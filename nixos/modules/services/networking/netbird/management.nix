@@ -17,6 +17,8 @@ let
     mkOption
     mkPackageOption
     optional
+    optionals
+    optionalAttrs
     recursiveUpdate
     ;
 
@@ -24,6 +26,8 @@ let
     bool
     enum
     listOf
+    nullOr
+    path
     port
     str
     ;
@@ -59,6 +63,12 @@ let
       TimeBasedCredentials = false;
     };
 
+    Relay = {
+      Addresses = cfg.relayAddresses;
+      CredentialsTTL = "24h";
+      Secret = if cfg.relaySecretFile != null then { _secret = cfg.relaySecretFile; } else "";
+    };
+
     Signal = {
       Proto = "https";
       URI = "${cfg.domain}:443";
@@ -75,7 +85,17 @@ let
     Datadir = "${stateDir}/data";
     DataStoreEncryptionKey = "very-insecure-key";
     StoreConfig = {
-      Engine = "sqlite";
+      Engine = cfg.store.engine;
+    }
+    // optionalAttrs (cfg.store.engine == "postgres" && cfg.store.postgres.dsnFile != null) {
+      DataSourcePath = {
+        _secret = cfg.store.postgres.dsnFile;
+      };
+    }
+    // optionalAttrs (cfg.store.engine == "mysql" && cfg.store.mysql.dsnFile != null) {
+      DataSourcePath = {
+        _secret = cfg.store.mysql.dsnFile;
+      };
     };
 
     HttpConfig = {
@@ -84,22 +104,39 @@ let
       OIDCConfigEndpoint = cfg.oidcConfigEndpoint;
     };
 
-    IdpManagerConfig = {
-      ManagerType = "none";
-      ClientConfig = {
-        Issuer = "";
-        TokenEndpoint = "";
-        ClientID = "netbird";
-        ClientSecret = "";
-        GrantType = "client_credentials";
-      };
-
-      ExtraConfig = { };
-      Auth0ClientCredentials = null;
-      AzureClientCredentials = null;
-      KeycloakClientCredentials = null;
-      ZitadelClientCredentials = null;
-    };
+    IdpManagerConfig =
+      if cfg.idp.embedded.enable then
+        {
+          ManagerType = "integrated";
+          ClientConfig = {
+            Issuer = "https://${cfg.domain}/oauth2";
+            TokenEndpoint = "";
+            ClientID = "netbird";
+            ClientSecret = "";
+            GrantType = "client_credentials";
+          };
+          ExtraConfig = { };
+          Auth0ClientCredentials = null;
+          AzureClientCredentials = null;
+          KeycloakClientCredentials = null;
+          ZitadelClientCredentials = null;
+        }
+      else
+        {
+          ManagerType = "none";
+          ClientConfig = {
+            Issuer = "";
+            TokenEndpoint = "";
+            ClientID = "netbird";
+            ClientSecret = "";
+            GrantType = "client_credentials";
+          };
+          ExtraConfig = { };
+          Auth0ClientCredentials = null;
+          AzureClientCredentials = null;
+          KeycloakClientCredentials = null;
+          ZitadelClientCredentials = null;
+        };
 
     DeviceAuthorizationFlow = {
       Provider = "none";
@@ -126,6 +163,28 @@ let
         UseIDToken = false;
       };
     };
+  }
+  // optionalAttrs cfg.idp.embedded.enable {
+    ProviderConfig = {
+      Issuer = "https://${cfg.domain}/oauth2";
+      Storage = {
+        Type = "sqlite3";
+        File = "${stateDir}/idp.db";
+      };
+      DashboardRedirectURIs = [
+        "https://${cfg.domain}/nb-auth"
+        "https://${cfg.domain}/nb-silent-auth"
+      ];
+      CLIRedirectURIs = [
+        "http://localhost:53000/"
+        "http://localhost:54000/"
+      ];
+      Owner = {
+        Email = "";
+        Password = "";
+        Username = "";
+      };
+    };
   };
 
   managementConfig = recursiveUpdate defaultSettings cfg.settings;
@@ -136,6 +195,33 @@ let
 in
 
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [
+        "services"
+        "netbird"
+        "server"
+        "management"
+        "singleAccountModeDomain"
+      ]
+      [
+        "services"
+        "netbird"
+        "server"
+        "management"
+        "singleAccountMode"
+        "domain"
+      ]
+    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "netbird"
+      "server"
+      "management"
+      "disableSingleAccountMode"
+    ] "Use services.netbird.server.management.singleAccountMode.enable = false instead.")
+  ];
+
   options.services.netbird.server.management = {
     enable = mkEnableOption "Netbird Management Service";
 
@@ -165,29 +251,30 @@ in
       description = "Domain used for peer resolution.";
     };
 
-    singleAccountModeDomain = mkOption {
-      type = str;
-      default = "netbird.selfhosted";
-      description = ''
-        Enables single account mode.
-        This means that all the users will be under the same account grouped by the specified domain.
-        If the installation has more than one account, the property is ineffective.
-      '';
+    singleAccountMode = {
+      enable = mkOption {
+        type = bool;
+        default = true;
+        description = ''
+          Enable single account mode where all users are grouped under a single account.
+          If the installation already has more than one account, this setting is ineffective.
+        '';
+      };
+
+      domain = mkOption {
+        type = str;
+        default = "netbird.selfhosted";
+        description = ''
+          Domain used to group users in single account mode.
+          Only used when `singleAccountMode.enable` is true.
+        '';
+      };
     };
 
     disableAnonymousMetrics = mkOption {
       type = bool;
       default = true;
       description = "Disables push of anonymous usage metrics to NetBird.";
-    };
-
-    disableSingleAccountMode = mkOption {
-      type = bool;
-      default = false;
-      description = ''
-        If set to true, disables single account mode.
-        The `singleAccountModeDomain` property will be ignored and every new user will have a separate NetBird account.
-      '';
     };
 
     port = mkOption {
@@ -212,8 +299,103 @@ in
 
     oidcConfigEndpoint = mkOption {
       type = str;
-      description = "The oidc discovery endpoint.";
+      default = "";
+      description = "The oidc discovery endpoint. Not required when using embedded IDP.";
       example = "https://example.eu.auth0.com/.well-known/openid-configuration";
+    };
+
+    # Relay configuration
+    relayAddresses = mkOption {
+      type = listOf str;
+      default = [ ];
+      description = ''
+        List of relay server addresses to advertise to clients.
+      '';
+      example = [ "rels://relay.example.com:443" ];
+    };
+
+    relaySecretFile = mkOption {
+      type = nullOr path;
+      default = null;
+      description = ''
+        Path to file containing the shared secret for relay authentication.
+        This must match the auth-secret configured on the relay server.
+      '';
+    };
+
+    # TLS configuration
+    tls = {
+      enable = mkEnableOption "TLS for the management server";
+
+      letsencrypt = {
+        domain = mkOption {
+          type = nullOr str;
+          default = null;
+          description = ''
+            Domain for automatic Let's Encrypt certificate.
+            When set, the management server will automatically obtain and renew certificates.
+          '';
+        };
+      };
+
+      certFile = mkOption {
+        type = nullOr path;
+        default = null;
+        description = "Path to the TLS certificate file.";
+      };
+
+      certKey = mkOption {
+        type = nullOr path;
+        default = null;
+        description = "Path to the TLS certificate key file.";
+      };
+    };
+
+    # Embedded IDP
+    idp.embedded.enable = mkEnableOption ''
+      the embedded identity provider.
+      When enabled, sets IdpManagerConfig.ManagerType to "integrated" and provides
+      default ProviderConfig values derived from the domain.
+      Customize the embedded IDP via the `settings` freeform option
+      (e.g. `settings.ProviderConfig.Owner.Email = "admin@example.com"`)
+    '';
+
+    # Database backend configuration
+    store = {
+      engine = mkOption {
+        type = enum [
+          "sqlite"
+          "postgres"
+          "mysql"
+        ];
+        default = "sqlite";
+        description = ''
+          Database engine for the management server.
+          Use postgres or mysql for larger deployments.
+        '';
+      };
+
+      postgres = {
+        dsnFile = mkOption {
+          type = nullOr path;
+          default = null;
+          description = ''
+            Path to file containing the PostgreSQL connection DSN.
+            Example content: postgres://user:password@localhost:5432/netbird?sslmode=disable
+          '';
+        };
+      };
+
+      mysql = {
+        dsnFile = mkOption {
+          type = nullOr path;
+          default = null;
+          description = ''
+            Path to file containing the MySQL connection DSN.
+            Example content: user:password@tcp(localhost:3306)/netbird
+          '';
+        };
+      };
     };
 
     settings = mkOption {
@@ -245,6 +427,12 @@ in
             TimeBasedCredentials = false;
           };
 
+          Relay = {
+            Addresses = cfg.relayAddresses;
+            CredentialsTTL = "24h";
+            Secret = "";
+          };
+
           Signal = {
             Proto = "https";
             URI = "''${cfg.domain}:443";
@@ -259,7 +447,7 @@ in
           };
 
           Datadir = "''${stateDir}/data";
-          DataStoreEncryptionKey = "genEVP6j/Yp2EeVujm0zgqXrRos29dQkpvX0hHdEUlQ=";
+          DataStoreEncryptionKey = "very-insecure-key";
           StoreConfig = { Engine = "sqlite"; };
 
           HttpConfig = {
@@ -293,7 +481,7 @@ in
               ClientID = "netbird";
               TokenEndpoint = null;
               DeviceAuthEndpoint = "";
-              Scope = "openid profile email offline_access api";
+              Scope = "openid profile email";
               UseIDToken = false;
             };
           };
@@ -305,8 +493,8 @@ in
               ClientSecret = "";
               AuthorizationEndpoint = "";
               TokenEndpoint = "";
-              Scope = "openid profile email offline_access api";
-              RedirectURLs = "http://localhost:53000";
+              Scope = "openid profile email";
+              RedirectURLs = [ "http://localhost:53000" ];
               UseIDToken = false;
             };
           };
@@ -354,7 +542,7 @@ in
         [
           {
             check = builtins.isString managementConfig.TURNConfig.Secret;
-            name = "The TURNConfig.secret";
+            name = "The TURNConfig.Secret";
           }
           {
             check = builtins.isString managementConfig.DataStoreEncryptionKey;
@@ -362,7 +550,14 @@ in
           }
           {
             check = any (T: (T ? Password) && builtins.isString T.Password) managementConfig.TURNConfig.Turns;
-            name = "A Turn configuration's password";
+            name = "A TURNConfig.Turns password";
+          }
+          {
+            check =
+              cfg.relayAddresses != [ ]
+              && managementConfig ? Relay
+              && builtins.isString (managementConfig.Relay.Secret or "");
+            name = "The Relay.Secret";
           }
         ];
 
@@ -370,6 +565,32 @@ in
       {
         assertion = cfg.port != cfg.metricsPort;
         message = "The primary listen port cannot be the same as the listen port for the metrics endpoint";
+      }
+      {
+        assertion =
+          cfg.tls.enable
+          -> (cfg.tls.letsencrypt.domain != null || (cfg.tls.certFile != null && cfg.tls.certKey != null));
+        message = "When TLS is enabled, either letsencrypt.domain or both certFile and certKey must be set";
+      }
+      {
+        assertion = cfg.tls.certFile != null -> cfg.tls.certKey != null;
+        message = "certKey must be set when certFile is set";
+      }
+      {
+        assertion = cfg.tls.certKey != null -> cfg.tls.certFile != null;
+        message = "certFile must be set when certKey is set";
+      }
+      {
+        assertion = cfg.store.engine == "postgres" -> cfg.store.postgres.dsnFile != null;
+        message = "store.postgres.dsnFile must be set when using postgres engine";
+      }
+      {
+        assertion = cfg.store.engine == "mysql" -> cfg.store.mysql.dsnFile != null;
+        message = "store.mysql.dsnFile must be set when using mysql engine";
+      }
+      {
+        assertion = !cfg.idp.embedded.enable || cfg.oidcConfigEndpoint == "";
+        message = "oidcConfigEndpoint should not be set when using embedded IDP";
       }
     ];
 
@@ -388,35 +609,44 @@ in
           [
             (getExe' cfg.package "netbird-mgmt")
             "management"
-            # Config file
             "--config"
             "${stateDir}/management.json"
-            # Data directory
             "--datadir"
             "${stateDir}/data"
-            # DNS domain
             "--dns-domain"
             cfg.dnsDomain
-            # Port to listen on
             "--port"
             cfg.port
-            # Port the internal prometheus server listens on
             "--metrics-port"
             cfg.metricsPort
-            # Log to stdout
             "--log-file"
             "console"
-            # Log level
             "--log-level"
             cfg.logLevel
-            #
             "--idp-sign-key-refresh-enabled"
-            # Domain for internal resolution
-            "--single-account-mode-domain"
-            cfg.singleAccountModeDomain
           ]
+          # Single account mode
+          ++ optionals cfg.singleAccountMode.enable [
+            "--single-account-mode-domain"
+            cfg.singleAccountMode.domain
+          ]
+          ++ (optional (!cfg.singleAccountMode.enable) "--disable-single-account-mode")
           ++ (optional cfg.disableAnonymousMetrics "--disable-anonymous-metrics")
-          ++ (optional cfg.disableSingleAccountMode "--disable-single-account-mode")
+          # Always disable GeoLite updates for self-hosted (privacy default)
+          ++ [ "--disable-geolite-update" ]
+          # TLS options
+          ++ optionals (cfg.tls.letsencrypt.domain != null) [
+            "--letsencrypt-domain"
+            cfg.tls.letsencrypt.domain
+          ]
+          ++ optionals (cfg.tls.certFile != null) [
+            "--cert-file"
+            cfg.tls.certFile
+          ]
+          ++ optionals (cfg.tls.certKey != null) [
+            "--cert-key"
+            cfg.tls.certKey
+          ]
           ++ cfg.extraOptions
         );
         Restart = "always";
@@ -442,7 +672,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectSystem = true;
+        ProtectSystem = "strict";
         RemoveIPC = true;
         RestrictNamespaces = true;
         RestrictRealtime = true;

@@ -1069,7 +1069,7 @@ in
   nebula.connectivity = runTest ./nebula/connectivity.nix;
   nebula.reload = runTest ./nebula/reload.nix;
   neo4j = runTest ./neo4j.nix;
-  netbird = runTest ./netbird.nix;
+  netbird = import ./netbird { inherit runTest; };
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
   netbox_4_2 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_2; };
   netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
