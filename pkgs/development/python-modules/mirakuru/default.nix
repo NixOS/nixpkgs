@@ -1,0 +1,69 @@
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pytest-rerunfailures,
+  pytest-xdist,
+  setuptools,
+  psutil,
+  netcat,
+  ps,
+  python-daemon,
+}:
+
+buildPythonPackage rec {
+  pname = "mirakuru";
+  version = "3.0.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "ClearcodeHQ";
+    repo = "mirakuru";
+    tag = "v${version}";
+    hash = "sha256-3WyjvHxr+6kG+cLSCEZkHoA70mSoT66ubmp0W9g2yJM=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [ psutil ];
+
+  nativeCheckInputs = [
+    netcat.nc
+    ps
+    python-daemon
+    pytest-rerunfailures
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  # socket bind races, but requires xdist_group
+  dontUsePytestXdist = true;
+
+  pythonImportsCheck = [ "mirakuru" ];
+
+  # Necessary for the tests to pass on Darwin with sandbox enabled.
+  __darwinAllowLocalNetworking = true;
+
+  # Those are failing in the darwin sandbox with:
+  # > ps: %mem: requires entitlement
+  # > ps: vsz: requires entitlement
+  # > ps: rss: requires entitlement
+  # > ps: time: requires entitlement
+  disabledTests = [
+    "test_forgotten_stop"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_mirakuru_cleanup"
+    "test_daemons_killing"
+  ];
+
+  meta = {
+    homepage = "https://github.com/dbfixtures/mirakuru";
+    description = "Process orchestration tool designed for functional and integration tests";
+    changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+  };
+}

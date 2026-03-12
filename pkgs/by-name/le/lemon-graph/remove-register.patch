@@ -1,0 +1,15 @@
+diff --git a/lemon/random.h b/lemon/random.h
+index 8de74ede8a..f9861f3916 100644
+--- a/lemon/random.h
++++ b/lemon/random.h
+@@ -249,8 +249,8 @@ namespace lemon {
+ 
+         current = state + length;
+ 
+-        register Word *curr = state + length - 1;
+-        register long num;
++        Word *curr = state + length - 1;
++        long num;
+ 
+         num = length - shift;
+         while (num--) {

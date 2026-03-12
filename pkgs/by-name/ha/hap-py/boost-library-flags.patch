@@ -1,0 +1,50 @@
+--- a/CMakeLists.txt	2023-02-01 23:55:18.171758209 +0100
++++ b/CMakeLists.txt	2023-02-02 19:32:16.574426531 +0100
+@@ -23,25 +23,11 @@
+     set (VCFEVAL_AVAILABLE 0)
+ endif()
+ 
+-execute_process(
+-    COMMAND ${CMAKE_SOURCE_DIR}/external/make_dependencies.sh
+-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+-    RESULT_VARIABLE EXTERNAL_SUCCESS)
+ 
+-if(NOT "${EXTERNAL_SUCCESS}" STREQUAL "0")
+-    message(FATAL_ERROR "Building external dependencies has failed")
+-endif()
+-
+-set(Boost_USE_STATIC_LIBS        ON)  # only find static libs
+ set(Boost_USE_MULTITHREADED      ON)
+-set(Boost_USE_STATIC_RUNTIME     ON)
+ 
+ # un-break library finding
+-set(Boost_NO_BOOST_CMAKE         ON)
+-set(Boost_NO_SYSTEM_PATHS        ON)
+ 
+-set(BOOST_ROOT ${CMAKE_BINARY_DIR})
+-message("Using our own Boost, which was built at ${HAPLOTYPES_SOURCE_DIR}/external/boost_install")
+ 
+ find_package(Boost 1.55.0 COMPONENTS thread iostreams regex unit_test_framework filesystem system program_options REQUIRED)
+ include_directories(${Boost_INCLUDE_DIRS})
+@@ -51,7 +51,8 @@
+ link_directories (${CMAKE_BINARY_DIR}/lib)
+ 
+ # make sure we use the bundled zlib version
+-set(ZLIB_LIBRARIES ${CMAKE_BINARY_DIR}/lib/libz.a)
++# Additional flags for nix, found by trial and error
++set(ZLIB_LIBRARIES -lz -lbz2 -lcurl -lcrypto -llzma)
+ 
+ include_directories (${HAPLOTYPES_SOURCE_DIR}/external/klib)
+ include_directories (${HAPLOTYPES_SOURCE_DIR}/external/intervaltree)
+@@ -84,11 +86,6 @@
+                         ${CMAKE_THREAD_LIBS_INIT})
+ 
+ 
+-execute_process(COMMAND git describe --tags --always
+-    OUTPUT_VARIABLE HAPLOTYPES_VERSION
+-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+-    OUTPUT_STRIP_TRAILING_WHITESPACE
+-)
+ 
+ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/c++/include/Version.hh.in"
+                "${CMAKE_BINARY_DIR}/include/Version.hh")

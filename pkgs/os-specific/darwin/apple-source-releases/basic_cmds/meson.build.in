@@ -1,0 +1,25 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/basic_cmds/blob/main/basic_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('basic_cmds', 'c', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+
+
+# Binaries
+executable(
+    'mesg',
+    install : true,
+    sources : [ 'mesg/mesg.c' ],
+)
+install_man('mesg/mesg.1')
+
+executable(
+    'write',
+    install : true,
+    sources : [ 'write/write.c' ],
+)
+install_man('write/write.1')
