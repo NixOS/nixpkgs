@@ -1517,8 +1517,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
-
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   androidenv = callPackage ../development/mobile/androidenv { };
