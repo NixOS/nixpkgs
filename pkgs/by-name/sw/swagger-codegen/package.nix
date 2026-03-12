@@ -53,7 +53,10 @@ maven.buildMavenPackage rec {
       binaryBytecode
     ];
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.jraygauthier ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      jraygauthier
+    ];
     mainProgram = "swagger-codegen";
   };
 }
