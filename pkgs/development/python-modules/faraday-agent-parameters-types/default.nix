@@ -9,7 +9,7 @@
   validators,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "faraday-agent-parameters-types";
   version = "1.9.1";
   pyproject = true;
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_parameters_types";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Oe/9/zKOoCLK3JHMacOhk2+d91MrhzkBTW3POoFm71M=";
   };
 
@@ -51,8 +51,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
-    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
