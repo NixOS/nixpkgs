@@ -37,6 +37,7 @@
   opencv,
   python3,
   openmp ? null,
+  testers,
 }:
 
 let
@@ -334,6 +335,13 @@ stdenv.mkDerivation (finalAttrs: {
       octave
       opencv
       ;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
+    cmake = testers.hasCmakeConfigModules {
+      package = finalAttrs.finalPackage;
+      moduleNames = [ "OpenBLAS" ];
+    };
   };
 
   meta = {
@@ -342,5 +350,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
     platforms = lib.attrNames configs;
     maintainers = with lib.maintainers; [ ttuegel ];
+    pkgConfigModules = [
+      "openblas"
+      "blas"
+      "cblas"
+      "lapack"
+    ];
   };
 })
