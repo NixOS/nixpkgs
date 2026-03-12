@@ -179,6 +179,47 @@ let
       '';
     };
   };
+
+  configFiles = lib.mapAttrs (
+    name: tunnel:
+    let
+      filterConfig = lib.attrsets.filterAttrsRecursive (
+        _: v:
+        !builtins.elem v [
+          null
+          [ ]
+          { }
+        ]
+      );
+
+      filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
+      filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
+
+      ingressesSet = filterIngressSet tunnel.ingress;
+      ingressesStr = filterIngressStr tunnel.ingress;
+
+      fullConfig = filterConfig {
+        tunnel = name;
+        credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
+        warp-routing = filterConfig tunnel.warp-routing;
+        originRequest = filterConfig tunnel.originRequest;
+        ingress =
+          (map (
+            key:
+            {
+              hostname = key;
+            }
+            // lib.getAttr key (filterConfig (filterConfig ingressesSet))
+          ) (lib.attrNames ingressesSet))
+          ++ (map (key: {
+            hostname = key;
+            service = lib.getAttr key ingressesStr;
+          }) (lib.attrNames ingressesStr))
+          ++ [ { service = tunnel.default; } ];
+      };
+    in
+    pkgs.writeText "cloudflared-${name}.yml" (builtins.toJSON fullConfig)
+  ) config.services.cloudflared.tunnels;
 in
 {
   imports = [
@@ -275,6 +316,12 @@ in
                 example = "http_status:404";
               };
 
+              configFile = lib.mkOption {
+                type = lib.types.path;
+                readOnly = true;
+                default = configFiles.${name};
+              };
+
               ingress = lib.mkOption {
                 type =
                   with lib.types;
@@ -358,42 +405,7 @@ in
     systemd.services = lib.mapAttrs' (
       name: tunnel:
       let
-        filterConfig = lib.attrsets.filterAttrsRecursive (
-          _: v:
-          !builtins.elem v [
-            null
-            [ ]
-            { }
-          ]
-        );
-
-        filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
-        filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
-
-        ingressesSet = filterIngressSet tunnel.ingress;
-        ingressesStr = filterIngressStr tunnel.ingress;
-
-        fullConfig = filterConfig {
-          tunnel = name;
-          credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
-          warp-routing = filterConfig tunnel.warp-routing;
-          originRequest = filterConfig tunnel.originRequest;
-          ingress =
-            (map (
-              key:
-              {
-                hostname = key;
-              }
-              // lib.getAttr key (filterConfig (filterConfig ingressesSet))
-            ) (lib.attrNames ingressesSet))
-            ++ (map (key: {
-              hostname = key;
-              service = lib.getAttr key ingressesStr;
-            }) (lib.attrNames ingressesStr))
-            ++ [ { service = tunnel.default; } ];
-        };
-
-        mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+        configFile = configFiles.${name};
         certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
       in
       lib.nameValuePair "cloudflared-tunnel-${name}" {
@@ -414,13 +426,14 @@ in
           ]
           ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          ExecStartPre = "${cfg.package}/bin/cloudflared tunnel --config=${configFile} --no-autoupdate ingress validate";
+          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${configFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
 
         environment = {
-          TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) ''%d/cert.pem'';
+          TUNNEL_ORIGIN_CERT = lib.mkIf (certFile != null) "%d/cert.pem";
           TUNNEL_EDGE_IP_VERSION = tunnel.edgeIPVersion;
         };
       }
