@@ -308,11 +308,24 @@ let
             local k_luks
             local opened
 
-            mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
-              die "Failed to mount YubiKey salt storage device"
+            ${
+              if dev.yubikey.salt != null then
+                ''
+                  # Inline salt mode - salt is embedded in initramfs
+                  salt="${dev.yubikey.salt}"
+                  iterations="${toString dev.yubikey.iterations}"
+                ''
+              else
+                ''
+                  # Storage mode - mount and read salt from external device
+                  mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
+                    die "Failed to mount YubiKey salt storage device"
 
-            salt="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 1p | tr -d '\n')"
-            iterations="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+                  salt="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 1p | tr -d '\n')"
+                  iterations="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+                ''
+            }
+
             challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
             response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
 
@@ -376,7 +389,9 @@ let
 
             [ "$opened" == false ] && die "Maximum authentication errors reached"
 
-            umount /crypt-storage
+            ${optionalString (dev.yubikey.salt == null) ''
+              umount /crypt-storage
+            ''}
         }
 
         open_with_hardware() {
@@ -903,10 +918,32 @@ in
                           description = "Deprecated: Salt rotation has been removed.";
                         };
 
-                        /*
-                          TODO: Add to the documentation of the current module:
+                        salt = mkOption {
+                          default = null;
+                          type = types.nullOr types.str;
+                          example = "1a2b3c4d...";
+                          description = ''
+                            Static salt (hex string) for YubiKey challenge-response.
+                            If set, the salt is embedded in the initramfs and the
+                            `storage` options are ignored.
 
-                          Options related to the storing the salt.
+                            Generate with: `dd if=/dev/random bs=1 count=16 | od -An -vtx1 | tr -d ' \n'`
+                          '';
+                        };
+
+                        iterations = mkOption {
+                          default = 1000000;
+                          type = types.int;
+                          description = ''
+                            PBKDF2 iteration count for key derivation.
+                            Only used when `salt` is set (inline mode).
+                            When using storage mode, iterations are read from the salt file.
+                          '';
+                        };
+
+                        /*
+                          Options related to the storing the salt on external storage.
+                          These are ignored when `salt` is set.
                         */
                         storage = {
                           device = mkOption {
