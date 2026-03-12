@@ -7,6 +7,7 @@
   libGL,
   qt6,
   boost,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,33 @@ stdenv.mkDerivation rec {
     hash = "sha256-Ur7GGXbYvVmrEUq/CTRyuVNLDHKfFrYHJibo0JvYhyM=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  postInstall = lib.optional stdenv.hostPlatform.isDarwin ''
+    mkdir $out/Applications
+    mv $out/mCRL2.app $out/Applications
+  '';
+
+  postFixup = lib.optional stdenv.hostPlatform.isDarwin ''
+    APP_DIR="$out/Applications/mCRL2.app/Contents"
+    find "$APP_DIR/lib" -name "*.dylib" | while read lib; do
+      install_name_tool -id "@rpath/$(basename "$lib")" "$lib" || true
+      otool -L "$lib" | grep "$out" | awk '{print $1}' | while read old_path; do
+        install_name_tool -change "$old_path" "@rpath/$(basename "$old_path")" "$lib" || true
+      done
+    done
+    find "$APP_DIR/bin" -type f | while read bin; do
+      install_name_tool -add_rpath "@loader_path/../lib" "$bin" || true
+      otool -L "$bin" | grep "$out" | awk '{print $1}' | while read old_path; do
+        libname=$(basename "$old_path")
+        install_name_tool -change "$old_path" "@rpath/$libname" "$bin" || true
+      done
+    done
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
+
   buildInputs = [
     libGLU
     libGL
@@ -30,7 +57,6 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Toolset for model-checking concurrent systems and protocols";
     longDescription = ''
       A formal specification language with an associated toolset,
