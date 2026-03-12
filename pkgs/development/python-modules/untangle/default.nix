@@ -14,9 +14,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stchris";
     repo = "untangle";
-    # 1.1.1 is not tagged on GitHub
     tag = version;
-    hash = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
+    hash = "sha256-i7B37Rj46ZVlN8vaMq7FoqS9dOoC680AqASdGk6pBJU=";
   };
 
   propagatedBuildInputs = [ defusedxml ];
