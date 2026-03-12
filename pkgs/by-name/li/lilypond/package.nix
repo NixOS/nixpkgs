@@ -41,6 +41,7 @@
     ]
   ),
   writeScript,
+  fetchpatch2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -77,6 +78,18 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace scripts/build/mf2pt1.pl \
       --replace-fail "mem=mf2pt1" "mem=$PWD/mf/mf2pt1"
   '';
+
+  patches = [
+    # fixes #475503
+    # distilled version of https://gitweb.git.savannah.gnu.org/gitweb/?p=lilypond.git;a=commit;h=f2192eb294e
+    # so, remove once that commit reaches a stable release
+    (fetchpatch2 {
+      name = "fix-clang-21-build.patch";
+      url = "https://cgit.freebsd.org/ports/plain/print/lilypond/files/patch-lily_include_smobs.hh?id=58bab68c706086774b17dcacc61c8fd37ecc8a15";
+      extraPrefix = ""; # adds old/new prefixes to process properly in patchPhase
+      hash = "sha256-nT8+nYU+m6lLTvHEvSIpG/yAwy1Omb6+4Z+NGwEVE4Q=";
+    })
+  ];
 
   strictDeps = true;
 
