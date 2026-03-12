@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-mailbox-server";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole-mailbox-server";
     tag = finalAttrs.version;
-    hash = "sha256-z0iJDUE0LL/PbAYGAHnNJ4wizuB4qA4nFk3uLNuTNWg=";
+    hash = "sha256-Ckwkvw4pMEGUTarfzg1GOodHMwM5hVix2bPCZTI6hxU=";
   };
 
   build-system = [ setuptools ];
@@ -29,7 +29,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     attrs
     autobahn
-    setuptools # pkg_resources is referenced at runtime
     twisted
   ]
   ++ autobahn.optional-dependencies.twisted
