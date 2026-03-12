@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pycm";
-  version = "4.5";
+  version = "4.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "pycm";
     tag = "v${version}";
-    hash = "sha256-qskLY0Ru0Ex7RfbsgXSTsi/UekvDyAKdJEBH6XakQp8=";
+    hash = "sha256-Yi82FBy+kUPKSXS8X6EOK+6hmR0xZgwlGqFjvc9bYEY=";
   };
 
   build-system = [ setuptools ];
