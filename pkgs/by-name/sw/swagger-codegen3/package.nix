@@ -15,10 +15,10 @@ maven.buildMavenPackage rec {
     owner = "swagger-api";
     repo = "swagger-codegen";
     tag = "v${version}";
-    hash = "sha256-TIgn4xyFUoMk5lkYNCK9vl2Z0a46HsC5lIa2QlIBg0w=";
+    hash = "sha256-uAH4daQM0S+g5uuahEa+/iTXSNCDVk8WDrRnjWpW6Xo=";
   };
 
-  mvnHash = "sha256-fvzmCLpN3+3D/IZOpJ5ZmraYS+79j9wFiedQmFZ6RIs=";
+  mvnHash = "sha256-Qyn/ppJ2CQOJNmFoqEV/29CqJ606r4UeFmwtH94Z1jM=";
 
   mvnParameters = toString [
     "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
