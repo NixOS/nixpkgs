@@ -9,16 +9,16 @@
 
 maven.buildMavenPackage rec {
   pname = "swagger-codegen3";
-  version = "3.0.77";
+  version = "3.0.81";
 
   src = fetchFromGitHub {
     owner = "swagger-api";
     repo = "swagger-codegen";
     tag = "v${version}";
-    hash = "sha256-TIgn4xyFUoMk5lkYNCK9vl2Z0a46HsC5lIa2QlIBg0w=";
+    hash = "sha256-5p8wVdPRsepwuXgl8weotxXrdGJcbe0Qv1VceCFrNdM=";
   };
 
-  mvnHash = "sha256-fvzmCLpN3+3D/IZOpJ5ZmraYS+79j9wFiedQmFZ6RIs=";
+  mvnHash = "sha256-d8OVpSRQWbajXnM1eCKOOmUVHPpBR2AVeZMdJXbBbLg=";
 
   mvnParameters = toString [
     "-Dproject.build.outputTimestamp=1980-01-01T00:00:02Z"
