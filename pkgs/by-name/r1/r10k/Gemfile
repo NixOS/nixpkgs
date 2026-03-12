@@ -2,4 +2,4 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gem "r10k"
+gem "r10k", ">= 5.0.0"
