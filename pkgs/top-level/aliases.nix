@@ -1152,12 +1152,78 @@ mapAliases {
   linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linux_hardened = linuxPackages_hardened.kernel; # Added 2025-08-10
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
-  linux_rpi0 = linuxKernel.kernels.linux_rpi1;
-  linux_rpi1 = linuxKernel.kernels.linux_rpi1;
-  linux_rpi2 = linuxKernel.kernels.linux_rpi2;
-  linux_rpi02w = linuxKernel.kernels.linux_rpi3;
-  linux_rpi3 = linuxKernel.kernels.linux_rpi3;
-  linux_rpi4 = linuxKernel.kernels.linux_rpi4;
+  linux_rpi0 =
+    warnAlias
+      "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+      callPackage
+      ../os-specific/linux/kernel/linux-rpi.nix
+      {
+        kernelPatches = with kernelPatches; [
+          bridge_stp_helper
+          request_key_helper
+        ];
+        rpiVersion = 1;
+      }; # Added 2026-02-04
+  linux_rpi1 =
+    warnAlias
+      "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+      callPackage
+      ../os-specific/linux/kernel/linux-rpi.nix
+      {
+        kernelPatches = with kernelPatches; [
+          bridge_stp_helper
+          request_key_helper
+        ];
+        rpiVersion = 1;
+      }; # Added 2026-02-04
+  linux_rpi2 =
+    warnAlias
+      "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+      callPackage
+      ../os-specific/linux/kernel/linux-rpi.nix
+      {
+        kernelPatches = with kernelPatches; [
+          bridge_stp_helper
+          request_key_helper
+        ];
+        rpiVersion = 2;
+      }; # Added 2026-02-04
+  linux_rpi02w =
+    warnAlias
+      "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+      callPackage
+      ../os-specific/linux/kernel/linux-rpi.nix
+      {
+        kernelPatches = with kernelPatches; [
+          bridge_stp_helper
+          request_key_helper
+        ];
+        rpiVersion = 3;
+      }; # Added 2026-02-04
+  linux_rpi3 =
+    warnAlias
+      "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+      callPackage
+      ../os-specific/linux/kernel/linux-rpi.nix
+      {
+        kernelPatches = with kernelPatches; [
+          bridge_stp_helper
+          request_key_helper
+        ];
+        rpiVersion = 3;
+      }; # Added 2026-02-04
+  linux_rpi4 =
+    warnAlias
+      "linux-rpi series will be removed in a future release. Please change to use nixos-hardware."
+      callPackage
+      ../os-specific/linux/kernel/linux-rpi.nix
+      {
+        kernelPatches = with kernelPatches; [
+          bridge_stp_helper
+          request_key_helper
+        ];
+        rpiVersion = 4;
+      }; # Added 2026-02-04
   linuxPackages-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages_5_4 = throw "linux 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-26
   linuxPackages_5_4_hardened = throw "linux_hardened on nixpkgs only contains latest stable and latest LTS"; # Added 2025-08-10
@@ -1184,12 +1250,12 @@ mapAliases {
   linuxPackages_hardened = linuxKernel.packages.linux_hardened; # Added 2025-08-10
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
   linuxPackages_latest_xen_dom0 = throw "'linuxPackages_latest_xen_dom0' has been renamed to/replaced by 'linuxPackages_latest'"; # Converted to throw 2025-10-27
-  linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
-  linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
-  linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
-  linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
-  linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
-  linuxPackages_rpi4 = linuxKernel.packages.linux_rpi4;
+  linuxPackages_rpi0 = linuxPackagesFor self.linux_rpi0;
+  linuxPackages_rpi1 = linuxPackagesFor self.linux_rpi1;
+  linuxPackages_rpi2 = linuxPackagesFor self.linux_rpi2;
+  linuxPackages_rpi02w = linuxPackagesFor self.linux_rpi02w;
+  linuxPackages_rpi3 = linuxPackagesFor self.linux_rpi3;
+  linuxPackages_rpi4 = linuxPackagesFor self.linux_rpi4;
   linuxPackages_rt_5_4 = throw "linux_rt 5.4 has been removed because it will reach its end of life within 25.11"; # Added 2025-10-22
   linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
   linuxPackages_rt_5_15 = linuxKernel.packages.linux_rt_5_15;

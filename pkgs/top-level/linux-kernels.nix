@@ -27,7 +27,6 @@ let
     packageAliases
     vanillaPackages
     rtPackages
-    rpiPackages
     ;
 
   markBroken =
@@ -91,38 +90,6 @@ in
         # NOTE: PLEASE DO NOT ADD NEW DOWNSTREAM KERNELS TO NIXPKGS.
         # New vendor kernels should go to nixos-hardware instead.
         # e.g. https://github.com/NixOS/nixos-hardware/tree/master/microsoft/surface/kernel
-
-        linux_rpi1 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 1;
-        };
-
-        linux_rpi2 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 2;
-        };
-
-        linux_rpi3 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 3;
-        };
-
-        linux_rpi4 = callPackage ../os-specific/linux/kernel/linux-rpi.nix {
-          kernelPatches = with kernelPatches; [
-            bridge_stp_helper
-            request_key_helper
-          ];
-          rpiVersion = 4;
-        };
 
         linux_5_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
           branch = "5.10";
@@ -764,17 +731,9 @@ in
     linux_rt_5_4 = throw "linux_rt 5.4 was removed because it will reach its end of life within 25.11"; # Added 2025-10-22
   };
 
-  rpiPackages = {
-    linux_rpi1 = packagesFor kernels.linux_rpi1;
-    linux_rpi2 = packagesFor kernels.linux_rpi2;
-    linux_rpi3 = packagesFor kernels.linux_rpi3;
-    linux_rpi4 = packagesFor kernels.linux_rpi4;
-  };
-
   packages = recurseIntoAttrs (
     vanillaPackages
     // rtPackages
-    // rpiPackages
     // {
 
       # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
