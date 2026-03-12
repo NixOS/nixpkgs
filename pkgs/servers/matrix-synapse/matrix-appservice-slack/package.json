@@ -43,7 +43,7 @@
     "classnames": "^2.3.2",
     "escape-string-regexp": "^4.0.0",
     "https-proxy-agent": "^5.0.1",
-    "matrix-appservice-bridge": "^8.1.2",
+    "matrix-appservice-bridge": "^10.0.0",
     "matrix-widget-api": "^1.1.1",
     "minimist": "^1.2.6",
     "nedb": "^1.8.0",
