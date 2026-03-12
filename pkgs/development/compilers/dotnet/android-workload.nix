@@ -338,51 +338,48 @@ stdenvNoCC.mkDerivation {
     zlib
   ];
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p "$out/share/dotnet/packs"
-      mkdir -p "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}"
-      cp ${androidManifest} "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}/WorkloadManifest.json"
-      cp ${androidManifestTargets} "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}/WorkloadManifest.targets"
-      cp ${androidWorkloadDependencies} "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}/WorkloadDependencies.json"
-      mkdir -p "$out/share/dotnet/sdk-manifests/${featureBand}/workloadsets/${workloadSetVersion}"
-      cp ${workloadSet} "$out/share/dotnet/sdk-manifests/${featureBand}/workloadsets/${workloadSetVersion}/microsoft.net.workloads.workloadset.json"
+    mkdir -p "$out/share/dotnet/packs"
+    mkdir -p "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}"
+    cp ${androidManifest} "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}/WorkloadManifest.json"
+    cp ${androidManifestTargets} "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}/WorkloadManifest.targets"
+    cp ${androidWorkloadDependencies} "$out/share/dotnet/sdk-manifests/${featureBand}/microsoft.net.sdk.android/${androidManifestVersion}/WorkloadDependencies.json"
+    mkdir -p "$out/share/dotnet/sdk-manifests/${featureBand}/workloadsets/${workloadSetVersion}"
+    cp ${workloadSet} "$out/share/dotnet/sdk-manifests/${featureBand}/workloadsets/${workloadSetVersion}/microsoft.net.workloads.workloadset.json"
 
-      mkdir -p "$out/share/dotnet/metadata/workloads/${featureBand}/InstalledWorkloads"
-      : > "$out/share/dotnet/metadata/workloads/${featureBand}/InstalledWorkloads/android"
-      mkdir -p "$out/share/dotnet/metadata/workloads/X64/${featureBand}/InstallState"
-      cp ${installState} "$out/share/dotnet/metadata/workloads/X64/${featureBand}/InstallState/default.json"
+    mkdir -p "$out/share/dotnet/metadata/workloads/${featureBand}/InstalledWorkloads"
+    : > "$out/share/dotnet/metadata/workloads/${featureBand}/InstalledWorkloads/android"
+    mkdir -p "$out/share/dotnet/metadata/workloads/X64/${featureBand}/InstallState"
+    cp ${installState} "$out/share/dotnet/metadata/workloads/X64/${featureBand}/InstallState/default.json"
 
-      mkdir -p "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.sdk.android/${androidManifestVersion}/${featureBand}"
-      : > "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.sdk.android/${androidManifestVersion}/${featureBand}/${featureBand}"
+    mkdir -p "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.sdk.android/${androidManifestVersion}/${featureBand}"
+    : > "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.sdk.android/${androidManifestVersion}/${featureBand}/${featureBand}"
 
-      mkdir -p "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.workload.mono.toolchain.current/${workloadSetVersion}/${featureBand}"
-      : > "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.workload.mono.toolchain.current/${workloadSetVersion}/${featureBand}/${featureBand}"
+    mkdir -p "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.workload.mono.toolchain.current/${workloadSetVersion}/${featureBand}"
+    : > "$out/share/dotnet/metadata/workloads/InstalledManifests/v1/microsoft.net.workload.mono.toolchain.current/${workloadSetVersion}/${featureBand}/${featureBand}"
 
-      mkdir -p "$out/share/dotnet/metadata/workloads/InstalledWorkloadSets/v1/${workloadSetVersion}/${featureBand}"
-      : > "$out/share/dotnet/metadata/workloads/InstalledWorkloadSets/v1/${workloadSetVersion}/${featureBand}/${featureBand}"
-    ''
-    + lib.concatMapStrings (
-      spec: ''
-        packDir="$out/share/dotnet/packs/${spec.resolvedId}/${spec.version}"
-        mkdir -p "$packDir"
-        unzip -qq ${spec.src} -d "$packDir"
-        rm -f "$packDir/.signature.p7s"
-        if [ -d "$packDir/tools" ]; then
-          find "$packDir/tools" -type f -exec chmod +x {} +
-        fi
+    mkdir -p "$out/share/dotnet/metadata/workloads/InstalledWorkloadSets/v1/${workloadSetVersion}/${featureBand}"
+    : > "$out/share/dotnet/metadata/workloads/InstalledWorkloadSets/v1/${workloadSetVersion}/${featureBand}/${featureBand}"
+  ''
+  + lib.concatMapStrings (spec: ''
+            packDir="$out/share/dotnet/packs/${spec.resolvedId}/${spec.version}"
+            mkdir -p "$packDir"
+            unzip -qq ${spec.src} -d "$packDir"
+            rm -f "$packDir/.signature.p7s"
+            if [ -d "$packDir/tools" ]; then
+              find "$packDir/tools" -type f -exec chmod +x {} +
+            fi
 
-        mkdir -p "$out/share/dotnet/metadata/workloads/InstalledPacks/v1/${spec.resolvedId}/${spec.version}"
-        cat > "$out/share/dotnet/metadata/workloads/InstalledPacks/v1/${spec.resolvedId}/${spec.version}/${featureBand}" <<EOF
-{"Id":"${spec.logicalId}","Version":"${spec.version}","Kind":${toString spec.kind},"ResolvedPackageId":"${spec.resolvedId}","Path":"$packDir","IsStillPacked":true}
-EOF
-      ''
-    ) packs
-    + ''
-      runHook postInstall
-    '';
+            mkdir -p "$out/share/dotnet/metadata/workloads/InstalledPacks/v1/${spec.resolvedId}/${spec.version}"
+            cat > "$out/share/dotnet/metadata/workloads/InstalledPacks/v1/${spec.resolvedId}/${spec.version}/${featureBand}" <<EOF
+    {"Id":"${spec.logicalId}","Version":"${spec.version}","Kind":${toString spec.kind},"ResolvedPackageId":"${spec.resolvedId}","Path":"$packDir","IsStillPacked":true}
+    EOF
+  '') packs
+  + ''
+    runHook postInstall
+  '';
 
   postFixup = ''
     addAutoPatchelfSearchPath "$out/share/dotnet/packs/Microsoft.Android.Sdk.Linux/${androidManifestVersion}/tools/Linux/binutils/lib"
