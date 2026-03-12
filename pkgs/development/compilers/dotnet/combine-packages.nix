@@ -37,10 +37,16 @@ mkWrapper "sdk" (
     nativeBuildInputs = [ makeWrapper ];
     postBuild = ''
       mkdir -p "$out"/share/dotnet
-      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
+      cp "${cli}"/share/dotnet/dotnet "$out"/share/dotnet/dotnet
       cp -R "${cli}"/nix-support "$out"/
       mkdir "$out"/bin
-      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+      mv "$out"/share/dotnet{,~}
+      cp -Lr "$out"/share/dotnet{~,}
+      rm -r "$out"/share/dotnet~
+      if [ -e "$out/share/dotnet/metadata/workloads/X64" ]; then
+        find "$out/share/dotnet/metadata/workloads" -path '*/userlocal' -delete
+      fi
+      makeWrapper "$out"/share/dotnet/dotnet "$out"/bin/dotnet
     ''
     + lib.optionalString (cli ? man) ''
       ln -s ${cli.man} $man

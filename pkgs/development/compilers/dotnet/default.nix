@@ -87,6 +87,7 @@ let
 
         buildDotnetModule = callPackage ../../../build-support/dotnet/build-dotnet-module { };
         buildDotnetGlobalTool = callPackage ../../../build-support/dotnet/build-dotnet-global-tool { };
+        androidWorkload_10_0 = callPackage ./android-workload.nix { };
 
         mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
         mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
