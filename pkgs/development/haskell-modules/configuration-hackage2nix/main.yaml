@@ -26,12 +26,16 @@
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2026-01-23: dataframe >= 0.3.3.7 uses random-1.3, which breaks dependency coherence on 25.11, whose default version is random-1.2
+  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
+  - dataframe == 0.3.3.6
   # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
   - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
   # 2026-01-30: Needs to match hasql from Stackage LTS 24
   - hasql-notifications < 0.2.5.0
   # 2026-02-04: as requested by ghcide >= 2.13
+  - hie-bios < 0.18.0
   - hiedb < 0.8.0
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
@@ -44,6 +48,10 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
+  # 2025-03-07: HLS and many other pkgs don't support lsp >= 2.8 (yet)
+  - lsp < 2.8
+  - lsp-test < 0.18
+  - lsp-types < 2.4
   # Needs to match microlens == 0.4.* in Stackage LTS 24
   - microlens-pro < 0.2.0.4
   # We currently use pandoc-crossref with a patch to revert it to pandoc == 3.7.*,
@@ -125,6 +133,7 @@ package-maintainers:
     - ghcjs-dom
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
+    - haskell-debugger
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
@@ -474,30 +483,31 @@ package-maintainers:
     - gopher-proxy
     # other packages I can help out for
     - cabal-install
-    - hledger
-    - pandoc
-    - systemd
+    - chatter
+    - citeproc
+    - diagrams
+    - envy
+    - Euterpea2
     - fast-logger
     - flat
-    - Euterpea2
-    - utc
-    - socket
     - gitit
-    - yarn-lock
-    - yarn2nix
-    - large-hashable
     - haskell-ci
-    - diagrams
-    - rel8
-    - regex-rure
-    - jacinda
-    - citeproc
-    - mighttpd2
-    # owothia
+    - hledger
     - irc-client
-    - chatter
-    - envy
+    - jacinda
     - krank
+    - large-hashable
+    - libriscv
+    - mighttpd2
+    - nix-serve-ng
+    - pandoc
+    - regex-rure
+    - rel8
+    - socket
+    - systemd
+    - utc
+    - yarn2nix
+    - yarn-lock
   t4ccer:
     - aeson-better-errors
     - cheapskate

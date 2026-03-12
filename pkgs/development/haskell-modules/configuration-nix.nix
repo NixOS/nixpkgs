@@ -29,6 +29,7 @@
 
 let
   inherit (pkgs) lib;
+  canExecute = pkgs.stdenv.buildPlatform.canExecute pkgs.stdenv.hostPlatform;
 in
 
 with haskellLib;
@@ -56,10 +57,18 @@ builtins.intersectAttrs super {
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
 
-  cabal-add = overrideCabal (drv: {
-    # tests depend on executable
-    preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
-  }) super.cabal-add;
+  cabal-add =
+    # Can't find executable without https://github.com/haskell/cabal/pull/9912
+    if lib.versionOlder self.ghc.version "9.12" then
+      overrideCabal (drv: {
+        # tests depend on executable
+        preCheck = ''
+          ${drv.preCheck or ""}
+          export PATH="$PWD/dist/build/cabal-add:$PATH"
+        '';
+      }) super.cabal-add
+    else
+      super.cabal-add;
 
   haskell-language-server = overrideCabal (drv: {
     # starting with 1.6.1.1 haskell-language-server wants to be linked dynamically
@@ -317,6 +326,9 @@ builtins.intersectAttrs super {
     ];
   }) super.arbtt;
 
+  # Needs to execute `git` while compiling the test suite?!
+  quick-process = addTestToolDepends [ pkgs.buildPackages.git ] super.quick-process;
+
   hzk = appendConfigureFlag "--extra-include-dirs=${pkgs.zookeeper_mt}/include/zookeeper" super.hzk;
 
   # Foreign dependency name clashes with another Haskell package.
@@ -424,6 +436,14 @@ builtins.intersectAttrs super {
             })
           )
       );
+
+  # Requires postgresql with postgis and predefined geometry type
+  esqueleto-postgis = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "!/roundtrip xy geometry/ && !/roundtrip xyz geometry/ && !/roundtryp xyzm geometry/ && !/function bindings/"
+    ];
+  }) super.esqueleto-postgis;
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
@@ -1817,11 +1837,16 @@ builtins.intersectAttrs super {
   inherit
     (
       let
-        fourmoluTestFix = overrideCabal (drv: {
-          preCheck = drv.preCheck or "" + ''
-            export PATH="$PWD/dist/build/fourmolu:$PATH"
-          '';
-        });
+        fourmoluTestFix =
+          # Can't find executable without https://github.com/haskell/cabal/pull/9912
+          if lib.versionOlder self.ghc.version "9.12" then
+            overrideCabal (drv: {
+              preCheck = drv.preCheck or "" + ''
+                export PATH="$PWD/dist/build/fourmolu:$PATH"
+              '';
+            })
+          else
+            lib.id;
       in
       builtins.mapAttrs (_: fourmoluTestFix) super
     )
@@ -1956,15 +1981,19 @@ builtins.intersectAttrs super {
     ]
     ++ old.buildTools or [ ];
     postInstall = old.postInstall + ''
-      mkdir -p "$out/share/man/man1"
-      "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
-
+      ${lib.optionalString canExecute ''
+        mkdir -p "$out/share/man/man1"
+        "$out/bin/cabal" man --raw > "$out/share/man/man1/cabal.1"
+      ''}
       wrapProgram "$out/bin/cabal" \
         --prefix PATH : "${pkgs.lib.makeBinPath [ pkgs.groff ]}"
     '';
     hydraPlatforms = pkgs.lib.platforms.all;
     broken = false;
   }) super.cabal-install;
+
+  # lots of errors
+  haskell-debugger = dontCheck super.haskell-debugger;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
