@@ -3,6 +3,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   zsh,
 }:
 
@@ -32,6 +33,8 @@ stdenv.mkDerivation {
     cp -r bin/* $out/bin/
     runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
     homepage = "https://github.com/unixorn/fzf-zsh-plugin";
