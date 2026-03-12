@@ -205,6 +205,7 @@ rec {
           ./manual.md \
           $dst/${common.indexPath}
 
+        # typos: ignore-next-line
         cp ${pkgs.roboto.src}/web/Roboto\[ital\,wdth\,wght\].ttf "$dst/Roboto.ttf"
 
         mkdir -p $out/nix-support

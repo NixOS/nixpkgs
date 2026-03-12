@@ -255,7 +255,7 @@ let
 
       # This function takes an empty attrset as an argument.
       # It could theoretically be replaced with its body,
-      # but such a binding is avoided to allow for earlier grabage collection.
+      # but such a binding is avoided to allow for earlier garbage collection.
       doCollect =
         { }:
         collectModules class (specialArgs.modulesPath or "") (regularModules ++ [ internalModule ]) (

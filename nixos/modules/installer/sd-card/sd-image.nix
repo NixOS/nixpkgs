@@ -124,7 +124,7 @@ in
       description = ''
         Label for the NixOS root volume.
         Usually used when creating a recovery NixOS media installation
-        that avoids conflicting with previous instalation label.
+        that avoids conflicting with previous installation label.
       '';
     };
 
@@ -146,7 +146,7 @@ in
       type = types.package;
       default = rootfsImage;
       description = ''
-        The finished root partition image with all custom fileystem modifications.
+        The finished root partition image with all custom filesystem modifications.
         Used to override the filesystem creator itself.
       '';
     };

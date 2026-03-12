@@ -50,7 +50,8 @@ in
   options = generatedOptions // sensibleOptions;
 
   config = {
-    # Typo: "enble" is distance 1 from "enable"
+    # typos: ignore: "enble" is distance 1 from "enable"
+    # typos: ignore-next-line
     enble = true;
   };
 }

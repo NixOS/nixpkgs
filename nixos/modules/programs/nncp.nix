@@ -44,7 +44,7 @@ in
       description = ''
         NNCP configuration, see
         <http://www.nncpgo.org/Configuration.html>.
-        At runtime these settings will be overlayed by the contents of
+        At runtime these settings will be overlaid by the contents of
         [](#opt-programs.nncp.secrets) into the file
         `${nncpCfgFile}`. Node keypairs go in
         `secrets`, do not specify them in

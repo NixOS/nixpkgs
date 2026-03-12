@@ -41,7 +41,7 @@ in
       example = true;
 
       description = ''
-        Whether to enable all firmware, including [unfree packages that must be explictly allowed](https://nixos.org/manual/nixpkgs/unstable/#sec-allow-unfree).
+        Whether to enable all firmware, including [unfree packages that must be explicitly allowed](https://nixos.org/manual/nixpkgs/unstable/#sec-allow-unfree).
 
         Alternatively, use the {option}`hardware.enableRedistributableFirmware` option.
       '';

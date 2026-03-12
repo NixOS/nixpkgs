@@ -1,0 +1,72 @@
+[default]
+locale = "en"
+extend-ignore-re = [
+  # Custom ignore regex patterns: https://github.com/crate-ci/typos/blob/master/docs/reference.md#example-configurations
+  # See also: https://github.com/crate-ci/typos/issues/316
+  ".*(?:#|--|//|/*).*(?:spellchecker|typos):\\s?ignore[^\\n]*\\n",
+  ".*(?:spellchecker|typos):\\s?ignore-next-line[^\\n]*\\n[^\\n]*",
+
+  '(e|p)?name\s*[:=]\s*".*"',
+  'owner\s*[:=]\s*".*"',
+  'version\s*[:=]\s*".*"',
+  '(repo|rev|tag|url|homepage)\s*[:=]\s*".*"',
+  '(sha256|hash)\s*[:=]\s*".*"',
+  '(meta\.)?maintainers\s*[:=]\s*.*',
+  '(meta\.)?teams\s*[:=]\s*.*',
+  '(meta\.)?license\s*[:=]\s*.*',
+
+  '[c]?makeFlags\s*=\s*\[[^\]]*\]',
+  'nativeBuildInputs\s*=\s*\[[^\]]*\]',
+  'buildInputs\s*=\s*\[[^\]]*\]',
+  'propagatedBuildInputs\s*=\s*\[[^\]]*\]',
+  'dependencies\s*=\s*\[[^\]]*\]',
+
+  'fingerprint\s*[:=]\s*".*"', # maintainer key fingerprint
+
+  '(APP|API|SECRET|GH)_(KEY|TOKEN)\s*=\s*".*"',
+  '.*(i|I)d\s*[:=].*;',
+
+  # Addresses (hex, MAC, IPv6)
+  '0x[0-9a-fA-F]+',
+  '[0-9a-fA-F]{2}(:[0-9a-fA-F]{2}){5}',
+  '([0-9a-fA-F]{1,4}:){2,7}[0-9a-fA-F]{1,4}',
+  '\b[A-Z0-9]{64,}\b', # long key-like blobs
+
+  # typos in markdown, cant be caught by extend-ignore-words-re
+  'aks-preview', # azure-cli extension
+  'Big Sur', # macOS version
+  'itms-services://', # iOS distribution URL scheme
+  'cc-by-nc-nd-\d+(?:\.\d+)?', # license
+  'HashiCorp', # company name
+]
+extend-ignore-words-re = [
+  # package names with special characters
+  'ags',
+  '-hda', # qemu option
+
+  # systemd daemons
+  'systemd-importd',
+  'systemd-localed',
+
+  'ttest_rel', # python function
+]
+
+[default.extend-words]
+# package names
+mosquitto = "mosquitto"
+thumbnailers = "thumbnailers"
+facter = "facter"
+muc = "muc"
+merecat = "merecat"
+
+pn = "pn" # a lot of false positives
+nd = "nd" # network device
+hime = "hime" # input method
+splitted = "splitted" # haskell function
+GIR = "GIR" # gnome introspection repository
+HSI = "HSI" # facter hardware sub-class
+crypted = "crypted" # nixos option
+smtpd_helo_restrictions = "smtpd_helo_restrictions" # postfix option
+
+mport = "mport" # ssh term - TODO: ignore per package?
+kend = "kend" # key end - TODO: ignore per package?

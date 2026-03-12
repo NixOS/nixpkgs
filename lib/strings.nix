@@ -961,7 +961,7 @@ rec {
     ## `lib.strings.stringAsChars` usage example
 
     ```nix
-    stringAsChars (x: if x == "a" then "i" else x) "nax"
+    stringAsChars (x: if x == "h" then "n" else x) "hix"
     => "nix"
     ```
 
@@ -3074,9 +3074,9 @@ rec {
     => false
     levenshteinAtMost 2 "foo" "boa"
     => true
-    levenshteinAtMost 2 "This is a sentence" "this is a sentense."
+    levenshteinAtMost 2 "This is a sentence" "this is a sentence."
     => false
-    levenshteinAtMost 3 "This is a sentence" "this is a sentense."
+    levenshteinAtMost 3 "This is a sentence" "this is a sentence."
     => true
     ```
 

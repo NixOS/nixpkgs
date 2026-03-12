@@ -330,7 +330,7 @@ calculateReverseDependencies depMap =
 getMaintainerMap :: IO MaintainerMap
 getMaintainerMap =
   readJSONLinesProcess nixEvalJobsCommand nixEvalJobsParams
-  -- we ignore unparseable lines since fromJSON will fail on { "attr": …, "error": … }
+  -- we ignore unparsable lines since fromJSON will fail on { "attr": …, "error": … }
   -- entries since they don't have a @meta@ attribute.
   <&> rights
   <&> map (\(JobMaintainers name maintainers) -> (,) name <$> nonEmpty maintainers)

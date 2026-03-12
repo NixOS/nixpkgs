@@ -74,6 +74,25 @@ let
           package = pkgs.nixfmt;
         };
 
+        programs.typos = {
+          enable = true;
+          package = pkgs.typos;
+          configFile = "ci/typos.toml";
+        };
+        # By default includes everything, excludes should be in nix to override that
+        settings.formatter.typos.excludes = [
+          "pkgs/**"
+          "nixos/**" # TODO: continue
+          "nixos/modules/programs/singularity.nix" # TODO: rename option with typo
+          "**/*.diff"
+          "**/*.patch"
+          "lib/licenses.nix"
+          "nixos/modules/misc/ids.nix"
+          "maintainers/maintainer-list.nix"
+          "maintainers/team-list.nix"
+          "maintainers/github-teams.json"
+        ];
+
         programs.yamlfmt = {
           enable = true;
           settings.formatter = {
@@ -134,7 +153,7 @@ let
         };
 
         # TODO: Upstream this into treefmt-nix eventually:
-        #   https://github.com/numtide/treefmt-nix/issues/387
+        # https://github.com/numtide/treefmt-nix/issues/387
         settings.formatter.markdown-code-runner = {
           command = pkgs.lib.getExe pkgs.markdown-code-runner;
           options =
