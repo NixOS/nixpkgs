@@ -1,8 +1,7 @@
 {
-  seriesFile,
   kafkaVersion,
   scalaVersion,
-  sha256,
+  hash,
 }:
 
 {
@@ -22,6 +21,7 @@
 let
   jre = jdk17_headless;
   series = lib.replaceStrings [ "." ] [ "_" ] (lib.versions.majorMinor kafkaVersion);
+  seriesFile = ./. + "/${series}.nix";
 in
 stdenv.mkDerivation rec {
   version = "${scalaVersion}-${kafkaVersion}";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/kafka/${kafkaVersion}/kafka_${version}.tgz";
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -69,6 +69,10 @@ stdenv.mkDerivation rec {
   passthru = {
     inherit jre; # Used by the NixOS module to select the supported JRE
     tests.nixos = nixosTests.kafka.base.${"kafka_" + series};
+    updateScript = [
+      ./update.sh
+      seriesFile
+    ];
   };
 
   meta = {
