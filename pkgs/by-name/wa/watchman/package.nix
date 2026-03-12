@@ -30,18 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Eh7IHYEavgVd2p+r1PzQrAdqPD5FlYiTp4TCon55byE=";
+    hash = "sha256-Ncys548lwB758+UztE1my8lyzruBDHuFXYeVzKyh7mo=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
