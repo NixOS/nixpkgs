@@ -6,7 +6,7 @@
   applyPatches,
   fetchpatch,
   fetchurl,
-  abseil-cpp_202407,
+  abseil-cpp_202508,
   cmake,
   cpuinfo,
   eigen,
@@ -59,39 +59,20 @@ let
     hash = "sha256-pjwjrqq6dfiVsXIhbBtbolhiysiFlFTnx5XcX77f+C0=";
   };
 
-  onnx-src = applyPatches {
+  onnx-src = fetchFromGitHub {
     name = "onnx-src";
-    src = fetchFromGitHub {
-      owner = "onnx";
-      repo = "onnx";
-      tag = "v1.18.0";
-      hash = "sha256-UhtF+CWuyv5/Pq/5agLL4Y95YNP63W2BraprhRqJOag=";
-    };
-
-    patches = [
-      # Fix "error: conversion from 'onnx::OpSchema' to non-scalar type 'onnx::OpSchemaRegistry::OpSchemaRegisterOnce'"
-      # https://github.com/microsoft/onnxruntime/issues/26229
-      # Fix from https://github.com/onnx/onnx/pull/7390
-      (fetchpatch {
-        url = "https://github.com/onnx/onnx/commit/595a069aaac07586f111681245bc808ee63551f8.patch";
-        includes = [ "onnx/defs/schema.h" ];
-        hash = "sha256-FFAJuJse4nmNT3ixvEdlqzbr3edY46SqEFv7z/oo6m0=";
-      })
-
-      # Fix "undefined reference to `onnx::RNNShapeInference(onnx::InferenceContext&)'"
-      (fetchpatch {
-        url = "https://github.com/onnx/onnx/commit/6769c41ad64ebca0358da8c7211d2c6d0e627b2b.patch";
-        hash = "sha256-VlTHs0om20kTNvSVQaasSsa5JROliQy4k9BECTsBtbU=";
-      })
-    ];
+    owner = "onnx";
+    repo = "onnx";
+    tag = "v1.20.1";
+    hash = "sha256-XZJXD6sBvVJ6cLPyDkKOW8oSkjqcw9whUqDWd7dxY3c=";
   };
 
   cutlass-src = fetchFromGitHub {
     name = "cutlass-src";
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.9.2";
-    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
+    tag = "v4.2.1";
+    hash = "sha256-iP560D5Vwuj6wX1otJhwbvqe/X4mYVeKTpK533Wr5gY=";
   };
 
   dlpack-src = fetchFromGitHub {
@@ -106,30 +87,17 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.23.2";
+  version = "1.24.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-hZ2L5+0Enkw4rGDKVpRECnKXP87w6Kbiyp6Fdxwt6hk=";
+    hash = "sha256-Hsv5spRI6LwaDxANdveAuM7gb59F40TGGq0p7FsWeM8=";
   };
 
   patches = [
-    # Missing cstdint include (GCC 15 compatibility)
-    (fetchpatch {
-      url = "https://github.com/microsoft/onnxruntime/commit/d6e712c5b7b6260a61e54d1fe40107cf5366ee77.patch";
-      hash = "sha256-FSuPybX8f2VoxvLhcYx4rdChaiK8bSUDR32sN3Efwfc=";
-    })
-
-    # Correct maybe-uninitialized and range-loop-construct warnings
-    # https://github.com/microsoft/onnxruntime/pull/26201
-    (fetchpatch {
-      url = "https://github.com/microsoft/onnxruntime/commit/8ebd0bf1cf02414584d15d7244b07fa97d65ba02.patch";
-      hash = "sha256-vX+kaFiNdmqWI91JELcLpoaVIHBb5EPbI7rCAMYAx04=";
-    })
-
     # Skip execinfo include on musl
     # https://github.com/microsoft/onnxruntime/pull/25726
     ./musl-execinfo.patch
@@ -255,7 +223,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ABSL_ENABLE_INSTALL" true)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeBool "FETCHCONTENT_QUIET" false)
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202407.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ABSEIL_CPP" "${abseil-cpp_202508.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DLPACK" "${dlpack-src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_FLATBUFFERS" "${flatbuffers_23.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MP11" "${mp11-src}")
@@ -342,12 +310,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
     echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
-  ''
-  # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
-  + ''
-    substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
-      "GetRuntimePath() const { return PathString(); }" \
-      "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
+    cat >> cmake/external/abseil-cpp.cmake << 'EOF'
+    if(TARGET absl::hash AND NOT TARGET absl::low_level_hash)
+      add_library(absl::low_level_hash INTERFACE IMPORTED)
+      target_link_libraries(absl::low_level_hash INTERFACE absl::hash)
+    endif()
+    EOF
   ''
   + lib.optionalString rocmSupport ''
     patchShebangs tools/ci_build/hipify-perl
