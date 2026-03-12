@@ -176,6 +176,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Seemingly runs forever, with tons of output
     "v22bis_tests"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isPower64 [
+    # Output differs from x86-generated reference due to float precision
+    "lpc10_tests"
   ];
 
   checkPhase = ''
