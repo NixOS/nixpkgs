@@ -25,8 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required( VERSION 2.8 )" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  # fixes: error: 'sprintf' is deprecated: This function is provided for compatibility reasons only.
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.cc.isClang "-Wno-error=deprecated-declarations";
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    # fixes: error: 'sprintf' is deprecated: This function is provided for compatibility reasons only.
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  };
 
   meta = {
     homepage = "https://github.com/vietjtnguyen/argagg";
