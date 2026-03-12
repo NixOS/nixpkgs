@@ -62,7 +62,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Ronin-CK/HyprQuickFrame";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "hyprquickframe";
   };
 })
