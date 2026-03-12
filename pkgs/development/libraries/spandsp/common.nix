@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     # https://github.com/freeswitch/spandsp/pull/111
     ./Fix-tests-pcap_parse-build-on-musl.patch
+
+    # https://github.com/freeswitch/spandsp/pull/116
+    ./fix-bit-operations-ub.patch
   ]
   ++ patches;
 
