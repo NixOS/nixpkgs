@@ -17,11 +17,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-g5o2H5FqP+ytu5eqmGUyn0lD9NQcCJ4+xQCmTk0Qxrg=";
   };
 
-  pythonRemoveDeps = [
-    # https://github.com/xnl-h4ck3r/xnldorker/pull/11
-    "asyncio"
-  ];
-
   build-system = with python3.pkgs; [ setuptools ];
 
   nativeBuildInputs = [ writableTmpDirAsHomeHook ];
@@ -45,8 +40,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Gather results of dorks across a number of search engines";
     homepage = "https://github.com/xnl-h4ck3r/xnldorker";
     changelog = "https://github.com/xnl-h4ck3r/xnldorker/blob/${finalAttrs.src.rev}/CHANGELOG.md";
-    # https://github.com/xnl-h4ck3r/xnldorker/issues/10
-    license = lib.licenses.unfree;
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "xnldorker";
   };
