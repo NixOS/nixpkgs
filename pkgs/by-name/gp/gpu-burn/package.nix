@@ -84,7 +84,10 @@ backendStdenv.mkDerivation {
     homepage = "http://wili.cc/blog/gpu-burn.html";
     license = lib.licenses.bsd2;
     mainProgram = "gpu_burn";
-    maintainers = with lib.maintainers; [ connorbaker ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      connorbaker
+    ];
     platforms = optionals cudaSupport lib.platforms.linux;
   };
 }
