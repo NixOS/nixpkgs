@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spotube";
-  version = "5.1.1";
+  version = "5.1.1"; 
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
