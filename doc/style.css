@@ -1,0 +1,492 @@
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.book,
+.appendix {
+  margin: auto;
+  width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+  .book,
+  .appendix {
+    max-width: 46rem;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .book,
+  .appendix {
+    max-width: 60rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .book,
+  .appendix {
+    max-width: 73rem;
+  }
+}
+
+.book .list-of-examples {
+  display: none;
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible;
+}
+
+pre {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+a {
+  background-color: transparent;
+}
+
+strong {
+  font-weight: bolder;
+}
+
+code {
+  font-family: monospace;
+  font-size: 1em;
+}
+
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+pre {
+  overflow: auto;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 100%;
+  line-height: 1.77777778;
+}
+
+@media screen and (min-width: 4000px) {
+  html {
+    background: #000;
+  }
+
+  html body {
+    margin: auto;
+    max-width: 250rem;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  html {
+    font-size: calc(16 / 320 * 100vw);
+  }
+}
+
+body {
+  font-size: 1rem;
+  font-family: "Roboto", sans-serif;
+  font-weight: 300;
+  color: var(--main-text-color);
+  background-color: var(--background);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+@media screen and (max-width: 767.9px) {
+  body {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+a {
+  text-decoration: none;
+  border-bottom: 1px solid;
+  color: var(--link-color);
+}
+
+ul {
+  padding: 0;
+  margin-top: 0;
+  margin-right: 0;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+thead th {
+  text-align: left;
+}
+
+hr {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-weight: 800;
+  line-height: 110%;
+  font-size: 200%;
+  margin-bottom: 1rem;
+  color: var(--heading-color);
+}
+
+h2 {
+  font-weight: 800;
+  line-height: 110%;
+  font-size: 170%;
+  margin-bottom: 0.625rem;
+  color: var(--heading-color);
+}
+
+h2:not(:first-child) {
+  margin-top: 1rem;
+}
+
+h3 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 150%;
+  color: var(--heading-color);
+}
+
+.note h3,
+.tip h3,
+.warning h3,
+.caution h3,
+.important h3 {
+  font-size: 120%;
+}
+
+h4 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 140%;
+  color: var(--heading-color);
+}
+
+h5 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 130%;
+  color: var(--small-heading-color);
+}
+
+h6 {
+  font-weight: 800;
+  line-height: 110%;
+  margin-bottom: 1rem;
+  font-size: 120%;
+}
+
+strong {
+  font-weight: bold;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dt > *:first-child,
+dd > *:first-child {
+  margin-top: 0;
+}
+
+dt > *:last-child,
+dd > *:last-child {
+  margin-bottom: 0;
+}
+
+pre,
+code {
+  font-family: monospace;
+}
+
+code {
+  color: #ff8657;
+  background: #f4f4f4;
+  display: inline-block;
+  padding: 0 0.5rem;
+  border: 1px solid #d8d8d8;
+  border-radius: 0.5rem;
+  line-height: 1.57777778;
+}
+
+div.book .programlisting,
+div.appendix .programlisting {
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow: auto;
+  background: var(--codeblock-background);
+  color: var(--codeblock-text-color);
+}
+
+div.book .note,
+div.book .tip,
+div.book .warning,
+div.book .caution,
+div.book .important,
+div.appendix .note,
+div.appendix .tip,
+div.appendix .warning,
+div.appendix .caution,
+div.appendix .important {
+  margin-bottom: 1rem;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  overflow: auto;
+  background: #f4f4f4;
+}
+
+div.book .note > .title,
+div.book .tip > .title,
+div.book .warning > .title,
+div.book .caution > .title,
+div.book .important > .title,
+div.appendix .note > .title,
+div.appendix .tip > .title,
+div.appendix .warning > .title,
+div.appendix .caution > .title,
+div.appendix .important > .title {
+  font-weight: 800;
+  line-height: 110%;
+  color: inherit;
+  margin-bottom: 0;
+}
+
+div.book .note > :first-child,
+div.book .tip > :first-child,
+div.book .warning > :first-child,
+div.book .caution > :first-child,
+div.book .important > :first-child,
+div.appendix .note > :first-child,
+div.appendix .tip > :first-child,
+div.appendix .warning > :first-child,
+div.appendix .caution > :first-child,
+div.appendix .important > :first-child {
+  margin-top: 0;
+}
+
+div.book .note > :last-child,
+div.book .tip > :last-child,
+div.book .warning > :last-child,
+div.book .caution > :last-child,
+div.book .important > :last-child,
+div.appendix .note > :last-child,
+div.appendix .tip > :last-child,
+div.appendix .warning > :last-child,
+div.appendix .caution > :last-child,
+div.appendix .important > :last-child {
+  margin-bottom: 0;
+}
+
+div.book .note,
+div.book .tip,
+div.appendix .note,
+div.appendix .tip {
+  color: var(--note-text-color);
+  background: var(--note-background);
+}
+
+div.book .warning,
+div.book .caution,
+div.appendix .warning,
+div.appendix .caution {
+  color: var(--warning-text-color);
+  background-color: var(--warning-background);
+}
+
+div.book .section,
+div.appendix .section {
+  margin-top: 2em;
+}
+
+div.book div.example,
+div.appendix div.example {
+  margin-top: 1.5em;
+}
+
+div.book div.example details,
+div.appendix div.example details {
+  padding: 5px;
+}
+
+div.book div.example details[open],
+div.appendix div.example details[open] {
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+div.book div.example details > summary,
+div.appendix div.example details > summary {
+  cursor: pointer;
+}
+
+div.book br.example-break,
+div.appendix br.example-break {
+  display: none;
+}
+
+div.book div.footnotes > hr,
+div.appendix div.footnotes > hr {
+  border-color: #d8d8d8;
+}
+
+div.book div.footnotes > br,
+div.appendix div.footnotes > br {
+  display: none;
+}
+
+div.book dt,
+div.appendix dt {
+  margin-top: 1em;
+}
+
+div.book .toc dt,
+div.appendix .toc dt {
+  margin-top: 0;
+}
+
+div.book .list-of-examples dt,
+div.appendix .list-of-examples dt {
+  margin-top: 0;
+}
+
+div.book code,
+div.appendix code {
+  padding: 0;
+  border: 0;
+  background-color: inherit;
+  color: inherit;
+  font-size: 100%;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  hyphens: none;
+}
+
+div.book div.toc,
+div.appendix div.toc {
+  margin-bottom: 3em;
+  border-bottom: 0.0625rem solid #d8d8d8;
+}
+
+div.book div.toc dd,
+div.appendix div.toc dd {
+  margin-left: 2em;
+}
+
+div.book span.command,
+div.appendix span.command {
+  font-family: monospace;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  hyphens: none;
+}
+
+div.book .informaltable th,
+div.book .informaltable td,
+div.appendix .informaltable th,
+div.appendix .informaltable td {
+  padding: 0.5rem;
+}
+
+div.book .variablelist .term,
+div.appendix .variablelist .term {
+  font-weight: 500;
+}
+
+/*
+  This relies on highlight.js applying certain classes on the prompts.
+  For more details, see https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html#stylable-scopes
+*/
+.hljs-meta.prompt_ {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+:root {
+  --background: #fff;
+  --main-text-color: #000;
+  --link-color: #405d99;
+  --heading-color: #6586c8;
+  --small-heading-color: #6a6a6a;
+  --note-text-color: #5277c3;
+  --note-background: #f2f8fd;
+  --warning-text-color: #cc3900;
+  --warning-background: #fff5e1;
+  --codeblock-background: #f2f8fd;
+  --codeblock-text-color: #000;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #242424;
+    --main-text-color: #fff;
+    --link-color: #6586c8;
+    --small-heading-color: #fff;
+    --note-background: none;
+    --warning-background: none;
+    --codeblock-background: #393939;
+    --codeblock-text-color: #fff;
+  }
+
+  div.book .note,
+  div.book .tip,
+  div.appendix .note,
+  div.appendix .tip,
+  div.book .warning,
+  div.book .caution,
+  div.appendix .warning,
+  div.appendix .caution {
+    border: 2px solid;
+    font-weight: 400;
+  }
+}
+
+@font-face {
+  font-family: Roboto;
+  src: url(Roboto.ttf);
+}

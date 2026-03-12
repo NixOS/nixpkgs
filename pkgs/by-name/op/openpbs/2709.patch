@@ -1,0 +1,190 @@
+From 236aa3fa2f5ee68a8be21a5cc3a729fb90539f1e Mon Sep 17 00:00:00 2001
+From: Eisuke Kawashima <e-kwsm@users.noreply.github.com>
+Date: Sun, 25 May 2025 20:38:53 +0900
+Subject: [PATCH] fix: fix -Wincompatible-pointer-types
+
+fix #2679
+---
+ src/include/pbs_nodes.h       | 4 ++--
+ src/include/svrfunc.h         | 2 +-
+ src/include/work_task.h       | 2 +-
+ src/lib/Libattr/attr_fn_acl.c | 2 +-
+ src/lib/Libnet/net_server.c   | 2 +-
+ src/server/hook_func.c        | 2 +-
+ src/server/issue_request.c    | 6 +++---
+ src/server/node_manager.c     | 2 +-
+ src/server/req_jobobit.c      | 2 +-
+ src/server/req_manager.c      | 2 +-
+ src/server/svr_movejob.c      | 2 +-
+ 11 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/src/include/pbs_nodes.h b/src/include/pbs_nodes.h
+index bc206fdb77..5dbf1a3268 100644
+--- a/src/include/pbs_nodes.h
++++ b/src/include/pbs_nodes.h
+@@ -391,7 +391,7 @@ extern void set_vnode_state(struct pbsnode *, unsigned long, enum vnode_state_op
+ extern struct resvinfo *find_vnode_in_resvs(struct pbsnode *, enum vnode_degraded_op);
+ extern void free_rinf_list(struct resvinfo *);
+ extern void degrade_offlined_nodes_reservations(void);
+-extern void degrade_downed_nodes_reservations(void);
++extern void degrade_downed_nodes_reservations(struct work_task *);
+ 
+ extern int mod_node_ncpus(struct pbsnode *pnode, long ncpus, int actmode);
+ extern int initialize_pbsnode(struct pbsnode *, char *, int);
+@@ -461,7 +461,7 @@ struct pbsnode *node_recov_db(char *nd_name, struct pbsnode *pnode);
+ extern int add_mom_to_pool(mominfo_t *);
+ extern void reset_pool_inventory_mom(mominfo_t *);
+ extern vnpool_mom_t *find_vnode_pool(mominfo_t *pmom);
+-extern void mcast_msg();
++extern void mcast_msg(struct work_task *);
+ int get_job_share_type(struct job *pjob);
+ #endif
+ 
+diff --git a/src/include/svrfunc.h b/src/include/svrfunc.h
+index cc555fa88d..34f9958035 100644
+--- a/src/include/svrfunc.h
++++ b/src/include/svrfunc.h
+@@ -311,7 +311,7 @@ extern int svr_connect(pbs_net_t, unsigned int, void (*)(int), enum conn_type, i
+ #ifdef _WORK_TASK_H
+ extern void release_req(struct work_task *);
+ #ifdef _BATCH_REQUEST_H
+-extern int issue_Drequest(int, struct batch_request *, void (*)(), struct work_task **, int);
++extern int issue_Drequest(int, struct batch_request *, void (*)(struct work_task *), struct work_task **, int);
+ #endif /* _BATCH_REQUEST_H */
+ #endif /* _WORK_TASK_H */
+ 
+diff --git a/src/include/work_task.h b/src/include/work_task.h
+index 3cceb659b0..4d81795a41 100644
+--- a/src/include/work_task.h
++++ b/src/include/work_task.h
+@@ -90,7 +90,7 @@ struct work_task {
+ 	int wt_aux2;			     /* optional info 2: e.g. *real* child pid (windows), tpp msgid etc */
+ };
+ 
+-extern struct work_task *set_task(enum work_type, long event, void (*func)(), void *param);
++extern struct work_task *set_task(enum work_type, long event, void (*func)(struct work_task *), void *param);
+ extern int convert_work_task(struct work_task *ptask, enum work_type);
+ extern void clear_task(struct work_task *ptask);
+ extern void dispatch_task(struct work_task *);
+diff --git a/src/lib/Libattr/attr_fn_acl.c b/src/lib/Libattr/attr_fn_acl.c
+index 0ef2d5328e..b0373eafeb 100644
+--- a/src/lib/Libattr/attr_fn_acl.c
++++ b/src/lib/Libattr/attr_fn_acl.c
+@@ -97,7 +97,7 @@ static int user_order(char *old, char *new);
+ static int group_order(char *old, char *new);
+ static int
+ set_allacl(attribute *, attribute *, enum batch_op,
+-	   int (*order_func)());
++	   int (*order_func)(char *, char *));
+ 
+ /* for all decode_*acl() - use decode_arst() */
+ /* for all encode_*acl() - use encode_arst() */
+diff --git a/src/lib/Libnet/net_server.c b/src/lib/Libnet/net_server.c
+index 045acd303d..b9f6470dbd 100644
+--- a/src/lib/Libnet/net_server.c
++++ b/src/lib/Libnet/net_server.c
+@@ -104,7 +104,7 @@ static char logbuf[256];
+ /* Private function within this file */
+ static int conn_find_usable_index(int);
+ static int conn_find_actual_index(int);
+-static void accept_conn();
++static void accept_conn(int);
+ static void cleanup_conn(int);
+ 
+ /**
+diff --git a/src/server/hook_func.c b/src/server/hook_func.c
+index b9534dfb9a..e0d0e52745 100644
+--- a/src/server/hook_func.c
++++ b/src/server/hook_func.c
+@@ -229,7 +229,7 @@ extern pbs_list_head svr_execjob_preresume_hooks;
+ extern time_t time_now;
+ extern struct python_interpreter_data svr_interp_data;
+ extern pbs_list_head task_list_event;
+-extern struct work_task *add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(), char *msgid, void *parm1, void *parm2);
++extern struct work_task *add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(struct work_task *), char *msgid, void *parm1, void *parm2);
+ 
+ extern char *path_rescdef;
+ extern char *path_hooks_rescdef;
+diff --git a/src/server/issue_request.c b/src/server/issue_request.c
+index 6bef14553b..6cf28dab76 100644
+--- a/src/server/issue_request.c
++++ b/src/server/issue_request.c
+@@ -201,7 +201,7 @@ reissue_to_svr(struct work_task *pwt)
+ 		/* either timed-out or got hard error, tell post-function  */
+ 		pwt->wt_aux = -1;   /* seen as error by post function  */
+ 		pwt->wt_event = -1; /* seen as connection by post func */
+-		((void (*)()) pwt->wt_parm2)(pwt);
++		((void (*)(struct work_task *)) pwt->wt_parm2)(pwt);
+ 	}
+ 	return;
+ }
+@@ -326,7 +326,7 @@ release_req(struct work_task *pwt)
+  *
+  */
+ struct work_task *
+-add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(), char *msgid, void *parm1, void *parm2)
++add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(struct work_task *), char *msgid, void *parm1, void *parm2)
+ {
+ 	struct work_task *ptask = NULL;
+ 
+@@ -394,7 +394,7 @@ add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(), char *msgid,
+  *
+  */
+ int
+-issue_Drequest(int conn, struct batch_request *request, void (*func)(), struct work_task **ppwt, int prot)
++issue_Drequest(int conn, struct batch_request *request, void (*func)(struct work_task *), struct work_task **ppwt, int prot)
+ {
+ 	struct attropl *patrl;
+ 	struct work_task *ptask;
+diff --git a/src/server/node_manager.c b/src/server/node_manager.c
+index a6fbf5805e..62661a2361 100644
+--- a/src/server/node_manager.c
++++ b/src/server/node_manager.c
+@@ -7923,7 +7923,7 @@ degrade_offlined_nodes_reservations(void)
+  * @par MT-safe: No
+  */
+ void
+-degrade_downed_nodes_reservations(void)
++degrade_downed_nodes_reservations(struct work_task *)
+ {
+ 	int i;
+ 	struct pbsnode *pn;
+diff --git a/src/server/req_jobobit.c b/src/server/req_jobobit.c
+index 37581cead4..034c3c0680 100644
+--- a/src/server/req_jobobit.c
++++ b/src/server/req_jobobit.c
+@@ -1337,7 +1337,7 @@ job_obit(ruu *pruu, int stream)
+ 	job *pjob;
+ 	svrattrl *patlist;
+ 	struct work_task *ptask;
+-	void (*eojproc)();
++	void (*eojproc)(struct work_task *);
+ 	char *mailmsg = NULL;
+ 	char *msg = NULL;
+ 
+diff --git a/src/server/req_manager.c b/src/server/req_manager.c
+index 14a50de62e..ac617d7be8 100644
+--- a/src/server/req_manager.c
++++ b/src/server/req_manager.c
+@@ -3612,7 +3612,7 @@ check_resource_set_on_jobs_or_resvs(struct batch_request *preq, resource_def *pr
+  * 		helper function to send/update resourcedef file.
+  */
+ static void
+-timed_send_rescdef()
++timed_send_rescdef(struct work_task *)
+ {
+ 	send_rescdef(1); /* forcing with 1 to avoid failures due to intermittent file stamp race issues */
+ 	rescdef_wt_g = NULL;
+diff --git a/src/server/svr_movejob.c b/src/server/svr_movejob.c
+index c438d5d739..8947dc8c85 100644
+--- a/src/server/svr_movejob.c
++++ b/src/server/svr_movejob.c
+@@ -122,7 +122,7 @@ extern time_t time_now;
+ extern int svr_create_tmp_jobscript(job *pj, char *script_name);
+ extern int scheduler_jobs_stat;
+ extern char *path_hooks_workdir;
+-extern struct work_task *add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(), char *msgid, void *parm1, void *parm2);
++extern struct work_task *add_mom_deferred_list(int stream, mominfo_t *minfo, void (*func)(struct work_task *), char *msgid, void *parm1, void *parm2);
+ 
+ /**
+  * @brief

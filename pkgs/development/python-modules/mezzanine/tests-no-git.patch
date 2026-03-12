@@ -1,0 +1,17 @@
+diff --git a/tests/test_core.py b/tests/test_core.py
+index 40cd39fe..57abbec0 100644
+--- a/tests/test_core.py
++++ b/tests/test_core.py
+@@ -47,11 +47,7 @@ from mezzanine.utils.sites import current_site_id, override_current_site_id
+ from mezzanine.utils.tests import TestCase
+ from mezzanine.utils.urls import admin_url
+ 
+-BRANCH_NAME = (
+-    subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+-    .decode()
+-    .strip()
+-)
++BRANCH_NAME = "stable"
+ VERSION_WARN = (
+     "Unpinned or pre-release dependencies detected in Mezzanine's requirements: {}"
+ )

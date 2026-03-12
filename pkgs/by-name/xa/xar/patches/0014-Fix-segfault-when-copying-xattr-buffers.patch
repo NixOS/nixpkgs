@@ -1,0 +1,123 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 20:46:31 +0300
+Subject: [PATCH 14/19] Fix segfault when copying xattr buffers
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+xar_linuxattr_read allocates an internal buffer and incrementally copies
+the data to xar_attrcopy_to_heap’s inbuf. This change fixes the offset
+handling by rewriting xar_linuxattr_read function from scratch (with an
+arguably cleaner implementation).
+---
+ xar/lib/linuxattr.c | 68 +++++++++++++++++++++++++++------------------
+ 1 file changed, 41 insertions(+), 27 deletions(-)
+
+diff --git a/xar/lib/linuxattr.c b/xar/lib/linuxattr.c
+index 496dd82..30c85c2 100644
+--- a/xar/lib/linuxattr.c
++++ b/xar/lib/linuxattr.c
+@@ -97,39 +97,50 @@ struct _linuxattr_context{
+ 
+ #define LINUXATTR_CONTEXT(x) ((struct _linuxattr_context *)(x))
+ 
+-int32_t xar_linuxattr_read(xar_t x, xar_file_t f, void * buf, size_t len, void *context) {
+-	
+-	if( !LINUXATTR_CONTEXT(context)->buf ) {
+-		int r;
+-		LINUXATTR_CONTEXT(context)->bufsz = 1024;
++int32_t xar_linuxattr_read(xar_t x, xar_file_t f, void *inbuf, size_t len, void *context) {
++	void *buf;
++	int bufsz, off, ret;
++	int r;
++
++	buf = LINUXATTR_CONTEXT(context)->buf;
++	bufsz = LINUXATTR_CONTEXT(context)->bufsz;
++	off = LINUXATTR_CONTEXT(context)->off;
++
++	if (buf == NULL) {
++		bufsz = 1024;
+ AGAIN2:
+-		LINUXATTR_CONTEXT(context)->buf = malloc(LINUXATTR_CONTEXT(context)->bufsz);
+-		if(!LINUXATTR_CONTEXT(context)->buf)
+-			goto AGAIN2;
+-		memset(LINUXATTR_CONTEXT(context)->buf, 0, LINUXATTR_CONTEXT(context)->bufsz);
+-		r = lgetxattr(LINUXATTR_CONTEXT(context)->file, LINUXATTR_CONTEXT(context)->attrname, LINUXATTR_CONTEXT(context)->buf, LINUXATTR_CONTEXT(context)->bufsz);
+-		if( r < 0 ) {
+-			switch(errno) {
+-			case ERANGE: LINUXATTR_CONTEXT(context)->bufsz *= 2; free(LINUXATTR_CONTEXT(context)->buf); goto AGAIN2;
+-			case ENOTSUP: free(LINUXATTR_CONTEXT(context)->buf); return 0;
+-			default: break;
++		buf = malloc(bufsz);
++		if (!buf) {
++			return -1;
++		}
++		memset(buf, 0, bufsz);
++		r = lgetxattr(LINUXATTR_CONTEXT(context)->file, LINUXATTR_CONTEXT(context)->attrname, buf, bufsz);
++		if (r < 0) {
++			free(buf);
++			switch (errno) {
++			case ERANGE:
++				bufsz *= 2;
++				goto AGAIN2;
++			case ENOTSUP:
++				return 0;
+ 			};
+ 			return -1;
+ 		}
++		LINUXATTR_CONTEXT(context)->buf = buf;
+ 		LINUXATTR_CONTEXT(context)->bufsz = r;
++		bufsz = r;
+ 	}
+ 
+-	if( (LINUXATTR_CONTEXT(context)->bufsz-LINUXATTR_CONTEXT(context)->off) <= len ) {
+-		int32_t ret;
+-		ret = LINUXATTR_CONTEXT(context)->bufsz - LINUXATTR_CONTEXT(context)->off;
+-		memcpy(buf, ((char *)LINUXATTR_CONTEXT(context)->buf)+LINUXATTR_CONTEXT(context)->off, ret);
+-		LINUXATTR_CONTEXT(context)->off += ret;
+-		return(ret);
+-	} else {
+-		memcpy(buf, ((char *)LINUXATTR_CONTEXT(context)->buf)+LINUXATTR_CONTEXT(context)->off, len);
+-		LINUXATTR_CONTEXT(context)->buf = ((char *)LINUXATTR_CONTEXT(context)->buf) + len;
+-		return len;
++	ret = bufsz - off;
++	if (ret <= len) {
++		memcpy(inbuf, ((char *)buf) + off, ret);
++		LINUXATTR_CONTEXT(context)->off = bufsz;
++		return ret;
+ 	}
++
++	memcpy(inbuf, ((char *)buf) + off, len);
++	LINUXATTR_CONTEXT(context)->off += len;
++	return len;
+ }
+ 
+ int32_t xar_linuxattr_write(xar_t x, xar_file_t f, void *buf, size_t len, void *context) {
+@@ -185,6 +196,7 @@ TRYAGAIN:
+ 
+ 	for( i=buf; (i-buf) < ret; i += strlen(i)+1 ) {
+ 		xar_ea_t e;
++		int rc;
+ 
+ 		context.bufsz = 0;
+ 		context.off = 0;
+@@ -194,11 +206,13 @@ TRYAGAIN:
+ 		xar_ea_pset(f, e, "fstype", fsname);
+ 		context.attrname = i;
+ 		context.ea = e;
+-		if (XAR(x)->attrcopy_to_heap(x, f, xar_ea_root(e), xar_linuxattr_read,&context) < 0) {
++		rc = XAR(x)->attrcopy_to_heap(x, f, xar_ea_root(e), xar_linuxattr_read, &context);
++		if (context.buf != NULL)
++			free(context.buf);
++		if (rc < 0) {
+ 			retval = -1;
+ 			goto BAIL;
+ 		}
+-		free(context.buf);
+ 		context.attrname = NULL;
+ 	}
+ 
+-- 
+2.44.1
+

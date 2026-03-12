@@ -1,0 +1,58 @@
+#!/bin/sh
+
+buildcpath() {
+  local path after
+  while (( $# )); do
+    case $1 in
+        -isystem)
+            shift
+            path=$path${path:+':'}$1
+            ;;
+        -idirafter)
+            shift
+            after=$after${after:+':'}$1
+            ;;
+    esac
+    shift
+  done
+  echo $path${after:+':'}$after
+}
+
+buildcpluspath() {
+  local path after
+  while (( $# )); do
+    case $1 in
+        -isystem|-cxx-isystem)
+            shift
+            path=$path${path:+':'}$1
+            ;;
+        -idirafter)
+            shift
+            after=$after${after:+':'}$1
+            ;;
+    esac
+    shift
+  done
+  echo $path${after:+':'}$after
+}
+
+# When user passes `--query-driver`, avoid extending `CPATH` et al, since we
+# don't want to infect user-specified toolchain and headers with our stuff.
+extendcpath=true
+
+for arg in "$@"; do
+  if [[ "${arg}" == \-\-query\-driver* ]]; then
+    extendcpath=false
+  fi
+done
+
+if [ "$extendcpath" = true ]; then
+  export C_INCLUDE_PATH=${CPATH}${CPATH:+':'}$(buildcpath ${NIX_CFLAGS_COMPILE} \
+                                                          $(<@clang@/nix-support/libc-cflags))
+
+  export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(buildcpluspath ${NIX_CFLAGS_COMPILE} \
+                                                                                            $(<@clang@/nix-support/libcxx-cxxflags) \
+                                                                                            $(<@clang@/nix-support/libc-cflags))
+fi
+
+@out@/bin/$(basename $0)-unwrapped "$@"

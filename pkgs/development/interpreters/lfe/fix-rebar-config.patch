@@ -1,0 +1,24 @@
+diff --git a/rebar.config b/rebar.config
+index 1204a6f..7e2c102 100644
+--- a/rebar.config
++++ b/rebar.config
+@@ -23,16 +23,16 @@
+ 
+ {pre_hooks, [{"(linux|darwin|solaris|freebsd|netbsd|openbsd)", ct,
+               "bin/lfescript bin/lfec"
+-              " -o $REBAR_DEPS_DIR/lfe/test"
++              " -o test"
+               " test/*_SUITE.lfe"},
+              {"(linux|darwin|solaris|freebsd|netbsd|openbsd)", eunit,
+               "bin/lfescript bin/lfec"
+-              " -o $REBAR_DEPS_DIR/lfe/ebin"
++              " -o ebin"
+               " test/clj-tests.lfe test/maps-tests.lfe"},
+              %% TODO: Test this on a win32 box
+              %%  {"win32", ct,
+              %%   "bin/lfescript bin/lfec -o $REBAR_DEPS_DIR/lfe/test test/*_SUITE.lfe"}
+              {"(linux|darwin|solaris|freebsd|netbsd|openbsd)", app_compile,
+-              "bin/lfescript bin/lfec -o $REBAR_DEPS_DIR/lfe/ebin src/*.lfe"}
++              "bin/lfescript bin/lfec -o ebin src/*.lfe"}
+              %% TODO: equivalent win32 hook
+             ]}.

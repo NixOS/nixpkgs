@@ -1,0 +1,13 @@
+diff --git a/gramps/gui/grampsgui.py b/gramps/gui/grampsgui.py
+index 26ef1a2..217e2a6 100644
+--- a/gramps/gui/grampsgui.py
++++ b/gramps/gui/grampsgui.py
+@@ -575,7 +575,7 @@ class Gramps:
+ 
+         if (
+             lin()
+-            and "SNAP" not in os.environ
++            and False
+             and glocale.lang != "C"
+             and not gettext.find(GTK_GETTEXT_DOMAIN)
+         ):

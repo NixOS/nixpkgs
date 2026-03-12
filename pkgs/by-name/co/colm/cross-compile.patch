@@ -1,0 +1,13 @@
+--- a/configure.ac	2019-07-09 22:41:03.166948024 -0700
++++ b/configure.ac	2019-07-09 22:41:16.699948056 -0700
+@@ -40,9 +40,7 @@
+ 
+ dnl Choose a default for the build_manual var. If the dist file is present in
+ dnl the root then default to no, otherwise go for it.
+-AC_CHECK_FILES( [$srcdir/DIST], 
+-	[. $srcdir/DIST;], 
+-	[build_manual=yes; ] )
++build_manual=yes;
+ 
+ dnl Set to true if the manual should be built.
+ AM_CONDITIONAL(BUILD_MANUAL, [test "x$build_manual" = "xyes"])
