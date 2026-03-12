@@ -3,25 +3,17 @@
   buildNimPackage,
   fetchFromGitHub,
   srcOnly,
-  nim-2_0,
-  nim-unwrapped-2_0,
-}:
-
-let
-  buildNimPackage' = buildNimPackage.override {
-    # Do not build with Nim-2.2.x.
-    nim2 = nim-2_0;
-  };
-in
-buildNimPackage' (finalAttrs: {
+  nim,
+  nim-unwrapped,
+}: buildNimPackage ({
   pname = "nimlsp";
-  version = "0.4.6";
+  version = "0-unstable-09-02-2026";
 
   src = fetchFromGitHub {
     owner = "PMunch";
     repo = "nimlsp";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MCtpCx8jMQp0VXuMowh69d1DQreU5cDftBf0lww7PUM=";
+    rev = "5fa2846f04600c2cf1173625976e037389db4489";
+    hash = "sha256-lpOhlKWbHej0OATdqnCA0Dv7S89v76wRMNwuTVsH4nw=";
   };
 
   lockFile = ./lock.json;
@@ -40,7 +32,7 @@ buildNimPackage' (finalAttrs: {
 
   nimFlags = [
     "--threads:on"
-    "-d:explicitSourcePath=${srcOnly nim-unwrapped-2_0}"
+    "-d:explicitSourcePath=${srcOnly nim-unwrapped}"
     "-d:tempDir=/tmp"
   ];
 
@@ -58,6 +50,6 @@ buildNimPackage' (finalAttrs: {
     homepage = "https://github.com/PMunch/nimlsp";
     license = lib.licenses.mit;
     mainProgram = "nimlsp";
-    maintainers = with lib.maintainers; [ xtrayambak ];
+    maintainers = with lib.maintainers; [ xtrayambak zodman ];
   };
 })
