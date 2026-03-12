@@ -3,6 +3,7 @@
   stdenv,
   alsa-lib,
   autoPatchelfHook,
+  callPackage,
   cups,
   fetchFromGitHub,
   file,
@@ -84,6 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp --recursive desktopApp/build/compose/binaries/main-release/app/Keyguard $out
     install -D --mode=0644 $out/lib/Keyguard.png $out/share/icons/hicolor/512x512/apps/keyguard.png
+    install -D --mode=0755 ${finalAttrs.passthru.sshAgent}/bin/keyguard-ssh-agent \
+      $out/lib/app/resources/keyguard-ssh-agent
 
     install -Dm444 -t $out/share/applications/ desktopApp/flatpak/*.desktop
     install -Dm444 desktopApp/flatpak/icon.svg $out/share/icons/hicolor/scalable/apps/com.artemchep.keyguard.svg
@@ -92,7 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    sshAgent = callPackage ./ssh-agent.nix { inherit (finalAttrs) src version; };
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Alternative client for the Bitwarden platform, created to provide the best user experience possible";
