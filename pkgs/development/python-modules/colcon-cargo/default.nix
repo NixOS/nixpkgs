@@ -38,6 +38,12 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = [
+    # Attempts to download https://index.crates.io/config.json at test time
+    "test_build_and_test_package"
+    "test_skip_pure_library_package"
+  ];
+
   disabledTestPaths = [
     # Skip the linter tests
     "test/test_flake8.py"
