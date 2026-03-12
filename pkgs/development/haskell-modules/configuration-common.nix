@@ -42,12 +42,12 @@ with haskellLib;
     ])
 
     (overrideCabal (drv: {
-      version = "1.3.0.0-unstable-2025-04-25";
+      version = "1.3.0.0-unstable-2026-01-30";
       src = pkgs.fetchFromGitHub {
         owner = "AccelerateHS";
         repo = "accelerate";
-        rev = "3f681a5091eddf5a3b97f4cd0de32adc830e1117";
-        sha256 = "sha256-tCcl7wAls+5cBSrqbxfEAJngbV43OJcLJdaC4qqkBxc=";
+        rev = "c22387ed2e00b00a6c79dcec5d22b53874da91fc";
+        sha256 = "sha256-AtKdxeCytRbmOIFe7OPbSMlhFhJnrgMuIqLFIeqnBGU";
       };
     }))
   ];
@@ -203,6 +203,15 @@ with haskellLib;
       lib.mapAttrs (_: pkg: pkg.overrideScope hls_overlay) (
         super
         // {
+          # Work around test suite not finding executable due to https://github.com/haskell/cabal/issues/11598
+          fourmolu = appendPatches [
+            (pkgs.fetchpatch {
+              name = "fourmolu-absolute-build-tool-paths.patch";
+              url = "https://github.com/fourmolu/fourmolu/commit/9217bc926ab80d20b815f0486be2184db07df4fc.patch";
+              hash = "sha256-ANzuKy5WfWCGZ7HFVBpTtuyUqzFfef/xR/v1KiyJEX4=";
+            })
+          ] super.fourmolu;
+
           # HLS 2.11: Too strict bound on Diff 1.0.
           haskell-language-server = lib.pipe super.haskell-language-server [
             dontCheck
@@ -234,6 +243,15 @@ with haskellLib;
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
 
+  # Work around test suite not finding executable due to https://github.com/haskell/cabal/issues/11598
+  cabal-add = appendPatches [
+    (pkgs.fetchpatch {
+      name = "cabal-add-absolute-build-tool-paths.patch";
+      url = "https://github.com/Bodigrim/cabal-add/commit/3b94b0175c294c2d0a30b6d8da3f56189216816c.patch";
+      hash = "sha256-4Nbro9Gl+RC78yprO8fYG/IWS7QvJPd0dKqSZb5jq9k=";
+    })
+  ] super.cabal-add;
+
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
@@ -259,7 +277,7 @@ with haskellLib;
       "vector-tests-O2"
     ];
     # inspection-testing doesn't work on all archs & ABIs
-    doCheck = !self.inspection-testing.meta.broken;
+    doCheck = super.vector.doCheck && !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
@@ -386,6 +404,18 @@ with haskellLib;
   # https://github.com/raehik/binrep/issues/14
   binrep = warnAfterVersion "1.1.0" (doJailbreak super.binrep);
 
+  # Does not support QuickCheck == 2.15.*
+  # https://codeberg.org/noiioiu/comonad-coactions/issues/1
+  comonad-coactions = dontCheck super.comonad-coactions;
+
+  # doctests don't evaluate properly
+  # https://github.com/morphismtech/distributors/issues/23
+  distributors = dontCheck super.distributors;
+
+  # Needs QuickCheck >= 2.16
+  # https://github.com/input-output-hk/io-sim/issues/248
+  io-sim = dontCheck super.io-sim;
+
   # 2024-06-23: Hourglass is archived and had its last commit 6 years ago.
   # Patch is needed to add support for time 1.10, which is only used in the tests
   # https://github.com/vincenthz/hs-hourglass/pull/56
@@ -494,15 +524,20 @@ with haskellLib;
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
-  # Fixes compilation for basement on i686
-  # https://github.com/haskell-foundation/foundation/pull/573
   basement = appendPatches [
+    # Fixes compilation for basement on i686
+    # https://github.com/haskell-foundation/foundation/pull/573
     (fetchpatch {
       name = "basement-i686-ghc-9.4.patch";
       url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
       sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
       stripLen = 1;
     })
+
+    # Fixes compilation on windows
+    # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
+    ./patches/basement-add-cast.patch
+
   ] super.basement;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
@@ -590,17 +625,18 @@ with haskellLib;
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
 
-  # Hackage tarball only includes what is supported by `cabal install git-annex`,
-  # but we want e.g. completions as well. See
-  # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
-  git-annex = lib.pipe super.git-annex [
+  # Requires file-io >= 0.2 if using OsPath flag (which we want for GHC >= 9.10)
+  git-annex = lib.pipe (super.git-annex.override { file-io = self.file-io_0_2_0; }) [
     (overrideCabal (drv: {
+      # Hackage tarball only includes what is supported by `cabal install git-annex`,
+      # but we want e.g. completions as well. See
+      # https://web.archive.org/web/20160724083703/https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
+      # or git-annex @ 3571b077a1244330cc736181ee04b4d258a78476 doc/bugs/bash_completion_file_is_missing*
       src = pkgs.fetchgit {
         name = "git-annex-${super.git-annex.version}-src";
         url = "git://git-annex.branchable.com/";
         tag = super.git-annex.version;
-        sha256 = "sha256-wH/As9KdHLlUgGUuIVjBjC8akqHfCZPBWABFXry6z28=";
+        sha256 = "sha256-oh9lrQvj1Ooi3PI5heNXBopX35s1K5Kyn/mH7V4sXB8=";
         # delete android and Android directories which cause issues on
         # darwin (case insensitive directory). Since we don't need them
         # during the build process, we can delete it to prevent a hash
@@ -849,12 +885,19 @@ with haskellLib;
   ];
 
   pandoc = appendPatches [
-    # Adjust text fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
+    # Adjust test fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
     (pkgs.fetchpatch {
       name = "pandoc-djot-0.1.2.3.patch";
       url = "https://github.com/jgm/pandoc/commit/643712ca70b924c0edcc059699aa1ee42234be34.patch";
       hash = "sha256-khDkb1PzC0fTaWTq3T04UvgoI+XefOJMaTV1d3Du8BU=";
       includes = [ "test/djot-reader.native" ];
+    })
+    # Adjust tests for skylighting-format-blaze-html >= 0.1.2
+    (pkgs.fetchpatch {
+      name = "pandoc-skylighting-format-blaze-html-0.1.2.patch";
+      url = "https://github.com/jgm/pandoc/commit/cab682ba58f2eb7e940d1af508e196ff6b1c1112.patch";
+      hash = "sha256-lpddKGa8xs+Lhi62HhBgV04fUq2kkippA1xX2/b2ukM=";
+      includes = [ "test/Tests/Writers/HTML.hs" ];
     })
   ] super.pandoc;
 
@@ -1147,6 +1190,20 @@ with haskellLib;
   # https://github.com/ndmitchell/shake/issues/804
   shake = dontCheck super.shake;
 
+  # https://github.com/martijnbastiaan/doctest-parallel/pull/99
+  doctest-parallel = lib.pipe super.doctest-parallel [
+    (appendPatch (fetchpatch {
+      name = "ghc-9.14-fixes";
+      url = "https://github.com/martijnbastiaan/doctest-parallel/commit/f3a40202ef8d2d4927dae706bf89f11b2800202d.patch";
+      sha256 = "sha256-mKF/hpMXWq5meiBHNbIKAz6c33DWE7zzHkS+Hgl5uX4";
+    }))
+    (overrideCabal (drv: {
+      # Revision change is not present in PR target branch
+      editedCabalFile = null;
+      revision = null;
+    }))
+  ];
+
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
@@ -1196,6 +1253,10 @@ with haskellLib;
   vimus = overrideCabal (drv: {
     broken = pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isi686;
   }) super.vimus;
+
+  # 2026-02-19: too strict bounds on bytestring (<0.11) and text (<2)
+  # https://github.com/theam/require/pull/31
+  require = doJailbreak super.require;
 
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
@@ -1943,7 +2004,7 @@ with haskellLib;
   util = appendConfigureFlags [
     "--ghc-option=-fno-safe-haskell"
     "--haddock-option=--optghc=-fno-safe-haskell"
-  ] super.util;
+  ] (doJailbreak super.util); # unmaintained
   category = appendConfigureFlags [
     "--ghc-option=-fno-safe-haskell"
     "--haddock-option=--optghc=-fno-safe-haskell"
@@ -2029,6 +2090,16 @@ with haskellLib;
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
+
+  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
+  dataframe-persistent = lib.pipe super.dataframe-persistent [
+    doJailbreak # 2026-01-23: too strict bounds on dataframe >= 0.4
+    dontCheck # 2026-01-23: test uses dataframe function not exported in 0.3.3.6
+  ];
+
+  # 2026-01-23: too strict bounds on random >= 1.3
+  # TODO: when (likely in 25.x) Stackage bumps random to 1.3, unpin
+  ihaskell-dataframe = doJailbreak super.ihaskell-dataframe;
 
   # Too strict version bounds on base
   # https://github.com/gibiansky/IHaskell/issues/1217
@@ -2322,6 +2393,12 @@ with haskellLib;
   # https://github.com/andrewufrank/uniform-fileio/issues/2
   uniform-fileio = dontCheck super.uniform-fileio;
 
+  # Waiting on https://github.com/mastratisi/railroad/commit/3fc1360ebec6337de3115968660361b1b7e92f0b
+  railroad = lib.pipe super.railroad [
+    (warnAfterVersion "0.1.1.1")
+    doJailbreak
+  ];
+
   # The shipped Setup.hs file is broken.
   csv = overrideCabal (drv: { preCompileBuildDriver = "rm Setup.hs"; }) super.csv;
 
@@ -2366,6 +2443,13 @@ with haskellLib;
   crypton-x509-validation = dontCheckIf (
     pkgs.stdenv.hostPlatform.isPower64 && pkgs.stdenv.hostPlatform.isBigEndian
   ) super.crypton-x509-validation;
+
+  crypton-x509-system = overrideCabal (drv: {
+    # Case sensitive when doing cross-compilation to windows
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace crypton-x509-system.cabal --replace-fail "Crypt32" "crypt32"
+    '';
+  }) super.crypton-x509-system;
 
   # Likely fallout from the crypton issues
   # exception: HandshakeFailed (Error_Protocol "bad PubKeyALG_Ed448 signature for ecdhparams" DecryptError)
@@ -2457,6 +2541,12 @@ with haskellLib;
 
   # Unmaintained
   records-sop = doJailbreak super.records-sop;
+  failure = appendPatch (fetchpatch {
+    # https://github.com/snoyberg/failure/pull/5
+    name = "switch-error-to-except";
+    url = "https://github.com/snoyberg/failure/commit/d46bebb5afdc17a0feb268bc86adb00b7edc4cc3.patch";
+    sha256 = "sha256-CDd/vvlRq1cldyH+qsJVNMiwViqKVSosr9A0ilv2gLM";
+  }) (doJailbreak super.failure);
 
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial =
@@ -2507,6 +2597,14 @@ with haskellLib;
       })
     ];
   }) super.hexstring;
+
+  # 2026-02-19: GHC 9.10 increased simplifier ticks, need higher threshold
+  # https://github.com/lehins/hip/issues/56
+  hip = overrideCabal (drv: {
+    configureFlags = (drv.configureFlags or [ ]) ++ [
+      "--ghc-options=-fsimpl-tick-factor=200"
+    ];
+  }) super.hip;
 
   # Disabling doctests.
   regex-tdfa = overrideCabal {
@@ -2921,12 +3019,6 @@ with haskellLib;
       sha256 = "09205ziac59axld8v1cyxa9xl42srypaq8d1gf6y3qwpmrx3rgr9";
     })
   ] (doJailbreak super.http2-client);
-
-  # Needs tls >= 2.1.10
-  http2-tls =
-    lib.warnIf (lib.versionAtLeast self.tls.version "2.1.10")
-      "haskellPackages.http2-tls: tls override can be removed"
-      (super.http2-tls.override { tls = self.tls_2_2_1; });
 
   # Relax http2 version bound (5.3.9 -> 5.3.10)
   # https://github.com/well-typed/grapesy/issues/297
