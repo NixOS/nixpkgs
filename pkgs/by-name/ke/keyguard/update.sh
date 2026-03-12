@@ -25,4 +25,40 @@ update-source-version keyguard $latestVersion $hash
 
 sed -i 's/tag = "r[0-9]\+\(\.[0-9]\+\)\?";/tag = "'"$latestTag"'";/g' "$ROOT/package.nix"
 
-$(nix-build -A keyguard.mitmCache.updateScript)
+# Full build for host arch — captures all deps including build-time-only ones
+"$(nix-build -A keyguard.mitmCache.updateScript)"
+
+# Supported JVM os.arch values for linux desktop
+ARCHS=("amd64" "aarch64")
+
+# Map host uname -m to JVM os.arch
+hostJvmArch=$(uname -m)
+case "$hostJvmArch" in
+  x86_64)  hostJvmArch="amd64" ;;
+  aarch64) ;;  # already matches JVM convention
+  *)       echo "Unsupported host architecture: $hostJvmArch"; exit 1 ;;
+esac
+
+depFiles=()
+# For each non-host arch, fetch arch-specific deps via nixDownloadDeps
+for arch in "${ARCHS[@]}"; do
+  [[ "$arch" == "$hostJvmArch" ]] && continue
+
+  echo "Fetching deps for $arch..."
+  "$(nix-build -E "
+    let pkgs = import ./. {}; in
+    pkgs.keyguard.mitmCache.updateScript.override {
+      pkg = pkgs.keyguard.overrideAttrs (old: {
+        gradleFlags = old.gradleFlags ++ [ \"-Dos.arch=$arch\" ];
+        gradleUpdateTask = \":desktopApp:nixDownloadDeps\";
+      });
+      data = \"${arch}-deps.json\";
+    }
+  ")"
+  depFiles+=("$ROOT/${arch}-deps.json")
+done
+
+# Merge arch-specific deps into the main deps.json
+jq --indent 1 -s 'reduce .[] as $item ({}; . * $item)' "$ROOT/deps.json" "${depFiles[@]}" > "$ROOT/merged-deps.json"
+mv "$ROOT/merged-deps.json" "$ROOT/deps.json"
+rm "${depFiles[@]}"
