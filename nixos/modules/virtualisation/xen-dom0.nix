@@ -36,7 +36,6 @@ let
   inherit (lib.meta) getExe;
   inherit (lib.attrsets) optionalAttrs;
   inherit (lib.trivial) boolToString;
-  inherit (lib.teams.xen) members;
 
   cfg = config.virtualisation.xen;
 
@@ -943,5 +942,5 @@ in
       };
     };
   };
-  meta.maintainers = members;
+  meta.teams = [ lib.teams.xen ];
 }
