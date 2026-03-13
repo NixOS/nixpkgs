@@ -74,7 +74,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [
-    nazarewk
+    shuuri-labs
   ];
   meta.doc = ./netbird.md;
 
@@ -180,6 +180,17 @@ in
                 '';
               };
 
+              extraEnvironment = mkOption {
+                type = attrsOf str;
+                default = { };
+                description = ''
+                  Additional environment variables to pass to the NetBird service.
+
+                  These are merged with the computed environment variables, with
+                  values from this option taking precedence on conflicts.
+                '';
+              };
+
               interface = mkOption {
                 type = str;
                 default = "nb-${client.name}";
@@ -208,6 +219,7 @@ in
                   } // optionalAttrs (client.dns-resolver.address != null) {
                     NB_DNS_RESOLVER_ADDRESS = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
+                  // client.extraEnvironment
                 '';
                 description = ''
                   Environment for the netbird service, used to pass configuration options.
@@ -275,10 +287,9 @@ in
                   - `CAP_NET_RAW`, `CAP_NET_ADMIN` and `CAP_BPF` still give unlimited network manipulation possibilites,
                   - older kernels don't have `CAP_BPF` and use `CAP_SYS_ADMIN` instead,
 
-                  Known security features that are not (yet) integrated into the module:
-                  - 2024-02-14: `rosenpass` is an experimental feature configurable solely
-                    through `--enable-rosenpass` flag on the `netbird up` command,
-                    see [the docs](https://docs.netbird.io/how-to/enable-post-quantum-cryptography)
+                  For post-quantum cryptography, set `NB_ENABLE_ROSENPASS = "true"` in
+                  [`extraEnvironment`](#opt-services.netbird.clients._name_.extraEnvironment).
+                  See [the docs](https://docs.netbird.io/how-to/enable-post-quantum-cryptography).
                 '';
               };
 
@@ -448,7 +459,8 @@ in
             }
             // optionalAttrs (client.dns-resolver.address != null) {
               NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
-            };
+            }
+            // client.extraEnvironment;
 
             config.config = {
               DisableAutoConnect = !client.autoStart;
