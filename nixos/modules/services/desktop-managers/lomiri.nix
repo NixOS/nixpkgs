@@ -292,5 +292,5 @@ in
     })
   ];
 
-  meta.maintainers = lib.teams.lomiri.members;
+  meta.teams = [ lib.teams.lomiri ];
 }

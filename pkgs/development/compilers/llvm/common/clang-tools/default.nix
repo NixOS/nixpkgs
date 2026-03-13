@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.smokeOk =
+  passthru.tests =
     let
       src = writeText "main.cpp" ''
         #include <iostream>
@@ -67,28 +67,24 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
     in
-    runCommand "clang-tools-test-smoke-ok" { } ''
-      ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
-      touch $out
-    '';
-
-  passthru.tests.smokeErr =
-    let
-      src = writeText "main.cpp" ''
-        #include <iostream>
-
-        int main() {
-           std::cout << "Hi!";
-        }
+    {
+      smokeOk = runCommand "clang-tools-test-smoke-ok" { } ''
+        ${finalAttrs.finalPackage}/bin/clangd  --check=${src}
+        touch $out
       '';
+      smokeErr = runCommand "clang-tools-test-smoke-err" { } ''
+        (${finalAttrs.finalPackage}/bin/clangd --query-driver='**' --check=${src} 2>&1 || true) \
+            | grep 'use of undeclared identifier'
 
-    in
-    runCommand "clang-tools-test-smoke-err" { } ''
-      (${finalAttrs.finalPackage}/bin/clangd --query-driver='**' --check=${src} 2>&1 || true) \
-          | grep 'use of undeclared identifier'
+        touch $out
+      '';
+      environmentErr = runCommand "clang-tools-test-environment-err" { } ''
+         (CLANGD_FLAGS="--query-driver='**'" ${finalAttrs.finalPackage}/bin/clangd --check=${src} 2>&1 || true) \
+            | grep 'use of undeclared identifier'
 
-      touch $out
-    '';
+        touch $out
+      '';
+    };
 
   meta = llvm_meta // {
     description = "Standalone command line tools for C++ development";

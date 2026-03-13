@@ -40,7 +40,7 @@ buildcpluspath() {
 # don't want to infect user-specified toolchain and headers with our stuff.
 extendcpath=true
 
-for arg in "$@"; do
+for arg in "$@" $CLANGD_FLAGS; do
   if [[ "${arg}" == \-\-query\-driver* ]]; then
     extendcpath=false
   fi
