@@ -3144,6 +3144,8 @@ self: super: with self; {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka { };
 
+  confu = callPackage ../development/python-modules/confu { };
+
   confusable-homoglyphs = callPackage ../development/python-modules/confusable-homoglyphs { };
 
   confuse = callPackage ../development/python-modules/confuse { };
@@ -4208,6 +4210,8 @@ self: super: with self; {
 
   django-guardian = callPackage ../development/python-modules/django-guardian { };
 
+  django-handleref = callPackage ../development/python-modules/django-handleref { };
+
   django-haystack = callPackage ../development/python-modules/django-haystack { };
 
   django-hcaptcha = callPackage ../development/python-modules/django-hcaptcha { };
@@ -4225,6 +4229,8 @@ self: super: with self; {
   django-ical = callPackage ../development/python-modules/django-ical { };
 
   django-import-export = callPackage ../development/python-modules/django-import-export { };
+
+  django-inet = callPackage ../development/python-modules/django-inet { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
@@ -4305,6 +4311,8 @@ self: super: with self; {
   django-pattern-library = callPackage ../development/python-modules/django-pattern-library { };
 
   django-payments = callPackage ../development/python-modules/django-payments { };
+
+  django-peeringdb = callPackage ../development/python-modules/django-peeringdb { };
 
   django-pgactivity = callPackage ../development/python-modules/django-pgactivity { };
 
@@ -10357,6 +10365,8 @@ self: super: with self; {
 
   mung = callPackage ../development/python-modules/mung { };
 
+  munge = callPackage ../development/python-modules/munge { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
@@ -12267,6 +12277,8 @@ self: super: with self; {
   pecan = callPackage ../development/python-modules/pecan { };
 
   peco = callPackage ../development/python-modules/peco { };
+
+  peeringdb-py = callPackage ../development/python-modules/peeringdb-py { };
 
   peewee = callPackage ../development/python-modules/peewee { };
 
@@ -19745,6 +19757,8 @@ self: super: with self; {
   tweepy = callPackage ../development/python-modules/tweepy { };
 
   twentemilieu = callPackage ../development/python-modules/twentemilieu { };
+
+  twentyc-rpc = callPackage ../development/python-modules/twentyc-rpc { };
 
   twiggy = callPackage ../development/python-modules/twiggy { };
 
