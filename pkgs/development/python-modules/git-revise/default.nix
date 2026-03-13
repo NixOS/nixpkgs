@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "git-revise";
-  version = "0.7.0-unstable-2025-01-28";
+  version = "0.7.0";
   format = "setuptools";
 
   # Missing tests on PyPI
