@@ -437,7 +437,10 @@ def get_generations(profile: Profile) -> list[Generation]:
         )
 
     return sorted(
-        [parse_path(p, profile) for p in profile.path.parent.glob("system-*-link")],
+        [
+            parse_path(p, profile)
+            for p in profile.path.parent.glob(f"{profile.name}-*-link")
+        ],
         key=lambda d: d.id,
     )
 
