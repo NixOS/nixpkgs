@@ -53,7 +53,7 @@ stdenv.mkDerivation (
                        'COMMAND ''${CMAKE_COMMAND} -E echo "Skipping macdeployqt under Nix"'
 
       grep -Fq "name 'objects-*'" src/mac/PlatformPackaging.cmake
-      sed -i "/name 'objects-\\*'/c\\    COMMAND /bin/sh -c \":\"" src/mac/PlatformPackaging.cmake
+      sed -i "/name 'objects-\\*'/c\\    COMMAND ''${CMAKE_COMMAND} -E true" src/mac/PlatformPackaging.cmake
     '';
 
     preConfigure = ''
@@ -145,7 +145,7 @@ stdenv.mkDerivation (
       ''
       + lib.optionalString stdenv.hostPlatform.isDarwin ''
         wrapQtApp "$out/Applications/rpi-imager.app/Contents/MacOS/rpi-imager"
-        makeQtWrapper "$out/Applications/rpi-imager.app/Contents/MacOS/rpi-imager" "$out/bin/rpi-imager"
+        ln -s ../Applications/rpi-imager.app/Contents/MacOS/rpi-imager "$out/bin/rpi-imager"
       '';
 
     env.LANG = "C.UTF-8";
