@@ -1,0 +1,22 @@
+diff --git a/util.py b/util.py
+index bfec1ed..0546772 100644
+--- a/util.py
++++ b/util.py
+@@ -22,16 +22,7 @@ log = logging.getLogger("bot")
+ 
+ 
+ def solve_filepath(path):
+-    if not path:
+-        return ''
+-
+-    if path[0] == '/':
+-        return path
+-    elif os.path.exists(path):
+-        return path
+-    else:
+-        mydir = os.path.dirname(os.path.realpath(__file__))
+-        return mydir + '/' + path
++    return path
+ 
+ 
+ def get_recursive_file_list_sorted(path):

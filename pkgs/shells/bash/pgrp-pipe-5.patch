@@ -1,0 +1,15 @@
+--- ./configure	2022-12-20 17:13:17.804045620 +0100
++++ ./configure-fixed	2022-12-20 17:16:00.444114824 +0100
+@@ -21723,11 +21723,7 @@
+ solaris2*)	LOCAL_CFLAGS=-DSOLARIS ;;
+ lynxos*)	LOCAL_CFLAGS=-DRECYCLES_PIDS ;;
+ linux*)		LOCAL_LDFLAGS=-rdynamic		 # allow dynamic loading
+-		case "`uname -r`" in
+-		1.*|2.[0123]*)	: ;;
+-		*)	printf "%s\n" "#define PGRP_PIPE 1" >>confdefs.h
+- ;;
+-		esac ;;
++		printf "%s\n" "#define PGRP_PIPE 1" >>confdefs.h ;;
+ netbsd*|openbsd*)	LOCAL_CFLAGS="-DDEV_FD_STAT_BROKEN" ;;
+ freebsd*|midnightbsd*)	LOCAL_CFLAGS='-DHEREDOC_PIPESIZE=4096' ;;
+ *qnx[67]*)	LOCAL_LIBS="-lncurses" ;;

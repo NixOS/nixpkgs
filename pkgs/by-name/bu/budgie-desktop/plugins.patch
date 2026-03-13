@@ -1,0 +1,66 @@
+diff --git a/src/panel/plugin/plugin-manager.c b/src/panel/plugin/plugin-manager.c
+index 1f0d32d60..2f46cee6e 100644
+--- a/src/panel/plugin/plugin-manager.c
++++ b/src/panel/plugin/plugin-manager.c
+@@ -115,12 +115,26 @@ static void budgie_panel_plugin_manager_init(BudgiePanelPluginManager *self) {
+ 	}
+ 
+ 	/* System path */
+-	peas_engine_add_search_path(self->engine, BUDGIE_MODULE_DIRECTORY, BUDGIE_MODULE_DATA_DIRECTORY);
++	const gchar* libdir = NULL;
++	const gchar* datadir = NULL;
++	libdir = g_getenv("BUDGIE_PLUGIN_LIBDIR");
++	if (libdir != NULL) {
++		g_debug("BUDGIE_PLUGIN_LIBDIR is set to %s", libdir);
++	} else {
++		g_debug("BUDGIE_PLUGIN_LIBDIR is unset, defaulting to %s", BUDGIE_MODULE_DIRECTORY);
++		libdir = BUDGIE_MODULE_DIRECTORY;
++	}
+ 
+-	if (BUDGIE_HAS_SECONDARY_PLUGIN_DIRS) {
+-		peas_engine_add_search_path(self->engine, BUDGIE_MODULE_DIRECTORY_SECONDARY, BUDGIE_MODULE_DATA_DIRECTORY_SECONDARY);
++	datadir = g_getenv("BUDGIE_PLUGIN_DATADIR");
++	if (datadir != NULL) {
++		g_debug("BUDGIE_PLUGIN_DATADIR is set to %s", datadir);
++	} else {
++		g_debug("BUDGIE_PLUGIN_DATADIR is unset, defaulting to %s", BUDGIE_MODULE_DATA_DIRECTORY);
++		datadir = BUDGIE_MODULE_DATA_DIRECTORY;
+ 	}
+ 
++	peas_engine_add_search_path(self->engine, libdir, datadir);
++
+ 	/* User path */
+ 	user_data_dir = g_get_user_data_dir();
+ 	user_mod_dir = g_build_path(G_DIR_SEPARATOR_S, user_data_dir, "budgie-desktop", "plugins", NULL);
+diff --git a/src/raven/plugin_manager.vala b/src/raven/plugin_manager.vala
+index 1ff139c9a..809b9b82a 100644
+--- a/src/raven/plugin_manager.vala
++++ b/src/raven/plugin_manager.vala
+@@ -51,11 +51,24 @@ namespace Budgie {
+ 
+ 			/* System path */
+ 			var dir = Environment.get_user_data_dir();
+-			engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR, Budgie.RAVEN_PLUGIN_DATADIR);
+-			if (Budgie.HAS_SECONDARY_PLUGIN_DIRS) {
+-				engine.add_search_path(Budgie.RAVEN_PLUGIN_LIBDIR_SECONDARY, Budgie.RAVEN_PLUGIN_DATADIR_SECONDARY);
++			var libdir = Environment.get_variable("RAVEN_PLUGIN_LIBDIR");
++			if (libdir != null) {
++				debug("RAVEN_PLUGIN_LIBDIR is set to %s", libdir);
++			} else {
++				debug("RAVEN_PLUGIN_LIBDIR is unset, defaulting to %s", Budgie.RAVEN_PLUGIN_LIBDIR);
++				libdir = Budgie.RAVEN_PLUGIN_LIBDIR;
+ 			}
+ 
++			var datadir = Environment.get_variable("RAVEN_PLUGIN_DATADIR");
++			if (datadir != null) {
++				debug("RAVEN_PLUGIN_DATADIR is set to %s", datadir);
++			} else {
++				debug("RAVEN_PLUGIN_DATADIR is unset, defaulting to %s", Budgie.RAVEN_PLUGIN_DATADIR);
++				datadir = Budgie.RAVEN_PLUGIN_DATADIR;
++ 			}
++
++			engine.add_search_path(libdir, datadir);
++
+ 			/* User path */
+ 			var user_mod = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "raven-plugins");
+ 			var hdata = Path.build_path(Path.DIR_SEPARATOR_S, dir, "budgie-desktop", "raven-data");
