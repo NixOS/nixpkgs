@@ -4,7 +4,7 @@
   hatchling,
   lib,
   pytestCheckHook,
-  python-dotenv,
+  pythonAtLeast,
   requests,
   typing-extensions,
 }:
@@ -20,6 +20,11 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-ytzzGr/z0jrsudtCBrcvGITo4DxxC8JCmSmQ8ybeomM=";
   };
+
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace tests/test_session.py \
+      --replace-fail '"Accept-Encoding": "gzip, deflate",' '"Accept-Encoding": "gzip, deflate, zstd",'
+  '';
 
   build-system = [ hatchling ];
 

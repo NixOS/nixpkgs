@@ -8,7 +8,6 @@
   pytest-aiohttp,
   pytest-codspeed,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
 }:
 
@@ -23,6 +22,11 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-luXv5J0PUvW+AGTecwkEq+qkG1N5Ja5NbBKJ3M6HC0I=";
   };
+
+  patches = [
+    # https://github.com/NabuCasa/snitun/pull/459
+    ./fix-python-3.14-compatibility.diff
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

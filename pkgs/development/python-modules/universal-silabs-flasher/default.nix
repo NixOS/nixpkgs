@@ -62,6 +62,11 @@ buildPythonPackage rec {
     pytest-timeout
   ];
 
+  disabledTests = [
+    # timing sensitive
+    "test_xmodem_happy_path"
+  ];
+
   pythonImportsCheck = [ "universal_silabs_flasher" ];
 
   meta = {
