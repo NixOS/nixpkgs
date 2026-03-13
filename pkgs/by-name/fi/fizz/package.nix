@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   outputs = [
     "bin"
@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookincubator";
     repo = "fizz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fO0lKi8MJe0+RX8Y5shkO0C7NVAFOsXyx+OyoHeMy4c=";
+    hash = "sha256-zxvxRu2rqNBvYo81DOsSnBo3MH4vd3ZfrnHAMdQscEw=";
   };
 
-  patches = [
-    ./glog-0.7.patch
-  ];
+  postPatch = ''
+    substituteInPlace fizz/CMakeLists.txt --replace-fail "Folly::folly_benchmark" "Folly::follybenchmark"
+  '';
 
   nativeBuildInputs = [
     cmake
