@@ -8752,8 +8752,6 @@ with pkgs;
     }
   );
 
-  rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
-
   sgx-sdk = callPackage ../os-specific/linux/sgx/sdk {
     ocamlPackages = ocaml-ng.ocamlPackages_5_3;
   };
