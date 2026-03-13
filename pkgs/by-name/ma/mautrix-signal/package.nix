@@ -20,14 +20,14 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "26.02";
-  tag = "v0.2602.0";
+  version = "26.02.2";
+  tag = "v0.2602.2";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     inherit tag;
-    hash = "sha256-FWFAH+jtPdLG9vJS4QXpFjsGWUzILW17WRFyfdnFlAE=";
+    hash = "sha256-+VhplU/7FR8itvjqsn4wwfUlDiIQZmhXgh8rNm/mjS8=";
   };
 
   buildInputs =
