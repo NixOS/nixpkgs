@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fb303";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   outputs = [
     "out"
@@ -30,12 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fb303";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mQuTvjaBTbbLG8fmtM19MU1yIbq1O8TjaQ2TLQXpwkQ=";
+    hash = "sha256-oXHEtvP6r6gzaXhxzkhqOaBbubUZpJodbTScsqKhgdM=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
