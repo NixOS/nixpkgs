@@ -10,6 +10,7 @@
   openssh,
   sshfs-fuse,
   encfs,
+  gocryptfs,
   which,
   ps,
   gnugrep,
@@ -33,6 +34,7 @@ let
     rsync
     sshfs-fuse
     encfs
+    gocryptfs
   ];
 in
 stdenv.mkDerivation (finalAttrs: {
