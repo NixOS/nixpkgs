@@ -100,6 +100,7 @@ let
       av
     ];
     number = getComponentDeps "conversation";
+    ntfy = getComponentDeps "camera" ++ getComponentDeps "tts";
     octoprint = getComponentDeps "camera";
     ollama = getComponentDeps "ai_task";
     onboarding = getComponentDeps "tts" ++ [
@@ -132,6 +133,7 @@ let
     songpal = [
       isal
     ];
+    sonos = getComponentDeps "frontend";
     swiss_public_transport = getComponentDeps "cookidoo";
     switch = getComponentDeps "camera" ++ getComponentDeps "conversation";
     switch_as_x = getComponentDeps "camera" ++ getComponentDeps "conversation";
@@ -160,6 +162,7 @@ let
     yolink = getComponentDeps "cloud";
     zeroconf = getComponentDeps "shelly";
     zha = getComponentDeps "deconz" ++ getComponentDeps "frontend";
+    zoneminder = getComponentDeps "camera";
     zwave_js = getComponentDeps "frontend";
   };
 
