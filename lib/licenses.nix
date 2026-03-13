@@ -1239,6 +1239,13 @@ lib.mapAttrs mkLicense (
       fullName = "PHP License v3.01";
     };
 
+    polyFormShield = {
+      fullName = "PolyForm Shield License 1.0.0";
+      url = "https://polyformproject.org/wp-content/uploads/2020/06/PolyForm-Shield-1.0.0.txt";
+      free = false;
+      redistributable = true;
+    };
+
     postgresql = {
       spdxId = "PostgreSQL";
       fullName = "PostgreSQL License";
