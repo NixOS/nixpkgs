@@ -1,4 +1,4 @@
-{
+{ 
   lib,
   buildNpmPackage,
   fetchFromGitHub,
@@ -13,7 +13,7 @@ buildNpmPackage {
   src = fetchFromGitHub {
     owner = "MeckeDev";
     repo = "cs2-chat-translator";
-    rev = "main"; # besser: Tag wie v0.1.0, wenn du einen setzt
+    rev = "main";
     sha256 = "sha256-KgWLpuUe4vyTNS89NnN2GtQsyGraCMuKgv91zNPdVoQ=";
   };
 
@@ -43,7 +43,5 @@ buildNpmPackage {
     homepage = "https://github.com/MeckeDev/cs2-chat-translator";
     license = licenses.mit;
     platforms = platforms.linux;
-    # optional, wenn du dich als Maintainer in nixpkgs einträgst:
-    # maintainers = with maintainers; [ meckeDev ];
   };
 }
