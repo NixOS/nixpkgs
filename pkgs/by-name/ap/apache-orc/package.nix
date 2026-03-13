@@ -43,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     # <store path>/bin/ld: <store path>/lib/libabsl_raw_hash-set.so.2601.0.0:
     # error adding symbols: DSO missing from command line
     ./cmake-link-abseil.patch
+
+    # Protobuf 34 adds `[[nodiscard]]` to several serialization functions. In
+    # order to avoid these warnings causing build failures, we add handling for
+    # this failure case.
+    ./protobuf34-nodiscard.patch
   ];
 
   nativeBuildInputs = [
