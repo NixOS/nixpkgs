@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agent-of-empires";
-  version = "0.15.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "njbrake";
     repo = "agent-of-empires";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ksxRr0PNAs15JjzgI5IzFQvsL9bY+4fPUUVpIhjDBEk=";
+    hash = "sha256-MSvvGYvSi0dc7CAUI9ComAerptq8uEdE//3f03tC7S0=";
   };
 
-  cargoHash = "sha256-rBDW2ZUgFegX6bhuOR3m9p/H74WDg+w85OmS01cw33o=";
+  cargoHash = "sha256-wW8mnEUJ3LyzkeBFP3qdfwpuPsqIZmLOxi/lGIj5On8=";
 
   nativeBuildInputs = [
     pkg-config
