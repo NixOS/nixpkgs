@@ -196,7 +196,9 @@ in
     environment.systemPackages = [
       (pkgs.writeShellScriptBin "mediagoblin-gmg" ''
         sudo=exec
-        if [[ "$USER" != mediagoblin ]]; then
+        if [[ "''${USER:-root}" == 'root' ]]; then
+          sudo='exec runuser -u mediagoblin --'
+        elif [[ "$USER" != "mediagoblin" ]]; then
          sudo='exec /run/wrappers/bin/sudo -u mediagoblin'
         fi
         $sudo sh -c "cd /var/lib/mediagoblin; env GI_TYPELIB_PATH=${GI_TYPELIB_PATH} GST_PLUGIN_PATH=${GST_PLUGIN_PATH} PATH=$PATH:${lib.makeBinPath path} ${lib.getExe' finalPackage "gmg"} $*"

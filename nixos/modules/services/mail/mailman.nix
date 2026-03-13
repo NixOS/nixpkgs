@@ -547,7 +547,9 @@ in
           mv $out/bin/mailman $out/bin/.mailman-wrapped
           echo '#!${pkgs.runtimeShell}
           sudo=exec
-          if [[ "$USER" != mailman ]]; then
+          if [[ "''${USER:-root}" == 'root' ]]; then
+            sudo='exec runuser -u mailman --'
+          elif [[ "$USER" != "mailman" ]]; then
             sudo="exec /run/wrappers/bin/sudo -u mailman"
           fi
           $sudo ${placeholder "out"}/bin/.mailman-wrapped "$@"
