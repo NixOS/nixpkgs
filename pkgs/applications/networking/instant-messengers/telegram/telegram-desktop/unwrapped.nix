@@ -19,7 +19,7 @@
   ffmpeg_6,
   protobuf,
   openalSoft,
-  minizip,
+  minizip-ng,
   range-v3,
   tl-expected,
   hunspell,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     xxHash
     ffmpeg_6
     openalSoft
-    minizip
+    minizip-ng
     range-v3
     tl-expected
     rnnoise
