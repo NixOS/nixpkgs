@@ -52,6 +52,10 @@ EOF
   r) to reboot immediately
   *) to ignore the error and continue
 EOF
+    if [ -n "$debug1" ]; then cat <<EOF
+Keyboard drivers may not have been loaded. If the prompt does not react
+you can retry with boot.debug1devices
+EOF
 
     read -n 1 reply
 
@@ -214,6 +218,7 @@ for o in $(cat /proc/cmdline); do
             ;;
         boot.debug1|debug1) # stop right away
             allowShell=1
+            debug1=1
             fail
             ;;
         boot.debug1devices) # stop after loading modules and creating device nodes
