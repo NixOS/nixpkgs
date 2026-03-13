@@ -760,6 +760,7 @@ mapAliases {
   freerdp3 = throw "'freerdp3' has been renamed to/replaced by 'freerdp'"; # Converted to throw 2025-10-27
   freerdpUnstable = throw "'freerdpUnstable' has been renamed to/replaced by 'freerdp'"; # Converted to throw 2025-10-27
   frugal = throw "'frugal' was removed because upstream has been pulled"; # Added 2025-12-20
+  fscrypt-experimental = warnAlias "'fscrypt-experimental' has been renamed to/replaced by 'fscrypt'" fscrypt; # Added 2026-01-19
   fusee-launcher = throw "'fusee-launcher' was removed as upstream removed the original source repository fearing legal repercussions"; # Added 2025-07-05
   fusionInventory = warnAlias "'fusionInventory' has been renamed to 'fusioninventory-agent'" fusioninventory-agent; # Added 2026-02-08
   futuresql = throw "'futuresql' has been renamed to/replaced by 'libsForQt5.futuresql'"; # Converted to throw 2025-10-27
