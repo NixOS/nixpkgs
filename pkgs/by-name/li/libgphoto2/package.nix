@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   autoreconfHook,
   pkg-config,
@@ -26,6 +27,13 @@ stdenv.mkDerivation rec {
     rev = "libgphoto2-${builtins.replaceStrings [ "." ] [ "_" ] version}-release";
     sha256 = "sha256-gv84HD/ZjmAa0EpuYtUTGLcC7+BE8kWi4ut+RlvQvow=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/gphoto/libgphoto2/commit/7c5e5f66bb1a113123e289c221728a2eaee2411f.patch";
+      sha256 = "0rxw1895iy6pk34jhzx43qlm45xpb4b2m1nibfiwjm1yh4kg71c8";
+    })
+  ];
 
   depsBuildBuild = [ pkg-config ];
 
