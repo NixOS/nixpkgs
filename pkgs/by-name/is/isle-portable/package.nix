@@ -3,6 +3,7 @@
   callPackage,
   requireFile,
   runCommand,
+  writeText,
   makeBinaryWrapper,
   symlinkJoin,
   isle-portable-unwrapped ? callPackage ./unwrapped.nix { },
@@ -37,17 +38,7 @@ symlinkJoin (
     ) iniWithDisk;
 
     # Make a config ini file
-    iniFile =
-      runCommand "isle.ini"
-        {
-          passAsFile = [ "iniFile" ];
-
-          # Set the ISO path.
-          iniFile = lib.generators.toINI { } quotedIni;
-        }
-        ''
-          cp "$iniFilePath" "$out"
-        '';
+    iniFile = writeText "isle.ini" (lib.generators.toINI { } quotedIni);
   in
   {
     inherit (isle-portable-unwrapped) version;

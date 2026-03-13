@@ -1,65 +1,47 @@
 {
   bats,
+  cmake,
   fetchFromGitHub,
   lib,
+  ninja,
   python3,
   stdenv,
-  testers,
   uncrustify,
+  versionCheckHook,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "packcc";
-  version = "2.2.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "arithy";
     repo = "packcc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fmZL34UL7epFFGo0gCsj8TcyhBt5uCfnLCLCQugXF6U=";
+    hash = "sha256-uRvZr6mw9eI0a4JxFwDNyPBIrwTHgq3KmarDP/NmrEs=";
   };
 
   postPatch = ''
-    patchShebangs tests
+    # Remove broken tests.
+    rm -rf \
+      tests/ast-calc.v3.d \
+      tests/style.d
   '';
 
-  dontConfigure = true;
-
-  preBuild = ''
-    cd build/${
-      if stdenv.cc.isGNU then
-        "gcc"
-      else if stdenv.cc.isClang then
-        "clang"
-      else
-        throw "Unsupported C compiler"
-    }
-  '';
-
-  doCheck = true;
-
-  nativeCheckInputs = [
-    bats
-    uncrustify
-    python3
+  nativeBuildInputs = [
+    cmake
+    ninja
   ];
 
-  preCheck = ''
-    # Style tests will always fail because upstream uses an older version of
-    # uncrustify.
-    rm -rf ../../tests/style.d
-  ''
-  + lib.optionalString stdenv.cc.isClang ''
-    export NIX_CFLAGS_COMPILE+=' -Wno-error=strict-prototypes -Wno-error=int-conversion'
-  '';
+  doCheck = true;
+  checkTarget = "check";
+  nativeCheckInputs = [
+    bats
+    python3
+    uncrustify
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 release/bin/packcc $out/bin/packcc
-    runHook postInstall
-  '';
-
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  doInstallCheck = true;
+  installCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Parser generator for C";
