@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "poetry-plugin-export";
-  version = "1.9.0-unstable-2025-09-14";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
