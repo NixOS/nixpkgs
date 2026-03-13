@@ -24,7 +24,10 @@ stdenv.mkDerivation {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru = {
+    updateScript = unstableGitUpdater { };
+    defaultScript = "${src}/odhcp6c-example-script.sh"
+  };
 
   meta = {
     description = "Embedded DHCPv6-client for OpenWrt";
@@ -32,5 +35,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ felbinger ];
     platforms = lib.platforms.linux;
+    mainProgram = "odhcp6c";
   };
 }
