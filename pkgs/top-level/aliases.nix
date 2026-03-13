@@ -986,6 +986,7 @@ mapAliases {
   krb5Full = throw "'krb5Full' has been renamed to/replaced by 'krb5'"; # Converted to throw 2025-10-27
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
+  ktop = lib.warnOnInstantiate "'ktop' has been removed as duplicate of 'kubectl-ktop'" kubectl-ktop; # Added 2025-01-16
   kube3d = throw "'kube3d' has been renamed to/replaced by 'k3d'"; # Converted to throw 2025-10-27
   kubei = throw "'kubei' has been renamed to/replaced by 'kubeclarity'"; # Converted to throw 2025-10-27
   kubo-migrator-all-fs-repo-migrations = throw "'kubo-migrator-all-fs-repo-migrations' has been renamed to/replaced by 'kubo-fs-repo-migrations'"; # Converted to throw 2025-10-27
