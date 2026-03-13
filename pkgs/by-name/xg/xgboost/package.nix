@@ -105,7 +105,7 @@ effectiveStdenv.mkDerivation rec {
 
   env = {
     # on Darwin, cmake uses find_library to locate R instead of using the PATH
-    NIX_LDFLAGS = "-L${R}/lib/R/lib";
+    NIX_LDFLAGS = lib.optionalString rLibrary "-L${R}/lib/R/lib";
 
     # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
     # confirmed xgboost itself does not use this part of the dmlc code.
