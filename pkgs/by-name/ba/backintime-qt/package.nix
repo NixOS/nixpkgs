@@ -16,6 +16,7 @@ let
     ps: with ps; [
       pyqt6
       backintime-common
+      keyring
       packaging
     ]
   );

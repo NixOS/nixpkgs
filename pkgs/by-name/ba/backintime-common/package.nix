@@ -10,6 +10,9 @@
   openssh,
   sshfs-fuse,
   encfs,
+  which,
+  ps,
+  gnugrep,
 }:
 
 let
@@ -57,8 +60,15 @@ stdenv.mkDerivation rec {
     substituteInPlace configure \
       --replace-fail "/.." "" \
       --replace-fail "share/backintime" "${python'.sitePackages}/backintime"
+
     substituteInPlace "backintime" "backintime-askpass" \
       --replace-fail "share" "${python'.sitePackages}"
+
+    substituteInPlace "schedule.py" \
+      --replace-fail "'crontab'" "'${cron}/bin/crontab'" \
+      --replace-fail "'which'" "'${lib.getExe which}'" \
+      --replace-fail "'ps'" "'${lib.getExe ps}'" \
+      --replace-fail "'grep'" "'${lib.getExe gnugrep}'" \
   '';
 
   dontAddPrefix = true;
