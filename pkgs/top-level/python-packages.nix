@@ -1270,6 +1270,8 @@ self: super: with self; {
 
   autoit-ripper = callPackage ../development/python-modules/autoit-ripper { };
 
+  autojinja = callPackage ../development/python-modules/autojinja { };
+
   autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
