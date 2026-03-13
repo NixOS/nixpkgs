@@ -1,14 +1,13 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchFromGitHub,
   testers,
   cmake,
   ninja,
   python3,
   nix-update-script,
-  abseil-cpp_202401,
+  abseil-cpp,
   curl,
   gtest,
   nlohmann_json,
@@ -17,7 +16,7 @@
   libwebm,
   mbedtls,
   mimalloc,
-  protobuf_29,
+  protobuf,
   zlib,
 }:
 
@@ -37,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     # and shaka-packager fails to build if these are not available.
     # This patch makes it possible to pass an external value as version.
     # The value itself is declared further below in `cmakeFlags`.
+    #
+    # Upstream PR: https://github.com/shaka-project/shaka-packager/pull/1552
     ./0001-Allow-external-declaration-of-packager-version.patch
     # Dependencies are vendored as git submodules inside shaka-packager.
     # We want to reuse the dependencies from nixpkgs instead to avoid unnecessary
@@ -47,6 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     # The last step is necessary to keep the patch size to a minimum, otherwise we'd have
     # to add the namespace identifiers everywhere a dependency is used.
     ./0002-Unvendor-dependencies.patch
+    # shaka-packager is missing an explicit import of the VLOG_IS_ON macro header
+    # for compatibility with newer abseil versions.
+    #
+    # Upstream PR: https://github.com/shaka-project/shaka-packager/pull/1553
+    ./0003-absl-vlog.patch
   ];
 
   nativeBuildInputs = [
@@ -61,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
       # pssh_box.py.
       ps.protobuf
     ]))
-    abseil-cpp_202401
+    abseil-cpp
     curl
     gtest
     nlohmann_json
@@ -70,12 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     libwebm
     mbedtls
     mimalloc
-    (protobuf_29.override {
-      # must be the same version as for shaka-packager
-      abseil-cpp = abseil-cpp_202401;
-    })
+    protobuf
     zlib
   ];
+
+  # shaka-packager is generally compatible to new versions of
+  # abseil-cpp, but makes use of deprecated absl functions
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   cmakeFlags = [
     "-DPACKAGER_VERSION=v${finalAttrs.version}-nixpkgs"
