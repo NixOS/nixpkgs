@@ -356,10 +356,16 @@ rec {
           export ${name}
         '') runtimeEnv
       )
-      + lib.optionalString (runtimeInputs != [ ]) ''
+      + ''
 
-        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+        export PATH="${
+          lib.concatStringsSep ":" (
+            (lib.optionals (runtimeInputs != [ ]) [ (lib.makeBinPath runtimeInputs) ])
+            ++ (lib.optionals inheritPath [ "$PATH" ])
+          )
+        }"
       ''
+
       + ''
 
         ${text}
