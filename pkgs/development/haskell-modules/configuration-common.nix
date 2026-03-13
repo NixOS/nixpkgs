@@ -1054,6 +1054,14 @@ with haskellLib;
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
 
+  # Test in question times out on Hydra builders.
+  grisette = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-t"
+      "!mrgAsum/semantics"
+    ];
+  }) super.grisette;
+
   # Allow template-haskell 2.22
   # https://github.com/well-typed/ixset-typed/pull/23
   ixset-typed =
