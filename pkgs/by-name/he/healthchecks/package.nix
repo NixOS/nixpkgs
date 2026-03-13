@@ -9,7 +9,7 @@ let
   py = python3.override {
     self = py;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_6;
     };
   };
 in

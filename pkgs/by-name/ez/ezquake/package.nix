@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ezquake";
-  version = "3.6.8";
+  version = "3.6.9";
 
   src = fetchFromGitHub {
     owner = "QW-Group";
     repo = "ezquake-source";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-BIkBl6ncwo0NljuqOHJ3yQeDTcClh5FGssdFsKUjN90=";
+    hash = "sha256-AJe7ZvF88gKrW6IsTLpYI7RmzetFGZifntHzX7aNcG4=";
   };
 
   nativeBuildInputs = [
