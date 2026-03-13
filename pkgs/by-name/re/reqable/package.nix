@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $out/share/reqable/reqable $out/bin/reqable \
       --prefix LD_LIBRARY_PATH : $out/share/reqable/lib \
       ''${gappsWrapperArgs[@]}
+
+    rm -r $out/share/pixmaps
   '';
 
   passthru.updateScript = nix-update-script { };
