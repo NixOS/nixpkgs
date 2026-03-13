@@ -88,7 +88,7 @@ buildPythonPackage rec {
     ln -s ${libGL}/lib $out/${python.sitePackages}/kaleido/executable/bin/swiftshader
   '';
 
-  passthru.tests = lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
+  passthru.tests = {
     kaleido = callPackage ./tests.nix { };
   };
 
