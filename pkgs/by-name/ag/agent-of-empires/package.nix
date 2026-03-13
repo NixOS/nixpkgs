@@ -9,6 +9,7 @@
   zlib,
   stdenv,
   git,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -45,6 +46,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --fish <($out/bin/aoe completion fish) \
       --zsh <($out/bin/aoe completion zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal session manager for AI coding agents, built on tmux";
