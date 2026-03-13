@@ -101,6 +101,7 @@ in
                                 ${lib.optionalString cfg.discovery "--discovery --listen '${cfg.listen}'"} \
                                 ${lib.escapeShellArgs cfg.extraOptions}
         '';
+        Slice = "system-samba.slice";
         # Runtime directory and mode
         RuntimeDirectory = "wsdd";
         RuntimeDirectoryMode = "0750";
