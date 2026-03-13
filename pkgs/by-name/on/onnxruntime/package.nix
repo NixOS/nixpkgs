@@ -3,8 +3,6 @@
   config,
   stdenv,
   fetchFromGitHub,
-  applyPatches,
-  fetchpatch,
   fetchurl,
   abseil-cpp_202508,
   cmake,
@@ -87,14 +85,14 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "onnxruntime";
-  version = "1.24.1";
+  version = "1.24.3";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Hsv5spRI6LwaDxANdveAuM7gb59F40TGGq0p7FsWeM8=";
+    hash = "sha256-1Vr0b38lHLYU4rlwDuZtyHUuKxcG6+cC5M1BiiDII/A=";
   };
 
   patches = [
