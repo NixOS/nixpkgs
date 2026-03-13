@@ -49,11 +49,11 @@
 assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.58.2";
+  version = "1.58.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rZ1b8LRcryMlIN8K3uUetlAgCwNwaA+Ao1Dq2dHWHd8=";
+    hash = "sha256-5xJL7HJOJlrQ7gC6on2NUVzx3dzxAmOL5nueJZybBA0=";
   };
 
   patches = [
