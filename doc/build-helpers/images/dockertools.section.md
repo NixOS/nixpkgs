@@ -864,6 +864,7 @@ See [](#ex-dockerTools-pullImage-nixprefetchdocker) for a tool that can help gat
 
 : Specifies the tag that will be used for the image after it has been downloaded.
   This only applies after the image is downloaded, and is not used to identify the image to be downloaded in the registry.
+  Has no effect if `ociArchive` is `true`.
 
   _Default value:_ `"latest"`.
 
@@ -882,6 +883,13 @@ See [](#ex-dockerTools-pullImage-nixprefetchdocker) for a tool that can help gat
   According to the linked specification, all possible values for `$GOARCH` in [the Go docs](https://go.dev/doc/install/source#environment) should be valid, but will commonly be one of `386`, `amd64`, `arm`, or `arm64`.
 
   _Default value:_ the same value from `pkgs.go.GOARCH`.
+
+`ociArchive` (Boolean; _optional_)
+
+: Used to save the image as an [OCI-compatible archive](https://github.com/containers/image/blob/main/docs/containers-transports.5.md#oci-archivepathreference) rather than a docker-save(1) formatted file.
+  This is useful for preserving the specified `imageDigest`, since docker-save(1) files do not store digest information.
+
+  _Default value:_ `false`.
 
 `tlsVerify` (Boolean; _optional_)
 
