@@ -17,9 +17,9 @@ rustPlatform.buildRustPackage rec {
     description = "TUI snake game with menu, highscores, obstacles and adaptive terminal size";
     longDescription = ''
       A terminal snake game featuring an animated main menu, persistent
-      highscores, periodic obstacles, adaptive field size that adjusts to your
-      terminal dimensions, and support for any keyboard layout (QWERTY,
-      ЙЦУКЕН, QWERTZ, AZERTY, etc.).
+      highscores, periodic obstacles, adaptive field size that adjusts to
+      your terminal dimensions, and support for any keyboard layout
+      (QWERTY, ЙЦУКЕН, QWERTZ, AZERTY, etc.).
     '';
     homepage = "https://github.com/imApeki/snake"\;
     license = lib.licenses.mit;
