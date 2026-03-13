@@ -22230,6 +22230,12 @@
     github = "rafameou";
     githubId = 26395874;
   };
+  rafanochi = {
+    email = "zawkindev@gmail.com";
+    name = "Rafa";
+    github = "rafanochi";
+    githubId = 139969429;
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
