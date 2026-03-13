@@ -14,7 +14,6 @@
   glib,
   webkitgtk_4_1,
   xdg-utils,
-  temurin-bin-25,
   libGL,
   alsa-lib,
   udev,
@@ -56,6 +55,22 @@ let
     stripRoot = false;
   };
 
+  launcherRunScript = writeScript "hytale-launcher-run" ''
+    #!/bin/bash
+    LAUNCHER_DIR="$HOME/.local/share/Hytale/bin"
+    LAUNCHER_BIN="$LAUNCHER_DIR/hytale-launcher"
+    NIX_BIN="${src}/hytale-launcher"
+    NIX_STORE_PATH_FILE="$LAUNCHER_DIR/.nix-store-path"
+
+    if [[ ! -f "$LAUNCHER_BIN" ]] || [[ "$(cat "$NIX_STORE_PATH_FILE" 2>/dev/null)" != "$NIX_BIN" ]]; then
+      mkdir -p "$LAUNCHER_DIR"
+      cp "$NIX_BIN" "$LAUNCHER_BIN"
+      echo "$NIX_BIN" > "$NIX_STORE_PATH_FILE"
+    fi
+
+    exec "$LAUNCHER_BIN" "$@"
+  '';
+
   fhsEnv = buildFHSEnv {
     pname = "hytale-launcher";
     version = finalVersion;
@@ -87,7 +102,7 @@ let
       stdenv.cc.cc.lib
     ];
 
-    runScript = "${src}/hytale-launcher";
+    runScript = "${launcherRunScript}";
 
     extraBwrapArgs = [
       "--setenv __NV_DISABLE_EXPLICIT_SYNC 1"
@@ -95,7 +110,6 @@ let
       # taken from the flatpak at https://launcher.hytale.com/builds/release/linux/amd64/hytale-launcher-latest.flatpak
       "--setenv WEBKIT_DISABLE_COMPOSITING_MODE 1"
       "--setenv DESKTOP_STARTUP_ID com.hypixel.HytaleLauncher"
-      "--setenv JAVA_HOME ${temurin-bin-25}"
     ];
 
     extraInstallCommands = ''
