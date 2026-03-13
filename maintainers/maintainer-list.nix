@@ -29005,6 +29005,12 @@
     githubId = 78392041;
     name = "Winter";
   };
+  WiredMic = {
+    name = "Rasmus Enevoldsen";
+    github = "WiredMic";
+    githubId = 111731519;
+    email = "rasmus@enev.dk";
+  };
   wirew0rm = {
     email = "alex@wirew0rm.de";
     github = "wirew0rm";
