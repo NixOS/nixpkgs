@@ -15,16 +15,26 @@
   qt6,
   man,
   asciidoctor,
+  keyringBackends ?
+    ps: with ps; [
+      secretstorage
+      keyrings-alt
+      keyring-pass
+    ],
 }:
 
 let
   python' = python3.withPackages (
-    ps: with ps; [
+    ps:
+    with ps;
+    [
       pyqt6
       backintime-common
+      dbus-python
       keyring
       packaging
     ]
+    ++ (keyringBackends ps)
   );
   diffProgram =
     if meldSupport then
