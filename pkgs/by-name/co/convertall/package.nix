@@ -2,6 +2,10 @@
   lib,
   flutter341,
   fetchFromGitHub,
+  runCommand,
+  nix-update-script,
+  yq-go,
+  _experimental-update-script-combinators,
 }:
 
 flutter341.buildFlutterApplication rec {
@@ -16,6 +20,27 @@ flutter341.buildFlutterApplication rec {
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "convertall.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+    ];
+  };
 
   meta = {
     homepage = "https://convertall.bellz.org";
