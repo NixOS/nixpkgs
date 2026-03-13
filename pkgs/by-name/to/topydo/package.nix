@@ -1,22 +1,24 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   fetchpatch,
   glibcLocales,
 }:
 
-python3.pkgs.buildPythonApplication (finalAttrs: {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "topydo";
   version = "0.14";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "topydo";
     repo = "topydo";
-    rev = finalAttrs.version;
-    sha256 = "1lpfdai0pf90ffrzgmmkadbd86rb7250i3mglpkc82aj6prjm6yb";
+    tag = finalAttrs.version;
+    hash = "sha256-y5sq8zVSCcTmpa+OCIo4KxvUVlOz1vezcyC5C6Jq7tI=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   patches = [
     # fixes a failing test
@@ -27,7 +29,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     })
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     arrow
     glibcLocales
     icalendar
@@ -36,7 +38,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     watchdog
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     freezegun
     unittestCheckHook
   ];
@@ -44,7 +46,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   # Skip test that has been reported multiple times upstream without result:
   # bram85/topydo#271, bram85/topydo#274.
   preCheck = ''
-    substituteInPlace test/test_revert_command.py --replace 'test_revert_ls' 'dont_test_revert_ls'
+    substituteInPlace test/test_revert_command.py --replace-fail 'test_revert_ls' 'dont_test_revert_ls'
   '';
 
   env.LC_ALL = "en_US.UTF-8";
@@ -53,7 +55,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Cli todo application compatible with the todo.txt format";
     mainProgram = "topydo";
     homepage = "https://github.com/topydo/topydo";
-    changelog = "https://github.com/topydo/topydo/blob/${finalAttrs.src.rev}/CHANGES.md";
+    changelog = "https://github.com/topydo/topydo/blob/${finalAttrs.src.tag}/CHANGES.md";
     license = lib.licenses.gpl3Plus;
     maintainers = [ ];
   };
