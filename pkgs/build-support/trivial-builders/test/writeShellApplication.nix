@@ -83,6 +83,42 @@ linkFarm "writeShellApplication-tests" {
     '';
   };
 
+  test-no-inherit-path-no-runtimeInputs = checkShellApplication {
+    name = "test-no-inherit-path-no-runtimeInputs";
+    inheritPath = false;
+    runtimeInputs = [ ];
+    text = ''
+      if [[ ''${#PATH} -eq 0 ]]; then
+        echo -n "PATH is empty"
+      fi
+    '';
+    expected = "PATH is empty";
+  };
+
+  test-no-inherit-path-runtimeInputs = checkShellApplication {
+    name = "test-no-inherit-path-runtimeInputs";
+    inheritPath = false;
+    runtimeInputs = [ hello ];
+    text = ''
+      if [[ ''${#PATH} -gt 0 ]]; then
+        echo -n "PATH is not empty"
+      fi
+    '';
+    expected = "PATH is not empty";
+  };
+
+  test-inherit-path = checkShellApplication {
+    name = "test-inherit-path";
+    inheritPath = true;
+    runtimeInputs = [ ];
+    text = ''
+      if [[ ''${#PATH} -gt 0 ]]; then
+        echo -n "PATH is not empty"
+      fi
+    '';
+    expected = "PATH is not empty";
+  };
+
   test-check-phase = checkShellApplication {
     name = "test-check-phase";
     text = "";
