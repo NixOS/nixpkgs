@@ -5,18 +5,19 @@
   git,
   breezy,
   subversion,
+  nix-update-script,
 }:
 
 with python3Packages;
 
 buildPythonApplication (finalAttrs: {
-  pname = "vcstool";
-  version = "0.3.0";
+  pname = "vcs2l";
+  version = "1.1.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    sha256 = "04b3a963e15386660f139e5b95d293e43e3cb414e3b13e14ee36f5223032ee2c";
+    sha256 = "1d86e685f9e01dda271b89df1b2bd42ca5555f5c0dcbef5cc727d443f25738cd";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -39,12 +40,17 @@ buildPythonApplication (finalAttrs: {
 
   doCheck = false; # requires network
 
-  pythonImportsCheck = [ "vcstool" ];
+  pythonImportsCheck = [ "vcs2l" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Provides a command line tool to invoke vcs commands on multiple repositories";
-    homepage = "https://github.com/dirk-thomas/vcstool";
+    homepage = "https://github.com/ros-infrastructure/vcs2l";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ sivteck ];
+    maintainers = with lib.maintainers; [
+      esteve
+      sivteck
+    ];
   };
 })

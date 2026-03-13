@@ -8179,6 +8179,12 @@
     github = "EstebanMacanek";
     githubId = 75503218;
   };
+  esteve = {
+    name = "Esteve Fernandez";
+    email = "nixpkgs@nara.ac";
+    github = "esteve";
+    githubId = 33620;
+  };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
     matrix = "@ethancedwards8:matrix.org";
