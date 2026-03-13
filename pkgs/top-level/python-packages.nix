@@ -19063,6 +19063,8 @@ self: super: with self; {
     callPackage ../development/python-modules/tensorflow-estimator/bin.nix
       { };
 
+  tensorflow-io = callPackage ../development/python-modules/tensorflow-io { };
+
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
