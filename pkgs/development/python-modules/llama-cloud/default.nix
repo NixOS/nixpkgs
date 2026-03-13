@@ -5,16 +5,17 @@
   httpx,
   poetry-core,
   pydantic,
+  anyio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-cloud";
   version = "0.1.45";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_cloud";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-FAJEAIzFcQ4xrpfGBDlzo6mWmlGw84FV+jOoQ0B46Ko=";
   };
 
@@ -36,4 +37,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
