@@ -16438,12 +16438,6 @@
     githubId = 5526;
     name = "Marcus Ramberg";
   };
-  marcweber = {
-    email = "marco-oweber@gmx.de";
-    github = "MarcWeber";
-    githubId = 34086;
-    name = "Marc Weber";
-  };
   marenz = {
     email = "marenz@arkom.men";
     github = "marenz2569";
