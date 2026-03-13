@@ -43,27 +43,27 @@ let
     }
   ];
 
-  nvimConfSingleLines = makeNeovimConfig {
+  nvimConfSingleLines = {
     plugins = packagesWithSingleLineConfigs;
-    customRC = ''
+    neovimRcContent = ''
       " just a comment
     '';
   };
 
-  nvimConfNix = makeNeovimConfig {
+  nvimConfNix = {
     inherit plugins;
-    customRC = ''
+    neovimRcContent = ''
       " just a comment
     '';
   };
 
-  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" (makeNeovimConfig {
+  nvim-with-luasnip = wrapNeovim2 "-with-luasnip" {
     plugins = [
       {
         plugin = vimPlugins.luasnip;
       }
     ];
-  });
+  };
 
   # build should fail with a wrong
   nvim-run-failing-check =
@@ -73,8 +73,6 @@ let
       {
         doCheck = true;
       };
-
-  nvimAutoDisableWrap = makeNeovimConfig { };
 
   wrapNeovim2 =
     suffix: config:
@@ -308,12 +306,12 @@ pkgs.lib.recurseIntoAttrs rec {
   '';
 
   # nixpkgs should detect that no wrapping is necessary
-  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" nvimAutoDisableWrap;
+  nvimShouldntWrap = wrapNeovim2 "-should-not-wrap" {};
 
   # this will generate a neovimRc content but we disable wrapping
-  nvimDontWrap = wrapNeovim2 "-forced-nowrap" (makeNeovimConfig {
+  nvimDontWrap = wrapNeovim2 "-forced-nowrap" ({
     wrapRc = false;
-    customRC = ''
+    neovimRcContent = ''
       " this shouldn't trigger the creation of an init.vim
     '';
   });
