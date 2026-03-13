@@ -7185,34 +7185,13 @@ with pkgs;
     libressl_4_2
     ;
 
-  openssl = openssl_3_6;
-
-  openssl_oqs = openssl.override {
-    providers = [
-      {
-        name = "oqsprovider";
-        package = pkgs.oqs-provider;
-      }
-    ];
-    autoloadProviders = true;
-
-    extraINIConfig = {
-      tls_system_default = {
-        Groups = "X25519MLKEM768:X25519:P-256:X448:P-521:ffdhe2048:ffdhe3072";
-      };
-    };
-  };
-
-  openssl_legacy = openssl.override {
-    conf = ../development/libraries/openssl/3.0/legacy.cnf;
-  };
-
-  inherit (callPackages ../development/libraries/openssl { })
-    openssl_1_1
-    openssl_3
-    openssl_3_5
-    openssl_3_6
-    ;
+  # Backward-compat aliases — prefer openssl.v1_1, openssl.v3, openssl.v3_5, openssl.v3_6, etc.
+  openssl_1_1 = openssl.v1_1;
+  openssl_3 = openssl.v3;
+  openssl_3_5 = openssl.v3_5;
+  openssl_3_6 = openssl.v3_6;
+  openssl_oqs = openssl.oqs;
+  openssl_legacy = openssl.legacy;
 
   pcre = callPackage ../development/libraries/pcre { };
   # pcre32 seems unused
