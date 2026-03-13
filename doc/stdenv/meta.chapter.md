@@ -249,6 +249,68 @@ Code to be executed on a peripheral device or embedded controller, built by a th
 
 Code to run on a VM interpreter or JIT compiled into bytecode by a third party. This includes packages which download Java `.jar` files from another source.
 
+## Package Types {#sec-meta-package-type}
+
+As derivations can output various kinds of artifacts, it is difficult to determinate what kind of package a derivation is.
+To solve this, the `packageType` attribute in `meta` exists. This takes the form of a list of attributes of strings.
+Various package types are already defined in `lib.packageTypes`. These support [CycloneDX SBOM](https://cyclonedx.org) & [SPDX SBOM](https://spdx.dev/) but may support more formats in the future.
+
+### `lib.packageTypes.application` {#lib.packageTypes.application}
+
+A generic application, commonly a GUI or CLI tool.
+
+### `lib.packageTypes.framework` {#lib.packageTypes.framework}
+
+A framework used for developing or running applications.
+
+### `lib.packageTypes.library` {#lib.packageTypes.library}
+
+A library, applications and frameworks usually depends on these.
+
+### `lib.packageTypes.container` {#lib.packageTypes.container}
+
+A derivation which contains a runtime format. An example would be a Docker or OCI container as a tarball.
+
+### `lib.packageTypes.runtime` {#lib.packageTypes.runtime}
+
+A derivation which contains a runtime environment. A wrapped environment produced by something like `buildEnv` is an example of this.
+
+### `lib.packageTypes.operating-system` {#lib.packageTypes.operating-system}
+
+A software operating system, a NixOS toplevel derivation is an example of an operating-system type.
+
+### `lib.packageTypes.firmware` {#lib.packageTypes.firmware}
+
+Firmware is a special type of software which provides low-level control of hardware.
+
+### `lib.packageTypes.device-driver` {#lib.packageTypes.device-driver}
+
+A device driver is a piece of software which is loaded in to provide software access to various hardware devices.
+
+### `lib.packageTypes.file` {#lib.packageTypes.file}
+
+A derivation which outputs a file.
+
+### `lib.packageTypes.data` {#lib.packageTypes.data}
+
+A derivation containing data.
+
+### `lib.packageTypes.documentation` {#lib.packageTypes.documentation}
+
+A derivation containing documentation. Maps to the `documentation` purpose in SPDX and the `file` type in CycloneDX.
+
+### `lib.packageTypes.executable` {#lib.packageTypes.executable}
+
+A derivation containing documentation. Maps to the `executable` purpose in SPDX and the `application` type in CycloneDX.
+
+### `lib.packageTypes.filesystem-image` {#lib.packageTypes.filesystem-image}
+
+A derivation containing documentation. Maps to the `filesystemImage` purpose in SPDX and the `file` type in CycloneDX.
+
+### `lib.packageTypes.patch` {#lib.packageTypes.patch}
+
+A derivation containing documentation. Maps to the `patch` purpose in SPDX and the `file` type in CycloneDX.
+
 ## Software identifiers {#sec-meta-identifiers}
 
 Package's `meta.identifiers` attribute specifies information about software identifiers associated with this package. Software identifiers are used, for example:
