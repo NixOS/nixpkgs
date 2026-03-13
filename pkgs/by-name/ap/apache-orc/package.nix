@@ -36,6 +36,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QQdRzwmUF1Qwxg53kJv1Q6yFuHqSrLYwUxKt+6wK9Hs=";
   };
 
+  patches = [
+    # Orc's CMake declarations do not correctly attempt to link in abseil,
+    # so we add the relevant library they need. Without these, we get errors
+    # like:
+    # <store path>/bin/ld: <store path>/lib/libabsl_raw_hash-set.so.2601.0.0:
+    # error adding symbols: DSO missing from command line
+    ./cmake-link-abseil.patch
+  ];
+
   nativeBuildInputs = [
     cmake
   ];
