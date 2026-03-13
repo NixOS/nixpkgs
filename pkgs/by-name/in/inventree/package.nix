@@ -13,8 +13,8 @@ let
   python3 = python313.override {
     self = python3;
     packageOverrides = _: super: {
-      django = super.django_5_2;
-      django_4 = super.django_5_2; # For django-stdimage
+      django = super.django_5;
+      django_4 = super.django_5; # For django-stdimage
     };
   };
 
@@ -69,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   dependencies =
     with python3.pkgs;
     [
-      django_5_2
+      django_5
       dj-rest-auth
       django-allauth
       django-cleanup
