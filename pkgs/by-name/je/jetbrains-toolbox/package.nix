@@ -6,6 +6,7 @@
   fetchurl,
   appimageTools,
   undmg,
+  makeDesktopItem,
 }:
 
 let
@@ -13,6 +14,16 @@ let
   version = "3.1.0.62320";
 
   updateScript = ./update.sh;
+
+  desktopItem = makeDesktopItem {
+    name = pname;
+    desktopName = "JetBrains Toolbox";
+    exec = "${pname} %U";
+    icon = pname;
+    categories = [ "Development" ];
+    mimeTypes = [ "x-scheme-handler/jetbrains" ];
+    terminal = false;
+  };
 
   meta = {
     description = "JetBrains Toolbox";
@@ -93,8 +104,8 @@ selectKernel {
       runScript = "${src}/bin/jetbrains-toolbox --update-failed";
 
       extraInstallCommands = ''
-        install -Dm0644 ${src}/bin/jetbrains-toolbox.desktop -t $out/share/applications
-        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/pixmaps/jetbrains-toolbox.png
+        install -Dm0644 ${desktopItem}/share/applications/${pname}.desktop -t $out/share/applications
+        install -Dm0644 ${src}/bin/toolbox-tray-color.png $out/share/pixmaps/${pname}.png
       '';
     };
 
