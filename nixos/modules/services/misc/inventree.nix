@@ -19,7 +19,7 @@ let
     ) ''INVENTREE_DB_PASSWORD="$(<"${cfg.database.passwordFile}")"''}
     set +a
 
-    pushd "${cfg.dataDir}"
+    pushd "${cfg.dataDir}" &>/dev/null
     sudo=exec
     if [[ "$USER" != ${cfg.user} ]]; then
       ${
@@ -30,7 +30,7 @@ let
       }
     fi
     $sudo ${cfg.package}/bin/inventree "$@"
-    popd
+    popd &>/dev/null
   '';
 
 in
@@ -261,19 +261,13 @@ in
             in
             {
               "/" = {
+                recommendedProxySettings = true;
                 extraConfig = ''
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Forwarded-By $server_addr:$server_port;
-                  proxy_set_header X-Forwarded-For $remote_addr;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header CLIENT_IP $remote_addr;
-
                   proxy_pass_request_headers on;
 
                   proxy_redirect off;
 
-                  client_max_body_size 100M;
+                  client_max_body_size 0;
 
                   proxy_buffering off;
                   proxy_request_buffering off;
@@ -327,6 +321,7 @@ in
             Group = cfg.group;
             RemainAfterExit = true;
             PrivateTmp = true;
+            UMask = "0077";
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
@@ -334,11 +329,10 @@ in
           environment = cfg.settings;
           script = ''
             set -euo pipefail
-            umask u=rwx,g=,o=
 
             ${
               lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
+                export INVENTREE_DB_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/db_password")"
               ''
             } \
             exec ${pkg}/bin/inventree migrate
@@ -387,9 +381,9 @@ in
           script = ''
             ${
               lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
+                export INVENTREE_DB_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/db_password")"
               ''
-            } \
+            }
             exec ${pkg}/bin/gunicorn InvenTree.wsgi
           '';
         };
@@ -418,9 +412,9 @@ in
           script = ''
             ${
               lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
+                export INVENTREE_DB_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/db_password")"
               ''
-            } \
+            }
             exec ${pkg}/bin/inventree qcluster
           '';
         };
