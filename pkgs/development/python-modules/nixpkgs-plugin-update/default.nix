@@ -32,6 +32,9 @@ buildPythonPackage {
     mypy
   '';
 
+  # NOTE: Causes "Could not find a url in the derivations src attribute" crash in maintainer scripts
+  passthru.updateScript = null;
+
   meta = {
     description = "Library for updating plugin collections in Nixpkgs";
     license = lib.licenses.mit;

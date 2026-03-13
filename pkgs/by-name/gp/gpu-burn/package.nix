@@ -1,9 +1,10 @@
 {
+  lib,
   autoAddDriverRunpath,
   config,
   cudaPackages,
   fetchFromGitHub,
-  lib,
+  nix-update-script,
 }:
 let
   inherit (lib.lists) last map optionals;
@@ -20,15 +21,15 @@ let
 in
 backendStdenv.mkDerivation {
   pname = "gpu-burn";
-  version = "0-unstable-2024-04-09";
+  version = "0-unstable-2025-11-04";
 
   strictDeps = true;
 
   src = fetchFromGitHub {
     owner = "wilicc";
     repo = "gpu-burn";
-    rev = "9aefd7c0cc603bbc8c3c102f5338c6af26f8127c";
-    hash = "sha256-Nz0yaoHGfodaYl2HJ7p+1nasqRmxwPJ9aL9oxitXDpM=";
+    rev = "671f4be92477ce01cd9b536bc534a006dbee058f";
+    hash = "sha256-zaGzwpdvF9dw3RypBO+g6FhjOFN8/F9+yI1+lLxLjgs=";
   };
 
   postPatch = ''
@@ -69,6 +70,10 @@ backendStdenv.mkDerivation {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
   # NOTE: Certain packages may be missing from cudaPackages on non-Linux platforms. To avoid evaluation failure,
   # we only include the platforms where we know the package is available -- thus the conditionals setting the
   # platforms and badPlatforms fields.
@@ -79,7 +84,10 @@ backendStdenv.mkDerivation {
     homepage = "http://wili.cc/blog/gpu-burn.html";
     license = lib.licenses.bsd2;
     mainProgram = "gpu_burn";
-    maintainers = with lib.maintainers; [ connorbaker ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      connorbaker
+    ];
     platforms = optionals cudaSupport lib.platforms.linux;
   };
 }

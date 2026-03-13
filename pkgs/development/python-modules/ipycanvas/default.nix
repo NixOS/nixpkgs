@@ -2,7 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatchling,
+  hatch,
+  hatch-build-scripts,
+  hatch-nodejs-version,
   ipywidgets,
   numpy,
   pillow,
@@ -27,7 +29,11 @@ buildPythonPackage rec {
       --replace-fail '"jupyterlab>=3,<5",' "" \
   '';
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatch
+    hatch-build-scripts
+    hatch-nodejs-version
+  ];
 
   env.HATCH_BUILD_NO_HOOKS = true;
 
