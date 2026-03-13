@@ -7273,6 +7273,12 @@
     name = "Louis Orleans";
     keys = [ { fingerprint = "llSOkL8Tn5+LOmWa4PDci+dQXZIRy11NSumDiFzNkAM"; } ];
   };
+  duijf = {
+    email = "git@duijf.io";
+    github = "duijf";
+    githubId = 1123589;
+    name = "Laurens Duijvesteijn";
+  };
   dukc = {
     email = "ajieskola@gmail.com";
     github = "dukc";
