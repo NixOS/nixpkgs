@@ -11563,18 +11563,9 @@ with pkgs;
 
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
-  openblas =
-    callPackage
-      (
-        # FIXME: migrate everything off make.nix on mass rebuild.
-        if stdenv.system == "aarch64-darwin" then
-          ../development/libraries/science/math/openblas
-        else
-          ../development/libraries/science/math/openblas/make.nix
-      )
-      {
-        inherit (llvmPackages) openmp;
-      };
+  openblas = callPackage ../development/libraries/science/math/openblas {
+    inherit (llvmPackages) openmp;
+  };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
