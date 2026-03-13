@@ -28745,6 +28745,12 @@
     githubId = 7038383;
     name = "Vojta Káně";
   };
+  vojtechstep = {
+    email = "code@vojtechstep.eu";
+    github = "VojtechStep";
+    githubId = 15523887;
+    name = "Vojta Štěpančík";
+  };
   volfyd = {
     email = "lb.nix@lisbethmail.com";
     github = "volfyd";
