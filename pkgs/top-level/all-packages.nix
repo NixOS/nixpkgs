@@ -8138,6 +8138,14 @@ with pkgs;
     )
   );
 
+  buildHomeAssistantTheme = callPackage ../servers/home-assistant/build-custom-theme { };
+  home-assistant-custom-themes = lib.recurseIntoAttrs (
+    lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ../servers/home-assistant/custom-themes;
+    }
+  );
+
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
   icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
