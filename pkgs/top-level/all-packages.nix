@@ -8570,8 +8570,6 @@ with pkgs;
     makeLinuxHeaders
     ;
 
-  klibc = callPackage ../os-specific/linux/klibc { };
-
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
   linuxKernel = recurseIntoAttrs (callPackage ./linux-kernels.nix { });
