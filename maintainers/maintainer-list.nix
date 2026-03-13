@@ -27724,6 +27724,12 @@
     githubId = 4044033;
     name = "Thomas Sowell";
   };
+  tsssni = {
+    email = "dingyongyu2002@foxmail.com";
+    github = "tsssni";
+    githubId = 98369004;
+    name = "Ding Yongyu";
+  };
   TsubakiDev = {
     email = "i@tsubakidev.cc";
     github = "TsubakiDev";
