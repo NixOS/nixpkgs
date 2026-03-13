@@ -7952,6 +7952,12 @@
     githubId = 5493775;
     name = "Ente";
   };
+  EntranceJew = {
+    email = "EntranceJew@gmail.com";
+    github = "EntranceJew";
+    githubId = 5711436;
+    name = "EntranceJew";
+  };
   Enzime = {
     github = "Enzime";
     githubId = 10492681;
