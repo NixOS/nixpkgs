@@ -130,7 +130,7 @@ let
   );
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = false;
   inherit pname version;
 
@@ -155,8 +155,8 @@ python3Packages.buildPythonApplication rec {
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit missingHashes;
-    yarnLock = "${src}/yarn.lock";
+    inherit (finalAttrs) missingHashes;
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = yarnHash;
   };
 
@@ -354,4 +354,4 @@ python3Packages.buildPythonApplication rec {
       oxij
     ];
   };
-}
+})
