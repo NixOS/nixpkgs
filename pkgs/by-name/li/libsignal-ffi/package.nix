@@ -21,6 +21,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-xffBXvq1ikesIjw6cXfphnTIiyuMiUcY8h0pzSgfD8U=";
   };
 
+  postPatch = lib.optionalString boringssl.passthru.isShared ''
+    substituteInPlace $cargoDepsCopy/boring-sys-*/build/main.rs \
+      --replace-fail "cargo:rustc-link-lib=static=crypto" "cargo:rustc-link-lib=dylib=crypto" \
+      --replace-fail "cargo:rustc-link-lib=static=ssl" "cargo:rustc-link-lib=dylib=ssl"
+  '';
+
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
