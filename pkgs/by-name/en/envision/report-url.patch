@@ -1,0 +1,13 @@
+diff --git a/src/ui/app.rs b/src/ui/app.rs
+index 77edeeb..4b598f6 100644
+--- a/src/ui/app.rs
++++ b/src/ui/app.rs
+@@ -567,7 +567,7 @@ impl AsyncComponent for App {
+                             if install_missing_widget.is_some() {
+                                 "\n\nYou can install them with the following command:"
+                             } else {
+-                                ""
++                                "\n\nPlease report this at https://github.com/NixOS/nixpkgs/issues/358664"
+                             }
+                         )),
+                         install_missing_widget.as_ref(),
