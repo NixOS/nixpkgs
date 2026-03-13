@@ -1,7 +1,7 @@
-{ lib
-, fetchFromCodeberg
-, buildGoModule
-,
+{
+  lib,
+  fetchFromCodeberg,
+  buildGoModule,
 }:
 buildGoModule (finalAttrs: {
   pname = "stalk";
@@ -25,7 +25,7 @@ buildGoModule (finalAttrs: {
     '';
     homepage = "https://codeberg.org/xrstf/stalk";
     license = lib.licenses.mit;
-    maintainers = [ "refactoriel" ];
+    maintainers = with lib.maintainers; [ refactoriel ];
     mainProgram = "stalk";
   };
 })
