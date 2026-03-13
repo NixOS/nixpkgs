@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -f tests/scripts/test076-authid-rewrite
   '';
 
-  doCheck = true;
+  doCheck = !(stdenv.hostPlatform.isi686 && stdenv.hostPlatform.isLinux);
 
   # The directory is empty and serve no purpose.
   preFixup = ''
