@@ -15,13 +15,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.24.0";
+  version = "5.25.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_dataproc";
     inherit version;
-    hash = "sha256-yKIv5tswCOc1uPzce2ARf2JD2Q4O2RDWMNFQTOXAvbQ=";
+    hash = "sha256-Z1FRprBEjBlglJi+3OzPH6UzgIVo9O4ST9JYVwb0JNY=";
   };
 
   build-system = [ setuptools ];
