@@ -109,3 +109,13 @@ Not all the configuration options are available directly in this module, but you
   };
 }
 ```
+
+## Migrating the data directory {#module-services-suwayomi-migrating-data-directory}
+
+The apps data directory has changed to actually reflect `services.suwayomi-server.dataDir`.
+Previously, Suwayomi-Server would store it's files under `${dataDir}/.local/share/Tachidesk`.
+
+Migrating the data is done in two simple steps:
+- Move everything in `${dataDir}/.local/share/Tachidesk` to `${dataDir}` itself.
+- Set `systemd.services.suwayomi-server.environment.JAVA_TOOL_OPTIONS` to
+  `"-Dsuwayomi.tachidesk.config.server.rootDir=${config.services.suwayomi-server.dataDir}"`
