@@ -11,6 +11,7 @@
   nix-update-script,
   pkg-config,
   qt6,
+  runCommand,
   testers,
   wrapGAppsHook4,
   writeShellScriptBin,
@@ -146,10 +147,24 @@ stdenv.mkDerivation (
     env.LANG = "C.UTF-8";
 
     passthru = {
-      tests.version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "QT_QPA_PLATFORM=offscreen rpi-imager --version";
-        version = "v${finalAttrs.version}";
+      tests = {
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "QT_QPA_PLATFORM=offscreen rpi-imager --version";
+          version = "v${finalAttrs.version}";
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        bundle =
+          runCommand "${finalAttrs.pname}-bundle-test"
+            {
+              nativeBuildInputs = [ finalAttrs.finalPackage ];
+            }
+            ''
+              test -d ${finalAttrs.finalPackage}/Applications/rpi-imager.app
+              test -x ${finalAttrs.finalPackage}/bin/rpi-imager
+              touch $out
+            '';
       };
       updateScript = nix-update-script { };
     };
