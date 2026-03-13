@@ -11319,6 +11319,12 @@
     githubId = 993484;
     name = "Greg Hale";
   };
+  imApeki = {
+    email = "iamapeki9@gmail.com";
+    github = "imApeki";
+    githubId = 127532162;
+    name = "Apeki";
+  };
   imatpot = {
     email = "nixpkgs@brnk.vc";
     github = "imatpot";
