@@ -458,7 +458,32 @@ def test_get_generations(tmp_path: Path) -> None:
     (tmp_path / "system-3-link").symlink_to(nixos_path)
     (tmp_path / "system-2-link").symlink_to(nixos_path)
 
+    # An alternate profile; this shouldn't appear.
+    (tmp_path / "custom").symlink_to(tmp_path / "custom-1-link")
+    (tmp_path / "custom-1-link").symlink_to(nixos_path)
+
     assert n.get_generations(m.Profile("system", tmp_path / "system")) == [
+        m.Generation(id=1, current=False, timestamp=ANY),
+        m.Generation(id=2, current=True, timestamp=ANY),
+        m.Generation(id=3, current=False, timestamp=ANY),
+    ]
+
+
+def test_get_generations_with_profile(tmp_path: Path) -> None:
+    nixos_path = tmp_path / "nixos-system"
+    nixos_path.mkdir()
+
+    (tmp_path / "custom").symlink_to(tmp_path / "custom-2-link")
+    # In the "wrong" order on purpose to make sure we are sorting the results
+    (tmp_path / "custom-1-link").symlink_to(nixos_path)
+    (tmp_path / "custom-3-link").symlink_to(nixos_path)
+    (tmp_path / "custom-2-link").symlink_to(nixos_path)
+
+    # An alternate profile; none of these should appear.
+    (tmp_path / "system").symlink_to(tmp_path / "system-1-link")
+    (tmp_path / "system-1-link").symlink_to(nixos_path)
+
+    assert n.get_generations(m.Profile("custom", tmp_path / "custom")) == [
         m.Generation(id=1, current=False, timestamp=ANY),
         m.Generation(id=2, current=True, timestamp=ANY),
         m.Generation(id=3, current=False, timestamp=ANY),
