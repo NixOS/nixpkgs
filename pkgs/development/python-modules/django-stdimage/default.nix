@@ -24,7 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-uwVU3Huc5fitAweShJjcMW//GBeIpJcxqKKLGo/EdIs=";
   };
 
-  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.14";
 
   dependencies = [
     django
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
   nativeBuildInputs = [ gettext ];
 
-  doCheck = true;
+  doCheck = lib.versionOlder django.version "5.0"; # No Django 5 support in the tests
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
