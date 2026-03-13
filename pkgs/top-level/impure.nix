@@ -3,12 +3,6 @@
   for the meaning of each argument.
 */
 
-let
-
-  homeDir = builtins.getEnv "HOME";
-
-in
-
 {
   # We put legacy `system` into `localSystem`, if `localSystem` was not passed.
   # If neither is passed, assume we are building packages on the current
@@ -26,8 +20,11 @@ in
   # $HOME/.config/nixpkgs/config.nix.
   config ?
     let
+      homeDir = builtins.getEnv "HOME";
+      xdgConfigHomeVar = builtins.getEnv "XDG_CONFIG_HOME";
+      xdgConfigHome = if xdgConfigHomeVar != "" then xdgConfigHomeVar else homeDir + "/.config";
       configFile = builtins.getEnv "NIXPKGS_CONFIG";
-      configFile2 = homeDir + "/.config/nixpkgs/config.nix";
+      configFile2 = xdgConfigHome + "/nixpkgs/config.nix";
       configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
     in
     if configFile != "" && builtins.pathExists configFile then
