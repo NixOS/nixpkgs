@@ -193,13 +193,7 @@ def copy_closure(
     Also supports copying a closure from a remote to another remote."""
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    # This command is always run locally and needs to keep its own environent
-    # while merging NIX_SSHOPTS and SSH_DEFAULT_OPTS together.
-    # E.g.: to preserve SSH_AUTH_SOCK
-    env = {
-        **os.environ,
-        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS])),
-    }
+    env = {"NIX_SSHOPTS": " ".join(filter(lambda x: x, [sshopts, *SSH_DEFAULT_OPTS]))}
 
     def nix_copy_closure(host: Remote, to: bool) -> None:
         run_wrapper(
@@ -210,7 +204,7 @@ def copy_closure(
                 host.host,
                 closure,
             ],
-            env=env,
+            append_local_env=env,
         )
 
     def nix_copy(to_host: Remote, from_host: Remote) -> None:
@@ -226,7 +220,7 @@ def copy_closure(
                 f"ssh://{to_host.host}",
                 closure,
             ],
-            env=env,
+            append_local_env=env,
         )
 
     match (to_host, from_host):
@@ -724,11 +718,11 @@ def _run_action_with_systemd(
 
     try:
         _run_action(
-            action,
-            path_to_config,
-            install_bootloader,
-            target_host,
-            sudo,
+            action=action,
+            path_to_config=path_to_config,
+            install_bootloader=install_bootloader,
+            target_host=target_host,
+            sudo=sudo,
             prefix=[*SYSTEMD_RUN_CMD_PREFIX, f"--unit={unique_unit_name}"],
         )
     except KeyboardInterrupt:
@@ -767,11 +761,11 @@ def switch_to_configuration(
 
     if _has_systemd(target_host):
         _run_action_with_systemd(
-            action,
-            path_to_config,
-            install_bootloader,
-            target_host,
-            sudo,
+            action=action,
+            path_to_config=path_to_config,
+            install_bootloader=install_bootloader,
+            target_host=target_host,
+            sudo=sudo,
         )
     else:
         logger.debug(
@@ -779,11 +773,11 @@ def switch_to_configuration(
             "not working in target host"
         )
         _run_action(
-            action,
-            path_to_config,
-            install_bootloader,
-            target_host,
-            sudo,
+            action=action,
+            path_to_config=path_to_config,
+            install_bootloader=install_bootloader,
+            target_host=target_host,
+            sudo=sudo,
         )
 
 
