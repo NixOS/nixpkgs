@@ -22,7 +22,7 @@
   libzip,
   pcre,
   poppler,
-  portaudio,
+  portaudiocpp,
   qpdf,
   zlib,
   # plugins
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzip
     pcre
     poppler
-    portaudio
+    portaudiocpp
     qpdf
     zlib
   ]
