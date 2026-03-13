@@ -8646,8 +8646,6 @@ with pkgs;
     enableGUI = true;
   };
 
-  kmod = callPackage ../os-specific/linux/kmod { };
-
   lvm2 = callPackage ../os-specific/linux/lvm2/2_03.nix {
     # break the cyclic dependency:
     # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
@@ -8688,7 +8686,7 @@ with pkgs;
 
   aggregateModules =
     modules:
-    callPackage ../os-specific/linux/kmod/aggregator.nix {
+    callPackage ../by-name/km/kmod/aggregator.nix {
       inherit (buildPackages) kmod;
       inherit modules;
     };
