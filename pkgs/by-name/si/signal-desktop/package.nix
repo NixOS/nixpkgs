@@ -7,7 +7,6 @@
   pnpmConfigHook,
   electron_40,
   python3,
-  makeWrapper,
   callPackage,
   fetchFromGitHub,
   jq,
@@ -19,7 +18,7 @@
   nixosTests,
 
   # command line arguments which are always set e.g "--password-store=kwallet6"
-  commandLineArgs ? "",
+  commandLineArgs ? [ ],
 
   withAppleEmojis ? false,
 }:
@@ -105,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpmConfigHook
     pnpm
-    makeWrapper
     python3
     jq
   ]
@@ -115,7 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
-  buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
+  buildInputs = [
+    electron.electronWrapHook
+  ]
+  ++ lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png;
 
   patches = [
     ./force-90-days-expiration.patch
@@ -253,6 +254,16 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
+  # Allows stringy or array flags
+  electronWrapperArgs =
+    if builtins.isString commandLineArgs then
+      "--add-flags ${commandLineArgs}"
+    else
+      builtins.concatMap (s: [
+        "--add-flag"
+        s
+      ]) commandLineArgs;
+
   installPhase = ''
     runHook preInstall
   ''
@@ -270,12 +281,6 @@ stdenv.mkDerivation (finalAttrs: {
     do
       install -Dm644 $icon $out/share/icons/hicolor/`basename ''${icon%.png}`/apps/signal-desktop.png
     done
-
-    makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
-      --add-flags "$out/share/signal-desktop/app.asar" \
-      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --add-flags ${lib.escapeShellArg commandLineArgs}
   ''
   + ''
     runHook postInstall

@@ -99,6 +99,33 @@
   "cuda-writing-tests": [
     "index.html#cuda-writing-tests"
   ],
+  "electron-wrap-hook": [
+    "index.html#electron-wrap-hook"
+  ],
+  "electron-wrap-hook-args": [
+    "index.html#electron-wrap-hook-args"
+  ],
+  "electron-wrap-hook-dont": [
+    "index.html#electron-wrap-hook-dont"
+  ],
+  "electron-wrap-hook-path": [
+    "index.html#electron-wrap-hook-path"
+  ],
+  "electron-wrap-hook-example": [
+    "index.html#electron-wrap-hook-example"
+  ],
+  "electron-wrap-hook-example-snippet": [
+    "index.html#electron-wrap-hook-example-snippet"
+  ],
+  "electron-wrap-hook-exclusive-variables": [
+    "index.html#electron-wrap-hook-exclusive-variables"
+  ],
+  "electron-wrap-hook-name": [
+    "index.html#electron-wrap-hook-name"
+  ],
+  "electron-wrap-hook-variables": [
+    "index.html#electron-wrap-hook-variables"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
