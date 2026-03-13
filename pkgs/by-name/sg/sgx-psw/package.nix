@@ -10,13 +10,16 @@
   git,
   makeWrapper,
   nixosTests,
-  protobuf,
+  protobuf_21,
   python3,
   ocaml,
   ocamlPackages,
   which,
   debug ? false,
 }:
+let
+  protobuf = protobuf_21;
+in
 stdenv.mkDerivation rec {
   pname = "sgx-psw";
   # Version as given in se_version.h
