@@ -24,6 +24,9 @@ let
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
       lomiri-mediaplayer-app = callPackage ./applications/lomiri-mediaplayer-app { };
       lomiri-music-app = callPackage ./applications/lomiri-music-app { };
+      lomiri-system-settings-online-accounts =
+        callPackage ./applications/lomiri-system-settings/plugins/lomiri-system-settings-online-accounts.nix
+          { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };
@@ -46,6 +49,7 @@ let
       libusermetrics = callPackage ./development/libusermetrics { };
       lomiri-api = callPackage ./development/lomiri-api { };
       lomiri-app-launch = callPackage ./development/lomiri-app-launch { };
+      lomiri-online-accounts = callPackage ./development/lomiri-online-accounts { };
       qtmir = callPackage ./development/qtmir { };
       trust-store = callPackage ./development/trust-store { };
       u1db-qt = callPackage ./development/u1db-qt { };
@@ -53,6 +57,7 @@ let
       #### QML / QML-related
       lomiri-action-api = callPackage ./qml/lomiri-action-api { };
       lomiri-notifications = callPackage ./qml/lomiri-notifications { };
+      lomiri-online-accounts-plugins = callPackage ./qml/lomiri-online-accounts-plugins { };
       lomiri-push-qml = callPackage ./qml/lomiri-push-qml { };
       lomiri-settings-components = callPackage ./qml/lomiri-settings-components { };
       lomiri-ui-extras = callPackage ./qml/lomiri-ui-extras { };
@@ -68,6 +73,7 @@ let
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
       lomiri-indicator-network = callPackage ./services/lomiri-indicator-network { };
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
+      lomiri-sync-monitor = callPackage ./services/lomiri-sync-monitor { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
       lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
