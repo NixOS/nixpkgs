@@ -13,7 +13,7 @@ let
         optional = false;
       };
     in
-    map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
+    map (x: defaultPlugin // (if x ? plugin then x else { plugin = x; })) plugins;
 
   pluginWithConfigType =
     with lib;
@@ -78,9 +78,18 @@ in
 
     userPluginViml = lib.mkOption {
       readOnly = true;
-      type = lib.types.listOf (lib.types.lines);
+      type = lib.types.listOf lib.types.lines;
       description = ''
         The viml config set by the user.
+      '';
+    };
+
+    pluginPython3Packages = lib.mkOption {
+      readOnly = true;
+      type = lib.types.listOf (lib.types.functionTo (lib.types.listOf lib.types.package));
+      example = lib.literalExpression "[ (ps: [ ps.python-language-server ]) ]";
+      description = ''
+        Packages required by the plugins to work with the python3 provider.
       '';
     };
 
@@ -88,7 +97,7 @@ in
 
   config =
     let
-      pluginsNormalized = normalizePlugins config.plugins;
+      pluginsNormalized = config.plugins;
     in
     {
       pluginAdvisedLua =
@@ -111,5 +120,7 @@ in
       userPluginViml = lib.foldl (
         acc: p: if p.config != null then acc ++ [ p.config ] else acc
       ) [ ] pluginsNormalized;
+
+      pluginPython3Packages = map (plugin: plugin.python3Dependencies or (_: [ ])) pluginsNormalized;
     };
 }

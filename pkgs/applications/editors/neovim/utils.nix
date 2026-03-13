@@ -99,24 +99,19 @@ let
         inherit plugins;
       };
 
-      pluginsNormalized = normalizePlugins plugins;
+      pluginsNormalized = checked_cfg.plugins;
 
       vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
 
-      getDeps = attrname: map (plugin: plugin.${attrname} or (_: [ ]));
-
-      requiredPlugins = vimUtils.requiredPluginsForPackage vimPackage;
-      pluginPython3Packages = getDeps "python3Dependencies" requiredPlugins;
     in
     {
-      # plugins' python dependencies
-      inherit pluginPython3Packages;
 
       # viml config set by the user along with the plugin
       inherit (checked_cfg)
         userPluginViml
         runtimeDeps
         pluginAdvisedLua
+        pluginPython3Packages
         ;
 
       # A Vim "package", see ':h packages'

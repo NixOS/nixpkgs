@@ -3878,7 +3878,9 @@ self: super: with self; {
 
   devpi-ldap = callPackage ../development/python-modules/devpi-ldap { };
 
-  devpi-server = callPackage ../development/python-modules/devpi-server { };
+  devpi-server = callPackage ../by-name/de/devpi-server/unwrapped.nix { };
+
+  devpi-web = callPackage ../development/python-modules/devpi-web { };
 
   devtools = callPackage ../development/python-modules/devtools { };
 
@@ -4687,6 +4689,8 @@ self: super: with self; {
   dramatiq = callPackage ../development/python-modules/dramatiq { };
 
   dramatiq-abort = callPackage ../development/python-modules/dramatiq-abort { };
+
+  dramatiq-eager-broker = callPackage ../development/python-modules/dramatiq-eager-broker { };
 
   drawille = callPackage ../development/python-modules/drawille { };
 
@@ -6589,8 +6593,6 @@ self: super: with self; {
   gotenberg-client = callPackage ../development/python-modules/gotenberg-client { };
 
   gotify = callPackage ../development/python-modules/gotify { };
-
-  gotrue = callPackage ../development/python-modules/gotrue { };
 
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
@@ -13504,6 +13506,8 @@ self: super: with self; {
 
   pydal = callPackage ../development/python-modules/pydal { };
 
+  pydanclick = callPackage ../development/python-modules/pydanclick { };
+
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
@@ -15483,6 +15487,8 @@ self: super: with self; {
   python-apt = callPackage ../development/python-modules/python-apt { };
 
   python-arango = callPackage ../development/python-modules/python-arango { };
+
+  python-avatars = callPackage ../development/python-modules/python-avatars { };
 
   python-awair = callPackage ../development/python-modules/python-awair { };
 
@@ -18702,8 +18708,6 @@ self: super: with self; {
   supabase-auth = callPackage ../development/python-modules/supabase-auth { };
 
   supabase-functions = callPackage ../development/python-modules/supabase-functions { };
-
-  supafunc = callPackage ../development/python-modules/supafunc { };
 
   super-collections = callPackage ../development/python-modules/super-collections { };
 
