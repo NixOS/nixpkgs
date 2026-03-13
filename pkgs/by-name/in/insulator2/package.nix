@@ -23,31 +23,31 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "insulator2";
   version = "2.14.0";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = "insulator2";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-3eDA+pwchnwWtweGeSDlf+Vt0Hoylmanf4hnvJ2YOGU=";
   };
 
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
-    inherit src missingHashes;
+    inherit (finalAttrs) src missingHashes;
     hash = "sha256-3BgvOoGMY86xzSHf6S0265PYOPEgLv77nT6CO9IGdwc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    sourceRoot = src.name + "/backend";
+    inherit (finalAttrs) src;
+    sourceRoot = finalAttrs.src.name + "/backend";
     hash = "sha256-u5WFV7luvqSQQtEJFlN//GH6iNcQpH/o01ME1dPtOB4=";
   };
 
   cargoRoot = "backend/";
-  buildAndTestSubdir = cargoRoot;
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   strictDeps = true;
 
@@ -85,4 +85,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ tc-kaluza ];
     mainProgram = "insulator2";
   };
-}
+})
