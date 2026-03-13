@@ -566,6 +566,16 @@ in
       '';
     };
 
+    finalPackage = mkOption {
+      default = package;
+      internal = true;
+      readOnly = true;
+      type = types.package;
+      description = ''
+        The final Home Assistant package which is being used in the service.
+      '';
+    };
+
     openFirewall = mkOption {
       default = false;
       type = types.bool;
