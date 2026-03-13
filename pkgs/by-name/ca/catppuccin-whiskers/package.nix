@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 let
-  version = "2.5.1";
+  version = "2.8.0";
 in
 rustPlatform.buildRustPackage {
   pname = "catppuccin-whiskers";
@@ -14,10 +14,10 @@ rustPlatform.buildRustPackage {
     owner = "catppuccin";
     repo = "whiskers";
     tag = "v${version}";
-    hash = "sha256-OLEXy9MCrPQu1KWICsYhe/ayVqxkYIFwyJoJhgiNDz4=";
+    hash = "sha256-pmUaedOR+yaScdo8APMXlMBpHc9rUOkUSmayXtFn5yo=";
   };
 
-  cargoHash = "sha256-CVg7kcOTRa8KfDwiJHQhTPQfK6g3jOMa4h/BCUo3ehw=";
+  cargoHash = "sha256-SaakNE2dbpkh5EPHdd7/GBFLV5YSLxTY6CHkMoR61U0=";
 
   meta = {
     homepage = "https://github.com/catppuccin/whiskers";
