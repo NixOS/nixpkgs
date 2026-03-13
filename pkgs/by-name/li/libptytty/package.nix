@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
 }:
 
@@ -15,9 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libptytty";
   version = "2.0";
 
-  src = fetchurl {
-    url = "http://dist.schmorp.de/libptytty/libptytty-${finalAttrs.version}.tar.gz";
-    sha256 = "1xrikmrsdkxhdy9ggc0ci6kg5b1hn3bz44ag1mk5k1zjmlxfscw0";
+  src = fetchFromGitHub {
+    owner = "yusiwen";
+    repo = "libptytty";
+    rev = "b9694ea18e0dbd78213f55233a430325c13ad63e";
+    hash = "sha256-Yyq0n/UqkRWNTatVAz/QEhBaWyO8nhHuIZkob2rwC70=";
   };
 
   nativeBuildInputs = [ cmake ];
