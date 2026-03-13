@@ -23,7 +23,7 @@
 }:
 
 let
-  version = "2.0.3";
+  version = "2.0.4";
   devenvNixVersion = "2.32";
   devenvNixRev = "41eee9d3b1f611b1b90d51caa858b6d83834c44a";
 
@@ -48,10 +48,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-1DpF5F7zgOZ7QrRjz23315pUoF532dHnsU/V4UQithk=";
+    hash = "sha256-wPH6q2PSP64doUXHqdEAmY68X4IAeC2UjSIyqzoUYwE=";
   };
 
-  cargoHash = "sha256-gZFRbTDPQNKf2msBv9wOavaH1iB1Tk3shYf0/4TSZBQ=";
+  cargoHash = "sha256-CzhdUrNAAhCVnXZCk06djnBv1cczhj7tIG/JRmaBX5c=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
-    boehmgc
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c
