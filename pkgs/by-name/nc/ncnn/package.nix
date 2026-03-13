@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ncnn";
-  version = "20250503";
+  version = "20260113";
 
   src = fetchFromGitHub {
     owner = "Tencent";
     repo = "ncnn";
     tag = finalAttrs.version;
-    hash = "sha256-7wktoeei16QaPdcxVVS25sZYPhTQMEq9PjaHBwm5Eas=";
+    hash = "sha256-Kflx8MXFenfRmKuE9r5rnLb9Ze9D8CD0isC2A+P/3iQ=";
   };
 
   patches = [ ./cmakelists.patch ];
