@@ -49,6 +49,11 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = true;
   };
 
+  postPatch = ''
+    # Hide update banner
+    echo "<template></template>" > src/components/banner/ManagerUpdateBanner.vue
+  '';
+
   buildPhase = ''
     runHook preBuild
 
