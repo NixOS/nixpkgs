@@ -1,0 +1,88 @@
+diff --git a/tests/e2e/test_basic_e2e.py b/tests/e2e/test_basic_e2e.py
+index 3e167e5..be8f247 100644
+--- a/tests/e2e/test_basic_e2e.py
++++ b/tests/e2e/test_basic_e2e.py
+@@ -30,9 +30,7 @@ def _collect_stdout(process: subprocess.Popen[str]) -> list[str]:
+ 
+ def _run_print_mode(config_path: Path, work_dir: Path, user_prompt: str) -> tuple[int, list[str]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--print",
+         "--yolo",
+         "--input-format",
+@@ -62,9 +60,7 @@ def _run_print_mode(config_path: Path, work_dir: Path, user_prompt: str) -> tupl
+ 
+ def _run_shell_mode(config_path: Path, work_dir: Path, user_prompt: str) -> tuple[int, list[str]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--yolo",
+         "--prompt",
+         user_prompt,
+@@ -142,9 +138,7 @@ def _run_wire_mode(
+     config_path: Path, work_dir: Path, user_prompt: str
+ ) -> tuple[int, dict[str, object], list[dict[str, object]]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--wire",
+         "--yolo",
+         "--config-file",
+diff --git a/tests/e2e/test_media_e2e.py b/tests/e2e/test_media_e2e.py
+index 9a06c95..4efb109 100644
+--- a/tests/e2e/test_media_e2e.py
++++ b/tests/e2e/test_media_e2e.py
+@@ -121,9 +121,7 @@ def _run_print_mode(
+     config_path: Path, work_dir: Path, messages: list[dict[str, object]]
+ ) -> tuple[int, list[str]]:
+     cmd = [
+-        "uv",
+-        "run",
+-        "kimi",
++        "@KIMI_CLI@",
+         "--print",
+         "--yolo",
+         "--input-format",
+@@ -240,9 +238,7 @@ def test_scripted_echo_media_e2e(temp_work_dir: KaosPath, tmp_path: Path, mode:
+         assert _content_has_text(parsed_contents[1], "The video appears to be a short clip.")
+     elif mode == "wire":
+         cmd = [
+-            "uv",
+-            "run",
+-            "kimi",
++            "@KIMI_CLI@",
+             "--wire",
+             "--yolo",
+             "--config-file",
+diff --git a/tests_e2e/test_wire_skills_mcp.py b/tests_e2e/test_wire_skills_mcp.py
+index 696feb0..2474215 100644
+--- a/tests_e2e/test_wire_skills_mcp.py
++++ b/tests_e2e/test_wire_skills_mcp.py
+@@ -230,6 +230,7 @@ def test_mcp_tool_call(tmp_path) -> None:
+             }
+         }
+     }
++
+     mcp_config_path = tmp_path / "mcp.json"
+     mcp_config_path.write_text(json.dumps(mcp_config), encoding="utf-8")
+ 
+diff --git a/tests_e2e/wire_helpers.py b/tests_e2e/wire_helpers.py
+index b7ae2c3..d8b5ec9 100644
+--- a/tests_e2e/wire_helpers.py
++++ b/tests_e2e/wire_helpers.py
+@@ -228,7 +228,7 @@ def start_wire(
+     skills_dir: Path | None = None,
+     agent_file: Path | None = None,
+ ) -> WireProcess:
+-    cmd = ["uv", "run", "kimi", "--wire"]
++    cmd = ["@KIMI_CLI@", "--wire"]
+     if yolo:
+         cmd.append("--yolo")
+     if config_path is not None:
