@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fido2-manage";
-  version = "0-unstable-2025-06-06";
+  version = "0-unstable-2026-02-10";
 
   src = fetchFromGitHub {
     owner = "token2";
     repo = "fido2-manage";
-    rev = "4fc6a4e0d905dcc2a7bfee70232a0398e9e4b45d";
-    hash = "sha256-olkEUHJ350FIMUlWG37wqSfO2wyYni4CYspwa4lAO5w=";
+    rev = "6b5d2b0af6c723e6a3d6526251cf9d5d56affa99";
+    hash = "sha256-kPPA4LcrVGZbpk4tDkYQ2QNqFcZrqllsGTTPQTRKxQs=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
