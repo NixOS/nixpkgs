@@ -2807,6 +2807,11 @@
     github = "azazak123";
     githubId = 50211158;
   };
+  azban = {
+    name = "azban";
+    github = "azban";
+    githubId = 714931;
+  };
   azd325 = {
     email = "tim.kleinschmidt@gmail.com";
     github = "Azd325";
