@@ -231,20 +231,7 @@ in
 
         linux_latest = packageAliases.linux_latest.kernel;
 
-        # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
-        # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
-        zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
-
-        linux_zen = zenKernels {
-          variant = "zen";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_lqx = zenKernels {
-          variant = "lqx";
+        linux_zen = callPackage ../os-specific/linux/kernel/zen-kernels.nix {
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -281,6 +268,7 @@ in
         linux_hardened = linux_6_12_hardened;
       }
       // lib.optionalAttrs config.allowAliases {
+        linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
         linux_libre = throw "linux_libre has been removed due to lack of maintenance";
         linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
@@ -785,12 +773,12 @@ in
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
-      linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
       linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
       linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
     }
     // lib.optionalAttrs config.allowAliases {
+      linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
       linux_libre = throw "linux_libre has been removed due to lack of maintenance";
       linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
