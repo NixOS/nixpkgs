@@ -11211,10 +11211,10 @@
     keys = [ { fingerprint = "1025 8841 8FF7 E165 6964  90A2 06E8 A973 4948 08A2"; } ];
   };
   ilarvne = {
-    email = "ilarvne@proton.me";
+    email = "nix@ilarvne.dev";
     github = "ilarvne";
     githubId = 99905590;
-    name = "Nurali Aslanbekov";
+    name = "Nurali A.";
   };
   ilaumjd = {
     email = "ilaumjd@gmail.com";
