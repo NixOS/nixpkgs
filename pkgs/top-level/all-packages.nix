@@ -8646,13 +8646,6 @@ with pkgs;
     enableGUI = true;
   };
 
-  lvm2 = callPackage ../os-specific/linux/lvm2/2_03.nix {
-    # break the cyclic dependency:
-    # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
-    # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
-    util-linux = util-linuxMinimal;
-  };
-
   lvm2_dmeventd = lvm2.override {
     enableDmeventd = true;
     enableCmdlib = true;

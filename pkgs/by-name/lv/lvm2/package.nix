@@ -1,5 +1,3 @@
-{ version, hash }:
-
 {
   lib,
   stdenv,
@@ -19,7 +17,7 @@
   onlyLib ? stdenv.hostPlatform.isStatic,
   # Otherwise we have a infinity recursion during static compilation
   enableUtilLinux ? !stdenv.hostPlatform.isStatic,
-  util-linux,
+  util-linuxMinimal,
   enableVDO ? false,
   vdo,
   enableMdadm ? false,
@@ -33,12 +31,18 @@
 # configure: error: --enable-dmeventd requires --enable-cmdlib to be used as well
 assert enableDmeventd -> enableCmdlib;
 
+let
+  # break the cyclic dependency:
+  # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
+  # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
+  util-linux = util-linuxMinimal;
+in
 stdenv.mkDerivation rec {
   pname =
     "lvm2"
     + lib.optionalString enableDmeventd "-with-dmeventd"
     + lib.optionalString enableVDO "-with-vdo";
-  inherit version;
+  version = "2.03.38";
 
   __structuredAttrs = true;
 
@@ -47,7 +51,7 @@ stdenv.mkDerivation rec {
       "https://mirrors.kernel.org/sourceware/lvm2/LVM2.${version}.tgz"
       "ftp://sourceware.org/pub/lvm2/LVM2.${version}.tgz"
     ];
-    inherit hash;
+    hash = "sha256-Mi1Ev0DeMY5ua1LFaZmq64axbIJnGHrC4BpE1NxSaWA=";
   };
 
   strictDeps = true;
