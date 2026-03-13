@@ -223,7 +223,8 @@ let
       res
       // {
         wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-        wrapRc = (configure != { });
+        wrapRc = configure != { };
+        legacyWrapper = true;
       }
     );
 
