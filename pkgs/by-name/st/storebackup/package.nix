@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   version = "3.5.2";
 
-  pname = "store-backup";
+  pname = "storebackup";
 
   enableParallelBuilding = true;
 
