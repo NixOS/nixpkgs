@@ -27711,6 +27711,12 @@
     github = "toelke";
     githubId = 183276;
   };
+  tom-xs = {
+    email = "tom.xaviersantos@gmail.com";
+    github = "tom-xs";
+    githubId = 434264191;
+    name = "Tomas Xavier Santos";
+  };
   tom94 = {
     email = "nix@94.me";
     github = "Tom94";
