@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonAtLeast,
   unittestCheckHook,
   rustPlatform,
   fetchFromGitHub,
@@ -13,7 +12,7 @@
   setuptools-rust,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nlpo3";
   version = "1.4.0-unstable-2024-11-11";
   pyproject = true;
@@ -30,10 +29,10 @@ buildPythonPackage rec {
       --replace-fail "data/test_dict.txt" "$src/nlpo3-python/tests/data/test_dict.txt"
   '';
 
-  sourceRoot = "${src.name}/nlpo3-python";
+  sourceRoot = "${finalAttrs.src.name}/nlpo3-python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src sourceRoot;
+    inherit (finalAttrs) src sourceRoot;
     hash = "sha256-S5nDOz/3ZenvMs8ruybEu5ULefeYGPIKO8kCW3dTa+E=";
   };
 
@@ -67,8 +66,8 @@ buildPythonPackage rec {
   meta = {
     description = "Thai Natural Language Processing library in Rust, with Python and Node bindings";
     homepage = "https://github.com/PyThaiNLP/nlpo3";
-    changelog = "https://github.com/PyThaiNLP/nlpo3/releases/tag/nlpo3-python-v${version}";
+    changelog = "https://github.com/PyThaiNLP/nlpo3/releases/tag/nlpo3-python-v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ vizid ];
   };
-}
+})
