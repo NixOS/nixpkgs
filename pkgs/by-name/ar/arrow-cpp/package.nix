@@ -131,8 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       };
 
       # apache-orc looks for things in caps
-      LZ4_ROOT = lz4;
-      ZSTD_ROOT = zstd.dev;
+      LZ4_HOME = lz4;
+      PROTOBUF_HOME = protobuf;
+      SNAPPY_HOME = snappy.dev;
+      ZSTD_HOME = zstd.dev;
       ARROW_TEST_DATA = "${arrow-testing}/data";
       PARQUET_TEST_DATA = "${parquet-testing}/data";
       GTEST_FILTER =
