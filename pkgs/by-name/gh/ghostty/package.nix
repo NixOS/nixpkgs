@@ -11,9 +11,10 @@
   glslang,
   gtk4-layer-shell,
   harfbuzz,
+  libadwaita,
   libGL,
   libx11,
-  libadwaita,
+  libxml2,
   ncurses,
   nixosTests,
   oniguruma,
@@ -64,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib # Required for `glib-compile-schemas`
     wrapGAppsHook4
     blueprint-compiler
+    libxml2 # `xmllint`
   ];
 
   buildInputs = [
