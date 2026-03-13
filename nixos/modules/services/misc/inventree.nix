@@ -14,6 +14,7 @@ let
   manage = pkgs.writeShellScriptBin "inventree-manage" ''
     set -a
     ${lib.toShellVars cfg.settings}
+    ${lib.concatMapStringsSep "\n" (file: ". ${file}") cfg.settingsFiles}
     ${lib.optionalString (
       cfg.database.passwordFile != null
     ) ''INVENTREE_DB_PASSWORD="$(<"${cfg.database.passwordFile}")"''}
@@ -191,6 +192,11 @@ in
       };
     };
 
+    settingsFiles = mkOption {
+      description = "Additional environment files to load into all services";
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -320,6 +326,7 @@ in
             RemainAfterExit = true;
             PrivateTmp = true;
             UMask = "0077";
+            EnvironmentFile = cfg.settingsFiles;
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
@@ -345,6 +352,7 @@ in
             Group = cfg.group;
             StateDirectory = "inventree";
             PrivateTmp = true;
+            EnvironmentFile = cfg.settingsFiles;
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
@@ -374,6 +382,7 @@ in
             Group = cfg.group;
             StateDirectory = "inventree";
             PrivateTmp = true;
+            EnvironmentFile = cfg.settingsFiles;
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
