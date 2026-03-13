@@ -224,6 +224,17 @@ python3.pkgs.buildPythonApplication rec {
       makeWrapper ${lib.getExe python3.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}":"${pythonPath}:$out/lib/${pname}/src/backend/InvenTree"
 
+      # Generate static assets
+      pushd $out/lib/${pname}/src/backend/InvenTree &>/dev/null
+      export INVENTREE_STATIC_ROOT=$out/lib/inventree/static
+      export INVENTREE_MEDIA_ROOT=$(mktemp -d)
+      export INVENTREE_BACKUP_DIR=$(mktemp -d)
+      export INVENTREE_DB_ENGINE=django.db.backends.sqlite3
+      export INVENTREE_DB_NAME=inventree.db
+      export INVENTREE_SITE_URL="http://localhost:8000"
+      ${python3.interpreter} ./manage.py collectstatic --no-input
+      popd &>/dev/null
+
       runHook postInstall
     '';
   doCheck = true;
