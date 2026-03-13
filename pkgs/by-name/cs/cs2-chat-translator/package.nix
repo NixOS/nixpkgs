@@ -1,13 +1,19 @@
-{ lib, buildNpmPackage, fetchFromGitHub, nodejs_20, xdotool }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs_20,
+  xdotool,
+}:
 
 buildNpmPackage {
   pname = "cs2-chat-translator";
   version = "0.1.0";
 
   src = fetchFromGitHub {
-    owner  = "MeckeDev";
-    repo   = "cs2-chat-translator";
-    rev    = "main";  # besser: Tag wie v0.1.0, wenn du einen setzt
+    owner = "MeckeDev";
+    repo = "cs2-chat-translator";
+    rev = "main"; # besser: Tag wie v0.1.0, wenn du einen setzt
     sha256 = "sha256-KgWLpuUe4vyTNS89NnN2GtQsyGraCMuKgv91zNPdVoQ=";
   };
 
@@ -34,9 +40,9 @@ buildNpmPackage {
 
   meta = with lib; {
     description = "CS2 chat translator (Node.js + xdotool + google-translate-api-x).";
-    homepage    = "https://github.com/MeckeDev/cs2-chat-translator";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = "https://github.com/MeckeDev/cs2-chat-translator";
+    license = licenses.mit;
+    platforms = platforms.linux;
     # optional, wenn du dich als Maintainer in nixpkgs einträgst:
     # maintainers = with maintainers; [ meckeDev ];
   };
