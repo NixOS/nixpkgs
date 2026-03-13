@@ -40,7 +40,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.3.0";
+  version = "1.3.1";
 
   outputs = [
     "out"
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-44bF0MtsaoF0EgUI1TbGUz4NUH6psIRMCZgZJ0GtSaU=";
+    hash = "sha256-+ddMmUe9Jjkun4qqW8XFXVgwVZdVHsGWcQzndgIlBjQ=";
   };
 
   deps = callPackage ./deps.nix {
