@@ -47,14 +47,14 @@ assert
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.7.9";
+  version = "2.7.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-c6WTalpjaZcUvppyYaTP03ErX5b+k7fUbphj58FVBS8=";
+    hash = "sha256-HLd7PAYdBzpzdfCRPc4elPq3KfzusIXYXTV8fRmo1lU=";
   };
 
   patches = [
@@ -107,6 +107,7 @@ python.pkgs.buildPythonApplication rec {
     "cryptography"
     "getmac"
     "mashumaro"
+    "numpy"
     "orjson"
     "pillow"
     "podcastparser"
@@ -130,7 +131,6 @@ python.pkgs.buildPythonApplication rec {
     aiortc
     aiorun
     aiosqlite
-    aiovban
     awesomeversion
     brotli
     certifi
