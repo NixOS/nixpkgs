@@ -6,7 +6,7 @@ use std::{
     cell::RefCell,
     collections::HashMap,
     io::{BufRead, Read, Write},
-    os::unix::{fs::PermissionsExt, process::CommandExt},
+    os::unix::{fs::{self, PermissionsExt}, process::CommandExt},
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
@@ -1094,6 +1094,12 @@ fn do_system_switch(action: Action) -> anyhow::Result<()> {
     }
 
     if *action == Action::Boot {
+        let next_system = Path::new("/run/next-system");
+        if next_system.exists() || next_system.is_symlink() {
+            std::fs::remove_file(next_system).context("Failed to remove old /run/next-system")?;
+        }
+        fs::symlink(&toplevel, next_system).context("Failed to link /run/next-system to toplevel")?;
+
         std::process::exit(0);
     }
 

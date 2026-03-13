@@ -1408,6 +1408,8 @@ in
             "version=9p2000.L"
             "msize=${toString cfg.msize}"
             "x-systemd.requires=modprobe@9pnet_virtio.service"
+            # TODO: REMOVE THIS BEFORE MERGING
+            "nofail"
           ]
           ++ lib.optional (tag == "nix-store") "cache=${cfg.nixStore9pCache}";
         };
