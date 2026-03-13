@@ -8248,6 +8248,8 @@ self: super: with self; {
 
   kerbad = callPackage ../development/python-modules/kerbad { };
 
+  keras-tuner = callPackage ../development/python-modules/keras-tuner { };
+
   kerberos = callPackage ../development/python-modules/kerberos { };
 
   kernels = callPackage ../development/python-modules/kernels { };
