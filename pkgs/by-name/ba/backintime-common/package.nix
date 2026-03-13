@@ -13,6 +13,8 @@
   which,
   ps,
   gnugrep,
+  man,
+  asciidoctor,
 }:
 
 let
@@ -33,22 +35,27 @@ let
     encfs
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "backintime-common";
-  version = "1.5.6";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "bit-team";
     repo = "backintime";
-    rev = "v${version}";
-    sha256 = "sha256-y9uo/6R9OXK9hqUD0pCLJXF2B80lr2gXf6v8+Ca6u5M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/33Lx62S/9RcqrfJumE6/o3KnAObBa3DcmuGkcOXIQE=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     gettext
   ];
-  buildInputs = [ python' ];
+
+  buildInputs = [
+    python'
+    man
+    asciidoctor
+  ];
 
   installFlags = [ "DEST=$(out)" ];
 
@@ -56,9 +63,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs --build updateversion.sh
+    patchShebangs --build doc/manpages/build_manpages.sh
     cd common
     substituteInPlace configure \
-      --replace-fail "/.." "" \
+      --replace-fail "/../etc" "/etc" \
       --replace-fail "share/backintime" "${python'.sitePackages}/backintime"
 
     substituteInPlace "backintime" "backintime-askpass" \
@@ -69,6 +77,9 @@ stdenv.mkDerivation rec {
       --replace-fail "'which'" "'${lib.getExe which}'" \
       --replace-fail "'ps'" "'${lib.getExe ps}'" \
       --replace-fail "'grep'" "'${lib.getExe gnugrep}'" \
+
+    substituteInPlace "bitlicense.py" \
+      --replace-fail "/usr/share/doc" "$out/share/doc" \
   '';
 
   dontAddPrefix = true;
@@ -91,4 +102,4 @@ stdenv.mkDerivation rec {
       done by taking snapshots of a specified set of directories.
     '';
   };
-}
+})

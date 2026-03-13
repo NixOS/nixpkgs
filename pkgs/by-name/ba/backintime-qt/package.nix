@@ -9,6 +9,8 @@
   coreutils,
   util-linux,
   qt6,
+  man,
+  asciidoctor,
 }:
 
 let
@@ -37,6 +39,8 @@ stdenv.mkDerivation {
     backintime-common
     qt6.qtbase
     qt6.qtwayland
+    man
+    asciidoctor
   ];
 
   nativeBuildInputs = backintime-common.nativeBuildInputs or [ ] ++ [
@@ -47,9 +51,10 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     patchShebangs --build updateversion.sh
+    patchShebangs --build doc/manpages/build_manpages.sh
     cd qt
     substituteInPlace qttools_path.py \
-      --replace "__file__, os.pardir, os.pardir" '"${backintime-common}/${python'.sitePackages}/backintime"'
+      --replace-fail "Path(__file__).parent.parent" '"${backintime-common}/${python'.sitePackages}/backintime"'
   '';
 
   preFixup = ''
