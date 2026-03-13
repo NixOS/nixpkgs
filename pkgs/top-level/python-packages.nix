@@ -2421,6 +2421,10 @@ self: super: with self; {
 
   cachy = callPackage ../development/python-modules/cachy { };
 
+  cadquery = callPackage ../development/python-modules/cadquery { };
+
+  cadquery-ocp = callPackage ../development/python-modules/cadquery-ocp { };
+
   cadwyn = callPackage ../development/python-modules/cadwyn { };
 
   caffe = toPythonModule (
@@ -19535,6 +19539,18 @@ self: super: with self; {
   traittypes = callPackage ../development/python-modules/traittypes { };
 
   trakit = callPackage ../development/python-modules/trakit { };
+
+  trame = callPackage ../development/python-modules/trame { };
+
+  trame-client = callPackage ../development/python-modules/trame-client { };
+
+  trame-common = callPackage ../development/python-modules/trame-common { };
+
+  trame-server = callPackage ../development/python-modules/trame-server { };
+
+  trame-vtk = callPackage ../development/python-modules/trame-vtk { };
+
+  trame-vuetify = callPackage ../development/python-modules/trame-vuetify { };
 
   trampoline = callPackage ../development/python-modules/trampoline { };
 
