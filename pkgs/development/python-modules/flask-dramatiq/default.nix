@@ -31,7 +31,8 @@ buildPythonPackage {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'poetry>=0.12' 'poetry-core' \
-      --replace 'poetry.masonry.api' 'poetry.core.masonry.api'
+      --replace 'poetry.masonry.api' 'poetry.core.masonry.api' \
+      --replace-fail 'dramatiq = "^1.5"' 'dramatiq = ">=1.5, <3"'
 
     patchShebangs --build ./example.py
   '';
