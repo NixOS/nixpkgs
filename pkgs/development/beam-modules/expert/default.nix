@@ -6,20 +6,20 @@
   fetchMixDeps,
 }:
 let
-  version = "0.1.0-rc.5";
+  version = "0.1.0-rc.6";
 
   src = fetchFromGitHub {
     owner = "elixir-lang";
     repo = "expert";
     tag = "v${version}";
-    hash = "sha256-7e8zi3AFHESXyxTA0/YRmzR4L4tl19L0LHKaEM1l0P4=";
+    hash = "sha256-w3jRpQLbigQVNuuPlyoOHp6wO0gPsgdR0kwHP6Zul6Y=";
   };
 
   engineDeps = fetchMixDeps {
     pname = "mix-deps-expert-engine";
 
     inherit src version;
-    hash = "sha256-PTyPLyo85N0BltX9oIRhHDGKgmNScb10N129wC8o6Q4=";
+    hash = "sha256-2QCaY4TlscRmklPQ897xjjree7N8cLl7O83syfqPmng=";
 
     preConfigure = ''
       cd apps/engine
@@ -33,7 +33,7 @@ mixRelease rec {
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-T5OSjoglZfQa1lMO2lOZJ7yWoyxf6m33rKGuy4zq2AE=";
+    hash = "sha256-Rx5O77UEIDKcCz967h/8z1MAdaw0syzvLG5JOSaqgLE=";
 
     preConfigure = ''
       cd apps/expert

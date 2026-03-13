@@ -86,7 +86,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     homepage = "https://siyanpanayotov.com/project/viewnior/";
     maintainers = with lib.maintainers; [
-      smironov
       artturin
     ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
