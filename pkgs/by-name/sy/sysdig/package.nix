@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  kernel,
+  kernel ? null,
   installShellFiles,
   pkg-config,
   luajit,

@@ -585,7 +585,7 @@ in
 
         shufflecake = callPackage ../os-specific/linux/shufflecake { };
 
-        sysdig = callPackage ../os-specific/linux/sysdig { };
+        sysdig = callPackage ../by-name/sy/sysdig/package.nix { };
 
         systemtap = callPackage ../development/tools/profiling/systemtap { };
 

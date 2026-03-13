@@ -8752,10 +8752,6 @@ with pkgs;
     }
   );
 
-  sysdig = callPackage ../os-specific/linux/sysdig {
-    kernel = null;
-  }; # sysdig is a client, for a driver look at linuxPackagesFor
-
   sysprof = callPackage ../development/tools/profiling/sysprof { };
 
   libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
