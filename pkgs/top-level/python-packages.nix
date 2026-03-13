@@ -7787,6 +7787,8 @@ self: super: with self; {
 
   j2lint = callPackage ../development/python-modules/j2lint { };
 
+  jack-client = callPackage ../development/python-modules/jack-client { };
+
   jaconv = callPackage ../development/python-modules/jaconv { };
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
