@@ -7,30 +7,40 @@
 let
   cfg = config.services.dnscache;
 
-  dnscache-root = pkgs.runCommand "dnscache-root" { preferLocalBuild = true; } ''
-    mkdir -p $out/{servers,ip}
+  dnscache-root =
+    pkgs.runCommand "dnscache-root"
+      {
+        preferLocalBuild = true;
+        inherit (cfg) extraRootFiles;
+      }
+      ''
+        mkdir -p $out/{servers,ip}
 
-    ${lib.concatMapStrings (ip: ''
-      touch "$out/ip/"${lib.escapeShellArg ip}
-    '') cfg.clientIps}
-
-    ${lib.concatStrings (
-      lib.mapAttrsToList (host: ips: ''
         ${lib.concatMapStrings (ip: ''
-          echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
-        '') ips}
-      '') cfg.domainServers
-    )}
+          touch "$out/ip/"${lib.escapeShellArg ip}
+        '') cfg.clientIps}
 
-    # if a list of root servers was not provided in config, copy it
-    # over. (this is also done by dnscache-conf, but we 'rm -rf
-    # /var/lib/dnscache/root' below & replace it wholesale with this,
-    # so we have to ensure servers/@ exists ourselves.)
-    if [ ! -e $out/servers/@ ]; then
-      # symlink does not work here, due chroot
-      cp ${pkgs.djbdns}/etc/dnsroots.global $out/servers/@;
-    fi
-  '';
+        ${lib.concatStrings (
+          lib.mapAttrsToList (host: ips: ''
+            ${lib.concatMapStrings (ip: ''
+              echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
+            '') ips}
+          '') cfg.domainServers
+        )}
+
+        # if a list of root servers was not provided in config, copy it
+        # over. (this is also done by dnscache-conf, but we 'rm -rf
+        # /var/lib/dnscache/root' below & replace it wholesale with this,
+        # so we have to ensure servers/@ exists ourselves.)
+        if [ ! -e $out/servers/@ ]; then
+          # symlink does not work here, due chroot
+          cp ${pkgs.djbdns}/etc/dnsroots.global $out/servers/@;
+        fi
+
+        if [ -n "$extraRootFiles" ] ; then
+           cp "$extraRootFiles"/* $out
+        fi
+      '';
 
 in
 {
@@ -74,6 +84,19 @@ in
             "@" = ["8.8.8.8" "8.8.4.4"];
             "example.com" = ["192.168.100.100"];
           }
+        '';
+
+      };
+
+      extraRootFiles = mkOption {
+        default = null;
+        type = types.nullOr types.pathInStore;
+        description = lib.mdDoc ''
+          Directory with additional files to copy into the server chroot.
+
+          Vanilla dnscahe does not recognize any files other than those managed by other
+          options of this service, but that option might be necessary if additional
+          patches were applied to the "djbdns" package via nixpkgs overlay.
         '';
       };
 
