@@ -42,14 +42,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole";
-  version = "0.22.0";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
     tag = finalAttrs.version;
-    hash = "sha256-22UFwBcpuutFDRPFJAS9MBwoTdIx2xW0DSpR44DJ1lU=";
+    hash = "sha256-knvQwdPfe9uHpSNqaEz4w2LY6LjCPVoUcFG0bhHQl+g=";
   };
 
   postPatch =

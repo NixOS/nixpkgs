@@ -45,7 +45,6 @@ symlinkJoin {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       balodja
-      smironov
     ];
     platforms = lib.platforms.linux;
   };

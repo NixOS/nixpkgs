@@ -77,6 +77,7 @@ jobs:
               'ci/github-script/bot.js',
               'ci/github-script/check-target-branch.js',
               'ci/github-script/commits.js',
+              'ci/github-script/get-pr-commit-details.js',
               'ci/github-script/lint-commits.js',
               'ci/github-script/merge.js',
               'ci/github-script/prepare.js',
