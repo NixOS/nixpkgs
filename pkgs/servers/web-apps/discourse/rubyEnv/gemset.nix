@@ -808,10 +808,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1i84h7qdh78s5hvivd9nffh04ikb222ll3xrawqbpwvrak6dvmsl";
+      sha256 = "04z4m8bkhxv4m990ynrbc41i0dh4543jnnqian9fcfiab1ag5hk1";
       type = "gem";
     };
-    version = "0.4";
+    version = "0.4.2";
   };
   discourse_dev_assets = {
     dependencies = [
