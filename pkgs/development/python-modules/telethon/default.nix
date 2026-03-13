@@ -12,7 +12,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "telethon";
   version = "1.42.0";
   pyproject = true;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromCodeberg {
     owner = "Lonami";
     repo = "Telethon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NMHJkSTGR3/tck0k97EfVN9f85PAWst+EZ6G7Tgrt5s=";
   };
 
@@ -48,13 +48,13 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   meta = {
     homepage = "https://codeberg.org/Lonami/Telethon";
     description = "Full-featured Telegram client library for Python 3";
     license = lib.licenses.mit;
-    changelog = "https://codeberg.org/Lonami/Telethon/blob/${src.tag}/readthedocs/misc/changelog.rst";
+    changelog = "https://codeberg.org/Lonami/Telethon/blob/${finalAttrs.src.tag}/readthedocs/misc/changelog.rst";
     maintainers = with lib.maintainers; [ nyanloutre ];
   };
-}
+})
