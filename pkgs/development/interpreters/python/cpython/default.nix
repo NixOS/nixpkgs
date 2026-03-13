@@ -165,21 +165,55 @@ let
         );
       }
       // __splices;
+      # When we override the interpreter we also need to override the spliced
+      # versions of the interpreter. NOTE: In lua-5/interpreter.nix, this
+      # filter is different - we take every attribute from @inputs, besides
+      # derivations. That filter causes cross compilations issues for Python
+      # See e.g:
+      #
+      # pkgsCross.armv7l-hf-multiplatform.buildPackages.python3Packages.bcrypt
+      #
+      # And the following Nixpkgs issues/PRs:
+      #
+      # - https://github.com/NixOS/nixpkgs/issues/48046
+      # - https://github.com/NixOS/nixpkgs/pull/480005 (Wrong PR)
+      # - https://github.com/NixOS/nixpkgs/pull/482866 (Correct fix)
+      # - https://github.com/NixOS/nixpkgs/pull/498251 (Re-adds this @inputs filter)
+      inputs' = lib.filterAttrs (
+        n: v:
+        (builtins.elem (builtins.typeOf v) [
+          "int"
+          "bool"
+          "string"
+          "path"
+          "null"
+        ])
+        || n == "packageOverrides"
+      ) inputs;
       override =
         attr:
         let
-          python = attr.override {
-            self = python;
-          };
+          python = attr.override (
+            inputs'
+            // {
+              self = python;
+            }
+          );
         in
         python;
-    in
-    passthruFun rec {
-      inherit self sourceVersion packageOverrides;
-      implementation = "cpython";
-      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
-      executable = libPrefix;
       pythonVersion = with sourceVersion; "${major}.${minor}";
+      libPrefix = "python${pythonVersion}${lib.optionalString (!enableGIL) "t"}";
+    in
+    passthruFun {
+      inherit
+        self
+        sourceVersion
+        packageOverrides
+        libPrefix
+        pythonVersion
+        ;
+      implementation = "cpython";
+      executable = libPrefix;
       sitePackages = "lib/${libPrefix}/site-packages";
       inherit hasDistutilsCxxPatch pythonAttr;
       inherit (splices)

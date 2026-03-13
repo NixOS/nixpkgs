@@ -203,10 +203,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib"
     mv -v $out/bin/*.* $out/lib/
 
-    mkdir -p "$out/share/pixmaps/"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer.png" "$out/share/pixmaps/PrusaSlicer.png"
-    ln -s "$out/share/PrusaSlicer/icons/PrusaSlicer-gcodeviewer_192px.png" "$out/share/pixmaps/PrusaSlicer-gcodeviewer.png"
-
     mkdir -p "$out"/share/mime/packages
     cat << EOF > "$out"/share/mime/packages/prusa-gcode-viewer.xml
     <?xml version="1.0" encoding="UTF-8"?>
