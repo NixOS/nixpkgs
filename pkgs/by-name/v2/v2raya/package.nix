@@ -18,13 +18,13 @@
 }:
 let
   pname = "v2raya";
-  version = "2.2.7.5";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     tag = "v${version}";
-    hash = "sha256-aa/Eb+fZQ1hwm6H7wb7mr0b4tCu12Mhy14OXNjZUJ0Y=";
+    hash = "sha256-WsxVDxp/kg7ZhG9DTZSyW23CLbzHRkvW4UjurQzLzpU=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
 
@@ -61,7 +61,7 @@ buildGoModule {
 
   sourceRoot = "${src.name}/service";
 
-  vendorHash = "sha256-uiURsB1V4IB77YKLu5gdaqw9Fuja6fC5adWYDE3OE+Q=";
+  vendorHash = "sha256-9dQkgTlQSZPlkeBfGEtSGqCoFeBrMo2+7T84LPxnugc=";
 
   ldflags = [
     "-s"
