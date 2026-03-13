@@ -202,6 +202,9 @@ buildPythonPackage rec {
     "test_cleanup"
     "test_with_autoscaler_file_descriptor_safety"
     "test_with_file_descriptor_safety"
+    # OverflowError: Python int too large to convert to C int
+    "test_fd_by_path"
+    "test_open"
   ];
 
   pythonImportsCheck = [ "celery" ];

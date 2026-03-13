@@ -61,7 +61,7 @@ let
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.budgie.excludePackages;
 in
 {
-  meta.maintainers = lib.teams.budgie.members;
+  meta.teams = [ lib.teams.budgie ];
 
   imports = [
     (lib.mkRenamedOptionModule

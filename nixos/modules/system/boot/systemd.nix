@@ -667,6 +667,8 @@ in
 
         "systemd/system-environment-generators/env-generator".source =
           "${config.system.nixos-init.package}/bin/env-generator";
+
+        "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
       };
 
     services.dbus.enable = true;
