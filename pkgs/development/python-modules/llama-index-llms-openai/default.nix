@@ -9,13 +9,13 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-llms-openai";
-  version = "0.6.26";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_llms_openai";
     inherit (finalAttrs) version;
-    hash = "sha256-NHRgLsvDDIiotYXP1XN4kdRdp4JRpeBnxNvC08w9CNs=";
+    hash = "sha256-hhyqO5n7ZJmk6xdHxOxDQs5web10B5G/af7n/19ItDY=";
   };
 
   pythonRemoveDeps = [
