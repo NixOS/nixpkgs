@@ -130,6 +130,7 @@ let
         "systemd"
         "tailscale"
         "tibber"
+        "tuya-smartplug"
         "unbound"
         "unpoller"
         "v2ray"
