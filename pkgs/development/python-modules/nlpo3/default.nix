@@ -14,14 +14,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "nlpo3";
-  version = "1.4.0-unstable-2024-11-11";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PyThaiNLP";
     repo = "nlpo3";
-    rev = "280c47b7f98e88319c1a4ac2c7a2e5f273c00621";
-    hash = "sha256-bEN2SaINfqvTIPSROXApR3zoLdjZY0h6bdAzbMHrJdM=";
+    tag = "nlpo3-python-v${finalAttrs.version}";
+    hash = "sha256-GQwUKc6VXF1mDzvB2HBwHlaC0Eu3sZvlTuGe0CDrP4k=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-S5nDOz/3ZenvMs8ruybEu5ULefeYGPIKO8kCW3dTa+E=";
+    hash = "sha256-Kp2FL6GXb5g5jqvFWZxZUy7OuGaavN9DZkp9kdI4d/4=";
   };
 
   preCheck = ''
