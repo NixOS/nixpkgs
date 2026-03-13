@@ -654,6 +654,11 @@ lib.mapAttrs mkLicense (
       url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
     };
 
+    gd = {
+      spdxId = "GD";
+      fullName = "GD License";
+    };
+
     geogebra = {
       fullName = "GeoGebra Non-Commercial License Agreement";
       url = "https://www.geogebra.org/license";
