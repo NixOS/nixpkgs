@@ -2,27 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  astropy,
-  dill,
-  echo,
-  fast-histogram,
-  h5py,
-  ipython,
-  matplotlib,
-  mpl-scatter-density,
-  numpy,
-  openpyxl,
-  pandas,
-  pyqt-builder,
-  pytestCheckHook,
-  qt6,
-  scipy,
-  setuptools,
-  setuptools-scm,
-  shapely,
-  xlrd,
+  python,
 }:
-
 buildPythonPackage rec {
   pname = "glueviz";
   version = "1.24.1";
@@ -30,36 +11,24 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "glue-viz";
-    repo = "glue";
+    repo = "glueviz";
     tag = "v${version}";
     hash = "sha256-21XFH1fIt8vLd0blZJn6ZRmLJaof/E30zHrBVLjXOaA=";
   };
 
-  buildInputs = [ pyqt-builder ];
-
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
-
-  build-system = [
+  build-system = with python.pkgs; [
     setuptools
     setuptools-scm
   ];
 
-  dependencies = [
-    astropy
-    dill
-    echo
-    fast-histogram
-    h5py
+  dependencies = with python.pkgs; [
     ipython
     matplotlib
     mpl-scatter-density
     numpy
-    openpyxl
-    pandas
-    scipy
-    setuptools
-    shapely
-    xlrd
+    glue-core
+    glue-qt
+    glue-vispy-viewers
   ];
 
   dontConfigure = true;
@@ -68,20 +37,15 @@ buildPythonPackage rec {
   # qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.
   doCheck = false;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  pythonImportsCheck = [ "glue" ];
-
   dontWrapQtApps = true;
 
-  preFixup = ''
-    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
-  '';
+  # it just a meta package
+  pythonImportsCheck = [ "glue" ];
 
   meta = {
     homepage = "https://glueviz.org";
-    description = "Linked Data Visualizations Across Multiple Files";
-    license = lib.licenses.bsd3; # https://github.com/glue-viz/glue/blob/main/LICENSE
-    maintainers = with lib.maintainers; [ ifurther ];
+    description = "The glueviz meta-package";
+    license = licenses.bsd3; # https://github.com/glue-viz/glueviz/blob/main/LICENSE
+    maintainers = with maintainers; [ ifurther ];
   };
 }
