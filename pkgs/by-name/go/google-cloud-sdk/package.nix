@@ -100,6 +100,13 @@ stdenv.mkDerivation rec {
     fi
     cp -R * .install $out/google-cloud-sdk/
 
+    # Resolve readlink noise in shell initialization
+    # We patch the source script before wrapProgram renames it.
+    # This ensures that the resulting .gcloud-wrapped binary contains the fix.
+    substituteInPlace "$out/google-cloud-sdk/bin/gcloud" \
+      --replace-fail 'while _cloudsdk_link=$(readlink "$_cloudsdk_path")' 'while _cloudsdk_link=$(readlink "$_cloudsdk_path" 2>/dev/null)' \
+      --replace-fail 'CLOUDSDK_ROOT_DIR=$(_cloudsdk_root_dir "$0")' 'CLOUDSDK_ROOT_DIR=$(realpath "$(dirname "$0")/..")'
+
     mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
     cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py

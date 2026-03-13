@@ -33,6 +33,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Fails with weasyprint >= 68 (tries to open /static/css/print.css in test env)
+    "test_get_pdf_download_and_options"
+  ];
+
   pythonImportsCheck = [ "django_weasyprint" ];
 
   meta = {

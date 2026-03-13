@@ -4470,7 +4470,7 @@
     name = "Claas Augner";
   };
   caverav = {
-    email = "camilo@fvv.cl";
+    email = "nixpkgs@caverav.cl";
     github = "caverav";
     githubId = 66751764;
     name = "Camilo Vera Vidales";
@@ -8756,6 +8756,12 @@
     github = "figsoda";
     githubId = 40620903;
     name = "figsoda";
+  };
+  fin-w = {
+    email = "fin-w@tutanota.com";
+    github = "fin-w";
+    githubId = 41450706;
+    name = "fin-w";
   };
   fionera = {
     email = "nix@fionera.de";
@@ -25201,12 +25207,6 @@
     githubId = 12636891;
     name = "Akhil Indurti";
   };
-  smironov = {
-    email = "grrwlf@gmail.com";
-    github = "sergei-mironov";
-    githubId = 4477729;
-    name = "Sergey Mironov";
-  };
   smissingham = {
     email = "sean@missingham.com";
     github = "smissingham";
@@ -26699,6 +26699,11 @@
     github = "tg-x";
     githubId = 378734;
     name = "TG ⊗ Θ";
+  };
+  tgi74 = {
+    github = "tgi74";
+    githubId = 1854712;
+    name = "tgi74";
   };
   th0rgal = {
     email = "thomas.marchand@tuta.io";
