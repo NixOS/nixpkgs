@@ -340,8 +340,16 @@ rec {
         name
         meta
         passthru
-        derivationArgs
         ;
+      derivationArgs = derivationArgs // {
+        inherit
+          runtimeInputs
+          excludeShellChecks
+          extraShellCheckFlags
+          bashOptions
+          inheritPath
+          ;
+      };
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
