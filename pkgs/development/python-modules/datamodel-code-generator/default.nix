@@ -88,6 +88,9 @@ buildPythonPackage rec {
   disabledTests = [
     # remote testing, name resolution failure.
     "test_openapi_parser_parse_remote_ref"
+    # Regression in inline-snapshot 0.32.0
+    # https://github.com/15r10nk/inline-snapshot/issues/358
+    "test_generate_returns_dict_for_multiple_modules"
   ];
 
   meta = {
