@@ -42,11 +42,17 @@ stdenv.mkDerivation (
 
       substituteInPlace src/CMakeLists.txt \
         --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' ""
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace-fail '        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)' \
+                       '        set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)'
 
       substituteInPlace src/mac/PlatformPackaging.cmake \
         --replace-fail 'COMMAND "''${MACDEPLOYQT}" "''${APP_BUNDLE_PATH}" -qmldir="''${CMAKE_CURRENT_SOURCE_DIR}" -always-overwrite' \
                        'COMMAND ''${CMAKE_COMMAND} -E echo "Skipping macdeployqt under Nix"'
 
+      grep -Fq "name 'objects-*'" src/mac/PlatformPackaging.cmake
       sed -i "/name 'objects-\\*'/c\\    COMMAND /bin/sh -c \":\"" src/mac/PlatformPackaging.cmake
     '';
 
@@ -114,10 +120,8 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
-      (lib.cmakeFeature "CMAKE_C_COMPILER_AR" "${stdenv.cc.bintools.bintools}/bin/ar")
-      (lib.cmakeFeature "CMAKE_C_COMPILER_RANLIB" "${stdenv.cc.bintools.bintools}/bin/ranlib")
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER_AR" "${stdenv.cc.bintools.bintools}/bin/ar")
-      (lib.cmakeFeature "CMAKE_CXX_COMPILER_RANLIB" "${stdenv.cc.bintools.bintools}/bin/ranlib")
+      (lib.cmakeFeature "CMAKE_AR" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar")
+      (lib.cmakeFeature "CMAKE_RANLIB" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib")
       (lib.cmakeFeature "LIBLZMA_INCLUDE_DIR" "${lib.getDev xz}/include")
       (lib.cmakeFeature "LIBLZMA_INCLUDE_DIRS" "${lib.getDev xz}/include")
       (lib.cmakeFeature "LIBLZMA_LIBRARY" "${lib.getLib xz}/lib/liblzma${stdenv.hostPlatform.extensions.sharedLibrary}")
