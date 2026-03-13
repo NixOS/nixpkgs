@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     "o3"
     "notui=1" # display build progress in a plain-text format
     "REPLXX=${if enableReplxx then "1" else "0"}"
+    "version=${sources.cbqn.version}"
   ]
   ++ lib.optionals stdenv.hostPlatform.avx2Support [
     "has=avx2"
