@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  pkg-config,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "see-cat";
@@ -16,10 +15,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-gADA6Ioxz8YM/SRYsT+43bKNS2Ov1XtTElDr7vx8T14=";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
 
   meta = {
     description = "Cute cat(1) for the terminal";
