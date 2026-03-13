@@ -117,17 +117,6 @@ in
       '';
     };
 
-    otherNodesIps = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      example = [
-        "192.168.1.2"
-        "192.168.1.3"
-      ];
-      description = ''
-        IP addresses of the other nodes.
-      '';
-    };
-
     restApiPort = lib.mkOption {
       type = lib.types.port;
       default = 8008;
