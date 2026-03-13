@@ -4,7 +4,6 @@
   alsa-lib,
   autoPatchelfHook,
   callPackage,
-  copyDesktopItems,
   cups,
   fetchFromGitHub,
   file,
@@ -17,19 +16,18 @@
   libglvnd,
   libxinerama,
   libxrandr,
-  makeDesktopItem,
   writeText,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20260228.1";
-    hash = "sha256-J8rP+DnbX0ktCiq8W9UsE3tM2V1apQrSLed7sq1gP6w=";
+    tag = "r20260313.1";
+    hash = "sha256-In40E185uU6Noq6OoQ1TP4x/P3X369QwjqwXNRvvuA0=";
   };
 
   postPatch = ''
@@ -52,12 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.JAVA_HOME = jdk21;
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk21}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${finalAttrs.env.JAVA_HOME}" ];
 
   nativeBuildInputs = [
     gradle_9
     jdk21
-    copyDesktopItems
     autoPatchelfHook
   ];
 
@@ -76,22 +73,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "keyguard";
-      exec = "Keyguard";
-      icon = "keyguard";
-      desktopName = "Keyguard";
-    })
-  ];
-
   installPhase = ''
     runHook preInstall
 
     cp --recursive desktopApp/build/compose/binaries/main-release/app/Keyguard $out
-    install -D --mode=0644 $out/lib/Keyguard.png $out/share/icons/hicolor/512x512/apps/keyguard.png
-    install -D --mode=0755 ${finalAttrs.passthru.sshAgent}/bin/keyguard-ssh-agent \
+    install -Dm755 ${finalAttrs.passthru.sshAgent}/bin/keyguard-ssh-agent \
       $out/lib/app/resources/keyguard-ssh-agent
+
+    install -Dm444 -t $out/share/applications/ desktopApp/flatpak/*.desktop
+    install -Dm444 desktopApp/flatpak/icon.svg $out/share/icons/hicolor/scalable/apps/com.artemchep.keyguard.svg
+    install -Dm444 -t $out/share/metainfo/ desktopApp/flatpak/*.metainfo.xml
 
     runHook postInstall
   '';
@@ -104,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Alternative client for the Bitwarden platform, created to provide the best user experience possible";
     homepage = "https://github.com/AChep/keyguard-app";
+    changelog = "https://github.com/AChep/keyguard-app/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "Keyguard";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ ilkecan ];
