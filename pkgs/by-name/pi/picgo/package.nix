@@ -6,7 +6,7 @@
   pnpm,
   fetchPnpmDeps,
   pnpmConfigHook,
-  electron_38,
+  electron_40,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -16,19 +16,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picgo";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "Molunerfinn";
     repo = "PicGo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fEj5ymnDBxeJ33GeIrcciQW3Wg7jMQaitwhUHne9a14=";
+    hash = "sha256-4Ih7PPBo6scJoUS8yTAR0iyG5vxNc/c0CCw5FGaIbHM=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) version src;
     pname = "picgo";
-    hash = "sha256-hYQM1KiKfsQL0AbYpHtmpDHbG3HsdXFbpgGzcZVW7R0=";
+    hash = "sha256-tILvWDoHAN5XT1F/cJYgfeMzowuO/fhiughI+0FvHzc=";
     fetcherVersion = 3; # lockfileVersion 9.0 corresponds to fetcherVersion 3
   };
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create startup script
     mkdir -p $out/bin
-    makeWrapper ${lib.getExe electron_38} $out/bin/picgo \
+    makeWrapper ${lib.getExe electron_40} $out/bin/picgo \
       --add-flags "$out/lib/picgo/.launcher.cjs" \
       --add-flags "--name picgo" \
       --set NODE_ENV production \
