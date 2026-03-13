@@ -4,6 +4,10 @@
   backintime-common,
   python3,
   polkit,
+  meld ? null,
+  meldSupport ? true,
+  kdePackages ? null,
+  kompareSupport ? false,
   which,
   su,
   coreutils,
@@ -22,6 +26,13 @@ let
       packaging
     ]
   );
+  diffProgram =
+    if meldSupport then
+      "${lib.getBin meld}/bin"
+    else if kompareSupport then
+      "${lib.getBin kdePackages.kompare}/bin"
+    else
+      "";
 in
 stdenv.mkDerivation {
   inherit (backintime-common)
@@ -59,7 +70,8 @@ stdenv.mkDerivation {
 
   preFixup = ''
     wrapQtApp "$out/bin/backintime-qt" \
-      --prefix PATH : "${lib.getBin backintime-common}/bin:$PATH"
+      --prefix PATH : "${lib.getBin backintime-common}/bin:$PATH" \
+      --prefix PATH : "${diffProgram}:$PATH"
 
     substituteInPlace "$out/share/polkit-1/actions/net.launchpad.backintime.policy" \
       --replace-fail "/usr/bin/backintime-qt" "$out/bin/backintime-qt"
