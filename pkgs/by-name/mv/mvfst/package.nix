@@ -16,16 +16,17 @@
   ctestCheckHook,
 
   gtest,
+  openssl,
 
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   outputs = [
-    "bin"
+    # "bin"
     "out"
     "dev"
   ];
@@ -34,12 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-K4rskeF66EHchsBj8wIP3BYBa7SvQ1ohnOV0HPu+y80=";
+    hash = "sha256-OaV9ClCsH9Iis5jiY1yfRy7yqCTnY87aaP3XK4Qr6b4=";
   };
-
-  patches = [
-    ./glog-0.7.patch
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -50,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     folly
     gflags
     glog
+    openssl
   ];
 
   propagatedBuildInputs = [
