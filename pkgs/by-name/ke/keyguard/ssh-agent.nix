@@ -12,7 +12,12 @@ rustPlatform.buildRustPackage {
 
   src = src + "/desktopSshAgent/src";
 
-  cargoHash = "sha256-oQqr4RUtbSagBIeG/Emu1QxZ/zbm1oA4SlO5He3uJqI=";
+  cargoHash = "sha256-/IQUqz/hi2I5LoTw0pj/vSu40Yb6BqisSn1W+/HCt4I=";
+
+  postPatch = ''
+    substituteInPlace Cargo.toml \
+      --replace-fail "../../commonSshAgent" "${src + "/commonSshAgent"}"
+  '';
 
   nativeBuildInputs = [ protobuf ];
 
