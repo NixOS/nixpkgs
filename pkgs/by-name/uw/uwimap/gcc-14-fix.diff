@@ -1,0 +1,57 @@
+diff --git a/src/mtest/mtest.c b/src/mtest/mtest.c
+index 69af568..8278c60 100644
+--- a/src/mtest/mtest.c
++++ b/src/mtest/mtest.c
+@@ -39,6 +39,8 @@
+ #include "c-client.h"
+ #include "imap4r1.h"
+ 
++char *gets(char *s);
++
+ /* Excellent reasons to hate ifdefs, and why my real code never uses them */
+ 
+ #ifndef unix
+diff --git a/src/osdep/unix/flocklnx.c b/src/osdep/unix/flocklnx.c
+index ca0112a..f4366ee 100644
+--- a/src/osdep/unix/flocklnx.c
++++ b/src/osdep/unix/flocklnx.c
+@@ -32,6 +32,7 @@
+ #ifndef NFS_SUPER_MAGIC
+ #define NFS_SUPER_MAGIC 0x6969
+ #endif
++#include "flocklnx.h"
+ 
+ int safe_flock (int fd,int op)
+ {
+diff --git a/src/osdep/unix/flocklnx.h b/src/osdep/unix/flocklnx.h
+new file mode 100644
+index 0000000..03a71f7
+--- /dev/null
++++ b/src/osdep/unix/flocklnx.h
+@@ -0,0 +1,2 @@
++
++int safe_flock (int fd,int op);
+diff --git a/src/osdep/unix/os_lnx.h b/src/osdep/unix/os_lnx.h
+index b5f39ff..963765c 100644
+--- a/src/osdep/unix/os_lnx.h
++++ b/src/osdep/unix/os_lnx.h
+@@ -60,6 +60,7 @@
+ #define flock safe_flock
+ 
+ 
++#include "flocklnx.h"
+ #include "env_unix.h"
+ #include "fs.h"
+ #include "ftl.h"
+diff --git a/src/osdep/unix/os_slx.h b/src/osdep/unix/os_slx.h
+index b5f39ff..963765c 100644
+--- a/src/osdep/unix/os_slx.h
++++ b/src/osdep/unix/os_slx.h
+@@ -60,6 +60,7 @@
+ #define flock safe_flock
+ 
+ 
++#include "flocklnx.h"
+ #include "env_unix.h"
+ #include "fs.h"
+ #include "ftl.h"

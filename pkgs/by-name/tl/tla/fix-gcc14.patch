@@ -1,0 +1,388 @@
+diff --git a/src/hackerlab/machine/endian.sh b/src/hackerlab/machine/endian.sh
+index 2a1c562..92bc81e 100644
+--- a/src/hackerlab/machine/endian.sh
++++ b/src/hackerlab/machine/endian.sh
+@@ -5,8 +5,9 @@
+ CC="$1"
+ 
+ cat > endian-test.c << EOF
+-
+-main()
++#include <stdlib.h>
++ 
++int main()
+ {
+   unsigned int x = 1;
+ 
+diff --git a/src/hackerlab/tests/rx-posix-tests/test-dbug.c b/src/hackerlab/tests/rx-posix-tests/test-dbug.c
+index 4620c31..3b7d35c 100644
+--- a/src/hackerlab/tests/rx-posix-tests/test-dbug.c
++++ b/src/hackerlab/tests/rx-posix-tests/test-dbug.c
+@@ -124,7 +124,7 @@ main (int argc, char * argv[])
+       {
+ 	subexps = 0;
+ 	nsub = 1;
+-	rx_analyze_rexp (&subexps, &nsub, exp);
++	rx_analyze_rexp (&subexps, (size_t *)&nsub, exp);
+ 	rx_print_rexp (1, 256, 0, exp);
+ 	if (nfa)
+ 	  {
+diff --git a/src/hackerlab/vu/vu-pathcompress.c b/src/hackerlab/vu/vu-pathcompress.c
+index 711acbe..3ea10d5 100644
+--- a/src/hackerlab/vu/vu-pathcompress.c
++++ b/src/hackerlab/vu/vu-pathcompress.c
+@@ -86,7 +86,7 @@ void pathcompress_free_closure(void * closure)
+   vu_sys_free_closure(closure);
+ }
+ 
+-int pathcompress_access(int* errn, char* path, int mode, void* closure)
++int pathcompress_access(int* errn, const char* path, int mode, void* closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -97,7 +97,7 @@ int pathcompress_access(int* errn, char* path, int mode, void* closure)
+   return rvl;
+ }
+ 
+-int pathcompress_chdir(int * errn, char * path, void * closure)
++int pathcompress_chdir(int * errn, const char * path, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -108,7 +108,7 @@ int pathcompress_chdir(int * errn, char * path, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_chmod(int * errn, char * path, int mode, void * closure)
++int pathcompress_chmod(int * errn, const char * path, int mode, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -119,7 +119,7 @@ int pathcompress_chmod(int * errn, char * path, int mode, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_chown(int * errn, char * path, int owner, int group, void * closure)
++int pathcompress_chown(int * errn, const char * path, int owner, int group, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -130,7 +130,7 @@ int pathcompress_chown(int * errn, char * path, int owner, int group, void * clo
+   return rvl;
+ }
+ 
+-int pathcompress_chroot(int * errn, char * path, void * closure)
++int pathcompress_chroot(int * errn, const char * path, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -254,7 +254,7 @@ int pathcompress_getcwd(char* cwd, size_t size)
+   return rvl;
+ }
+ 
+-int pathcompress_link(int * errn, char * from, char * to, void * closure)
++int pathcompress_link(int * errn, const char * from, const char * to, void * closure)
+ {
+   int rvl;
+   char compressed_from[PATH_LEN]="";
+@@ -276,7 +276,7 @@ off_t pathcompress_lseek(int * errn, int fd, off_t offset, int whence, void * cl
+   return rvl;
+ }
+ 
+-int pathcompress_lstat(int * errn, char * path, struct stat * buf, void * closure)
++int pathcompress_lstat(int * errn, const char * path, struct stat * buf, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -293,7 +293,7 @@ int pathcompress_lstat(int * errn, char * path, struct stat * buf, void * closur
+   return rvl;
+ }
+ 
+-int pathcompress_mkdir(int * errn, char * path, int mode, void * closure)
++int pathcompress_mkdir(int * errn, const char * path, int mode, void * closure)
+ {
+   int rvl;
+   char abspath[PATH_LEN]="";
+@@ -315,7 +315,7 @@ int pathcompress_mkdir(int * errn, char * path, int mode, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_open(int * errn, char * path, int flags, int mode, void * closure)
++int pathcompress_open(int * errn, const char * path, int flags, int mode, void * closure)
+ {
+   int rvl;
+   char* p;
+@@ -368,7 +368,7 @@ int pathcompress_open(int * errn, char * path, int flags, int mode, void * closu
+   return 0;
+ }
+ 
+-int pathcompress_opendir(int * errn, DIR ** retv, char * path, void * closure)
++int pathcompress_opendir(int * errn, DIR ** retv, const char * path, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -453,7 +453,7 @@ int pathcompress_readdir(int * errn, struct alloc_limits * limits, char ** file_
+   return rvl;
+ }
+ 
+-int pathcompress_readlink(int * errn, char * path, char * buf, int bufsize, void * closure)
++int pathcompress_readlink(int * errn, const char * path, char * buf, int bufsize, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -467,7 +467,7 @@ int pathcompress_readlink(int * errn, char * path, char * buf, int bufsize, void
+   return rvl;
+ }
+ 
+-int pathcompress_rename(int * errn, char * from, char * to, void * closure)
++int pathcompress_rename(int * errn, const char * from, const char * to, void * closure)
+ {
+   struct stat stat;
+   int err;
+@@ -502,7 +502,7 @@ int pathcompress_rename(int * errn, char * from, char * to, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_rmdir(int * errn, char * path, void * closure)
++int pathcompress_rmdir(int * errn, const char * path, void * closure)
+ {
+   int rvl;
+   char dirnames[PATH_LEN]="";
+@@ -517,7 +517,7 @@ int pathcompress_rmdir(int * errn, char * path, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_stat(int * errn, char * path, struct stat * buf, void * closure)
++int pathcompress_stat(int * errn, const char * path, struct stat * buf, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -537,7 +537,7 @@ int pathcompress_stat(int * errn, char * path, struct stat * buf, void * closure
+   return rvl;
+ }
+ 
+-int pathcompress_symlink(int * errn, char * from, char * to, void * closure)
++int pathcompress_symlink(int * errn, const char * from, const char * to, void * closure)
+ {
+   int rvl;
+   char compressed_from[PATH_LEN]="";
+@@ -553,7 +553,7 @@ int pathcompress_symlink(int * errn, char * from, char * to, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_truncate(int * errn, char * path, off_t where, void * closure)
++int pathcompress_truncate(int * errn, const char * path, off_t where, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -566,7 +566,7 @@ int pathcompress_truncate(int * errn, char * path, off_t where, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_unlink(int * errn, char * path, void * closure)
++int pathcompress_unlink(int * errn, const char * path, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -578,7 +578,7 @@ int pathcompress_unlink(int * errn, char * path, void * closure)
+   return rvl;
+ }
+ 
+-int pathcompress_utime(int * errn, char * path, struct utimbuf * times, void * closure)
++int pathcompress_utime(int * errn, const char * path, struct utimbuf * times, void * closure)
+ {
+   int rvl;
+   char compressed_path[PATH_LEN]="";
+@@ -590,7 +590,7 @@ int pathcompress_utime(int * errn, char * path, struct utimbuf * times, void * c
+   return rvl;
+ }
+ 
+-ssize_t pathcompress_write(int * errn, int fd, char * buf, size_t count, void * closure)
++ssize_t pathcompress_write(int * errn, int fd, const char * buf, size_t count, void * closure)
+ {
+   int rvl;
+   Dprintf("pathcompress_write(%d,%p,%d)", fd, buf, count);
+diff --git a/src/tla/libarch/changeset-report.c b/src/tla/libarch/changeset-report.c
+index d3539b3..1672c2f 100644
+--- a/src/tla/libarch/changeset-report.c
++++ b/src/tla/libarch/changeset-report.c
+@@ -630,7 +630,7 @@ print_custom_diffs (int out_fd, struct arch_changeset_report * report, t_uchar *
+           orig_path = file_name_in_vicinity(0, orig_dir, orig_part_path);
+           mod_path = file_name_in_vicinity(0, mod_dir, id2 /*report->patched_regular_files[x][0]*/);
+ 	  
+-	  arch_really_invoke_diff ( out_fd, orig_path,  orig_part_path, mod_path, id2 /*report->patched_regular_files[x][0]*/, (char **)opts);
++	  arch_really_invoke_diff ( out_fd, orig_path,  orig_part_path, mod_path, id2 /*report->patched_regular_files[x][0]*/, (const char **)opts);
+ 	  
+           rel_field_unref(key);
+           lim_free(0, mod_path);
+@@ -650,7 +650,7 @@ print_custom_diffs (int out_fd, struct arch_changeset_report * report, t_uchar *
+         {
+           t_uchar *id = str_save(0, rel_peek_str(report->added_files, x, 2));
+           t_uchar *id2 = str_save(0, rel_peek_str(report->added_files, x, 0));
+-          arch_really_invoke_diff ( out_fd, "/dev/null", NULL, id /*report->added_files[x][2]*/, id2 /*report->added_files[x][0]*/, (char**)opts);
++          arch_really_invoke_diff ( out_fd, "/dev/null", NULL, id /*report->added_files[x][2]*/, id2 /*report->added_files[x][0]*/, (const char**)opts);
+           lim_free(0, id);
+           lim_free(0, id2);
+         }
+@@ -680,7 +680,7 @@ print_removed_file_diffs (int out_fd, struct arch_changeset_report * report, t_u
+         {
+           t_uchar *id = str_save(0, rel_peek_str(report->removed_files, x, 2));
+           t_uchar *id2 = str_save(0, rel_peek_str(report->removed_files, x, 0));
+-          arch_really_invoke_diff ( out_fd, id /*report->removed_files[x][2]*/, id2 /*report->removed_files[x][0]*/, "/dev/null", NULL, (char**)opts);
++          arch_really_invoke_diff ( out_fd, id /*report->removed_files[x][2]*/, id2 /*report->removed_files[x][0]*/, "/dev/null", NULL, (const char**)opts);
+           lim_free(0, id);
+           lim_free(0, id2);
+         }
+diff --git a/src/tla/libarch/cmd-apply-delta.c b/src/tla/libarch/cmd-apply-delta.c
+index 8aebd8b..5a8615e 100644
+--- a/src/tla/libarch/cmd-apply-delta.c
++++ b/src/tla/libarch/cmd-apply-delta.c
+@@ -31,6 +31,8 @@
+ #include "tla/libarch/cmd-get.h"
+ #include "tla/libarch/cmd-delta.h"
+ #include "tla/libarch/cmd-apply-delta.h"
++#include "tla/libarch/cmdutils.h"
++#include "tla/libarch/star-merge.h"
+ 
+ 
+ /* __STDC__ prototypes for static functions */
+diff --git a/src/tla/libarch/cmd-branch.c b/src/tla/libarch/cmd-branch.c
+index 6308fef..d63c75c 100644
+--- a/src/tla/libarch/cmd-branch.c
++++ b/src/tla/libarch/cmd-branch.c
+@@ -26,6 +26,7 @@
+ #include "tla/libarch/cmd-switch.h"
+ #include "tla/libarch/cmdutils.h"
+ #include "tla/libarch/archive-setup.h"
++#include "tla/libarch/cmd.h"
+ 
+ 
+ 
+diff --git a/src/tla/libarch/cmd-diff.c b/src/tla/libarch/cmd-diff.c
+index 98dbe19..4b678b0 100644
+--- a/src/tla/libarch/cmd-diff.c
++++ b/src/tla/libarch/cmd-diff.c
+@@ -30,6 +30,7 @@
+ #include "tla/libarch/cmd-diff.h"
+ #include "tla/libarch/cmd-versions.h"
+ #include "tla/libarch/invent.h"
++#include "tla/libarch/make-changeset-files.h"
+ 
+ 
+ /* gettext support not yet incorporated into tla, reserve the gettext notation for later */
+@@ -38,7 +39,7 @@
+ 
+ 
+ /* __STDC__ prototypes for static functions */
+-static void make_changeset_callback (void * ign, char * fmt, va_list ap);
++static void make_changeset_callback (void * ign, const char * fmt, va_list ap);
+ 
+ 
+ 
+@@ -527,7 +528,7 @@ arch_cmd_diff (t_uchar * program_name, int argc, char * argv[])
+ 
+ 
+ static void
+-make_changeset_callback (void * ign, char * fmt, va_list ap)
++make_changeset_callback (void * ign, const char * fmt, va_list ap)
+ {
+   safe_printfmt_va_list (1, fmt, ap);
+   safe_flush (1);
+diff --git a/src/tla/libarch/cmd-export.c b/src/tla/libarch/cmd-export.c
+index bfed694..24e5d6a 100644
+--- a/src/tla/libarch/cmd-export.c
++++ b/src/tla/libarch/cmd-export.c
+@@ -35,6 +35,7 @@
+ #include "tla/libarch/cmd.h"
+ #include "tla/libarch/cmdutils.h"
+ #include "tla/libarch/cmd-export.h"
++#include "tla/libarch/chatter.h"
+ 
+ 
+ 
+diff --git a/src/tla/libarch/cmdutils.c b/src/tla/libarch/cmdutils.c
+index 3aafd13..195d636 100644
+--- a/src/tla/libarch/cmdutils.c
++++ b/src/tla/libarch/cmdutils.c
+@@ -20,6 +20,7 @@
+ #include "tla/libarch/patch-logs.h"
+ #include "tla/libarch/pfs.h"
+ #include "tla/libfsutils/dir-as-cwd.h"
++#include "tla/libarch/local-cache.h"
+ 
+ 
+ /* __STDC__ prototypes for static functions */
+diff --git a/src/tla/libarch/diffs.c b/src/tla/libarch/diffs.c
+index dcae932..5f935ae 100644
+--- a/src/tla/libarch/diffs.c
++++ b/src/tla/libarch/diffs.c
+@@ -230,7 +230,7 @@ arch_really_invoke_diff (int output_fd,
+       if (extraopts != NULL)
+         {
+           t_uchar ** opt;
+-          for (opt = extraopts; *opt != NULL; ++opt)
++          for (opt = (t_uchar**)extraopts; *opt != NULL; ++opt)
+             {
+               *(t_uchar **) ar_push ((void*) &argv, 0, sizeof(t_uchar*)) = *opt;
+ 
+diff --git a/src/tla/libarch/invent.c b/src/tla/libarch/invent.c
+index 077d776..defd2da 100644
+--- a/src/tla/libarch/invent.c
++++ b/src/tla/libarch/invent.c
+@@ -19,6 +19,7 @@
+ #include "tla/libarch/inode-sig.h"
+ #include "tla/libarch/inv-ids.h"
+ #include "tla/libarch/invent.h"
++#include "cmdutils.h"
+ 
+ 
+ 
+diff --git a/src/tla/libarch/local-cache.c b/src/tla/libarch/local-cache.c
+index 0cade1b..945cd8b 100644
+--- a/src/tla/libarch/local-cache.c
++++ b/src/tla/libarch/local-cache.c
+@@ -24,6 +24,7 @@
+ #include "tla/libarch/library-txn.h"
+ #include "tla/libarch/local-cache.h"
+ #include "tla/libarch/namespace.h"
++#include "project-tree.h"
+ 
+ 
+ 
+diff --git a/src/tla/libarch/pfs-ftp.c b/src/tla/libarch/pfs-ftp.c
+index 546c702..c457837 100644
+--- a/src/tla/libarch/pfs-ftp.c
++++ b/src/tla/libarch/pfs-ftp.c
+@@ -12,6 +12,7 @@
+ #include <string.h>
+ #include <stdio.h>
+ #include <errno.h>
++#include <ctype.h>
+ #include "config-options.h"
+ #include "hackerlab/bugs/panic.h"
+ #include "hackerlab/os/errno-to-string.h"
+diff --git a/src/tla/libarch/undo.c b/src/tla/libarch/undo.c
+index abc40e9..dc8e6ed 100644
+--- a/src/tla/libarch/undo.c
++++ b/src/tla/libarch/undo.c
+@@ -19,6 +19,7 @@
+ #include "tla/libarch/apply-changeset.h"
+ #include "tla/libarch/chatter.h"
+ #include "tla/libarch/undo.h"
++#include "tla/libarch/make-changeset-files.h"
+ 
+ 
+ /* __STDC__ prototypes for static functions */
+diff --git a/src/tla/libfsutils/tmp-files.c b/src/tla/libfsutils/tmp-files.c
+index 164acdb..1188627 100644
+--- a/src/tla/libfsutils/tmp-files.c
++++ b/src/tla/libfsutils/tmp-files.c
+@@ -18,6 +18,8 @@
+ #include "hackerlab/fs/file-names.h"
+ #include "hackerlab/vu/safe.h"
+ #include "tla/libfsutils/tmp-files.h"
++#include "hackerlab/fs/tmp-files.h"
++#include "tla/libarch/cmdutils.h"
+ 
+ 
+ 

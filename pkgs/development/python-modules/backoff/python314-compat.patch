@@ -1,0 +1,108 @@
+diff --git a/tests/test_backoff_async.py b/tests/test_backoff_async.py
+index 226ef08..9298b5f 100644
+--- a/tests/test_backoff_async.py
++++ b/tests/test_backoff_async.py
+@@ -692,7 +692,7 @@ def test_on_predicate_on_regular_function_without_event_loop(monkeypatch):
+     monkeypatch.setattr('time.sleep', lambda x: None)
+ 
+     # Set default event loop to None.
+-    loop = asyncio.get_event_loop()
++    loop = asyncio.new_event_loop()
+     asyncio.set_event_loop(None)
+ 
+     try:
+@@ -716,7 +716,7 @@ def test_on_exception_on_regular_function_without_event_loop(monkeypatch):
+     monkeypatch.setattr('time.sleep', lambda x: None)
+ 
+     # Set default event loop to None.
+-    loop = asyncio.get_event_loop()
++    loop = asyncio.new_event_loop()
+     asyncio.set_event_loop(None)
+ 
+     try:
+
+From 401709d040df302cdf3cd4a7e0d7703c90ff2d9e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Edgar=20Ram=C3=ADrez-Mondrag=C3=B3n?= <edgarrm358@gmail.com>
+Date: Thu, 17 Oct 2024 16:28:46 -0600
+Subject: [PATCH] Use `inspect.iscoroutinefunction` instead of
+ `asyncio.iscoroutinefunction`
+
+---
+ backoff/_async.py     | 13 +++++++------
+ backoff/_decorator.py |  6 +++---
+ 2 files changed, 10 insertions(+), 9 deletions(-)
+
+diff --git a/backoff/_async.py b/backoff/_async.py
+index 82fd477..c24587c 100644
+--- a/backoff/_async.py
++++ b/backoff/_async.py
+@@ -1,5 +1,6 @@
+ # coding:utf-8
+ import datetime
++import inspect
+ import functools
+ import asyncio
+ from datetime import timedelta
+@@ -8,7 +9,7 @@
+ 
+ 
+ def _ensure_coroutine(coro_or_func):
+-    if asyncio.iscoroutinefunction(coro_or_func):
++    if inspect.iscoroutinefunction(coro_or_func):
+         return coro_or_func
+     else:
+         @functools.wraps(coro_or_func)
+@@ -47,10 +48,10 @@ def retry_predicate(target, wait_gen, predicate,
+     on_giveup = _ensure_coroutines(on_giveup)
+ 
+     # Easy to implement, please report if you need this.
+-    assert not asyncio.iscoroutinefunction(max_tries)
+-    assert not asyncio.iscoroutinefunction(jitter)
++    assert not inspect.iscoroutinefunction(max_tries)
++    assert not inspect.iscoroutinefunction(jitter)
+ 
+-    assert asyncio.iscoroutinefunction(target)
++    assert inspect.iscoroutinefunction(target)
+ 
+     @functools.wraps(target)
+     async def retry(*args, **kwargs):
+@@ -124,8 +125,8 @@ def retry_exception(target, wait_gen, exception,
+     giveup = _ensure_coroutine(giveup)
+ 
+     # Easy to implement, please report if you need this.
+-    assert not asyncio.iscoroutinefunction(max_tries)
+-    assert not asyncio.iscoroutinefunction(jitter)
++    assert not inspect.iscoroutinefunction(max_tries)
++    assert not inspect.iscoroutinefunction(jitter)
+ 
+     @functools.wraps(target)
+     async def retry(*args, **kwargs):
+diff --git a/backoff/_decorator.py b/backoff/_decorator.py
+index 77ed8c2..ca5d0ff 100644
+--- a/backoff/_decorator.py
++++ b/backoff/_decorator.py
+@@ -1,5 +1,5 @@
+ # coding:utf-8
+-import asyncio
++import inspect
+ import logging
+ import operator
+ from typing import Any, Callable, Iterable, Optional, Type, Union
+@@ -98,7 +98,7 @@ def decorate(target):
+             log_level=giveup_log_level
+         )
+ 
+-        if asyncio.iscoroutinefunction(target):
++        if inspect.iscoroutinefunction(target):
+             retry = _async.retry_predicate
+         else:
+             retry = _sync.retry_predicate
+@@ -198,7 +198,7 @@ def decorate(target):
+             log_level=giveup_log_level,
+         )
+ 
+-        if asyncio.iscoroutinefunction(target):
++        if inspect.iscoroutinefunction(target):
+             retry = _async.retry_exception
+         else:
+             retry = _sync.retry_exception

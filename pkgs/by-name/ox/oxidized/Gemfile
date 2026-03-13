@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'oxidized', '0.35.0'
+gem 'oxidized-web', '0.18.1'
+gem 'oxidized-script', '0.7.0'
+gem 'psych', '~> 5.0'

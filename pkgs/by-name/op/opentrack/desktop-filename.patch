@@ -1,0 +1,15 @@
+diff --git a/gui/init.cpp b/gui/init.cpp
+index 1647b050db0efe76028000939a7ca8e4047116b7..9114c31c51a69294e0803c15008a824e18da7a09 100644
+--- a/gui/init.cpp
++++ b/gui/init.cpp
+@@ -315,6 +315,10 @@ int otr_main(int argc, char** argv, std::function<std::unique_ptr<QWidget>()> co
+     add_win32_path();
+ #endif
+ 
++#ifdef Q_OS_LINUX
++    app.setDesktopFileName("opentrack");
++#endif
++
+     QDir::setCurrent(OPENTRACK_BASE_PATH);
+ 
+     set_qt_style();

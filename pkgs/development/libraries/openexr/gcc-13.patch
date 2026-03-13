@@ -1,0 +1,25 @@
+From 8aa103fe6e815514990e59708468eabc36f7f332 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?=C3=A9clairevoyant?=
+ <848000+eclairevoyant@users.noreply.github.com>
+Date: Fri, 5 Jan 2024 18:12:16 -0500
+Subject: [PATCH] gcc13
+
+---
+ OpenEXR/IlmImf/ImfTiledMisc.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/OpenEXR/IlmImf/ImfTiledMisc.cpp b/OpenEXR/IlmImf/ImfTiledMisc.cpp
+index 06ea3144..749537d4 100644
+--- a/OpenEXR/IlmImf/ImfTiledMisc.cpp
++++ b/OpenEXR/IlmImf/ImfTiledMisc.cpp
+@@ -46,6 +46,7 @@
+ #include <ImfTileDescription.h>
+ #include <algorithm>
+ #include <limits>
++#include <cstdint>
+ 
+ #include "ImfNamespace.h"
+ 
+-- 
+2.42.0
+

@@ -1,0 +1,4 @@
+(stack trace truncated; use '--show-trace' to show the full, detailed trace)
+
+error: Refusing to evaluate package 'a-0' in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:11 because it has an invalid meta attrset:
+  - a.meta.problems.invalid: Problem kind invalid, inferred from the problem name, is invalid; expected enum<removal,deprecated>. You can specify an explicit problem kind with `a.meta.problems.invalid.kind`

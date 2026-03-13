@@ -1,0 +1,13 @@
+diff --git a/src-tauri/src/updates.rs b/src-tauri/src/updates.rs
+index 51b8c41..9cc954d 100644
+--- a/src-tauri/src/updates.rs
++++ b/src-tauri/src/updates.rs
+@@ -176,7 +176,7 @@ impl<'a> UpdateHelper<'a> {
+             if updater.is_err() {
+                 error!("Failed to get updater");
+ 
+-                continue;
++                return;
+             }
+             info!("Attempting to check update");
+             if let Ok(update) = updater.unwrap().check().await {
