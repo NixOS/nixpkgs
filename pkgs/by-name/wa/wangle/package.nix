@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   outputs = [
     "out"
@@ -35,12 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tGq6jbBPotuBK1PuRRGvdNb208glzlt7dehjIY+4nvk=";
+    hash = "sha256-uP4If0+m3K8S2TqkTY/HdhOYaHLQsmDuja2IhCbdVA8=";
   };
 
-  patches = [
-    ./glog-0.7.patch
-  ];
+  # the filter for non-public directories collides with nix build directory
+  postPatch = ''
+    substituteInPlace wangle/CMakeLists.txt --replace-fail 'list(FILTER WANGLE_HEADERS EXCLUDE REGEX "/build/")' ""
+  '';
 
   nativeBuildInputs = [
     cmake
