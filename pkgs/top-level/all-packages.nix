@@ -8752,10 +8752,6 @@ with pkgs;
     }
   );
 
-  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk {
-    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
-  };
-
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
     protobuf = protobuf_21;
   };

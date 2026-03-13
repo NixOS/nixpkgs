@@ -12,7 +12,7 @@
   git,
   libtool,
   linkFarmFromDrvs,
-  ocamlPackages,
+  ocaml-ng,
   openssl,
   perl,
   python3,
@@ -23,6 +23,9 @@
   writeText,
   debug ? false,
 }:
+let
+  ocamlPackages = ocaml-ng.ocamlPackages_5_3;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sgx-sdk";
   # Version as given in se_version.h
@@ -269,13 +272,13 @@ stdenv.mkDerivation (finalAttrs: {
     postHooks+=(sgxsdk)
   '';
 
-  passthru.tests = callPackage ../samples { sgxMode = "SIM"; };
+  passthru.tests = callPackage ./samples { sgxMode = "SIM"; };
 
   # Run tests in SGX hardware mode on an SGX-enabled machine
   # $(nix-build -A sgx-sdk.runTestsHW)/bin/run-tests-hw
   passthru.runTestsHW =
     let
-      testsHW = lib.filterAttrs (_: v: v ? "name") (callPackage ../samples { sgxMode = "HW"; });
+      testsHW = lib.filterAttrs (_: v: v ? "name") (callPackage ./samples { sgxMode = "HW"; });
       testsHWLinked = linkFarmFromDrvs "sgx-samples-hw-bundle" (lib.attrValues testsHW);
     in
     writeShellApplication {
