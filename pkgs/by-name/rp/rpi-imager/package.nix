@@ -20,7 +20,8 @@
   enableUring ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs:
+{
   pname = "rpi-imager";
   version = "2.0.6";
 
@@ -39,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace src/CMakeLists.txt \
       --replace-fail 'qt_add_lupdate(TS_FILES ''${TRANSLATIONS} SOURCE_TARGETS ''${PROJECT_NAME} OPTIONS -no-obsolete -locations none)' ""
+
+    substituteInPlace src/mac/PlatformPackaging.cmake \
+      --replace-fail 'COMMAND "''${MACDEPLOYQT}" "''${APP_BUNDLE_PATH}" -qmldir="''${CMAKE_CURRENT_SOURCE_DIR}" -always-overwrite' \
+                     'COMMAND ''${CMAKE_COMMAND} -E echo "Skipping macdeployqt under Nix"'
+
+    sed -i "/name 'objects-\\*'/c\\    COMMAND /bin/sh -c \":\"" src/mac/PlatformPackaging.cmake
   '';
 
   preConfigure = ''
@@ -53,9 +60,19 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
       # Upstream uses `git describe` to define a `IMAGER_VERSION` CMake variable,
-      # and we fool it to take a version from a fake `git` executable.
+      # and some CMake dependency probes also check `git --version`.
       fake-git = writeShellScriptBin "git" ''
-        echo "v${finalAttrs.version}"
+        case "$1" in
+          describe)
+            echo "v${finalAttrs.version}"
+            ;;
+          --version)
+            echo "git version 2.49.0"
+            ;;
+          *)
+            echo "git version 2.49.0"
+            ;;
+        esac
       '';
     in
     [
@@ -64,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
       fake-lsblk
       pkg-config
       qt6.wrapQtAppsHook
-      wrapGAppsHook4
-    ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
   buildInputs = [
     curl
@@ -92,6 +109,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "GENERATE_CAPITAL_CITIES" false)
     (lib.cmakeBool "GENERATE_COUNTRIES_FROM_REGDB" false)
     (lib.cmakeBool "GENERATE_TIMEZONES_FROM_IANA" false)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "CMAKE_OSX_ARCHITECTURES" stdenv.hostPlatform.darwinArch)
+    (lib.cmakeFeature "CMAKE_C_COMPILER_AR" "${stdenv.cc.bintools.bintools}/bin/ar")
+    (lib.cmakeFeature "CMAKE_C_COMPILER_RANLIB" "${stdenv.cc.bintools.bintools}/bin/ranlib")
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER_AR" "${stdenv.cc.bintools.bintools}/bin/ar")
+    (lib.cmakeFeature "CMAKE_CXX_COMPILER_RANLIB" "${stdenv.cc.bintools.bintools}/bin/ranlib")
+    (lib.cmakeFeature "LIBLZMA_INCLUDE_DIR" "${lib.getDev xz}/include")
+    (lib.cmakeFeature "LIBLZMA_INCLUDE_DIRS" "${lib.getDev xz}/include")
+    (lib.cmakeFeature "LIBLZMA_LIBRARY" "${lib.getLib xz}/lib/liblzma${stdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeFeature "LIBLZMA_LIBRARIES" "${lib.getLib xz}/lib/liblzma${stdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeBool "LIBLZMA_HAS_AUTO_DECODER" true)
+    (lib.cmakeBool "LIBLZMA_HAS_EASY_ENCODER" true)
+    (lib.cmakeBool "LIBLZMA_HAS_LZMA_PRESET" true)
   ];
 
   qtWrapperArgs = [
@@ -99,10 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
     "--unset QT_STYLE_OVERRIDE"
   ];
 
-  dontWrapGApps = true;
+  dontWrapGApps = stdenv.hostPlatform.isLinux;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
-  preFixup = ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    wrapQtApp "$out/Applications/rpi-imager.app/Contents/MacOS/rpi-imager"
+    makeQtWrapper "$out/Applications/rpi-imager.app/Contents/MacOS/rpi-imager" "$out/bin/rpi-imager"
   '';
 
   env.LANG = "C.UTF-8";
@@ -127,7 +163,15 @@ stdenv.mkDerivation (finalAttrs: {
       anthonyroussel
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    # could not find xz
-    badPlatforms = lib.platforms.darwin;
   };
+}
+// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/{Applications,bin}
+    cp -r rpi-imager.app $out/Applications/
+
+    runHook postInstall
+  '';
 })
