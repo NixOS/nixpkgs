@@ -21,7 +21,7 @@ let
 in
 {
   meta = {
-    maintainers = teams.podman.members;
+    teams = [ teams.podman ];
   };
 
   options.virtualisation.cri-o = {
