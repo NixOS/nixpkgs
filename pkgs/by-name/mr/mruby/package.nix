@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mruby";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "mruby";
     repo = "mruby";
     rev = finalAttrs.version;
-    sha256 = "sha256-rCoEC1ioX6bOocPoPi+Lsn4PM8gY0DjKja1/MJvJ1n8=";
+    sha256 = "sha256-PfiOcp65nnlLRFObdi43dII5MC4rYLO8oVw+3uEbIMg=";
   };
 
   patches = [
