@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Command line archiver utility";
+    description = "Command line version of the 7-Zip archiver utility";
     homepage = "https://7-zip.org";
     license =
       with lib.licenses;
