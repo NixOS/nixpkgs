@@ -11093,6 +11093,8 @@ self: super: with self; {
 
   niquests = callPackage ../development/python-modules/niquests { };
 
+  nireports = callPackage ../development/python-modules/nireports { };
+
   nitime = callPackage ../development/python-modules/nitime { };
 
   nitransforms = callPackage ../development/python-modules/nitransforms { };
