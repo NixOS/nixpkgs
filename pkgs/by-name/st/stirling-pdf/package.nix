@@ -21,6 +21,7 @@
   webkitgtk_4_1,
 
   nix-update-script,
+  nixosTests,
 
   isDesktopVariant ? false,
   buildWithFrontend ? !isDesktopVariant,
@@ -166,7 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${jre} "$res_dir/runtime/jre"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.stirling-pdf = nixosTests.stirling-pdf;
+  };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
