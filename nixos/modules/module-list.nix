@@ -1125,6 +1125,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/ax25/axlisten.nix
   ./services/networking/ax25/axports.nix
+  ./services/networking/ax25/mheard.nix
   ./services/networking/babeld.nix
   ./services/networking/bee.nix
   ./services/networking/biboumi.nix
