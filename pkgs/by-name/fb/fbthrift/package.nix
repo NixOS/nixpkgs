@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fbthrift";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   outputs = [
     # Trying to split this up further into `bin`, `out`, and `dev`
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "fbthrift";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jx2jSMeoRBYG7xCWKTzaIpNjrGnbPLiR9vQVO7m3if0=";
+    hash = "sha256-vbDDYYIi+lH31BYY6kR4A3rXkmeLiR5mYO9JAslVx/E=";
   };
 
   patches = [
@@ -50,8 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove a line that breaks the build due to the CMake classic of
     # incorrect path concatenation.
     ./remove-cmake-install-rpath.patch
-
-    ./glog-0.7.patch
   ];
 
   nativeBuildInputs = [
@@ -76,7 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    # the shared libs build for all targets is borked due to a cyclic dependency between thrifttype and thriftanyrep
+    (lib.cmakeBool "BUILD_SHARED_LIBS" false)
 
     (lib.cmakeBool "thriftpy" false)
 
@@ -94,14 +93,6 @@ stdenv.mkDerivation (finalAttrs: {
     # it. I don’t know, either. It scares me.
     (lib.cmakeFeature "CMAKE_SHARED_LINKER_FLAGS" "-Wl,-undefined,dynamic_lookup")
   ];
-
-  # Fix a typo introduced by the following commit that causes hundreds
-  # of pointless rebuilds when installing:
-  # <https://github.com/facebook/fbthrift/commit/58038399cefc0c2256ce4ef5444dee37147cbf07>
-  postPatch = ''
-    substituteInPlace ThriftLibrary.cmake \
-      --replace-fail .tcch .tcc
-  '';
 
   # Copied from Homebrew; fixes the following build error:
   #
