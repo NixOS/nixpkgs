@@ -11,6 +11,12 @@
 #   nix-instantiate --eval --strict --json test.nix -A result | jq
 #
 # Empty list as an output means success
+
+# Dependencies coming from the CI-pinned Nixpkgs
+{
+  lib,
+}:
+# Function arguments
 {
   # Files that were changed
   # Type: ListOf (Nixpkgs-root-relative path)
@@ -18,7 +24,7 @@
   # Attributes whose value was affected by the change
   # Type: ListOf (ListOf String)
   affectedAttrPaths,
-
+  # Nixpkgs used to check maintainers. Customisable for testing
   pkgs ? import ../../.. {
     system = "x86_64-linux";
     # We should never try to ping maintainers through package aliases, this can only lead to errors.
@@ -27,7 +33,6 @@
     config.allowAliases = false;
     overlays = [ ];
   },
-  lib,
 }:
 let
   nixpkgsRoot = toString ../../.. + "/";

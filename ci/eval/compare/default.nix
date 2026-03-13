@@ -158,8 +158,10 @@ let
       }
     );
 
+  getMaintainers = callPackage ./maintainers.nix { };
+
   inherit
-    (callPackage ./maintainers.nix {
+    (getMaintainers {
       affectedAttrPaths = map (a: a.packagePath) (
         convertToPackagePlatformAttrs (diffAttrs.changed ++ diffAttrs.removed)
       );
