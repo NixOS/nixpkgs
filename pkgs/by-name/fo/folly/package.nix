@@ -30,6 +30,7 @@
   gtest,
 
   follyMobile ? false,
+  withBenchmarks ? true,
 
   nix-update-script,
 
@@ -40,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2026.01.19.00";
+  version = "2026.03.16.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -52,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gfmN/9LizPdacUd1eJxFx79I63SwqX0NaWFgbe6vbFk=";
+    hash = "sha256-LihCftvRx1F7/WQX4eb7aysV6JZCSwlk2+3IYJN/0mo=";
   };
 
   nativeBuildInputs = [
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
 
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    (lib.cmakeBool "BUILD_BENCHMARKS" withBenchmarks) # required by fizz
 
     # Folly uses these instead of the standard CMake variables for some reason.
     (lib.cmakeFeature "INCLUDE_INSTALL_DIR" "${placeholder "dev"}/include")
@@ -132,16 +134,6 @@ stdenv.mkDerivation (finalAttrs: {
     # than leaving a dangling reference to the build directory in the
     # `dev` output’s CMake files.
     ./install-test-certs.patch
-
-    # The base template for std::char_traits has been removed in LLVM 19
-    # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
-    ./char_traits.patch
-
-    # <https://github.com/facebook/folly/issues/2171>
-    ./folly-fix-glog-0.7.patch
-
-    # https://github.com/facebook/folly/pull/2561
-    ./memset-memcpy-aarch64.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
