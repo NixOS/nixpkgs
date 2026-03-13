@@ -7884,6 +7884,8 @@ self: super: with self; {
 
   jinja2-git = callPackage ../development/python-modules/jinja2-git { };
 
+  jinja2-git-dir = callPackage ../development/python-modules/jinja2-git-dir { };
+
   jinja2-humanize-extension = callPackage ../development/python-modules/jinja2-humanize-extension { };
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
