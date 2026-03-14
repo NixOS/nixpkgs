@@ -25786,6 +25786,11 @@
     github = "StephenWithPH";
     githubId = 2990492;
   };
+  stepisptr-t = {
+    name = "Štěpán Beran";
+    github = "stepisptr-t";
+    githubId = 77941720;
+  };
   sterfield = {
     email = "sterfield@gmail.com";
     github = "sterfield";
