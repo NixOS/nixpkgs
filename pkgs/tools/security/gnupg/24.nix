@@ -224,6 +224,7 @@ stdenv.mkDerivation rec {
       fpletz
       sgo
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     mainProgram = "gpg";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;

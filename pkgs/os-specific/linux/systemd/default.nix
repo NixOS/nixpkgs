@@ -996,7 +996,10 @@ stdenv.mkDerivation (finalAttrs: {
       ofl
       publicDomain
     ];
-    teams = [ lib.teams.systemd ];
+    teams = [
+      lib.teams.systemd
+      lib.teams.security-review
+    ];
     pkgConfigModules = [
       "libsystemd"
       "libudev"

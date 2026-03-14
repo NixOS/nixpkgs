@@ -27,14 +27,28 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-orc";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "orc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H7nowl2pq31RIAmTUz15x48Wc99MljFJboc4F7Ln/zk=";
+    hash = "sha256-QQdRzwmUF1Qwxg53kJv1Q6yFuHqSrLYwUxKt+6wK9Hs=";
   };
+
+  patches = [
+    # Orc's CMake declarations do not correctly attempt to link in abseil,
+    # so we add the relevant library they need. Without these, we get errors
+    # like:
+    # <store path>/bin/ld: <store path>/lib/libabsl_raw_hash-set.so.2601.0.0:
+    # error adding symbols: DSO missing from command line
+    ./cmake-link-abseil.patch
+
+    # Protobuf 34 adds `[[nodiscard]]` to several serialization functions. In
+    # order to avoid these warnings causing build failures, we add handling for
+    # this failure case.
+    ./protobuf34-nodiscard.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -65,12 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   env = {
     GTEST_HOME = gtest.dev;
-    LZ4_ROOT = lz4;
+    LZ4_HOME = lz4;
     ORC_FORMAT_URL = orc-format;
     PROTOBUF_HOME = protobuf;
-    SNAPPY_ROOT = snappy.dev;
-    ZLIB_ROOT = zlib.dev;
-    ZSTD_ROOT = zstd.dev;
+    SNAPPY_HOME = snappy.dev;
+    ZLIB_HOME = zlib.dev;
+    ZSTD_HOME = zstd.dev;
   };
 
   meta = {

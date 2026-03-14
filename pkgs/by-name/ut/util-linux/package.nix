@@ -252,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ numinit ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [
       "blkid"
