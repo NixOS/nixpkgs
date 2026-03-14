@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "amule-project";
     repo = "amule";
     tag = finalAttrs.version;
-    sha256 = "1nm4vxgmisn1b6l3drmz0q04x067j2i8lw5rnf0acaapwlp8qwvi";
+    hash = "sha256-cXOMLuVXKaaAs7lwiqKQx4BOAAa/5jaoWcHqWF/fpNo=";
   };
 
   patches = [
