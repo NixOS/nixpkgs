@@ -19528,6 +19528,12 @@
     githubId = 47303199;
     name = "Simon Gutgesell";
   };
+  nonplay = {
+    name = "Artem Ostrasev";
+    email = "nonplay@bxteam.org";
+    github = "NONPLAYT";
+    githubId = 76615486;
+  };
   noodlez1232 = {
     email = "contact@nathanielbarragan.xyz";
     matrix = "@noodlez1232:matrix.org";
@@ -29070,6 +29076,12 @@
     github = "witchof0x20";
     githubId = 36118348;
     keys = [ { fingerprint = "69C9 876B 5797 1B2E 11C5  7C39 80A1 F76F C9F9 54AE"; } ];
+  };
+  wiyba = {
+    name = "Dmitry Shmakov";
+    email = "contact@wiyba.org";
+    github = "wiyba";
+    githubId = 81859776;
   };
   wizardlink = {
     name = "wizardlink";
