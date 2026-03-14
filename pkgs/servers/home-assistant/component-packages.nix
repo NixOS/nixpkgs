@@ -2285,6 +2285,10 @@
       ps: with ps; [
         aioguardian
       ];
+    "ha_hoymiles_wifi" =
+      ps: with ps; [
+        hoymiles_wifi
+      ];
     "habitica" =
       ps: with ps; [
         habiticalib

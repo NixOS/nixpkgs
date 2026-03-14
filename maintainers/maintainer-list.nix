@@ -16934,6 +16934,12 @@
     githubId = 1472826;
     name = "Max Smolin";
   };
+  maximumstock = {
+    email = "mxmlnstock@gmail.com";
+    github = "maximumstock";
+    githubId = 9075718;
+    name = "Maximilian Stock";
+  };
   maxmosk = {
     email = "maximmosk4@gmail.com";
     github = "maxmosk";
