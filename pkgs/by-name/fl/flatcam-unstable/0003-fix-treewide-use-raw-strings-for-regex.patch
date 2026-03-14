@@ -1,0 +1,254 @@
+From 0f7c81c713531e4c7dfff420a34304c0fc2bf602 Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Wed, 18 Feb 2026 21:27:56 -0800
+Subject: [PATCH 3/4] fix(treewide): use raw strings for regex
+
+---
+ appGUI/GUIElements.py         | 14 +++++++-------
+ appObjects/FlatCAMGeometry.py |  4 ++--
+ appParsers/ParseFont.py       |  2 +-
+ appParsers/ParseGerber.py     |  2 +-
+ appParsers/ParseSVG.py        |  4 ++--
+ appTools/ToolDrilling.py      |  2 +-
+ camlib.py                     | 20 ++++++++++----------
+ 7 files changed, 24 insertions(+), 24 deletions(-)
+
+diff --git a/appGUI/GUIElements.py b/appGUI/GUIElements.py
+index 4ca52992..87c832b2 100644
+--- a/appGUI/GUIElements.py
++++ b/appGUI/GUIElements.py
+@@ -754,7 +754,7 @@ class NumericalEvalEntry(FCEntry):
+     def __init__(self, border_color=None):
+         super().__init__(border_color=border_color)
+ 
+-        regex = QtCore.QRegExp("[0-9\/\*\+\-\%\.\,\s]*")
++        regex = QtCore.QRegExp(r"[0-9/*+\-%\.,\s]*")
+         validator = QtGui.QRegExpValidator(regex, self)
+         self.setValidator(validator)
+ 
+@@ -778,7 +778,7 @@ class NumericalEvalTupleEntry(EvalEntry):
+     def __init__(self, border_color=None):
+         super().__init__(border_color=border_color)
+ 
+-        regex = QtCore.QRegExp("[0-9\/\*\+\-\%\.\s\,\[\]\(\)]*")
++        regex = QtCore.QRegExp(r"[0-9/*+\-%\.\s,\[\]\(\)]*")
+         validator = QtGui.QRegExpValidator(regex, self)
+         self.setValidator(validator)
+ 
+@@ -799,7 +799,7 @@ class FCColorEntry(QtWidgets.QFrame):
+         super().__init__(**kwargs)
+ 
+         self.entry = FCEntry()
+-        regex = QtCore.QRegExp("[#A-Fa-f0-9]*")
++        regex = QtCore.QRegExp(r"[#A-Fa-f0-9]*")
+         validator = QtGui.QRegExpValidator(regex, self.entry)
+         self.entry.setValidator(validator)
+ 
+@@ -1298,7 +1298,7 @@ class FCDoubleSpinner(QtWidgets.QDoubleSpinBox):
+         # by default don't allow the minus sign to be entered as the default for QDoubleSpinBox is the positive range
+         # between 0.00 and 99.00 (2 decimals)
+         self.lineEdit().setValidator(
+-            QtGui.QRegExpValidator(QtCore.QRegExp("\+?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
++            QtGui.QRegExpValidator(QtCore.QRegExp(r"\+?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
+ 
+         if suffix:
+             self.setSuffix(' %s' % str(suffix))
+@@ -1487,15 +1487,15 @@ class FCDoubleSpinner(QtWidgets.QDoubleSpinBox):
+         # make sure that the user can't type more decimals than the set precision
+         if self.minimum() < 0 or self.maximum() <= 0:
+             self.lineEdit().setValidator(
+-                QtGui.QRegExpValidator(QtCore.QRegExp("-?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
++                QtGui.QRegExpValidator(QtCore.QRegExp(r"-?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
+         else:
+             self.lineEdit().setValidator(
+-                QtGui.QRegExpValidator(QtCore.QRegExp("\+?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
++                QtGui.QRegExpValidator(QtCore.QRegExp(r"+?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
+ 
+     def set_range(self, min_val, max_val):
+         if min_val < 0 or max_val <= 0:
+             self.lineEdit().setValidator(
+-                QtGui.QRegExpValidator(QtCore.QRegExp("-?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
++                QtGui.QRegExpValidator(QtCore.QRegExp(r"-?[0-9]*[.,]?[0-9]{%d}" % self.decimals()), self))
+ 
+         self.setRange(min_val, max_val)
+ 
+diff --git a/appObjects/FlatCAMGeometry.py b/appObjects/FlatCAMGeometry.py
+index 4cca8075..78054332 100644
+--- a/appObjects/FlatCAMGeometry.py
++++ b/appObjects/FlatCAMGeometry.py
+@@ -2478,7 +2478,7 @@ class GeometryObject(FlatCAMObj, Geometry):
+ 
+         endxy = endxy if endxy else self.options["endxy"]
+         if isinstance(endxy, str):
+-            endxy = re.sub('[()\[\]]', '', endxy)
++            endxy = re.sub(r'[()\[\]]', '', endxy)
+             if endxy and endxy != '':
+                 endxy = [float(eval(a)) for a in endxy.split(",")]
+ 
+@@ -2486,7 +2486,7 @@ class GeometryObject(FlatCAMObj, Geometry):
+ 
+         toolchangexy = toolchangexy if toolchangexy else self.options["toolchangexy"]
+         if isinstance(toolchangexy, str):
+-            toolchangexy = re.sub('[()\[\]]', '', toolchangexy)
++            toolchangexy = re.sub(r'[()\[\]]', '', toolchangexy)
+             if toolchangexy and toolchangexy != '':
+                 toolchangexy = [float(eval(a)) for a in toolchangexy.split(",")]
+ 
+diff --git a/appParsers/ParseFont.py b/appParsers/ParseFont.py
+index ed0f6acb..31c4b5e1 100644
+--- a/appParsers/ParseFont.py
++++ b/appParsers/ParseFont.py
+@@ -70,7 +70,7 @@ class ParseFont:
+         executable = '/usr/sbin/chkfontpath'
+         if os.path.isfile(executable):
+             data = os.popen(executable).readlines()
+-            match = re.compile('\d+: (.+)')
++            match = re.compile(r'\d+: (.+)')
+             set_lst = []
+             for line in data:
+                 result = match.match(line)
+diff --git a/appParsers/ParseGerber.py b/appParsers/ParseGerber.py
+index e2142b31..7799aeb7 100644
+--- a/appParsers/ParseGerber.py
++++ b/appParsers/ParseGerber.py
+@@ -180,7 +180,7 @@ class Gerber(Geometry):
+         # Optional start with G02 or G03, optional end with D01 or D02 with
+         # optional coordinates but at least one in any order.
+         self.circ_re = re.compile(r'^(?:G0?([23]))?(?=.*X([\+-]?\d+))?(?=.*Y([\+-]?\d+))' +
+-                                  '?(?=.*I([\+-]?\d+))?(?=.*J([\+-]?\d+))?[XYIJ][^D]*(?:D0([12]))?\*$')
++                                  r'?(?=.*I([\+-]?\d+))?(?=.*J([\+-]?\d+))?[XYIJ][^D]*(?:D0([12]))?\*$')
+ 
+         # G01/2/3 Occurring without coordinates
+         self.interp_re = re.compile(r'^(?:G0?([123]))\*')
+diff --git a/appParsers/ParseSVG.py b/appParsers/ParseSVG.py
+index 48879708..eeb58a93 100644
+--- a/appParsers/ParseSVG.py
++++ b/appParsers/ParseSVG.py
+@@ -411,7 +411,7 @@ def getsvggeo(node, object_type, root=None, units='MM', res=64, factor=1.0):
+     if root is None:
+         root = node
+ 
+-    kind = re.search('(?:\{.*\})?(.*)$', node.tag).group(1)
++    kind = re.search(r'(?:\{.*\})?(.*)$', node.tag).group(1)
+     geo = []
+ 
+     # Recurse
+@@ -511,7 +511,7 @@ def getsvgtext(node, object_type, units='MM'):
+     :return:            List of Shapely geometry
+     :rtype:             list
+     """
+-    kind = re.search('(?:\{.*\})?(.*)$', node.tag).group(1)
++    kind = re.search(r'(?:\{.*\})?(.*)$', node.tag).group(1)
+     geo = []
+ 
+     # Recurse
+diff --git a/appTools/ToolDrilling.py b/appTools/ToolDrilling.py
+index a4febb4e..5fc5cbdd 100644
+--- a/appTools/ToolDrilling.py
++++ b/appTools/ToolDrilling.py
+@@ -1783,7 +1783,7 @@ class ToolDrilling(AppTool, Excellon):
+             x_tc, y_tc = [0, 0]
+             try:
+                 if job_obj.xy_toolchange != '':
+-                    tcxy_temp = re.sub('[()\[\]]', '', str(job_obj.xy_toolchange))
++                    tcxy_temp = re.sub(r'[()\[\]]', '', str(job_obj.xy_toolchange))
+                     if tcxy_temp:
+                         x_tc, y_tc = [float(eval(a)) for a in tcxy_temp.split(",")]
+             except Exception:
+diff --git a/camlib.py b/camlib.py
+index ae058a54..3717819f 100644
+--- a/camlib.py
++++ b/camlib.py
+@@ -3208,7 +3208,7 @@ class CNCjob(Geometry):
+                 self.xy_toolchange = None
+             else:
+                 # either originally it was a string or not, xy_toolchange will be made string
+-                self.xy_toolchange = re.sub('[()\[\]]', '', str(self.xy_toolchange)) if self.xy_toolchange else None
++                self.xy_toolchange = re.sub(r'[()\[\]]', '', str(self.xy_toolchange)) if self.xy_toolchange else None
+ 
+                 # and now, xy_toolchange is made into a list of floats in format [x, y]
+                 if self.xy_toolchange:
+@@ -3233,7 +3233,7 @@ class CNCjob(Geometry):
+                 self.xy_end = None
+             else:
+                 # either originally it was a string or not, xy_end will be made string
+-                self.xy_end = re.sub('[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
++                self.xy_end = re.sub(r'[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
+ 
+                 # and now, xy_end is made into a list of floats in format [x, y]
+                 if self.xy_end:
+@@ -3618,7 +3618,7 @@ class CNCjob(Geometry):
+                 self.xy_end = None
+             else:
+                 # either originally it was a string or not, xy_end will be made string
+-                self.xy_end = re.sub('[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
++                self.xy_end = re.sub(r'[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
+ 
+                 # and now, xy_end is made into a list of floats in format [x, y]
+                 if self.xy_end:
+@@ -3638,7 +3638,7 @@ class CNCjob(Geometry):
+                 self.xy_toolchange = None
+             else:
+                 # either originally it was a string or not, xy_toolchange will be made string
+-                self.xy_toolchange = re.sub('[()\[\]]', '', str(self.xy_toolchange)) if self.xy_toolchange else None
++                self.xy_toolchange = re.sub(r'[()\[\]]', '', str(self.xy_toolchange)) if self.xy_toolchange else None
+ 
+                 # and now, xy_toolchange is made into a list of floats in format [x, y]
+                 if self.xy_toolchange:
+@@ -3873,7 +3873,7 @@ class CNCjob(Geometry):
+             if self.xy_toolchange == '':
+                 self.xy_toolchange = None
+             else:
+-                self.xy_toolchange = re.sub('[()\[\]]', '', str(self.xy_toolchange)) if self.xy_toolchange else None
++                self.xy_toolchange = re.sub(r'[()\[\]]', '', str(self.xy_toolchange)) if self.xy_toolchange else None
+ 
+                 if self.xy_toolchange:
+                     self.xy_toolchange = [float(eval(a)) for a in self.xy_toolchange.split(",")]
+@@ -3888,7 +3888,7 @@ class CNCjob(Geometry):
+             pass
+ 
+         # XY_end parameter
+-        self.xy_end = re.sub('[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
++        self.xy_end = re.sub(r'[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
+         if self.xy_end and self.xy_end != '':
+             self.xy_end = [float(eval(a)) for a in self.xy_end.split(",")]
+         if self.xy_end and len(self.xy_end) < 2:
+@@ -5306,7 +5306,7 @@ class CNCjob(Geometry):
+         self.startz = float(startz) if startz is not None else  self.app.defaults["geometry_startz"]
+         self.z_end = float(endz) if endz is not None else  self.app.defaults["geometry_endz"]
+ 
+-        self.xy_end = re.sub('[()\[\]]', '', str(endxy)) if endxy else  self.app.defaults["geometry_endxy"]
++        self.xy_end = re.sub(r'[()\[\]]', '', str(endxy)) if endxy else  self.app.defaults["geometry_endxy"]
+ 
+         if self.xy_end and self.xy_end != '':
+             self.xy_end = [float(eval(a)) for a in self.xy_end.split(",")]
+@@ -5328,7 +5328,7 @@ class CNCjob(Geometry):
+             if toolchangexy == '':
+                 self.xy_toolchange = None
+             else:
+-                self.xy_toolchange = re.sub('[()\[\]]', '', str(toolchangexy)) \
++                self.xy_toolchange = re.sub(r'[()\[\]]', '', str(toolchangexy)) \
+                     if toolchangexy else self.app.defaults["geometry_toolchangexy"]
+ 
+                 if self.xy_toolchange and self.xy_toolchange != '':
+@@ -5705,7 +5705,7 @@ class CNCjob(Geometry):
+         self.z_end = float(endz) if endz is not None else self.app.defaults["geometry_endz"]
+ 
+         self.xy_end = endxy if endxy != '' and endxy else self.app.defaults["geometry_endxy"]
+-        self.xy_end = re.sub('[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
++        self.xy_end = re.sub(r'[()\[\]]', '', str(self.xy_end)) if self.xy_end else None
+ 
+         if self.xy_end is not None and self.xy_end != '':
+             self.xy_end = [float(eval(a)) for a in self.xy_end.split(",")]
+@@ -5725,7 +5725,7 @@ class CNCjob(Geometry):
+             if toolchangexy == '':
+                 self.xy_toolchange = None
+             else:
+-                self.xy_toolchange = re.sub('[()\[\]]', '', str(toolchangexy)) if self.xy_toolchange else None
++                self.xy_toolchange = re.sub(r'[()\[\]]', '', str(toolchangexy)) if self.xy_toolchange else None
+ 
+                 if self.xy_toolchange and self.xy_toolchange != '':
+                     self.xy_toolchange = [float(eval(a)) for a in self.xy_toolchange.split(",")]
+-- 
+2.52.0
+

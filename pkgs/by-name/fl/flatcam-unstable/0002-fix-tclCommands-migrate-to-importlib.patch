@@ -1,0 +1,35 @@
+From 61e81fd6a24e58ab109a61931a1c2272ea77b2dd Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Wed, 18 Feb 2026 21:17:37 -0800
+Subject: [PATCH 2/4] fix(tclCommands): migrate to importlib
+
+---
+ tclCommands/__init__.py | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/tclCommands/__init__.py b/tclCommands/__init__.py
+index 30971044..d1f88313 100644
+--- a/tclCommands/__init__.py
++++ b/tclCommands/__init__.py
+@@ -1,3 +1,4 @@
++import importlib
+ import pkgutil
+ import sys
+ 
+@@ -73,9 +74,10 @@ import tclCommands.TclCommandWriteGCode
+ 
+ __all__ = []
+ 
+-for loader, name, is_pkg in pkgutil.walk_packages(__path__):
+-    module = loader.find_module(name).load_module(name)
+-    __all__.append(name)
++prefix = __name__ + "."
++for _finder, modname, _ispkg in pkgutil.walk_packages(__path__, prefix):
++    importlib.import_module(modname)
++    __all__.append(modname.split(".", 1)[1])  # keep same "name" style as before (no package prefix)
+ 
+ 
+ def register_all_commands(app, commands):
+-- 
+2.52.0
+
