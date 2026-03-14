@@ -11,15 +11,15 @@
 
 let
   inherit (stdenv.hostPlatform.uname) processor;
-  version = "6.4.0";
+  version = "6.5.0";
   sources = {
     "x86_64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-      hash = "sha256-Q4MwU3dIFheKKSMxzCBZI8XoForaN41BuRGVMhJaUKw=";
+      hash = "sha256-xxVgA/P+eu3Jhq97Avv2VN6Kten/UwyrF8CIrTwrBTg=";
     };
     "aarch64-linux" = {
       url = "https://cdn.geekbench.com/Geekbench-${version}-LinuxARMPreview.tar.gz";
-      hash = "sha256-PZ95w2X4sqTLZGZ5wygt7WjSK4Gfgtdh/UCPo+8Ysc8=";
+      hash = "sha256-5qJK0AcaM7PCgNN4/MwJoSXHSSdU9gEMp53kdY4mqrE=";
     };
   };
   geekbench_avx2 = lib.optionalString stdenv.hostPlatform.isx86_64 "geekbench_avx2";
