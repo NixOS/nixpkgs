@@ -6237,8 +6237,6 @@ with pkgs;
     ssl_implementation = mbedtls_2;
   };
 
-  cxxtest = python3Packages.callPackage ../development/libraries/cxxtest { };
-
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
   db = db5;
