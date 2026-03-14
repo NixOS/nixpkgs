@@ -1,0 +1,49 @@
+From 135798f6dff7cf5167906cecc0e9c86860c70f36 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
+Date: Mon, 4 Sep 2023 14:10:01 +0200
+Subject: [PATCH] Fix completion with Nix 2.4+ on non-NixOS
+
+Nix 2.4+ stopped setting NIX_PATH in the environment and instead uses a
+built-in default in the C++ code (not exposed to shell processes). That
+means this completion codes sees $override as empty and runs `NIX_PATH=
+nix-instantiate ...`. Setting NIX_PATH to an empty string means Nix
+won't use its default built-in value and completion breaks (assuming
+the completion depends on '<nixpkgs>' or similar search path entries).
+
+NixOS isn't affected because there NIX_PATH is still set (by the OS, not
+by code from the Nix repo).
+
+The fix is to not pass NIX_PATH unless we have a value for it. That
+works for both old and new Nix, on NixOS and non-NixOS.
+
+(I initially tried with a single `$maybe_nix_path nix-instantiate ...`,
+but apparently bash treats the value in $maybe_nix_path as a command
+instead of setting environment variables for the process.)
+---
+ _nix | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/_nix b/_nix
+index 6b9c281..61052f1 100755
+--- a/_nix
++++ b/_nix
+@@ -101,7 +101,15 @@ function _nix_eval_stdin () {
+     # Shortcut: since the output of this function is only used in the -W argument of compgen,
+     # which expects a shell-quoted list of words, we leave the double quotes from the Nix
+     # output intact to approximate shell quoting.
+-    NIX_PATH=$override nix-instantiate --eval - 2> /dev/null | tr '[]' ' '
++    if [[ -n "$override" ]]; then
++        NIX_PATH=$override nix-instantiate --eval - 2> /dev/null | tr '[]' ' '
++    else
++        # Don't set NIX_PATH to empty string, as that'll overwrite/clear Nix'
++        # built-in default (since version 2.4+). Nix 2.3 and older sets
++        # NIX_PATH in shell initialization files, which means for those
++        # versions we already have it in $override (code path above).
++        nix-instantiate --eval - 2> /dev/null | tr '[]' ' '
++    fi
+ }
+ 
+ # Resolve any urls ourselves, as nix will start downloading and block
+-- 
+2.50.1
+

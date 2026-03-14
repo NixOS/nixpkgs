@@ -1,0 +1,65 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  glibcLocales,
+  gnureadline,
+  pyperclip,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  rich-argparse,
+  setuptools-scm,
+  wcwidth,
+  python,
+}:
+
+buildPythonPackage rec {
+  pname = "cmd2";
+  version = if python.isPy313 then "3.1.0" else "3.2.1";
+  pyproject = true;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash =
+      if python.isPy313 then
+        "sha256-zOOuzgGLCxBVmIraoraHrJwd84v9Kr/Cnb61GpcH3jM="
+      else
+        "sha256-bGNyobJs0Uu2IJZTyJ1zAP58FDno3KMPW2tv/bXyFPo=";
+  };
+
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
+    pyperclip
+    rich-argparse
+    wcwidth
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    glibcLocales
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-mock
+  ];
+
+  disabledTests = [
+    # Don't require vim for tests, it causes lots of rebuilds
+    "test_find_editor_not_specified"
+    "test_transcript"
+  ];
+
+  pythonImportsCheck = [ "cmd2" ];
+
+  meta = {
+    description = "Enhancements for standard library's cmd module";
+    homepage = "https://github.com/python-cmd2/cmd2";
+    changelog = "https://github.com/python-cmd2/cmd2/releases/tag/${version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ teto ];
+  };
+}

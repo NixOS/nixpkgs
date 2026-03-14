@@ -1,0 +1,37 @@
+diff --git a/cmd/shfmt/main.go b/cmd/shfmt/main.go
+index c6c08e37..e59128ec 100644
+--- a/cmd/shfmt/main.go
++++ b/cmd/shfmt/main.go
+@@ -153,13 +153,12 @@ For more information and to report bugs, see https://github.com/mvdan/sh.
+ 	flag.Parse()
+ 
+ 	if versionFlag.val {
+-		version := "(unknown)"
++		version := "@version@"
+ 		if info, ok := debug.ReadBuildInfo(); ok {
+ 			mod := &info.Main
+ 			if mod.Replace != nil {
+ 				mod = mod.Replace
+ 			}
+-			version = mod.Version
+ 		}
+ 		fmt.Println(version)
+ 		return
+diff --git a/cmd/shfmt/testdata/script/flags.txtar b/cmd/shfmt/testdata/script/flags.txtar
+index 012912cb..54305a03 100644
+--- a/cmd/shfmt/testdata/script/flags.txtar
++++ b/cmd/shfmt/testdata/script/flags.txtar
+@@ -9,11 +9,11 @@ exec shfmt --help
+ stderr 'usage: shfmt'
+ 
+ exec shfmt -version
+-stdout 'devel|v3'
++stdout '@version@'
+ ! stderr .
+ 
+ exec shfmt --version
+-stdout 'devel|v3'
++stdout '@version@'
+ ! stderr .
+ 
+ ! exec shfmt -ln=bash -p
