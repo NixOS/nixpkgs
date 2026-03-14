@@ -208,6 +208,16 @@ in
             '';
             apply = v: "file://${v}";
           };
+          api_key = lib.mkOption {
+            type = lib.types.path;
+            default = pkgs.writeText "unpoller-unifi-default.api_key" "unifi";
+            defaultText = lib.literalExpression "unpoller-unifi-default.api_key";
+            description = ''
+              Path of a file containing the API Key for authentication.
+              This file needs to be readable by the unifi-poller user.
+            '';
+            apply = v: "file://${v}";
+          };
           url = lib.mkOption {
             type = lib.types.str;
             default = "https://unifi:8443";
