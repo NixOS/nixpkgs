@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "arjun";
-  version = "2.2.7-unstable-2025-02-20";
+  version = "2.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
