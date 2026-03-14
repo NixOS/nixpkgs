@@ -31,6 +31,7 @@
   spacy,
   sqlalchemy,
   tenacity,
+  tinytag,
   tiktoken,
   tree-sitter,
   typing-inspect,
@@ -38,14 +39,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-core";
-  version = "0.14.12";
+  version = "0.14.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-grF9IToAMc3x5/40+u3lHU9RyjROWu1e3M6N1owq0f4=";
+    hash = "sha256-xcssJPBXq3bjSD13nsR6jRTmTWPVks8aKHZCZ3lSKY4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
@@ -96,6 +97,7 @@ buildPythonPackage (finalAttrs: {
     spacy
     sqlalchemy
     tenacity
+    tinytag
     tiktoken
     typing-inspect
   ];
@@ -133,6 +135,8 @@ buildPythonPackage (finalAttrs: {
     "tests/tools/"
     "tests/schema/"
     "tests/multi_modal_llms/"
+    "tests/prompts/"
+    "tests/base/llms/"
   ];
 
   disabledTests = [
