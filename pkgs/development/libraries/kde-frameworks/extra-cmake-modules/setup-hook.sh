@@ -1,5 +1,5 @@
 ecmCMakeFlags() {
-    appendToVar cmakeFlags "-DECM_DIR=@out@/share/ECM/cmake"
+    prependToVar cmakeFlags "-DECM_DIR=@out@/share/ECM/cmake"
 }
 
 preConfigureHooks+=(ecmCMakeFlags)
@@ -12,53 +12,53 @@ addEnvHooks "$targetOffset" ecmEnvHook
 
 ecmPostHook() {
     # Because we need to use absolute paths here, we must set *all* the paths.
-    appendToVar cmakeFlags "-DKDE_INSTALL_EXECROOTDIR=${!outputBin}"
-    appendToVar cmakeFlags "-DKDE_INSTALL_BINDIR=${!outputBin}/bin"
-    appendToVar cmakeFlags "-DKDE_INSTALL_SBINDIR=${!outputBin}/sbin"
-    appendToVar cmakeFlags "-DKDE_INSTALL_LIBDIR=${!outputLib}/lib"
-    appendToVar cmakeFlags "-DKDE_INSTALL_LIBEXECDIR=${!outputLib}/libexec"
-    appendToVar cmakeFlags "-DKDE_INSTALL_CMAKEPACKAGEDIR=${!outputDev}/lib/cmake"
-    appendToVar cmakeFlags "-DKDE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
-    appendToVar cmakeFlags "-DKDE_INSTALL_LOCALSTATEDIR=/var"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DATAROOTDIR=${!outputBin}/share"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DATADIR=${!outputBin}/share"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DOCBUNDLEDIR=${!outputBin}/share/doc/HTML"
-    appendToVar cmakeFlags "-DKDE_INSTALL_KCFGDIR=${!outputBin}/share/config.kcfg"
-    appendToVar cmakeFlags "-DKDE_INSTALL_KCONFUPDATEDIR=${!outputBin}/share/kconf_update"
-    appendToVar cmakeFlags "-DKDE_INSTALL_KSERVICES5DIR=${!outputBin}/share/kservices5"
-    appendToVar cmakeFlags "-DKDE_INSTALL_KSERVICETYPES5DIR=${!outputBin}/share/kservicetypes5"
-    appendToVar cmakeFlags "-DKDE_INSTALL_KXMLGUI5DIR=${!outputBin}/share/kxmlgui5"
-    appendToVar cmakeFlags "-DKDE_INSTALL_KNOTIFY5RCDIR=${!outputBin}/share/knotifications5"
-    appendToVar cmakeFlags "-DKDE_INSTALL_ICONDIR=${!outputBin}/share/icons"
-    appendToVar cmakeFlags "-DKDE_INSTALL_LOCALEDIR=${!outputLib}/share/locale"
-    appendToVar cmakeFlags "-DKDE_INSTALL_SOUNDDIR=${!outputBin}/share/sounds"
-    appendToVar cmakeFlags "-DKDE_INSTALL_TEMPLATEDIR=${!outputBin}/share/templates"
-    appendToVar cmakeFlags "-DKDE_INSTALL_WALLPAPERDIR=${!outputBin}/share/wallpapers"
-    appendToVar cmakeFlags "-DKDE_INSTALL_APPDIR=${!outputBin}/share/applications"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DESKTOPDIR=${!outputBin}/share/desktop-directories"
-    appendToVar cmakeFlags "-DKDE_INSTALL_MIMEDIR=${!outputBin}/share/mime/packages"
-    appendToVar cmakeFlags "-DKDE_INSTALL_METAINFODIR=${!outputBin}/share/metainfo"
-    appendToVar cmakeFlags "-DKDE_INSTALL_MANDIR=${!outputBin}/share/man"
-    appendToVar cmakeFlags "-DKDE_INSTALL_INFODIR=${!outputBin}/share/info"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DBUSDIR=${!outputBin}/share/dbus-1"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DBUSINTERFACEDIR=${!outputBin}/share/dbus-1/interfaces"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DBUSSERVICEDIR=${!outputBin}/share/dbus-1/services"
-    appendToVar cmakeFlags "-DKDE_INSTALL_DBUSSYSTEMSERVICEDIR=${!outputBin}/share/dbus-1/system-services"
-    appendToVar cmakeFlags "-DKDE_INSTALL_SYSCONFDIR=${!outputBin}/etc"
-    appendToVar cmakeFlags "-DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
-    appendToVar cmakeFlags "-DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
+    prependToVar cmakeFlags "-DKDE_INSTALL_EXECROOTDIR=${!outputBin}"
+    prependToVar cmakeFlags "-DKDE_INSTALL_BINDIR=${!outputBin}/bin"
+    prependToVar cmakeFlags "-DKDE_INSTALL_SBINDIR=${!outputBin}/sbin"
+    prependToVar cmakeFlags "-DKDE_INSTALL_LIBDIR=${!outputLib}/lib"
+    prependToVar cmakeFlags "-DKDE_INSTALL_LIBEXECDIR=${!outputLib}/libexec"
+    prependToVar cmakeFlags "-DKDE_INSTALL_CMAKEPACKAGEDIR=${!outputDev}/lib/cmake"
+    prependToVar cmakeFlags "-DKDE_INSTALL_INCLUDEDIR=${!outputInclude}/include"
+    prependToVar cmakeFlags "-DKDE_INSTALL_LOCALSTATEDIR=/var"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DATAROOTDIR=${!outputBin}/share"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DATADIR=${!outputBin}/share"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DOCBUNDLEDIR=${!outputBin}/share/doc/HTML"
+    prependToVar cmakeFlags "-DKDE_INSTALL_KCFGDIR=${!outputBin}/share/config.kcfg"
+    prependToVar cmakeFlags "-DKDE_INSTALL_KCONFUPDATEDIR=${!outputBin}/share/kconf_update"
+    prependToVar cmakeFlags "-DKDE_INSTALL_KSERVICES5DIR=${!outputBin}/share/kservices5"
+    prependToVar cmakeFlags "-DKDE_INSTALL_KSERVICETYPES5DIR=${!outputBin}/share/kservicetypes5"
+    prependToVar cmakeFlags "-DKDE_INSTALL_KXMLGUI5DIR=${!outputBin}/share/kxmlgui5"
+    prependToVar cmakeFlags "-DKDE_INSTALL_KNOTIFY5RCDIR=${!outputBin}/share/knotifications5"
+    prependToVar cmakeFlags "-DKDE_INSTALL_ICONDIR=${!outputBin}/share/icons"
+    prependToVar cmakeFlags "-DKDE_INSTALL_LOCALEDIR=${!outputLib}/share/locale"
+    prependToVar cmakeFlags "-DKDE_INSTALL_SOUNDDIR=${!outputBin}/share/sounds"
+    prependToVar cmakeFlags "-DKDE_INSTALL_TEMPLATEDIR=${!outputBin}/share/templates"
+    prependToVar cmakeFlags "-DKDE_INSTALL_WALLPAPERDIR=${!outputBin}/share/wallpapers"
+    prependToVar cmakeFlags "-DKDE_INSTALL_APPDIR=${!outputBin}/share/applications"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DESKTOPDIR=${!outputBin}/share/desktop-directories"
+    prependToVar cmakeFlags "-DKDE_INSTALL_MIMEDIR=${!outputBin}/share/mime/packages"
+    prependToVar cmakeFlags "-DKDE_INSTALL_METAINFODIR=${!outputBin}/share/metainfo"
+    prependToVar cmakeFlags "-DKDE_INSTALL_MANDIR=${!outputBin}/share/man"
+    prependToVar cmakeFlags "-DKDE_INSTALL_INFODIR=${!outputBin}/share/info"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DBUSDIR=${!outputBin}/share/dbus-1"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DBUSINTERFACEDIR=${!outputBin}/share/dbus-1/interfaces"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DBUSSERVICEDIR=${!outputBin}/share/dbus-1/services"
+    prependToVar cmakeFlags "-DKDE_INSTALL_DBUSSYSTEMSERVICEDIR=${!outputBin}/share/dbus-1/system-services"
+    prependToVar cmakeFlags "-DKDE_INSTALL_SYSCONFDIR=${!outputBin}/etc"
+    prependToVar cmakeFlags "-DKDE_INSTALL_CONFDIR=${!outputBin}/etc/xdg"
+    prependToVar cmakeFlags "-DKDE_INSTALL_AUTOSTARTDIR=${!outputBin}/etc/xdg/autostart"
 
     if [ "$(uname)" = "Darwin" ]; then
-        appendToVar cmakeFlags "-DKDE_INSTALL_BUNDLEDIR=${!outputBin}/Applications/KDE"
+        prependToVar cmakeFlags "-DKDE_INSTALL_BUNDLEDIR=${!outputBin}/Applications/KDE"
     fi
 
     if [ -n "${qtPluginPrefix-}" ]; then
-        appendToVar cmakeFlags "-DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
-        appendToVar cmakeFlags "-DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"
+        prependToVar cmakeFlags "-DKDE_INSTALL_QTPLUGINDIR=${!outputBin}/$qtPluginPrefix"
+        prependToVar cmakeFlags "-DKDE_INSTALL_PLUGINDIR=${!outputBin}/$qtPluginPrefix"
     fi
 
     if [ -n "${qtQmlPrefix-}" ]; then
-        appendToVar cmakeFlags "-DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
+        prependToVar cmakeFlags "-DKDE_INSTALL_QMLDIR=${!outputBin}/$qtQmlPrefix"
     fi
 }
 postHooks+=(ecmPostHook)
