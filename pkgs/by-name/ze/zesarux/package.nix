@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zesarux";
-  version = "unstable-2023-10-31";
+  version = "12.1";
 
   src = fetchFromGitHub {
     owner = "chernandezba";
     repo = "zesarux";
-    rev = "02e734b088c3b880b2d260a9812404f029dfc92a";
-    hash = "sha256-1PWFpUNekDKyCUNuV/cNUZ7hWGZBMu0nxswD6pap8pg=";
+    tag = "ZEsarUX-${finalAttrs.version}";
+    hash = "sha256-899+n55+Sa+TqnQBH/kyhEIcIr/4pGZ3ekWgXb9NVOo=";
   };
 
   nativeBuildInputs = [
