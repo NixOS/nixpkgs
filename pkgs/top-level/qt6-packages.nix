@@ -75,6 +75,14 @@ makeScopeWithSplicing' {
 
       libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
+      libqtdbusmock = callPackage ../development/libraries/libqtdbusmock {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
+      libqtdbustest = callPackage ../development/libraries/libqtdbustest {
+        inherit (pkgs.lomiri-qt6) cmake-extras;
+      };
+
       libquotient = callPackage ../development/libraries/libquotient { };
       mlt = pkgs.mlt.override {
         qt = qt6;

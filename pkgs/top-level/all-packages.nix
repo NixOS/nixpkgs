@@ -6735,14 +6735,6 @@ with pkgs;
   inherit (callPackage ../development/libraries/libliftoff { }) libliftoff_0_4 libliftoff_0_5;
   libliftoff = libliftoff_0_5;
 
-  libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
-    inherit (lomiri) cmake-extras;
-  };
-
-  libqtdbustest = libsForQt5.callPackage ../development/libraries/libqtdbustest {
-    inherit (lomiri) cmake-extras;
-  };
-
   libretranslate = with python3.pkgs; toPythonApplication libretranslate;
 
   librsb = callPackage ../development/libraries/librsb {
@@ -11473,6 +11465,7 @@ with pkgs;
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
 
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
+  lomiri-qt6 = recurseIntoAttrs (callPackage ../desktops/lomiri { useQt6 = true; });
 
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 

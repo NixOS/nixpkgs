@@ -116,6 +116,14 @@ makeScopeWithSplicing' {
 
         libqofono = callPackage ../development/libraries/libqofono { };
 
+        libqtdbusmock = callPackage ../development/libraries/libqtdbusmock {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
+
+        libqtdbustest = callPackage ../development/libraries/libqtdbustest {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
+
         libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
 
         libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };

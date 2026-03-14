@@ -15,8 +15,6 @@
   intltool,
   libayatana-common,
   libgudev,
-  libqtdbusmock,
-  libqtdbustest,
   librda,
   libsForQt5,
   lomiri,
@@ -91,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [
     gtest
-    libqtdbusmock
-    libqtdbustest
+    libsForQt5.libqtdbusmock
+    libsForQt5.libqtdbustest
     properties-cpp
   ];
 

@@ -15,18 +15,21 @@
   lomiri-ui-toolkit,
   mesa,
   pkg-config,
-  qqc2-suru-style,
+  qqc2-suru-style ? null,
+  qt5compat ? null,
   qtbase,
   qtdeclarative,
-  qtquickcontrols2,
-  qtsystems,
+  qtquickcontrols2 ? null,
+  qtsystems ? null,
   qttools,
   qtwebengine,
   wrapQtAppsHook,
   xvfb-run,
+  withDocumentation ? true,
 }:
 
 let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
   listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
+  ]
+  ++ lib.optionals withDocumentation [
     "doc"
   ];
 
@@ -55,16 +60,22 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail 'COMMAND ''${QDOC_BIN} -qt5' 'COMMAND ''${QDOC_BIN}'
+  ''
+  + lib.optionalString (!withDocumentation) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(doc)' 'message(WARNING "[Nix] Not building documentation")'
   '';
 
-  strictDeps = true;
+  strictDeps = !withQt6;
 
   nativeBuildInputs = [
     cmake
     gettext
     pkg-config
-    qttools # qdoc
     wrapQtAppsHook
+  ]
+  ++ lib.optionals withDocumentation [
+    qttools # qdoc
   ];
 
   buildInputs = [
@@ -79,9 +90,20 @@ stdenv.mkDerivation (finalAttrs: {
     lomiri-content-hub
     lomiri-ui-extras
     lomiri-ui-toolkit
+  ]
+  ++ lib.optionals (!withQt6) [
+    # Not ported to Qt6 yet, explicitly disabled in the Qt6 build
+    # https://gitlab.com/ubports/development/core/morph-browser/-/blob/4f20c943e78694818d1b80b5563bd89901230e75/src/app/browserapplication.cpp#L196
     qqc2-suru-style
+
+    # Folded into qtdeclarative in Qt6
     qtquickcontrols2
+
+    # Will prolly want this in the future, but needs porting to Qt6
     qtsystems
+  ]
+  ++ lib.optionals withQt6 [
+    qt5compat
   ];
 
   nativeCheckInputs = [
@@ -92,11 +114,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "CLICK_MODE" false)
-    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
-    (lib.cmakeBool "WERROR" true)
+    (lib.cmakeBool "ENABLE_QT6" withQt6)
+    (lib.cmakeBool "WERROR" (!withQt6)) # Porting WIP
   ];
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    # Hard dependency on Qt5 still
+    && (!withQt6);
 
   disabledTests = [
     # Don't care about linter failures
@@ -115,6 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
           lomiri-ui-toolkit
           qtwebengine
           qtdeclarative
+        ]
+        ++ lib.optionals (!withQt6) [
           qtquickcontrols2
           qtsystems
         ]
@@ -134,8 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gitUpdater { };
     tests = {
       # Test of morph-browser itself
-      standalone = nixosTests.morph-browser;
-
+      standalone = if withQt6 then nixosTests.morph-browser.qt6 else nixosTests.morph-browser.qt5;
+    }
+    // lib.optionalAttrs (!withQt6) {
       # Interactions between the Lomiri ecosystem and this browser
       inherit (nixosTests.lomiri) desktop-basics desktop-appinteractions;
     };
