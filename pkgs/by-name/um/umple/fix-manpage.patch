@@ -1,0 +1,13 @@
+--- a/build.gradle
++++ b/build.gradle
+@@ -605,8 +605,8 @@ task packageAllJars {
+ 
+ // Generate options text from help message
+ task genOptions(type:Exec) {
+-  workingDir "${rootProject.projectDir.toString()}/dist/"
+-  commandLine 'java', '-jar', 'umple.jar', '-help'
++  workingDir "${rootProject.projectDir.toString()}/dist/gradle/libs/"
++  commandLine 'java', '-jar', '@UMPLE_OUT_JAR@', '-help'
+   standardOutput = new ByteArrayOutputStream()
+   doLast {
+     def strings = standardOutput.toString().split('-----------')
