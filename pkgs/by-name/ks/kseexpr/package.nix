@@ -3,39 +3,41 @@
   stdenv,
   fetchFromGitLab,
   cmake,
-  extra-cmake-modules,
-  qt5,
-  libsForQt5,
+  qt6,
+  kdePackages,
   bison,
   flex,
-  llvm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kseexpr";
-  version = "4.0.4.0";
+  version = "6.0.0.0";
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "kseexpr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XjFGAN7kK2b0bLouYG3OhajhOQk4AgC4EQRzseccGCE=";
+    hash = "sha256-Z3CjQdKHeZ/6He43qVYQj8Fo0y88v/ldJJD8bPYOaEo=";
   };
+
   patches = [
     # see https://github.com/NixOS/nixpkgs/issues/144170
     ./cmake_libdir.patch
   ];
+
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    qt5.wrapQtAppsHook
+    kdePackages.extra-cmake-modules
   ];
+
+  dontWrapQtApps = true;
+
   buildInputs = [
     bison
     flex
-    libsForQt5.ki18n
-    llvm
-    qt5.qtbase
+    kdePackages.ki18n
+    qt6.qtbase
+    qt6.qttools
   ];
 
   meta = {

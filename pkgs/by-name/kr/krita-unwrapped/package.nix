@@ -4,10 +4,8 @@
   boost,
   cmake,
   curl,
-  eigen,
+  eigen_5,
   exiv2,
-  extra-cmake-modules,
-  fetchpatch,
   fetchurl,
   fftw,
   fribidi,
@@ -24,7 +22,8 @@
   libjxl,
   libmypaint,
   libraw,
-  libsForQt5,
+  qt6,
+  kdePackages,
   libunibreak,
   libwebp,
   opencolorio,
@@ -39,34 +38,25 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "krita-unwrapped";
 
-  version = "5.2.15";
+  version = "6.0.0-beta3";
   src = fetchurl {
-    url = "mirror://kde/stable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
-    hash = "sha256-m5T4Qh2XZ8KU3vWY+xBwfd5usje67KJZBmn7DUuQOzk=";
+    url = "mirror://kde/unstable/krita/${finalAttrs.version}/krita-${finalAttrs.version}.tar.gz";
+    hash = "sha256-buK4EE6OBo7W+aQ7WtrgFu1NhoLToDITo6QUP+KgtKM=";
   };
-
-  patches = [
-    # Fixes build with SIP 6.8
-    (fetchpatch {
-      name = "bump-SIP-ABI-version-to-12.8.patch";
-      url = "https://invent.kde.org/graphics/krita/-/commit/2d71c47661d43a4e3c1ab0c27803de980bdf2bb2.diff";
-      hash = "sha256-U3E44nj4vra++PJV20h4YHjES78kgrJtr4ktNeQfOdA=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     pkg-config
     python3Packages.sip
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     boost
     libraw
     fftw
-    eigen
+    eigen_5
     exiv2
     fribidi
     lcms2
@@ -90,9 +80,12 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     SDL2
     zug
-    python3Packages.pyqt5
+    python3Packages.pyqt6
+
+    qt6.qtmultimedia
+    qt6.qttools
   ]
-  ++ (with libsForQt5; [
+  ++ (with kdePackages; [
     breeze-icons
     karchive
     kcompletion
@@ -108,15 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
     kwindowsystem
     mlt
     poppler
-    qtmultimedia
-    qtx11extras
     quazip
-
-    # TODO: reenable libkdcraw when migrating to Qt6, see #430298
-    # libkdcraw
+    libkdcraw
   ]);
-
-  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.cc.isGNU "-Wno-deprecated-copy");
 
   # Krita runs custom python scripts in CMake with custom PYTHONPATH which krita determined in their CMake script.
   # Patch the PYTHONPATH so python scripts can import sip successfully.
@@ -143,8 +130,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeBuildType = "RelWithDebInfo";
 
   cmakeFlags = [
-    "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
-    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt5}/${python3Packages.python.sitePackages}/PyQt5/bindings"
+    "-DBUILD_WITH_QT6=ON"
+    "-DENABLE_UPDATERS=OFF"
+    "-DPYQT6_SIP_DIR=${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings"
+    "-DPYQT_SIP_DIR_OVERRIDE=${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings"
     "-DBUILD_KRITA_QT_DESIGNER_PLUGINS=ON"
   ];
 
