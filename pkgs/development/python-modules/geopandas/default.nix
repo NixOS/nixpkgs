@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     tag = "v${version}";
-    hash = "sha256-TBb9Bb12OZ9RWiwAGU6JKqiumw1C11USycpKM8mJVdU=";
+    hash = "sha256-66FbHNewpSEVZ9RwngK7E4bcELa9Z2OQ9xVP9+fgeHQ=";
   };
 
   build-system = [ setuptools ];
