@@ -35,8 +35,9 @@ let
   # version 0.0.32.post2 was confirmed to break CUDA.
   # Remove this note once the latest published revision "just works".
   version = "0.0.30";
+  effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-buildPythonPackage {
+buildPythonPackage.override { stdenv = effectiveStdenv; } {
   pname = "xformers";
   inherit version;
   pyproject = true;
@@ -65,8 +66,6 @@ buildPythonPackage {
   env = lib.attrsets.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
   };
-
-  stdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 
   buildInputs =
     lib.optional stdenv.hostPlatform.isDarwin openmp
