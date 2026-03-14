@@ -76,6 +76,11 @@ let
     SystemCallArchitectures = "native";
     UMask = "0077";
   };
+
+  # Easier usage of django manage.py stuff
+  manage = pkgs.writeShellScriptBin "lasuite-docs-manage" ''
+    ${lib.getExe' pkgs.util-linux "nsenter"} -t "$(${lib.getExe' config.systemd.package "systemctl"} show -p MainPID lasuite-docs --value)" -a --wdns=${commonServiceConfig.WorkingDirectory} -e -S follow -G follow ${lib.getExe cfg.backendPackage} "$@"
+  '';
 in
 {
   options.services.lasuite-docs = {
@@ -346,6 +351,7 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ manage ];
     systemd.services.lasuite-docs-postgresql-setup = mkIf cfg.postgresql.createLocally {
       wantedBy = [ "lasuite-docs.target" ];
       requiredBy = [ "lasuite-docs.service" ];
@@ -525,6 +531,11 @@ in
         };
 
         locations."/admin" = {
+          proxyPass = "http://${cfg.bind}";
+          recommendedProxySettings = true;
+        };
+
+        locations."/static/admin" = {
           proxyPass = "http://${cfg.bind}";
           recommendedProxySettings = true;
         };
