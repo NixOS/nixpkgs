@@ -56,6 +56,7 @@ function runChecklist({
       'Opened by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).':
         pull_request.user.login === 'r-ryantm',
     },
+    'PR is not a draft': !pull_request.draft,
   }
 
   if (user) {
