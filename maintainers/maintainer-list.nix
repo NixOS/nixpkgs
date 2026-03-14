@@ -12406,6 +12406,11 @@
     githubId = 277474;
     keys = [ { fingerprint = "F1F1 3395 8E8E 9CC4 D9FC  9647 1931 9CD8 416A 642B"; } ];
   };
+  jfr = {
+    name = "Joseph Fox-Rabinovitz";
+    github = " joe-saronic";
+    githubId = 156837150;
+  };
   jfroche = {
     name = "Jean-François Roche";
     email = "jfroche@pyxel.be";

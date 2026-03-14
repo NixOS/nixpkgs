@@ -15172,6 +15172,8 @@ self: super: with self; {
 
   pytest-arraydiff = callPackage ../development/python-modules/pytest-arraydiff { };
 
+  pytest-assume = callPackage ../development/python-modules/pytest-assume { };
+
   pytest-astropy = callPackage ../development/python-modules/pytest-astropy { };
 
   pytest-astropy-header = callPackage ../development/python-modules/pytest-astropy-header { };
