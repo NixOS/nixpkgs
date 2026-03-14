@@ -24,12 +24,25 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace Makefile --replace 2711 0711
   '';
 
-  makeFlags = [
-    "libdir=\${out}/lib"
-    "libexecdir=\${out}/lib"
-    "includedir=\${out}/include"
-    "mandir=\${out}/share/man"
-  ];
+  makeFlags =
+    lib.optionals stdenv.hostPlatform.isStatic [
+      "utempter"
+      "libutempter.a"
+    ]
+    ++ [
+      "libdir=\${out}/lib"
+      "libexecdir=\${out}/lib"
+      "includedir=\${out}/include"
+      "mandir=\${out}/share/man"
+    ];
+
+  preInstall = lib.optionalString stdenv.hostPlatform.isStatic ''
+    touch libutempter.so
+  '';
+
+  postInstall = lib.optionalString stdenv.hostPlatform.isStatic ''
+    rm -v $out/lib/libutempter.so*
+  '';
 
   meta = {
     homepage = "https://github.com/altlinux/libutempter";
