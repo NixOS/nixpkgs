@@ -1,22 +1,21 @@
 {
   lib,
-  stdenv,
+  pkgsStatic,
   fetchFromGitHub,
-  rustPlatform,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+pkgsStatic.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rcp";
-  version = "0.21.1";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ayT8lp8XqkvtUaff2Iy+5IVyJ/ukKl0qruEWjBlgAvo=";
+    hash = "sha256-ANFzZwklGoTOd+2LFe3WaWSVOUmn1WjwSLaoTJTtXeg=";
   };
 
-  cargoHash = "sha256-AcH5V5hapVQgGrwWAEN6Xpj00RRNqZiCSn+/onpmd50=";
+  cargoHash = "sha256-SI6L6HtvA6pBvi7xeJThwiueSz/kDlT9zR6pahrIjSM=";
 
   env.RUSTFLAGS = "--cfg tokio_unstable";
 
@@ -27,6 +26,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_edge_case_special_permissions"
     # these tests require network access to determine local IP address
     "--skip=test_remote"
+    # these tests expect to find version/git info from Cargo.toml, which isn't available in the sandbox
+    "--skip=version::tests::test_current_version"
+    "--skip=test_protocol_version_has_git_info"
+    "--skip=test_rcpd_protocol_version_has_git_info"
   ];
 
   meta = {
@@ -36,8 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     mainProgram = "rcp";
     maintainers = with lib.maintainers; [ wykurz ];
-    # Building procfs on an for a unsupported platform. Currently only linux and android are supported
-    # (Your current target_os is macos)
-    broken = stdenv.hostPlatform.isDarwin;
+    # procfs only supports Linux and Android
+    broken = pkgsStatic.stdenv.hostPlatform.isDarwin;
   };
 })
