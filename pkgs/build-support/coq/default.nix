@@ -179,6 +179,7 @@ let
         }
       ]
       [ "COQDOCINSTALL=$(out)/share/coq/${coq.coq-version}/user-contrib" ];
+  COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
 in
 
 stdenv.mkDerivation (
@@ -207,6 +208,15 @@ stdenv.mkDerivation (
           "mkCoqDerivation: enableParallelBuilding is enabled by default; remove the explicit setting"
           enableParallelBuilding;
 
+      env =
+        optionalAttrs setCOQBIN {
+          COQBIN = "${coq}/bin/";
+        }
+        // optionalAttrs (args ? useMelquiondRemake) {
+          inherit COQUSERCONTRIB;
+        }
+        // (args.env or { });
+
       meta =
         (
           {
@@ -228,7 +238,6 @@ stdenv.mkDerivation (
         // (args.meta or { });
 
     }
-    // (optionalAttrs setCOQBIN { COQBIN = "${coq}/bin/"; })
     // (optionalAttrs (!args ? installPhase && !args ? useMelquiondRemake) {
       installFlags = coqlib-flags ++ docdir-flags ++ extraInstallFlags;
     })
@@ -246,8 +255,7 @@ stdenv.mkDerivation (
         runHook postInstall
       '';
     })
-    // (optionalAttrs (args ? useMelquiondRemake) rec {
-      COQUSERCONTRIB = "$out/lib/coq/${coq.coq-version}/user-contrib";
+    // (optionalAttrs (args ? useMelquiondRemake) {
       preConfigurePhases = [ "autoconf" ];
       configureFlags = [ "--libdir=${COQUSERCONTRIB}/${useMelquiondRemake.logpath or ""}" ];
       buildPhase = "./remake -j$NIX_BUILD_CORES";
