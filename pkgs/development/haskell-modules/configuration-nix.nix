@@ -1992,8 +1992,19 @@ builtins.intersectAttrs super {
     broken = false;
   }) super.cabal-install;
 
-  # lots of errors
-  haskell-debugger = dontCheck super.haskell-debugger;
+  haskell-debugger = overrideCabal (drv: {
+    preCheck = ''
+      export HOME=$TMPDIR
+      export PATH="$PWD/dist/build/hdb:$PATH"
+    '';
+    testFlags = drv.testFlags or [ ] ++ builtins.concatMap (x: ["-p" x]) [
+      "! /T79/"            # needs sandbox off and has --package-db related error
+      "! /T130/"           # strange haskell-debugger-view related error
+      "! /T130b/"          # cabal repl errors and has --package-db related error
+      "! /T135/"           # needs sandbox off
+      "! /T169c.internal/" # seems like a stray newline sneaks in somewhere
+    ];
+  }) (addTestToolDepend pkgs.cabal-install super.haskell-debugger);
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 

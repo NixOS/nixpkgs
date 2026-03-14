@@ -254,6 +254,10 @@ self: super:
     # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
     zip = dontCheck super.zip;
 
+    haskell-debugger = overrideCabal (drv: {
+      __darwinAllowLocalNetworking = true; # `runInTerminal` test launches local server
+    }) super.haskell-debugger;
+
     http-streams = super.http-streams.overrideAttrs (drv: {
       __darwinAllowLocalNetworking = true;
     });
