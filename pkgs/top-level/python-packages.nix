@@ -9613,6 +9613,8 @@ self: super: with self; {
 
   mcp = callPackage ../development/python-modules/mcp { };
 
+  mcp-obsidian = callPackage ../development/python-modules/mcp-obsidian { };
+
   mcpadapt = callPackage ../development/python-modules/mcpadapt { };
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
