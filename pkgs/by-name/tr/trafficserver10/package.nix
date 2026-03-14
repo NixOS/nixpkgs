@@ -11,7 +11,7 @@
 # A NixOS module should copy/symlink these to /etc/trafficserver/ and create
 # runtime directories at /var/log/trafficserver/, /var/cache/trafficserver/, etc.
 #
-# To upgrade (e.g., 10.1.0 -> 10.2.0):
+# To upgrade (e.g., 10.1.1 -> 10.2.0):
 #   1. Update `version` to the new version number
 #   2. Update `hash` in src (use: nix-prefetch-url --unpack <new-url> then nix hash convert)
 #   3. Rebuild and test: nix-build -A trafficserver10
@@ -65,11 +65,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "10.1.0";
+  version = "10.1.1";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-8FQtJroMdIZvBzpT299H/5pB9+KbapZtIUvGtcuF9h4=";
+    hash = "sha256-zH8VxaReTRjfZE9Z9h2RAQLrMmdCTg+Jd3JrwUvv8lo=";
   };
 
   nativeBuildInputs = [
@@ -159,8 +159,7 @@ stdenv.mkDerivation rec {
       large intranets by maximizing existing and available bandwidth.
     '';
     license = lib.licenses.asl20;
-    # maintainers = with lib.maintainers; [ randomizedcoder ];
-    # TODO: Add maintainer after https://github.com/NixOS/nixpkgs/pull/473609 is merged
+    maintainers = with lib.maintainers; [ randomizedcoder ];
     platforms = lib.platforms.unix;
   };
 }
