@@ -153,6 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
               "TestMinioServer.Connect"
               "TestS3FS.*"
               "TestS3FSGeneric.*"
+            ]
+            ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+              # https://github.com/apache/arrow/issues/41505
+              "TestAzuriteGeneric.Empty"
             ];
         in
         "-${lib.concatStringsSep ":" filteredTests}";
@@ -306,10 +310,6 @@ stdenv.mkDerivation (finalAttrs: {
         # Failing with "run-test.sh: line 88: 63682 Abort trap: 6"
         "arrow-flight-internals-test"
         "arrow-flight-sql-test"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-        # https://github.com/apache/arrow/issues/41505
-        "TestAzuriteGeneric.Empty"
       ];
     in
     ''
