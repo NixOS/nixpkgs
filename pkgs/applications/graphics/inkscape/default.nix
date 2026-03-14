@@ -19,8 +19,9 @@
   gspell,
   gtk-mac-integration,
   gtkmm3,
+  gtksourceview4,
   gdk-pixbuf,
-  imagemagick,
+  graphicsmagick,
   lcms,
   lib2geom,
   libcdr,
@@ -34,6 +35,7 @@
   libXft,
   libxml2,
   libxslt,
+  readline,
   ninja,
   perlPackages,
   pkg-config,
@@ -166,7 +168,8 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gsl
     gtkmm3
-    imagemagick
+    gtksourceview4
+    graphicsmagick
     lcms
     lib2geom
     libcdr
@@ -180,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libxml2
     libxslt
+    readline
     perlPackages.perl
     poppler
     popt
