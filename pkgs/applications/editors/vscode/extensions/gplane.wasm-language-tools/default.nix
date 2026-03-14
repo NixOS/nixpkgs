@@ -18,6 +18,11 @@ vscode-utils.buildVscodeMarketplaceExtension {
     runHook postBuild
   '';
 
+  # The update script for the wasm-language-tools package itself updates this
+  # package too, so we disable this update script to avoid sometimes
+  # accidentally updating just this package by itself.
+  enableUpdateScript = false;
+
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/gplane.wasm-language-tools/changelog";
     description = "Language support of WebAssembly";
