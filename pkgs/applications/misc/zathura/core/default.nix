@@ -32,13 +32,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "2026.02.09";
+  version = "2026.02.22";
 
   src = fetchFromGitHub {
     owner = "pwmt";
     repo = "zathura";
     tag = finalAttrs.version;
-    hash = "sha256-Zkefujp9Ywm7swHNMMvWSV0hKHaMXpJpOcfoL+f6XfE=";
+    hash = "sha256-FFpNRVrxChjTkQQIN40j2S4LcmV+NrKtqsHRF8XuRMk=";
   };
 
   outputs = [
