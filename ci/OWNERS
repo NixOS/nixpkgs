@@ -136,7 +136,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @Artturin @Ericson2314 @lo
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
 /nixos/modules/system/boot/systemd          @NixOS/systemd
 /nixos/lib/systemd-*.nix                    @NixOS/systemd
-/pkgs/os-specific/linux/systemd             @NixOS/systemd
+/pkgs/by-name/sy/systemd/package.nix             @NixOS/systemd
 
 # Systemd-boot
 /nixos/modules/system/boot/loader/systemd-boot      @JulienMalka

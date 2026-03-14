@@ -5,7 +5,6 @@
   pkgsCross,
   testers,
   fetchFromGitHub,
-  fetchzip,
   buildPackages,
   makeBinaryWrapper,
   ninja,
@@ -17,7 +16,6 @@
   getent,
   glibcLocales,
   autoPatchelfHook,
-  fetchpatch,
 
   # glib is only used during tests (test-bus-gvariant, test-bus-marshal)
   glib,
@@ -25,7 +23,7 @@
   python3Packages,
 
   # Mandatory dependencies
-  util-linux,
+  util-linuxMinimal,
   kbd,
   kmod,
   libxcrypt,
@@ -203,6 +201,15 @@ let
   #  $ curl -s https://api.github.com/repos/systemd/systemd/releases/latest | \
   #     jq '.created_at|strptime("%Y-%m-%dT%H:%M:%SZ")|mktime'
   releaseTimestamp = "1766012573";
+
+  # break some cyclic dependencies
+  util-linux = util-linuxMinimal;
+
+  # provide a super minimal gnupg used for systemd-machined
+  gnupg' = gnupg.override {
+    enableMinimal = true;
+    guiSupport = false;
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
@@ -629,7 +636,7 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optionals withImportd [
         {
           search = "\"gpg\"";
-          replacement = "\\\"${gnupg}/bin/gpg\\\"";
+          replacement = "\\\"${gnupg'}/bin/gpg\\\"";
           where = [ "src/import/pull-common.c" ];
         }
         {
