@@ -13,6 +13,7 @@
   numpy,
   optax,
   orbax-checkpoint,
+  orbax-export,
   pyyaml,
   rich,
   tensorstore,
@@ -36,16 +37,16 @@
   tomlq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.2";
+  version = "0.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
-    tag = "v${version}";
-    hash = "sha256-Wdfc35/iah98C5WNYZWiAd2FJUJlyGLJ8xELpuYD3GU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Tz4LR+aYfV6prBaBSq13hT38Ea1IpHv3iiKjBMtLEdE=";
   };
 
   build-system = [
@@ -53,6 +54,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+  pythonRelaxDeps = [
+    "optax"
+  ];
   dependencies = [
     flaxlib
     jax
@@ -60,6 +64,7 @@ buildPythonPackage rec {
     numpy
     optax
     orbax-checkpoint
+    orbax-export
     pyyaml
     rich
     tensorstore
@@ -132,8 +137,8 @@ buildPythonPackage rec {
   meta = {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
-    changelog = "https://github.com/google/flax/releases/tag/v${version}";
+    changelog = "https://github.com/google/flax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})
