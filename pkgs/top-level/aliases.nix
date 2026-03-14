@@ -1711,6 +1711,7 @@ mapAliases {
   retroarchFull = throw "'retroarchFull' has been renamed to/replaced by 'retroarch-full'"; # Converted to throw 2025-10-27
   retroshare06 = throw "'retroshare06' has been renamed to/replaced by 'retroshare'"; # Converted to throw 2025-10-27
   rewind-ai = throw "'rewind-ai' has been removed due to lack of of maintenance upstream"; # Added 2025-08-03
+  rHttp = warnAlias "'rHttp' has been renamed to 'rhttp'" rhttp; # Added 2026-02-12
   rigsofrods = throw "'rigsofrods' has been renamed to/replaced by 'rigsofrods-bin'"; # Converted to throw 2025-10-27
   rili = throw "'rili' has been dropped in favor of its maintained fork 'li-ri'"; # Added 2026-01-03
   river = throw "'river' has been renamed to/replaced by 'river-classic'"; # Added 2025-08-30
