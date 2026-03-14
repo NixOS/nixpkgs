@@ -210,7 +210,7 @@ def run_wrapper_bg(
     if process_input:
         stdin = subprocess.PIPE
     else:
-        stdin = None
+        stdin = subprocess.DEVNULL
 
     r = subprocess.Popen(
         final_args,

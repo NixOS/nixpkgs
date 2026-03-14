@@ -737,6 +737,7 @@ def _run_action_with_systemd(
         raise
     finally:
         journalctl.terminate()
+        journalctl.wait()
 
 
 def switch_to_configuration(
