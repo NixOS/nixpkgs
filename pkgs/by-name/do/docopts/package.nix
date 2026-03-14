@@ -3,6 +3,10 @@
   buildGoModule,
   fetchFromGitHub,
   fetchpatch,
+  bash,
+  gawk,
+  gnugrep,
+  gnused,
 }:
 buildGoModule (finalAttrs: {
   pname = "docopts";
@@ -24,6 +28,30 @@ buildGoModule (finalAttrs: {
   ];
 
   vendorHash = "sha256-+pMgaHB69itbQ+BDM7/oaJg3HrT1UN+joJL7BO/2vxE=";
+
+  # Only build the main CLI; json_t and test_json_load are test/helper binaries
+  subPackages = [ "." ];
+
+  # Install docopts.sh in PATH to allow sourcing, and replace any binary reference
+  # with nixpkgs binary paths.
+  postInstall = ''
+    install -D -m 444 $src/docopts.sh $out/bin/docopts.sh
+    substituteInPlace $out/bin/docopts.sh \
+      --replace-fail '#!/usr/bin/env bash' '#!${bash}/bin/bash'
+    # Replace commands only in non-comment lines.
+    while IFS= read -r line; do
+      if [[ "$line" =~ ^[[:space:]]*# ]]; then
+        printf '%s\n' "$line"
+      else
+        line="''${line// awk / ${gawk}/bin/awk }"
+        line="''${line//sed / ${gnused}/bin/sed }"
+        line="''${line// docopts / $out/bin/docopts }"
+        line="''${line//'| grep "'/'| ${gnugrep}/bin/grep "'}"
+        printf '%s\n' "$line"
+      fi
+    done < $out/bin/docopts.sh > $out/bin/docopts.sh.tmp
+    mv $out/bin/docopts.sh.tmp $out/bin/docopts.sh
+  '';
 
   meta = {
     homepage = "https://github.com/docopt/docopts";
