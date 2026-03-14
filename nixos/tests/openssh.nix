@@ -276,6 +276,17 @@ in
         ];
       };
 
+    server-provisioned-key =
+      { ... }:
+      {
+        services.openssh.enable = true;
+        virtualisation.credentials = {
+          "ssh.authorized_keys.root" = {
+            text = snakeOilPublicKey;
+          };
+        };
+      };
+
     client =
       { ... }:
       {
@@ -299,6 +310,7 @@ in
     server_null_pam.wait_for_unit("sshd", timeout=60)
     server_null_pam.fail("journalctl -u sshd.service | grep 'Unsupported option UsePAM'")
     server_sftp.wait_for_unit("sshd", timeout=60)
+    server_provisioned_key.wait_for_unit("sshd", timeout=60)
 
     server_lazy.wait_for_unit("sshd.socket", timeout=60)
     server_localhost_only_lazy.wait_for_unit("sshd.socket", timeout=60)
@@ -362,6 +374,16 @@ in
         )
         client.succeed(
             "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-lazy true",
+            timeout=30
+        )
+
+    with subtest("provisioned-authkey"):
+        client.succeed(
+            "cat ${snakeOilPrivateKey} > privkey.snakeoil"
+        )
+        client.succeed("chmod 600 privkey.snakeoil")
+        client.succeed(
+            "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i privkey.snakeoil server-provisioned-key true",
             timeout=30
         )
 
