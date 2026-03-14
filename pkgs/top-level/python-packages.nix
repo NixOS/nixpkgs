@@ -5903,6 +5903,8 @@ self: super: with self; {
 
   fountains = callPackage ../development/python-modules/fountains { };
 
+  fowl = callPackage ../development/python-modules/fowl { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fpdf = callPackage ../development/python-modules/fpdf { };
@@ -17579,6 +17581,8 @@ self: super: with self; {
   shtab = callPackage ../development/python-modules/shtab { };
 
   shutilwhich = callPackage ../development/python-modules/shutilwhich { };
+
+  shwim = callPackage ../development/python-modules/shwim { };
 
   sievelib = callPackage ../development/python-modules/sievelib { };
 
