@@ -3,9 +3,11 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  gitMinimal,
   installShellFiles,
   testers,
   nix-update-script,
+  writableTmpDirAsHomeHook,
   ghq,
 }:
 
@@ -22,7 +24,10 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-RRxRwYTkveOZvvxAwpG9ie4+ZdUDDkZZfX5cNn0DAhA=";
 
-  doCheck = false;
+  nativeCheckInputs = [
+    gitMinimal
+    writableTmpDirAsHomeHook
+  ];
 
   ldflags = [
     "-X=main.Version=${finalAttrs.version}"
