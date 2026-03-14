@@ -1,14 +1,14 @@
 # Type check the CI scripts in ci/github-script using TypeScript
 {
   importNpmLock,
-  nodejs,
+  nodejs_24,
   runCommand,
   writeShellScriptBin,
 }:
 let
   npmDeps = importNpmLock.buildNodeModules {
     npmRoot = ./.;
-    inherit nodejs;
+    nodejs = nodejs_24;
   };
 
   # Files from ci/ that are referenced by the scripts
@@ -18,7 +18,7 @@ let
 in
 runCommand "typecheck-ci-scripts"
   {
-    nativeBuildInputs = [ nodejs ];
+    nativeBuildInputs = [ nodejs_24 ];
     passthru.driver = writeShellScriptBin "typecheck-ci-scripts" ''
       nix-build --no-out-link "$@" \
         ${toString ./..} -A typecheck-ci-scripts

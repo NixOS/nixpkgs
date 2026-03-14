@@ -4,7 +4,14 @@
     "allowJs": true,
     "noEmit": true,
     "target": "ES2024",
-    "lib": ["ESNext"],
+    "lib": [
+      "es2024",
+      "ESNext.Array",
+      "ESNext.Collection",
+      "ESNext.Error",
+      "ESNext.Iterator",
+      "ESNext.Promise"
+    ],
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
