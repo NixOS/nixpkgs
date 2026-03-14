@@ -6,14 +6,14 @@
   hatchling,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-embeddings-openai";
   version = "0.5.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_embeddings_openai";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-CRvQw+kYJ0jogn3n15cTohnV9eDcl9G7eycc9SRSDks=";
   };
 
@@ -32,4 +32,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
