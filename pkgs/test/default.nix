@@ -109,6 +109,8 @@ in
       gccTests = recurseIntoAttrs gccTests;
     };
 
+  eval = callPackage ./eval { };
+
   devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
 
   stdenv-inputs = callPackage ./stdenv-inputs { };
