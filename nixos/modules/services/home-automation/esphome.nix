@@ -17,7 +17,9 @@ let
 
   cfg = config.services.esphome;
 
-  stateDir = "/var/lib/esphome";
+  defaultStateDir = "/var/lib/esphome";
+  stateDirIsDefault = cfg.stateDir == defaultStateDir; # use DynamicUser only if using default stateDir
+  stateDirInHome = lib.hasPrefix "/home/" cfg.stateDir; # disable ProtectHome if stateDir is in /home
 
   esphomeParams =
     if cfg.enableUnixSocket then
@@ -49,6 +51,13 @@ in
       type = types.port;
       default = 6052;
       description = "esphome port";
+    };
+
+    stateDir = mkOption {
+      type = types.path;
+      default = defaultStateDir;
+      example = "/persist/esphome";
+      description = "Directory which ESPHome uses for its project files and working state.";
     };
 
     openFirewall = mkOption {
@@ -92,18 +101,17 @@ in
 
       environment = {
         # platformio fails to determine the home directory when using DynamicUser
-        PLATFORMIO_CORE_DIR = "${stateDir}/.platformio";
+        PLATFORMIO_CORE_DIR = "${cfg.stateDir}/.platformio";
       }
       // lib.optionalAttrs cfg.usePing { ESPHOME_DASHBOARD_USE_PING = "true"; };
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${stateDir}";
-        DynamicUser = true;
+        ExecStart = "${cfg.package}/bin/esphome dashboard ${esphomeParams} ${cfg.stateDir}";
+        DynamicUser = stateDirIsDefault;
         User = "esphome";
         Group = "esphome";
-        WorkingDirectory = stateDir;
-        StateDirectory = "esphome";
-        StateDirectoryMode = "0750";
+        WorkingDirectory = cfg.stateDir;
+        ReadWritePaths = [ cfg.stateDir ];
         Restart = "on-failure";
         RuntimeDirectory = mkIf cfg.enableUnixSocket "esphome";
         RuntimeDirectoryMode = "0750";
@@ -120,7 +128,6 @@ in
         #PrivateTmp = true; # Implied by DynamicUser
         ProtectClock = true;
         ProtectControlGroups = true;
-        ProtectHome = true;
         ProtectHostname = false; # breaks bwrap
         ProtectKernelLogs = false; # breaks bwrap
         ProtectKernelModules = true;
@@ -144,7 +151,30 @@ in
           "@mount" # Required by platformio for chroot
         ];
         UMask = "0077";
+      }
+      // lib.optionalAttrs stateDirIsDefault {
+        StateDirectory = "esphome";
+        StateDirectoryMode = "0750";
+      }
+      // lib.optionalAttrs (!stateDirIsDefault) {
+        NoNewPrivileges = true;
+        RemoveIPC = true;
+      }
+      // lib.optionalAttrs (!stateDirInHome) {
+        ProtectHome = true;
       };
     };
+
+    users.groups.esphome = lib.mkIf (!stateDirIsDefault) { };
+    users.users.esphome = lib.mkIf (!stateDirIsDefault) {
+      isSystemUser = true;
+      group = "esphome";
+      home = cfg.stateDir;
+      description = "ESPHome dashboard user";
+    };
+
+    systemd.tmpfiles.rules = lib.mkIf (!stateDirIsDefault) [
+      "d '${cfg.stateDir}' 0750 esphome esphome - -"
+    ];
   };
 }
