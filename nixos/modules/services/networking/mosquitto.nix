@@ -773,8 +773,8 @@ in
       lib.imap0 (idx: listener: {
         name = "mosquitto/acl-${toString idx}.conf";
         value = {
-          user = config.users.users.mosquitto.name;
-          group = config.users.users.mosquitto.group;
+          uid = config.ids.uids.mosquitto;
+          gid = config.ids.gids.mosquitto;
           mode = "0400";
           text = (
             lib.concatStringsSep "\n" (
