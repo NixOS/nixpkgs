@@ -19063,6 +19063,10 @@ self: super: with self; {
 
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
+  tensorflow-model-optimization =
+    callPackage ../development/python-modules/tensorflow-model-optimization
+      { };
+
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
   tensorflowWithCuda = self.tensorflow.override { cudaSupport = true; };
