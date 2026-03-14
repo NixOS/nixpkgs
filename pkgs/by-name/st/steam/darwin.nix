@@ -28,8 +28,5 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit (linuxSteam) buildRuntimeEnv;
-
-    run = throw "steam-run is only available for Linux; the Darwin steam package installs Valve's bootstrap app bundle.";
-    run-free = throw "steam-run-free is only available for Linux; the Darwin steam package installs Valve's bootstrap app bundle.";
   };
 }
