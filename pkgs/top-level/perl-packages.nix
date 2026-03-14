@@ -6135,6 +6135,30 @@ with self;
     };
   };
 
+  ConfigScoped = buildPerlModule rec {
+    pname = "Config-Scoped";
+    version = "0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAISSMAI/Config-Scoped-${version}.tar.gz";
+      hash = "sha256-NQ2MdJJ2EwJNA0N0KPHs7bJ3Yq05PQ5yC3wDz6uBgSs=";
+    };
+    propagatedBuildInputs = [
+      Error
+      ParseRecDescent
+    ];
+    meta = {
+      description = "Feature-rich configuration file parser";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
+    };
+  };
+
   ConfigStd = buildPerlModule {
     pname = "Config-Std";
     version = "0.903";
@@ -26550,6 +26574,26 @@ with self;
     };
   };
 
+  ObjectDestroyer = buildPerlPackage rec {
+    pname = "Object-Destroyer";
+    version = "2.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/Object-Destroyer-${version}.tar.gz";
+      hash = "sha256-3BnVFtVuiYc9H3TSoCm+ixQ8zT1AinwcL+7angkVfYo=";
+    };
+    meta = {
+      description = "Make objects with circular references DESTROY normally";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
+      ];
+    };
+  };
+
   ObjectEvent = buildPerlPackage rec {
     pname = "Object-Event";
     version = "1.23";
@@ -32385,6 +32429,27 @@ with self;
       license = with lib.licenses; [
         artistic1
         gpl1Plus
+      ];
+    };
+  };
+
+  SysFilesystem = buildPerlPackage rec {
+    pname = "Sys-Filesystem";
+    version = "1.408";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RE/REHSACK/Sys-Filesystem-${version}.tar.gz";
+      hash = "sha256-V34RByuJfXGMI0GBpcBZ+NwEtl/ZVGXwsSkstjWXTZc=";
+    };
+    propagatedBuildInputs = [
+      ModulePluggable
+      ParamsUtil
+    ];
+    meta = {
+      description = "Retrieve list of filesystems and their properties";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        de11n
+        despsyched
       ];
     };
   };
