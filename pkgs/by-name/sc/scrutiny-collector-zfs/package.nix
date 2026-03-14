@@ -2,15 +2,14 @@
   buildGoModule,
   fetchFromGitHub,
   makeWrapper,
-  smartmontools,
-  nixosTests,
+  zfs,
   lib,
   nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   version = "1.9.1";
-  pname = "scrutiny-collector";
+  pname = "scrutiny-collector-zfs";
 
   src = fetchFromGitHub {
     owner = "Starosdev";
@@ -19,7 +18,7 @@ buildGoModule (finalAttrs: {
     hash = "sha256-t0oy1y8aJadgmQE/pR/8kwW4GAuKvsUtU76aV1nhww0=";
   };
 
-  subPackages = "collector/cmd/collector-metrics";
+  subPackages = "collector/cmd/collector-zfs";
 
   vendorHash = "sha256-nfL+44lKBmAcScoV0AHotSotQz4Z3kHIpePERuncM6c=";
 
@@ -34,22 +33,21 @@ buildGoModule (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    cp $GOPATH/bin/collector-metrics $out/bin/scrutiny-collector-metrics
-    wrapProgram $out/bin/scrutiny-collector-metrics \
-      --prefix PATH : ${lib.makeBinPath [ smartmontools ]}
+    cp $GOPATH/bin/collector-zfs $out/bin/scrutiny-collector-zfs
+    wrapProgram $out/bin/scrutiny-collector-zfs \
+      --prefix PATH : ${lib.makeBinPath [ zfs ]}
     runHook postInstall
   '';
 
-  passthru.tests.scrutiny-collector = nixosTests.scrutiny;
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Hard disk metrics collector for Scrutiny";
+    description = "ZFS pool metrics collector for Scrutiny";
     homepage = "https://github.com/Starosdev/scrutiny";
     changelog = "https://github.com/Starosdev/scrutiny/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samasaur ];
-    mainProgram = "scrutiny-collector-metrics";
+    mainProgram = "scrutiny-collector-zfs";
     platforms = lib.platforms.linux;
   };
 })

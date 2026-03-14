@@ -53,7 +53,7 @@ in
         description = ''
           Scrutiny settings to be rendered into the configuration file.
 
-          See <https://github.com/AnalogJ/scrutiny/blob/master/example.scrutiny.yaml>.
+          See <https://github.com/Starosdev/scrutiny/blob/master/example.scrutiny.yaml>.
 
           Options containing secret data should be set to an attribute set
           containing the attribute `_secret`. This attribute should be a string
@@ -156,7 +156,7 @@ in
           description = ''
             Collector settings to be rendered into the collector configuration file.
 
-            See <https://github.com/AnalogJ/scrutiny/blob/master/example.collector.yaml>.
+            See <https://github.com/Starosdev/scrutiny/blob/master/example.collector.yaml>.
 
             Options containing secret data should be set to an attribute set
             containing the attribute `_secret`. This attribute should be a string
@@ -187,6 +187,63 @@ in
               ];
               default = "INFO";
               description = "Log level for Scrutiny collector.";
+            };
+          };
+        };
+      };
+      zfs-collector = {
+        enable = mkEnableOption "the Scrutiny ZFS metrics collector" // {
+          default = cfg.enable;
+          defaultText = lib.literalExpression "config.services.scrutiny.enable";
+        };
+
+        package = mkPackageOption pkgs "scrutiny-collector-zfs" { };
+
+        schedule = mkOption {
+          type = str;
+          default = "daily";
+          description = ''
+            How often to run the collector in systemd calendar format.
+          '';
+        };
+
+        settings = mkOption {
+          description = ''
+            Collector settings to be rendered into the collector configuration file.
+
+            See <https://github.com/Starosdev/scrutiny/blob/master/example.collector-zfs.yaml>.
+
+            Options containing secret data should be set to an attribute set
+            containing the attribute `_secret`. This attribute should be a string
+            or structured JSON with `quote = false;`, pointing to a file that
+            contains the value the option should be set to.
+          '';
+          default = { };
+          type = submodule {
+            freeformType = settingsFormat.type;
+
+            options.host.id = mkOption {
+              type = nullOr str;
+              default = null;
+              description = "Host ID for identifying/labelling groups of disks";
+            };
+
+            options.api.endpoint = mkOption {
+              type = str;
+              default = "http://${cfg.settings.web.listen.host}:${toString cfg.settings.web.listen.port}${cfg.settings.web.listen.basepath}";
+              defaultText = literalExpression ''"http://''${config.services.scrutiny.settings.web.listen.host}:''${config.services.scrutiny.settings.web.listen.port}''${config.services.scrutiny.settings.web.listen.basepath}"'';
+              description = "Scrutiny app API endpoint for sending ZFS metrics to.";
+            };
+
+            options.log.level = mkOption {
+              type = enum [
+                "DEBUG"
+                "INFO"
+                "WARNING"
+                "ERROR"
+              ];
+              default = "INFO";
+              description = "Log level for Scrutiny ZFS collector.";
             };
           };
         };
@@ -273,7 +330,33 @@ in
         timers.scrutiny-collector.timerConfig.Persistent = true;
       };
     })
+    (mkIf cfg.zfs-collector.enable {
+      systemd = {
+        services.scrutiny-zfs-collector = {
+          description = "Scrutiny ZFS Collector Service";
+          enableStrictShellChecks = true;
+          after = lib.optional cfg.enable "scrutiny.service";
+          wants = lib.optional cfg.enable "scrutiny.service";
+          environment = {
+            COLLECTOR_VERSION = "1";
+            COLLECTOR_API_ENDPOINT = cfg.zfs-collector.settings.api.endpoint;
+          };
+          preStart = ''
+            ${genJqSecretsReplacementSnippet cfg.zfs-collector.settings "/run/scrutiny-zfs-collector/config.yaml"}
+          '';
+          serviceConfig = {
+            Type = "oneshot";
+            ExecStart = "${getExe cfg.zfs-collector.package} run --config /run/scrutiny-zfs-collector/config.yaml";
+            RuntimeDirectory = "scrutiny-zfs-collector";
+            RuntimeDirectoryMode = "0700";
+          };
+          startAt = cfg.zfs-collector.schedule;
+        };
+
+        timers.scrutiny-zfs-collector.timerConfig.Persistent = true;
+      };
+    })
   ];
 
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [ samasaur ];
 }
