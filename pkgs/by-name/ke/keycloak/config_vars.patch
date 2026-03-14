@@ -1,8 +1,8 @@
 diff --git a/quarkus/dist/src/main/content/bin/kc.sh b/quarkus/dist/src/main/content/bin/kc.sh
-index d7be862cde..16f9aa78e0 100644
+index 9a6e62e2dd..8faa4bd1f8 100644
 --- a/bin/kc.sh
 +++ b/bin/kc.sh
-@@ -32,8 +32,8 @@ abs_path () {
+@@ -34,12 +34,12 @@ abs_path () {
    fi
  }
  
@@ -11,5 +11,10 @@ index d7be862cde..16f9aa78e0 100644
 +SERVER_OPTS="-Dkc.home.dir=$KC_HOME_DIR"
 +SERVER_OPTS="$SERVER_OPTS -Djboss.server.config.dir=$KC_CONF_DIR"
  SERVER_OPTS="$SERVER_OPTS -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ SERVER_OPTS="$SERVER_OPTS -Dpicocli.disable.closures=true"
  SERVER_OPTS="$SERVER_OPTS -Dquarkus-log-max-startup-records=10000"
- CLASSPATH_OPTS="'$(abs_path "../lib/quarkus-run.jar"):$(abs_path "../lib/bootstrap/*")'"
+-CLASSPATH_OPTS="'$(abs_path "../lib/quarkus-run.jar")'"
++CLASSPATH_OPTS="'$KC_HOME_DIR/lib/quarkus-run.jar'"
+ 
+ DEBUG_MODE="${DEBUG:-false}"
+ DEBUG_PORT="${DEBUG_PORT:-8787}"
