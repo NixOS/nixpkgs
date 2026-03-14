@@ -13,14 +13,17 @@ let
 in
 symlinkJoin {
   pname = "sjmcl";
-  inherit (sjmcl') version;
+  inherit (sjmcl') version meta;
 
   paths = [
     sjmcl'
     hicolor-icon-theme
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+  ];
+
   buildInputs = [
     desktop-file-utils
     hicolor-icon-theme
@@ -30,16 +33,4 @@ symlinkJoin {
     wrapProgram $out/bin/SJMCL \
       --prefix PATH : "${lib.makeBinPath ([ desktop-file-utils ] ++ jdks)}"
   '';
-
-  meta = {
-    inherit (sjmcl'.meta)
-      description
-      homepage
-      changelog
-      license
-      maintainers
-      mainProgram
-      platforms
-      ;
-  };
 }

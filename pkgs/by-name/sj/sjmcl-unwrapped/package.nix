@@ -10,13 +10,13 @@
   wrapGAppsHook4,
   pkg-config,
   openssl,
+  glib-networking,
+  webkitgtk_4_1,
   cairo,
   gdk-pixbuf,
-  glib-networking,
   gtk3,
   libsoup_3,
   pango,
-  webkitgtk_4_1,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sjmcl-unwrapped";
@@ -31,9 +31,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
-  cargoLock.lockFile = "${finalAttrs.src}/${finalAttrs.cargoRoot}/Cargo.lock";
-  tauriBundleType = "deb";
-  doCheck = false;
+  cargoHash = "sha256-kui9FVuknNHtP30f08vvSjWJOaNIWvil/ruQqxtKqys=";
+
+  cargoBuildFlags = [
+    "--package"
+    "SJMCL"
+  ];
+  cargoTestFlags = finalAttrs.cargoBuildFlags ++ [
+    "--all-targets"
+  ];
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
@@ -47,7 +53,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cargo-tauri.hook
     pkg-config
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wrapGAppsHook4
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
