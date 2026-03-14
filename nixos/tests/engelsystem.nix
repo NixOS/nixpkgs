@@ -25,7 +25,7 @@
 
   testScript = ''
     engelsystem.start()
-    engelsystem.wait_for_unit("phpfpm-engelsystem.service")
+    engelsystem.wait_for_unit("nginx.service")
     engelsystem.wait_until_succeeds("curl engelsystem/login -sS -f")
     engelsystem.succeed(
         "curl engelsystem/login -sS -f -c cookie | xmllint -html -xmlout - >login"

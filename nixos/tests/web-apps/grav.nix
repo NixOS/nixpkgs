@@ -12,7 +12,6 @@
 
   testScript = ''
     start_all()
-    machine.wait_for_unit("phpfpm-grav.service")
     machine.wait_for_open_port(80)
 
     # The first request to a fresh install should result in a redirect to the
