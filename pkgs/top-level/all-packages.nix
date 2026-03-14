@@ -8755,6 +8755,7 @@ with pkgs;
       inherit dbus;
     };
     skim = callPackage ../by-name/nu/nushell-plugin-skim/package.nix { };
+    clipboard = callPackage ../by-name/nu/nushell-plugin-clipboard/package.nix { };
     semver = callPackage ../by-name/nu/nushell-plugin-semver/package.nix { };
     hcl = callPackage ../by-name/nu/nushell-plugin-hcl/package.nix { };
     desktop_notifications =
