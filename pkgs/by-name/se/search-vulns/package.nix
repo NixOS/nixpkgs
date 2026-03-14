@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "search-vulns";
-  version = "1.0.5";
+  version = "1.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ra1nb0rn";
     repo = "search_vulns";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Or0B6ENoSpaoYwUsd2jrDKr5gHjORMxvTQzlkoNkPdw=";
+    hash = "sha256-0aqAjDJy+ShybYawUFyqKzz3yDut5n3t47lCEksykEU=";
     fetchSubmodules = true;
   };
 

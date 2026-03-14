@@ -96,6 +96,8 @@ let
     (lib.filter (path: lib.length path > 3))
     (map (path: lib.elemAt path 3))
     (map lib.singleton)
+    # Filter out new packages
+    (lib.filter (attrPath: lib.hasAttrByPath attrPath pkgs))
   ];
 
   # An attribute can appear in affected *and* touched
