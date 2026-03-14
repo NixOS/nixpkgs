@@ -7337,6 +7337,8 @@ self: super: with self; {
 
   ibeacon-ble = callPackage ../development/python-modules/ibeacon-ble { };
 
+  ibind = callPackage ../development/python-modules/ibind { };
+
   ibis = callPackage ../development/python-modules/ibis { };
 
   ibis-framework = callPackage ../development/python-modules/ibis-framework { };
