@@ -10,6 +10,7 @@
   drkonqi = callPackage ./drkonqi { };
   flatpak-kcm = callPackage ./flatpak-kcm { };
   kactivitymanagerd = callPackage ./kactivitymanagerd { };
+  kapsule = callPackage ./kapsule { };
   kde-cli-tools = callPackage ./kde-cli-tools { };
   kde-gtk-config = callPackage ./kde-gtk-config { };
   kdecoration = callPackage ./kdecoration { };
