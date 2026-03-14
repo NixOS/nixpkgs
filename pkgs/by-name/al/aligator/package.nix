@@ -14,9 +14,9 @@
 
   # buildInputs
   fmt,
+  mimalloc,
 
   # propagatedBuildInputs
-  suitesparse,
   crocoddyl,
   pinocchio,
 
@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aligator";
-  version = "0.16.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "Simple-Robotics";
     repo = "aligator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OyCJa2iTkCxVLooSKdVgBd0y7rHObo4vFcc56t48TSY=";
+    hash = "sha256-qdXZo7IvgcUFEJARwxpSaHJVRlZ6HdgRADPOiY3oCpk=";
   };
 
   outputs = [
@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     fmt
+    mimalloc
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
@@ -60,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     crocoddyl
     pinocchio
-    suitesparse
   ];
 
   checkInputs = [
