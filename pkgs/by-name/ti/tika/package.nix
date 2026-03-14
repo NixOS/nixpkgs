@@ -17,7 +17,7 @@
 
 let
   mvnDepsHashes = {
-    "x86_64-linux" = "sha256-ZlGOxVXU63AKzfWeOLGPa2l8v+Rv8Bzr4H/Er62cxk8=";
+    "x86_64-linux" = "sha256-KplVoVM7KpOE/xFxcnW6QCGFOKLYlc6xehBuZBk7J6s=";
     "aarch64-linux" = "sha256-CrOYBEnp8cVpdF2PrpGQjmdYH8ZKupm9Jf1LVyNoObk=";
     "x86_64-darwin" = "sha256-D1QkCTYep9RbNUaZPrnbgkR94cvQkX3xxxUxwyLIqx8=";
     "aarch64-darwin" = "sha256-zvvko6wSJoc2cgMLl7XVmypq0vVTirrIpJiEdypPlrU=";
