@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "postgrest";
-  version = "2.28.0";
+  version = "2.28.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "supabase-py";
     tag = "v${version}";
-    hash = "sha256-nK+IZRrKjNy84EC8krBvAZll5E0+jV3bLJh8qIVRElI=";
+    hash = "sha256-Zrmig8leWihJ0rxTx6dE6cmoIFP98QFoSve7BArLaNQ=";
   };
 
   sourceRoot = "${src.name}/src/postgrest";
