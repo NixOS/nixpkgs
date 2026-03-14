@@ -584,6 +584,7 @@ in
     _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
   firefox-syncserver = runTest ./firefox-syncserver.nix;
+  firefox_decrypt = runTest ./firefox_decrypt.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;
   firejail = runTest ./firejail.nix;
   firewall = runTest {
@@ -771,7 +772,6 @@ in
   immich = runTest ./web-apps/immich.nix;
   immich-kiosk = runTest ./web-apps/immich-kiosk.nix;
   immich-public-proxy = runTest ./web-apps/immich-public-proxy.nix;
-  immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   immichframe = runTest ./web-apps/immichframe.nix;
   incron = runTest ./incron.nix;

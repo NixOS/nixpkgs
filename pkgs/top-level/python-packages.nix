@@ -5449,8 +5449,6 @@ self: super: with self; {
 
   fasttext = callPackage ../development/python-modules/fasttext { };
 
-  fasttext-predict = callPackage ../development/python-modules/fasttext-predict { };
-
   fastuuid = callPackage ../development/python-modules/fastuuid { };
 
   fatrop = toPythonModule (
@@ -21025,7 +21023,7 @@ self: super: with self; {
   whispers = callPackage ../development/python-modules/whispers { };
 
   whisperx = callPackage ../development/python-modules/whisperx {
-    inherit (pkgs) ffmpeg;
+    ffmpeg = pkgs.ffmpeg-headless;
     ctranslate2-cpp = pkgs.ctranslate2;
   };
 

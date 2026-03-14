@@ -1,7 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoconf-archive,
+  autoreconfHook,
+  mate-common,
   pkg-config,
   gettext,
   itstool,
@@ -11,27 +14,35 @@
   vte,
   pcre2,
   wrapGAppsHook3,
+  yelp-tools,
   gitUpdater,
   nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-terminal";
-  version = "1.28.1";
+  version = "1.28.2";
 
-  src = fetchurl {
-    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor finalAttrs.version}/mate-terminal-${finalAttrs.version}.tar.xz";
-    sha256 = "8TXrGp4q4ieY7LLcGRT9tM/XdOa7ZcAVK+N8xslGnpI=";
+  src = fetchFromGitHub {
+    owner = "mate-desktop";
+    repo = "mate-terminal";
+    tag = "v${finalAttrs.version}";
+    fetchSubmodules = true;
+    hash = "sha256-tyYHMn+qwytpSNUZg4xfwnuVClxj2IcyB4C4Dsn+1Nc=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
     gettext
     itstool
+    mate-common # mate-common.m4 macros
     pkg-config
     libxml2 # xmllint
     wrapGAppsHook3
+    yelp-tools
   ];
 
   buildInputs = [
@@ -44,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
-    url = "https://git.mate-desktop.org/mate-terminal";
     odd-unstable = true;
     rev-prefix = "v";
   };

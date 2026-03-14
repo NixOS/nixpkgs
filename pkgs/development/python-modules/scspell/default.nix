@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  pytestCheckHook,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
@@ -22,6 +23,7 @@ buildPythonPackage {
   build-system = [ setuptools ];
 
   nativeCheckInputs = [
+    pytestCheckHook
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
@@ -33,7 +35,7 @@ buildPythonPackage {
   meta = {
     description = "Spell checker for source code";
     homepage = "https://github.com/myint/scspell";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ guelakais ];
     mainProgram = "scspell";
   };

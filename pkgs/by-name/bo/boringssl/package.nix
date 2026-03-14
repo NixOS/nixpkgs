@@ -11,12 +11,12 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
 stdenv.mkDerivation (finalAttrs: {
   pname = "boringssl";
-  version = "0.20251124.0";
+  version = "0.20260211.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-xRuerQhS2uk9eFNaSkl8krcepVwUDmAxc9nhLCI1w98=";
+    hash = "sha256-sN0tqnS19ltXeAd3xUiLMc6kLtTYPh2xT1F1U1mPi/M=";
   };
 
   patches = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
       "-Wno-error=stringop-overflow"
+      "-Wno-error=array-bounds"
     ]
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=character-conversion"

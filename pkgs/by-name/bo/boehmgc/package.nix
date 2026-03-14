@@ -119,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/bdwgc/bdwgc/blob/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.boehmGC;
     maintainers = [ ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     identifiers.cpeParts =
       lib.meta.cpeFullVersionWithVendor "boehm-demers-weiser" finalAttrs.version

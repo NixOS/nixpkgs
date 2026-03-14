@@ -155,7 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [
       eclairevoyant
-      marcweber
       yurrriq
     ];
     platforms = lib.platforms.all;

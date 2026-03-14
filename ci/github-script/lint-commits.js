@@ -145,7 +145,7 @@ async function checkCommitMessages({ github, context, core, repoPath }) {
   if (failures.size !== 0) {
     core.error(
       'Please review the guidelines at ' +
-        'https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#commit-conventions, ' +
+        '<https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#commit-conventions>, ' +
         'as well as the applicable area-specific guidelines linked there.',
     )
     core.setFailed('Committers: merging is discouraged.')

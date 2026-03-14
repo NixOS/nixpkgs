@@ -262,8 +262,8 @@ let
         mktplcRef = {
           name = "ng-template";
           publisher = "Angular";
-          version = "20.3.0";
-          hash = "sha256-o3e2qVKw/sfnFHbHHdRlB9UjEx1KLD1KVoaAsnlYjmY=";
+          version = "21.2.2";
+          hash = "sha256-rpll3EsTGEuynrw7EsP3GeltG/vtYqgO8mvTCVyU1ao=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/Angular.ng-template/changelog";
@@ -1902,8 +1902,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.5";
-          hash = "sha256-KTKGjfS+xtn6NMFCdYq1S+idoXpkME/BA4jAhSyGiHc=";
+          version = "1.18.7";
+          hash = "sha256-8zT3nFWyMmOmGxAqEjulh/K+45gUnKDgI7easR+ErpU=";
         };
 
         meta = {
