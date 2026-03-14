@@ -12,13 +12,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "age-plugin-se";
-  version = "0.1.4";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "remko";
     repo = "age-plugin-se";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sg73DzlW4aXNbIIePZox4JkF10OfsMtPw0q/0DWwgDk=";
+    hash = "sha256-ga9EYfvscXf8VHSptjgnjaeZT+D/69PAr/s53JOHG20=";
   };
 
   nativeBuildInputs = [
