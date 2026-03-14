@@ -123,6 +123,7 @@ let
         "smartctl"
         "smokeping"
         "snmp"
+        "speedtest"
         "sql"
         "statsd"
         "storagebox"
