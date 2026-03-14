@@ -23927,12 +23927,6 @@
     email = "hey@sandydoo.me";
     matrix = "@sandydoo:matrix.org";
   };
-  santosh = {
-    email = "santoshxshrestha@gmail.com";
-    name = "Santosh Shrestha";
-    github = "santoshxshrestha";
-    githubId = 182977126;
-  };
   sarahec = {
     email = "seclark@nextquestion.net";
     github = "sarahec";
@@ -28401,6 +28395,12 @@
     github = "viluon";
     githubId = 7235381;
     name = "Ondřej Kvapil";
+  };
+  vimlinuz = {
+    email = "vimlinuz@gmail.com";
+    name = "Santosh Shrestha";
+    github = "vimlinuz";
+    githubId = 182977126;
   };
   vincentbernat = {
     email = "vincent@bernat.ch";
