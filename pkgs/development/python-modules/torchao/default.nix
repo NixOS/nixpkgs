@@ -105,6 +105,9 @@ buildPythonPackage (finalAttrs: {
     # Requires internet access
     "test_on_dummy_distilbert"
 
+    # execnet.gateway_base.DumpError: can't serialize <class 'torch.dtype'>
+    "test_numerical_consistency_per_tensor"
+
     # FileNotFoundError: [Errno 2] No such file or directory: 'checkpoints/meta-llama/Llama-2-7b-chat-hf/model.pth'
     "test_gptq_mt"
 

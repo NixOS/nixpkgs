@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -46,6 +47,13 @@ buildPythonPackage (finalAttrs: {
     rev = "6f2aa7254458145f99d7004cbd6ebc8e53a06404";
     hash = "sha256-ryR5iO3IwkoLdMLSFGhHCLl0P8yD+GQdZFEE6M/EYh0=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/meta-pytorch/torchtune/commit/cab42402c59a32a0b3d8e2dfbe03817c153653b5.patch";
+      hash = "sha256-ud3LgvAjq5h5ekXrLuzaNBp7X0ltIwIrDcVbXHUuCec=";
+    })
+  ];
 
   build-system = [
     setuptools
