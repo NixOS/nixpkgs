@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "mediapy";
-  version = "1.2.5";
+  version = "1.2.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LHpMUXBLJmQnNxkKbl++qCYLAn/enZnGRKZwJVquhg8=";
+    hash = "sha256-LIZs+goXAhP3cbHdVYSi6C2NDcD6lJgvg+KarifknIM=";
   };
 
   nativeBuildInputs = [ flit-core ];
