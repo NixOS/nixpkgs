@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperion.ng";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "hyperion-project";
     repo = "hyperion.ng";
     rev = version;
-    hash = "sha256-lKLXgOrXp8DLmlpQe/33A30l4K9VX8P0q2LUA+lLYws=";
+    hash = "sha256-RpD/DGqnTT62FAG5tgESEy+I/PgsJWkfk4fvu2UkouE=";
     # needed for `dependencies/external/`:
     # * rpi_ws281x` - not possible to use as a "system" lib
     # * qmdnsengine - not in nixpkgs yet
