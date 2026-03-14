@@ -70,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests)
       btrbk
+      btrbk-sudo-wheel
       btrbk-no-timer
       btrbk-section-order
       btrbk-doas
