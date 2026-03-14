@@ -36,7 +36,7 @@ in
       type = types.submodule { freeformType = types.attrsOf (types.nullOr types.str); };
       defaultText = lib.literalExpression ''
         {
-          HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox";
+          HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox?no_tmp_dir=1";
           HBOX_STORAGE_PREFIX_PATH = "data";
           HBOX_DATABASE_DRIVER = "sqlite3";
           HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
@@ -44,7 +44,6 @@ in
           HBOX_OPTIONS_CHECK_GITHUB_RELEASE = "false";
           HBOX_MODE = "production";
           HOME = "/var/lib/homebox";
-          TMPDIR = "/var/lib/homebox/tmp";
         }
       '';
       description = ''
@@ -87,7 +86,9 @@ in
 
     services.homebox.settings = lib.mkMerge [
       (lib.mapAttrs (_: mkDefault) {
-        HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox";
+        # We cannot use a tempdir as homebox wants to rename the file, which does not work across filesystem boundaries
+        # also see: https://github.com/google/go-cloud/issues/3294 and https://pkg.go.dev/gocloud.dev/blob/fileblob#URLOpener
+        HBOX_STORAGE_CONN_STRING = "file:///var/lib/homebox?no_tmp_dir=1";
         HBOX_STORAGE_PREFIX_PATH = "data";
         HBOX_DATABASE_DRIVER = "sqlite3";
         HBOX_DATABASE_SQLITE_PATH = "/var/lib/homebox/data/homebox.db?_pragma=busy_timeout=999&_pragma=journal_mode=WAL&_fk=1";
@@ -96,10 +97,8 @@ in
         HBOX_MODE = "production";
         # Fix this startup issue:
         #   failed to create modcache index dir: mkdir /var/empty/.cache: read-only file system
+        # TODO: remove once https://github.com/golang/tools/commit/03cb4551c662c0e078502fe5f317ca4114b89cd8 is available
         HOME = "/var/lib/homebox";
-        # Fix uploading/saving attachments/images:
-        # [...] rename /tmp/ced4804c80b1ed1f6e88060f6d829db421e6dbf3a189715265900b5d6b0243ed.1889b3d16ab36e22.tmp /var/lib/homebox/data/5f42f81b-e9ad-4495-b6a6-9e9f704db30e/documents/ced4804c80b1ed1f6e88060f6d829db421e6dbf3a189715265900b5d6b0243ed: invalid cross-device link" [...]
-        TMPDIR = "/var/lib/homebox/tmp";
       })
 
       (mkIf cfg.database.createLocally {
