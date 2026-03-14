@@ -32,6 +32,7 @@
   wrapQtAppsHook,
   qtbase,
   qtsvg,
+  emacs,
 }:
 
 let
@@ -46,10 +47,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RY2UdpYl5z1fYjJQD0nLrcsrGDOA1D0iZqD5cBrrnFs=";
   };
 
+  outputs = [
+    "out"
+    "info"
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config
     texinfo
+    emacs
   ]
   ++ lib.optionals withQt [
     qttools
@@ -122,6 +129,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  installTargets = [
+    "install"
+    "install-info"
+  ];
 
   meta = {
     homepage = "http://www.gnuplot.info/";
