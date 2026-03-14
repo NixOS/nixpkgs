@@ -35,6 +35,23 @@ let
       DhcpDdns = cfg.dhcp-ddns.settings;
     }
   );
+
+  dbLibraries = [
+    "libdhcp_pgsql.so"
+    "libdhcp_mysql.so"
+  ];
+  mkEnableDatabaseOption =
+    srv:
+    lib.mkOption {
+      type = lib.types.bool;
+      default = lib.any (hook: lib.elem (hook.library or "") dbLibraries) (
+        cfg.${srv}.settings.hooks-libraries or [ ]
+      );
+      defaultText = lib.literalExpression ''
+        lib.any (hook: lib.elem (hook.library or "") ${toString dbLibraries}) (cfg.${srv}.settings.hooks-libraries or [ ]);
+      '';
+      description = "Enable utilities required for database support.";
+    };
 in
 {
   options.services.kea = with lib.types; {
@@ -140,6 +157,8 @@ in
               Kea DHCP4 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp4-srv.html>.
             '';
           };
+
+          enableDatabase = mkEnableDatabaseOption "dhcp4";
         };
       };
     };
@@ -206,6 +225,8 @@ in
               Kea DHCP6 configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/dhcp6-srv.html>.
             '';
           };
+
+          enableDatabase = mkEnableDatabaseOption "dhcp6";
         };
       };
     };
@@ -293,7 +314,10 @@ in
     lib.mkIf (cfg.ctrl-agent.enable || cfg.dhcp4.enable || cfg.dhcp6.enable || cfg.dhcp-ddns.enable) (
       lib.mkMerge [
         {
-          environment.systemPackages = [ cfg.package ];
+          environment.systemPackages = [
+            cfg.package
+          ]
+          ++ lib.optionals (cfg.dhcp4.enableDatabase || cfg.dhcp6.enableDatabase) [ cfg.package.db ];
 
           users.users.kea = {
             isSystemUser = true;
@@ -384,6 +408,8 @@ in
 
             environment = commonEnvironment;
 
+            path = lib.optionals cfg.dhcp4.enableDatabase [ cfg.package.db ];
+
             restartTriggers = [
               dhcp4Config
             ];
@@ -440,6 +466,8 @@ in
             ];
 
             environment = commonEnvironment;
+
+            path = lib.optionals cfg.dhcp6.enableDatabase [ cfg.package.db ];
 
             restartTriggers = [
               dhcp6Config
