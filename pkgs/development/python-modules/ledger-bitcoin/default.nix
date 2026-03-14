@@ -8,6 +8,7 @@
   bip32,
   coincurve,
   typing-extensions,
+  hidapi,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +30,7 @@ buildPythonPackage rec {
     bip32
     coincurve
     typing-extensions
+    hidapi
   ];
 
   pythonImportsCheck = [ "ledger_bitcoin" ];
