@@ -6,14 +6,14 @@
   python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3wsr";
   version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "roosta";
     repo = "i3wsr";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-8cQM2M9XjS4FSSX1/WHqmTP842Ahd1XoaqOWSGSEE0s=";
   };
 
@@ -37,4 +37,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sebbadk ];
   };
-}
+})
