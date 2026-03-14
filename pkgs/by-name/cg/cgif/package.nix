@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cgif";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "dloebl";
     repo = "cgif";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vnm0YIMoU6gJCxSP28mqBtqZnfhmhmvaSp5DvZJqW/A=";
+    hash = "sha256-Eoq2QPDz5YYw22Ux1H9CYFN1x+/1YTYqi/rmdwf+Hk4=";
   };
 
   nativeBuildInputs = [
