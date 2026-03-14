@@ -1,6 +1,7 @@
 {
   steam-unwrapped,
   stdenvNoCC,
+  ...
 }:
 
 stdenvNoCC.mkDerivation {

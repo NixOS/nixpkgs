@@ -14,6 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   bootstrapVersion = "6.1";
   clientVersion = "1773426488";
+  expectedArch = if stdenvNoCC.hostPlatform.isAarch64 then "arm64" else "x86_64";
   version = "${finalAttrs.bootstrapVersion}-${finalAttrs.clientVersion}";
 
   srcFile = "appdmg_osx.zip.984652b88a9737e3f4e77c656d9ffa67d5042c2c";
@@ -62,7 +63,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     test -x "$out/bin/steam"
     test -f "$out/Applications/Steam.app/Contents/MacOS/steam_osx"
 
-    ${file}/bin/file "$out/Applications/Steam.app/Contents/MacOS/steam_osx" | grep -F "arm64"
+    file_output="$(${file}/bin/file "$out/Applications/Steam.app/Contents/MacOS/steam_osx")"
+    printf '%s\n' "$file_output" | grep -F "Mach-O"
+    printf '%s\n' "$file_output" | grep -F "${finalAttrs.expectedArch}"
 
     test "$(${xcbuild}/bin/PlistBuddy -c 'Print :CFBundleVersion' "$out/Applications/Steam.app/Contents/Info.plist" | tr -d '"')" = "${finalAttrs.bootstrapVersion}"
     test -z "$(find "$out/Applications/Steam.app" -name '._*' -print -quit)"
