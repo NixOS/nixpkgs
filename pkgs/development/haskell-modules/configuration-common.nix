@@ -14,7 +14,7 @@
 self: super:
 
 let
-  inherit (pkgs) fetchpatch lib;
+  inherit (pkgs) fetchpatch lib callPackage;
   inherit (lib) throwIfNot versionOlder;
 
   warnAfterVersion =
@@ -2875,6 +2875,8 @@ with haskellLib;
     ''
     + (drv.postPatch or "");
   }) super.pdftotext;
+
+  Gifcurry = callPackage ./gifcurry { };
 
   # QuickCheck <2.15
   # https://github.com/google/proto-lens/issues/403
