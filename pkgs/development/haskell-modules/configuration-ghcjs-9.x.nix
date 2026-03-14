@@ -60,10 +60,7 @@ with haskellLib;
   ];
 
   # https://github.com/haskellari/splitmix/pull/75
-  splitmix = appendPatch (pkgs.fetchpatch {
-    url = "https://github.com/haskellari/splitmix/commit/7ffb3158f577c48ab5de774abea47767921ef3e9.patch";
-    sha256 = "sha256-n2q4FGf/pPcI1bhb9srHjHLzaNVehkdN6kQgL0F4MMg=";
-  }) super.splitmix;
+  splitmix = appendPatch ./pathces/splitmix-update-ghcjs-condition.patch super.splitmix;
 
   # See https://gitlab.haskell.org/ghc/ghc/-/issues/26019#note_621324, without this flag the build OOMs
   SHA = haskellLib.appendConfigureFlag "--ghc-option=-fignore-interface-pragmas" super.SHA;
