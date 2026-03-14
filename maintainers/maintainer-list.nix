@@ -7858,6 +7858,12 @@
     name = "Emilia";
     keys = [ { fingerprint = "F772 3569 4B43 B599 73C2  A931 1EFB E941 B89B B810"; } ];
   };
+  EmilioPeJu = {
+    email = "emiliopeju@gmail.com";
+    github = "EmilioPeJu";
+    githubId = 26623273;
+    name = "Emilio Perez";
+  };
   emilioziniades = {
     email = "emilioziniades@protonmail.com";
     github = "emilioziniades";
