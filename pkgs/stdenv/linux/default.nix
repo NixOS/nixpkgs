@@ -714,6 +714,7 @@ in
 
         extraNativeBuildInputs = [
           prevStage.patchelf
+          prevStage.patchShebangs
           # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
           prevStage.updateAutotoolsGnuConfigScriptsHook
         ];
