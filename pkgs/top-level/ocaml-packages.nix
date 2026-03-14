@@ -2261,6 +2261,26 @@ let
 
         yaml-sexp = callPackage ../development/ocaml-modules/yaml/yaml-sexp.nix { };
 
+        yocaml = callPackage ../development/ocaml-modules/yocaml { };
+
+        yocaml_cmarkit = callPackage ../development/ocaml-modules/yocaml/cmarkit.nix { };
+
+        yocaml_eio = callPackage ../development/ocaml-modules/yocaml/eio.nix { };
+
+        yocaml_jingoo = callPackage ../development/ocaml-modules/yocaml/jingoo.nix { };
+
+        yocaml_mustache = callPackage ../development/ocaml-modules/yocaml/mustache.nix { };
+
+        yocaml_otoml = callPackage ../development/ocaml-modules/yocaml/otoml.nix { };
+
+        yocaml_runtime = callPackage ../development/ocaml-modules/yocaml/runtime.nix { };
+
+        yocaml_syndication = callPackage ../development/ocaml-modules/yocaml/syndication.nix { };
+
+        yocaml_unix = callPackage ../development/ocaml-modules/yocaml/unix.nix { };
+
+        yocaml_yaml = callPackage ../development/ocaml-modules/yocaml/yaml.nix { };
+
         yojson = callPackage ../development/ocaml-modules/yojson { };
 
         yojson_2 = yojson.overrideAttrs (_: {
