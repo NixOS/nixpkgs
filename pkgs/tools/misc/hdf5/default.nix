@@ -32,7 +32,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.14.6";
+  version = "2.1.0";
   pname =
     "hdf5"
     + lib.optionalString cppSupport "-cpp"
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     owner = "HDFGroup";
     repo = "hdf5";
     rev = "hdf5_${version}";
-    hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
+    hash = "sha256-ujZJRZyQ7bpbbwALzxTNobeVsAWNv+hxqj/H26Z4NtA=";
   };
 
   patches = [
