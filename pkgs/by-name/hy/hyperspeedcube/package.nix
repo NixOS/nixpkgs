@@ -119,7 +119,10 @@ rustPlatform.buildRustPackage rec {
       records and runs on all major operating systems plus the web.
     '';
     homepage = "https://ajfarkas.dev/hyperspeedcube/";
-    license = lib.licenses.cc-by-nc-sa-40;
+    license = with lib.licenses; [
+      mit
+      asl20
+    ];
     maintainers = [ lib.maintainers.omnipotententity ];
     platforms = [ "x86_64-linux" ];
   };
