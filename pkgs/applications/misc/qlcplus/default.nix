@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qlcplus";
-  version = "5.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "mcallegari";
     repo = "qlcplus";
     rev = "QLC+_${version}";
-    hash = "sha256-gEwcTIJhY78Ts0lUn4MVciV7sPIBkqlxPMa9I1nTHO0=";
+    hash = "sha256-UVGSmmtzNqeD+mU2nROoFqdHx79zgMPem4NHWerp3GQ=";
   };
 
   nativeBuildInputs = [
