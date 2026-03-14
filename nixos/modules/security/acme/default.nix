@@ -15,9 +15,21 @@ let
   numCerts = lib.length (builtins.attrNames cfg.certs);
   _24hSecs = 60 * 60 * 24;
 
+  # The placerholder email address used by lego in case none gets passed
+  placeholderEmail = "noemail@example.com";
+
   # Used to make unique paths for each cert/account config set
   mkHash = with builtins; val: lib.substring 0 20 (hashString "sha256" val);
-  mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
+  mkAccountHash =
+    acmeServer: data:
+    mkHash (
+      lib.concatStringsSep " " [
+        (toString acmeServer)
+        data.keyType
+        (if (data.email != null) then data.email else placeholderEmail)
+      ]
+
+    );
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
 
   # Lockdir is acme-setup.service's RuntimeDirectory.
@@ -263,6 +275,8 @@ let
         "--accept-tos" # Checking the option is covered by the assertions
         "--path"
         "."
+      ]
+      ++ lib.optionals (data.email != null) [
         "--email"
         data.email
       ]
@@ -544,7 +558,12 @@ let
           # Check if a new order is needed
           # We can only renew if the list of domains has not changed.
           # We also need an account key. Avoids #190493
-          if cmp -s domainhash.txt certificates/domainhash.txt && [ -e '${certificateKey}' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
+          if cmp -s domainhash.txt certificates/domainhash.txt && [ -e '${certificateKey}' ] && \
+            [ -e 'certificates/${keyName}.crt' ] && \
+            [ -n "$(find accounts -name '${
+              if (data.email != null) then data.email else placeholderEmail
+            }.key')" ];
+          then
             # Even if a cert is not expired, it may be revoked by the CA.
             # Try to renew, and silently fail if the cert is not expired.
             # Avoids #85794 and resolves #129838
@@ -1074,14 +1093,6 @@ in
           certs = lib.attrValues cfg.certs;
         in
         [
-          {
-            assertion = cfg.defaults.email != null || lib.all (certOpts: certOpts.email != null) certs;
-            message = ''
-              You must define `security.acme.certs.<name>.email` or
-              `security.acme.defaults.email` to register with the CA. Note that using
-              many different addresses for certs may trigger account rate limits.
-            '';
-          }
           {
             assertion = cfg.acceptTerms;
             message = ''

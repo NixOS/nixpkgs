@@ -51,7 +51,14 @@ in
           };
 
           accountchange.configuration = {
-            security.acme.certs."${config.networking.fqdn}".email = "admin@example.test";
+            # Providing an email address is optional
+            security.acme.certs."${config.networking.fqdn}".email = null;
+          };
+
+          emailplaceholder.configuration = {
+            # but Lego will default to this email address, which should not
+            # result in any change when configured
+            security.acme.certs."${config.networking.fqdn}".email = "noemail@example.com";
           };
 
           keytype.configuration = {
@@ -154,6 +161,7 @@ in
       certName = nodes.builtin.networking.fqdn;
       caDomain = nodes.acme.test-support.acme.caDomain;
     in
+    # python
     ''
       ${(import ./utils.nix).pythonUtils}
 
@@ -212,11 +220,23 @@ in
           hash_after = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem")
           # Has to do a full run to register account, which creates new certs.
           assert hash != hash_after, "Certificate was not renewed"
+          hash = hash_after
+
+          builtin.succeed("systemctl stop renew-triggered.target")
+          switch_to(builtin, "emailplaceholder")
+          builtin.wait_for_unit("renew-triggered.target")
+
+          # Check that there are still two account directories
+          builtin.succeed("test $(ls -1 /var/lib/acme/.lego/accounts | tee /dev/stderr | wc -l) -eq 2")
+          hash_after = builtin.succeed(f"sha256sum /var/lib/acme/{cert}/cert.pem")
+          assert hash == hash_after, "Implicit to explicit email placeholder renewed the certificate"
+
           # Remove the new account directory
           builtin.succeed(
               "cd /var/lib/acme/.lego/accounts"
               " && ls -1 --sort=time | tee /dev/stderr | head -1 | xargs rm -rf"
           )
+
           # old_hash will be used in the preservation tests later
           old_hash = hash_after
 
