@@ -10,25 +10,22 @@
   pytestCheckHook,
   setuptools-scm,
   setuptools,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "django-flags";
-  version = "5.0.14";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cfpb";
     repo = "django-flags";
     tag = version;
-    hash = "sha256-0IOcpl8OamNlalqNqMvmx/bkuIkaNnLwCD7nFclR8S4=";
+    hash = "sha256-4UOueNXfDouTqpLpG391zcGHTTJ8GfznYmEl33YKdv8=";
   };
 
   dependencies = [
     django
   ];
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     setuptools

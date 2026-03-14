@@ -8,7 +8,7 @@
 
 let
   pname = "postman";
-  version = "11.82.1";
+  version = "11.87.4";
 
   src =
     let
@@ -27,10 +27,10 @@ let
       name = "postman-${version}.${if stdenvNoCC.hostPlatform.isLinux then "tar.gz" else "zip"}";
       url = "https://dl.pstmn.io/download/version/${version}/${system}";
       hash = selectSystem {
-        aarch64-darwin = "sha256-7n/9ezPgpon3AEQXmoK/iazOPvRh/pDVy/YBVUwjbkI=";
-        aarch64-linux = "sha256-nn6Krn3/z7FkPRJDO7wNhny50YvuWwWWQ9lf9mk8ZGo=";
-        x86_64-darwin = "sha256-jN6TbPRkEFH9KyU3owcsrWbJvyIqMT0f8zV9OymiNzY=";
-        x86_64-linux = "sha256-PEPMrWrm57SAdaHL6ZWES0Ao7J7vn0TAX9WZ/WCFq6U=";
+        aarch64-darwin = "sha256-1ilYfvduHTh5tvIrIXmrwQgfiWnYhdXhNv/o19wUNrE=";
+        aarch64-linux = "sha256-JdO/gBT7B+FQ8mguyw7oD2hfQACfyDVxF714iVkTW2I=";
+        x86_64-darwin = "sha256-Sb66zJQJzixk032fsdAfU88Yw9t7xeFoPBlQ+pRcdmU=";
+        x86_64-linux = "sha256-a8jsIFlJD12tydTZM9Mibv+m7bcSqAN4JVQgQxB4WJo=";
       };
     };
 
