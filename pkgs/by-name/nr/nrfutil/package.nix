@@ -53,16 +53,18 @@ let
             inherit (package) hash;
           };
 
-          nativeBuildInputs = [
+          nativeBuildInputs = lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
             autoPatchelfHook
           ];
 
           buildInputs = [
+            libusb1
+            segger-jlink-headless
+          ]
+          ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
             xz
             zlib
-            libusb1
             gcc.cc.lib
-            segger-jlink-headless
           ];
 
           dontConfigure = true;
@@ -82,6 +84,12 @@ let
             versionCheckHook
           ];
 
+          # nrfutil tries to write a log file to $HOME/.nrfutil/logs/, which fails in sandbox
+          versionCheckKeepEnvironment = [ "HOME" ];
+          preVersionCheck = ''
+            export HOME=$(mktemp -d)
+          '';
+
           meta = sharedMeta // {
             mainProgram = name;
           };
@@ -90,8 +98,8 @@ let
       (
         [
           "nrfutil"
-          "nrfutil-completion"
         ]
+        ++ lib.optional (platformSources.packages ? nrfutil-completion) "nrfutil-completion"
         ++ extensions
       );
 
@@ -114,8 +122,18 @@ symlinkJoin {
           ''--prefix PATH : "$out/bin"''
           ''--prefix PATH : "$out"/lib/nrfutil-npm''
           ''--prefix PATH : "$out"/lib/nrfutil-nrf5sdk-tools''
-          "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libusb1 ]}"
-          "--set NRF_JLINK_DLL_PATH '${segger-jlink-headless}'/lib/libjlinkarm.so"
+          (
+            if stdenvNoCC.hostPlatform.isDarwin then
+              "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libusb1 ]}"
+            else
+              "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libusb1 ]}"
+          )
+          (
+            if stdenvNoCC.hostPlatform.isDarwin then
+              "--set NRF_JLINK_DLL_PATH '${segger-jlink-headless}'/Applications/SEGGER/JLink/libjlinkarm.dylib"
+            else
+              "--set NRF_JLINK_DLL_PATH '${segger-jlink-headless}'/lib/libjlinkarm.so"
+          )
           ''--set NRFUTIL_BLE_SNIFFER_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-shim''
           ''--set NRFUTIL_BLE_SNIFFER_HCI_SHIM_BIN_ENV "$out"/lib/nrfutil-ble-sniffer/wireshark-hci-shim''
         ]
@@ -133,15 +151,28 @@ symlinkJoin {
     ''
       wrapProgram "$out"/bin/nrfutil ${wrapProgramArgs}
 
-      installShellCompletion --cmd nrfutil \
-        --bash $(realpath "$out"/share/nrfutil-completion/scripts/bash/setup.bash) \
-        --zsh $(realpath "$out"/share/nrfutil-completion/scripts/zsh/_nrfutil)
+      ${lib.optionalString (platformSources.packages ? nrfutil-completion) ''
+        installShellCompletion --cmd nrfutil \
+          --bash $(realpath "$out"/share/nrfutil-completion/scripts/bash/setup.bash) \
+          --zsh $(realpath "$out"/share/nrfutil-completion/scripts/zsh/_nrfutil)
+      ''}
     '';
 
-  passthru = {
-    updateScript = ./update.sh;
-    withExtensions = extensions: nrfutil.override { inherit extensions; };
-  };
+  passthru =
+    let
+      availableExtensions = lib.attrNames (
+        lib.removeAttrs platformSources.packages [
+          "nrfutil"
+          "nrfutil-completion"
+        ]
+      );
+    in
+    {
+      updateScript = ./update.sh;
+      allExtensions = availableExtensions;
+      withExtensions = extensions: nrfutil.override { inherit extensions; };
+      withAllExtensions = nrfutil.override { extensions = availableExtensions; };
+    };
 
   meta = sharedMeta // {
     mainProgram = "nrfutil";
