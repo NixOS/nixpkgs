@@ -2,6 +2,7 @@
   mkKdeDerivation,
   qtwebview,
   pkg-config,
+  qcoro,
   discount,
   flatpak,
   fwupd,
@@ -12,6 +13,9 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwebview
+
+    qcoro
+
     discount
     flatpak
     fwupd
