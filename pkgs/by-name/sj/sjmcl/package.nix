@@ -34,7 +34,6 @@ symlinkJoin {
   meta = {
     inherit (sjmcl'.meta)
       description
-      longDescription
       homepage
       changelog
       license

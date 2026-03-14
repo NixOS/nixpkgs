@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -44,19 +45,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     npmHooks.npmConfigHook
     cargo-tauri.hook
-    wrapGAppsHook4
     pkg-config
-  ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
+    glib-networking
+    webkitgtk_4_1
     cairo
     gdk-pixbuf
-    glib-networking
     gtk3
     libsoup_3
     pango
-    webkitgtk_4_1
   ];
 
   meta = {
