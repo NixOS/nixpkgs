@@ -23,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ome-zarr-models";
-  version = "1.5";
+  version = "1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ome-zarr-models";
     repo = "ome-zarr-models-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lEzYP4AcEV6EtE+E8yqNHJPIPJ0RwWtzm77fcdxYGYk=";
+    hash = "sha256-z2qBQhgijJB8O5smlJ4Y0FMS6UoMZcHVIJn5JuYq/IU=";
   };
 
   build-system = [
