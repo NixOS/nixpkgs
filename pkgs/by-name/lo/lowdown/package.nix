@@ -11,6 +11,7 @@
   enableDarwinSandbox ? true,
   # for passthru.tests
   nix,
+  lix,
   lowdown-unsandboxed,
 }:
 
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     # most important consumers in nixpkgs
-    inherit nix lowdown-unsandboxed;
+    inherit nix lix lowdown-unsandboxed;
   };
 
   meta = {
