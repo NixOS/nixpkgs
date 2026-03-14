@@ -9734,6 +9734,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/wlroots { })
     wlroots_0_18
     wlroots_0_19
+    wlroots_0_20
     ;
 
   sway-contrib = recurseIntoAttrs (callPackages ../applications/misc/sway-contrib { });
@@ -10674,7 +10675,7 @@ with pkgs;
   transmission_4-qt = transmission_4-qt5;
 
   tinywl = callPackage ../applications/window-managers/tinywl {
-    wlroots = wlroots_0_19;
+    wlroots = wlroots_0_20;
   };
 
   tuxclocker = libsForQt5.callPackage ../applications/misc/tuxclocker {
