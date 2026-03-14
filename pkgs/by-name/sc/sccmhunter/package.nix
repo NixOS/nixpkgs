@@ -7,14 +7,14 @@
 }:
 python312Packages.buildPythonApplication (finalAttrs: {
   pname = "sccmhunter";
-  version = "1.1.10";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "garrettfoster13";
     repo = "sccmhunter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-657xwD5Sk8vU3MSGj7Yuu/lh7SRS25VFk/igKhq1pks=";
+    hash = "sha256-aWZx5KfsuhyT08OmYFHKVO8Sr9g5WHXpKLpijo2TAPI=";
   };
 
   build-system = with python312Packages; [
