@@ -4,6 +4,7 @@
   hostPlatform,
   fetchurl,
   bash,
+  coreutils,
   gcc,
   binutils,
   gnumake,
@@ -13,15 +14,18 @@
   diffutils,
   findutils,
   gnutar,
+  gzip,
+  bzip2,
   xz,
+  gmp,
+  mpfr,
 }:
 let
-  pname = "gnupatch-static";
-  version = "2.8";
-
+  pname = "mpc";
+  version = "1.3.1";
   src = fetchurl {
-    url = "mirror://gnu/patch/patch-${version}.tar.xz";
-    hash = "sha256-+Hzuae7CtPy/YKOWsDCtaqNBXxkqpffuhMrV4R9/WuM=";
+    url = "mirror://gnu/mpc/mpc-${version}.tar.gz";
+    hash = "sha256-q2QkkvXPiCt0qgy3MM1BCoHtzb7IlRg86TDnBsHHWbg=";
   };
 in
 bash.runCommand "${pname}-${version}"
@@ -38,36 +42,33 @@ bash.runCommand "${pname}-${version}"
       diffutils
       findutils
       gnutar
+      gzip
+      bzip2
       xz
     ];
 
-    passthru.tests.get-version =
-      result:
-      bash.runCommand "${pname}-get-version-${version}" { } ''
-        ${result}/bin/patch --version
-        mkdir $out
-      '';
-
     meta = {
-      description = "GNU Patch, a program to apply differences to files";
-      homepage = "https://www.gnu.org/software/patch";
+      description = "GNU Compiler Collection, version ${version}";
+      homepage = "https://gcc.gnu.org";
       license = lib.licenses.gpl3Plus;
-      mainProgram = "patch";
-      platforms = lib.platforms.unix;
       teams = [ lib.teams.minimal-bootstrap ];
+      platforms = lib.platforms.unix;
+      mainProgram = "gcc";
     };
   }
   ''
     # Unpack
     tar xf ${src}
-    cd patch-${version}
+    cd mpc-${version}
 
     # Configure
     bash ./configure \
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --disable-dependency-tracking
+      --disable-dependency-tracking \
+      --with-gmp=${gmp} \
+      --with-mpfr=${mpfr}
 
     # Build
     make -j $NIX_BUILD_CORES

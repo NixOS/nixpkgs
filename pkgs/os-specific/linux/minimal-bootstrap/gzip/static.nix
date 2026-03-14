@@ -5,7 +5,7 @@
   fetchurl,
   bash,
   gcc,
-  musl,
+  libc,
   binutils,
   gnumake,
   gnused,
@@ -31,7 +31,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -68,9 +67,7 @@ bash.runCommand "${pname}-${version}"
       --prefix=$out \
       --build=${buildPlatform.config} \
       --host=${hostPlatform.config} \
-      --disable-dependency-tracking \
-      CC=musl-gcc \
-      CFLAGS=-static
+      --disable-dependency-tracking ${lib.optionalString hostPlatform.isMusl "CFLAGS=-static"}
 
     # Build
     make -j $NIX_BUILD_CORES bin_SCRIPTS=

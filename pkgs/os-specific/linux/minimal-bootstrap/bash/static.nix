@@ -4,8 +4,8 @@
   hostPlatform,
   fetchurl,
   bash,
+  gcc-buildbuild,
   gcc,
-  musl,
   binutils,
   gnumake,
   gnused,
@@ -25,6 +25,10 @@ let
     url = "mirror://gnu/bash/bash-${version}.tar.gz";
     sha256 = "sha256-DVzYaWX4aaJs9k9Lcb57lvkKO6iz104n6OnZ1VUPMbo=";
   };
+
+  binutilsTargetPrefix = lib.optionalString (
+    hostPlatform.config != buildPlatform.config
+  ) "${hostPlatform.config}-";
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -32,7 +36,6 @@ bash.runCommand "${pname}-${version}"
 
     nativeBuildInputs = [
       gcc
-      musl
       binutils
       gnumake
       gnused
@@ -56,6 +59,10 @@ bash.runCommand "${pname}-${version}"
     tar xf ${src}
     cd bash-${version}
 
+    export AR="${binutilsTargetPrefix}ar"
+    export STRIP="${binutilsTargetPrefix}strip"
+    export STRIPPROG="$STRIP"
+
     # Configure
     bash ./configure \
       --prefix=$out \
@@ -64,7 +71,7 @@ bash.runCommand "${pname}-${version}"
       --without-bash-malloc \
       --disable-dependency-tracking \
       --enable-static-link \
-      CC=musl-gcc
+      CC_FOR_BUILD=${gcc-buildbuild}/bin/gcc
 
     # Build
     make -j $NIX_BUILD_CORES

@@ -2,6 +2,7 @@
   lib,
   buildPlatform,
   hostPlatform,
+  targetPlatform,
   fetchurl,
   bash,
   tinycc,
@@ -106,12 +107,15 @@ bash.runCommand "${pname}-${version}"
     ln -s ../mpc-${mpcVersion} mpc
 
     # Patch
+    sed -i 's,ifndef ELIDE_CODE,if 0,' libiberty/getopt.c
+    sed -i 's,ifndef ELIDE_CODE,if 0,' libiberty/getopt1.c
     ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
     export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
+    export LD="ld"
 
     # Avoid "Link tests are not allowed after GCC_NO_EXECUTABLES"
     export lt_cv_shlibpath_overrides_runpath=yes

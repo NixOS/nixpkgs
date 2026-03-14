@@ -2,6 +2,7 @@
   lib,
   buildPlatform,
   hostPlatform,
+  targetPlatform,
   fetchurl,
   bash,
   coreutils,
@@ -13,9 +14,11 @@
   diffutils,
   gnutar,
   xz,
-  tinycc,
+  tinycc ? null,
+  gcc ? null,
+  binutils ? null,
+  musl ? null,
 }:
-
 let
   # Based on https://github.com/ZilchOS/bootstrap-from-tcc/blob/2e0c68c36b3437386f786d619bc9a16177f2e149/using-nix/2a1-static-binutils.nix
   inherit (import ./common.nix { inherit lib; }) meta;
@@ -34,10 +37,17 @@ let
     ./fix-tinycc-attribute.patch
   ];
 
+  enableShared = !hostPlatform.isStatic;
+  targetPrefix = lib.optionalString (
+    targetPlatform.config != hostPlatform.config
+  ) "${targetPlatform.config}-";
+
   configureFlags = [
     "--prefix=${placeholder "out"}"
     "--build=${buildPlatform.config}"
     "--host=${hostPlatform.config}"
+    "--target=${targetPlatform.config}"
+    "--program-prefix=${targetPrefix}"
     "--with-sysroot=/"
     "--disable-dependency-tracking"
     "--enable-deterministic-archives"
@@ -53,14 +63,28 @@ let
     # libbfd and libopcodes into a default visibility. Drop default lib
     # path to force users to declare their use of these libraries.
     "--with-lib-path=:"
-  ];
+  ]
+  ++ (
+    if enableShared then
+      [
+        "--enable-shared"
+        "--disable-static"
+      ]
+    else
+      [
+        "--disable-shared"
+        "--enable-static"
+      ]
+  );
+
+  cc = if gcc != null then "gcc" else "${lib.getExe' tinycc.compiler "tcc"} -B ${tinycc.libs}/lib";
+  ar = if binutils != null then "ar" else "${lib.getExe' tinycc.compiler "tcc"} -ar";
 in
 bash.runCommand "${pname}-${version}"
   {
     inherit pname version meta;
 
     nativeBuildInputs = [
-      tinycc.compiler
       gnumake
       gnupatch
       gnused
@@ -69,7 +93,10 @@ bash.runCommand "${pname}-${version}"
       diffutils
       gnutar
       xz
-    ];
+    ]
+    ++ lib.optional (tinycc != null) tinycc.compiler
+    ++ lib.optional (gcc != null) gcc
+    ++ lib.optional (binutils != null) binutils;
 
     passthru.tests.get-version =
       result:
@@ -98,9 +125,11 @@ bash.runCommand "${pname}-${version}"
     export PATH="$(pwd)/aliases/:$PATH"
 
     # Configure
-    export CC="tcc -B ${tinycc.libs}/lib"
-    export AR="tcc -ar"
+    export CC="${cc}"
+    export AR="${ar}"
     export lt_cv_sys_max_cmd_len=32768
+    # elf.c with mmap() seems unstable for some reason
+    export ac_cv_func_mmap_fixed_mapped=no
 
     export CFLAGS="-D__LITTLE_ENDIAN__=1"
     bash ./configure ${lib.concatStringsSep " " configureFlags}

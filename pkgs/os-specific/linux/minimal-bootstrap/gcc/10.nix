@@ -74,28 +74,31 @@ bash.runCommand "${pname}-${version}"
       xz
     ];
 
-    passthru.tests.hello-world =
-      result:
-      bash.runCommand "${pname}-simple-program-${version}"
-        {
-          nativeBuildInputs = [
-            binutils
-            musl
-            result
-          ];
-        }
-        ''
-          cat <<EOF >> test.c
-          #include <stdio.h>
-          int main() {
-            printf("Hello World!\n");
-            return 0;
+    passthru = {
+      sharedAvailable = false;
+      tests.hello-world =
+        result:
+        bash.runCommand "${pname}-simple-program-${version}"
+          {
+            nativeBuildInputs = [
+              binutils
+              musl
+              result
+            ];
           }
-          EOF
-          musl-gcc -o test test.c
-          ./test
-          mkdir $out
-        '';
+          ''
+            cat <<EOF >> test.c
+            #include <stdio.h>
+            int main() {
+              printf("Hello World!\n");
+              return 0;
+            }
+            EOF
+            musl-gcc -o test test.c
+            ./test
+            mkdir $out
+          '';
+    };
 
     meta = {
       description = "GNU Compiler Collection, version ${version}";
@@ -139,17 +142,36 @@ bash.runCommand "${pname}-${version}"
       --with-native-system-header-dir=/include \
       --with-sysroot=${musl} \
       --enable-languages=c,c++ \
+      --disable-serial-configure \
+      --disable-analyzer \
       --disable-bootstrap \
       --disable-dependency-tracking \
+      --disable-decimal-float \
       --disable-libmpx \
       --disable-libsanitizer \
+      --disable-libstdcxx-pch \
+      --disable-multilib \
+      --disable-nls \
+      --disable-libssp \
       --disable-lto \
       --disable-multilib \
-      --disable-plugin
+      --disable-plugin \
+      --enable-static \
+      --disable-shared
 
     # Build
     make -j $NIX_BUILD_CORES
 
     # Install
     make -j $NIX_BUILD_CORES install-strip
+
+    if [ -d "$out/lib64" ]; then
+      shopt -s dotglob
+      for lib in $out/lib64/*; do
+        mv --no-clobber "$lib" "$out/lib/"
+      done
+      shopt -u dotglob
+      rm -rf "$out/lib64"
+      ln -s lib "$out/lib64"
+    fi
   ''
