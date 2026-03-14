@@ -49,6 +49,7 @@ let
     mkIf
     mkOption
     mkEnableOption
+    mkMerge
     ;
 
   postgresqlPackage =
@@ -170,9 +171,9 @@ in
 
     machine-learning = {
       enable =
-        mkEnableOption "immich's machine-learning functionality to detect faces and search for objects"
+        mkEnableOption "immich's machine-learning functionality to detect faces and search for objects. Can be enabled without server"
         // {
-          default = true;
+          default = cfg.enable;
         };
       environment = mkOption {
         type = types.submodule { freeformType = types.attrsOf types.str; };
@@ -257,227 +258,232 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
-        message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
-      }
-      {
-        # When removing this assertion, please adjust the nixosTests accordingly.
-        assertion =
-          (cfg.database.enable && cfg.database.enableVectors)
-          -> lib.versionOlder config.services.postgresql.package.version "17";
-        message = "Immich doesn't support PostgreSQL 17+ when using pgvecto.rs. Consider disabling it using services.immich.database.enableVectors if it is not needed anymore.";
-      }
-      {
-        assertion = cfg.database.enable -> (cfg.database.enableVectorChord || cfg.database.enableVectors);
-        message = "At least one of services.immich.database.enableVectorChord and services.immich.database.enableVectors has to be enabled.";
-      }
-    ];
+  config = mkMerge [
+    (mkIf (cfg.enable || cfg.machine-learning.enable) {
+      systemd.slices.system-immich = {
+        description = "Immich (self-hosted photo and video backup solution) slice";
+        documentation = [ "https://immich.app/docs" ];
+      };
+      users.users = mkIf (cfg.user == "immich") {
+        immich = {
+          name = "immich";
+          group = cfg.group;
+          isSystemUser = true;
+        };
+      };
+      users.groups = mkIf (cfg.group == "immich") { immich = { }; };
+    })
 
-    services.postgresql = mkIf cfg.database.enable {
-      enable = true;
-      ensureDatabases = mkIf cfg.database.createDB [ cfg.database.name ];
-      ensureUsers = mkIf cfg.database.createDB [
+    (mkIf cfg.enable {
+      assertions = [
         {
-          name = cfg.database.user;
-          ensureDBOwnership = true;
-          ensureClauses.login = true;
+          assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
+          message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
+        }
+        {
+          # When removing this assertion, please adjust the nixosTests accordingly.
+          assertion =
+            (cfg.database.enable && cfg.database.enableVectors)
+            -> lib.versionOlder config.services.postgresql.package.version "17";
+          message = "Immich doesn't support PostgreSQL 17+ when using pgvecto.rs. Consider disabling it using services.immich.database.enableVectors if it is not needed anymore.";
+        }
+        {
+          assertion = cfg.database.enable -> (cfg.database.enableVectorChord || cfg.database.enableVectors);
+          message = "At least one of services.immich.database.enableVectorChord and services.immich.database.enableVectors has to be enabled.";
         }
       ];
-      extensions =
-        ps:
-        lib.optionals cfg.database.enableVectors [ ps.pgvecto-rs ]
-        ++ lib.optionals cfg.database.enableVectorChord [
-          ps.pgvector
-          ps.vectorchord
-        ];
-      settings = {
-        shared_preload_libraries =
-          lib.optionals cfg.database.enableVectors [
-            "vectors.so"
-          ]
-          ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
-        search_path = "\"$user\", public, vectors";
-      };
-    };
-    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
-      let
-        extensions = [
-          "unaccent"
-          "uuid-ossp"
-          "cube"
-          "earthdistance"
-          "pg_trgm"
-        ]
-        ++ lib.optionals cfg.database.enableVectors [
-          "vectors"
-        ]
-        ++ lib.optionals cfg.database.enableVectorChord [
-          "vector"
-          "vchord"
-        ];
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" (
-          # save previous version of vectorchord to trigger reindex on update
-          lib.optionalString cfg.database.enableVectorChord ''
-            SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
-          ''
-          + ''
-            ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
-            ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
-            ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ''
-          + lib.optionalString cfg.database.enableVectors ''
-            ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
-            GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
-          ''
-          # trigger reindex if vectorchord updates
-          # https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
-          + lib.optionalString cfg.database.enableVectorChord ''
-            SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
 
-            SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
-            \if :has_vchord_updated
-              REINDEX INDEX face_index;
-              REINDEX INDEX clip_index;
-            \endif
-          ''
-        );
-      in
-      [
-        ''
-          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
-        ''
-      ];
-
-    services.redis.servers = mkIf cfg.redis.enable {
-      immich = {
+      services.postgresql = mkIf cfg.database.enable {
         enable = true;
-        port = cfg.redis.port;
-        bind = mkIf (!isRedisUnixSocket) cfg.redis.host;
-      };
-    };
-
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
-
-    services.immich.environment =
-      let
-        postgresEnv =
-          if isPostgresUnixSocket then
-            { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
-          else
-            {
-              DB_HOSTNAME = cfg.database.host;
-              DB_PORT = toString cfg.database.port;
-              DB_DATABASE_NAME = cfg.database.name;
-              DB_USERNAME = cfg.database.user;
-            };
-        redisEnv =
-          if isRedisUnixSocket then
-            { REDIS_SOCKET = cfg.redis.host; }
-          else
-            {
-              REDIS_PORT = toString cfg.redis.port;
-              REDIS_HOSTNAME = cfg.redis.host;
-            };
-      in
-      postgresEnv
-      // redisEnv
-      // {
-        IMMICH_HOST = cfg.host;
-        IMMICH_PORT = toString cfg.port;
-        IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
-        IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
-      }
-      // lib.optionalAttrs (cfg.settings != null) {
-        IMMICH_CONFIG_FILE = "/run/immich/config.json";
-      };
-
-    services.immich.machine-learning.environment = {
-      MACHINE_LEARNING_WORKERS = "1";
-      MACHINE_LEARNING_WORKER_TIMEOUT = "120";
-      MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
-      XDG_CACHE_HOME = "/var/cache/immich";
-      IMMICH_HOST = "localhost";
-      IMMICH_PORT = "3003";
-    };
-
-    systemd.slices.system-immich = {
-      description = "Immich (self-hosted photo and video backup solution) slice";
-      documentation = [ "https://immich.app/docs" ];
-    };
-
-    systemd.services.immich-server = {
-      description = "Immich backend server (Self-hosted photo and video backup solution)";
-      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
-      wantedBy = [ "multi-user.target" ];
-      inherit (cfg) environment;
-      path = [
-        # gzip and pg_dumpall are used by the backup service
-        pkgs.gzip
-        postgresqlPackage
-      ];
-
-      preStart = mkIf (cfg.settings != null) secretsReplacement.script;
-
-      serviceConfig = commonServiceConfig // {
-        LoadCredential = secretsReplacement.credentials;
-        ExecStart = lib.getExe cfg.package;
-        EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
-        Slice = "system-immich.slice";
-        StateDirectory = "immich";
-        SyslogIdentifier = "immich";
-        RuntimeDirectory = "immich";
-        User = cfg.user;
-        Group = cfg.group;
-        # ensure that immich-server has permission to connect to the redis socket.
-        SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
-          config.services.redis.servers.immich.group
+        ensureDatabases = mkIf cfg.database.createDB [ cfg.database.name ];
+        ensureUsers = mkIf cfg.database.createDB [
+          {
+            name = cfg.database.user;
+            ensureDBOwnership = true;
+            ensureClauses.login = true;
+          }
         ];
+        extensions =
+          ps:
+          lib.optionals cfg.database.enableVectors [ ps.pgvecto-rs ]
+          ++ lib.optionals cfg.database.enableVectorChord [
+            ps.pgvector
+            ps.vectorchord
+          ];
+        settings = {
+          shared_preload_libraries =
+            lib.optionals cfg.database.enableVectors [
+              "vectors.so"
+            ]
+            ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
+          search_path = "\"$user\", public, vectors";
+        };
       };
-    };
 
-    systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
-      description = "immich machine learning";
-      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
-      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
-      wantedBy = [ "multi-user.target" ];
-      inherit (cfg.machine-learning) environment;
-      serviceConfig = commonServiceConfig // {
-        ExecStart = lib.getExe cfg.package.machine-learning;
-        Slice = "system-immich.slice";
-        CacheDirectory = "immich";
-        User = cfg.user;
-        Group = cfg.group;
+      systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
+        let
+          extensions = [
+            "unaccent"
+            "uuid-ossp"
+            "cube"
+            "earthdistance"
+            "pg_trgm"
+          ]
+          ++ lib.optionals cfg.database.enableVectors [
+            "vectors"
+          ]
+          ++ lib.optionals cfg.database.enableVectorChord [
+            "vector"
+            "vchord"
+          ];
+          sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" (
+            # save previous version of vectorchord to trigger reindex on update
+            lib.optionalString cfg.database.enableVectorChord ''
+              SELECT COALESCE(installed_version, ''') AS vchord_version_before FROM pg_available_extensions WHERE name = 'vchord' \gset
+            ''
+            + ''
+              ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+              ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
+              ALTER SCHEMA public OWNER TO ${cfg.database.user};
+            ''
+            + lib.optionalString cfg.database.enableVectors ''
+              ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
+              GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
+            ''
+            # trigger reindex if vectorchord updates
+            # https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
+            + lib.optionalString cfg.database.enableVectorChord ''
+              SELECT COALESCE(installed_version, ''') AS vchord_version_after FROM pg_available_extensions WHERE name = 'vchord' \gset
+
+              SELECT (:'vchord_version_before' != ''' AND :'vchord_version_before' != :'vchord_version_after') AS has_vchord_updated \gset
+              \if :has_vchord_updated
+                REINDEX INDEX face_index;
+                REINDEX INDEX clip_index;
+              \endif
+            ''
+          );
+        in
+        [
+          ''
+            ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ''
+        ];
+
+      services.redis.servers = mkIf cfg.redis.enable {
+        immich = {
+          enable = true;
+          port = cfg.redis.port;
+          bind = mkIf (!isRedisUnixSocket) cfg.redis.host;
+        };
       };
-    };
 
-    systemd.tmpfiles.settings = {
-      immich = {
-        # Redundant to the `UMask` service config setting on new installs, but installs made in
-        # early 24.11 created world-readable media storage by default, which is a privacy risk. This
-        # fixes those installs.
-        "${cfg.mediaLocation}" = {
-          e = {
-            user = cfg.user;
-            group = cfg.group;
-            mode = "0700";
+      networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+
+      services.immich.environment =
+        let
+          postgresEnv =
+            if isPostgresUnixSocket then
+              { DB_URL = "postgresql:///${cfg.database.name}?host=${cfg.database.host}"; }
+            else
+              {
+                DB_HOSTNAME = cfg.database.host;
+                DB_PORT = toString cfg.database.port;
+                DB_DATABASE_NAME = cfg.database.name;
+                DB_USERNAME = cfg.database.user;
+              };
+          redisEnv =
+            if isRedisUnixSocket then
+              { REDIS_SOCKET = cfg.redis.host; }
+            else
+              {
+                REDIS_PORT = toString cfg.redis.port;
+                REDIS_HOSTNAME = cfg.redis.host;
+              };
+        in
+        postgresEnv
+        // redisEnv
+        // {
+          IMMICH_HOST = cfg.host;
+          IMMICH_PORT = toString cfg.port;
+          IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
+          IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
+        }
+        // lib.optionalAttrs (cfg.settings != null) {
+          IMMICH_CONFIG_FILE = "/run/immich/config.json";
+        };
+
+      systemd.services.immich-server = {
+        description = "Immich backend server (Self-hosted photo and video backup solution)";
+        requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
+        after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
+        wantedBy = [ "multi-user.target" ];
+        inherit (cfg) environment;
+        path = [
+          # gzip and pg_dumpall are used by the backup service
+          pkgs.gzip
+          postgresqlPackage
+        ];
+
+        preStart = mkIf (cfg.settings != null) secretsReplacement.script;
+
+        serviceConfig = commonServiceConfig // {
+          LoadCredential = secretsReplacement.credentials;
+          ExecStart = lib.getExe cfg.package;
+          EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
+          Slice = "system-immich.slice";
+          StateDirectory = "immich";
+          SyslogIdentifier = "immich";
+          RuntimeDirectory = "immich";
+          User = cfg.user;
+          Group = cfg.group;
+          # ensure that immich-server has permission to connect to the redis socket.
+          SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
+            config.services.redis.servers.immich.group
+          ];
+        };
+      };
+
+      systemd.tmpfiles.settings = {
+        immich = {
+          # Redundant to the `UMask` service config setting on new installs, but installs made in
+          # early 24.11 created world-readable media storage by default, which is a privacy risk. This
+          # fixes those installs.
+          "${cfg.mediaLocation}" = {
+            e = {
+              user = cfg.user;
+              group = cfg.group;
+              mode = "0700";
+            };
           };
         };
       };
-    };
 
-    users.users = mkIf (cfg.user == "immich") {
-      immich = {
-        name = "immich";
-        group = cfg.group;
-        isSystemUser = true;
+    })
+
+    (mkIf cfg.machine-learning.enable {
+      services.immich.machine-learning.environment = {
+        MACHINE_LEARNING_WORKERS = "1";
+        MACHINE_LEARNING_WORKER_TIMEOUT = "120";
+        MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+        XDG_CACHE_HOME = "/var/cache/immich";
+        IMMICH_HOST = "localhost";
+        IMMICH_PORT = "3003";
       };
-    };
-    users.groups = mkIf (cfg.group == "immich") { immich = { }; };
-  };
+      systemd.services.immich-machine-learning = {
+        description = "immich machine learning";
+        wantedBy = [ "multi-user.target" ];
+        inherit (cfg.machine-learning) environment;
+        serviceConfig = commonServiceConfig // {
+          ExecStart = lib.getExe cfg.package.machine-learning;
+          Slice = "system-immich.slice";
+          CacheDirectory = "immich";
+          User = cfg.user;
+          Group = cfg.group;
+        };
+      };
+    })
+
+  ];
   meta = {
     maintainers = with lib.maintainers; [ jvanbruegge ];
     doc = ./immich.md;
