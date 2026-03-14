@@ -121,7 +121,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/meehl/rusty-path-of-building";
     changelog = "https://github.com/meehl/rusty-path-of-building/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ k900 ];
+    maintainers = with lib.maintainers; [
+      k900
+      cholli
+    ];
     mainProgram = "rusty-path-of-building";
   };
 })
