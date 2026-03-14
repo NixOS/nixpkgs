@@ -44,9 +44,6 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-WLfLbQYYJOdMHApNnFZYiET4es3z2SeeLP0jbrFqxrU=";
   };
 
-  # ansible_connection is already wrapped, so don't pass it through
-  # the python interpreter again, as it would break execution of
-  # connection plugins.
   postPatch = ''
     patchShebangs --build packaging/cli-doc/build.py
 
@@ -96,6 +93,10 @@ buildPythonPackage (finalAttrs: {
     export HOME="$(mktemp -d)"
     packaging/cli-doc/build.py man --output-dir=man
     installManPage man/*
+  '';
+
+  postFixup = ''
+    patchPythonScript $out/${python.sitePackages}/ansible/cli/scripts/ansible_connection_cli_stub.py
   '';
 
   # internal import errors, missing dependencies
