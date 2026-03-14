@@ -8,30 +8,23 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwin";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "Jake-Shadle";
     repo = "xwin";
     tag = finalAttrs.version;
-    hash = "sha256-p7rrZ2yxSpGKNuddcSO2wlvsIFj8LYG91tCK1mWO+NY=";
+    hash = "sha256-alD8hX1CqtVlkoUhD/C4APWlmUaV7WsZgCYdH39cc5s=";
   };
 
-  cargoHash = "sha256-e2uYAE2veYDNZpHr40bpIbplg7orW8oIxgZORhPpbFY=";
+  cargoHash = "sha256-btcamYbahRRsI/OCCg2YjZ/x6qslKfjjto8QXyYfKI4=";
 
   strictDeps = true;
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ];
-
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "native-tls"
-  ];
 
   doCheck = true;
   # Requires network access
