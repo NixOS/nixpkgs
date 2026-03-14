@@ -4244,6 +4244,12 @@
     githubId = 20440897;
     name = "Caique";
   };
+  Cairnstew = {
+    email = "sean.cairnsst@gmail.com";
+    github = "Cairnstew";
+    githubId = 15699393;
+    name = "Sean Cairns";
+  };
   CaitlinDavitt = {
     email = "CaitlinDavitt@gmail.com";
     github = "CaitlinDavitt";
