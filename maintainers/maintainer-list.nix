@@ -476,6 +476,12 @@
     githubId = 908758;
     name = "Abigail Bunyan";
   };
+  abl030 = {
+    email = "abl030@gmail.com";
+    github = "abl030";
+    githubId = 60121280;
+    name = "abl030";
+  };
   aborsu = {
     email = "a.borsu@gmail.com";
     github = "aborsu";
