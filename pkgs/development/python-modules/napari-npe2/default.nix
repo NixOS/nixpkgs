@@ -33,14 +33,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "napari-npe2";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aZOs9wTYcblt9EZftYHKFWI/GvpZcC2KqVTAis15+Iw=";
+    hash = "sha256-cR7hf5v+RgcENY3rSHnOB4E/TONVYvHKS5i3Kv1Sbuc=";
   };
 
   build-system = [
