@@ -682,6 +682,60 @@ If you have any problems with formatting, please ping the [formatting team](http
   As an exception, an explicit conditional expression with null can be used when fixing an important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
+- In some situations, you may want to write Mad Lib code. Mad Lib code is code that takes a value and embeds it in a new piece of data that will be parsed again later (for example, a Nix expression might embed the value of a variable in a Bash script, a Python script might calculate values and then embed them in a JSON file or a Bash script might dynamically generate a URL). When writing Mad Lib code, always include safe guards to ensure that values are properly escaped (unless doing so would break something):
+
+  ```nix
+  { lib, writeShellScript }:
+  let
+    authors = "Alice and Bob";
+  in
+  writeShellScript "show-author-names" ''
+    printf 'This script was created by %s.\n' ${lib.strings.escapeShellArg authors}
+  ''
+  ```
+
+  instead of
+
+  ```nix
+  { writeShellScript }:
+  let
+    authors = "Alice and Bob";
+  in
+  writeShellScript "show-author-names" ''
+    printf 'This script was created by %s.\n' ${authors}
+  ''
+  ```
+
+  Safe guards should be included even if you believe that a value will never contain anything that needs to be escaped (you might be mistaken, and the situation might change with future code changes).
+
+  Don’t use safe guards if doing so would break something:
+
+  ```nix
+  { writeShellScript }:
+  let
+    bashStrictMode = "set -o errexit -o nounset -o pipefail";
+  in
+  writeShellScript "strict-hello-world" ''
+    ${bashStrictMode}
+
+    echo 'Hello, world!'
+  ''
+  ```
+
+  instead of
+
+  ```nix
+  { lib, writeShellScript }:
+  let
+    bashStrictMode = "set -o errexit -o nounset -o pipefail";
+  in
+  writeShellScript "strict-hello-world" ''
+    ${lib.strings.escapeShellArg bashStrictMode}
+
+    echo 'Hello, world!'
+  ''
+  ```
+
 - Any style choices not covered here but that can be expressed as general rules should be left at the discretion of the authors of changes and _not_ commented in reviews.
   The purpose of this is:
    - to avoid churn as contributors with different style preferences undo each other's changes,
