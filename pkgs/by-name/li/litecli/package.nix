@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "litecli";
-  version = "1.12.3";
+  version = "1.17.1";
 
   pyproject = true;
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "dbcli";
     repo = "litecli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-TPwzXfb4n6wTe6raQ5IowKdhGkKrf2pmSS2+Q03NKYk=";
+    hash = "sha256-YSPNtDL5rNgRh5lJBKfL1jjWemlmf3eesBMSLyJVRLY=";
   };
 
   dependencies =
@@ -31,6 +31,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   build-system = with python3Packages; [
     setuptools
+    setuptools-scm
   ];
 
   nativeCheckInputs = with python3Packages; [
