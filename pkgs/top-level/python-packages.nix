@@ -3016,6 +3016,10 @@ self: super: with self; {
 
   colcon-test-result = callPackage ../development/python-modules/colcon-test-result { };
 
+  colcon-top-level-workspace =
+    callPackage ../development/python-modules/colcon-top-level-workspace
+      { };
+
   colcon-zsh = callPackage ../development/python-modules/colcon-zsh { };
 
   collections-extended = callPackage ../development/python-modules/collections-extended { };
