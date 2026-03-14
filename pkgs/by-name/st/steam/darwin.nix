@@ -1,9 +1,13 @@
 {
+  callPackage,
   steam-unwrapped,
   stdenvNoCC,
   ...
 }:
 
+let
+  linuxSteam = callPackage ./linux.nix { inherit steam-unwrapped; };
+in
 stdenvNoCC.mkDerivation {
   pname = "steam";
   inherit (steam-unwrapped) version meta;
@@ -23,6 +27,8 @@ stdenvNoCC.mkDerivation {
   '';
 
   passthru = {
+    inherit (linuxSteam) buildRuntimeEnv;
+
     run = throw "steam-run is only available for Linux; the Darwin steam package installs Valve's bootstrap app bundle.";
     run-free = throw "steam-run-free is only available for Linux; the Darwin steam package installs Valve's bootstrap app bundle.";
   };
