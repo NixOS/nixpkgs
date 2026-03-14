@@ -9111,8 +9111,6 @@ self: super: with self; {
 
   llama-index-workflows = callPackage ../development/python-modules/llama-index-workflows { };
 
-  llama-parse = callPackage ../development/python-modules/llama-parse { };
-
   llama-stack-client = callPackage ../development/python-modules/llama-stack-client { };
 
   llamaindex-py-client = callPackage ../development/python-modules/llamaindex-py-client { };
