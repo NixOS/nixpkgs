@@ -2,7 +2,6 @@
   lib,
   anki-utils,
   fetchFromGitHub,
-  nix-update-script,
 }:
 anki-utils.buildAnkiAddon (finalAttrs: {
   pname = "anki-quizlet-importer-extended";
@@ -13,7 +12,6 @@ anki-utils.buildAnkiAddon (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-BTddZColXM193x8xFa1axHeiWukjxXvwkXGpHxsLtR0=";
   };
-  passthru.updateScript = nix-update-script { };
   meta = {
     description = "Import Quizlet Decks into Anki";
     homepage = "https://ankiweb.net/shared/info/1362209126";
