@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
-  version = "2.3.3";
+  version = "2.4.1";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/RenderKit/oidn/releases/download/v${finalAttrs.version}/oidn-${finalAttrs.version}.src.tar.gz";
-    sha256 = "sha256-JzAd47fYGLT6DeOep8Wag29VY9HOTpqf0OSv1v0kGQU=";
+    sha256 = "sha256-SM0Bn4qgeqRJAXr2MMjNjfWJVTcciERZxMHiyx4Z1hA=";
   };
 
   patches = lib.optional cudaSupport ./cuda.patch;
