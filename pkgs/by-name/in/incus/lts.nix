@@ -1,7 +1,7 @@
 import ./generic.nix {
-  hash = "sha256-Sg3+399EgwEcZ8fp9cb2KEWQtBpYr5PkwTdnGl/AdfA";
-  version = "6.0.5-unstable-2026-01-23";
-  rev = "f8da60633e493bb5c0521981fa031bc909988c95";
+  hash = "sha256-B29HLuw48j7/Er7p/sHen7ohbbACsAjzPr9Nn8eZNR0=";
+  version = "6.0.5";
+  rev = "v6.0.5";
   vendorHash = "sha256-KOJqPvp+w7G505ZMJ1weRD2SATmfq1aeyCqmbJ6WMAY=";
   patches = [
     # qemu 9.1 compat, remove when added to LTS
@@ -14,7 +14,7 @@ import ./generic.nix {
     # ./d6a1ea3912938dae740cf821cd070e66e7a623ff.patch
     # ./d6f0a77dd26df4c1ced80ffa63848279fd4330cc.patch
     # ./92ac6ac999a4928cfdb92c485a048e4d51f471d0.patch
-    # ./f8da60633e493bb5c0521981fa031bc909988c95,patch
+    # ./v6.0.5,patch
   ];
   lts = true;
   nixUpdateExtraArgs = [
