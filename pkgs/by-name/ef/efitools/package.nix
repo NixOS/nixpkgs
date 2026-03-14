@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   gnu-efi,
   openssl,
   sbsigntool,
@@ -23,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     perlPackages.FileSlurp
     help2man
+    buildPackages.openssl
+    buildPackages.sbsigntool
   ];
 
   src = fetchzip {
@@ -44,8 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e 's#$(DESTDIR)/usr#$(out)#g' Make.rules
     sed -i '$asign-efi-sig-list.o flash-var.o: CFLAGS += -D_GNU_SOURCE' Makefile
     substituteInPlace lib/console.c --replace "EFI_WARN_UNKOWN_GLYPH" "EFI_WARN_UNKNOWN_GLYPH"
+    # Fix cross-compilation: use $(AR) and $(NM) variables instead of hardcoded commands
+    substituteInPlace Make.rules --replace-warn 'ar rcv' '$(AR) rcv'
+    substituteInPlace Make.rules --replace-warn 'nm -D' '$(NM) -D'
+    # Fix cross-compilation: use cross-toolchain objcopy
+    substituteInPlace Make.rules --replace-warn 'OBJCOPY		= objcopy' 'OBJCOPY		= ${stdenv.cc.targetPrefix}objcopy'
     patchShebangs .
   '';
+
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.parsed.cpu.name}"
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "NM=${stdenv.cc.targetPrefix}nm"
+  ];
 
   meta = {
     description = "Tools for manipulating UEFI secure boot platforms";

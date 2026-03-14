@@ -10,6 +10,7 @@
   libuuid,
   gnu-efi,
   libbfd,
+  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     automake
     pkg-config
     help2man
+    util-linux # for getopt used by create-ccan-tree
   ];
   buildInputs = [
     openssl
@@ -43,6 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preConfigure
 
     substituteInPlace configure.ac --replace "@@NIX_GNUEFI@@" "${gnu-efi}"
+
+    # Fix EFI_ARCH to use target architecture instead of build machine's uname -m
+    substituteInPlace configure.ac \
+      --replace-warn 'EFI_ARCH=$(uname -m | sed' 'EFI_ARCH=$(echo ${stdenv.hostPlatform.parsed.cpu.name} | sed'
 
     lib/ccan.git/tools/create-ccan-tree --build-type=automake lib/ccan "talloc read_write_all build_assert array_size endian"
     touch AUTHORS
@@ -59,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postConfigure
   '';
+
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ];
 
   meta = {
     description = "Tools for maintaining UEFI signature databases";
