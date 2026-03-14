@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-mac";
-  version = "2.25.22.79";
+  version = "26.8.76";
 
   src = fetchzip {
     extension = "zip";
     name = "WhatsApp.app";
-    url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=relbranch";
-    hash = "sha256-LYjPMiXLD1U5ZNt/acBagrV2RS7U/OGMJ06mUFBluSQ=";
+    url = "https://web.whatsapp.com/desktop/mac_native/release/?version=2.${finalAttrs.version}&extension=zip&configuration=Release&branch=relbranch&is_buck=true";
+    hash = "sha256-YPx3VpGYyCNfneaISHAezTY+wx79paCy88t0APE1EGc=";
   };
 
   dontConfigure = true;
@@ -41,8 +41,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      url=$(curl --silent "https://web.whatsapp.com/desktop/mac_native/updates/?branch=relbranch&configuration=Release")
-      version=$(echo "$url" | xmlstarlet sel -t -v "substring-before(substring-after(//enclosure/@url, 'version='), '&')")
+      feed_url="https://web.whatsapp.com/desktop/mac_native/updates/?branch=relbranch&configuration=Release"
+      version=$(curl --silent "$feed_url" | xmlstarlet sel -N sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" -t -v "//sparkle:shortVersionString")
       update-source-version whatsapp-for-mac "$version" --file=./pkgs/by-name/wh/whatsapp-for-mac/package.nix
     '';
   });
