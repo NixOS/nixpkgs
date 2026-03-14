@@ -13669,6 +13669,11 @@
     githubId = 56224949;
     name = "Mia Kanashi";
   };
+  kaorilovescakes = {
+    name = "KaoriLovesCakes";
+    github = "KaoriLovesCakes";
+    githubId = 110009919;
+  };
   kaptcha0 = {
     name = "J'C Kabunga";
     github = "kaptcha0";
