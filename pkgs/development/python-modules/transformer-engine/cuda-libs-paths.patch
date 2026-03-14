@@ -1,0 +1,31 @@
+diff --git a/transformer_engine/common/__init__.py b/transformer_engine/common/__init__.py
+index 3ffe1c7b..ea069922 100644
+--- a/transformer_engine/common/__init__.py
++++ b/transformer_engine/common/__init__.py
+@@ -283,7 +283,7 @@ def _load_cudnn():
+     """Load CUDNN shared library."""
+ 
+     # Attempt to locate cuDNN in CUDNN_HOME or CUDNN_PATH, if either is set
+-    cudnn_home = os.environ.get("CUDNN_HOME") or os.environ.get("CUDNN_PATH")
++    cudnn_home = "@cudnn@"
+     if cudnn_home:
+         libs = glob.glob(f"{cudnn_home}/**/libcudnn{_get_sys_extension()}*", recursive=True)
+         libs.sort(reverse=True, key=os.path.basename)
+@@ -320,7 +320,7 @@ def _load_cudnn():
+ def _load_nvrtc():
+     """Load NVRTC shared library."""
+     # Attempt to locate NVRTC in CUDA_HOME, CUDA_PATH or /usr/local/cuda
+-    cuda_home = os.environ.get("CUDA_HOME") or os.environ.get("CUDA_PATH") or "/usr/local/cuda"
++    cuda_home = "@cuda_nvrtc@"
+     libs = glob.glob(f"{cuda_home}/**/libnvrtc{_get_sys_extension()}*", recursive=True)
+     libs = list(filter(lambda x: not ("stub" in x or "libnvrtc-builtins" in x), libs))
+     libs.sort(reverse=True, key=os.path.basename)
+@@ -350,7 +350,7 @@ def _load_nvrtc():
+ def _load_curand():
+     """Load cuRAND shared library."""
+     # Attempt to locate cuRAND in CUDA_HOME, CUDA_PATH or /usr/local/cuda
+-    cuda_home = os.environ.get("CUDA_HOME") or os.environ.get("CUDA_PATH") or "/usr/local/cuda"
++    cuda_home = "@libcurand@"
+     libs = glob.glob(f"{cuda_home}/**/libcurand{_get_sys_extension()}*", recursive=True)
+     libs = list(filter(lambda x: not ("stub" in x), libs))
+     libs.sort(reverse=True, key=os.path.basename)
