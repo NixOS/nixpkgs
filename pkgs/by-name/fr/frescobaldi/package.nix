@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "frescobaldi";
-  version = "4.0.4";
+  version = "4.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
     tag = "v${version}";
-    hash = "sha256-J0QC+VwNdA24vAW5Fx+cz5IFajkB8GmR4Rae0Q+2zw8=";
+    hash = "sha256-p1Is8KXT63h788x4qcC48+1cXDiohHpAspWJnxuQ8wY=";
   };
 
   dependencies = with python3Packages; [
