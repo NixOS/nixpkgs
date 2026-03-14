@@ -12,14 +12,14 @@
 }:
 buildPythonPackage rec {
   pname = "django-markdownify";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwinmatijsen";
     repo = "django-markdownify";
     tag = version;
-    hash = "sha256-KYU8p8NRD4EIS/KhOk9nvmXCf0RWEc+IFZ57YtsDSWE=";
+    hash = "sha256-L/N0jjxBz7aQletOg+qairgq4utifPz4oqjT9AcljLI=";
   };
 
   dependencies = [

@@ -224,7 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) immich immich-vectorchord-migration immich-vectorchord-reindex;
+      inherit (nixosTests) immich immich-vectorchord-reindex;
     };
 
     machine-learning = immich-machine-learning.override {

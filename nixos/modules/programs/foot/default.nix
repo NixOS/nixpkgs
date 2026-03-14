@@ -75,13 +75,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment = {
-      systemPackages = [ cfg.package ];
-      etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
-
-      etc."xdg/autostart/foot-server.desktop".source =
-        lib.mkIf cfg.xdg.serverAutostart "${cfg.package}/share/applications/foot-server.desktop";
-    };
+    environment = lib.mkMerge [
+      {
+        systemPackages = [ cfg.package ];
+        etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
+      }
+      (lib.mkIf cfg.xdg.serverAutostart {
+        etc."xdg/autostart/foot-server.desktop".source =
+          "${cfg.package}/share/applications/foot-server.desktop";
+      })
+    ];
 
     programs = {
       foot.settings.main.include = lib.optionals (cfg.theme != null) [

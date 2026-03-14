@@ -1325,18 +1325,6 @@ with haskellLib;
   # https://github.com/emilypi/Base32/issues/24
   base32 = doJailbreak super.base32;
 
-  # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
-  # https://github.com/augustss/djinn/pull/8
-  djinn = overrideSrc {
-    version = "unstable-2023-11-20";
-    src = pkgs.fetchFromGitHub {
-      owner = "augustss";
-      repo = "djinn";
-      rev = "69b3fbad9f42f0b1b2c49977976b8588c967d76e";
-      hash = "sha256-ibxn6DXk4pqsOsWhi8KcrlH/THnuMWvIu5ENOn3H3So=";
-    };
-  } super.djinn;
-
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
   stunclient = overrideCabal (drv: {

@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.26.0";
+  version = "1.26.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     tag = version;
-    hash = "sha256-XnGNrQVdSyg5CVBZBwrqDPbf4/+9yyerGBrZArbh6xI=";
+    hash = "sha256-N9/lxbz9nLIGC7VyuRbNbuX0K0XAxhytLzsU16BMCWY=";
   };
 
   separateDebugInfo = true;
