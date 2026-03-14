@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "moe";
-  version = "1.15";
+  version = "1.16";
 
   src = fetchurl {
     url = "mirror://gnu/moe/moe-${finalAttrs.version}.tar.lz";
-    hash = "sha256-QfjIsJnOMEeUXKTgl6YNkkPpxz+7JowZShLaiw2fCmY=";
+    hash = "sha256-TCXNeJGScq6+wKf4wSYBG7Wktdh0IoB6NCMhbwoXqGg=";
   };
 
   prePatch = ''
