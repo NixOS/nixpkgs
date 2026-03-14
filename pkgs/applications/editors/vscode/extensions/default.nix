@@ -203,8 +203,8 @@ let
         mktplcRef = {
           name = "project-manager";
           publisher = "alefragnani";
-          version = "12.8.0";
-          hash = "sha256-sNiDyWdQ40Xeu7zp1ioRCi3majrPshlVbUSV2klr4r4=";
+          version = "13.0.1";
+          hash = "sha256-ziMrOwjkJP7KbPP9ILvrsZZTsY8rrfZ/VatCPivr8e4=";
         };
         meta = {
           license = lib.licenses.mit;
