@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 76f9381..389d3a2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,6 +26,7 @@ target_link_libraries(image-reaction
+     ${LIBOBS_LIBRARIES}
+     ${OBS_FRONTEND_LIB})
+ 
+-include_directories("${LIBOBS_INCLUDE_DIR}/../UI/obs-frontend-api"
++include_directories(${OBS_INCLUDE_DIR}
++    ${OBS_FRONTEND_API_INCLUDE_DIR}
+     ${LIBOBS_INCLUDE_DIR}
+ )
