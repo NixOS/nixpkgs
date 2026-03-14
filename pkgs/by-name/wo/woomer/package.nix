@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   glfw3,
   nix-update-script,
   pkg-config,
@@ -22,7 +22,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-LcL43Wq+5d7HPsm2bEK0vZsjP/dixtNhMKywXMi4ODw=";
   };
 
-  cargoHash = "sha256-xll/A0synEsXy9kPThA3bR8LRuAOQH0T6CAfIEoYJ0w=";
+  cargoPatches = [
+    # added because the maintainer isn't responding
+    # resolves https://github.com/raylib-rs/raylib-rs/issues/74
+    # remove when https://github.com/coffeeispower/woomer/pull/30 is merged
+    (fetchpatch {
+      url = "https://github.com/coffeeispower/woomer/pull/30.patch";
+      hash = "sha256-bZuKf/iPzEzVNHv0PY9O/vt54rbq/olSUWBPhv2L6xE=";
+    })
+  ];
+
+  cargoHash = "sha256-mSyTQU/PtibkepFrYh6nrRtnsd1jONaPXt9Y5SiE3/U=";
 
   strictDeps = true;
 
@@ -70,8 +80,5 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # https://github.com/waycrate/wayshot/blob/cb6bd68dbbe6ab70a5d8fe3bd04cc154f0631cd8/libwayshot/src/screencopy.rs#L11
     # https://github.com/nix-rust/nix/blob/0e4353a368abfcedea4ebe4345cf7604bb61d238/src/sys/mod.rs#L40-L44
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    # TODO: Remove after upstream is no longer affected by
-    # https://github.com/raylib-rs/raylib-rs/issues/74
-    broken = stdenv.hostPlatform.isAarch64;
   };
 })
