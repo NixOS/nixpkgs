@@ -168,7 +168,7 @@ in
           `cfg.package` must be built with `withNdsudo = true`
           :::
         '';
-        example = ''
+        example = lib.literalExpression ''
           [
             pkgs.smartmontools
             pkgs.nvme-cli
