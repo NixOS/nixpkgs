@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   gitMinimal,
   installShellFiles,
   versionCheckHook,
@@ -11,16 +12,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "beads";
-  version = "0.42.0";
+  version = "0.49.0";
 
   src = fetchFromGitHub {
     owner = "steveyegge";
     repo = "beads";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3t+pm7vuFj3PH1oCJ/AnwbGupqleimNQnP2bRSBHrSg=";
+    hash = "sha256-m0gVLeWfFeaWZpARuXgP00npmZcO7XCm7mXWA52bqTc=";
   };
 
-  vendorHash = "sha256-ovG0EWQFtifHF5leEQTFvTjGvc+yiAjpAaqaV0OklgE=";
+  vendorHash = "sha256-YU+bRLVlWtHzJ1QPzcKJ70f+ynp8lMoIeFlm+29BNPE=";
 
   subPackages = [ "cmd/bd" ];
 
@@ -37,7 +38,10 @@ buildGoModule (finalAttrs: {
   ];
 
   # Skip security tests on Darwin - they check for /etc/passwd which isn't available in sandbox
-  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  checkFlags = [
+    "-skip=TestDaemonAutostart_StartDaemonProcess_Stubbed"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-skip=TestCleanupMergeArtifacts_CommandInjectionPrevention"
   ];
 
@@ -59,11 +63,16 @@ buildGoModule (finalAttrs: {
   versionCheckProgramArg = "version";
   doInstallCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Lightweight memory system for AI coding agents with graph-based issue tracking";
     homepage = "https://github.com/steveyegge/beads";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kedry ];
+    maintainers = with lib.maintainers; [
+      arunoruto
+      kedry
+    ];
     mainProgram = "bd";
   };
 })
