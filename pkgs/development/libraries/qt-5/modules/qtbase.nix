@@ -308,6 +308,7 @@ stdenv.mkDerivation (
         echo "QMAKE_LFLAGS=''${LDFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
         echo "QMAKE_CFLAGS=''${CFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
         echo "QMAKE_CXXFLAGS=''${CXXFLAGS}" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
+        echo "QMAKE_PKGCONFIG_INCDIR=${placeholder "dev"}/include" >> mkspecs/devices/${qtPlatformCross stdenv.hostPlatform}/qmake.conf
       '';
 
       postConfigure = ''
