@@ -8298,6 +8298,11 @@
     githubId = 1847524;
     name = "Evan Stoll";
   };
+  evanlhatch = {
+    github = "evanlhatch";
+    githubId = 44220750;
+    name = "Evan Hatch";
+  };
   evanrichter = {
     email = "evanjrichter@gmail.com";
     github = "evanrichter";
