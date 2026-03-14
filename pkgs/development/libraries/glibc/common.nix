@@ -352,6 +352,7 @@ stdenv.mkDerivation (
             ma27
             connorbaker
           ];
+          teams = [ lib.teams.security-review ];
           platforms = lib.platforms.linux;
         }
         // (args.meta or { });

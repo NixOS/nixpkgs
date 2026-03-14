@@ -13,14 +13,14 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2026-03-02";
+    version = "0-unstable-2026-03-10";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "dd98f761ad393e9efce113bfe56cfd40aa10ed2a";
-      hash = "sha256-LSNStNZZddtWYbppPL4pNqT0oVcem/FLZFhk1DELG84=";
+      rev = "8b95b2058be41580270f1dc348847c3342ee129b";
+      hash = "sha256-5IdfqWj4zOSnkvsssSJywKXrY18DO/zPKNLAJ19Jirk=";
     };
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
@@ -54,7 +54,6 @@ python.pkgs.toPythonModule (
         babel
         certifi
         cloudscraper
-        fasttext-predict
         flask
         flask-babel
         httpx

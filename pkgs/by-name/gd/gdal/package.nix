@@ -318,7 +318,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gdal.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      marcweber
       dotlambda
     ];
     teams = [ lib.teams.geospatial ];

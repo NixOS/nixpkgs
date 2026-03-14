@@ -120,7 +120,10 @@ let
       nixComponentsAttributeName
     ];
 
-  teams = [ lib.teams.nix ];
+  teams = [
+    lib.teams.nix
+    lib.teams.security-review
+  ];
 
   # Disables tests that have been flaky due to the darwin sandbox and fork safety
   # with missing shebangs.

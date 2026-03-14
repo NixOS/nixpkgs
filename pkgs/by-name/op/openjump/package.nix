@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.openjump.org/";
     license = lib.licenses.gpl2;
     mainProgram = "OpenJump";
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     teams = [ lib.teams.geospatial ];
     platforms = jre.meta.platforms;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
