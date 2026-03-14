@@ -3094,6 +3094,8 @@ self: super: with self; {
 
   compit-inext-api = callPackage ../development/python-modules/compit-inext-api { };
 
+  complexipy = callPackage ../development/python-modules/complexipy { };
+
   compliance-trestle = callPackage ../development/python-modules/compliance-trestle { };
 
   complycube = callPackage ../development/python-modules/complycube { };
