@@ -9,6 +9,7 @@
   libidn2,
   libtool,
   libxml2,
+  json_c,
   openssl,
   liburcu,
   libuv,
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libtool
     libxml2
+    json_c
     openssl
     liburcu
     libuv
