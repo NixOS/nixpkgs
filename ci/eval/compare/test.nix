@@ -138,6 +138,21 @@ let
         ];
       };
     };
+    testByNameNonExistentChanged = {
+      expr = fun {
+        pkgs = mockPkgs {
+          packages = [ ];
+        };
+        # Happens when a new package was added to pkgs/by-name
+        changedFiles = [ "pkgs/by-name/he/hello/sources.json" ];
+        affectedAttrPaths = [ ];
+      };
+      expected = {
+        packages = [ ];
+        teams = { };
+        users = { };
+      };
+    };
     testByNameReadmeChanged = {
       expr = fun {
         pkgs = mockPkgs {

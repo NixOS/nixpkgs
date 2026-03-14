@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "4.16";
+  version = "4.17";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
     tag = finalAttrs.version;
-    hash = "sha256-BRdI/50YxwdCdBj91w6OPgTcOb7JkshkVSD8b8bHcYA=";
+    hash = "sha256-xy3gXw3cbFO3OkzgEmIecvxPJT15tn58FI4ppibckzE=";
   };
 
   vendorHash = "sha256-XbfKYftKfbJDkbp9DwVAs56w5lMvqdlW5cwhhivniBM=";
