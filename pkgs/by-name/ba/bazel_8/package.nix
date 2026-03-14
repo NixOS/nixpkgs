@@ -92,6 +92,7 @@ let
       unzip
       which
       zip
+      bash
     ];
   defaultShell = callPackage ./defaultShell.nix { } { inherit defaultShellUtils; };
 
