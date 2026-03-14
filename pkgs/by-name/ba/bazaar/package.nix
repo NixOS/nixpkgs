@@ -18,9 +18,12 @@
   libdex,
   libglycin,
   libglycin-gtk4,
+  libproxy,
   libsoup_3,
   libxmlb,
+  libxml2,
   libyaml,
+  malcontent,
   md4c,
   webkitgtk_6_0,
   libsecret,
@@ -29,18 +32,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bazaar";
-  version = "0.7.8";
+  version = "0.7.12";
 
   src = fetchFromGitHub {
     owner = "kolunmi";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s3NKRh1xUcLXVGWm0oYY4fVX7t7+bZIZ2jAYe1W0LKA=";
+    hash = "sha256-6FWRYzxakUbK2ch+6j2hJAY21qbehYD4CHhCQoneG2M=";
   };
 
   nativeBuildInputs = [
     blueprint-compiler
     desktop-file-utils
+    libxml2
     meson
     ninja
     pkg-config
@@ -58,9 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     libglycin-gtk4
     glycin-loaders
+    libproxy
     libsoup_3
     libxmlb
     libyaml
+    malcontent
     md4c
     webkitgtk_6_0
     libsecret
