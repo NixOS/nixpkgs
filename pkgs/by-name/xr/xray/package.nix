@@ -15,7 +15,7 @@
 
 buildGo126Module (finalAttrs: {
   pname = "xray";
-  version = "26.2.6";
+  version = "1.260206.0";
 
   src = fetchFromGitHub {
     owner = "XTLS";
