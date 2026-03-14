@@ -358,7 +358,7 @@ rec {
       '') settings
     );
 
-  generateUnits =
+  generateUnitsBashOld =
     {
       allowCollisions ? true,
       type,
@@ -378,12 +378,9 @@ rec {
         }
         .${type};
     in
-    pkgs.runCommand "${type}-units"
-      {
-        preferLocalBuild = true;
-        allowSubstitutes = false;
-      }
+    pkgs.runCommandLocal "${type}-units-bash-legacy" { }
       ''
+        START_TIME=$(date +%s%3N)
         mkdir -p $out
 
         # Copy the upstream systemd units we're interested in.
@@ -537,7 +534,390 @@ rec {
 
           ln -s ../remote-fs.target $out/multi-user.target.wants/
         ''}
+        
+        END_TIME=$(date +%s%3N)
+        ELAPSED=$((END_TIME - START_TIME))
+        echo "Built ${type}-units with bash in ''${ELAPSED}ms" >&2
       ''; # */
+
+  generateUnits =
+    {
+      allowCollisions ? true,
+      type,
+      units,
+      upstreamUnits,
+      upstreamWants,
+      packages ? cfg.packages,
+      package ? cfg.package,
+    }:
+    if cfg.unitGenerator.useGoImpl or false
+    then
+      # Fast path: only build Go version (no comparison)
+      generateUnitsGoOnly {
+        inherit allowCollisions type units upstreamUnits upstreamWants packages package;
+      }
+    else if cfg.unitGenerator.useRustImpl or false
+    then
+      # Fast path: only build Rust version (no comparison)
+      generateUnitsRustOnly {
+        inherit allowCollisions type units upstreamUnits upstreamWants packages package;
+      }
+    else
+      # Default: build bash (output) + Go (testing & comparison)
+      generateUnitsBashWithGoComparison {
+        inherit allowCollisions type units upstreamUnits upstreamWants packages package;
+      };
+
+  # Build only the Go version (when unitGenerator.useGoImpl = true)
+  # Set optional = true to make failures graceful (for comparison mode)
+  generateUnitsGoOnly =
+    {
+      allowCollisions ? true,
+      type,
+      units,
+      upstreamUnits,
+      upstreamWants,
+      packages ? cfg.packages,
+      package ? cfg.package,
+      optional ? false,
+    }:
+    let
+      typeDir =
+        {
+          system = "system";
+          initrd = "system";
+          user = "user";
+          nspawn = "nspawn";
+        }
+        .${type};
+      
+      # Compile the Go unit generator
+      unitGenerator = pkgs.writers.writeGo "systemd-unit-generator" {} 
+        ./systemd-unit-generator.go;
+      
+      # Extract units by override strategy
+      unitsAutodetect = mapAttrsToList (n: v: v.unit) (
+        filterAttrs (
+          n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists"
+        ) units
+      );
+      
+      # Systemd.units which shall be treated as drop-in file
+      unitsDropin = mapAttrsToList (n: v: v.unit) (
+        filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units
+      );
+      
+      # Extract aliases, wantedBy, upheldBy, requiredBy
+      aliases = mapAttrs (n: v: v.aliases or []) units;
+      wantedBy = mapAttrs (n: v: v.wantedBy or []) units;
+      upheldBy = mapAttrs (n: v: v.upheldBy or []) units;
+      requiredBy = mapAttrs (n: v: v.requiredBy or []) units;
+      
+      # Create JSON config (outDir passed via command line)
+      config = pkgs.writeText "${type}-unit-gen-config.json" (builtins.toJSON {
+        inherit typeDir allowCollisions;
+        packageSource = toString package;
+        # we flatten these, because sometimes they are generated as nested list (bug?)
+        upstreamUnits = flatten upstreamUnits;
+        upstreamWants = flatten upstreamWants;
+        packages = flatten packages;
+        unitsAutodetect = map toString unitsAutodetect;
+        unitsDropin = map toString unitsDropin;
+        inherit aliases wantedBy upheldBy requiredBy;
+        isSystemType = type == "system";
+        defaultUnit = if type == "system" then cfg.defaultUnit else "";
+        ctrlAltDelUnit = if type == "system" then cfg.ctrlAltDelUnit else "";
+        lndirPath = lndir;
+        debug = cfg.unitGenerator.debug or false;
+      });
+    in
+    pkgs.runCommandLocal "${type}-units-go-ng" { }
+      (if optional then ''
+        # Optional mode: catch failures and write marker
+        set +e
+        START_TIME=$(date +%s%3N)
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "=== Building systemd units with Go implementation ===" >&2
+        ''}
+        
+        ${if cfg.unitGenerator.debug or false then ''
+          # Debug mode: show output
+          if ${unitGenerator} -config ${config} -out $out 2>&1 | tee $TMPDIR/go-error.log >&2; then
+        '' else ''
+          # Non-debug mode: capture output
+          if ${unitGenerator} -config ${config} -out $out 2>$TMPDIR/go-error.log; then
+        ''}
+          END_TIME=$(date +%s%3N)
+          ELAPSED=$((END_TIME - START_TIME))
+          echo "Built ${type}-units with Go in ''${ELAPSED}ms (consider enabling systemd.unitGenerator.useGoImpl)" >&2
+          exit 0
+          
+        else
+          # Go build failed - create marker
+          rm -rf $out
+          mkdir -p $out
+          echo "Go unit generator failed" > $out/.build-failed
+          if [ -f $TMPDIR/go-error.log ]; then
+            cp $TMPDIR/go-error.log $out/.error.log
+          fi
+          exit 0  # Don't fail the derivation
+        fi
+        
+      '' else ''
+        START_TIME=$(date +%s%3N)
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "=== Building systemd units with Go implementation ===" >&2
+        ''}
+        ${unitGenerator} -config ${config} -out $out
+        END_TIME=$(date +%s%3N)
+        ELAPSED=$((END_TIME - START_TIME))
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "Built ${type}-units with Go in ''${ELAPSED}ms" >&2
+        ''}
+      '');
+
+  # Build only the Rust version (when unitGenerator.useRustImpl = true)
+  # Set optional = true to make failures graceful (for comparison mode)
+  generateUnitsRustOnly =
+    {
+      allowCollisions ? true,
+      type,
+      units,
+      upstreamUnits,
+      upstreamWants,
+      packages ? cfg.packages,
+      package ? cfg.package,
+      optional ? false,
+    }:
+    let
+      typeDir =
+        {
+          system = "system";
+          initrd = "system";
+          user = "user";
+          nspawn = "nspawn";
+        }
+        .${type};
+      
+      # Compile the Rust unit generator
+      unitGenerator = pkgs.callPackage ./systemd-unit-generator-rust { };
+      
+      # Extract units by override strategy
+      unitsAutodetect = mapAttrsToList (n: v: v.unit) (
+        filterAttrs (
+          n: v: (attrByPath [ "overrideStrategy" ] "asDropinIfExists" v) == "asDropinIfExists"
+        ) units
+      );
+      
+      # Systemd.units which shall be treated as drop-in file
+      unitsDropin = mapAttrsToList (n: v: v.unit) (
+        filterAttrs (n: v: v ? overrideStrategy && v.overrideStrategy == "asDropin") units
+      );
+      
+      # Extract aliases, wantedBy, upheldBy, requiredBy
+      aliases = mapAttrs (n: v: v.aliases or []) units;
+      wantedBy = mapAttrs (n: v: v.wantedBy or []) units;
+      upheldBy = mapAttrs (n: v: v.upheldBy or []) units;
+      requiredBy = mapAttrs (n: v: v.requiredBy or []) units;
+      
+      # Create JSON config (outDir passed via command line)
+      config = pkgs.writeText "${type}-unit-gen-config.json" (builtins.toJSON {
+        inherit typeDir allowCollisions;
+        packageSource = toString package;
+        # we flatten these, because sometimes they are generated as nested list (bug?)
+        upstreamUnits = flatten upstreamUnits;
+        upstreamWants = flatten upstreamWants;
+        packages = flatten packages;
+        unitsAutodetect = map toString unitsAutodetect;
+        unitsDropin = map toString unitsDropin;
+        inherit aliases wantedBy upheldBy requiredBy;
+        isSystemType = type == "system";
+        defaultUnit = if type == "system" then cfg.defaultUnit else "";
+        ctrlAltDelUnit = if type == "system" then cfg.ctrlAltDelUnit else "";
+        lndirPath = lndir;
+        debug = cfg.unitGenerator.debug or false;
+      });
+    in
+    pkgs.runCommandLocal "${type}-units-rust-ng" { }
+      (if optional then ''
+        # Optional mode: catch failures and write marker
+        set +e
+        START_TIME=$(date +%s%3N)
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "=== Building systemd units with Rust implementation ===" >&2
+        ''}
+        
+        ${if cfg.unitGenerator.debug or false then ''
+          # Debug mode: show output
+          if ${unitGenerator}/bin/systemd-unit-generator -config ${config} -out $out 2>&1 | tee $TMPDIR/rust-error.log >&2; then
+        '' else ''
+          # Non-debug mode: capture output
+          if ${unitGenerator}/bin/systemd-unit-generator -config ${config} -out $out 2>$TMPDIR/rust-error.log; then
+        ''}
+          END_TIME=$(date +%s%3N)
+          ELAPSED=$((END_TIME - START_TIME))
+          echo "Built ${type}-units with Rust in ''${ELAPSED}ms (consider enabling systemd.unitGenerator.useRustImpl)" >&2
+          exit 0
+          
+        else
+          # Rust build failed - create marker
+          rm -rf $out
+          mkdir -p $out
+          echo "Rust unit generator failed" > $out/.build-failed
+          if [ -f $TMPDIR/rust-error.log ]; then
+            cp $TMPDIR/rust-error.log $out/.error.log
+          fi
+          exit 0  # Don't fail the derivation
+        fi
+        
+      '' else ''
+        START_TIME=$(date +%s%3N)
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "=== Building systemd units with Rust implementation ===" >&2
+        ''}
+        ${unitGenerator}/bin/systemd-unit-generator -config ${config} -out $out
+        END_TIME=$(date +%s%3N)
+        ELAPSED=$((END_TIME - START_TIME))
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "Built ${type}-units with Rust in ''${ELAPSED}ms" >&2
+        ''}
+      '');
+
+  # Build bash version (output) and Go/Rust versions (comparison) - default behavior
+  generateUnitsBashWithGoComparison =
+    {
+      allowCollisions ? true,
+      type,
+      units,
+      upstreamUnits,
+      upstreamWants,
+      packages ? cfg.packages,
+      package ? cfg.package,
+    }:
+    let
+      # Build the bash version (this will be the output)
+      bashVersion = generateUnitsBashOld {
+        inherit allowCollisions type units upstreamUnits upstreamWants packages package;
+      };
+      
+      # Build Go version for comparison (with optional = true to allow graceful failure)
+      goVersion = generateUnitsGoOnly {
+        inherit allowCollisions type units upstreamUnits upstreamWants packages package;
+        optional = true;
+      };
+      
+      # Build Rust version for comparison (with optional = true to allow graceful failure)
+      rustVersion = generateUnitsRustOnly {
+        inherit allowCollisions type units upstreamUnits upstreamWants packages package;
+        optional = true;
+      };
+    in
+    # Return bash version as output, but compare with Go and Rust
+    pkgs.runCommandLocal "${type}-units" { }
+      ''
+        # Use bash output as the actual result (just symlink the directory)
+        ln -s ${bashVersion} $out
+        
+        # Compare with Go version and warn if different
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+        echo "=== Comparing bash (stable) with Go (experimental) implementation ===" >&2
+        ''}
+        
+        # Check if Go build failed
+        if [ -f ${goVersion}/.build-failed ]; then
+          cat >&2 <<'EOF'
+        
+        WARNING: Go systemd unit generator failed to build!
+        
+        The experimental Go implementation failed to build for: ${type}-units
+        Using stable bash output.
+        EOF
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "" >&2
+          echo "Build error:" >&2
+          cat ${goVersion}/.error.log >&2 2>/dev/null || echo "(error log not available)" >&2
+        ''}
+        ${optionalString (!(cfg.unitGenerator.debug or false)) ''
+          echo "Enable systemd.unitGenerator.debug = true; to see the full error." >&2
+        ''}
+          echo "" >&2
+        elif ! diff -r ${bashVersion} ${goVersion} > $TMPDIR/unit-diff.log 2>&1; then
+          cat >&2 <<'EOF'
+        
+        WARNING: Go systemd unit generator produced different output!
+        
+        The experimental Go implementation differs from bash for: ${type}-units
+        
+        Using stable bash output, but please help us by reporting this:
+          https://github.com/NixOS/nixpkgs/issues/new?template=03_bug_report_nixos.yml&title=systemd%20unit%20generator:%20Go%20implementation%20differs%20from%20bash
+
+        To help diagnose, enable debug output and post it to the issue:
+          systemd.unitGenerator.debug = true;
+        
+        To use the faster Go version only, set:
+          systemd.unitGenerator.useGoImpl = true;
+        
+        EOF
+          echo "Diff:" >&2
+          cat $TMPDIR/unit-diff.log >&2 || true
+        else
+        ${if cfg.unitGenerator.debug or false then ''
+          echo "✓ Go and bash implementations match!" >&2
+        '' else ''
+          true
+        ''}
+        fi
+        
+        # Compare with Rust version and warn if different
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+        echo "=== Comparing bash (stable) with Rust implementation ===" >&2
+        ''}
+        
+        # Check if Rust build failed
+        if [ -f ${rustVersion}/.build-failed ]; then
+          cat >&2 <<'EOF'
+        
+        WARNING: Rust systemd unit generator failed to build!
+        
+        The Rust implementation failed to build for: ${type}-units
+        Using stable bash output.
+        EOF
+        ${optionalString (cfg.unitGenerator.debug or false) ''
+          echo "" >&2
+          echo "Build error:" >&2
+          cat ${rustVersion}/.error.log >&2 2>/dev/null || echo "(error log not available)" >&2
+        ''}
+        ${optionalString (!(cfg.unitGenerator.debug or false)) ''
+          echo "Enable systemd.unitGenerator.debug = true; to see the full error." >&2
+        ''}
+          echo "" >&2
+        elif ! diff -r ${bashVersion} ${rustVersion} > $TMPDIR/unit-diff-rust.log 2>&1; then
+          cat >&2 <<'EOF'
+        
+        WARNING: Rust systemd unit generator produced different output!
+        
+        The Rust implementation differs from bash for: ${type}-units
+        
+        Using stable bash output, but please help us by reporting this:
+          https://github.com/NixOS/nixpkgs/issues/new?template=03_bug_report_nixos.yml&title=systemd%20unit%20generator:%20Rust%20implementation%20differs%20from%20bash
+
+        To help diagnose, enable debug output and post it to the issue:
+          systemd.unitGenerator.debug = true;
+        
+        To use the Rust version only, set:
+          systemd.unitGenerator.useRustImpl = true;
+        
+        EOF
+          echo "Diff:" >&2
+          cat $TMPDIR/unit-diff-rust.log >&2 || true
+        else
+        ${if cfg.unitGenerator.debug or false then ''
+          echo "✓ Rust and bash implementations match!" >&2
+        '' else ''
+          true
+        ''}
+        fi
+      '';
 
   makeJobScript =
     {
