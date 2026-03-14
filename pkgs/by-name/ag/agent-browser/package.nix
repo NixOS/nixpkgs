@@ -1,83 +1,32 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  cargo,
-  rustc,
-  nodejs,
-  pnpm_10,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  makeWrapper,
   nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "agent-browser";
-  version = "0.17.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "vercel-labs";
     repo = "agent-browser";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7b9vlgyC6tyfTwHsJJIwLhkZ+1KM36vXd+8rl+uG7bo=";
+    hash = "sha256-04Y3OUiCfuIimO0KmF7VPFG3REvqD+nq7QprnuIZwKE=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.src.name}/cli";
-    hash = "sha256-raoQMOffll5bmf2DZtzTXbYO7hbCamTKU92YTKyoNdI=";
-  };
+  sourceRoot = "${finalAttrs.src.name}/cli";
 
-  cargoRoot = "cli";
+  cargoHash = "sha256-7l/2Q1P5JIC+kp0Pm729LBXXHVDt//Xe1cieWHjcvdc=";
 
-  pnpmDeps = fetchPnpmDeps {
-    inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
-    fetcherVersion = 3;
-    hash = "sha256-akW4F0fc4coU38x/og2fedKmTZ0wRyvmYzQbQCYn8VU=";
-  };
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  nativeBuildInputs = [
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-    pnpm_10
-    pnpmConfigHook
-    nodejs
-    makeWrapper
-  ];
-
-  postUnpack = ''
-    cargoDepsCopy="$sourceRoot/cli/vendor"
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    pnpm run build
-    cargo build --release --manifest-path cli/Cargo.toml
-
-    runHook postBuild
-  '';
-
-  # Upstream's postinstall.js downloads pre-built binaries from GitHub releases.
-  # We build the Rust CLI from source instead, setting AGENT_BROWSER_HOME so
-  # the CLI can locate dist/daemon.js at runtime.
-  # skills/ contains AI agent documentation (SKILL.md) for tools like Claude Code.
-  installPhase = ''
-    runHook preInstall
-
+  # skills/ contains SKILL.md for tools like Claude Code.
+  postInstall = ''
     mkdir -p $out/lib/agent-browser
-    cp -r dist node_modules package.json skills $out/lib/agent-browser/
-    install -Dm755 cli/target/release/agent-browser $out/lib/agent-browser/agent-browser
-
-    makeWrapper $out/lib/agent-browser/agent-browser $out/bin/agent-browser \
-      --prefix PATH : ${lib.makeBinPath [ nodejs ]} \
-      --set AGENT_BROWSER_HOME "$out/lib/agent-browser"
-
-    runHook postInstall
+    cp -r ../skills $out/lib/agent-browser/
   '';
 
   passthru.updateScript = nix-update-script { };
