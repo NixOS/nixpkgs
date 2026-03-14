@@ -7,12 +7,9 @@
   gnutar,
   gzip,
 }:
-let
-  version = "6M62";
-in
 stdenv.mkDerivation {
   pname = "inform7";
-  inherit version;
+  version = "6M62";
   buildInputs = [
     perl
     coreutils
@@ -20,8 +17,8 @@ stdenv.mkDerivation {
     gzip
   ];
   src = fetchzip {
-    url = "http://inform7.com/download/content/6M62/I7_6M62_Linux_all.tar.gz";
-    sha256 = "0bk0pfymvsn1g8ci0pfdw7dgrlzb232a8pc67y2xk6zgpf3m41vj";
+    url = "http://emshort.com/inform-app-archive/6M62/I7_6M62_Linux_all.tar.gz";
+    hash = "sha256-f/ICxCl2VPBMZwXsk7ahD3kV8XF+CEi21x9mm8ElP/Y=";
   };
   preConfigure = "touch Makefile.PL";
   buildPhase = "";
@@ -38,7 +35,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Design system for interactive fiction";
     mainProgram = "i7";
-    homepage = "http://inform7.com/";
+    homepage = "http://emshort.com/inform-app-archive";
     license = lib.licenses.artistic2;
     maintainers = with lib.maintainers; [ mbbx6spp ];
     platforms = lib.platforms.unix;
