@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rpm-sequoia";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = "rpm-sequoia";
     tag = "v${version}";
-    hash = "sha256-/PdbCBpEWig+acLvrN5nhJ6ca+tAh2bpqDLTRJoFuWU=";
+    hash = "sha256-sko97eYJMUPOOPZFn8IeCzOUYKjN70RrWvX1JY5/Xhk=";
   };
 
-  cargoHash = "sha256-Qi46nlgX/k2rRAvCToXkfZpjt7ERu25/4WUIIQUOC/I=";
+  cargoHash = "sha256-/TPxuk7it6t2Bz7gNbVmfC3uFVyQef01Jw7S1pa1SSs=";
 
   patches = [
     ./objdump.patch
