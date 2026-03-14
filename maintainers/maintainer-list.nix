@@ -112,6 +112,11 @@
     github = "einetuer";
     githubId = 54070204;
   };
+  _0xAdk = {
+    github = "0xAdk";
+    githubId = 29005635;
+    name = "0xAdk";
+  };
   _0xB10C = {
     email = "nixpkgs@b10c.me";
     name = "0xB10C";
