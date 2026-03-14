@@ -173,6 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.zlib;
     platforms = lib.platforms.all;
     pkgConfigModules = [ "zlib" ];
+    teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "zlib" finalAttrs.version;
   };
 })

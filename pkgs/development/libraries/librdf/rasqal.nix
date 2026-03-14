@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21
       asl20
     ];
-    maintainers = with lib.maintainers; [ marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     pkgConfigModules = [ "rasqal" ];
   };

@@ -5,14 +5,14 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "kin-openapi";
-  version = "0.133.0";
-  vendorHash = "sha256-SFT4mY0TVUa/hMMe7sOVToSX8qA1OimOiNs4kBjRdBU=";
+  version = "0.134.0";
+  vendorHash = "sha256-+PE/OyZ9Y4uZV4AmzATasrFseQF3UrWQT0bKoxm3uXM=";
 
   src = fetchFromGitHub {
     owner = "getkin";
     repo = "kin-openapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7KC+cHdI3zArJbSMfao8JIb3sUZJK1PQfrIiFI0zHM8=";
+    hash = "sha256-MJ6oG2CU8jzPk394iJqCZPmm3LCbF6Nz112/fJ65c5w=";
   };
 
   checkFlags =

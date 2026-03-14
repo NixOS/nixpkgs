@@ -617,6 +617,7 @@ stdenv.mkDerivation (finalAttrs: {
       philiptaron
       zivarah
     ];
+    teams = [ lib.teams.security-review ];
     mainProgram = "git";
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "git-scm" finalAttrs.version;
   };

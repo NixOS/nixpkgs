@@ -235,6 +235,7 @@ def run_wrapper(
     *,
     check: bool = True,
     env: Mapping[str, EnvValue] | None = None,
+    append_local_env: Mapping[str, str] | None = None,
     remote: Remote | None = None,
     sudo: bool = False,
     **kwargs: Unpack[RunKwargs],
@@ -245,11 +246,16 @@ def run_wrapper(
     )
 
     logger.debug(
-        "calling run with args=%r, kwargs=%r, env=%r",
+        "calling run with args=%r, kwargs=%r, env=%r, append_local_env=%r",
         _sanitize_env_run_args(list(final_args)),
         kwargs,
         env,
+        append_local_env,
     )
+
+    if append_local_env:
+        popen_env = dict(os.environ) if popen_env is None else dict(popen_env)
+        popen_env.update(append_local_env)
 
     try:
         r = subprocess.run(

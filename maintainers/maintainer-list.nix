@@ -5709,6 +5709,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  cyrusknopf = {
+    email = "cyrus.knopf@gmail.com";
+    github = "cyrusknopf";
+    githubId = 26168196;
+    name = "Cyrus Knopf";
+  };
   cything = {
     name = "cy";
     email = "nix@cything.io";
@@ -16432,12 +16438,6 @@
     githubId = 5526;
     name = "Marcus Ramberg";
   };
-  marcweber = {
-    email = "marco-oweber@gmx.de";
-    github = "MarcWeber";
-    githubId = 34086;
-    name = "Marc Weber";
-  };
   marenz = {
     email = "marenz@arkom.men";
     github = "marenz2569";
@@ -22230,6 +22230,12 @@
     github = "rafameou";
     githubId = 26395874;
   };
+  rafanochi = {
+    email = "zawkindev@gmail.com";
+    name = "Rafa";
+    github = "rafanochi";
+    githubId = 139969429;
+  };
   ragge = {
     email = "r.dahlen@gmail.com";
     github = "ragnard";
@@ -23231,6 +23237,12 @@
     github = "rople380";
     githubId = 55679162;
     keys = [ { fingerprint = "1401 1B63 393D 16C1 AA9C  C521 8526 B757 4A53 6236"; } ];
+  };
+  roquess = {
+    name = "Steve Roques";
+    email = "steve.roques@gmail.com";
+    github = "roquess";
+    githubId = 8398054;
   };
   rorosen = {
     email = "robert.rose@mailbox.org";
@@ -30111,6 +30123,16 @@
     github = "zestsystem";
     githubId = 39456023;
     name = "Mike Yim";
+  };
+  zevisert = {
+    email = "dev@zevisert.ca";
+    github = "zevisert";
+    githubId = 11222441;
+    name = "Zev Isert";
+    keys = [
+      { fingerprint = "BBA2 3AB2 60EA 8DD3 9889  F234 C530 8063 6561 2531"; }
+      { fingerprint = "897B 6DF1 D6FC 152C 9347  486D 042F 1F94 C62D DB03"; }
+    ];
   };
   zfnmxt = {
     name = "zfnmxt";
