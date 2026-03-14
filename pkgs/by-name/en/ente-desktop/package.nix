@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
-  electron_38,
+  electron_41,
   yarnConfigHook,
   copyDesktopItems,
   vips,
@@ -15,7 +15,7 @@
   imagemagick,
 }:
 let
-  electron = electron_38;
+  electron = electron_41;
 in
 
 stdenv.mkDerivation (finalAttrs: {
