@@ -897,7 +897,9 @@ in
           options.BridgeRelay = optionBool "BridgeRelay" // {
             default = false;
           };
-          options.CacheDirectory = optionPath "CacheDirectory";
+          options.CacheDirectory = optionPath "CacheDirectory" // {
+            default = "/var/cache/tor";
+          };
           options.CacheDirectoryGroupReadable = optionBool "CacheDirectoryGroupReadable"; # default is null and like "auto"
           options.CellStatistics = optionBool "CellStatistics";
           options.ClientAutoIPv6ORPort = optionBool "ClientAutoIPv6ORPort";
@@ -1416,6 +1418,8 @@ in
         TimeoutSec = cfg.settings.ShutdownWaitLength + 30; # Wait a bit longer than ShutdownWaitLength before actually timing out
         Restart = "on-failure";
         LimitNOFILE = 32768;
+        CacheDirectory = lib.mkIf (cfg.settings.CacheDirectory == "/var/cache/tor") "tor";
+        CacheDirectoryMode = "0700";
         RuntimeDirectory = [
           # g+x allows access to the control socket
           "tor"
