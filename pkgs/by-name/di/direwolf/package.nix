@@ -5,14 +5,21 @@
   fetchpatch,
   cmake,
   alsa-lib,
+  avahi,
   gpsd,
   gpsdSupport ? false,
   hamlib_4,
   hamlib ? hamlib_4,
   hamlibSupport ? true,
+  hidapi,
+  libcap,
+  libgpiod,
+  libusb1,
   perl,
+  pkg-config,
   portaudio,
   python3,
+  sndio,
   espeak,
   udev,
   udevCheckHook,
@@ -32,26 +39,32 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CCJr3l4RxYZLrdCRwio64EzpDyErlV9JDOXD6TH8p9o=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     cmake
+    pkg-config
     udevCheckHook
   ];
-
-  strictDeps = true;
-
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ portaudio ]
-    ++ lib.optionals gpsdSupport [ gpsd ]
-    ++ lib.optionals hamlibSupport [ hamlib ]
-    ++ lib.optionals extraScripts [
-      python3
-      perl
-      espeak
-    ];
+  buildInputs = [
+    hidapi
+    libusb1
+    portaudio
+    sndio
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    avahi
+    udev
+    libcap
+    libgpiod
+  ]
+  ++ lib.optionals gpsdSupport [ gpsd ]
+  ++ lib.optionals hamlibSupport [ hamlib ]
+  ++ lib.optionals extraScripts [
+    python3
+    perl
+    espeak
+  ];
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   preConfigure = lib.optionals (!extraScripts) ''
