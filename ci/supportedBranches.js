@@ -1,8 +1,3 @@
-#!/usr/bin/env nix-shell
-/*
-#!nix-shell -i node -p nodejs
-*/
-
 const typeConfig = {
   master: ['development', 'primary'],
   release: ['development', 'primary'],
