@@ -1,14 +1,12 @@
-args@{
+{
   lib,
-  config,
-  pkgs,
   ...
 }:
-let
-  test = import ./test.nix args;
-in
-test {
-  name = "contracts-secrets-hardcoded-secret";
+{
+  meta.maintainers = [ lib.maintainers.ibizaman ];
+}
+// lib.contracts.fileSecrets.behaviorTest {
+  name = "hardcoded-secret";
   providerRoot = [
     "testing"
     "hardcoded-secret"
@@ -23,7 +21,4 @@ test {
       }
     )
   ];
-}
-// {
-  meta.maintainers = [ lib.maintainers.ibizaman ];
 }

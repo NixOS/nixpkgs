@@ -7,13 +7,19 @@
 let
   cfg = config.testing.hardcoded-secret;
 
-  inherit (lib) mapAttrs' mkOption nameValuePair;
+  inherit (lib)
+    contracts
+    mapAttrs'
+    mkOption
+    nameValuePair
+    ;
   inherit (lib.types)
     attrsOf
     str
     submodule
     ;
   inherit (pkgs) writeText;
+  inherit (contracts) fileSecrets;
 in
 {
   options.testing.hardcoded-secret = mkOption {
@@ -45,51 +51,16 @@ in
           options = {
             input = mkOption {
               description = "Input of the contract for file secrets.";
-              type = lib.types.submodule {
-                options = {
-                  mode = mkOption {
-                    description = ''
-                      Mode the secret file must have.
-                    '';
-                    type = str;
-                    default = "0400";
-                  };
-
-                  owner = mkOption {
-                    description = ''
-                      Linux user that must own the secret file.
-                    '';
-                    type = str;
-                    default = "root";
-                  };
-
-                  group = mkOption {
-                    description = ''
-                      Linux group that must own the secret file.
-                    '';
-                    type = str;
-                    default = "root";
-                  };
-                };
+              type = fileSecrets.input {
+                owner.default = "root";
+                group.default = "root";
               };
             };
-
             output = mkOption {
               description = "Output of the contract for file secrets.";
               default = { };
-              type = lib.types.submodule {
-                options = {
-                  path = mkOption {
-                    type = str;
-                    description = ''
-                      Path to the file containing the secret generated out of band.
-
-                      This path will exist after deploying to a target host,
-                      it is not available through the nix store.
-                    '';
-                    default = "/run/hardcodedsecrets/${name}";
-                  };
-                };
+              type = fileSecrets.output {
+                path.default = "/run/hardcodedsecrets/${name}";
               };
             };
 
