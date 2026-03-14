@@ -38,10 +38,12 @@ let
           description = "Extra Environment variables to pass to the fedimintd.";
           default = {
             RUST_BACKTRACE = "1";
+            RUST_LIB_BACKTRACE = "0";
           };
           example = {
             RUST_LOG = "info,fm=debug";
             RUST_BACKTRACE = "1";
+            RUST_LIB_BACKTRACE = "0";
           };
         };
 
@@ -63,6 +65,7 @@ let
           };
           url = mkOption {
             type = types.nullOr types.str;
+            default = null;
             example = "fedimint://p2p.myfedimint.com:8173";
             description = ''
               Public address for p2p connections from peers (if TCP is used)
@@ -87,6 +90,7 @@ let
           };
           url = mkOption {
             type = types.nullOr types.str;
+            default = null;
             description = ''
               Public URL of the API address of the reverse proxy/tls terminator. Usually starting with `wss://`.
             '';
@@ -133,34 +137,48 @@ let
             example = "bitcoin";
             description = "Bitcoin network to participate in.";
           };
-          rpc = {
-            url = mkOption {
-              type = types.str;
-              default = "http://127.0.0.1:38332";
-              example = "signet";
-              description = "Bitcoin node (bitcoind/electrum/esplora) address to connect to";
-            };
 
-            kind = mkOption {
-              type = types.str;
-              default = "bitcoind";
-              example = "electrum";
-              description = "Kind of a bitcoin node.";
-            };
-
-            secretFile = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                If set the URL specified in `bitcoin.rpc.url` will get the content of this file added
-                as an URL password, so `http://user@example.com` will turn into `http://user:SOMESECRET@example.com`.
-
-                Example:
-
-                `/etc/nix-bitcoin-secrets/bitcoin-rpcpassword-public` (for nix-bitcoin default)
-              '';
-            };
+          bitcoindUrl = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "http://127.0.0.1:38332";
+            description = "Bitcoin node (bitcoind/electrum/esplora) address to connect to";
           };
+
+          bitcoindUser = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "bitcoin";
+            description = "Bitcoind RPC user";
+          };
+
+          bitcoindPassword = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            description = "Bitcoind RPC password";
+          };
+
+          bitcoindSecretFile = mkOption {
+            type = types.nullOr types.path;
+            default = null;
+            description = ''
+              If set the URL specified in `bitcoin.bitcoindUrl` will get the content of
+              this file added as an URL password, so `http://user@example.com` will turn
+              into `http://user:SOMESECRET@example.com`.
+
+              Example:
+
+              `/etc/nix-bitcoin-secrets/bitcoin-rpcpassword-public` (for nix-bitcoin default)
+            '';
+          };
+
+          esploraUrl = mkOption {
+            type = types.nullOr types.str;
+            default = null;
+            example = "https://mempool.space/signet/api";
+            description = "Bitcoin node (bitcoind/electrum/esplora) address to connect to";
+          };
+
         };
 
         consensus.finalityDelay = mkOption {
@@ -234,6 +252,23 @@ in
     in
     mkIf (eachFedimintd != { }) {
 
+      assertions = [
+        {
+          assertion = lib.all (
+            cfg:
+            (cfg.bitcoin.bitcoindUrl != null)
+            -> (cfg.bitcoin.bitcoindUser != null && cfg.bitcoin.bitcoindPassword != null)
+          ) (lib.mapAttrsToList (name: cfg: cfg) eachFedimintd);
+          message = "If bitcoindUrl is set, both bitcoindUser and bitcoindPassword must also be set. Embedded credentials in the bitcoindUrl are not supported anymore, please remove them.";
+        }
+        {
+          assertion = lib.all (cfg: (cfg.bitcoin.bitcoindUrl != null || cfg.bitcoin.esploraUrl != null)) (
+            lib.mapAttrsToList (name: cfg: cfg) eachFedimintd
+          );
+          message = "Either bitcoindUrl or esploraUrl must be set for each fedimintd instance";
+        }
+      ];
+
       networking.firewall.allowedTCPPorts = concatLists (
         mapAttrsToList (
           fedimintdName: cfg:
@@ -259,21 +294,9 @@ in
         fedimintdName: cfg:
         (nameValuePair "fedimintd-${fedimintdName}" (
           let
-            startScript = pkgs.writeShellScriptBin "fedimintd" (
-              (
-                if cfg.bitcoin.rpc.secretFile != null then
-                  ''
-                    >&2 echo "Setting FM_FORCE_BITCOIN_RPC_URL using password from ${cfg.bitcoin.rpc.secretFile}"
-                    secret=$(${pkgs.coreutils}/bin/head -n 1 "${cfg.bitcoin.rpc.secretFile}" || exit 1)
-                    export FM_FORCE_BITCOIN_RPC_URL=$(echo "$FM_BITCOIN_RPC_URL" | sed "s|^\(\w\+://[^@]\+\)\(@.*\)|\1:''${secret}\2|")
-                  ''
-                else
-                  ""
-              )
-              + ''
-                exec ${cfg.package}/bin/fedimintd
-              ''
-            );
+            startScript = pkgs.writeShellScriptBin "fedimintd" ''
+              exec ${cfg.package}/bin/fedimintd
+            '';
           in
           {
             description = "Fedimint Server";
@@ -287,8 +310,11 @@ in
                 FM_BIND_UI = "${cfg.ui.bind}:${toString cfg.ui.port}";
                 FM_DATA_DIR = cfg.dataDir;
                 FM_BITCOIN_NETWORK = cfg.bitcoin.network;
-                FM_BITCOIN_RPC_URL = cfg.bitcoin.rpc.url;
-                FM_BITCOIN_RPC_KIND = cfg.bitcoin.rpc.kind;
+                FM_BITCOIND_URL = cfg.bitcoin.bitcoindUrl;
+                FM_ESPLORA_URL = cfg.bitcoin.esploraUrl;
+                FM_BITCOIND_URL_PASSWORD_FILE = cfg.bitcoin.bitcoindSecretFile;
+                FM_BITCOIND_USERNAME = cfg.bitcoin.bitcoindUser;
+                FM_BITCOIND_PASSWORD = cfg.bitcoin.bitcoindPassword;
               }
 
               (lib.optionalAttrs (cfg.p2p.url != null) {
@@ -310,6 +336,7 @@ in
 
               Restart = "always";
               RestartSec = 10;
+              StartLimitBurst = 5;
               UMask = "007";
               LimitNOFILE = "100000";
 
@@ -333,15 +360,18 @@ in
               ];
               RestrictNamespaces = true;
               RestrictRealtime = true;
-              SocketBindAllow = "udp:${toString cfg.api_iroh.port}";
+              SocketBindAllow = [
+                "tcp:${toString cfg.p2p.port}"
+                "udp:${toString cfg.p2p.port}"
+                "tcp:${toString cfg.api_ws.port}"
+                "tcp:${toString cfg.ui.port}"
+                "udp:${toString cfg.api_iroh.port}"
+              ];
               SystemCallArchitectures = "native";
               SystemCallFilter = [
                 "@system-service"
                 "~@privileged"
               ];
-            };
-            unitConfig = {
-              StartLimitBurst = 5;
             };
           }
         ))
