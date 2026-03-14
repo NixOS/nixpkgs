@@ -1,7 +1,11 @@
+# Run this test with NIXPKGS_ALLOW_UNFREE=1
 { pkgs, lib, ... }:
 {
   name = "graylog";
-  meta.maintainers = [ ];
+  meta.maintainers = with lib.maintainers; [
+    bbenno
+    robertjakub
+  ];
 
   nodes.machine =
     { pkgs, ... }:
@@ -10,6 +14,9 @@
       virtualisation.diskSize = 1024 * 6;
 
       services.mongodb.enable = true;
+      # use Community Edition to speedup tests.
+      services.mongodb.package = pkgs.mongodb-ce;
+
       services.elasticsearch.enable = true;
       services.elasticsearch.extraConf = ''
         network.publish_host: 127.0.0.1
@@ -127,12 +134,14 @@
 
       machine.succeed(
           'test "$(curl -X GET '
-          + "-sSfL 'http://127.0.0.1:9000/api/search/universal/relative?query=*' "
+          + "-sSfL 'http://127.0.0.1:9000/api/search/universal/relative?query=*&range=300&fields=*' "
           + f"-u {session}:session "
           + "-H 'Accept: application/json' "
           + "-H 'Content-Type: application/json' "
           + "-H 'x-requested-by: cli'"
           + ' | jq \'.total_results\' | xargs echo)" = "1"'
       )
+
+      machine.shutdown()
     '';
 }

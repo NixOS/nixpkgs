@@ -5,6 +5,9 @@ in
 buildGraylog {
   version = "6.0.14";
   hash = "sha256-PH3xAO4bb5SvcqZoRoQeRaIBZdGfoRd3Kcnr603hYaI=";
-  maintainers = with lib.maintainers; [ bbenno ];
+  maintainers = with lib.maintainers; [
+    bbenno
+    robertjakub
+  ];
   license = lib.licenses.sspl;
 }
