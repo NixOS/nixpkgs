@@ -457,6 +457,7 @@ in
   dconf = runTest ./dconf.nix;
   ddns-updater = runTest ./ddns-updater.nix;
   deconz = runTest ./deconz.nix;
+  deemix = runTest ./deemix.nix;
   deluge = runTest ./deluge.nix;
   dendrite = runTest ./matrix/dendrite.nix;
   dep-scan = runTest ./dep-scan.nix;
