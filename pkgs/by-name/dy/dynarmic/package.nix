@@ -18,7 +18,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dynarmic";
-  version = "6.7.0-unstable-2026-01-04";
+  version = "0-unstable-2026-01-04";
 
   src = fetchFromGitHub {
     owner = "azahar-emu";
