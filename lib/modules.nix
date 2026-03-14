@@ -2165,6 +2165,52 @@ let
     );
 
   /**
+    Extend a (sub-)module type with a set of overrides.
+
+    modules.extendSubmodule :: attrs -> optionType -> optionType
+
+    # Inputs
+
+    `overrides`
+
+    : 1\. A (recursive) attrset of fields to add to the option
+
+    `mod`
+
+    : 2\. A (sub-)module type to extend with `overrides`
+
+    Example:
+
+    ```nix
+    { config, lib, ... }:
+    let
+      inherit (lib) mkOption modules types;
+    in
+    {
+      options.foo = mkOption {
+        default = { };
+        type = modules.extendSubmodule
+          bar = {
+            default = 10;
+            defaultText = "10";
+          };
+          (types.submodule {
+            options.bar = mkOption {
+              type = types.int;
+            };
+          });
+      };
+    }
+    ```
+  */
+  extendSubmodule =
+    overrides: mod:
+    (extendOption overrides (
+      lib.mkOption {
+        type = mod;
+      }
+    )).type;
+
   private =
     mapAttrs
       (
@@ -2315,6 +2361,7 @@ private
   #       externally.
   inherit
     extendOption
+    extendSubmodule
     defaultOrderPriority
     defaultOverridePriority
     doRename
