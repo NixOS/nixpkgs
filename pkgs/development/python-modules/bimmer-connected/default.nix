@@ -70,6 +70,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bimmer_connected" ];
 
   meta = {
+    broken = true; # library not working anymore due to changes at BMW side
     changelog = "https://github.com/bimmerconnected/bimmer_connected/releases/tag/${version}";
     description = "Library to read data from the BMW Connected Drive portal";
     mainProgram = "bimmerconnected";
