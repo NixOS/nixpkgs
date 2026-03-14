@@ -1454,8 +1454,6 @@ with pkgs;
 
   inherit (cue) writeCueValidator;
 
-  dazel = python3Packages.callPackage ../development/tools/dazel { };
-
   detect-secrets = with python3Packages; toPythonApplication detect-secrets;
 
   deterministic-host-uname = deterministic-uname.override {
