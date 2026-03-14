@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   pname = "lowdown${
     lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"
   }";
-  version = "2.0.4";
+  version = "3.0.0";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
-    sha512 = "649a508b7727df6e7e1203abb3853e05f167b64832fd5e1271f142ccf782e600b1de73c72dc02673d7b175effdc54f2c0f60318208a968af9f9763d09cf4f9ef";
+    sha512 = "94e97234d598382c3c3dc27f9bfdb3a3a2fcf7dbb6a8df3c85ee09f27f792449034a41d49d9cfd3d8450d2de01b8562c20c3d120e65c81af4d7d6c9454119e93";
   };
 
   # https://github.com/kristapsdz/lowdown/pull/171
@@ -41,12 +41,6 @@ stdenv.mkDerivation rec {
     bmake # Uses FreeBSD's dialect
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
-
-  postPatch = ''
-    # fails test, some column width mismatch
-    rm regress/table-footnotes.md
-    rm regress/table-styles.md
-  '';
 
   # The Darwin sandbox calls fail inside Nix builds, presumably due to
   # being nested inside another sandbox.
