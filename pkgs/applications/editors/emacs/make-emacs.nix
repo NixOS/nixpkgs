@@ -198,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
       )
     ];
 
-  postPatch = lib.concatStringsSep "\n" [
+  postPatch = lib.concatLines [
     (lib.optionalString srcRepo ''
       rm -fr .git
     '')
@@ -244,8 +244,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '("/etc/mailcap" system)' \
                        '("/etc/mailcap" system) ("${mailcap}/etc/mailcap" system)'
     ''
-
-    ""
   ];
 
   nativeBuildInputs = [

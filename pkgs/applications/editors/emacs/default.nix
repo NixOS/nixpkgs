@@ -1,4 +1,8 @@
-{ lib, pkgs }:
+{
+  callPackage,
+  lib,
+  pkgs,
+}:
 
 lib.makeScope pkgs.newScope (
   self:
@@ -9,13 +13,7 @@ lib.makeScope pkgs.newScope (
     };
   in
   {
-    sources = import ./sources.nix {
-      inherit lib;
-      inherit (pkgs)
-        fetchFromGitHub
-        fetchzip
-        ;
-    };
+    sources = callPackage ./sources.nix { };
 
     emacs30 = callPackage (self.sources.emacs30) inheritedArgs;
 
@@ -37,5 +35,7 @@ lib.makeScope pkgs.newScope (
         srcRepo = true;
       }
     );
+
+    emacs30-plus = callPackage (self.sources.emacs30-plus) inheritedArgs;
   }
 )
