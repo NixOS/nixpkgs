@@ -3,7 +3,7 @@
   callPackage,
 }:
 
-callPackage ../package.nix {
+callPackage ../git-credential-email/package.nix {
   pname = "git-msgraph";
   scripts = [ "git-msgraph" ];
   description = "Git helper to use Microsoft Graph API instead of SMTP to send emails";
