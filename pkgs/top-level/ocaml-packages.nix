@@ -702,6 +702,18 @@ let
 
         gendarme = callPackage ../development/ocaml-modules/gendarme { };
 
+        gendarme-csv = callPackage ../development/ocaml-modules/gendarme/encoders { type = "csv"; };
+
+        gendarme-ezjsonm = callPackage ../development/ocaml-modules/gendarme/encoders { type = "ezjsonm"; };
+
+        gendarme-json = callPackage ../development/ocaml-modules/gendarme/encoders { type = "json"; };
+
+        gendarme-toml = callPackage ../development/ocaml-modules/gendarme/encoders { type = "toml"; };
+
+        gendarme-yaml = callPackage ../development/ocaml-modules/gendarme/encoders { type = "yaml"; };
+
+        gendarme-yojson = callPackage ../development/ocaml-modules/gendarme/encoders { type = "yojson"; };
+
         genspio = callPackage ../development/ocaml-modules/genspio { };
 
         get-activity = callPackage ../development/ocaml-modules/get-activity { };
@@ -1801,6 +1813,10 @@ let
         ppx_irmin = callPackage ../development/ocaml-modules/irmin/ppx.nix { };
 
         ppx_lun = callPackage ../development/ocaml-modules/lun/ppx.nix { };
+
+        ppx_marshal = callPackage ../development/ocaml-modules/ppx_marshal { };
+
+        ppx_marshal_ext = callPackage ../development/ocaml-modules/ppx_marshal_ext { };
 
         ppx_monad = callPackage ../development/ocaml-modules/ppx_monad { };
 
