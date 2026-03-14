@@ -357,7 +357,7 @@ in
       else
         ''
           # Set up the statically computed bits of /etc.
-          echo "setting up /etc..."
+          echo "setting up /etc..." >&2
           ${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl ${./setup-etc.pl} ${etc}/etc
         '';
 
