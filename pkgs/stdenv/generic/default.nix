@@ -5,7 +5,7 @@ let
     argsStdenv@{
       name ? "stdenv",
       pname ? name,
-      version ? lib.trivial.release + "pre-git",
+      version ? lib.trivial.release,
       preHook ? "",
       initialPath,
 
