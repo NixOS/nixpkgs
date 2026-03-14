@@ -4362,7 +4362,6 @@ assertNoAdditions {
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
-        marcweber
         mel
       ];
       platforms = lib.platforms.unix;

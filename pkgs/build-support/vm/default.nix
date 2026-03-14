@@ -403,8 +403,8 @@ let
         ];
         origArgs = args;
         origBuilder = builder;
-        QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
-        passAsFile = [ ]; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
+        env.QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize} -object memory-backend-memfd,id=mem,size=${toString memSize}M,share=on -machine memory-backend=mem";
+        __structuredAttrs = true;
       }
     );
 

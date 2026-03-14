@@ -37,7 +37,9 @@ buildGoModule (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/sigsum-key";
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
+  };
 
   meta = {
     description = "System for public and transparent logging of signed checksums";

@@ -29,7 +29,7 @@ def test_remote_shell_script() -> None:
 
 @patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
 @patch("subprocess.run", autospec=True)
-def test_run(mock_run: Any) -> None:
+def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(["test", "--with", "flags"], check=True)
     mock_run.assert_called_with(
         ["test", "--with", "flags"],
@@ -61,6 +61,51 @@ def test_run(mock_run: Any) -> None:
         text=True,
         errors="surrogateescape",
         env=None,
+        input=None,
+    )
+
+    p.run_wrapper(
+        ["test", "--with", "flags"],
+        check=False,
+        sudo=False,
+        append_local_env={"FOO": "bar"},
+    )
+    mock_run.assert_called_with(
+        [
+            "test",
+            "--with",
+            "flags",
+        ],
+        check=False,
+        text=True,
+        errors="surrogateescape",
+        env={
+            "FOO": "bar",
+            "PATH": "/path/to/bin",
+        },
+        input=None,
+    )
+
+    p.run_wrapper(
+        ["test", "--with", "flags"],
+        check=False,
+        sudo=False,
+        env={"PATH": "/"},
+        append_local_env={"FOO": "bar"},
+    )
+    mock_run.assert_called_with(
+        [
+            "test",
+            "--with",
+            "flags",
+        ],
+        check=False,
+        text=True,
+        errors="surrogateescape",
+        env={
+            "FOO": "bar",
+            "PATH": "/",
+        },
         input=None,
     )
 
