@@ -2077,6 +2077,94 @@ let
     config = lib.importTOML file;
   };
 
+  /**
+    Extend a (sub-)module option with a set of overrides.
+
+    modules.extendOption :: attrs -> option -> option
+
+    # Inputs
+
+    `overrides`
+
+    : 1\. A (recursive) attrset of fields to add to the option
+
+    `opt`
+
+    : 2\. Option to extend with `overrides`
+
+    Example:
+
+    ```nix
+    { config, lib, ... }:
+    let
+      inherit (lib) mkOption modules types;
+    in
+    {
+      options.foo = modules.extendOption
+        {
+          bar = {
+            default = 10;
+            defaultText = "10";
+          };
+        }
+        (mkOption {
+          type = types.submodule {
+            options.bar = mkOption {
+              type = types.int;
+            };
+          };
+        })
+    }
+    ```
+  */
+  extendOption =
+    overrides: opt:
+    let
+      inherit (opt) type;
+      isSubmodule = lib.isOptionType type && type.name == "submodule";
+      # (deduplicated) keys from submodules to iterate over
+      # we don't need the values, but attrset offers O(1) containment checks
+      subOptions = lib.optionalAttrs isSubmodule (
+        lib.attrsets.mergeAttrsList (lib.lists.map (mod: mod.options or { }) type.getSubModules)
+      );
+      subOverrides = lib.filterAttrs (k: _: subOptions ? ${k}) overrides;
+      directOverrides = lib.filterAttrs (k: _: !(subOptions ? ${k})) overrides;
+    in
+    lib.mkOption (
+      # re-wrap existing option attributes
+      (builtins.removeAttrs opt [ "_type" ])
+      # if we are annotating something that isn't a sub-module,
+      # just override relevant attributes on the option
+      // directOverrides
+      # to annotate a sub-module, presume we should just annotate its sub-options,
+      # which we iterate over to reconstruct with relevant annotations.
+      // lib.optionalAttrs isSubmodule {
+        type = lib.types.submoduleWith (
+          # meta we will not change
+          type.functor.payload
+          # modules are the parameter that will change as per our overrides
+          // {
+            modules = [
+              {
+                options = lib.mapAttrs (
+                  k: _:
+                  let
+                    # option for the attribute in question: for now presume just one sub-module had it
+                    attrOpt = (lib.head (lib.filter (m: (m.options or { }) ? ${k}) type.getSubModules)).options.${k};
+                    # any overrides for the attribute in question
+                    attrOverrides = subOverrides.${k} or { };
+                  in
+                  # recurse until we have no more overrides to annotate the option with
+                  if attrOverrides != { } then extendOption attrOverrides attrOpt else attrOpt
+                ) subOptions;
+              }
+            ];
+          }
+        );
+      }
+    );
+
+  /**
   private =
     mapAttrs
       (
@@ -2226,6 +2314,7 @@ private
   #       are just needed by types.nix, but are not meant to be consumed
   #       externally.
   inherit
+    extendOption
     defaultOrderPriority
     defaultOverridePriority
     doRename
