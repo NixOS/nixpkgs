@@ -37,14 +37,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "wagtail";
-  version = "7.3";
+  version = "7.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "wagtail";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-o/4jn32ffR3BPVNwtFKJ6PowXYi7SpjBqghdeZIl5tM=";
+    hash = "sha256-MKG09uzkjG5lASGJus2gY+tdOgXlwl71+BCnBOz4bf0=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-Uc16K1RZUCnr4qRe2u4yB44F+zYFBxMpEQCz5992RMA=";
+    hash = "sha256-w3G6plFeCTGabeZQaQnCdKd+bk/uV9BO1bdQSQPR5Zk=";
   };
 
   preBuild = ''
