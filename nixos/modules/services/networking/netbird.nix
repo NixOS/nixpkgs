@@ -759,35 +759,25 @@ in
             };
 
             environment.NB_SETUP_KEY_FILE = "%d/setup-key";
-            /*
-              might want to do something similar to the docker entrypoint (watching log messages) instead
-              see https://github.com/netbirdio/netbird/blob/dc30dcacce4c322502975f1f491e6774efd7e1e9/client/netbird-entrypoint.sh
-            */
+
             script = ''
               set -x
-              # uses a file on a `tmpfs`, because variable updates get lost in the loop
-              status_file="/tmp/status.txt"
 
-              refresh_status() {
-                '${lib.getExe client.wrapper}' status &>"$status_file" || :
-              }
-
-              print_short_setup_key() {
-                cut -b1-8 <"$NB_SETUP_KEY_FILE"
+              get_status() {
+                '${lib.getExe client.wrapper}' status 2>&1 || :
               }
 
               main() {
-                refresh_status
-                <"$status_file" sed 's/^/STATUS:PRE-CONNECT : /g'
-
-                until refresh_status && <"$status_file" grep --quiet 'Connected\|NeedsLogin' ; do
+                # grep for `: Connected` as well, as `Connected` appears other
+                # places even when not connected, and before NeedsLogin
+                until get_status | grep --quiet ': Connected\|NeedsLogin' ; do
                   sleep 1
                 done
-                <"$status_file" sed 's/^/STATUS:POST-CONNECT: /g'
 
-                if <"$status_file" grep --quiet 'NeedsLogin' ; then
-                  echo "Using Setup Key File with key: $(print_short_setup_key)" >&2
-                  '${lib.getExe client.wrapper}' up --setup-key-file="$NB_SETUP_KEY_FILE"
+                if get_status | grep --quiet 'NeedsLogin' ; then
+                  # setup key is in $NB_SETUP_KEY_FILE, and is
+                  # automatically picked up by the cli
+                  '${lib.getExe client.wrapper}' up
                 fi
               }
 
