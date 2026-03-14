@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "redisinsight";
-  version = "2.70.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "RedisInsight";
     repo = "RedisInsight";
     rev = finalAttrs.version;
-    hash = "sha256-b97/hBhXqSFDzcyrQKu5Ebu1Ud3wpWEjyzUehj0PP9w=";
+    hash = "sha256-4Ag+uUUicCqpWZWa2ZGw0NZKYymrAtXTFaA4F/S268Q=";
   };
 
   patches = [
@@ -42,21 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
   baseOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-base-offline-cache";
     inherit (finalAttrs) src patches;
-    hash = "sha256-m3relh3DZGReEi4dVOJcIXU9QVClisXw+f7K5i25x24=";
+    hash = "sha256-ObbLV1ifmmLRUBwHXAyVjRVQCK0vtdmOWYQUYQbzXik=";
   };
 
   innerOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-inner-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight";
-    hash = "sha256-rqmrETlc2XoZDM4GP1+qI4eK4oGmtpmc6TVvAam2+W8=";
+    hash = "sha256-T51oVqf5Ne6sIst07Pygpi37vu+WeDTuPjA4osIM2Gs=";
   };
 
   apiOfflineCache = fetchYarnDeps {
     name = "redisinsight-${finalAttrs.version}-api-offline-cache";
     inherit (finalAttrs) src patches;
     postPatch = "cd redisinsight/api";
-    hash = "sha256-KFtmq3iYAnsAi5ysvGCzBk9RHV7EE7SIPbzPza7vBdA=";
+    hash = "sha256-w5iUh0Ut+FLO9NXPKP3QDvOzg9mzfJ7pMlgi8WF/nlY=";
   };
 
   nativeBuildInputs = [
