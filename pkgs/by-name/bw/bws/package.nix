@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bws";
-  version = "1.0.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "sdk";
     rev = "bws-v${version}";
-    hash = "sha256-acS4yKppvIBiwBMoa5Ero4G9mUf8OLG/TbrZOolAwuc=";
+    hash = "sha256-NjnLoa4UjPzTejjEwc5LIrHqeqncXoMICJM2eUesoIM=";
   };
 
-  cargoHash = "sha256-SJn00C7vkNoghdVPUszep40RSL8fD+/ELUeuf9GBD7c=";
+  cargoHash = "sha256-lfnCUWf9MM1Yynxza7Fz1qxNyDbPNMOcbVHkvZx32bk=";
 
   nativeBuildInputs = [
     installShellFiles
