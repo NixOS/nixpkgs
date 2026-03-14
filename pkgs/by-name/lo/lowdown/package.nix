@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     runHook preInstallCheck
 
     echo '# TEST' > test.md
-    $out/bin/lowdown test.md
+    $out/bin/lowdown test.md | grep '[hH]1'
 
     runHook postInstallCheck
   '';
