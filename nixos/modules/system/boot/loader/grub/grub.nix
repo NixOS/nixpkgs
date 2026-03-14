@@ -104,6 +104,7 @@ let
           extraEntriesBeforeNixOS
           extraPrepareConfig
           configurationLimit
+          keepBootedSystemEntry
           copyKernels
           default
           fsIdentifier
@@ -638,6 +639,20 @@ in
         description = ''
           Maximum of configurations in boot menu. GRUB has problems when
           there are too many entries.
+        '';
+      };
+
+      keepBootedSystemEntry = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to include the currently booted system (from `/run/booted-system`) as a
+          in the GRUB menu. This ensures that a system known to have booted successfully is
+          always available as a fallback even if it is not included within
+          `boot.loader.grub.configurationLimit` generations or if the system profile
+          link has been removed by a command line `sudo nixos-collect-garbage -d`.
+          (`/run/booted-system` has a separate GC root so it will normally stay around until
+          at least the next successful boot.)
         '';
       };
 
