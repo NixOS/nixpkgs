@@ -23,7 +23,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-  # skills/ contains SKILL.md for tools like Claude Code.
+  __darwinAllowLocalNetworking = true;
+
+  # skills/ contains SKILL.md for tools like Claude Code
   postInstall = ''
     mkdir -p $out/lib/agent-browser
     cp -r ../skills $out/lib/agent-browser/
