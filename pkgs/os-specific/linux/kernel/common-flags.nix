@@ -6,9 +6,17 @@
 }:
 # Absolute paths for compilers avoid any PATH-clobbering issues.
 [
-  #
-  # We use the unwrapped compiler, because the clang-wrapper doesn't like -target.
+  # We use the unwrapped compiler, because the clang-wrapper doesn't
+  # like -target. For consistency, we also use it for GCC.
   "CC=${lib.getExe stdenv.cc.cc}"
+  # Avoid potential hard-to-debug linking issues by setting the C++
+  # compiler as well. It is not used by the Linux kernel, but can be
+  # used by modules. This avoids linking object files built with
+  # wrapped and unwrapped compilers.
+  #
+  # Besides clang, all C++ compilers we have, seem to offer g++, so we
+  # can simplify the check here.
+  "CXX=${lib.getExe' stdenv.cc.cc (if stdenv.cc.isClang then "clang++" else "g++")}"
   # The wrapper for ld.lld breaks linking the kernel. We use the unwrapped linker as workaround. See:
   # https://github.com/NixOS/nixpkgs/issues/321667
   "LD=${lib.getExe' stdenv.cc.bintools.bintools "${stdenv.cc.targetPrefix}ld"}"

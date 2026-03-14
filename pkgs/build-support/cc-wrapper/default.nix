@@ -32,6 +32,7 @@
   gnugrep ? null,
   expand-response-params,
   libcxx ? null,
+  cxxName ? cc.cxxName or null,
 
   # Whether or not to add `-B` and `-L` to `nix-support/cc-{c,ld}flags`
   useCcForLibs ?
@@ -523,32 +524,25 @@ stdenvNoCC.mkDerivation {
   # version.
   + ''
     export named_cc=${targetPrefix}cc
-    export named_cxx=${targetPrefix}c++
+    export named_cxx=${targetPrefix}${if cxxName != null then cxxName else "c++"}
 
     if [ -e $ccPath/${targetPrefix}gcc${exeSuffix} ]; then
       wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc${exeSuffix}
       ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
       export named_cc=${targetPrefix}gcc
-      export named_cxx=${targetPrefix}g++
     elif [ -e $ccPath/clang${exeSuffix} ]; then
       wrap ${targetPrefix}clang $wrapper $ccPath/clang${exeSuffix}
       ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
       export named_cc=${targetPrefix}clang
-      export named_cxx=${targetPrefix}clang++
     elif [ -e $ccPath/arocc${exeSuffix} ]; then
       wrap ${targetPrefix}arocc $wrapper $ccPath/arocc${exeSuffix}
       ln -s ${targetPrefix}arocc $out/bin/${targetPrefix}cc
       export named_cc=${targetPrefix}arocc
     fi
-
-    if [ -e $ccPath/${targetPrefix}g++${exeSuffix} ]; then
-      wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++${exeSuffix}
-      ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
-    elif [ -e $ccPath/clang++${exeSuffix} ]; then
-      wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++${exeSuffix}
-      ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
-    fi
-
+  '' + lib.optionalString (cxxName != null) ''
+      wrap ${targetPrefix}${cxxName} $wrapper $ccPath/${if isGNU then targetPrefix else ""}${cxxName}${exeSuffix}
+      ln -s ${targetPrefix}${cxxName} $out/bin/${targetPrefix}c++
+  '' + ''
     if [ -e $ccPath/${targetPrefix}cpp${exeSuffix} ]; then
       wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp${exeSuffix}
     elif [ -e $ccPath/cpp${exeSuffix} ]; then
