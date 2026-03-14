@@ -26,6 +26,7 @@ let
     PrivateTmp = true;
     PrivateDevices = cfg.accelerationDevices == [ ];
     DeviceAllow = mkIf (cfg.accelerationDevices != null) cfg.accelerationDevices;
+    LockPersonality = true;
     PrivateMounts = true;
     ProtectClock = true;
     ProtectControlGroups = true;
@@ -34,6 +35,8 @@ let
     ProtectKernelLogs = true;
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
+    ProtectSystem = "strict";
+    RemoveIPC = true;
     RestrictAddressFamilies = [
       "AF_INET"
       "AF_INET6"
@@ -42,6 +45,12 @@ let
     RestrictNamespaces = true;
     RestrictRealtime = true;
     RestrictSUIDSGID = true;
+    SystemCallFilter = [
+      "@system-service"
+      "~@privileged"
+      "@chown"
+    ];
+    SystemCallArchitectures = "native";
     UMask = "0077";
   };
   inherit (lib)
@@ -435,6 +444,11 @@ in
         # ensure that immich-server has permission to connect to the redis socket.
         SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
           config.services.redis.servers.immich.group
+        ];
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        ReadWritePaths = [
+          "${cfg.mediaLocation}"
         ];
       };
     };
