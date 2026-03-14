@@ -10,13 +10,8 @@
     willibutz
   ];
 
-  nodes.machine =
-    {
-      config,
-      lib,
-      pkgs,
-      ...
-    }:
+  defaults =
+    { config, lib, ... }:
     let
       inherit (config.image.repart.verityStore) partitionIds;
     in
@@ -54,12 +49,6 @@
               SizeMinBytes = if config.nixpkgs.hostPlatform.isx86_64 then "64M" else "96M";
             };
           };
-          ${partitionIds.store-verity}.repartConfig = {
-            Minimize = "best";
-          };
-          ${partitionIds.store}.repartConfig = {
-            Minimize = "best";
-          };
         };
       };
 
@@ -74,16 +63,20 @@
         initrd.systemd.enable = true;
       };
 
-      system.image = {
-        id = "nixos-appliance";
-        version = "1";
-      };
+      system.image.id = "nixos-appliance";
 
       # don't create /usr/bin/env
       # this would require some extra work on read-only /usr
       # and it is not a strict necessity
       system.activationScripts.usrbinenv = lib.mkForce "";
     };
+
+  nodes.machine = {
+    system.image.version = "1";
+  };
+
+  # Test that building without a version number works
+  nodes.without-version = { };
 
   testScript =
     { nodes, ... }: # python
@@ -100,7 +93,7 @@
         "-f",
         "qcow2",
         "-b",
-        "${nodes.machine.system.build.finalImage}/${nodes.machine.image.repart.imageFile}",
+        "${nodes.machine.system.build.image}/${nodes.machine.image.filePath}",
         "-F",
         "raw",
         tmp_disk_image.name,
