@@ -317,7 +317,7 @@ in
     programs.ssh.setXAuthLocation = lib.mkDefault (
       config.services.xserver.enable
       || config.programs.ssh.forwardX11 == true
-      || config.services.openssh.settings.X11Forwarding
+      || config.services.openssh.settings.X11Forwarding == true
     );
 
     assertions = [
