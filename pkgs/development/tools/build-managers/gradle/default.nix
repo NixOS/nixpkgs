@@ -375,14 +375,6 @@ rec {
     # Only enable this on *one* version to avoid duplicate PRs.
     enableUpdateScript = true;
   };
-  gradle_7 = mkGradle {
-    version = "7.6.6";
-    hash = "sha256-Zz2XdvMDvHBI/DMp0jLW6/EFGweJO9nRFhb62ahnO+A=";
-    defaultJava = jdk17;
-    meta.knownVulnerabilities = [
-      "Gradle 7 no longer receives security updates with the release of Gradle 9 on 31 July 2025. https://endoflife.date/gradle"
-    ];
-  };
 
   # Default version of Gradle in nixpkgs.
   gradle = gradle_8;
