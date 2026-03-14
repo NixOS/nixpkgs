@@ -20,7 +20,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-desktop";
-  version = "1.7.15";
+  version = "1.7.21";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
       "web"
     ];
     tag = "photosd-v${finalAttrs.version}";
-    hash = "sha256-QnJp+oHkRsb/uMobA33Hgo2VOzfDFDtJ6vchCAzyb+c=";
+    hash = "sha256-i/4annBMhZrdm2SMhHpvn8CtFAIdYNX6JvAG1/VCqOc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "ente-desktop-${finalAttrs.version}-web-offline-cache";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/web";
-    hash = "sha256-m+7woB5XnOPDMLpoIBui1GxeW1BOms18SKJ8vaJcv68=";
+    hash = "sha256-NhpSwesQ9B5gEeBQVjEEAKO4A68wfmBoQ3ga/baieNE=";
   };
 
   nativeBuildInputs = [
