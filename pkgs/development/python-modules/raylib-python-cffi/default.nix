@@ -16,14 +16,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "raylib-python-cffi";
-  version = "5.5.0.4";
+  version = "5.6.0.0.dev4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "electronstudio";
     repo = "raylib-python-cffi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MKyTpGnup4QmRui2OVBpnyn9KENATWcwYcikOmYX4c8=";
+    hash = "sha256-Jikwoyw5LjbpLIyl60crQsBy+zPDz/Fdn3GjG/ZzCK0=";
   };
 
   build-system = [ setuptools ];
