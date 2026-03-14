@@ -24,6 +24,7 @@
   xmlstarlet,
   nodejs,
   cpio,
+  ninja,
   callPackage,
   unzip,
   yq,
@@ -96,6 +97,9 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals (lib.versionAtLeast version "10") [
     cpio
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "11") [
+    ninja
   ]
   ++ lib.optionals isDarwin [
     getconf
@@ -427,7 +431,12 @@ stdenv.mkDerivation {
     "--"
     "-p:PortableBuild=true"
   ]
-  ++ lib.optional (targetRid != buildRid) "-p:TargetRid=${targetRid}";
+  ++ lib.optional (targetRid != buildRid) "-p:TargetRid=${targetRid}"
+  # https://github.com/dotnet/source-build/issues/5521
+  ++ lib.optionals (version == "11.0.0-preview.2") [
+    "--branding"
+    "repodefault "
+  ];
 
   buildPhase = ''
     runHook preBuild
