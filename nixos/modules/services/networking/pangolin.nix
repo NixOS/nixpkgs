@@ -23,12 +23,12 @@ let
     # will not work if the interface is renamed
     # https://github.com/fosrl/newt/issues/37#issuecomment-3193385911
     text = ''
-      if [ ! -f /var/lib/pangolin/config/wg0 ]; then
+      if [ ! -f ${cfg.dataDir}/config/wg0 ]; then
           until ip l d wg0
           do
             sleep 2
           done
-          touch /var/lib/pangolin/config/wg0
+          touch ${cfg.dataDir}/config/wg0
           systemctl restart gerbil --no-block
       fi
     '';
