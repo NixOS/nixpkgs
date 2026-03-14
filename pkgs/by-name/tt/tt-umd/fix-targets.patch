@@ -1,0 +1,201 @@
+diff --git a/device/CMakeLists.txt b/device/CMakeLists.txt
+index 006645b8..d1a39913 100644
+--- a/device/CMakeLists.txt
++++ b/device/CMakeLists.txt
+@@ -234,23 +234,22 @@ target_include_directories(
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/common
++        ${TTLOGGER_INCLUDES}
+ )
+ 
+ target_link_libraries(
+     device
+     PRIVATE
+         umd::Firmware
+-        hwloc
++        PkgConfig::HWLOC
+         rt
+-        spdlog::spdlog_header_only
+-        fmt::fmt-header-only
++        spdlog
++        fmt
+         picosha2::picosha2
+-        tt-logger::tt-logger
+-        yaml-cpp::yaml-cpp
++        yaml-cpp
++        umd_asio_lib
+ )
+ 
+-target_link_libraries(device PRIVATE umd_asio_lib)
+-
+ check_function_exists(
+     backtrace
+     HAVE_BACKTRACE
+diff --git a/examples/reset_notification_example/CMakeLists.txt b/examples/reset_notification_example/CMakeLists.txt
+index 242c61b3..4d1f2fb5 100644
+--- a/examples/reset_notification_example/CMakeLists.txt
++++ b/examples/reset_notification_example/CMakeLists.txt
+@@ -4,7 +4,12 @@ target_link_libraries(
+     listener_example
+     PRIVATE
+         umd::device
+-        tt-logger::tt-logger
++)
++
++target_include_directories(
++    listener_example
++    PRIVATE
++        ${TTLOGGER_INCLUDES}
+ )
+ 
+ add_executable(notifier_example notifier_example.cpp)
+@@ -13,7 +18,12 @@ target_link_libraries(
+     notifier_example
+     PRIVATE
+         umd::device
+-        tt-logger::tt-logger
++)
++
++target_include_directories(
++    notifier_example
++    PRIVATE
++        ${TTLOGGER_INCLUDES}
+ )
+ 
+ set_target_properties(
+diff --git a/examples/tt_device_example/CMakeLists.txt b/examples/tt_device_example/CMakeLists.txt
+index 34af1245..7289ca6b 100644
+--- a/examples/tt_device_example/CMakeLists.txt
++++ b/examples/tt_device_example/CMakeLists.txt
+@@ -4,7 +4,12 @@ target_link_libraries(
+     tt_device_example
+     PRIVATE
+         umd::device
+-        tt-logger::tt-logger
++)
++
++target_include_directories(
++    tt_device_example
++    PRIVATE
++        ${TTLOGGER_INCLUDES}
+ )
+ 
+ set_target_properties(
+diff --git a/nanobind/CMakeLists.txt b/nanobind/CMakeLists.txt
+index d148677f..b3b9618e 100644
+--- a/nanobind/CMakeLists.txt
++++ b/nanobind/CMakeLists.txt
+@@ -100,9 +100,10 @@ target_link_libraries(
+     PRIVATE
+         umd::device
+         fmt::fmt-header-only
+-        tt-logger::tt-logger
+ )
+ 
++target_include_directories(nanobind_tt_umd PRIVATE ${TTLOGGER_INCLUDES})
++
+ # Function to install common Python package files (__init__.py, stubs, py.typed)
+ function(install_python_package_files DESTINATION COMPONENT)
+     # Generate __init__.py at install time if not already built
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 1fccef89..ae0d4aee 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -9,7 +9,6 @@ target_link_libraries(
+         pthread
+         spdlog::spdlog_header_only
+         fmt::fmt-header-only
+-        tt-logger::tt-logger
+         $<$<BOOL:${TT_UMD_BUILD_SIMULATION}>:nng>
+ )
+ target_include_directories(
+@@ -18,6 +17,7 @@ target_include_directories(
+         ${PROJECT_SOURCE_DIR}
+         ${CMAKE_CURRENT_SOURCE_DIR}
+         "$<TARGET_PROPERTY:umd::device,INCLUDE_DIRECTORIES>"
++        ${TTLOGGER_INCLUDES}
+ )
+ target_compile_definitions(test_common INTERFACE UMD_TESTS_ROOT_PATH="${CMAKE_CURRENT_SOURCE_DIR}")
+ 
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 65198dbb..52553cc6 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -144,19 +144,39 @@ CPMAddPackage(
+ ####################################################################################################################
+ # tt-logger
+ ####################################################################################################################
+-CPMAddPackage(NAME tt-logger GITHUB_REPOSITORY tenstorrent/tt-logger VERSION 1.1.7 SYSTEM YES)
++# CPMAddPackage doesn't support "GLOBAL"
++find_package(tt-logger GLOBAL)
++
++if(NOT tt-logger_FOUND)
++    CPMAddPackage(NAME tt-logger GITHUB_REPOSITORY tenstorrent/tt-logger VERSION 1.1.7 SYSTEM YES)
++endif()
++
++get_target_property(TTLOGGER_INCLUDES
++    tt-logger::tt-logger
++    INTERFACE_INCLUDE_DIRECTORIES
++)
+ 
+ ####################################################################################################################
+ # cxxopts
+ ####################################################################################################################
+-CPMAddPackage(
+-    NAME cxxopts
+-    GITHUB_REPOSITORY jarro2783/cxxopts
+-    GIT_TAG
+-        dbf4c6a66816f6c3872b46cc6af119ad227e04e1 #version 3.2.1 + patches
+-    SYSTEM YES
+-    OPTIONS
+-        "CMAKE_MESSAGE_LOG_LEVEL NOTICE"
++# CPMAddPackage doesn't support "GLOBAL"
++find_package(cxxopts GLOBAL)
++
++if(NOT cxxopts_FOUND)
++    CPMAddPackage(
++        NAME cxxopts
++        GITHUB_REPOSITORY jarro2783/cxxopts
++        GIT_TAG
++            dbf4c6a66816f6c3872b46cc6af119ad227e04e1 #version 3.2.1 + patches
++        SYSTEM YES
++        OPTIONS
++            "CMAKE_MESSAGE_LOG_LEVEL NOTICE"
++    )
++endif()
++
++get_target_property(CXXOPTS_INCLUDES
++    cxxopts::cxxopts
++    INTERFACE_INCLUDE_DIRECTORIES
+ )
+ 
+ ####################################################################################################################
+@@ -205,3 +225,6 @@ if(umd_asio_ADDED)
+     target_compile_definitions(umd_asio_lib INTERFACE ASIO_STANDALONE)
+     target_compile_definitions(umd_asio_lib INTERFACE ASIO_NO_DEPRECATED)
+ endif()
++
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(HWLOC REQUIRED IMPORTED_TARGET GLOBAL hwloc)
+diff --git a/tools/CMakeLists.txt b/tools/CMakeLists.txt
+index 5685197f..9dc1bb5a 100644
+--- a/tools/CMakeLists.txt
++++ b/tools/CMakeLists.txt
+@@ -17,8 +17,14 @@ target_link_libraries(
+     tools_common
+     INTERFACE
+         umd::device
+-        tt-logger::tt-logger
+-        cxxopts::cxxopts
++        fmt
++)
++
++target_include_directories(
++    tools_common
++    INTERFACE
++        ${TTLOGGER_INCLUDES}
++        ${CXXOPTS_INCLUDES}
+ )
+ 
+ add_executable(telemetry telemetry.cpp)

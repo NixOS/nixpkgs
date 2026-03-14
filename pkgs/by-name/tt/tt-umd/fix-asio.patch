@@ -1,0 +1,18 @@
+diff --git a/third_party/CMakeLists.txt b/third_party/CMakeLists.txt
+index 65198db..a20fcad 100644
+--- a/third_party/CMakeLists.txt
++++ b/third_party/CMakeLists.txt
+@@ -194,9 +194,11 @@ endif()
+ ####################################################################################################################
+ # asio (Standalone)
+ ####################################################################################################################
+-CPMAddPackage(NAME umd_asio GITHUB_REPOSITORY chriskohlhoff/asio GIT_TAG asio-1-30-2 SYSTEM YES DOWNLOAD_ONLY YES)
++if(NOT CPM_LOCAL_PACKAGES_ONLY)
++  CPMAddPackage(NAME umd_asio GITHUB_REPOSITORY chriskohlhoff/asio GIT_TAG asio-1-30-2 SYSTEM YES DOWNLOAD_ONLY YES)
++endif()
+
+-if(umd_asio_ADDED)
++if(umd_asio_ADDED OR CPM_LOCAL_PACKAGES_ONLY)
+     add_library(umd_asio_lib INTERFACE)
+
+     target_include_directories(umd_asio_lib SYSTEM INTERFACE "${umd_asio_SOURCE_DIR}/asio/include")
