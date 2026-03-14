@@ -20,17 +20,17 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-ytksYeWHLWrNeeTW0aCBw+dc0N7WtLtNpqRZ10Y3WbA=";
-      aarch64-linux = "sha256-HbO+IjAiccbyquWrvXrCFRkYKlbvJ2wlk49ydGDbGbs=";
-      armv7l-linux = "sha256-mvZz4MCe9IGdfjfFbrNhmjAidPB8e7IeOLATclTKdcw=";
-      x86_64-darwin = "sha256-mDEn3rnE7FBDlGqrd3pmOL4mplOf7WpGi4A1W1UqVok=";
-      aarch64-darwin = "sha256-yxL9zJDRWrkmizEZ5Da0Lo1YBJEBOJinsOKpOrMKMlY=";
+      x86_64-linux = "sha256-6GlSDelNeR85gZ/AwgwXsK4A+kwUDIJneWsZs2r7Itg=";
+      aarch64-linux = "sha256-oAaaqPfA2RjyjJXZqaWngWrcZSAkTowvv0L9xreBGLg=";
+      armv7l-linux = "sha256-NKhXFR3R0SsEG2r2MwQWntfF+4BrWNUfk/grAcdv+ug=";
+      x86_64-darwin = "sha256-DzVkFrzjtwAyKCfRTJzR9DRdzWQLinTjAhnQrdxJ/4w=";
+      aarch64-darwin = "sha256-sMYMOb2iX/RlJMl01P5jwyVKWjhhRph2aWIf0Atgobc=";
     }
     .${system} or throwSystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrok";
-  version = "2.0.0-rc4";
+  version = "1.1.11";
 
   src = fetchzip {
     url = "https://github.com/openziti/zrok/releases/download/v${finalAttrs.version}/zrok_${finalAttrs.version}_${plat}.tar.gz";
