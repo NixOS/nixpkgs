@@ -129,6 +129,9 @@ in
         hash = "sha256-+M4gI77SoQ4dYIe/iGFgIwF1fS/6KQ8s16vj8ht/rik=";
       })
     ]
+    ++ lib.optionals (lib.versions.major info.version == "39") [
+      ./39-angle-patchdir.patch
+    ]
     ++ lib.optionals (lib.versions.major info.version == "41") [
       ./41-skia-patchdir.patch
     ];

@@ -1,0 +1,11 @@
+diff --git a/patches/config.json b/patches/config.json
+index f5dbe8600f..9e1e5e0704 100644
+--- a/patches/config.json
++++ b/patches/config.json
+@@ -14,5 +14,5 @@
+   { "patch_dir": "src/electron/patches/reclient-configs", "repo": "src/third_party/engflow-reclient-configs" },
+   { "patch_dir": "src/electron/patches/sqlite", "repo": "src/third_party/sqlite/src" },
+   { "patch_dir": "src/electron/patches/skia", "repo": "src/third_party/skia" },
+-  { "patch_dir": "src/electron/patches/angle", "repo": "src/third_party/angle/src" }
++  { "patch_dir": "src/electron/patches/angle", "repo": "src/third_party/angle" }
+ ]
