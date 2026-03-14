@@ -76,6 +76,7 @@ mapAliases {
 
   # keep-sorted start case=no numeric=yes
   abodepy = throw "'abodepy' has been renamed to/replaced by 'jaraco-abode'"; # Converted to throw 2025-10-29
+  ailment = throw "'ailment' has been merged with 'angr'."; # Added 2026-02-04
   aioinflux = throw "'aioinflux' was removed because it is abandonned upstream. For InfluxDB v2+ support, please use the official Python client library"; # Added 2026-01-15
   aiosenz = throw "aiosenz was removed because Home Assistant switched to pysenz"; # added 2025-12-29
   aioshutil = throw "'aioshutil' was removed because uiprotect no longer depends on it"; # added 2026-02-16
@@ -566,6 +567,7 @@ mapAliases {
   uamqp = throw "'uamqp' has been removed because it is broken and unmaintained."; # added 2025-06-11
   ufoLib2 = throw "'ufoLib2' has been renamed to/replaced by 'ufolib2'"; # Converted to throw 2025-10-29
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
+  unicorn-angr = throw "'unicorn-angr' has been removed as angr now uses upstream unicorn"; # Added 2026-02-04
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   update_checker = throw "'update_checker' has been renamed to/replaced by 'update-checker'"; # Converted to throw 2025-10-29
   vcver = throw "vcver has been removed, since it was an unused leaf package"; # added 2025-08-25

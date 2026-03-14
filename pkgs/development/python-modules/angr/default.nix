@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  ailment,
   archinfo,
+  angr,
   buildPythonPackage,
   cachetools,
   capstone,
@@ -27,32 +27,54 @@
   pyvex,
   rich,
   rpyc,
-  setuptools,
+  setuptools-rust,
   sortedcontainers,
   sqlalchemy,
   sympy,
-  unicorn-angr,
+  unicorn,
   unique-log-filter,
+  cargo,
+  rustPlatform,
+  rustc,
+  lmdb,
+  msgspec,
+  pypcode,
+  pytestCheckHook,
+  pytest-insta,
+  keystone-engine,
 }:
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.193";
+  version = "9.2.197";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "angr";
     repo = "angr";
     tag = "v${version}";
-    hash = "sha256-7wBfxHWD5FRin8pfKup4izJBQzFN5N5dQZqIto5y83k=";
+    hash = "sha256-EMTYn6pvZaVb4mimRYfOt21wOUBTQD7YLhAzU9PpP5w=";
   };
 
   pythonRelaxDeps = [ "capstone" ];
 
-  build-system = [ setuptools ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      ;
+    hash = "sha256-/IQCbZUVGV5WNzIIELr5tfFPOITUqHj+zp8FH2bAuCU=";
+  };
+
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    setuptools-rust
+  ];
 
   dependencies = [
-    ailment
     archinfo
     cachetools
     capstone
@@ -79,11 +101,15 @@ buildPythonPackage rec {
     sortedcontainers
     sympy
     unique-log-filter
+    lmdb
+    msgspec
+    pypcode
   ];
 
   optional-dependencies = {
     angrdb = [ sqlalchemy ];
-    unicorn = [ unicorn-angr ];
+    unicorn = [ unicorn ];
+    keystone = [ keystone-engine ];
   };
 
   setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
@@ -91,21 +117,54 @@ buildPythonPackage rec {
     "linux"
   ];
 
-  # Tests have additional requirements, e.g., pypcode and angr binaries
-  # cle is executing the tests with the angr binaries
-  doCheck = false;
-
   pythonImportsCheck = [
     "angr"
     "claripy"
     "cle"
     "pyvex"
     "archinfo"
+    "pypcode"
+  ];
+
+  doCheck = false;
+  passthru.tests.pytest = angr.overridePythonAttrs (prev: {
+    doCheck = true;
+    dependencies =
+      prev.dependencies
+      ++ prev.optional-dependencies.angrdb
+      ++ prev.optional-dependencies.unicorn
+      ++ prev.optional-dependencies.keystone;
+  });
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-insta
+  ];
+
+  preCheck =
+    let
+      binaries = fetchFromGitHub {
+        owner = "angr";
+        repo = "binaries";
+        tag = "v${version}";
+        hash = "sha256-x5Ot4UlJelvYANQc8h0O6FlMEEKtdWDrrQ1ku1cwey4=";
+      };
+    in
+    ''
+      cd ..
+      cp -r ${binaries} binaries
+    '';
+
+  enabledTestPaths = [ "source/tests" ];
+
+  disabledTestPaths = [
+    "source/tests/engines/test_unicorn.py"
   ];
 
   meta = {
     description = "Powerful and user-friendly binary analysis platform";
     homepage = "https://angr.io/";
+    changelog = "https://github.com/theopolis/uefi-firmware-parser/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fab ];
   };
