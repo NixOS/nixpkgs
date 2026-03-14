@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcap-ng";
-  version = "0.9";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "stevegrubb";
     repo = "libcap-ng";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KF4SaES6FYuoBoZB+hhWlFuQemWM4Vg8aybCOgXM+Uc=";
+    hash = "sha256-fdRrqEf14s+f6LM9rDSR7D9+tv3EpV3IoNDlJy6PSO0=";
   };
 
   # NEWS needs to exist or else the build fails
