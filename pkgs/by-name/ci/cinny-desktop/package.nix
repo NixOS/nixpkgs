@@ -14,6 +14,8 @@
   webkitgtk_4_1,
   jq,
   moreutils,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -21,7 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # We have to be using the same version as cinny-web or this isn't going to work.
   version = "4.11.1";
 
-  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
@@ -86,6 +87,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     openssl
     webkitgtk_4_1
   ];
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { attrPath = "cinny-unwrapped"; })
+      (nix-update-script { })
+    ];
+  };
 
   meta = {
     description = "Yet another matrix client for desktop";
