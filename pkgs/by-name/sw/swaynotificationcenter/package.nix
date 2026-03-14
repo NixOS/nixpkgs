@@ -36,13 +36,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SwayNotificationCenter";
-  version = "0.12.3";
+  version = "0.12.4";
 
   src = fetchFromGitHub {
     owner = "ErikReider";
     repo = "SwayNotificationCenter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8zVG3mJxT6K0jkqsnaJ4wscPAk3z00YTsmHsJmuKWc8=";
+    hash = "sha256-W4d41+qFT+4Vfpx/v77DuiumQ8mzl6g+PCIJZ+Py1Po=";
   };
 
   # build pkg-config is required to locate the native `scdoc` input
