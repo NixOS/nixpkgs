@@ -17,6 +17,7 @@
   replaceVars,
   noto-fonts-color-emoji,
   nixosTests,
+  xdg-utils,
 
   # command line arguments which are always set e.g "--password-store=kwallet6"
   commandLineArgs ? "",
@@ -115,6 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
+
+  # Signal executes `xdg-settings` on startup in the node process.
+  runtimeDependencies = [
+    xdg-utils
+  ];
+
   buildInputs = (lib.optional (!withAppleEmojis) noto-fonts-color-emoji-png);
 
   patches = [
