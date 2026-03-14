@@ -5,9 +5,6 @@
   ...
 }:
 
-let
-  linuxSteam = callPackage ./linux.nix { inherit steam-unwrapped; };
-in
 stdenvNoCC.mkDerivation {
   pname = "steam";
   inherit (steam-unwrapped) version meta;
@@ -27,6 +24,6 @@ stdenvNoCC.mkDerivation {
   '';
 
   passthru = {
-    inherit (linuxSteam) buildRuntimeEnv;
+    buildRuntimeEnv = callPackage ./runtime-env.nix { };
   };
 }

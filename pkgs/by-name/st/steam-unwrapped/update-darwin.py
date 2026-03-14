@@ -152,7 +152,11 @@ def _fetch_text(url: str) -> str:
 
 def _bootstrap_version_from_archive(archive_bytes: bytes) -> str:
     with zipfile.ZipFile(io.BytesIO(archive_bytes)) as archive:
-        return archive.read(VERSION_FILE).decode("utf-8").strip()
+        try:
+            return archive.read(VERSION_FILE).decode("utf-8").strip()
+        except KeyError as exc:
+            message = f"Archive did not contain {VERSION_FILE!r}"
+            raise UpdateError(message) from exc
 
 
 def _find_nix() -> str:
