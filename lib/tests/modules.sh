@@ -822,9 +822,9 @@ checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
 
-# extend*
 checkConfigError 'not of type' config.foo.bar ./extendOption.nix
 checkConfigError 'not of type' config.foo.bar ./extendSubmodule.nix
+checkConfigError 'not of type' config.foo.bar ./mkContract.nix
 
 # specialArgs._class
 checkConfigOutput '"nixos"' config.nixos.config.foo ./specialArgs-class.nix

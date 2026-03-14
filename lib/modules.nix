@@ -2211,6 +2211,48 @@ let
       }
     )).type;
 
+  /**
+    Construct a (sub-)module type from options and a set of overrides.
+
+    modules.mkContract :: attrsOf option -> attrs -> optionType
+
+    # Inputs
+
+    `options`
+
+    : 1\. An attrset of module options from which to construct the submodule type
+
+    `overrides`
+
+    : 2\. A (recursive) attrset of fields to add to the submodule type
+
+    Example:
+
+    ```nix
+    { config, lib, ... }:
+    let
+      inherit (lib) mkOption modules types;
+    in
+    {
+      options.foo = mkOption {
+        default = { };
+        type = modules.mkContract
+          {
+            bar = mkOption {
+              type = types.int;
+            };
+          }
+          bar = {
+            default = 10;
+            defaultText = "10";
+          };
+      };
+    }
+    ```
+  */
+  mkContract =
+    options: overrides: extendSubmodule overrides (lib.types.submodule { inherit options; });
+
   private =
     mapAttrs
       (
@@ -2387,6 +2429,7 @@ private
     mkAssert
     mkBefore
     mkChangedOptionModule
+    mkContract
     mkDefault
     mkDefinition
     mkDerivedConfig
