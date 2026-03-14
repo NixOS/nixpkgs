@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
-  version = "15.74.3";
+  version = "15.75.4";
 
   src =
     let
@@ -38,11 +38,11 @@ stdenv.mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-7QQlGzIr3BBFaur8ycGY0VuYz21cJI+EfCsRuCAr8XA=";
+        hash = "sha256-HW5UdbNrfPy6vAu1hTCoAng2HPB03ne2WJFqBh/Iv2E=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-prz3RaeMykgLrK9ai3/ivzRsUFT1dyWP1xymEl3s4eA=";
+        hash = "sha256-rflEgfniXMth27ApDK6Q18jZ1AtAMeLr5U0NWJKMSE0=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
