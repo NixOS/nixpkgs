@@ -10,12 +10,17 @@
   hypothesis,
   pytestCheckHook,
   sphinxHook,
+  sphinx-autodoc-typehints,
   sphinx-copybutton,
+  sphinx-design,
+  sphinx-issues,
+  sphinx-notfound-page,
+  sphinx-reredirects,
   pydata-sphinx-theme,
 }:
 
 buildPythonPackage rec {
-  version = "6.3.2";
+  version = "7.0.2";
   pname = "icalendar";
   pyproject = true;
   outputs = [
@@ -27,7 +32,7 @@ buildPythonPackage rec {
     owner = "collective";
     repo = "icalendar";
     tag = "v${version}";
-    hash = "sha256-EnG6zPaKKTgLw2DxWOyBkxlFuqtURpBlxy1aoZjX/TQ=";
+    hash = "sha256-Xsxnk3C6egpovNkDnT0V8LHiW1bA9hvM5up9rjKxdnU=";
   };
 
   patches = [
@@ -48,7 +53,12 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     sphinxHook
+    sphinx-autodoc-typehints
     sphinx-copybutton
+    sphinx-design
+    sphinx-issues
+    sphinx-notfound-page
+    sphinx-reredirects
     pydata-sphinx-theme
   ];
 
