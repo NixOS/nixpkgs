@@ -19,6 +19,7 @@
   fsspec,
   hist,
   ipywidgets,
+  loky,
   lz4,
   matplotlib,
   mplhep,
@@ -27,6 +28,7 @@
   packaging,
   pandas,
   pyarrow,
+  pydantic,
   requests,
   rich,
   scipy,
@@ -75,6 +77,7 @@ buildPythonPackage rec {
     fsspec
     hist
     ipywidgets
+    loky
     lz4
     matplotlib
     mplhep
@@ -83,6 +86,7 @@ buildPythonPackage rec {
     packaging
     pandas
     pyarrow
+    pydantic
     requests
     rich
     scipy

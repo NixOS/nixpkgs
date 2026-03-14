@@ -9300,6 +9300,8 @@ self: super: with self; {
 
   logzero = callPackage ../development/python-modules/logzero { };
 
+  loky = callPackage ../development/python-modules/loky { };
+
   lomond = callPackage ../development/python-modules/lomond { };
 
   london-tube-status = callPackage ../development/python-modules/london-tube-status { };
