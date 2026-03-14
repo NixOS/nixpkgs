@@ -9077,10 +9077,6 @@ self: super: with self; {
 
   llama-index-readers-json = callPackage ../development/python-modules/llama-index-readers-json { };
 
-  llama-index-readers-llama-parse =
-    callPackage ../development/python-modules/llama-index-readers-llama-parse
-      { };
-
   llama-index-readers-s3 = callPackage ../development/python-modules/llama-index-readers-s3 { };
 
   llama-index-readers-twitter =
