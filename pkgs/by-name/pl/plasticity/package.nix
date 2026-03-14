@@ -18,6 +18,7 @@
   libnotify,
   libxkbcommon,
   libgbm,
+  libGL,
   nspr,
   nss,
   openssl,
@@ -122,9 +123,17 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
   preFixup = ''
-    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
+    patchelf --add-needed libGL.so.1 \
+      --set-rpath "${
+        lib.makeLibraryPath [
+          libGL
+        ]
+      }" \
+      $out/bin/Plasticity
+
+    rm "$out/lib/Plasticity/libvulkan.so.1"
+    ln -s -t "$out/lib/Plasticity" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
   '';
 
   meta = {
