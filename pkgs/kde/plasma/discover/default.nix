@@ -9,12 +9,6 @@
 mkKdeDerivation {
   pname = "discover";
 
-  patches = [
-    # remove forced QML dependency check
-    # FIXME: fix the check in ECM instead
-    ./qml-deps.patch
-  ];
-
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtwebview

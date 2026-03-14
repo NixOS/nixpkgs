@@ -68,8 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Tz14pjI5pNJOQH0KFaf9mJkFdup1GVxlkMnzVQusx/M=";
   };
 
-  patches = [ ./qmlmodule-fix.patch ];
-
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
