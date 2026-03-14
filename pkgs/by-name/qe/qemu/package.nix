@@ -178,12 +178,11 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!userOnly) [ dtc ];
 
-  # gnutls is required for crypto support (luks) in qemu-img
   buildInputs = [
     glib
-    gnutls
-    zlib
   ]
+  ++ lib.optionals (!userOnly) [ gnutls ]
+  ++ [ zlib ]
   ++ lib.optionals (!minimal) [
     dtc
     pixman
@@ -298,7 +297,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--disable-strip" # We'll strip ourselves after separating debug info.
-    "--enable-gnutls" # auto detection only works when building with --enable-system
+
+    # auto detection only works when building with --enable-system
+    # Disable gnutls when userOnly for smaller binaries and work around link error on statically linked aarch64:
+    #   relocation truncated to fit: R_AARCH64_LD64_GOTPAGE_LO15 against symbol `_nettle_aes256_decrypt_arm64' defined in .text section in .../lib/libnettle.a(aes256-decrypt-2.o)
+    # See https://github.com/NixOS/nixpkgs/issues/464805
+    (lib.enableFeature (!userOnly) "gnutls")
+
     (lib.enableFeature enableDocs "docs")
     (lib.enableFeature enableTools "tools")
     "--localstatedir=/var"
