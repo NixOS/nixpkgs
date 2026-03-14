@@ -1,19 +1,21 @@
 {
   stdenv,
+  undmg,
   pname,
   version,
+  passthru,
   meta,
-  undmg,
-  fetchurl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    passthru
+    meta
+    ;
 
-  src = fetchurl {
-    url = "https://proton.me/download/PassDesktop/darwin/universal/ProtonPass_${version}.dmg";
-    hash = "sha256-oo02IYOKZEsr0+4zimSFkutTGuS63ZvMZTeUTapZrVw=";
-  };
+  src = passthru.sources.${stdenv.hostPlatform.system};
 
   nativeBuildInputs = [ undmg ];
 
