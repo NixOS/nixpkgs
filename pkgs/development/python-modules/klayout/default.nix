@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "klayout";
-  version = "0.30.5";
+  version = "0.30.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WigRictn6CxOPId2YitlEm43vEw+dSRWdoareD9HtMc=";
+    hash = "sha256-W8ry1+wxVOUxg4hXMd0OpcaWcVr6wUBC3eGgDney2Xc=";
   };
 
   build-system = [
