@@ -18687,6 +18687,11 @@
     githubId = 72071763;
     name = "Yusup Urazaev";
   };
+  name-tar-xz = {
+    github = "name-tar-xz";
+    githubId = 54463026;
+    name = "name-tar-xz";
+  };
   namore = {
     email = "namor@hemio.de";
     github = "namore";
