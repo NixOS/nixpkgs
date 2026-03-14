@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   nix-update-script,
+  nixosTests,
   writeText,
 
   cmake,
@@ -128,6 +129,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional enableAfXdpSkbMode ./xdp-skb-mode.patch;
 
   passthru.updateScript = nix-update-script { };
+
+  passthru.tests = {
+    inherit (nixosTests) vpp;
+  };
 
   meta = {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
