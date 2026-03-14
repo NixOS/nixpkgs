@@ -1966,9 +1966,9 @@
   };
 
   powershell = {
-    version = "0.25.10";
+    version = "0.26.3";
     url = "github:airbus-cert/tree-sitter-powershell";
-    hash = "sha256-xzDM1CdBY95XgLsEjqKWrwuIf/s6/2Q0XbxJRvOuL2o=";
+    hash = "sha256-ETuZcVSvHF5ILN6+xjWlQM5IiT/+dtxdSckrHJSJSWk=";
     meta = {
       license = lib.licenses.mit;
       maintainers = with lib.maintainers; [
