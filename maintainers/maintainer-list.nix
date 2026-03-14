@@ -10008,6 +10008,12 @@
     githubId = 273582;
     name = "greg";
   };
+  gregshuflin = {
+    email = "greg@everdayimshuflin.com";
+    github = "neunenak";
+    githubId = 311545;
+    name = "Greg Shuflin";
+  };
   greizgh = {
     email = "greizgh@ephax.org";
     github = "greizgh";
