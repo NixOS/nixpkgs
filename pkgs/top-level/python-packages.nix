@@ -2472,6 +2472,8 @@ self: super: with self; {
 
   cantools = callPackage ../development/python-modules/cantools { };
 
+  capirca = callPackage ../development/python-modules/capirca { };
+
   capstone = callPackage ../development/python-modules/capstone { inherit (pkgs) capstone; };
 
   capstone_4 = callPackage ../development/python-modules/capstone/4.nix {
@@ -13315,6 +13317,8 @@ self: super: with self; {
   pybars3 = callPackage ../development/python-modules/pybars3 { };
 
   pybase64 = callPackage ../development/python-modules/pybase64 { };
+
+  pybatfish = callPackage ../development/python-modules/pybatfish { };
 
   pybbox = callPackage ../development/python-modules/pybbox { };
 
