@@ -1326,6 +1326,23 @@ let
         };
       };
 
+      dieghernan.selenized-theme = buildVscodeMarketplaceExtension {
+        meta = {
+          changelog = "https://marketplace.visualstudio.com/items?itemName=dieghernan.selenized-theme/changelog";
+          description = "Dark and light syntax themes with green accents inspired by Selenized by Jan Warchoł";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=dieghernan.selenized-theme";
+          homepage = "https://github.com/dieghernan/selenized-theme";
+          licenses = lib.licenses.mit;
+          maintainers = [ ];
+        };
+        mktplcRef = {
+          name = "selenized-theme";
+          publisher = "dieghernan";
+          version = "0.2.1";
+          hash = "sha256-s1EHGugQCQQSRL7nS2XLwEQnF9coJHW4PTbkyWGv/H0=";
+        };
+      };
+
       discloud.discloud = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "discloud";
