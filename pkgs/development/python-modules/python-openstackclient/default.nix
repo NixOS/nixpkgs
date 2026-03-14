@@ -12,6 +12,7 @@
   python-barbicanclient,
   python-cinderclient,
   python-designateclient,
+  python-gnocchiclient,
   python-heatclient,
   python-ironicclient,
   python-keystoneclient,
@@ -104,6 +105,7 @@ buildPythonPackage (finalAttrs: {
       python-aodhclient
       python-barbicanclient
       python-designateclient
+      python-gnocchiclient
       python-heatclient
       python-ironicclient
       python-magnumclient
