@@ -3,9 +3,11 @@
   stdenv,
   alsa-lib,
   appstream-glib,
+  blueprint-compiler,
   cargo,
   desktop-file-utils,
   fetchFromGitHub,
+  json-glib,
   glib,
   gtk4,
   libadwaita,
@@ -16,27 +18,24 @@
   rustPlatform,
   rustc,
   wrapGAppsHook4,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "exercise-timer";
-  version = "1.8.5";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "mfep";
     repo = "exercise-timer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yparZ9XmHkjwvgpnERpi8hvRXdb8R+kAyFOFl+exXb4=";
+    hash = "sha256-81bGX5Oa5z5AbtYDzPcSyFsz0/zWcDw/Ky9n+EfnZNo=";
     fetchLFS = true;
-  };
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-JObzeiQHEGIDjOung3o8dpaXVcOoJS2v1hyrcS1fqcI=";
   };
 
   nativeBuildInputs = [
     appstream-glib
+    blueprint-compiler
     cargo
     desktop-file-utils
     glib
@@ -44,13 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    rustPlatform.cargoSetupHook
     rustc
     wrapGAppsHook4
+    vala
   ];
 
   buildInputs = [
     alsa-lib
+    json-glib
     libadwaita
   ];
 
