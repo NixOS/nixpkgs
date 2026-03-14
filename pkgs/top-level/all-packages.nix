@@ -11631,6 +11631,10 @@ with pkgs;
   };
   suitesparse = suitesparse_5_3;
 
+  suitesparsePackages = recurseIntoAttrs (
+    callPackage ../development/libraries/science/math/suitesparse/7.12.nix { }
+  );
+
   trilinos-mpi = trilinos.override { withMPI = true; };
 
   wolfram-engine = libsForQt5.callPackage ../applications/science/math/wolfram-engine { };
