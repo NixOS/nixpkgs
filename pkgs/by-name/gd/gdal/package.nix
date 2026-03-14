@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -91,6 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-W9MSZP+qmG7r2SzjOXbeYebY5vx8z8cpySv/sGyj42Y=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-test-ogr-geojson";
+      url = "https://github.com/OSGeo/gdal/commit/01a8dbb1e2eb64ba98888255d116d23d6e165ee5.patch?full_index=1";
+      hash = "sha256-JpDc/0pkLR76qI90MKRP09HUMAqnUZoLVb5+y3AaftA=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
