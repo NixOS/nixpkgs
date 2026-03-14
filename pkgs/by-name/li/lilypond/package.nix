@@ -141,7 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
       ofl # mf/
     ];
     maintainers = with lib.maintainers; [
-      marcweber
       yurrriq
     ];
     platforms = lib.platforms.all;

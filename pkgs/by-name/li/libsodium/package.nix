@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
       mdaniels5757
       raskin
     ];
+    teams = [ lib.teams.security-review ];
     pkgConfigModules = [ "libsodium" ];
     platforms = lib.platforms.all;
   };

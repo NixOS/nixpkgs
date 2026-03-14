@@ -20,7 +20,10 @@ rec {
           asl20
           llvm-exception
         ];
-    teams = [ lib.teams.llvm ];
+    teams = [
+      lib.teams.llvm
+      lib.teams.security-review
+    ];
 
     # See llvm/cmake/config-ix.cmake.
     platforms =

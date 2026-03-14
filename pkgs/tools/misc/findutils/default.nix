@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "find";
     maintainers = [ lib.maintainers.mdaniels5757 ];
+    teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
   };
 })

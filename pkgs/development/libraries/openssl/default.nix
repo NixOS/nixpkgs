@@ -385,6 +385,7 @@ let
         license = lib.licenses.openssl;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
+        teams = [ lib.teams.security-review ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"

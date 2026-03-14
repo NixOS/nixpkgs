@@ -6,7 +6,7 @@
   lib ? pkgs.lib,
 }:
 let
-  fun = import ./maintainers.nix;
+  fun = import ./maintainers.nix { inherit lib; };
 
   mockPkgs =
     {
@@ -46,7 +46,6 @@ let
     testEmpty = {
       expr = fun {
         pkgs = mockPkgs { };
-        inherit lib;
         changedFiles = [ ];
         affectedAttrPaths = [ ];
       };
@@ -59,7 +58,6 @@ let
     testNonExistentAffected = {
       expr = fun {
         pkgs = mockPkgs { };
-        inherit lib;
         changedFiles = [ "a" ];
         affectedAttrPaths = [ [ "b" ] ];
       };
@@ -74,7 +72,6 @@ let
         pkgs = mockPkgs {
           packages = [ [ "b" ] ];
         };
-        inherit lib;
         changedFiles = [ "a" ];
         affectedAttrPaths = [ [ "b" ] ];
       };
@@ -89,7 +86,6 @@ let
         pkgs = mockPkgs {
           packages = [ [ "b" ] ];
         };
-        inherit lib;
         # Also tests that subpaths work
         changedFiles = [ "b/c" ];
         affectedAttrPaths = [ [ "b" ] ];
@@ -110,7 +106,6 @@ let
           packages = [ [ "b" ] ];
           githubTeams = false;
         };
-        inherit lib;
         changedFiles = [ "b/c" ];
         affectedAttrPaths = [ [ "b" ] ];
       };
@@ -130,7 +125,6 @@ let
         pkgs = mockPkgs {
           packages = [ [ "hello" ] ];
         };
-        inherit lib;
         changedFiles = [ "pkgs/by-name/he/hello/sources.json" ];
         affectedAttrPaths = [ ];
       };
@@ -149,7 +143,6 @@ let
         pkgs = mockPkgs {
           packages = [ [ "hello" ] ];
         };
-        inherit lib;
         changedFiles = [ "pkgs/by-name/README.md" ];
         affectedAttrPaths = [ ];
       };
@@ -164,7 +157,6 @@ let
         pkgs = mockPkgs {
           packages = [ [ "hello" ] ];
         };
-        inherit lib;
         changedFiles = [
           "hello"
           "pkgs/by-name/he/hello/sources.json"
@@ -186,7 +178,6 @@ let
         pkgs = mockPkgs {
           modules = [ "a" ];
         };
-        inherit lib;
         changedFiles = [ "a" ];
         affectedAttrPaths = [ ];
       };
@@ -206,7 +197,6 @@ let
           modules = [ "a" ];
           githubTeams = false;
         };
-        inherit lib;
         changedFiles = [ "a" ];
         affectedAttrPaths = [ ];
       };

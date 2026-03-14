@@ -272,6 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
       das_j
       mdaniels5757
     ];
+    teams = [ lib.teams.security-review ];
     platforms = with lib.platforms; unix ++ windows;
     priority = 10;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" finalAttrs.version;
