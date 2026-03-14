@@ -18838,6 +18838,8 @@ self: super: with self; {
 
   t61codec = callPackage ../development/python-modules/t61codec { };
 
+  ta-lib = callPackage ../development/python-modules/ta-lib { taLib = pkgs.ta-lib; };
+
   tabcmd = callPackage ../development/python-modules/tabcmd { };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
