@@ -12,22 +12,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calligraplan";
-  version = "3.3.0";
+  version = "4.0.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "office";
     repo = "calligraplan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-szPdRxbzJ2+nmgp+1FwmKZwHEDV8EtbDW/3jsw4J6HI=";
+    hash = "sha256-OD719omgw+RZrFz6qWiFDFB4t6Lvvh2M2QXYAIh0H2I=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://invent.kde.org/office/calligraplan/-/commit/cdd85c895b487a8b3837bf8b864103997e0af544.patch";
-      hash = "sha256-IMoJvvszPuIdWedeU7PQw8ngYmMA7k//wXfT+mZQP88=";
-    })
-  ];
 
   buildInputs = [
     qt5.qtbase
