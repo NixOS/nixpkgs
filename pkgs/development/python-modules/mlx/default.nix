@@ -127,8 +127,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
-    # brittle memory leak test, see: https://github.com/ml-explore/mlx/pull/3088
+    # brittle memory leak test, see:
+    # https://github.com/ml-explore/mlx/pull/3088
     "test_siblings_without_eval"
+
+    # affected by racy cpu implementation, see:
+    # https://github.com/ml-explore/mlx/pull/3131
+    "test_gather_qmm_sorted"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
     # Segmentation fault
