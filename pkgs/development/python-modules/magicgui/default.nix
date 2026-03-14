@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "magicgui";
-  version = "0.10.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyapp-kit";
     repo = "magicgui";
     tag = "v${version}";
-    hash = "sha256-jpM5OpQ10cF+HBhAI9cI/gXdHMzYsgY9vtpfNq+5fIw=";
+    hash = "sha256-jTgSWXxGEbyJZt8x0gPOtevLtuXpFX04NdqFY+tOPA4=";
   };
 
   build-system = [
