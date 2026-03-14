@@ -5,6 +5,7 @@
   fetchpatch,
   pytestCheckHook,
   setuptools,
+  writableTmpDirAsHomeHook,
 
   packaging,
   pandas,
@@ -25,7 +26,7 @@
   xyzservices,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "geopandas";
   version = "1.1.3";
   pyproject = true;
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-66FbHNewpSEVZ9RwngK7E4bcELa9Z2OQ9xVP9+fgeHQ=";
   };
 
@@ -70,12 +71,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
+    writableTmpDirAsHomeHook
   ]
-  ++ optional-dependencies.all;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTests = [
     # Requires network access
@@ -89,8 +87,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/geopandas/geopandas/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.geospatial ];
   };
-}
+})
