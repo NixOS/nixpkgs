@@ -336,12 +336,12 @@ with pkgs;
   djgpp = djgpp_i586;
   djgpp_i586 = callPackage ../development/compilers/djgpp {
     targetArchitecture = "i586";
-    stdenv = gccStdenv;
+    stdenv = gcc14Stdenv;
   };
   djgpp_i686 = lowPrio (
     callPackage ../development/compilers/djgpp {
       targetArchitecture = "i686";
-      stdenv = gccStdenv;
+      stdenv = gcc14Stdenv;
     }
   );
 
