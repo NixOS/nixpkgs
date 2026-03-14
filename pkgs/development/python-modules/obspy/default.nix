@@ -18,7 +18,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "obspy";
-  version = "1.4.2-unstable-2025-08-21";
+  version = "1.4.2";
   pyproject = true;
 
   # Applies a gcc fix that can't be applied as a patch due to other repo changes
