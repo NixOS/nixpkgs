@@ -1,30 +1,30 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch2,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "dtach";
-  version = "0.9";
+  version = "0-unstable-2025-06-20";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/dtach/dtach/${finalAttrs.version}/dtach-${finalAttrs.version}.tar.gz";
-    sha256 = "1wwj2hlngi8qn2pisvhyfxxs8gyqjlgrrv5lz91w8ly54dlzvs9j";
+  src = fetchFromGitHub {
+    owner = "crigler";
+    repo = "dtach";
+    rev = "b027c27b2439081064d07a86883c8e0b20a183c9";
+    hash = "sha256-ilxBbrqwGe+jpFbQ93nfyp3HuDY0D7NgIXkIkw9YXkI=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/crigler/dtach/commit/6d80909a8c0fd19717010a3c76fec560f988ca48.patch?full_index=1";
-      hash = "sha256-v3vToJdSwihiPCSjXjEJghiaynHPTEql3F7URXRjCbM=";
-    })
-  ];
-
   installPhase = ''
-    mkdir -p $out/bin
-    cp dtach $out/bin/dtach
+    runHook preInstall
+
+    install -D dtach $out/bin/dtach
+
+    runHook postInstall
   '';
+
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     homepage = "https://dtach.sourceforge.net/";
@@ -40,9 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     license = lib.licenses.gpl2Plus;
-
     platforms = lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.jmbaur ];
     mainProgram = "dtach";
   };
-})
+}
