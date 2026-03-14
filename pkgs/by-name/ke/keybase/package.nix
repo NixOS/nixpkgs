@@ -6,9 +6,9 @@
   gnupg,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "keybase";
-  version = "6.5.1";
+  version = "6.6.0";
 
   modRoot = "go";
   subPackages = [
@@ -21,15 +21,15 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "keybase";
     repo = "client";
-    rev = "v${version}";
-    hash = "sha256-B3vedsxQM4FDZVpkMKR67DF7FtaTPhGIJ1e2lViKYzg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZIOS4plCF7coSRLSk86v4xMxRS1geKpRDwZJ9Ouys1Q=";
   };
-  vendorHash = "sha256-uw1tiaYoMpMXCYt5bPL5OBbK09PJmAQYQDrDwuPShxU=";
+  vendorHash = "sha256-PP60BF2C71zLlbR1obtqVRvt7eKp7IB9atF2BKJD9Zs=";
 
   patches = [
     (replaceVars ./fix-paths-keybase.patch {
-      gpg = "${gnupg}/bin/gpg";
-      gpg2 = "${gnupg}/bin/gpg2";
+      gpg = lib.getExe gnupg;
+      gpg2 = lib.getExe' gnupg "gpg2";
     })
   ];
   tags = [ "production" ];
@@ -52,4 +52,4 @@ buildGoModule rec {
     ];
     license = lib.licenses.bsd3;
   };
-}
+})
