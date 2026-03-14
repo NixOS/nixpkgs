@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kalign";
-  version = "3.4.0";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
     owner = "TimoLassmann";
     repo = "kalign";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QcFNaCTqj6CFiOzQ6ezfBL0mu8PDU11hyNdkcsLOPzA=";
+    hash = "sha256-wcVzKedd8IFKql+TU4wJ4jEGDPdDfpyC5iGXrPYa0oY=";
   };
 
   nativeBuildInputs = [
