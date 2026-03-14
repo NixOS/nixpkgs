@@ -43,7 +43,7 @@ def test_flake_parse(mock_node: Mock, tmpdir: Path, monkeypatch: MonkeyPatch) ->
         autospec=True,
         return_value=subprocess.CompletedProcess([], 0, stdout="remote\n"),
     ):
-        target_host = m.Remote("target@remote", [], None)
+        target_host = m.Remote("target@remote", [], None, "ssh")
         assert m.Flake.parse("/path/to/flake", target_host) == m.Flake(
             "/path/to/flake", 'nixosConfigurations."remote"'
         )
@@ -162,9 +162,9 @@ def test_flake_from_arg(
             return_value=subprocess.CompletedProcess([], 0, "remote-hostname\n"),
         ),
     ):
-        assert m.Flake.from_arg("/path/to", m.Remote("user@host", [], None)) == m.Flake(
-            "/path/to", 'nixosConfigurations."remote-hostname"'
-        )
+        assert m.Flake.from_arg(
+            "/path/to", m.Remote("user@host", [], None, "ssh")
+        ) == m.Flake("/path/to", 'nixosConfigurations."remote-hostname"')
 
 
 @patch("pathlib.Path.mkdir", autospec=True)

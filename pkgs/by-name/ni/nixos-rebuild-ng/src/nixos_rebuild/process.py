@@ -46,6 +46,7 @@ class Remote:
     host: str
     opts: list[str]
     sudo_password: str | None
+    store_type: str
 
     @classmethod
     def from_arg(
@@ -57,13 +58,18 @@ class Remote:
         if not host:
             return None
 
+        try:
+            store_type, host = host.split("://", 1)
+        except ValueError:
+            store_type = "ssh"
+
         opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
             cls._validate_opts(opts, ask_sudo_password)
         sudo_password = None
         if ask_sudo_password:
             sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
-        return cls(host, opts, sudo_password)
+        return cls(host, opts, sudo_password, store_type)
 
     @staticmethod
     def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
