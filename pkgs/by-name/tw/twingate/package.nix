@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "twingate";
-  version = "2025.310.174671";
+  version = "2026.22.182963";
 
   src = fetchurl {
     url = "https://binaries.twingate.com/client/linux/DEB/x86_64/${version}/twingate-amd64.deb";
-    hash = "sha256-ZzOsXpjLBR447Kvo2kwy9y8TRm8Yp3EMlVx6vQU72jQ=";
+    hash = "sha256-tVGsZS8QBy78mPolBE8pSo2xnCXgC0L7K0xJJ2YT6FY=";
   };
 
   buildInputs = [
@@ -53,10 +53,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) twingate; };
 
-  meta = {
+  meta = with lib; {
     description = "Twingate Client";
     homepage = "https://twingate.com";
-    license = lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tonyshkurenko ];
     platforms = [ "x86_64-linux" ];
   };
 }
