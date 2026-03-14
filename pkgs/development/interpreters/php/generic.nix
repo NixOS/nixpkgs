@@ -116,7 +116,7 @@ let
               let
                 deps = lib.concatMap (ext: (ext.internalDeps or [ ]) ++ (ext.peclDeps or [ ])) extensions;
               in
-              if !(deps == [ ]) then deps ++ (getDepsRecursively deps) else deps;
+              if deps == [ ] then [ ] else (deps ++ (getDepsRecursively deps));
 
             # Generate extension load configuration snippets from the
             # extension parameter. This is an attrset suitable for use
@@ -139,11 +139,14 @@ let
               ) (enabledExtensions ++ (getDepsRecursively enabledExtensions))
             );
 
-            extNames = map getExtName enabledExtensions;
-            extraInit = writeText "php-extra-init-${version}.ini" ''
-              ${lib.concatStringsSep "\n" (lib.textClosureList extensionTexts extNames)}
-              ${extraConfig}
-            '';
+            extraInit =
+              let
+                extNames = map getExtName (builtins.filter (ext: (ext.configureFlags != [ ])) enabledExtensions);
+              in
+              writeText "php-extra-init-${version}.ini" ''
+                ${lib.concatStringsSep "\n" (lib.textClosureList extensionTexts extNames)}
+                ${extraConfig}
+              '';
 
             phpWithExtensions = symlinkJoin {
               pname = "php-with-extensions";

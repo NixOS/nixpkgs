@@ -730,9 +730,10 @@ lib.makeScope pkgs.newScope (
             {
               name = "xml";
               buildInputs = [ libxml2 ];
-              configureFlags = [
-                "--enable-xml"
-              ];
+              # Set this to an empty list because this extension is enabled by
+              # default. Also, there's no need to add the `xml.so` in the final
+              # PHP ini or else it will emit a warning at each php call.
+              configureFlags = [ ];
               doCheck = false;
             }
             {
