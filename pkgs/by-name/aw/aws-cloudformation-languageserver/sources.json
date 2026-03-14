@@ -1,0 +1,19 @@
+{
+  "version": "1.4.0",
+  "aarch64-darwin": {
+    "url": "https://github.com/aws-cloudformation/cloudformation-languageserver/releases/download/v1.4.0/cloudformation-languageserver-1.4.0-darwin-arm64-node22.zip",
+    "sha256": "sha256-bOI1JT4buFsVaC3c+ZeQEZs0cqAGbDfXieYcrXOs/Cc="
+  },
+  "aarch64-linux": {
+    "url": "https://github.com/aws-cloudformation/cloudformation-languageserver/releases/download/v1.4.0/cloudformation-languageserver-1.4.0-linux-arm64-node22.zip",
+    "sha256": "sha256-Pgpm0lgFnCydt3eJmu8AaURhd1rKS1W4SxzryHnI+VI="
+  },
+  "x86_64-darwin": {
+    "url": "https://github.com/aws-cloudformation/cloudformation-languageserver/releases/download/v1.4.0/cloudformation-languageserver-1.4.0-darwin-x64-node22.zip",
+    "sha256": "sha256-VqpywoM2KtRXJzWygzYBNpfiqTlgUMwWKnmTWmxnz6g="
+  },
+  "x86_64-linux": {
+    "url": "https://github.com/aws-cloudformation/cloudformation-languageserver/releases/download/v1.4.0/cloudformation-languageserver-1.4.0-linux-x64-node22.zip",
+    "sha256": "sha256-KKwHQQh3Tx+ZGRhT3A9JDYNpydIW+N4jmB43IiH+czE="
+  }
+}
