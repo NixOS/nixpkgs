@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coeurl";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     domain = "nheko.im";
     owner = "nheko-reborn";
     repo = "coeurl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NGplM5c/dMGSQbhKeuPOTWL8KsqvMd/76YuwCxnqNNE=";
+    hash = "sha256-8BwyPfLgkJG1CHnRAKxgn8ObEGSK+lKKUhQibs1dCg4=";
   };
   postPatch = ''
     substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'

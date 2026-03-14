@@ -49,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "remmina";
-  version = "1.4.41";
+  version = "1.4.43";
 
   src = fetchFromGitLab {
     owner = "Remmina";
     repo = "Remmina";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0KUwZ81CyuLa05Cwe7wJrTbM1Dp9mAzNBI5pR7FKTOU=";
+    hash = "sha256-7nY2NhlWp+4FTTmeam1B+sotqis0lSwhozSC8I14aMI=";
   };
 
   nativeBuildInputs = [

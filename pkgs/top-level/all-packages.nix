@@ -6338,6 +6338,8 @@ with pkgs;
     fmt_12
     ;
 
+  firefox_decrypt = callPackage ../by-name/fi/firefox_decrypt/package.nix { nss = nss_latest; };
+
   fmt = fmt_12;
 
   fontconfig = callPackage ../development/libraries/fontconfig { };

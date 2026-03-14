@@ -11,13 +11,13 @@
     let
       self = {
         pname = "cbqn";
-        version = "0.10.0";
+        version = "0.11.0";
 
         src = fetchFromGitHub {
           owner = "dzaima";
           repo = "CBQN";
           rev = "v${self.version}";
-          hash = "sha256-RZIxIRlx1SSYP+WrMRvg6nUqqs4zqEaGPvFyY3WFgbU=";
+          hash = "sha256-ZXhCFLLUVJTgpJqMd97EMSoE4fwuqBJ742kzV662bnY=";
         };
       };
     in
@@ -25,25 +25,25 @@
 
   cbqn-bytecode = {
     pname = "cbqn-bytecode";
-    version = "0-unstable-2025-11-24";
+    version = "0-unstable-2026-01-24";
 
     src = fetchFromGitHub {
       owner = "dzaima";
       repo = "cbqnBytecode";
-      rev = "cca48b93b2e3260d2fa371c578d94cf044e39042";
-      hash = "sha256-xBjXlzWhbsKjiknnncVRkh9VlUNzaxYVNB7BhZTI/r4=";
+      rev = "156b47caf895f6706811c5c34bbbbaf192b8018b";
+      hash = "sha256-xz4gs1b1yNbnR3v4Kw1xLCAb1I1uoBMdYJRQH9JVD/k=";
     };
   };
 
   replxx = {
     pname = "replxx";
-    version = "0-unstable-2025-05-20";
+    version = "0-unstable-2026-02-02";
 
     src = fetchFromGitHub {
       owner = "dzaima";
       repo = "replxx";
-      rev = "c1ce5b0bcabd96ec93ebf630a85619295ec7c2f3";
-      hash = "sha256-4TEjJdF0FAIT69uVMp0y4bFFrRda1CXC/bLX6mrUTA0=";
+      rev = "5e3bd870699007b9536d29f60e3a2b0a68ce0a7a";
+      hash = "sha256-B1N1d5K4E20OlbX4wTclEiXULM2FT3oT0btyrYCNQ20=";
     };
   };
 
