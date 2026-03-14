@@ -42,7 +42,7 @@ in
 {
 
   tarball = import ./make-tarball.nix {
-    inherit nixpkgs;
+    inherit nixpkgs supportedSystems;
     officialRelease = false;
   };
 
