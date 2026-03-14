@@ -23,10 +23,12 @@ let
 
 in
 # Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
+let
+  pname = "openra_2019-${mod.name}";
+in
 stdenv.mkDerivation (
-  lib.recursiveUpdate packageAttrs rec {
-    name = "${pname}-${version}";
-    pname = "openra_2019-${mod.name}";
+  {
+    inherit pname;
     inherit (mod) version;
 
     srcs = [
@@ -47,7 +49,7 @@ stdenv.mkDerivation (
       exit 0
       EOF
 
-      sed -i 's/^VERSION.*/VERSION = ${version}/g' Makefile
+      sed -i 's/^VERSION.*/VERSION = ${mod.version}/g' Makefile
 
       dos2unix *.md
 
@@ -57,7 +59,7 @@ stdenv.mkDerivation (
     configurePhase = ''
       runHook preConfigure
 
-      make version VERSION=${lib.escapeShellArg version}
+      make version VERSION=${lib.escapeShellArg mod.version}
       make -C ${engineSourceName} version VERSION=${lib.escapeShellArg engine.version}
 
       runHook postConfigure
@@ -93,7 +95,7 @@ stdenv.mkDerivation (
       substitute ${./openra-mod.desktop} $(mkdirp $out/share/applications)/${pname}.desktop \
         --subst-var-by name ${lib.escapeShellArg mod.name} \
         --subst-var-by title ${lib.escapeShellArg mod.title} \
-        --subst-var-by description ${lib.escapeShellArg mod.description}
+        --subst-var-by description ${lib.escapeShellArg mod.meta.description}
 
       cp README.md $(mkdirp $out/share/doc/packages/${pname})/README.md
 
@@ -110,9 +112,7 @@ stdenv.mkDerivation (
       runHook postInstall
     '';
 
-    inherit (mod) pos;
-    meta = {
-      inherit (mod) description homepage;
-    };
+    meta = packageAttrs.meta // mod.meta;
   }
+  // removeAttrs packageAttrs [ "meta" ]
 )

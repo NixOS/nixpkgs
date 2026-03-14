@@ -564,7 +564,6 @@ in
                           extraConfig =
                             { options, ... }:
                             {
-                              _file = "module at ${__curPos.file}:${toString __curPos.line}";
                               config = {
                                 nixpkgs =
                                   if options.nixpkgs ? hostPlatform then
