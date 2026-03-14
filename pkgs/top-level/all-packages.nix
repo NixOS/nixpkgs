@@ -6066,6 +6066,7 @@ with pkgs;
     ;
   texinfo = texinfo7;
   texinfoInteractive = texinfo.override { interactive = true; };
+  texinfoFull = texinfo.override { full = true; };
 
   tflint-plugins = recurseIntoAttrs (callPackage ../development/tools/analysis/tflint-plugins { });
 

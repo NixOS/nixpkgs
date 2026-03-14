@@ -4,8 +4,10 @@
   buildPackages,
   fetchurl,
   perl,
+  perlPackages,
   libintl,
   bashNonInteractive,
+  makeWrapper,
   updateAutotoolsGnuConfigScriptsHook,
   gawk,
   freebsd,
@@ -14,6 +16,7 @@
 
   # we are a dependency of gcc, this simplifies bootstrapping
   interactive ? false,
+  full ? false,
   ncurses,
   procps,
   meta,
@@ -42,10 +45,16 @@ let
     versionOlder
     ;
   crossBuildTools = stdenv.hostPlatform != stdenv.buildPlatform;
+  extra = interactive || full;
 in
-
 stdenv.mkDerivation {
-  pname = "texinfo${optionalString interactive "-interactive"}";
+  pname =
+    if full then
+      "texinfo-full"
+    else if interactive then
+      "texinfo-interactive"
+    else
+      "texinfo";
   inherit version;
 
   src = fetchurl {
@@ -55,9 +64,7 @@ stdenv.mkDerivation {
 
   patches =
     patches
-    ++ optional (
-      interactive && versionAtLeast version "7.2"
-    ) ./fix-test-suite-failures-with-perl-5.42.patch
+    ++ optional (extra && versionAtLeast version "7.2") ./fix-test-suite-failures-with-perl-5.42.patch
     ++ optional crossBuildTools ./cross-tools-flags.patch;
 
   postPatch = ''
@@ -97,7 +104,8 @@ stdenv.mkDerivation {
     perl
   ];
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ optional full makeWrapper;
+
   buildInputs = [
     bashNonInteractive
     libintl
@@ -106,7 +114,7 @@ stdenv.mkDerivation {
     libiconv
     gawk
   ]
-  ++ optional interactive ncurses;
+  ++ optional extra ncurses;
 
   configureFlags = [
     "PERL=${buildPackages.perl}/bin/perl"
@@ -132,14 +140,24 @@ stdenv.mkDerivation {
   nativeCheckInputs = [ procps ] ++ optionals stdenv.buildPlatform.isFreeBSD [ freebsd.locale ];
   checkInputs = optionals (lib.versionAtLeast version "7.2") [ glibcLocales ];
 
-  doCheck = interactive && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
+  doCheck = extra && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isSunOS; # flaky
 
-  postFixup = optionalString crossBuildTools ''
-    for f in "$out"/bin/{pod2texi,texi2any}; do
-      substituteInPlace "$f" \
-        --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
-    done
-  '';
+  postFixup =
+    optionalString crossBuildTools ''
+      for f in "$out"/bin/{pod2texi,texi2any}; do
+        substituteInPlace "$f" \
+          --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+      done
+    ''
+    +
+      # Make optional perl dependencies available.
+      # https://nixos.wiki/wiki/Perl#Wrappers_for_installed_programs.
+      optionalString full ''
+        for f in "$out"/bin/{pod2texi,texi2any}; do
+          wrapProgram "$f" \
+            --prefix PERL5LIB : "${with perlPackages; makePerlPath [ ArchiveZip ]}"
+        done
+      '';
 
   meta = meta // {
     branch = version;
