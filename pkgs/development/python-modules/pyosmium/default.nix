@@ -5,7 +5,6 @@
   cmake,
   libosmium,
   protozero,
-  boost,
   expat,
   bzip2,
   zlib,
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "pyosmium";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = isPyPy;
@@ -32,7 +31,7 @@ buildPythonPackage rec {
     owner = "osmcode";
     repo = "pyosmium";
     tag = "v${version}";
-    hash = "sha256-AkldgvZmn1CLa9Ze7RHBhL5wLLJ+mBnNj+yyV98nzZ8=";
+    hash = "sha256-baLa3Zy67kbUBGoDqJjfO/ICSbr7cNYY8bUuVfcy3yQ=";
   };
 
   build-system = [
@@ -45,7 +44,6 @@ buildPythonPackage rec {
   buildInputs = [
     libosmium
     protozero
-    boost
     expat
     bzip2
     zlib
