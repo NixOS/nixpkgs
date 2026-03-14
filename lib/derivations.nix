@@ -20,7 +20,7 @@ let
     prefix: pkg:
     if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
-{
+rec {
   inherit (builtins)
     addDrvOutputDependencies
     unsafeDiscardOutputDependency
@@ -261,5 +261,12 @@ in
         "outputName"
       ];
     in
-    drv // mapAttrs (_: lib.warn msg) drvToWrap;
+    drv
+    // mapAttrs (_: lib.warn msg) drvToWrap
+    // (
+      if drv ? overrideAttrs && builtins.isFunction drv.overrideAttrs then
+        { overrideAttrs = x: warnOnInstantiate msg (drv.overrideAttrs x); }
+      else
+        { }
+    );
 }
