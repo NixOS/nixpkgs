@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   openssl,
   zlib,
   pcre,
@@ -53,6 +54,33 @@ stdenv.mkDerivation rec {
     ../nginx/nix-etag-1.15.4.patch
     ./check-resolv-conf.patch
     ../nginx/nix-skip-check-logs-path.patch
+  ]
+  # Backport update mime-types from freenginx.
+  ++ [
+    (fetchpatch {
+      url = "https://github.com/freenginx/nginx/commit/77ee09313a4281d891f9fa0bf325de36e9a8c933.patch";
+      sha256 = "sha256-1SB+SwtHx1zU31S3EVUs73b57LIRxD5jr5FHqAgluqM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/freenginx/nginx/commit/6e44afc355ae5262506bdbf9d692d5cc7cb20994.patch";
+      sha256 = "sha256-pKlXcXPGjmvtPH2P2ewkakjNrQ4w/x3Y2GHjgg4OdIg=";
+    })
+    (fetchpatch {
+      url = "https://github.com/freenginx/nginx/commit/c85785e4116e6b175946682fc6d17d32312c20ee.patch";
+      sha256 = "sha256-gKXMUHCBiahpfNTgBUoxm5haCweAIHZHHCGL72QkoGA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/freenginx/nginx/commit/b2f1ac35fe1d458f06008624fdc50ef99844a7bb.patch";
+      sha256 = "sha256-V2pqB6j43te8Q7wOU9GHHRs4Gm22duSiELrwxfD4fgY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/freenginx/nginx/commit/4e12815b7590520417203543ccb7f116444711c9.patch";
+      sha256 = "sha256-ZV7beyblllvhEyuvxlscbEZqisBpO6XyFmJwYMpneYU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/freenginx/nginx/commit/83ed572828ef4a82b2941c536411332242b71060.patch";
+      sha256 = "sha256-zlWUMU4OMyMPUKmWMv5Vg4Ey0G/aTjRbVdvU/Z2a+cE=";
+    })
   ];
 
   postPatch = ''
