@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpulsar";
-  version = "3.7.2";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3kUyimyv0Si3zUFaIsIVdulzH8l2fxe6BO9a5L6n8I8=";
+    hash = "sha256-Fjm5RE6AwRs6+ib9VQTAyz6QLGIk3mEvtSZawIZfTbM=";
   };
 
   nativeBuildInputs = [
