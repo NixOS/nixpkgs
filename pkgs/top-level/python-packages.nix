@@ -5378,6 +5378,12 @@ self: super: with self; {
 
   fastapi-sso = callPackage ../development/python-modules/fastapi-sso { };
 
+  fastapi-users = callPackage ../development/python-modules/fastapi-users { };
+
+  fastapi-users-db-sqlalchemy =
+    callPackage ../development/python-modules/fastapi-users-db-sqlalchemy
+      { };
+
   fastapi-versionizer = callPackage ../development/python-modules/fastapi-versionizer { };
 
   fastavro = callPackage ../development/python-modules/fastavro { };
