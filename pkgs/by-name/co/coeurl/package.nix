@@ -21,9 +21,6 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-8BwyPfLgkJG1CHnRAKxgn8ObEGSK+lKKUhQibs1dCg4=";
   };
-  postPatch = ''
-    substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
-  '';
 
   nativeBuildInputs = [
     ninja
