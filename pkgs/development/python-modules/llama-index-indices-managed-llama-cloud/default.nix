@@ -8,14 +8,14 @@
   llama-index-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-indices-managed-llama-cloud";
   version = "0.9.4";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-teAHUqswVkq/GcV1laIQf1aXw7A7CFgXtPyoSjjrvVk=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
