@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     description = "Hosting library for JSFX";
     homepage = "https://github.com/JoepVanlier/ysfx";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.bitbloxhub ];
     platforms = lib.platforms.linux;
   };
 }
