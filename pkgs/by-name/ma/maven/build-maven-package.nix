@@ -95,6 +95,7 @@ let
       ''
       + lib.optionalString (!buildOffline) ''
         mvn $MAVEN_EXTRA_ARGS package -Dmaven.repo.local=$out/.m2 ${mvnSkipTests} ${mvnParameters}
+        rm -rf $out/.m2/.cache
       ''
       + ''
         runHook postBuild
