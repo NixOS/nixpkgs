@@ -11169,6 +11169,11 @@
     email = "astrid@astrid.tech";
     name = "ifd3f";
   };
+  ifiokjr = {
+    name = "Ifiok Jr.";
+    github = "ifiokjr";
+    githubId = 1160934;
+  };
   iFreilicht = {
     github = "iFreilicht";
     githubId = 9742635;
