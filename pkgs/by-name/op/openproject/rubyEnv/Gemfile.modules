@@ -1,0 +1,46 @@
+group :development, :test do
+  gem 'ladle'
+end
+
+gem 'omniauth-openid_connect-providers',
+    git: 'https://github.com/opf/omniauth-openid_connect-providers.git',
+    ref: 'c7e2498a8b093cfc5693d4960cae2e903a5e10cd'
+
+gem 'omniauth-openid-connect',
+    git: 'https://github.com/opf/omniauth-openid-connect.git',
+    ref: '825d06235b64f6bc872bba709f1c2d48fd5cede4'
+
+group :opf_plugins do
+    # included so that engines can reference OpenProject::Version
+    $:.push File.expand_path("../lib", __FILE__)
+
+  gem 'openproject-auth_plugins',              path: 'modules/auth_plugins'
+  gem 'openproject-auth_saml',                 path: 'modules/auth_saml'
+  gem 'openproject-openid_connect',            path: 'modules/openid_connect'
+  gem 'openproject-xls_export',                path: 'modules/xls_export'
+  gem 'costs',                                 path: 'modules/costs'
+  gem 'openproject-reporting',                 path: 'modules/reporting'
+  gem "openproject-backlogs",                  path: 'modules/backlogs'
+  gem 'openproject-avatars',                   path: 'modules/avatars'
+  gem 'openproject-two_factor_authentication', path: 'modules/two_factor_authentication'
+  gem 'openproject-webhooks',                  path: 'modules/webhooks'
+  gem 'openproject-github_integration',        path: 'modules/github_integration'
+  gem 'openproject-gitlab_integration',        path: 'modules/gitlab_integration'
+  gem 'openproject-ldap_groups',               path: 'modules/ldap_groups'
+  gem 'openproject-recaptcha',                 path: 'modules/recaptcha'
+  gem 'openproject-job_status',                path: 'modules/job_status'
+
+  gem 'grids',                                 path: 'modules/grids'
+  gem 'my_page',                               path: 'modules/my_page'
+  gem 'openproject-boards',                    path: 'modules/boards'
+  gem 'overviews',                             path: 'modules/overviews'
+  gem 'budgets',                               path: 'modules/budgets'
+  gem 'openproject-meeting',                   path: 'modules/meeting'
+  gem 'openproject-team_planner',              path: 'modules/team_planner'
+  gem 'openproject-gantt',                     path: 'modules/gantt'
+  gem 'openproject-calendar',                  path: 'modules/calendar'
+  gem 'openproject-storages',                  path: 'modules/storages'
+  gem 'openproject-documents',                 path: 'modules/documents'
+
+  gem 'openproject-bim',                       path: 'modules/bim'
+end
