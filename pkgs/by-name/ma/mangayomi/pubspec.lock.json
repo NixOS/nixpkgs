@@ -14,11 +14,11 @@
       "dependency": "transitive",
       "description": {
         "name": "analyzer",
-        "sha256": "f4ad0fea5f102201015c9aae9d93bc02f75dd9491529a8c21f88d17a8523d44c",
+        "sha256": "974859dc0ff5f37bc4313244b3218c791810d03ab3470a579580279ba971a48d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "7.6.0"
+      "version": "7.7.1"
     },
     "analyzer_buffer": {
       "dependency": "transitive",
@@ -284,11 +284,11 @@
       "dependency": "transitive",
       "description": {
         "name": "code_builder",
-        "sha256": "11654819532ba94c34de52ff5feb52bd81cba1de00ef2ed622fd50295f9d4243",
+        "sha256": "6a6cab2ba4680d6423f34a9b972a4c9a94ebe1b62ecec4e1a1f2cba91fd1319d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.11.0"
+      "version": "4.11.1"
     },
     "collection": {
       "dependency": "transitive",
@@ -471,17 +471,6 @@
       "source": "hosted",
       "version": "5.0.3"
     },
-    "epubx": {
-      "dependency": "direct main",
-      "description": {
-        "path": ".",
-        "ref": "dev",
-        "resolved-ref": "c8203a489fae5683001556b1d323e35f356294fb",
-        "url": "https://github.com/kodjodevf/epubx.dart.git"
-      },
-      "source": "git",
-      "version": "4.0.3"
-    },
     "expressions": {
       "dependency": "transitive",
       "description": {
@@ -536,11 +525,11 @@
       "dependency": "direct main",
       "description": {
         "name": "ffi",
-        "sha256": "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418",
+        "sha256": "d07d37192dbf97461359c1518788f203b0c9102cfd2c35a716b823741219542c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.4"
+      "version": "2.1.5"
     },
     "ffigen": {
       "dependency": "direct main",
@@ -993,11 +982,11 @@
       "dependency": "transitive",
       "description": {
         "name": "image",
-        "sha256": "4e973fcf4caae1a4be2fa0a13157aa38a8f9cb049db6529aa00b4d71abc4d928",
+        "sha256": "492bd52f6c4fbb6ee41f781ff27765ce5f627910e1e0cbecfa3d9add5562604c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.5.4"
+      "version": "4.7.2"
     },
     "infinite_listview": {
       "dependency": "transitive",
@@ -2127,11 +2116,11 @@
       "dependency": "transitive",
       "description": {
         "name": "time",
-        "sha256": "370572cf5d1e58adcb3e354c47515da3f7469dac3a95b447117e728e7be6f461",
+        "sha256": "46187cf30bffdab28c56be9a63861b36e4ab7347bf403297595d6a97e10c789f",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.1.5"
+      "version": "2.1.6"
     },
     "timing": {
       "dependency": "transitive",
@@ -2167,11 +2156,11 @@
       "dependency": "transitive",
       "description": {
         "name": "uri_parser",
-        "sha256": "ff4d2c720aca3f4f7d5445e23b11b2d15ef8af5ddce5164643f38ff962dcb270",
+        "sha256": "051c62e5f693de98ca9f130ee707f8916e2266945565926be3ff20659f7853ce",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.0.0"
+      "version": "3.0.2"
     },
     "url_launcher": {
       "dependency": "direct main",
@@ -2287,11 +2276,11 @@
       "dependency": "transitive",
       "description": {
         "name": "volume_controller",
-        "sha256": "d75039e69c0d90e7810bfd47e3eedf29ff8543ea7a10392792e81f9bded7edf5",
+        "sha256": "5c1a13d2ea99d2f6753e7c660d0d3fab541f36da3999cafeb17b66fe49759ad7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.4.0"
+      "version": "3.4.1"
     },
     "wakelock_plus": {
       "dependency": "transitive",
@@ -2317,11 +2306,11 @@
       "dependency": "transitive",
       "description": {
         "name": "watcher",
-        "sha256": "592ab6e2892f67760543fb712ff0177f4ec76c031f02f5b4ff8d3fc5eb9fb61a",
+        "sha256": "1398c9f081a753f9226febe8900fce8f7d0a67163334e1c94a2438339d79d635",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.1.4"
+      "version": "1.2.1"
     },
     "web": {
       "dependency": "transitive",
@@ -2467,11 +2456,11 @@
       "dependency": "transitive",
       "description": {
         "name": "yaml_edit",
-        "sha256": "fb38626579fb345ad00e674e2af3a5c9b0cc4b9bfb8fd7f7ff322c7c9e62aef5",
+        "sha256": "ec709065bb2c911b336853b67f3732dd13e0336bd065cc2f1061d7610ddf45e3",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.2"
+      "version": "2.2.3"
     }
   },
   "sdks": {
