@@ -28,6 +28,20 @@ in
       description = "Primary group of ntfy-sh user.";
     };
 
+    nginx = {
+      enable = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = "Whether to set up an nginx virtual host.";
+      };
+
+      virtualHost = lib.mkOption {
+        type = lib.types.str;
+        example = "push.example.com";
+        description = "Virtual host to use for nginx.";
+      };
+    };
+
     settings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
@@ -78,6 +92,7 @@ in
   config =
     let
       configuration = settingsFormat.generate "server.yml" cfg.settings;
+      defaultListen = "127.0.0.1:2586";
     in
     lib.mkIf cfg.enable {
       # to configure access control via the cli
@@ -88,7 +103,7 @@ in
 
       services.ntfy-sh.settings = {
         auth-file = lib.mkDefault "/var/lib/ntfy-sh/user.db";
-        listen-http = lib.mkDefault "127.0.0.1:2586";
+        listen-http = lib.mkDefault defaultListen;
         attachment-cache-dir = lib.mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = lib.mkDefault "/var/lib/ntfy-sh/cache-file.db";
       };
@@ -133,6 +148,29 @@ in
         ntfy-sh = {
           isSystemUser = true;
           group = cfg.group;
+        };
+      };
+
+      services.nginx = lib.mkIf cfg.nginx.enable {
+        enable = true;
+        virtualHosts."${cfg.nginx.virtualHost}" = {
+          addSSL = true;
+
+          locations."/" = {
+            proxyPass = "http://${cfg.settings.listen-http or defaultListen}";
+            proxyWebsockets = true;
+            recommendedProxySettings = false;
+            extraConfig = ''
+              proxy_set_header Host $host;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+              proxy_connect_timeout 3m;
+              proxy_send_timeout 3m;
+              proxy_read_timeout 3m;
+
+              client_max_body_size 0;
+            '';
+          };
         };
       };
     };
