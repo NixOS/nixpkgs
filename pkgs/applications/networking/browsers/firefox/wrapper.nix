@@ -80,6 +80,7 @@ let
       # https://mozilla.github.io/policy-templates/
       extraPolicies ? { },
       extraPoliciesFiles ? [ ],
+      extraAutoConfig ? "",
       libName ? browser.libName or applicationName, # Important for tor package or the like
       nixExtensions ? null,
       hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname),
@@ -553,8 +554,11 @@ let
           prefsDir="$out/${prefsDir}"
           mkdir -p "$prefsDir"
 
-          echo 'pref("general.config.filename", "mozilla.cfg");' > "$prefsDir/autoconfig.js"
-          echo 'pref("general.config.obscure_value", 0);' >> "$prefsDir/autoconfig.js"
+          cat > "$prefsDir/autoconfig.js" << EOF
+          pref("general.config.filename", "mozilla.cfg");
+          pref("general.config.obscure_value", 0);
+          ${extraAutoConfig}
+          EOF
 
           cat > "$libDir/mozilla.cfg" << EOF
           ${mozillaCfg}
