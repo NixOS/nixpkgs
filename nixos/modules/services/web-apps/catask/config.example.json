@@ -1,0 +1,116 @@
+{
+    "instance": {
+        "title": "CatAsk",
+        "description": "Ask me something!",
+        "image": "/static/icons/favicon/android-chrome-512x512.png",
+        "fullBaseUrl": "https://catask.localhost",
+        "rules": "Be kind!"
+    },
+    "accessibility": {
+        "font": "default",
+        "userway": {
+            "enabled": false,
+            "account": ""
+        }
+    },
+    "languages": {
+        "default": "en_US",
+        "allowChanging": true
+    },
+    "style": {
+        "accentLight": "#7c50bb",
+        "accentDark": "#9162dc",
+        "bgLight": "#ffffff",
+        "bgDark": "#202020",
+        "navStyle": "pills",
+        "tintColors": false,
+        "infoBoxLayout": "row",
+        "homepageLayout": "catask",
+        "navIcons": true,
+        "navIconsOnly": false,
+        "customCss": "",
+        "useCustomCss": false,
+        "overrideBaseStyles": false,
+        "overrideCatAskStyles": false,
+        "cardStyle": "compact"
+    },
+    "antispam": {
+        "type": "basic",
+        "enabled": true,
+        "recaptcha": {
+            "sitekey": "",
+            "secretkey": ""
+        },
+        "turnstile": {
+            "sitekey": "",
+            "secretkey": ""
+        },
+        "frc": {
+            "sitekey": "",
+            "apikey": ""
+        }
+    },
+    "ntfy": {
+        "enabled": false,
+        "host": "https://ntfy.sh",
+        "user": "",
+        "pass": "",
+        "topic": ""
+    },
+    "crosspost": {
+        "fediverse": {
+            "enabled": false,
+            "instance": "",
+            "client": {
+                "id": "",
+                "secret": ""
+            },
+            "token": "",
+            "visibility": "public",
+            "cw": "",
+            "isMisskey": false,
+            "loggedIn": false,
+            "accountInfo": {
+                "display_name": "",
+                "name": "",
+                "avatar_url": ""
+            }
+        },
+        "bluesky": {
+            "enabled": false,
+            "handle": "",
+            "appPassword": ""
+        }
+    },
+    "comments": {
+        "enabled": true,
+        "style": "default"
+    },
+    "plugins": {
+        "enabled": false
+    },
+    "sentry": {
+        "report_level": "0"
+    },
+    "oauth": {
+        "providers_configured": 0,
+        "google": { "client_id": "", "client_secret": "" },
+        "mastodon": { "client_id": "", "client_secret": "", "domain": "mastodon.social", "app_created": false },
+        "github": { "client_id": "", "client_secret": "" },
+        "gitlab": { "client_id": "", "client_secret": "", "domain": "gitlab.com" },
+        "discord": { "client_id": "", "client_secret": "" },
+        "gitea": { "domain": "codeberg.org", "client_id": "", "client_secret": "" }
+    },
+    "themeStoreUrl": "https://themes.catask.org",
+    "username": "",
+    "trimContentAfter": "150",
+    "charLimit": "512",
+    "anonName": "Anonymous",
+    "lockInbox": false,
+    "allowAnonQuestions": true,
+    "showQuestionCount": true,
+    "noDeleteConfirm": false,
+    "fediVerificationUrl": "",
+    "analyticsEnabled": false,
+    "setupCompleted": true
+}
