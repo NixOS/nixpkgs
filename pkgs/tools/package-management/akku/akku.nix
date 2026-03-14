@@ -23,13 +23,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "akku";
-  version = "1.1.0-unstable-2025-11-08";
+  version = "1.1.0-unstable-2026-01-09";
 
   src = fetchFromGitLab {
     owner = "akkuscm";
     repo = "akku";
-    rev = "411b79ffb40f5ee3b50a72c5a2d5aea97f023c93";
-    sha256 = "sha256-5e4W33EnKvUoLvTsmTPp3GFZsMZp0p3wDwpD9t3clCk=";
+    rev = "5e57de0e144b283b74bc9b050a4aa6510a1cf28c";
+    sha256 = "sha256-5Z2BBfmw3UQaky/7Y8q0Xa+mOxlpOZXQvsGxErmxZSk=";
   };
 
   nativeBuildInputs = [
