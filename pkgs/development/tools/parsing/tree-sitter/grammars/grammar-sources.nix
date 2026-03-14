@@ -726,6 +726,19 @@
     };
   };
 
+  fstar = {
+    version = "0-unstable-2026-03-14";
+    url = "github:sei40kr/tree-sitter-fstar";
+    rev = "cdb06d462e0ee727c313f3e07c71bc2d288e0f89";
+    hash = "sha256-kGFP+MbZ10qS13n8pcI6YhIS6xWjDtuqZSeIiPSO7pM=";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        sei40kr
+      ];
+    };
+  };
+
   gas = {
     version = "0.0.1-unstable-2023-09-15";
     url = "github:sirius94/tree-sitter-gas";
