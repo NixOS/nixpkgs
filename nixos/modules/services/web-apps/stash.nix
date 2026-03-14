@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    contracts
     getExe
     literalExpression
     mkEnableOption
@@ -16,6 +17,7 @@ let
     toUpper
     types
     ;
+  inherit (contracts) fileSecrets;
 
   cfg = config.services.stash;
 
@@ -374,53 +376,15 @@ let
           input = mkOption {
             description = "Input of the contract for file secrets.";
             default = { };
-            type = types.submodule {
-              options = {
-                mode = mkOption {
-                  description = ''
-                    Mode the secret file must have.
-                  '';
-                  type = types.str;
-                  default = "0400";
-                  readOnly = true;
-                };
-
-                owner = mkOption {
-                  description = ''
-                    Linux user that must own the secret file.
-                  '';
-                  type = types.str;
-                  default = cfg.user;
-                  readOnly = true;
-                };
-
-                group = mkOption {
-                  description = ''
-                    Linux group that must own the secret file.
-                  '';
-                  type = types.str;
-                  default = cfg.group;
-                  readOnly = true;
-                };
-              };
+            type = fileSecrets.input {
+              owner.default = cfg.user;
+              group.default = cfg.group;
             };
           };
 
           output = mkOption {
             description = "Output of the contract for file secrets.";
-            type = types.submodule {
-              options = {
-                path = mkOption {
-                  type = types.str;
-                  description = ''
-                    Path to the file containing the secret generated out of band.
-
-                    This path will exist after deploying to a target host,
-                    it is not available through the nix store.
-                  '';
-                };
-              };
-            };
+            type = fileSecrets.output { };
           };
         };
       };
