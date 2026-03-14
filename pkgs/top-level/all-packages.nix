@@ -319,8 +319,6 @@ with pkgs;
     practiceMod = true;
   };
 
-  chef-cli = callPackage ../tools/misc/chef-cli { };
-
   coolercontrol = recurseIntoAttrs (callPackage ../applications/system/coolercontrol { });
 
   cup-docker-noserver = cup-docker.override { withServer = false; };
