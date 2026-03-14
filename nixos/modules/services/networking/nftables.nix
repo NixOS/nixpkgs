@@ -51,7 +51,8 @@ in
   options = {
     networking.nftables.enable = lib.mkOption {
       type = lib.types.bool;
-      default = false;
+      default = lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "6.17";
+      defaultText = lib.literalExpression ''lib.versionAtLeast (lib.getVersion config.boot.kernelPackages.kernel) "6.17"'';
       description = ''
         Whether to enable nftables and use nftables based firewall if enabled.
         nftables is a Linux-based packet filtering framework intended to
