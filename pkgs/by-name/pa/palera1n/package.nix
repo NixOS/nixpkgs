@@ -117,7 +117,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Jailbreak for A8 through A11, T2 devices, on iOS/iPadOS/tvOS 15.0+";
     homepage = "https://palera.in";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.mit;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
