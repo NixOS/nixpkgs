@@ -9039,10 +9039,6 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-llms-openai-like
       { };
 
-  llama-index-multi-modal-llms-openai =
-    callPackage ../development/python-modules/llama-index-multi-modal-llms-openai
-      { };
-
   llama-index-node-parser-docling =
     callPackage ../development/python-modules/llama-index-node-parser-docling
       { };
