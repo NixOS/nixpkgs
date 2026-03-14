@@ -393,6 +393,7 @@ in
   console-xkb-and-i18n = runTest ./console-xkb-and-i18n.nix;
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
+  containers-bind-mounts-special-paths = runTest ./containers-bind-mounts-special-paths.nix;
   containers-bridge = runTest ./containers-bridge.nix;
   containers-custom-pkgs = runTest ./containers-custom-pkgs.nix;
   containers-ephemeral = runTest ./containers-ephemeral.nix;
