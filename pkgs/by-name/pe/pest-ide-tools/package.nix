@@ -7,15 +7,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pest-ide-tools";
-  version = "0.3.11";
+  version = "0.13.2";
 
-  cargoHash = "sha256-wLdVIAwrnAk8IRp4RhO3XgfYtNw2S07uAHB1mokZ2lk=";
+  cargoHash = "sha256-KNYQYvklDqn0J82LAbK/zwhvyMhZJ9PMWo0rErDsIMs=";
 
   src = fetchFromGitHub {
     owner = "pest-parser";
     repo = "pest-ide-tools";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-12/FndzUbUlgcYcwMT1OfamSKgy2q+CvtGyx5YY4IFQ=";
+    sha256 = "sha256-xksPMErUWAoNvteFV387zgh/yzpmw0SUpn3mPIcIV4s=";
   };
 
   passthru = {
