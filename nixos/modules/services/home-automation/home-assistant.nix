@@ -319,7 +319,8 @@ in
         Available cards can be found below `pkgs.home-assistant-custom-lovelace-modules`.
 
         ::: {.note}
-        Automatic loading only works with lovelace in `yaml` mode.
+        When non-empty, `lovelace.resource_mode` is automatically set to `"yaml"`
+        so that resources are loaded from the YAML configuration.
         :::
       '';
     };
@@ -428,21 +429,63 @@ in
 
             lovelace = {
               # https://www.home-assistant.io/lovelace/dashboards/
-              mode = mkOption {
-                type = types.enum [
-                  "yaml"
-                  "storage"
-                ];
+              dashboards = mkOption {
+                type = types.nullOr format.type;
                 default =
-                  if (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) then "yaml" else "storage";
+                  if (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) then
+                    {
+                      lovelace = {
+                        mode = "yaml";
+                        filename = "ui-lovelace.yaml";
+                        title = "Overview";
+                        icon = "mdi:view-dashboard";
+                        show_in_sidebar = true;
+                      };
+                    }
+                  else
+                    null;
                 defaultText = literalExpression ''
-                  if (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null)
-                    then "yaml"
-                  else "storage";
+                  if (cfg.lovelaceConfig != null || cfg.lovelaceConfigFile != null) then {
+                    lovelace = {
+                      mode = "yaml";
+                      filename = "ui-lovelace.yaml";
+                      title = "Overview";
+                      icon = "mdi:view-dashboard";
+                      show_in_sidebar = true;
+                    };
+                  } else null
                 '';
-                example = "yaml";
+                example = literalExpression ''
+                  {
+                    lovelace = {
+                      mode = "yaml";
+                      filename = "ui-lovelace.yaml";
+                      title = "Overview";
+                      icon = "mdi:view-dashboard";
+                      show_in_sidebar = true;
+                    };
+                  }
+                '';
                 description = ''
-                  In what mode should the main Lovelace panel be, `yaml` or `storage` (UI managed).
+                  Lovelace dashboard definitions. When {option}`lovelaceConfig` or
+                  {option}`lovelaceConfigFile` is set, this defaults to a YAML-mode dashboard
+                  named `lovelace`.
+
+                  See <https://www.home-assistant.io/lovelace/dashboards/> for details.
+                '';
+              };
+
+              resource_mode = mkOption {
+                type = types.nullOr (types.enum [ "yaml" ]);
+                default = if cfg.customLovelaceModules != [ ] then "yaml" else null;
+                defaultText = literalExpression ''
+                  if cfg.customLovelaceModules != [ ] then "yaml" else null
+                '';
+                description = ''
+                  Set to `"yaml"` to load lovelace resources from YAML configuration
+                  instead of managing them through the UI.
+
+                  Automatically set when {option}`customLovelaceModules` is non-empty.
                 '';
               };
             };
@@ -510,7 +553,7 @@ in
       '';
       description = ''
         Your {file}`ui-lovelace.yaml` as a Nix attribute set.
-        Setting this option will automatically set `lovelace.mode` to `yaml`.
+        Setting this option will automatically configure a YAML-mode lovelace dashboard.
 
         Beware that setting this option will delete your previous {file}`ui-lovelace.yaml`
       '';
@@ -521,8 +564,8 @@ in
       type = types.nullOr types.path;
       example = "/path/to/ui-lovelace.yaml";
       description = ''
-        Your {file}`ui-lovelace.yaml` managed as configuraton file.
-        Setting this option will automatically set `lovelace.mode` to `yaml`.
+        Your {file}`ui-lovelace.yaml` managed as configuration file.
+        Setting this option will automatically configure a YAML-mode lovelace dashboard.
       '';
     };
 
@@ -609,6 +652,19 @@ in
   };
 
   config = mkIf cfg.enable {
+    warnings = optionals (cfg.config != null && cfg.config ? lovelace && cfg.config.lovelace ? mode) [
+      ''
+        services.home-assistant.config.lovelace.mode is deprecated and will be
+        removed in a future release. Home Assistant 2026.8 removes the legacy
+        top-level `lovelace: mode: yaml` option.
+
+        Use `services.home-assistant.config.lovelace.dashboards` and
+        `services.home-assistant.config.lovelace.resource_mode` instead.
+
+        See https://www.home-assistant.io/dashboards/dashboards/ for details.
+      ''
+    ];
+
     assertions = [
       {
         assertion = cfg.openFirewall -> cfg.config != null;
