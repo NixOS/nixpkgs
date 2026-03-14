@@ -13,9 +13,9 @@
 let
   inherit
     (callPackage ./common-drv-attrs.nix {
-      version = "3.2.7";
+      version = "3.3.0";
       pname = "cdemu-daemon";
-      hash = "sha256-EKh2G6RA9Yq46BpTAqN2s6TpLJb8gwDuEpGiwdGcelc=";
+      hash = "sha256-AYHjiOAQdu685gc6p0j2QNtCmTYTWix1kzWQZYvGPWU=";
     })
     pname
     version
