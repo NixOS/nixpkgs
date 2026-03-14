@@ -77,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--enable-crypt"
     "--enable-overlays"
+    "--enable-spasswd"
     (lib.enableFeature withModules "argon2")
     (lib.enableFeature withModules "modules")
   ]
