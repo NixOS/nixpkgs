@@ -37,7 +37,6 @@
   gtest,
   libbacktrace,
   lz4,
-  minio,
   ninja,
   nlohmann_json,
   openssl,
@@ -268,6 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
           "TestMinioServer.Connect"
           "TestS3FS.*"
           "TestS3FSGeneric.*"
+          "TestS3FSHTTPS.*" # Needs Minio
         ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           # TODO: revisit at 12.0.0 or when
@@ -286,7 +286,6 @@ stdenv.mkDerivation (finalAttrs: {
     which
     sqlite
   ]
-  ++ lib.optionals enableS3 [ minio ]
   ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
