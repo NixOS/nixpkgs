@@ -425,7 +425,5 @@ in
     );
   };
 
-  meta.maintainers = [
-    # lib.maintainers.randomizedcoder
-  ];
+  meta.maintainers = [ lib.maintainers.randomizedcoder ];
 }

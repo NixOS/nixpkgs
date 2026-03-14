@@ -317,7 +317,7 @@ stdenv.mkDerivation {
     homepage = "https://pcp.io";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    # maintainers = with lib.maintainers; [ randomizedcoder ];
+    maintainers = with lib.maintainers; [ randomizedcoder ];
     mainProgram = "pminfo";
   };
 }
