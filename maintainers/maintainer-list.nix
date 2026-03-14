@@ -29180,6 +29180,12 @@
     github = "WoutSwinkels";
     githubId = 113464111;
   };
+  woynert = {
+    email = "woynertgamer@gmail.com";
+    github = "woynert";
+    githubId = 61242172;
+    name = "Woynert";
+  };
   wozeparrot = {
     email = "wozeparrot@gmail.com";
     github = "wozeparrot";
