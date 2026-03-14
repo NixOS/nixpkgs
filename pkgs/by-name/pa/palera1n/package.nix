@@ -124,6 +124,7 @@ stdenv.mkDerivation {
       "i686-linux"
       "armv7l-linux"
     ];
+    mainProgram = "palera1n";
     maintainers = [ "mugiwarix" ];
   };
 }
