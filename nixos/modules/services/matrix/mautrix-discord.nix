@@ -26,247 +26,142 @@ in
         type = lib.types.submodule {
           freeformType = format.type;
 
-          config = {
-            _module.args = { inherit cfg lib; };
-          };
-
           options = {
-            homeserver = lib.mkOption {
-              type = lib.types.attrs;
-              default = {
-                software = "standard";
-                status_endpoint = null;
-                message_send_checkpoint_endpoint = null;
-                async_media = false;
-                websocket = false;
-                ping_interval_seconds = 0;
+            homeserver = {
+              address = lib.mkOption {
+                type = lib.types.str;
+                example = "http://localhost:8008";
+                description = "The address of the homeserver.";
               };
-              description = ''
-                fullDataDiration.
-                                See [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
-                                for more information.
-              '';
+
+              domain = lib.mkOption {
+                type = lib.types.str;
+                example = "example.com";
+                description = "The domain of the homeserver.";
+              };
+
+              software = lib.mkOption {
+                type = lib.types.str;
+                default = "standard";
+                description = "The software running the homeserver.";
+              };
             };
 
-            appservice = lib.mkOption {
-              type = lib.types.attrs;
-              default = {
-                address = "http://localhost:29334";
-                hostname = "0.0.0.0";
-                port = 29334;
-                database = {
-                  type = "sqlite3";
-                  uri = "file:/var/lib/mautrix-discord/mautrix-discord.db?_txlock=immediate";
-                  max_open_conns = 20;
-                  max_idle_conns = 2;
-                  max_conn_idle_time = null;
-                  max_conn_lifetime = null;
-                };
-                id = "discord";
-                bot = {
-                  username = "discordbot";
-                  displayname = "Discord bridge bot";
-                  avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
-                };
-                ephemeral_events = true;
-                async_transactions = false;
-                as_token = "This value is generated when generating the registration";
-                hs_token = "This value is generated when generating the registration";
+            appservice = {
+              address = lib.mkOption {
+                type = lib.types.str;
+                example = "http://localhost:29334";
+                description = "The address that the appservice will listen on.";
               };
-              defaultText = lib.literalExpression ''
-                {
-                  address = "http://localhost:29334";
-                  hostname = "0.0.0.0";
-                  port = 29334;
-                  database = {
-                    type = "sqlite3";
-                    uri = "file:''${config.services.mautrix-discord.dataDir}/mautrix-discord.db?_txlock=immediate";
-                    max_open_conns = 20;
-                    max_idle_conns = 2;
-                    max_conn_idle_time = null;
-                    max_conn_lifetime = null;
+
+              hostname = lib.mkOption {
+                type = lib.types.str;
+                default = "0.0.0.0";
+                description = "The hostname to bind to.";
+              };
+
+              port = lib.mkOption {
+                type = lib.types.port;
+                example = 29334;
+                description = "The port that the appservice will listen on.";
+              };
+
+              database = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = format.type;
+                  options = {
+                    type = lib.mkOption {
+                      type = lib.types.str;
+                      default = "sqlite3";
+                      description = "Database type.";
+                    };
+
+                    uri = lib.mkOption {
+                      type = lib.types.str;
+                      description = "Database connection URI.";
+                    };
                   };
-                  id = "discord";
-                  bot = {
-                    username = "discordbot";
-                    displayname = "Discord bridge bot";
-                    avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
+                };
+                description = "Database configuration.";
+              };
+
+              id = lib.mkOption {
+                type = lib.types.str;
+                default = "discord";
+                description = "Appservice ID.";
+              };
+
+              bot = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = format.type;
+                  options = {
+                    username = lib.mkOption {
+                      type = lib.types.str;
+                      default = "discordbot";
+                      description = "Bot username.";
+                    };
+
+                    displayname = lib.mkOption {
+                      type = lib.types.str;
+                      default = "Discord bridge bot";
+                      description = "Bot display name.";
+                    };
                   };
-                  ephemeral_events = true;
-                  async_transactions = false;
-                  as_token = "This value is generated when generating the registration";
-                  hs_token = "This value is generated when generating the registration";
-                }
-              '';
-              description = ''
-                Appservice configuration.
-                See [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
-                for more information.
-              '';
+                };
+                default = { };
+                description = "Bot configuration.";
+              };
+
+              as_token = lib.mkOption {
+                type = lib.types.str;
+                default = default_token;
+                description = "Application service token.";
+              };
+
+              hs_token = lib.mkOption {
+                type = lib.types.str;
+                default = default_token;
+                description = "Homeserver token.";
+              };
             };
 
-            bridge = lib.mkOption {
-              type = lib.types.attrs;
-              default = {
-                username_template = "discord_{{.}}";
-                displayname_template = "{{if .Webhook}}Webhook{{else}}{{or .GlobalName .Username}}{{if .Bot}} (bot){{end}}{{end}}";
-                channel_name_template = "{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else}}#{{.Name}}{{end}}";
-                guild_name_template = "{{.Name}}";
-                private_chat_portal_meta = "default";
-                public_address = null;
-                avatar_proxy_key = "generate";
-                portal_message_buffer = 128;
-                startup_private_channel_create_limit = 5;
-                delivery_receipts = false;
-                message_status_events = false;
-                message_error_notices = true;
-                restricted_rooms = true;
-                autojoin_thread_on_open = true;
-                embed_fields_as_tables = true;
-                mute_channels_on_create = false;
-                sync_direct_chat_list = false;
-                resend_bridge_info = false;
-                custom_emoji_reactions = true;
-                delete_portal_on_channel_delete = false;
-                delete_guild_on_leave = true;
-                federate_rooms = true;
-                prefix_webhook_messages = true;
-                enable_webhook_avatars = false;
-                use_discord_cdn_upload = true;
-                #proxy =
-                cache_media = "unencrypted";
-                direct_media = {
-                  enabled = false;
-                  #server_name = "discord-media.example.com";
-                  #well_known_response =
-                  allow_proxy = true;
-                  server_key = "generate";
+            bridge = {
+              permissions = lib.mkOption {
+                type = lib.types.attrsOf lib.types.str;
+                example = {
+                  "example.com" = "user";
+                  "@admin:example.com" = "admin";
                 };
-                animated_sticker = {
-                  target = "webp";
-                  args = {
-                    width = 320;
-                    height = 320;
-                    fps = 25;
-                  };
-                };
-                double_puppet_server_map = {
-                  #"example.com" = "https://example.com";
-                };
-                double_puppet_allow_discovery = false;
-                login_shared_secret_map = {
-                  #"example.com" = "foobar";
-                };
-                command_prefix = "!discord";
-                management_room_text = {
-                  welcome = "Hello, I'm a Discord bridge bot.";
-                  welcome_connected = "Use `help` for help.";
-                  welcome_unconnected = "Use `help` for help or `login` to log in.";
-                  additional_help = "";
-                };
-                backfill = {
-                  forward_limits = {
-                    initial = {
-                      dm = 0;
-                      channel = 0;
-                      thread = 0;
-                    };
-                    missed = {
-                      dm = 0;
-                      channel = 0;
-                      thread = 0;
-                    };
-                    max_guild_members = -1;
-                  };
-                };
-                encryption = {
-                  allow = false;
-                  default = false;
-                  appservice = false;
-                  msc4190 = false;
-                  require = false;
-                  allow_key_sharing = false;
-                  plaintext_mentions = false;
-                  delete_keys = {
-                    delete_outbound_on_ack = false;
-                    dont_store_outbound = false;
-                    ratchet_on_decrypt = false;
-                    delete_fully_used_on_decrypt = false;
-                    delete_prev_on_new_session = false;
-                    delete_on_device_delete = false;
-                    periodically_delete_expired = false;
-                    delete_outdated_inbound = false;
-                  };
-                  verification_levels = {
-                    receive = "unverified";
-                    send = "unverified";
-                    share = "cross-signed-tofu";
-                  };
-                  rotation = {
-                    enable_custom = false;
-                    milliseconds = 604800000;
-                    messages = 100;
-                    disable_device_change_key_rotation = false;
-                  };
-                };
-                provisioning = {
-                  prefix = "/_matrix/provision";
-                  shared_secret = "generate";
-                  debug_endpoints = false;
-                };
-                permissions = {
-                  "*" = "relay";
-                  #"example.com" = "user";
-                  #"@admin:example.com": "admin";
-                };
+                description = ''
+                  Bridge permissions. Users in this list can use the bridge.
+                  * - All Matrix users
+                  domain - All users on a given homeserver
+                  mxid - Specific user
+                '';
               };
-              description = ''
-                Bridge configuration.
-                See [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
-                for more information.
-              '';
             };
+
             logging = lib.mkOption {
               type = lib.types.attrs;
               default = {
                 min_level = "info";
-                writers = lib.singleton {
-                  type = "stdout";
-                  format = "pretty-colored";
-                  time_format = " ";
-                };
+                writers = [
+                  {
+                    type = "stdout";
+                    format = "pretty-colored";
+                    time_format = " ";
+                  }
+                ];
               };
-              description = ''
-                Logging configuration.
-                See [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
-                for more information.
-              '';
+              description = "Logging configuration.";
             };
           };
         };
         default = { };
-        example = lib.literalExpression ''
-          {
-            homeserver = {
-              address = "http://localhost:8008";
-              domain = "public-domain.tld";
-            };
-
-            appservice.public = {
-              prefix = "/public";
-              external = "https://public-appservice-address/public";
-            };
-
-            bridge.permissions = {
-              "example.com" = "user";
-              "@admin:example.com" = "admin";
-            };
-          }
-        '';
         description = ''
-          {file}`config.yaml` configuration as a Nix attribute set.
-          Configuration options should match those described in
-          [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml).
+          Configuration for mautrix-discord. See
+          [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
+          for available options.
         '';
       };
 
@@ -284,10 +179,7 @@ in
         type = lib.types.path;
         default = "/var/lib/mautrix-discord";
         defaultText = "/var/lib/mautrix-discord";
-        description = ''
-          Directory to store the bridge's configuration and database files.
-          This directory will be created if it does not exist.
-        '';
+        description = "Directory to store the bridge's data.";
       };
 
       # TODO: Get upstream to add an environment File option. Refer to https://github.com/NixOS/nixpkgs/pull/404871#issuecomment-2895663652 and https://github.com/mautrix/discord/issues/187
@@ -295,12 +187,8 @@ in
         type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
-          File containing environment variables to substitute when copying the configuration
-          out of Nix store to the `services.mautrix-discord.dataDir`.
-          Can be used for storing the secrets without making them available in the Nix store.
-          For example, you can set `services.mautrix-discord.settings.appservice.as_token = "$MAUTRIX_DISCORD_APPSERVICE_AS_TOKEN"`
-          and then specify `MAUTRIX_DISCORD_APPSERVICE_AS_TOKEN="{token}"` in the environment file.
-          This value will get substituted into the configuration file as a token.
+          File containing environment variables for secret substitution.
+          Variables in the config like `$VARIABLE` will be replaced.
         '';
       };
 
@@ -308,25 +196,14 @@ in
         type = lib.types.str;
         readOnly = true;
         default = "mautrix-discord.service";
-        description = ''
-          The systemd unit (a service or a target) for other services to depend on if they
-          need to be started after matrix-synapse.
-          This option is useful as the actual parent unit for all matrix-synapse processes
-          changes when configuring workers.
-        '';
+        description = "The systemd service unit name.";
       };
 
       registrationServiceUnit = lib.mkOption {
         type = lib.types.str;
         readOnly = true;
         default = "mautrix-discord-registration.service";
-        description = ''
-          The registration service that generates the registration file.
-          Systemd unit (a service or a target) for other services to depend on if they
-          need to be started after mautrix-discord registration service.
-          This option is useful as the actual parent unit for all matrix-synapse processes
-          changes when configuring workers.
-        '';
+        description = "The registration service unit name.";
       };
 
       serviceDependencies = lib.mkOption {
@@ -344,28 +221,30 @@ in
           (lib.lists.optional config.services.matrix-conduit.enable "matrix-conduit.service") ++
           (lib.lists.optional config.services.dendrite.enable "dendrite.service");
         '';
-        description = ''
-          List of Systemd services to require and wait for when starting the application service.
-        '';
+        description = "Additional systemd service dependencies.";
       };
     };
   };
   config = lib.mkIf cfg.enable {
+
     assertions = [
       {
         assertion =
-          cfg.settings.homeserver.domain or "" != "" && cfg.settings.homeserver.address or "" != "";
-        message = ''
-          The options with information about the homeserver:
-          `services.mautrix-discord.settings.homeserver.domain` and
-          `services.mautrix-discord.settings.homeserver.address` have to be set.
-        '';
+          cfg.settings.homeserver.address or "" != "" && cfg.settings.homeserver.domain or "" != "";
+        message = "services.mautrix-discord.settings.homeserver.{address,domain} must be set.";
       }
       {
         assertion = cfg.settings.bridge.permissions or { } != { };
-        message = ''
-          The option `services.mautrix-discord.settings.bridge.permissions` has to be set.
-        '';
+        message = "services.mautrix-discord.settings.bridge.permissions must be set.";
+      }
+      {
+        assertion =
+          cfg.settings.appservice.port or null != null && cfg.settings.appservice.address or "" != "";
+        message = "services.mautrix-discord.settings.appservice.{port,address} must be set.";
+      }
+      {
+        assertion = cfg.settings.appservice.database.uri or "" != "";
+        message = "services.mautrix-discord.settings.appservice.database.uri must be set.";
       }
     ];
 
@@ -550,6 +429,7 @@ in
       maintainers = with lib.maintainers; [
         mistyttm
       ];
+      doc = ./mautrix-discord.md;
     };
   };
 }
