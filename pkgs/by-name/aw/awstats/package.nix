@@ -7,11 +7,11 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "awstats";
-  version = "7.9";
+  version = "8.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/awstats/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YVF47TE9NDFfFaUi2xpdEsqcOV43hbsGKAq/+V2aBUY=";
+    sha256 = "sha256-Pvdv+WxTmEd92KERNOJm5TikhwZ/aQajrIo4v9EcEeA=";
   };
 
   postPatch = ''
@@ -27,7 +27,10 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
-  buildInputs = [ ]; # plugins will need some
+  buildInputs = with perlPackages; [
+    JSONXS
+    TryTiny
+  ];
 
   preConfigure = ''
     touch Makefile.PL
