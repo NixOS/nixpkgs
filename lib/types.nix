@@ -1180,6 +1180,13 @@ rec {
       };
     };
 
+  optionDeclaration = mkOptionType {
+    name = "optionDeclaration";
+    description = "option declaration";
+    descriptionClass = "noun";
+    check = opt: isType "option" opt && !(opt ? value);
+  };
+
   # The type of a type!
   optionType = mkOptionType {
     name = "optionType";
