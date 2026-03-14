@@ -65,7 +65,7 @@ let
       tag = version;
       hash = "sha256-lFPAu296cQMDnEcLTReSHuLuOz13kd7n0GV+ifcX+lQ=";
     };
-    pnpmDeps = old.pnpmDeps.override {
+    pnpmDeps = old.pnpmDeps.overrideAttrs {
       inherit src version;
       hash = "sha256-9v30vhclD+sPcui/VG8dwaC8XGU6QFs/Gu8rjjoQy/w=";
     };
