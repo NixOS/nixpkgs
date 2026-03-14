@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   vala,
   gi-docgen,
@@ -37,7 +38,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gegl";
-  version = "0.4.64";
+  version = "0.4.66";
 
   outputs = [
     "out"
@@ -48,8 +49,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${lib.versions.majorMinor finalAttrs.version}/gegl-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DeHJ3SLBYNXkvfw4jSkvA0R8ymJYVBuaEv7Xg9DPfGA=";
+    hash = "sha256-krBYVeIZCGiUnXDOpumlCxY6akQSQudApiY5dTefmTs=";
   };
+
+  patches = [
+    # Do not include poly2tri-c symbols in ABI check.
+    # https://gitlab.gnome.org/GNOME/gegl/-/issues/452
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gegl/-/commit/b68c36c96f0c4554682c3bf336a105a561e2b9c6.patch";
+      hash = "sha256-Jx9gu/whqcxFNiGlsHGtekNuPyTnOoKJfwSdrWFqjOg=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -104,6 +114,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
+    # Selecting platform default is broken by -Dauto_features.
+    "-Drelocatable=disabled"
   ]
   ++ lib.optionals (!withLuaJIT) [
     "-Dlua=disabled"
