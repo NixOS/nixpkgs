@@ -127,7 +127,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://github.com/espotek-org/Labrador";
     license = lib.licenses.gpl3Only;
-    # maintainers = with lib.maintainers; [ randomizedcoder ];
+    maintainers = with lib.maintainers; [ randomizedcoder ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "labrador";
   };
