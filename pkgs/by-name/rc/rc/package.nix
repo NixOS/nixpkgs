@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   # TODO: think on a less ugly fixup
   postPatch = ''
     ed -v -s Makefile << EOS
