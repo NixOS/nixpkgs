@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "lua";
     publisher = "sumneko";
-    version = "3.15.0";
-    hash = "sha256-wcOo1gmWgPJJNQog2+emM05RE1fTtLqFANWfN3ExTnM=";
+    version = "3.17.1";
+    hash = "sha256-Dr9rzvikSCvEUOxb/6RhJcke+C9xzlkLWYWVfnANLno=";
   };
 
   # Running chmod in runtime will lock up extension
