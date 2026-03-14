@@ -44,6 +44,7 @@ rustPlatform.buildRustPackage {
     description = "A cross-platform terminal game where tetrominos fall and stack";
     homepage = "https://github.com/Strophox/tetro-tui";
     license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ gl1tchxd ];
     mainProgram = "tetro-tui";
   };
