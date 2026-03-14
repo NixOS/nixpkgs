@@ -144,9 +144,8 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members ++ [
-      lib.maintainers.frontear
-    ];
+    teams = [ lib.teams.freedesktop ];
+    maintainers = [ lib.maintainers.frontear ];
   };
 
   ###### interface
