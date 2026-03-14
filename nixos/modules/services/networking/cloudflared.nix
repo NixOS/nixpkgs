@@ -92,6 +92,31 @@ let
       '';
     };
 
+    matchSNItoHost = lib.mkOption {
+      type = with lib.types; nullOr bool;
+      default = null;
+      example = "true";
+      description = ''
+        When true, cloudflared will automatically set the Server Name Indication (SNI) during the TLS handshake to the hostname of the incoming request.
+
+        This setting is useful when directing traffic to entry points that host multiple services and rely on SNI to route requests or present the correct certificate.
+        It eliminates the need to explicitly configure originServerName for individual services when using wildcard routing.
+      '';
+    };
+
+    http2Origin = lib.mkOption {
+      type = with lib.types; nullOr bool;
+      default = null;
+      example = "true";
+      description = ''
+        When false (default), cloudflared will connect to your origin with HTTP/1.1.
+
+        When true, cloudflared will attempt to connect to your origin server using HTTP/2.0 instead of HTTP/1.1.
+        HTTP/2.0 is a faster protocol for high traffic origins but requires you to deploy an SSL certificate on the origin.
+        We recommend using this setting in conjunction with noTLSVerify so that you can use a self-signed certificate.
+      '';
+    };
+
     caPool = lib.mkOption {
       type = with lib.types; nullOr (either str path);
       default = null;
@@ -154,6 +179,47 @@ let
       '';
     };
   };
+
+  configFiles = lib.mapAttrs (
+    name: tunnel:
+    let
+      filterConfig = lib.attrsets.filterAttrsRecursive (
+        _: v:
+        !builtins.elem v [
+          null
+          [ ]
+          { }
+        ]
+      );
+
+      filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
+      filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
+
+      ingressesSet = filterIngressSet tunnel.ingress;
+      ingressesStr = filterIngressStr tunnel.ingress;
+
+      fullConfig = filterConfig {
+        tunnel = name;
+        credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
+        warp-routing = filterConfig tunnel.warp-routing;
+        originRequest = filterConfig tunnel.originRequest;
+        ingress =
+          (map (
+            key:
+            {
+              hostname = key;
+            }
+            // lib.getAttr key (filterConfig (filterConfig ingressesSet))
+          ) (lib.attrNames ingressesSet))
+          ++ (map (key: {
+            hostname = key;
+            service = lib.getAttr key ingressesStr;
+          }) (lib.attrNames ingressesStr))
+          ++ [ { service = tunnel.default; } ];
+      };
+    in
+    pkgs.writeText "cloudflared-${name}.yml" (builtins.toJSON fullConfig)
+  ) config.services.cloudflared.tunnels;
 in
 {
   imports = [
@@ -211,18 +277,6 @@ in
                 '';
               };
 
-              warp-routing = {
-                enabled = lib.mkOption {
-                  type = with lib.types; nullOr bool;
-                  default = null;
-                  description = ''
-                    Enable warp routing.
-
-                    See [Connect from WARP to a private network on Cloudflare using Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/tutorials/warp-to-tunnel/).
-                  '';
-                };
-              };
-
               edgeIPVersion = lib.mkOption {
                 type = lib.types.enum [
                   "auto"
@@ -248,6 +302,12 @@ in
                   See `service`.
                 '';
                 example = "http_status:404";
+              };
+
+              configFile = lib.mkOption {
+                type = lib.types.path;
+                readOnly = true;
+                default = configFiles.${name};
               };
 
               ingress = lib.mkOption {
@@ -333,42 +393,7 @@ in
     systemd.services = lib.mapAttrs' (
       name: tunnel:
       let
-        filterConfig = lib.attrsets.filterAttrsRecursive (
-          _: v:
-          !builtins.elem v [
-            null
-            [ ]
-            { }
-          ]
-        );
-
-        filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
-        filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
-
-        ingressesSet = filterIngressSet tunnel.ingress;
-        ingressesStr = filterIngressStr tunnel.ingress;
-
-        fullConfig = filterConfig {
-          tunnel = name;
-          credentials-file = "/run/credentials/cloudflared-tunnel-${name}.service/credentials.json";
-          warp-routing = filterConfig tunnel.warp-routing;
-          originRequest = filterConfig tunnel.originRequest;
-          ingress =
-            (map (
-              key:
-              {
-                hostname = key;
-              }
-              // lib.getAttr key (filterConfig (filterConfig ingressesSet))
-            ) (lib.attrNames ingressesSet))
-            ++ (map (key: {
-              hostname = key;
-              service = lib.getAttr key ingressesStr;
-            }) (lib.attrNames ingressesStr))
-            ++ [ { service = tunnel.default; } ];
-        };
-
-        mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
+        configFile = configFiles.${name};
         certFile = if (tunnel.certificateFile != null) then tunnel.certificateFile else cfg.certificateFile;
       in
       lib.nameValuePair "cloudflared-tunnel-${name}" {
@@ -389,7 +414,8 @@ in
           ]
           ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
-          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
+          ExecStartPre = "${cfg.package}/bin/cloudflared tunnel --config=${configFile} --no-autoupdate ingress validate";
+          ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${configFile} --no-autoupdate run";
           Restart = "on-failure";
           DynamicUser = true;
         };
