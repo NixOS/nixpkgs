@@ -964,6 +964,7 @@ in
   mautrix-meta-sqlite = runTest ./matrix/mautrix-meta-sqlite.nix;
   mealie = runTest ./mealie.nix;
   mediamtx = runTest ./mediamtx.nix;
+  mediathekarr = runTest ./mediathekarr.nix;
   mediatomb = runTest ./mediatomb.nix;
   mediawiki = import ./mediawiki.nix {
     inherit (pkgs) lib;
