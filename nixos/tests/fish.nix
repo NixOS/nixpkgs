@@ -15,6 +15,21 @@
       documentation.man.enable = false;
     };
 
+  # Test babelfish (default) with shell hooks that use bash `source` command.
+  # This previously failed with "Unknown command: babelfish" because babelfish
+  # wasn't invoked with an absolute path.
+  nodes.babelfish =
+    { pkgs, ... }:
+
+    {
+      programs.fish.enable = true;
+      programs.git.enable = true;
+      programs.git.prompt.enable = true;
+
+      # Avoid slow man cache build
+      documentation.man.enable = false;
+    };
+
   testScript =
     #python
     ''
@@ -30,5 +45,9 @@
       )
       machine.wait_for_file("/etc/fish/config.fish")
       config = machine.succeed("fish_indent -c /etc/fish/config.fish")
+
+      # Test babelfish with git prompt (the fix for "Unknown command: babelfish")
+      babelfish.wait_for_file("/etc/fish/config.fish")
+      babelfish.succeed("fish -ic 'echo babelfish test passed'")
     '';
 }
