@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "3.4.3";
 
   src = fetchurl {
-    url = "http://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
+    url = "https://fastjet.fr/repo/fastjet-${finalAttrs.version}.tar.gz";
     hash = "sha256-zBdUcb+rhla4xhg6jl6a0F1fdQbkbzISqagjCQW49qM=";
   };
 
