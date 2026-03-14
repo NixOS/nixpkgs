@@ -118,10 +118,6 @@ makeScopeWithSplicing' {
 
       qtspell = callPackage ../development/libraries/qtspell { };
 
-      qwlroots = callPackage ../development/libraries/qwlroots {
-        wlroots = pkgs.wlroots_0_18;
-      };
-
       qwt = callPackage ../development/libraries/qwt/default.nix { };
 
       qxlsx = callPackage ../development/libraries/qxlsx { };
@@ -149,9 +145,17 @@ makeScopeWithSplicing' {
 
       timed = callPackage ../applications/system/timed { };
 
-      waylib = callPackage ../development/libraries/waylib { };
-
       wayqt = callPackage ../development/libraries/wayqt { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      qwlroots = throw ''
+        'qt6Packages.qwlroots' has been removed because it has been merged into treeland upstream.
+        The upstream no longer provides it as a standalone development library.
+      ''; # Added 2025-02-07
+      waylib = throw ''
+        'qt6Packages.waylib' has been removed because it has been merged into treeland upstream.
+        The upstream no longer provides it as a standalone development library.
+      ''; # Added 2025-02-07
     }
   );
 }
