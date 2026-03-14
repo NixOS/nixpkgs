@@ -52,7 +52,6 @@
   cmake,
   libssh2,
   openssl,
-  openssl_1_1,
   libmysqlclient,
   git,
   perl,
@@ -799,10 +798,14 @@ in
       }
     );
 
-  openssl = attrs: {
+  openssl =
+    attrs:
     # https://github.com/ruby/openssl/issues/369
-    buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
-  };
+    assert lib.assertMsg (lib.versionAtLeast attrs.version "3.0.0")
+      "OpenSSL 1.1 is EOL and the corresponding Ruby gem was removed.";
+    {
+      buildInputs = [ openssl ];
+    };
 
   opus-ruby = attrs: {
     dontBuild = false;
