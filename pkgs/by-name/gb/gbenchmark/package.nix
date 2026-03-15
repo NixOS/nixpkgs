@@ -39,7 +39,9 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # This might be a problem with our Clang, as it does not reproduce
   # with Xcode, but we just work around it by silencing the warning.
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
+  env.NIX_CFLAGS_COMPILE =
+    "-Wno-error=c2y-extensions"
+    + lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
 
   # Tests fail on 32-bit due to not enough precision
   doCheck = stdenv.hostPlatform.is64bit;
