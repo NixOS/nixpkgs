@@ -1,0 +1,150 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 89e05cc5..786cf20f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -851,47 +851,17 @@ if(NODE_EXECUTABLE AND NPM_EXECUTABLE AND BUILD_WEB_APP)
+             DESTINATION share/applications
+         )
+         # Create symlink in standard applications path only if not installing to /usr
+-        if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-            install(CODE "
+-                file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/share/applications\")
+-                execute_process(
+-                    COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                        ${CMAKE_INSTALL_PREFIX}/share/applications/lemonade-web-app.desktop
+-                        \"\$ENV{DESTDIR}/usr/share/applications/lemonade-web-app.desktop\"
+-                )
+-            ")
+-        endif()
+         install(FILES ${CMAKE_SOURCE_DIR}/src/web-app/assets/logo.svg
+             DESTINATION share/pixmaps
+             RENAME lemonade-app.svg
+         )
+         # Create symlink in standard pixmaps path only if not installing to /usr
+-        if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-            install(CODE "
+-                file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/share/pixmaps\")
+-                execute_process(
+-                    COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                        ${CMAKE_INSTALL_PREFIX}/share/pixmaps/lemonade-app.svg
+-                        \"\$ENV{DESTDIR}/usr/share/pixmaps/lemonade-app.svg\"
+-                )
+-            ")
+-        endif()
+         # Install launch script for web app
+         install(FILES ${CMAKE_SOURCE_DIR}/data/lemonade-web-app
+             DESTINATION bin
+             PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+         )
+         # Create symlink in standard bin path only if not installing to /usr
+-        if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-            install(CODE "
+-                file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
+-                execute_process(
+-                    COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                        ${CMAKE_INSTALL_PREFIX}/bin/lemonade-web-app
+-                        \"\$ENV{DESTDIR}/usr/bin/lemonade-web-app\"
+-                )
+-            ")
+-        endif()
+     endif()
+ else()
+     if(NOT NODE_EXECUTABLE OR NOT NPM_EXECUTABLE)
+@@ -1161,23 +1131,13 @@ if(UNIX AND NOT APPLE)
+     )
+     # Create symlink in standard systemd search path only if not installing to /usr
+     # (if prefix is /usr, the service is already in the standard location)
+-    if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-        install(CODE "
+-            file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/lib/systemd/system\")
+-            execute_process(
+-                COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                    ${CMAKE_INSTALL_PREFIX}/lib/systemd/system/lemonade-server.service
+-                    \"\$ENV{DESTDIR}/usr/lib/systemd/system/lemonade-server.service\"
+-            )
+-        ")
+-    endif()
+     install(FILES ${CMAKE_SOURCE_DIR}/data/lemonade.conf
+-        DESTINATION /etc/lemonade
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/lemonade
+         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ GROUP_WRITE WORLD_READ
+     )
+ 
+     install(FILES ${CMAKE_SOURCE_DIR}/data/secrets.conf
+-        DESTINATION /etc/lemonade
++        DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/lemonade
+         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ GROUP_WRITE
+     )
+ 
+@@ -1284,50 +1244,13 @@ if(UNIX AND NOT APPLE)
+                 DESTINATION share/applications
+             )
+             # Create symlink in standard applications path only if not installing to /usr
+-            if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-                install(CODE "
+-                    file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/share/applications\")
+-                    execute_process(
+-                        COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                            ${CMAKE_INSTALL_PREFIX}/share/applications/lemonade-app.desktop
+-                            \"\$ENV{DESTDIR}/usr/share/applications/lemonade-app.desktop\"
+-                    )
+-                ")
+-            endif()
+             install(FILES ${CMAKE_SOURCE_DIR}/src/app/assets/logo.svg
+                 DESTINATION share/pixmaps
+                 RENAME lemonade-app.svg
+             )
+ 
+             # Create symlink in standard pixmaps path only if not installing to /usr
+-            if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-                install(CODE "
+-                    file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/share/pixmaps\")
+-                    execute_process(
+-                        COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                            ${CMAKE_INSTALL_PREFIX}/share/pixmaps/lemonade-app.svg
+-                            \"\$ENV{DESTDIR}/usr/share/pixmaps/lemonade-app.svg\"
+-                    )
+-                ")
+-            endif()
+             # Create symlink in standard bin path only if not installing to /usr
+-            if(NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-                install(CODE "
+-                    file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
+-                    execute_process(
+-                        COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                            \"\${CMAKE_INSTALL_PREFIX}/share/lemonade-server/app/lemonade\"
+-                            \"\$ENV{DESTDIR}/usr/bin/lemonade-app\"
+-                    )
+-                ")
+-            else()
+-                install(CODE "
+-                    file(CREATE_LINK
+-                        \"\${CMAKE_INSTALL_PREFIX}/share/lemonade-server/app/lemonade\"
+-                        \"\${CMAKE_INSTALL_PREFIX}/bin/lemonade-app\"
+-                        SYMBOLIC)
+-                ")
+-            endif()
+         endif()
+ 
+     else()
+diff --git a/src/cpp/tray/CMakeLists.txt b/src/cpp/tray/CMakeLists.txt
+index 1a029f13..3771e05a 100644
+--- a/src/cpp/tray/CMakeLists.txt
++++ b/src/cpp/tray/CMakeLists.txt
+@@ -268,16 +268,6 @@ if(APPLE AND CMAKE_BUILD_TYPE STREQUAL "Release")
+ endif()
+ 
+ # Create symlink in standard bin path only if not installing to /usr
+-if(UNIX AND NOT APPLE AND NOT CMAKE_INSTALL_PREFIX STREQUAL "/usr")
+-    install(CODE "
+-        file(MAKE_DIRECTORY \"\$ENV{DESTDIR}/usr/bin\")
+-        execute_process(
+-            COMMAND ${CMAKE_COMMAND} -E create_symlink
+-                ${CMAKE_INSTALL_PREFIX}/bin/lemonade-server
+-                \"\$ENV{DESTDIR}/usr/bin/lemonade-server\"
+-        )
+-    ")
+-endif()
+ 
+ # Note: Icon resources are copied by parent CMakeLists.txt
+ 

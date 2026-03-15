@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 89e05cc5..36423d24 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -151,7 +151,7 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+ 
+ # Fetch missing dependencies
+-if(NOT USE_SYSTEM_JSON OR NOT USE_SYSTEM_CURL OR NOT USE_SYSTEM_ZSTD OR NOT USE_SYSTEM_CLI11 OR NOT USE_SYSTEM_HTTPLIB)
++if(NOT USE_SYSTEM_JSON OR NOT USE_SYSTEM_CURL OR NOT USE_SYSTEM_ZSTD OR NOT USE_SYSTEM_CLI11 OR NOT USE_SYSTEM_HTTPLIB OR WIN32 OR CMAKE_SYSTEM_NAME STREQUAL "Linux")
+     include(FetchContent)
+ endif()
+ 
