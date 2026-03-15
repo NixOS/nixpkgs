@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz"
+      "https://pari.math.u-bordeaux.fr/pub/pari/unix/pari-${version}.tar.gz"
       # old versions are at the url below
-      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz"
+      "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/pari-${version}.tar.gz"
     ];
     hash = "sha256-jZxPzVhMRo0n4PI8NoNlhyhEUglMSxxATCDEuBBGLcs=";
   };

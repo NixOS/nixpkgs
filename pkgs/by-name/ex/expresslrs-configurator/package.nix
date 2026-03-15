@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchzip {
-    url = "https://github.com/ExpressLRS/ExpressLRS-Configurator/releases/download/v${version}/${pname}-${version}.zip";
+    url = "https://github.com/ExpressLRS/ExpressLRS-Configurator/releases/download/v${version}/expresslrs-configurator-${version}.zip";
     stripRoot = false;
     hash = "sha256-BIbJzNWjYFbbwCEWoym3g6XBpQGi2owbf2XsQiXwHmw=";
   };
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       icon = pname;
       desktopName = "ExpressLRS Configurator";
       comment = "Configuration tool for ExpressLRS";

@@ -23,7 +23,7 @@ let
   pname = "qtcreator";
   version = "18.0.2";
   src = fetchurl {
-    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    url = "mirror://qt/official_releases/qtcreator/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
     hash = "sha256-HP9kIjMjS23dQDidBeSQWAj5j9RDQhh/6RCSkKBJLIg=";
   };
   goModules =

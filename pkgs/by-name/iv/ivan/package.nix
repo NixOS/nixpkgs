@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   # Create "ivan.desktop" file
   ivanDesktop = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     icon = "ivan.png";
     desktopName = "IVAN";
     genericName = pname;

@@ -68,7 +68,7 @@ buildNpmPackage rec {
     (makeDesktopItem {
       name = pname;
       desktopName = "Antares SQL";
-      exec = pname;
+      exec = "antares";
       icon = pname;
       terminal = false;
       type = "Application";

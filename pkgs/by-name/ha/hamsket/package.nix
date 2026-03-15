@@ -18,7 +18,7 @@ let
     makeDesktopItem {
       desktopName = "Hamsket";
       name = pname;
-      exec = pname;
+      exec = "hamsket";
       icon = pname;
       categories = [ "Network" ];
     }

@@ -22,7 +22,7 @@ let
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     desktopName = "PyMol Molecular Graphics System";
     genericName = "Molecular Modeler";
     comment = description;

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       desktopName = "Abaddon";
       genericName = meta.description;
       startupWMClass = pname;

@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = "${pname} %U";
+    exec = "${meta.mainProgram} %U";
     icon = pname;
     type = "Application";
     comment = meta.description;

@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       desktopName = "Camunda Modeler";
       icon = pname;
       keywords = [

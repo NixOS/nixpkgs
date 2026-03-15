@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "1.62";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/nuweb/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/project/nuweb/nuweb-${version}.tar.gz";
     sha256 = "sha256-JVqPYkYPXBT0xLNWuW4DV6N6ZlKuBYQGT46frhnpU64=";
   };
 

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
-    url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
+    url = "https://hexler.net/pub/touchosc/touchosc-${version}-${suffix}.deb";
     hash =
       {
         aarch64-linux = "sha256-WHjtjxSLphODnYynKX5oYRirBWnv0wTh5mxCrw5DL3c=";

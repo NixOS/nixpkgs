@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   desktopItem = makeDesktopItem {
     name = pname;
-    exec = pname;
+    exec = meta.mainProgram;
     icon = pname;
     comment = meta.description;
     genericName = meta.description;

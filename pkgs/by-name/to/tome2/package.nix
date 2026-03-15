@@ -16,7 +16,7 @@ let
   desktopItem = makeDesktopItem {
     desktopName = pname;
     name = pname;
-    exec = "${pname}-x11";
+    exec = "tome2-x11";
     icon = pname;
     comment = description;
     type = "Application";

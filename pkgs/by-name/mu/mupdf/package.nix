@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   pname = "mupdf";
 
   src = fetchurl {
-    url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
+    url = "https://mupdf.com/downloads/archive/mupdf-${version}-source.tar.gz";
     hash = "sha256-riRCQW3kmRgtN6UmxvorrMejvtWoiNETygSERITf58Y=";
   };
 
@@ -190,7 +190,7 @@ stdenv.mkDerivation rec {
       desktopName = pname;
       comment = meta.description;
       icon = "mupdf";
-      exec = "${pname} %f";
+      exec = "${meta.mainProgram} %f";
       terminal = false;
       mimeTypes = [
         "application/epub+zip"

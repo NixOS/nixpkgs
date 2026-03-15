@@ -47,7 +47,7 @@ let
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = "jprofiler";
       icon = pname;
       comment = meta.description;
       desktopName = nameApp;

@@ -23,7 +23,7 @@ let
     name = pname;
     desktopName = pname;
     comment = "MyCrypto is a free, open-source interface for interacting with the blockchain";
-    exec = pname;
+    exec = meta.mainProgram;
     icon = "mycrypto";
     categories = [ "Finance" ];
   };

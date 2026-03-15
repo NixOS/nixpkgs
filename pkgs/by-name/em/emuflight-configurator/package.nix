@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = meta.mainProgram;
       icon = pname;
       comment = "Emuflight configuration tool";
       desktopName = "Emuflight Configurator";

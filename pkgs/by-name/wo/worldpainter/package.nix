@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = pname;
       desktopName = pname;
-      exec = pname;
+      exec = "worldpainter";
       icon = pname;
       terminal = false;
       type = "Application";

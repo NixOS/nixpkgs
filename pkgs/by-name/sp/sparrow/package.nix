@@ -38,7 +38,7 @@ let
 
   # nixpkgs-update: no auto update
   src = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrowwallet-${version}-${sparrowArch}.tar.gz";
     hash =
       {
         x86_64-linux = "sha256-9rkyTEi+KvFDvMCSNkedxX9lYZPZvGwCClLz87DXrKc=";
@@ -72,12 +72,12 @@ let
   };
 
   manifest = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt";
     hash = "sha256-hPgRK1pMnhpAOWFO+bySXgE7I1rJf1MVrA5FdIkSgu4=";
   };
 
   manifestSignature = fetchurl {
-    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-manifest.txt.asc";
+    url = "https://github.com/sparrowwallet/sparrow/releases/download/${version}/sparrow-${version}-manifest.txt.asc";
     hash = "sha256-suHr5oM0QVVGQnv8zqFBAuHCUs3Ss1O9U3wx9Exmy7U=";
   };
 
@@ -230,8 +230,8 @@ let
   };
 in
 stdenvNoCC.mkDerivation rec {
-  inherit version src;
-  pname = "sparrow";
+  inherit pname version src;
+
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems

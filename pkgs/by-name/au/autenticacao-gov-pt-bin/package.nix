@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = pname;
-      exec = pname;
+      exec = "autenticacao-gov-pt-bin";
       desktopName = "Autenticação.gov";
       genericName = "Portuguese eID Data";
       comment = "Middleware for Electronic Identification in Portugal";
