@@ -57,8 +57,9 @@ in
     ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
   '';
 
-  # Install new init script
-  system.activationScripts.installInitScript = ''
-    ln -fs $systemConfig/init /init
+  # Update /init symlink when switching configurations so the container
+  # boots the new system on restart.
+  system.build.installBootLoader = pkgs.writeShellScript "install-docker-init" ''
+    ${pkgs.coreutils}/bin/ln -fs "$1/init" /init
   '';
 }

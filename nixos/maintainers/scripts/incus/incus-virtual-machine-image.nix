@@ -13,18 +13,24 @@
     ];
   };
 
-  # copy the config for nixos-rebuild
-  system.activationScripts.config =
+  # Create a default configuration.nix on first boot so nixos-rebuild works
+  # out of the box.
+  systemd.services.incus-create-nixos-config =
     let
-      config = pkgs.replaceVars ./incus-virtual-machine-image-inner.nix {
+      configFile = pkgs.replaceVars ./incus-virtual-machine-image-inner.nix {
         stateVersion = lib.trivial.release;
       };
     in
-    ''
-      if [ ! -e /etc/nixos/configuration.nix ]; then
-        install -m 0644 -D ${config} /etc/nixos/configuration.nix
-      fi
-    '';
+    {
+      description = "Create default NixOS configuration for Incus";
+      wantedBy = [ "multi-user.target" ];
+      unitConfig.ConditionPathExists = "!/etc/nixos/configuration.nix";
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${pkgs.coreutils}/bin/install -m 0644 -D ${configFile} /etc/nixos/configuration.nix";
+      };
+    };
 
   # Network
   networking = {
