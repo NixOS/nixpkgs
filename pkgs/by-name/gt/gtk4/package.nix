@@ -4,7 +4,6 @@
   buildPackages,
   replaceVars,
   fetchurl,
-  fetchpatch,
   pkg-config,
   docutils,
   gettext,
@@ -77,7 +76,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.20.3";
+  version = "4.22.0";
 
   outputs = [
     "out"
@@ -93,14 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk/${lib.versions.majorMinor finalAttrs.version}/gtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-KHPykDCIpmxxFz6i7YX/riZqZrlyw6SEK7svbxh+wVM=";
+    hash = "sha256-7TkyRp09iR31NFHyzSg4CvdnP3NqpEO7Pdp620CZTx4=";
   };
-
-  # TODO: make it unconditional on rebuild, drop on version >= 4.20.4
-  patches = lib.optional stdenv.hostPlatform.is32bit (fetchpatch {
-    url = "https://gitlab.gnome.org/GNOME/gtk/-/commit/3b7ed49f26700c65fa9c6f41cf40d4fd5f921756.diff";
-    hash = "sha256-P6cE7fnR5W+H0EWQWJ3hYSu4MwMygPIfS6e0IiXlQv8=";
-  });
 
   depsBuildBuild = [
     pkg-config
@@ -118,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     gi-docgen
     libxml2 # for xmllint
+    shared-mime-info # for update-mime-database
   ]
   ++ lib.optionals (compileSchemas && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
