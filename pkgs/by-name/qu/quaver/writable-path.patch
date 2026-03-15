@@ -1,0 +1,40 @@
+Submodule Wobble contains modified content
+diff --git a/Wobble/Wobble/Logging/Logger.cs b/Wobble/Wobble/Logging/Logger.cs
+index 8234500..4a4b1d0 100644
+--- a/Wobble/Wobble/Logging/Logger.cs
++++ b/Wobble/Wobble/Logging/Logger.cs
+@@ -23,7 +23,7 @@ namespace Wobble.Logging
+         /// <summary>
+         ///     The folder which contains all the logs.
+         /// </summary>
+-        public static string LogsFolder => Path.Join(AppDomain.CurrentDomain.BaseDirectory, "Logs");
++        public static string LogsFolder => Path.Join(WobbleGame.WorkingDirectory, "Logs");
+ 
+         /// <summary>
+         ///     The minimum log level required to log messages.
+diff --git a/Wobble/Wobble/WobbleGame.cs b/Wobble/Wobble/WobbleGame.cs
+index 8b2ab2c..016d3a1 100644
+--- a/Wobble/Wobble/WobbleGame.cs
++++ b/Wobble/Wobble/WobbleGame.cs
+@@ -37,7 +37,20 @@ namespace Wobble
+         /// <summary>
+         ///     The current working directory of the executable.
+         /// </summary>
+-        public static string WorkingDirectory => AppDomain.CurrentDomain.BaseDirectory;
++        public static string WorkingDirectory
++        {
++            get
++            {
++                var result = Environment.GetEnvironmentVariable("XDG_DATA_HOME");
++                if (string.IsNullOrEmpty(result))
++                {
++                    result = Path.Join(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share");
++                }
++                result = Path.Join(result, "Quaver");
++                Directory.CreateDirectory(result);
++                return result;
++            }
++        }
+ 
+         /// <summary>
+         ///     Device period to pass to AudioManager.Initialize().
