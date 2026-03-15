@@ -1517,8 +1517,6 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
-  reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
-
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   androidenv = callPackage ../development/mobile/androidenv { };
@@ -1932,10 +1930,6 @@ with pkgs;
   };
 
   xmlsort = perlPackages.XMLFilterSort;
-
-  mcelog = callPackage ../os-specific/linux/mcelog {
-    util-linux = util-linuxMinimal;
-  };
 
   apc-temp-fetch = with python3.pkgs; callPackage ../tools/networking/apc-temp-fetch { };
 
@@ -3512,8 +3506,6 @@ with pkgs;
   trezor-agent = with python3Packages; toPythonApplication trezor-agent;
 
   ttp = with python3.pkgs; toPythonApplication ttp;
-
-  trace-cmd = callPackage ../os-specific/linux/trace-cmd { };
 
   translatelocally-models = recurseIntoAttrs (callPackages ../misc/translatelocally-models { });
 
@@ -5600,9 +5592,6 @@ with pkgs;
     callPackage ../development/tools/continuous-integration/buildkite-test-collector-rust
       {
       };
-
-  libbpf = callPackage ../os-specific/linux/libbpf { };
-  libbpf_0 = callPackage ../os-specific/linux/libbpf/0.x.nix { };
 
   bundlewrap = with python3.pkgs; toPythonApplication bundlewrap;
 
@@ -8483,8 +8472,6 @@ with pkgs;
 
   ### OS-SPECIFIC
 
-  alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
-
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
@@ -8507,30 +8494,12 @@ with pkgs;
     enableUnstable = true;
   };
 
-  b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
-
-  b43Firmware_6_30_163_46 =
-    callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix
-      { };
-
-  batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
-
   bluez5 = bluez;
   bluez5-experimental = bluez-experimental;
 
   bluez-experimental = bluez.override {
     enableExperimental = true;
   };
-
-  busybox = callPackage ../os-specific/linux/busybox {
-    # Fixes libunwind from being dynamically linked to a static binary.
-    stdenv =
-      if (stdenv.targetPlatform.useLLVM or false) then
-        overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
-      else
-        stdenv;
-  };
-  busybox-sandbox-shell = callPackage ../os-specific/linux/busybox/sandbox-shell.nix { };
 
   cm-rgb = python3Packages.callPackage ../tools/system/cm-rgb { };
 
@@ -8542,24 +8511,12 @@ with pkgs;
     // config.conky or { }
   );
 
-  cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
-    inherit (pkgs) meson;
-  };
-
   # Darwin package set
   #
   # Even though this is a set of packages not single package, use `callPackage`
   # not `callPackages` so the per-package callPackages don't have their
   # `.override` clobbered. C.F. `llvmPackages` which does the same.
   darwin = callPackage ./darwin-packages.nix { };
-
-  displaylink = callPackage ../os-specific/linux/displaylink {
-    inherit (linuxPackages) evdi;
-  };
-
-  dmraid = callPackage ../os-specific/linux/dmraid { lvm2 = lvm2_dmeventd; };
-
-  drbd = callPackage ../os-specific/linux/drbd/utils.nix { };
 
   # unstable until the first 1.x release
   fwts = callPackage ../os-specific/linux/fwts { };
@@ -8569,10 +8526,6 @@ with pkgs;
   error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
   libffado = ffado;
-
-  freefall = callPackage ../os-specific/linux/freefall {
-    inherit (linuxPackages) kernel;
-  };
 
   fusePackages = dontRecurseIntoAttrs (
     callPackage ../os-specific/linux/fuse {
@@ -8588,8 +8541,6 @@ with pkgs;
   btop-cuda = btop.override { cudaSupport = true; };
   btop-rocm = btop.override { rocmSupport = true; };
 
-  i7z = qt5.callPackage ../os-specific/linux/i7z { };
-
   ipu6-camera-hal = callPackage ../development/libraries/ipu6-camera-hal { };
 
   ipu6ep-camera-hal = callPackage ../development/libraries/ipu6-camera-hal {
@@ -8603,16 +8554,10 @@ with pkgs;
   iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
   # hiPrio for collisions with inetutils (ping)
 
-  iptables = callPackage ../os-specific/linux/iptables { };
-  iptables-legacy = callPackage ../os-specific/linux/iptables { nftablesCompat = false; };
   iptables-nftables-compat = iptables;
-
-  jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
   libkrun-sev = libkrun.override { variant = "sev"; };
   libkrun-tdx = libkrun.override { variant = "tdx"; };
-
-  projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
   lklWithFirewall = lkl.override { firewallSupport = true; };
 
@@ -8620,8 +8565,6 @@ with pkgs;
     linuxHeaders
     makeLinuxHeaders
     ;
-
-  klibc = callPackage ../os-specific/linux/klibc { };
 
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
@@ -8683,8 +8626,6 @@ with pkgs;
   linuxPackages_xanmod_latest = linuxKernel.packages.linux_xanmod_latest;
   linux_xanmod_latest = linuxKernel.kernels.linux_xanmod_latest;
 
-  linux-doc = callPackage ../os-specific/linux/kernel/htmldocs.nix { };
-
   cryptodev = linuxPackages.cryptodev;
 
   librealsense = callPackage ../development/libraries/librealsense { };
@@ -8699,15 +8640,6 @@ with pkgs;
 
   librealsense-gui = callPackage ../development/libraries/librealsense {
     enableGUI = true;
-  };
-
-  kmod = callPackage ../os-specific/linux/kmod { };
-
-  lvm2 = callPackage ../os-specific/linux/lvm2/2_03.nix {
-    # break the cyclic dependency:
-    # util-linux (non-minimal) depends (optionally, but on by default) on systemd,
-    # systemd (optionally, but on by default) on cryptsetup and cryptsetup depends on lvm2
-    util-linux = util-linuxMinimal;
   };
 
   lvm2_dmeventd = lvm2.override {
@@ -8743,7 +8675,7 @@ with pkgs;
 
   aggregateModules =
     modules:
-    callPackage ../os-specific/linux/kmod/aggregator.nix {
+    callPackage ../by-name/km/kmod/aggregator.nix {
       inherit (buildPackages) kmod;
       inherit modules;
     };
@@ -8816,38 +8748,10 @@ with pkgs;
     }
   );
 
-  rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
-
-  sgx-sdk = callPackage ../os-specific/linux/sgx/sdk {
-    ocamlPackages = ocaml-ng.ocamlPackages_5_3;
-  };
-
-  sgx-psw = callPackage ../os-specific/linux/sgx/psw {
-    protobuf = protobuf_21;
-  };
-
-  sinit = callPackage ../os-specific/linux/sinit {
-    rcinit = "/etc/rc.d/rc.init";
-    rcshutdown = "/etc/rc.d/rc.shutdown";
-  };
-
-  sysdig = callPackage ../os-specific/linux/sysdig {
-    kernel = null;
-  }; # sysdig is a client, for a driver look at linuxPackagesFor
-
   sysprof = callPackage ../development/tools/profiling/sysprof { };
 
   libsysprof-capture = callPackage ../development/tools/profiling/sysprof/capture.nix { };
 
-  systemd = callPackage ../os-specific/linux/systemd {
-    # break some cyclic dependencies
-    util-linux = util-linuxMinimal;
-    # provide a super minimal gnupg used for systemd-machined
-    gnupg = gnupg.override {
-      enableMinimal = true;
-      guiSupport = false;
-    };
-  };
   systemdMinimal = systemd.override {
     pname = "systemd-minimal";
     withAcl = false;
@@ -9006,10 +8910,6 @@ with pkgs;
   windows = recurseIntoAttrs (callPackages ../os-specific/windows { });
 
   cygwin = recurseIntoAttrs (callPackages ../os-specific/cygwin { });
-
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
-
-  wpa_supplicant_gui = libsForQt5.callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
   inherit
     ({
@@ -9682,8 +9582,6 @@ with pkgs;
     withGUI = true;
     withDoc = true;
   };
-
-  guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
 
   hachoir = with python3Packages; toPythonApplication hachoir;
 

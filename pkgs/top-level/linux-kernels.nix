@@ -585,7 +585,7 @@ in
 
         shufflecake = callPackage ../os-specific/linux/shufflecake { };
 
-        sysdig = callPackage ../os-specific/linux/sysdig { };
+        sysdig = callPackage ../by-name/sy/sysdig/package.nix { };
 
         systemtap = callPackage ../development/tools/profiling/systemtap { };
 
@@ -680,7 +680,7 @@ in
 
         hpuefi-mod = callPackage ../os-specific/linux/hpuefi-mod { };
 
-        drbd = callPackage ../os-specific/linux/drbd/driver.nix { };
+        drbd = callPackage ../by-name/dr/drbd/driver.nix { };
 
         nullfs = callPackage ../os-specific/linux/nullfs { };
 
