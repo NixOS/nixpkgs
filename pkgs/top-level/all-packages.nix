@@ -3162,7 +3162,6 @@ with pkgs;
   opentelemetry-collector-releases =
     callPackage ../tools/misc/opentelemetry-collector/releases.nix
       { };
-
   openvswitch-dpdk = callPackage ../by-name/op/openvswitch/package.nix { withDPDK = true; };
 
   optifinePackages = callPackage ../tools/games/minecraft/optifine { };
