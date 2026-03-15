@@ -1,19 +1,22 @@
 {
   lib,
   fetchFromGitHub,
+  gcc-arm-embedded,
+  makeDesktopItem,
   python3Packages,
+  udevCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mtkclient";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bkerler";
     repo = "mtkclient";
     rev = "v${version}";
-    hash = "sha256-mbfuOYJvwHfDvjTtAgMBLi7REIRRcJ9bhkY5oVjxCAM=";
+    hash = "sha256-PNDjIoMkd/UkP/CQxLiJbCcQvJ3u1ghp0ILJ0jHJrts=";
   };
 
   build-system = [ python3Packages.hatchling ];
@@ -29,10 +32,32 @@ python3Packages.buildPythonApplication rec {
     shiboken6
   ];
 
+  nativeBuildInputs = [
+    udevCheckHook
+
+    # Dependencies for stage1 kamakiri payloads
+    gcc-arm-embedded
+  ];
+
   pythonImportsCheck = [ "mtkclient" ];
 
-  # Note: No need to install mtkclient udev rules, 50-android.rules is covered by
+  # Build on-device payloads from source before assembling into a python package.
+  preBuild = ''
+    make -C src/stage1
+  '';
+
+  # Note: No need to install other mtkclient udev rules, 50-android.rules is covered by
   #       systemd 258 or newer and 51-edl.rules only applies to Qualcomm (i.e. not MTK).
+  postInstall = ''
+    install -Dm444 Setup/Linux/52-mtk.rules -t $out/lib/udev/rules.d
+  '';
+
+  desktopItem = makeDesktopItem {
+    name = "mtkclient";
+    desktopName = "MTKClient";
+    comment = "Mediatek Flash and Repair Utility";
+    exec = "mtk_gui";
+  };
 
   meta = {
     description = "MTK reverse engineering and flash tool";
