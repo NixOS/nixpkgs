@@ -20000,6 +20000,12 @@
     githubId = 9677399;
     name = "Ofek Lev";
   };
+  of-the-stars = {
+    name = "Stellae";
+    github = "of-the-stars";
+    githubId = 47869156;
+    email = "stellae.incaelis@gmail.com";
+  };
   offsetcyan = {
     github = "offsetcyan";
     githubId = 49906709;
