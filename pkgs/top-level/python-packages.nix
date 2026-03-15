@@ -11332,6 +11332,8 @@ self: super: with self; {
 
   obstore = callPackage ../development/python-modules/obstore { };
 
+  obsws-python = callPackage ../development/python-modules/obsws-python { };
+
   oca-port = callPackage ../development/python-modules/oca-port { };
 
   ochre = callPackage ../development/python-modules/ochre { };
