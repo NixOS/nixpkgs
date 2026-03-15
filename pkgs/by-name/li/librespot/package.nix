@@ -1,17 +1,14 @@
 {
   lib,
-  rustPlatform,
+  rustPackages,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
   stdenv,
   openssl,
-  withALSA ? stdenv.hostPlatform.isLinux,
   alsa-lib,
   alsa-plugins,
-  withPortAudio ? false,
   portaudio,
-  withPulseAudio ? false,
   libpulseaudio,
   withRodio ? true,
   withAvahi ? false,
@@ -19,16 +16,21 @@
   withDNS-SD ? false,
   avahi-compat,
   tlsBackend ? "native-tls", # "native-tls" "rustls-tls-native-roots" "rustls-tls-webpki-roots"
+  config,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+let
+  withALSA = stdenv.hostPlatform.isLinux;
+  withPulseAudio = config.pulseaudio or stdenv.hostPlatform.isLinux;
+  withPortAudio = stdenv.hostPlatform.isDarwin;
+in
+rustPackages.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "librespot";
   version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "librespot-org";
     repo = "librespot";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-twWndV6z5Cdivz7pfAJzdlIjddEiZPEFnTzipMczmJo=";
   };
 
@@ -39,7 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     makeWrapper
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    rustPlatform.bindgenHook
+    rustPackages.rustPlatform.bindgenHook
   ];
 
   buildInputs = [
