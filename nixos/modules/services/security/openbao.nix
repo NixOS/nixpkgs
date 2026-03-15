@@ -17,6 +17,11 @@ in
       package = lib.mkPackageOption pkgs "openbao" {
         example = "pkgs.openbao.override { withHsm = false; withUi = false; }";
       };
+      user = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = "User account under which the openbao service runs.";
+      };
 
       settings = lib.mkOption {
         description = ''
@@ -121,12 +126,13 @@ in
         StateDirectory = "openbao";
         StateDirectoryMode = "0700";
         RuntimeDirectory = "openbao";
-        RuntimeDirectoryMode = "0700";
+        RuntimeDirectoryMode = "0770";
 
         CapabilityBoundingSet = "";
-        DynamicUser = true;
         LimitCORE = 0;
         LockPersonality = true;
+        DynamicUser = builtins.isNull cfg.user;
+        User = cfg.user;
         MemorySwapMax = 0;
         MemoryZSwapMax = 0;
         PrivateUsers = true;
@@ -153,7 +159,7 @@ in
           "@resources"
           "~@privileged"
         ];
-        UMask = "0077";
+        UMask = "0007";
       };
     };
   };
