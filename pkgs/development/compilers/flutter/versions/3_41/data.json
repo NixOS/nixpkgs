@@ -16,8 +16,7 @@
   },
   "dartVersion": "3.11.0",
   "dartHash": {
-    "x86_64-linux": "sha256-8xcptWe+MYx8wjva/muamX+n3b+CnfUBbwZiJ7aqDJk=",
-    "aarch64-linux": "sha256-dr/vXICcCCF332xRu/SADY1NdV8ulvt1Fiv40rAy74M=",
+    "linux": "sha256-7y6kNpjWpc8+4Rhv+GuMnV5xHCQ5om2/3woZOJ8wYSc=",
     "x86_64-darwin": "sha256-Wlwpx6g4EmkzKAEyaxHMrc8M/nMB7QGj8G6BdmvLjXQ=",
     "aarch64-darwin": "sha256-IjJFpC6rG4EeUC4VYluGcHX/4BLenrU3Skzd4u4IdTQ="
   },
