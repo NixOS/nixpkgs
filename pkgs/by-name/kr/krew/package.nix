@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeWrapper,
   gitMinimal,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -23,10 +25,24 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  ldflags = [
+    "-s"
+    "-X"
+    "sigs.k8s.io/krew/internal/version.gitTag=v${finalAttrs.version}"
+  ];
+
   postFixup = ''
     wrapProgram $out/bin/krew \
       --prefix PATH : ${lib.makeBinPath [ gitMinimal ]}
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Package manager for kubectl plugins";
