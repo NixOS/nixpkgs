@@ -100,6 +100,8 @@ let
   # For other ways to deploy a ceph cluster, look at the documentation at
   # https://docs.ceph.com/docs/master/
   testScript = ''
+    import json
+
     start_all()
 
     monA.wait_for_unit("network.target")
@@ -222,6 +224,25 @@ let
     monA.wait_for_open_port(8080)
     monA.wait_until_succeeds("curl -q --fail http://localhost:8080")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
+
+    # Initialize dashboard creds
+    monA.succeed(
+        "echo 'foo bar baz qux' > /tmp/dashboard_pw",
+        "ceph dashboard ac-user-create admin -i /tmp/dashboard_pw administrator",
+    )
+
+    # Get dashboard auth token
+    auth_payload = json.dumps({"username": "admin", "password": "foo bar baz qux"})
+    auth_response = json.loads(monA.succeed(
+        f"curl --fail -s -X POST -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Content-Type: application/json' -d '{auth_payload}' http://localhost:8080/api/auth",
+    ))
+    token = auth_response["token"]
+
+    # Check cluster health via dashboard API
+    health = json.loads(monA.succeed(
+        f"curl --fail -s -H 'Accept: application/vnd.ceph.api.v1.0+json' -H 'Authorization: Bearer {token}' http://localhost:8080/api/health/minimal",
+    ))
+    assert health["health"]["status"] == "HEALTH_OK"
   '';
 in
 {
