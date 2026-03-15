@@ -180,9 +180,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    zlib
   ]
-  ++ lib.optionals (!userOnly) [ gnutls ]
-  ++ [ zlib ]
   ++ lib.optionals (!minimal) [
     dtc
     pixman
@@ -193,7 +192,10 @@ stdenv.mkDerivation (finalAttrs: {
     libslirp
     libcbor
   ]
-  ++ lib.optionals (!userOnly) [ curl ]
+  ++ lib.optionals (!userOnly) [
+    curl
+    gnutls
+  ]
   ++ lib.optionals ncursesSupport [ ncurses ]
   ++ lib.optionals seccompSupport [ libseccomp ]
   ++ lib.optionals numaSupport [ numactl ]
