@@ -526,6 +526,7 @@ with haskellLib;
   jpeg-turbo = dontCheck super.jpeg-turbo;
   JuicyPixels-jpeg-turbo = dontCheck super.JuicyPixels-jpeg-turbo;
 
+  # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
   basement = appendPatches [
     # Fixes compilation for basement on i686
     # https://github.com/haskell-foundation/foundation/pull/573
@@ -535,12 +536,14 @@ with haskellLib;
       sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
       stripLen = 1;
     })
-
-    # Fixes compilation on windows
-    # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
-    ./patches/basement-add-cast.patch
+    ./patches/basement-add-cast.patch # Fixes compilation on windows
+    ./patches/basement-ghcjs.patch # Fixes compilation on ghcjs
 
   ] super.basement;
+
+  # Repo is archived, package is abandoned: https://github.com/haskell-foundation/foundation
+  # Fixes compilation on ghcjs
+  foundation = appendPatch ./patches/foundation-ghcjs.patch super.foundation;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
