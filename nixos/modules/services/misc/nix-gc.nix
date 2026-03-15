@@ -61,9 +61,16 @@ in
       };
 
       options = lib.mkOption {
-        default = "";
-        example = "--max-freed $((64 * 1024**3))";
-        type = lib.types.singleLineStr;
+        default = { };
+        example = {
+          max-freed = "$((64 * 1024**3))";
+        };
+        type = with lib.types; either (attrsOf str) str;
+        apply =
+          value:
+          lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2605 && builtins.isString value)
+            "migrate the `nix.gc.options` string to the `lib.cli.toCommandLineStandardString { }` attribute set"
+            value;
         description = ''
           Options given to [`nix-collect-garbage`](https://nixos.org/manual/nix/stable/command-ref/nix-collect-garbage) when the garbage collector is run automatically.
         '';
@@ -85,7 +92,16 @@ in
 
     systemd.services.nix-gc = lib.mkIf config.nix.enable {
       description = "Nix Garbage Collector";
-      script = "exec ${config.nix.package.out}/bin/nix-collect-garbage ${cfg.options}";
+      script = ''
+        exec \
+          ${config.nix.package.out}/bin/nix-collect-garbage \
+          ${
+            if builtins.isString cfg.options then
+              cfg.options
+            else
+              lib.cli.toCommandLineStandardString { } cfg.options
+          }
+      '';
       serviceConfig.Type = "oneshot";
       startAt = lib.optionals cfg.automatic cfg.dates;
       # do not start and delay when switching
