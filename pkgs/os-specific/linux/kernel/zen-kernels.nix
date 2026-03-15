@@ -71,6 +71,7 @@ let
             # Preempt (low-latency)
             PREEMPT = mkKernelOverride yes;
             PREEMPT_VOLUNTARY = mkKernelOverride no;
+            PREEMPT_LAZY = mkKernelOverride no;
 
             # Preemptible tree-based hierarchical RCU
             TREE_RCU = yes;
