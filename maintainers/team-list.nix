@@ -664,6 +664,7 @@ with lib.maintainers;
     members = [
       hexa
       natsukium
+      Zaczero
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";
