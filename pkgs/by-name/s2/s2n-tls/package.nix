@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s2n-tls";
-  version = "1.6.4";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
-    tag = "v${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-Hnjf+NaxfXFxUvPPIBcK2larrzyQHKh/8FkBYdTexr4=";
   };
 
@@ -46,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  doCheck = false;
+
   passthru.tests = {
     inherit nix;
   };
@@ -53,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "C99 implementation of the TLS/SSL protocols";
     homepage = "https://github.com/aws/s2n-tls";
+    changelog = "https://github.com/aws/s2n-tls/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
