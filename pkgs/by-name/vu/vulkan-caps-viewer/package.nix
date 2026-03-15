@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://vulkan.gpuinfo.org/";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ pedrohlc ];
     changelog = "https://github.com/SaschaWillems/VulkanCapsViewer/releases/tag/${version}";
   };
