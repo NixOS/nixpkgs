@@ -327,6 +327,20 @@ lib.fix (
           appliedArgs = if builtins.isFunction newArgs then newArgs args else newArgs;
         in
         self (args // { __fromCombineWrapper = false; } // appliedArgs);
+      withDocs = self (
+        args
+        // {
+          __fromCombineWrapper = false;
+          withDocs = true;
+        }
+      );
+      withSources = self (
+        args
+        // {
+          __fromCombineWrapper = false;
+          withSources = true;
+        }
+      );
       withPackages =
         reqs:
         self (
