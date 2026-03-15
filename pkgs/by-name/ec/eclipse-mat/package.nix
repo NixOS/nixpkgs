@@ -87,9 +87,12 @@ stdenv.mkDerivation rec {
     # Create desktop item.
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    find $out/mat/plugins -name 'eclipse*.png' -type f -exec cp {} $out/share/pixmaps \;
-    mv $out/share/pixmaps/eclipse64.png $out/share/pixmaps/eclipse.png
+    iconDir=$(dirname $(ls $out/mat/plugins/*/eclipse64.png))
+    for x in 16 22 24 32 48 64 128 256 512 1024; do
+      install -Dm444 $iconDir/eclipse$x.png $out/share/icons/hicolor/''${x}x''${x}/apps/eclipse.png
+    done
+    install -Dm444 $iconDir/eclipse_lg.png $out/share/icons/hicolor/116x302/apps/eclipse_lg.png
+    install -Dm444 $iconDir/eclipse_lg@2x.png $out/share/icons/hicolor/232x604/apps/eclipse_lg.png
   '';
 
   nativeBuildInputs = [
