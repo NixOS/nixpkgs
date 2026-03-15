@@ -1787,6 +1787,7 @@ in
   xscreensaver = runTest ./xscreensaver.nix;
   xss-lock = runTest ./xss-lock.nix;
   xterm = runTest ./xterm.nix;
+  xwiki = runTest ./xwiki.nix;
   xxh = runTest ./xxh.nix;
   yarr = runTest ./yarr.nix;
   ydotool = import ./ydotool.nix {
