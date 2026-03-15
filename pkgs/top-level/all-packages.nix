@@ -10226,7 +10226,7 @@ with pkgs;
     addThumbnailer = true;
   };
 
-  obs-studio = qt6Packages.callPackage ../applications/video/obs-studio { };
+  obs-studio = callPackage ../applications/video/obs-studio { };
 
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins { });
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
