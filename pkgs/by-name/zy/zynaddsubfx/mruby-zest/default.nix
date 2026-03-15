@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   bison,
   pkg-config,
@@ -11,7 +11,10 @@
   libx11,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+# UI becomes unresponsive when built with GCC 15
+# (building with -std=gnu17 does not fix the issue)
+# https://github.com/mruby-zest/mruby-zest-build/issues/127
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "mruby-zest";
   version = "3.0.6";
 
@@ -20,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "mruby-zest-build";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    sha256 = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
+    hash = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
   };
 
   patches = [
