@@ -5,7 +5,6 @@
   fetchurl,
   fetchFromGitHub,
   fetchPypi,
-  fetchpatch2,
   callPackage,
 
   # Build time
@@ -20,7 +19,10 @@
   # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
   fmt_9,
   git,
+  gnutls,
+  thrift,
   libtool,
+  lksctp-tools,
   makeWrapper,
   nasm,
   pkg-config,
@@ -36,6 +38,7 @@
   # * https://tracker.ceph.com/issues/71269
   # * https://github.com/NixOS/nixpkgs/issues/406306
   ceph-arrow-cpp ? callPackage ./arrow-cpp-19.nix { },
+  libndctl,
   babeltrace,
   # Note when trying to upgrade boost:
   # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
@@ -46,7 +49,7 @@
   # If you want to upgrade to boost >= 1.86, you need a Ceph version that
   # has this PR in:
   #     https://github.com/ceph/ceph/pull/61312
-  boost183,
+  boost187,
   bzip2,
   cryptsetup,
   cunit,
@@ -73,7 +76,7 @@
   oath-toolkit,
   openldap,
   parted,
-  python311, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
+  python313, # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
   rdkafka,
   rocksdb,
   snappy,
@@ -81,6 +84,7 @@
   sqlite,
   utf8proc,
   xfsprogs,
+  yaml-cpp,
   zlib,
   zstd,
 
@@ -118,6 +122,20 @@
   libxfs ? null,
   liburing ? null,
   zfs ? null,
+  showOptions ? false,
+  withGrafana ? false,
+  withOcf ? false,
+  withRbdRwl ? false,
+  withRbdMirror ? false,
+  withRbdSsdCache ? false,
+  withBluestorePmem ? false,
+  withBlkin ? false,
+  withCrimson ? false,
+  withGssapi ? false,
+  withSpdk ? false,
+  withDpdk ? false,
+  withJaeger ? false,
+  withRadosgwArrowFlight ? false,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
@@ -125,6 +143,7 @@
 assert cryptopp != null || (nss != null && nspr != null);
 
 let
+  python = python313;
   shouldUsePkg =
     pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
@@ -230,101 +249,7 @@ let
       meta = getMeta "Ceph common module for code shared by manager modules";
     };
 
-  # Watch out for python <> boost compatibility
-  python = python311.override {
-    self = python;
-    packageOverrides =
-      self: super:
-      let
-        bcryptOverrideVersion = "4.0.1";
-      in
-      {
-        # Ceph does not support the following yet:
-        # * `bcrypt` > 4.0
-        # * `cryptography` > 40
-        # See:
-        # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-        # * Upstream issue: https://tracker.ceph.com/issues/63529
-        #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-        # * Moved to issue: https://tracker.ceph.com/issues/64213
-        #   > MGR modules incompatible with later PyO3 versions - PyO3 modules may only be initialized once per interpreter process
-
-        bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
-          pname = "bcrypt";
-          version = bcryptOverrideVersion;
-          src = fetchPypi {
-            inherit pname version;
-            hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
-          };
-          cargoRoot = "src/_bcrypt";
-          cargoDeps = rustPlatform.fetchCargoVendor {
-            inherit
-              pname
-              version
-              src
-              cargoRoot
-              ;
-            hash = "sha256-8PyCgh/rUO8uynzGdgylAsb5k55dP9fCnf40UOTCR/M=";
-          };
-        });
-
-        # We pin the older `cryptography` 40 here;
-        # this also forces us to pin other packages, see below
-        cryptography = self.callPackage ./old-python-packages/cryptography.nix { };
-
-        # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
-        # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-        # and https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
-        pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
-          version = "23.1.1";
-          src = fetchPypi {
-            pname = "pyOpenSSL";
-            inherit version;
-            hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
-          };
-          disabledTests = old.disabledTests or [ ] ++ [
-            "test_export_md5_digest"
-          ];
-          disabledTestPaths = old.disabledTestPaths or [ ] ++ [
-            "tests/test_ssl.py"
-          ];
-          propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
-            self.flaky
-          ];
-          # hack: avoid building docs due to incompatibility with current sphinx
-          nativeBuildInputs = [ openssl ]; # old.nativeBuildInputs but without sphinx*
-          outputs = lib.filter (o: o != "doc") old.outputs;
-        });
-
-        # This is the most recent version of `trustme` that's still compatible with `cryptography` 40.
-        # See https://github.com/NixOS/nixpkgs/issues/359723
-        # and https://github.com/python-trio/trustme/commit/586f7759d5c27beb44da60615a71848eb2a5a490
-        trustme = self.callPackage ./old-python-packages/trustme.nix { };
-
-        fastapi = super.fastapi.overridePythonAttrs (old: {
-          # Flaky test:
-          #     ResourceWarning: Unclosed <MemoryObjectSendStream>
-          # Unclear whether it's flaky in general or only in this overridden package set.
-          doCheck = false;
-        });
-
-        # Ceph does not support `kubernetes` >= 19, see:
-        #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
-        kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
-          version = "18.20.0";
-          src = fetchFromGitHub {
-            owner = "kubernetes-client";
-            repo = "python";
-            rev = "v${version}";
-            sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
-            fetchSubmodules = true;
-          };
-        });
-
-      };
-  };
-
-  boost' = boost183.override {
+  boost' = boost187.override {
     enablePython = true;
     inherit python;
   };
@@ -335,7 +260,7 @@ let
       ceph-common
 
       # build time
-      cython_0
+      cython
 
       # debian/control
       bcrypt
@@ -374,56 +299,33 @@ let
   );
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "19.2.3";
+  version = "20.2.0";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-zlgp28C81SZbaFJ4yvQk4ZgYz4K/aZqtcISTO8LscSU=";
+    hash = "sha256-jeBk1pgx7zJzOVOfIzx47IJ/o1HEDO2amRbwtBdMZoU=";
   };
+
+  checkFlag = x: if x then "ON" else "OFF";
+
+  optionalBuildInputs = lib.concatLists [
+    (lib.optionals withBluestorePmem [
+      libndctl.dev
+    ])
+
+    (lib.optionals withCrimson [
+      yaml-cpp
+      gnutls
+      lksctp-tools
+    ])
+
+    (lib.optionals withJaeger [
+      thrift
+    ])
+  ];
 in
 stdenv.mkDerivation {
   pname = "ceph";
   inherit src version;
-
-  patches = [
-    ./boost-1.85.patch
-
-    (fetchpatch2 {
-      name = "ceph-boost-1.86-uuid.patch";
-      url = "https://github.com/ceph/ceph/commit/01306208eac492ee0e67bff143fc32d0551a2a6f.patch?full_index=1";
-      hash = "sha256-OnDrr72inzGXXYxPFQevsRZImSvI0uuqFHqtFU2dPQE=";
-    })
-
-    # See:
-    # * <https://github.com/boostorg/python/issues/394>
-    # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
-    # * <https://github.com/ceph/ceph/pull/60999>
-    ./boost-1.86-PyModule.patch
-
-    (fetchpatch2 {
-      name = "ceph-cmake-4.patch";
-      url = "https://gitlab.alpinelinux.org/ashpool/aports/-/raw/d22b70eafe33c3daabe4eea6913c5be87d9463ad/community/ceph19/cpp_redis.patch";
-      hash = "sha256-wxPIsYt25CjXhJ6kmr/MXwFD58Sl4y4W+r9jAMND+uw=";
-    })
-
-    # See:
-    # * <https://github.com/ceph/ceph/pull/55560>
-    # * <https://github.com/ceph/ceph/pull/60575>
-    (fetchpatch2 {
-      name = "ceph-systemd-sans-cluster-name.patch";
-      url = "https://github.com/ceph/ceph/commit/5659920c7c128cb8d9552580dbe23dd167a56c31.patch?full_index=1";
-      hash = "sha256-Uch8ZghyTowUvSq0p/RxiVpdG1Yqlww9inpVksO6zyk=";
-    })
-    (fetchpatch2 {
-      name = "ceph-systemd-prefix.patch";
-      url = "https://github.com/ceph/ceph/commit/9b38df488d7101b02afa834ea518fd52076d582a.patch?full_index=1";
-      hash = "sha256-VcbJhCGTUdNISBd6P96Mm5M3fFVmZ8r7pMl+srQmnIQ=";
-    })
-    (fetchpatch2 {
-      name = "ceph-19.2.2-gcc15.patch";
-      url = "https://github.com/ceph/ceph/commit/830925f0dd196f920893b1947ae74171a202e825.patch";
-      hash = "sha256-bs+noyjiyAjwqfgSHDxdZJnZ/kptOOcz75KMqAaROpg=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf # `autoreconf` is called, e.g. for `qatlib_ext`
@@ -447,6 +349,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     cryptoLibsMap.${cryptoStr}
+    ++ lib.lists.unique optionalBuildInputs
     ++ [
       ceph-arrow-cpp
       babeltrace
@@ -529,6 +432,10 @@ stdenv.mkDerivation {
   preConfigure = ''
     unset AS
 
+    substituteInPlace src/pmdk/src/libpmem2/{badblocks,region_namespace,usc}_ndctl.c \
+                      src/pmdk/src/tools/daxio/daxio.c \
+      --replace-fail "<ndctl/libdaxctl.h>" "<daxctl/libdaxctl.h>"
+
     substituteInPlace src/common/module.c \
       --replace "char command[128];" "char command[256];" \
       --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
@@ -554,11 +461,22 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
-
     "-DWITH_CEPHFS_SHELL:BOOL=ON"
-    "-DWITH_SYSTEMD:BOOL=${if withSystemd then "ON" else "OFF"}"
+    "-DWITH_GRAFANA:BOOL=${checkFlag withGrafana}"
+    "-DWITH_OCF:BOOL=${checkFlag withOcf}"
+    "-DWITH_RBD_RWL:BOOL=${checkFlag withRbdRwl}"
+    "-DWITH_RBD_MIRROR:BOOL=${checkFlag withRbdMirror}"
+    "-DWITH_RBD_SSD_CACHE:BOOL=${checkFlag withRbdSsdCache}"
+    "-DWITH_BLUESTORE_PMEM:BOOL=${checkFlag withBluestorePmem}"
+    "-DWITH_CRIMSON:BOOL=${checkFlag withCrimson}"
+    "-DWITH_GSSAPI:BOOL=${checkFlag withGssapi}"
+    "-DWITH_SPDK:BOOL=${checkFlag withSpdk}" # broken
+    "-DWITH_DPDK:BOOL=${checkFlag withDpdk}" # broken
+    "-DWITH_RADOSGW_ARROW_FLIGHT:BOOL=${checkFlag withRadosgwArrowFlight}" # broken
+    "-DWITH_BLKIN:BOOL=${checkFlag withBlkin}" # broken
+    "-DWITH_SYSTEMD:BOOL=${checkFlag withSystemd}"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
-    # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
+    # `WITH_JAEGER` requires `thrift` as a dependency (fine), but the build fails with:
     #     CMake Error at src/opentelemetry-cpp-stamp/opentelemetry-cpp-build-Release.cmake:49 (message):
     #     Command failed: 2
     #
@@ -576,7 +494,7 @@ stdenv.mkDerivation {
     # But the relevant code is already removed in `open-telemetry` 1.10: https://github.com/open-telemetry/opentelemetry-cpp/pull/2031
     # So it's probably not worth trying to fix that for this Ceph version,
     # and instead just disable Ceph's Jaeger support.
-    "-DWITH_JAEGER:BOOL=OFF"
+    "-DWITH_JAEGER:BOOL=${checkFlag withJaeger}"
     "-DWITH_TESTS:BOOL=OFF"
 
     # Use our own libraries, where possible
@@ -596,6 +514,7 @@ stdenv.mkDerivation {
     # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
     "-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}"
   ]
+  ++ lib.optional showOptions "-LH"
   ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
   preBuild =

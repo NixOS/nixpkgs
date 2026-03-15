@@ -23,7 +23,7 @@
       "transfer"
     ];
   },
-  boost,
+  boost187,
   brotli,
   bzip2,
   cmake,
@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [
-    boost
+    boost187
     brotli
     bzip2
     flatbuffers
