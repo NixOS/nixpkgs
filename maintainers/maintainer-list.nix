@@ -27403,6 +27403,12 @@
     githubId = 74688871;
     name = "Tochukwu Ahanonu";
   };
+  tom-xs = {
+    email = "tom.xaviersantos@gmail.com";
+    github = "tom-xs";
+    githubId = 434264191;
+    name = "Tomas Xavier Santos";
+  };
   tom94 = {
     email = "nix@94.me";
     github = "Tom94";
