@@ -4,9 +4,7 @@
   config,
   ...
 }:
-
 with lib;
-
 let
   cfg = config.services.vikunja;
   format = pkgs.formats.yaml { };
@@ -55,7 +53,16 @@ in
       default = 3456;
       description = "The TCP port exposed by the API.";
     };
-
+    user = mkOption {
+      type = types.str;
+      default = "vikunja";
+      description = "The user vikunja should run as.";
+    };
+    group = mkOption {
+      type = types.str;
+      default = "vikunja";
+      description = "The group vikunja should run as.";
+    };
     settings = mkOption {
       type = format.type;
       default = { };
@@ -131,7 +138,8 @@ in
 
       serviceConfig = {
         Type = "simple";
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
         StateDirectory = "vikunja";
         ExecStart = "${cfg.package}/bin/vikunja";
         Restart = "always";
@@ -144,5 +152,22 @@ in
     environment.systemPackages = [
       cfg.package # for admin `vikunja` CLI
     ];
+
+    users = {
+      users = mkIf (cfg.user == "vikunja") {
+        vikunja = {
+          name = "vikunja";
+          group = cfg.group;
+          isSystemUser = true;
+        };
+      };
+      groups = mkIf (cfg.group == "vikunja") { vikunja = { }; };
+    };
+
+    systemd.tmpfiles.settings.vikunja."/var/lib/vikunja".d = {
+      user = cfg.user;
+      group = cfg.group;
+      mode = "0750";
+    };
   };
 }
