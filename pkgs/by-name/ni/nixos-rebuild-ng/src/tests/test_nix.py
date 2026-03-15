@@ -83,7 +83,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
 def test_build_remote(
     mock_uuid4: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
-    build_host = m.Remote("user@host", [], None)
+    build_host = m.Remote("user@host", [], None, "ssh")
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     def run_wrapper_side_effect(
@@ -177,7 +177,7 @@ def test_build_remote_flake(
 ) -> None:
     monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse("/flake.nix#hostname")
-    build_host = m.Remote("user@host", [], None)
+    build_host = m.Remote("user@host", [], None, "ssh")
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     assert n.build_remote_flake(
@@ -237,12 +237,28 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, None)
         mock_run.assert_not_called()
 
-    target_host = m.Remote("user@target.host", [], None)
-    build_host = m.Remote("user@build.host", [], None)
+    target_host = m.Remote("user@target.host", [], None, "ssh")
+    build_host = m.Remote("user@build.host", [], None, "ssh")
+    target_host_ng = m.Remote("user@target.host", [], None, "ssh-ng")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host)
         mock_run.assert_called_with(
             ["nix-copy-closure", "--to", "user@target.host", closure],
+            append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        )
+
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host_ng)
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "copy",
+                "--to",
+                "ssh-ng://user@target.host",
+                closure,
+            ],
             append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
         )
 
@@ -518,7 +534,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             sudo=False,
         )
 
-    remote = m.Remote("user@host", [], "password")
+    remote = m.Remote("user@host", [], "password", "ssh")
     with patch(
         get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
     ) as mock_run:
@@ -580,7 +596,6 @@ def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_diff_closures(mock_run: Mock) -> None:
-
     n.diff_closures(
         Path("/run/current-system"), Path("/nix/var/nix/profiles/system"), None
     )
@@ -632,7 +647,7 @@ def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
         sudo=False,
     )
 
-    target_host = m.Remote("user@localhost", [], None)
+    target_host = m.Remote("user@localhost", [], None, "ssh")
     assert n.rollback(profile, target_host, True) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
@@ -672,7 +687,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             sudo=False,
         )
 
-        target_host = m.Remote("user@localhost", [], None)
+        target_host = m.Remote("user@localhost", [], None, "ssh")
         assert (
             n.rollback_temporary_profile(m.Profile("foo", path), target_host, True)
             == path.parent / "foo-2083-link"
@@ -770,7 +785,7 @@ def test_switch_to_configuration_without_systemd_run(
         == "error: '--specialisation' can only be used with 'switch' and 'test'"
     )
 
-    target_host = m.Remote("user@localhost", [], None)
+    target_host = m.Remote("user@localhost", [], None, "ssh")
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
         mp.setenv("PATH", "/path/to/bin")
@@ -833,7 +848,7 @@ def test_switch_to_configuration_with_systemd_run(
         remote=None,
     )
 
-    target_host = m.Remote("user@localhost", [], None)
+    target_host = m.Remote("user@localhost", [], None, "ssh")
     with monkeypatch.context() as mp:
         mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
         mp.setenv("PATH", "/path/to/bin")
