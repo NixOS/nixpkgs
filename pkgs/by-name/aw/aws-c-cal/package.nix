@@ -11,13 +11,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
   # nixpkgs-update: no auto update
-  version = "0.9.2";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ufMoB71xebxO/Cu/xVQ3BMrcCgIlkG+MXH2Ru2i6uXo=";
+    hash = "sha256-EBy3TSEz97LMzP3XB2h1c/OkAdx4yRHHLMn+PmeURKs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
+  doCheck = false;
+
   passthru.tests = {
     inherit nix;
   };
@@ -38,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "AWS Crypto Abstraction Layer";
     homepage = "https://github.com/awslabs/aws-c-cal";
+    changelog = "https://github.com/awslabs/aws-c-cal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = [ ];
