@@ -1,0 +1,31 @@
+diff --git a/src/nim_lk.nim b/src/nim_lk.nim
+index 09ced9d..c4aa067 100644
+--- a/src/nim_lk.nim
++++ b/src/nim_lk.nim
+@@ -265,7 +265,7 @@ proc getPackageUrl(name: string): tuple[url: Uri, meth: string] =
+       # TODO: better git heuristic
+       result.meth = "git"
+   else:
+-    if globalRegistry.isNil:
++    if globalRegistry == nil:
+       let registryPath = registryCachePath()
+       if fileExists(registryPath):
+         globalRegistry = parseFile(registryPath)
+@@ -385,7 +385,7 @@ proc queueNimbleDependencies(
+ proc getComponent(bom: JsonNode; bomRef: string; byName = false): JsonNode =
+   for e in bom{"components"}.elems:
+     if e{"bom-ref"}.getStr == bomRef: return e
+-  if result.isNil and byName:
++  if result == nil and byName:
+     for e in bom{"components"}.elems:
+       if e{"name"}.getStr == bomRef: return e
+   return newJObject()
+@@ -571,7 +571,7 @@ proc updateFodData(bom: JsonNode; bomRef, version: string; fodData: JsonNode): b
+ 
+ proc update(bom: JsonNode; bomRef: string; byName: bool): bool =
+   let comp = bom.getComponent(bomRef, byName)
+-  assert not comp.isNil
++  assert not comp == nil
+   var bomRef = comp{"bom-ref"}.getStr
+   assert not bomRef.isNil
+   var suitableRefFound = false
