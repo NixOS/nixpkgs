@@ -16,20 +16,20 @@
 
 buildGoModule (finalAttrs: {
   pname = "olivetin";
-  version = "2025.11.25";
+  version = "3000.11.3";
 
   src = fetchFromGitHub {
     owner = "OliveTin";
     repo = "OliveTin";
     tag = finalAttrs.version;
-    hash = "sha256-HQLInEVXowWpDaSW/4bduUMdYsvQ0Rju1Rl2l9jupYA=";
+    hash = "sha256-GSCqtekFj0c2TPSygRiUAfSMQAyPbfuR0dxAGQ/Rghw=";
   };
-
-  patches = [ ./update-go-sum.patch ];
 
   modRoot = "service";
 
-  vendorHash = "sha256-xSroaS6fwHrQ0s09uD3bkBZWWxbIndiOGL2JPvKzC6E=";
+  vendorHash = "sha256-iH9tgw4KSER/xIPOIontSQLWrI4ORayRjyHsT1HU0m8=";
+
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -75,21 +75,21 @@ buildGoModule (finalAttrs: {
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-fTsJE9ymtJ0TU2OhXLE+XfEOckFMG7IPi0IHHAmN84s=";
+    outputHash = "sha256-SaGHxawFw55zI37psqI9kdaR8DLnx4iV2XZdomr28b8=";
   };
 
   webui = buildNpmPackage {
     pname = "olivetin-webui";
     inherit (finalAttrs) version src;
 
-    npmDepsHash = "sha256-a1BBNlGusdMlmDXgclGqkO8AywSd4DTQKkuBVzuzAfE=";
+    npmDepsHash = "sha256-vrvwy96wtXxt0JJDs8YG0Lm3kpVRoJ2Qmu8nlggH6qc=";
 
-    sourceRoot = "${finalAttrs.src.name}/webui.dev";
+    sourceRoot = "${finalAttrs.src.name}/frontend";
 
     buildPhase = ''
       runHook preBuild
 
-      npx parcel build --public-url "."
+      make build
 
       runHook postBuild
     '';
@@ -98,7 +98,6 @@ buildGoModule (finalAttrs: {
       runHook preInstall
 
       cp -r dist $out
-      cp -r *.png $out
 
       runHook postInstall
     '';
@@ -110,8 +109,6 @@ buildGoModule (finalAttrs: {
     ln -s ${finalAttrs.gen} gen
     substituteInPlace internal/config/config.go \
       --replace-fail 'config.WebUIDir = "./webui"' 'config.WebUIDir = "${finalAttrs.webui}"'
-    substituteInPlace internal/httpservers/webuiServer_test.go \
-      --replace-fail '"../webui/"' '"${finalAttrs.webui}"'
   '';
 
   postInstall = ''
@@ -128,8 +125,8 @@ buildGoModule (finalAttrs: {
         services.olivetin.package = finalAttrs.finalPackage;
       };
     };
-    releaseSeries = "2k";
-    updateScript = ./update.sh;
+    releaseSeries = "3k";
+    updateScript = ./update-3k.sh;
   };
 
   meta = {
@@ -140,16 +137,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "OliveTin";
-    knownVulnerabilities = [
-      "CVE-2026-27626: OS Command Injection via password argument type and webhook JSON extraction bypasses shell safety checks"
-      "CVE-2026-28342: Unauthenticated Denial of Service via Memory Exhaustion in PasswordHash API Endpoint"
-      "CVE-2026-28789: Unauthenticated DoS via concurrent map writes in OAuth2 state handling"
-      "CVE-2026-28790: Unauthenticated Action Termination via KillAction When Guests Must Login"
-      "CVE-2026-30223: JWT Audience Validation Bypass in Local Key and HMAC Modes"
-      "CVE-2026-30224: Session Fixation - Logout Fails to Invalidate Server-Side Session"
-      "CVE-2026-30225: RestartAction always runs actions as guest"
-      "CVE-2026-30233: View permission not being checked when returning dashboards"
-      "CVE-2026-31817: Unsafe parsing of UniqueTrackingId can be used to write files"
-    ];
   };
 })
