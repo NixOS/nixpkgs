@@ -670,6 +670,21 @@ in
     ];
   };
 
+  # for more bleeding edge support there's more
+  # in https://github.com/nabam/nixos-rockchip
+  ubootPineTab2 = buildUBoot {
+    defconfig = "pinetab2-rk3566_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    env = {
+      BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
+      ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    };
+    filesToInstall = [
+      "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
+    ];
+  };
+
   ubootQemuAarch64 = buildUBoot {
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];

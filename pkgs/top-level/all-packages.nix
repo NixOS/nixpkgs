@@ -8958,6 +8958,7 @@ with pkgs;
     ubootPine64LTS
     ubootPinebook
     ubootPinebookPro
+    ubootPineTab2
     ubootQemuAarch64
     ubootQemuArm
     ubootQemuRiscv64Smode
