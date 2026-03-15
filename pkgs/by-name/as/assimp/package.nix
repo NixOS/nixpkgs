@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   zlib,
   nix-update-script,
@@ -10,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
-  version = "6.0.2";
+  version = "6.0.4";
   outputs = [
     "out"
     "lib"
@@ -21,18 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "assimp";
     repo = "assimp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
+    hash = "sha256-ryTgsN0z9BZBz7i9aUMKuneN5oqfxpduwJlb+Q0q3Mk=";
   };
 
-  patches = [
-    # Fix build with gcc15
-    # https://github.com/assimp/assimp/pull/6283
-    (fetchpatch {
-      name = "assimp-fix-invalid-vector-gcc15.patch";
-      url = "https://github.com/assimp/assimp/commit/59bc03d931270b6354690512d0c881eec8b97678.patch";
-      hash = "sha256-O+JPwcOdyFtmFE7eZojHo1DUavF5EhLYlUyxtYo/KF4=";
-    })
-  ];
+  postPatch = ''
+    # nix build sandbox does not set /var/tmp up:
+    #   https://github.com/assimp/assimp/issues/6270
+    substituteInPlace test/unit/UnitTestFileGenerator.h \
+      --replace-fail 'define TMP_PATH "/var/tmp/"' 'define TMP_PATH "/tmp/"'
+  '';
 
   nativeBuildInputs = [ cmake ];
 
