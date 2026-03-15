@@ -14360,6 +14360,8 @@ self: super: with self; {
 
   pynput = callPackage ../development/python-modules/pynput { };
 
+  pynputfix = callPackage ../development/python-modules/pynputfix { };
+
   pynrrd = callPackage ../development/python-modules/pynrrd { };
 
   pynslookup = callPackage ../development/python-modules/pynslookup { };
