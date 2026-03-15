@@ -132,22 +132,41 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.stateDir}/ui' 0700 - - - -"
+    ];
+
     systemd.services.litellm = {
       description = "LLM Gateway to provide model access, fallbacks and spend tracking across 100+ LLMs.";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment = cfg.environment;
+      environment = {
+        # LiteLLM will try to "restructure" (rewrite) its packaged UI files on startup
+        # to support extensionless routes (e.g. `/ui/login`). In Nix builds the packaged
+        # UI lives in the read-only Nix store, so point it at a writable runtime path.
+        LITELLM_NON_ROOT = "true";
+        LITELLM_UI_PATH = "${cfg.stateDir}/ui";
+      }
+      // cfg.environment;
 
       serviceConfig =
         let
           configFile = settingsFormat.generate "config.yaml" cfg.settings;
         in
         {
+          ExecStartPre = [
+            # LiteLLM may rewrite/copy UI assets with read-only permissions
+            # during previous runs; normalize writability on each start.
+            "${pkgs.runtimeShell} -euc 'chmod -R u+rwX ${cfg.stateDir}/ui'"
+          ];
           ExecStart = "${lib.getExe cfg.package} --host \"${cfg.host}\" --port ${toString cfg.port} --config ${configFile}";
           EnvironmentFile = lib.optional (cfg.environmentFile != null) cfg.environmentFile;
           WorkingDirectory = cfg.stateDir;
-          StateDirectory = "litellm";
+          StateDirectory = [
+            "litellm"
+            "litellm/ui"
+          ];
           RuntimeDirectory = "litellm";
           RuntimeDirectoryMode = "0755";
           PrivateTmp = true;
