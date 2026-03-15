@@ -2998,6 +2998,11 @@
     githubId = 127523;
     name = "Herman Fries";
   };
+  barrettruth = {
+    name = "Barrett Ruth";
+    github = "barrettruth";
+    githubId = 62671086;
+  };
   BarrOff = {
     name = "BarrOff";
     github = "BarrOff";
