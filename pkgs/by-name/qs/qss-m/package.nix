@@ -59,9 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     "USE_CODEC_OPUS=0"
   ];
 
-  preInstall = ''
-    mkdir -p "$out/bin"
-    substituteInPlace Makefile --replace-fail "/usr/local/games/quake" "$out/bin/qss-m"
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 quakespasm $out/bin/qss-m
+    install -Dm644 ../Misc/QuakeSpasm_512.png $out/share/icons/hicolor/512x512/apps/qss-m.png
+    runHook postInstall
   '';
 
   enableParallelBuilding = true;
