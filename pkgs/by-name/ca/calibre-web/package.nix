@@ -8,7 +8,7 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.26-unstable-2026-03-01";
+  version = "0.6.26";
   pyproject = true;
 
   src = fetchFromGitHub {
