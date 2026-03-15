@@ -172,12 +172,76 @@ let
         nativeLibs = [ pkgs.fuse ];
       };
 
+      cl-colors-ng = build-asdf-system {
+        pname = "cl-colors-ng";
+        version = "20260217-git";
+        src = pkgs.fetchFromCodeberg {
+          owner = "cage";
+          repo = "cl-colors-ng";
+          rev = "310e6495e2";
+          hash = "sha256-6LmyvS6wQ2qJUmDn4oquXYHrPeVc6hWuT+v35z9X2VI=";
+        };
+        lispLibs = with self; [
+          alexandria
+          cl-ppcre
+          parse-number
+        ];
+        system = [
+          "cl-colors-ng"
+          "cl-colors-ng/tests"
+        ];
+      };
+
       cl-containers = build-asdf-system {
         inherit (super.cl-containers) pname version src;
         lispLibs = super.cl-containers.lispLibs ++ [ self.moptilities ];
         systems = [
           "cl-containers"
           "cl-containers/with-moptilities"
+        ];
+      };
+
+      cl-electron = build-asdf-system rec {
+        pname = "cl-electron";
+        version = "20260307-git";
+        src = pkgs.fetchFromGitHub {
+          owner = "atlas-engineer";
+          repo = "cl-electron";
+          rev = "0a334b580df371f42353ce938d245bc0e505683c";
+          hash = "sha256-iu0vu31tNwgUji0A/doqvY8BvHQCZhDNcvGJN6bBYG4=";
+        };
+        npmDeps = pkgs.fetchNpmDeps {
+          name = "${pname}-${version}-npm-deps";
+          inherit src;
+          hash = "sha256-dHuhSAXgWP1wa71kq7P2wVVEEPYm5lsn1h+PRWCGDnQ=";
+        };
+        npmFlags = [ "--ignore-scripts" ];
+        nativeBuildInputs = with pkgs; [
+          nodejs
+          npmHooks.npmConfigHook
+        ];
+        lispLibs = with self; [
+          alexandria
+          cl-json
+          cl-base64
+          iolib
+          cl-ppcre
+          nclasses
+          bordeaux-threads
+          lparallel
+          parse-number
+          babel
+          # tests
+          lisp-unit2
+          spinneret
+          parenscript
+          # examples
+          lass
+        ];
+        systems = [
+          "cl-electron"
+          "cl-electron/tests"
+          "cl-electron/examples"
         ];
       };
 
@@ -416,6 +480,29 @@ let
           "duckdb/benchmark"
         ];
       });
+
+      prompter = build-asdf-system {
+        pname = "prompter";
+        version = "20260217-git";
+        src = pkgs.fetchFromGitHub {
+          owner = "atlas-engineer";
+          repo = "prompter";
+          rev = "fb0302dd94c5be20674e07038419e27eac79f406";
+          sha256 = "sha256-eiUngOi5dwt6cve676kkYdB45GQzUD/NBz63EcLkqLA=";
+        };
+        lispLibs = with self; [
+          alexandria
+          calispel
+          cl-containers
+          closer-mop
+          lparallel
+          moptilities
+          nclasses
+          serapeum
+          str
+          trivial-package-local-nicknames
+        ];
+      };
 
       polyclot = build-asdf-system {
         pname = "polyclot";
