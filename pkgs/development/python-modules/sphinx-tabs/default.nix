@@ -19,7 +19,7 @@
 
 buildPythonPackage {
   pname = "sphinx-tabs";
-  version = "3.4.7-unstable-2026-01-24";
+  version = "3.5.0";
   pyproject = true;
 
   outputs = [
