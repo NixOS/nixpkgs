@@ -44,7 +44,6 @@
   withLua ? false,
   lua5_3,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot";
   version = "2.3.21.1";
@@ -55,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     perl
     pkg-config
   ]
+  ++ lib.optional withMySQL libmysqlclient.dev
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   buildInputs = [
@@ -140,6 +140,20 @@ stdenv.mkDerivation (finalAttrs: {
     # fix timespec calls
     ./timespec.patch
   ];
+
+  # When `MySQL` is used, the configure script uses `mysql_config` to obtain
+  # the location of the headers and libraries. As `mysql_config` is ran during
+  # the build it is part of `nativeBuildInputs`. However, in a cross environment
+  # the `pkgsBuild` version of `mysql_config` outputs the build platform version
+  # of the library and headers, which is wrong. Therefore, when doing a cross
+  # build we directly insert the correct paths.
+  preConfigure = lib.optionalString (withMySQL && stdenv.hostPlatform != stdenv.buildPlatform) ''
+    MYSQL_CFLAGS="$($PKG_CONFIG --cflags mysqlclient)"
+    MYSQL_LIBS="$($PKG_CONFIG --libs mysqlclient)"
+    substituteInPlace configure \
+      --replace-fail 'MYSQL_INCLUDE="`$MYSQL_CONFIG --include`"' "MYSQL_INCLUDE=\"$MYSQL_CFLAGS\"" \
+      --replace-fail 'MYSQL_LIBS="`$MYSQL_CONFIG --libs`"' "MYSQL_LIBS=\"$MYSQL_LIBS\""
+  '';
 
   configureFlags = [
     # It will hardcode this for /var/lib/dovecot.
