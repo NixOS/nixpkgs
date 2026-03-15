@@ -336,6 +336,20 @@ in
         // {
           default = true;
         };
+
+      moduleParams = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.attrsOf lib.types.raw);
+        default = { };
+        example = ''
+          {
+            nvidia = {
+              NVreg_UsePageAttributeTable = 1;
+              NVreg_RegistryDwords = "EnableBrightnessControl=1"
+            };
+          }
+        '';
+        description = "Additional parameters to pass to the NVIDIA kernel module.";
+      };
     };
   };
 
@@ -522,6 +536,17 @@ in
                 cfg.powerManagement.kernelSuspendNotifier
                 -> (useOpenModules && lib.versionAtLeast nvidia_x11.version "595");
               message = "NVIDIA driver support for kernel suspend notifiers requires NVIDIA driver version 595 or newer, and the open source kernel modules.";
+            }
+
+            {
+              assertion =
+                removeAttrs cfg.moduleParams [
+                  "nvidia"
+                  "nvidia-drm"
+                  "nvidia-modeset"
+                  "nvidia-uvm"
+                ] == { };
+              message = "You can only use `hardware.nvidia.moduleParams` to set parameters for the kernel modules of NVIDIA drivers.";
             }
           ];
 
@@ -714,6 +739,19 @@ in
             lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
+          hardware.nvidia.moduleParams = lib.mkMerge (
+            lib.optional (offloadCfg.enable || cfg.modesetting.enable) { nvidia-drm.modeset = 1; }
+            ++ lib.optional (
+              (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+            ) { nvidia-drm.fbdev = 1; }
+            ++ lib.optional (cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier) {
+              nvidia.NVreg_UseKernelSuspendNotifiers = 1;
+            }
+            ++ lib.optional cfg.powerManagement.enable { nvidia.NVreg_PreserveVideoMemoryAllocations = 1; }
+            ++ lib.optional useOpenModules { nvidia.NVreg_OpenRmEnableUnsupportedGpus = 1; }
+            ++ lib.optional cfg.powerManagement.finegrained { nvidia.NVreg_DynamicPowerManagement = "0x02"; }
+          );
+
           boot = {
             extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
             # nvidia-uvm is required by CUDA applications.
@@ -723,23 +761,16 @@ in
               "nvidia_drm"
             ];
 
-            # If requested enable modesetting via kernel parameters.
-            kernelParams =
-              lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-              ++ lib.optional (
-                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
-              ) "nvidia-drm.fbdev=1"
-              ++ lib.optional (
-                cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier
-              ) "nvidia.NVreg_UseKernelSuspendNotifiers=1"
-              ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-              ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
-              ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
+            kernelParams = lib.optional (
+              config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport
+            ) "ibt=off";
 
-            # enable finegrained power management
-            extraModprobeConfig = lib.optionalString cfg.powerManagement.finegrained ''
-              options nvidia "NVreg_DynamicPowerManagement=0x02"
-            '';
+            extraModprobeConfig =
+              let
+                mergeParams = lib.concatMapAttrsStringSep " " (k: v: "${k}=${toString v}");
+                genModprobeLine = module: params: "options ${module} ${mergeParams params}";
+              in
+              lib.concatMapAttrsStringSep "\n" genModprobeLine cfg.moduleParams;
           };
           services.udev.extraRules = lib.optionalString cfg.powerManagement.finegrained (
             lib.optionalString (lib.versionOlder config.boot.kernelPackages.kernel.version "5.5") ''
