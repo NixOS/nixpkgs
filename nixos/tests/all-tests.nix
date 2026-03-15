@@ -353,6 +353,7 @@ in
   certmgr = import ./certmgr.nix { inherit pkgs runTest; };
   cfssl = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./cfssl.nix;
   cgit = runTest ./cgit.nix;
+  changedetection-io = runTest ./changedetection-io.nix;
   charliecloud = runTest ./charliecloud.nix;
   chhoto-url = runTest ./chhoto-url.nix;
   chromadb = runTest ./chromadb.nix;
