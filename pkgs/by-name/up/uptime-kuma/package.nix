@@ -1,5 +1,6 @@
 {
   lib,
+  pkgs,
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
@@ -39,7 +40,18 @@ buildNpmPackage (finalAttrs: {
       --chdir $out/lib/node_modules/uptime-kuma
   '';
 
-  passthru.tests.uptime-kuma = nixosTests.uptime-kuma;
+  passthru = {
+    services.default = {
+      imports = [
+        (lib.modules.importApply ./service.nix {
+          inherit (pkgs) unixtools apprise;
+        })
+      ];
+      uptime-kuma.package = lib.mkDefault finalAttrs.finalPackage;
+    };
+
+    tests.uptime-kuma = nixosTests.uptime-kuma;
+  };
 
   meta = {
     description = "Fancy self-hosted monitoring tool";
@@ -48,6 +60,7 @@ buildNpmPackage (finalAttrs: {
     changelog = "https://github.com/louislam/uptime-kuma/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      james-1701
       julienmalka
       felixsinger
     ];

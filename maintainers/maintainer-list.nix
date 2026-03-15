@@ -11906,6 +11906,11 @@
     github = "jamerrq";
     githubId = 35697365;
   };
+  james-1701 = {
+    name = "James H";
+    github = "james-1701";
+    githubId = 76922491;
+  };
   james-atkins = {
     name = "James Atkins";
     github = "james-atkins";
