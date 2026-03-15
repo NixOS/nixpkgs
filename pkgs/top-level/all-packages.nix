@@ -9561,6 +9561,8 @@ with pkgs;
     pname = "firefox-bin";
   };
 
+  firefoxpwa = wrapFirefox firefoxpwa-unwrapped { };
+
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
     libName = "librewolf";
