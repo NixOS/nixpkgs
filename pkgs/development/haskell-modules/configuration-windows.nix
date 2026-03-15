@@ -6,6 +6,16 @@ in
 
 with haskellLib;
 
+let
+  # Avoid a cycle by disabling tests and the external interpreter for packages that are dependencies of iserv-proxy.
+  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+  # Also disable tests during iserv-proxy bootstrap since test packages tend to rely on TH for discovering test cases
+  breakCrossCycle = lib.flip lib.pipe [
+    (overrideCabal { enableExternalInterpreter = false; })
+    (haskellLib.dontCheckIf (with pkgs.stdenv; buildPlatform != hostPlatform))
+  ];
+in
+
 (self: super: {
   # cabal2nix doesn't properly add dependencies conditional on os(windows)
   digest = addBuildDepends [ self.zlib ] super.digest;
@@ -38,18 +48,8 @@ with haskellLib;
   # See https://github.com/rust-lang/rust/issues/132226#issuecomment-2445100058
   iserv-proxy = appendConfigureFlag "--ghc-option=-optl=-Wl,--disable-runtime-pseudo-reloc" super.iserv-proxy;
 
-  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
-  # See configuration-nix.nix, where iserv-proxy and network are handled.
   # On Windows, network depends on temporary (see above), which depends on random, which depends on splitmix.
-  inherit
-    (
-      let
-        noExternalInterpreter = overrideCabal {
-          enableExternalInterpreter = false;
-        };
-      in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) random splitmix temporary; }
-    )
+  inherit (lib.mapAttrs (_: breakCrossCycle) { inherit (super) random splitmix temporary; })
     random
     splitmix
     temporary
