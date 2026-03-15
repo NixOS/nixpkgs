@@ -1,18 +1,29 @@
 {
   lib,
+  runCommand,
   rustPlatform,
   fetchFromGitHub,
+  patchelf,
   pkg-config,
   installShellFiles,
+  makeBinaryWrapper,
   bzip2,
   openssl,
   xz,
+  zlib,
   zstd,
   stdenv,
   testers,
   writableTmpDirAsHomeHook,
   nix-update-script,
 }:
+
+let
+  libPath = lib.makeLibraryPath [
+    zlib # libz.so.1
+    stdenv.cc.cc.lib # libstdc++.so.6
+  ];
+in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espup";
@@ -28,14 +39,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-Y6Y+62lJ3k6GMkU82CDkTt1Prd3UrtBKqA5Spctochw=";
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     pkg-config
     installShellFiles
+  ];
+
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
+    (runCommand "0001-dynamically-patchelf-binaries.patch"
+      {
+        CC = stdenv.cc;
+        patchelf = patchelf;
+        libPath = "${libPath}";
+      }
+      ''
+        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
+        substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+          --subst-var patchelf \
+          --subst-var dynamicLinker \
+          --subst-var libPath
+      ''
+    )
   ];
 
   buildInputs = [
     bzip2
     openssl
     xz
+    zlib
     zstd
   ];
 
@@ -51,7 +81,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=toolchain::rust::tests::test_xtensa_rust_parse_version"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = ''
+    wrapProgram $out/bin/espup --prefix "LD_LIBRARY_PATH" : "${libPath}"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espup \
       --bash <($out/bin/espup completions bash) \
       --fish <($out/bin/espup completions fish) \
