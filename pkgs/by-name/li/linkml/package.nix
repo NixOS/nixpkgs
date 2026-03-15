@@ -6,14 +6,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "linkml";
-  version = "1.10.0";
+  version = "1.12.1";
   pyproject = true;
+  __structuredAttrs = true;
 
   src = fetchFromGitHub {
     owner = "linkml";
     repo = "linkml";
     rev = "v${version}";
-    hash = "sha256-9UFjro2z/LBOMS5RtrVmObvjBLtFPnqPLLYMdCV6gvg=";
+    hash = "sha256-1L2uzNJRzUtEnLCUg1JktiWybNvTLhtnR00oRyGrnaU=";
   };
 
   # The installable application lives under packages/linkml and depends on the sibling packages/linkml_runtime.
@@ -29,6 +30,22 @@ python3Packages.buildPythonApplication rec {
   # linkml-runtime is a sibling workspace package bundled in the same repo.
   propagatedBuildInputs =
     let
+      # LinkML 1.12 requires Pydantic 2.13.5; keep curies on the same
+      # package-local variant so its transitive dependency does not pull the
+      # incompatible nixpkgs default Pydantic into the environment.
+      curies = python3Packages.curies.override {
+        pydantic = python3Packages.pydantic_2_13_5;
+      };
+      prefixmaps = python3Packages.prefixmaps.override {
+        inherit curies;
+      };
+      openapi-schema-validator = python3Packages.openapi-schema-validator.override {
+        pydantic = python3Packages.pydantic_2_13_5;
+        pydantic-settings = python3Packages.pydantic-settings_2_15_0;
+      };
+      openapi-spec-validator = python3Packages.openapi-spec-validator.override {
+        inherit openapi-schema-validator;
+      };
       linkml-runtime = python3Packages.buildPythonPackage {
         pname = "linkml-runtime";
         inherit version src;
@@ -39,53 +56,74 @@ python3Packages.buildPythonApplication rec {
           uv-dynamic-versioning
           hatch-vcs
         ];
-        propagatedBuildInputs = with python3Packages; [
-          click
-          curies
-          deprecated
-          hbreader
-          jsonasobj2
-          jsonschema
-          prefixcommons
-          prefixmaps
-          pydantic
-          pyyaml
-          rdflib
-          requests
-        ];
+        propagatedBuildInputs = lib.flatten (
+          with python3Packages;
+          [
+            click
+            curies
+            deprecated
+            hbreader
+            isodate
+            json-flattener
+            jsonasobj2
+            jsonschema
+            jsonschema.optional-dependencies.format
+            prefixcommons
+            prefixmaps
+            pydantic_2_13_5
+            pyyaml
+            rdflib
+            requests
+            pyoxigraph_0_5_11
+          ]
+        );
+        preInstallCheck = ''
+          export PYSTOW_HOME="$TMPDIR/pystow-home"
+        '';
         pythonImportsCheck = [ "linkml_runtime" ];
       };
     in
-    with python3Packages;
-    [
-      linkml-runtime
-      antlr4-python3-runtime
-      click
-      graphviz
-      hbreader
-      isodate
-      jinja2
-      jsonasobj2
-      jsonschema
-      openpyxl
-      parse
-      pydantic
-      pyyaml
-      rdflib
-      requests
-      typing-extensions
-    ];
+    lib.flatten (
+      with python3Packages;
+      [
+        linkml-runtime
+        antlr4-python3-runtime_4_9
+        click
+        curies
+        graphviz
+        hbreader
+        isodate
+        jinja2
+        jsonasobj2
+        jsonschema
+        jsonschema.optional-dependencies.format
+        openpyxl
+        openapi-spec-validator
+        parse
+        platformdirs_4_12_2
+        pyjsg
+        pydantic_2_13_5
+        pydantic-settings_2_15_0
+        prefixcommons
+        prefixmaps
+        pyshex
+        pyshexc
+        python-dateutil
+        pyyaml
+        rdflib
+        requests
+        sphinx-click
+        sqlalchemy_2_0_54
+        watchdog
+        pyoxigraph_0_5_11
+        typing-extensions
+      ]
+    );
 
-  nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
-    pytest-snapshot
-  ];
-
-  pytestFlagsArray = [
-    "-m"
-    "not network and not slow and not docker and not kroki"
-  ];
-
+  preInstallCheck = ''
+    export PYSTOW_HOME="$TMPDIR/pystow-home"
+  '';
+  # This package subproject ships no tests; runtime dependency and import checks still run.
   pythonImportsCheck = [ "linkml" ];
 
   meta = {
