@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rofi-rbw";
-  version = "1.5.1";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofi-rbw";
     tag = finalAttrs.version;
-    hash = "sha256-Qdbz3UjWMCuJUzR6UMt/apt+OjMAr2U7uMtv9wxEZKE=";
+    hash = "sha256-zIX+K6Gb+V75J+ndel1o4Oa3FyxLm3DfPhaA6/rSrvQ=";
   };
 
   build-system = [
@@ -64,6 +64,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     maintainers = with lib.maintainers; [
       equirosa
       dit7ya
+      nim65s
     ];
     platforms = lib.platforms.linux;
     mainProgram = "rofi-rbw";
