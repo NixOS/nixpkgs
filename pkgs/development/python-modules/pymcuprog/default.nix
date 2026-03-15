@@ -21,7 +21,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "pymcuprog";
   version = "3.19.4.61";
   pyproject = true;
@@ -29,9 +29,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "microchip-pic-avr-tools";
     repo = "pymcuprog";
-    # the repo currently does not tag releases, so using the
-    # commit ID for now
-    rev = "e2fa9a7f0b9cc413367c51b9ccf19d93cdca6c8";
+    rev = finalAttrs.version;
     hash = "sha256-RmFGQ6LbuwwM/WHr01nYGZYoWG7Qbasz/TL4r8l1NUk";
   };
 
@@ -66,4 +64,4 @@ buildPythonPackage {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prophetofxenu ];
   };
-}
+})
