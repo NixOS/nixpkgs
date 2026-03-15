@@ -29,6 +29,17 @@ let
 
       rocmUpdateScript = self.callPackage ./update.nix { };
 
+      # Shared source for projects AMD now maintains in the rocm-systems
+      # monorepo. Suite-versioned packages derive their version from this ref.
+      rocmSystemsVersion = "7.2.0";
+      rocmSystemsSrc = fetchFromGitHub {
+        owner = "ROCm";
+        repo = "rocm-systems";
+        rev = "rocm-${self.rocmSystemsVersion}";
+        fetchSubmodules = true;
+        hash = "sha256-HMvDeL1QDuxIHzJ5mTSQ/f0qEqyheh9NFcHhB80dXOM=";
+      };
+
       ## ROCm ##
       llvm = lib.recurseIntoAttrs (
         callPackage ./llvm/default.nix {
@@ -58,7 +69,10 @@ let
       };
 
       rocm-smi = pyPackages.callPackage ./rocm-smi {
-        inherit (self) rocmUpdateScript;
+        inherit (self)
+          rocmSystemsSrc
+          rocmSystemsVersion
+          ;
       };
 
       aqlprofile = self.callPackage ./aqlprofile { };

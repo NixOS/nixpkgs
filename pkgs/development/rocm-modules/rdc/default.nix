@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  rocmSystemsSrc,
+  rocmSystemsVersion,
   cmake,
   pkg-config,
   amdsmi,
@@ -47,9 +47,9 @@ let
     )
   );
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rdc";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
   outputs = [
     "out"
@@ -61,12 +61,8 @@ stdenv.mkDerivation (finalAttrs: {
     "test"
   ];
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rdc";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-gF17mcbsqsL2K9pwTAVG9E6nVY4pi2lC88WyPa0xMes=";
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/rdc";
 
   patches = [
     # https://github.com/ROCm/rocm-systems/pull/2423
@@ -133,17 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/rdctst_tests $test/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
-    homepage = "https://github.com/ROCm/rdc";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rdc";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

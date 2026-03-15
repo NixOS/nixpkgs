@@ -1,24 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  rocmSystemsSrc,
+  rocmSystemsVersion,
   pkg-config,
   libdrm,
   cmake,
   wrapPython,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rocm-smi";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocm_smi_lib";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IeOutA/Mpt/75VpdcfPnZrWvx6GG/JLaQNfBrNKb+Mw=";
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/rocm-smi-lib";
 
   propagatedBuildInputs = [
     libdrm
@@ -55,18 +51,12 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${libdrm.dev}/include/libdrm/ $out/include/
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";
-    homepage = "https://github.com/ROCm/rocm_smi_lib";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-smi-lib";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}

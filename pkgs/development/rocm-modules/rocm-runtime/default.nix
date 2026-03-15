@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  rocmSystemsSrc,
   fetchpatch,
-  rocmUpdateScript,
+  rocmSystemsVersion,
   pkg-config,
   cmake,
   xxd,
@@ -14,16 +14,12 @@
   llvm,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rocm-runtime";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "ROCR-Runtime";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6xELKQ/uqAoorsCR/H7d8iNK7LsVNsW2DRRZo5cU7UM=";
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/rocr-runtime";
 
   cmakeBuildType = "RelWithDebInfo";
   separateDebugInfo = true;
@@ -102,18 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
     description = "Platform runtime for ROCm";
-    homepage = "https://github.com/ROCm/ROCR-Runtime";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocr-runtime";
     license = with lib.licenses; [ ncsa ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}
