@@ -5,31 +5,38 @@
   nix-update-script,
   openssl,
   perl,
+  zig,
   pkg-config,
   stdenv,
   vimUtils,
 }:
 let
-  version = "896355b-unstable-2026-02-07";
+  version = "1001eb8-unstable-2026-03-13";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "d7bc72786d4362ca70aa05d397f8d08bbaf39604";
-    hash = "sha256-CqX2QoDO7InjXYMzvljufA0QYhvFbsht2auE0+nVktw=";
+    rev = "fcdf4a9172fba824ca6834731b93b74eba51d1c3";
+    hash = "sha256-AYxWrqru0/HCrfTXRqTExiOT6mNzNMk+pT6APRs0BUM=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-jch2snZVoDqPkbeuF++yc/3ikoWal29bTKZjkyDgVjU=";
+    cargoHash = "sha256-nXtJPE6HNZx5Ra4CwYi/f4EWww//1XwsiwtRG77RPJk=";
 
     nativeBuildInputs = [
       pkg-config
       perl
+      rustPlatform.bindgenHook
     ];
 
     buildInputs = [
       openssl
+    ];
+
+    # This test requires curl and GitHub access
+    checkFlags = [
+      "--skip=update_check::tests::test_update_check_end_to_end"
     ];
 
     env = {
@@ -39,6 +46,8 @@ let
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime
       RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-arg=-undefined -C link-arg=dynamic_lookup";
+
+      ZIG = lib.getExe zig; # zlob requires zig
     };
   };
 in

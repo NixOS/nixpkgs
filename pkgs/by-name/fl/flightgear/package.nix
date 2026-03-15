@@ -30,6 +30,7 @@
   qt5,
   glew,
   curl,
+  nix-update-script,
 }:
 
 let
@@ -108,6 +109,8 @@ stdenv.mkDerivation rec {
     # Remove redundant AppImage artifacts
     rm -rf "$out/appdir"
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Flight simulator";

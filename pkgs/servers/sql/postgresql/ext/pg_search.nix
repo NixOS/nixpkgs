@@ -50,16 +50,16 @@ let
 in
 buildPgrxExtension (finalAttrs: {
   pname = "pg_search";
-  version = "0.21.13";
+  version = "0.21.14";
 
   src = fetchFromGitHub {
     owner = "paradedb";
     repo = "paradedb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OkZ4Li9FzpX4dE8aqbCUuCOMcXrw4NElOb4+2/lltS4=";
+    hash = "sha256-uXEtb9e9YgNuPOO9O8nPbCvG+MSwYiKFifI/GJqE9i8=";
   };
 
-  cargoHash = "sha256-7EqEHQ8mHaqYc/vafFMmTWqTml/ox46Fjc+hk8QDaEw=";
+  cargoHash = "sha256-sTkbpnB/N5eDfTCk86TIM6BZQ20hdHUqSbRFo4Wyo68=";
 
   inherit postgresql;
 
@@ -100,7 +100,7 @@ buildPgrxExtension (finalAttrs: {
   meta = {
     description = "Transactional Elasticsearch alternative as a PostgreSQL extension";
     homepage = "https://paradedb.com";
-    changelog = "https://github.com/paradedb/paradedb/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/paradedb/paradedb/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.lucperkins ];
     # https://github.com/paradedb/paradedb/blob/v0.21.13/pg_search/Cargo.toml#L14-L18
