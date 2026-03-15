@@ -272,7 +272,7 @@ let
                   If it does, write the ignore patterns to the rest API.
                 */
                 + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
-                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${new_cfg.id}
+                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${lib.strings.escapeURL new_cfg.id}
                 ''
               ))
               (lib.concatStringsSep "\n")
@@ -286,11 +286,11 @@ let
               stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
                 --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
                 --raw-output \
-                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
+                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]|@uri'
               )"
               for id in ''${stale_${conf_type}_ids}; do
                 >&2 echo "Deleting stale device: $id"
-                curl -X DELETE ${s.baseAddress}/$id
+                curl -X DELETE "${s.baseAddress}/$id"
               done
             ''
           ))
