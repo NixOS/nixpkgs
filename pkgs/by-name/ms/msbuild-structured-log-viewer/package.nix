@@ -4,23 +4,33 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+  writeText,
   autoPatchelfHook,
   copyDesktopItems,
   icu,
   openssl,
   libkrb5,
+  libx11,
+  libxrandr,
+  libxext,
+  libxi,
+  libxcursor,
+  libsm,
+  libice,
+  gtk3,
+  libGL,
   makeDesktopItem,
   nix-update-script,
 }:
 buildDotnetModule (finalAttrs: {
   pname = "msbuild-structured-log-viewer";
-  version = "2.3.143";
+  version = "2.3.150";
 
   src = fetchFromGitHub {
     owner = "KirillOsenkov";
     repo = "MSBuildStructuredLog";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Gjk6hxgFSiSLDP9B4UUsNEaadLjTn8WrPmFRbIUerAA=";
+    hash = "sha256-HTWPsVl/pMi+lMSax5JNtbPXHeqD8QxfvLp2bhVxfPs=";
   };
 
   env.AVALONIA_TELEMETRY_OPTOUT = "1";
@@ -31,10 +41,22 @@ buildDotnetModule (finalAttrs: {
   projectFile = [ "src/StructuredLogViewer.Avalonia/StructuredLogViewer.Avalonia.csproj" ];
   nugetDeps = ./deps.json;
 
-  # HACK: Clear out RuntimeIdentifiers that's set in StructuredLogViewer.Avalonia.csproj, otherwise our --runtime has no effect
-  dotnetFlags = [ "-p:RuntimeIdentifiers=" ];
+  dotnetBuildFlags = [
+    "-p:CustomAfterDirectoryBuildTargets=${writeText "StubGitVersioning.targets" ''
+      <Project>
+          <Target Name="GetBuildVersion" Returns="$(BuildVersion)" DependsOnTargets="GetAssemblyVersion">
+              <PropertyGroup>
+                  <BuildVersion>$(Version)</BuildVersion>
+                  <AssemblyFileVersion>$(FileVersion)</AssemblyFileVersion>
+                  <AssemblyInformationalVersion>$(InformationalVersion)</AssemblyInformationalVersion>
+              </PropertyGroup>
+          </Target>
+      </Project>
+    ''}"
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    dotnetCorePackages.autoPatchcilHook
     autoPatchelfHook
     copyDesktopItems
   ];
@@ -44,6 +66,43 @@ buildDotnetModule (finalAttrs: {
     icu
     openssl
     libkrb5
+
+    libx11
+    libxrandr
+    libxext
+    libxi
+    libxcursor
+    libsm
+    libice
+    gtk3
+    libGL
+  ];
+
+  autoPatchcilIgnoreMissingDeps = [
+    "libc"
+
+    # windows-only
+    "kernel32"
+    "KERNEL32.DLL"
+    "user32"
+    "shell32"
+    "ntdll"
+    "NTDLL.DLL"
+    "dxgi"
+    "d3d11"
+    "dcomp"
+    "ole32"
+    "shlwapi"
+    "libgdiplus"
+    "imm32"
+    "Windows.UI.Composition"
+
+    # optional rendering modes that aren't enabled
+    "libEGL"
+    "libvulkan.so.1"
+
+    # bundled
+    "libAvaloniaNative"
   ];
 
   dontDotnetFixup = true;
@@ -53,6 +112,7 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/msbuild-structured-log-viewer.png
+    install -Dm444 ${./mimetype.xml} $out/share/mime/packages/binlog.xml
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/StructuredLogViewer.Avalonia/Info.plist \
@@ -71,6 +131,9 @@ buildDotnetModule (finalAttrs: {
     icon = "msbuild-structured-log-viewer";
     exec = finalAttrs.meta.mainProgram;
     categories = [ "Development" ];
+    mimeTypes = [
+      "application/x-binlog"
+    ];
   };
 
   passthru.updateScript = nix-update-script { };

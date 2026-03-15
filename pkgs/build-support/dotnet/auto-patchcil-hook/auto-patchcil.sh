@@ -4,13 +4,13 @@
 declare -a autoPatchcilLibs
 declare -a extraAutoPatchcilLibs
 
-gatherLibraries() {
+gatherAutoPatchcilLibraries() {
     if [ -d "$1/lib" ]; then
         autoPatchcilLibs+=("$1/lib")
     fi
 }
 
-addEnvHooks "${targetOffset:?}" gatherLibraries
+addEnvHooks "${targetOffset:?}" gatherAutoPatchcilLibraries
 
 # Can be used to manually add additional directories with shared object files
 # to be included for the next autoPatchcil invocation.
