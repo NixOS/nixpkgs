@@ -214,6 +214,7 @@ rec {
   disableStaticLibraries = compose.disableStaticLibraries;
 
   enableSeparateBinOutput = compose.enableSeparateBinOutput;
+  enableSeparateTestOutput = compose.enableSeparateTestOutput;
 
   appendPatch = drv: x: compose.appendPatch x drv;
   appendPatches = drv: xs: compose.appendPatches xs drv;
