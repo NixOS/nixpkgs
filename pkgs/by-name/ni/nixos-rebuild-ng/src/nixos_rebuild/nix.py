@@ -206,17 +206,20 @@ def copy_closure(
             append_local_env=env,
         )
 
-    def nix_copy(to_host: Remote, from_host: Remote) -> None:
+    def nix_copy(to_host: Remote | None, from_host: Remote | None) -> None:
+        host_flags = []
+        if from_host is not None:
+            host_flags += ["--from", f"{from_host.store_type}://{from_host.host}"]
+        if to_host is not None:
+            host_flags += ["--to", f"{to_host.store_type}://{to_host.host}"]
+
         run_wrapper(
             [
                 "nix",
                 *FLAKE_FLAGS,
                 "copy",
                 *dict_to_flags(copy_flags),
-                "--from",
-                f"ssh://{from_host.host}",
-                "--to",
-                f"ssh://{to_host.host}",
+                *host_flags,
                 closure,
             ],
             append_local_env=env,
@@ -225,9 +228,12 @@ def copy_closure(
     match (to_host, from_host):
         case (x, y) if x == y:
             return
-        case (Remote(_) as host, None) | (None, Remote(_) as host):
+        # nix-copy-closure doesn't support store types other than "ssh".
+        case (Remote(_) as host, None) | (None, Remote(_) as host) if (
+            host.store_type == "ssh"
+        ):
             nix_copy_closure(host, to=bool(to_host))
-        case (Remote(_), Remote(_)):
+        case (Remote(_), _) | (_, Remote(_)):
             nix_copy(to_host, from_host)
 
 

@@ -112,7 +112,7 @@ def test_run_wrapper(mock_run: Any) -> None:
     p.run_wrapper(
         ["test", "--with", "some flags"],
         check=True,
-        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
+        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -142,7 +142,7 @@ def test_run_wrapper(mock_run: Any) -> None:
         check=True,
         sudo=True,
         env={"FOO": "bar"},
-        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password"),
+        remote=m.Remote("user@localhost", ["--ssh", "opt"], "password", "ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -181,7 +181,7 @@ def test__kill_long_running_ssh_process(mock_run: Any) -> None:
             "build",
             "/nix/store/la0c8nmpr9xfclla0n4f3qq9iwgdrq4g-nixos-system-sankyuu-nixos-25.05.20250424.f771eb4.drv^*",
         ],
-        m.Remote("user@localhost", opts=[], sudo_password=None),
+        m.Remote("user@localhost", opts=[], sudo_password=None, store_type="ssh"),
     )
     mock_run.assert_called_with(
         [
@@ -208,6 +208,7 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
         "user@localhost",
         opts=[],
         sudo_password=None,
+        store_type="ssh",
     )
 
     with patch("getpass.getpass", autospec=True, return_value="password"):
@@ -216,11 +217,12 @@ def test_remote_from_name(monkeypatch: MonkeyPatch) -> None:
             "user@localhost",
             opts=["-f", "foo", "-b", "bar", "-t"],
             sudo_password="password",
+            store_type="ssh",
         )
 
 
 def test_ssh_host() -> None:
-    remotes = {
+    ssh_remotes = {
         "user@[fe80::1%25eth0]": "user@fe80::1%eth0",
         "[fe80::c98b%25enp4s0]": "fe80::c98b%enp4s0",
         "user@[2001::5fce:a:198]": "user@2001::5fce:a:198",
@@ -231,12 +233,23 @@ def test_ssh_host() -> None:
         "localhost": "localhost",
         "user@example.org": "user@example.org",
         "example.org": "example.org",
+        "ssh://explicit-store@localhost": "explicit-store@localhost",
+    }
+    ssh_ng_remotes = {
+        "ssh-ng://example.org": "example.org",
     }
 
-    for host_input, expected in remotes.items():
+    for host_input, expected in ssh_remotes.items():
         remote = m.Remote.from_arg(host_input, None, False)
         assert remote is not None
         assert remote.ssh_host() == expected
+        assert remote.store_type == "ssh"
+
+    for host_input, expected in ssh_ng_remotes.items():
+        remote = m.Remote.from_arg(host_input, None, False)
+        assert remote is not None
+        assert remote.ssh_host() == expected
+        assert remote.store_type == "ssh-ng"
 
 
 @patch("subprocess.run", autospec=True)
@@ -275,7 +288,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
             ["test"],
             check=False,
             sudo=True,
-            remote=m.Remote("user@localhost", [], None),
+            remote=m.Remote("user@localhost", [], None, "ssh"),
         )
     mock_run.assert_called_with(
         [
