@@ -1,13 +1,13 @@
 {
   lib,
   buildPythonPackage,
-  hatchling,
-  fetchFromGitHub,
-  pytestCheckHook,
   click,
+  fetchFromGitHub,
+  hatchling,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kml2geojson";
   version = "5.1.1";
   pyproject = true;
@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mrcagney";
     repo = "kml2geojson";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-50hKosd4tgTV5GUXHAdTsz4S5QFtM7FTqUHy5TGcq0c=";
   };
 
@@ -34,4 +34,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "k2g";
   };
-}
+})
