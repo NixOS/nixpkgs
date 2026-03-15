@@ -696,7 +696,6 @@ in
                 cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier
               ) "nvidia.NVreg_UseKernelSuspendNotifiers=1"
               ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-              ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
               ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
 
             # enable finegrained power management
