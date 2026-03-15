@@ -80,15 +80,6 @@ stdenv.mkDerivation rec {
   # Bail out! GLib-GIO-FATAL-CRITICAL: g_inet_address_to_string: assertion 'G_IS_INET_ADDRESS (address)' failed
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postFixup = lib.optionalString withIntrospection ''
-    # Move developer documentation to devdoc output.
-    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
-    find -L "$out/share/doc" -type f -regex '.*\.devhelp2?' -print0 \
-      | while IFS= read -r -d ''' file; do
-        moveToOutput "$(dirname "''${file/"$out/"/}")" "$devdoc"
-    done
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gssdp";
