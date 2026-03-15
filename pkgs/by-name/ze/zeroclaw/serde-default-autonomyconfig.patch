@@ -1,0 +1,25 @@
+From b4a387bcf9839115afd4d7e570329c81ce99ec1c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Marijan=20Petri=C4=8Devi=C4=87?=
+ <marijan.petricevic94@gmail.com>
+Date: Sat, 7 Mar 2026 14:15:04 +0100
+Subject: [PATCH] config/schema: add serde default to AutonomyConfig
+
+---
+ src/config/schema.rs | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/config/schema.rs b/src/config/schema.rs
+index 23729b2a..0dd57908 100644
+--- a/src/config/schema.rs
++++ b/src/config/schema.rs
+@@ -2209,6 +2209,7 @@ impl Default for WebhookAuditConfig {
+ /// Controls what the agent is allowed to do: shell commands, filesystem access,
+ /// risk approval gates, and per-policy budgets.
+ #[derive(Debug, Clone, Serialize, Deserialize, JsonSchema)]
++#[serde(default)]
+ pub struct AutonomyConfig {
+     /// Autonomy level: `read_only`, `supervised` (default), or `full`.
+     pub level: AutonomyLevel,
+-- 
+2.53.0
+

@@ -23,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-6EVUk+wp3Rjhk/q2htXq41TMD+rGFO0nJbVWNbLWj5U=";
   };
 
+  patches = [ ./serde-default-autonomyconfig.patch ];
+
   postPatch =
     let
       zeroclaw-web = callPackage ./zeroclaw-web { inherit (finalAttrs) version; };
