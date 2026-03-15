@@ -35,6 +35,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   dontDropIconThemeCache = true;
+  # the fixupPhase is extremely slow
+  dontFixup = true;
 
   installPhase = ''
     runHook preInstall
