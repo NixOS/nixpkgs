@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "apko";
-  version = "1.1.12";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "apko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UqvmHIHHMNJ3VX6UT/CdK6vhrAW6TLwtfvmRPPGXjVI=";
+    hash = "sha256-UE318xcs8OkJNIE/nULzsgKKKcHMp8O06MN+c0SDXeI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-Pi0egpWT/12CZI84NtJKYpRT7OwzwF9MTq9Q+9DN2cw=";
+  vendorHash = "sha256-1SR8G01QBgW+8awjXMsqU/P4vVqg5+NRkSfOR5WFTSU=";
 
   excludedPackages = [
     "internal/gen-jsonschema"
@@ -55,7 +55,7 @@ buildGoModule (finalAttrs: {
   # skip tests on darwin due to some local networking failures
   # `__darwinAllowLocalNetworking = true;` wasn't sufficient for
   # aarch64 or x86_64
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     # some test data include SOURCE_DATE_EPOCH (which is different from our default)
     # and the default version info which we get by unsetting our ldflags
