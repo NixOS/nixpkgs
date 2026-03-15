@@ -105,6 +105,11 @@ builtins.intersectAttrs super {
   # ghcide-bench tests need network
   ghcide-bench = dontCheck super.ghcide-bench;
 
+  # Test suite scredit-test uses `cabal run`.
+  screp = overrideCabal {
+    testTargets = [ "screp-test" ];
+  } super.screp;
+
   # 2023-04-01: TODO: Either reenable at least some tests or remove the preCheck override
   ghcide = overrideCabal (drv: {
     # tests depend on executable
