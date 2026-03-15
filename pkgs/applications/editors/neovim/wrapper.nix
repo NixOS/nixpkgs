@@ -109,7 +109,7 @@ let
 
         luaPathLuaRc =
           let
-            luaEnv = lua.withPackages extraLuaPackages;
+            luaEnv = lua.withPackages (lp: extraLuaPackages lp ++ vimPackageInfo.luaDependencies);
 
             # getLuaPath / getLuaCPath are not interpreter dependant at the moment and might thus cause
             # errors between luajit/Puc lua
