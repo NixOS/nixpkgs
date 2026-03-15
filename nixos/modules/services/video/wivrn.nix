@@ -106,6 +106,10 @@ in
       };
 
       steam = {
+        enable = lib.mkEnableOption "Steam support" // {
+          default = true;
+        };
+
         importOXRRuntimes = mkEnableOption ''
           Sets `PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES` system-wide to allow Steam to automatically discover the WiVRn server.
 
@@ -211,12 +215,12 @@ in
               }
           );
           # Needs Steam in the PATH to allow launching games from the headset
-          path = [ cfg.steam.package ];
+          path = mkIf cfg.steam.enable [ cfg.steam.package ];
           wantedBy = mkIf cfg.autoStart [ "default.target" ];
           restartTriggers = [
             cfg.package
-            cfg.steam.package
-          ];
+          ]
+          ++ lib.optionals cfg.steam.enable [ cfg.steam.package ];
         };
       };
     };
