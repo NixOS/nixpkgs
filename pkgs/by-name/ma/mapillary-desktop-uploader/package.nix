@@ -2,6 +2,7 @@
   lib,
   fetchurl,
   appimageTools,
+  writeScript,
 }:
 
 let
@@ -29,6 +30,16 @@ appimageTools.wrapType2 {
 
     install -m 444 -D ${appimageContents}/usr/share/icons/hicolor/512x512/apps/${pname}.png \
       $out/share/icons/hicolor/512x512/apps/${pname}.png
+  '';
+
+  passthru.updateScript = writeScript "update-mapillary-desktop-uploader" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+
+    set -eu -o pipefail
+
+    version="$(curl -sI https://tools.mapillary.com/uploader/download/linux | grep -Fi 'location:' | sed -n 's/.*mapillary-uploader-\([0-9.]\+\)\.AppImage.*/\1/p')"
+    update-source-version mapillary-desktop-uploader "$version"
   '';
 
   meta = {
