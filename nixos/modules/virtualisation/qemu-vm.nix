@@ -1432,14 +1432,8 @@ in
             device = "tmpfs";
             fsType = "tmpfs";
             neededForBoot = true;
-            # Sync with systemd's tmp.mount;
-            options = [
-              "mode=1777"
-              "strictatime"
-              "nosuid"
-              "nodev"
-              "size=${toString config.boot.tmp.tmpfsSize}"
-            ];
+            # Sync with systemd's tmp.mount
+            options = config.boot.tmp.tmpfsFinalOptions;
           };
           "/nix/store" = lib.mkIf (cfg.useNixStoreImage || cfg.mountHostNixStore) (
             if cfg.writableStore then
