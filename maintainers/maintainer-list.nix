@@ -19718,6 +19718,12 @@
     github = "Noodlesalat";
     githubId = 12748782;
   };
+  nuexq = {
+    email = "nuexqq@gmail.com";
+    github = "nuexq";
+    githubId = 145666753;
+    name = "nuexq";
+  };
   nukaduka = {
     email = "ksgokte@gmail.com";
     github = "NukaDuka";
