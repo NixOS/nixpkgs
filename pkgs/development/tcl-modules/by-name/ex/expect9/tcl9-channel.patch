@@ -1,0 +1,100 @@
+--- a/exp_chan.c
++++ b/exp_chan.c
+@@ -53,22 +53,31 @@
+ static int		ExpGetHandleProc _ANSI_ARGS_((ClientData instanceData,
+ 		            int direction, ClientData *handlePtr));
+ 
++
++/* Forward declaration for Tcl 9 VERSION_5 close2 proc */
++static int ExpClose2Proc(ClientData instanceData, Tcl_Interp *interp, int flags);
+ /*
+  * This structure describes the channel type structure for Expect-based IO:
+  */
+ 
+ Tcl_ChannelType expChannelType = {
+     "exp",				/* Type name. */
+-    ExpBlockModeProc,			/* Set blocking/nonblocking mode.*/
+-    ExpCloseProc,			/* Close proc. */
++    TCL_CHANNEL_VERSION_5,		/* Version - required for Tcl 9 */
++    TCL_CLOSE2PROC,			/* closeProc - must be NULL for Tcl 9 */
+     ExpInputProc,			/* Input proc. */
+     ExpOutputProc,			/* Output proc. */
+-    NULL,				/* Seek proc. */
++    NULL,				/* seekProc - not used in Tcl 9 */
+     NULL,				/* Set option proc. */
+     NULL,				/* Get option proc. */
+     ExpWatchProc,			/* Initialize notifier. */
+     ExpGetHandleProc,			/* Get OS handles out of channel. */
+-    NULL,				/* Close2 proc */
++    ExpClose2Proc,			/* close2Proc - required for Tcl 9 */
++    ExpBlockModeProc,			/* Set blocking/nonblocking mode.*/
++    NULL,				/* flushProc */
++    NULL,				/* handlerProc */
++    NULL,				/* wideSeekProc */
++    NULL,				/* threadActionProc */
++    NULL,				/* truncateProc */
+ };
+ 
+ typedef struct ThreadSpecificData {
+@@ -366,6 +375,61 @@
+     return 0;
+ }
+ 
++
++/*
++ *----------------------------------------------------------------------
++ *
++ * ExpClose2Proc --
++ *
++ *	This procedure is called from the generic IO level to perform
++ *	channel-type-specific cleanup when an exp-based channel is closed.
++ *	This is the Tcl 9 VERSION_5 compatible version with flags parameter.
++ *
++ * Results:
++ *	0 if successful, errno if failed.
++ *
++ * Side effects:
++ *	Closes the device of the channel.
++ *
++ *----------------------------------------------------------------------
++ */
++
++/*ARGSUSED*/
++static int
++ExpClose2Proc(ClientData instanceData, Tcl_Interp *interp, int flags)
++{
++    ExpState *esPtr = (ExpState *) instanceData;
++    ExpState **nextPtrPtr;
++    ThreadSpecificData *tsdPtr = TCL_TSD_INIT(&dataKey);
++
++    /* Handle half-close for bidirectional channels */
++    if ((flags & (TCL_CLOSE_READ | TCL_CLOSE_WRITE)) != 0) {
++        /* Half-close not supported for expect channels */
++        return EINVAL;
++    }
++
++    esPtr->registered = FALSE;
++
++    Tcl_Free((char*)esPtr->input.buffer);
++    Tcl_DecrRefCount(esPtr->input.newchars);
++
++    for (nextPtrPtr = &(tsdPtr->firstExpPtr); (*nextPtrPtr) != NULL;
++	 nextPtrPtr = &((*nextPtrPtr)->nextPtr)) {
++	if ((*nextPtrPtr) == esPtr) {
++	    (*nextPtrPtr) = esPtr->nextPtr;
++	    break;
++	}
++    }
++    tsdPtr->channelCount--;
++
++    if (esPtr->bg_status == blocked ||
++	    esPtr->bg_status == disarm_req_while_blocked) {
++	esPtr->freeWhenBgHandlerUnblocked = 1;
++    } else {
++	expStateFree(esPtr);
++    }
++    return 0;
++}
+ /*
+  *----------------------------------------------------------------------
+  *
