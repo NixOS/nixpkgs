@@ -10,6 +10,7 @@
   cryptohash-sha256,
   directory,
   fetchgit,
+  githash,
   hsyslog,
   http-conduit,
   http-types,
@@ -34,11 +35,11 @@
 }:
 mkDerivation {
   pname = "oama";
-  version = "0.20.2";
+  version = "0.22.0";
   src = fetchgit {
     url = "https://github.com/pdobsan/oama.git";
-    sha256 = "1zr2a77b3azdqyk6hzchhg573gwwb5h0d7x382srggm25lp3isk9";
-    rev = "bbe5a6d9f87659c8a24b6515694acf1b522a396b";
+    sha256 = "1lasr8psfsgc43in6lgaf7byvmdvanhg7idxijz504z6ga7v0pnj";
+    rev = "e419ef10ca4feacf4818c5cd9bd5e617f7ee2ee7";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -51,6 +52,7 @@ mkDerivation {
     containers
     cryptohash-sha256
     directory
+    githash
     hsyslog
     http-conduit
     http-types
@@ -80,6 +82,7 @@ mkDerivation {
     containers
     cryptohash-sha256
     directory
+    githash
     hsyslog
     http-conduit
     http-types
