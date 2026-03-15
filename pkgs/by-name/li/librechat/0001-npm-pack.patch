@@ -1,12 +1,11 @@
 diff --git a/package.json b/package.json
-index 2131951..91e4846 100644
+index ecbede482..e8aad9907 100644
 --- a/package.json
 +++ b/package.json
-@@ -114,5 +114,15 @@
-       "admin/",
-       "packages/"
-     ]
-+  },
+@@ -8,6 +8,16 @@
+     "client",
+     "packages/*"
+   ],
 +  "files": [
 +    "api",
 +    "client/dist",
@@ -16,5 +15,7 @@ index 2131951..91e4846 100644
 +  ],
 +  "bin": {
 +    "librechat-server": "api/server/index.js"
-   }
- }
++  },
+   "scripts": {
+     "update": "node config/update.js",
+     "add-balance": "node config/add-balance.js",
