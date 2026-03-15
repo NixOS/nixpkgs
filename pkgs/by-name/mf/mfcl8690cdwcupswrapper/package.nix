@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwcupswrapper";
-  version = "1.4.0-0";
+  version = "1.5.0-3";
 
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf103250/${pname}-${version}.i386.deb";
-    sha256 = "1bl9r8mmj4vnanwpfjqgq3c9lf2v46wp5k6r2n9iqprf7ldd1kb2";
+    sha256 = "CREQRr4nhw1pD+8AfD5p/EHpx3R6vQIO8h6VtnHxXls=";
   };
 
   nativeBuildInputs = [
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/mfcl8690cdw
 
     substituteInPlace $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "basedir =~" "basedir = \"$basedir/\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
+      --replace-fail /usr/bin/perl ${perl}/bin/perl \
+      --replace-fail "basedir =~" "basedir = \"$basedir/\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"mfcl8690cdw\"; #"
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_mfcl8690cdw \
       --prefix PATH : ${
