@@ -24,7 +24,7 @@
   libpulseaudio,
   libusb1,
   limesuite,
-  libbladeRF,
+  libbladerf,
   mbelib,
   ninja,
   opencv4,
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     hackrf
     hidapi
-    libbladeRF
+    libbladerf
     libiio
     libopus
     libpulseaudio
