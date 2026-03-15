@@ -40,7 +40,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2026.01.19.00";
+  version = "2026.03.09.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gfmN/9LizPdacUd1eJxFx79I63SwqX0NaWFgbe6vbFk=";
+    hash = "sha256-hZ0i9majTfZEhHJd4kITa5/Esfo1+VpgtODDzmsRHrQ=";
   };
 
   nativeBuildInputs = [
@@ -135,13 +135,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # The base template for std::char_traits has been removed in LLVM 19
     # https://releases.llvm.org/19.1.0/projects/libcxx/docs/ReleaseNotes.html
-    ./char_traits.patch
+    # ./char_traits.patch
 
     # <https://github.com/facebook/folly/issues/2171>
-    ./folly-fix-glog-0.7.patch
+    # ./folly-fix-glog-0.7.patch
 
     # https://github.com/facebook/folly/pull/2561
-    ./memset-memcpy-aarch64.patch
+    # ./memset-memcpy-aarch64.patch
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/144170
