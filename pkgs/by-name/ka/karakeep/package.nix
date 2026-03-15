@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   testers,
+  nixosTests,
   nodejs,
   node-gyp,
   gnutar,
@@ -14,16 +15,17 @@
   pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.29.3";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-MmurmQ/z8ME7Y6lpEWGaf7sFRSYhwd8flM4f0GBbUIM=";
+    tag = "cli/v${finalAttrs.version}";
+    hash = "sha256-++aNTkLOkwgkzRxg/WdrHfchXQwUUir0qqmb7WfdZJ0=";
   };
 
   patches = [
@@ -64,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
 
     fetcherVersion = 3;
-    hash = "sha256-LEdI9chVuOli4XiA0VRV9h8L3ho0IRbPsXtAyQM6Du8=";
+    hash = "sha256-+MbKG0h3cD0kZua0OkdQsUeTjAY4ysK41KXUSaOSKHA=";
   };
   buildPhase = ''
     runHook preBuild
@@ -142,20 +144,28 @@ stdenv.mkDerivation (finalAttrs: {
     find $out -type l ! -exec test -e {} \; -delete
   '';
 
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   passthru = {
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
         # version
-        version = "0.27.1";
+        version = "0.29.1";
       };
+      inherit (nixosTests) karakeep;
     };
     updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://karakeep.app/";
+    changelog = "https://github.com/karakeep-app/karakeep/releases/tag/v${finalAttrs.version}";
     description = "Self-hostable bookmark-everything app (links, notes and images) with AI-based automatic tagging and full text search";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.three ];
