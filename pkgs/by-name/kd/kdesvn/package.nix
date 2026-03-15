@@ -26,6 +26,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DSUBVERSION_INSTALL_PATH=${lib.getDev subversion}"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" # Required as upstream uses cmake_minimum_required < 3.5
   ];
 
   nativeBuildInputs = [
