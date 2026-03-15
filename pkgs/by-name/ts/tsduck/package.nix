@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+  testers,
   # build and doc tooling
   asciidoctor-with-extensions,
   doxygen,
@@ -22,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tsduck";
-  version = "3.40-4165";
+  version = "3.43-4549";
 
   src = fetchFromGitHub {
     owner = "tsduck";
     repo = "tsduck";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-bFnsGoElXeStIX5KwonJuF0x7DDzhzq+3oygkUOmZE0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-N+ZqPj16IJZdO/Kdj0Cff0JL6OhZBqTA7riPQrv28lo=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # see CONFIG.txt in the sources
   makeFlags = [
-    "CXXFLAGS_NO_WARNINGS=-Wno-deprecated-declarations"
     "NODEKTEC=1"
     "NOGITHUB=1"
     "NOHIDES=1"
@@ -69,8 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     "SYSROOT=${placeholder "out"}"
   ];
 
-  # remove tests which break the sandbox
-  patches = [ ./tests.patch ];
+  # Prevent promoted compiler warnings from breaking the build,
+  # when the compiler introduces new warnings.
+  # We are packaging release tags, not building and debugging:
+  # if the maintainer has chosen to release it, our job is just to build it.
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+
+  patches = [
+    # remove tests which break the sandbox
+    ./tests.patch
+    # add missing <sys/time.h> for utimes() on Darwin;
+    # fixed upstream on master, drop after next tagged release
+    ./utimes-fix.patch
+  ];
   checkTarget = "test";
   doCheck = true;
   doInstallCheck = true;
@@ -79,6 +91,19 @@ stdenv.mkDerivation (finalAttrs: {
     "install-tools"
     "install-devel"
   ];
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "tsversion";
+    };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(.+)$"
+      ];
+    };
+  };
 
   meta = {
     description = "MPEG Transport Stream Toolkit";
