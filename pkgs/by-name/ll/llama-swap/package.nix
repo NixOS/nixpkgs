@@ -17,7 +17,7 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "llama-swap";
-  version = "183";
+  version = "186";
 
   outputs = [
     "out"
@@ -28,7 +28,7 @@ buildGoModule (finalAttrs: {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5TIcDK6M/9jDkJDWafRGw+/TaW7Pbvn1yl9ijnzP/Mc=";
+    hash = "sha256-3D+fQ9Lu0OfON694hWlv5QcuGS/zAlkOW+Q9AMq+RWQ=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
