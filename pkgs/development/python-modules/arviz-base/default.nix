@@ -40,14 +40,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "arviz-base";
-  version = "0.8.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz-base";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g2DmhYqO9dgvDZwAXXSDFn5wHU0BvxXNgOzk6mmEmsw=";
+    hash = "sha256-0BR2soX3VXt2Zyb+mNcC9lDYOiO6I5qBOIWttJGS1Y4=";
   };
 
   build-system = [
