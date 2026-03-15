@@ -7,6 +7,7 @@
   pkg-config,
   python3,
   nix-update-script,
+  jemalloc,
   xxHash,
   fmt,
   libxml2,
@@ -99,13 +100,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2601";
+  version = "2603";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-AfHOD3S3zDwe85Zr8XEMmI+LrdVEZdXJ9FWQQ+oUNik=";
+    hash = "sha256-rQOqziJ7IizJV3VmAWGo5s2xn2/xnp0sx3VfBtH1JK4=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -116,10 +117,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       git submodule update --init --depth 1 \
         External/Vulkan-Headers \
         External/drm-headers \
-        External/jemalloc \
+        External/rpmalloc \
         External/jemalloc_glibc \
-        External/robin-map \
         External/vixl \
+        External/unordered_dense \
         Source/Common/cpp-optparse
 
       find . -name .git -print0 | xargs -0 rm -rf
@@ -132,6 +133,10 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
+    substituteInPlace FEXCore/include/git_version.h.in \
+      --replace-fail "@GIT_HASH_ARRAY@" "" \
+      --replace-fail "@GIT_DESCRIBE_STRING@" "FEX-${finalAttrs.version}"
+
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt ThunkLibs/HostLibs/CMakeLists.txt \
       --replace-fail "/usr/include/libdrm" "${devRootFS}/include/libdrm" \
       --replace-fail "/usr/include/wayland" "${devRootFS}/include/wayland"
@@ -143,6 +148,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       }"
     substituteInPlace ThunkLibs/GuestLibs/CMakeLists.txt \
       --replace-fail "-- " "-- $(cat ${llvmPackages.stdenv.cc}/nix-support/libcxx-cxxflags) "
+
+    # Disable including current date in manpages
+    substituteInPlace FEXCore/Scripts/config_generator.py \
+      --replace-fail ".Dd {0}" ".Dd" \
+      --replace-fail "output_man.write(header.format(" "output_man.write(header) #"
 
     # Patch any references to library wrapper paths
     substituteInPlace FEXCore/Source/Interface/Config/Config.json.in \
@@ -183,6 +193,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   buildInputs = [
+    jemalloc
     xxHash
     fmt
     libxml2
