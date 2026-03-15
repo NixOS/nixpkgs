@@ -8,17 +8,13 @@
   libnl,
 }:
 
-let
-  cfg = import ./version.nix;
-in
-
 stdenv.mkDerivation rec {
   pname = "alfred";
-  inherit (cfg) version;
+  version = "2026.0";
 
   src = fetchurl {
     url = "https://downloads.open-mesh.org/batman/releases/batman-adv-${version}/${pname}-${version}.tar.gz";
-    sha256 = cfg.sha256.${pname};
+    hash = "sha256-35EVL+Mftjd6JM6TEwRFlzUQRpr5N35MycX10l4451E=";
   };
 
   nativeBuildInputs = [ pkg-config ];

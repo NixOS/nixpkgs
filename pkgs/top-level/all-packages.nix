@@ -8472,8 +8472,6 @@ with pkgs;
 
   ### OS-SPECIFIC
 
-  alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
-
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
