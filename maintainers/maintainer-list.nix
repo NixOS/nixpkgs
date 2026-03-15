@@ -26011,6 +26011,12 @@
     matrix = "@superherointj:matrix.org";
     name = "Sérgio Marcelo";
   };
+  Superredstone = {
+    email = "patrickcanal3@gmail.com";
+    github = "Superredstone";
+    githubId = 56410215;
+    name = "Patrick Canal";
+  };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
     matrix = "@sandro:supersandro.de";
