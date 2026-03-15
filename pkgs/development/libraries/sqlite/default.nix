@@ -82,7 +82,12 @@ stdenv.mkDerivation rec {
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
-    (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
+    (
+      if stdenv.hostPlatform.isStatic || !(lib.meta.availableOn stdenv.hostPlatform tcl) then
+        "--disable-tcl"
+      else
+        "--with-tcl=${lib.getLib tcl}/lib"
+    )
   ]
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
