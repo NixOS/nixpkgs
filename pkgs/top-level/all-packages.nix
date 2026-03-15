@@ -2842,12 +2842,6 @@ with pkgs;
 
   importNpmLock = callPackages ../build-support/node/import-npm-lock { };
 
-  nodePackages_latest = recurseIntoAttrs nodejs_latest.pkgs;
-
-  nodePackages = recurseIntoAttrs nodejs.pkgs;
-
-  node2nix = nodePackages.node2nix;
-
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
