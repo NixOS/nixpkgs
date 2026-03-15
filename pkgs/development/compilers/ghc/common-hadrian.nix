@@ -320,10 +320,16 @@
         ./ghc-define-undefined-elf-st-visibility.patch
       ]
 
-      ++ lib.optionals (lib.versionOlder version "9.15.20260127") [
-        # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
-        ./ghc-9.6-or-later-docs-sphinx-9.patch
-      ]
+      ++
+        lib.optionals
+          (
+            lib.versionOlder version "9.12.3.20260311"
+            || (lib.versionAtLeast version "9.14" && lib.versionOlder version "9.15.20260127")
+          )
+          [
+            # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
+            ./ghc-9.6-or-later-docs-sphinx-9.patch
+          ]
 
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
