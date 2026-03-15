@@ -94,7 +94,7 @@ mapAliases {
   bower = throw "bower was removed because it was deprecated"; # added 2025-09-17
   inherit (pkgs) bower2nix; # added 2024-08-23
   browserify = throw "browserify has been removed because it was unmaintained in nixpkgs"; # Added 2026-03-01
-  browser-sync = throw "'browser-sync' has been removed because it was unmaintained in nixpkgs"; # Added 2026-01-26
+  inherit (pkgs) browser-sync; # Added 2026-03-10
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
