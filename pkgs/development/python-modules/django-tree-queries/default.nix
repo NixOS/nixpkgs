@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-tree-queries";
-  version = "0.23";
+  version = "0.23.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "feincms";
     repo = "django-tree-queries";
     tag = version;
-    hash = "sha256-ZAR93mleN4Gqf9v2ufnPjIqatkygpvXoLpfN4bJpHw8=";
+    hash = "sha256-OWWkz2UUwobAi6TTrEYwVgvQpDEbTjdSwKHu2ddrkwU=";
   };
 
   build-system = [
