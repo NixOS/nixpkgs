@@ -23,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace apps/vtkxform.cxx --replace-fail \
       "float xyzFloat[3] = { xyz[0], xyz[1], xyz[2] };" \
       "float xyzFloat[3] = { (float)xyz[0], (float)xyz[1], (float)xyz[2] };"
+
+    # EXPORT_LIBRARY_DEPENDENCIES was removed in cmake 4 (CMP0033).
+    # Remove the call and related install since cmtk is a standalone tool.
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'EXPORT_LIBRARY_DEPENDENCIES(''${CMTK_BINARY_DIR}/CMTKLibraryDepends.cmake)' ""
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'INSTALL(FILES ''${CMTK_BINARY_DIR}/CMTKLibraryDepends.cmake DESTINATION ''${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)' ""
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -38,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_CXX_STANDARD" "14")
+    # Upstream is abandoned (last release 2016) and uses cmake features
+    # removed in cmake 4 (EXPORT_LIBRARY_DEPENDENCIES, cmake_minimum_required < 3.5).
+    # Use CMAKE_POLICY_VERSION_MINIMUM to maintain compatibility.
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Dfinite=isfinite")
