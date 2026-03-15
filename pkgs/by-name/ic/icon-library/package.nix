@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   wrapGAppsHook4,
   buildPackages,
   cargo,
@@ -10,6 +10,7 @@
   ninja,
   pkg-config,
   rustc,
+  rustPlatform,
   gettext,
   gdk-pixbuf,
   glib,
@@ -20,11 +21,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icon-library";
-  version = "0.0.19";
+  version = "0.0.22";
 
-  src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/7725604ce39be278abe7c47288085919/icon-library-${finalAttrs.version}.tar.xz";
-    hash = "sha256-nWGTYoSa0/fxnD0Mb2132LkeB1oa/gj/oIXBbI+FDw8=";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "design";
+    repo = "icon-library";
+    tag = finalAttrs.version;
+    hash = "sha256-XpvD7AYFx3GRcYqdDBrMo7vQIUYaE3zxtsoSgLNDDzU=";
+    forceFetchGit = true;
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-OkVUAQnui0PzYXjoC6nTcLNqD/TLkz5pVtjV+7KSUq4=";
   };
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -42,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
   buildInputs = [
