@@ -623,6 +623,10 @@ in
               add_header Cache-Control "public";
               default_type application/json;
               proxy_set_header Accept-Encoding "";
+              sub_filter_once off;
+              sub_filter_types application/manifest+json;
+              sub_filter '"start_url": "/BASE_PATH/"' '"start_url" : "$http_x_ingress_path/"';
+              sub_filter '"src": "/BASE_PATH/' '"src": "$http_x_ingress_path/';
             '';
           };
           "/" = {
