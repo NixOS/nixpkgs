@@ -10,6 +10,7 @@
   pkgconfig,
   pytest-asyncio,
   pytestCheckHook,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -59,6 +60,12 @@ buildPythonPackage rec {
   postCheck = ''
     popd
   '';
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    "test_ssl_async_example"
+    "test_async_ssl_calculator_example"
+  ];
 
   meta = {
     description = "Cython wrapping of the C++ Cap'n Proto library";
