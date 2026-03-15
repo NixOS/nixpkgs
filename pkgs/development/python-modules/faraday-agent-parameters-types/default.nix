@@ -1,23 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   marshmallow,
   packaging,
   pytestCheckHook,
   setuptools,
   validators,
 }:
-
-buildPythonPackage rec {
+let
+  marshmallow' = marshmallow.overrideAttrs (super: {
+    version = "3.26.2";
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+    disabledTests = super.disabledTests ++ [
+      "test_from_timestamp_with_overflow_value"
+    ];
+  });
+in
+buildPythonPackage (finalAttrs: {
   pname = "faraday-agent-parameters-types";
   version = "1.9.1";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "faraday_agent_parameters_types";
-    inherit version;
-    hash = "sha256-PWO4wufHGIgAi1BHoM/+6ZjsUDB4oY26NsHOdNYYTJc=";
+  src = fetchFromGitHub {
+    owner = "infobyte";
+    repo = "faraday_agent_parameters_types";
+    tag = finalAttrs.version;
+    hash = "sha256-Oe/9/zKOoCLK3JHMacOhk2+d91MrhzkBTW3POoFm71M=";
   };
 
   pythonRelaxDeps = [ "validators" ];
@@ -30,7 +44,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    marshmallow
+    marshmallow'
     packaging
     validators
   ];
@@ -50,8 +64,8 @@ buildPythonPackage rec {
   meta = {
     description = "Collection of Faraday agent parameters types";
     homepage = "https://github.com/infobyte/faraday_agent_parameters_types";
-    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/infobyte/faraday_agent_parameters_types/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

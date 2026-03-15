@@ -24,8 +24,21 @@
   setuptools,
   typing-extensions,
 }:
-
-buildPythonPackage rec {
+let
+  marshmallow' = marshmallow.overrideAttrs (super: {
+    version = "3.26.2";
+    src = fetchFromGitHub {
+      owner = "marshmallow-code";
+      repo = "marshmallow";
+      tag = "3.26.2";
+      hash = "sha256-ioe+aZHOW8r3wF3UknbTjAP0dEggd/NL9PTkPVQ46zM=";
+    };
+    disabledTests = super.disabledTests ++ [
+      "test_from_timestamp_with_overflow_value"
+    ];
+  });
+in
+buildPythonPackage (finalAttrs: {
   pname = "pytenable";
   version = "1.9.0";
   pyproject = true;
@@ -33,7 +46,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tenable";
     repo = "pyTenable";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ml5364D3qvd6VNhF2JyGoCzxbdO0DBkaBMoD38O5x8o=";
   };
 
@@ -49,7 +62,7 @@ buildPythonPackage rec {
     defusedxml
     gql
     graphql-core
-    marshmallow
+    marshmallow'
     pydantic
     pydantic-extra-types
     python-box
@@ -68,6 +81,10 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-pkcs12
     responses
+  ];
+
+  pytestFlags = [
+    "-Wignore::pytest.PytestRemovedIn9Warning"
   ];
 
   disabledTestPaths = [
@@ -98,8 +115,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for the Tenable.io and TenableSC API";
     homepage = "https://github.com/tenable/pyTenable";
-    changelog = "https://github.com/tenable/pyTenable/releases/tag/${src.tag}";
+    changelog = "https://github.com/tenable/pyTenable/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
