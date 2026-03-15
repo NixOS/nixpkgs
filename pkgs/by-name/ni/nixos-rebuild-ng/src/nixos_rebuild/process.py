@@ -297,7 +297,7 @@ def _normalize_env(env: Mapping[str, EnvValue] | None) -> dict[str, EnvValue]:
     """
     Normalize env mapping, but preserve some environment variables by default.
     """
-    return {"PATH": PRESERVE_ENV, **(env or {})}
+    return {"PATH": PRESERVE_ENV, "SSH_AUTH_SOCK": PRESERVE_ENV, **(env or {})}
 
 
 def _resolve_env_local(env: dict[str, EnvValue]) -> dict[str, str]:
