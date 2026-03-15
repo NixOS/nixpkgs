@@ -64,7 +64,7 @@
   R,
   sng,
   sqlite,
-  squashfsTools,
+  squashfs-tools,
   systemdUkify,
   tcpdump,
   ubootTools,
@@ -188,7 +188,7 @@ python.pkgs.buildPythonApplication rec {
       pgpdump
       sng
       sqlite
-      squashfsTools
+      squashfs-tools
       unzip
       xxd
       xz

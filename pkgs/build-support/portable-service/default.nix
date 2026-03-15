@@ -38,7 +38,7 @@
   contents ? [ ],
 
   # mksquashfs options
-  squashfsTools ? pkgs.squashfsTools,
+  squashfs-tools ? pkgs.squashfs-tools,
   squash-compression ? "xz -Xdict-size 100%",
   squash-block-size ? "1M",
 }:
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
   pname = "${pname}-img";
   inherit version;
 
-  nativeBuildInputs = [ squashfsTools ];
+  nativeBuildInputs = [ squashfs-tools ];
   closureInfo = pkgs.closureInfo { rootPaths = [ rootFsScaffold ] ++ contents; };
 
   buildCommand = ''

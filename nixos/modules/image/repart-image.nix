@@ -17,7 +17,7 @@
   dosfstools,
   mtools,
   e2fsprogs,
-  squashfsTools,
+  squashfs-tools,
   erofs-utils,
   btrfs-progs,
   xfsprogs,
@@ -105,7 +105,7 @@ let
       mtools
     ];
     "ext4" = [ e2fsprogs.bin ];
-    "squashfs" = [ squashfsTools ];
+    "squashfs" = [ squashfs-tools ];
     "erofs" = [ erofs-utils ];
     "btrfs" = [ btrfs-progs ];
     "xfs" = [ xfsprogs ];

@@ -173,7 +173,7 @@ with pkgs.lib;
           f.write("squashfs")
 
         subprocess.run([
-          "${pkgs.squashfsTools}/bin/mksquashfs",
+          "${pkgs.squashfs-tools}/bin/mksquashfs",
           "filesystem",
           "${fsImage}",
         ])

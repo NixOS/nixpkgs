@@ -13,7 +13,7 @@
   nix-update-script,
   nixosTests,
   pkg-config,
-  squashfsTools,
+  squashfs-tools,
   stdenv,
   wimlib,
 }:
@@ -24,7 +24,7 @@ let
     debootstrap
     gnupg
     gnutar
-    squashfsTools
+    squashfs-tools
   ]
   ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # repack-windows deps

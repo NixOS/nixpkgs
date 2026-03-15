@@ -1,6 +1,6 @@
 {
   autoPatchelfHook,
-  squashfsTools,
+  squashfs-tools,
   alsa-lib,
   fetchurl,
   makeDesktopItem,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   # TODO: migrate off autoPatchelfHook and use nixpkgs' electron
   nativeBuildInputs = [
     autoPatchelfHook
-    squashfsTools
+    squashfs-tools
     makeWrapper
     wrapGAppsHook3
   ];

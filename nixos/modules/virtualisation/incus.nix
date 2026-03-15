@@ -58,7 +58,7 @@ let
       qemu_kvm
       rsync
       squashfs-tools-ng
-      squashfsTools
+      squashfs-tools
       sshfs
       swtpm
       systemd
