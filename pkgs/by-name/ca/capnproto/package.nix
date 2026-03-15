@@ -5,6 +5,7 @@
   pkg-config,
   clangStdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   openssl,
   zlib,
@@ -48,6 +49,16 @@ clangStdenv.mkDerivation rec {
     ./fix-libucontext.patch
     # https://github.com/capnproto/capnproto/pull/2410
     ./fix-libatomic.patch
+    # Fix buffer overrun in async readMessage()
+    (fetchpatch2 {
+      url = "https://github.com/capnproto/capnproto/commit/28731820130b3b06a658fa061cfc40a3917bceaa.patch?full_index=1";
+      hash = "sha256-3weH0+ZjmVnUmnaCD3X5u6AykfUdKAFgXxHfzRRTksM=";
+    })
+    # Fix HTTP body size integer overflow bugs
+    (fetchpatch2 {
+      url = "https://github.com/capnproto/capnproto/commit/2744b3c012b4aa3c31cefb61ec656829fa5c0e36.patch?full_index=1";
+      hash = "sha256-OVuphM8w80mS4cgXr14kfuPrflACK/BkZdDySCNWat8=";
+    })
   ];
 
   nativeBuildInputs = [
