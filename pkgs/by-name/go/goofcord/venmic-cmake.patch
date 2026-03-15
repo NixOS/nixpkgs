@@ -1,0 +1,114 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index af314c0..277fe57 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -83,43 +83,14 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC VENMIC_VERSION="${PROJECT_VERS
+ # Setup Dependencies
+ # --------------------------------------------------------------------------------------------------------
+ 
+-include("cmake/cpm.cmake")
+-
+-CPMFindPackage(
+-  NAME           rohrkabel
+-  VERSION        7.0
+-  GIT_REPOSITORY "https://github.com/Curve/rohrkabel"
+-)
+-
+-CPMFindPackage(
+-  NAME           tl-expected
+-  VERSION        1.1.0
+-  GIT_REPOSITORY "https://github.com/TartanLlama/expected"
+-)
+-
+-CPMFindPackage(
+-  NAME           channel
+-  VERSION        2.3
+-  GIT_REPOSITORY "https://github.com/Curve/channel"
+-)
+-
+-CPMFindPackage(
+-  NAME           range-v3
+-  GIT_TAG        0.12.0
+-  GIT_REPOSITORY "https://github.com/ericniebler/range-v3"
+-)
+-
+-CPMFindPackage(
+-  NAME           glaze
+-  VERSION        2.6.8
+-  GIT_REPOSITORY "https://github.com/stephenberry/glaze"
+-)
+-
+-CPMFindPackage(
+-  NAME           spdlog
+-  VERSION        1.14.1
+-  GIT_REPOSITORY "https://github.com/gabime/spdlog"
+-)
++if (NOT DEFINED ROHRKABEL_SOURCE_DIR)
++  message(FATAL_ERROR "[venmic] ROHRKABEL_SOURCE_DIR must be set to a local checkout")
++endif()
++
++add_subdirectory("${ROHRKABEL_SOURCE_DIR}" "${CMAKE_BINARY_DIR}/rohrkabel")
++find_package(range-v3 CONFIG REQUIRED)
++find_package(glaze CONFIG REQUIRED)
++find_package(spdlog CONFIG REQUIRED)
+ 
+ target_link_libraries(${PROJECT_NAME} PUBLIC cr::rohrkabel tl::expected cr::channel glaze::glaze range-v3::meta spdlog::spdlog)
+ 
+@@ -148,8 +119,10 @@ endif()
+ # Setup Node Addon
+ # --------------------------------------------------------------------------------------------------------
+ 
+-if (venmic_addon AND NOT CMAKE_JS_VERSION)
+-  message(FATAL_ERROR "[venmic] Please build the addon using CMake.js")
++if (venmic_addon)
++  if (NOT CMAKE_JS_INC)
++    message(FATAL_ERROR "[venmic] CMAKE_JS_INC must be set when building the addon without CMake.js")
++  endif()
+ endif()
+ 
+ if (venmic_addon)
+diff --git a/addon/CMakeLists.txt b/addon/CMakeLists.txt
+index e5922ae..780631a 100644
+--- a/addon/CMakeLists.txt
++++ b/addon/CMakeLists.txt
+@@ -29,13 +29,7 @@ target_sources(${PROJECT_NAME} PRIVATE ${src})
+ # Setup Dependencies
+ # --------------------------------------------------------------------------------------------------------
+ 
+-include("../cmake/cpm.cmake")
+-
+-CPMFindPackage(
+-  NAME           range-v3
+-  GIT_TAG        0.12.0
+-  GIT_REPOSITORY "https://github.com/ericniebler/range-v3"
+-)
++find_package(range-v3 CONFIG REQUIRED)
+ 
+ target_link_libraries(${PROJECT_NAME} PUBLIC vencord::venmic range-v3::meta)
+ 
+diff --git a/src/patchbay.impl.cpp b/src/patchbay.impl.cpp
+index deb9212..f3e0c0e 100644
+--- a/src/patchbay.impl.cpp
++++ b/src/patchbay.impl.cpp
+@@ -6,6 +6,8 @@
+ #include <charconv>
+ #include <stdexcept>
+ 
++#include <fmt/ranges.h>
++
+ #include <range/v3/view.hpp>
+ #include <range/v3/algorithm.hpp>
+ 
+@@ -393,7 +395,11 @@ namespace vencord
+             return on_node(id);
+         }
+ 
+-        logger::get()->trace("[patchbay] (handle) workaround is active ({})", glz::write_json(options.workaround));
++        auto workaround_json = glz::write_json(options.workaround);
++        logger::get()->trace(
++            "[patchbay] (handle) workaround is active ({})",
++            workaround_json.value_or(std::string("<error>"))
++        );
+ 
+         if (!matches(options.workaround, props))
+         {
