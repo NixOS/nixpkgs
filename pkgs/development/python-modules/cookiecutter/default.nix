@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cookiecutter";
-  version = "2.6.0";
+  version = "2.7.1";
   pyproject = true;
 
   # not sure why this is broken
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2yH4Fp6k9P3CQI1IykSFk0neJkf75JSp1sPt/AVCwhw=";
+    hash = "sha256-ynu3vIxv9EH79TkhtVN2aAAOONVuKNdjobc5dcZsYTg=";
   };
 
   postPatch = ''
