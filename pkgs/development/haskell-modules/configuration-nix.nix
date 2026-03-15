@@ -110,6 +110,11 @@ builtins.intersectAttrs super {
     testTargets = [ "screp-test" ];
   } super.screp;
 
+  # `integration` test suite requires a running MySQL server (?)
+  mysql-haskell = overrideCabal {
+    testTargets = [ "test" ];
+  } super.mysql-haskell;
+
   # 2023-04-01: TODO: Either reenable at least some tests or remove the preCheck override
   ghcide = overrideCabal (drv: {
     # tests depend on executable
