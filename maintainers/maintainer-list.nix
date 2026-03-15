@@ -26066,6 +26066,12 @@
     githubId = 43136984;
     name = "Sven Ziegler";
   };
+  svistoi = {
+    email = "svistoi@zohomailcloud.ca";
+    github = "svistoi";
+    githubId = 43136984;
+    name = "47987757";
+  };
   svrana = {
     email = "shaw@vranix.com";
     github = "svrana";
