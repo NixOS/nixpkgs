@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/rustic-rs/rustic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     description = "Fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.all;
     license = [
       lib.licenses.mit
       lib.licenses.asl20
