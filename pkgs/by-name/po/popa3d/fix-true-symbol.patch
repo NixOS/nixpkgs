@@ -1,0 +1,20 @@
+--- a/standalone.c
++++ b/standalone.c
+@@ -108,7 +108,7 @@ int do_standalone(void)
+ int main(void)
+ #endif
+ {
+-	int true = 1;
++	int one = 1;
+ 	int sock, new;
+ 	struct sockaddr_in addr;
+ 	socklen_t addrlen;
+@@ -123,7 +123,7 @@ int main(void)
+ 		return log_error("socket");
+ 
+ 	if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR,
+-	    (void *)&true, sizeof(true)))
++	    (void *)&one, sizeof(one)))
+ 		return log_error("setsockopt");
+ 
+ 	memset(&addr, 0, sizeof(addr));

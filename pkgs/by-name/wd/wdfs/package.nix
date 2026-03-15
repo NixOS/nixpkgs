@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     neon
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-std=c17";
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook to
     # take effect.

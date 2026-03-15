@@ -1,0 +1,126 @@
+--- a/bs4/builder/_htmlparser.py
++++ b/bs4/builder/_htmlparser.py
+@@ -10,6 +10,7 @@
+ ]
+ 
+ from html.parser import HTMLParser
++import re
+ 
+ from typing import (
+     Any,
+@@ -223,6 +224,64 @@
+         """Handle some textual data that shows up between tags."""
+         self.soup.handle_data(data)
+ 
++    _DECIMAL_REFERENCE_WITH_FOLLOWING_DATA = re.compile("^([0-9]+)(.*)")
++    _HEX_REFERENCE_WITH_FOLLOWING_DATA = re.compile("^([0-9a-f]+)(.*)")
++
++    @classmethod
++    def _dereference_numeric_character_reference(cls, name:str) -> Tuple[str, bool, str]:
++        """Convert a numeric character reference into an actual character.
++
++        :param name: The number of the character reference, as
++          obtained by html.parser
++
++        :return: A 3-tuple (dereferenced, replacement_added,
++          extra_data). `dereferenced` is the dereferenced character
++          reference, or the empty string if there was no
++          reference. `replacement_added` is True if the reference
++          could only be dereferenced by replacing content with U+FFFD
++          REPLACEMENT CHARACTER. `extra_data` is a portion of data
++          following the character reference, which was deemed to be
++          normal data and not part of the reference at all.
++        """
++        dereferenced:str = ""
++        replacement_added:bool = False
++        extra_data:str = ""
++
++        base:int = 10
++        reg = cls._DECIMAL_REFERENCE_WITH_FOLLOWING_DATA
++        if name.startswith("x") or name.startswith("X"):
++            # Hex reference
++            name = name[1:]
++            base = 16
++            reg = cls._HEX_REFERENCE_WITH_FOLLOWING_DATA
++
++        real_name:Optional[int] = None
++        try:
++            real_name = int(name, base)
++        except ValueError:
++            # This is either bad data that starts with what looks like
++            # a numeric character reference, or a real numeric
++            # reference that wasn't terminated by a semicolon.
++            #
++            # The fix to https://bugs.python.org/issue13633 made it
++            # our responsibility to handle the extra data.
++            #
++            # To preserve the old behavior, we extract the numeric
++            # portion of the incoming "reference" and treat that as a
++            # numeric reference. All subsequent data will be processed
++            # as string data.
++            match = reg.search(name)
++            if match is not None:
++                real_name = int(match.groups()[0], base)
++                extra_data = match.groups()[1]
++
++        if real_name is None:
++            dereferenced = ""
++            extra_data = name
++        else:
++            dereferenced, replacement_added = UnicodeDammit.numeric_character_reference(real_name)
++        return dereferenced, replacement_added, extra_data
++
+     def handle_charref(self, name: str) -> None:
+         """Handle a numeric character reference by converting it to the
+         corresponding Unicode character and treating it as textual
+@@ -230,22 +289,13 @@
+ 
+         :param name: Character number, possibly in hexadecimal.
+         """
+-        # TODO: This was originally a workaround for a bug in
+-        # HTMLParser. (http://bugs.python.org/issue13633) The bug has
+-        # been fixed, but removing this code still makes some
+-        # Beautiful Soup tests fail. This needs investigation.
+-        real_name:int
+-        if name.startswith("x"):
+-            real_name = int(name.lstrip("x"), 16)
+-        elif name.startswith("X"):
+-            real_name = int(name.lstrip("X"), 16)
+-        else:
+-            real_name = int(name)
+-
+-        data, replacement_added = UnicodeDammit.numeric_character_reference(real_name)
++        dereferenced, replacement_added, extra_data = self._dereference_numeric_character_reference(name)
+         if replacement_added:
+             self.soup.contains_replacement_characters = True
+-        self.handle_data(data)
++        if dereferenced is not None:
++            self.handle_data(dereferenced)
++        if extra_data is not None:
++            self.handle_data(extra_data)
+ 
+     def handle_entityref(self, name: str) -> None:
+         """Handle a named entity reference by converting it to the
+--- a/bs4/tests/test_htmlparser.py
++++ b/bs4/tests/test_htmlparser.py
+@@ -162,3 +162,20 @@
+         # Since we do the replacement ourselves, we can set contains_replacement_characters appropriately.
+         # lxml and html5lib do the replacement so all we ever see is REPLACEMENT CHARACTER.
+         assert soup.contains_replacement_characters == True
++
++class TestBeautifulSoupHTMLParser:
++    def test_dereference_numeric_character_reference(self):
++        m = BeautifulSoupHTMLParser._dereference_numeric_character_reference
++        assert m("64") == ("@", False, "")
++        assert m("x64") == ("d", False, "")
++        assert m("X64") == ("d", False, "")
++        assert m("64andsomeextra") == ("@", False, "andsomeextra")
++        assert m("") == ("", False, "")
++        assert m("00whee") == ("�", True, "whee")
++        assert m("xfffdthatsit") == ("�", False, "thatsit")
++        assert m("xabcdplussomeextra") == ("ꯍ", False, "plussomeextra")
++        assert m("obviouslynotnumeric") == ("", False, "obviouslynotnumeric")
++
++        # These are almost certainly wrong but at least it doesn't crash.
++        assert m("xabcdandsomeextra") == ("\U000abcda", False, "ndsomeextra")
++        assert m("xffffffffffffffffffffffbeep") == ("�", True, "p")

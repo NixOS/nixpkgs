@@ -24,8 +24,8 @@
 }:
 let
   majorVersion = "4";
-  minorVersion = "4";
-  versionSuffix = "ga6";
+  minorVersion = "5";
+  versionSuffix = "ga5";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "x3270";
@@ -33,11 +33,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://x3270.bgp.nu/download/0${majorVersion}.0${minorVersion}/suite3270-${finalAttrs.version}-src.tgz";
-    hash = "sha256-hDju5ZeVzTv78ZYwUzabmqMK9rheTZJ7clTSTpkkM7E=";
+    hash = "sha256-AVdvpYWYzN09Nm/r+u9h49Hek+tgqT+axrpfr4QUTG8=";
   };
 
   postPatch = ''
     patchShebangs .
+    substituteInPlace Common/mkversion.py --replace-fail "int(os.environ['SOURCE_DATE_EPOCH'])" "1"
   '';
 
   buildFlags = lib.optional stdenv.hostPlatform.isLinux "unix";

@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./use-openssl.patch
     ./use-glibc-crypt.patch
     ./enable-standalone-mode.patch
+    ./fix-true-symbol.patch
   ];
 
   enableParallelBuilding = true;

@@ -1,12 +1,12 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchurl,
   unzip,
   zlib,
 }:
 
-stdenv.mkDerivation {
+gcc14Stdenv.mkDerivation {
   pname = "uif2iso";
   version = "0.1.7";
 
