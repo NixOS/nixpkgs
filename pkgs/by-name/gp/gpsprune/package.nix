@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 ${finalAttrs.src} $out/share/java/gpsprune.jar
     makeWrapper ${jre}/bin/java $out/bin/gpsprune \
       --add-flags "-jar $out/share/java/gpsprune.jar"
-    mkdir -p $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/64x64/apps
     ${unzip}/bin/unzip -p $src tim/prune/gui/images/window_icon_64.png > $out/share/icons/hicolor/64x64/apps/gpsprune.png
 
     runHook postInstall
