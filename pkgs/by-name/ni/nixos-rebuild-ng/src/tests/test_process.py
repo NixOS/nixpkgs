@@ -27,6 +27,17 @@ def test_remote_shell_script() -> None:
     )
 
 
+def test_normalize_env_preserves_ssh_auth_sock() -> None:
+    """SSH_AUTH_SOCK must be preserved so that commands like nix-copy-closure
+    can use SSH agent forwarding for authentication."""
+    env = p._normalize_env(None)
+    assert env.get("SSH_AUTH_SOCK") is p.PRESERVE_ENV
+
+    # Explicit SSH_AUTH_SOCK value should not be overridden
+    env = p._normalize_env({"SSH_AUTH_SOCK": "/tmp/custom-agent"})
+    assert env["SSH_AUTH_SOCK"] == "/tmp/custom-agent"
+
+
 @patch.dict(p.os.environ, {"PATH": "/path/to/bin"}, clear=True)
 @patch("subprocess.run", autospec=True)
 def test_run_wrapper(mock_run: Any) -> None:
@@ -124,7 +135,7 @@ def test_run_wrapper(mock_run: Any) -> None:
             "--",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" "$@"'""",
+            """'exec env -i PATH="${PATH-}" SSH_AUTH_SOCK="${SSH_AUTH_SOCK-}" "$@"'""",
             "sh",
             "test",
             "--with",
@@ -157,7 +168,7 @@ def test_run_wrapper(mock_run: Any) -> None:
             "--stdin",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" FOO=bar "$@"'""",
+            """'exec env -i PATH="${PATH-}" SSH_AUTH_SOCK="${SSH_AUTH_SOCK-}" FOO=bar "$@"'""",
             "sh",
             "test",
             "--with",
@@ -289,7 +300,7 @@ def test_custom_sudo_args(mock_run: Any) -> None:
             "--args",
             "/bin/sh",
             "-c",
-            """'exec env -i PATH="${PATH-}" "$@"'""",
+            """'exec env -i PATH="${PATH-}" SSH_AUTH_SOCK="${SSH_AUTH_SOCK-}" "$@"'""",
             "sh",
             "test",
         ],
