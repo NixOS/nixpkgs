@@ -29378,6 +29378,12 @@
     githubId = 36407913;
     name = "Uli Baum";
   };
+  xelacodes = {
+    name = "Alex";
+    github = "itzTheMeow";
+    githubId = 50887230;
+    email = "nixpkgs@xela.codes";
+  };
   xelden = {
     email = "anpiz@protonmail.com";
     github = "Xelden";
