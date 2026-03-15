@@ -5,15 +5,15 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hongdown";
-  version = "0.3.4";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "dahlia";
     repo = "hongdown";
     tag = finalAttrs.version;
-    hash = "sha256-Bj0ECrYRnXSjgyblocnVjdYipuzbX2+G3KRWZvdR9Rk=";
+    hash = "sha256-brfBh5DFQKabFuPwsFVx49B+AlRLr9SXmJDcMo2orYY=";
   };
-  cargoHash = "sha256-q84orbkrcKbO5FeI9dk0E92EtE9eQ8n/yGjXzh9MIgg=";
+  cargoHash = "sha256-0RAPG+YBzj4T+lb+77lNFJFBoGB4up4wH2IUGdqCwdg=";
   meta = {
     description = "Markdown formatter that enforces Hong Minhee's Markdown style conventions";
     mainProgram = "hongdown";
