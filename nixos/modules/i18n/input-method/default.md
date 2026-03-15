@@ -158,24 +158,6 @@ The following snippet can be used to configure uim:
 Note: The [](#opt-i18n.inputMethod.uim.toolbar) option can be
 used to choose uim toolbar.
 
-## Hime {#module-services-input-methods-hime}
-
-Hime is an extremely easy-to-use input method framework. It is lightweight,
-stable, powerful and supports many commonly used input methods, including
-Cangjie, Zhuyin, Dayi, Rank, Shrimp, Greek, Korean Pinyin, Latin Alphabet,
-etc...
-
-The following snippet can be used to configure Hime:
-
-```nix
-{
-  i18n.inputMethod = {
-    enable = true;
-    type = "hime";
-  };
-}
-```
-
 ## Kime {#module-services-input-methods-kime}
 
 Kime is Korean IME. it's built with Rust language and let you get simple, safe, fast Korean typing
