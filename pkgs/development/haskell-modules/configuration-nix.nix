@@ -1023,9 +1023,11 @@ builtins.intersectAttrs super {
     ];
   }) super.lsp-test;
 
-  lsp_2_8_0_0 = doDistribute (super.lsp_2_8_0_0.override {
-    lsp-types = self.lsp-types_2_4_0_0;
-  });
+  lsp_2_8_0_0 = doDistribute (
+    super.lsp_2_8_0_0.override {
+      lsp-types = self.lsp-types_2_4_0_0;
+    }
+  );
   lsp-types_2_4_0_0 = doDistribute super.lsp-types_2_4_0_0;
 
   # the test suite attempts to run the binaries built in this package
