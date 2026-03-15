@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 let
@@ -19,15 +20,22 @@ let
         hash = "sha256-2vgpzbiNuGd8p8fnvt8OTY28bVnoKtFj0TXjaOBFids=";
       };
 
+      outputs = [
+        "out"
+        "doc"
+      ];
+
       installPhase = ''
         runHook preInstall
 
-
-        install -D -m444 -t "$out/share/fonts/truetype" "${directory}/"*.ttf
         install -D -m644 -t "$out/share/doc/${finalAttrs.pname}-${finalAttrs.version}" "${directory}/OFL.txt"
 
         runHook postInstall
       '';
+
+      nativeBuildInputs = [
+        installFonts
+      ];
 
       meta = {
         homepage = "https://www.kreativekorp.com/software/fonts/index.shtml";
