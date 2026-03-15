@@ -1,0 +1,70 @@
+diff --git a/tests/tests.rs b/tests/tests.rs
+index 9269065..ee2a4f9 100644
+--- a/tests/tests.rs
++++ b/tests/tests.rs
+@@ -20,14 +20,13 @@ fn find_binary(binary_re_str: &str) -> PathBuf {
+         .unwrap_or_else(|| panic!("could not find {binary_re_str}"))
+ }
+
+-fn run_mode<F>(target: &str, mode: &str, sysroot: &Path, cfg: Option<F>)
++fn run_mode<F>(target: &str, mode: &str, cfg: Option<F>)
+ where
+     F: Fn(&mut compiletest_rs::Config),
+ {
+     let target_rustcflags = format!(
+-        "-C linker={} --sysroot {}",
++        "-C linker={}",
+         env!("CARGO_BIN_EXE_bpf-linker"),
+-        sysroot.to_str().unwrap()
+     );
+
+     let llvm_filecheck = Some(find_binary(r"^FileCheck(-\d+)?$"));
+@@ -128,40 +127,17 @@ fn compile_test() {
+     let root_dir = env::var_os("CARGO_MANIFEST_DIR")
+         .expect("could not determine the root directory of the project");
+     let root_dir = Path::new(&root_dir);
+-    let bpf_sysroot = if let Some(bpf_sysroot) = env::var_os("BPFEL_SYSROOT_DIR") {
+-        PathBuf::from(bpf_sysroot)
+-    } else {
+-        let rustc = Command::new(env::var_os("RUSTC").unwrap_or_else(|| OsString::from("rustc")));
+-        let rustc_src = rustc_build_sysroot::rustc_sysroot_src(rustc)
+-            .expect("could not determine sysroot source directory");
+-        let directory = root_dir.join("target/sysroot");
+-        match rustc_build_sysroot::SysrootBuilder::new(&directory, target)
+-            .build_mode(rustc_build_sysroot::BuildMode::Build)
+-            .sysroot_config(rustc_build_sysroot::SysrootConfig::NoStd)
+-            // to be able to thoroughly test DI we need to build sysroot with debuginfo
+-            // this is necessary to compile rust core with DI
+-            .rustflag("-Cdebuginfo=2")
+-            .build_from_source(&rustc_src)
+-            .expect("failed to build sysroot")
+-        {
+-            rustc_build_sysroot::SysrootStatus::AlreadyCached => {}
+-            rustc_build_sysroot::SysrootStatus::SysrootBuilt => {}
+-        }
+-        directory
+-    };
+
+     build_bitcode(root_dir.join("tests/c"), root_dir.join("target/bitcode"));
+
+     run_mode(
+         target,
+         "assembly",
+-        &bpf_sysroot,
+         None::<fn(&mut compiletest_rs::Config)>,
+     );
+     run_mode(
+         target,
+         "assembly",
+-        &bpf_sysroot,
+         Some(|cfg: &mut compiletest_rs::Config| {
+             cfg.src_base = PathBuf::from("tests/btf");
+             cfg.llvm_filecheck_preprocess = Some(btf_dump);
+@@ -173,7 +149,6 @@ fn compile_test() {
+         run_mode(
+             target,
+             "assembly",
+-            &bpf_sysroot,
+             Some(|cfg: &mut compiletest_rs::Config| {
+                 cfg.src_base = PathBuf::from("tests/nightly/btf");
+                 cfg.llvm_filecheck_preprocess = Some(btf_dump);

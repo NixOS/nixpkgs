@@ -1,0 +1,60 @@
+diff --git a/build.rs b/build.rs
+index 9eb688b068..8dd2c0baa0 100644
+--- a/build.rs
++++ b/build.rs
+@@ -585,47 +585,14 @@
+     let stdout = io::stdout();
+     let mut stdout = stdout.lock();
+ 
+-    // If `LLVM_PREFIX` variable is not provided, find the directory with LLVM
+-    // libraries by assuming it's `lib/` inside a prefix where `llvm-config`
+-    // lives.
+-    const LLVM_PREFIX: &str = "LLVM_PREFIX";
+-    const PATH: &str = "PATH";
+-    writeln!(stdout, "cargo:rerun-if-env-changed={LLVM_PREFIX}")?;
+-    writeln!(stdout, "cargo:rerun-if-env-changed={PATH}")?;
+-    let (var_name, paths_os) = env::var_os(LLVM_PREFIX)
+-        .map(|mut p| {
+-            p.push("/bin");
+-            (LLVM_PREFIX, p)
+-        })
+-        .or_else(|| env::var_os(PATH).map(|p| (PATH, p)))
+-        .ok_or_else(|| anyhow!("neither {LLVM_PREFIX} nor {PATH} is set"))?;
+-    let llvm_config = env::split_paths(&paths_os)
+-        .find_map(|dir| {
+-            let candidate = Path::new(&dir).join("llvm-config");
+-            candidate
+-                .try_exists()
+-                .with_context(|| format!("failed to inspect the file {}", candidate.display()))
+-                .map(|exists| exists.then_some(candidate))
+-                .transpose()
+-        })
+-        .transpose()?
+-        .ok_or_else(|| {
+-            anyhow!(
+-                "could not find llvm-config in directories specified by environment
+-variable `{var_name}` {}",
+-                paths_os.display()
+-            )
+-        })?;
+-    let llvm_lib_dir = llvm_config
+-        .parent()
+-        .and_then(|p| p.parent())
+-        .ok_or_else(|| {
+-            anyhow!(
+-                "llvm-config location has no parent: {}",
+-                llvm_config.display()
+-            )
+-        })?
+-        .join("lib");
++    // Upstream uses `PATH` (through `llvm-config)`) and `LLVM_PREFIX` to determine the path of
++    // libLLVM. However, because in nixpkgs `llvm-config` resides in the `dev` output and `libLLVM`
++    // resides in `lib` output of the LLVM package, this does not work.
++    const LLVM_LIB_PATH: &str = "LLVM_LIB_PATH";
++    writeln!(stdout, "cargo:rerun-if-env-changed={LLVM_LIB_PATH}")?;
++
++    let llvm_lib_dir =
++        env::var_os(LLVM_LIB_PATH).ok_or_else(|| anyhow!("{LLVM_LIB_PATH} is not defined"))?;
+     let llvm_lib_dir = fs::canonicalize(&llvm_lib_dir).with_context(|| {
+         format!(
+             "failed to canonicalize LLVM lib directory {}",
