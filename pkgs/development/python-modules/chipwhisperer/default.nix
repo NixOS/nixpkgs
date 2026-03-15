@@ -34,13 +34,13 @@
 
 buildPythonPackage rec {
   pname = "chipwhisperer";
-  version = "5.7.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "newaetech";
     repo = "chipwhisperer";
-    tag = version;
-    hash = "sha256-C7QP044QEP7vmz1lMseLtMTYoKn5SoFV/q9URY7yQ6I=";
+    tag = "v${version}b";
+    hash = "sha256-MLav2usbDQ8kE6C8BSvIBWsCXG1UrcpsgLaZfLcX6Jc=";
   };
 
   pyproject = true;
