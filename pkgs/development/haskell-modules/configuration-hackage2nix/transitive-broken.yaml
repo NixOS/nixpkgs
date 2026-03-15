@@ -2483,8 +2483,6 @@ dont-distribute-packages:
  - openssh-github-keys
  - opentelemetry-lightstep
  - opentok
- - opentracing-jaeger
- - opentracing-zipkin-v1
  - OpenVG
  - optimal-blocks
  - optimusprime

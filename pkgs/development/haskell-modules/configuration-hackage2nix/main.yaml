@@ -962,3 +962,13 @@ dont-distribute-packages:
   - persistent-zookeeper # depends on hzk
   - pocket-dns # depends on persistent-zookeeper
   - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1
+
+  # These packages are deprecated due to the usage of opentracing which is a archived upstream.
+  - opentracing
+  - opentracing-wai
+  - opentracing-jaeger
+  - opentracing-zipkin-v2
+  - opentracing-zipkin-v1
+  - opentracing-http-client
+  - opentracing-zipkin-common
+  - lightstep-haskell # Lightstep opentracing library.
