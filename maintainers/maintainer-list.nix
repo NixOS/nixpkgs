@@ -19132,6 +19132,12 @@
     github = "nicegamer7";
     githubId = 8083772;
   };
+  nick-linux = {
+    email = "nick-stationengineer@proton.me";
+    name = "Nick";
+    github = "nick-linux8";
+    githubId = 264581716;
+  };
   nickcao = {
     name = "Nick Cao";
     email = "nickcao@nichi.co";
