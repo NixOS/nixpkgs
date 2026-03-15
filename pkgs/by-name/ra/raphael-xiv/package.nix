@@ -7,6 +7,7 @@
   libxkbcommon,
   wayland,
   libx11,
+  libxcursor,
 }:
 let
   linkLibPath = lib.makeLibraryPath [
@@ -14,6 +15,7 @@ let
     libxkbcommon
     wayland
     libx11
+    libxcursor
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
