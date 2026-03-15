@@ -286,6 +286,7 @@ mapAliases {
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29
   linear-garage-door = throw "'linear-garage-door' has been superseded by 'nice-go'"; # Added 2025-11-16
   linear_operator = throw "'linear_operator' has been renamed to/replaced by 'linear-operator'"; # Converted to throw 2025-10-29
+  llama-index-multi-modal-llms-openai = throw "'llama-index-multi-modal-llms-openai' has been removed from upstream in favor of 'llama-index-llms-openai";
   lmcloud = throw "'lmcloud' has been renamed to/replaced by 'pylamarzocco'"; # Converted to throw 2025-10-29
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
