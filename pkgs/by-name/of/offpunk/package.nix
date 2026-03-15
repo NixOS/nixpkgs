@@ -1,14 +1,13 @@
 {
-  lib,
-  python3Packages,
   fetchFromSourcehut,
   file,
   gettext,
   installShellFiles,
   less,
-  offpunk,
-  testers,
+  lib,
+  python3Packages,
   timg,
+  versionCheckHook,
   xdg-utils,
   xsel,
 }:
@@ -21,7 +20,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-RwigItHVNsgq6k3O8YrSMFBaZMJwJSzB6dfnNiYsefY=";
   };
 
@@ -66,11 +65,22 @@ python3Packages.buildPythonApplication (finalAttrs: {
     installManPage man/*.1
   '';
 
-  passthru.tests.version = testers.testVersion { package = offpunk; };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
-    description = "Command-line and offline-first smolnet browser/feed reader";
-    homepage = finalAttrs.src.meta.homepage;
+    changelog = "https://git.sr.ht/~lioploum/offpunk/tree/v${finalAttrs.version}/item/CHANGELOG";
+    description = "CLI and offline-first smolnet browser/feed reader";
+    longDescription = ''
+      Offpunk allows you to browse the Web, Gemini, Gopher and
+      subscribe to RSS feeds without leaving your terminal and while
+      being offline.
+
+      The goal of Offpunk is to be able to synchronise your content
+      once (a day, a week, a month) and then browse/organise it while
+      staying disconnected.
+    '';
+    homepage = "https://offpunk.net";
     license = lib.licenses.agpl3Plus;
     mainProgram = "offpunk";
     maintainers = with lib.maintainers; [ DamienCassou ];
