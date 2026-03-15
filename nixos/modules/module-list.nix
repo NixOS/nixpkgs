@@ -315,6 +315,7 @@
   ./programs/skim.nix
   ./programs/slock.nix
   ./programs/sniffnet.nix
+  ./programs/solaar.nix
   ./programs/soundmodem.nix
   ./programs/ssh.nix
   ./programs/starship.nix
