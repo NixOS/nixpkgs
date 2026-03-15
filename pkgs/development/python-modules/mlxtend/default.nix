@@ -47,6 +47,14 @@ buildPythonPackage rec {
     "test_invalid_labels_1"
     "test_default"
     "test_nullability"
+    # see upstream issue https://github.com/rasbt/mlxtend/issues/1161
+    # skip the "TypeError: only 0-dimensional arrays can be converted to Python scalars" failures in test_perceptron
+    "test_standardized_iris_data"
+    "test_progress_1"
+    "test_progress_2"
+    "test_progress_3"
+    "test_score_function"
+    "test_nonstandardized_iris_data"
   ];
 
   disabledTestPaths = [
