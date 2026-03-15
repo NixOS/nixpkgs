@@ -907,6 +907,7 @@ in
   livebook-service = runTest ./livebook-service.nix;
   livekit = runTest ./networking/livekit.nix;
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
+  llama-cpp = runTest ./llama-cpp.nix;
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
   local-content-share = runTest ./local-content-share.nix;
