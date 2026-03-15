@@ -3,19 +3,15 @@
   fetchFromGitHub,
   python3,
 }:
-
-let
-  version = "3.4.7";
-in
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "routersploit";
-  inherit version;
+  version = "3.4.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "threat9";
     repo = "routersploit";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-10NBSY/mYjOWoz2XCJ1UvXUIYUW4csRJHHtDlWMO420=";
   };
 
@@ -54,6 +50,7 @@ python3.pkgs.buildPythonApplication {
   meta = {
     description = "Exploitation Framework for Embedded Devices";
     homepage = "https://github.com/threat9/routersploit";
+    changelog = "https://github.com/threat9/routersploit/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       fab
@@ -61,4 +58,4 @@ python3.pkgs.buildPythonApplication {
     ];
     mainProgram = "rsf";
   };
-}
+})
