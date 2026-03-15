@@ -4683,7 +4683,6 @@ with pkgs;
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
-    cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_6
     cargo-pgrx_0_16_0
     cargo-pgrx_0_16_1
@@ -5432,6 +5431,7 @@ with pkgs;
     electron_38-bin
     electron_39-bin
     electron_40-bin
+    electron_41-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -5439,6 +5439,7 @@ with pkgs;
     electron-chromedriver_38
     electron-chromedriver_39
     electron-chromedriver_40
+    electron-chromedriver_41
     ;
 
   inherit
@@ -5471,12 +5472,17 @@ with pkgs;
           src = electron-source.electron_40;
           bin = electron_40-bin;
         };
+        electron_41 = getElectronPkg {
+          src = electron-source.electron_41;
+          bin = electron_41-bin;
+        };
       }
     )
     electron_37
     electron_38
     electron_39
     electron_40
+    electron_41
     ;
   electron = electron_38;
   electron-bin = electron_38-bin;
@@ -6337,6 +6343,8 @@ with pkgs;
     fmt_11
     fmt_12
     ;
+
+  firefox_decrypt = callPackage ../by-name/fi/firefox_decrypt/package.nix { nss = nss_latest; };
 
   fmt = fmt_12;
 

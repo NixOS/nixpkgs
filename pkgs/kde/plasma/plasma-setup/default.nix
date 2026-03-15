@@ -7,8 +7,6 @@
 mkKdeDerivation {
   pname = "plasma-setup";
 
-  patches = [ ./optional-dependencies.patch ];
-
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [
     qtlocation

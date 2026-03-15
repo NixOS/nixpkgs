@@ -4,21 +4,18 @@
   setuptools-scm,
   lib,
   django,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "django-user-sessions";
-  version = "2.0.0";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-user-sessions";
     tag = version;
-    hash = "sha256-Wexy6G2pZ8LTnqtJkBZIePV7qhQW8gu/mKiQfZtgf/o=";
+    hash = "sha256-vHLeEmlVil1iJi+YkxL5c04Vq/b5b43tjC2ZcjH4/Ys=";
   };
-
-  disabled = pythonOlder "3.7";
 
   dependencies = [
     django
