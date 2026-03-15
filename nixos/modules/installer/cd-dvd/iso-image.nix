@@ -216,6 +216,8 @@ let
     [ baseIsolinuxCfg ] ++ lib.optional config.boot.loader.grub.memtest86.enable isolinuxMemtest86Entry
   );
 
+  efiRoot = "/EFI/BOOT";
+
   refindBinary =
     if targetArch == "x64" || targetArch == "aa64" then "refind_${targetArch}.efi" else null;
 
@@ -224,12 +226,28 @@ let
     if refindBinary != null then
       ''
         # Adds rEFInd to the ISO.
-        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/EFI/BOOT/
+        cp -v ${pkgs.refind}/share/refind/${refindBinary} $out/${efiRoot}/
       ''
     else
       "# No refind for ${targetArch}";
 
   grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
+
+  grubRoot = if config.isoImage.makeChrpBootable then "/boot/grub" else efiRoot;
+
+  grubMarkerFile = "/nixos-installer-marker";
+
+  # "#" may not be handled in these, producing an error on the console
+  grubEmbeddedCfg = pkgs.writers.writeText "grub-embedded.cfg" (
+    # Search using a "marker file"
+    ''
+      search --set=root --file ${grubMarkerFile}
+    ''
+    # Switch to real config file
+    + ''
+      configfile ($root)${grubRoot}/grub.cfg
+    ''
+  );
 
   grubMenuCfg = ''
     set textmode=${lib.boolToString (config.isoImage.forceTextMode)}
@@ -239,7 +257,7 @@ let
     #
 
     # Search using a "marker file"
-    search --set=root --file /EFI/nixos-installer-image
+    search --set=root --file ${grubMarkerFile}
 
     insmod gfxterm
     insmod png
@@ -280,13 +298,13 @@ let
       if config.isoImage.grubTheme != null then
         ''
           # Sets theme.
-          set theme=(\$root)/EFI/BOOT/grub-theme/theme.txt
+          set theme=(\$root)${grubRoot}/grub-theme/theme.txt
           # Load theme fonts
-          $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
+          $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)${grubRoot}/grub-theme/%P\n")
         ''
       else
         ''
-          if background_image (\$root)/EFI/BOOT/efi-background.png; then
+          if background_image (\$root)${efiRoot}/efi-background.png; then
             # Black background means transparent background when there
             # is a background image set... This seems undocumented :(
             set color_normal=black/black
@@ -300,43 +318,61 @@ let
     }
 
     hiddenentry 'Text mode' --hotkey 't' {
-      loadfont (\$root)/EFI/BOOT/unicode.pf2
+      loadfont (\$root)${grubRoot}/unicode.pf2
       set textmode=true
       terminal_output console
     }
 
     ${lib.optionalString (config.isoImage.grubTheme != null) ''
       hiddenentry 'GUI mode' --hotkey 'g' {
-        $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
+        $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)${grubRoot}/grub-theme/%P\n")
         set textmode=false
         terminal_output gfxterm
       }
     ''}
   '';
 
-  # The EFI boot image.
+  # The EFI/CHRP boot image.
   # Notes about grub:
   #  * Yes, the grubMenuCfg has to be repeated in all submenus. Otherwise you
   #    will get white-on-black console-like text on sub-menus. *sigh*
-  efiDir =
-    pkgs.runCommand "efi-directory"
+  grubDir =
+    let
+      grubBuildPkg =
+        if config.isoImage.makeChrpBootable then
+          pkgs.buildPackages.grub2_ieee1275
+        else
+          pkgs.buildPackages.grub2_efi;
+      grubHostPkg =
+        if config.isoImage.makeChrpBootable then grubPkgs.grub2_ieee1275 else grubPkgs.grub2_efi;
+      grubBootName =
+        if config.isoImage.makeChrpBootable then "grub.elf" else "BOOT${lib.toUpper targetArch}.EFI";
+    in
+    pkgs.runCommand "grub-directory"
       {
-        nativeBuildInputs = [ pkgs.buildPackages.grub2_efi ];
+        nativeBuildInputs = [ grubBuildPkg ];
         strictDeps = true;
       }
-      ''
-        mkdir -p $out/EFI/BOOT
+      (
+        ''
+          grub-script-check ${grubEmbeddedCfg}
 
-        # Add a marker so GRUB can find the filesystem.
-        touch $out/EFI/nixos-installer-image
+          # Add a marker so GRUB can find the filesystem.
+          mkdir $out
+          touch $out/${grubMarkerFile}
 
-        # ALWAYS required modules.
-        MODULES=(
-          # Basic modules for filesystems and partition schemes
-          "fat"
-          "iso9660"
-          "part_gpt"
-          "part_msdos"
+          # ALWAYS required modules.
+          MODULES=(
+            # Basic modules for filesystems and partition schemes
+            "fat"
+            "iso9660"
+            "part_gpt"
+            "part_msdos"
+        ''
+        + lib.optionalString config.isoImage.makeNewWorldMacBootable ''
+          "part_apple"
+        ''
+        + ''
 
           # Basic stuff
           "normal"
@@ -344,142 +380,155 @@ let
           "linux"
           "configfile"
           "loopback"
+        ''
+        + lib.optionalString (!config.isoImage.makeChrpBootable) ''
           "chain"
+        ''
+        + ''
           "halt"
 
+        ''
+        + lib.optionalString config.isoImage.makeEfiBootable ''
           # Allows rebooting into firmware setup interface
           "efifwsetup"
 
           # EFI Graphics Output Protocol
           "efi_gop"
+        ''
+        + ''
 
-          # User commands
-          "ls"
+            # User commands
+            "ls"
 
-          # System commands
-          "search"
-          "search_label"
-          "search_fs_uuid"
-          "search_fs_file"
-          "echo"
+            # System commands
+            "search"
+            "search_label"
+            "search_fs_uuid"
+            "search_fs_file"
+            "echo"
 
-          # We're not using it anymore, but we'll leave it in so it can be used
-          # by user, with the console using "C"
-          "serial"
+            # We're not using it anymore, but we'll leave it in so it can be used
+            # by user, with the console using "C"
+            "serial"
 
-          # Graphical mode stuff
-          "gfxmenu"
-          "gfxterm"
-          "gfxterm_background"
-          "gfxterm_menu"
-          "test"
-          "loadenv"
-          "all_video"
-          "videoinfo"
+            # Graphical mode stuff
+            "gfxmenu"
+            "gfxterm"
+            "gfxterm_background"
+            "gfxterm_menu"
+            "test"
+            "loadenv"
+            "all_video"
+            "videoinfo"
 
-          # File types for graphical mode
-          "png"
-        )
+            # File types for graphical mode
+            "png"
+          )
 
-        echo "Building GRUB with modules:"
-        for mod in ''${MODULES[@]}; do
-          echo " - $mod"
-        done
-
-        # Modules that may or may not be available per-platform.
-        echo "Adding additional modules:"
-        for mod in efi_uga; do
-          if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
+          echo "Building GRUB with modules:"
+          for mod in ''${MODULES[@]}; do
             echo " - $mod"
-            MODULES+=("$mod")
-          fi
-        done
+          done
 
-        # Make our own efi program, we can't rely on "grub-install" since it seems to
-        # probe for devices, even with --skip-fs-probe.
-        grub-mkimage \
-          --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
-          -o $out/EFI/BOOT/BOOT${lib.toUpper targetArch}.EFI \
-          -p /EFI/BOOT \
-          -O ${grubPkgs.grub2_efi.grubTarget} \
-          ''${MODULES[@]}
-        cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/BOOT/
+          # Modules that may or may not be available per-platform.
+          echo "Adding additional modules:"
+          for mod in efi_uga; do
+            if [ -f ${grubHostPkg}/lib/grub/${grubHostPkg.grubTarget}/$mod.mod ]; then
+              echo " - $mod"
+              MODULES+=("$mod")
+            fi
+          done
 
-        cat <<EOF > $out/EFI/BOOT/grub.cfg
+          mkdir -p $out/${grubRoot}
 
-        set timeout=${toString grubEfiTimeout}
+          # Make our own efi program, we can't rely on "grub-install" since it seems to
+          # probe for devices, even with --skip-fs-probe.
+          grub-mkimage \
+            --directory=${grubHostPkg}/lib/grub/${grubHostPkg.grubTarget} \
+            -o $out/${grubRoot}/${grubBootName} \
+            -c ${grubEmbeddedCfg} \
+            -p ${grubRoot} \
+            -O ${grubHostPkg.grubTarget} \
+            ''${MODULES[@]}
+          cp ${grubHostPkg}/share/grub/unicode.pf2 $out/${grubRoot}
 
-        clear
-        # This message will only be viewable on the default (UEFI) console.
-        echo ""
-        echo "Loading graphical boot menu..."
-        echo ""
-        echo "Press 't' to use the text boot menu on this console..."
-        echo ""
+          cat <<EOF > $out/${grubRoot}/grub.cfg
 
-        ${grubMenuCfg}
+          set timeout=${toString grubEfiTimeout}
 
-        # If the parameter iso_path is set, append the findiso parameter to the kernel
-        # line. We need this to allow the nixos iso to be booted from grub directly.
-        if [ \''${iso_path} ] ; then
-          set isoboot="findiso=\''${iso_path}"
-        fi
+          clear
+          # This message will only be viewable on the default (i.e. UEFI) console.
+          echo ""
+          echo "Loading graphical boot menu..."
+          echo ""
+          echo "Press 't' to use the text boot menu on this console..."
+          echo ""
 
-        #
-        # Menu entries
-        #
-
-        ${buildMenuGrub2 { }}
-        submenu "Options" --class submenu --class hidpi {
           ${grubMenuCfg}
 
-          ${lib.concatMapStringsSep "\n" (
-            {
-              title,
-              class,
-              params,
-            }:
-            ''
-              submenu "${title}" --class ${class} {
-                ${grubMenuCfg}
-                ${buildMenuGrub2 { inherit params; }}
-              }
-            ''
-          ) optionsSubMenus}
-        }
-
-        ${lib.optionalString (refindBinary != null) ''
-          # GRUB apparently cannot do "chainloader" operations on "CD".
-          if [ "\$root" != "cd0" ]; then
-            menuentry 'rEFInd' --class refind {
-              # Force root to be the FAT partition
-              # Otherwise it breaks rEFInd's boot
-              search --set=root --no-floppy --fs-uuid 1234-5678
-              chainloader (\$root)/EFI/BOOT/${refindBinary}
-            }
+          # If the parameter iso_path is set, append the findiso parameter to the kernel
+          # line. We need this to allow the nixos iso to be booted from grub directly.
+          if [ \''${iso_path} ] ; then
+            set isoboot="findiso=\''${iso_path}"
           fi
-        ''}
-        ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
-          menuentry 'Memtest86+' --class debug {
-            linux (\$root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
+
+          #
+          # Menu entries
+          #
+
+          ${buildMenuGrub2 { }}
+          submenu "Options" --class submenu --class hidpi {
+            ${grubMenuCfg}
+
+            ${lib.concatMapStringsSep "\n" (
+              {
+                title,
+                class,
+                params,
+              }:
+              ''
+                submenu "${title}" --class ${class} {
+                  ${grubMenuCfg}
+                  ${buildMenuGrub2 { inherit params; }}
+                }
+              ''
+            ) optionsSubMenus}
           }
-        ''}
-        menuentry 'Firmware Setup' --class settings {
-          fwsetup
-          clear
-          echo ""
-          echo "If you see this message, your EFI system doesn't support this feature."
-          echo ""
-        }
-        menuentry 'Shutdown' --class shutdown {
-          halt
-        }
-        EOF
 
-        grub-script-check $out/EFI/BOOT/grub.cfg
+          ${lib.optionalString (refindBinary != null) ''
+            # GRUB apparently cannot do "chainloader" operations on "CD".
+            if [ "\$root" != "cd0" ]; then
+              menuentry 'rEFInd' --class refind {
+                # Force root to be the FAT partition
+                # Otherwise it breaks rEFInd's boot
+                search --set=root --no-floppy --fs-uuid 1234-5678
+                chainloader (\$root)${efiRoot}/${refindBinary}
+              }
+            fi
+          ''}
+          ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
+            menuentry 'Memtest86+' --class debug {
+              linux (\$root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
+            }
+          ''}
+          menuentry 'Firmware Setup' --class settings {
+            fwsetup
+            clear
+            echo ""
+            echo "If you see this message, then your system doesn't support this feature."
+            echo ""
+          }
+          menuentry 'Shutdown' --class shutdown {
+            halt
+          }
+          EOF
 
-        ${refind}
-      '';
+          grub-script-check $out/${grubRoot}/grub.cfg
+        ''
+        + lib.optionalString config.isoImage.makeEfiBootable ''
+          ${refind}
+        ''
+      );
 
   efiImg =
     pkgs.runCommand "efi-image_eltorito"
@@ -495,8 +544,8 @@ let
       #   dates (cp -p, touch, mcopy -m, faketime for label), IDs (mkfs.vfat -i)
       ''
         mkdir ./contents && cd ./contents
-        mkdir -p ./EFI/BOOT
-        cp -rp "${efiDir}"/EFI/BOOT/{grub.cfg,*.EFI,*.efi} ./EFI/BOOT
+        mkdir -p ./${efiRoot}
+        cp -rp "${grubDir}"/${efiRoot}/{grub.cfg,*.EFI,*.efi} ./${efiRoot}
 
         # Rewrite dates for everything in the FS
         find . -exec touch --date=2000-01-01 {} +
@@ -654,6 +703,22 @@ in
       type = lib.types.bool;
       description = ''
         Whether the ISO image should be an EFI-bootable volume.
+      '';
+    };
+
+    isoImage.makeChrpBootable = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = ''
+        Whether the ISO image should be bootable on CHRP machines.
+      '';
+    };
+
+    isoImage.makeNewWorldMacBootable = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = ''
+        Whether the ISO image should be bootable on PowerMacs with New World ROMs.
       '';
     };
 
@@ -846,6 +911,10 @@ in
           in
           "isoImage.volumeID ${config.isoImage.volumeID} is ${howmany} characters. That is ${toomany} characters longer than the limit of 32.";
       }
+      {
+        assertion = config.isoImage.makeNewWorldMacBootable -> config.isoImage.makeChrpBootable;
+        message = "isoImage.makeNewWorldMacBootable requires isoImage.makeChrpBootable. New World ROM Macs use CHRP boot scripts.";
+      }
       (
         let
           badSpecs = lib.filterAttrs (
@@ -871,11 +940,19 @@ in
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = lib.mkImageMediaOverride false;
 
-    environment.systemPackages = [
-      grubPkgs.grub2
-    ]
-    ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux;
-    system.extraDependencies = [ grubPkgs.grub2_efi ];
+    environment.systemPackages =
+      if config.isoImage.makeChrpBootable then
+        [
+          grubPkgs.grub2_ieee1275
+        ]
+      else
+        (
+          [
+            grubPkgs.grub2
+          ]
+          ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux
+        );
+    system.extraDependencies = lib.optional (lib.meta.availableOn grubPkgs.hostPlatform grubPkgs.grub2_efi) grubPkgs.grub2_efi;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the
@@ -996,19 +1073,115 @@ in
           target = "/boot/efi.img";
         }
         {
-          source = "${efiDir}/EFI";
+          source = "${grubDir}/EFI";
           target = "/EFI";
         }
         {
           source = config.isoImage.efiSplashImage;
-          target = "/EFI/BOOT/efi-background.png";
+          target = "${efiRoot}/efi-background.png";
+        }
+      ]
+      ++ lib.optionals config.isoImage.makeChrpBootable [
+        {
+          source = "${grubDir}/boot/grub";
+          target = "/boot/grub";
+        }
+        {
+          # TODO: Customise (name, logo)
+          source = pkgs.runCommand "grub-bootinfo" { } ''
+            cp ${grubPkgs.grub2_ieee1275}/lib/grub/powerpc-ieee1275/bootinfo.txt $out
+            substituteInPlace $out --replace-fail '\boot\grub\powerpc.elf' '\boot\grub\grub.elf'
+          '';
+          target = "/ppc/bootinfo.txt";
+        }
+      ]
+      ++ lib.optionals config.isoImage.makeNewWorldMacBootable [
+        {
+          source =
+            let
+              ppm2osbadgeicon = pkgs.callPackage (
+                {
+                  stdenv,
+                }:
+                stdenv.mkDerivation {
+                  pname = "ppm2osbadgeicon";
+                  version = "3";
+
+                  src = ./ppm2osbadgeicon.c;
+
+                  dontUnpack = true;
+                  dontConfigure = true;
+
+                  buildPhase = ''
+                    runHook preBuild
+
+                    $CC -std=c99 -Wall -Wextra -pedantic -Werror $src -o ppm2osbadgeicon -lm
+
+                    runHook postBuild
+                  '';
+
+                  installPhase = ''
+                    runHook preInstall
+
+                    install -Dm755 -t $out/bin ppm2osbadgeicon
+
+                    runHook postInstall
+                  '';
+                }
+              ) { };
+
+              bootxStart = pkgs.writers.writeText "BootX-start" ''
+                <CHRP-BOOT>
+                <COMPATIBLE>
+                MacRISC MacRISC3 MacRISC4
+                </COMPATIBLE>
+                <DESCRIPTION>
+                GRand Unified Bootloader
+                </DESCRIPTION>
+                <OS-NAME>
+                NixOS
+                </OS-NAME>
+                <OS-BADGE-ICONS>
+              '';
+              # boot-script tags must be lowercase for SLOF (used in QEMU and some machines)
+              bootxEnd = pkgs.writers.writeText "BootX-end" ''
+                </OS-BADGE-ICONS>
+                <boot-script>
+                boot &device;:&partition;,\boot\grub\grub.elf
+                </boot-script>
+                </CHRP-BOOT>
+              '';
+              # Has wrong colours when run on my machine. Bug in imagemagick?
+              nix-snowflake-ppm =
+                pkgs.runCommand "nix-snowflake.ppm" { nativeBuildInputs = [ pkgs.imagemagick ]; }
+                  ''
+                    magick \
+                      -background white \
+                      ${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg \
+                      -resize 52x52 \
+                      -depth 8 \
+                      $out
+                  '';
+            in
+            pkgs.runCommand "grub-BootX" { nativeBuildInputs = [ ppm2osbadgeicon ]; } ''
+              cat ${bootxStart} > $out
+              ppm2osbadgeicon ${./flake.ppm} >> $out
+              cat ${bootxEnd} >> $out
+            '';
+          target = "/System/Library/CoreServices/BootX";
+        }
+      ]
+      ++ lib.optionals (config.isoImage.makeEfiBootable || config.isoImage.makeChrpBootable) [
+        {
+          source = "${grubDir}/${grubMarkerFile}";
+          target = grubMarkerFile;
         }
       ]
       ++ lib.optionals (config.isoImage.makeEfiBootable && !config.boot.initrd.systemd.enable) [
         # http://www.supergrubdisk.org/wiki/Loopback.cfg
         # This feature will be removed, and thus is not supported by systemd initrd
         {
-          source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/BOOT/grub.cfg") + "/grub";
+          source = (pkgs.writeTextDir "grub/loopback.cfg" "source ${efiRoot}/grub.cfg") + "/grub";
           target = "/boot/grub";
         }
       ]
@@ -1021,7 +1194,7 @@ in
       ++ lib.optionals (config.isoImage.grubTheme != null) [
         {
           source = config.isoImage.grubTheme;
-          target = "/EFI/BOOT/grub-theme";
+          target = "${grubRoot}/grub-theme";
         }
       ];
 
@@ -1051,6 +1224,13 @@ in
       // lib.optionalAttrs config.isoImage.makeEfiBootable {
         efiBootable = true;
         efiBootImage = "boot/efi.img";
+      }
+      // lib.optionalAttrs config.isoImage.makeChrpBootable {
+        chrpBootable = true;
+      }
+      // lib.optionalAttrs config.isoImage.makeNewWorldMacBootable {
+        tbxiBlessDir = "/System/Library/CoreServices";
+        tbxiBlessFile = "BootX";
       }
     );
 
