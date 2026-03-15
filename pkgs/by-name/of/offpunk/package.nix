@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "offpunk";
-  version = "3.0";
+  version = "3.1";
   pyproject = true;
 
   src = fetchFromSourcehut {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5SoMa93QbwbsryeHGc3pkkDA8v9eonZvuflSuDV2hmI=";
+    hash = "sha256-RwigItHVNsgq6k3O8YrSMFBaZMJwJSzB6dfnNiYsefY=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -44,10 +44,23 @@ python3Packages.buildPythonApplication (finalAttrs: {
     chardet
     cryptography
     feedparser
+    hatch-requirements-txt
     readability-lxml
     requests
     setproctitle
   ]);
+
+  /*
+    False positive from pythonRuntimeDepsCheckHook:
+      - "bs4" is the import name for beautifulsoup4 (not the PyPI
+        package name)
+      - "file" refers to the system `file` binary, not a Python
+        package
+  */
+  pythonRemoveDeps = [
+    "bs4"
+    "file"
+  ];
 
   postInstall = ''
     installManPage man/*.1
