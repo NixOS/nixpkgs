@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -63,6 +64,13 @@ buildPythonPackage rec {
     types-beautifulsoup4
     types-pyyaml
     types-requests
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # Failed: Failed to start the server after 5 seconds.
+    "test_add_provenance_with_release"
+    "test_add_provenance_with_revision"
+    "test_scanner_result"
   ];
 
   disabledTestPaths = [
