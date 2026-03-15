@@ -26,13 +26,13 @@ let
 in
 python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname;
-  version = "5.6.2";
+  version = "5.7.1";
 
   src = fetchFromGitHub {
     owner = "AdityaGarg8";
     repo = "git-credential-email";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pW13tOPOyS5EorR1C/WEpJpu2ilCA4s8N7GkXoyPv7U=";
+    hash = "sha256-u5I88zHr4bACndc0hZF953DxyjfhOlRiXD49DO9On1k=";
   };
 
   dependencies =
