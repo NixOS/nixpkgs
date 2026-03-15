@@ -131,6 +131,15 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "installfonts": [
+    "index.html#installfonts"
+  ],
+  "installfonts-installfont": [
+    "index.html#installfonts-installfont"
+  ],
+  "installfonts-installfont-exampleusage": [
+    "index.html#installfonts-installfont-exampleusage"
+  ],
   "libcxxhardeningextensive": [
     "index.html#libcxxhardeningextensive"
   ],
