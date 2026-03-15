@@ -10296,6 +10296,11 @@
     githubId = 56235032;
     name = "Hamza Remmal";
   };
+  hanabelmengistu = {
+    name = "hanabel.mengistu@circleci.com";
+    github = "hanabel1";
+    githubId = 224660613;
+  };
   hanemile = {
     email = "mail@emile.space";
     github = "HanEmile";
