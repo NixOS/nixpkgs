@@ -1095,6 +1095,14 @@ with haskellLib;
   webdriver-angular = dontCheck super.webdriver-angular;
   xsd = dontCheck super.xsd;
 
+  # Test in question times out on Hydra builders.
+  grisette = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-t"
+      "!mrgAsum/semantics"
+    ];
+  }) super.grisette;
+
   # Allow template-haskell 2.22
   # https://github.com/well-typed/ixset-typed/pull/23
   ixset-typed =
@@ -2736,6 +2744,13 @@ with haskellLib;
 
   # Test suite doesn't compile anymore
   twitter-types = dontCheck super.twitter-types;
+
+  secp256k1-haskell = appendPatch (pkgs.fetchpatch {
+    # https://github.com/jprupp/secp256k1-haskell/pull/51
+    name = "remove-deprecated-aliases";
+    url = "https://github.com/jprupp/secp256k1-haskell/commit/68318be6ac5271639e3e982a9a5b194dc1f926c2.patch";
+    sha256 = "sha256-l9WPdV5D8C/t6YXg7Cf6RyNx0cnJKp78VLk02On1Zt4=";
+  }) super.secp256k1-haskell;
 
   # Tests open file "data/test_vectors_aserti3-2d_run01.txt" but it doesn't exist
   haskoin-core = dontCheck super.haskoin-core;
