@@ -1,57 +1,77 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   python3Packages,
-  libjack2,
   which,
   bash,
-  qt5,
+  qt6,
+  coreutils,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "raysession";
-  version = "0.14.4";
+  version = "0.17.4";
 
-  src = fetchurl {
-    url = "https://github.com/Houston4444/RaySession/releases/download/v${finalAttrs.version}/RaySession-${finalAttrs.version}-source.tar.gz";
-    hash = "sha256-cr9kqZdqY6Wq+RkzwYxNrb/PLFREKUgWeVNILVUkc7A=";
+  src = fetchFromGitHub {
+    owner = "Houston4444";
+    repo = "RaySession";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DR8i0jJCcMy5r3/xxsOiMScMzHRFrdRjJm2p/0/rbQw=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
     # Fix installation path of xdg schemas.
-    substituteInPlace Makefile --replace '$(DESTDIR)/' '$(DESTDIR)$(PREFIX)/'
-    # Do not wrap an importable module with a shell script.
+    substituteInPlace Makefile --replace-fail '$(DESTDIR)/' '$(DESTDIR)$(PREFIX)/'
+    # Fix a shebang typo
+    substituteInPlace src/bin/conf_testou.py \
+      --replace-fail '#!/usr/bin env' '#!/usr/bin/env'
+    # Fix the python3 invocation in the completions
+    substituteInPlace src/completion/ray_completion.sh \
+      --replace-fail python3 ${lib.getExe python3Packages.python}
+
+    # Mark importable modules as non-executable as to not binwrap them
+    chmod -x src/control/ray_control.py
     chmod -x src/daemon/desktops_memory.py
-    chmod -x src/clients/jackpatch/main_loop.py
+    chmod -x src/daemon/ray_daemon.py
+    chmod -x src/gui/raysession.py
+    chmod -x src/patchbay_daemon/patchbay_daemon.py
+
+    # Mark actual entrypoints as executable to be recognized by patchShebangs
+    chmod +x session_scripts/{slow_open,save_via_window}/ray-scripts/*.sh
+    chmod +x src/bin/*.{py,sh}
+    chmod +x src/jack_config_script/*.sh
   '';
 
   pyproject = false;
 
   nativeBuildInputs = [
-    python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
-    qt5.qttools # lrelease to build translations.
-    which # which to find lrelease.
-    qt5.wrapQtAppsHook
+    python3Packages.pyqt6 # pyuic6 and rcc to build resources.
+    qt6.qttools # lrelease to build translations.
+    which # which to find lrelease
+    qt6.wrapQtAppsHook
   ];
   buildInputs = [
-    libjack2
     bash
+    coreutils # Some shebangs use "env -S"
   ];
-  dependencies = [
-    python3Packages.pyliblo3
-    python3Packages.pyqt5
+
+  dependencies = with python3Packages; [
+    pyqt6
+    qtpy
+    pyliblo3
+    jack-client
   ];
 
   dontWrapQtApps = true; # The program is a python script.
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  makeWrapperArgs = [
-    "--suffix"
-    "LD_LIBRARY_PATH"
-    ":"
-    (lib.makeLibraryPath [ libjack2 ])
+  makeFlags = [
+    "RCC=${qt6.qtbase}/libexec/rcc"
   ];
+
+  strictDeps = true;
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/raysession/src" "$out ''${pythonPath[*]}"
@@ -64,7 +84,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/Houston4444/RaySession";
     description = "Session manager for Linux musical programs";
     license = lib.licenses.gpl2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ vojtechstep ];
     platforms = lib.platforms.linux;
   };
 })
