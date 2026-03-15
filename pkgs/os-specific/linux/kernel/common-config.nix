@@ -682,6 +682,8 @@ let
     # Filesystem options - in particular, enable extended attributes and
     # ACLs for all filesystems that support them.
     filesystem = {
+      FS_DAX = yes; # Direct Access
+
       FANOTIFY = yes;
       FANOTIFY_ACCESS_PERMISSIONS = yes;
 
