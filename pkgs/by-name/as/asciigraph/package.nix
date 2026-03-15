@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "asciigraph";
-  version = "0.7.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "guptarohit";
     repo = "asciigraph";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+4aGkumO42cloHWV8qEEJ5bj8TTdtfXTWGFCgCRE4Mg=";
+    hash = "sha256-wlalEB6/4RakFT48lRbAtVZCT5UC2shi4pvPmbzr6fA=";
   };
 
   vendorHash = null;
