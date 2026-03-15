@@ -62,12 +62,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         SyslogIdentifier = "bazarr";
-        ExecStart = pkgs.writeShellScript "start-bazarr" ''
-          ${cfg.package}/bin/bazarr \
-            --config '${cfg.dataDir}' \
-            --port ${toString cfg.listenPort} \
-            --no-update True
-        '';
+        ExecStart = "${lib.getExe cfg.package} --config '${cfg.dataDir}' --port ${toString cfg.listenPort} --no-update True";
         Restart = "on-failure";
         KillSignal = "SIGINT";
         SuccessExitStatus = "0 156";
