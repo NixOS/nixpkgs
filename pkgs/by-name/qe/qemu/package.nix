@@ -333,7 +333,13 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!pluginsSupport) "--disable-plugins"
   ++ lib.optional (!enableBlobs) "--disable-install-blobs"
   ++ lib.optional userOnly "--disable-system"
-  ++ lib.optional stdenv.hostPlatform.isStatic "--static";
+  ++ lib.optional stdenv.hostPlatform.isStatic "--static"
+  # Works around: https://github.com/NixOS/nixpkgs/issues/464805
+  # We should revisit this when pkgsStatic is static-pie by default.
+  # (Note that --disable-pie causes -fno-pie -no-pie to be passed, overriding Nixpkg's hardening handling.
+  # Therefore it should be limited to affected platforms.
+  # See: https://gitlab.com/qemu-project/qemu/-/blob/v10.2.1/meson.build?ref_type=tags#L462-482 for details.)
+  ++ lib.optional (stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isAarch64) "--disable-pie";
 
   dontWrapGApps = true;
 
