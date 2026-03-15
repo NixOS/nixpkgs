@@ -25,10 +25,14 @@ buildGoModule (finalAttrs: {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  postPatch = ''
+    substituteInPlace internal/cueversion/version.go \
+      --replace-fail "return cueMod.Version" "return \"v${finalAttrs.version}\""
+  '';
+
   ldflags = [
     "-s"
     "-w"
-    "-X cuelang.org/go/cmd/cue/cmd.version=v${finalAttrs.version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -45,7 +49,7 @@ buildGoModule (finalAttrs: {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
         command = "cue version";
-        version = "v${finalAttrs.version}";
+        version = "cue version v${finalAttrs.version}";
       };
     };
   };
