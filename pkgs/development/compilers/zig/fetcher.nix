@@ -26,7 +26,7 @@ runCommand "${name}-zig-deps"
     runHook unpackPhase
 
     cd $sourceRoot
-    zig build --fetch
+    zig build --fetch=all
 
     mv $ZIG_GLOBAL_CACHE_DIR/p $out
   ''
