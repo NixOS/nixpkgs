@@ -279,9 +279,15 @@ let
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
     pkgsStatic = nixpkgsFun {
       overlays = [
-        (self': super': {
-          pkgsStatic = super';
-        })
+        (
+          self': super':
+          {
+            pkgsStatic = super';
+          }
+          // lib.optionalAttrs super'.stdenv.hostPlatform.isMusl {
+            pkgsMusl = super';
+          }
+        )
       ]
       ++ overlays;
       crossSystem = {
