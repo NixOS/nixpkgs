@@ -109,6 +109,8 @@ buildDotnetModule {
   doCheck = true;
 
   __darwinAllowLocalNetworking = true; # for tests
+  # vstest.console process failed to connect to testhost process after 90 seconds
+  sandboxProfile = ''(allow network* (remote ip "*:*"))'';
 
   __structuredAttrs = true; # for Copyright property that contains spaces
 
