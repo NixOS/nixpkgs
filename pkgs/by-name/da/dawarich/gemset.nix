@@ -2116,6 +2116,17 @@
     };
     version = "3.2.4";
   };
+  rack-attack = {
+    dependencies = [ "rack" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1wpcxspprm187k6mch9fxhaaq1a3s9bzybd2fdaw1g45pzg9yjgj";
+      type = "gem";
+    };
+    version = "6.8.0";
+  };
   rack-oauth2 = {
     dependencies = [
       "activesupport"
