@@ -497,6 +497,7 @@ builtins.intersectAttrs super {
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client; # the spec runs openid against google.com
   persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
+  notion-client = dontCheck super.notion-client;
   pipes-mongodb = dontCheck super.pipes-mongodb; # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   riak = dontCheck super.riak; # http://hydra.cryp.to/build/498763/log/raw
