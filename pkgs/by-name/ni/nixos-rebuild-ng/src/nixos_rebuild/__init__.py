@@ -278,9 +278,6 @@ def parse_args(
         parser_warn(f"--diff is a no-op with '{args.action}'")
         args.diff = False
 
-    if args.action == Action.EDIT.value and (args.file or args.attr):
-        parser.error(f"--file and --attr are not supported with '{args.action}'")
-
     if (args.target_host or args.build_host) and args.action not in (
         Action.SWITCH.value,
         Action.BOOT.value,
@@ -369,7 +366,7 @@ def execute(argv: list[str]) -> None:
             )
 
         case Action.EDIT:
-            services.edit(flake=flake, grouped_nix_args=grouped_nix_args)
+            services.edit(build_attr, flake=flake, grouped_nix_args=grouped_nix_args)
 
         case Action.DRY_RUN:
             raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
