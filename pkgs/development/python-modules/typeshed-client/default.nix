@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "typeshed-client";
-  version = "2.8.2";
+  version = "2.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JelleZijlstra";
     repo = "typeshed_client";
     tag = "v${version}";
-    hash = "sha256-+muWm2/Psp8V1n7mEloc+ltuwHG/uRvDUgSFRNzz5EQ=";
+    hash = "sha256-pI/TOR0dzlYbPaNt8eUuVBxB6MS+572daTaL48MDmks=";
   };
 
   build-system = [ setuptools ];
