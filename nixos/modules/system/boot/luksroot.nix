@@ -159,9 +159,6 @@ let
         + optionalString dev.allowDiscards " --allow-discards"
         + optionalString dev.bypassWorkqueues " --perf-no_read_workqueue --perf-no_write_workqueue"
         + optionalString (dev.header != null) " --header=${dev.header}";
-      cschange = "cryptsetup luksChangeKey ${dev.device} ${
-        optionalString (dev.header != null) "--header=${dev.header}"
-      }";
       fido2luksCredentials =
         dev.fido2.credentials ++ optional (dev.fido2.credential != null) dev.fido2.credential;
     in
@@ -310,17 +307,25 @@ let
             local response
             local k_luks
             local opened
-            local new_salt
-            local new_iterations
-            local new_challenge
-            local new_response
-            local new_k_luks
 
-            mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
-              die "Failed to mount YubiKey salt storage device"
+            ${
+              if dev.yubikey.salt != null then
+                ''
+                  # Inline salt mode - salt is embedded in initramfs
+                  salt="${dev.yubikey.salt}"
+                  iterations="${toString dev.yubikey.iterations}"
+                ''
+              else
+                ''
+                  # Storage mode - mount and read salt from external device
+                  mount -t ${dev.yubikey.storage.fsType} ${dev.yubikey.storage.device} /crypt-storage || \
+                    die "Failed to mount YubiKey salt storage device"
 
-            salt="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 1p | tr -d '\n')"
-            iterations="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+                  salt="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 1p | tr -d '\n')"
+                  iterations="$(cat /crypt-storage${dev.yubikey.storage.path} | sed -n 2p | tr -d '\n')"
+                ''
+            }
+
             challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
             response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
 
@@ -384,46 +389,9 @@ let
 
             [ "$opened" == false ] && die "Maximum authentication errors reached"
 
-            echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
-            for i in $(seq ${toString dev.yubikey.saltLength}); do
-                byte="$(dd if=/dev/random bs=1 count=1 2>/dev/null | rbtohex)";
-                new_salt="$new_salt$byte";
-                echo -n .
-            done;
-            echo "ok"
-
-            new_iterations="$iterations"
-            ${optionalString (dev.yubikey.iterationStep > 0) ''
-              new_iterations="$(($new_iterations + ${toString dev.yubikey.iterationStep}))"
+            ${optionalString (dev.yubikey.salt == null) ''
+              umount /crypt-storage
             ''}
-
-            new_challenge="$(echo -n $new_salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-
-            new_response="$(ykchalresp -${toString dev.yubikey.slot} -x $new_challenge 2>/dev/null)"
-
-            if [ -z "$new_response" ]; then
-                echo "Warning: Unable to generate new challenge response, current challenge persists!"
-                umount /crypt-storage
-                return
-            fi
-
-            if [ -n "$k_user" ]; then
-                echo -n $k_user
-            else
-                echo
-            fi | pbkdf2-sha512 ${toString dev.yubikey.keyLength} $new_iterations $new_response > /crypt-ramfs/new_key
-
-            echo -n "$k_luks" | hextorb | ${cschange} --key-file=- /crypt-ramfs/new_key
-
-            if [ $? == 0 ]; then
-                echo -ne "$new_salt\n$new_iterations" > /crypt-storage${dev.yubikey.storage.path}
-                sync /crypt-storage${dev.yubikey.storage.path}
-            else
-                echo "Warning: Could not update LUKS key, current challenge persists!"
-            fi
-
-            rm -f /crypt-ramfs/new_key
-            umount /crypt-storage
         }
 
         open_with_hardware() {
@@ -913,22 +881,10 @@ in
                           description = "Which slot on the YubiKey to challenge.";
                         };
 
-                        saltLength = mkOption {
-                          default = 16;
-                          type = types.int;
-                          description = "Length of the new salt in byte (64 is the effective maximum).";
-                        };
-
                         keyLength = mkOption {
                           default = 64;
                           type = types.int;
                           description = "Length of the LUKS slot key derived with PBKDF2 in byte.";
-                        };
-
-                        iterationStep = mkOption {
-                          default = 0;
-                          type = types.int;
-                          description = "How much the iteration count for PBKDF2 is increased at each successful authentication.";
                         };
 
                         gracePeriod = mkOption {
@@ -937,10 +893,32 @@ in
                           description = "Time in seconds to wait for the YubiKey.";
                         };
 
-                        /*
-                          TODO: Add to the documentation of the current module:
+                        salt = mkOption {
+                          default = null;
+                          type = types.nullOr types.str;
+                          example = "1a2b3c4d...";
+                          description = ''
+                            Static salt (hex string) for YubiKey challenge-response.
+                            If set, the salt is embedded in the initramfs and the
+                            `storage` options are ignored.
 
-                          Options related to the storing the salt.
+                            Generate with: `dd if=/dev/random bs=1 count=16 | od -An -vtx1 | tr -d ' \n'`
+                          '';
+                        };
+
+                        iterations = mkOption {
+                          default = 1000000;
+                          type = types.int;
+                          description = ''
+                            PBKDF2 iteration count for key derivation.
+                            Only used when `salt` is set (inline mode).
+                            When using storage mode, iterations are read from the salt file.
+                          '';
+                        };
+
+                        /*
+                          Options related to the storing the salt on external storage.
+                          These are ignored when `salt` is set.
                         */
                         storage = {
                           device = mkOption {
