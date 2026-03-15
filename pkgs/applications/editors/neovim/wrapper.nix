@@ -69,6 +69,8 @@ let
       # { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
       # ]
       plugins ? [ ],
+      # the function you would have passed to lua.withPackages
+      extraLuaPackages ? (_: [ ]),
       ...
     }@attrs:
     assert
@@ -105,8 +107,23 @@ let
         packpathDirs.myNeovimPackages = vimPackageInfo.vimPackage;
         finalPackdir = neovimUtils.packDir packpathDirs;
 
+        luaPathLuaRc =
+          let
+            luaEnv = lua.withPackages extraLuaPackages;
+
+            # getLuaPath / getLuaCPath are not interpreter dependant at the moment and might thus cause
+            # errors between luajit/Puc lua
+            generatedLuaPath = lua.pkgs.getLuaPath luaEnv;
+            generatedLuaCPath = lua.pkgs.getLuaCPath luaEnv;
+          in
+          ''
+            package.path = "${generatedLuaPath}".. ";" .. package.path
+            package.cpath = "${generatedLuaCPath}".. ";" .. package.cpath
+          '';
+
         rcContent = lib.concatStringsSep "\n" (
           [
+            luaPathLuaRc
             providerLuaRc
           ]
           ++ lib.optional (luaRcContent != "") luaRcContent
