@@ -1,0 +1,21 @@
+diff --git a/electron-builder.config.cjs b/electron-builder.config.cjs
+index f8f8328c..129d9251 100644
+--- a/electron-builder.config.cjs
++++ b/electron-builder.config.cjs
+@@ -146,10 +146,12 @@ module.exports = {
+ 			},
+ 		],
+ 		desktop: {
+-			Name: productName,
+-			Comment: 'Instant messaging and VoIP application',
+-			Categories: 'Network;InstantMessaging;',
+-			StartupWMClass: isCanary ? 'fluxer-canary' : 'fluxer',
++			entry: {
++				Name: productName,
++				Comment: 'Instant messaging and VoIP application',
++				Categories: 'Network;InstantMessaging;',
++				StartupWMClass: isCanary ? 'fluxer-canary' : 'fluxer',
++			},
+ 		},
+ 	},
+ 
