@@ -20,9 +20,7 @@ rustPlatform.buildRustPackage (
 
       patches = [ ./web-ui-package-json.patch ];
 
-      npmDepsHash = "sha256-jgsNF93DkEVgPGzdi192HKoSHPYhdrtog28jZvOLK6E=";
-      # Fix peer dependency conflicts with ESLint 9.
-      npmFlags = [ "--legacy-peer-deps" ];
+      npmDepsHash = "sha256-MwcQL4nLN0kCMSubHbgtX3rGcA4xJjUuGv6nFgDXQtw=";
 
       nativeBuildInputs = [ openapi-generator-cli ];
 
@@ -37,16 +35,16 @@ rustPlatform.buildRustPackage (
   in
   {
     pname = "warpgate";
-    version = "0.18.0";
+    version = "0.21.1";
 
     src = fetchFromGitHub {
       owner = "warp-tech";
       repo = "warpgate";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-GLY/VGEKB6gFNTbBlbhpmqQZ62pk2wd6JwWwy4Tz0FE=";
+      hash = "sha256-j2F+Y3rEiAOybiNXD0vdo1kSdJQs78wnKD8n4JuR9VA=";
     };
 
-    cargoHash = "sha256-hwAtj8tTDsYgzuDobMg97wepKKIpohSVClyRiaDd+8w=";
+    cargoHash = "sha256-HQdBBd+XX+7OgYrxuP+scmnG2unBVryPfA5/inflqMw=";
 
     patches = [
       (replaceVars ./hardcode-version.patch { inherit (finalAttrs) version; })
