@@ -4,15 +4,15 @@
   fetchurl,
 }:
 let
-  version = "2.0.88";
+  version = "3.0.0";
   platformMap = {
     aarch64-linux = {
       url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz-arm64.efi";
-      hash = "sha256-AeW92FU65XVJKGPi+A/iz7Jvtb7wKIO3xG3Cx7v4kRg=";
+      hash = "sha256-0i3mKD5t4z3YsvXyNIl0n/4D/pEzoz2meAmqhb+f/9A=";
     };
     x86_64-linux = {
       url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz.efi";
-      hash = "sha256-ipbZJ0mPCuwzb/TDtXXUBTuWOcSsKGAJ1GEGIgB2G7E=";
+      hash = "sha256-xvxF4mPgzcZO6j616FqozL8ObuMRuqKu87TtiPkHa+0=";
     };
   };
 in
