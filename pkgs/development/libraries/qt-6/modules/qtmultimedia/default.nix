@@ -19,17 +19,22 @@
   libva,
   libpulseaudio,
   pipewire,
+  libsysprof-capture,
   wayland,
   libxrandr,
+  openssl,
   elfutils,
   libunwind,
   orc,
   pkgsBuildBuild,
+  replaceVars,
 }:
 
 qtModule {
   pname = "qtmultimedia";
+
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     ffmpeg
   ]
@@ -44,8 +49,10 @@ qtModule {
     wayland
     libxrandr
     libva
+    libsysprof-capture
   ]
   ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [ elfutils ];
+
   propagatedBuildInputs = [
     qtbase
     qtdeclarative
@@ -66,6 +73,22 @@ qtModule {
     ./windows-no-uppercase-libs.patch
     ./windows-resolve-function-name.patch
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf $out/lib/libQt6Multimedia.so \
+      --add-rpath ${
+        lib.makeLibraryPath [
+          pipewire
+          libva
+          openssl
+        ]
+      } \
+      --add-needed "libpipewire-0.3.so.0" \
+      --add-needed "libva.so.2" \
+      --add-needed "libva-drm.so.2" \
+      --add-needed "libva-x11.so.2" \
+      --add-needed "libssl.so"
+  '';
 
   cmakeFlags = [
     "-DENABLE_DYNAMIC_RESOLVE_VAAPI_SYMBOLS=0"
