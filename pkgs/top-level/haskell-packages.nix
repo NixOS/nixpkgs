@@ -6,6 +6,7 @@
   newScope,
   stdenv,
   config,
+  lib,
 }:
 
 let
@@ -89,14 +90,29 @@ in
   compiler = pkgs.lib.recurseIntoAttrs (
     let
       bb = pkgsBuildBuild.haskell;
+
+      # No bindist from upstream, but sometimes we can "borrow" GHC from Debian
+      ghc966DebianBinary = callPackage ../development/compilers/ghc/9.6.6-debian-binary.nix { };
+
+      # Try using the given package to bootstrap, if that's available on the
+      # host platform.  Otherwise, try falling back to something else.  At the
+      # moment, the only fallback we know how to do is to borrow from Debian.
+      bootstrapViaOrFallback =
+        pkg:
+        if lib.meta.availableOn stdenv.hostPlatform pkg.ghc then
+          pkg
+        else if lib.meta.availableOn stdenv.hostPlatform ghc966DebianBinary then
+          bb.packages.ghc966DebianBinary
+        else
+          throw "No available bootstrap GHC for '${stdenv.hostPlatform.system}'";
     in
     {
+      inherit ghc966DebianBinary;
+
       # Required to bootstrap 9.4.8.
       ghc902Binary = callPackage ../development/compilers/ghc/9.0.2-binary.nix {
         inherit llvmPackages;
       };
-
-      ghc966DebianBinary = callPackage ../development/compilers/ghc/9.6.6-debian-binary.nix { };
 
       ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix { };
 
@@ -110,67 +126,31 @@ in
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs =
-          if
-            stdenv.buildPlatform.isPower64
-            && stdenv.buildPlatform.isBigEndian
-            && pkgs.stdenv.hostPlatform.isAbiElfv1
-          then
-            # No bindist, "borrowing" the GHC from Debian
-            bb.packages.ghc966DebianBinary
-          else
-            bb.packages.ghc948;
+        bootPkgs = bootstrapViaOrFallback bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
-        bootPkgs =
-          if
-            stdenv.buildPlatform.isPower64
-            && stdenv.buildPlatform.isBigEndian
-            && pkgs.stdenv.hostPlatform.isAbiElfv1
-          then
-            # No bindist, "borrowing" the GHC from Debian
-            bb.packages.ghc966DebianBinary
-          else if stdenv.buildPlatform.isi686 then
-            bb.packages.ghc948
-          else
-            bb.packages.ghc984Binary;
+        bootPkgs = bootstrapViaOrFallback (
+          if stdenv.buildPlatform.isi686 then bb.packages.ghc948 else bb.packages.ghc984Binary
+        );
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
-        bootPkgs =
-          if
-            stdenv.buildPlatform.isPower64
-            && stdenv.buildPlatform.isBigEndian
-            && pkgs.stdenv.hostPlatform.isAbiElfv1
-          then
-            # No bindist, "borrowing" the GHC from Debian
-            bb.packages.ghc966DebianBinary
-          else if stdenv.buildPlatform.isi686 then
-            bb.packages.ghc967
-          else
-            bb.packages.ghc984Binary;
+        bootPkgs = bootstrapViaOrFallback (
+          if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary
+        );
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
-        bootPkgs =
-          if
-            stdenv.buildPlatform.isPower64
-            && stdenv.buildPlatform.isBigEndian
-            && pkgs.stdenv.hostPlatform.isAbiElfv1
-          then
-            # No bindist, "borrowing" the GHC from Debian
-            bb.packages.ghc966DebianBinary
-          else if stdenv.buildPlatform.isi686 then
-            bb.packages.ghc967
-          else
-            bb.packages.ghc984Binary;
+        bootPkgs = bootstrapViaOrFallback (
+          if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary
+        );
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;

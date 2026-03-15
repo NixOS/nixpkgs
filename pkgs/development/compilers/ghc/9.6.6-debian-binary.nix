@@ -23,6 +23,33 @@ let
   # GHC upstream doesn't release bindist tarballs for some platforms.
   # We're using Debian's binary package, and patching it into a usable-in-Nixpkgs state.
   ghcDebs = {
+    powerpc64le-linux = {
+      src = {
+        urls = [
+          "http://ftp.debian.org/debian/pool/main/g/ghc/ghc_9.6.6-4_ppc64el.deb"
+        ];
+        sha256 = "6dd14937485831c72aef62851c4251f2afa2c7a06a2d4956e25a1f82ab195a01";
+      };
+      exePathForLibraryCheck = null;
+      archSpecificLibraries = [
+        {
+          nixPackage = gmp;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = ncurses6;
+          fileToCheckFor = "libtinfo.so.6";
+        }
+        {
+          nixPackage = numactl;
+          fileToCheckFor = null;
+        }
+        {
+          nixPackage = libffi;
+          fileToCheckFor = null;
+        }
+      ];
+    };
     powerpc64-linux = {
       src = {
         urls = [
@@ -50,6 +77,8 @@ let
           fileToCheckFor = null;
         }
       ];
+
+      platforms = lib.systems.inspect.patterns.isAbiElfv1;
     };
   };
 
@@ -191,11 +220,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch ghc settings
     + ''
       substituteInPlace $out/lib/ghc/lib/settings \
-        --replace-fail powerpc64-linux-gnu-gcc gcc \
-        --replace-fail powerpc64-linux-gnu-g++ g++ \
-        --replace-fail powerpc64-linux-gnu-ld ld \
-        --replace-fail powerpc64-linux-gnu-ar ar \
-        --replace-fail powerpc64-linux-gnu-ranlib ranlib \
+        --replace-fail ${stdenv.hostPlatform.system}-gnu-gcc gcc \
+        --replace-fail ${stdenv.hostPlatform.system}-gnu-g++ g++ \
+        --replace-fail ${stdenv.hostPlatform.system}-gnu-ld ld \
+        --replace-fail ${stdenv.hostPlatform.system}-gnu-ar ar \
+        --replace-fail ${stdenv.hostPlatform.system}-gnu-ranlib ranlib \
         --replace-fail llc-18 llc \
         --replace-fail opt-18 opt
     '';
@@ -262,7 +291,25 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
-    platforms = builtins.attrNames ghcDebs;
+
+    # ghcDebs is keyed on the system double (cpu-kernel), and each entry may
+    # additionally constrain the choice of platforms with a system inspection
+    # pattern.
+    platforms = builtins.map (
+      system:
+      let
+        isThis = {
+          inherit (lib.systems.parse.mkSystemFromString system)
+            cpu
+            kernel
+            ;
+        };
+      in
+      if ghcDebs.${system} ? platforms then
+        lib.systems.inspect.patternLogicalAnd isThis ghcDebs.${system}.platforms
+      else
+        isThis
+    ) (builtins.attrNames ghcDebs);
     maintainers = [ lib.maintainers.OPNA2608 ];
     teams = [ lib.teams.haskell ];
   };
