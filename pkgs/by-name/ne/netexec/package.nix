@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python312,
   writableTmpDirAsHomeHook,
 }:
@@ -43,6 +44,14 @@ python.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-27884.patch";
+      url = "https://github.com/Pennyw0rth/NetExec/commit/7d027f2774d0520b322d60f9c99b9ab3edb4035e.patch";
+      hash = "sha256-2iVQypHbjPSH4Tg+TTLHuGFdN1MGVXIvt1Lfgc1QqJw=";
+    })
   ];
 
   postPatch = ''
