@@ -6,6 +6,7 @@
   python3Packages,
   woff2,
   xmlstarlet,
+  installFonts,
   # available color formats: ["cbdt" "glyf_colr_0" "glyf_colr_1" "sbix" "picosvgz" "untouchedsvgz"]
   # available black formats: ["glyf"]
   fontFormats ? [
@@ -61,6 +62,7 @@ stdenvNoCC.mkDerivation rec {
     python3Packages.fonttools
     woff2
     xmlstarlet
+    installFonts
   ];
 
   methods_black = builtins.filter (m: builtins.elem m fontFormats) methods.black;
@@ -83,16 +85,6 @@ stdenvNoCC.mkDerivation rec {
     bash helpers/generate-fonts-runner.sh "$(pwd)/build" "${version}"
 
     runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/share/fonts/truetype $out/share/fonts/woff2
-    cp build/fonts/*/*.ttf $out/share/fonts/truetype/
-    cp build/fonts/*/*.woff2 $out/share/fonts/woff2/
-
-    runHook postInstall
   '';
 
   meta = {
