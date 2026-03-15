@@ -13,7 +13,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "mypy-protobuf";
-  version = "5.0.0";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
