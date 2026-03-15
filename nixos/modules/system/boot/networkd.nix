@@ -1884,6 +1884,24 @@ let
       '';
     };
 
+    overrideStrategy = mkOption {
+      default = "asDropinIfExists";
+      type = types.enum [
+        "asDropinIfExists"
+        "asDropin"
+      ];
+      description = ''
+        Defines how unit configuration is provided for systemd-networkd:
+
+        `asDropinIfExists` (default) creates a standalone unit file.
+
+        `asDropin` creates a drop-in file named `overrides.conf`, which extends
+        an upstream unit with the same name (e.g. one shipped by the systemd package).
+
+        See also {manpage}`systemd.network(5)`.
+      '';
+    };
+
     matchConfig = mkOption {
       default = { };
       example = {
@@ -3194,10 +3212,21 @@ let
   mkUnitFiles =
     prefix: cfg:
     listToAttrs (
-      map (name: {
-        name = "${prefix}systemd/network/${name}";
-        value.source = "${cfg.units.${name}.unit}/${name}";
-      }) (attrNames cfg.units)
+      map (
+        name:
+        let
+          unit = cfg.units.${name};
+          useDropin = unit.enable && unit.overrideStrategy == "asDropin";
+        in
+        {
+          name =
+            if useDropin then
+              "${prefix}systemd/network/${name}.d/overrides.conf"
+            else
+              "${prefix}systemd/network/${name}";
+          value.source = "${unit.unit}/${name}";
+        }
+      ) (attrNames cfg.units)
     );
 
   commonOptions = visible: {
@@ -3331,7 +3360,7 @@ let
     let
       cfg = config.systemd.network;
       mkUnit = f: def: {
-        inherit (def) enable;
+        inherit (def) enable overrideStrategy;
         text = f def;
       };
     in
@@ -3404,7 +3433,10 @@ let
 
         systemd.services.systemd-networkd =
           let
-            isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
+            isReloadableUnitFileName =
+              unitFileName:
+              strings.hasSuffix ".network" unitFileName
+              || strings.hasSuffix ".network.d/overrides.conf" unitFileName;
             reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
             nonReloadableUnitFiles = attrsets.filterAttrs (k: v: !isReloadableUnitFileName k) unitFiles;
             unitFileSources = unitFiles: map (x: x.source) (attrValues unitFiles);
