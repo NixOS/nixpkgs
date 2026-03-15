@@ -5339,7 +5339,8 @@
       ];
     "saunum" =
       ps: with ps; [
-      ]; # missing inputs: pysaunum
+        pysaunum
+      ];
     "scene" =
       ps: with ps; [
       ];
@@ -7939,6 +7940,7 @@
     "samsungtv"
     "sanix"
     "satel_integra"
+    "saunum"
     "scene"
     "schedule"
     "schlage"
