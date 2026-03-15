@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyrfxtrx";
-  version = "0.32.0";
+  version = "0.33.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pyRFXtrx";
     tag = version;
-    hash = "sha256-6gD6ch7DyaD9nCY/VfyJHmV4gEDPsDfVKjNaNedmVVE=";
+    hash = "sha256-n/qt/Q+gK7qBMZVi7T+TCkFMB6G4+mjePzjos9QSy/s=";
   };
 
   build-system = [ setuptools ];
