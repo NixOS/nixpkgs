@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xastir";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "xastir";
     repo = "xastir";
     tag = "Release-${finalAttrs.version}";
-    hash = "sha256-bpT8F3xURo9jRxBrGGflmcLD6U7F+FTW+VAK1WCgqF4=";
+    hash = "sha256-OwP0vmxOZOyCu5L2WLfDJYFRCZ2XitjPY0Dpi9oR310=";
   };
 
   nativeBuildInputs = [
