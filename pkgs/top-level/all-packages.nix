@@ -2721,8 +2721,6 @@ with pkgs;
 
   kaffeine = libsForQt5.callPackage ../applications/video/kaffeine { };
 
-  keepkey-agent = with python3Packages; toPythonApplication keepkey-agent;
-
   keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
@@ -11093,8 +11091,6 @@ with pkgs;
   groestlcoind = callPackage ../applications/blockchains/groestlcoin {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
-
-  ledger-agent = with python3Packages; toPythonApplication ledger-agent;
 
   napari = with python312Packages; toPythonApplication napari;
 

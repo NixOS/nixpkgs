@@ -8236,8 +8236,6 @@ self: super: with self; {
 
   keepkey = callPackage ../development/python-modules/keepkey { };
 
-  keepkey-agent = callPackage ../development/python-modules/keepkey-agent { };
-
   kegtron-ble = callPackage ../development/python-modules/kegtron-ble { };
 
   keke = callPackage ../development/python-modules/keke { };
@@ -8577,8 +8575,6 @@ self: super: with self; {
         python3 = python;
       }
     )).py;
-
-  ledger-agent = callPackage ../development/python-modules/ledger-agent { };
 
   ledger-bitcoin = callPackage ../development/python-modules/ledger-bitcoin { };
 
