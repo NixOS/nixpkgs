@@ -5,6 +5,7 @@
   writableTmpDirAsHomeHook,
   cargo,
   fetchFromGitHub,
+  fetchPypi,
   installShellFiles,
   lame,
   mpv-unwrapped,
@@ -95,6 +96,35 @@ let
     wrapt
   ];
 
+  darwinExtraWheels =
+    let
+      mkWheel = args: fetchPypi ({ format = "wheel"; } // args);
+    in
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      (mkWheel {
+        pname = "anki_audio";
+        version = "0.1.0";
+        dist = "cp39";
+        python = "cp39";
+        abi = "abi3";
+        platform = if stdenv.hostPlatform.isAarch64 then "macosx_11_0_arm64" else "macosx_11_0_x86_64";
+        hash =
+          if stdenv.hostPlatform.isAarch64 then
+            "sha256-JJ4/eDc2b42jQUE5KC+F32/mXe8uH3bCNg6ojgOGj2s="
+          else
+            "sha256-VRnf8A+Yf5N4WXn6w7ffbSPqF2Jrj28L5VGXX67zYaI=";
+      })
+      (mkWheel {
+        pname = "anki_mac_helper";
+        version = "0.1.1";
+        dist = "py3";
+        python = "py3";
+        abi = "none";
+        platform = "any";
+        hash = "sha256-d0ppz58P5tS1SUni1liKVKdv9R54y/wmtSfR7TxbNOM=";
+      })
+    ];
+
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
@@ -129,7 +159,10 @@ let
       #!${stdenv.shell}
       mkdir -p $out
     ''
-    + (lib.strings.concatStringsSep "\n" (map (dep: "ln -vsf ${dep.dist}/*.whl $out") pythonDeps));
+    + (lib.strings.concatStringsSep "\n" (
+      (map (dep: "ln -vsf ${dep.dist}/*.whl $out") pythonDeps)
+      ++ (map (wheel: ''ln -vsf ${wheel} "$out/${wheel.name}"'') darwinExtraWheels)
+    ));
   } "bash $installCommandPath";
 in
 
