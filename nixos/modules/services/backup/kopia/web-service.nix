@@ -1,0 +1,164 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.services.kopia;
+  helpers = import ./helpers.nix { inherit lib; };
+in
+{
+  options.services.kopia.backups = lib.mkOption {
+    type = lib.types.attrsOf (
+      lib.types.submodule (
+        { ... }:
+        {
+          options.web = {
+            enable = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Whether to enable the Kopia web UI server.
+              '';
+            };
+
+            address = lib.mkOption {
+              type = lib.types.str;
+              default = "127.0.0.1:51515";
+              description = ''
+                Address and port for the Kopia web server to listen on.
+              '';
+            };
+
+            serverUsername = lib.mkOption {
+              type = lib.types.str;
+              default = "kopia";
+              description = ''
+                Username for the Kopia web server (basic auth).
+              '';
+            };
+
+            serverPassword = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = ''
+                Password for the Kopia web server (basic auth).
+                Mutually exclusive with {option}`web.serverPasswordFile`.
+
+                ::: {.warning}
+                This password will be stored in the Nix store in plain text.
+                Prefer {option}`web.serverPasswordFile` instead.
+                :::
+              '';
+            };
+
+            serverPasswordFile = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = ''
+                Path to a file containing the password for the Kopia web
+                server. Mutually exclusive with {option}`web.serverPassword`.
+              '';
+            };
+
+            tlsCertFile = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = ''
+                Path to a TLS certificate file for the Kopia web server.
+              '';
+            };
+
+            tlsKeyFile = lib.mkOption {
+              type = with lib.types; nullOr str;
+              default = null;
+              description = ''
+                Path to a TLS key file for the Kopia web server.
+              '';
+            };
+          };
+        }
+      )
+    );
+  };
+
+  config = lib.mkIf (cfg.backups != { }) {
+    assertions = lib.flatten (
+      lib.mapAttrsToList (
+        name: backup:
+        let
+          prefix = "services.kopia.backups.${name}";
+        in
+        [
+          {
+            assertion =
+              backup.web.enable -> (backup.web.serverPassword != null || backup.web.serverPasswordFile != null);
+            message = "${prefix}: one of web.serverPassword or web.serverPasswordFile must be set when web.enable is true";
+          }
+          (helpers.mkMutualExclusionAssertion {
+            inherit name;
+            optionA = "web.serverPassword";
+            optionB = "web.serverPasswordFile";
+            valueA = backup.web.serverPassword;
+            valueB = backup.web.serverPasswordFile;
+          })
+          {
+            assertion = (backup.web.tlsCertFile != null) == (backup.web.tlsKeyFile != null);
+            message = "${prefix}: both web.tlsCertFile and web.tlsKeyFile must be set together";
+          }
+        ]
+      ) cfg.backups
+    );
+
+    warnings = lib.flatten (
+      lib.mapAttrsToList (
+        name: backup:
+        helpers.mkPlainTextWarning {
+          inherit name;
+          option = "web.serverPassword";
+          value = backup.web.serverPassword;
+          fileOption = "web.serverPasswordFile";
+        }
+      ) cfg.backups
+    );
+
+    systemd.services = lib.mapAttrs' (
+      name: backup:
+      let
+        kopiaExe = lib.getExe cfg.package;
+        tlsArgs =
+          if backup.web.tlsCertFile != null then
+            "--tls-cert-file ${lib.escapeShellArg backup.web.tlsCertFile} --tls-key-file ${lib.escapeShellArg backup.web.tlsKeyFile}"
+          else
+            "--insecure";
+        webScript = pkgs.writeShellScript "kopia-web-${name}" ''
+          set -euo pipefail
+          export KOPIA_PASSWORD="$(cat ${lib.escapeShellArg backup.passwordFile})"
+          export KOPIA_SERVER_USERNAME=${lib.escapeShellArg backup.web.serverUsername}
+          ${
+            if backup.web.serverPassword != null then
+              "export KOPIA_SERVER_PASSWORD=${lib.escapeShellArg backup.web.serverPassword}"
+            else
+              ''export KOPIA_SERVER_PASSWORD="$(cat ${lib.escapeShellArg backup.web.serverPasswordFile})"''
+          }
+
+          exec ${kopiaExe} server start ${tlsArgs} --address ${lib.escapeShellArg backup.web.address}
+        '';
+      in
+      lib.nameValuePair (helpers.mkUnitBaseName "web" name) {
+        description = "Kopia web UI for ${name}";
+        requires = [ (helpers.mkUnitQualifiedName "repository" name) ];
+        after = [ (helpers.mkUnitQualifiedName "repository" name) ];
+        wantedBy = [ "multi-user.target" ];
+        environment = helpers.mkKopiaEnvironment name;
+        serviceConfig = helpers.mkBaseServiceConfig name backup // {
+          Type = "simple";
+          Restart = "on-failure";
+          RestartSec = 30;
+          ExecStart = webScript;
+        };
+      }
+    ) (lib.filterAttrs (_: b: b.web.enable) cfg.backups);
+  };
+}

@@ -459,6 +459,7 @@
   ./services/backup/btrbk.nix
   ./services/backup/duplicati.nix
   ./services/backup/duplicity.nix
+  ./services/backup/kopia
   ./services/backup/libvirtd-autosnapshot.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/pgbackrest.nix

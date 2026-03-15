@@ -7608,6 +7608,12 @@
     githubId = 8173116;
     name = "Dean Eckert";
   };
+  efficacy38 = {
+    email = "efficacy38@gmail.com";
+    github = "efficacy38";
+    githubId = 60431808;
+    name = "Cai-Sian Jhuang";
+  };
   ehegnes = {
     email = "eric.hegnes@gmail.com";
     github = "ehegnes";
