@@ -4,20 +4,31 @@
   autoPatchelfHook,
   buildDotnetModule,
   fetchFromGitHub,
+  fetchpatch,
   dbus,
   dotnetCorePackages,
+  nix-update-script,
 }:
 
 buildDotnetModule (finalAttrs: {
   pname = "assetripper";
-  version = "1.3.10";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "AssetRipper";
     repo = "AssetRipper";
     tag = finalAttrs.version;
-    hash = "sha256-sqlZsUTeLyHHESNtC07F2FjgLXnuqgoPYRcgE57sq5k=";
+    hash = "sha256-Y896m3KFmcv2kU6LkzrZuSAMLugSgmMXP0LINwgeKCQ=";
   };
+
+  patches = [
+    # https://github.com/AssetRipper/AssetRipper/pull/2153
+    # Create temp path in the system temp directory instead of the unwritable installation directory
+    (fetchpatch {
+      url = "https://github.com/AssetRipper/AssetRipper/commit/8618d71c8cd49f5a26688b30d262f55e617f1bc5.patch";
+      hash = "sha256-8KLsTJqXyEdYNKT2HyExnW2Z70A7drvvFIAe0+pRalc=";
+    })
+  ];
 
   buildInputs = [
     dbus
@@ -66,6 +77,8 @@ buildDotnetModule (finalAttrs: {
 
   dotnet-sdk = dotnetCorePackages.sdk_10_0;
   dotnet-runtime = finalAttrs.dotnet-sdk.aspnetcore;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for extracting assets from Unity serialized files and asset bundles";
