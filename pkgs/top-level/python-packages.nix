@@ -2456,6 +2456,8 @@ self: super: with self; {
 
   camelot = callPackage ../development/python-modules/camelot { };
 
+  camtrap-package = callPackage ../development/python-modules/camtrap-package { };
+
   can-isotp = callPackage ../development/python-modules/can-isotp { };
 
   canals = callPackage ../development/python-modules/canals { };
@@ -3155,6 +3157,8 @@ self: super: with self; {
   connected-components-3d = callPackage ../development/python-modules/connected-components-3d { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
+
+  connectorx = callPackage ../development/python-modules/connectorx { krb5-c = pkgs.krb5; };
 
   connexion = callPackage ../development/python-modules/connexion { };
 
@@ -4106,6 +4110,8 @@ self: super: with self; {
 
   django-bootstrap5 = callPackage ../development/python-modules/django-bootstrap5 { };
 
+  django-braces = callPackage ../development/python-modules/django-braces { };
+
   django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
   django-cache-memoize = callPackage ../development/python-modules/django-cache-memoize { };
@@ -4179,6 +4185,8 @@ self: super: with self; {
   django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
+
+  django-extra-views = callPackage ../development/python-modules/django-extra-views { };
 
   django-filer = callPackage ../development/python-modules/django-filer { };
 
