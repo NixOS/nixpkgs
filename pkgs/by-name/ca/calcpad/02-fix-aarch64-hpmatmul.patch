@@ -1,0 +1,15 @@
+diff --git a/Calcpad.Core/Matrix/HpMatrix/HpMatmulWinograd.cs b/Calcpad.Core/Matrix/HpMatrix/HpMatmulWinograd.cs
+--- a/Calcpad.Core/Matrix/HpMatrix/HpMatmulWinograd.cs
++++ b/Calcpad.Core/Matrix/HpMatrix/HpMatmulWinograd.cs
+@@ -114,8 +114,10 @@ namespace Calcpad.Core
+             {
+                 if (Avx512F.IsSupported)
+                     MultiplyAvx512Kernel_64x64(A, B, C);
+-                else 
++                else if (Fma.IsSupported)
+                     MultiplyFmaKernel_64x64(A, B, C);
++                else
++                    MultiplySimd(A, B, C);
+                 return;
+             }
+             if (n < KernelSize)
