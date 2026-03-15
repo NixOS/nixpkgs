@@ -1,7 +1,9 @@
 {
   lib,
   stdenv,
+  autoreconfHook,
   callPackage,
+  deterministic-host-uname,
   makeSetupHook,
   runCommand,
   tzdata,
@@ -12,6 +14,7 @@
   release,
   version,
   src,
+  patches ? [ ],
   extraPatch ? "",
   ...
 }:
@@ -28,6 +31,8 @@ let
 
     setOutputFlags = false;
 
+    inherit patches;
+
     postPatch = ''
       substituteInPlace library/clock.tcl \
         --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
@@ -37,14 +42,21 @@ let
     ''
     + extraPatch;
 
-    nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
-      # Only used to detect the presence of zlib. Could be replaced with a stub.
-      zip
-    ];
+    nativeBuildInputs =
+      lib.optionals (lib.versionAtLeast version "9.0") [
+        # Only used to detect the presence of zlib. Could be replaced with a stub.
+        zip
+      ]
+      ++ lib.optional (
+        !lib.systems.equals stdenv.hostPlatform stdenv.buildPlatform
+      ) deterministic-host-uname
+      ++ lib.optional stdenv.hostPlatform.isCygwin autoreconfHook;
 
     buildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
       zlib
     ];
+
+    autoreconfFlags = if stdenv.hostPlatform.isCygwin then "unix" else null;
 
     preConfigure = ''
       cd unix
@@ -108,17 +120,24 @@ let
       let
         dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
         staticExtension = stdenv.hostPlatform.extensions.staticLibrary;
+        exeExtension = stdenv.hostPlatform.extensions.executable;
+        dllDir = if stdenv.hostPlatform.isCygwin then "bin" else "lib";
       in
       ''
         make install-private-headers
-        ln -s $out/bin/tclsh${release} $out/bin/tclsh
+        ln -s $out/bin/tclsh${release}${exeExtension} $out/bin/tclsh${exeExtension}
         if [[ -e $out/lib/libtcl${release}${staticExtension} ]]; then
           ln -s $out/lib/libtcl${release}${staticExtension} $out/lib/libtcl${staticExtension}
         fi
         ${lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-          ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
+          ln -s $out/${dllDir}/libtcl${release}${dllExtension} $out/${dllDir}/libtcl${dllExtension}
         ''}
+      ''
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        ln -s $out/lib/libtcl${release}.dll${staticExtension} $out/lib/libtcl.dll${staticExtension}
       '';
+
+    allowedImpureDLLs = [ "USER32.dll" ];
 
     meta = {
       description = "Tcl scripting language";
