@@ -8,6 +8,7 @@
   wayland,
   libx11,
   libxcursor,
+  libxi,
 }:
 let
   linkLibPath = lib.makeLibraryPath [
@@ -16,6 +17,7 @@ let
     wayland
     libx11
     libxcursor
+    libxi
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
