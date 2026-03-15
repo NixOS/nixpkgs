@@ -14,6 +14,7 @@
   threadpoolctl,
   pytestCheckHook,
   python,
+  sklearn-compat,
 }:
 
 buildPythonPackage rec {
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     scikit-learn
     scipy
     threadpoolctl
+    sklearn-compat
   ];
 
   optional-dependencies = {
