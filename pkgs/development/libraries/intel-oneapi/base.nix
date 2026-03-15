@@ -27,6 +27,7 @@
   gtk3,
   pango,
   cairo,
+  libgbm,
   expat,
   libxkbcommon,
   eudev,
@@ -103,6 +104,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       nss
       dbus
       cups
+      libgbm
       expat
       libxkbcommon
       eudev
@@ -154,6 +156,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
       gtk3
       pango
       cairo
+      libgbm
       expat
       libxkbcommon
       eudev
