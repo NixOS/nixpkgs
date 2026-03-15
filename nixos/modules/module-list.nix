@@ -1937,6 +1937,7 @@
   ./system/boot/unl0kr.nix
   ./system/boot/uvesafb.nix
   ./system/boot/zram-as-tmp.nix
+  ./system/boot/zswap.nix
   ./system/etc/etc-activation.nix
   ./system/service/systemd/system.nix
   ./system/service/systemd/user.nix
