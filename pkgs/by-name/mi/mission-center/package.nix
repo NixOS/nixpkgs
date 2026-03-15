@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-XS+/gpCMIqDgFR6AjuT2q+p+85GklUuRhKWzaBfQjZg=";
       })
       (rustPlatform.fetchCargoVendor {
-        pname = "${finalAttrs.pname}-magpie";
+        pname = "mission-center-magpie";
         inherit (finalAttrs) version src;
         sourceRoot = "${finalAttrs.src.name}/subprojects/magpie";
         hash = "sha256-9YZ2dgIaq0AtS8QsIC/0cJlELIy/UbOvulgZFL/qRRs=";

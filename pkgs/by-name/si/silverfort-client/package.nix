@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "3.7.6";
 
   src = requireFile rec {
-    name = "${finalAttrs.pname}_${finalAttrs.version}_amd64.deb";
+    name = "silverfort-client_${finalAttrs.version}_amd64.deb";
     hash = "sha256-r/za9JNQoVVowYp3DQ7nHfS+W74v5SZWOmRmIiRvOKw=";
     message = ''
       Due to the commercial license of Silverfort, Nix is unable to download

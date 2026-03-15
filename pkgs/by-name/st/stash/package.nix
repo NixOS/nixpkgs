@@ -26,7 +26,7 @@ buildGoModule (
   finalAttrs:
   let
     frontend = stdenv.mkDerivation (final: {
-      pname = "${finalAttrs.pname}-ui";
+      pname = "stash-ui";
       inherit (finalAttrs) version gitHash;
       src = "${finalAttrs.src}/ui/v2.5";
 

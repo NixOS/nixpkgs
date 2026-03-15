@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [ "--with-fontrootdir=$(out)/share/fonts/X11" ];
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-font-bitstream-100dpi" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
-      version="$(list-directory-versions --pname ${finalAttrs.pname} \
+      version="$(list-directory-versions --pname font-bitstream-100dpi \
         --url https://xorg.freedesktop.org/releases/individual/font/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version font-bitstream-100dpi "$version"
     '';
   };
 

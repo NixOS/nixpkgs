@@ -14,15 +14,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UIj5h2n7Y8Mm6bnSy3yfSmMKKAHdHaBpcdCCkXbPJbY=";
   };
 
-  passthru.updateScript = writeScript "update-${finalAttrs.pname}" ''
+  passthru.updateScript = writeScript "update-gccmakedep" ''
     #!/usr/bin/env nix-shell
     #!nix-shell -i bash -p common-updater-scripts
 
-    version="$(list-directory-versions --pname ${finalAttrs.pname} \
+    version="$(list-directory-versions --pname gccmakedep \
       --url https://xorg.freedesktop.org/releases/individual/util/ \
       | sort -V | tail -n1)"
 
-    update-source-version ${finalAttrs.pname} "$version"
+    update-source-version gccmakedep "$version"
   '';
 
   meta = {

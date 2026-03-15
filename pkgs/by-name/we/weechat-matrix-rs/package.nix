@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mv $out/lib/libmatrix${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/weechat/plugins/matrix${stdenv.hostPlatform.extensions.sharedLibrary}
   '';
   passthru.tests.load-plugin =
-    runCommand "${finalAttrs.pname}-test-load"
+    runCommand "weechat-matrix-rs-test-load"
       {
         nativeBuildInputs = [ weechat ];
       }

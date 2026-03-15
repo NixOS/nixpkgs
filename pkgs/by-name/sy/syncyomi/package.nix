@@ -37,7 +37,7 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-fzPEljXFskr1/qzTsnASFNNc+8vA7kqO21mhMqwT44w=";
 
   web = stdenvNoCC.mkDerivation (webFinalAttrs: {
-    pname = "${finalAttrs.pname}-web";
+    pname = "syncyomi-web";
     inherit (finalAttrs) src version;
     sourceRoot = "${webFinalAttrs.src.name}/web";
 

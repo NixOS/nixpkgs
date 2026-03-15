@@ -51,7 +51,7 @@ buildGoModule (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) version src;
-    pname = "${finalAttrs.pname}-ui";
+    pname = "perses-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
     hash = "sha256-ObQvOZ2IvU/6lfozPweVu46nohKXT0YzZeTyd0VK7GM=";
   };

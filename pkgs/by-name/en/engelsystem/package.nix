@@ -27,7 +27,7 @@ php.buildComposerProject2 (finalAttrs: {
   vendorHash = "sha256-JRd5FJviNf5NUI9PwRcMqdDXYBlMoBB6o5yx7dvostE=";
 
   yarnOfflineCache = fetchYarnDeps {
-    pname = "${finalAttrs.pname}-yarn-deps";
+    pname = "engelsystem-yarn-deps";
     yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = "sha256-nyCLM9OF2qwlW+VK38kiRMo6jMlupNFG+91N3Fb/WLY=";
   };

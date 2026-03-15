@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   # yes, the below download function is an absolute mess.
   # blame blackmagicdesign.
   src =
-    runCommandLocal "${finalAttrs.pname}-${lib.versions.majorMinor finalAttrs.version}-src.tar.gz"
+    runCommandLocal "blackmagic-desktop-video-${lib.versions.majorMinor finalAttrs.version}-src.tar.gz"
       {
         outputHashMode = "recursive";
         outputHashAlgo = "sha256";

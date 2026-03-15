@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/Applications/TablePlus.app"
     cp -R . "$out/Applications/TablePlus.app"
     mkdir "$out/bin"
-    ln -s "$out/Applications/TablePlus.app/Contents/MacOS/TablePlus" "$out/bin/${finalAttrs.pname}"
+    ln -s "$out/Applications/TablePlus.app/Contents/MacOS/TablePlus" "$out/bin/tableplus"
 
     runHook postInstall
   '';

@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
       new_version="$(curl -s https://drobilla.net/category/serd/ |
           pcregrep -o1 'download.drobilla.net/serd-([0-9.]+).tar.xz' |
           head -n1)"
-      update-source-version ${finalAttrs.pname} "$new_version"
+      update-source-version serd "$new_version"
     '';
   };
 

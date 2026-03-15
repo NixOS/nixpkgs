@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.4.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/partclone-utils/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    url = "mirror://sourceforge/partclone-utils/partclone-utils-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-HcmLT48mz9FmdO31Ti4uOT78tLEml4ezYWyp5fltkDA=";
   };
 

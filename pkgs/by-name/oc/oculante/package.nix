@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   patchFlags = [
     "-p1"
-    "--directory=../${finalAttrs.pname}-${finalAttrs.version}-vendor"
+    "--directory=../oculante-${finalAttrs.version}-vendor"
   ];
 
   postInstall = ''

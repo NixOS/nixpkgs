@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-O0";
 
   passthru = {
-    updateScript = writeScript "update-${finalAttrs.pname}" ''
+    updateScript = writeScript "update-libxfont_1" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p common-updater-scripts
       version="$(list-directory-versions --pname libXfont \
         --url https://xorg.freedesktop.org/releases/individual/lib/ \
         | sort -V | tail -n1)"
-      update-source-version ${finalAttrs.pname} "$version"
+      update-source-version libxfont_1 "$version"
     '';
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };

@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   src = fetchCrate {
     inherit (finalAttrs) version;
-    pname = "${finalAttrs.pname}_bin";
+    pname = "bao_bin";
     hash = "sha256-8h5otpu3z2Hgy0jMCITJNr8Q4iVdlR5Lea2X+WuenWs=";
   };
 

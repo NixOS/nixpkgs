@@ -43,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp -r bin $out/
 
-    mkdir -p $out/share/${finalAttrs.pname}
-    cp -r examples $out/share/${finalAttrs.pname}/examples
+    mkdir -p $out/share/CLProver++
+    cp -r examples $out/share/CLProver++/examples
 
     runHook postInstall
   '';

@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   npmDeps = fetchNpmDeps {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    name = "weaver-${finalAttrs.version}-npm-deps";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/ui";
     hash = "sha256-VOL2BLTfJ1nM2L3IZpixOuAaBUHVJX032MGb3+eousY=";
