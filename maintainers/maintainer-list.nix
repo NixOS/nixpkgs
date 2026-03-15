@@ -23763,6 +23763,13 @@
     github = "saadndm";
     githubId = 88615188;
   };
+  sabrinaishere = {
+    name = "Sabrina Myers";
+    email = "SabrinaTheBitch@protonmail.com";
+    matrix = "@sabrina_the_bitch:matrix.org";
+    github = "SabrinaIsHere";
+    githubId = 74331139;
+  };
   sagikazarmark = {
     name = "Mark Sagi-Kazar";
     email = "mark.sagikazar@gmail.com";
