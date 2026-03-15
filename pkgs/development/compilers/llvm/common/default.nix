@@ -477,7 +477,40 @@ makeScopeWithSplicing' {
       bolt = callPackage ./bolt { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
-      flang = callPackage ./flang { };
+      flang-unwrapped = callPackage ./flang { };
+      flang-rt = callPackage ./flang-rt { };
+      flang-wrapper = stdenv.mkDerivation {
+        name = "flang-adapter-${self.flang-unwrapped.version}";
+        inherit (self.flang-unwrapped) passthru meta;
+
+        buildCommand = ''
+          mkdir -p $out/bin
+
+          substitute ${./flang/wrapper.sh} $out/bin/flang-new \
+            --subst-var-by shell ${pkgs.runtimeShell} \
+            --subst-var-by flang_unwrapped ${self.flang-unwrapped}
+
+          chmod +x $out/bin/flang-new
+          ln -s flang-new $out/bin/flang
+        '';
+      };
+      flang = wrapCCWith rec {
+        cc = self.flang-wrapper;
+        bintools = bintools';
+        extraPackages = [ targetLlvmPackages.flang-rt ];
+        extraBuildCommands = mkExtraBuildCommands0 cc + ''
+          # triplet however is not used in darwin
+          PLATFORM_DIR="${if stdenv.targetPlatform.isDarwin then "darwin" else stdenv.targetPlatform.config}"
+          RT_LIB_PATH="${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/$PLATFORM_DIR"
+          if [ -d "$RT_LIB_PATH" ]; then
+            ln -s "$RT_LIB_PATH" "$rsrc"/lib
+            echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+          else
+            ln -s "${targetLlvmPackages.flang-rt}/lib" "$rsrc"/lib
+            echo "-L$rsrc/lib" >> $out/nix-support/cc-ldflags
+          fi
+        '';
+      };
 
       libc-overlay = callPackage ./libc {
         isFullBuild = false;
