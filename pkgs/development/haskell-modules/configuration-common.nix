@@ -650,6 +650,10 @@ with haskellLib;
     })
   ] super.call-stack;
 
+  # too strict upper bound on base:
+  #   base >=4.17.2.1 && <4.18
+  hell = doJailbreak super.hell;
+
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
