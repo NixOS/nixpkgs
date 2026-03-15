@@ -190,6 +190,12 @@ with haskellLib;
     }
   );
 
+  # First to upgrade to lsp >= 2.8 while HLS hasn't yet had a compatible release
+  futhark = super.futhark.override {
+    lsp = self.lsp_2_8_0_0;
+    lsp-types = self.lsp-types_2_4_0_0;
+  };
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################

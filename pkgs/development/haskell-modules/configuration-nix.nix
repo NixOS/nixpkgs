@@ -1023,6 +1023,13 @@ builtins.intersectAttrs super {
     ];
   }) super.lsp-test;
 
+  lsp_2_8_0_0 = doDistribute (
+    super.lsp_2_8_0_0.override {
+      lsp-types = self.lsp-types_2_4_0_0;
+    }
+  );
+  lsp-types_2_4_0_0 = doDistribute super.lsp-types_2_4_0_0;
+
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
   dhall-lsp-server = dontCheck super.dhall-lsp-server;
