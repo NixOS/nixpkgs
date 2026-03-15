@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.44.4";
+  version = "2.44.5";
 
   outputs = [
     "out"
@@ -38,14 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withIntrospection "devdoc"
   ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) "installedTests";
 
-  src =
-    let
-      inherit (finalAttrs) pname version;
-    in
-    fetchurl {
-      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      hash = "sha256-k6Gqw/FCeuc0Vzl1gqLDjQSWOKgBeIzL1fSMpge9vRc=";
-    };
+  src = fetchurl {
+    url = "mirror://gnome/sources/gdk-pixbuf/${lib.versions.majorMinor finalAttrs.version}/gdk-pixbuf-${finalAttrs.version}.tar.xz";
+    hash = "sha256-abk+CRObgMDuZhUD1g3rWlh0oxdytRhLnNVGKkEAq2g=";
+  };
 
   patches = [
     # Move installed tests to a separate output
@@ -155,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
+      packageName = "gdk-pixbuf";
       versionPolicy = "odd-unstable";
     };
 
