@@ -17,7 +17,7 @@
 }:
 
 let
-  version = "0.23.0";
+  version = "0.24.0";
 in
 buildPythonPackage {
   pname = "beetcamp";
@@ -28,7 +28,7 @@ buildPythonPackage {
     owner = "snejus";
     repo = "beetcamp";
     tag = version;
-    hash = "sha256-8FEDpobEGZ0Lw1+JRoFIEe3AuiuX7dwsRab+P3hC3W0=";
+    hash = "sha256-8SsdBxDgPn3CIKjyYV68/5GbMnOYv/oIg3/DoUeG30k=";
   };
 
   patches = [
