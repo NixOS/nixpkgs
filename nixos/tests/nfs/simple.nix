@@ -18,7 +18,21 @@ import ../make-test-python.nix (
             options = [ "vers=${toString version}" ];
           };
         };
-        networking.firewall.enable = false; # FIXME: only open statd
+        services.nfs.settings = {
+          statd.port = 4000;
+          lockd.port = 4001;
+          lockd.udp-port = 4001;
+        };
+        networking.firewall.allowedTCPPorts = [
+          111
+          4000
+          4001
+        ];
+        networking.firewall.allowedUDPPorts = [
+          111
+          4000
+          4001
+        ];
       };
 
   in
@@ -41,7 +55,23 @@ import ../make-test-python.nix (
             /data 192.168.1.0/255.255.255.0(rw,no_root_squash,no_subtree_check,fsid=0)
           '';
           services.nfs.server.createMountPoints = true;
-          networking.firewall.enable = false; # FIXME: figure out what ports need to be allowed
+          services.nfs.server.mountdPort = 4002;
+          services.nfs.server.statdPort = 4000;
+          services.nfs.server.lockdPort = 4001;
+          networking.firewall.allowedTCPPorts = [
+            111
+            2049
+            4000
+            4001
+            4002
+          ];
+          networking.firewall.allowedUDPPorts = [
+            111
+            2049
+            4000
+            4001
+            4002
+          ];
         };
     };
 
@@ -85,7 +115,7 @@ import ../make-test-python.nix (
 
       with subtest("locks survive server reboot"):
           client1.wait_for_unit("data.mount")
-          server.shutdown()
+          server.crash()
           server.start()
           client1.succeed("touch /data/xyzzy")
           client1.fail("time flock -n -s /data/lock true")
