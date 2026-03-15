@@ -9,6 +9,15 @@
   icu,
   openssl,
   libkrb5,
+  libx11,
+  libxrandr,
+  libxext,
+  libxi,
+  libxcursor,
+  libsm,
+  libice,
+  gtk3,
+  libGL,
   makeDesktopItem,
   nix-update-script,
 }:
@@ -32,6 +41,7 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    dotnetCorePackages.autoPatchcilHook
     autoPatchelfHook
     copyDesktopItems
   ];
@@ -41,6 +51,43 @@ buildDotnetModule (finalAttrs: {
     icu
     openssl
     libkrb5
+
+    libx11
+    libxrandr
+    libxext
+    libxi
+    libxcursor
+    libsm
+    libice
+    gtk3
+    libGL
+  ];
+
+  autoPatchcilIgnoreMissingDeps = [
+    "libc"
+
+    # windows-only
+    "kernel32"
+    "KERNEL32.DLL"
+    "user32"
+    "shell32"
+    "ntdll"
+    "NTDLL.DLL"
+    "dxgi"
+    "d3d11"
+    "dcomp"
+    "ole32"
+    "shlwapi"
+    "libgdiplus"
+    "imm32"
+    "Windows.UI.Composition"
+
+    # optional rendering modes that aren't enabled
+    "libEGL"
+    "libvulkan.so.1"
+
+    # bundled
+    "libAvaloniaNative"
   ];
 
   dontDotnetFixup = true;
