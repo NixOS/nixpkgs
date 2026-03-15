@@ -2021,6 +2021,7 @@ mapAliases {
   vtk_9_egl = warnAlias "'vtk_9_5' now build with egl support by default, so `vtk_9_egl` is deprecated, consider using 'vtk_9_5' instead." vtk_9_5; # Added 2025-07-18
   vtk_9_withQt5 = throw "'vtk_9_withQt5' has been removed, Consider using 'vtkWithQt6' instead."; # Added 2025-07-18
   vtkWithQt5 = throw "'vtkWithQt5' has been removed. Consider using 'vtkWithQt6' instead."; # Added 2025-09-06
+  vulkan-hdr-layer-kwin6 = throw "'vulkan-hdr-layer-kwin6' was removed as it is unnecessary since Mesa 25.1 and NVIDIA 595."; # Added 2026-03-05
   vwm = throw "'vwm' was removed as it is broken and not maintained upstream"; # Added 2025-05-17
   w_scan = throw "'w_scan' has been removed due to lack of upstream maintenance"; # Added 2025-08-29
   waitron = throw "'waitron' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
