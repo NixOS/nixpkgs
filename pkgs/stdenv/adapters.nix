@@ -92,15 +92,15 @@ rec {
             (mkDerivationSuper args).overrideAttrs (
               args:
               (
-                if (args.__structuredAttrs or false) || (args ? env.NIX_CFLAGS_LINK) then
+                if (args.__structuredAttrs or false) || (args ? env.NIX_CFLAGS_LINK_BEFORE) then
                   {
                     env = (args.env or { }) // {
-                      NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -static";
+                      NIX_CFLAGS_LINK_BEFORE = toString (args.env.NIX_CFLAGS_LINK_BEFORE or "") + " -static-pie";
                     };
                   }
                 else
                   {
-                    NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -static";
+                    NIX_CFLAGS_LINK_BEFORE = toString (args.NIX_CFLAGS_LINK_BEFORE or "") + " -static-pie";
                   }
               )
               // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
