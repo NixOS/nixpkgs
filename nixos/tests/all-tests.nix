@@ -493,7 +493,14 @@ in
   dokuwiki = runTest ./dokuwiki.nix;
   dolibarr = runTest ./dolibarr.nix;
   domination = runTest ./domination.nix;
-  dovecot = runTest ./dovecot.nix;
+  dovecot = runTest {
+    imports = [ ./dovecot.nix ];
+    _module.args.dovecot = pkgs: pkgs.dovecot;
+  };
+  dovecot_2_3 = runTest {
+    imports = [ ./dovecot.nix ];
+    _module.args.dovecot = pkgs: pkgs.dovecot_2_3;
+  };
   draupnir = runTest ./matrix/draupnir.nix;
   drawterm = discoverTests (import ./drawterm.nix);
   drbd = runTest ./drbd.nix;
