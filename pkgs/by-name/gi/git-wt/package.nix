@@ -1,22 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
+  installShellFiles,
   git,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "git-wt";
-  version = "0.17.0";
+  version = "0.21.1";
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "git-wt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gZO3SAIrOQ+wEKf1VAg+e5bLVDt2/s73INZougMXH4k=";
+    hash = "sha256-t4kN5Z+1zKcwK2s7So0OA+I5wKLZTjWffgtEbs/vXiQ=";
   };
 
-  vendorHash = "sha256-LkyH7czzBkiyAYGrKuPSeB4pNAZLmgwXgp6fmYBps6s=";
+  vendorHash = "sha256-O4vqouNxvA3GvrnpRO6GXDD8ysPfFCaaSJVFj2ufxwI=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   nativeCheckInputs = [ git ];
 
@@ -25,6 +28,13 @@ buildGoModule (finalAttrs: {
     "-w"
     "-X github.com/k1LoW/git-wt/version.Version=v${finalAttrs.version}"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd git-wt \
+      --bash <($out/bin/git-wt --init bash --nocd) \
+      --zsh <($out/bin/git-wt --init zsh --nocd) \
+      --fish <($out/bin/git-wt --init fish --nocd)
+  '';
 
   meta = {
     description = "Git subcommand that makes git worktree simple";
