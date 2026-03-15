@@ -10815,6 +10815,12 @@
     githubId = 25618740;
     name = "Vincent Cui";
   };
+  hoptodesk = {
+    name = "HopToDesk";
+    email = "app@hoptodesk.com";
+    github = "hoptodesk";
+    githubId = 103363758;
+  };
   hornwall = {
     email = "hannes@hornwall.me";
     github = "Hornwall";
