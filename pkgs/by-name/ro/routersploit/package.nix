@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   python3,
 }:
@@ -17,16 +18,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
-    paramiko
-    pycryptodome
-    pysnmp
-    requests
-    setuptools
-  ];
-
-  # Tests are out-dated and support for newer pysnmp is not implemented yet
-  doCheck = false;
+  dependencies =
+    with python3.pkgs;
+    [
+      paramiko
+      pycryptodome
+      pysnmp
+      requests
+      setuptools
+    ]
+    ++ lib.optionals (pythonAtLeast "3.13") [
+      standard-telnetlib
+    ];
 
   nativeCheckInputs = with python3.pkgs; [
     pytest-xdist
@@ -45,6 +48,27 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "tests/core/"
     "tests/test_exploit_scenarios.py"
     "tests/test_module_info.py"
+  ];
+
+  disabledTests = [
+    # AttributeError: module 'paramiko' has no attribute 'DSSKey'.
+    "test_exploit_empty_response"
+    "test_exploit_error_response"
+    "test_exploit_not_found_response"
+    "test_exploit_redirect_response"
+    "test_exploit_trash_response"
+
+    # Runs substantially slower, making this test flaky
+    "test_exploit_timeout_response"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # port conflict when running simultaneous builds
+    "test_http_scenario_service_empty_response"
+    "test_http_scenario_service_error"
+    "test_http_scenario_service_found"
+    "test_http_scenario_service_not_found"
+    "test_http_scenario_service_redirect"
+    "test_http_scenario_service_trash"
   ];
 
   meta = {
