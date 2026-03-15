@@ -53,7 +53,7 @@ appimageTools.wrapAppImage {
   extraInstallCommands = ''
     # Add desktop convencience stuff
     install -Dm444 ${appimageContents}/flexoptix-app.desktop -t $out/share/applications
-    install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/pixmaps
+    install -Dm444 ${appimageContents}/flexoptix-app.png -t $out/share/icons/hicolor/1024x1024/apps
     substituteInPlace $out/share/applications/flexoptix-app.desktop \
       --replace-fail 'Exec=AppRun' "Exec=$out/bin/${pname} --"
 
