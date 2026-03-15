@@ -3151,12 +3151,6 @@ with haskellLib;
   # 2025-04-13: jailbreak to allow hedgehog >= 1.5
   hw-bits = warnAfterVersion "0.7.2.2" (doJailbreak super.hw-bits);
 
-  # 2025-04-23: jailbreak to allow bytestring >= 0.12
-  brillo-rendering = warnAfterVersion "1.13.3" (doJailbreak super.brillo-rendering);
-  brillo-examples = warnAfterVersion "1.13.3" (doJailbreak super.brillo-examples);
-  brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
-  brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
-
   monad-bayes =
     # Floating point precision issues. Test suite is only checked on x86_64.
     # https://github.com/tweag/monad-bayes/issues/368
