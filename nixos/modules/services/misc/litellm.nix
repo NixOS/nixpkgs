@@ -20,7 +20,15 @@ in
         type = types.path;
         default = "/var/lib/litellm";
         example = "/home/foo";
-        description = "State directory of LiteLLM.";
+        description = ''
+          State directory of LiteLLM.
+
+          This module runs with `DynamicUser = true` and provisions state via
+          systemd `StateDirectory=...`, which places state under `/var/lib`.
+          Setting this to a location outside `/var/lib` is therefore generally
+          unsupported unless the module is extended to run as a persistent user
+          and to provision/chown the directory accordingly.
+        '';
       };
 
       host = lib.mkOption {
@@ -132,6 +140,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    warnings =
+      lib.optional (!lib.hasPrefix "/var/lib/" (toString cfg.stateDir))
+        "services.litellm.stateDir is set to '${toString cfg.stateDir}', but the module provisions state under /var/lib via systemd StateDirectory while using DynamicUser. Paths outside /var/lib may not be writable for the service.";
+
     systemd.services.litellm = {
       description = "LLM Gateway to provide model access, fallbacks and spend tracking across 100+ LLMs.";
       wantedBy = [ "multi-user.target" ];
