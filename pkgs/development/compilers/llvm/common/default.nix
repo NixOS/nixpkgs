@@ -22,6 +22,7 @@
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  isOpenCilk ? false,
   cmake,
   cmakeMinimal,
   python3,
@@ -158,6 +159,29 @@ makeScopeWithSplicing' {
         + ''
           ln -s "${targetLlvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
           ln -s "${targetLlvmPackages.compiler-rt.out}/share" "$rsrc/share"
+        ''
+        + lib.optionalString isOpenCilk ''
+          # Merge cheetah runtime and headers into resource root for -fopencilk support
+          rm "$rsrc/lib"
+          mkdir -p "$rsrc/lib"
+          for d in ${targetLlvmPackages.compiler-rt.out}/lib/*/; do
+            subdir=$(basename "$d")
+            mkdir -p "$rsrc/lib/$subdir"
+            ln -s "$d"* "$rsrc/lib/$subdir/"
+          done
+          ln -sf ${targetLlvmPackages.compiler-rt.out}/lib/*.* "$rsrc/lib/" 2>/dev/null || true
+          for d in ${targetLlvmPackages.cheetah}/lib/*/; do
+            subdir=$(basename "$d")
+            mkdir -p "$rsrc/lib/$subdir"
+            ln -s "$d"* "$rsrc/lib/$subdir/"
+          done
+          ln -sf ${targetLlvmPackages.cheetah}/lib/*.* "$rsrc/lib/" 2>/dev/null || true
+
+          # Merge cheetah cilk headers into clang resource include directory
+          rm "$rsrc/include"
+          mkdir -p "$rsrc/include"
+          ln -s ${lib.getLib cc}/lib/clang/${clangVersion}/include/* "$rsrc/include/"
+          cp -rs ${targetLlvmPackages.cheetah}/include/* "$rsrc/include/"
         '';
 
       bintoolsNoLibc' = if bootBintoolsNoLibc == null then self.bintoolsNoLibc else bootBintoolsNoLibc;
@@ -224,14 +248,20 @@ makeScopeWithSplicing' {
         cc = self.clang-unwrapped;
         # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
         libcxx = null;
-        extraPackages = [ targetLlvmPackages.compiler-rt ];
+        extraPackages = [
+          targetLlvmPackages.compiler-rt
+        ]
+        ++ lib.optional isOpenCilk targetLlvmPackages.cheetah;
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
       libcxxClang = wrapCCWith rec {
         cc = self.clang-unwrapped;
         libcxx = targetLlvmPackages.libcxx;
-        extraPackages = [ targetLlvmPackages.compiler-rt ];
+        extraPackages = [
+          targetLlvmPackages.compiler-rt
+        ]
+        ++ lib.optional isOpenCilk targetLlvmPackages.cheetah;
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
@@ -293,6 +323,7 @@ makeScopeWithSplicing' {
         extraPackages = [
           targetLlvmPackages.compiler-rt
         ]
+        ++ lib.optional isOpenCilk targetLlvmPackages.cheetah
         ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
           targetLlvmPackages.libunwind
         ];
@@ -472,6 +503,20 @@ makeScopeWithSplicing' {
       mlir = callPackage ./mlir { };
 
       libclc = callPackage ./libclc { };
+    }
+    // lib.optionalAttrs isOpenCilk {
+      cheetah = callPackage ./cheetah {
+        monorepoSrc = metadata.monorepoSrc;
+        # Cheetah must be compiled with clang (GCC rejects always_inline + setjmp).
+        # Use clangWithLibcAndBasicRt to avoid circular dependency with cheetah-including wrappers.
+        stdenv = overrideCC args.stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
+      };
+
+      cilktools = callPackage ./cilktools {
+        monorepoSrc = metadata.monorepoSrc;
+        stdenv = overrideCC args.stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
+        inherit (self) cheetah;
+      };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
       bolt = callPackage ./bolt { };
