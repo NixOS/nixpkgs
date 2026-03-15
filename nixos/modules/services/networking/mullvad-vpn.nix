@@ -94,7 +94,7 @@ with lib;
       startLimitBurst = 5;
       startLimitIntervalSec = 20;
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/mullvad-daemon -v --disable-stdout-timestamps";
+        ExecStart = "${cfg.package}/bin/mullvad-daemon --disable-stdout-timestamps";
         Restart = "always";
         RestartSec = 1;
       };
