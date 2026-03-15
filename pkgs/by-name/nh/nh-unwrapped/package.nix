@@ -100,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.NH_REV = finalAttrs.src.tag;
 
   meta = {
-    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/nix-community/nh/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Yet another nix cli helper";
     homepage = "https://github.com/nix-community/nh";
     license = lib.licenses.eupl12;
