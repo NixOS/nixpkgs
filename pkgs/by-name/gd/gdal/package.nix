@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -91,6 +92,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-W9MSZP+qmG7r2SzjOXbeYebY5vx8z8cpySv/sGyj42Y=";
   };
+
+  patches = [
+    # https://github.com/OSGeo/gdal/pull/14068
+    (fetchpatch2 {
+      name = "proj-9.8.0-compat.patch";
+      url = "https://github.com/OSGeo/gdal/commit/01a8dbb1e2eb64ba98888255d116d23d6e165ee5.patch?full_index=1";
+      hash = "sha256-RlngFpBc21UW4Tj+XEElg76cVWg7xZwee7R3ioMosLg=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
