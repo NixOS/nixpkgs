@@ -12,14 +12,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "plastexshowmore";
-  version = "0.1.0";
+  version = "0.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "plastexshowmore";
     owner = "PatrickMassot";
     tag = finalAttrs.version;
-    hash = "sha256-fKjGt3bMAGUjUAea3IDo9wmcE/IJDB9vLEvFbqgWvDM=";
+    hash = "sha256-b45VHHEwFA41FaInDteix56O7KYDzyKiRRSl7heHqEA=";
   };
 
   build-system = [ setuptools ];
