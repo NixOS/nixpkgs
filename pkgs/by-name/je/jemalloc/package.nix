@@ -13,7 +13,30 @@
   # compatibility.
   stripPrefix ? stdenv.hostPlatform.isDarwin,
   disableInitExecTls ? false,
+  # Page size in KiB to configure jemalloc for.
+  # Defaults to 64 on architectures where 64KB pages are common, 4 otherwise.
+  # Note that a higher value is compatible with lower page sizes but may waste memory.
+  pageSizeKiB ?
+    if
+      (
+        stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64 || stdenv.hostPlatform.isPower64
+      )
+    then
+      64
+    else
+      4,
 }:
+
+let
+  pageSizeMap = {
+    "4" = 12;
+    "16" = 14;
+    "64" = 16;
+  };
+in
+assert lib.asserts.assertOneOf "pageSizeKiB" (toString pageSizeKiB) (
+  builtins.attrNames pageSizeMap
+);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jemalloc";
@@ -54,12 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/jemalloc/jemalloc/issues/467
   # https://sources.debian.org/src/jemalloc/5.3.0-3/debian/rules/
   ++ [
-    (
-      if (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isLoongArch64) then
-        "--with-lg-page=16"
-      else
-        "--with-lg-page=12"
-    )
+    "--with-lg-page=${toString pageSizeMap."${toString pageSizeKiB}"}"
   ]
   # See https://github.com/jemalloc/jemalloc/issues/1997
   # Using a value of 48 should work on both emulated and native x86_64-darwin.

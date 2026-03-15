@@ -9,21 +9,18 @@
   pytestCheckHook,
   pytest-django,
   pytest-cov,
-  pythonOlder,
 }:
 buildPythonPackage rec {
   pname = "django-money";
-  version = "3.5.4";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-money";
     repo = "django-money";
     tag = version;
-    hash = "sha256-JqAZaiJ2zCb7Jwvumqi16IrQ6clmcw71WpPzbhE2Fms=";
+    hash = "sha256-VxAKTtrbDMRhiLxqjVYt7pLGl0sy9F1iwswP/hxQ01k=";
   };
-
-  disabled = pythonOlder "3.7";
 
   dependencies = [
     django

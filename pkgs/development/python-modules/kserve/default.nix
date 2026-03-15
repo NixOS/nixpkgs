@@ -3,17 +3,19 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   setuptools,
 
   # dependencies
+  aiohttp,
   cloudevents,
+  cryptography,
   fastapi,
   grpc-interceptor,
   grpcio,
   grpcio-tools,
+  h11,
   httpx,
   kubernetes,
   numpy,
@@ -24,10 +26,13 @@
   psutil,
   pydantic,
   python-dateutil,
+  python-multipart,
   pyyaml,
   six,
+  starlette,
   tabulate,
   timing-asgi,
+  urllib3,
   uvicorn,
 
   # optional-dependencies
@@ -54,37 +59,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "kserve";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f6ILZMLxfckEpy7wSgCqUx89JWSnn0DbQiqRSHcQHms=";
+    hash = "sha256-gLYYuIy43cuXrCvjjXLHMim0m/EAwaivLdFhKuUdeX0=";
   };
-
-  patches = [
-    # Fix vllm imports in python/kserve/kserve/protocol/rest/openai/types/__init__.py
-    # Submitted upstream: https://github.com/kserve/kserve/pull/4882
-    (fetchpatch2 {
-      name = "update-vllm-imports-to-fix-compat";
-      url = "https://github.com/kserve/kserve/commit/dd1575501e56f588103f448efca684bc54569b81.patch";
-      stripLen = 2;
-      hash = "sha256-K0ImsDADhH6G3R+27nRX/sD7UdRXptYIkLaoxuwB8+M=";
-    })
-  ];
 
   sourceRoot = "${finalAttrs.src.name}/python/kserve";
 
   pythonRelaxDeps = [
+    "cryptography"
     "fastapi"
     "httpx"
     "numpy"
     "prometheus-client"
     "protobuf"
-    "uvicorn"
     "psutil"
+    "python-multipart"
+    "starlette"
+    "uvicorn"
   ];
 
   build-system = [
@@ -92,11 +89,14 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    aiohttp
     cloudevents
+    cryptography
     fastapi
     grpc-interceptor
     grpcio
     grpcio-tools
+    h11
     httpx
     kubernetes
     numpy
@@ -107,10 +107,13 @@ buildPythonPackage (finalAttrs: {
     psutil
     pydantic
     python-dateutil
+    python-multipart
     pyyaml
     six
+    starlette
     tabulate
     timing-asgi
+    urllib3
     uvicorn
   ]
   ++ uvicorn.optional-dependencies.standard;
