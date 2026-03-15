@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "tt-burnin";
-  version = "0.2.4";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-burnin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/tnCLhA6zeUkVYhDtdohrZODwHxNTZbnsWgY2Gt16DQ=";
+    hash = "sha256-1TuI4Vgm06SjOmWEHaohZZVbDUTGv6YvgH4OMOnHkw8=";
   };
 
   # Remove when https://github.com/NixOS/nixpkgs/pull/444714 is merged
