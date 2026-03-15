@@ -1993,6 +1993,14 @@ with haskellLib;
     })
   ] super.moto;
 
+  # c2hs/language-c don't support C23 [[nodiscard]] yet: https://github.com/visq/language-c/issues/107.
+  # To work around this, we tell the preprocessor of GCC 15 to use an older standard (the GCC 14 default).
+  avif =
+    if pkgs.stdenv.hasCC && pkgs.stdenv.cc.isGNU then
+      appendConfigureFlags [ "--c2hs-options=--cppopts=-std=gnu17" ] super.avif
+    else
+      super.avif;
+
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not
   # compatible with Cabal 3. No upstream repository found so far
   readline = appendPatch ./patches/readline-fix-for-cabal-3.patch super.readline;
