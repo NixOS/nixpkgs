@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "redlib";
   version = "0.36.0-unstable-2025-12-16";
 
@@ -65,6 +65,10 @@ rustPlatform.buildRustPackage {
   };
 
   passthru = {
+    services.default = {
+      imports = [ ./service.nix ];
+      redlib.package = lib.mkDefault finalAttrs.finalPackage;
+    };
     tests = nixosTests.redlib;
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
@@ -79,4 +83,4 @@ rustPlatform.buildRustPackage {
       Guanran928
     ];
   };
-}
+})

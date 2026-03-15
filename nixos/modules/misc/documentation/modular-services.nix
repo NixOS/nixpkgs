@@ -22,6 +22,7 @@ let
     options = {
       "<imports = [ pkgs.ghostunnel.services.default ]>" = fakeSubmodule pkgs.ghostunnel.services.default;
       "<imports = [ pkgs.php.services.default ]>" = fakeSubmodule pkgs.php.services.default;
+      "<imports = [ pkgs.redlib.services.default ]>" = fakeSubmodule pkgs.redlib.services.default;
     };
   };
 in
