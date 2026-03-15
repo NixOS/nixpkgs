@@ -9088,6 +9088,11 @@
     github = "franzmondlichtmann";
     githubId = 105480088;
   };
+  FrdrCkII = {
+    github = "FrdrCkII";
+    githubId = 150365019;
+    name = "FrdrCkII";
+  };
   freax13 = {
     email = "erbse.13@gmx.de";
     github = "Freax13";
