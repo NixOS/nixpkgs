@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchpatch,
   fetchurl,
   fetchzip,
   perl,
@@ -29,22 +28,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aspell";
-  version = "0.60.8.1";
+  version = "0.60.8.2";
 
   src = fetchurl {
     url = "mirror://gnu/aspell/aspell-${version}.tar.gz";
-    hash = "sha256-1toSs01C1Ff6YE5DWtSEp0su/80SD/QKzWuz+yiH0hs=";
+    hash = "sha256-V/5IY+rmBI9yJFqFdbRLcY+4XKFLn4wK/EGyVN/XaRk=";
   };
 
-  patches = [
-    # fix gcc-15 / clang-19 build. can remove on next update
-    (fetchpatch {
-      name = "fix-gcc-15-build.patch";
-      url = "https://github.com/GNUAspell/aspell/commit/ee6cbb12ff36a1e6618d7388a78dd4e0a2b44041.patch";
-      hash = "sha256-rW1FcfARdtT4wX+zGd2x/1K8zRp9JZhdR/zRd8RwPZA=";
-    })
-  ]
-  ++ lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
+  patches = lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
   postPatch = ''
     patch interfaces/cc/aspell.h < ${./clang.patch}
