@@ -1,10 +1,12 @@
 {
+  options,
   config,
   lib,
   pkgs,
   ...
 }:
 let
+  opt = options.services.librechat;
   cfg = config.services.librechat;
   meiliCfg = config.services.meilisearch;
   format = pkgs.formats.yaml { };
@@ -84,6 +86,12 @@ in
             default = 3080;
             example = 2309;
             description = "The value that will be passed to the PORT environment variable, telling LibreChat what to listen on.";
+          };
+          LIBRECHAT_LOG_DIR = lib.mkOption {
+            type = lib.types.path;
+            default = "${cfg.dataDir}/logs";
+            defaultText = lib.literalExpression ''"''${config.${opt.dataDir}}/logs"'';
+            description = "The directory where logs are written to.";
           };
         };
       };
