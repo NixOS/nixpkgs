@@ -30,19 +30,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
-  version = "0.18.8";
+  version = "0.19.5";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-OSM2yjiz3I5+SVpcJSWCDyS4y4w9JJ/8CAP2BK0sL7o=";
+    hash = "sha256-gVYTt4r4QlVsYewUdiHAsGeEZx2oY9wGL2RJ2JvGio4=";
   };
 
   # Workaround for https://github.com/NixOS/nixpkgs/issues/359340
-  cargoPatches = [
-    ./gix-from-crates-io.patch
-  ];
+  cargoPatches = [ ./avoid-duplicate-crates.patch ];
 
   # Let Tauri know what version we're building and deactivate the built-in updater
   # Note: .bundle.externalBin doesn't include `"but"` at the moment
@@ -59,12 +57,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail 'checkUpdate = tauriCheck;' 'checkUpdate = () => null;'
   '';
 
-  cargoHash = "sha256-L53iIVxv3KtmXiqITad1enIMX3Iu/mWSJJPZk7KAWuM=";
+  cargoHash = "sha256-+tu6UrvB90+Vk8UwTIrz02Q41hgRy85szPGgeEdHVck=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-IAsEzM9kmZWnh390CV7mOyOshVlESsyoNT0ZvdY03KY=";
+    hash = "sha256-lOoQKtdxw7gGLcKJM2XhmWBDUSxGdxl6T/JzXmq/jo8=";
   };
 
   nativeBuildInputs = [
