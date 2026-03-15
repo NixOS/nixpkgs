@@ -1,0 +1,17 @@
+diff --git a/src/boot/linux/CMakeLists.txt b/src/boot/linux/CMakeLists.txt
+index 9c9f0cbe..d70402d6 100644
+--- a/src/boot/linux/CMakeLists.txt
++++ b/src/boot/linux/CMakeLists.txt
+@@ -4,11 +4,7 @@ set(CMAKE_C_STANDARD 11)
+ 
+ add_library(unix-hooks SHARED main.c)
+ 
+-if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+-    target_compile_definitions(unix-hooks PRIVATE MILLENNIUM_RUNTIME_PATH="$<TARGET_FILE:Millennium>")
+-endif()
+-
+-# Ensure symbols are exported properly for library interposition
++target_compile_definitions(unix-hooks PRIVATE MILLENNIUM_RUNTIME_PATH="${MILLENNIUM_RUNTIME_PATH}")
+ target_compile_options(unix-hooks PRIVATE -fvisibility=hidden)
+ target_link_options(unix-hooks PRIVATE -Wl,--no-undefined -ldl)
+ 
