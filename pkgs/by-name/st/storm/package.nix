@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-storm";
-  version = "2.8.3";
+  version = "2.8.4";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   src = fetchurl {
     url = "mirror://apache/storm/${finalAttrs.name}/${finalAttrs.name}.tar.gz";
-    hash = "sha256-W7a/4vJgGhiAxk0l+1jY+38Mpz8WOLodhlW6l6nQHEc=";
+    hash = "sha256-+1Bg8aYigr30XZP7muPaX7E6XSlRWcfNzl16rLi+ml0=";
   };
 
   nativeBuildInputs = [
