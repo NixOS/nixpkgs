@@ -38,11 +38,6 @@ buildPythonPackage rec {
     joblib
   ];
 
-  patches = [
-    # https://github.com/rasbt/mlxtend/issues/1117
-    ./0001-StackingCVClassifier-fit-ensure-compatibility-with-s.patch
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlags = [ "-sv" ];
@@ -59,10 +54,6 @@ buildPythonPackage rec {
     "mlxtend/evaluate/tests/test_feature_importance.py" # urlopen error
     "mlxtend/evaluate/tests/test_bias_variance_decomp.py" # keras.api._v2
     "mlxtend/evaluate/tests/test_bootstrap_point632.py" # keras.api._v2
-    # Failing tests, most likely an upstream issue. See https://github.com/rasbt/mlxtend/issues/1117
-    "mlxtend/classifier/tests/test_ensemble_vote_classifier.py"
-    "mlxtend/classifier/tests/test_stacking_classifier.py"
-    "mlxtend/classifier/tests/test_stacking_cv_classifier.py"
   ];
 
   meta = {
