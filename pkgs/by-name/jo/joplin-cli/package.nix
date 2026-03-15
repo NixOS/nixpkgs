@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/lib/packages/lib/node_modules/canvas
 
     # Remove extra files
-    rm -rf $out/lib/packages/app-cli/{app/*.test.ts,*.md,.*ignore,tests/,tools/,*.js,*.json,*.sh}
+    rm -rf $out/lib/packages/app-cli/{app/*.test.ts,*.md,.*ignore,tests/,tools/,*.js,*.sh}
 
     # Link final binary
     chmod +x $out/lib/packages/app-cli/app/main.js
@@ -115,6 +115,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://joplinapp.org/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "joplin";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
