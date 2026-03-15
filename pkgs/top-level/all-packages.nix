@@ -9630,14 +9630,14 @@ with pkgs;
     )
     // {
       jdk-no-jcef = callPackage ../development/compilers/jetbrains-jdk {
-        jdk = jdk21;
+        jdk = jdk25;
         withJcef = false;
       };
       jdk = callPackage ../development/compilers/jetbrains-jdk {
-        jdk = jdk21;
+        jdk = jdk25;
       };
       jcef = callPackage ../development/compilers/jetbrains-jdk/jcef.nix {
-        jdk = jdk21;
+        jdk = jdk25;
       };
     }
     // lib.optionalAttrs config.allowAliases {
