@@ -3,26 +3,27 @@
   fetchYarnDeps,
   lib,
   nodejs,
-  python312,
+  python313,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
   yarnInstallHook,
 }:
 let
-  python3 = python312.override {
+  python3 = python313.override {
     self = python3;
-    packageOverrides = self: super: {
-      django = super.django_4;
+    packageOverrides = _: super: {
+      django = super.django_5;
+      django_4 = super.django_5; # For django-stdimage
     };
   };
 
-  version = "1.1.10";
+  version = "1.2.3";
   src = fetchFromGitHub {
     owner = "inventree";
     repo = "inventree";
     tag = "${version}";
-    hash = "sha256-TPB/3pFIU+ui4c+CbqIKTyAfJ/Xepm/RIhZeYhTrgI4=";
+    hash = "sha256-2Rye1znvF3GfzcLYj09+cIbf5MHbmpEQBj818LtW6O4=";
   };
 
   frontend =
@@ -38,7 +39,7 @@ let
 
       yarnOfflineCache = fetchYarnDeps {
         yarnLock = finalAttrs.src + "/yarn.lock";
-        hash = "sha256-Ijbkx+INZgsvMhkzo8h/FUY75W3UHnKAdUjQRD8kJZw=";
+        hash = "sha256-tZHrl6NC4MGpmH7+Ge2V/y9FRNd9NdbQ/NreHE10b10=";
       };
 
       nativeBuildInputs = [
@@ -68,7 +69,7 @@ python3.pkgs.buildPythonApplication rec {
   dependencies =
     with python3.pkgs;
     [
-      django
+      django_5
       dj-rest-auth
       django-allauth
       django-cleanup
@@ -159,36 +160,37 @@ python3.pkgs.buildPythonApplication rec {
   prePatch =
     let
       skippedCheckFunctions = [
-        "test_task_check_for_updates"
-        "test_download_image"
-        "test_commit_info"
-        "test_rates"
-        "test_download_build_orders"
-        "test_valid_url"
-        "test_refresh_endpoint"
-        "test_download_csv"
-        "test_download_line_items"
-        "test_export"
-        "test_download_xlsx"
-        "test_download_csv"
-        "test_export"
-        "test_part_label_translation"
-        "test_part_download"
-        "test_date_filters"
-        "test_bom_export"
-        "test_hash"
-        "test_date"
         "test_api_call"
-        "test_function_errors"
-        "test_stocktake_exporter"
-        "test_return"
-        "test_plugin_install"
-        "test_full_process"
-        "test_package_loading"
+        "test_bom_export"
+        "test_commit_info"
+        "test_date"
+        "test_date_filters"
+        "test_download_build_orders"
+        "test_download_csv"
+        "test_download_csv"
+        "test_download_image"
+        "test_download_line_items"
+        "test_download_xlsx"
         "test_export"
-        "test_users_exist"
+        "test_export"
+        "test_export"
+        "test_full_process"
+        "test_function_errors"
+        "test_hash"
         "test_import_part"
+        "test_large_export"
         "test_model_names"
+        "test_package_loading"
+        "test_part_download"
+        "test_part_label_translation"
+        "test_plugin_install"
+        "test_rates"
+        "test_refresh_endpoint"
+        "test_return"
+        "test_stocktake_exporter"
+        "test_task_check_for_updates"
+        "test_users_exist"
+        "test_valid_url"
       ];
       skippedFuncScripts = builtins.map (funcName: ''
         grep -rlZ ${funcName} . | while IFS= read -r -d "" file; do
@@ -213,7 +215,6 @@ python3.pkgs.buildPythonApplication rec {
       mkdir -p $out/lib/${pname}/src/backend/InvenTree/web/
       cp -r src $out/lib/${pname}
       ln -s ${frontend}/static $out/lib/${pname}/src/backend/InvenTree/web
-      # cp -r ${frontend}/static $out/lib/${pname}/src/backend/InvenTree/web
 
       chmod +x $out/lib/${pname}/src/backend/InvenTree/manage.py
 
@@ -222,6 +223,17 @@ python3.pkgs.buildPythonApplication rec {
 
       makeWrapper ${lib.getExe python3.pkgs.gunicorn} $out/bin/gunicorn \
         --prefix PYTHONPATH : "${pythonPath}:$out/${python3.sitePackages}":"${pythonPath}:$out/lib/${pname}/src/backend/InvenTree"
+
+      # Generate static assets
+      pushd $out/lib/${pname}/src/backend/InvenTree &>/dev/null
+      export INVENTREE_STATIC_ROOT=$out/lib/inventree/static
+      export INVENTREE_MEDIA_ROOT=$(mktemp -d)
+      export INVENTREE_BACKUP_DIR=$(mktemp -d)
+      export INVENTREE_DB_ENGINE=django.db.backends.sqlite3
+      export INVENTREE_DB_NAME=inventree.db
+      export INVENTREE_SITE_URL="http://localhost:8000"
+      ${python3.interpreter} ./manage.py collectstatic --no-input
+      popd &>/dev/null
 
       runHook postInstall
     '';

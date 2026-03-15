@@ -14,12 +14,13 @@ let
   manage = pkgs.writeShellScriptBin "inventree-manage" ''
     set -a
     ${lib.toShellVars cfg.settings}
+    ${lib.concatMapStringsSep "\n" (file: ". ${file}") cfg.settingsFiles}
     ${lib.optionalString (
       cfg.database.passwordFile != null
     ) ''INVENTREE_DB_PASSWORD="$(<"${cfg.database.passwordFile}")"''}
     set +a
 
-    pushd "${cfg.dataDir}"
+    pushd "${cfg.dataDir}" &>/dev/null
     sudo=exec
     if [[ "$USER" != ${cfg.user} ]]; then
       ${
@@ -30,7 +31,7 @@ let
       }
     fi
     $sudo ${cfg.package}/bin/inventree "$@"
-    popd
+    popd &>/dev/null
   '';
 
 in
@@ -191,6 +192,11 @@ in
       };
     };
 
+    settingsFiles = mkOption {
+      description = "Additional environment files to load into all services";
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+    };
   };
 
   config = lib.mkIf cfg.enable (
@@ -205,7 +211,7 @@ in
 
           INVENTREE_CONFIG_FILE = lib.mkDefault "${cfg.dataDir}/config/config.yaml";
           INVENTREE_OIDC_PRIVATE_KEY_FILE = lib.mkDefault "${cfg.dataDir}/config/oidc_private_key.txt";
-          INVENTREE_STATIC_ROOT = lib.mkDefault "${cfg.dataDir}/data/static_root";
+          INVENTREE_STATIC_ROOT = lib.mkDefault "${cfg.package}/lib/inventree/static";
           INVENTREE_MEDIA_ROOT = lib.mkDefault "${cfg.dataDir}/data/media";
           INVENTREE_BACKUP_DIR = lib.mkDefault "${cfg.dataDir}/data/backups";
           INVENTREE_SITE_URL = lib.mkDefault "http://${cfg.domain}";
@@ -221,7 +227,6 @@ in
             "${cfg.dataDir}"
             "${cfg.dataDir}/config"
             "${cfg.dataDir}/data"
-            "${cfg.dataDir}/data/static_root"
             "${cfg.dataDir}/data/media"
             "${cfg.dataDir}/data/backups"
             "${cfg.dataDir}/data/plugins"
@@ -261,19 +266,13 @@ in
             in
             {
               "/" = {
+                recommendedProxySettings = true;
                 extraConfig = ''
-                  proxy_set_header Host $host;
-                  proxy_set_header X-Forwarded-By $server_addr:$server_port;
-                  proxy_set_header X-Forwarded-For $remote_addr;
-                  proxy_set_header X-Forwarded-Proto $scheme;
-                  proxy_set_header X-Real-IP $remote_addr;
-                  proxy_set_header CLIENT_IP $remote_addr;
-
                   proxy_pass_request_headers on;
 
                   proxy_redirect off;
 
-                  client_max_body_size 100M;
+                  client_max_body_size 0;
 
                   proxy_buffering off;
                   proxy_request_buffering off;
@@ -317,7 +316,6 @@ in
           after = lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.target";
           requires = lib.optional mysqlLocal "mysql.service" ++ lib.optional pgsqlLocal "postgresql.target";
           before = [
-            "inventree-static.service"
             "inventree-server.service"
             "inventree-qcluster.service"
           ];
@@ -327,6 +325,8 @@ in
             Group = cfg.group;
             RemainAfterExit = true;
             PrivateTmp = true;
+            UMask = "0077";
+            EnvironmentFile = cfg.settingsFiles;
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
@@ -334,39 +334,11 @@ in
           environment = cfg.settings;
           script = ''
             set -euo pipefail
-            umask u=rwx,g=,o=
 
-            ${
-              lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
-              ''
-            } \
-            exec ${pkg}/bin/inventree migrate
-          '';
-        };
-
-        systemd.services.inventree-static = {
-          description = "Inventree static migration";
-          wantedBy = [ "inventree.target" ];
-          partOf = [ "inventree.target" ];
-          before = [ "inventree-server.service" ];
-          environment = cfg.settings;
-          serviceConfig = {
-            User = cfg.user;
-            Group = cfg.group;
-            StateDirectory = "inventree";
-            PrivateTmp = true;
-          }
-          // lib.optionalAttrs (cfg.database.passwordFile != null) {
-            LoadCredential = "db_password:${cfg.database.passwordFile}";
-          };
-          script = ''
-            ${
-              lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
-              ''
-            } \
-            exec ${pkg}/bin/inventree collectstatic  --no-input
+            ${lib.optionalString (cfg.database.passwordFile != null) ''
+              export INVENTREE_DB_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/db_password")"
+            ''}
+            ${pkg}/bin/inventree migrate
           '';
         };
 
@@ -380,16 +352,15 @@ in
             Group = cfg.group;
             StateDirectory = "inventree";
             PrivateTmp = true;
+            EnvironmentFile = cfg.settingsFiles;
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
           };
           script = ''
-            ${
-              lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
-              ''
-            } \
+            ${lib.optionalString (cfg.database.passwordFile != null) ''
+              export INVENTREE_DB_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/db_password")"
+            ''}
             exec ${pkg}/bin/gunicorn InvenTree.wsgi
           '';
         };
@@ -411,16 +382,15 @@ in
             Group = cfg.group;
             StateDirectory = "inventree";
             PrivateTmp = true;
+            EnvironmentFile = cfg.settingsFiles;
           }
           // lib.optionalAttrs (cfg.database.passwordFile != null) {
             LoadCredential = "db_password:${cfg.database.passwordFile}";
           };
           script = ''
-            ${
-              lib.optionalString (cfg.database.passwordFile != null) ''
-                INVENTREE_DB_PASSWORD=$(<"$CREDENTIALS_DIRECTORY/db_password")
-              ''
-            } \
+            ${lib.optionalString (cfg.database.passwordFile != null) ''
+              export INVENTREE_DB_PASSWORD="$(<"$CREDENTIALS_DIRECTORY/db_password")"
+            ''}
             exec ${pkg}/bin/inventree qcluster
           '';
         };
