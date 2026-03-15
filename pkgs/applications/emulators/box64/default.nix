@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      allowedVersions = "\\.[02468]$";
+    };
     tests.hello = runCommand "box64-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
       BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version 2>&1 | tee $out
     '';
