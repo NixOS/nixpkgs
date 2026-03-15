@@ -2,12 +2,12 @@
   lib,
   python,
   makePythonHook,
-  makeWrapper,
+  pkgsBuildTarget,
 }:
 
 makePythonHook {
   name = "wrap-python-hook";
-  propagatedBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ pkgsBuildTarget.makeWrapper ];
   substitutions.sitePackages = python.sitePackages;
   substitutions.executable = python.interpreter;
   substitutions.python = python.pythonOnBuildForHost;
