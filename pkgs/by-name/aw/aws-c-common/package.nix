@@ -9,13 +9,13 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-common";
   # nixpkgs-update: no auto update
-  version = "0.12.4";
+  version = "0.12.6";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-common";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hKCIPZlLPyH7D3Derk2onyqTzWGUtCx+f2+EKtAKlwA=";
+    hash = "sha256-RQNo+B9qdJurgFT9JKWIl7OZd2O9p4KfZdGGFSCnKZA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
         "promise_test_multiple_waiters"
         # Flaky test https://github.com/NixOS/nixpkgs/issues/443233
         "test_memory_usage_maxrss"
+        "test_file_path_read_from_offset_direct_io"
       ];
     in
     ''
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "AWS SDK for C common core";
     homepage = "https://github.com/awslabs/aws-c-common";
+    changelog = "https://github.com/awslabs/aws-c-common/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     # https://github.com/awslabs/aws-c-common/issues/1175
