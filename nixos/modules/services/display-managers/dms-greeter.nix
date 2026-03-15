@@ -290,7 +290,9 @@ in
         fi
 
         if [ -f settings.json ]; then
-            if cp "$(${jq} -r '.customThemeFile' settings.json)" custom-theme.json; then
+            theme_file="$(${jq} -r '.customThemeFile // empty' settings.json)"
+            if [ -f "$theme_file" ] && [ -r "$theme_file" ]; then
+                cp "$theme_file" custom-theme.json
                 mv settings.json settings.orig.json
                 ${jq} '.customThemeFile = "${cacheDir}/custom-theme.json"' settings.orig.json > settings.json
             fi
