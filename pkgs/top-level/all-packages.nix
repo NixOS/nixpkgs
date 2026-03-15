@@ -2448,6 +2448,7 @@ with pkgs;
   gnutar = callPackage ../tools/archivers/gnutar { };
 
   inherit (callPackage ../development/tools/godot { })
+    buildGodotModule
     godot3
     godot3-export-templates
     godot3-headless
