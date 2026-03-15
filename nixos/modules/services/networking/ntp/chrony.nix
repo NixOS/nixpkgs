@@ -51,7 +51,7 @@ let
   ++ lib.optional cfg.enableMemoryLocking "-m"
   ++ cfg.extraFlags;
 
-  dispathcerScriptFile = pkgs.callPackage (
+  dispatcherScriptFile = pkgs.callPackage (
     {
       runCommand,
       srcOnly,
@@ -258,7 +258,7 @@ in
     networking.networkmanager.dispatcherScripts = lib.mkIf cfg.dispatcherScript [
       {
         type = "basic";
-        source = dispathcerScriptFile;
+        source = dispatcherScriptFile;
       }
     ];
 
