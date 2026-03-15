@@ -84,8 +84,8 @@ flutter332.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps
-    ln -s $out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png $out/share/pixmaps/enteauth.png
+    mkdir -p $out/share/icons/hicolor/1024x1024/apps
+    ln -s $out/app/ente-auth/data/flutter_assets/assets/icons/auth-icon.png $out/share/icons/hicolor/1024x1024/apps/enteauth.png
 
     install -Dm444 linux/packaging/enteauth.appdata.xml $out/share/metainfo/${desktopId}.metainfo.xml
     substituteInPlace $out/share/metainfo/${desktopId}.metainfo.xml \
