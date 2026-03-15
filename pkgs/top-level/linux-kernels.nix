@@ -647,6 +647,10 @@ in
 
         xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
+        xrt = callPackage ../os-specific/linux/xrt {
+          xrt = pkgs.xrt;
+        };
+
         yt6801 = callPackage ../os-specific/linux/yt6801 { };
 
         ithc = callPackage ../os-specific/linux/ithc { };
