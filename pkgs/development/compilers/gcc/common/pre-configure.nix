@@ -96,3 +96,14 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 + lib.optionalString (
   (!lib.systems.equals targetPlatform hostPlatform) && withoutTargetLibc && enableShared
 ) (import ./libgcc-buildstuff.nix { inherit lib stdenv; })
+
+# Allow setting --enable-cxx-flags (https://gcc.gnu.org/onlinedocs/libstdc++/manual/configure.html)
+# This would better belong in platform-flags.nix, but this value contains spaces, which configureFlags does not support.
++ (
+  let
+    p = targetPlatform.gcc or { } // targetPlatform.parsed.abi;
+  in
+  lib.optionalString (p ? enableCxxFlags) ''
+    configureFlagsArray+=('--enable-cxx-flags=${builtins.concatStringsSep " " p.enableCxxFlags}')
+  ''
+)
