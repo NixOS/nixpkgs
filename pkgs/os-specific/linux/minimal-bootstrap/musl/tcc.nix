@@ -32,6 +32,18 @@ let
       hash = "sha256-wd2Aev1zPJXy3q933aiup5p1IMKzVJBquAyl3gbK4PU=";
     })
   ];
+  patchesPath1 = [
+    (fetchurl {
+      name = "locale-fix-1.patch";
+      url = "https://www.openwall.com/lists/musl/2025/02/13/1/1";
+      hash = "sha256-CJb821El2dByP04WXxPCCYMOcEWnXLpOhYBgg3y3KS4=";
+    })
+    (fetchurl {
+      name = "locale-fix-2.patch";
+      url = "https://www.openwall.com/lists/musl/2025/02/13/1/2";
+      hash = "sha256-BiD87k6KTlLr4ep14rUdIZfr2iQkicBYaSTq+p6WBqE=";
+    })
+  ];
 in
 bash.runCommand "${pname}-${version}"
   {
@@ -54,6 +66,7 @@ bash.runCommand "${pname}-${version}"
 
     # Patch
     ${lib.concatMapStringsSep "\n" (f: "patch -Np0 -i ${f}") patches}
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patchesPath1}
     # tcc does not support complex types
     rm -rf src/complex
     # Configure fails without this
