@@ -26976,6 +26976,12 @@
     githubId = 1220572;
     name = "Christian Theune";
   };
+  theutz = {
+    email = "michael@theutz.com";
+    github = "theutz";
+    githubId = 756348;
+    name = "Michael Utz";
+  };
   thevar1able = {
     email = "var1able+nixpkgs@var1able.network";
     github = "thevar1able";
