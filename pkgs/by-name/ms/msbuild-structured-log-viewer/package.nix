@@ -4,11 +4,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  autoPatchelfHook,
   copyDesktopItems,
-  icu,
-  openssl,
-  libkrb5,
   makeDesktopItem,
   nix-update-script,
 }:
@@ -30,15 +26,7 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
     copyDesktopItems
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    stdenv.cc.cc.lib
-    icu
-    openssl
-    libkrb5
   ];
 
   dontDotnetFixup = true;
