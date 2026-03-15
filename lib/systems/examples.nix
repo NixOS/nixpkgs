@@ -23,9 +23,11 @@ rec {
 
   ppc64-elfv1 = {
     config = "powerpc64-unknown-linux-gnuabielfv1";
+    rust.rustcTargetSpec = "powerpc64-unknown-linux-gnu";
   };
   ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";
+    rust.rustcTargetSpec = "${./rustc-target-specs/powerpc64-unknown-linux-gnuabielfv2}/powerpc64-unknown-linux-gnu.json";
   };
   ppc64 = ppc64-elfv2;
   ppc64-musl = {
