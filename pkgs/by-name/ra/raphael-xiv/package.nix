@@ -6,14 +6,14 @@
   libGL,
   libxkbcommon,
   wayland,
-  libX11,
+  libx11,
 }:
 let
   linkLibPath = lib.makeLibraryPath [
     libGL
     libxkbcommon
     wayland
-    libX11
+    libx11
   ];
 in
 rustPlatform.buildRustPackage (finalAttrs: {
