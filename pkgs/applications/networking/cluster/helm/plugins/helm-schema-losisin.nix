@@ -7,7 +7,7 @@
 }:
 
 buildGoModule (finalAttrs: {
-  pname = "helm-schema";
+  pname = "helm-schema-losisin";
   version = "2.3.1";
 
   src = fetchFromGitHub {
@@ -34,10 +34,10 @@ buildGoModule (finalAttrs: {
   '';
 
   postInstall = ''
-    install -D plugin.complete -t $out/helm-schema/
-    install -m644 plugin.yaml -t $out/helm-schema/
+    install -D plugin.complete -t $out/${finalAttrs.pname}/
+    install -m644 plugin.yaml -t $out/${finalAttrs.pname}/
     mv $out/bin/{helm-values-schema-json,schema}
-    mv $out/bin $out/helm-schema
+    mv $out/bin $out/${finalAttrs.pname}
   '';
 
   # Unit tests try to open web server on port 0
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${placeholder "out"}/helm-schema/bin/schema";
+  versionCheckProgram = "${placeholder "out"}/${finalAttrs.pname}/bin/schema";
 
   passthru.updateScript = nix-update-script { };
 
