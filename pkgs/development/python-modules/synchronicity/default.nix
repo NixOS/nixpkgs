@@ -1,0 +1,58 @@
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gevent,
+  hatchling,
+  mypy,
+  pytest-asyncio,
+  pytest-markdown-docs,
+  pytestCheckHook,
+  sigtools,
+  typing-extensions,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "synchronicity";
+  version = "0.11.1";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "modal-labs";
+    repo = "synchronicity";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Uyn4apHILBwjHoMkr52IkcFlaX7jx3WzuzZfvdxcDFo=";
+  };
+
+  build-system = [ hatchling ];
+  dependencies = [ typing-extensions ];
+  optional-dependencies.compile = [ sigtools ];
+
+  nativeCheckInputs = [
+    gevent
+    mypy
+    pytestCheckHook
+    pytest-asyncio
+    pytest-markdown-docs
+    sigtools
+  ];
+
+  disabledTests = [
+    # Asserts execution time, non-deterministic
+    "test_blocking"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Assertion error
+    "test_async"
+  ];
+
+  pythonImportsCheck = [ "synchronicity" ];
+
+  meta = {
+    description = "Export blocking and async library versions from a single async implementation";
+    homepage = "https://github.com/modal-labs/synchronicity";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Kharacternyk ];
+  };
+})

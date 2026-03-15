@@ -10105,6 +10105,8 @@ self: super: with self; {
 
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
+  modal = callPackage ../development/python-modules/modal { };
+
   modbus-tk = callPackage ../development/python-modules/modbus-tk { };
 
   moddb = callPackage ../development/python-modules/moddb { };
@@ -18802,6 +18804,8 @@ self: super: with self; {
   syncedlyrics = callPackage ../development/python-modules/syncedlyrics { };
 
   syncer = callPackage ../development/python-modules/syncer { };
+
+  synchronicity = callPackage ../development/python-modules/synchronicity { };
 
   syndication-domination = toPythonModule (
     pkgs.syndication-domination.override {
