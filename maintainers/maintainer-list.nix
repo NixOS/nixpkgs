@@ -14672,6 +14672,13 @@
     githubId = 2422454;
     name = "Kai Wohlfahrt";
   };
+  kxxt = {
+    name = "kxxt";
+    email = "rsworktech@outlook.com";
+    matrix = "@kxxt:matrix.org";
+    github = "kxxt";
+    githubId = 18085551;
+  };
   kyehn = {
     name = "kyehn";
     github = "kyehn";
