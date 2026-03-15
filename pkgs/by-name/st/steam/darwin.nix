@@ -22,8 +22,4 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
-
-  passthru = {
-    buildRuntimeEnv = callPackage ./runtime-env.nix { };
-  };
 }
