@@ -61,6 +61,7 @@ let
           5;
       startLimitIntervalSec = 60 * 30; # 30 mins
 
+      path = [ ceph.out ];
       serviceConfig = {
         LimitNOFILE = 1048576;
         LimitNPROC = 1048576;
