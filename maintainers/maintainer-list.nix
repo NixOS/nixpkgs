@@ -23238,6 +23238,13 @@
     name = "Roosembert (Roosemberth) Palacios";
     keys = [ { fingerprint = "78D9 1871 D059 663B 6117  7532 CAAA ECE5 C224 2BB7"; } ];
   };
+  rootrim = {
+    email = "omuaz01@gmail.com";
+    matrix = "@rootrim:matrix.org";
+    github = "rootrim";
+    githubId = 151086338;
+    name = "Muaz (Johnny) Öztürk";
+  };
   rople380 = {
     name = "rople380";
     github = "rople380";
