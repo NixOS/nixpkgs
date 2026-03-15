@@ -41,13 +41,8 @@ python3Packages.buildPythonApplication rec {
         ];
         propagatedBuildInputs = with python3Packages; [
           click
-          curies
           deprecated
-          hbreader
-          jsonasobj2
           jsonschema
-          prefixcommons
-          prefixmaps
           pydantic
           pyyaml
           rdflib
@@ -62,10 +57,8 @@ python3Packages.buildPythonApplication rec {
       antlr4-python3-runtime
       click
       graphviz
-      hbreader
       isodate
       jinja2
-      jsonasobj2
       jsonschema
       openpyxl
       parse
