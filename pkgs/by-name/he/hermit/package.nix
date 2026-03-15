@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,13 +15,7 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-RYXZ2yJ8BIxsgeEwhXz7g0NnWG3kMPZoJaOLMUQyWWQ=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -m444 -Dt $out/share/fonts/opentype *.otf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     description = "Monospace font designed to be clear, pragmatic and very readable";
