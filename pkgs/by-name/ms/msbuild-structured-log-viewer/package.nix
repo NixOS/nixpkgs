@@ -4,6 +4,7 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
+  writeText,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
@@ -24,6 +25,20 @@ buildDotnetModule (finalAttrs: {
 
   projectFile = [ "src/StructuredLogViewer.Avalonia/StructuredLogViewer.Avalonia.csproj" ];
   nugetDeps = ./deps.json;
+
+  dotnetBuildFlags = [
+    "-p:CustomAfterDirectoryBuildTargets=${writeText "StubGitVersioning.targets" ''
+      <Project>
+          <Target Name="GetBuildVersion" Returns="$(BuildVersion)" DependsOnTargets="GetAssemblyVersion">
+              <PropertyGroup>
+                  <BuildVersion>$(Version)</BuildVersion>
+                  <AssemblyFileVersion>$(FileVersion)</AssemblyFileVersion>
+                  <AssemblyInformationalVersion>$(InformationalVersion)</AssemblyInformationalVersion>
+              </PropertyGroup>
+          </Target>
+      </Project>
+    ''}"
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
