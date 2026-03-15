@@ -6,7 +6,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "goconst";
-  version = "1.8.2";
+  version = "1.9.0";
 
   excludedPackages = [ "tests" ];
 
@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
     owner = "jgautheron";
     repo = "goconst";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-srBUqWfiuMqpKH/O66gJEEKFOC/ifsu2xscEnp54cRY=";
+    sha256 = "sha256-Sz0mWzwe/Nq3aPDMEtRE1uMzeulL+ODtyPDeBEPqb6A=";
   };
 
   vendorHash = null;
