@@ -330,7 +330,7 @@ default-package-overrides:
   - cased ==0.1.0.0
   - cases ==0.1.4.4
   - casing ==0.1.4.1
-  - cassava ==0.5.5.0
+  - cassava >= 0.5.4.0 && (> 0.5.5.0 || < 0.5.5.0) && < 0.6.0.0
   - cassava-conduit ==0.6.6
   - cassava-megaparsec ==2.1.1
   - cast ==0.1.0.2
