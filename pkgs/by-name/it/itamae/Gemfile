@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+gem 'itamae'
+
+# docker backend:
+gem 'docker-api'
+
+# ed25519 ssh key support:
+gem 'bcrypt_pbkdf'
+gem 'ed25519'

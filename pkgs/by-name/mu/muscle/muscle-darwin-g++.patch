@@ -1,0 +1,15 @@
+
+diff --git a/Makefile b/Makefile
+index df16673..be3bd0d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -20,9 +20,6 @@ OS := $(shell uname)
+ CPPFLAGS := $(CPPFLAGS) -DNDEBUG -pthread
+ 
+ CXX := g++
+-ifeq ($(OS),Darwin)
+-	CXX := g++-11
+-endif
+ 
+ CXXFLAGS := $(CXXFLAGS) -O3 -fopenmp -ffast-math
+ 

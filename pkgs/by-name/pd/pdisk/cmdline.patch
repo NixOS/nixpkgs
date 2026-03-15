@@ -1,0 +1,13 @@
+--- a/cmdline.c	2021-10-05 22:29:41.000000000 -0700
++++ a/cmdline.c	2024-05-30 12:05:29.146787602 -0700
+@@ -22,10 +22,8 @@
+  * @APPLE_LICENSE_HEADER_END@
+  */
+ #include <stdio.h>
+-#ifndef __linux__
+ #include <stdlib.h>
+ #include <unistd.h>
+-#endif
+ #include <string.h>
+ #include <errno.h>
+ #include <fcntl.h>

@@ -1,0 +1,13 @@
+diff --git a/cmake/git-version.cmake b/cmake/git-version.cmake
+index be226fd..1451ff6 100644
+--- a/cmake/git-version.cmake
++++ b/cmake/git-version.cmake
+@@ -15,6 +15,8 @@ if(GIT_EXECUTABLE)
+   endif()
+ endif()
+ 
++set(LPAC_VERSION "$ENV{LPAC_VERSION}")
++
+ # Final fallback: Just use a bogus version string that is semantically older
+ # than anything else and spit out a warning to the developer.
+ if(NOT DEFINED LPAC_VERSION)

@@ -1,0 +1,126 @@
+From 71ff7368f729289f2eb3fe5a01365411fa006751 Mon Sep 17 00:00:00 2001
+From: Christoph Heiss <christoph@c8h4.io>
+Date: Mon, 23 Feb 2026 10:58:20 +0100
+Subject: [PATCH proxmox-backup 1/2] cargo: re-route dependencies not available
+ on crates.io
+
+Signed-off-by: Christoph Heiss <christoph@c8h4.io>
+---
+ Cargo.toml | 100 ++++++++++++++++++++++++++---------------------------
+ 1 file changed, 50 insertions(+), 50 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 9bf7b79a..ced3b793 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -271,57 +271,57 @@ proxmox-rrd-api-types.workspace = true
+ # Local path overrides
+ # NOTE: You must run `cargo update` after changing this for it to take effect!
+ [patch.crates-io]
+-#pbs-api-types = { path = "../proxmox/pbs-api-types" }
+-#proxmox-acme = { path = "../proxmox/proxmox-acme" }
+-#proxmox-acme-api = { path = "../proxmox/proxmox-acme-api" }
+-#proxmox-api-macro = { path = "../proxmox/proxmox-api-macro" }
+-#proxmox-apt = { path = "../proxmox/proxmox-apt" }
+-#proxmox-apt-api-types = { path = "../proxmox/proxmox-apt-api-types" }
+-#proxmox-async = { path = "../proxmox/proxmox-async" }
+-#proxmox-auth-api = { path = "../proxmox/proxmox-auth-api" }
+-#proxmox-base64 = { path = "../proxmox/proxmox-base64" }
+-#proxmox-borrow = { path = "../proxmox/proxmox-borrow" }
+-#proxmox-compression = { path = "../proxmox/proxmox-compression" }
+-#proxmox-config-digest = { path = "../proxmox/proxmox-config-digest" }
+-#proxmox-daemon = { path = "../proxmox/proxmox-daemon" }
+-#proxmox-http = { path = "../proxmox/proxmox-http" }
+-#proxmox-http-error = { path = "../proxmox/proxmox-http-error" }
+-#proxmox-human-byte = { path = "../proxmox/proxmox-human-byte" }
+-#proxmox-io = { path = "../proxmox/proxmox-io" }
+-#proxmox-lang = { path = "../proxmox/proxmox-lang" }
+-#proxmox-ldap = { path = "../proxmox/proxmox-ldap" }
+-#proxmox-log = { path = "../proxmox/proxmox-log" }
+-#proxmox-metrics = { path = "../proxmox/proxmox-metrics" }
+-#proxmox-network-api = { path = "../proxmox/proxmox-network-api" }
+-#proxmox-network-types = { path = "../proxmox/proxmox-network-types" }
+-#proxmox-notify = { path = "../proxmox/proxmox-notify" }
+-#proxmox-openid = { path = "../proxmox/proxmox-openid" }
+-#proxmox-product-config = { path = "../proxmox/proxmox-product-config" }
+-#proxmox-rate-limiter = { path = "../proxmox/proxmox-rate-limiter" }
+-#proxmox-rest-server = { path = "../proxmox/proxmox-rest-server" }
+-#proxmox-router = { path = "../proxmox/proxmox-router" }
+-#proxmox-rrd = { path = "../proxmox/proxmox-rrd" }
+-#proxmox-rrd-api-types = { path = "../proxmox/proxmox-rrd-api-types" }
+-#proxmox-s3-client = { path = "../proxmox/proxmox-s3-client" }
+-#proxmox-schema = { path = "../proxmox/proxmox-schema" }
+-#proxmox-section-config = { path = "../proxmox/proxmox-section-config" }
+-#proxmox-sendmail = { path = "../proxmox/proxmox-sendmail" }
+-#proxmox-serde = { path = "../proxmox/proxmox-serde" }
+-#proxmox-shared-cache = { path = "../proxmox/proxmox-shared-cache" }
+-#proxmox-shared-memory = { path = "../proxmox/proxmox-shared-memory" }
+-#proxmox-sortable-macro = { path = "../proxmox/proxmox-sortable-macro" }
+-#proxmox-subscription = { path = "../proxmox/proxmox-subscription" }
+-#proxmox-sys = { path = "../proxmox/proxmox-sys" }
+-#proxmox-systemd = { path = "../proxmox/proxmox-systemd" }
+-#proxmox-tfa = { path = "../proxmox/proxmox-tfa" }
+-#proxmox-time = { path = "../proxmox/proxmox-time" }
+-#proxmox-upgrade-checks = { path = "../proxmox/proxmox-upgrade-checks" }
+-#proxmox-uuid = { path = "../proxmox/proxmox-uuid" }
+-#proxmox-worker-task = { path = "../proxmox/proxmox-worker-task" }
++pbs-api-types = { path = "../proxmox/pbs-api-types" }
++proxmox-acme = { path = "../proxmox/proxmox-acme" }
++proxmox-acme-api = { path = "../proxmox/proxmox-acme-api" }
++proxmox-api-macro = { path = "../proxmox/proxmox-api-macro" }
++proxmox-apt = { path = "../proxmox/proxmox-apt" }
++proxmox-apt-api-types = { path = "../proxmox/proxmox-apt-api-types" }
++proxmox-async = { path = "../proxmox/proxmox-async" }
++proxmox-auth-api = { path = "../proxmox/proxmox-auth-api" }
++proxmox-base64 = { path = "../proxmox/proxmox-base64" }
++proxmox-borrow = { path = "../proxmox/proxmox-borrow" }
++proxmox-compression = { path = "../proxmox/proxmox-compression" }
++proxmox-config-digest = { path = "../proxmox/proxmox-config-digest" }
++proxmox-daemon = { path = "../proxmox/proxmox-daemon" }
++proxmox-http = { path = "../proxmox/proxmox-http" }
++proxmox-http-error = { path = "../proxmox/proxmox-http-error" }
++proxmox-human-byte = { path = "../proxmox/proxmox-human-byte" }
++proxmox-io = { path = "../proxmox/proxmox-io" }
++proxmox-lang = { path = "../proxmox/proxmox-lang" }
++proxmox-ldap = { path = "../proxmox/proxmox-ldap" }
++proxmox-log = { path = "../proxmox/proxmox-log" }
++proxmox-metrics = { path = "../proxmox/proxmox-metrics" }
++proxmox-network-api = { path = "../proxmox/proxmox-network-api" }
++proxmox-network-types = { path = "../proxmox/proxmox-network-types" }
++proxmox-notify = { path = "../proxmox/proxmox-notify" }
++proxmox-openid = { path = "../proxmox/proxmox-openid" }
++proxmox-product-config = { path = "../proxmox/proxmox-product-config" }
++proxmox-rate-limiter = { path = "../proxmox/proxmox-rate-limiter" }
++proxmox-rest-server = { path = "../proxmox/proxmox-rest-server" }
++proxmox-router = { path = "../proxmox/proxmox-router" }
++proxmox-rrd = { path = "../proxmox/proxmox-rrd" }
++proxmox-rrd-api-types = { path = "../proxmox/proxmox-rrd-api-types" }
++proxmox-s3-client = { path = "../proxmox/proxmox-s3-client" }
++proxmox-schema = { path = "../proxmox/proxmox-schema" }
++proxmox-section-config = { path = "../proxmox/proxmox-section-config" }
++proxmox-sendmail = { path = "../proxmox/proxmox-sendmail" }
++proxmox-serde = { path = "../proxmox/proxmox-serde" }
++proxmox-shared-cache = { path = "../proxmox/proxmox-shared-cache" }
++proxmox-shared-memory = { path = "../proxmox/proxmox-shared-memory" }
++proxmox-sortable-macro = { path = "../proxmox/proxmox-sortable-macro" }
++proxmox-subscription = { path = "../proxmox/proxmox-subscription" }
++proxmox-sys = { path = "../proxmox/proxmox-sys" }
++proxmox-systemd = { path = "../proxmox/proxmox-systemd" }
++proxmox-tfa = { path = "../proxmox/proxmox-tfa" }
++proxmox-time = { path = "../proxmox/proxmox-time" }
++proxmox-upgrade-checks = { path = "../proxmox/proxmox-upgrade-checks" }
++proxmox-uuid = { path = "../proxmox/proxmox-uuid" }
++proxmox-worker-task = { path = "../proxmox/proxmox-worker-task" }
+ 
+-#proxmox-fuse = {path = "../proxmox-fuse" }
+-#pathpatterns = {path = "../pathpatterns" }
+-#pxar = { path = "../pxar" }
++proxmox-fuse = {path = "../proxmox-fuse" }
++pathpatterns = {path = "../pathpatterns" }
++pxar = { path = "../pxar" }
+ 
+ [features]
+ default = []
+-- 
+2.52.0
+

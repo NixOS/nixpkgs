@@ -1,0 +1,29 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 35bb10e..71c79eb 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -144,9 +144,9 @@ checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
+
+ [[package]]
+ name = "frizbee"
+-version = "0.7.0"
++version = "0.6.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4d024031f1a5bc5f19917baa0b618f1067610e35ba23e9f105653fcb27e74f5c"
++checksum = "c3365720de81dac18e889afa72f5907aa061c975548da68e2400c056ebc94aec"
+ dependencies = [
+  "multiversion",
+  "rayon",
+diff --git a/Cargo.toml b/Cargo.toml
+index 392d1bb..c776c7d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -9,7 +9,7 @@ crate-type = ["cdylib"]
+
+ [dependencies]
+ regex = "1.11.2"
+-frizbee = "0.7.0"
++frizbee = "0.6.0"
+ mlua = { version = "0.11.3", features = ["module", "luajit"] }
+ thiserror = "2.0.16"
+ blake3 = "1.8.2"
