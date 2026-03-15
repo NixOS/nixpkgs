@@ -8,20 +8,21 @@
   scdoc,
   wayland,
   wayland-scanner,
-  libvarlink,
+  vali,
   libscfg,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kanshi";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "kanshi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-90FnVtiYR8AEAddIQe9sfgQDMO8OqlQ8fNy/nJsbhKs=";
+    hash = "sha256-F6wyNFygU3uPBliDPOp5EdTeCx/5ZulnC9MOqYtiVQw=";
   };
 
   strictDeps = true;
@@ -40,8 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayland
-    libvarlink
     libscfg
+    vali
   ];
 
   meta = {
