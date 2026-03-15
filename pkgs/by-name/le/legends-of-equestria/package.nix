@@ -2,7 +2,7 @@
   lib,
   stdenv,
   runCommand,
-  megacmd,
+  megacmd-bin,
   unzip,
   makeWrapper,
   autoPatchelfHook,
@@ -101,7 +101,7 @@ stdenv.mkDerivation {
           pname = "${pname}-source";
           inherit version;
           nativeBuildInputs = [
-            megacmd
+            megacmd-bin
             unzip
           ];
           outputHashAlgo = "sha256";
