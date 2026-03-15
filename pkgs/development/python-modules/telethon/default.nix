@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   openssl,
   rsa,
   pyaes,
@@ -23,22 +22,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-NMHJkSTGR3/tck0k97EfVN9f85PAWst+EZ6G7Tgrt5s=";
   };
-
-  patches = [
-    # https://github.com/LonamiWebs/Telethon/pull/4670
-    (fetchpatch {
-      url = "https://github.com/LonamiWebs/Telethon/commit/8e2a46568ef9193f5887aea1abf919ac4ca6d31e.patch";
-      name = "fix_async_test.patch";
-      hash = "sha256-oVpLnO4OxNam/mq945OskVEHkbS5TDSUXk/0xPHVv3I=";
-    })
-  ]
-  ++ lib.optionals (lib.versionOlder version "1.40.1") [
-    (fetchpatch {
-      url = "https://github.com/LonamiWebs/Telethon/commit/ae9c798e2c3648ff40dee1b3f371f5d66851642e.patch";
-      name = "fix_test_messages_test.patch";
-      hash = "sha256-8SJm8EE6w7zRQxt1NuTX6KP1MTYPiYO/maJ5tOA2I9w=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace telethon/crypto/libssl.py --replace-fail \
