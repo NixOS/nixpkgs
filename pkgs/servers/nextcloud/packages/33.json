@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-a8sMBDFa6FEZV60WjyApx/qF9Vv8WUcQnhz9GFtvfEg=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v4.0.0/collectives-4.0.0.tar.gz",
-    "version": "4.0.0",
+    "hash": "sha256-BYgY9kC91ftpw/eXlFT5ryNhjz138pzPoIh89k46GZ8=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v4.1.0/collectives-4.1.0.tar.gz",
+    "version": "4.1.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-jeE+tqP1fXW2mFMgoVTtR07DhzTO2rIbPkL38VzZRNM=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.4.0/contacts-v8.4.0.tar.gz",
-    "version": "8.4.0",
+    "hash": "sha256-/RNCZGmPJ2Feh506D5xIw09vX27H0IEVz+ipn7V7MfM=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v8.4.1/contacts-v8.4.1.tar.gz",
+    "version": "8.4.1",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -109,6 +109,16 @@
       "agpl"
     ]
   },
+  "files_linkeditor": {
+    "hash": "sha256-yT3b0K31PfK8ApI23yQAZRfTiWyFZnBVlTi+/sZCv+Y=",
+    "url": "https://github.com/te-online/nextcloud-app-releases/raw/main/files_linkeditor/v1.1.24/files_linkeditor.tar.gz",
+    "version": "1.1.24",
+    "description": "### External web links in Nextcloud!\n* ✍️ **create and edit** .URL and .webloc links in the file view\n* 🌍 **open links** by clicking them and confirming you want to go to the external site\n* 📤 **works in public shares** so you can share links easily with others\n* 🔄 **sync your links** as .URL and .webloc are web links as created on most operating systems.\n\n_[View changelog](https://github.com/te-online/files_linkeditor/blob/main/CHANGELOG.md)_",
+    "homepage": "https://github.com/te-online/files_linkeditor",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "files_retention": {
     "hash": "sha256-+BWPFD86OnNGeuAM49ST0AHsOpCxLhwRYVYJDAtSB8E=",
     "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v4.0.0/files_retention-v4.0.0.tar.gz",
@@ -120,9 +130,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-pPq35QtolbjBPiaILAvf7RA2uG3otiAyIRcU3AYwb5E=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.2.4/forms-v5.2.4.tar.gz",
-    "version": "5.2.4",
+    "hash": "sha256-hiDhtnWtscpI+ICOk1nulJoCLovnBv8YBtso/CtJjH4=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v5.2.5/forms-v5.2.5.tar.gz",
+    "version": "5.2.5",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API_v3.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -200,9 +210,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-Aq+ISmrPNlH42KNqkxAqoTEgML2l36lhsAMS0GUYb+c=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.7.1/mail-v5.7.1.tar.gz",
-    "version": "5.7.1",
+    "hash": "sha256-LlfmKN8Nw7G6+9vE+letrAb1DccwSUbeoSUG+u3X6gs=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.7.3/mail-v5.7.3.tar.gz",
+    "version": "5.7.3",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -215,6 +225,16 @@
     "version": "3.0.0",
     "description": "A stand-alone music player app and a \"lite\" player for the Files app\n\n- On modern browsers, supports audio types .mp3, .ogg, .m4a, .m4b, .flac, .wav, and more\n- Playlist support with import from .m3u, .m3u8, .pls, and .wpl files\n- Show lyrics from the file metadata or .lrc files\n- Browse by artists, albums, genres, or folders\n- Gapless play\n- Filter the shown content with the search function\n- Advanced search to freely use and combine dozens of search criteria\n- Play internet radio and podcast channels\n- Setup Last.fm connection to scrobble plays and/or see background information on artists, albums, and songs\n- Control with media control keys on the keyboard or OS\n- The app can handle libraries consisting of thousands of albums and tens of thousands of songs\n- Includes a server backend compatible with the Subsonic and Ampache protocols, allowing playback and browsing of your library on dozens of external apps on Android, iOS, Windows, Linux, etc.\n- Widget for the Nextcloud Dashboard",
     "homepage": "https://github.com/nc-music/music",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "news": {
+    "hash": "sha256-53zwBxm/vUqQvc3h9od73RYxqJhh0M6lVS4//bJHMuA=",
+    "url": "https://github.com/nextcloud/news/releases/download/28.0.1/news.tar.gz",
+    "version": "28.0.1",
+    "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
+    "homepage": "https://github.com/nextcloud/news",
     "licenses": [
       "agpl"
     ]
@@ -360,9 +380,9 @@
     ]
   },
   "tables": {
-    "hash": "sha256-dQA82KvegGxatWQy3Sq6AJs/hMmkCrNCnrC9FIZmXck=",
-    "url": "https://github.com/nextcloud-releases/tables/releases/download/v2.0.0/tables-v2.0.0.tar.gz",
-    "version": "2.0.0",
+    "hash": "sha256-4v24FNg0XKzpKoYKZzQjfAkC7JJZmfoJ7THsoK0A34E=",
+    "url": "https://github.com/nextcloud-releases/tables/releases/download/v2.0.1/tables-v2.0.1.tar.gz",
+    "version": "2.0.1",
     "description": "Manage data the way you need it.\n\nWith this app you are able to create your own tables with individual columns. You can start with a template or from scratch and add your wanted columns.\nYou can choose from the following column types:\n- Text line or rich text\n- Link to urls or other nextcloud resources\n- Numbers\n- Progress bar\n- Stars rating\n- Yes/No tick\n- Date and/or time\n- (Multi) selection\n- Users, groups and teams\n\nShare your tables and views with users and groups within your cloud.\n\nHave a good time and manage whatever you want.",
     "homepage": "https://github.com/nextcloud/tables",
     "licenses": [
@@ -375,6 +395,16 @@
     "version": "0.17.1",
     "description": "Once enabled, a new Tasks menu will appear in your Nextcloud apps menu. From there you can add and delete tasks, edit their title, description, start and due dates and mark them as important. Tasks can be shared between users. Tasks can be synchronized using CalDav (each task list is linked to an Nextcloud calendar, to sync it to your local client: Thunderbird, Evolution, KDE Kontact, iCal … - just add the calendar as a remote calendar in your client). You can download your tasks as ICS files using the download button for each calendar.",
     "homepage": "https://github.com/nextcloud/tasks/",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "theming_customcss": {
+    "hash": "sha256-Fgu31s+K4MFUgvNe9mAVHi9C0iJnv40v1onUMk+lFZk=",
+    "url": "https://github.com/nextcloud/theming_customcss/releases/download/v1.20.0/theming_customcss.tar.gz",
+    "version": "1.20.0",
+    "description": "This app allows admins to customize the appearance of their Nextcloud instance by adding their own CSS rules.\n\nThe rules can be added in the admin settings in the \"Theming\" section. This allows you to easily adjust the look and feel of your Nextcloud instance without having to modify any files on the server.",
+    "homepage": "",
     "licenses": [
       "agpl"
     ]
@@ -410,9 +440,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-uvGCdA8wNHdeZJk+AIZZrxbylxicNusJzi5nqHWaVtY=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v8.4.0/user_oidc-v8.4.0.tar.gz",
-    "version": "8.4.0",
+    "hash": "sha256-Xl35Ss/P6PvK6pvm7i/J+0EHJaLPbOCffR8ZT5c3XA4=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v8.6.1/user_oidc-v8.6.1.tar.gz",
+    "version": "8.6.1",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
