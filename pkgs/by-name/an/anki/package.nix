@@ -122,18 +122,15 @@ let
     exec ${yarn}/bin/yarn "$@"
   '';
 
-  uvWheels = runCommand "uv-wheels" {
-    # otherwise, it's too long of a string
-    passAsFile = [ "installCommand" ];
-    installCommand = ''
-      #!${stdenv.shell}
+  uvWheels = runCommand "uv-wheels" { } (
+    ''
       mkdir -p $out
     ''
-    + (lib.strings.concatStringsSep "\n" (map (dep: "ln -vsf ${dep.dist}/*.whl $out") pythonDeps));
-  } "bash $installCommandPath";
+    + (lib.strings.concatMapStringsSep "\n" (dep: "ln -vsf ${dep.dist}/*.whl $out") pythonDeps)
+  );
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pyproject = false;
   inherit pname version;
 
@@ -158,8 +155,8 @@ python3Packages.buildPythonApplication rec {
 
   missingHashes = ./missing-hashes.json;
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
-    inherit missingHashes;
-    yarnLock = "${src}/yarn.lock";
+    inherit (finalAttrs) missingHashes;
+    yarnLock = "${finalAttrs.src}/yarn.lock";
     hash = yarnHash;
   };
 
@@ -357,4 +354,4 @@ python3Packages.buildPythonApplication rec {
       oxij
     ];
   };
-}
+})
