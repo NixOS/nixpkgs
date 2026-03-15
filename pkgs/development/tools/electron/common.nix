@@ -128,6 +128,12 @@ in
         url = "https://github.com/chromium/chromium/commit/9415f40bc6f853547f791e633be638c71368ce56.patch";
         hash = "sha256-+M4gI77SoQ4dYIe/iGFgIwF1fS/6KQ8s16vj8ht/rik=";
       })
+    ]
+    ++ lib.optionals (lib.versions.major info.version == "39") [
+      ./39-angle-patchdir.patch
+    ]
+    ++ lib.optionals (lib.versions.major info.version == "41") [
+      ./41-skia-patchdir.patch
     ];
 
   postPatch = ''
