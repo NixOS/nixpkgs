@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-readers-s3";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_readers_s3";
     inherit version;
-    hash = "sha256-Ye+B4lcwdeaAisaIZH98X2n7FA7n9/gkVVNRN1uihys=";
+    hash = "sha256-ZmUsD0kyGtAcfSvsgaG8U1vbOTQW3BYg7WsHVfyic9c=";
   };
 
   build-system = [ hatchling ];
