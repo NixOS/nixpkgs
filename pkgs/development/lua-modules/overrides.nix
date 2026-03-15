@@ -22,6 +22,7 @@
   gnulib,
   gnum4,
   gobject-introspection,
+  icu,
   imagemagick,
   installShellFiles,
   lib,
@@ -400,6 +401,35 @@ in
     buildInputs = old.buildInputs ++ [
       (lib.getDev libc)
     ];
+  });
+
+  ltreesitter = prev.ltreesitter.overrideAttrs (old: {
+    buildInputs = (old.buildInputs or [ ]) ++ [
+      tree-sitter
+    ];
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail '"tree-sitter/lib/src/lib.c",' "" \
+        --replace-fail '"tree-sitter/lib/include",' '"${tree-sitter}/include"' \
+        --replace-fail '"tree-sitter/lib/src"' ""
+    '';
+    NIX_CFLAGS_COMPILE = "-I${tree-sitter}/include";
+    NIX_LDFLAGS = "-L${tree-sitter}/lib -ltree-sitter";
+  });
+
+  ltreesitter-ts = prev.ltreesitter-ts.overrideAttrs (old: {
+    # Upstream package relies on git submodules (ltreesitter + tree-sitter),
+    # but the default source fetch misses those files.
+    src = fetchFromGitHub {
+      owner = "FourierTransformer";
+      repo = "ltreesitter-ts";
+      rev = "0.0.1";
+      fetchSubmodules = true;
+      hash = "sha256-hKM5HQU7A08mA004ZMV7hIVq/2WR3KocMatnTplM8uU=";
+    };
+    nativeBuildInputs = old.nativeBuildInputs ++ [ icu ];
+    NIX_CFLAGS_COMPILE = "-I${lib.getDev icu}/include";
+    NIX_LDFLAGS = "-L${lib.getLib icu}/lib -licuuc -licui18n -licudata";
   });
 
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
@@ -1067,6 +1097,33 @@ in
     '';
   };
 
+  teal-language-server = prev.teal-language-server.overrideAttrs (old: {
+    strictDeps = false;
+    # Relax lockfile-pinned deps (e.g. luafilesystem 1.8.0-1) so nixpkgs
+    # packaged versions can satisfy dependencies.
+    preConfigure = (old.preConfigure or "") + ''
+      rm -f luarocks.lock
+    '';
+    postConfigure = (old.postConfigure or "") + ''
+      substituteInPlace ''${rockspecFilename} \
+        --replace-fail '"ltreesitter-ts == 0.0.1",' '"ltreesitter >= 0.2.0",' \
+        --replace-fail '"tree-sitter-cli == 0.24.4",' "" \
+        --replace-fail '"tl == 0.24.4",' '"tl >= 0.24.4",' \
+        --replace-fail '"tree-sitter-teal == 0.0.33",' '"tree-sitter-teal >= 0.0.33",'
+    '';
+
+    nativeBuildInputs =
+      (lib.filter (
+        drv:
+        !(lib.elem (lib.getName drv) [
+          "ltreesitter-ts"
+        ])
+      ) old.nativeBuildInputs)
+      ++ [
+        final.ltreesitter
+      ];
+  });
+
   tiktoken_core = prev.tiktoken_core.overrideAttrs (old: {
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) src;
@@ -1108,6 +1165,17 @@ in
     ];
   });
 
+  tree-sitter-cli = prev.tree-sitter-cli.overrideAttrs (_: {
+    # Keep this package hermetic: provide the already-packaged tree-sitter
+    # binary instead of using the LuaRocks backend that downloads from GitHub.
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out/bin
+      ln -s ${lib.getExe tree-sitter} $out/bin/tree-sitter
+      runHook postInstall
+    '';
+  });
+
   tree-sitter-http = prev.tree-sitter-http.overrideAttrs (old: {
     nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
       tree-sitter
@@ -1127,6 +1195,13 @@ in
 
     # should be fixed upstream
     meta.broken = lua.luaversion != "5.1";
+  });
+
+  tree-sitter-teal = prev.tree-sitter-teal.overrideAttrs (old: {
+    nativeBuildInputs = old.nativeBuildInputs ++ [
+      tree-sitter
+      writableTmpDirAsHomeHook
+    ];
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
