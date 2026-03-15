@@ -336,6 +336,20 @@ in
         // {
           default = true;
         };
+
+      moduleParams = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.attrsOf lib.types.raw);
+        default = { };
+        example = ''
+          {
+            nvidia = {
+              NVreg_UsePageAttributeTable = 1;
+              NVreg_RegistryDwords = "EnableBrightnessControl=1"
+            };
+          }
+        '';
+        description = "Additional parameters to pass to the NVIDIA kernel module.";
+      };
     };
   };
 
@@ -398,10 +412,47 @@ in
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
             KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 1'"
           '';
-          hardware.graphics = {
-            extraPackages = [ nvidia_x11.out ];
-            extraPackages32 = [ nvidia_x11.lib32 ];
-          };
+          hardware.graphics =
+            let
+              icd = [
+                "egl-gbm"
+                "egl-wayland"
+              ]
+              ++ lib.optionals (lib.versionAtLeast nvidia_x11.version "560") [
+                "egl-wayland2"
+                "egl-x11"
+              ];
+              combineIcdPkgs =
+                icd: pkgs:
+                pkgs.symlinkJoin {
+                  name = "nvidia-egl-external-platforms${lib.optionalString pkgs.stdenv.is32bit "-x32"}";
+                  paths = lib.attrVals icd pkgs;
+                  # https://github.com/NixOS/nixpkgs/pull/497342#issuecomment-4034876793
+                  postBuild = lib.optionalString (lib.versionOlder nvidia_x11.version "595") ''
+                    pushd $out/share/egl/egl_external_platform.d
+                    for f in [0-9][0-9]_*; do
+                      num=''${f:0:2}
+                      rest=''${f:2}
+                      new=$(printf "%02d" $((99 - 10#$num)))
+                      mv -- "$f" "tmp-$new$rest"
+                    done
+                    for f in tmp-*; do
+                      mv -- "$f" "''${f#tmp-}"
+                    done
+                    popd
+                  '';
+                };
+            in
+            {
+              extraPackages = [
+                nvidia_x11.out
+                (combineIcdPkgs icd pkgs)
+              ];
+              extraPackages32 = [
+                nvidia_x11.lib32
+                (combineIcdPkgs icd pkgs.pkgsi686Linux)
+              ];
+            };
           environment.systemPackages = [ nvidia_x11.bin ];
         }
 
@@ -485,6 +536,17 @@ in
                 cfg.powerManagement.kernelSuspendNotifier
                 -> (useOpenModules && lib.versionAtLeast nvidia_x11.version "595");
               message = "NVIDIA driver support for kernel suspend notifiers requires NVIDIA driver version 595 or newer, and the open source kernel modules.";
+            }
+
+            {
+              assertion =
+                removeAttrs cfg.moduleParams [
+                  "nvidia"
+                  "nvidia-drm"
+                  "nvidia-modeset"
+                  "nvidia-uvm"
+                ] == { };
+              message = "You can only use `hardware.nvidia.moduleParams` to set parameters for the kernel modules of NVIDIA drivers.";
             }
           ];
 
@@ -677,8 +739,21 @@ in
             lib.optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
               "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
+          hardware.nvidia.moduleParams = lib.mkMerge (
+            lib.optional (offloadCfg.enable || cfg.modesetting.enable) { nvidia-drm.modeset = 1; }
+            ++ lib.optional (
+              (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
+            ) { nvidia-drm.fbdev = 1; }
+            ++ lib.optional (cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier) {
+              nvidia.NVreg_UseKernelSuspendNotifiers = 1;
+            }
+            ++ lib.optional cfg.powerManagement.enable { nvidia.NVreg_PreserveVideoMemoryAllocations = 1; }
+            ++ lib.optional useOpenModules { nvidia.NVreg_OpenRmEnableUnsupportedGpus = 1; }
+            ++ lib.optional cfg.powerManagement.finegrained { nvidia.NVreg_DynamicPowerManagement = "0x02"; }
+          );
+
           boot = {
-            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.bin ];
+            extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
             # nvidia-uvm is required by CUDA applications.
             kernelModules = lib.optionals config.services.xserver.enable [
               "nvidia"
@@ -686,23 +761,16 @@ in
               "nvidia_drm"
             ];
 
-            # If requested enable modesetting via kernel parameters.
-            kernelParams =
-              lib.optional (offloadCfg.enable || cfg.modesetting.enable) "nvidia-drm.modeset=1"
-              ++ lib.optional (
-                (offloadCfg.enable || cfg.modesetting.enable) && lib.versionAtLeast nvidia_x11.version "545"
-              ) "nvidia-drm.fbdev=1"
-              ++ lib.optional (
-                cfg.powerManagement.enable && cfg.powerManagement.kernelSuspendNotifier
-              ) "nvidia.NVreg_UseKernelSuspendNotifiers=1"
-              ++ lib.optional cfg.powerManagement.enable "nvidia.NVreg_PreserveVideoMemoryAllocations=1"
-              ++ lib.optional useOpenModules "nvidia.NVreg_OpenRmEnableUnsupportedGpus=1"
-              ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport) "ibt=off";
+            kernelParams = lib.optional (
+              config.boot.kernelPackages.kernel.kernelAtLeast "6.2" && !ibtSupport
+            ) "ibt=off";
 
-            # enable finegrained power management
-            extraModprobeConfig = lib.optionalString cfg.powerManagement.finegrained ''
-              options nvidia "NVreg_DynamicPowerManagement=0x02"
-            '';
+            extraModprobeConfig =
+              let
+                mergeParams = lib.concatMapAttrsStringSep " " (k: v: "${k}=${toString v}");
+                genModprobeLine = module: params: "options ${module} ${mergeParams params}";
+              in
+              lib.concatMapAttrsStringSep "\n" genModprobeLine cfg.moduleParams;
           };
           services.udev.extraRules = lib.optionalString cfg.powerManagement.finegrained (
             lib.optionalString (lib.versionOlder config.boot.kernelPackages.kernel.version "5.5") ''
@@ -728,7 +796,7 @@ in
         })
         # Data Center
         (lib.mkIf (cfg.datacenter.enable) {
-          boot.extraModulePackages = [ nvidia_x11.bin ];
+          boot.extraModulePackages = if useOpenModules then [ nvidia_x11.open ] else [ nvidia_x11.mod ];
 
           systemd = {
             tmpfiles.rules =

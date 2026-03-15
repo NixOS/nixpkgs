@@ -6,18 +6,18 @@
   pkg-config,
   meson,
   ninja,
-  wayland-scanner,
   jq,
   libGL,
+  libgbm,
   libdrm,
-  wayland,
-  wayland-protocols,
+  libx11,
+  libxcb,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "egl-wayland";
-  version = "1.1.21";
+  pname = "egl-x11";
+  version = "1.0.5";
 
   outputs = [
     "out"
@@ -26,16 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = "egl-wayland";
-    tag = finalAttrs.version;
-    hash = "sha256-a98DzmzCG6DlLJ1HCl/LeD21Q7yyNbTce1poOoAnTjA=";
+    repo = "egl-x11";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Sl/qc39H29wXsb5UYKGK7IciwTlbRBqA9omL2sgXpx0=";
   };
-
-  postPatch = ''
-    # Declares an includedir but doesn't install any headers
-    # CMake's `pkg_check_modules(NAME wayland-eglstream IMPORTED_TARGET)` considers this an error
-    sed -i -e '/includedir/d' wayland-eglstream.pc.in
-  '';
 
   depsBuildBuild = [
     pkg-config
@@ -45,15 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wayland-scanner
     jq
   ];
 
   buildInputs = [
     libGL
+    libgbm
     libdrm
-    wayland
-    wayland-protocols
+    libx11
+    libxcb
   ];
 
   propagatedBuildInputs = [
@@ -73,12 +67,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
-    description = "EGLStream-based Wayland external platform";
-    homepage = "https://github.com/NVIDIA/egl-wayland/";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    description = "X11/XCB external platform library";
+    homepage = "https://github.com/NVIDIA/egl-x11/";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      hedning
       ccicnce113424
     ];
   };

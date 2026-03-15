@@ -6,18 +6,16 @@
   pkg-config,
   meson,
   ninja,
-  wayland-scanner,
   jq,
   libGL,
+  libgbm,
   libdrm,
-  wayland,
-  wayland-protocols,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "egl-wayland";
-  version = "1.1.21";
+  pname = "egl-gbm";
+  version = "1.1.3";
 
   outputs = [
     "out"
@@ -26,16 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = "egl-wayland";
+    repo = "egl-gbm";
     tag = finalAttrs.version;
-    hash = "sha256-a98DzmzCG6DlLJ1HCl/LeD21Q7yyNbTce1poOoAnTjA=";
+    hash = "sha256-OoHgvFbyd6JakSKyN7N97FMJHNYV1spj7zy3f1g/PN0=";
   };
-
-  postPatch = ''
-    # Declares an includedir but doesn't install any headers
-    # CMake's `pkg_check_modules(NAME wayland-eglstream IMPORTED_TARGET)` considers this an error
-    sed -i -e '/includedir/d' wayland-eglstream.pc.in
-  '';
 
   depsBuildBuild = [
     pkg-config
@@ -45,15 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wayland-scanner
     jq
   ];
 
   buildInputs = [
     libGL
+    libgbm
     libdrm
-    wayland
-    wayland-protocols
   ];
 
   propagatedBuildInputs = [
@@ -73,12 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
 
   meta = {
-    description = "EGLStream-based Wayland external platform";
-    homepage = "https://github.com/NVIDIA/egl-wayland/";
+    description = "GBM EGL external platform library";
+    homepage = "https://github.com/NVIDIA/egl-gbm/";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      hedning
       ccicnce113424
     ];
   };

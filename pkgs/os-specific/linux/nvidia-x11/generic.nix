@@ -42,9 +42,7 @@
   fetchurl,
   fetchzip,
   kernel ? null,
-  kernelModuleMakeFlags ? [ ],
   perl,
-  nukeReferences,
   which,
   libarchive,
   jq,
@@ -201,25 +199,15 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ]
   ++ lib.optional i686bundled "lib32"
-  ++ lib.optional (!libsOnly) "bin"
+  ++ lib.optionals (!libsOnly) [
+    "bin"
+    "modsrc"
+  ]
   ++ lib.optional (!libsOnly && firmware) "firmware";
   outputDev = if libsOnly then null else "bin";
 
   kernel = if libsOnly then null else kernel.dev;
   kernelVersion = if libsOnly then null else kernel.modDirVersion;
-
-  makeFlags = lib.optionals (!libsOnly) (
-    kernelModuleMakeFlags
-    ++ [
-      "IGNORE_PREEMPT_RT_PRESENCE=1"
-      "NV_BUILD_SUPPORTS_HMM=1"
-      "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
-      "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
-    ]
-  );
 
   hardeningDisable = [
     "pic"
@@ -234,12 +222,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     perl
-    nukeReferences
     which
     libarchive
     jq
-  ]
-  ++ lib.optionals (!libsOnly) kernel.moduleBuildDependencies;
+  ];
 
   disallowedReferences = lib.optionals (!libsOnly) [ kernel.dev ];
 
@@ -274,9 +260,17 @@ stdenv.mkDerivation (finalAttrs: {
         );
     in
     {
+      mod = callPackage ./kernel-modules.nix {
+        open = false;
+        nvidia_x11 = finalAttrs.finalPackage;
+        # build files already patched when building the main package, so no need to patch them again
+        patches = [ ];
+        inherit broken;
+      };
       open = lib.mapNullable (
         hash:
-        callPackage ./open.nix {
+        callPackage ./kernel-modules.nix {
+          open = true;
           inherit hash;
           nvidia_x11 = finalAttrs.finalPackage;
           patches =
@@ -339,6 +333,10 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (sha256_32bit != null) [ "i686-linux" ]
     ++ lib.optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [
+      binaryNativeCode
+      binaryFirmware
+    ];
     maintainers = with lib.maintainers; [
       kiskae
       edwtjo
