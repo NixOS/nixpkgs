@@ -71,15 +71,17 @@ in
       '';
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
-        options.host = lib.mkOption {
-          type = lib.types.str;
-          description = "The IP to listen on.";
-          default = "127.0.0.1";
-        };
-        options.port = lib.mkOption {
-          type = lib.types.port;
-          description = "The port to listen on.";
-          default = 8080;
+        options = {
+          host = lib.mkOption {
+            type = lib.types.str;
+            description = "The IP to listen on.";
+            default = "127.0.0.1";
+          };
+          port = lib.mkOption {
+            type = lib.types.port;
+            description = "The port to listen on.";
+            default = 8080;
+          };
         };
       };
     };
