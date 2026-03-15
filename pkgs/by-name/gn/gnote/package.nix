@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "49.2";
+  version = "49.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnote/${lib.versions.major version}/gnote-${version}.tar.xz";
-    hash = "sha256-lC8CsXIFff4HbdBNDwNlLqafNjg3Lsbrn8p3CBYEp7U=";
+    hash = "sha256-vUoL/sDz6vMAyUvq9TyAFrYu4zwvoXs/ZabxEaICMG8=";
   };
 
   buildInputs = [
