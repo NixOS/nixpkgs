@@ -5,6 +5,7 @@
   fontforge,
   perl,
   perlPackages,
+  installFonts,
 }:
 
 let
@@ -38,6 +39,7 @@ let
       perl
       perlPackages.IOString
       perlPackages.FontTTF
+      installFonts
     ];
 
     src = fetchFromGitHub {
@@ -51,27 +53,23 @@ let
 
     preBuild = "patchShebangs scripts";
 
-    installPhase = "install -m444 -Dt $out/share/fonts/truetype build/*.ttf";
-
     inherit meta;
   };
 
   minimal = stdenv.mkDerivation {
     pname = "dejavu-fonts-minimal";
     inherit version;
-    buildCommand = ''
-      install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/DejaVuSans.ttf
-    '';
+    nativeBuildInputs = [ installFonts ];
     inherit meta;
   };
 in
 stdenv.mkDerivation {
   pname = "dejavu-fonts";
   inherit version;
-  buildCommand = ''
-    install -m444 -Dt $out/share/fonts/truetype ${full-ttf}/share/fonts/truetype/*.ttf
-    ln -s --relative --force --target-directory=$out/share/fonts/truetype ${minimal}/share/fonts/truetype/DejaVuSans.ttf
-  '';
+
+  nativeBuildInputs = [
+    installFonts
+  ];
   inherit meta;
 
   passthru = { inherit minimal full-ttf; };
