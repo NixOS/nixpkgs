@@ -43,7 +43,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postInstall = ''
     install -Dm644 misc/rare.desktop -t $out/share/applications/
-    install -Dm644 $out/${python3Packages.python.sitePackages}/rare/resources/images/Rare.png $out/share/pixmaps/rare.png
+    install -Dm644 $out/${python3Packages.python.sitePackages}/rare/resources/images/Rare.png $out/share/icons/hicolor/1024x1024/apps/rare.png
   '';
 
   preFixup = ''
