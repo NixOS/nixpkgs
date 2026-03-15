@@ -6,17 +6,13 @@
   libnl,
 }:
 
-let
-  cfg = import ./version.nix;
-in
-
 stdenv.mkDerivation rec {
   pname = "batctl";
-  inherit (cfg) version;
+  version = "2026.0";
 
   src = fetchurl {
     url = "https://downloads.open-mesh.org/batman/releases/batman-adv-${version}/${pname}-${version}.tar.gz";
-    sha256 = cfg.sha256.${pname};
+    hash = "sha256-tLcNrmIBBuRe492x9RL2kHVpKxI0PQUhJnQDyyEqSiY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

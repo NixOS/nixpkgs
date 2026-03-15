@@ -8494,8 +8494,6 @@ with pkgs;
     enableUnstable = true;
   };
 
-  batctl = callPackage ../os-specific/linux/batman-adv/batctl.nix { };
-
   bluez5 = bluez;
   bluez5-experimental = bluez-experimental;
 
