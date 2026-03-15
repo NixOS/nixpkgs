@@ -16,7 +16,7 @@
   nixpkgs ? null,
 }:
 let
-  inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
+  inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt typecheck-ci-scripts;
 
   # For `nix-shell -A hello`
   curPkgs = removeAttrs (import ./. { inherit system; }) [
@@ -31,12 +31,14 @@ curPkgs
   inputsFrom = [
     fmt.shell
   ];
-  packages = with pkgs; [
+  packages = [
     # Helper to review Nixpkgs PRs
     # See CONTRIBUTING.md
-    nixpkgs-reviewFull
+    pkgs.nixpkgs-reviewFull
     # Command-line utility for working with GitHub
     # Used by nixpkgs-review to fetch eval results
-    gh
+    pkgs.gh
+    # Type check CI scripts
+    typecheck-ci-scripts.passthru.driver
   ];
 }

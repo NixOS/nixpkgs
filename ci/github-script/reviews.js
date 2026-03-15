@@ -126,7 +126,7 @@ async function dismissReviews({ github, context, core, dry, reviewKey }) {
  *  core: import('@actions/core'),
  *  dry: boolean,
  *  body: string,
- *  event: keyof eventToState,
+ *  event?: keyof eventToState,
  *  reviewKey: string,
  * }} PostReviewProps
  */

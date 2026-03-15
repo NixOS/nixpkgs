@@ -8,18 +8,19 @@ pkgs.callPackage (
     gh,
     importNpmLock,
     mkShell,
-    nodejs,
+    nodejs_24,
   }:
   mkShell {
     packages = [
       gh
       importNpmLock.hooks.linkNodeModulesHook
-      nodejs
+      nodejs_24
+      (pkgs.callPackage ./. { }).passthru.driver
     ];
 
     npmDeps = importNpmLock.buildNodeModules {
       npmRoot = ./.;
-      inherit nodejs;
+      nodejs = nodejs_24;
     };
   }
 ) { }

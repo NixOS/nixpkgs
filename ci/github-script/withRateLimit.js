@@ -11,6 +11,7 @@ module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
   // Rate-Limiting and Throttling, see for details:
   //   https://github.com/octokit/octokit.js/issues/1069#throttling
   //   https://docs.github.com/en/rest/using-the-rest-api/best-practices-for-using-the-rest-api
+  // @ts-expect-error bottleneck lacks TypeScript types
   const allLimits = new Bottleneck({
     // Avoid concurrent requests
     maxConcurrent,
@@ -18,6 +19,7 @@ module.exports = async ({ github, core, maxConcurrent = 1 }, callback) => {
     reservoir: 0,
   })
   // Pause between mutative requests
+  // @ts-expect-error bottleneck lacks TypeScript types
   const writeLimits = new Bottleneck({ minTime: 1000 }).chain(allLimits)
   github.hook.wrap('request', async (request, options) => {
     // Requests to a different host do not count against the rate limit.

@@ -1,8 +1,3 @@
-#!/usr/bin/env nix-shell
-/*
-#!nix-shell -i node -p nodejs
-*/
-
 const typeConfig = {
   master: ['development', 'primary'],
   release: ['development', 'primary'],
@@ -47,7 +42,7 @@ function classify(branch) {
 module.exports = { classify, split }
 
 // If called directly via CLI, runs the following tests:
-if (!module.parent) {
+if (require.main === module) {
   console.log('split(branch)')
   function testSplit(branch) {
     console.log(branch, split(branch))
