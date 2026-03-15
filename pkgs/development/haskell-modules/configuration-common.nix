@@ -2089,6 +2089,12 @@ with haskellLib;
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
 
+  # Allow granite >= 0.4
+  dataframe = lib.pipe super.dataframe [
+    (warnAfterVersion "0.5.0.1")
+    doJailbreak
+  ];
+
   # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
   dataframe-persistent = lib.pipe super.dataframe-persistent [
     doJailbreak # 2026-01-23: too strict bounds on dataframe >= 0.4
