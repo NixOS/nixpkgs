@@ -8186,6 +8186,8 @@ self: super: with self; {
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
+  kaldi-native-fbank = callPackage ../development/python-modules/kaldi-native-fbank { };
+
   kaleido = callPackage ../development/python-modules/kaleido { };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
@@ -11763,6 +11765,10 @@ self: super: with self; {
 
   opentelemetry-semantic-conventions =
     callPackage ../development/python-modules/opentelemetry-semantic-conventions
+      { };
+
+  opentelemetry-semantic-conventions-ai =
+    callPackage ../development/python-modules/opentelemetry-semantic-conventions-ai
       { };
 
   opentelemetry-test-utils = callPackage ../development/python-modules/opentelemetry-test-utils { };
