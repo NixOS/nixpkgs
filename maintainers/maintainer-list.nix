@@ -26176,6 +26176,11 @@
     githubId = 52673095;
     name = "Syed Ahkam";
   };
+  sylfn = {
+    github = "sylfn";
+    githubId = 44705138;
+    name = "Yuki Sireneva";
+  };
   sylonin = {
     email = "syl@sperg.net";
     github = "Sylonin";

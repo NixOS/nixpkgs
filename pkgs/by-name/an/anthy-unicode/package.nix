@@ -1,20 +1,23 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   buildPackages,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "anthy";
-  version = "9100h";
+  pname = "anthy-unicode";
+  version = "1.0.0.20260213";
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # for cross builds, copy build tools from the native package
-    cp -r "${buildPackages.anthy.dev}"/lib/internals/{mkdepgraph,.libs} depgraph/
-    cp -r "${buildPackages.anthy.dev}"/lib/internals/{mkworddic,.libs} mkworddic/
-    cp -r "${buildPackages.anthy.dev}"/lib/internals/{calctrans,.libs} calctrans/
-    cp -r "${buildPackages.anthy.dev}"/lib/internals/{mkfiledic,.libs} mkanthydic/
+    cp -r "${buildPackages.anthy-unicode.dev}"/lib/internals/{mkdepgraph,.libs} depgraph/
+    cp -r "${buildPackages.anthy-unicode.dev}"/lib/internals/{mkworddic,.libs} mkworddic/
+    cp -r "${buildPackages.anthy-unicode.dev}"/lib/internals/{calctrans,.libs} calctrans/
+    cp -r "${buildPackages.anthy-unicode.dev}"/lib/internals/{mkfiledic,.libs} mkanthydic/
     substituteInPlace mkworddic/Makefile.in \
       --replace-fail 'anthy.wdic : mkworddic' 'anthy.wdic : ' \
       --replace-fail 'all: ' 'all: anthy.wdic #'
@@ -36,10 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "Hiragana text to Kana Kanji mixed text Japanese input method";
-    homepage = "https://web.archive.org/web/20250404073626/https://osdn.net/projects/anthy/";
+    description = "Hiragana text to Kana Kanji mixed text Japanese input method (maintained fork)";
+    homepage = "https://github.com/fujiwarat/anthy-unicode";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ sylfn ];
     platforms = lib.platforms.unix;
   };
 
@@ -49,8 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r depgraph/{mkdepgraph,.libs} mkworddic/{mkworddic,.libs} calctrans/{calctrans,.libs} mkanthydic/{mkfiledic,.libs} "$dev/lib/internals"
   '';
 
-  src = fetchurl {
-    url = "mirror://osdn/anthy/37536/anthy-${finalAttrs.version}.tar.gz";
-    sha256 = "0ism4zibcsa5nl77wwi12vdsfjys3waxcphn1p5s7d0qy1sz0mnj";
+  src = fetchFromGitHub {
+    owner = "fujiwarat";
+    repo = "anthy-unicode";
+    tag = finalAttrs.version;
+    sha256 = "sha256-lyd6cvuddQa535ZXhng6iQbP9cwfPXWXBEsqOEsjkHI=";
   };
 })
