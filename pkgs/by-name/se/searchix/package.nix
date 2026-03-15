@@ -19,14 +19,14 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "searchix";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R8/iR8QoeUwNQCFkr+JtoPq/iKkJRIe8dsbvGfFqinE=";
+    hash = "sha256-2pffyKBX+ICYEN+42gwN2byjw+T9H4esi2+oTqs52GE=";
   };
 
   vendorHash = "sha256-yfcQgy4cQFRvtsyLHLojnJaWhle1ZR3unmaFQj8ljuw=";
