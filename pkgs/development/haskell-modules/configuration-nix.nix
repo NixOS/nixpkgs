@@ -442,10 +442,10 @@ builtins.intersectAttrs super {
       src = pkgs.fetchFromGitHub {
         repo = "nix-serve-ng";
         owner = "aristanetworks";
-        rev = "1d21f73a2d563ffbb924a4244c29b35e898caefe";
-        hash = "sha256-N6c3NozYqAGwmjf+k5GHOZzlcquDntrJwsZQ7O2sqtQ=";
+        rev = "e8218eb1c912a800ea77ae7edd71db4ee379a7dd";
+        hash = "sha256-H4PLUC9xb2kdDs4r/VaiRq7rrK/gM+WFuHnRIP78H+U=";
       };
-      version = "1.0.1-unstable-2025-05-28";
+      version = "1.1.0-unstable-2026-03-03";
     })
 
     (overrideCabal (old: {

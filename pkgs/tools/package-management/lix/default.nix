@@ -126,9 +126,11 @@ let
           nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
             (haskell.lib.compose.enableCabalFlag "lix")
             (haskell.lib.compose.overrideCabal (drv: {
-              # https://github.com/aristanetworks/nix-serve-ng/issues/46
               # Resetting (previous) broken flag since it may be related to C++ Nix
-              broken = lib.versionAtLeast self.lix.version "2.93";
+              # Broken with Lix >= 2.94
+              # https://github.com/aristanetworks/nix-serve-ng/issues/60
+              # https://github.com/aristanetworks/nix-serve-ng/issues/56
+              broken = lib.versionAtLeast self.lix.version "2.94";
             }))
           ];
 
@@ -249,7 +251,16 @@ lib.makeExtensible (
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
 
-        patches = [ lixMdbookPatch ];
+        patches = [
+          lixMdbookPatch
+
+          # Fix incorrect Requires.private entry in lix-store.pc, https://gerrit.lix.systems/c/lix/+/4680
+          (fetchpatch {
+            name = "lix-2.94-lix-store-pc-typo-fix.patch";
+            url = "https://git.lix.systems/lix-project/lix/commit/06f987fb0c8f96730edc15599dd62705a37cfca5.patch";
+            hash = "sha256-PUDOthOhAZpggmd0JHPOGR09P0D+33xO2SCU4UTB9eE=";
+          })
+        ];
       };
     };
 
