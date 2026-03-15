@@ -9587,8 +9587,6 @@ with pkgs;
     withDoc = true;
   };
 
-  guvcview = libsForQt5.callPackage ../os-specific/linux/guvcview { };
-
   hachoir = with python3Packages; toPythonApplication hachoir;
 
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };

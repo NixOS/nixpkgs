@@ -19,8 +19,7 @@
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   useQt ? false,
-  qtbase ? null,
-  wrapQtAppsHook ? null,
+  libsForQt5,
   # can be turned off if used as a library
   useGtk ? true,
   gtk3,
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ]
   ++ lib.optionals useGtk [ wrapGAppsHook3 ]
-  ++ lib.optionals useQt [ wrapQtAppsHook ];
+  ++ lib.optionals useQt [ libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [
     SDL2
@@ -59,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
   ++ lib.optionals useGtk [ gtk3 ]
   ++ lib.optionals useQt [
-    qtbase
+    libsForQt5.qtbase
   ];
 
   configureFlags = [
