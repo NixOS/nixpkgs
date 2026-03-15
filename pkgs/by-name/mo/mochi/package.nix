@@ -74,7 +74,10 @@ let
     license = lib.licenses.unfree;
     mainProgram = "mochi";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ poopsicles ];
+    maintainers = with lib.maintainers; [
+      piotrkwiecinski
+      poopsicles
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in
