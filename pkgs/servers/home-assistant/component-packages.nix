@@ -6184,7 +6184,8 @@
       ];
     "teltonika" =
       ps: with ps; [
-      ]; # missing inputs: teltasync
+        teltasync
+      ];
     "temper" =
       ps: with ps; [
         temperusb
@@ -8124,6 +8125,7 @@
     "telegram"
     "telegram_bot"
     "tellduslive"
+    "teltonika"
     "temper"
     "template"
     "tesla_fleet"
