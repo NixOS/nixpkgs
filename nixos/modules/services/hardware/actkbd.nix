@@ -138,8 +138,8 @@ in
         ConditionPathExists = "%I";
       };
       serviceConfig = {
-        Type = "forking";
-        ExecStart = "${pkgs.actkbd}/bin/actkbd -D -c ${configFile} -d %I";
+        Type = "exec";
+        ExecStart = "${pkgs.actkbd}/bin/actkbd -c ${configFile} -d %I";
       };
     };
 
