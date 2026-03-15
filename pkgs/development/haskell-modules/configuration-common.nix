@@ -3083,6 +3083,10 @@ with haskellLib;
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
+  # Missing test files in sdist
+  # https://github.com/vmchale/lzlib/issues/1
+  lzlib = dontCheck super.lzlib;
+
   # 2025-07-29: test suite "test" fails to build because of missing source files,
   # fixed by https://github.com/commercialhaskell/path/pull/193
   path = warnAfterVersion "0.9.6" (dontCheck super.path);
