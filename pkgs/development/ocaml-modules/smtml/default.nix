@@ -24,17 +24,19 @@
   zarith,
   mdx,
   ounit2,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
 buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VnkF+bZXeqaj9LSpyzqH5AM9EQsrW4Rlj5kvyTfYTKE=";
+    hash = "sha256-x2zUFTZHeCATnHKuBHChCSbM9kltv4AhfBaZuVU3ATQ=";
   };
 
   minimalOCamlVersion = "4.14";
@@ -82,6 +84,18 @@ buildDunePackage (finalAttrs: {
       || lib.versions.majorMinor ocaml.version == "5.4"
       || stdenv.hostPlatform.isDarwin
     );
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      attrPath = "ocamlPackages.smtml";
+    })
+    (nix-update-script {
+      attrPath = "owi";
+      extraArgs = [
+        "--version=branch=main"
+      ];
+    })
+  ];
 
   meta = {
     description = "SMT solver frontend for OCaml";
