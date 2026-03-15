@@ -164,6 +164,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   postFixup = ''
+    makeWrapperArgs="$makeWrapperArgs ''${qtWrapperArgs[*]}"
     wrapPythonProgramsIn "$out/lib/pince" "$out ''${pythonPath[*]}"
   '';
 
