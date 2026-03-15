@@ -2506,17 +2506,18 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
-  graylog-6_0 = callPackage ../tools/misc/graylog/6.0.nix { };
-
   inherit
     ({
-      graylog-6_1 = callPackage ../tools/misc/graylog/6.1.nix { };
+      graylog-6_3 = callPackage ../tools/misc/graylog/6.3.nix { };
     })
-    graylog-6_1
+    graylog-6_3
     ;
 
+  graylog = graylog-6_3;
+
+  # If this is updated, the graylogPackage should also be updated to match the default graylog version.
   graylogPlugins = recurseIntoAttrs (
-    callPackage ../tools/misc/graylog/plugins.nix { graylogPackage = graylog-6_0; }
+    callPackage ../tools/misc/graylog/plugins.nix { graylogPackage = graylog-6_3; }
   );
 
   graphviz = callPackage ../tools/graphics/graphviz { };
