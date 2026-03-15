@@ -47,6 +47,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       "SYSROOT_LIB:=$SYSROOT_LIB"
       "SYSROOT_INC:=$SYSROOT_INC"
       "SYSROOT_SHARE:=$SYSROOT_SHARE"
+      "TARGET_TRIPLE:=${stdenvNoLibc.system}"
       ${lib.strings.optionalString enablePosixThreads "THREAD_MODEL:=posix"}
     )
   '';
