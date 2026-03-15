@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   # NEWS needs to exist or else the build fails
   postPatch = ''
     touch NEWS
+    substituteInPlace utils/captest.c \
+      --replace-fail /usr/bin/captest ${placeholder "out"}/bin/captest
   '';
 
   strictDeps = true;

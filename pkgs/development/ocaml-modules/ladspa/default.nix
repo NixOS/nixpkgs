@@ -3,7 +3,7 @@
   buildDunePackage,
   fetchFromGitHub,
   dune-configurator,
-  ladspaH,
+  ladspa-header,
 }:
 
 buildDunePackage (finalAttrs: {
@@ -18,7 +18,7 @@ buildDunePackage (finalAttrs: {
   };
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ ladspaH ];
+  propagatedBuildInputs = [ ladspa-header ];
 
   meta = {
     homepage = "https://github.com/savonet/ocaml-alsa";

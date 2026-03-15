@@ -46,14 +46,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "coreutils" + (optionalString (!minimal) "-full");
-  version = "9.10"; # TODO: remove texinfo dep and the patch on next release.
+  version = "9.10"; # TODO: remove texinfo dep and the patches on next release.
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/coreutils-${finalAttrs.version}.tar.xz";
     hash = "sha256-FlNamt8LEANzZOLWEqrT2fTso6NElJztdNEvr0vVHSU=";
   };
 
-  patches = [ ./fix-kill-doctest.patch ];
+  patches = [
+    ./fix-kill-doctest.patch
+    # See https://github.com/NixOS/nixpkgs/pull/487081#issuecomment-3953615275,
+    # https://github.com/NixOS/nixpkgs/issues/495290,
+    # and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=80477
+    ./tests-notty-sighup.patch
+  ];
 
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.

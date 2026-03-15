@@ -6,6 +6,7 @@
   stdune,
   ocamlc-loc,
   ordering,
+  pp,
   xdg,
   dyn,
 }:
@@ -23,13 +24,10 @@ buildDunePackage {
     stdune
     ocamlc-loc
     ordering
+    pp
     xdg
     dyn
   ];
-
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
 
   meta = {
     description = "Library to connect and control a running dune instance";

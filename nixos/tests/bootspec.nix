@@ -128,7 +128,7 @@ in
       environment.systemPackages = [ pkgs.jq ];
       # It's probably the case, but we want to make it explicit here.
       boot.initrd.enable = true;
-      boot.initrd.secrets."/some/example" = pkgs.writeText "example-secret" "test";
+      boot.initrd.secretPaths."/some/example".source = pkgs.writeText "example-secret" "test";
     };
 
     testScript = ''

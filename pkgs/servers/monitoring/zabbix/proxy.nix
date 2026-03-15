@@ -12,7 +12,7 @@
   zlib,
   buildPackages,
   odbcSupport ? true,
-  unixODBC,
+  unixodbc,
   snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
   net-snmp,
   sshSupport ? true,
@@ -67,7 +67,7 @@ import ./versions.nix (
       (if (lib.versions.major version >= "7" && lib.versions.minor version >= "4") then pcre2 else pcre)
       zlib
     ]
-    ++ optional odbcSupport unixODBC
+    ++ optional odbcSupport unixodbc
     ++ optional snmpSupport net-snmp
     ++ optional sqliteSupport sqlite
     ++ optional sshSupport libssh2

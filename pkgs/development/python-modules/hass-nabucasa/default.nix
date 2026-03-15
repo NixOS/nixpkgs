@@ -32,7 +32,7 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hass-nabucasa";
-  version = "1.14.0";
+  version = "1.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -41,7 +41,7 @@ buildPythonPackage (finalAttrs: {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     tag = finalAttrs.version;
-    hash = "sha256-uTADu6IK8X+oQVvGdprmijR+MUJuWG9KMclq7zveC8o=";
+    hash = "sha256-WwpCAIfl/2fp01v9Rq4tQW70aoVlvhEJl31XQTAENmA=";
   };
 
   postPatch = ''

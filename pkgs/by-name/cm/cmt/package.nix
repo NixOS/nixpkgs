@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-qC+GNt4fSto4ahmaAXqc13Wkm0nnFrEejdP3I8k99so=";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ ladspa-header ];
 
   preBuild = ''
     cd src

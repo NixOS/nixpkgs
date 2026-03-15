@@ -202,7 +202,7 @@ def write_entry(profile: str | None, generation: int, specialisation: str | None
             print("warning: failed to create initrd secrets "
                   f'for "{title} - Configuration {generation}", an older generation', file=sys.stderr)
             print("note: this is normal after having removed "
-                  "or renamed a file in `boot.initrd.secrets`", file=sys.stderr)
+                  "or modified an entry in `boot.initrd.secretPaths`", file=sys.stderr)
     entry_file = BOOT_MOUNT_POINT / "loader/entries" / generation_conf_filename(profile, generation, specialisation)
     tmp_path = entry_file.with_suffix(".tmp")
     kernel_params = "init=%s " % bootspec.init

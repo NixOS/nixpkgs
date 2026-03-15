@@ -1,10 +1,10 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo124Module {
+buildGoModule {
   pname = "pinecone";
   version = "0.11.0-unstable-2025-03-04";
 
@@ -23,5 +23,6 @@ buildGo124Module {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ networkexception ];
     mainProgram = "pinecone";
+    broken = true;
   };
 }

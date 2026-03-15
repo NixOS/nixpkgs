@@ -1,4 +1,4 @@
-{ lib }:
+{ fetchpatch, lib }:
 
 {
 
@@ -112,6 +112,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/polarmutex/tree-sitter-beancount/pull/137>.
+    excludeBrokenTreeSitterJson = true;
   };
 
   bibtex = {
@@ -414,6 +417,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+    patches = [
+      (fetchpatch {
+        name = "Fix invalid `tree-sitter.json`";
+        url = "https://github.com/UserNobody14/tree-sitter-dart/commit/81638dbbdb76a0e88ea8c31b95ec76b9625ddb84.diff";
+        hash = "sha256-oaxuKQPN/gprO4OFWYItkj5dqd2xlq3SV6qr4YkSFjM=";
+      })
+    ];
   };
 
   dbml = {
@@ -863,6 +873,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/ember-tooling/tree-sitter-glimmer/pull/189>
+    excludeBrokenTreeSitterJson = true;
   };
 
   glsl = {
@@ -1207,6 +1220,9 @@
     meta = {
       license = lib.licenses.cc0;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/sogaiu/tree-sitter-janet-simple/pull/7>
+    excludeBrokenTreeSitterJson = true;
   };
 
   java = {
@@ -1635,6 +1651,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/Norgate-AV/tree-sitter-netlinx/pull/82>
+    excludeBrokenTreeSitterJson = true;
   };
 
   nginx = {
@@ -2635,8 +2654,14 @@
   };
 
   tlaplus = rec {
-    # FIXME: remove language override after release is available that includes
+    # FIXME: remove patch after release is available that includes
     # https://github.com/tlaplus-community/tree-sitter-tlaplus/pull/138
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/tlaplus-community/tree-sitter-tlaplus/commit/2d831940c782850f64dabf5b7b17e9e51f7f0ebb.diff";
+        hash = "sha256-ski2aYo25kHXz3T+Z2Coitdywot3tUiEbDY7gH7mTHE=";
+      })
+    ];
     version = "1.5.0";
     url = "github:tlaplus-community/tree-sitter-tlaplus?ref=${version}";
     hash = "sha256-k34gkAd0ueXEAww/Hc1mtBfn0Kp1pIBQtjDZ9GQeB4Q=";

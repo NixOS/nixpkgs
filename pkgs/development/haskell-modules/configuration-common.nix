@@ -460,6 +460,21 @@ with haskellLib;
   # 2025-02-14: Too strict bounds on attoparsec < 0.14
   attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
 
+  # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
+  # https://github.com/haskell/attoparsec/issues/232
+  attoparsec = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.buf.t_iter\""
+    ];
+  }) super.attoparsec;
+  attoparsec-isotropic = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.leftToRight.buf.t_iter\""
+    ];
+  }) super.attoparsec-isotropic;
+
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = lib.pipe super.ghc-heap-view [
     disableLibraryProfiling

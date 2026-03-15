@@ -8,7 +8,7 @@
   alsa-lib,
   dssi,
   fluidsynth,
-  ladspaH,
+  ladspa-header,
   libinstpatch,
   libjack2,
   liblo,
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     dssi
     fluidsynth
-    ladspaH
+    ladspa-header
     libinstpatch
     libjack2
     liblo

@@ -29,6 +29,7 @@
   findutils,
   gawk,
   getopt,
+  gettext,
   gnugrep,
   gnumake,
   gnupg,
@@ -45,6 +46,7 @@
   extraMirrors ? [ ],
   nixfmt,
   luajit,
+  texinfo,
 }:
 let
   # various binaries (compiled)
@@ -79,6 +81,7 @@ let
           findutils
           gawk
           getopt
+          gettext
           ghostscript_headless
           git-latexdiff
           gnugrep
@@ -93,6 +96,7 @@ let
           ruby
           zip
           luajit
+          texinfo
           ;
       };
     in
@@ -100,9 +104,9 @@ let
 
   version = {
     # day of the snapshot being taken
-    year = "2025";
-    month = "07";
-    day = "03";
+    year = "2026";
+    month = "02";
+    day = "02";
     # TeX Live version
     texliveYear = 2025;
     # final (historic) release or snapshot
@@ -144,7 +148,7 @@ let
         # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
         # TODO make this less hacky
         (if version.final then mirrors else [ (lib.last mirrors) ]);
-    hash = "sha256-hTWTs5meP6X7+bBGEHP9pDv8eJTfvBZFKX0WeK8+aZg=";
+    hash = "sha256-GxJXqY6plT3wngKiuqiZUst4eTZIylUdhN2ojUApIpU=";
   };
 
   tlpdbNix =
@@ -152,9 +156,10 @@ let
       {
         inherit tlpdbxz;
         tl2nix = ./tl2nix.sed;
+        nativeBuildInputs = [ nixfmt ];
       }
       ''
-        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt} > "$out"
+        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | nixfmt > "$out"
       '';
 
   # map: name -> fixed-output hash
@@ -358,9 +363,11 @@ let
       x11
     ];
     scheme-full = [
+      agpl3Only
       artistic1-cl8
       artistic2
       asl20
+      bsd0
       bsd2
       bsd3
       bsdOriginal
@@ -433,6 +440,7 @@ let
     scheme-medium = [
       artistic1-cl8
       asl20
+      bsd0
       bsd2
       bsd3
       cc-by-40
@@ -502,6 +510,7 @@ let
       x11
     ];
     scheme-tetex = [
+      agpl3Only
       artistic1-cl8
       asl20
       bsd2

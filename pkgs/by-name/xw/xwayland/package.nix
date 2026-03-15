@@ -1,6 +1,8 @@
 {
   dri-pkgconfig-stub,
   egl-wayland,
+  epoll-shim,
+  evdev-proto,
   bash,
   libepoxy,
   fetchurl,
@@ -98,7 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxres
     libxt
     libdrm
-    libtirpc
     libxcb
     libxkbfile
     libxshmfence
@@ -106,13 +107,20 @@ stdenv.mkDerivation (finalAttrs: {
     mesa-gl-headers
     openssl
     pixman
-    systemd
     wayland
     wayland-protocols
     xkbcomp
     xorgproto
     xtrans
     zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libtirpc
+    systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    epoll-shim
+    evdev-proto
   ]
   ++ lib.optionals withLibunwind [
     libunwind
@@ -141,6 +149,6 @@ stdenv.mkDerivation (finalAttrs: {
       emantor
       k900
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 })

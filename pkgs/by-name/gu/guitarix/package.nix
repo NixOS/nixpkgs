@@ -19,7 +19,7 @@
   gtkmm3,
   hicolor-icon-theme,
   intltool,
-  ladspaH,
+  ladspa-header,
   libjack2,
   libsndfile,
   lilv,
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsettings-desktop-schemas
     gtk3
     gtkmm3
-    ladspaH
+    ladspa-header
     libjack2
     libsndfile
     lilv

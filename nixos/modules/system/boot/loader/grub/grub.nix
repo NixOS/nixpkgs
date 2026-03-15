@@ -935,21 +935,21 @@ in
     '')
     (mkRemovedOptionModule [ "boot" "loader" "grub" "extraInitrd" ] ''
       This option has been replaced with the bootloader agnostic
-      boot.initrd.secrets option. To migrate to the initrd secrets system,
+      boot.initrd.secretPaths option. To migrate to the initrd secrets system,
       extract the extraInitrd archive into your main filesystem:
 
         # zcat /boot/extra_initramfs.gz | cpio -idvmD /etc/secrets/initrd
         /path/to/secret1
         /path/to/secret2
 
-      then replace boot.loader.grub.extraInitrd with boot.initrd.secrets:
+      then replace boot.loader.grub.extraInitrd with boot.initrd.secretPaths:
 
-        boot.initrd.secrets = {
-          "/path/to/secret1" = "/etc/secrets/initrd/path/to/secret1";
-          "/path/to/secret2" = "/etc/secrets/initrd/path/to/secret2";
+        boot.initrd.secretPaths = {
+          "/path/to/secret1".source = "/etc/secrets/initrd/path/to/secret1";
+          "/path/to/secret2".source = "/etc/secrets/initrd/path/to/secret2";
         };
 
-      See the boot.initrd.secrets option documentation for more information.
+      See the boot.initrd.secretPaths option documentation for more information.
     '')
   ];
 

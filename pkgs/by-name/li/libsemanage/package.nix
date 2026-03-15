@@ -9,19 +9,19 @@
   libselinux,
   bzip2,
   audit,
-  enablePython ? true,
+  enablePython ? !stdenv.hostPlatform.isStatic,
   swig ? null,
   python3 ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsemanage";
-  version = "3.8.1";
+  version = "3.10";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
-    sha256 = "sha256-ezkSeyGcxwv9k1pK9rDyuoPUs1yRbyU8fpQsI6tJDwc=";
+    url = "${finalAttrs.se_url}/${finalAttrs.version}/libsemanage-${finalAttrs.version}.tar.gz";
+    hash = "sha256-GXiJTEFHaa13Q40miG6q4/t7t0V47ypa0xMMictcsf4=";
   };
 
   outputs = [
@@ -60,6 +60,9 @@ stdenv.mkDerivation rec {
     "PYPREFIX=python"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "DEFAULT_SEMANAGE_CONF_LOCATION=$(out)/etc/selinux/semanage.conf"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "DISABLE_SHARED=y"
   ];
 
   # The following turns the 'clobbered' error into a warning
@@ -80,4 +83,4 @@ stdenv.mkDerivation rec {
     description = "Policy management tools for SELinux";
     license = lib.licenses.lgpl21;
   };
-}
+})

@@ -252,7 +252,7 @@ if [[ -z $noBootLoader ]]; then
       # system. This preserves the validity of their absolute paths after changing
       # the root with `nixos-enter`.
       # Without this the bootloader installation may fail due to options that
-      # contain paths referenced during evaluation, like initrd.secrets.
+      # contain paths referenced during evaluation, like initrd.secretPaths.
       # when not root, re-execute the script in an unshared namespace
       mount --rbind --mkdir / "$mountPoint"
       mount --make-rslave "$mountPoint"

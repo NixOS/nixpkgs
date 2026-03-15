@@ -14,7 +14,9 @@ let
   children = lib.mapAttrs (
     childName: childConfig: childConfig.configuration.system.build.toplevel
   ) config.specialisation;
-  hasAtLeastOneInitrdSecret = lib.length (lib.attrNames config.boot.initrd.secrets) > 0;
+  hasInitrdSecrets =
+    (lib.length (lib.attrNames config.boot.initrd.secretPaths) > 0)
+    || (config.boot.initrd.extraSecretsHook != "");
   schemas = {
     v1 = rec {
       filename = "boot.json";
@@ -33,7 +35,7 @@ let
               // lib.optionalAttrs config.boot.initrd.enable {
                 initrd = "${config.system.build.initialRamdisk}/${config.system.boot.loader.initrdFile}";
               }
-              // lib.optionalAttrs hasAtLeastOneInitrdSecret {
+              // lib.optionalAttrs hasInitrdSecrets {
                 initrdSecrets = "${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets";
               };
             }

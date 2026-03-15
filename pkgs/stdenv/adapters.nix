@@ -263,7 +263,9 @@ rec {
     stdenv:
     stdenv.override (old: {
       mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-        NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+        env = (args.env or { }) // {
+          NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=gold";
+        };
       });
     });
 
@@ -335,7 +337,9 @@ rec {
             (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12"))
             {
               mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-                NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+                env = (args.env or { }) // {
+                  NIX_CFLAGS_LINK = toString (args.env.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+                };
               });
             }
       );

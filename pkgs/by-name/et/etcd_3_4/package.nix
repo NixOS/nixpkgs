@@ -1,11 +1,11 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   nixosTests,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "etcd";
   version = "3.4.39";
 

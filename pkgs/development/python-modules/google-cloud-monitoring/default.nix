@@ -33,6 +33,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ google-api-core.optional-dependencies.grpc;
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   optional-dependencies = {
     pandas = [ pandas ];
   };

@@ -9,7 +9,7 @@
   lv2,
   jdk_headless,
   vamp-plugin-sdk,
-  ladspaH,
+  ladspa-header,
   meson,
   ninja,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
     fftw
     vamp-plugin-sdk
-    ladspaH
+    ladspa-header
     lv2
   ];
   makeFlags = [ "AR:=$(AR)" ];

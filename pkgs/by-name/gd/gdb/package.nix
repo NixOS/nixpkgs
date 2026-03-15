@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
     # subset of the platform description.
     "--program-prefix=${targetPrefix}"
 
-    (enableFeature true "werror")
+    (enableFeature false "werror")
     (enableFeature true "64-bit-bfd")
     (enableFeature false "install-libbfd")
     (enableFeature withTui "tui")

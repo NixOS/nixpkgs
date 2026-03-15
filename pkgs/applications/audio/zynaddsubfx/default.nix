@@ -21,7 +21,7 @@
   alsa-lib,
   dssiSupport ? false,
   dssi,
-  ladspaH,
+  ladspa-header,
   jackSupport ? true,
   libjack2,
   ossSupport ? true,
@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals dssiSupport [
     dssi
-    ladspaH
+    ladspa-header
   ]
   ++ lib.optionals jackSupport [ libjack2 ]
   ++ lib.optionals portaudioSupport [ portaudio ]
