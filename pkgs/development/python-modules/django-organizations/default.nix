@@ -41,6 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "organizations" ];
 
+  disabledTests = lib.optionals (lib.versionAtLeast django.version "6.0") [
+    # test application produces more migrations than anticipated
+    # https://github.com/bennylope/django-organizations/issues/294
+    "test_no_missing_migrations"
+  ];
+
   meta = {
     description = "Multi-user accounts for Django projects";
     homepage = "https://github.com/bennylope/django-organizations";

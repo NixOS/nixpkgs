@@ -1,0 +1,58 @@
+diff --git a/django_extensions/management/commands/list_signals.py b/django_extensions/management/commands/list_signals.py
+index b19f3d3e..000d643b 100644
+--- a/django_extensions/management/commands/list_signals.py
++++ b/django_extensions/management/commands/list_signals.py
+@@ -53,7 +53,9 @@ def handle(self, *args, **options):
+         for signal in signals:
+             signal_name = SIGNAL_NAMES.get(signal, "unknown")
+             for receiver in signal.receivers:
+-                if django.VERSION >= (5, 0):
++                if django.VERSION >= (6, 0):
++                    lookup, receiver, is_async, _ = receiver
++                elif django.VERSION >= (5, 0):
+                     lookup, receiver, is_async = receiver
+                 else:
+                     lookup, receiver = receiver
+diff --git a/tests/test_management_command.py b/tests/test_management_command.py
+index 4ed2975b..08f923ab 100644
+--- a/tests/test_management_command.py
++++ b/tests/test_management_command.py
+@@ -4,6 +4,7 @@
+ import logging
+ import importlib
+ 
++import django
+ from django.core.management import (
+     call_command,
+     find_commands,
+@@ -422,7 +423,10 @@ def test_field_class(self):
+             stdout=out,
+         )
+         self.output = out.getvalue()
+-        self.assertIn("id - AutoField", self.output)
++        if django.VERSION >= (6, 0):
++            self.assertIn("id - BigAutoField", self.output)
++        else:
++            self.assertIn("id - AutoField", self.output)
+         self.assertIn("char_field - CharField", self.output)
+         self.assertIn("integer_field - IntegerField", self.output)
+         self.assertIn("foreign_key_field - ForeignKey", self.output)
+diff --git a/tests/testapp/models.py b/tests/testapp/models.py
+index ca317405..4da9e2f1 100644
+--- a/tests/testapp/models.py
++++ b/tests/testapp/models.py
+@@ -1,4 +1,5 @@
+ # -*- coding: utf-8 -*-
++import django
+ from django.db import models
+ from django.contrib.auth import get_user_model
+ from django.db.models import UniqueConstraint
+@@ -179,7 +180,7 @@ class Meta:
+                 fields=("common_field", "uniq_field"), name="unique_common_uniq_pair"
+             ),
+             models.CheckConstraint(
+-                check=~models.Q(common_field=models.F("another_common_field")),
++                **({"condition": ~models.Q(common_field=models.F("another_common_field"))} if django.VERSION >= (5, 2) else {"check": ~models.Q(common_field=models.F("another_common_field"))}),
+                 name="common_and_another_common_differ",
+             ),
+         ]

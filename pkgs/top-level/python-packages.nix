@@ -4441,11 +4441,15 @@ self: super: with self; {
 
   django-valkey = callPackage ../development/python-modules/django-valkey { };
 
+  django-vcache = callPackage ../development/python-modules/django-vcache { };
+
   django-versatileimagefield =
     callPackage ../development/python-modules/django-versatileimagefield
       { };
 
   django-vite = callPackage ../development/python-modules/django-vite { };
+
+  django-vtasks = callPackage ../development/python-modules/django-vtasks { };
 
   django-weasyprint = callPackage ../development/python-modules/django-weasyprint { };
 
