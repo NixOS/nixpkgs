@@ -182,7 +182,7 @@ let
       viAlias ? false,
       configure ? { },
       extraName ? "",
-    }:
+    }@attrs:
     let
 
       # we convert from the old configure.format to
@@ -203,26 +203,15 @@ let
           optional = true;
         }) opt);
 
-      res = makeNeovimConfig {
-        inherit withPython3;
-        inherit extraPython3Packages;
-        inherit extraLuaPackages;
-        inherit
-          withNodeJs
-          withRuby
-          viAlias
-          vimAlias
-          ;
-        customRC = configure.customRC or "";
-        customLuaRC = configure.customLuaRC or "";
-        inherit plugins;
-        inherit extraName;
-      };
     in
     wrapNeovimUnstable neovim (
-      res
+      attrs
       // {
-        wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
+        neovimRcContent = configure.customRC or "";
+        luaRcContent = configure.customLuaRC or "";
+        inherit plugins;
+
+        wrapperArgs = lib.escapeShellArgs attrs.wrapperArgs + " " + extraMakeWrapperArgs;
         wrapRc = configure != { };
         legacyWrapper = true;
       }
