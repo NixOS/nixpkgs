@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cruise";
-  version = "1.1.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "NucleoFusion";
     repo = "cruise";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0xIugbLlKlMODbMvsFzQXjKNNGY61tF4P/0loPlfs6o=";
+    hash = "sha256-AhLSzynNvtHK3URTd1034/2ToGcJUDp7rGMtr3kyees=";
   };
 
   vendorHash = "sha256-Zx1rZl5ljlsBNV1eQKPtQ+SgJV9l5rS8hwBe8nX9dYQ=";
