@@ -12949,6 +12949,8 @@ self: super: with self; {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
+  psdtags = callPackage ../development/python-modules/psdtags { };
+
   psnawp = callPackage ../development/python-modules/psnawp { };
 
   psrpcore = callPackage ../development/python-modules/psrpcore { };
