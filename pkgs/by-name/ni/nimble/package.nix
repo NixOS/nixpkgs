@@ -12,13 +12,13 @@
 buildNimPackage (
   final: prev: {
     pname = "nimble";
-    version = "0.20.1";
+    version = "0.22.2";
 
     src = fetchFromGitHub {
       owner = "nim-lang";
       repo = "nimble";
       rev = "v${final.version}";
-      hash = "sha256-DV/cheAoG0UviYEYqfaonhrAl4MgjDwFqbbKx7jUnKE=";
+      hash = "sha256-PoEJKD24BNOc70DwGlLaPmo48WeEC9nOHy8etkXRUMQ=";
       fetchSubmodules = true;
     };
 
