@@ -10,14 +10,14 @@
 # Updating this package will force an update for prisma. The
 # version of prisma-engines and prisma must be the same for them to
 # function correctly.
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prisma-engines_6";
   version = "6.18.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-p198o8ON5mGPCxK+gE0mW+JVyQlNsCsqwa8D4MNBkpA=";
   };
 
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
       aqrln
     ];
   };
-}
+})
 
 ### Troubleshooting
 # Here's an example application using Prisma with Nix: https://github.com/pimeys/nix-prisma-example

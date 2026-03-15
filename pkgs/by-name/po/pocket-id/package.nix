@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   buildGo125Module,
   stdenvNoCC,
   nodejs,
@@ -20,6 +21,16 @@ buildGo125Module (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-mnmBwQ79sScTPM4Gh9g0x/QTmqm1TgxaOkww+bvs1b4=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2026-28513.patch";
+      url = "https://github.com/pocket-id/pocket-id/commit/34890235ba8c2d856e3a121fdf59fe9d627e8596.patch?full_index=1";
+      hash = "sha256-Th1/J9M7kxcXyuNa0CZIIX1CuIS31Dx12+O4bzSxS0E=";
+    })
+  ];
+
+  patchFlags = [ "-p2" ];
 
   sourceRoot = "${finalAttrs.src.name}/backend";
 
