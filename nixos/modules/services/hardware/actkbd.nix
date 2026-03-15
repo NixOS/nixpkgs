@@ -139,7 +139,7 @@ in
       };
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${pkgs.actkbd}/bin/actkbd -c ${configFile} -d %I";
+        ExecStart = "${pkgs.actkbd}/bin/actkbd --config ${configFile} --device %I";
       };
     };
 
