@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
+  rocmSystemsSrc,
+  rocmSystemsVersion,
   rocm-runtime,
   rocprofiler,
   numactl,
   libpciaccess,
   libxml2,
   elfutils,
-  fetchFromGitHub,
-  rocmUpdateScript,
   cmake,
   clang,
   clr,
@@ -16,17 +16,12 @@
   gpuTargets ? clr.gpuTargets,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rocprofiler-register";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocprofiler-register";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6jr6dfmCjeP5PCNfLDMmh8IO9Hxz6RvLlacNwIWQduQ=";
-    fetchSubmodules = true;
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/rocprofiler-register";
 
   nativeBuildInputs = [
     cmake
@@ -64,17 +59,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = "rocprofiler-register";
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm/rocprofiler";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprofiler-register";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

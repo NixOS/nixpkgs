@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  rocmSystemsSrc,
+  rocmSystemsVersion,
   symlinkJoin,
   cmake,
   clang,
@@ -42,17 +42,12 @@ let
     '';
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rocprofiler";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocprofiler";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-W32VAdtZdFmkHeUwyHIIHk8yRnABq6gUaHLZ9Bj8kYI=";
-    fetchSubmodules = true;
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/rocprofiler";
 
   nativeBuildInputs = [
     cmake
@@ -123,18 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
       --add-needed libhsa-amd-aqlprofile64.so
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
   passthru.rocmtoolkit-merged = rocmtoolkit-merged;
 
   meta = {
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm/rocprofiler";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprofiler";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

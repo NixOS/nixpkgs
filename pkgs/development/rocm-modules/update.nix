@@ -7,7 +7,10 @@
   name ? "",
   owner ? "",
   repo ? "",
+  attrPath ? null,
+  file ? null,
   page ? "releases",
+  versionKey ? null,
   # input: array of [ { tag_name: "rocm-6.x.x", }, ... ]. some entries may have bad names like rocm-test-date we want to skip
   # output: first tag_name/name that's a proper version if any
   filter ? "map(.tag_name // .name) | map(select(test(\"^rocm-[0-9]+\\\\.[0-9]+(\\\\.[0-9]+)?$\"))) | first | ltrimstr(\"rocm-\")",
@@ -16,6 +19,7 @@
 let
   pname =
     if lib.hasPrefix "rocm-llvm-" name then "llvm.${lib.removePrefix "rocm-llvm-" name}" else name;
+  updateAttrPath = if attrPath != null then attrPath else "rocmPackages.${pname}";
 
   updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
@@ -52,11 +56,16 @@ let
     >&2 echo parsed version "$version_arr" from "$version"
 
     if (( ''${version_arr[0]} > 7 )); then
-      echo "'rocmPackages.${pname}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
+      echo "'${updateAttrPath}' is already at its maximum allowed version.''\nAny further upgrades should go into 'rocmPackages_X.${pname}'." >&2
       exit 1
     fi
 
-    update-source-version rocmPackages.${pname} "$version" --ignore-same-hash
+    cmd=(update-source-version ${lib.escapeShellArg updateAttrPath} "$version" --ignore-same-hash)
+    ${lib.optionalString (file != null) "cmd+=(${lib.escapeShellArg "--file=${file}"})"}
+    ${lib.optionalString (
+      versionKey != null
+    ) "cmd+=(${lib.escapeShellArg "--version-key=${versionKey}"})"}
+    "''${cmd[@]}"
   '';
 in
 [ updateScript ]

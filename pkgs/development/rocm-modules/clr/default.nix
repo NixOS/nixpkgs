@@ -2,9 +2,9 @@
   lib,
   stdenv,
   callPackage,
-  fetchFromGitHub,
+  rocmSystemsSrc,
   fetchpatch,
-  rocmUpdateScript,
+  rocmSystemsVersion,
   makeWrapper,
   cmake,
   perl,
@@ -70,7 +70,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
   outputs = [
     "out"
@@ -80,12 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
   strictDeps = true;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "clr";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-zz2O4Qsl1zXMC25L714azsFR2PROAvdpjgKhRolmt1w=";
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/clr";
 
   nativeBuildInputs = [
     makeWrapper
@@ -254,13 +250,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit hipClangPath;
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-      page = "tags?per_page=4";
-    };
-
     impureTests = {
       rocm-smi = callPackage ./test-rocm-smi.nix {
         inherit rocm-smi;
@@ -317,7 +306,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm/clr";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/clr";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];

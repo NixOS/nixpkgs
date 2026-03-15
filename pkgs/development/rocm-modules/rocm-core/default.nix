@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   rocmUpdateScript,
+  rocmSystemsSrc,
+  rocmSystemsVersion,
   cmake,
   writeText,
 }:
@@ -17,14 +18,10 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocm-core";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AqD6MByFAtY6IzAFXdCrCANPXqROaGHybdKixv3NbXE=";
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/rocm-core";
 
   patches = [
     ./env-rocm-path.patch
@@ -77,17 +74,23 @@ stdenv.mkDerivation (finalAttrs: {
       env | grep '^ROCM'
     '';
 
-  passthru.ROCM_LIBPATCH_VERSION = finalAttrs.env.ROCM_LIBPATCH_VERSION;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-    page = "tags?per_page=4";
+  passthru = {
+    inherit rocmSystemsSrc;
+    ROCM_LIBPATCH_VERSION = finalAttrs.env.ROCM_LIBPATCH_VERSION;
+    updateScript = rocmUpdateScript {
+      name = "rocm-systems";
+      owner = "ROCm";
+      repo = "rocm-systems";
+      attrPath = "rocmPackages.rocm-core";
+      file = "pkgs/development/rocm-modules/default.nix";
+      page = "tags";
+      versionKey = "rocmSystemsVersion";
+    };
   };
 
   meta = {
     description = "Utility for getting the ROCm release version";
-    homepage = "https://github.com/ROCm/rocm-core";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocm-core";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

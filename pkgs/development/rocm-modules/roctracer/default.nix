@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  rocmSystemsSrc,
+  rocmSystemsVersion,
   cmake,
   clr,
   rocm-device-libs,
@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "7.2.0";
+  version = rocmSystemsVersion;
 
   outputs = [
     "out"
@@ -31,12 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
     "test"
   ];
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "roctracer";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-LCtdPnE+rJU/ccI1PTFDMPNXxgl1GrRgc5z7LjOw3zA=";
-  };
+  src = rocmSystemsSrc;
+  sourceRoot = "${rocmSystemsSrc.name}/projects/roctracer";
 
   nativeBuildInputs = [
     cmake
@@ -101,15 +97,9 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf $out/test
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
     description = "Tracer callback/activity library";
-    homepage = "https://github.com/ROCm/roctracer";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/roctracer";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
