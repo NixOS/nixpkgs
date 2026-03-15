@@ -8,16 +8,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqruff";
-  version = "0.34.1";
+  version = "0.35.4";
 
   src = fetchFromGitHub {
     owner = "quarylabs";
     repo = "sqruff";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Yk4ejrIs8/8RVvXS2V2ZTBn6zawVO502Xeeb8rjU6e4=";
+    hash = "sha256-Ksd/nt5zUyfRXDeBU8N56UvIriG2biE2tGlIF2Wy1iI=";
   };
 
-  cargoHash = "sha256-4jB1chciQaR/RYhRTfwWOOUIZgePezl8lAngpfoSuJc=";
+  cargoHash = "sha256-bIU1a7GcmzjGl8Plik0MOLFe5ToReuowLzVwRAen1h4=";
 
   # Disable the `python` feature which doesn't work on Nix yet
   buildNoDefaultFeatures = true;
