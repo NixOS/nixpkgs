@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.8.0";
+  version = "1.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h5netcdf";
     repo = "h5netcdf";
     tag = "v${version}";
-    hash = "sha256-m+8vdWOQb9aIg/mPeTrN20EzTj229Cit3nYgrkPlfGA=";
+    hash = "sha256-g7cAUhIrTzWv/ELOWLNMKhm2rM7i+7o4iJS5d4vzal4=";
   };
 
   build-system = [
