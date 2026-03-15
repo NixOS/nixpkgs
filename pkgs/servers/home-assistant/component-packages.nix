@@ -6130,6 +6130,10 @@
     "telnet" =
       ps: with ps; [
       ];
+    "teltonika" =
+      ps: with ps; [
+        teltasync
+      ];
     "temper" =
       ps: with ps; [
         temperusb
