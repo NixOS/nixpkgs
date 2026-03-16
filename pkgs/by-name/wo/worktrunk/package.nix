@@ -74,6 +74,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ];
     platforms = lib.platforms.unix;
     mainProgram = "wt";
-    maintainers = with lib.maintainers; [ siriobalmelli ];
+    maintainers = with lib.maintainers; [
+      siriobalmelli
+      DuskyElf
+    ];
   };
 })
