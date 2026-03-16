@@ -90,8 +90,11 @@ autoPatchcil() {
         --rid "$rid"
         "${ignoreMissingDepsArray[@]}"
         --paths "$@"
-        --libs "${autoPatchcilLibs[@]}"
     )
+
+    if (( ${#autoPatchcilLibs[@]} > 0 )); then
+        autoPatchcilFlags+=(--libs "${autoPatchcilLibs[@]}")
+    fi
 
     # shellcheck disable=SC2016
     echoCmd 'patchcil auto flags' "${autoPatchcilFlags[@]}"
