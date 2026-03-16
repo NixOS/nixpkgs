@@ -4182,8 +4182,6 @@ self: super: with self; {
 
   django-filter = callPackage ../development/python-modules/django-filter { };
 
-  django-flags = callPackage ../development/python-modules/django-flags { };
-
   django-formset-js-improved =
     callPackage ../development/python-modules/django-formset-js-improved
       { };
