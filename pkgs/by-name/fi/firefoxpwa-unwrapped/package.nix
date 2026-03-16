@@ -1,5 +1,4 @@
 {
-  extraLibs ? [ ],
   firefoxRuntime ? firefox-unwrapped,
 
   lib,
@@ -8,27 +7,15 @@
   makeWrapper,
   rustPlatform,
 
-  cups,
-  ffmpeg,
   firefox-unwrapped,
-  libcanberra-gtk3,
-  libglvnd,
-  libnotify,
-  libpulseaudio,
-  libva,
-  libgbm,
   nixosTests,
   openssl,
-  pciutils,
-  pipewire,
   pkg-config,
   stdenv,
-  udev,
-  libxscrnsaver,
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "firefoxpwa";
+  pname = "firefoxpwa-unwrapped";
   version = "2.18.0";
 
   src = fetchFromGitHub {
@@ -62,27 +49,6 @@ rustPlatform.buildRustPackage rec {
   };
   completions = "target/${stdenv.targetPlatform.config}/release/completions";
 
-  gtk_modules = map (x: x + x.gtkModule) [ libcanberra-gtk3 ];
-  libs =
-    let
-      libs = [
-        cups
-        ffmpeg
-        libglvnd
-        libnotify
-        libpulseaudio
-        libva
-        libgbm
-        pciutils
-        pipewire
-        udev
-        libxscrnsaver
-      ]
-      ++ gtk_modules
-      ++ extraLibs;
-    in
-    lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
-
   postInstall = ''
     # Runtime
     mkdir -p $out/share/firefoxpwa
@@ -113,17 +79,18 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 packages/appstream/si.filips.FirefoxPWA.svg $out/share/icons/hicolor/scalable/apps/si.filips.FirefoxPWA.svg
 
     wrapProgram $out/bin/firefoxpwa \
-      --prefix FFPWA_SYSDATA : "$out/share/firefoxpwa" \
-      --prefix LD_LIBRARY_PATH : "$libs" \
-      --suffix-each GTK_PATH : "$gtk_modules"
+      --prefix FFPWA_SYSDATA : "$out/share/firefoxpwa"
 
     wrapProgram $out/bin/firefoxpwa-connector \
-      --prefix FFPWA_SYSDATA : "$out/share/firefoxpwa" \
-      --prefix LD_LIBRARY_PATH : "$libs" \
-      --suffix-each GTK_PATH : "$gtk_modules"
+      --prefix FFPWA_SYSDATA : "$out/share/firefoxpwa"
   '';
 
-  passthru.tests.firefoxpwa = nixosTests.firefoxpwa;
+  passthru = {
+    tests.firefoxpwa = nixosTests.firefoxpwa;
+    binaryName = "firefoxpwa";
+    applicationName = "firefoxpwa";
+    inherit (firefoxRuntime) gtk3;
+  };
 
   meta = {
     description = "Tool to install, manage and use Progressive Web Apps (PWAs) in Mozilla Firefox (native component)";
