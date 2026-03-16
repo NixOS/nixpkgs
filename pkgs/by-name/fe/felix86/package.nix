@@ -10,6 +10,8 @@
   libx11,
   vulkan-headers,
   vulkan-loader,
+
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ZYDIS_BUILD_DOXYGEN" false)
     (lib.cmakeBool "BUILD_TESTS" true)
   ];
+
+  passthru.tests = callPackage ./test.nix { };
 
   meta = {
     description = "x86 and x86-64 userspace emulator for RISC-V Linux";
