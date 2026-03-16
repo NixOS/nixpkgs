@@ -1,14 +1,13 @@
 {
-  lib,
-  stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  ntpd-rs,
   installShellFiles,
-  pandoc,
-  nixosTests,
+  lib,
   nix-update-script,
-  testers,
+  nixosTests,
+  pandoc,
+  rustPlatform,
+  stdenvNoCC,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,8 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-DXAy/K70sNhVOjDOd6G/juE7JgmewPzGHZDeXAOZ1+s=";
 
   nativeBuildInputs = [
-    pandoc
     installShellFiles
+    pandoc
   ];
 
   # These fail based on timestamp issues with bundled certificates
@@ -53,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace utils/generate-man.sh \
-      --replace-fail 'utils/pandoc.sh' 'pandoc'
+      --replace-fail 'utils/pandoc.sh' '${lib.getExe pandoc}'
   '';
 
   postBuild = ''
@@ -61,41 +60,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service
     installManPage docs/precompiled/man/{ntp.toml.5,ntp-ctl.8,ntp-daemon.8,ntp-metrics-exporter.8}
+    install -Dm444 docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service \
+      --target-directory="$out"/lib/systemd/system
   '';
 
   outputs = [
-    "out"
     "man"
+    "out"
   ];
 
-  passthru = {
-    tests = {
-      nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.ntpd-rs;
-      version = testers.testVersion {
-        package = ntpd-rs;
-        inherit (finalAttrs) version;
-      };
-    };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru = {
+    tests.nixos = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux nixosTests.ntpd-rs;
     updateScript = nix-update-script { };
   };
 
   meta = {
+    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
-    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
-      mit # or
-      asl20
+      asl20 # OR
+      mit
     ];
+    mainProgram = "ntp-ctl";
     maintainers = with lib.maintainers; [
       fpletz
       getchoo
     ];
-    mainProgram = "ntp-ctl";
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    broken = with stdenvNoCC.hostPlatform; (isDarwin && isx86_64);
   };
 })
