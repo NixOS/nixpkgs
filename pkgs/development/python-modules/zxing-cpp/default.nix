@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
     substituteInPlace setup.py \
       --replace-fail "cfg = 'Debug' if self.debug else 'Release'" "cfg = 'Release'" \
-      --replace-fail " '-DVERSION_INFO=' + self.distribution.get_version()]" " '-DVERSION_INFO=' + self.distribution.get_version(), '-DZXING_DEPENDENCIES=LOCAL', '-DZXING_USE_BUNDLED_ZINT=OFF']"
+      --replace-fail "f'-DPython_EXECUTABLE={sys.executable}'," "f'-DPython_EXECUTABLE={sys.executable}', '-DZXING_DEPENDENCIES=LOCAL', '-DZXING_USE_BUNDLED_ZINT=OFF',"
   '';
 
   dontUseCmakeConfigure = true;
