@@ -33,19 +33,20 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      package-wrapped
+      # package-wrapped
+      cfg.package
     ];
 
     # register binfmt_misc for transparent x86/x86-64 execution
     boot.binfmt.registrations =
       let
         commonOptions = {
-          interpreter = "${package-wrapped}/bin/felix86";
+          interpreter = "${cfg.package}/bin/felix86";
 
           # https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html
           openBinary = true;
           matchCredentials = true;
-          fixBinary = true;
+          fixBinary = false; # cannot have fixBinary when the interpreter is invoked through a shell
         };
       in
       {
