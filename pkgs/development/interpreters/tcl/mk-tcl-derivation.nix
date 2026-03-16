@@ -51,10 +51,15 @@ let
       // {
 
         buildInputs = buildInputs ++ [ tcl.tclPackageHook ];
-        nativeBuildInputs = nativeBuildInputs ++ [
-          makeWrapper
-          tcl
-        ];
+        nativeBuildInputs =
+          nativeBuildInputs
+          ++ [
+            makeWrapper
+            tcl
+          ]
+          ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+            tcl.tclRequiresCheckHook
+          ];
         propagatedBuildInputs = propagatedBuildInputs ++ [ tcl ];
 
         env = {
