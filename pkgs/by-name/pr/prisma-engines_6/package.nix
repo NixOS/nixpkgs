@@ -21,7 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-z3GdnrLEMJIGPKXXbz2wrbiGpuNlgYxqg3iYINYTnPI=";
   };
 
-  cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
+  cargoPatches = [
+    ./0001-bump-metrics-to-0.23.1.diff
+  ];
+
+  cargoHash = "sha256-8sAjYLSmNneQVrNh9iOmk5lVajtiFPWYSC8jfo5CK5U=";
 
   # Use system openssl.
   env.OPENSSL_NO_VENDOR = 1;

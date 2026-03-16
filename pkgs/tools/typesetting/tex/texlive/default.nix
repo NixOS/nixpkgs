@@ -203,7 +203,7 @@ let
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
     inherit bin tl;
-    inherit version;
+    inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
       lib

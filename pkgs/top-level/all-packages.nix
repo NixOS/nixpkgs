@@ -10174,10 +10174,6 @@ with pkgs;
 
   taxi-cli = with python3Packages; toPythonApplication taxi;
 
-  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
-    lua = lua5;
-  };
-
   mupdf-headless = mupdf.override {
     enableX11 = false;
     enableGL = false;

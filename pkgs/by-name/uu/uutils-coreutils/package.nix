@@ -49,13 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   nativeBuildInputs = [
+    cargo
     rustPlatform.bindgenHook
     rustPlatform.cargoSetupHook
     python3Packages.sphinx
   ];
 
   makeFlags = [
-    "CARGO=${lib.getExe cargo}"
     "PREFIX=${placeholder "out"}"
     "PROFILE=release"
     "SELINUX_ENABLED=${if selinuxSupport then "1" else "0"}"
@@ -75,11 +75,15 @@ stdenv.mkDerivation (finalAttrs: {
         ])
       )
     }"
+    "SKIP_UTILS=${lib.optionalString stdenv.hostPlatform.isStatic "stdbuf"}"
   ]
   ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
   ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
-  env = lib.optionalAttrs selinuxSupport {
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+  }
+  // lib.optionalAttrs selinuxSupport {
     SELINUX_INCLUDE_DIR = "${libselinux.dev}/include";
     SELINUX_LIB_DIR = lib.makeLibraryPath [
       libselinux
