@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchurl,
   fetchpatch2,
   autoreconfHook,
   pkg-config,
@@ -23,20 +22,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtas";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "clementgallet";
     repo = "libTAS";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/hyKJ8HGLN7hT+9If/lcp0C7GnhJMRpc7EKDgA1kQcI=";
+    hash = "sha256-TDFpLleY7+uBjcIqF9e7mA5eQN2s+U04qVQRvpfFfcQ=";
   };
   patches = [
-    # Fixes `undefined symbol: SDL_Log` errors
-    (fetchurl {
-      url = "https://github.com/clementgallet/libTAS/commit/779ff0fb0f3accfc62949680d85ecf96b28d18ef.patch";
-      hash = "sha256-xAaTWIXt8FkMu6GE5mBWtLypROFZ1aEqmBTtG+6rTWk=";
-    })
     # Fix build with gcc15
     (fetchpatch2 {
       url = "https://github.com/clementgallet/libTAS/commit/9699b158c522cf778bcdf626d0520fdd0a8b83aa.patch?full_index=1";
