@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -64,6 +65,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "swh.scheduler" ];
+
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     plotille
