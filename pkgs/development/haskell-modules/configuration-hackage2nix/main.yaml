@@ -32,6 +32,7 @@ default-package-overrides:
   # 2025-12-26: Needs to match egison-pattern-src from Stackage LTS
   - egison-pattern-src-th-mode < 0.2.2
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
+  - futhark-server == 1.3.0.0 # required by futhark-0.25.36
   # 2026-01-30: Needs to match hasql from Stackage LTS 24
   - hasql-notifications < 0.2.5.0
   # 2026-02-04: as requested by ghcide >= 2.13
@@ -106,6 +107,7 @@ extra-packages:
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
   - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
+  - hpack == 0.39.1                     # 2026-03-15: to match upstream stack-3.9.3
   - language-javascript == 0.7.0.0      # required by purescript
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
@@ -961,3 +963,13 @@ dont-distribute-packages:
   - persistent-zookeeper # depends on hzk
   - pocket-dns # depends on persistent-zookeeper
   - zoovisitor # depends on zookeeper_mt, which depends on openssl-1.1
+
+  # These packages are deprecated due to the usage of opentracing which is a archived upstream.
+  - opentracing
+  - opentracing-wai
+  - opentracing-jaeger
+  - opentracing-zipkin-v2
+  - opentracing-zipkin-v1
+  - opentracing-http-client
+  - opentracing-zipkin-common
+  - lightstep-haskell # Lightstep opentracing library.

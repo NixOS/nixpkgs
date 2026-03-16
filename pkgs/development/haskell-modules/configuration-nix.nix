@@ -105,6 +105,16 @@ builtins.intersectAttrs super {
   # ghcide-bench tests need network
   ghcide-bench = dontCheck super.ghcide-bench;
 
+  # Test suite scredit-test uses `cabal run`.
+  screp = overrideCabal {
+    testTargets = [ "screp-test" ];
+  } super.screp;
+
+  # `integration` test suite requires a running MySQL server (?)
+  mysql-haskell = overrideCabal {
+    testTargets = [ "test" ];
+  } super.mysql-haskell;
+
   # 2023-04-01: TODO: Either reenable at least some tests or remove the preCheck override
   ghcide = overrideCabal (drv: {
     # tests depend on executable
@@ -497,6 +507,7 @@ builtins.intersectAttrs super {
   network-transport-zeromq = dontCheck super.network-transport-zeromq; # https://github.com/tweag/network-transport-zeromq/issues/30
   oidc-client = dontCheck super.oidc-client; # the spec runs openid against google.com
   persistent-migration = dontCheck super.persistent-migration; # spec requires pg_ctl binary
+  notion-client = dontCheck super.notion-client;
   pipes-mongodb = dontCheck super.pipes-mongodb; # http://hydra.cryp.to/build/926195/log/raw
   pixiv = dontCheck super.pixiv;
   riak = dontCheck super.riak; # http://hydra.cryp.to/build/498763/log/raw
@@ -1022,6 +1033,13 @@ builtins.intersectAttrs super {
       "func-test"
     ];
   }) super.lsp-test;
+
+  lsp_2_8_0_0 = doDistribute (
+    super.lsp_2_8_0_0.override {
+      lsp-types = self.lsp-types_2_4_0_0;
+    }
+  );
+  lsp-types_2_4_0_0 = doDistribute super.lsp-types_2_4_0_0;
 
   # the test suite attempts to run the binaries built in this package
   # through $PATH but they aren't in $PATH
