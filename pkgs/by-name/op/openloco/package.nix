@@ -1,17 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   fetchurl,
-  SDL2,
-  cmake,
-  libpng,
-  libzip,
-  openal,
-  pkg-config,
-  yaml-cpp,
-  fmt_11,
-  libx11,
+  pkgsi686Linux,
 }:
 let
   sfl-src = fetchFromGitHub {
@@ -27,7 +18,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "openloco";
   version = "25.11";
 
@@ -58,18 +49,18 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    cmake
-    pkg-config
+    pkgsi686Linux.cmake
+    pkgsi686Linux.pkg-config
   ];
 
   buildInputs = [
-    SDL2
-    libpng
-    libzip
-    openal
-    yaml-cpp
-    fmt_11
-    libx11
+    pkgsi686Linux.SDL2
+    pkgsi686Linux.libpng
+    pkgsi686Linux.libzip
+    pkgsi686Linux.openal
+    pkgsi686Linux.yaml-cpp
+    pkgsi686Linux.fmt_11
+    pkgsi686Linux.libx11
   ];
 
   meta = {
