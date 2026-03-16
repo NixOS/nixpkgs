@@ -134,7 +134,7 @@ let
           ssl_cert = <${cfg.sslServerCert}
           ssl_key = <${cfg.sslServerKey}
           ${optionalString (cfg.sslCACert != null) ("ssl_ca = <" + cfg.sslCACert)}
-          ${optionalString cfg.enableDHE "ssl_dh = <${config.security.dhparams.params.dovecot2.path}"}
+          ${optionalString cfg.enableDHE "ssl_dh = <${config.security.dhparams.params.dovecot.path}"}
           disable_plaintext_auth = yes
         ''
     )
@@ -626,7 +626,7 @@ in
 
     security.dhparams = mkIf (cfg.sslServerCert != null && cfg.enableDHE) {
       enable = true;
-      params.dovecot2 = { };
+      params.dovecot = { };
     };
 
     services.dovecot2 = {
