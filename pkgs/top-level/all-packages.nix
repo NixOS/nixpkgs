@@ -10710,8 +10710,6 @@ with pkgs;
     }
   );
 
-  unigine-superposition = libsForQt5.callPackage ../applications/graphics/unigine-superposition { };
-
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   valentina = libsForQt5.callPackage ../applications/misc/valentina { };
