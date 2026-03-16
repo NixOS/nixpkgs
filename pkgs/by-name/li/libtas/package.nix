@@ -11,6 +11,7 @@
   lua5_4,
   qt5,
   libxcb,
+  libcap,
   libxi,
   file,
   binutils,
@@ -37,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/clementgallet/libTAS/commit/9699b158c522cf778bcdf626d0520fdd0a8b83aa.patch?full_index=1";
       hash = "sha256-vM1f6rvKIFyzEGJ7k+b/Zp4gAv8u6mdDUD5evV+hCJU=";
     })
+    # Capabilities cannot be set in Nix derivations,
+    # so the `setcap` invocation in the install hook must be removed.
+    ./0001-remove-setcap-install-hook.patch
   ];
 
   nativeBuildInputs = [
@@ -51,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     lua5_4
     qt5.qtbase
     libxcb
+    libcap
   ];
 
   configureFlags = [
