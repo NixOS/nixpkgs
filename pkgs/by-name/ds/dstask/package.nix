@@ -52,6 +52,9 @@ buildGoModule (finalAttrs: {
     description = "Command line todo list with super-reliable git sync";
     homepage = finalAttrs.src.meta.homepage;
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ stianlagstad ];
+    maintainers = with lib.maintainers; [
+      remidupre
+      stianlagstad
+    ];
   };
 })
