@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pywaze";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "eifinger";
     repo = "pywaze";
     tag = "v${version}";
-    hash = "sha256-INjVspha4AbxKPMQtL/4BUavFisrQXUGofZ3nuz39UU=";
+    hash = "sha256-yhECJORKVM8R/+CjhSTwgtCPeQ8QwIuG3EZHmtjVkX0=";
   };
 
   build-system = [ hatchling ];
