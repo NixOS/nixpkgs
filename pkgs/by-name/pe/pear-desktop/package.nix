@@ -13,7 +13,7 @@
   makeDesktopItem,
   nix-update-script,
 
-  # Extra Chromium/Electron flags for driver-specific GPU tuning.
+  # Extra Chromium/Electron flags for eg driver-specific GPU tuning
   commandLineArgs ? "",
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -98,22 +98,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  postFixup =
-    lib.optionalString (!stdenv.hostPlatform.isDarwin) (
-      ''
-        makeWrapper ${electron}/bin/electron $out/bin/pear-desktop \
-      ''
-      + lib.optionalString (commandLineArgs != "") ''
-          --add-flags ${lib.escapeShellArg commandLineArgs} \
-        ''
-      + ''
-          --add-flags $out/share/pear-desktop/resources/app.asar \
-          --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
-          --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-          --set-default ELECTRON_IS_DEV 0 \
-          --inherit-argv0
-      ''
-    );
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) (
+    ''
+      makeWrapper ${electron}/bin/electron $out/bin/pear-desktop \
+    ''
+    + lib.optionalString (commandLineArgs != "") ''
+      --add-flags ${lib.escapeShellArg commandLineArgs} \
+    ''
+    + ''
+      --add-flags $out/share/pear-desktop/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
+      --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set-default ELECTRON_IS_DEV 0 \
+      --inherit-argv0
+    ''
+  );
 
   passthru.updateScript = nix-update-script { };
 
