@@ -85,6 +85,6 @@ buildPythonPackage (finalAttrs: {
     description = "Source code scanner to analyze code bases and compare them with source code artifacts archived by Software Heritage";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
