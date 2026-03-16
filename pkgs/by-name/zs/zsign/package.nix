@@ -5,6 +5,7 @@
   openssl,
   pkg-config,
   minizip,
+  nix-update-script,
   zlib,
   versionCheckHook,
 }:
@@ -49,6 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross-platform codesign alternative for iOS 12+";
