@@ -1,21 +1,22 @@
 {
   lib,
-  buildGoModule,
+  # Required version by go.mod. buildGoModule is at 125 at time of writing.
+  buildGo126Module,
   fetchFromGitHub,
   nix-update-script,
 }:
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "oh-my-posh";
-  version = "29.1.0";
+  version = "29.9.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "oh-my-posh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gbb/ZVd3oNABw8Hjeht//bPdLVQnWtEtAkvYudGqMTs=";
+    hash = "sha256-F80vnUm7/F16ucQ0UqZPjSmwR2c1uo5boNqlWQj2H3g=";
   };
 
-  vendorHash = "sha256-75buRo7DNq4gzY+66NEVSI1XOJdgckqzHoDwraUmEAw=";
+  vendorHash = "sha256-EIaM2AbTuNwkNCWyBaRxB7ZTvHzSVZ8c9+N7KAUU/xU=";
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
