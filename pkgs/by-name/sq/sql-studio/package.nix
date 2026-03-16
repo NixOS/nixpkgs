@@ -9,13 +9,13 @@
 }:
 let
   pname = "sql-studio";
-  version = "0.1.50";
+  version = "0.1.51";
 
   src = fetchFromGitHub {
     owner = "frectonz";
     repo = "sql-studio";
     tag = version;
-    hash = "sha256-sXlOnqzi3N+56sdJdkpcVq1mKgdhhu0KdU1Xdoyr10w=";
+    hash = "sha256-LooRM7KlNmRHG5M18MLnV+hraQ1kRVEZp2GVYnwNScI=";
   };
 
   ui = buildNpmPackage {
@@ -35,7 +35,7 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  cargoHash = "sha256-+hf0GtD5lfa//JYFQZFvO+2m9FgOn9jV6NQ0rQejRXg=";
+  cargoHash = "sha256-SJiPVvRYRkMHprGXtObNVSsO//2VNTpouCB+qcXlbjc=";
 
   nativeBuildInputs = [ pkg-config ];
 
