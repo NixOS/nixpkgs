@@ -49,11 +49,12 @@ let
       tag = version;
       hash = "sha256-icFgoKIrr3fGSVmSczlMJiT5KSb746kVldtrk+Q0wW8=";
     };
-    cargoHash = "sha256-PgCfBcmK9RCA5BMacJ5oYEpo2DnBKx2xPbdLb79yCCY=";
+    cargoHash = "sha256-8sAjYLSmNneQVrNh9iOmk5lVajtiFPWYSC8jfo5CK5U=";
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit (old) pname;
       inherit src version;
+      patches = old.cargoDeps.vendorStaging.patches or [ ];
       hash = cargoHash;
     };
   });
