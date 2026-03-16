@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch2,
   installShellFiles,
   lib,
   nix-update-script,
@@ -28,26 +29,22 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pandoc
   ];
 
-  # These fail based on timestamp issues with bundled certificates
-  # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
+  # https://github.com/pendulum-project/ntpd-rs/issues/2152
   checkFlags = [
-    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
-    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
     "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
     "--skip=daemon::ntp_source::tests::test_timeroundtrip"
     "--skip=daemon::server::tests::test_server_serves"
-    "--skip=nts::tests::test_key_exchange_roundtrip_no_cookies"
-    "--skip=nts::tests::test_keyexchange_fixed_key_no_permission"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_keep_alive"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_no_permit"
-    "--skip=nts::tests::test_keyexchange_roundtrip_no_proto_overlap"
-    "--skip=nts::tests::test_keyexchange_roundtrip_no_upgrade_possible"
-    "--skip=nts::tests::test_keyexchange_roundtrip_supports"
-    "--skip=nts::tests::test_keyexchange_roundtrip_upgrading"
-    "--skip=nts::tests::test_keyexchange_roundtrip_v4"
-    "--skip=nts::tests::test_keyexchange_roundtrip_v5"
-    "--skip=nts::tests::test_keyexchange_supports_no_permission"
+  ];
+
+  # These fail based on timestamp issues with bundled certificates.
+  # See https://github.com/NixOS/nixpkgs/issues/497682 &
+  # https://github.com/pendulum-project/ntpd-rs/pull/2133
+  # Remove after ntpd-rs > 1.7.1
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/pendulum-project/ntpd-rs/commit/1df0cc959248612faf705f2fd69f53057fd0372e.patch";
+      hash = "sha256-2Yicq8P4TQJbhOSOVOXGmVAWEJdsDdaXKiQX40Z/oZY=";
+    })
   ];
 
   postPatch = ''
@@ -79,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   meta = {
-    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
     license = with lib.licenses; [
