@@ -130,6 +130,6 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-core";
     license = lib.licenses.gpl3Only;
     mainProgram = "swh";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
