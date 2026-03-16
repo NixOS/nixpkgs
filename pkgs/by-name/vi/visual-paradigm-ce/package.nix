@@ -5,6 +5,7 @@
   copyDesktopItems,
   makeDesktopItem,
   openjdk,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,6 +24,17 @@ stdenv.mkDerivation (finalAttrs: {
       }_${suffix}_Linux64_InstallFree.tar.gz";
       hash = "sha256-n6cijv9ndliqcvcbIOnMB/mwIjkOzWe1AcJZB+HdHBg=";
     };
+
+  passthru.updateScript = writeScript "update-visual-paradigm-ce" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl gnused common-updater-scripts
+
+    set -eu -o pipefail
+
+    version = "$(curl -Ls -o /dev/null -w %{url_effective} https://www.visual-paradigm.com/downloads/vpce/checksum.html | sed -E 's#.*/vpce([0-9]+\.[0-9]+)/([0-9]+)/.*#\1.\2#')"
+
+    update-source-version visual-paradigm-ce "$version"
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems
