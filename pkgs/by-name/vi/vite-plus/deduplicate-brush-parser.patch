@@ -1,0 +1,32 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -642,20 +642,6 @@
+ ]
+
+ [[package]]
+-name = "brush-parser"
+-version = "0.3.0"
+-source = "git+https://github.com/reubeno/brush?rev=dcb760933b10ee0433d7b740a5709b06f5c67c6b#dcb760933b10ee0433d7b740a5709b06f5c67c6b"
+-dependencies = [
+- "bon",
+- "cached",
+- "indenter",
+- "peg",
+- "thiserror 2.0.18",
+- "tracing",
+- "utf8-chars",
+-]
+-
+-[[package]]
+ name = "bstr"
+ version = "1.12.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -7589,7 +7575,7 @@
+ source = "git+https://github.com/voidzero-dev/vite-task.git?rev=076cef486127e6cd1fefc58945f00dac316888ca#076cef486127e6cd1fefc58945f00dac316888ca"
+ dependencies = [
+  "bincode",
+- "brush-parser 0.3.0 (git+https://github.com/reubeno/brush?rev=dcb760933b10ee0433d7b740a5709b06f5c67c6b)",
++ "brush-parser 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+  "diff-struct",
+  "serde",
+  "shell-escape",
