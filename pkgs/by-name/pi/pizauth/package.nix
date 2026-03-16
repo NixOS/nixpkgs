@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizauth";
-  version = "1.0.10";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "ltratt";
     repo = "pizauth";
     tag = "pizauth-${finalAttrs.version}";
-    hash = "sha256-wdR/7gV/2U+MsncbQ6Gy2na5YuBp4F2H8ohij+Dfvcs=";
+    hash = "sha256-e9YBeYMC9tfxZoXZi/QBW3FO5V6BAe7RSvVWs7rv0PI=";
   };
 
-  cargoHash = "sha256-AvUaeevnV5fIeEKXQAY1IGHcV3l3lTwFmFKsaEPbr+4=";
+  cargoHash = "sha256-9cDVbDCb8vY6KxreyiMX3gp13bXZpxTQOwYbk6TEVpc=";
 
   nativeBuildInputs = [ installShellFiles ];
 

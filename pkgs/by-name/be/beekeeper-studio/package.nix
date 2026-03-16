@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.5.7";
+  version = "5.6.0";
 
   src =
     let
@@ -54,10 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchurl {
       url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-YKGMDX6rMNS6sYTsV/9sLpLvVkFcjEFdxO9hhb7SprU=";
-        aarch64-linux = "sha256-PFVUaXt0spYX4F1WElNmNY6ltzTCDJO2WA9LfB0MNiQ=";
-        x86_64-darwin = "sha256-btcEFZPz//qZ+3msrzjIt1wGYtjSDz2rKSQK5rTp4B8=";
-        aarch64-darwin = "sha256-JTgGXrWADaiqvRbqruOpEHtTVS8pYQpsXYKAblHGlIk=";
+        x86_64-linux = "sha256-dqwB1kCUL3DetfFCsBVh3xq3fNKSOMabJepDV7DpLGA=";
+        aarch64-linux = "sha256-dv321Lszm+xJiXK4Hfi0ij7TvkuJx8o8mepWjGnGBD8=";
+        x86_64-darwin = "sha256-AQb+HcLP+7e+SuqKWxHH+O2O6/Daf14CuTQj90T2yoo=";
+        aarch64-darwin = "sha256-tJ2N3KtdC4VNXe0lKSb9cD3YF61GRc5/kpSZw9TNkb4=";
       };
     };
 
@@ -160,6 +160,5 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "x86_64-darwin"
     ];
-    knownVulnerabilities = [ "Electron version 32 is EOL" ];
   };
 })

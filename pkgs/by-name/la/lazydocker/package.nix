@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lazydocker";
-  version = "0.24.4";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-cW90/yblSLBkcR4ZdtcSI9MXFjOUxyEectjRn9vZwvg=";
+    sha256 = "sha256-ZZl0gt0gNjEI3JC96Xc29SZAyKh15jCuGHyEanIwNwY=";
   };
 
   vendorHash = null;

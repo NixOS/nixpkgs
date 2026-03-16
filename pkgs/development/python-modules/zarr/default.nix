@@ -23,37 +23,17 @@
   cupy,
   # cli
   typer,
-  # test
-  pytestCheckHook,
-  pytest-asyncio,
-  pytest-cov,
-  pytest-accept ? null, # TODO: Package
+  # optional
   rich,
-  mypy,
-  numpydoc,
+  universal-pathlib,
+
+  # test
   hypothesis,
-  pytest-xdist,
+  numpydoc,
+  pytest-asyncio,
+  pytestCheckHook,
   tomlkit,
   uv,
-  # remote_tests
-  botocore,
-  s3fs,
-  moto,
-  requests,
-  # optional
-  universal-pathlib,
-  # docs
-  mkdocs-material,
-  mkdocs,
-  mkdocstrings,
-  mkdocstrings-python,
-  mike,
-  mkdocs-redirects,
-  markdown-exec ? null, # TODO: Package
-  griffe-inherited-docstrings ? null, # TODO: Package,
-  ruff,
-  towncrier,
-  astroid,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -94,67 +74,22 @@ buildPythonPackage (finalAttrs: {
       cli = [
         typer
       ];
-      # Development extras
-      test = [
-        #pytest
-        pytest-asyncio
-        pytest-cov
-        pytest-accept
-        rich
-        mypy
-        numpydoc
-        hypothesis
-        # From some reason the existence of pytest-xdist makes the tests fail
-        # depending on $NIX_BUILD_CORES
-        #pytest-xdist
-        packaging
-        tomlkit
-        uv
-      ];
-      remote_tests = [
-        botocore
-        s3fs
-        moto
-        requests
-      ]
-      ++ moto.optional-dependencies.server
-      ++ moto.optional-dependencies.s3;
       optional = [
         rich
         universal-pathlib
       ];
-      docs = [
-        # Doc building
-        mkdocs-material
-        mkdocs
-        mkdocstrings
-        mkdocstrings-python
-        mike
-        mkdocs-redirects
-        markdown-exec
-        griffe-inherited-docstrings
-        ruff
-        towncrier # Changelog generation
-        # Optional dependencies to run examples
-        rich
-        s3fs
-        astroid
-        #pytest
-      ]
-      ++ mkdocs-material.optional-dependencies.imaging
-      ++ lib.optionals (markdown-exec != null) markdown-exec.optional-dependencies.ansi
-      ++ numcodecs.optional-dependencies.msgpack;
     };
   };
 
   nativeCheckInputs = [
+    hypothesis
+    numpydoc
+    pytest-asyncio
     pytestCheckHook
+    tomlkit
+    uv
   ]
-  ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli
-  # Not adding `passthru.optional-dependencies.remote{,_tests}` since the
-  # existence of these Python modules triggers tests that fail in the sandbox
-  # due to failed network requests.
-  ++ finalAttrs.finalPackage.passthru.optional-dependencies.test;
+  ++ finalAttrs.finalPackage.passthru.optional-dependencies.cli;
 
   disabledTestPaths = [
     # requires uv and then fails at setting up python envs

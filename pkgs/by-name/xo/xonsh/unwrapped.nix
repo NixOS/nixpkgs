@@ -130,7 +130,7 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://xon.sh/";
     description = "Python-ish, BASHwards-compatible shell";
-    changelog = "https://github.com/xonsh/xonsh/raw/main/CHANGELOG.rst";
+    changelog = "https://github.com/xonsh/xonsh/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ bsd3 ];
     mainProgram = "xonsh";
     maintainers = with lib.maintainers; [ samlukeyes123 ];

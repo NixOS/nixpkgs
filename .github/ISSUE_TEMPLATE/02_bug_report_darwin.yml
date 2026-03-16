@@ -54,7 +54,7 @@ body:
       description: "Please include a step-by-step guide for reproducing this issue. Consider writing in concise, numbered bullet points to ensure that Nixpkgs developers can retrace your steps."
     validations:
       required: true
-  - type: "input"
+  - type: "textarea"
     id: "expected-behaviour"
     attributes:
       label: "Expected behaviour"

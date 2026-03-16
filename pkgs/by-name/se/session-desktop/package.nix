@@ -109,7 +109,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.17.12";
+  version = "1.17.14";
   src =
     (fetchFromGitHub {
       owner = "session-foundation";
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf .git
         popd
       '';
-      hash = "sha256-+ZLTIBXXjqX1TAGboXU4OYQPBDXMm7epfY3tsi3zOfk=";
+      hash = "sha256-SrXlAOl6X5/4Vqrow+VONIiXPBC53Nm6M+xpcUTwjhk=";
     }).overrideAttrs
       (oldAttrs: {
         # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-rusUkqokhhmbqTgzIQIbqFCNbI1pmIxO5USy7mmOzxs=";
+    hash = "sha256-nIBMPw0laFDQWlY05x0YsSmYHLyAxKOD4ArbZ6wLZ7Y=";
   };
 
   buildPhase = ''
