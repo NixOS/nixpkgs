@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     homepage = "https://archive.org/details/fuji-xerox-docuprint-c525-a-ap_1.0-2_i386";
     license = licenses.unfree; # Proprietary binary driver
     platforms = platforms.linux;
-    maintainers = [ isomorph70 ];
+    maintainers = [ lib.maintainers.isomorph70 ];
     broken = false; # Works on NixOS, with 32 bit libraries.
     # A flaw on Xerox 6525N, printing n copies results in n^2 copies being printed.
     priority = 4; # High priority for printer drivers
