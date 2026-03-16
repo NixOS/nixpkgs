@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "A Minecraft launcher from @SJMC-Dev";
     homepage = "https://github.com/UNIkeEN/SJMCL";
-    changelog = "https://github.com/UNIkeEN/SJMCL/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/UNIkeEN/SJMCL/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ FrdrCkII ];
     mainProgram = "SJMCL";
