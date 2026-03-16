@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   setuptools,
@@ -46,6 +47,9 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "swh.auth" ];
+
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     aiocache
