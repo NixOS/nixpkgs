@@ -16,7 +16,12 @@ buildGoModule (finalAttrs: {
     owner = "kubernetes-sigs";
     repo = "krew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KG4/vtEfwWVddfFoNbC4xakxOynDY6jyxek4JAXW5gY=";
+    hash = "sha256-rhl4qVHwl876OSDrcLSS07x3H/x/zmFLPHdRw+fcYsw=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C "$out" rev-parse --short HEAD > "$out/.git_head"
+      rm -rf "$out/.git"
+    '';
   };
 
   vendorHash = "sha256-z0wiYknXcCx4vqROngn58CRe9TBgya4y3v736VBMhQ8=";
@@ -30,6 +35,10 @@ buildGoModule (finalAttrs: {
     "-X"
     "sigs.k8s.io/krew/internal/version.gitTag=v${finalAttrs.version}"
   ];
+
+  preBuild = ''
+    ldflags+=" -X=sigs.k8s.io/krew/internal/version.gitCommit=$(<.git_head)"
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/krew \
