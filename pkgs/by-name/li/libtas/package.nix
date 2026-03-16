@@ -10,6 +10,7 @@
   ffmpeg,
   lua5_4,
   qt5,
+  libxcb,
   libxi,
   file,
   binutils,
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     lua5_4
     qt5.qtbase
+    libxcb
   ];
 
   configureFlags = [
