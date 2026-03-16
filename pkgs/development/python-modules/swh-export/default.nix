@@ -85,6 +85,6 @@ buildPythonPackage (finalAttrs: {
     description = "Software Heritage dataset tools";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-export";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
