@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   brotli,
   cmake,
   ctestCheckHook,
@@ -32,7 +31,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
-  version = "0.11.1";
+  version = "0.11.2";
 
   outputs = [
     "out"
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     tag = "v${version}";
-    hash = "sha256-ORwhKOp5Nog366UkLbuWpjz/6sJhxUO6+SkoJGH+3fE=";
+    hash = "sha256-L4/BY68ZBCpebQxryR7D1CxrsneYvw8B8EvW2mkF7bA=";
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };
@@ -144,17 +143,6 @@ stdenv.mkDerivation rec {
     shopt -s extglob
     rm -rf third_party/!(sjpeg)/
     shopt -u extglob
-
-    # Fix the build with CMake 4.
-    #
-    # See:
-    #
-    # * <https://github.com/webmproject/sjpeg/commit/9990bdceb22612a62f1492462ef7423f48154072>
-    # * <https://github.com/webmproject/sjpeg/commit/94e0df6d0f8b44228de5be0ff35efb9f946a13c9>
-    substituteInPlace third_party/sjpeg/CMakeLists.txt \
-      --replace-fail \
-        'cmake_minimum_required(VERSION 2.8.7)' \
-        'cmake_minimum_required(VERSION 3.5...3.10)'
 
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
       --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"
