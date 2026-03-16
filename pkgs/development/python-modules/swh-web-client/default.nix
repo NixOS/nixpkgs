@@ -66,6 +66,6 @@ buildPythonPackage (finalAttrs: {
     description = "Client for Software Heritage Web applications, via their APIs";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-web-client";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
