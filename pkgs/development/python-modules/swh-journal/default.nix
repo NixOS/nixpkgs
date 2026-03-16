@@ -60,6 +60,6 @@ buildPythonPackage (finalAttrs: {
     description = "Persistent logger of changes to the archive, with publish-subscribe support";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-journal";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
