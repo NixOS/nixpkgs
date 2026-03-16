@@ -758,6 +758,8 @@ self: super: with self; {
 
   anitopy = callPackage ../development/python-modules/anitopy { };
 
+  anki-audio = callPackage ../development/python-modules/anki-audio { };
+
   anndata = callPackage ../development/python-modules/anndata { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
