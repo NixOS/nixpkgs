@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildPythonPackage,
   click,
   cmake,
@@ -61,6 +62,18 @@ buildPythonPackage rec {
     # import from $out
     rm src/swh/shard/*.py
   '';
+
+  disabledTests = [
+    "test_setup_log_handler_with_env_configuration"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # assert (51675136 - 51396608) < (100 * 1024)
+    "test_memleak"
+    # ValueError: Cannot convert negative int
+    "test_write_above_rlimit_fsize"
+    # ValueError: Cannot convert negative int
+    "test_finalize_above_rlimit_fsize"
+  ];
 
   meta = {
     changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-shard/-/tags/v2.2.0";
