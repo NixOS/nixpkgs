@@ -18,7 +18,7 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-web-client";
   version = "0.9.2";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-web-client";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZZptYLC1os2i0NtBD3mp4QaQQRoKxnr9k8gJuqmpizE=";
   };
 
@@ -68,4 +68,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})
