@@ -13,6 +13,7 @@
   zeromq,
   flex,
   bison,
+  nix-update-script,
 
   # for tests
   python3,
@@ -119,6 +120,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   passthru.tests = {
     withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: {
