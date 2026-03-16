@@ -15,8 +15,8 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "krew";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-KG4/vtEfwWVddfFoNbC4xakxOynDY6jyxek4JAXW5gY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KG4/vtEfwWVddfFoNbC4xakxOynDY6jyxek4JAXW5gY=";
   };
 
   vendorHash = "sha256-z0wiYknXcCx4vqROngn58CRe9TBgya4y3v736VBMhQ8=";
