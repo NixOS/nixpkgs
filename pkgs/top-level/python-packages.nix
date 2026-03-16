@@ -4376,8 +4376,6 @@ self: super: with self; {
 
   django-sql-utils = callPackage ../development/python-modules/django-sql-utils { };
 
-  django-sslserver = callPackage ../development/python-modules/django-sslserver { };
-
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
   django-stdimage = callPackage ../development/python-modules/django-stdimage {
