@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nfs-ganesha";
-  version = "9.7";
+  version = "9.8";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "nfs-ganesha";
     repo = "nfs-ganesha";
     tag = "V${finalAttrs.version}";
-    hash = "sha256-MGDt78UnkPaNc2YD/GHlFnvZNo0ZBbtvG+vxcplH+fI=";
+    hash = "sha256-os0juaxJGOB1Ugh+7MvK0Gg11PSKkesCq6TgaFR+sDE=";
   };
 
   patches = lib.optional useDbus ./allow-bypassing-dbus-pkg-config-test.patch;
