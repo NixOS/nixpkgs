@@ -24,7 +24,7 @@
 
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-model";
   version = "8.4.1";
   pyproject = true;
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-model";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-v/vbY0mxvsbuLUAmDACW9brfVF5djMYyvv9Mf1VL6do=";
   };
 
@@ -81,4 +81,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})
