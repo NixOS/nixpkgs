@@ -7,6 +7,7 @@
   protobuf_27,
   bazel_7,
   ibus,
+  withIbus ? false,
   unzip,
   xdg-utils,
   jp-zip-codes,
@@ -36,9 +37,9 @@ buildBazelPackage rec {
   ];
 
   buildInputs = [
-    ibus
     qt6.qtbase
-  ];
+  ]
+  ++ lib.optional withIbus ibus;
 
   dontAddBazelOpts = true;
   removeRulesCC = false;
@@ -65,7 +66,18 @@ buildBazelPackage rec {
     "opt"
   ];
 
-  bazelTargets = [ "package" ];
+  bazelTargets = [
+    "unix/icons"
+    "gui/tool:mozc_tool"
+    "server:mozc_server"
+    "unix/emacs:mozc_emacs_helper"
+    "unix/emacs:mozc.el"
+    "renderer/qt:mozc_renderer"
+  ]
+  ++ lib.optionals withIbus [
+    "unix/ibus:gen_mozc_xml"
+    "unix/ibus:ibus_mozc"
+  ];
 
   postPatch = ''
     # replace protobuf with our own
@@ -89,8 +101,25 @@ buildBazelPackage rec {
   buildAttrs.installPhase = ''
     runHook preInstall
 
-    unzip bazel-bin/unix/mozc.zip -x "tmp/*" -d /
-
+    install -Dm555 "bazel-bin/server/mozc_server"           "$out/lib/mozc/mozc_server"
+    install -Dm555 "bazel-bin/renderer/qt/mozc_renderer"    "$out/lib/mozc/mozc_renderer"
+    install -Dm555 "bazel-bin/gui/tool/mozc_tool"           "$out/lib/mozc/mozc_tool"
+    install -Dm555 "bazel-bin/unix/emacs/mozc_emacs_helper" "$out/bin/mozc_emacs_helper"
+    install -Dm444 "unix/emacs/mozc.el"                     "$out/share/emacs/site-lisp/emacs-mozc/mozc.el"
+    install -d "$out/share/icons/mozc/"
+    unzip bazel-bin/unix/icons.zip -d "$out/share/icons/mozc/"
+  ''
+  + (lib.optionalString withIbus ''
+    install -Dm555 "bazel-bin/unix/ibus/ibus_mozc"          "$out/lib/ibus-mozc/ibus-engine-mozc"
+    install -Dm555 "bazel-bin/unix/ibus/mozc.xml"           "$out/share/ibus/components/mozc.xml"
+    install -d "$out/share/ibus-mozc/"
+    for icon in $out/share/icons/mozc/*.png
+    do
+      cp $icon $out/share/ibus-mozc/
+    done
+    mv $out/share/ibus-mozc/{mozc,product_icon}.png
+  '')
+  + ''
     # create a desktop file for gnome-control-center
     # copied from ubuntu
     mkdir -p $out/share/applications
@@ -102,7 +131,7 @@ buildBazelPackage rec {
   '';
 
   meta = {
-    isIbusEngine = true;
+    isIbusEngine = withIbus;
     description = "Japanese input method from Google";
     mainProgram = "mozc_emacs_helper";
     homepage = "https://github.com/google/mozc";

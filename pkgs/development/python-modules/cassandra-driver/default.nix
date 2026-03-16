@@ -117,6 +117,10 @@ buildPythonPackage (finalAttrs: {
     # time-sensitive
     "test_nts_token_performance"
     "test_empty_connections"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # AssertionError: [(1773409714.980824, <cassandra.connection.Timer object at 0x116cb2870>)] is not false
+    "test_timer_cancellation"
   ];
 
   meta = {

@@ -2066,7 +2066,8 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    inherit mozc mozc-ut;
+    mozc = mozc.override { withIbus = true; };
+    mozc-ut = mozc-ut.override { withIbus = true; };
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
       withIbusSupport = true;
@@ -9560,6 +9561,8 @@ with pkgs;
   firefox-bin = wrapFirefox firefox-bin-unwrapped {
     pname = "firefox-bin";
   };
+
+  firefoxpwa = wrapFirefox firefoxpwa-unwrapped { };
 
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;

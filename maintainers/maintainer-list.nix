@@ -15504,6 +15504,17 @@
     githubId = 918448;
     name = "Anthony Lodi";
   };
+  logan-barnett = {
+    email = "logustus+nixpkgs@gmail.com";
+    github = "LoganBarnett";
+    githubId = 27005;
+    keys = [
+      {
+        fingerprint = "3F29 5F7D 2427 6467 A9B2  3459 41E4 6FB1 ACEA 3EF0";
+      }
+    ];
+    name = "Logan Barnett";
+  };
   logger = {
     name = "Ido Samuelson";
     email = "ido.samuelson@gmail.com";
@@ -19131,6 +19142,12 @@
     email = "kerminaawad@gmail.com";
     github = "nicegamer7";
     githubId = 8083772;
+  };
+  nick-linux = {
+    email = "nick-stationengineer@proton.me";
+    name = "Nick";
+    github = "nick-linux8";
+    githubId = 264581716;
   };
   nickcao = {
     name = "Nick Cao";
@@ -26156,12 +26173,6 @@
     github = "sxmair";
     githubId = 127287939;
     name = "Syed Sumairul Hasan";
-  };
-  syberant = {
-    email = "sybrand@neuralcoding.com";
-    github = "syberant";
-    githubId = 20063502;
-    name = "Sybrand Aarnoutse";
   };
   syboxez = {
     email = "syboxez@gmail.com";

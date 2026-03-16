@@ -96,6 +96,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/blueman-project/blueman";
     description = "GTK-based Bluetooth Manager";
+    mainProgram = "blueman-manager";
     license = lib.licenses.gpl3;
     platforms = lib.platforms.linux;
     changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
