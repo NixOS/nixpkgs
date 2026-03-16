@@ -45,7 +45,10 @@ let
       ./nixos-test-base.nix
       {
         key = "nodes";
-        _module.args.nodes = config.nodesCompat;
+        _module.args = {
+          inherit (config) containers;
+          nodes = config.nodesCompat;
+        };
       }
       (
         { options, ... }:
