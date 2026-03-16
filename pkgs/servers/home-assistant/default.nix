@@ -160,6 +160,29 @@ let
         };
       });
 
+      # Pinned due to API changes in python-roborock >= 4.16.0 that require
+      # home-assistant >= 2026.3.0 (fan_power_options renamed to fan_speed_options)
+      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
+        version = "4.15.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = "v${version}";
+          hash = "sha256-M1LAAQRzJkVQKHin/SUEEVVgFKFCbYbZ2NZ8vSwT+1Y=";
+        };
+        dependencies = (lib.filter (dep: (dep.pname or "") != "pyrate-limiter") (oldAttrs.dependencies or [ ])) ++ [
+          (super.pyrate-limiter.overridePythonAttrs (old: rec {
+            version = "3.9.0";
+            src = fetchFromGitHub {
+              owner = "vutran1710";
+              repo = "PyrateLimiter";
+              tag = "v${version}";
+              hash = "sha256-CAN3OWxXQaAzrh2q6z0OxPs4i02L/g2ISYFdUMHsHpg=";
+            };
+            build-system = [ self.poetry-core ];
+          }))
+        ];
+      });
+
       py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
         version = "1.6.40";
         src = fetchFromGitHub {
