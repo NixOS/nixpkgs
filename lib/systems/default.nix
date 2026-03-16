@@ -256,6 +256,25 @@ let
           )
           && !isStatic;
 
+        # FIXME: placeholder name and probably should compose to create hasSharedLibraries
+        # instead of duplicating.
+        # Whether the platform supports relocatable / position-independent code natively
+        # even if shared libraries are disabled (so true in pkgsStatic on x86_64-linux)
+        # Bare metal targets — arm-none-eabi, various embedded … — lack such support
+        canReloc =
+          with final;
+          isAndroid
+          || isGnu
+          || isMusl
+          || isDarwin
+          || isSunOS
+          || isOpenBSD
+          || isFreeBSD
+          || isNetBSD
+          || isCygwin
+          || isMinGW
+          || isWindows;
+
         # The difference between `isStatic` and `hasSharedLibraries` is mainly the
         # addition of the `staticMarker` (see make-derivation.nix).  Some
         # platforms, like embedded machines without a libc (e.g. arm-none-eabi)
