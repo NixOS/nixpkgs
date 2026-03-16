@@ -760,6 +760,10 @@ self: super: with self; {
 
   anki-audio = callPackage ../development/python-modules/anki-audio { };
 
+  anki-mac-helper = callPackage ../development/python-modules/anki-mac-helper {
+    inherit (pkgs) swift;
+  };
+
   anndata = callPackage ../development/python-modules/anndata { };
 
   annexremote = callPackage ../development/python-modules/annexremote { };
