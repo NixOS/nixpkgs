@@ -4160,8 +4160,6 @@ self: super: with self; {
 
   django-currentuser = callPackage ../development/python-modules/django-currentuser { };
 
-  django-dbbackup = callPackage ../development/python-modules/django-dbbackup { };
-
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
 
   django-dynamic-preferences =
@@ -4176,8 +4174,6 @@ self: super: with self; {
 
   django-environ = callPackage ../development/python-modules/django-environ { };
 
-  django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
-
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
   django-filer = callPackage ../development/python-modules/django-filer { };
@@ -4185,8 +4181,6 @@ self: super: with self; {
   django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
 
   django-filter = callPackage ../development/python-modules/django-filter { };
-
-  django-flags = callPackage ../development/python-modules/django-flags { };
 
   django-formset-js-improved =
     callPackage ../development/python-modules/django-formset-js-improved
@@ -4222,8 +4216,6 @@ self: super: with self; {
 
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
 
-  django-ical = callPackage ../development/python-modules/django-ical { };
-
   django-import-export = callPackage ../development/python-modules/django-import-export { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
@@ -4252,13 +4244,9 @@ self: super: with self; {
     callPackage ../development/python-modules/django-login-required-middleware
       { };
 
-  django-mailbox = callPackage ../development/python-modules/django-mailbox { };
-
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
-
-  django-markdownify = callPackage ../development/python-modules/django-markdownify { };
 
   django-markdownx = callPackage ../development/python-modules/django-markdownx { };
 
@@ -4277,8 +4265,6 @@ self: super: with self; {
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
 
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
-
-  django-money = callPackage ../development/python-modules/django-money { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
 
@@ -4348,8 +4334,6 @@ self: super: with self; {
 
   django-ratelimit = callPackage ../development/python-modules/django-ratelimit { };
 
-  django-recurrence = callPackage ../development/python-modules/django-recurrence { };
-
   django-redis = callPackage ../development/python-modules/django-redis { };
 
   django-registration = callPackage ../development/python-modules/django-registration { };
@@ -4392,18 +4376,9 @@ self: super: with self; {
 
   django-sql-utils = callPackage ../development/python-modules/django-sql-utils { };
 
-  django-sslserver = callPackage ../development/python-modules/django-sslserver { };
-
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
-  django-stdimage = callPackage ../development/python-modules/django-stdimage {
-    django = django_4;
-    pytest-django = pytest-django.override { django = django_4; };
-  };
-
   django-storages = callPackage ../development/python-modules/django-storages { };
-
-  django-structlog = callPackage ../development/python-modules/django-structlog { };
 
   django-stubs = callPackage ../development/python-modules/django-stubs { };
 
@@ -4437,8 +4412,6 @@ self: super: with self; {
 
   django-types = callPackage ../development/python-modules/django-types { };
 
-  django-user-sessions = callPackage ../development/python-modules/django-user-sessions { };
-
   django-valkey = callPackage ../development/python-modules/django-valkey { };
 
   django-versatileimagefield =
@@ -4454,10 +4427,6 @@ self: super: with self; {
   django-webpush = callPackage ../development/python-modules/django-webpush { };
 
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
-
-  django-xforwardedfor-middleware =
-    callPackage ../development/python-modules/django-xforwardedfor-middleware
-      { };
 
   # LTS in extended support phase
   django_4 = callPackage ../development/python-modules/django/4.nix { };
@@ -11334,6 +11303,8 @@ self: super: with self; {
 
   obstore = callPackage ../development/python-modules/obstore { };
 
+  obsws-python = callPackage ../development/python-modules/obsws-python { };
+
   oca-port = callPackage ../development/python-modules/oca-port { };
 
   ochre = callPackage ../development/python-modules/ochre { };
@@ -12758,8 +12729,6 @@ self: super: with self; {
 
   ppdeep = callPackage ../development/python-modules/ppdeep { };
 
-  ppf-datamatrix = callPackage ../development/python-modules/ppf-datamatrix { };
-
   ppft = callPackage ../development/python-modules/ppft { };
 
   ppk2-api = callPackage ../development/python-modules/ppk2-api { };
@@ -13127,8 +13096,6 @@ self: super: with self; {
   py-markdown-table = callPackage ../development/python-modules/py-markdown-table { };
 
   py-melissa-climate = callPackage ../development/python-modules/py-melissa-climate { };
-
-  py-moneyed = callPackage ../development/python-modules/py-moneyed { };
 
   py-multiaddr = callPackage ../development/python-modules/py-multiaddr { };
 
@@ -14366,6 +14333,8 @@ self: super: with self; {
   pynotifier = callPackage ../development/python-modules/pynotifier { };
 
   pynput = callPackage ../development/python-modules/pynput { };
+
+  pynputfix = callPackage ../development/python-modules/pynputfix { };
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
 

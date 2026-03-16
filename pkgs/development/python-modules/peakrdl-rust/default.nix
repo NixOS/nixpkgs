@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "peakrdl-rust";
-  version = "0.5.1";
+  version = "0.6.2";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "darsor";
     repo = "PeakRDL-rust";
     tag = "v${version}";
-    hash = "sha256-rcVM7ljFWlEXLxG7ASXE2iZ+WYazeMFE0sgTzkviOP0=";
+    hash = "sha256-YU2JZGC8AF3mhzwozItgqtWsrs4YEltZiP1rNkPfZ7M=";
   };
 
   build-system = [ uv-build ];

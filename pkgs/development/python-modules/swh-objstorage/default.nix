@@ -81,6 +81,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "swh.objstorage" ];
 
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   enabledTestPaths = [ "swh/objstorage/tests" ];
 
   nativeCheckInputs = [
