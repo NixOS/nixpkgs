@@ -415,7 +415,7 @@ pkgs.lib.recurseIntoAttrs rec {
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps = runTest nvim-with-luasnip ''
-    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
+    ${nvim-with-luasnip}/bin/nvim -i NONE -c "lua require'jsregexp'" -e +quitall!
   '';
 
   inherit nvim_with_rocks_nvim;
