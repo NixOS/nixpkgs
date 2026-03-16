@@ -1586,6 +1586,7 @@
   ./services/video/go2rtc/default.nix
   ./services/video/mediamtx.nix
   ./services/video/mirakurun.nix
+  ./services/video/motioneye.nix
   ./services/video/photonvision.nix
   ./services/video/ustreamer.nix
   ./services/video/v4l2-relayd.nix
