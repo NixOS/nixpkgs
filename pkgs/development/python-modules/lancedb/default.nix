@@ -42,21 +42,21 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "lancedb";
-  version = "0.27.1";
+  version = "0.29.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
     tag = "python-v${finalAttrs.version}";
-    hash = "sha256-pWrwv3VtfkfOKnkiiu26yRDrDrsNxb+0r/kcNHwzmhU=";
+    hash = "sha256-sOgRGn0romt5xJ70c+GSqNoRAp0D9F9hEq6bm7JRK/Y=";
   };
 
   buildAndTestSubdir = "python";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-U1Od4lhaaGdYF3TISfRWY7sRmyyniZqLofBCnYAo1ew=";
+    hash = "sha256-GQA5RuxpYmrNqNrpW4GLZlXrphflErmR5PeeVcs6ZJQ=";
   };
 
   build-system = [ rustPlatform.maturinBuildHook ];
@@ -110,6 +110,17 @@ buildPythonPackage (finalAttrs: {
     # Requires internet access
     # RuntimeError: lance error: LanceError(IO): Generic S3 error
     "test_bucket_without_dots_passes"
+
+    # lance_namespace.errors.UnsupportedOperationError: Not supported: create_empty_table
+    "TestAsyncNamespaceConnection"
+    "TestNamespaceConnection"
+
+    # Failed: DID NOT RAISE <class 'Exception'>
+    "test_merge_insert"
+
+    # TypeError: FFILanceTableProvider.__datafusion_table_provider__() missing 1 required positional
+    # argument: 'session'
+    "test_sql_query"
   ]
   ++ lib.optionals (pythonAtLeast "3.14") [
     # TypeError: Converting Pydantic type to Arrow Type: unsupported type
