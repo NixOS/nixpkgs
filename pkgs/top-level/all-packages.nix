@@ -9885,12 +9885,6 @@ with pkgs;
     withFonts = true;
   };
 
-  lmms = libsForQt5.callPackage ../applications/audio/lmms {
-    lame = null;
-    libsoundio = null;
-    portaudio = null;
-  };
-
   luminanceHDR = callPackage ../applications/graphics/luminance-hdr {
     openexr = openexr_2;
   };
