@@ -1,22 +1,10 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  makeWrapper,
-  autoPatchelfHook,
-  libx11,
-  libxext,
-  libxrandr,
-  libxinerama,
-  libglvnd,
-  openal,
-  glibc,
-  makeDesktopItem,
-  copyDesktopItems,
-  imagemagick,
-  liberation_ttf,
+  pkgsi686Linux,
 }:
-stdenv.mkDerivation rec {
+
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "unigine-sanctuary";
   version = "2.3";
 
@@ -26,9 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   libPath = lib.makeLibraryPath [
-    libglvnd
-    openal
-    glibc
+    pkgsi686Linux.libglvnd
+    pkgsi686Linux.openal
+    pkgsi686Linux.glibc
   ];
 
   installPhase = ''
@@ -47,7 +35,7 @@ stdenv.mkDerivation rec {
     convert -size 256x256 xc:Transparent -define gradient:center="128,128" -define gradient:vector="128,128 128,128" \
       -define gradient:radii="128,128" -fill radial-gradient:'rgb(164,0,0)-rgb(67,1,3)' \
       -draw "roundRectangle 0,0 256,256 50,50" ${pname}-${version}/icon.png
-    convert ${pname}-${version}/icon.png -size 181.991x181.991 -font ${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf \
+    convert ${pname}-${version}/icon.png -size 181.991x181.991 -font ${pkgsi686Linux.liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf \
       -pointsize 181.991 -define gradient:center="128,128" -define gradient:vector="128,128 128,128" \
       -define gradient:radii="46.6974,46.6974" -fill radial-gradient:'rgb(249,197,46)-rgb(218,144,31)' \
       -stroke none -strokewidth 4.54977 -draw 'text 69.3061,194.247 "S"' ${pname}-${version}/icon.png
@@ -62,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItems = [
-    (makeDesktopItem {
+    (pkgsi686Linux.makeDesktopItem {
       name = "Sanctuary";
       exec = "Sanctuary";
       genericName = "A GPU Stress test tool from the UNIGINE";
@@ -72,18 +60,18 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    makeWrapper
-    imagemagick
-    copyDesktopItems
+    pkgsi686Linux.autoPatchelfHook
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.imagemagick
+    pkgsi686Linux.copyDesktopItems
   ];
 
   buildInputs = [
-    stdenv.cc.cc
-    libx11
-    libxext
-    libxrandr
-    libxinerama
+    pkgsi686Linux.stdenv.cc.cc
+    pkgsi686Linux.libx11
+    pkgsi686Linux.libxext
+    pkgsi686Linux.libxrandr
+    pkgsi686Linux.libxinerama
   ];
 
   dontUnpack = true;

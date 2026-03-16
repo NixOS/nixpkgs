@@ -9427,8 +9427,6 @@ with pkgs;
     }
   );
 
-  unigine-sanctuary = pkgsi686Linux.callPackage ../applications/graphics/unigine-sanctuary { };
-
   uuagc = haskell.lib.compose.justStaticExecutables haskellPackages.uuagc;
 
   vim = vimUtils.makeCustomizable (
