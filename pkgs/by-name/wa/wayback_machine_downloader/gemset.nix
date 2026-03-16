@@ -1,12 +1,23 @@
 {
-  wayback_machine_downloader = {
+  concurrent-ruby = {
     groups = [ "default" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "170426sashqc2k2angg8d0bhs7spi1x1isv6cyk2hif0l6xxm3cm";
+      sha256 = "a1aDfh5+UpL5hk80tpxaLLx1wM9TOPHOmQPRD6di1as=";
       type = "gem";
     };
-    version = "2.3.1";
+    version = "1.3.6";
+  };
+  wayback_machine_downloader_straw = {
+    dependencies = [ "concurrent-ruby" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "mf5FxPcC3GWKLy8xAXFidzBjbBeRYGMMxWIKOd2NAEw=";
+      type = "gem";
+    };
+    version = "2.4.6";
   };
 }
