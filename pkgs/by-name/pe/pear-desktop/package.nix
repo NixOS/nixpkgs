@@ -14,7 +14,7 @@
   nix-update-script,
 
   # Extra Chromium/Electron flags for eg driver-specific GPU tuning
-  commandLineArgs ? "",
+  commandLineArgs ? [ ],
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pear-desktop";
@@ -102,8 +102,8 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       makeWrapper ${electron}/bin/electron $out/bin/pear-desktop \
     ''
-    + lib.optionalString (commandLineArgs != "") ''
-      --add-flags ${lib.escapeShellArg commandLineArgs} \
+    + lib.optionalString (commandLineArgs != [ ]) ''
+      --add-flags ${lib.escapeShellArg (lib.concatStringsSep " " commandLineArgs)} \
     ''
     + ''
       --add-flags $out/share/pear-desktop/resources/app.asar \
