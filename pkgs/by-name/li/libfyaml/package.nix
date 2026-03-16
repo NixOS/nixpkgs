@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfyaml";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "pantoniou";
     repo = "libfyaml";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2cbw67gDcp5ufsSp+QQg8vOQx0cFcM2rTkAQ/53XB8I=";
+    hash = "sha256-mRQQe+J5wtLt/bI/Wer9TVGdU3a1zp3zFCm4oNQON8M=";
   };
 
   nativeBuildInputs = [
