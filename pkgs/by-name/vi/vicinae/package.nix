@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.20.5";
+  version = "0.20.7";
 
   src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k3rmWZlUYLMOT33AvwZ56eZfjNc6KXH2AN5Fe8LDKFM=";
+    hash = "sha256-tfx8byB4/LaNA7dsR4zIMtZHSBX8mvYK6jCvQlfVx0E=";
   };
 
   apiDeps = fetchNpmDeps {
@@ -84,6 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    # Toggle telemetry from opt-out to opt-in
+    substituteInPlace extra/config.jsonc \
+      --replace-fail '"system_info": true' '"system_info": false'
+
     local postPatchHooks=()
     source ${npmHooks.npmConfigHook}/nix-support/setup-hook
     npmRoot=src/typescript/api npmDeps=${finalAttrs.apiDeps} npmConfigHook
