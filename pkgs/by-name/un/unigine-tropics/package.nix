@@ -3,16 +3,14 @@
   fetchurl,
   pkgsi686Linux,
 }:
-let
-  version = "1.3";
-in
-pkgsi686Linux.stdenv.mkDerivation {
+
+pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "unigine-tropics";
-  inherit version;
+  version = "1.3";
 
   src = fetchurl {
-    url = "https://assets.unigine.com/d/Unigine_Tropics-${version}.run";
-    sha256 = "sha256-/eA1i42/PMcoBbUJIGS66j7QpZ13oPkOi1Y6Q27TikU=";
+    url = "https://assets.unigine.com/d/Unigine_Tropics-${finalAttrs.version}.run";
+    hash = "sha256-/eA1i42/PMcoBbUJIGS66j7QpZ13oPkOi1Y6Q27TikU=";
   };
 
   libPath = lib.makeLibraryPath [
@@ -86,4 +84,4 @@ pkgsi686Linux.stdenv.mkDerivation {
     ];
     mainProgram = "Tropics";
   };
-}
+})
