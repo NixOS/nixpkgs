@@ -80,6 +80,9 @@ buildPythonPackage (finalAttrs: {
     description = "Shard File Format for the Software Heritage Object Storage";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-shard";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.dotlambda ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      drupol
+    ];
   };
 })
