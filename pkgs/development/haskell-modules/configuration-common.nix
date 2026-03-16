@@ -173,6 +173,12 @@ with haskellLib;
     }
   );
 
+  # First to upgrade to lsp >= 2.8 while HLS hasn't yet had a compatible release
+  futhark = super.futhark.override {
+    lsp = self.lsp_2_8_0_0;
+    lsp-types = self.lsp-types_2_4_0_0;
+  };
+
   #######################################
   ### HASKELL-LANGUAGE-SERVER SECTION ###
   #######################################
@@ -1198,20 +1204,6 @@ with haskellLib;
   # https://github.com/ndmitchell/shake/issues/804
   shake = dontCheck super.shake;
 
-  # https://github.com/martijnbastiaan/doctest-parallel/pull/99
-  doctest-parallel = lib.pipe super.doctest-parallel [
-    (appendPatch (fetchpatch {
-      name = "ghc-9.14-fixes";
-      url = "https://github.com/martijnbastiaan/doctest-parallel/commit/f3a40202ef8d2d4927dae706bf89f11b2800202d.patch";
-      sha256 = "sha256-mKF/hpMXWq5meiBHNbIKAz6c33DWE7zzHkS+Hgl5uX4";
-    }))
-    (overrideCabal (drv: {
-      # Revision change is not present in PR target branch
-      editedCabalFile = null;
-      revision = null;
-    }))
-  ];
-
   # https://github.com/nushio3/doctest-prop/issues/1
   doctest-prop = dontCheck super.doctest-prop;
 
@@ -1991,6 +1983,14 @@ with haskellLib;
     })
   ] super.moto;
 
+  # c2hs/language-c don't support C23 [[nodiscard]] yet: https://github.com/visq/language-c/issues/107.
+  # To work around this, we tell the preprocessor of GCC 15 to use an older standard (the GCC 14 default).
+  avif =
+    if pkgs.stdenv.hasCC && pkgs.stdenv.cc.isGNU then
+      appendConfigureFlags [ "--c2hs-options=--cppopts=-std=gnu17" ] super.avif
+    else
+      super.avif;
+
   # Readline uses Distribution.Simple from Cabal 2, in a way that is not
   # compatible with Cabal 3. No upstream repository found so far
   readline = appendPatch ./patches/readline-fix-for-cabal-3.patch super.readline;
@@ -2086,6 +2086,12 @@ with haskellLib;
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
   database-id-class = doJailbreak super.database-id-class;
+
+  # Allow granite >= 0.4
+  dataframe = lib.pipe super.dataframe [
+    (warnAfterVersion "0.5.0.1")
+    doJailbreak
+  ];
 
   # TODO: when (likely in 25.x) Stackage bumps random to 1.3, review
   dataframe-persistent = lib.pipe super.dataframe-persistent [
@@ -3075,6 +3081,10 @@ with haskellLib;
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
 
+  # Missing test files in sdist
+  # https://github.com/vmchale/lzlib/issues/1
+  lzlib = dontCheck super.lzlib;
+
   # 2025-07-29: test suite "test" fails to build because of missing source files,
   # fixed by https://github.com/commercialhaskell/path/pull/193
   path = warnAfterVersion "0.9.6" (dontCheck super.path);
@@ -3148,12 +3158,6 @@ with haskellLib;
 
   # 2025-04-13: jailbreak to allow hedgehog >= 1.5
   hw-bits = warnAfterVersion "0.7.2.2" (doJailbreak super.hw-bits);
-
-  # 2025-04-23: jailbreak to allow bytestring >= 0.12
-  brillo-rendering = warnAfterVersion "1.13.3" (doJailbreak super.brillo-rendering);
-  brillo-examples = warnAfterVersion "1.13.3" (doJailbreak super.brillo-examples);
-  brillo-juicy = warnAfterVersion "0.2.4" (doJailbreak super.brillo-juicy);
-  brillo = warnAfterVersion "1.13.3" (doJailbreak super.brillo);
 
   monad-bayes =
     # Floating point precision issues. Test suite is only checked on x86_64.
