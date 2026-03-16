@@ -4174,8 +4174,6 @@ self: super: with self; {
 
   django-environ = callPackage ../development/python-modules/django-environ { };
 
-  django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
-
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
   django-filer = callPackage ../development/python-modules/django-filer { };
