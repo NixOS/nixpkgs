@@ -1330,8 +1330,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.28.2";
-          hash = "sha256-zRptDItJuLcHTkKUarpsXlRBa4R84cupKXKtBt5Stmw=";
+          version = "2.28.3";
+          hash = "sha256-4GRwqcuZJ3hAM58tUyOyCNEUq2cAIk17wscqAeJ0gSg=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.128.0";
-          hash = "sha256-ujDnHmhMorewvIH+zJXSnUpnMfQNE5XqHA1lnsq22Qk=";
+          version = "0.132.0";
+          hash = "sha256-2+hB2qENwiVawP3mavUAObjWwXlsDrKXa4u9TyXV3AM=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2885,8 +2885,8 @@ let
         mktplcRef = {
           name = "marp-vscode";
           publisher = "marp-team";
-          version = "3.3.0";
-          hash = "sha256-Z/dhVvmyhyjEM3QUswLA2ExXeFIRzNOUn7Kd6s/C50k=";
+          version = "3.4.0";
+          hash = "sha256-2mH/rs1TVSbw2z8fkcAea8xKmW1hXM4vET99wd1tJHc=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3828,8 +3828,8 @@ let
         mktplcRef = {
           name = "ansible";
           publisher = "redhat";
-          version = "26.1.3";
-          hash = "sha256-iBAlDqi7u/srkgBBLha/JCHZnpccz37BdZ7zVJVfJYY=";
+          version = "26.3.0";
+          hash = "sha256-c6NcQsJe2sjJH/nBhStHYWKNSfJtU3CLHpv+2qPlyqM=";
         };
         meta = {
           description = "Ansible language support";

@@ -1,18 +1,21 @@
 {
-  lib,
   fetchFromGitHub,
+  lib,
   python3Packages,
+  versionCheckHook,
+  nix-update-script,
 }:
-python3Packages.buildPythonPackage {
+
+python3Packages.buildPythonPackage rec {
   pname = "nixoscope";
-  version = "0-unstable-2026-03-05";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "giomf";
     repo = "nixoscope";
-    rev = "71de2ff0b4c9376db759a05ad58ace87d2b52ccb";
-    hash = "sha256-5yNGtEWlSAfJcy4X8C3dHQ+4Xaawi6aX20C82bfZxG4=";
+    tag = "v${version}";
+    hash = "sha256-9w5+KgC1daxGZ0BEVX75bKExpdnzik5pFnOPGHLDtiQ=";
   };
 
   build-system = with python3Packages; [
@@ -22,6 +25,18 @@ python3Packages.buildPythonPackage {
   dependencies = with python3Packages; [
     graphviz
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+  ];
+
+  unittestFlags = [
+    "-s"
+    "tests"
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Visualize dependencies between NixOS modules";
