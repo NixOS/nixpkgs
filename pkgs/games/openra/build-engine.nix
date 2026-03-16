@@ -100,7 +100,10 @@ buildDotnetModule {
     homepage = "https://www.openra.net/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.mdarocha ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ 
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "openra-ra";
   };
 }
