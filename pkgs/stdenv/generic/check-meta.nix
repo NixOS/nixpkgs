@@ -500,13 +500,13 @@ let
       version,
       update,
       edition,
+      language,
       sw_edition,
       target_sw,
       target_hw,
-      language,
       other,
     }:
-    "cpe:2.3:${part}:${vendor}:${product}:${version}:${update}:${edition}:${sw_edition}:${target_sw}:${target_hw}:${language}:${other}";
+    "cpe:2.3:${part}:${vendor}:${product}:${version}:${update}:${edition}:${language}:${sw_edition}:${target_sw}:${target_hw}:${other}";
   possibleCPEPartsFuns = [
     (vendor: version: {
       success = true;
