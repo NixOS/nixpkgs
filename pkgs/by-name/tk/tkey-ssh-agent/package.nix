@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "tkey-ssh-agent";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tillitis";
     repo = "tkey-ssh-agent";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Uf3VJJfZn4UYX1q79JdaOfrore+L/Mic3whzpP32JV0=";
+    hash = "sha256-VwhWIQ+ZTwYD3NwxCImrtK49+i31Cc7xBjx5Cxvm+PA=";
   };
 
-  vendorHash = "sha256-SFyp1UB6+m7/YllRyY56SwweJ3X175bChXQYiG2M7zM=";
+  vendorHash = "sha256-/lSC2+TjG2Ps9t8BbcgXIFWeFykszJM3hr2DqSrnkO8=";
 
   subPackages = [
     "cmd/tkey-ssh-agent"
