@@ -110,6 +110,6 @@ buildPythonPackage (finalAttrs: {
     description = "Abstraction layer over the archive, allowing to access all stored source code artifacts as well as their metadata";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-storage";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
 })
