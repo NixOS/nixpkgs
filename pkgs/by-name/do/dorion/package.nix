@@ -20,7 +20,6 @@
   webkitgtk_4_1,
   cargo-tauri,
   desktop-file-utils,
-  fetchpatch,
   pipewire,
 }:
 
@@ -42,38 +41,29 @@ in
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dorion";
-  version = "6.12.0";
+  version = "6.12.1";
 
   src = fetchFromGitHub {
     owner = "SpikeHD";
     repo = "Dorion";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pykmoSiV3iSaD/V/Sd5GSV/BZWhk9XVg8io1j8wZv5k=";
+    hash = "sha256-0ROpZVD+p/dz5SXwqOJKWdeG1dJd04M5u13LV1JYHlQ=";
   };
-
-  patches = [
-    # https://github.com/SpikeHD/Dorion/issues/419
-    (fetchpatch {
-      url = "https://github.com/SpikeHD/Dorion/commit/98d50dadd1a7fb018698a3fe61ac104cbe89b5d4.patch";
-      hash = "sha256-1VbB2CVMUWw18lWC4EL83VS4SdC03AxDUKRq/hQNAAg=";
-    })
-  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-FJ4gQKgZkYqvjcqcRapJ8IQWP52kIg4uOTxifKG8zyo=";
+  cargoHash = "sha256-PSL3LfiCiYey6cizWpogQxWOtMNByPZxHkziyQG8x0w=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      patches
       ;
     pnpm = pnpm_9;
     fetcherVersion = 3;
-    hash = "sha256-qSmIyLv8A+JDbTVG+Qcvq3gqBXBGtfbH4/tN+CvEmd8=";
+    hash = "sha256-E45X3JEns1TE+SVbtbBEl+RzwRgTiGN7/N4OgJ5o63o=";
   };
 
   # CMake (webkit extension)
