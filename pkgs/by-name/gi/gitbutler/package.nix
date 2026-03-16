@@ -120,29 +120,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "but-cherry-apply"
     "but-worktrees"
   ]
-  ++ [
-    "--"
-  ]
-  # Skip these specific tests
-  ++ lib.concatMap (test: [ "--skip=${test}" ]) [
-    # These tests try connecting to a local address (192.0.2.1) and expect the
-    # connection to fail in a certain way. When run on macOS with a network
-    # sandbox (?) these tests fail while preparing the socket.
-    # https://github.com/NixOS/nixpkgs/pull/473706#issuecomment-3734337124
-    "test_is_network_error"
-    # assertion `left == right` failed: GIT_EDITOR should take precedence if git is executed correctly
-    #  left: "vi"
-    # right: "from-GIT_EDITOR"
-    "git_editor_takes_precedence"
-    # FLAKY (try again): child exited unsuccessfully: ExitStatus(unix_wait_status(10752))
-    "migrations_in_parallel_with_processes"
-    # Archive at 'tests/fixtures/generated-archives/[...].tar' not found [..] Error: No such file or directory (os error 2)
-    "merge_first_branch_into_gb_local_and_verify_rebase"
-    "json_output_with_dangling_commits"
-    "two_dangling_commits_different_branches"
-    # darwin: Error: timeout waiting for matching event
-    "track_directory_changes_after_rename"
-  ];
+  ++ [ "--" ]
+  ++ lib.concatMap (test: [ "--skip=${test}" ]) finalAttrs.passthru.skippedTests;
 
   env = {
     # Make sure `crates/gitbutler-tauri/inject-git-binaries.sh` can find our
@@ -156,7 +135,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # task tracing requires Tokio to be built with RUSTFLAGS="--cfg tokio_unstable"
     RUSTFLAGS = "--cfg tokio_unstable";
 
-    TUBRO_BINARY_PATH = lib.getExe turbo;
+    TURBO_BINARY_PATH = lib.getExe turbo;
     TURBO_TELEMETRY_DISABLED = 1;
 
     OPENSSL_NO_VENDOR = true;
@@ -185,6 +164,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
     '';
 
   passthru = {
+    inherit (finalAttrs) cargoHash;
+
+    # Shared skip list used by both the gitbutler desktop and gitbutler-cli test runs.
+    # cargo's --skip does substring matching, so prefixes like "tui::tests" cover whole modules.
+    skippedTests = [
+      # These tests try connecting to a local address (192.0.2.1) and expect the
+      # connection to fail in a certain way. When run on macOS with a network
+      # sandbox (?) these tests fail while preparing the socket.
+      # https://github.com/NixOS/nixpkgs/pull/473706#issuecomment-3734337124
+      "test_is_network_error"
+      # assertion `left == right` failed: GIT_EDITOR should take precedence if git is executed correctly
+      #  left: "vi"
+      # right: "from-GIT_EDITOR"
+      "git_editor_takes_precedence"
+      # FLAKY (try again): child exited unsuccessfully: ExitStatus(unix_wait_status(10752))
+      "migrations_in_parallel_with_processes"
+      # Archive at 'tests/fixtures/generated-archives/[...].tar' not found [..] Error: No such file or directory (os error 2)
+      "merge_first_branch_into_gb_local_and_verify_rebase"
+      "json_output_with_dangling_commits"
+      "two_dangling_commits_different_branches"
+      "new_from_project_handle_uses_repo_gitdir"
+      "new_from_project_handle_keeps_repo_cached"
+      # darwin: Error: timeout waiting for matching event
+      "track_directory_changes_after_rename"
+      # TUI snapshot tests require a real terminal; fail in the nix sandbox
+      "command::legacy::status::tui::tests"
+    ];
+
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
