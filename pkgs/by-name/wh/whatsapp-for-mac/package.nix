@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-mac";
-  version = "2.26.9.17";
+  version = "2.26.10.18";
 
   src = fetchzip {
     extension = "zip";
     name = "WhatsApp.app";
     url = "https://web.whatsapp.com/desktop/mac_native/release/?version=${finalAttrs.version}&extension=zip&configuration=Release&branch=master";
-    hash = "sha256-bba22HBnIeio4M92mckiOa1IQpRUfx/I7OkfA4hO6rU=";
+    hash = "sha256-cQB2AF/emNHtSpf1DrjCV+yds8kbD2Lv9UTkAo7CZlM=";
   };
 
   dontConfigure = true;
