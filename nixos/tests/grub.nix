@@ -49,7 +49,7 @@
     grub_select_all_configurations()
     with subtest("Invalid credentials are rejected"):
         grub_login_as("wronguser", "wrongsecret")
-        machine.wait_for_console_text("error: access denied.")
+        machine.wait_for_console_text("error: normal/auth.c:grub_auth_check_authentication:285:access denied.")
 
     grub_select_all_configurations()
     with subtest("Valid credentials are accepted"):
