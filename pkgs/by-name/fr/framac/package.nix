@@ -45,14 +45,14 @@ let
   ocamlpath = lib.concatMapStringsSep ":" mkocamlpath runtimeDeps;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frama-c";
-  version = "31.0";
-  slang = "Gallium";
+  version = "32.0";
+  slang = "Germanium";
 
   src = fetchurl {
-    url = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-qUOE8A1TeRy7S02Dq0Fge8cZYtQkYfAtcRFsT/bcpWc=";
+    url = "https://frama-c.com/download/frama-c-${finalAttrs.version}-${finalAttrs.slang}.tar.gz";
+    hash = "sha256-rQNWLRpS0cIAkS0OhLxwDnov+ju14yqi81fIzUljDHs=";
   };
 
   preConfigure = ''
@@ -92,6 +92,7 @@ stdenv.mkDerivation rec {
     ppx_deriving
     ppx_deriving_yaml
     ppx_deriving_yojson
+    ppx_inline_test
     gdk-pixbuf
     unionFind
   ];
@@ -140,4 +141,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     broken = !lib.versionAtLeast ocamlPackages.ocaml.version "4.14";
   };
-}
+})
