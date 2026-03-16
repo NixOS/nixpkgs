@@ -105,6 +105,7 @@ buildGoModule (finalAttrs: {
       piperswe
       qjoly
       wrbbz
+      ryand56
     ];
     mainProgram = "cloudflared";
   };
