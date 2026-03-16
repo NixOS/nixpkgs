@@ -22,7 +22,7 @@
   pkgs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-export";
   version = "1.8.0";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-export";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-n97MMYn7EmTrv411YSxUD1+zfbFB8KOSns44N3NqqV8=";
   };
 
@@ -87,4 +87,4 @@ buildPythonPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})
