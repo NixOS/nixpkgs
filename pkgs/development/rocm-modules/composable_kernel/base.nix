@@ -5,7 +5,6 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  llvm,
   clr,
   rocminfo,
   python3,
@@ -124,7 +123,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
-  # No flags to build selectively it seems...
+  patches = [
+    # Hacky fix for failure for some targets when all targets are selected out
+    # for a non-optional at link time kernel
+    ./fix-empty-offload-targets.diff
+  ];
+
   postPatch =
     # Reduce configure time by preventing thousands of clang-tidy targets being added
     # We will never call them
