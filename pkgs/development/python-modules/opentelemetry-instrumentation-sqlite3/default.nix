@@ -30,6 +30,6 @@ buildPythonPackage {
 
   meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/blob/main/instrumentation/opentelemetry-instrumentation-sqlite3";
-    description = "OpenTelemetry Instrumentation for Django";
+    description = "OpenTelemetry SQLite3 instrumentation";
   };
 }
