@@ -1,5 +1,5 @@
 import ./generic.nix {
-  kafkaVersion = "3.9.1";
+  kafkaVersion = "3.9.2";
   scalaVersion = "2.13";
-  hash = "sha256-3UOZgW5niUbKt2470WhhA1VeabyPKrhobNpxqhW8MaM=";
+  hash = "sha256-1dlRwiSE+aCQiwVWO8gKBC3pd53x4GqJ930nzrX2gyM=";
 }

@@ -20,12 +20,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marvin";
-  version = "25.3.5";
+  version = "25.5.0";
 
   src = fetchurl {
     name = "marvin-${finalAttrs.version}.deb";
     url = "http://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
-    hash = "sha256-OiTHMGKAuHadoKQMTTPRcYl/zKL+bc0ts/UNsJlHn0Q=";
+    hash = "sha256-+fTO6cEJL4QRFpLQ9CXZFt7Jg3otR3ZMWN5vH+3QXmA=";
   };
 
   nativeBuildInputs = [

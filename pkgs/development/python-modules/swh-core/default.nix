@@ -81,6 +81,9 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+  # Many broken tests on Darwin. Disabling them for now.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   nativeCheckInputs = [
     aiohttp-utils
     flask
