@@ -7617,8 +7617,6 @@ with pkgs;
 
   vtkWithQt6 = vtk.override { withQt6 = true; };
 
-  vulkan-caps-viewer = libsForQt5.callPackage ../tools/graphics/vulkan-caps-viewer { };
-
   wayland = callPackage ../development/libraries/wayland { };
   wayland-scanner = callPackage ../development/libraries/wayland/scanner.nix { };
 

@@ -27,6 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-fix-project-name.patch
     ./0003-fix-darwin-app.patch
     ./0004-force-qt6.patch
+    # This has been committed upstream, but hasn't been released
+    #  https://github.com/complexlogic/EasyAudioSync/commit/5bf22927f9e83dc3043e09370bb54815085a00ba
+    ./0005-fix-ffmpeg-dep-functions.patch
   ];
 
   nativeBuildInputs = [
