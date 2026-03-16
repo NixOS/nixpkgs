@@ -33,6 +33,6 @@ buildPythonPackage {
 
   meta = opentelemetry-instrumentation.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/blob/main/instrumentation/opentelemetry-instrumentation-system-metrics";
-    description = "OpenTelemetry Instrumentation for Django";
+    description = "OpenTelemetry System Metrics Instrumentation";
   };
 }
