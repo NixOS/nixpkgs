@@ -4248,8 +4248,6 @@ self: super: with self; {
 
   django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
 
-  django-markdownify = callPackage ../development/python-modules/django-markdownify { };
-
   django-markdownx = callPackage ../development/python-modules/django-markdownx { };
 
   django-markup = callPackage ../development/python-modules/django-markup { };
