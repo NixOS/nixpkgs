@@ -30397,5 +30397,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  huanghunr = {
+    email = "huanghunr@outlook.com";
+    github = "huanghunr";
+    githubId = 160948982;
+    name = "huanghunr";
+  };
   # keep-sorted end
 }
