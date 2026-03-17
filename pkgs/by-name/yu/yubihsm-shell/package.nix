@@ -94,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
     # so we expect a failure here, but it should at least try to connect
     yubihsm-connector -d </dev/null 1>&2 2>connector.log &
     yubihsm_pid=$!
+    idx=0
+    while ! grep takeoff connector.log >/dev/null && [ $idx -lt 10 ]; do
+      idx=$((idx+1))
+      echo "Waiting for yubihsm-connector startup (try: $idx)" >&2
+      sleep 1
+    done
     $out/bin/yubihsm-shell -Pv1 </dev/null || true
     kill -INT "$yubihsm_pid" && { wait "$yubihsm_pid" || true; }
     cat connector.log >&2

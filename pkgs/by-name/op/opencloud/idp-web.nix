@@ -2,9 +2,7 @@
   stdenvNoCC,
   lib,
   opencloud,
-  applyPatches,
-  fetchpatch,
-  pnpm_10,
+  pnpm_9,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
@@ -12,33 +10,22 @@
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencloud-idp-web";
 
-  inherit (opencloud) version;
-
-  src = applyPatches {
-    src = opencloud.src;
-    patches = [
-      # Fixes broken kopano tarball, remove in next version
-      (fetchpatch {
-        url = "https://github.com/opencloud-eu/opencloud/commit/212846f2f4e23e89ed675e5a689d87ba1de55b70.patch";
-        hash = "sha256-i+fkWTY4nrZ5fVGlQhhamxy9yrBL9OtDdm7CfV13oak=";
-      })
-    ];
-  };
+  inherit (opencloud) src version;
 
   pnpmRoot = "services/idp";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_9;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pnpmRoot}";
     fetcherVersion = 3;
-    hash = "sha256-W5odz//dONpBg4eRQQoVrBMVsEQVkkP89hzMdIXxG7w=";
+    hash = "sha256-AAAzo//YG5X2531C3vEhsLHRYJilRcomT5uTBSmzNmQ=";
   };
 
   nativeBuildInputs = [
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_9
   ];
 
   buildPhase = ''
