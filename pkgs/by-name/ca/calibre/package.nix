@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
         pykakasi
         pyqt-builder
         pyqt6
+        pystache
         python
         regex
         sip
