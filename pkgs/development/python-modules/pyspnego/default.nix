@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.12.0";
+  version = "0.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "pyspnego";
     tag = "v${version}";
-    hash = "sha256-dkss+8Z0dS4MTunBZWEH+WK1+kGikCHf7VPCR1reMS0=";
+    hash = "sha256-nO+WNpgPAunBSFbrCRb/W511z0nXUIK7XT/SisTk2+0=";
   };
 
   nativeBuildInputs = [ setuptools ];
