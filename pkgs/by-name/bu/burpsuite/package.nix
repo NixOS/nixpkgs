@@ -2,15 +2,14 @@
   lib,
   buildFHSEnv,
   fetchurl,
-  jdk,
   makeDesktopItem,
+  copyDesktopItems,
+  jdk,
   proEdition ? false,
   unzip,
 }:
 
 let
-  version = "2026.1.2";
-
   product =
     if proEdition then
       {
@@ -24,6 +23,10 @@ let
         productDesktop = "Burp Suite Community Edition";
         hash = "sha256-5LNzF68VhGdWttzZCkw/Ign4x6V4EhU/EHMddeSVirk=";
       };
+in
+buildFHSEnv rec {
+  pname = "burpsuite";
+  version = "2026.1.2";
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -35,24 +38,24 @@ let
     hash = product.hash;
   };
 
-  pname = "burpsuite";
-  description = "Integrated platform for performing security testing of web applications";
-  desktopItem = makeDesktopItem {
-    name = "burpsuite";
-    exec = pname;
-    icon = pname;
-    desktopName = product.productDesktop;
-    comment = description;
-    categories = [
-      "Development"
-      "Security"
-      "System"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = meta.mainProgram;
+      icon = pname;
+      desktopName = product.productDesktop;
+      comment = meta.description;
+      categories = [
+        "Development"
+        "Security"
+        "System"
+      ];
+    })
+  ];
 
-in
-buildFHSEnv {
-  inherit pname version;
+  nativeBuildInputs = [
+    copyDesktopItems
+  ];
 
   runScript = "${jdk}/bin/java -jar ${src}";
 
@@ -86,16 +89,16 @@ buildFHSEnv {
       libxrandr
     ];
 
+  # install icon
   extraInstallCommands = ''
     mkdir -p "$out/share/icons/hicolor/64x64/apps"
-    ${lib.getBin unzip}/bin/unzip -p ${src} resources/Media/icon64${product.productName}.png > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
-    cp -r ${desktopItem}/share/applications $out/share
+    ${lib.getBin unzip}/bin/unzip -p "${src}" "resources/Media/icon64${product.productName}.png" > "$out/share/icons/hicolor/64x64/apps/burpsuite.png"
   '';
 
   passthru.updateScript = ./update.sh;
 
   meta = {
-    inherit description;
+    description = "Integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
       Its various tools work seamlessly together to support the entire testing process, from
