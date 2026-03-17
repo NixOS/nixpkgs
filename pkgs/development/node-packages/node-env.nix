@@ -547,6 +547,7 @@ let
           python
           nodejs
         ]
+        ++ lib.optional (nodejs ? npm) nodejs.npm
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
         ++ buildInputs;
@@ -669,6 +670,7 @@ let
           python
           nodejs
         ]
+        ++ lib.optional (nodejs ? npm) nodejs.npm
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
         ++ buildInputs;
@@ -768,6 +770,7 @@ let
           python
           nodejs
         ]
+        ++ lib.optional (nodejs ? npm) nodejs.npm
         ++ lib.optional (stdenv.hostPlatform.isLinux) pkgs.util-linux
         ++ buildInputs;
         buildCommand = ''
