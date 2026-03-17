@@ -44,18 +44,21 @@ let
     {
       aarch64-darwin = any-darwin;
       x86_64-darwin = any-darwin;
+      # use https://web.archive.org/save to archive the Linux versions
+      # add `if_` at the end of timestamps to avoid toolbar insertion
+      # for a more complicated guide, see https://en.wikipedia.org/wiki/Help:Using_the_Wayback_Machine
       aarch64-linux = {
-        version = "4.1.0.13";
+        version = "4.1.1.4";
         src = fetchurl {
-          url = "https://web.archive.org/web/20251209092116if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-          hash = "sha256-/d5crM6IGd0k0fSlBSQx4TpIVX/8iib+an0VMkWMNdw=";
+          url = "https://web.archive.org/web/20260311102559if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
+          hash = "sha256-YlWJxT62tXDaNwYVpsPMC5elFH8fsbI1HjTQn6ePiPo=";
         };
       };
       x86_64-linux = {
-        version = "4.1.0.13";
+        version = "4.1.1.4";
         src = fetchurl {
-          url = "https://web.archive.org/web/20251219062558if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
-          hash = "sha256-+r5Ebu40GVGG2m2lmCFQ/JkiDsN/u7XEtnLrB98602w=";
+          url = "https://web.archive.org/web/20260311102439if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_x86_64.AppImage";
+          hash = "sha256-XxAvFnlljqurGPDgRr+DnuCKbdVvgXBPh02DLHY3Oz8=";
         };
       };
     };
