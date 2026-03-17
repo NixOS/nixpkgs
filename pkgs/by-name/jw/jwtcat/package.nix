@@ -24,7 +24,11 @@ python3Packages.buildPythonApplication {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 jwtcat.py $out/bin/jwtcat
+    
+    runHook postInstall
   '';
 
   meta = {
