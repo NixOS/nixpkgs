@@ -29,7 +29,7 @@ buildNpmPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
-  npmDepsHash = "sha256-Qi41qDJ0WR0QWw7guhuz1imT51SqI7mORGjNbmZWnio";
+  npmDepsHash = "sha256-ossX/zc9/gQgHmdB6sQzG/w1zYFbskAFCkzCberbNf8=";
 
   strictDeps = true;
   nativeBuildInputs = [ esbuild ];
