@@ -93,6 +93,14 @@ in
       '';
     };
 
+    luaDependencies = lib.mkOption {
+      readOnly = true;
+      type = lib.types.listOf (lib.types.nullOr lib.types.package);
+      example = lib.literalExpression "[ (lp: [ lp.mpack ]) ]";
+      description = ''
+        Lua dependencies required by the plugins.
+      '';
+    };
   };
 
   config =
@@ -122,5 +130,11 @@ in
       ) [ ] pluginsNormalized;
 
       pluginPython3Packages = map (plugin: plugin.python3Dependencies or (_: [ ])) pluginsNormalized;
+
+      luaDependencies =
+        let
+          op = acc: p: acc ++ (p.plugin.requiredLuaModules or [ ]);
+        in
+        lib.foldl' op [ ] pluginsNormalized;
     };
 }
