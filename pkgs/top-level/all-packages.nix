@@ -11377,9 +11377,6 @@ with pkgs;
     waylandSupport = true;
   };
 
-  samsung-unified-linux-driver_4_01_17 = callPackage ../misc/cups/drivers/samsung/4.01.17.nix { };
-  samsung-unified-linux-driver = res.samsung-unified-linux-driver_4_01_17;
-
   sane-backends = callPackage ../applications/graphics/sane/backends (config.sane or { });
 
   sane-drivers = callPackage ../applications/graphics/sane/drivers.nix { };
