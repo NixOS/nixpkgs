@@ -11111,8 +11111,6 @@ with pkgs;
     withNonfreeDb = true;
   };
 
-  dcp9020cdw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcp9020cdw { }).cupswrapper;
-
   dcpj785dw = (pkgsi686Linux.callPackage ../misc/cups/drivers/brother/dcpj785dw { }).driver;
 
   dcpj785dw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcpj785dw { }).cupswrapper;
