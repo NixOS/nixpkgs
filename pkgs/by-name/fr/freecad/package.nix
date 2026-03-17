@@ -119,6 +119,12 @@ freecad-utils.makeCustomizable (
         url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
         hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
       })
+      # Workaround for transparency problems on wayland
+      # Remove once FreeCad 1.1 is released
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/cb8c193408b82e208504f22fa75aa0a4609b00cb.patch?full_index=1";
+        hash = "sha256-e4Ki1zGZveEMXCxXwgwbd9f2KTJi648M9WIc1Vn9YQM=";
+      })
     ];
 
     postPatch = ''
