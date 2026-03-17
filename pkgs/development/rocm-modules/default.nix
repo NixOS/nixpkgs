@@ -4,7 +4,6 @@
   callPackage,
   newScope,
   symlinkJoin,
-  fetchFromGitHub,
   boost179,
   opencv,
   python3Packages,
@@ -28,6 +27,9 @@ let
       stdenv = rocmClangStdenv;
 
       rocmUpdateScript = self.callPackage ./update.nix { };
+
+      rocmVersion = "7.2.0";
+      fetchRocmMonorepoSource = self.callPackage ./fetchRocmMonorepoSource.nix { };
 
       ## ROCm ##
       llvm = lib.recurseIntoAttrs (
@@ -58,7 +60,10 @@ let
       };
 
       rocm-smi = pyPackages.callPackage ./rocm-smi {
-        inherit (self) rocmUpdateScript;
+        inherit (self)
+          fetchRocmMonorepoSource
+          rocmVersion
+          ;
       };
 
       aqlprofile = self.callPackage ./aqlprofile { };
@@ -128,7 +133,8 @@ let
 
       tensile = pyPackages.callPackage ./tensile {
         inherit (self)
-          rocmUpdateScript
+          fetchRocmMonorepoSource
+          rocmVersion
           clr
           ;
       };

@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   fetchzip,
-  rocmUpdateScript,
   cmake,
   rocm-cmake,
   rocprim,
@@ -18,9 +18,27 @@
   gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocsparse";
+    hash = "sha256-hurqdZpBIPrSHeJkBHRy/duFhd6QZ6flNx0Ri+QPfmg=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsparse${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -31,13 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildBenchmarks [
     "benchmark"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocSPARSE";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-jmrX1a09DlQTkuXwkrInt9pKX5pk3oCO88S0pKXXhO0=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -134,23 +145,15 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru = {
-    matrices = import ./deps.nix {
-      inherit fetchzip;
-      mirror1 = "https://sparse.tamu.edu/MM";
-      mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
-    };
-
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
+  passthru.matrices = import ./deps.nix {
+    inherit fetchzip;
+    mirror1 = "https://sparse.tamu.edu/MM";
+    mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
   };
 
   meta = {
+    inherit (source) homepage;
     description = "ROCm SPARSE implementation";
-    homepage = "https://github.com/ROCm/rocSPARSE";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

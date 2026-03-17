@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   symlinkJoin,
   cmake,
   clang,
@@ -41,18 +41,27 @@ let
       rm -rf $out/nix-support
     '';
   };
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "rocprofiler";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocprofiler";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-W32VAdtZdFmkHeUwyHIIHk8yRnABq6gUaHLZ9Bj8kYI=";
-    fetchSubmodules = true;
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocprofiler";
+    hash = "sha256-0Bhg4RVKU5LjOHoeeCVHBWIL216ydDkAPPyAaTqkSoo=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+      fetchSubmodules = true;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
   };
+in
+stdenv.mkDerivation {
+  pname = "rocprofiler";
+  inherit (source) version src sourceRoot;
 
   nativeBuildInputs = [
     cmake
@@ -123,18 +132,13 @@ stdenv.mkDerivation (finalAttrs: {
       --add-needed libhsa-amd-aqlprofile64.so
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
   passthru.rocmtoolkit-merged = rocmtoolkit-merged;
 
   meta = {
+    inherit (source) homepage;
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm/rocprofiler";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   rocblas,
@@ -35,9 +35,27 @@
   ),
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocsolver";
+    hash = "sha256-NusobXJZKvDL1c9ZH6iHQaEtDObbw6FC/GVUZxkSN8A=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
+stdenv.mkDerivation {
   pname = "rocsolver${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -48,13 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildBenchmarks [
     "benchmark"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocSOLVER";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-aCmNTF8P0Y7piPkRnu/+DWFhTd7X8mDcaQpotfw/4hM=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -115,20 +126,15 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = "rocsolver";
-    inherit (finalAttrs.src) owner repo;
-  };
-
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
+    inherit (source) homepage;
     description = "ROCm LAPACK implementation";
-    homepage = "https://github.com/ROCm/rocSOLVER";
     license = with lib.licenses; [ bsd2 ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
   };
-})
+}

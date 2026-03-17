@@ -2,10 +2,11 @@
   lib,
   stdenv,
   callPackage,
-  fetchFromGitHub,
   fetchpatch,
   fetchurl,
   runCommand,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   pkg-config,
   cmake,
   rocm-cmake,
@@ -43,7 +44,6 @@
 let
   # FIXME: cmake files need patched to include this properly
   cFlags = "-Wno-documentation-pedantic --offload-compress -I${hipblas-common}/include -I${hipblas}/include -I${roctracer}/include -I${nlohmann_json}/include -I${sqlite.dev}/include -I${rocrand}/include";
-  version = "7.2.0";
 
   # Targets outside this list will get
   # error: use of undeclared identifier 'CK_BUFFER_RESOURCE_3RD_DWORD'
@@ -64,14 +64,6 @@ let
     "gfx1200"
     "gfx1201"
   ] gpuTargets;
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "MIOpen";
-    rev = "rocm-${version}";
-    hash = "sha256-OwBFzUruHHeJD7n3zLs/NsU5cNEjwkwFgim4m2/1hR0=";
-    fetchSubmodules = true;
-  };
 
   latex = lib.optionalAttrs buildDocs (
     texliveSmall.withPackages (
@@ -112,10 +104,27 @@ let
         ln -sf ${kdb} ${targetPath}/${name}.kdb
       '') kdbs
     );
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/miopen";
+    hash = "sha256-oZ34cwBVjc9QW+169JvIXTyyPkeOw5oHbjJ0wYYBFu0=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+      fetchSubmodules = true;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit version src;
   pname = "miopen";
+  inherit (source) version src sourceRoot;
 
   env.CFLAGS = cFlags;
   env.CXXFLAGS = cFlags;
@@ -301,11 +310,11 @@ stdenv.mkDerivation (finalAttrs: {
       inherit frugally-deep nlohmann_json;
     };
   };
-  passthru.updateScript = ./update.sh;
+  passthru.rocmMonorepo.extraUpdateScript = "update-kdbs.sh";
 
   meta = {
+    inherit (source) homepage;
     description = "Machine intelligence library for ROCm";
-    homepage = "https://github.com/ROCm/MIOpen";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

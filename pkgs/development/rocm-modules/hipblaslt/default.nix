@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   rocm-smi,
@@ -25,7 +26,6 @@
   jemalloc,
   zlib,
   zstd,
-  rocmUpdateScript,
   buildTests ? false,
   buildSamples ? false,
   # hipblaslt supports only devices with MFMA or WMMA
@@ -67,26 +67,29 @@ let
   # maybe we improve the toolchain to use config files + assemble a sysroot
   # so system wide include assumptions work
   cFlags = "-Wno-switch -fopenmp -I${lib.getDev zstd}/include -I${amd-blis}/include/blis/ -I${lib.getDev msgpack-cxx}/include";
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
+  source = rec {
     repo = "rocm-libraries";
-    rev = "rocm-${finalAttrs.version}";
+    version = rocmVersion;
+    sourceSubdir = "projects/hipblaslt";
     hash = "sha256-+yaOUA8hzRPnz14Cmp2BbfIS5811PgMcHQLY2+FatMU=";
-    sparseCheckout = [
-      "projects/hipblaslt"
-      "shared"
-    ];
-    # Compress the 5ish GiB of yaml files so this .src is under output size limit
-    postFetch = ''
-      find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${lib.getExe zstd} --rm {} \;
-    '';
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+      postFetch = ''
+        find $out -name '*.yaml' -path '*/Tensile/Logic/*' -exec ${lib.getExe zstd} --rm {} \;
+      '';
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
   };
-  sourceRoot = "${finalAttrs.src.name}/projects/hipblaslt";
+in
+stdenv.mkDerivation {
+  pname = "hipblaslt${clr.gpuArchSuffix}";
+  inherit (source) version src sourceRoot;
   env.CXX = compiler;
   env.CFLAGS = cFlags;
   env.CXXFLAGS = cFlags;
@@ -245,15 +248,11 @@ stdenv.mkDerivation (finalAttrs: {
   # and are fine ignoring it at runtime if it's not supported
   # so we have to support building an empty hipblaslt
   passthru.supportsTargetArches = supportsTargetArches;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
   meta = {
+    inherit (source) homepage;
     description = "Library that provides general matrix-matrix operations with a flexible API";
-    homepage = "https://github.com/ROCm/hipBLASlt";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

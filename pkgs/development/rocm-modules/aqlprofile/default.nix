@@ -1,21 +1,33 @@
 {
   lib,
   stdenv,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   clr,
   cmake,
-  fetchFromGitHub,
 }:
 
+let
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/aqlprofile";
+    hash = "sha256-Lb4VToGEvFi9UEb89GNzeTFQA4Zm3mx4zYi8EZnrZZ4=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
 stdenv.mkDerivation {
   pname = "aqlprofile";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "aqlprofile";
-    tag = "rocm-7.2.0";
-    hash = "sha256-MAZUHo52gb0aZSFnKugMlXxcDkmMwhy1AFF1RDRgRVk=";
-  };
+  inherit (source) version src sourceRoot;
 
   env.CXXFLAGS = "-DROCP_LD_AQLPROFILE=1";
 
@@ -25,8 +37,8 @@ stdenv.mkDerivation {
   ];
 
   meta = {
+    inherit (source) homepage;
     description = "AQLPROFILE library for AMD HSA runtime API extension support";
-    homepage = "https://github.com/ROCm/aqlprofile/";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

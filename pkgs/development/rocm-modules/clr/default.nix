@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   callPackage,
-  fetchFromGitHub,
   fetchpatch,
-  rocmUpdateScript,
   makeWrapper,
   cmake,
   perl,
@@ -35,7 +35,22 @@
 }:
 
 let
-  inherit (rocm-core) ROCM_LIBPATCH_VERSION;
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/clr";
+    hash = "sha256-faehhFOvGvXsCWpkvkMhoDBVFwj28y805yHZjB9rTJ8=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
   # HIP_CLANG_PATH or ROCM_PATH/llvm
   # Note: relying on ROCM_PATH/llvm is bad for cross
   hipClang = symlinkJoin {
@@ -70,7 +85,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -79,13 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   __structuredAttrs = true;
   strictDeps = true;
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "clr";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-zz2O4Qsl1zXMC25L714azsFR2PROAvdpjgKhRolmt1w=";
-  };
 
   nativeBuildInputs = [
     makeWrapper
@@ -190,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     export HIP_DEVICE_LIB_PATH="${rocm-device-libs}/amdgcn/bitcode"
     export NIX_CC_USE_RESPONSE_FILE=0
     export HIP_CLANG_PATH="${hipClangPath}"
-    export ROCM_LIBPATCH_VERSION="${ROCM_LIBPATCH_VERSION}"
+    export ROCM_LIBPATCH_VERSION="${rocm-core.ROCM_LIBPATCH_VERSION}"
     export HSA_PATH="${rocm-runtime}"' > $out/nix-support/setup-hook
 
     # Just link rocminfo, it's easier
@@ -255,13 +263,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit hipClangPath;
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-      page = "tags?per_page=4";
-    };
-
     impureTests = {
       # bash $(nix-build -A rocmPackages.clr.impureTests.rocm-smi)
       rocm-smi = callPackage ./test-rocm-smi.nix {
@@ -323,8 +324,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    inherit (source) homepage;
     description = "AMD Common Language Runtime for hipamd, opencl, and rocclr";
-    homepage = "https://github.com/ROCm/clr";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
