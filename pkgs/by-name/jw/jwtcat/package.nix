@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication {
     runHook preInstall
 
     install -Dm755 jwtcat.py $out/bin/jwtcat
-    
+
     runHook postInstall
   '';
 
