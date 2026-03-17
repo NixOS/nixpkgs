@@ -1,34 +1,33 @@
 {
   lib,
-  buildPythonApplication,
-  click,
-  i3ipc,
-  psutil,
-  natsort,
+  python3Packages,
   fetchPypi,
   xprop,
   xdotool,
-  importlib-metadata,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "i3-resurrect";
   version = "1.4.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-13FKRvEE4vHq5G51G1UyBnfNiWeS9Q/SYCG16E1Sn4c=";
   };
 
-  propagatedBuildInputs = [
-    click
-    psutil
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
+    python3Packages.click
+    python3Packages.psutil
     xprop
-    natsort
-    i3ipc
+    python3Packages.natsort
+    python3Packages.i3ipc
     xdotool
-    importlib-metadata
+    python3Packages.importlib-metadata
   ];
   doCheck = false; # no tests
 
@@ -40,4 +39,4 @@ buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ magnetophon ];
   };
-}
+})

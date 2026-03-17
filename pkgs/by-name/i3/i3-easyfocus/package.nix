@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "cornerman";
     repo = "i3-easyfocus";
     rev = "fffb468f7274f9d7c9b92867c8cb9314ec6cf81a";
-    sha256 = "1db23vzzmp0hnfss1fkd80za6d2pajx7hdwikw50pk95jq0w8wfm";
+    hash = "sha256-1XHEAZYlzQsKn5E3eLpUVzSjPkBtuqC1sxDc+v8eYrU=";
   };
 
   nativeBuildInputs = [ pkg-config ];

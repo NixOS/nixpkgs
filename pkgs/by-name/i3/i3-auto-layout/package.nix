@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage {
     owner = "chmln";
     repo = "i3-auto-layout";
     rev = "9e41eb3891991c35b7d35c9558e788899519a983";
-    sha256 = "sha256-gpVYVyh+2y4Tttvw1SuCf7mx/nxR330Ob2R4UmHZSJs=";
+    hash = "sha256-gpVYVyh+2y4Tttvw1SuCf7mx/nxR330Ob2R4UmHZSJs=";
   };
 
   cargoHash = "sha256-oKpcYhD9QNW+8gFVybDEnz58cZ+2Bf4bwYuflXiJ1jc=";
