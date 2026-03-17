@@ -12,13 +12,13 @@
 buildHomeAssistantComponent rec {
   owner = "bcpearce";
   domain = "gtfs_realtime";
-  version = "0.3.2";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "bcpearce";
     repo = "homeassistant-gtfs-realtime";
     tag = version;
-    hash = "sha256-G3OtDoF+td7IC+zVXJ+c/chdtYMoq6cStZ3dV8eyUZI=";
+    hash = "sha256-iT32ADgDHwBnX6v4UnGkUNtGL9/ukA3EMCLquCBcaKo=";
   };
 
   dependencies = [ gtfs-station-stop ];
