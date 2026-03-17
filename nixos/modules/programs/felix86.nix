@@ -53,7 +53,8 @@ in
           # https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html
           openBinary = true;
           matchCredentials = true;
-          fixBinary = false; # cannot have fixBinary when the interpreter is invoked through a shell
+          fixBinary = true;
+          wrapInterpreterInShell = false;
         };
       in
       lib.mkIf (!cfg.disableBinfmt) {
