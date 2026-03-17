@@ -6,6 +6,7 @@
   cmake,
   dbus,
   fetchFromGitHub,
+  autoPatchelfHook,
   ibusMinimal,
   installShellFiles,
   libGL,
@@ -97,20 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
       substituteInPlace src/dialog/unix/SDL_zenitydialog.c \
         --replace-fail '"zenity"' '"${lib.getExe zenity}"'
-    ''
-    # https://github.com/libsdl-org/SDL/issues/14805
-    + lib.optionalString vulkanSupport ''
-      substituteInPlace src/video/x11/SDL_x11vulkan.c \
-                        src/video/wayland/SDL_waylandvulkan.c \
-                        src/video/offscreen/SDL_offscreenvulkan.c \
-                        src/video/kmsdrm/SDL_kmsdrmvulkan.c \
-                        src/video/vivante/SDL_vivantevulkan.c \
-                        src/video/android/SDL_androidvulkan.c \
-        --replace-fail 'libvulkan.so' '${lib.getLib vulkan-loader}/lib/libvulkan.so'
-    ''
-    + lib.optionalString x11Support ''
-      substituteInPlace src/video/x11/SDL_x11vulkan.c \
-        --replace-fail 'libX11-xcb.so' '${lib.getLib libx11}/lib/libX11-xcb.so'
     '';
 
   strictDeps = true;
@@ -119,8 +106,15 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
+    autoPatchelfHook
   ]
   ++ lib.optional waylandSupport wayland-scanner;
+
+  autoPatchelfFlags = [ "--keep-libc" ];
+  autoPatchelfIgnoreMissingDeps = [
+    "libGLES_CM.so.1"
+    "libsteam_api.so"
+  ];
 
   buildInputs =
     lib.optionals libusbSupport [
