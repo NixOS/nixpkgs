@@ -52,23 +52,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.0.7";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-/WVzqHaDwztvLskE9mSewPlfnVfFPRHQYKvuOitSeNo=";
+    hash = "sha256-OGwMfiY689NFbIPIyY+vKDEC6dB40yiMC6uwRIPBiSQ=";
   };
 
   mesonFlags = [
-    (lib.mesonOption "use_sys_capstone" "true")
-    (lib.mesonOption "use_sys_lz4" "true")
-    (lib.mesonOption "use_sys_magic" "true")
-    (lib.mesonOption "use_sys_openssl" "true")
-    (lib.mesonOption "use_sys_xxhash" "true")
-    (lib.mesonOption "use_sys_zip" "true")
-    (lib.mesonOption "use_sys_zlib" "true")
+    (lib.mesonBool "use_sys_capstone" true)
+    (lib.mesonBool "use_sys_lz4" true)
+    (lib.mesonBool "use_sys_magic" true)
+    (lib.mesonBool "use_sys_openssl" true)
+    (lib.mesonBool "use_sys_xxhash" true)
+    (lib.mesonBool "use_sys_zip" true)
+    (lib.mesonBool "use_sys_zlib" true)
     (lib.mesonOption "r2_gittap" finalAttrs.version)
   ];
 
