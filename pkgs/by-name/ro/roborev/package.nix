@@ -6,7 +6,6 @@
   git,
   installShellFiles,
   testers,
-  roborev,
 }:
 
 buildGoModule (finalAttrs: {
@@ -42,8 +41,8 @@ buildGoModule (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = roborev;
-    command = "roborev version";
+    package = finalAttrs.finalPackage;
+    command = "${finalAttrs.meta.mainProgram} version";
     version = "v${finalAttrs.version}";
   };
 
