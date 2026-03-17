@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "slobdict";
-  version = "1.0.0";
+  version = "1.1.0";
 
   pyproject = false; # built with meson
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "MuntashirAkon";
     repo = "SlobDict";
     tag = finalAttrs.version;
-    hash = "sha256-V6EmEpxUMZUN9lHSNs4nZBZI2QNxUUWWODukm01lYxY=";
+    hash = "sha256-U4cESOmlrP5ZQlLEm+qn0JyLdQ+ir21y74Gls4D2S6c=";
   };
 
   nativeBuildInputs = [
