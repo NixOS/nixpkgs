@@ -4457,6 +4457,12 @@
     githubId = 37775;
     name = "Kirill A. Korinsky";
   };
+  caterpillar = {
+    email = "w@caterpillar.ink";
+    github = "caterpillar-1";
+    githubId = 39209322;
+    name = "Caterpillar";
+  };
   cathalmullan = {
     email = "contact@cathal.dev";
     github = "CathalMullan";
