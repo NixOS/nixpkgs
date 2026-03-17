@@ -44,14 +44,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "pymupdf";
-  version = "1.27.1";
+  version = "1.27.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymupdf";
     repo = "PyMuPDF";
     tag = finalAttrs.version;
-    hash = "sha256-Ebvdkvp0y7seG0sciMMnztflIBVRHh/Cowpw/lSLYLE=";
+    hash = "sha256-7Bnu5AG1b5v4hd85xzyFvjsqXl5Lqltbb2NcmkTQwaE=";
   };
 
   patches = [
@@ -136,6 +136,8 @@ buildPythonPackage (finalAttrs: {
     "test_4702"
     # Not a git repository, so git ls-files fails
     "test_open2"
+    # Segfaults in test_general.py::test_4907 with system MuPDF
+    "test_4907"
   ];
 
   disabledTestPaths = [
