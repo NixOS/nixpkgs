@@ -5279,6 +5279,12 @@
     githubId = 327028;
     name = "Cole Mickens";
   };
+  colepearson27 = {
+    name = "Cole Pearson";
+    email = "colepearson27@gmail.com";
+    github = "colepearson27";
+    githubId = 113060096;
+  };
   colescott = {
     email = "colescottsf@gmail.com";
     github = "colescott";
