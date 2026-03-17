@@ -699,7 +699,7 @@ with haskellLib;
   # Pass in `pkgs.nix` for the required tools. This means that overriding
   # them sort of works, but only if you override all instances.
   nix-paths =
-    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+    if with pkgs.stdenv; buildPlatform.canExecute hostPlatform then
       super.nix-paths.override {
         nix-build = pkgs.nix;
         nix-env = pkgs.nix;
