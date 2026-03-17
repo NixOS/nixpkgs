@@ -31,14 +31,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "langsmith";
-  version = "0.7.14";
+  version = "0.7.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uoWevYxIjslOKzsbVaYc3KZjpG9703S/ucVaCK85R5M=";
+    hash = "sha256-praKCpNzZ8e+QEU9Ji9ryspzIiF9X98rUOvMbwjMZho=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/python";
@@ -93,9 +93,7 @@ buildPythonPackage (finalAttrs: {
     # due to circular import
     "tests/unit_tests/test_client.py"
     "tests/unit_tests/evaluation/test_runner.py"
-    # flaky time comparisons
-    # https://github.com/langchain-ai/langsmith-sdk/issues/2245
-    "tests/unit_tests/test_uuid_v7.py"
+
     # google-adk isn't packaged (and has an enormous number of dependencies)
     "tests/unit_tests/wrappers/test_google_adk.py"
   ];

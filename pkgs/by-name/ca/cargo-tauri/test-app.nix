@@ -64,10 +64,40 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     pnpm --filter '@tauri-apps/api' build
   '';
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    bundleDir="target/${stdenv.hostPlatform.rust.cargoShortTarget}/''${cargoBuildType:-release}/bundle/macos"
+    touch "$bundleDir/.test-hidden-entry"
+    touch "$bundleDir/test-visible-entry"
+  '';
 
   # No one should be actually running this, so lets save some time
   buildType = "debug";
   doCheck = false;
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
+  installCheckPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstallCheck
+
+    test -d "$out/Applications"
+
+    shopt -s nullglob dotglob
+    appBundles=("$out"/Applications/*.app)
+    nonAppEntries=("$out"/Applications/*)
+    shopt -u nullglob dotglob
+
+    test "''${#appBundles[@]}" -gt 0
+
+    for entry in "''${nonAppEntries[@]}"; do
+      case "$entry" in
+        *.app) ;;
+        *)
+          echo "unexpected non-.app entry in Applications: $entry" >&2
+          exit 1
+          ;;
+      esac
+    done
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     inherit (cargo-tauri.hook.meta) platforms;

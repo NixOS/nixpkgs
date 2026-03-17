@@ -2,28 +2,31 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
   pkg-config,
   sqlite,
+  gitMinimal,
   writableTmpDirAsHomeHook,
   versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rtk";
-  version = "0.29.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "rtk-ai";
     repo = "rtk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QGHCa8rO4YBFXdrz78FhWKFxY7DmRxCXM8iYQv4yTYE=";
+    hash = "sha256-aB9SWF9jYHeH3Apz5v4mQptLa6tS9cIfyfo6rHqsD8w=";
   };
 
   strictDeps = true;
 
-  cargoHash = "sha256-gNJjtQah7NFSgFVYJftK19dECzDvLCi2E33na2PtKmc=";
+  cargoHash = "sha256-0dpZRBPubzd2GuK02/jbNBWOR/TpFM5lVMucEii/JxM=";
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
   ];
 
@@ -31,7 +34,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     sqlite
   ];
 
+  postInstall = ''
+    wrapProgram $out/bin/rtk \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gitMinimal
+        ]
+      }
+  '';
+
   nativeCheckInputs = [
+    gitMinimal
     writableTmpDirAsHomeHook
   ];
 
