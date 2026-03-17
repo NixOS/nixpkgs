@@ -25,14 +25,14 @@ in
 
 py.pkgs.buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.74.0";
+  version = "3.76.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     tag = "v${version}";
-    hash = "sha256-s2mE3aE0QJqyvzD7eL7MoRBRopWFGUVFZ7d3pRwF7gA=";
+    hash = "sha256-3fmehq8jM9S2ICxD+4+bEEJqtn/bgV5UW3mveJl+Z7A=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -66,6 +66,8 @@ py.pkgs.buildPythonApplication rec {
     "prompt-toolkit"
     "pyOpenSSL"
     "terminaltables"
+    "certifi"
+    "pytz"
   ];
 
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
