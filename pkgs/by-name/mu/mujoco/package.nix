@@ -6,6 +6,7 @@
   gitMinimal,
   fetchFromGitLab,
   glfw,
+  libGL,
   glm,
   spdlog,
   cereal,
@@ -107,6 +108,11 @@ stdenv.mkDerivation (finalAttrs: {
     spdlog
     cereal
     glfw
+  ];
+
+  propagatedBuildInputs = [
+    # consuming MuJoCo through cmake find_package requires libGL
+    libGL
   ];
 
   cmakeFlags = [
