@@ -16,7 +16,7 @@
   gd,
   libxaw,
   icu,
-  ghostscript,
+  ghostscript_headless,
   libxpm,
   libxmu,
   libxext,
@@ -29,7 +29,7 @@
   libpaper,
   graphite2,
   zziplib,
-  harfbuzz,
+  harfbuzzFull,
   potrace,
   gmp,
   mpfr,
@@ -44,11 +44,12 @@
   woff2,
   xxHash,
   makeWrapper,
-  useFixedHashes,
+  useFixedHashes ? true,
   asymptote,
   biber-ms,
   tlpdb,
   luajit,
+  ...
 }@args:
 
 # Useful resource covering build options:
@@ -411,7 +412,7 @@ rec {
     buildInputs = core.buildInputs ++ [
       core
       cairo
-      harfbuzz
+      harfbuzzFull
       icu
       graphite2
       libx11
@@ -595,7 +596,7 @@ rec {
     buildInputs = [
       core
       brotli
-      ghostscript
+      ghostscript_headless
       zlib
       freetype
       ttfautohint
@@ -625,7 +626,7 @@ rec {
       libpng
       freetype
       gd
-      ghostscript
+      ghostscript_headless
     ];
 
     preConfigure = ''
@@ -639,7 +640,7 @@ rec {
       "--disable-debug"
     ];
 
-    GS = "${ghostscript}/bin/gs";
+    GS = lib.getExe ghostscript_headless;
 
     enableParallelBuilding = true;
   };
@@ -738,7 +739,7 @@ rec {
     buildInputs = [
       core # kpathsea
       freetype
-      ghostscript
+      ghostscript_headless
       libx11
       libxaw
       libxi
