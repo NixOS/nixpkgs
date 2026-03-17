@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication {
   pname = "jwtcat";
   version = "0-unstable-2022-10-15";
-  format = "other";
+  pyproject = false;
   doCheck = false;
 
   src = fetchFromGitHub {
