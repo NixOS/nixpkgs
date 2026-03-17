@@ -122,10 +122,8 @@ let
           '';
 
         rcContent = lib.concatStringsSep "\n" (
-          [
-            luaPathLuaRc
-            providerLuaRc
-          ]
+          lib.optional (extraLuaPackages lua.pkgs != [ ]) luaPathLuaRc
+          ++ [ providerLuaRc ]
           ++ lib.optional (luaRcContent != "") luaRcContent
           ++ lib.optional (neovimRcContent' != "") ''
             vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
