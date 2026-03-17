@@ -49,7 +49,7 @@ parser.add_argument(
 parser.add_argument("-v", "--verbose", action="count", default=0)
 
 
-def symlink_parents(p: Path) -> List[Path]:
+def symlink_targets(p: Path) -> List[Path]:
     """
     >>> from pathlib import Path
     >>> from tempfile import TemporaryDirectory
@@ -57,17 +57,17 @@ def symlink_parents(p: Path) -> List[Path]:
     ...     Path(d, "a").touch()
     ...     Path(d, "b").symlink_to("a")
     ...     Path(d, "c").symlink_to(Path(d, "b"))
-    ...     parents = [str(p).replace(d, "$TMPDIR") for p in symlink_parents(Path(d, "c"))]
-    >>> parents
+    ...     targets = [str(p).replace(d, "$TMPDIR") for p in symlink_targets(Path(d, "c"))]
+    >>> targets
     ['$TMPDIR/b', '$TMPDIR/a']
     """
     out = []
     while p.is_symlink():
-        parent = p.readlink()
-        if parent.is_absolute():
-            p = parent
+        target = p.readlink()
+        if target.is_absolute():
+            p = target
         else:
-            p = p.parent / parent
+            p = p.parent / target
             p = p.absolute()
         if p in out:
             break
@@ -209,9 +209,9 @@ def entrypoint():
         for child in (
             host_path.iterdir() if host_path.is_dir() else [host_path]
         ):
-            for parent in symlink_parents(child):
-                parent_str = parent.absolute().as_posix()
-                queue.append((parent_str, parent_str, follow_symlinks))
+            for target in symlink_targets(child):
+                target_str = target.absolute().as_posix()
+                queue.append((target_str, target_str, follow_symlinks))
 
     # the pre-build-hook command
     if args.issue_command == "always" or (
