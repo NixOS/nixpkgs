@@ -73,6 +73,7 @@ lua_cliargs,,,,,,
 luabitop,https://raw.githubusercontent.com/teto/luabitop/master/luabitop-1.0.2-3.rockspec,,,,,
 luacheck,,,,,,
 luacov,,,,,,
+luacov-reporter-lcov,,,,,,ulysseszhan
 luadbi,,,,,,
 luadbi-mysql,,,,,,
 luadbi-postgresql,,,,,,
