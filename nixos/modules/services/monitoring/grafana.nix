@@ -440,6 +440,18 @@ in
       type = types.path;
     };
 
+    environmentFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [ ];
+      example = [ "/run/keys/grafana.env" ];
+      description = ''
+        List of paths to files to load as systemd environment files.
+        This is useful to avoid putting secrets into the nix store.
+        See <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#override-configuration-with-environment-variables/>
+        for more information.
+      '';
+    };
+
     openFirewall = mkOption {
       type = types.bool;
       default = false;
@@ -2097,6 +2109,7 @@ in
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
         Restart = "on-failure";
+        EnvironmentFile = cfg.environmentFiles;
         RuntimeDirectory = "grafana";
         RuntimeDirectoryMode = "0755";
         # Hardening
