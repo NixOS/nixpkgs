@@ -109,7 +109,7 @@ let
 
         luaPathLuaRc =
           let
-            luaEnv = lua.withPackages extraLuaPackages;
+            luaEnv = lua.withPackages (lp: extraLuaPackages lp ++ vimPackageInfo.luaDependencies);
 
             # getLuaPath / getLuaCPath are not interpreter dependant at the moment and might thus cause
             # errors between luajit/Puc lua
@@ -122,10 +122,8 @@ let
           '';
 
         rcContent = lib.concatStringsSep "\n" (
-          [
-            luaPathLuaRc
-            providerLuaRc
-          ]
+          lib.optional (extraLuaPackages lua.pkgs != [ ]) luaPathLuaRc
+          ++ [ providerLuaRc ]
           ++ lib.optional (luaRcContent != "") luaRcContent
           ++ lib.optional (neovimRcContent' != "") ''
             vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
