@@ -43,6 +43,13 @@ python3Packages.buildPythonApplication {
     makeWrapper
     python3Packages.setuptools
   ];
+  checkInputs = [
+    python3Packages.pytestCheckHook
+  ];
+  doCheck = true;
+  pythonImportsCheck = [
+    "nix_required_mounts"
+  ];
 
   postFixup = ''
     wrapProgram $out/bin/${pname} \

@@ -50,13 +50,27 @@ parser.add_argument("-v", "--verbose", action="count", default=0)
 
 
 def symlink_parents(p: Path) -> List[Path]:
+    """
+    >>> from pathlib import Path
+    >>> from tempfile import TemporaryDirectory
+    >>> with TemporaryDirectory() as d:
+    ...     Path(d, "a").touch()
+    ...     Path(d, "b").symlink_to("a")
+    ...     Path(d, "c").symlink_to(Path(d, "b"))
+    ...     parents = [str(p).replace(d, "$TMPDIR") for p in symlink_parents(Path(d, "c"))]
+    >>> parents
+    ['$TMPDIR/b', '$TMPDIR/a']
+    """
     out = []
-    while p.is_symlink() and p not in out:
+    while p.is_symlink():
         parent = p.readlink()
-        if parent.is_relative_to("."):
-            p = p / parent
-        else:
+        if parent.is_absolute():
             p = parent
+        else:
+            p = p.parent / parent
+            p = p.absolute()
+        if p in out:
+            break
         out.append(p)
     return out
 
@@ -70,20 +84,26 @@ def get_required_system_features(parsed_drv: dict) -> List[str]:
     # Older versions of Nix store structuredAttrs in the env as a JSON string.
     drv_env = parsed_drv.get("env", {})
     if "__json" in drv_env:
-        return list(json.loads(drv_env["__json"]).get("requiredSystemFeatures", []))
+        return list(
+            json.loads(drv_env["__json"]).get("requiredSystemFeatures", [])
+        )
 
     # Without structuredAttrs, requiredSystemFeatures is a space-separated string in env.
     return drv_env.get("requiredSystemFeatures", "").split()
 
 
-def validate_mounts(pattern: Pattern) -> List[Tuple[PathString, PathString, bool]]:
+def validate_mounts(
+    pattern: Pattern,
+) -> List[Tuple[PathString, PathString, bool]]:
     roots = []
     for mount in pattern["paths"]:
         if isinstance(mount, PathString):
             matches = glob.glob(mount)
             assert matches, f"Specified host paths do not exist: {mount}"
 
-            roots.extend((m, m, pattern["unsafeFollowSymlinks"]) for m in matches)
+            roots.extend(
+                (m, m, pattern["unsafeFollowSymlinks"]) for m in matches
+            )
         else:
             assert isinstance(mount, dict) and "host" in mount, mount
             assert Path(
@@ -136,7 +156,9 @@ def entrypoint():
             "`nix show-derivation`"
             f". Expected JSON, observed: {proc.stdout}",
         )
-        logging.error(textwrap.indent(proc.stdout.decode("utf8"), prefix=" " * 4))
+        logging.error(
+            textwrap.indent(proc.stdout.decode("utf8"), prefix=" " * 4)
+        )
         logging.info("Exiting the nix-required-binds hook")
         return
     [canon_drv_path] = parsed_drv.keys()
@@ -149,13 +171,17 @@ def entrypoint():
 
     parsed_drv = parsed_drv[canon_drv_path]
     required_features = get_required_system_features(parsed_drv)
-    required_features = list(filter(known_features.__contains__, required_features))
+    required_features = list(
+        filter(known_features.__contains__, required_features)
+    )
 
     patterns: List[Pattern] = list(
         pattern
         for pattern in allowed_patterns.values()
         for path in pattern["paths"]
-        if any(feature in required_features for feature in pattern["onFeatures"])
+        if any(
+            feature in required_features for feature in pattern["onFeatures"]
+        )
     )  # noqa: E501
 
     queue: Deque[Tuple[PathString, PathString, bool]] = deque(
@@ -180,7 +206,9 @@ def entrypoint():
 
         # assert host_path_str == guest_path_str, (host_path_str, guest_path_str)
 
-        for child in host_path.iterdir() if host_path.is_dir() else [host_path]:
+        for child in (
+            host_path.iterdir() if host_path.is_dir() else [host_path]
+        ):
             for parent in symlink_parents(child):
                 parent_str = parent.absolute().as_posix()
                 queue.append((parent_str, parent_str, follow_symlinks))
