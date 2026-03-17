@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "2.4.2";
+  version = "2.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = "ansible-runner";
     tag = version;
-    hash = "sha256-aO7AcDtPbbmTsY+39oZYdPABYFy6bK3ZR1jatLTb7O4=";
+    hash = "sha256-kKG6Jn0RRa6rglUrE8fJmXj+nbeKNUbL/GVWqT20Hfk=";
   };
 
   postPatch = ''
