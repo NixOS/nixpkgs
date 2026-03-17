@@ -1,19 +1,10 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  SDL,
-  libGL,
-  libGLU,
-  libpng,
-  libx11,
-  nasm,
-  pkg-config,
-  zlib,
-  udevCheckHook,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "zsnes2";
   version = "2.0.12";
 
@@ -25,18 +16,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    nasm
-    pkg-config
-    udevCheckHook
+    pkgsi686Linux.nasm
+    pkgsi686Linux.pkg-config
+    pkgsi686Linux.udevCheckHook
   ];
 
   buildInputs = [
-    SDL
-    libGL
-    libGLU
-    libpng
-    libx11
-    zlib
+    pkgsi686Linux.SDL
+    pkgsi686Linux.libGL
+    pkgsi686Linux.libGLU
+    pkgsi686Linux.libpng
+    pkgsi686Linux.libx11
+    pkgsi686Linux.zlib
   ];
 
   dontConfigure = true;
