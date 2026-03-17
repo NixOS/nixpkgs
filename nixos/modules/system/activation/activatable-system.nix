@@ -52,7 +52,7 @@ in
         (pkgs.writeShellApplication {
           name = "activate";
           text = config.system.activationScripts.script;
-          checkPhase = "";
+          runShellCheck = false;
           bashOptions = [ ];
         }).overrideAttrs
           { preferLocalBuild = true; }
@@ -61,7 +61,7 @@ in
         (pkgs.writeShellApplication {
           name = "dry-activate";
           text = config.system.dryActivationScript;
-          checkPhase = "";
+          runShellCheck = false;
           bashOptions = [ ];
         }).overrideAttrs
           { preferLocalBuild = true; }
