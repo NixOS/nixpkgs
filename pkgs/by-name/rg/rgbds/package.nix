@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     maintainers = with lib.maintainers; [
       NieDzejkob
+      mattcurrie
     ];
     platforms = lib.platforms.all;
   };
