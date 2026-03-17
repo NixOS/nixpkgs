@@ -23,4 +23,5 @@
   "window-corner-preview@fabiomereu.it" = callPackage ./window-corner-preview { };
   # Can be removed when https://github.com/oae/gnome-shell-pano/issues/271 resolved
   "pano@elhan.io" = callPackage ./pano { };
+  "light-dict@tuberry.github.io" = callPackage ./light-dict { };
 }
