@@ -14,7 +14,7 @@
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiotankerkoenig";
   version = "0.5.2";
   pyproject = true;
@@ -22,13 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiotankerkoenig";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LpaJyx5w0htbvWJ8kL8BlyMdlLOKlR6p+XW7qWMhXZo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
   build-system = [ hatchling ];
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for interacting with tankerkoenig.de";
     homepage = "https://github.com/jpbede/aiotankerkoenig";
-    changelog = "https://github.com/jpbede/aiotankerkoenig/releases/tag/v${version}";
+    changelog = "https://github.com/jpbede/aiotankerkoenig/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
