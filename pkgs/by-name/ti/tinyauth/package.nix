@@ -29,8 +29,8 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X tinyauth/internal/config.Version=v${finalAttrs.version}"
-    "-X tinyauth/internal/config.CommitHash=${finalAttrs.src.rev}"
+    "-X github.com/steveiliop56/tinyauth/internal/config.Version=v${finalAttrs.version}"
+    "-X github.com/steveiliop56/tinyauth/internal/config.CommitHash=${finalAttrs.src.rev}"
   ];
 
   preBuild = ''
