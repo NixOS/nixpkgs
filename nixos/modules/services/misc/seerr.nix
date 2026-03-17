@@ -6,6 +6,9 @@
 }:
 let
   cfg = config.services.seerr;
+  # 26.05 introduced a breaking change which is guarded behind stateVersion to avoid
+  # breaking users.
+  useNewConfigLocation = lib.versionAtLeast config.system.stateVersion "26.05";
 in
 {
   imports = [
@@ -35,7 +38,7 @@ in
 
     configDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/jellyseerr/config";
+      default = if useNewConfigLocation then "/var/lib/seerr/" else "/var/lib/jellyseerr/config";
       description = "Config data directory";
     };
   };
@@ -51,7 +54,8 @@ in
       };
       serviceConfig = {
         Type = "exec";
-        StateDirectory = "jellyseerr";
+        # Note: this should be a parent of configDir.
+        StateDirectory = if useNewConfigLocation then "seerr" else "jellyseerr";
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
