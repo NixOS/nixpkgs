@@ -1,20 +1,7 @@
 {
   lib,
-  stdenv,
   fetchurl,
   pkgsi686Linux,
-  dpkg,
-  makeWrapper,
-  coreutils,
-  gnused,
-  gawk,
-  file,
-  cups,
-  util-linux,
-  xxd,
-  runtimeShell,
-  ghostscript,
-  a2ps,
 }:
 
 # Why:
@@ -35,7 +22,7 @@
 # Result:
 # The user can run brprintconf_mfcj6510dw in the shell.
 
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "mfcj6510dwlpr";
   version = "3.0.0-1";
 
@@ -44,18 +31,22 @@ stdenv.mkDerivation rec {
     sha256 = "1ccvx393pqavsgzd8igrzlin5jrsf01d3acyvwqd1d0yz5jgqy6d";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.dpkg
+    pkgsi686Linux.autoPatchelfHook
+  ];
+
   buildInputs = [
-    cups
-    ghostscript
-    dpkg
-    a2ps
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.a2ps
   ];
 
   dontUnpack = true;
 
   brprintconf_mfcj6510dw_script = ''
-    #!${runtimeShell}
+    #!${pkgsi686Linux.runtimeShell}
     cd $(mktemp -d)
     ln -s @out@/usr/bin/brprintconf_mfcj6510dw_patched brprintconf_mfcj6510dw_patched
     ln -s @out@/opt/brother/Printers/mfcj6510dw/inf/brmfcj6510dwfunc brmfcj6510dwfunc
@@ -66,29 +57,26 @@ stdenv.mkDerivation rec {
   installPhase = ''
     dpkg-deb -x $src $out
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
-      --replace /opt "$out/opt"
+      --replace-fail /opt "$out/opt"
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/lpd/psconvertij2 \
-      --replace "GHOST_SCRIPT=`which gs`" "GHOST_SCRIPT=${ghostscript}/bin/gs"
+      --replace-fail "GHOST_SCRIPT=`which gs`" "GHOST_SCRIPT=${pkgsi686Linux.ghostscript}/bin/gs"
     substituteInPlace $out/opt/brother/Printers/mfcj6510dw/inf/setupPrintcapij \
-      --replace "/opt/brother/Printers" "$out/opt/brother/Printers" \
-      --replace "printcap.local" "printcap"
+      --replace-fail "/opt/brother/Printers" "$out/opt/brother/Printers" \
+      --replace-fail "printcap.local" "printcap"
 
-    patchelf --set-interpreter ${pkgsi686Linux.stdenv.cc.libc.out}/lib/ld-linux.so.2 \
-      --set-rpath $out/opt/brother/Printers/mfcj6510dw/inf:$out/opt/brother/Printers/mfcj6510dw/lpd \
-      $out/opt/brother/Printers/mfcj6510dw/lpd/brmfcj6510dwfilter
-    patchelf --set-interpreter ${pkgsi686Linux.stdenv.cc.libc.out}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_mfcj6510dw
-
-    #stripping the hardcoded path.
-    ${util-linux}/bin/hexdump -ve '1/1 "%.2X"' $out/usr/bin/brprintconf_mfcj6510dw | \
+    # stripping the hardcoded path.
+    ${pkgsi686Linux.util-linux}/bin/hexdump -ve '1/1 "%.2X"' $out/usr/bin/brprintconf_mfcj6510dw | \
     sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F6272257366756E63.62726d66636a36353130647766756e63000000000000000000000000000000000000000000.' | \
     sed 's.2F6F70742F62726F746865722F5072696E746572732F25732F696E662F627225737263.62726D66636A3635313064777263000000000000000000000000000000000000000000.' | \
-    ${xxd}/bin/xxd -r -p > $out/usr/bin/brprintconf_mfcj6510dw_patched
+    ${pkgsi686Linux.xxd}/bin/xxd -r -p > $out/usr/bin/brprintconf_mfcj6510dw_patched
+
     chmod +x $out/usr/bin/brprintconf_mfcj6510dw_patched
-    #executing from current dir. segfaults if it's not r\w.
+
+    # executing from current dir. segfaults if it's not r\w.
     mkdir -p $out/bin
     echo -n "$brprintconf_mfcj6510dw_script" > $out/bin/brprintconf_mfcj6510dw
     chmod +x $out/bin/brprintconf_mfcj6510dw
-    substituteInPlace $out/bin/brprintconf_mfcj6510dw --replace @out@ $out
+    substituteInPlace $out/bin/brprintconf_mfcj6510dw --replace-fail @out@ $out
 
     mkdir -p $out/lib/cups/filter/
     ln -s $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw $out/lib/cups/filter/brother_lpdwrapper_mfcj6510dw
@@ -96,19 +84,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/psconvertij2 \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          coreutils
-          gnused
-          gawk
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gnused
+          pkgsi686Linux.gawk
         ]
       }
+
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          coreutils
-          gnused
-          file
-          ghostscript
-          a2ps
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gnused
+          pkgsi686Linux.file
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.a2ps
         ]
       }
   '';
