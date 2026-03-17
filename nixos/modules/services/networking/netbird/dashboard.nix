@@ -171,7 +171,7 @@ in
         root = cfg.finalDrv;
 
         locations = {
-          "/".tryFiles = "$uri $uri.html $uri/ =404";
+          "/".tryFiles = "$uri $uri/ /index.html";
 
           "= /404.html".extraConfig = ''
             internal;
