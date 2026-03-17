@@ -1834,11 +1834,7 @@ self: super: with self; {
 
   basiciw = callPackage ../development/python-modules/basiciw { };
 
-  basicsr =
-    if (pythonAtLeast "3.12" && !pythonOlder "3.12") then
-      null
-    else
-      callPackage ../development/python-modules/basicsr { };
+  basicsr = callPackage ../development/python-modules/basicsr { };
 
   batchgenerators = callPackage ../development/python-modules/batchgenerators { };
 
@@ -11473,6 +11469,8 @@ self: super: with self; {
     }
   );
 
+  opennsfw2 = callPackage ../development/python-modules/opennsfw2 { };
+
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
 
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
@@ -13695,6 +13693,8 @@ self: super: with self; {
   pygount = callPackage ../development/python-modules/pygount { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
+
+  pygrabber = callPackage ../development/python-modules/pygrabber { };
 
   pygraphviz = callPackage ../development/python-modules/pygraphviz { inherit (pkgs) graphviz; };
 
