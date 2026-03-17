@@ -109,7 +109,7 @@ in
       };
       environment = {
         SCX_SCHEDULER = cfg.scheduler;
-        SCX_FLAGS = lib.escapeShellArgs cfg.extraArgs;
+        SCX_FLAGS = toString cfg.extraArgs;
       };
 
       wantedBy = [ "multi-user.target" ];
