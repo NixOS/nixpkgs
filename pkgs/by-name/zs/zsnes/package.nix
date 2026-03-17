@@ -1,19 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
-  nasm,
-  SDL,
-  zlib,
-  libpng,
-  ncurses,
-  libGLU,
-  libGL,
-  makeDesktopItem,
+  pkgsi686Linux,
 }:
 
 let
-  desktopItem = makeDesktopItem {
+  desktopItem = pkgsi686Linux.makeDesktopItem {
     name = "zsnes";
     exec = "zsnes";
     icon = "zsnes";
@@ -24,7 +16,7 @@ let
   };
 
 in
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "zsnes";
   version = "1.51";
 
@@ -41,13 +33,13 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    nasm
-    SDL
-    zlib
-    libpng
-    ncurses
-    libGLU
-    libGL
+    pkgsi686Linux.nasm
+    pkgsi686Linux.SDL
+    pkgsi686Linux.zlib
+    pkgsi686Linux.libpng
+    pkgsi686Linux.ncurses
+    pkgsi686Linux.libGLU
+    pkgsi686Linux.libGL
   ];
 
   prePatch = ''
