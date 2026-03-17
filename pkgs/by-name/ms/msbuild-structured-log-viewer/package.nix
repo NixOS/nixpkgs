@@ -4,11 +4,8 @@
   buildDotnetModule,
   fetchFromGitHub,
   dotnetCorePackages,
-  autoPatchelfHook,
+  writeText,
   copyDesktopItems,
-  icu,
-  openssl,
-  libkrb5,
   makeDesktopItem,
   nix-update-script,
 }:
@@ -31,19 +28,22 @@ buildDotnetModule (finalAttrs: {
   projectFile = [ "src/StructuredLogViewer.Avalonia/StructuredLogViewer.Avalonia.csproj" ];
   nugetDeps = ./deps.json;
 
-  # HACK: Clear out RuntimeIdentifiers that's set in StructuredLogViewer.Avalonia.csproj, otherwise our --runtime has no effect
-  dotnetFlags = [ "-p:RuntimeIdentifiers=" ];
-
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
-    copyDesktopItems
+  dotnetBuildFlags = [
+    "-p:CustomAfterDirectoryBuildTargets=${writeText "StubGitVersioning.targets" ''
+      <Project>
+          <Target Name="GetBuildVersion" Returns="$(BuildVersion)" DependsOnTargets="GetAssemblyVersion">
+              <PropertyGroup>
+                  <BuildVersion>$(Version)</BuildVersion>
+                  <AssemblyFileVersion>$(FileVersion)</AssemblyFileVersion>
+                  <AssemblyInformationalVersion>$(InformationalVersion)</AssemblyInformationalVersion>
+              </PropertyGroup>
+          </Target>
+      </Project>
+    ''}"
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    stdenv.cc.cc.lib
-    icu
-    openssl
-    libkrb5
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
   ];
 
   dontDotnetFixup = true;
@@ -53,6 +53,7 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 $src/src/StructuredLogViewer/icons/msbuild-structured-log-viewer.png $out/share/icons/hicolor/32x32/apps/msbuild-structured-log-viewer.png
+    install -Dm444 ${./mimetype.xml} $out/share/mime/packages/binlog.xml
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/StructuredLogViewer.Avalonia/Info.plist \
@@ -71,6 +72,9 @@ buildDotnetModule (finalAttrs: {
     icon = "msbuild-structured-log-viewer";
     exec = finalAttrs.meta.mainProgram;
     categories = [ "Development" ];
+    mimeTypes = [
+      "application/x-binlog"
+    ];
   };
 
   passthru.updateScript = nix-update-script { };
