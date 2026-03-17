@@ -1,18 +1,10 @@
 {
   lib,
-  stdenv,
-  coreutils,
-  dpkg,
   fetchurl,
-  ghostscript,
-  gnugrep,
-  gnused,
-  makeWrapper,
-  perl,
-  which,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "mfcl2700dnlpr";
   version = "3.2.0-1";
 
@@ -22,8 +14,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    dpkg
-    makeWrapper
+    pkgsi686Linux.dpkg
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.autoPatchelfHook
+  ];
+
+  buildInputs = [
+    pkgsi686Linux.perl
   ];
 
   dontUnpack = true;
@@ -34,25 +31,20 @@ stdenv.mkDerivation rec {
     dir=$out/opt/brother/Printers/MFCL2700DN
 
     substituteInPlace $dir/lpd/filter_MFCL2700DN \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
+      --replace-fail /usr/bin/perl ${pkgsi686Linux.perl}/bin/perl \
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 
     wrapProgram $dir/lpd/filter_MFCL2700DN \
       --prefix PATH : ${
         lib.makeBinPath [
-          coreutils
-          ghostscript
-          gnugrep
-          gnused
-          which
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.gnugrep
+          pkgsi686Linux.gnused
+          pkgsi686Linux.which
         ]
       }
-
-    interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
-    patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter
-    patchelf --set-interpreter "$interpreter" $dir/lpd/brprintconflsr3
-    patchelf --set-interpreter "$interpreter" $dir/lpd/rawtobr3
   '';
 
   meta = {
