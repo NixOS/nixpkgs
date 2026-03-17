@@ -8,7 +8,6 @@ python3Packages.buildPythonApplication {
   pname = "jwtcat";
   version = "0-unstable-2022-10-15";
   pyproject = false;
-  doCheck = false;
 
   src = fetchFromGitHub {
     owner = "aress31";
@@ -30,6 +29,8 @@ python3Packages.buildPythonApplication {
     
     runHook postInstall
   '';
+
+  doCheck = false;
 
   meta = {
     description = "CPU-based JSON Web Token cracker and scanner";
