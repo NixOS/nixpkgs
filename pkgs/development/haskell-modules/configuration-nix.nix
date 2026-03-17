@@ -2230,21 +2230,20 @@ builtins.intersectAttrs super {
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 
-  # Avoids a cycle by disabling use of the external interpreter for the packages that are dependencies of iserv-proxy.
-  # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
-  inherit
-    (
-      let
-        noExternalInterpreter = overrideCabal {
-          enableExternalInterpreter = false;
-        };
-      in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) libiserv iserv-proxy network; }
-    )
-    libiserv
-    iserv-proxy
-    network
-    ;
+  iserv-proxy =
+    let
+      # Avoid a cycle by disabling tests and the external interpreter for packages that are dependencies of iserv-proxy.
+      # These in particular can't rely on template haskell for cross-compilation anyway as they can't rely on iserv-proxy.
+      # Also disable tests during iserv-proxy bootstrap since test packages tend to rely on TH for discovering test cases
+      breakExternalInterpreterBootstrapCycle = overrideCabal {
+        doCheck = false;
+        enableExternalInterpreter = false;
+      };
+      overlay = lib.mapAttrs (
+        _: pkg: if (pkg ? isHaskellLibrary) then breakExternalInterpreterBootstrapCycle pkg else pkg
+      );
+    in
+    super.iserv-proxy.overrideScope (_: overlay);
 
   # Workaround for flaky test: https://github.com/basvandijk/threads/issues/10
   threads = appendPatch ./patches/threads-flaky-test.patch super.threads;
