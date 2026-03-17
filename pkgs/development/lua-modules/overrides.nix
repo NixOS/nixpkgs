@@ -1129,6 +1129,16 @@ in
     meta.broken = lua.luaversion != "5.1";
   });
 
+  utf8 = prev.utf8.overrideAttrs {
+    postPatch = ''
+      sed -i '/#include <assert.h>/a\
+      #ifndef lua_assert\
+        #define lua_assert(x) assert(x)\
+      #endif
+      ' lutf8lib.c
+    '';
+  };
+
   vstruct = prev.vstruct.overrideAttrs (_: {
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
   });
