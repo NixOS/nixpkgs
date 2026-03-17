@@ -63,6 +63,13 @@ stdenv.mkDerivation (finalAttrs: {
   # There's only the Makefile
   dontConfigure = true;
 
+  outputs = [
+    "out"
+    "man"
+    "tex"
+    "texdoc"
+  ];
+
   makeFlags = [
     "PERLPATH=${perlWithPackages}/bin/perl"
     # We *need* to set DESTDIR as empty and use absolute paths below,
@@ -74,8 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     "BINDIR=${placeholder "out"}/bin"
     "PERLDIR=${placeholder "out"}/share/perl5"
     "MODSDIR=${placeholder "out"}/lib"
-    "TEXDIR=${placeholder "out"}/tex/latex/" # what texlive.combine expects
-    "TEXDOCDIR=${placeholder "out"}/share/doc/texmf/" # TODO where to put this?
+    "TEXDIR=${placeholder "tex"}/tex/latex/auto-multiple-choice/" # what texlive.withPackages expects
+    "TEXDOCDIR=${placeholder "texdoc"}/doc/latex/auto-multiple-choice/"
     "MAN1DIR=${placeholder "out"}/share/man/man1"
     "DESKTOPDIR=${placeholder "out"}/share/applications"
     "METAINFODIR=${placeholder "out"}/share/metainfo"
@@ -109,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
         netpbm
       ]
     } \
-    --set TEXINPUTS ".:$out/tex/latex:"
+    --set TEXINPUTS ".:$tex/tex/latex:"
   '';
 
   nativeBuildInputs = [
@@ -161,10 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
       …
       environment.systemPackages = with pkgs; [
         auto-multiple-choice
-        (texlive.combine {
-          inherit (pkgs.texlive) scheme-full;
-          inherit auto-multiple-choice;
-        })
+        (texliveFull.withPackages (_: [auto-multiple-choice.tex]))
       ];
       </screen>
 
