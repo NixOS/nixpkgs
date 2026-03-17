@@ -69,8 +69,7 @@ in
 
       enable = lib.mkOption {
         type = lib.types.bool;
-        default = !(config.environment.etc ? "resolv.conf");
-        defaultText = lib.literalExpression ''!(config.environment.etc ? "resolv.conf")'';
+        default = true;
         description = ''
           Whether DNS configuration is managed by resolvconf.
         '';
