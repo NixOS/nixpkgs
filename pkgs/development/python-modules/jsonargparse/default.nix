@@ -1,29 +1,20 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pyyaml,
-
-  # optional-dependencies
-
-  # tests
-
   argcomplete,
+  buildPythonPackage,
   docstring-parser,
+  fetchFromGitHub,
   fsspec,
   jsonnet,
   jsonschema,
   omegaconf,
   pytestCheckHook,
+  pythonAtLeast,
+  pyyaml,
   reconplogger,
   requests,
   ruyaml,
+  setuptools,
   toml,
   types-pyyaml,
   types-requests,
