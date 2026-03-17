@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "nixpkgs-vet";
     maintainers = with lib.maintainers; [
+      mdaniels5757
       philiptaron
       willbush
     ];

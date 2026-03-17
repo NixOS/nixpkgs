@@ -28,13 +28,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextpnr-xilinx";
-  version = "0.8.2-unstable-2026-02-25";
+  version = "0.8.2-unstable-2026-03-13";
 
   src = fetchFromGitHub {
     owner = "openXC7";
     repo = "nextpnr-xilinx";
-    rev = "72d8217b80cafed22cbac1253a2f23ca1ee10806";
-    hash = "sha256-YIwJfh6epUDGfWwHS0zjfcrx5A68NUY6gxyuEBb0g3A=";
+    rev = "96bb068afdb941e9292509a28b079c14c26ceca6";
+    hash = "sha256-l9V7glWRtt9NUAKV00zeacA4vyFjwhfxv3mfDEF4lgI=";
   };
 
   nativeBuildInputs = [

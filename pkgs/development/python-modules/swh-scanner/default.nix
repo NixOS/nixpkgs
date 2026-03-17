@@ -22,7 +22,7 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-scanner";
   version = "0.8.3";
   pyproject = true;
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-scanner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-baUUuYFapBD7iuDaDP8CSR9f4glVZcS5qBpZddVf7z8=";
   };
 
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     types-requests
   ];
 
-  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin) [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Failed: Failed to start the server after 5 seconds.
     "test_add_provenance_with_release"
     "test_add_provenance_with_revision"
@@ -81,10 +81,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/tags/${src.tag}";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/tags/${finalAttrs.src.tag}";
     description = "Source code scanner to analyze code bases and compare them with source code artifacts archived by Software Heritage";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

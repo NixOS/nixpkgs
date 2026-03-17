@@ -38,7 +38,7 @@
   util-linux,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-objstorage";
   version = "5.1.0";
   pyproject = true;
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-objstorage";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-NnNT9Lt/LGDIJpUmfkfPn6JnF3k8Usf2UVa88zHPKlg=";
   };
 
@@ -113,10 +113,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-objstorage/-/tags/${src.tag}";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-objstorage/-/tags/${finalAttrs.src.tag}";
     description = "Content-addressable object storage for the Software Heritage project";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-objstorage";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

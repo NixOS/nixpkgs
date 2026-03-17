@@ -93,6 +93,7 @@ mapAliases {
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
   atsim_potentials = throw "'atsim_potentials' has been renamed to/replaced by 'atsim-potentials'"; # Converted to throw 2025-10-29
+  audio-metadata = throw "'audio-metadata' has been removed as it's unmaintained since 2020"; # Added 2026-03-12
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
@@ -123,6 +124,7 @@ mapAliases {
   casbin = pycasbin; # added 2025-06-12
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
   characteristic = throw "'characteristic' has been removed because it is no longer maintained upstream"; # Added 2026-01-14
+  chart-studio = throw "'chart-studio' has been removed as it is no longer maintained upstream"; # Added 2026-03-12
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
@@ -537,6 +539,7 @@ mapAliases {
   systembridge = throw "systembridge has been removed because it is unmaintained upstream"; # Added 2025-11-23
   systemd = throw "systemd was removed because it was misnamed; use systemd-python instead"; # added 2025-11-09
   sysv_ipc = throw "'sysv_ipc' has been renamed to/replaced by 'sysv-ipc'"; # Converted to throw 2025-10-29
+  tbm-utils = throw "'tbm-utils' has been removed as it is unmaintained since 2020"; # Added 2026-03-12
   tensorflow-bin_2 = throw "'tensorflow-bin_2' has been renamed to/replaced by 'tensorflow-bin'"; # Converted to throw 2025-10-29
   tensorflow-build_2 = throw "'tensorflow-build_2' has been renamed to/replaced by 'tensorflow-build'"; # Converted to throw 2025-10-29
   tensorflow-estimator = throw "'tensorflow-estimator' has been renamed to/replaced by 'tensorflow-estimator-bin'"; # Converted to throw 2025-10-29

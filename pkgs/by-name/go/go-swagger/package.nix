@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-swagger";
-  version = "0.33.1";
+  version = "0.33.2";
 
   src = fetchFromGitHub {
     owner = "go-swagger";
     repo = "go-swagger";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CVfGKkqneNgSJZOptQrywCioSZwJP0XGspVM3S45Q/k=";
+    hash = "sha256-8BMO7rItteXSc0qdfjrgYN/Zfm2hIzTvI2SHY3nxyX4=";
   };
 
-  vendorHash = "sha256-x3fTIXmI5NnOKph1D84MHzf1Kod+WLYn1JtnWLr4x+U=";
+  vendorHash = "sha256-3eebNmeYz207chEej/2jcjgqq/zcckm1KwuWHA8O6cw=";
 
   doCheck = false;
 
