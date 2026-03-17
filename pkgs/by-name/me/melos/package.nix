@@ -31,6 +31,16 @@ buildDartApplication (finalAttrs: {
     cp --recursive packages/melos/templates $out/
   '';
 
+  passthru = {
+    updateScript = {
+      command = [
+        ./update.sh
+        ./.
+      ];
+      supportedFeatures = [ "commit" ];
+    };
+  };
+
   meta = {
     homepage = "https://github.com/invertase/melos";
     description = "Tool for managing Dart projects with multiple packages";
