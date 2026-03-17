@@ -77,7 +77,7 @@ let
       # The type of build to perform. This is passed to `dotnet` with the `--configuration` flag. Possible values are `Release`, `Debug`, etc.
       buildType ? "Release",
       # If set to true, builds the application as a self-contained - removing the runtime dependency on dotnet
-      selfContainedBuild ? false,
+      selfContainedBuild ? null,
       # Whether to use an alternative wrapper, that executes the application DLL using the dotnet runtime from the user environment. `dotnet-runtime` is provided as a default in case no .NET is installed
       # This is useful for .NET tools and applications that may need to run under different .NET runtimes
       useDotnetFromEnv ? false,
