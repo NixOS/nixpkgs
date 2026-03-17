@@ -1,6 +1,7 @@
 {
   acl,
   bash,
+  buildPackages,
   cockpit,
   coreutils,
   fetchFromGitHub,
@@ -41,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   missingHashes = ./missing-hashes.json;
 
-  offlineCache = yarn-berry.fetchYarnBerryDeps {
+  # Use buildPackages for cross-compilation support
+  offlineCache = buildPackages.yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
     hash = "sha256-YnR1SqBGnxEQaGUGMNTHHEGcOIhuGbWnqMdr4eRGXcA=";
   };
@@ -51,8 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     jq
     yarn-berry
-    yarn-berry.yarnBerryConfigHook
+    buildPackages.yarn-berry.yarnBerryConfigHook
   ];
+
+  disallowedRequisites = [ finalAttrs.offlineCache ];
 
   passthru.updateScript = nix-update-script { };
 
