@@ -19,16 +19,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wleave";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "AMNatty";
     repo = "wleave";
     rev = finalAttrs.version;
-    hash = "sha256-+0EKnaxRaHRxRvhASuvfpUijEZJFimR4zSzOyC3FOkQ=";
+    hash = "sha256-AiZVa8+nCrxgi6E54Aa6+At+6JUZkwESpe5v72S8HyA=";
   };
 
-  cargoHash = "sha256-MRVWiQNzETFbWeKwYeoXSUY9gncRCsYdPEZhpOKcTvA=";
+  cargoHash = "sha256-tBjL1l9YH0P6effTYES9urYdKtUh/H3hCI5hUphb9tQ=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -59,16 +59,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm644 -t "$out/etc/wleave" {"style.css","layout.json"}
     install -Dm644 -t "$out/share/wleave/icons" icons/*
 
-    for f in man/*.scd; do
-      local page="man/$(basename "$f" .scd)"
-      scdoc < "$f" > "$page"
-      installManPage "$page"
-    done
-
-    installShellCompletion --cmd wleave \
-      --bash <(cat completions/wleave.bash) \
-      --fish <(cat completions/wleave.fish) \
-      --zsh <(cat completions/_wleave)
+    # Man pages are currently broken due to upstream scdoc syntax errors.
+    # Disable generation until upstream fixes them.
   '';
 
   passthru.updateScript = nix-update-script { };
