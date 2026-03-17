@@ -24,7 +24,7 @@ let
   };
 in
 
-py.pkgs.buildPythonApplication rec {
+py.pkgs.buildPythonApplication (finalAttrs: {
   pname = "oci-cli";
   version = "3.76.0";
   pyproject = true;
@@ -32,7 +32,7 @@ py.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-3fmehq8jM9S2ICxD+4+bEEJqtn/bgV5UW3mveJl+Z7A=";
   };
 
@@ -108,6 +108,7 @@ py.pkgs.buildPythonApplication rec {
   meta = {
     description = "Command Line Interface for Oracle Cloud Infrastructure";
     homepage = "https://docs.cloud.oracle.com/iaas/Content/API/Concepts/cliconcepts.htm";
+    changelog = "https://github.com/oracle/oci-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20 # or
       upl
@@ -118,4 +119,4 @@ py.pkgs.buildPythonApplication rec {
       FKouhai
     ];
   };
-}
+})
