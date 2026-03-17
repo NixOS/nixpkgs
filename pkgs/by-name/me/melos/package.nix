@@ -3,18 +3,15 @@
   fetchFromGitHub,
   buildDartApplication,
 }:
-let
+buildDartApplication (finalAttrs: {
+  pname = "melos";
   version = "7.3.0";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
-    tag = "melos-v${version}";
+    tag = "melos-v${finalAttrs.version}";
     hash = "sha256-XTEhH8F54BoXJ1QNhUIZszHQoDwP0Za1LPQ6Dv9sR08=";
   };
-in
-buildDartApplication {
-  pname = "melos";
-  inherit version src;
 
   patches = [
     # Patch melos entrypoint to bypass cli_launcher which throws because it does not find melos in the "classic" folders eg : .dart_tool or pub cache.
@@ -41,4 +38,4 @@ buildDartApplication {
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eymeric ];
   };
-}
+})
