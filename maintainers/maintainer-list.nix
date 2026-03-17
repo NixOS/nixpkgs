@@ -22215,6 +22215,12 @@
     githubId = 30029970;
     keys = [ { fingerprint = "66AE 3F93 364C 6AB8 18F9  F35D 8D1E 0726 2DFD BD00"; } ];
   };
+  Ra77a3l3-jar = {
+    email = "raffaelemeo77@gmail.com";
+    name = "Raffaele Meo";
+    github = "Ra77a3l3-jar";
+    githubId = 175424218;
+  };
   raboof = {
     email = "arnout@bzzt.net";
     matrix = "@raboof:matrix.org";
@@ -26046,6 +26052,12 @@
     githubId = 5861043;
     matrix = "@superherointj:matrix.org";
     name = "Sérgio Marcelo";
+  };
+  supermarin = {
+    email = "git+nixpkgs@mar.in";
+    name = "marin";
+    github = "supermarin";
+    githubId = 627285;
   };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
