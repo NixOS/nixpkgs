@@ -11379,8 +11379,6 @@ with pkgs;
   # To ensure vdrift's code is built on hydra
   vdrift-bin = vdrift.bin;
 
-  vessel = pkgsi686Linux.callPackage ../games/vessel { };
-
   wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 
   inherit (callPackage ../games/xonotic { })

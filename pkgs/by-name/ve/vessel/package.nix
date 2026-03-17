@@ -1,14 +1,10 @@
 {
   lib,
-  stdenv,
   requireFile,
-  SDL,
-  libpulseaudio,
-  alsa-lib,
-  runtimeShell,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "vessel";
   version = "12082012";
 
@@ -19,28 +15,24 @@ stdenv.mkDerivation rec {
     directory where you saved it.
   '';
 
-  src =
-    if (stdenv.hostPlatform.isi686) then
-      requireFile {
-        message = goBuyItNow;
-        name = "vessel-${version}-bin";
-        sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
-      }
-    else
-      throw "unsupported platform ${stdenv.hostPlatform.system} only i686-linux supported for now.";
+  src = requireFile {
+    message = goBuyItNow;
+    name = "vessel-${version}-bin";
+    sha256 = "1vpwcrjiln2mx43h7ib3jnccyr3chk7a5x2bw9kb4lw8ycygvg96";
+  };
 
   ld_preload = ./isatty.c;
 
   libPath =
     lib.makeLibraryPath [
-      stdenv.cc.cc
-      stdenv.cc.libc
+      pkgsi686Linux.stdenv.cc.cc
+      pkgsi686Linux.stdenv.cc.libc
     ]
     + ":"
     + lib.makeLibraryPath [
-      SDL
-      libpulseaudio
-      alsa-lib
+      pkgsi686Linux.SDL
+      pkgsi686Linux.libpulseaudio
+      pkgsi686Linux.alsa-lib
     ];
 
   buildCommand = ''
@@ -79,7 +71,7 @@ stdenv.mkDerivation rec {
     done
 
     cat > $out/bin/Vessel << EOW
-    #!${runtimeShell}
+    #!${pkgsi686Linux.runtimeShell}
     cd $out/libexec/strangeloop/vessel/
     exec ./x86/vessel.x86
     EOW
