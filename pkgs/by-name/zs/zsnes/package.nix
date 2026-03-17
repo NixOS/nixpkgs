@@ -83,10 +83,7 @@ pkgsi686Linux.stdenv.mkDerivation {
     description = "Super Nintendo Entertainment System Emulator";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.zsnes.com";
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-    ];
+    platforms = lib.intersectLists lib.platforms.linux lib.platforms.x86;
     mainProgram = "zsnes";
   };
 }
