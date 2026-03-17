@@ -4,6 +4,7 @@
   python3,
   installShellFiles,
   nix-update-script,
+  versionCheckHook,
 }:
 
 let
@@ -100,6 +101,8 @@ py.pkgs.buildPythonApplication rec {
     "oci_cli"
   ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -109,6 +112,7 @@ py.pkgs.buildPythonApplication rec {
       asl20 # or
       upl
     ];
+    mainProgram = "oci";
     maintainers = with lib.maintainers; [
       ilian
       FKouhai
