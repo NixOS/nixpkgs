@@ -10,6 +10,7 @@
   coreutils,
   curl,
   dbus,
+  enet,
   expat,
   fd,
   fetchFromGitHub,
@@ -145,6 +146,19 @@ in
         cp ''${rockspecFilename} "$specDir/${pname}-${version}.rockspec"
         rockspecFilename="$specDir/${pname}-${version}.rockspec"
       '';
+  });
+
+  enet = prev.enet.overrideAttrs (old: {
+    postPatch = ''
+      # luaL_checkint is removed in Lua 5.3, and luaL_register is removed in Lua 5.4
+      sed -i '/#include "lauxlib.h"/a\
+      #if LUA_VERSION_NUM >= 502\
+        #define luaL_checkint(L,n) ((int)luaL_checkinteger(L, (n)))\
+        #define luaL_register(L,n,f) ((n) ? luaL_newlib(L,f) : luaL_setfuncs(L,f,0))\
+      #endif
+      ' enet.c
+    '';
+    buildInputs = old.buildInputs ++ [ enet ];
   });
 
   fzf-lua = prev.fzf-lua.overrideAttrs {
