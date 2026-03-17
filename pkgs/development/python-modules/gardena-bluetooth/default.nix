@@ -1,29 +1,29 @@
 {
   lib,
   asyncclick,
-  bleak,
   bleak-retry-connector,
+  bleak,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytest-asyncio,
   pytestCheckHook,
+  setuptools,
   tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "gardena-bluetooth";
-  version = "1.6.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "gardena-bluetooth";
     tag = version;
-    hash = "sha256-L726A0o9TIxFjHOxx0e42RIj4XMOdeZTJE2gWo6OhG4=";
+    hash = "sha256-H02Uq/n2iWAtrO/Reg+yWkFxVkLJWUhq3frc50EF4fo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bleak
