@@ -124,6 +124,7 @@ mpack,,,,,,
 neorg,,,,,5.1,GaetanLepage
 neorg-interim-ls,,,,,,
 neotest,,,,,5.1,mrcjkb
+nginx-lua-prometheus,,,,,,ulysseszhan
 nlua,,,,,,teto
 nui.nvim,,,,,5.1,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,5.1,
