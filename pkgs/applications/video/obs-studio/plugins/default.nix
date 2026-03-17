@@ -54,6 +54,8 @@
 
   obs-media-controls = qt6Packages.callPackage ./obs-media-controls { };
 
+  obs-midi-mg = qt6Packages.callPackage ./obs-midi-mg.nix { };
+
   obs-move-transition = callPackage ./obs-move-transition.nix { };
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
