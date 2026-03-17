@@ -23,14 +23,14 @@
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.8.2";
+  version = "4.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     tag = "v${version}";
-    hash = "sha256-+W8UJ5oXFw4V+gY/ofzjmO1DwZrZjcycaZH+WKC/9CI=";
+    hash = "sha256-j4GHlRXtNJxcM8xuSz+a8NwhNPg4wEyMyvhyb40QEZs=";
   };
 
   build-system = [ flit-core ];
