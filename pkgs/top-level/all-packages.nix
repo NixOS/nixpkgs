@@ -10617,6 +10617,7 @@ with pkgs;
   transmission_4-qt5 = transmission_4.override { enableQt5 = true; };
   transmission_4-qt6 = transmission_4.override { enableQt6 = true; };
   transmission_4-qt = transmission_4-qt5;
+  transmission_4-mac = transmission_4.override { enableMac = true; };
 
   tinywl = callPackage ../applications/window-managers/tinywl {
     wlroots = wlroots_0_20;
