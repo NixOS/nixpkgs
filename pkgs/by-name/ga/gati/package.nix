@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gati";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "YutaUra";
     repo = "gati";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0zuu3bewFQ2ArlLxBRS6JMJPCyqZCOd/R+vCo9ZahvA=";
+    hash = "sha256-Pp/yWZvGJq0t0HmKBbNKydBBv30aqqMO/DVp1lTrXXg=";
   };
 
-  cargoHash = "sha256-uEukQsY57ZtShJhor4856zw+9lmBDkPn2kl6mjsBxIM=";
+  cargoHash = "sha256-lHgxkelhRXYbYWdtwgYzgi9IYOD9VjKnXYtu+UKXzPI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ oniguruma ];
 
-  RUSTONIG_SYSTEM_LIBONIG = 1;
+  env.RUSTONIG_SYSTEM_LIBONIG = 1;
 
   # cli_clipboard requires a display server, unavailable in the sandbox
   checkFlags = [ "--skip=app::tests::export_sets_flash_message_on_success" ];
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A terminal tool for reviewing code, not writing it";
+    description = "Terminal tool for reviewing code, not writing it";
     homepage = "https://github.com/YutaUra/gati";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ yutaura ];
