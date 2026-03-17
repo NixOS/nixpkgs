@@ -1729,8 +1729,8 @@ let
         mktplcRef = {
           name = "foam-vscode";
           publisher = "foam";
-          version = "0.31.0";
-          hash = "sha256-Z3M20CjSEFSG5KVfsbLa7gokNnGAG1IrdD0xe7Ch3t8=";
+          version = "0.33.0";
+          hash = "sha256-xeZp75qnxnW2LNtRz0IUzrBjBe5Po3VHGTta+6VCLvQ=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/foam.foam-vscode/changelog";
