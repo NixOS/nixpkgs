@@ -26047,6 +26047,12 @@
     matrix = "@superherointj:matrix.org";
     name = "Sérgio Marcelo";
   };
+  supermarin = {
+    email = "git+nixpkgs@mar.in";
+    name = "marin";
+    github = "supermarin";
+    githubId = 627285;
+  };
   SuperSandro2000 = {
     email = "sandro.jaeckel@gmail.com";
     matrix = "@sandro:supersandro.de";
