@@ -9698,10 +9698,10 @@
     keys = [ { fingerprint = "275F 6749 AFD2 379D 1033  548C 1237 AB12 2E6F 4761"; } ];
   };
   gigglesquid = {
-    email = "jack.connors@protonmail.com";
+    email = "jack.connors@gigglesquid.tech";
     github = "GiggleSquid";
     githubId = 3685154;
-    name = "Jack connors";
+    name = "Jack Connors";
     keys = [ { fingerprint = "21DF 8034 B212 EDFF 9F19  9C19 F65B 7583 7ABF D019"; } ];
   };
   gila = {
@@ -10077,6 +10077,13 @@
     github = "gruve-p";
     githubId = 11212268;
     name = "gruve-p";
+  };
+  gs-101 = {
+    email = "gabrielsantosdesouza@disroot.org";
+    github = "gs-101";
+    githubId = 172639817;
+    keys = [ { fingerprint = "D1D3 37F6 CB32 02DC B9BA  337B F9D8 EABC F57E ED58"; } ];
+    name = "Gabriel Santos";
   };
   gschwartz = {
     email = "gsch@pennmedicine.upenn.edu";
@@ -13738,6 +13745,12 @@
     github = "kaylorben";
     githubId = 41012641;
     name = "Benjamin Kaylor";
+  };
+  kaynetik = {
+    email = "aleksandar@nesovic.dev";
+    github = "kaynetik";
+    githubId = 48174247;
+    name = "Aleksandar Nesovic";
   };
   kazcw = {
     email = "kaz@lambdaverse.org";
@@ -24527,6 +24540,12 @@
     github = "stigtsp";
     githubId = 75371;
     name = "Stig Palmquist";
+  };
+  sgomezsal = {
+    email = "contact@sgomezsal.com";
+    github = "sgomezsal";
+    githubId = 79657820;
+    name = "Santiago Gomez";
   };
   sgraf = {
     email = "sgraf1337@gmail.com";

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyfirefly";
-  version = "0.1.14";
+  version = "0.1.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyfirefly";
     tag = "v${version}";
-    hash = "sha256-MS3iDyH7rR/fsIVVEvhJjaNvjT81r6ReSzS6cqjChR8=";
+    hash = "sha256-vB/2CJMr5UEkANmJYCSA8igDCTYX0DFitDK3RFr68aE=";
   };
 
   build-system = [ hatchling ];

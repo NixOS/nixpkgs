@@ -18,6 +18,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   };
 
   pythonRelaxDeps = [
+    "codespell"
     "pontos"
     "validators"
   ];

@@ -46,10 +46,7 @@ appimageTools.wrapType2 rec {
     changelog = "https://github.com/tutao/tutanota/releases/tag/tutanota-desktop-release-${version}";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [
-      da157
-      s0ssh
-    ];
+    maintainers = with lib.maintainers; [ s0ssh ];
     mainProgram = "tutanota-desktop";
     platforms = [ "x86_64-linux" ];
   };
