@@ -31,6 +31,13 @@ buildGoModule (finalAttrs: {
 
   vendorHash = "sha256-yfcQgy4cQFRvtsyLHLojnJaWhle1ZR3unmaFQj8ljuw=";
 
+  overrideModAttrs = old: {
+    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
+
   subPackages = [ "cmd/searchix-web" ];
 
   tags = [ "embed" ];
@@ -45,7 +52,7 @@ buildGoModule (finalAttrs: {
     cp ${simpleCss}/simple.css frontend/static/base.css
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postInstall = ''
     $out/bin/searchix-web generate-error-page --outdir $out/share/searchix/
   '';
 
