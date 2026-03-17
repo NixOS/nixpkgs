@@ -57,11 +57,23 @@ def symlink_targets(p: Path) -> List[Path]:
     ...     Path(d, "a").touch()
     ...     Path(d, "b").symlink_to("a")
     ...     Path(d, "c").symlink_to(Path(d, "b"))
-    ...     targets = [str(p).replace(d, "$TMPDIR") for p in symlink_targets(Path(d, "c"))]
-    >>> targets
+    ...     targets = symlink_targets(Path(d, "c"))
+    >>> [str(p).replace(d, "$TMPDIR") for p in targets]
     ['$TMPDIR/b', '$TMPDIR/a']
+    >>> with TemporaryDirectory() as d:
+    ...     Path(d, "a").symlink_to("b")
+    ...     Path(d, "b").symlink_to("a")
+    ...     targets = symlink_targets(Path(d, "b"))
+    >>> [str(p).replace(d, "$TMPDIR") for p in targets]
+    ['$TMPDIR/a', '$TMPDIR/b']
+    >>> with TemporaryDirectory() as d:
+    ...     Path(d, "a").touch()
+    ...     targets = symlink_targets(Path(d, "a"))
+    >>> targets
+    []
     """
     out = []
+    p = p.absolute()
     while p.is_symlink():
         target = p.readlink()
         if target.is_absolute():
