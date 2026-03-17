@@ -3,9 +3,10 @@
   fetchFromGitHub,
   lib,
   mypy,
-  numpy,
-  setuptools,
-  wheel,
+  numpy ? python312Packages.numpy,
+  python312Packages,
+  setuptools ? python312Packages.setuptools,
+  wheel ? python312Packages.wheel,
 }:
 
 buildPythonPackage (finalAttrs: {

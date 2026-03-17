@@ -4,11 +4,12 @@
   config,
   fetchPypi,
   lib,
-  numpy,
-  opencv-python,
-  opencv-python-withCuda,
-  setuptools,
-  wheel,
+  numpy ? python312Packages.numpy,
+  opencv-python ? python312Packages.opencv-python,
+  opencv-python-withCuda ? python312Packages.opencv-python-withCuda,
+  python312Packages,
+  setuptools ? python312Packages.setuptools,
+  wheel ? python312Packages.wheel,
 }:
 
 buildPythonPackage (finalAttrs: {
