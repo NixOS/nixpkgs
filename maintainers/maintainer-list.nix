@@ -14827,6 +14827,12 @@
       }
     ];
   };
+  laksith19 = {
+    email = "nixpkgs@laksith19.net";
+    github = "laksith19";
+    githubId = 78128865;
+    name = "Laksith Prabu";
+  };
   lamarios = {
     matrix = "@lamarios:matrix.org";
     github = "lamarios";
