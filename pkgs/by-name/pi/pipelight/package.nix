@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenv_32bit,
   fetchurl,
   bash,
   cabextract,
@@ -9,16 +9,18 @@
   libx11,
   libGLU,
   libGL,
-  wine-staging,
+  pkgsi686Linux,
 }:
 
 let
-  wine_custom = wine-staging;
+  wine_custom = pkgsi686Linux.wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
 
+  stdenv' = stdenv_32bit;
+
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation rec {
 
   version = "0.2.8.2";
 
