@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit # or
       asl20
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ hythera ];
     # NB: `ein` is also provided by this package, but `nix run
     # nixpkgs#gitoxide` doesn't work at all without this set.
     mainProgram = "gix";
