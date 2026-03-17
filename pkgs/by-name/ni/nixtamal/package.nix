@@ -11,6 +11,7 @@
   nix-prefetch-fossil,
   nix-prefetch-git,
   nix-prefetch-pijul,
+  removeReferencesTo,
   testers,
   nixtamal,
 }:
@@ -31,6 +32,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
+    removeReferencesTo
     # For manpages
     python3Packages.docutils
     python3Packages.pygments
@@ -40,11 +42,15 @@ ocamlPackages.buildDunePackage (finalAttrs: {
   ];
 
   buildInputs = with ocamlPackages; [
-    camomile
     cmdliner
+    fmt
+    ppx_deriving_qcheck
+  ];
+
+  propagatedBuildInputs = with ocamlPackages; [
+    camomile
     eio
     eio_main
-    fmt
     jingoo
     (jsont.override {
       withBrr = false;
@@ -53,7 +59,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     kdl
     logs
     ppx_deriving
-    ppx_deriving_qcheck
+    qcheck-core
     saturn
     stdint
     uri
@@ -72,8 +78,20 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
   doCheck = true;
 
-  postInstall = ''
-    wrapProgram "$out/bin/nixtamal" --prefix PATH : ${
+  outputs = [
+    "bin"
+    "lib"
+    "out"
+  ];
+
+  installPhase = ''
+    runHook preInstall
+    dune install --prefix="$bin" --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" nixtamal
+    for dep in ${ocamlPackages.ocaml} ${ocamlPackages.camomile}
+    do
+        remove-references-to -t $dep $bin/bin/nixtamal
+    done
+    wrapProgram "$bin/bin/nixtamal" --prefix PATH : ${
       lib.makeBinPath [
         coreutils
         nix-prefetch-darcs
@@ -82,10 +100,11 @@ ocamlPackages.buildDunePackage (finalAttrs: {
         nix-prefetch-pijul
       ]
     }
+    runHook postInstall
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = nixtamal;
+    package = nixtamal.bin;
     command = "${nixtamal.meta.mainProgram} --version";
   };
 
