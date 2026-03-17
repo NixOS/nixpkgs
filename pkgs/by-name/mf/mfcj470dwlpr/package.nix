@@ -2,18 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  cups,
-  dpkg,
-  ghostscript,
-  a2ps,
-  coreutils,
-  gnused,
-  gawk,
-  file,
-  makeWrapper,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "mfcj470dw-cupswrapper";
   version = "3.0.0-1";
 
@@ -22,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "7202dd895d38d50bb767080f2995ed350eed99bc2b7871452c3c915c8eefc30a";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ pkgsi686Linux.makeWrapper ];
   buildInputs = [
-    cups
-    ghostscript
-    dpkg
-    a2ps
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.dpkg
+    pkgsi686Linux.a2ps
   ];
 
   dontUnpack = true;
@@ -48,20 +40,20 @@ stdenv.mkDerivation rec {
     wrapProgram $out/opt/brother/Printers/mfcj470dw/lpd/psconvertij2 \
     --prefix PATH ":" ${
       lib.makeBinPath [
-        gnused
-        coreutils
-        gawk
+        pkgsi686Linux.gnused
+        pkgsi686Linux.coreutils
+        pkgsi686Linux.gawk
       ]
     }
 
     wrapProgram $out/opt/brother/Printers/mfcj470dw/lpd/filtermfcj470dw \
     --prefix PATH ":" ${
       lib.makeBinPath [
-        ghostscript
-        a2ps
-        file
-        gnused
-        coreutils
+        pkgsi686Linux.ghostscript
+        pkgsi686Linux.a2ps
+        pkgsi686Linux.file
+        pkgsi686Linux.gnused
+        pkgsi686Linux.coreutils
       ]
     }
   '';
