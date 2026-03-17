@@ -43,33 +43,59 @@ let
         "gfx950"
       ];
     };
-    grouped_conv_bwd = {
+    grouped_conv_bwd1 = {
       targets = [
-        "device_grouped_conv1d_bwd_weight_instance"
         "device_grouped_conv2d_bwd_data_instance"
+      ];
+    };
+    grouped_conv_bwd2 = {
+      targets = [
         "device_grouped_conv2d_bwd_weight_instance"
       ];
     };
-    grouped_conv_fwd = {
+    grouped_conv_bwd3 = {
+      enabled = !miOpenReqLibsOnly;
       targets = [
-        "device_grouped_conv1d_fwd_instance"
+        "device_grouped_conv1d_bwd_weight_instance"
+      ];
+    };
+    grouped_conv_fwd1 = {
+      targets = [
         "device_grouped_conv2d_fwd_instance"
-        "device_grouped_conv2d_fwd_bias_bnorm_clamp_instance"
+      ];
+    };
+    grouped_conv_fwd2 = {
+      targets = [
         "device_grouped_conv2d_fwd_bias_clamp_instance"
         "device_grouped_conv2d_fwd_clamp_instance"
+      ];
+    };
+    grouped_conv_fwd3 = {
+      enabled = !miOpenReqLibsOnly;
+      targets = [
+        "device_grouped_conv1d_fwd_instance"
+        "device_grouped_conv2d_fwd_bias_bnorm_clamp_instance"
         "device_grouped_conv2d_fwd_dynamic_op_instance"
       ];
     };
     grouped_conv_bwd_3d1 = {
       targets = [
         "device_grouped_conv3d_bwd_data_instance"
-        "device_grouped_conv3d_bwd_data_bilinear_instance"
-        "device_grouped_conv3d_bwd_data_scale_instance"
       ];
     };
     grouped_conv_bwd_3d2 = {
       targets = [
+        "device_grouped_conv3d_bwd_data_bilinear_instance"
+        "device_grouped_conv3d_bwd_data_scale_instance"
+      ];
+    };
+    grouped_conv_bwd_3d3 = {
+      targets = [
         "device_grouped_conv3d_bwd_weight_instance"
+      ];
+    };
+    grouped_conv_bwd_3d4 = {
+      targets = [
         "device_grouped_conv3d_bwd_weight_bilinear_instance"
         "device_grouped_conv3d_bwd_weight_scale_instance"
       ];
@@ -77,25 +103,35 @@ let
     grouped_conv_fwd_3d1 = {
       targets = [
         "device_grouped_conv3d_fwd_instance"
-        "device_grouped_conv3d_fwd_clamp_instance"
-        "device_grouped_conv3d_fwd_bias_bnorm_clamp_instance"
-        "device_grouped_conv3d_fwd_bias_clamp_instance"
-        "device_grouped_conv3d_fwd_bilinear_instance"
-        "device_grouped_conv3d_fwd_convinvscale_instance"
-        "device_grouped_conv3d_fwd_convscale_instance"
-        "device_grouped_conv3d_fwd_convscale_add_instance"
       ];
     };
     grouped_conv_fwd_3d2 = {
       targets = [
-        "device_grouped_conv3d_fwd_convscale_relu_instance"
-        "device_grouped_conv3d_fwd_dynamic_op_instance"
+        "device_grouped_conv3d_fwd_bias_clamp_instance"
+      ];
+    };
+    grouped_conv_fwd_3d3 = {
+      targets = [
+        "device_grouped_conv3d_fwd_bilinear_instance"
+        "device_grouped_conv3d_fwd_clamp_instance"
         "device_grouped_conv3d_fwd_scale_instance"
-        "device_grouped_conv3d_fwd_scaleadd_ab_instance"
         "device_grouped_conv3d_fwd_scaleadd_scaleadd_relu_instance"
       ];
     };
+    grouped_conv_fwd_3d4 = {
+      enabled = !miOpenReqLibsOnly;
+      targets = [
+        "device_grouped_conv3d_fwd_bias_bnorm_clamp_instance"
+        "device_grouped_conv3d_fwd_convinvscale_instance"
+        "device_grouped_conv3d_fwd_convscale_instance"
+        "device_grouped_conv3d_fwd_convscale_add_instance"
+        "device_grouped_conv3d_fwd_convscale_relu_instance"
+        "device_grouped_conv3d_fwd_dynamic_op_instance"
+        "device_grouped_conv3d_fwd_scaleadd_ab_instance"
+      ];
+    };
     grouped_conv_fwd_nd = {
+      enabled = !miOpenReqLibsOnly;
       targets = [
         "device_grouped_convnd_bwd_weight_instance"
       ];
@@ -169,12 +205,17 @@ let
     };
     conv = {
       targets = [
-        "device_conv1d_bwd_data_instance"
         "device_conv2d_bwd_data_instance"
         "device_conv2d_fwd_instance"
         "device_conv2d_fwd_bias_relu_instance"
-        "device_conv2d_fwd_bias_relu_add_instance"
         "device_conv3d_bwd_data_instance"
+      ];
+    };
+    conv2 = {
+      enabled = !miOpenReqLibsOnly;
+      targets = [
+        "device_conv1d_bwd_data_instance"
+        "device_conv2d_fwd_bias_relu_add_instance"
       ];
     };
     pool = {
@@ -188,6 +229,7 @@ let
       ];
     };
     other0 = {
+      enabled = !miOpenReqLibsOnly;
       targets = [
         "device_quantization_instance"
       ];

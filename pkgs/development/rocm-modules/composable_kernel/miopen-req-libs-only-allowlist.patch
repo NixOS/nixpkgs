@@ -1,0 +1,49 @@
+diff --git a/library/src/tensor_operation_instance/gpu/CMakeLists.txt b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
+index 172f6681b8..826b6bf50b 100644
+--- a/library/src/tensor_operation_instance/gpu/CMakeLists.txt
++++ b/library/src/tensor_operation_instance/gpu/CMakeLists.txt
+@@ -321,8 +321,42 @@ FOREACH(subdir_path ${dir_list})
+         endif()
+ 
+         if(MIOPEN_REQ_LIBS_ONLY)
+-            message(STATUS "Removing all sources that are not required for MIOpen")
+-            if(NOT "${cmake_instance}" MATCHES "conv")
++            get_filename_component(_subdir_name ${subdir_path} NAME)
++            # Allowlist of instance directories used by MIOpen.
++            # MIOpen links device_conv_operations; traced from includes
++            # in MIOpen solver source (implicitgemm_ck_util.hpp,
++            # conv_hip_implicit_gemm_*_xdlops.cpp, conv_ck_igemm_*_fused.cpp).
++            set(_miopen_required_subdirs
++                # non-grouped conv (convolution_forward.hpp, convolution_backward_data.hpp)
++                conv2d_fwd
++                conv2d_fwd_bias_relu
++                conv2d_bwd_data
++                conv3d_bwd_data
++                # 2D grouped conv (grouped_convolution_forward.hpp, _backward_data.hpp, _backward_weight.hpp)
++                grouped_conv2d_fwd
++                grouped_conv2d_bwd_data
++                grouped_conv2d_bwd_weight
++                # 2D grouped fused (grouped_convolution_forward_clamp.hpp, _bias_clamp.hpp)
++                grouped_conv2d_fwd_clamp
++                grouped_conv2d_fwd_bias_clamp
++                # 3D grouped conv (same headers as 2D, NumDimSpatial=3 branches)
++                grouped_conv3d_fwd
++                grouped_conv3d_bwd_data
++                grouped_conv3d_bwd_weight
++                # 3D grouped fused (grouped_convolution_forward_{bilinear,scale,clamp,bias_clamp,scaleadd_scaleadd_relu}.hpp)
++                grouped_conv3d_fwd_bilinear
++                grouped_conv3d_fwd_scale
++                grouped_conv3d_fwd_clamp
++                grouped_conv3d_fwd_bias_clamp
++                grouped_conv3d_fwd_scaleadd_scaleadd_relu
++                # 3D grouped bwd fused (grouped_convolution_backward_data_{bilinear,scale}.hpp)
++                grouped_conv3d_bwd_data_bilinear
++                grouped_conv3d_bwd_data_scale
++                # 3D grouped wrw fused (grouped_convolution_backward_weight_{bilinear,scale}.hpp)
++                grouped_conv3d_bwd_weight_bilinear
++                grouped_conv3d_bwd_weight_scale
++            )
++            if(NOT _subdir_name IN_LIST _miopen_required_subdirs)
+                 set(add_inst 0)
+             endif()
+         endif()

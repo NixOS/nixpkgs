@@ -127,6 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Hacky fix for failure for some targets when all targets are selected out
     # for a non-optional at link time kernel
     ./fix-empty-offload-targets.diff
+    # Replace the broad MIOPEN_REQ_LIBS_ONLY "conv" str filter with correct allowlist
+    # to avoid building kernels that are never used by MIOpen despite
+    # MIOPEN_REQ_LIBS_ONLY being set
+    ./miopen-req-libs-only-allowlist.patch
   ];
 
   postPatch =
