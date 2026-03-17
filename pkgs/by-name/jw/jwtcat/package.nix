@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication {
   '';
 
   meta = {
-    description = "A CPU-based JSON Web Token (JWT) cracker and - to some extent - scanner.";
+    description = "CPU-based JSON Web Token cracker and scanner";
     homepage = "https://github.com/aress31/jwtcat";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ _0x2B ];
