@@ -22,13 +22,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2026-03-08";
+    version = "0-unstable-2026-03-16";
 
     src = fetchFromGitLab {
       owner = "aiyahm";
       repo = "FairyWren-Icons";
-      rev = "07bcdd4e83c4d46a698a4af60b9b8acc422af39f";
-      hash = "sha256-Gzr3AiVD+IFnJa3X3wp8CAFl6SL/gD3dCrFGMDHDMos=";
+      rev = "612fd0b98b1b566d772f8e1ecfe60ae2b4f281ce";
+      hash = "sha256-D/iR0+fO/j3e4mdyDs/qrUQMlzatICnoUcTAwOLRfxs=";
     };
 
     propagatedBuildInputs = [
