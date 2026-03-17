@@ -204,7 +204,7 @@ stdenv.mkDerivation {
       ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
 
       mkdir -p "$out/share"
-      for f in '${chromium.browser}'/share/*; do # hello emacs */
+      for f in '${chromium.browser}'/share/*; do
         ln -s -t "$out/share/" "$f"
       done
     '';
