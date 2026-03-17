@@ -100,9 +100,7 @@ buildGo126Module (finalAttrs: {
       --set PDFCPU_BIN_PATH "${getExe pdfcpu}" \
       --set PDFTK_BIN_PATH "${getExe pdftk}" \
       --set QPDF_BIN_PATH "${getExe qpdf}" \
-      --set UNOCONVERTER_BIN_PATH "${getExe unoconv}" \
-      --set CHROMIUM_BIN_PATH "${getExe chromium}" \
-      --set LIBREOFFICE_BIN_PATH "${libreoffice'}"
+      --set UNOCONVERTER_BIN_PATH "${getExe unoconv}"
   '';
 
   passthru.updateScript = nix-update-script { };
