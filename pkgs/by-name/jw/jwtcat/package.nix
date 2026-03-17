@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-pk0/Lzw4yUIXfLBX/0Xwaecio42MjLYUzECQ8xaH3vY=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pyjwt
     coloredlogs
     tqdm
