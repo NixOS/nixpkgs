@@ -71,27 +71,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
-    # Run both shell completion and manpage generation tasks. Unlike the
-    # fine-grained variants, the 'dist' command doesn't allow specifying the
-    # path but that's fine, because we can simply install them from the implicit
-    # output directories.
-    $out/bin/xtask dist
+  postInstall =
+    lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
+      let
+        emulator = stdenv.hostPlatform.emulator buildPackages;
+      in
+      ''
+        # Run both shell completion and manpage generation tasks. Unlike the
+        # fine-grained variants, the 'dist' command doesn't allow specifying the
+        # path but that's fine, because we can simply install them from the implicit
+        # output directories.
+        ${emulator} $out/bin/xtask dist
 
-    # The dist task above should've created
-    #  1. Shell completions in comp/
-    #  2. The NH manpage (nh.1) in man/
-    # Let's install those.
-    # The important thing to note here is that installShellCompletion cannot
-    # actually load *all* shell completions we generate with 'xtask dist'.
-    # Elvish, for example isn't supported. So we have to be very explicit
-    # about what we're installing, or this will fail.
-    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} ./comp/*.{bash,fish,zsh,nu}
-    installManPage ./man/nh.1
-
-    # Avoid populating PATH with an 'xtask' cmd
-    rm $out/bin/xtask
-  '';
+        # The dist task above should've created
+        #  1. Shell completions in comp/
+        #  2. The NH manpage (nh.1) in man/
+        # Let's install those.
+        # The important thing to note here is that installShellCompletion cannot
+        # actually load *all* shell completions we generate with 'xtask dist'.
+        # Elvish, for example isn't supported. So we have to be very explicit
+        # about what we're installing, or this will fail.
+        installShellCompletion --cmd ${finalAttrs.meta.mainProgram} ./comp/*.{bash,fish,zsh,nu}
+        installManPage ./man/nh.1
+      ''
+    )
+    + ''
+      # Avoid populating PATH with an 'xtask' cmd
+      rm $out/bin/xtask
+    '';
 
   cargoHash = "sha256-BLv69rL5L84wNTMiKHbSumFU4jVQqAiI1pS5oNLY9yE=";
 
