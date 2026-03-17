@@ -402,6 +402,11 @@ in
     ];
   });
 
+  lsqlite3 = prev.lsqlite3.overrideAttrs (old: {
+    src = old.src.overrideAttrs { extension = "zip"; };
+    buildInputs = old.buildInputs ++ [ sqlite.dev ];
+  });
+
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
     strictDeps = false;
     meta.broken = isLuaJIT;
