@@ -7,7 +7,6 @@
   hierarchy-builder,
   stdlib,
   single ? false,
-  coqPackages,
   coq,
   version ? null,
 }@args:
@@ -232,4 +231,25 @@ let
     in
     patched-derivation;
 in
-mathcomp_ (if single then "single" else "analysis")
+# this is just a wrapper for rocqPackages.mathcomp-analysis for Rocq >= 9.0
+if
+  coq.rocqPackages ? mathcomp-analysis
+  && !(lib.elem version [
+    "1.12.0"
+    "1.13.0"
+    "1.14.0"
+    "1.15.0"
+  ])
+then
+  coq.rocqPackages.mathcomp-analysis.override {
+    inherit version single;
+    inherit
+      mathcomp
+      mathcomp-finmap
+      mathcomp-bigenough
+      stdlib
+      ;
+    inherit (coq.rocqPackages) rocq-core;
+  }
+else
+  mathcomp_ (if single then "single" else "analysis")
