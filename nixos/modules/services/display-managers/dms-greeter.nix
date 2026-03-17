@@ -22,6 +22,7 @@ let
   cfg = config.services.displayManager.dms-greeter;
   cfgDms = config.programs.dms-shell;
   cfgAutoLogin = config.services.displayManager.autoLogin;
+  sessionData = config.services.displayManager.sessionData;
 
   cacheDir = "/var/lib/dms-greeter";
 
@@ -51,6 +52,38 @@ let
       )
     } ${optionalString cfg.logs.save "> ${cfg.logs.path} 2>&1"}
   '';
+
+  autoLoginCommand =
+    pkgs.runCommand "dms-greeter-autologin-command"
+      {
+        nativeBuildInputs = [
+          pkgs.gnugrep
+          pkgs.coreutils
+        ];
+      }
+      ''
+        set -euo pipefail
+
+        session="${sessionData.autologinSession}"
+        desktops="${sessionData.desktops}"
+
+        for sessionFile in \
+          "$desktops/share/wayland-sessions/$session.desktop" \
+          "$desktops/share/xsessions/$session.desktop"
+        do
+          if [ -f "$sessionFile" ]; then
+            command="$(grep -m1 '^Exec=' "$sessionFile" | cut -d= -f2- || true)"
+
+            if [ -n "$command" ]; then
+              printf '%s\n' "$command" > "$out"
+              exit 0
+            fi
+          fi
+        done
+
+        echo "dms-greeter autologin: could not resolve Exec for session '$session'" >&2
+        exit 1
+      '';
 
   jq = getExe pkgs.jq;
 
@@ -217,6 +250,13 @@ in
             programs.${cfg.compositor.name}.enable = true;
         '';
       }
+      {
+        assertion = cfgAutoLogin.enable -> sessionData.autologinSession != null;
+        message = ''
+          dms-greeter auto-login requires services.displayManager.defaultSession to be set,
+          or at least one session in services.displayManager.sessionPackages.
+        '';
+      }
     ];
 
     services.greetd = {
@@ -227,7 +267,8 @@ in
           command = getExe greeterScript;
         };
         initial_session = mkIf (cfgAutoLogin.enable && (cfgAutoLogin.user != null)) {
-          inherit (cfgAutoLogin) user command;
+          inherit (cfgAutoLogin) user;
+          command = ''${getExe pkgs.bash} -lc "${pkgs.systemd}/bin/systemd-cat $(<${autoLoginCommand})"'';
         };
       };
     };
@@ -290,7 +331,9 @@ in
         fi
 
         if [ -f settings.json ]; then
-            if cp "$(${jq} -r '.customThemeFile' settings.json)" custom-theme.json; then
+            theme_file="$(${jq} -r '.customThemeFile // empty' settings.json)"
+            if [ -f "$theme_file" ] && [ -r "$theme_file" ]; then
+                cp "$theme_file" custom-theme.json
                 mv settings.json settings.orig.json
                 ${jq} '.customThemeFile = "${cacheDir}/custom-theme.json"' settings.orig.json > settings.json
             fi

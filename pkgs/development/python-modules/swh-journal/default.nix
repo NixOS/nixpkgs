@@ -13,7 +13,7 @@
   pytest-mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-journal";
   version = "2.0.0";
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-journal";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ycTB7hSjTerJOd+nEv8HbM82vPAO8P1+xooy0oN4eHw=";
   };
 
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Persistent logger of changes to the archive, with publish-subscribe support";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-journal";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

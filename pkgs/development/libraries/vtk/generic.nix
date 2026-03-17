@@ -39,6 +39,7 @@
   # filters
   openturns,
   openslide,
+  onnxruntime,
 
   # io modules
   cgns,
@@ -65,6 +66,7 @@
   hdf5,
   netcdf,
   opencascade-occt,
+  openusd,
 
   # threading
   onetbb,
@@ -113,6 +115,9 @@ let
     viskores = self.callPackage viskores.override { };
     gdal = self.callPackage gdal.override { useMinimalFeatures = true; };
     pdal = self.callPackage pdal.override { };
+    # vtk fail to configure with openusd with materialX support
+    # see https://github.com/AcademySoftwareFoundation/MaterialX/pull/2752
+    openusd = openusd.override { withMaterialX = false; };
   });
   vtkBool = feature: bool: lib.cmakeFeature feature "${if bool then "YES" else "NO"}";
 in
@@ -155,6 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
     vtkPackages.gdal
     vtkPackages.pdal
   ]
+  ++ lib.optionals (lib.versionAtLeast finalAttrs.version "9.6.0") [
+    vtkPackages.openusd
+    onnxruntime
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxfixes
     libxrender
@@ -169,7 +178,11 @@ stdenv.mkDerivation (finalAttrs: {
     eigen
     boost
     verdict
+  ]
+  ++ lib.optionals (lib.versionOlder finalAttrs.version "9.6.0") [
     double-conversion
+  ]
+  ++ [
     freetype
     lz4
     xz
