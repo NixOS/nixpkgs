@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "roborev";
-  version = "0.39.0";
+  version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "roborev-dev";
     repo = "roborev";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oxiJwGxiEkxJH2Ao6aHXwYuqerZii26sIYydLfCZA6g=";
+    hash = "sha256-E5AcXd63sNRoRc8SCVlV5Jv5arjgpCR/8knZHJ8UG0k=";
   };
 
-  vendorHash = "sha256-9jLxJ4iKuuAAxF8eNbRCoTMv+WmQjGIOl3PC0HZOi6M=";
+  vendorHash = "sha256-chHhETsoDGJEw1CijPmKEVUIc5dhwGytFBFCWuO5GRY=";
 
   subPackages = [ "cmd/roborev" ];
 
