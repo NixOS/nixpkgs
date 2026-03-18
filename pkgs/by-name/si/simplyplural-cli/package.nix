@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonPackage {
+python3Packages.buildPythonApplication {
   pname = "simplyplural-cli";
   version = "0.1.1";
 
