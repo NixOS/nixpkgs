@@ -6757,6 +6757,8 @@ self: super: with self; {
 
   gtfs-realtime-bindings = callPackage ../development/python-modules/gtfs-realtime-bindings { };
 
+  gtfs-station-stop = callPackage ../development/python-modules/gtfs-station-stop { };
+
   gto = callPackage ../development/python-modules/gto { };
 
   gtts = callPackage ../development/python-modules/gtts { };
@@ -7916,6 +7918,8 @@ self: super: with self; {
   json-stream = callPackage ../development/python-modules/json-stream { };
 
   json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
+
+  json-timeseries = callPackage ../development/python-modules/json-timeseries { };
 
   json-tricks = callPackage ../development/python-modules/json-tricks { };
 
@@ -11572,6 +11576,8 @@ self: super: with self; {
 
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
 
+  openplantbook-sdk = callPackage ../development/python-modules/openplantbook-sdk { };
+
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
   openrazer = callPackage ../development/python-modules/openrazer/pylib.nix { };
@@ -13093,6 +13099,8 @@ self: super: with self; {
   py-multicodec = callPackage ../development/python-modules/py-multicodec { };
 
   py-multihash = callPackage ../development/python-modules/py-multihash { };
+
+  py-netgear-plus = callPackage ../development/python-modules/py-netgear-plus { };
 
   py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
 

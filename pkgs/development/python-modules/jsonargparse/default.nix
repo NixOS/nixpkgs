@@ -1,29 +1,20 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonAtLeast,
-
-  # build-system
-  setuptools,
-
-  # dependencies
-  pyyaml,
-
-  # optional-dependencies
-
-  # tests
-
   argcomplete,
+  buildPythonPackage,
   docstring-parser,
+  fetchFromGitHub,
   fsspec,
   jsonnet,
   jsonschema,
   omegaconf,
   pytestCheckHook,
+  pythonAtLeast,
+  pyyaml,
   reconplogger,
   requests,
   ruyaml,
+  setuptools,
   toml,
   types-pyyaml,
   types-requests,
@@ -32,14 +23,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "jsonargparse";
-  version = "4.46.0";
+  version = "4.47.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YLryV70RV4TH86ysllMXyCsZp7xr1LRFwKU1PjvoilA=";
+    hash = "sha256-iZiXIeoxohbiKgE7oMy6q9kc3m0AxPFgoQunXmZDjYA=";
   };
 
   build-system = [ setuptools ];

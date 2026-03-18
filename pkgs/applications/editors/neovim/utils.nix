@@ -112,6 +112,7 @@ let
         runtimeDeps
         pluginAdvisedLua
         pluginPython3Packages
+        luaDependencies
         ;
 
       # A Vim "package", see ':h packages'

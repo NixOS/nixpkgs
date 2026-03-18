@@ -400,13 +400,13 @@
     "vendorHash": null
   },
   "fastly_fastly": {
-    "hash": "sha256-EQlK21yB1PcM74NBKnslB/Q4Y9JO1SOzvmpGZkJ74HQ=",
+    "hash": "sha256-qEBjalezQhcDDeAW/GGf8d70A5iWpWU4C0ABN5HZpAM=",
     "homepage": "https://registry.terraform.io/providers/fastly/fastly",
     "owner": "fastly",
     "repo": "terraform-provider-fastly",
-    "rev": "v8.7.1",
+    "rev": "v8.7.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-xgIAmxi9VvPsWqBtQHchv5UvwALkayxmoMsUp0aYJVs="
+    "vendorHash": "sha256-I+8Ql0/m/vYchnGsg0ADX/wpWwgH79ALN8Cl6gzcS2c="
   },
   "flexibleenginecloud_flexibleengine": {
     "hash": "sha256-yEZ9JiUSqFFbfqzOOD59ZBv4yFCeUBBKlp6aiUqDqiM=",
@@ -526,11 +526,11 @@
     "vendorHash": null
   },
   "hashicorp_azurerm": {
-    "hash": "sha256-sg6CJVQJybbYghcp8dBhm2B7xvmsuUS7Je2jmGZHwZE=",
+    "hash": "sha256-6SzcMWDKloX8qmBW8sGKOAKVxFVegaSYSm7xSZBS3p4=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/azurerm",
     "owner": "hashicorp",
     "repo": "terraform-provider-azurerm",
-    "rev": "v4.63.0",
+    "rev": "v4.64.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1238,13 +1238,13 @@
     "vendorHash": "sha256-E9e4+n12uSc12F428D8Oqe0iquTMywAY4DYWhSC+hmk="
   },
   "splunk-terraform_signalfx": {
-    "hash": "sha256-lDFwuSZdc0gI5LotTSJk0FSBc9jn7WN43hXEsVHiwG0=",
+    "hash": "sha256-N9vAa6/FAGQaLFv2GUz4P8vKXR1F8QPFJ+sIaFoNFpw=",
     "homepage": "https://registry.terraform.io/providers/splunk-terraform/signalfx",
     "owner": "splunk-terraform",
     "repo": "terraform-provider-signalfx",
-    "rev": "v9.25.0",
+    "rev": "v9.26.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-EOr4Ps0IYYOtRq19tt87NFfCEvJTaFBGb5B4mKMll7c="
+    "vendorHash": "sha256-oan+TCct0oHyVHgf09WbH+Xo9IUoEywEYkgGE/pzUzQ="
   },
   "spotinst_spotinst": {
     "hash": "sha256-dZStuj7YjSF9X5/AEkrZyqDT2l2orpV4jY6CJrXjOgA=",
@@ -1409,11 +1409,11 @@
     "vendorHash": "sha256-OVdhM8Zqnm1J8KducnkNkroBoSLER3fHfZBjyp7kBu8="
   },
   "ucloud_ucloud": {
-    "hash": "sha256-UOVnfWYhntmRHMApQgemjUBsyUIz0bexsc1gwDGGee4=",
+    "hash": "sha256-lDLYp0ApFCV6XYCxCunkpFwEXpACoChQWLx2bHTjeQs=",
     "homepage": "https://registry.terraform.io/providers/ucloud/ucloud",
     "owner": "ucloud",
     "repo": "terraform-provider-ucloud",
-    "rev": "v1.39.2",
+    "rev": "v1.39.3",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
