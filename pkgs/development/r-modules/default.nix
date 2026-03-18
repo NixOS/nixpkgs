@@ -1724,6 +1724,7 @@ let
     "ceramic"
     "connections"
     "covidmx"
+    "ggiraph"
     "csodata"
     "DiceView"
     "facmodTS"
