@@ -6971,6 +6971,12 @@
     githubId = 131907205;
     name = "David Thievon";
   };
+  dogethebeast = {
+    email = "ratiqnarwal@gmail.com";
+    github = "dogethebeast";
+    githubId = 60806265;
+    name = "Ratiq Narwal";
+  };
   dolphindalt = {
     email = "dolphindalt@gmail.com";
     github = "dolphindalt";
