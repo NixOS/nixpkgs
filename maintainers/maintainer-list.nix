@@ -22237,7 +22237,7 @@
   rachitvrma = {
     name = "Rachit Kumar Verma";
     github = "rachitvrma";
-    githubId = "155641117";
+    githubId = 155641117;
   };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
