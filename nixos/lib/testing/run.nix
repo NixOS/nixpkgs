@@ -2,6 +2,7 @@
   config,
   hostPkgs,
   lib,
+  containers,
   options,
   ...
 }:
@@ -96,12 +97,15 @@ in
         requiredSystemFeatures = [
           "nixos-test"
         ]
+        # Containers use systemd-nspawn, which requires pid 0 inside of the sandbox.
+        ++ lib.optional (builtins.length (lib.attrNames containers) > 0) "uid-range"
         ++ lib.optional isLinux "kvm"
         ++ lib.optional isDarwin "apple-virt";
 
         nativeBuildInputs = lib.optionals config.enableDebugHook [
           hostPkgs.openssh
           hostPkgs.inetutils
+          hostPkgs.socat # to allow SSH backdoor connections for systemd-nspawn containers
         ];
 
         buildCommand = ''
