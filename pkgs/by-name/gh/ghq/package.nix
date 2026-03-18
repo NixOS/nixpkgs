@@ -1,16 +1,15 @@
 {
   lib,
   stdenv,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   installShellFiles,
   testers,
   nix-update-script,
   ghq,
-  go_1_26,
 }:
 
-buildGoModule.override { go = go_1_26; } (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "ghq";
   version = "1.9.4";
 
