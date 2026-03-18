@@ -71,17 +71,22 @@ async function main() {
       // Don't unlink this file, we just wrote it.
       managed.delete(file);
 
-      // Link file
+      // No need to replace the symlink if it already points to the right target
       try {
-        await fs.promises.symlink(sourcePath, targetPath);
+        if (await fs.promises.readlink(targetPath) === sourcePath) {
+          return
+        }
       } catch (err) {
-        // If the target file already exists remove it and try again
-        if (err.code !== "EEXIST") {
+        // If the symlink doesn't already exist, keep going. If we get a
+        // different error trying to stat it, fail.
+        if (err.code !== "ENOENT") {
           throw err;
         }
-        await fs.promises.unlink(targetPath);
-        await fs.promises.symlink(sourcePath, targetPath);
       }
+      // Replace the link, if it exists, atomically.
+      const tmpPath = `${targetPath}.tmp.${process.pid}`
+      await fs.promises.symlink(sourcePath, tmpPath);
+      await fs.promises.rename(tmpPath, targetPath);
     })
   );
 

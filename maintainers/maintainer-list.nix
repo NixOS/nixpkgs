@@ -22725,6 +22725,12 @@
     githubId = 3302;
     name = "Renzo Carbonara";
   };
+  replicapra = {
+    name = "replicapra";
+    github = "replicapra";
+    githubId = 154707993;
+    email = "nixpkgs@replicapra.dev";
+  };
   repparw = {
     email = "ubritos@gmail.com";
     github = "repparw";

@@ -7919,6 +7919,8 @@ self: super: with self; {
 
   json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
 
+  json-timeseries = callPackage ../development/python-modules/json-timeseries { };
+
   json-tricks = callPackage ../development/python-modules/json-tricks { };
 
   json2html = callPackage ../development/python-modules/json2html { };
@@ -11575,6 +11577,8 @@ self: super: with self; {
   openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
 
   openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
+
+  openplantbook-sdk = callPackage ../development/python-modules/openplantbook-sdk { };
 
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 

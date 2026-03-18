@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sqlite3-to-mysql";
-  version = "2.5.1";
+  version = "2.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "techouse";
     repo = "sqlite3-to-mysql";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2SoLiqOLuGcB4IV2CPud+mjc5s8mqobD72kkx0WCwVU=";
+    hash = "sha256-6WIGQVZZBWVGP8nr7Gxvd3j9wrt08EcCmb9ljRMkUgc=";
   };
 
   build-system = with python3Packages; [
@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     packaging
     mysql80
     python-dateutil
+    sqlglot
   ];
 
   pythonRelaxDeps = [
