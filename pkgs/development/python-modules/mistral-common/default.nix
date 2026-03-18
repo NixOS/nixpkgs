@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "mistral-common";
-  version = "1.8.8";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-common";
     tag = "v${version}";
-    hash = "sha256-rvW2idAqdCZi7+DsHJXczJKbfceZQ4lQyHScLOqxFIc=";
+    hash = "sha256-If0nukwe/9W4i42S+lE52lT/AU77VK0S9LKG1AyWzjA=";
   };
 
   build-system = [ setuptools ];
