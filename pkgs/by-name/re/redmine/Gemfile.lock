@@ -77,7 +77,7 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     base64 (0.3.0)
@@ -154,7 +154,7 @@ GEM
       pp (>= 0.6.0)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
-    json (2.18.1)
+    json (2.19.1)
     jwt (3.1.2)
       base64
     language_server-protocol (3.17.0.5)
@@ -177,14 +177,14 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2026.0203)
+    mime-types-data (3.2026.0303)
     mini_magick (5.2.0)
       benchmark
       logger
     mini_mime (1.1.5)
     mini_portile2 (2.8.9)
     minitest (5.27.0)
-    mocha (3.0.1)
+    mocha (3.1.0)
       ruby2_keywords (>= 0.0.5)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
@@ -204,7 +204,7 @@ GEM
       net-protocol
     netrc (0.11.0)
     nio4r (2.7.5)
-    nokogiri (1.18.10)
+    nokogiri (1.19.1)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oauth2 (2.0.18)
@@ -232,7 +232,7 @@ GEM
     psych (5.3.1)
       date
       stringio
-    public_suffix (7.0.2)
+    public_suffix (7.0.5)
     puma (7.2.0)
       nio4r (~> 2.0)
     racc (1.8.1)
@@ -325,7 +325,7 @@ GEM
       rubocop-ast (>= 1.45.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.49.0)
+    rubocop-ast (1.49.1)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
     rubocop-performance (1.25.0)
@@ -372,7 +372,7 @@ GEM
       svg_optimizer
       thor
     thor (1.5.0)
-    timeout (0.6.0)
+    timeout (0.6.1)
     trilogy (2.9.0)
     tsort (0.2.0)
     tzinfo (2.0.6)
@@ -429,7 +429,7 @@ DEPENDENCIES
   net-ldap (~> 0.17.0)
   net-pop (~> 0.1.2)
   net-smtp (~> 0.5.0)
-  nokogiri (~> 1.18.3)
+  nokogiri (~> 1.19.1)
   oauth2
   pg (~> 1.5.3)
   propshaft (~> 1.1.0)
