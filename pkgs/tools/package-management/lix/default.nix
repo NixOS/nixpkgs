@@ -41,6 +41,13 @@ let
     hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
   };
 
+  lixLowdown30Patch = fetchpatch {
+    name = "lix-lowdown-3.0-support.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/af0390c27bdc401ece8f8192cb3024f0ff08e977.patch";
+    excludes = [ "flake.nix" ];
+    hash = "sha256-ZBkbgeZ/D7H2teX8bPy5NEG1aXbQVksTDV3aVBZdRPM=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -229,6 +236,8 @@ lib.makeExtensible (
           })
 
           lixMdbookPatch
+
+          lixLowdown30Patch
         ];
       };
     };
@@ -253,7 +262,10 @@ lib.makeExtensible (
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
 
-        patches = [ lixMdbookPatch ];
+        patches = [
+          lixMdbookPatch
+          lixLowdown30Patch
+        ];
       };
     };
 
