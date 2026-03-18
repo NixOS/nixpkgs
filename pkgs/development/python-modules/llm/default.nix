@@ -167,7 +167,7 @@ let
 
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.28";
+    version = "0.29";
     pyproject = true;
 
     build-system = [ setuptools ];
@@ -176,7 +176,7 @@ let
       owner = "simonw";
       repo = "llm";
       tag = version;
-      hash = "sha256-PMQGyBwP6UCIz7p94atWgepbw9IwW6ym60sfP/PBrCA=";
+      hash = "sha256-51WHV8ZvyUJgr+a3jFUoZ2hPlv2oiA4rrgalqZEFIfM=";
     };
 
     patches = [
