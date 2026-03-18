@@ -1,5 +1,6 @@
 {
   lib,
+  aiofiles,
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
@@ -10,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "pyporscheconnectapi";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CJNE";
     repo = "pyporscheconnectapi";
     tag = finalAttrs.version;
-    hash = "sha256-aiNCT1IYSXdlJfIoQsBnVn9FGHifkI8e35VCQGGAAZ0=";
+    hash = "sha256-c46XAWKf7LeQ9Nz1IumOIs/Z8DuCa2zaatBizFT+FMg=";
   };
 
   postPatch = ''
@@ -28,6 +29,7 @@ buildPythonPackage (finalAttrs: {
   build-system = [ setuptools ];
 
   dependencies = [
+    aiofiles
     beautifulsoup4
     httpx
     rich
