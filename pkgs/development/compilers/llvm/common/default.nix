@@ -468,11 +468,9 @@ makeScopeWithSplicing' {
       };
 
       llvm-libgcc = callPackage ./llvm-libgcc {
-        stdenv = overrideCC stdenv (
-          buildLlvmPackages.libcxxClang.override {
-            bintools = buildLlvmPackages.bintools;
-          }
-        );
+        # Use the same bootstrap compiler as libunwind — has libc and
+        # compiler-rt crt files, but no libunwind/libgcc dependency.
+        stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
       };
 
       openmp = callPackage ./openmp { };

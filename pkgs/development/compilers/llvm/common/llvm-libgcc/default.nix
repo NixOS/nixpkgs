@@ -35,6 +35,21 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "LLVM_LIBGCC_EXPLICIT_OPT_IN" true)
     (lib.cmakeBool "COMPILER_RT_USE_LLVM_UNWINDER" stdenv.hostPlatform.useLLVM)
+    # Skip CMake's compiler link test — the bootstrap compiler may not be
+    # able to link executables yet (no libgcc_s), which is what we're building.
+    (lib.cmakeBool "CMAKE_C_COMPILER_WORKS" true)
+    (lib.cmakeBool "CMAKE_CXX_COMPILER_WORKS" true)
+    (lib.cmakeBool "CMAKE_ASM_COMPILER_WORKS" true)
+    # Only build builtins — sanitizers need C++ headers (libc++) which are
+    # not available at this bootstrap stage.  The full compiler-rt with
+    # sanitizers is built separately as compiler-rt-libc.
+    (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_XRAY" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_MEMPROF" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_ORC" false)
+    (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
   ];
 
   outputs = [
