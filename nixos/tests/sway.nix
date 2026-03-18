@@ -2,9 +2,7 @@
 {
   name = "sway";
   meta = {
-    maintainers = with lib.maintainers; [
-      synthetica
-    ];
+    maintainers = [ ];
   };
 
   # testScriptWithTypes:49: error: Cannot call function of unknown type
