@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-scheduler-hook";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "lisanna-dettwyler";
     repo = "nix-scheduler-hook";
     tag = "v${version}";
-    hash = "sha256-pB42rjqkASgdYQJD9nPqFSM0JAUIko1FN4d0J52BUsc=";
+    hash = "sha256-tgZ2BZuKmaoPh4h4r/nej98tvl4PvwZfA6xbTLgNZMA=";
   };
 
   sourceRoot = "source/src";
