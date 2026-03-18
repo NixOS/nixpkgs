@@ -27,6 +27,6 @@ stdenvNoCC.mkDerivation {
     description = "NightDiamond cursor themes";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ santosh ];
+    maintainers = with lib.maintainers; [ vimlinuz ];
   };
 }
