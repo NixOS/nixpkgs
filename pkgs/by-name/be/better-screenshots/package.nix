@@ -16,13 +16,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-bms9+RuzuEh6kBV7S4yjwXWBLUSPuu0ucD/riFm07E4=";
   };
 
-  dependencies = [
-    python3Packages.setuptools
-    python3Packages.click
-    python3Packages.pillow
-    python3Packages.toml
-    python3Packages.pyyaml
-    python3Packages.requests
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
+    click
+    pillow
+    toml
+    pyyaml
+    requests
   ];
 
   doCheck = false;
