@@ -18,6 +18,9 @@ buildPythonPackage rec {
     hash = "sha256-M6fJbW1XCe+LKyjIupKnLmVkH582r1+AH44r9JA0Sxg=";
   };
 
+  # Tries to setup python virtualenv and install dependencies
+  dontConfigure = true;
+
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
@@ -27,6 +30,13 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError
     "test_ctor_w_path"
+    "test_ctor_w_egg_info_as_file"
+  ];
+
+  disabledTestPaths = [
+    # disabled in upstream CI: https://github.com/aboutcode-org/pkginfo2/commit/4c9899954a154095aa3289d2a1657257f3f0d0e0
+    "tests/wonky/"
+    "tests/examples/"
   ];
 
   meta = {
