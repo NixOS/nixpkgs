@@ -83,7 +83,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
-    changelog = "https://github.com/LedFx/LedFx/blob/${finalAttrs.version}/CHANGELOG.rst";
+    changelog = "https://github.com/LedFx/LedFx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ledfx";
