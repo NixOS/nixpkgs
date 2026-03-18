@@ -531,6 +531,10 @@ let
       cargo
       rustc
     ];
+    waysign = with pkgs; [
+      cargo
+      rustc
+    ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [
       fftw.dev
@@ -2251,6 +2255,10 @@ let
         pkgs.cargo
         pkgs.rustc
       ];
+    });
+
+    waysign = old.waysign.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
