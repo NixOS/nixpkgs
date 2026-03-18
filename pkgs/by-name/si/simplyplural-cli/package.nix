@@ -23,10 +23,10 @@ python3Packages.buildPythonApplication {
     python3Packages.websockets
   ];
 
-  meta = with lib; {
-    description = "A command-line interface for SimplyPlural";
+  meta = {
+    description = "CLI for the Simply Plural app";
     homepage = "https://github.com/SiteRelEnby/simplyplural-cli";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ oricat ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ oricat ];
   };
 }
