@@ -6,15 +6,15 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pkginfo2";
   version = "30.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "nexB";
+    owner = "aboutcode-org";
     repo = "pkginfo2";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-M6fJbW1XCe+LKyjIupKnLmVkH582r1+AH44r9JA0Sxg=";
   };
 
@@ -41,10 +41,10 @@ buildPythonPackage rec {
 
   meta = {
     description = "Query metadatdata from sdists, bdists or installed packages";
-    homepage = "https://github.com/nexB/pkginfo2";
-    changelog = "https://github.com/aboutcode-org/pkginfo2/releases/tag/${src.tag}";
+    homepage = "https://github.com/aboutcode-org/pkginfo2";
+    changelog = "https://github.com/aboutcode-org/pkginfo2/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pkginfo2";
   };
-}
+})
