@@ -30,7 +30,7 @@ buildLua {
       --replace-fail 'yad_exe = "yad"' \
                 'yad_exe = "${lib.getExe yad}"' \
       --replace-fail 'notify_send_exe = "notify-send"' \
-                'notify_send_exe = "${lib.getExe libnotify}"' \
+                'notify_send_exe = "${lib.getExe libnotify}"'
   '';
 
   scriptPath = "convert_script.lua";
