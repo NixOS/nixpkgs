@@ -6,16 +6,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "rcon-cli";
-  version = "1.7.3";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "itzg";
     repo = "rcon-cli";
     tag = finalAttrs.version;
-    hash = "sha256-v9f367XTPKAocGdwwPe/dXsFK30THbqpQwuvSV/lWN4=";
+    hash = "sha256-Cs2SYz6+3ziAbnoXiWdpwBg3lmIJWq06wuYy/TKoVSU=";
   };
 
-  vendorHash = "sha256-TogEdy0rtOzywBCtJ9dw8jO25dzxygqDGFDCbCNwhz8=";
+  vendorHash = "sha256-MxIofF5Jj+w7gxsO+F48ymtgB3bgSutmC5Jh3GcKCnA=";
   subPackages = [ "." ];
 
   passthru.updateScript = nix-update-script { };
