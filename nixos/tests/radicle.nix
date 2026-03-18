@@ -188,7 +188,7 @@ in
         )
       with subtest("bob can sync bob's repository from the seed"):
         bob.succeed(
-          "cd /tmp/repo && rad sync --seed ${seed-nid}",
+          "cd /tmp/repo && rad sync --fetch --seed ${seed-nid}",
           "cd /tmp/repo && git pull"
         )
         assert bob.succeed("cat /tmp/repo/testfile") == "hello bob\n"
