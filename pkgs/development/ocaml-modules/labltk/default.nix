@@ -81,6 +81,10 @@ let
         version = "8.06.15";
         sha256 = "sha256-I/y5qr5sasCtlrwxL/Lex79rg0o4tzDMBmQY7MdpU2w=";
       };
+      "5.4" = mkNewParam {
+        version = "8.06.16";
+        sha256 = "sha256-T+5x6nfxrJh4NEMCPFY/9AMug2oqxNl4CGw1lRy9ne4=";
+      };
     };
   param =
     params.${lib.versions.majorMinor ocaml.version}
