@@ -118,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-stdout"
     "--with-avahi"
   ]
-  ++ optional enablePulse "--with-pa"
-  ++ optional enablePipewire "--with-pw"
+  ++ optional enablePulse "--with-pulseaudio"
+  ++ optional enablePipewire "--with-pipewire"
   ++ optional enableAlsa "--with-alsa"
   ++ optional enableSndio "--with-sndio"
   ++ optional enableAo "--with-ao"

@@ -38,13 +38,13 @@ in
       settings = mkOption {
         type = configFormat.type;
         default = {
-          general.output_backend = "pa";
+          general.output_backend = "pulseaudio";
           diagnostics.log_verbosity = 1;
         };
         example = {
           general = {
             name = "NixOS Shairport";
-            output_backend = "pw";
+            output_backend = "pipewire";
           };
           metadata = {
             enabled = "yes";
@@ -118,7 +118,7 @@ in
     services.avahi.publish.userServices = true;
 
     services.shairport-sync.settings = {
-      general.output_backend = lib.mkDefault "pa";
+      general.output_backend = lib.mkDefault "pulseaudio";
       diagnostics.log_verbosity = lib.mkDefault 1;
     };
 
