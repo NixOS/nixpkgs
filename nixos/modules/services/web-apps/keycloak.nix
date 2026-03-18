@@ -170,8 +170,11 @@ in
 
             For PostgreSQL, this can also be a path to a Unix socket
             directory (e.g., `/run/postgresql`) to use peer authentication.
-            This requires adding `junixsocket-common` and `junixsocket-native-common`
-            to [](#opt-services.keycloak.plugins).
+            The required `junixsocket` plugins are added automatically.
+
+            When [](#opt-services.keycloak.database.createLocally) is enabled
+            with PostgreSQL, this option is ignored and Unix socket auth is
+            used automatically.
           '';
         };
 
@@ -224,8 +227,12 @@ in
           description = ''
             Whether a database should be automatically created on the
             local host. Set this to false if you plan on provisioning a
-            local database yourself. This has no effect if
-            services.keycloak.database.host is customized.
+            local database yourself.
+
+            For PostgreSQL, the local database uses Unix socket
+            authentication (peer auth), so no password is required.
+            For MySQL/MariaDB, this has no effect if
+            [](#opt-services.keycloak.database.host) is customized.
           '';
         };
 
@@ -265,8 +272,10 @@ in
           description = ''
             The path to a file containing the database password.
 
-            Not required when using Unix socket authentication (peer auth)
-            by setting `host` to a socket path like `/run/postgresql`.
+            Not required when using Unix socket authentication (peer auth),
+            either via [](#opt-services.keycloak.database.createLocally) with
+            PostgreSQL or by setting [](#opt-services.keycloak.database.host)
+            to a socket path.
           '';
         };
       };
@@ -436,16 +445,17 @@ in
 
   config =
     let
-      # We only want to create a database if we're actually going to
-      # connect to it.
-      databaseActuallyCreateLocally = cfg.database.createLocally && cfg.database.host == "localhost";
-      createLocalPostgreSQL = databaseActuallyCreateLocally && cfg.database.type == "postgresql";
+      createLocalPostgreSQL = cfg.database.createLocally && cfg.database.type == "postgresql";
       createLocalMySQL =
-        databaseActuallyCreateLocally
+        cfg.database.createLocally
+        && cfg.database.host == "localhost"
         && elem cfg.database.type [
           "mysql"
           "mariadb"
         ];
+      databaseActuallyCreateLocally = createLocalPostgreSQL || createLocalMySQL;
+      useUnixSocket =
+        createLocalPostgreSQL || (cfg.database.type == "postgresql" && hasPrefix "/" cfg.database.host);
 
       mySqlCaKeystore = pkgs.runCommand "mysql-ca-keystore" { } ''
         ${pkgs.jre}/bin/keytool -importcert -trustcacerts -alias MySQLCACert -file ${cfg.database.caCert} -keystore $out -storepass notsosecretpassword -noprompt
@@ -518,7 +528,14 @@ in
           ++ (with cfg.package.plugins; [
             quarkus-systemd-notify
             quarkus-systemd-notify-deployment
-          ]);
+          ])
+          ++ optionals useUnixSocket (
+            with cfg.package.plugins;
+            [
+              junixsocket-common
+              junixsocket-native-common
+            ]
+          );
       };
     in
     mkIf cfg.enable {
@@ -564,10 +581,11 @@ in
           '';
         }
         {
-          assertion = cfg.database.passwordFile != null || hasPrefix "/" cfg.database.host;
+          assertion = cfg.database.passwordFile != null || useUnixSocket;
           message = ''
             services.keycloak.database.passwordFile must be set unless using
-            Unix socket authentication (host starting with /).
+            Unix socket authentication via a locally created PostgreSQL database
+            or by setting host to a socket path.
           '';
         }
       ];
@@ -604,8 +622,8 @@ in
           dbProps = if cfg.database.type == "postgresql" then postgresParams else mariadbParams;
 
           # Unix socket connection requires junixsocket library and special JDBC URL
-          isUnixSocket = hasPrefix "/" cfg.database.host;
-          unixSocketUrl = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${cfg.database.host}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
+          socketDir = if createLocalPostgreSQL then "/run/postgresql" else cfg.database.host;
+          unixSocketUrl = "jdbc:postgresql://localhost/${dbName}?socketFactory=org.newsclub.net.unix.AFUNIXSocketFactory$FactoryArg&socketFactoryArg=${socketDir}/.s.PGSQL.${toString cfg.database.port}&sslMode=disable";
         in
         mkMerge [
           {
@@ -615,10 +633,10 @@ in
               _secret = cfg.database.passwordFile;
             };
           }
-          (mkIf isUnixSocket {
+          (mkIf useUnixSocket {
             db-url = unixSocketUrl;
           })
-          (mkIf (!isUnixSocket) {
+          (mkIf (!useUnixSocket) {
             db-url-host = cfg.database.host;
             db-url-port = toString cfg.database.port;
             db-url-database = dbName;
@@ -641,24 +659,12 @@ in
           RemainAfterExit = true;
           User = "postgres";
           Group = "postgres";
-          LoadCredential = [ "db_password:${cfg.database.passwordFile}" ];
         };
         script = ''
           set -o errexit -o pipefail -o nounset -o errtrace
           shopt -s inherit_errexit
 
-          create_role="$(mktemp)"
-          trap 'rm -f "$create_role"' EXIT
-
-          # Read the password from the credentials directory and
-          # escape any single quotes by adding additional single
-          # quotes after them, following the rules laid out here:
-          # https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-CONSTANTS
-          db_password="$(<"$CREDENTIALS_DIRECTORY/db_password")"
-          db_password="''${db_password//\'/\'\'}"
-
-          echo "CREATE ROLE keycloak WITH LOGIN PASSWORD '$db_password' CREATEDB" > "$create_role"
-          psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tA --file="$create_role"
+          psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tAc "CREATE ROLE keycloak WITH LOGIN"
           psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
         '';
         enableStrictShellChecks = true;
