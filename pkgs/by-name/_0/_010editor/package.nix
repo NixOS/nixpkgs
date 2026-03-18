@@ -4,6 +4,7 @@
   fetchzip,
   fetchurl,
   autoPatchelfHook,
+  copyDesktopItems,
   makeWrapper,
   makeDesktopItem,
   cups,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "010editor";
-  version = "16.0.3";
+  version = "16.0.4";
 
   src = finalAttrs.passthru.srcs.${stdenv.hostPlatform.system};
 
@@ -27,6 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+      copyDesktopItems
       makeWrapper
       qt6.wrapQtAppsHook
     ]
@@ -54,54 +56,48 @@ stdenv.mkDerivation (finalAttrs: {
           --unset QT_PLUGIN_PATH \
           --set XKB_CONFIG_ROOT ${xkeyboard-config}/share/X11/xkb
 
-        # Install icon + desktop entry
+        # Install icon
         install -D $out/opt/010_icon_128x128.png $out/share/icons/hicolor/128x128/apps/010.png
-        install -D $desktopItem/share/applications/* -t $out/share/applications/
       '';
     in
     ''
       runHook preInstall
-      ${
-        if stdenv.hostPlatform.isDarwin then
-          darwinInstall
-        else if stdenv.hostPlatform.isLinux then
-          linuxInstall
-        else
-          "echo 'Unsupported Platform' && exit 1"
-      }
+      ${if stdenv.hostPlatform.isDarwin then darwinInstall else linuxInstall}
       runHook postInstall
     '';
 
-  desktopItem = makeDesktopItem {
-    name = "010editor";
-    exec = "010editor %f";
-    icon = "010";
-    desktopName = "010 Editor";
-    genericName = "Text and hex editor";
-    categories = [ "Development" ];
-    mimeTypes = [
-      "text/html"
-      "text/plain"
-      "text/x-c++hdr"
-      "text/x-c++src"
-      "text/xml"
-    ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "010editor";
+      exec = "010editor %f";
+      icon = "010";
+      desktopName = "010 Editor";
+      genericName = "Text and hex editor";
+      categories = [ "Development" ];
+      mimeTypes = [
+        "text/html"
+        "text/plain"
+        "text/x-c++hdr"
+        "text/x-c++src"
+        "text/xml"
+      ];
+    })
+  ];
 
   passthru.srcs = {
     x86_64-linux = fetchzip {
       url = "https://download.sweetscape.com/010EditorLinux64Installer${finalAttrs.version}.tar.gz";
-      hash = "sha256-4p7EZ/wcOgcLKTAGgTlJVvabeIttI0UFl+DF7V7ma50=";
+      hash = "sha256-M1D2Bmi45sYiB0Ci+0X0AxyIeR+On60xt4jP1Jsy5tA=";
     };
 
     x86_64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMac64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-v1QdX+osklCXtg0HoT3+HnEL+AbVhynJ0XA+jA7bX3M=";
+      hash = "sha256-vsI0VgcJGleJTQ5C1JaiCkELfWfwgFhyCx+6j5mldIk=";
     };
 
     aarch64-darwin = fetchurl {
       url = "https://download.sweetscape.com/010EditorMacARM64Installer${finalAttrs.version}.dmg";
-      hash = "sha256-CmatQUVGJHpi23b5C3betL6YkP3+gOA9p+xfUbsKxi0=";
+      hash = "sha256-+yU5JdPNS2BfiZLsBLyyC+ieVNqbIWba3teBlTIDWtk=";
     };
   };
 
