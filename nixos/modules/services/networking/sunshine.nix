@@ -150,6 +150,9 @@ in
     boot.kernelModules = [ "uinput" ];
 
     services.udev.packages = [ cfg.package ];
+    services.udev.extraRules = ''
+      KERNEL=="uinput", GROUP="input", MODE="0660"
+    '';
 
     services.avahi = {
       enable = mkDefault true;
