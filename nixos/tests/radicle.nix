@@ -120,6 +120,9 @@ in
     };
   };
 
+  interactive.sshBackdoor.enable = true;
+  interactive.defaults.virtualisation.graphics = false;
+
   testScript =
     { nodes, ... }@args:
     ''
