@@ -1,16 +1,7 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  file,
-  a2ps,
-  coreutils,
-  gawk,
+  pkgsi686Linux,
 }:
 
 let
@@ -29,7 +20,7 @@ let
     sha256 = "5af241782a0d500d7f47e06ea43d61127f4019b5b1c6e68b4c1cb4521a742c22";
   };
 in
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "cups-brother-hl1110";
   inherit version;
 
@@ -38,56 +29,60 @@ stdenv.mkDerivation {
     cupssrc
     cupsdeb
   ];
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    cups
-    ghostscript
-    dpkg
-    a2ps
+
+  nativeBuildInputs = [
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.autoPatchelfHook
+    pkgsi686Linux.dpkg
   ];
+
+  buildInputs = [
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.a2ps
+  ];
+
   unpackPhase = ''
     tar -xvf ${cupssrc}
   '';
+
   buildPhase = ''
     gcc -Wall ${srcdir}/brcupsconfig/brcupsconfig.c -o brcupsconfig4
   '';
+
   installPhase = ''
     # install lpr
     dpkg-deb -x ${lprdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/HL1110/lpd/filter_HL1110 \
-    --replace /opt "$out/opt" \
+    --replace-fail /opt "$out/opt"
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/HL1110/lpd/psconvert2
-
-    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/lpd/brprintconflsr3
-    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/lpd/rawtobr3
-    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1110/inf/braddprinter
 
     wrapProgram $out/opt/brother/Printers/HL1110/lpd/psconvert2 \
     --prefix PATH ":" ${
       lib.makeBinPath [
-        gnused
-        coreutils
-        gawk
+        pkgsi686Linux.gnused
+        pkgsi686Linux.coreutils
+        pkgsi686Linux.gawk
       ]
     }
 
     wrapProgram $out/opt/brother/Printers/HL1110/lpd/filter_HL1110 \
-    --prefix PATH ":" ${
-      lib.makeBinPath [
-        ghostscript
-        a2ps
-        file
-        gnused
-        coreutils
-      ]
-    }
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.a2ps
+          pkgsi686Linux.file
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
+        ]
+      }
 
-
+    # install cups
     dpkg-deb -x ${cupsdeb} $out
 
-    substituteInPlace $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 --replace /opt "$out/opt"
+    substituteInPlace $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 --replace-fail /opt "$out/opt"
 
     mkdir -p $out/lib/cups/filter
     ln -s $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 $out/lib/cups/filter/brother_lpdwrapper_HL1110
@@ -96,14 +91,13 @@ stdenv.mkDerivation {
     ln -s $out/opt/brother/Printers/HL1110/cupswrapper/brcupsconfig4 $out/lib/cups/filter/brcupsconfig4
 
     wrapProgram $out/opt/brother/Printers/HL1110/cupswrapper/brother_lpdwrapper_HL1110 \
-    --prefix PATH ":" ${
-      lib.makeBinPath [
-        gnused
-        coreutils
-        gawk
-      ]
-    }
-
+      --prefix PATH ":" ${
+        lib.makeBinPath [
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gawk
+        ]
+      }
   '';
 
   meta = {
