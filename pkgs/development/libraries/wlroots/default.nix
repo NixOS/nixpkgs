@@ -147,7 +147,6 @@ let
         license = lib.licenses.mit;
         platforms = lib.platforms.linux ++ lib.platforms.freebsd;
         maintainers = with lib.maintainers; [
-          synthetica
           wineee
           doronbehar
         ];

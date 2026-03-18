@@ -5,7 +5,7 @@
   fetchpatch,
   gradle,
   autoPatchelfHook,
-  jetbrains, # Requird by upstream due to JCEF dependency
+  jetbrains, # Required by upstream due to JCEF dependency
   fontconfig,
   libxinerama,
   libxrandr,
@@ -113,23 +113,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "animeko";
-  version = "5.2.0";
+  version = "5.3.2";
 
   src = fetchFromGitHub {
     owner = "open-ani";
     repo = "animeko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eP1v/o9qUk8qG+n1cJRmlgu2l06hFZLeUN/X06qAVpY=";
+    hash = "sha256-mDUl1RpTIFBHdYst6R16iVljiUNOYh6mNUtOLBSuOE0=";
     fetchSubmodules = true;
   };
 
-  # CefLog.init(jcefConfig.cefSettings) is being comment out due to compile error
   postPatch = ''
     echo "kotlin.native.ignoreDisabledTargets=true" >> local.properties
     sed -i "s/^version.name=.*/version.name=${finalAttrs.version}/" gradle.properties
     sed -i "s/^package.version=.*/package.version=${finalAttrs.version}/" gradle.properties
-    substituteInPlace app/shared/app-platform/src/desktopMain/kotlin/platform/AniCefApp.kt \
-      --replace-fail 'CefLog.init(jcefConfig.cefSettings)' '//CefLog.init(jcefConfig.cefSettings)'
   '';
 
   gradleBuildTask = "createReleaseDistributable";
@@ -235,6 +232,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libx11
     libxdamage
+  ];
+
+  patches = [
+    # Builtin updater will never work on NixOS, so we made a patch to disable updater
+    ./0001-no-update-checker.patch
   ];
 
   dontWrapQtApps = true;
