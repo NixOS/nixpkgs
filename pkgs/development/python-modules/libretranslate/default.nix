@@ -34,14 +34,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libretranslate";
-  version = "1.9.0";
+  version = "1.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    hash = "sha256-bBs7gG42H4MNca5RUiedKNQkLjKpBm2SbPMRyh2gh6c=";
     tag = "v${finalAttrs.version}";
+    hash = "sha256-VcMo1GX+ituQOW8Dpt0ABJG5fsJbFuxAPmi59Byg5ww=";
   };
 
   build-system = [
@@ -49,6 +49,14 @@ buildPythonPackage (finalAttrs: {
   ];
 
   pythonRelaxDeps = true;
+
+  # LibreTranslate has forked argos-translate [1] to fix some bugs and make stanza optional, but it's
+  # unclear what the future of this fork is.
+  #
+  # We'll stay on upstream argostranslate for now.
+  #
+  # [1]: https://github.com/Libretranslate/argos-translate/
+  pythonRemoveDeps = [ "argos-translate-lt" ];
 
   dependencies = [
     argostranslate
