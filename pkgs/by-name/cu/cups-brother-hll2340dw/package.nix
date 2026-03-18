@@ -1,18 +1,7 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  file,
-  a2ps,
-  coreutils,
-  perl,
-  gnugrep,
-  which,
+  pkgsi686Linux,
 }:
 
 let
@@ -28,16 +17,21 @@ let
   };
 
 in
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "cups-brother-hll2340dw";
   inherit version;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.dpkg
+    pkgsi686Linux.autoPatchelfHook
+  ];
+
   buildInputs = [
-    cups
-    ghostscript
-    dpkg
-    a2ps
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.a2ps
+    pkgsi686Linux.perl
   ];
 
   dontUnpack = true;
@@ -48,15 +42,9 @@ stdenv.mkDerivation {
     dpkg-deb -x ${lprdeb} $out
 
     substituteInPlace $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
-      --replace /opt "$out/opt" \
-      --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HLL2340D/\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"HLL2340D\"; #"
-
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/opt/brother/Printers/HLL2340D/lpd/brprintconflsr3
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $out/opt/brother/Printers/HLL2340D/lpd/rawtobr3
+      --replace-fail /usr/bin/perl ${pkgsi686Linux.perl}/bin/perl \
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HLL2340D/\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"HLL2340D\"; #"
 
     for f in \
       $out/opt/brother/Printers/HLL2340D/cupswrapper/brother_lpdwrapper_HLL2340D \
@@ -65,10 +53,10 @@ stdenv.mkDerivation {
       wrapProgram $f \
         --prefix PATH : ${
           lib.makeBinPath [
-            coreutils
-            ghostscript
-            gnugrep
-            gnused
+            pkgsi686Linux.coreutils
+            pkgsi686Linux.ghostscript
+            pkgsi686Linux.gnugrep
+            pkgsi686Linux.gnused
           ]
         }
     done
@@ -82,13 +70,13 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/brother/Printers/HLL2340D/lpd/filter_HLL2340D \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          ghostscript
-          a2ps
-          file
-          gnused
-          gnugrep
-          coreutils
-          which
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.a2ps
+          pkgsi686Linux.file
+          pkgsi686Linux.gnused
+          pkgsi686Linux.gnugrep
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.which
         ]
       }
   '';
