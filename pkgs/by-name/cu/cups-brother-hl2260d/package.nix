@@ -1,17 +1,8 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  coreutils,
-  perl,
-  gnugrep,
-  which,
   debugLvl ? "0",
+  pkgsi686Linux,
 }:
 
 let
@@ -26,21 +17,22 @@ let
     hash = "sha256-k6+ulZVoFTpEY6WJ9TO9Rzp2c4dwPqL3NY5/XYJpvOc=";
   };
 in
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "cups-brother-hl2260d";
   inherit version;
 
   nativeBuildInputs = [
-    makeWrapper
-    dpkg
-  ];
-  buildInputs = [
-    cups
-    ghostscript
-    perl
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.dpkg
+    pkgsi686Linux.autoPatchelfHook
   ];
 
-  dontPatchELF = true;
+  buildInputs = [
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.perl
+  ];
+
   dontBuild = true;
 
   unpackPhase = ''
@@ -55,31 +47,24 @@ stdenv.mkDerivation {
     LPDDIR=$out/opt/brother/Printers/HL2260D/lpd
 
     substituteInPlace $LPDDIR/filter_HL2260D \
-      --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HL2260D\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"HL2260D\"; #"
-
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $INFDIR/braddprinter
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $LPDDIR/brprintconflsr3
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      $LPDDIR/rawtobr3
+      --replace-fail "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/HL2260D\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"HL2260D\"; #"
 
     # Patch cupswrapper
     WRAPPER=$out/opt/brother/Printers/HL2260D/cupswrapper/brother_lpdwrapper_HL2260D
     PAPER_CFG=$out/opt/brother/Printers/HL2260D/cupswrapper/paperconfigml1
 
     substituteInPlace $WRAPPER \
-      --replace "basedir =~" "basedir = \"$out/opt/brother/Printers/HL2260D\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"HL2260D\"; #" \
-      --replace "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
+      --replace-fail "basedir =~" "basedir = \"$out/opt/brother/Printers/HL2260D\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"HL2260D\"; #" \
+      --replace-fail "\$DEBUG=0;" "\$DEBUG=${debugLvl};"
     substituteInPlace $WRAPPER \
-      --replace "\`cp " "\`cp -p " \
-      --replace "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
-      --replace "\`mv " "\`cp -p "
+      --replace-fail "\`cp " "\`cp -p " \
+      --replace-fail "\$TEMPRC\`" "\$TEMPRC; chmod a+rw \$TEMPRC\`" \
+      --replace-fail "\`mv " "\`cp -p "
     # This config script make this assumption that the *.ppd are found in a global location `/etc/cups/ppd`.
     substituteInPlace $PAPER_CFG \
-      --replace "/etc/cups/ppd" "$out/share/cups/model"
+      --replace-fail "/etc/cups/ppd" "$out/share/cups/model"
   '';
 
   installPhase = ''
@@ -92,17 +77,17 @@ stdenv.mkDerivation {
       $out/lib/cups/filter/brother_lpdwrapper_HL2260D \
       --prefix PATH : ${
         lib.makeBinPath [
-          coreutils
-          gnugrep
-          gnused
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gnugrep
+          pkgsi686Linux.gnused
         ]
       }
 
     wrapProgram $out/opt/brother/Printers/HL2260D/lpd/filter_HL2260D \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          ghostscript
-          which
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.which
         ]
       }
   '';
