@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pan-os-python";
-  version = "1.12.4";
+  version = "1.12.5";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pan_os_python";
     inherit version;
-    hash = "sha256-j7+FvpH5bfSEdMUMrCYREcJW2QLVRrq46oS+CUCtHfk=";
+    hash = "sha256-Zea0WMdFkZLEZi2aqU9woXFA3aAQBEYhf+D7s5ZaOro=";
   };
 
   postPatch = ''

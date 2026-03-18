@@ -128,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "LLVM_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "MLIR_INCLUDE_DOCS" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_BUILD_DOCS" (buildDocs || buildMan))
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     # Way too slow, only uses one core
     # (lib.cmakeBool "LLVM_ENABLE_DOXYGEN" (buildDocs || buildMan))
     (lib.cmakeBool "LLVM_ENABLE_SPHINX" (buildDocs || buildMan))

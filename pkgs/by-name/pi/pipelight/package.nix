@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenv_32bit,
   fetchurl,
   bash,
   cabextract,
@@ -9,23 +9,25 @@
   libx11,
   libGLU,
   libGL,
-  wine-staging,
+  pkgsi686Linux,
 }:
 
 let
-  wine_custom = wine-staging;
+  wine_custom = pkgsi686Linux.wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
 
+  stdenv' = stdenv_32bit;
+
 in
-stdenv.mkDerivation rec {
+stdenv'.mkDerivation (finalAttrs: {
 
   version = "0.2.8.2";
 
   pname = "pipelight";
 
   src = fetchurl {
-    url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
+    url = "https://bitbucket.org/mmueller2012/pipelight/get/v${finalAttrs.version}.tar.gz";
     sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
   };
 
@@ -90,4 +92,4 @@ stdenv.mkDerivation rec {
     ];
     mainProgram = "pipelight-plugin";
   };
-}
+})
