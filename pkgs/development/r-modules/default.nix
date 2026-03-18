@@ -2253,6 +2253,14 @@ let
       ];
     });
 
+    waysign = old.waysign.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
+    });
+
     purrr = old.purrr.overrideAttrs (attrs: {
       patchPhase = "patchShebangs configure";
     });
