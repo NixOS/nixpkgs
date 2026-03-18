@@ -1,4 +1,5 @@
 {
+  aiofiles,
   buildPythonPackage,
   charset-normalizer,
   cryptography,
@@ -17,21 +18,17 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.17.0";
+  version = "3.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
-    hash = "sha256-HGczeExOoZMBiPS//B/gu56Wnpzz55oawhTT67ekuOs=";
+    hash = "sha256-lZMUm1rYCsNSMz/cKTqynaLqb1P75JJCFMDZ9onFS4g=";
   };
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "wassima"
-  ];
 
   dependencies = [
     charset-normalizer
@@ -66,6 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niquests" ];
 
   nativeCheckInputs = [
+    aiofiles
     cryptography
     fastapi
     pytest-asyncio
