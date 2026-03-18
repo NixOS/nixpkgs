@@ -5,6 +5,18 @@
   fetchurl,
   nix-update-script,
 }:
+let
+  osOption =
+    platform:
+    if platform.isDarwin then
+      "Darwin"
+    else if platform.isCygwin then
+      "CYGWIN"
+    else if platform.isWindows then
+      "MSYS"
+    else
+      "Linux";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentxl";
   version = "11.3.7";
@@ -19,6 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
   # Using -std=gnu89 to prevent errors that occur with default args
   env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-int-conversion";
 
+  patches = [
+    ./fix-cross.patch
+  ];
+
   postPatch = ''
     # Replace hardcoded FHS paths in various files
     find . -type f -exec sed -i \
@@ -27,18 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
       -e "s#/usr/local/bin#$out/bin#g" \
       -e "s#/usr/local/lib/txl#$out/lib#g" \
       {} +
-
-    # Replace hardcoded gcc references
-    substituteInPlace scripts/unix/{txlc,txl2c} \
-      --replace-fail gcc '${stdenv.cc}/bin/cc'
   '';
 
-  preBuild = ''
-    makeFlagsArray+=(
-      CC="$CC"
-      LD="$CC"
-    )
-  '';
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+    "STRIP=${stdenv.cc.targetPrefix}strip"
+    "EXE=${stdenv.hostPlatform.extensions.executable}"
+    "OS=${osOption stdenv.hostPlatform}"
+  ];
 
   checkFlags = [ "-C test" ];
 
@@ -58,7 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source compiler for the Txl language";
     mainProgram = "txl";
-    platforms = lib.platforms.unix;
     homepage = "https://github.com/CordyJ/OpenTxl";
     downloadPage = "https://github.com/CordyJ/OpenTxl/releases";
     changelog = "https://github.com/CordyJ/OpenTxl/releases/tag/v${finalAttrs.version}";

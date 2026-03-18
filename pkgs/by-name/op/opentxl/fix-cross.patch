@@ -1,0 +1,166 @@
+diff --git a/Makefile b/Makefile
+index 1374808..2de353f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -13,9 +13,10 @@
+ # most optimizing C compilers to generate incorrect code for it, or at 
+ # the very least to slow it down severely, at higher levels of optimization.
+ 
+-CC = gcc -w -Wno-error=int-conversion 
+-CFLAGS = -c -O -fno-inline -I .
++CC = gcc
++CFLAGS = -w -Wno-error=int-conversion -c -O -fno-inline -I .
+ LD = gcc
++STRIP = strip
+ LDFLAGS =
+ LDLIBS = -lm
+ RLFLAGS = -r 
+@@ -52,12 +53,14 @@ else ifeq ($(OS), CYGWIN)
+ 
+ else ifeq ($(OS), MSYS)
+     MESSAGE = "Making TXL on Msys / MinGW using gcc and BSD signal handling"
++    CFLAGS := $(CFLAGS) -DWIN
+     LDFLAGS := $(LDFLAGS) -Wl,--stack,0x2000000
+     EXE = .exe
+     SIGTYPE = BSD
+ 
+ else ifeq ($(OS), MINGW64)
+     MESSAGE = "Making TXL on Msys / MinGW using gcc and BSD signal handling"
++    CFLAGS := $(CFLAGS) -DWIN
+     LDFLAGS := $(LDFLAGS) -Wl,--stack,0x2000000
+     EXE = .exe
+     SIGTYPE = BSD
+@@ -89,18 +92,18 @@ alltxls : thetxl thetxldb thetxlpf thetxlvm thetxlcvt thetxlapr
+ thetxl : bin objs objs/main.o objs/txl.o objs/xform.o objs/parse.o objs/loadstor.o ${OBJS} ${TLOBJS} 
+ 	${CC} ${LDFLAGS} -o bin/txl objs/main.o objs/txl.o objs/xform.o objs/parse.o objs/loadstor.o \
+ 	    ${OBJS} ${TLOBJS} ${LDLIBS}
+-	strip bin/txl${EXE}
++	$(STRIP) bin/txl${EXE}
+ 	cp scripts/unix/* bin/
+ 
+ thetxldb : bin objs objs/main.o objs/txl.o objs/xformdb.o objs/parse.o objs/loadstor.o ${OBJS} ${TLOBJS} 
+ 	${CC} ${LDFLAGS} -o bin/txldb objs/main.o objs/txl.o objs/xformdb.o objs/parse.o objs/loadstor.o \
+ 	    ${OBJS} ${TLOBJS} ${LDLIBS}
+-	strip bin/txldb${EXE}
++	$(STRIP) bin/txldb${EXE}
+ 
+ thetxlpf : lib objs objs/main.o objs/txl.o objs/xformpf.o objs/parsepf.o objs/loadstor.o ${OBJS} ${TLOBJS}
+ 	${CC} ${LDFLAGS} -o lib/txlpf.x objs/main.o objs/txl.o objs/xformpf.o objs/parsepf.o objs/loadstor.o \
+ 	    ${OBJS} ${TLOBJS} ${LDLIBS}
+-	strip lib/txlpf.x
++	$(STRIP) lib/txlpf.x
+ 
+ thetxlvm : lib objs objs/main.o objs/txlsa.o objs/xform.o objs/loadsa.o objs/parsa.o ${COMMONOBJS} ${TLOBJS} 
+ 	${LD} ${RLFLAGS} -o lib/txlvm.o objs/txlsa.o objs/xform.o objs/loadsa.o objs/parsa.o \
+@@ -109,11 +112,11 @@ thetxlvm : lib objs objs/main.o objs/txlsa.o objs/xform.o objs/loadsa.o objs/par
+ 
+ thetxlcvt : lib objs objs/main.o objs/txlcvt.o
+ 	${CC} ${LDFLAGS} -o lib/txlcvt.x objs/main.o objs/txlcvt.o ${TLOBJS} ${LDLIBS}
+-	strip lib/txlcvt.x
++	$(STRIP) lib/txlcvt.x
+ 
+ thetxlapr : lib objs objs/main.o objs/txlapr.o
+ 	${CC} ${LDFLAGS} -o lib/txlapr.x objs/main.o objs/txlapr.o ${TLOBJS} ${LDLIBS}
+-	strip lib/txlapr.x
++	$(STRIP) lib/txlapr.x
+ 
+ objs/main.o : tpluslib/TL.h UNIX main.c 
+ 	${CC} $(CFLAGS) -D${SIGTYPE} main.c; mv main.o objs/main.o
+@@ -216,4 +219,3 @@ clean :
+ 	rm -f bin/txl* objs/*.o 
+ 	rm -rf opentxl opentxl-* opentxl*.tar.gz 
+ 	cd test; make clean; cd ..
+-
+diff --git a/scripts/unix/txl2c b/scripts/unix/txl2c
+index 7429daf..ebf56c5 100755
+--- a/scripts/unix/txl2c
++++ b/scripts/unix/txl2c
+@@ -19,15 +19,7 @@ then
+     exit 99
+ fi
+ 
+-# Localization
+-CC="gcc"
+-
+-case `uname -s` in
+-    CYGWIN*|MSYS*|MINGW64*)
+-        CC="$CC -Wl,--stack,0x20000000";;
+-    *)
+-	;;
+-esac
++BUILD_TXLLIB="${BUILD_TXLLIB:-$TXLLIB}"
+ 
+ # Decode TXL program name and options
+ TXLPROG=""
+@@ -90,7 +82,7 @@ then
+ fi
+ 
+ # Convert TXLVM byte code to initialized C byte array
+-$TXLLIB/txlcvt.x $TXLNAME.ctxl
++$BUILD_TXLLIB/txlcvt.x $TXLNAME.ctxl
+ 
+ # Clean up
+ /bin/rm -f $TXLNAME.ctxl Txl/$TXLNAME.ctxl txl/$TXLNAME.ctxl 2> /dev/null
+diff --git a/scripts/unix/txlc b/scripts/unix/txlc
+index 4f49f49..201037e 100755
+--- a/scripts/unix/txlc
++++ b/scripts/unix/txlc
+@@ -20,9 +20,12 @@ then
+ fi
+ 
+ # Localization
+-CC="gcc"
++CC="${CC:-cc}"
++BUILD_TXLLIB="${BUILD_TXLLIB:-$TXLLIB}"
++TARGET_TXLLIB="${TARGET_TXLLIB:-$TXLLIB}"
++OS="${OS:-$(uname -s)}"
+ 
+-case `uname -s` in
++case "$OS" in
+     CYGWIN*|MSYS*|MINGW64*)
+         CC="$CC -Wl,--stack,0x20000000";;
+     *)
+@@ -90,10 +93,10 @@ then
+ fi
+ 
+ # Convert TXLVM byte code to initialized C byte array
+-$TXLLIB/txlcvt.x $TXLNAME.ctxl
++$BUILD_TXLLIB/txlcvt.x $TXLNAME.ctxl
+ 
+ # Compile and link with TXLVM
+-$CC -O -w -o $TXLNAME.x $TXLLIB/txlmain.o $TXLLIB/txlvm.o  ${TXLNAME}_TXL.c -lm
++$CC -O -w -o $TXLNAME.x $TARGET_TXLLIB/txlmain.o $TARGET_TXLLIB/txlvm.o  ${TXLNAME}_TXL.c -lm
+ 
+ # Clean up
+ /bin/rm -f $TXLNAME.ctxl Txl/$TXLNAME.ctxl txl/$TXLNAME.ctxl ${TXLNAME}_TXL.* 2> /dev/null
+diff --git a/scripts/unix/txlp b/scripts/unix/txlp
+index e39af87..cbb53ac 100755
+--- a/scripts/unix/txlp
++++ b/scripts/unix/txlp
+@@ -19,6 +19,8 @@ then
+     exit 99
+ fi
+ 
++BUILD_TXLLIB="${BUILD_TXLLIB:-$TXLLIB}"
++
+ # Decode TXL program name and options
+ TXLFILES=""
+ TXLOPTIONS=""
+@@ -43,7 +45,7 @@ done
+ # Run the TXL command, using txlpf
+ if [ "$1" != "" ]
+ then
+-if  ! $TXLLIB/txlpf.x $* > /dev/null 2> /tmp/txlp$$ 
++if  ! $BUILD_TXLLIB/txlpf.x $* > /dev/null 2> /tmp/txlp$$
+ then
+ 	echo "txlp:  TXL program failed" 2>&1
+ 	cat /tmp/txlp$$ 2>&1
+@@ -54,7 +56,7 @@ then
+ fi
+ 
+ # Analyze the results
+-$TXLLIB/txlapr.x $PROFOPTIONS
++$BUILD_TXLLIB/txlapr.x $PROFOPTIONS
+ 
+ # Clean up
+ /bin/rm -f /tmp/txlp$$
