@@ -124,6 +124,38 @@ let
       ''
         substitute $inputPath $out --replace-fail @deps@ "$(cat ${deps})"
       '';
+
+  # dep closure for builtin builders in meson array form for immediate use
+  builtinDeps =
+    finalAttrs:
+    if stdenv.hostPlatform.isStatic then
+      builtins.toFile "lix-static-dep-closure" "[]"
+    else
+      runCommand "lix-builtin-dep-closure"
+        {
+          closure = closureInfo {
+            # closureInfo does not work all that well for things like lowdown,
+            # where it finds only -out but not -lib. we'll take -out and -lib,
+            # ignoring -bin, -man, -dev, etc. and hope that'll be good enough.
+            rootPaths = lib.flatten (
+              map
+                (drv: [
+                  (drv.out or [ ])
+                  (drv.lib or [ ])
+                ])
+                (
+                  lib.subtractLists finalAttrs.disallowedReferences (
+                    finalAttrs.buildInputs ++ finalAttrs.propagatedBuildInputs
+                  )
+                )
+            );
+          };
+        }
+        ''
+          closure=($(cat $closure/store-paths))
+          closure="$(printf ", '%s'" "''${closure[@]}")"
+          printf "[%s]" "''${closure:2}" >$out
+        '';
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -155,37 +187,6 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.cc.stdenv.cc.cc
   ];
   __structuredAttrs = true;
-
-  # dep closure for builtin builders in meson array form for immediate use
-  builtinDeps =
-    if stdenv.hostPlatform.isStatic then
-      builtins.toFile "lix-static-dep-closure" "[]"
-    else
-      runCommand "lix-builtin-dep-closure"
-        {
-          closure = closureInfo {
-            # closureInfo does not work all that well for things like lowdown,
-            # where it finds only -out but not -lib. we'll take -out and -lib,
-            # ignoring -bin, -man, -dev, etc. and hope that'll be good enough.
-            rootPaths = lib.flatten (
-              map
-                (drv: [
-                  (drv.out or [ ])
-                  (drv.lib or [ ])
-                ])
-                (
-                  lib.subtractLists finalAttrs.disallowedReferences (
-                    finalAttrs.buildInputs ++ finalAttrs.propagatedBuildInputs
-                  )
-                )
-            );
-          };
-        }
-        ''
-          closure=($(cat $closure/store-paths))
-          closure="$(printf ", '%s'" "''${closure[@]}")"
-          printf "[%s]" "''${closure:2}" >$out
-        '';
 
   # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
   dontUseCmakeConfigure = true;
@@ -373,7 +374,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (lib.versionAtLeast version "2.95") [
     "--${
       if stdenv.hostPlatform != stdenv.buildPlatform then "cross" else "native"
-    }-file=${mesonCrossFile finalAttrs.builtinDeps}"
+    }-file=${mesonCrossFile (builtinDeps finalAttrs)}"
   ];
 
   ninjaFlags = [ "-v" ];
