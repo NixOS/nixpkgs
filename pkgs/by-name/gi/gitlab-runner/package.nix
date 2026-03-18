@@ -6,20 +6,21 @@
   fetchFromGitLab,
   nix-update-script,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "gitlab-runner";
-  version = "18.8.0";
+  version = "18.9.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rS7+BUdec+Z4G/dd5D/NHe3gbELWicg0Nmgx4zJAIX4=";
+    hash = "sha256-U13SouwEfCVy5M8fv6rkCX0F+ecVYdsocvAdt3yxPJA=";
   };
 
-  vendorHash = "sha256-Br9TW+sg7PDOE2d8lVQ9Xv9+UD7JHzitdTOcyodHr+s=";
+  vendorHash = "sha256-Ak1Q8FnTD8LKcN9xRc1gpcnUiambGC3CJP84cwQqTtM=";
 
   # For patchShebangs
   buildInputs = [ bash ];
@@ -84,6 +85,8 @@ buildGoModule (finalAttrs: {
       "-X ${ldflagsPackageVariablePrefix}.VERSION=${finalAttrs.version}"
       "-X ${ldflagsPackageVariablePrefix}.REVISION=v${finalAttrs.version}"
     ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
   preCheck = ''
     # Make the tests pass outside of GitLab CI
