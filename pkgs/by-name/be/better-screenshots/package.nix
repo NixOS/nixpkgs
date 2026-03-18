@@ -27,7 +27,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = false;
-
+  postInstall = ''
+    wrapProgram $out/bin/better-screenshots \
+      --prefix PATH : "${lib.makeBinPath [ grim slurp wl-clipboard ]}"
+  '';
   meta = {
     description = "Screenshot tool with image and background customizations plus configurable cloud uploads.";
     mainProgram = "better-screenshots";
