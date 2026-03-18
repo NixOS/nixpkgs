@@ -68,6 +68,7 @@ let
           callPackage ../development/coq-modules/bignums { }
         else
           null;
+      CakeMLExtraction = callPackage ../development/coq-modules/CakeMLExtraction { };
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres { };
       ceres-bs = callPackage ../development/coq-modules/ceres-bs { };
