@@ -6,7 +6,6 @@
   cmake,
   ninja,
   scikit-build-core,
-  pybind11,
   boost,
   eigen,
   python,
@@ -29,22 +28,22 @@ let
     };
   } ./setup-hook.sh;
 in
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pybind11";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11";
-    tag = "v${version}";
-    hash = "sha256-ZiwNGsE1FOkhnWv/1ib1akhQ4FZvrXRCDnnBZoPp6r4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T09+cS8J3wG1NisgwBUh6g5KreOp9d5U1qOKS6x1pKk=";
   };
 
   build-system = [
     cmake
     ninja
-    pybind11.passthru.scikit-build-core-no-tests
+    finalAttrs.passthru.scikit-build-core-no-tests
   ];
 
   buildInputs = lib.optionals buildTests [
@@ -105,7 +104,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/pybind/pybind11";
-    changelog = "https://github.com/pybind/pybind11/blob/${src.rev}/docs/changelog.rst";
+    changelog = "https://github.com/pybind/pybind11/blob/${finalAttrs.src.tag}/docs/changelog.md";
     description = "Seamless operability between C++11 and Python";
     mainProgram = "pybind11-config";
     longDescription = ''
@@ -119,4 +118,4 @@ buildPythonPackage rec {
       dotlambda
     ];
   };
-}
+})
