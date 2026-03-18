@@ -13,7 +13,7 @@ unit.  (However, this ignores the fsck unit, so it's not perfect...)
  1 file changed, 4 deletions(-)
 
 diff --git a/rules.d/99-systemd.rules.in b/rules.d/99-systemd.rules.in
-index bebc4d7d09..60278a0da7 100644
+index bebc4d7..60278a0 100644
 --- a/rules.d/99-systemd.rules.in
 +++ b/rules.d/99-systemd.rules.in
 @@ -30,10 +30,6 @@ SUBSYSTEM=="block", ACTION=="add", KERNEL=="dm-*", ENV{DM_NAME}!="?*", ENV{SYSTE
