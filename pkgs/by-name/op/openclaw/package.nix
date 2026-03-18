@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  buildPackages,
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -10,6 +11,7 @@
   versionCheckHook,
   nix-update-script,
   rolldown,
+  installShellFiles,
   version ? "2026.3.12",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -39,6 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pnpm_10
     nodejs_22
     makeWrapper
+    installShellFiles
   ];
 
   preBuild = ''
@@ -81,6 +84,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  postInstall = lib.optionalString (stdenvNoCC.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenvNoCC.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd openclaw \
+        --bash <(${emulator} $out/bin/openclaw completion --shell bash) \
+        --fish <(${emulator} $out/bin/openclaw completion --shell fish) \
+        --zsh <(${emulator} $out/bin/openclaw completion --shell zsh)
+    ''
+  );
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
