@@ -157,16 +157,13 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${lib.getExe cfg.package} ${cfg.arguments}";
+        ExecStart = "${lib.getExe cfg.package} --configfile=${configFile} ${cfg.arguments}";
         Restart = "on-failure";
         RuntimeDirectory = "shairport-sync";
       };
     };
 
-    environment = {
-      systemPackages = [ cfg.package ];
-      etc."shairport-sync.conf".source = configFile;
-    };
+    environment.systemPackages = [ cfg.package ];
   };
 
 }
