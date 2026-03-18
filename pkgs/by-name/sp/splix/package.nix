@@ -8,16 +8,14 @@
   jbigkit,
   zlib,
 }:
-
 let
-
   color-profiles = stdenv.mkDerivation {
     pname = "splix-color-profiles";
-    version = "unstable-2007-06-25";
+    version = "0-unstable-2007-06-25";
 
     src = fetchurl {
-      url = "http://splix.ap2c.org/samsung_cms.tar.bz2";
-      sha256 = "1156flics5m9m7a4hdmcc2nphbdyary6dfmbcrmsp9xb7ivsypdl";
+      url = "https://web.archive.org/web/20170518031609if_/http://splix.ap2c.org/samsung_cms.tar.bz2";
+      hash = "sha256-tF2vdzyrp6trZqu6ZnxWvi14rWCsNkjUqakWzSJ1poQ=";
     };
 
     installPhase = ''
@@ -25,7 +23,6 @@ let
       cp * $out/share/cups/profiles/samsung/
     '';
   };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splix-svn";
@@ -36,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     # although the community has been adding some new printer models.
     url = "svn://svn.code.sf.net/p/splix/code/splix";
     rev = finalAttrs.version;
-    sha256 = "16wbm4xnz35ca3mw2iggf5f4jaxpyna718ia190ka6y4ah932jxl";
+    hash = "sha256-tEsxElTEGzVBCiqicJT1tytJXHHvRcHrUKyMbzupi5s=";
   };
 
   postPatch = ''
@@ -60,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "CUPS drivers for SPL (Samsung Printer Language) printers";
-    homepage = "http://splix.ap2c.org";
+    homepage = "https://web.archive.org/web/20220729010458/http://splix.ap2c.org/";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
