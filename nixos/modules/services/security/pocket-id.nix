@@ -213,15 +213,16 @@ in
           settingsFile
         ];
 
+        script = ''
+          ${exportAllCredentials cfg.credentials}
+          exec ${getExe cfg.package}
+        '';
+
         serviceConfig = {
           Type = "simple";
           User = cfg.user;
           Group = cfg.group;
           WorkingDirectory = cfg.dataDir;
-          ExecStart = pkgs.writeShellScript "pocket-id-start" ''
-            ${exportAllCredentials cfg.credentials}
-            ${getExe cfg.package}
-          '';
           Restart = "always";
           RestartSec = 1;
           EnvironmentFile = [
