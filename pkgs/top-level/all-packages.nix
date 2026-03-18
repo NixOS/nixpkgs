@@ -11799,9 +11799,6 @@ with pkgs;
 
   dcpj785dw-cupswrapper = (callPackage ../misc/cups/drivers/brother/dcpj785dw { }).cupswrapper;
 
-  # this driver ships with pre-compiled 32-bit binary libraries
-  cnijfilter_2_80 = pkgsi686Linux.callPackage ../misc/cups/drivers/cnijfilter_2_80 { };
-
   faust = faust2;
 
   gajim = callPackage ../applications/networking/instant-messengers/gajim {
