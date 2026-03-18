@@ -102,10 +102,10 @@ let
       not,
     }:
     lib.pipe IDsToDelete [
-      (lib.mapAttrsToList (
-        t: id:
+      (map (
+        obj:
         checkSettingWithId {
-          inherit t id;
+          inherit (obj) t id;
           inherit not;
         }
       ))
@@ -114,13 +114,19 @@ let
   # These IDs are added to syncthing using the API, similarly to how the
   # generated systemd unit's bash script does it. Only we add it and expect the
   # systemd unit bash script to remove them when executed.
-  IDsToDelete = {
-    # Also created using the syncthing generate command above
-    device = "LZ2CTHT-3W2M7BC-CMKDFZL-DLUQJFS-WJR73PA-NZGODWG-DZBHCHI-OXTQXAK";
-    # Intentionally this is a substring of the IDs of the 'test_folder's, as
-    # explained in: https://github.com/NixOS/nixpkgs/issues/259256
-    folder = "DeleteMe";
-  };
+  IDsToDelete = [
+    {
+      t = "device";
+      id = "LZ2CTHT-3W2M7BC-CMKDFZL-DLUQJFS-WJR73PA-NZGODWG-DZBHCHI-OXTQXAK";
+      # Arbitrary, doesn't really matter
+      name = "DeleteThisDevice";
+    }
+    # Folders' id strings also use for their path when created.
+    {
+      t = "folder";
+      id = "DeleteMe";
+    }
+  ];
   addDeviceToDeleteScript = pkgs.writers.writeBash "syncthing-add-device-to-delete.sh" ''
     set -euo pipefail
 
@@ -141,24 +147,27 @@ let
             --retry 5 --retry-delay 1 --retry-all-errors \
             "$@"
     }
-    curl -d ${
-      lib.escapeShellArg (
-        builtins.toJSON {
-          deviceID = IDsToDelete.device;
-          name = "DeleteMe";
-        }
-      )
-    } \
-        -X POST 127.0.0.1:8384/rest/config/devices
-    curl -d ${
-      lib.escapeShellArg (
-        builtins.toJSON {
-          id = IDsToDelete.folder;
-          path = "/var/lib/syncthing/DeleteMe";
-        }
-      )
-    } \
-        -X POST 127.0.0.1:8384/rest/config/folders
+    ${lib.concatMapStringsSep "\n" (obj: ''
+      curl -d ${
+        lib.escapeShellArg (
+          builtins.toJSON (
+            if obj.t == "device" then
+              {
+                deviceID = obj.id;
+                inherit (obj) name;
+              }
+            else if obj.t == "folder" then
+              {
+                inherit (obj) id;
+                path = "/var/lib/syncthing/${obj.id}";
+              }
+            else
+              throw "unsupported object type ${obj.t}"
+          )
+        )
+      } \
+        -X POST 127.0.0.1:8384/rest/config/${obj.t}s
+    '') IDsToDelete}
   '';
 in
 {
