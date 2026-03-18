@@ -126,6 +126,10 @@ let
       t = "folder";
       id = "DeleteMe";
     }
+    {
+      t = "folder";
+      id = "Delete Me";
+    }
   ];
   addDeviceToDeleteScript = pkgs.writers.writeBash "syncthing-add-device-to-delete.sh" ''
     set -euo pipefail
