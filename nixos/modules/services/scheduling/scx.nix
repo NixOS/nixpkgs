@@ -71,11 +71,11 @@ in
     };
 
     extraArgs = lib.mkOption {
-      type = lib.types.listOf lib.types.singleLineStr;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
-        "--slice-us 5000"
         "--verbose"
+        "--slice-us 5000"
       ];
       description = ''
         Parameters passed to the chosen scheduler at runtime.
@@ -107,9 +107,10 @@ in
         '';
         Restart = "on-failure";
       };
+
       environment = {
         SCX_SCHEDULER = cfg.scheduler;
-        SCX_FLAGS = lib.escapeShellArgs cfg.extraArgs;
+        SCX_FLAGS = lib.concatStringsSep " " cfg.extraArgs;
       };
 
       wantedBy = [ "multi-user.target" ];
