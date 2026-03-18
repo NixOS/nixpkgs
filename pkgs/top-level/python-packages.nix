@@ -12785,6 +12785,8 @@ self: super: with self; {
 
   preggy = callPackage ../development/python-modules/preggy { };
 
+  premailer = callPackage ../development/python-modules/premailer { };
+
   preprocess-cancellation = callPackage ../development/python-modules/preprocess-cancellation { };
 
   presenterm-export = callPackage ../development/python-modules/presenterm-export { };
