@@ -89,7 +89,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pulsar";
-  version = "1.131.1";
+  version = "1.131.2";
 
   src =
     finalAttrs.passthru.srcs.${stdenv.hostPlatform.system}
@@ -98,11 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.srcs = {
     x86_64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/Linux.pulsar-${finalAttrs.version}.tar.gz";
-      hash = "sha256-Is+KAnPuHUrj87KFTjB/v/LMDflq4LbX3VP8Cv7/CNQ=";
+      hash = "sha256-9KziiAKvfzh1yERPRakMCuQmW0ZlUQiaNFI2plWgb/c=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/ARM.Linux.pulsar-${finalAttrs.version}-arm64.tar.gz";
-      hash = "sha256-P2ZBV9Al6xw347yUs3BOWnwJGWegRh52oygLFgjoBcw=";
+      hash = "sha256-0AG87yQfg/osTtCBV10/X/4MXkWxD7lkDXcyFIGKvEs=";
     };
   };
 
