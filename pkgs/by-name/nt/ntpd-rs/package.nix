@@ -29,6 +29,28 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
+  # These fail based on timestamp issues with bundled certificates
+  # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
+  checkFlags = [
+    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
+    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
+    "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
+    "--skip=daemon::ntp_source::tests::test_timeroundtrip"
+    "--skip=daemon::server::tests::test_server_serves"
+    "--skip=nts::tests::test_key_exchange_roundtrip_no_cookies"
+    "--skip=nts::tests::test_keyexchange_fixed_key_no_permission"
+    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key"
+    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_keep_alive"
+    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_no_permit"
+    "--skip=nts::tests::test_keyexchange_roundtrip_no_proto_overlap"
+    "--skip=nts::tests::test_keyexchange_roundtrip_no_upgrade_possible"
+    "--skip=nts::tests::test_keyexchange_roundtrip_supports"
+    "--skip=nts::tests::test_keyexchange_roundtrip_upgrading"
+    "--skip=nts::tests::test_keyexchange_roundtrip_v4"
+    "--skip=nts::tests::test_keyexchange_roundtrip_v5"
+    "--skip=nts::tests::test_keyexchange_supports_no_permission"
+  ];
+
   postPatch = ''
     substituteInPlace utils/generate-man.sh \
       --replace-fail 'utils/pandoc.sh' 'pandoc'
