@@ -10,7 +10,7 @@ NixOS has an option to link the xkb data files to /etc/X11, but not to
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/locale/localectl.c b/src/locale/localectl.c
-index 63703007ad..50def81940 100644
+index 6370300..50def81 100644
 --- a/src/locale/localectl.c
 +++ b/src/locale/localectl.c
 @@ -295,7 +295,7 @@ static const char* xkb_directory(void) {
