@@ -39,7 +39,7 @@ buildPythonPackage rec {
   meta = {
     description = "Module for version handling of modules";
     homepage = "https://github.com/aboutcode-org/packvers";
-    changelog = "https://github.com/nexB/packvers/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/aboutcode-org/packvers/blob/${src.tag}/CHANGELOG.rst";
     license = with lib.licenses; [
       asl20 # and
       bsd2
