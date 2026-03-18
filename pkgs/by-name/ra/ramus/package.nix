@@ -54,7 +54,13 @@ let
 
       makeWrapper ${jre}/bin/java $out/bin/ramus \
         --add-flags "-cp '$out/share/ramus/lib/ramus/*:$out/share/ramus/lib/thirdparty/*' com.ramussoft.local.Main" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libx11 libxext libGL ]}"
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libx11
+            libxext
+            libGL
+          ]
+        }"
 
       runHook postInstall
     '';
@@ -74,4 +80,4 @@ let
     };
   });
 in
-  self
+self
