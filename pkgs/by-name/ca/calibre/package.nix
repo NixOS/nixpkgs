@@ -296,7 +296,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
     license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
