@@ -4,9 +4,9 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   lib,
   lxml,
-  poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
@@ -16,17 +16,17 @@
 
 buildPythonPackage rec {
   pname = "aiowebdav2";
-  version = "0.6.1";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiowebdav2";
     tag = "v${version}";
-    hash = "sha256-xByCfzIxHPo7yDvv14c91FNipKv6TkPvtaFmb2fG/5A=";
+    hash = "sha256-W3TdumweNyGz2qDFgSGu+ZPnEpLvWQQ216jER6e4k18=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiofiles
