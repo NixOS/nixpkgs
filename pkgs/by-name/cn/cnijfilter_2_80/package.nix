@@ -1,15 +1,7 @@
 {
-  stdenv,
   lib,
   fetchzip,
-  autoconf,
-  automake,
-  libtool,
-  cups,
-  popt,
-  libtiff,
-  libpng,
-  ghostscript,
+  pkgsi686Linux,
 }:
 
 /*
@@ -17,7 +9,9 @@
   file included in the tarball
 */
 
-stdenv.mkDerivation {
+# this driver ships with pre-compiled 32-bit binary libraries
+
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "cnijfilter";
 
   /*
@@ -39,16 +33,16 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    pkgsi686Linux.autoconf
+    pkgsi686Linux.automake
   ];
   buildInputs = [
-    libtool
-    cups
-    popt
-    libtiff
-    libpng
-    ghostscript
+    pkgsi686Linux.libtool
+    pkgsi686Linux.cups
+    pkgsi686Linux.popt
+    pkgsi686Linux.libtiff
+    pkgsi686Linux.libpng
+    pkgsi686Linux.ghostscript
   ];
 
   env.NIX_CFLAGS_COMPILE = " -std=gnu90";
@@ -61,7 +55,7 @@ stdenv.mkDerivation {
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;
     sed -i "s|/usr|$out|" backend/src/cnij_backend_common.c;
-    sed -i "s|/usr/bin|${ghostscript}/bin|" pstocanonij/filter/pstocanonij.c;
+    sed -i "s|/usr/bin|${pkgsi686Linux.ghostscript}/bin|" pstocanonij/filter/pstocanonij.c;
     sed -i "s|/usr/local|$out|" libs/bjexec/bjexec.c;
   '';
 
