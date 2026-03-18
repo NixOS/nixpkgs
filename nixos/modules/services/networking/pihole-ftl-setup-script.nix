@@ -41,7 +41,8 @@ in
     local payload="$1"
 
     echo "Adding list: $payload"
-    local result=$(PostFTLData "lists" "$payload")
+    local type=$($jq -r '.type' <<< "$payload")
+    local result=$(PostFTLData "lists?type=$type" "$payload")
 
     local error="$($jq '.error' <<< "$result")"
     if [[ "$error" != "null" ]]; then
