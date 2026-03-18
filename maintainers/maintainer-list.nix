@@ -16749,6 +16749,12 @@
     githubId = 952712;
     name = "Matt Christ";
   };
+  mattcurrie = {
+    email = "me+nixpkgs@mattcurrie.com";
+    github = "mattcurrie";
+    githubId = 455505;
+    name = "Matt Currie";
+  };
   mattdef = {
     email = "mattdef@gmail.com";
     github = "mattdef";
