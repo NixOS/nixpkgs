@@ -49,6 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  # libtar/Makefile.in hardcodes `INSTALL_PROGRAM = @INSTALL_PROGRAM@ -s`,
+  # which runs bare `strip` during `make install`. This fails in cross builds
+  # where only the prefixed strip (e.g. aarch64-unknown-linux-gnu-strip) is
+  # available. Nix's fixup phase handles stripping with the correct tool, so
+  # just remove the flag.
+  postPatch = ''
+    substituteInPlace libtar/Makefile.in \
+      --replace-fail '@INSTALL_PROGRAM@ -s' '@INSTALL_PROGRAM@'
+  '';
+
   meta = {
     description = "C library for manipulating POSIX tar files";
     mainProgram = "libtar";

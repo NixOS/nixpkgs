@@ -2,6 +2,10 @@
   buildOctavePackage,
   lib,
   fetchurl,
+  mesa,
+  gnuplot,
+  makeFontsConf,
+  writableTmpDirAsHomeHook,
 }:
 
 buildOctavePackage rec {
@@ -12,6 +16,16 @@ buildOctavePackage rec {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
     sha256 = "sha256-pYY8E5LZd+pPNwzFVH4EsXY8K3fXs6Hyz2zYweXkmRk=";
   };
+
+  nativeOctavePkgTestInputs = [
+    mesa
+    gnuplot
+    writableTmpDirAsHomeHook
+  ];
+
+  octavePkgTestEnv.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://gnu-octave.github.io/packages/image/";

@@ -18,6 +18,7 @@
   clangStdenv,
   nixpkgs-review,
   nixpkgs-reviewFull,
+  nil,
   nix-direnv,
   nix-fast-build,
   haskell,
@@ -109,6 +110,10 @@ let
           # from the derivation.
           nixpkgs-reviewFull = nixpkgs-reviewFull.override {
             nixpkgs-review = self.nixpkgs-review;
+          };
+
+          nil = nil.override {
+            nix = self.lix;
           };
 
           nix-direnv = nix-direnv.override {

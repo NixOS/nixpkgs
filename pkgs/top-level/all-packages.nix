@@ -7224,11 +7224,6 @@ with pkgs;
     physfs
     ;
 
-  pipelight = callPackage ../tools/misc/pipelight {
-    stdenv = stdenv_32bit;
-    wine-staging = pkgsi686Linux.wine-staging;
-  };
-
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
   podofo = podofo_1_0;
