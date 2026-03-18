@@ -23,6 +23,13 @@ buildRedist {
     rmdir -v "$PWD/include/cccl"
   '';
 
+  # NVIDIA, in their wisdom, expect CCCL to be a directory inside include.
+  # https://github.com/NVIDIA/cutlass/blob/087c84df83d254b5fb295a7a408f1a1d554085cf/CMakeLists.txt#L773
+  postInstall = lib.optionalString (cudaAtLeast "13.0") ''
+    nixLog "creating alias for ''${!outputInclude:?}/include/cccl"
+    ln -srv "''${!outputInclude:?}/include" "''${!outputInclude:?}/include/cccl"
+  '';
+
   meta = {
     description = "Building blocks that make it easier to write safe and efficient CUDA C++ code";
     longDescription = ''
