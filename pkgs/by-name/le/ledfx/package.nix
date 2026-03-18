@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ledfx";
   version = "2.1.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "LedFx";
     repo = "LedFx";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-N9EHK0GVohFCjEKsm3g4h+4XWfzZO1tzdd2z5IN1YjI=";
   };
 
@@ -72,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   optional-dependencies = {
-    hue = with pyproject.pkgs; [ python-mbedtls ];
+    hue = with python3.pkgs; [ python-mbedtls ];
   };
 
   nativeCheckInputs = with python3.pkgs; [
@@ -83,9 +83,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Network based LED effect controller with support for advanced real-time audio effects";
     homepage = "https://github.com/LedFx/LedFx";
-    changelog = "https://github.com/LedFx/LedFx/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/LedFx/LedFx/blob/${finalAttrs.version}/CHANGELOG.rst";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ledfx";
   };
-}
+})
