@@ -193,7 +193,10 @@ stdenv.mkDerivation rec {
     # zxtune supports mac and windows, but more work will be needed to
     # integrate with the custom make system (see platformName above)
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ EBADBEEF ];
+    maintainers = with lib.maintainers; [
+      pbsds
+      EBADBEEF
+    ];
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }
