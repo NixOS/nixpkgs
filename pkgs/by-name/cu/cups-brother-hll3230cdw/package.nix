@@ -1,16 +1,10 @@
 {
-  stdenv,
   lib,
   fetchurl,
-  perl,
-  gnused,
-  dpkg,
-  makeWrapper,
-  autoPatchelfHook,
-  libredirect,
+  pkgsi686Linux,
 }:
 
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "cups-brother-hll3230cdw";
   version = "1.0.2";
   src = fetchurl {
@@ -19,15 +13,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    dpkg
-    makeWrapper
-    autoPatchelfHook
+    pkgsi686Linux.dpkg
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.autoPatchelfHook
   ];
 
   buildInputs = [
-    perl
-    gnused
-    libredirect
+    pkgsi686Linux.perl
+    pkgsi686Linux.gnused
+    pkgsi686Linux.libredirect
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
@@ -63,23 +57,24 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace $out/opt/brother/Printers/hll3230cdw/lpd/filter_hll3230cdw \
-      --replace "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/hll3230cdw/\"; #" \
-      --replace "PRINTER =~" "PRINTER = \"hll3230cdw\"; #"
+      --replace-fail "my \$BR_PRT_PATH =" "my \$BR_PRT_PATH = \"$out/opt/brother/Printers/hll3230cdw/\"; #" \
+      --replace-fail "PRINTER =~" "PRINTER = \"hll3230cdw\"; #"
 
     substituteInPlace $out/opt/brother/Printers/hll3230cdw/cupswrapper/brother_lpdwrapper_hll3230cdw \
-      --replace "PRINTER =~" "PRINTER = \"hll3230cdw\"; #" \
-      --replace "my \$basedir = \`readlink \$0\`" "my \$basedir = \"$out/opt/brother/Printers/hll3230cdw/\""
+      --replace-fail "PRINTER =~" "PRINTER = \"hll3230cdw\"; #" \
+      --replace-fail "my \$basedir = \`readlink \$0\`" "my \$basedir = \"$out/opt/brother/Printers/hll3230cdw/\""
 
     wrapProgram $out/bin/brprintconf_hll3230cdw \
-      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --set LD_PRELOAD "${pkgsi686Linux.libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS /opt=$out/opt
 
     wrapProgram $out/opt/brother/Printers/hll3230cdw/lpd/brhll3230cdwfilter \
-      --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+      --set LD_PRELOAD "${pkgsi686Linux.libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS /opt=$out/opt
 
     substituteInPlace $out/bin/brprintconf_hll3230cdw \
-      --replace \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${gnused}/bin/sed -E '/^(function list :|resource file :).*/{s#/opt#$out/opt#}'"
+      --replace-fail \"\$"@"\" \"\$"@\" | LD_PRELOAD= ${pkgsi686Linux.gnused}/bin/sed -E '/^(function list :|resource file
+    :).*/{s#/opt#$out/opt#}'"
   '';
 
   meta = {
