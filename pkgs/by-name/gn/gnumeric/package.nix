@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchpatch,
   pkg-config,
   intltool,
   libxml2,
@@ -36,6 +36,20 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "GNUMERIC_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-fv4RlIfJiLY3MbsAsgRgJ010/Ob1X1be29XfoweCMpI=";
   };
+
+  patches = [
+    # Replace bool type with gboolean.
+    # See https://gitlab.gnome.org/GNOME/gnumeric/-/merge_requests/39.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnumeric/-/commit/dee6523426b75c10c36b188fafe6e7a27b6631e3.patch";
+      hash = "sha256-a4KgxsrU9m/dZqu2LNC+jWiXvCTcRPzZW/67pg8yLGY=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
+  '';
 
   preConfigure = ''
     ./autogen.sh
@@ -73,11 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    substituteInPlace configure.ac \
-      --replace-fail 'GLIB_COMPILE_RESOURCES=' 'GLIB_COMPILE_RESOURCES="glib-compile-resources"#'
-  '';
 
   passthru = {
     updateScript = gnome.updateScript {

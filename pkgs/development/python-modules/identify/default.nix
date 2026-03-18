@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "identify";
-  version = "2.6.17";
+  version = "2.6.18";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "identify";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hnVG1TRkq605uFk3PmzqFwnzcYru/4OYbrJYAtDuo0g=";
+    hash = "sha256-Va1aWNeavA0iR/gKSrheJI/PIIy+KfmjEK1I97n9V/c=";
   };
 
   build-system = [ setuptools ];
