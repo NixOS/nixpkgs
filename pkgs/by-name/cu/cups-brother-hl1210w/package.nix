@@ -1,17 +1,7 @@
 {
   lib,
-  stdenv,
   pkgsi686Linux,
   fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  file,
-  a2ps,
-  coreutils,
-  gawk,
 }:
 
 let
@@ -25,7 +15,7 @@ let
     sha256 = "1sl3g2cd4a2gygryrr27ax3qaa65cbirz3kzskd8afkwqpmjyv7j";
   };
 in
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "cups-brother-hl1210W";
   inherit version;
 
@@ -33,13 +23,19 @@ stdenv.mkDerivation {
     lprdeb
     cupsdeb
   ];
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [
-    cups
-    ghostscript
-    dpkg
-    a2ps
+
+  nativeBuildInputs = [
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.autoPatchelfHook
+    pkgsi686Linux.dpkg
   ];
+
+  buildInputs = [
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.a2ps
+  ];
+
   dontUnpack = true;
 
   installPhase = ''
@@ -51,26 +47,22 @@ stdenv.mkDerivation {
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/HL1210W/lpd/psconvert2
 
-    patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1210W/lpd/brprintconflsr3
-    patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1210W/lpd/rawtobr3
-    patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $out/opt/brother/Printers/HL1210W/inf/braddprinter
-
     wrapProgram $out/opt/brother/Printers/HL1210W/lpd/psconvert2 \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          gnused
-          coreutils
-          gawk
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gawk
         ]
       }
     wrapProgram $out/opt/brother/Printers/HL1210W/lpd/filter_HL1210W \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          ghostscript
-          a2ps
-          file
-          gnused
-          coreutils
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.a2ps
+          pkgsi686Linux.file
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
         ]
       }
 
@@ -88,9 +80,9 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          gnused
-          coreutils
-          gawk
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gawk
         ]
       }
   '';
