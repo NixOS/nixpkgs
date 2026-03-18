@@ -19,7 +19,7 @@
   versionCheckHook,
 }:
 buildPythonPackage (finalAttrs: {
-  version = "0.22.1";
+  version = "0.23.0";
   pname = "keymap-drawer";
   pyproject = true;
   disabled = pythonOlder "3.12";
@@ -28,7 +28,7 @@ buildPythonPackage (finalAttrs: {
     owner = "caksoylar";
     repo = "keymap-drawer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X3O5yspEdey03YQ6JsYN/DE9NUiq148u1W6LQpUQ3ns=";
+    hash = "sha256-yrZidTATnOPacAfdk0gFIgH/3MaZqVOjmzkWNnMa01s=";
   };
 
   build-system = [ poetry-core ];
@@ -68,10 +68,5 @@ buildPythonPackage (finalAttrs: {
       MattSturgeon
     ];
     mainProgram = "keymap";
-    # keymap-drawer currently requires tree-sitter 0.24.0
-    # See https://github.com/caksoylar/keymap-drawer/issues/183
-    # top-level package `keymap-drawer` is not broken due to this
-    # incompatibility, thanks to a Python override
-    broken = lib.versionAtLeast tree-sitter.version "0.25.0";
   };
 })
