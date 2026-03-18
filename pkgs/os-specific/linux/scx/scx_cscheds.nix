@@ -11,7 +11,7 @@
   libseccomp,
 }:
 
-llvmPackages.stdenv.mkDerivation {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
   version = "0-unstable-2026-01-13";
 
@@ -48,10 +48,35 @@ llvmPackages.stdenv.mkDerivation {
     "zerocallusedregs"
   ];
 
-  doCheck = true;
+  __structuredAttrs = true;
+  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cd $out/bin
+    found=(scx_*)
+    if [[ "''${found[@]}" != "''${EXPECTED_SCHEDULERS[@]}" ]]; then
+      echo "List of available schedulers changed, expected: ''${EXPECTED_SCHEDULERS[@]}, found: ''${found[@]}"
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
 
   passthru = {
     inherit (scx.rustscheds.passthru) tests;
+    schedulers = [
+      "scx_central"
+      "scx_flatcg"
+      "scx_nest"
+      "scx_pair"
+      "scx_prev"
+      "scx_qmap"
+      "scx_simple"
+      "scx_userland"
+    ];
   };
 
   meta = scx.rustscheds.meta // {
@@ -68,4 +93,4 @@ llvmPackages.stdenv.mkDerivation {
     '';
     homepage = "https://github.com/sched-ext/scx/tree/main/scheds/c";
   };
-}
+})

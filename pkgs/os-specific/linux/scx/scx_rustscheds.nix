@@ -55,8 +55,48 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # which is not available in the sandbox
   doCheck = false;
 
+  # we don't need these
+  postInstall = ''
+    rm $out/bin/{scx_arena_selftests,vmlinux_docify,xtask}
+  '';
+
+  __structuredAttrs = true;
+  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cd $out/bin
+    found=(scx_*)
+    if [[ "''${found[@]}" != "''${EXPECTED_SCHEDULERS[@]}" ]]; then
+      echo "List of available schedulers changed, expected: ''${EXPECTED_SCHEDULERS[@]}, found: ''${found[@]}"
+      exit 1
+    fi
+
+    runHook postInstallCheck
+  '';
+
   passthru.tests.basic = nixosTests.scx;
   passthru.updateScript = nix-update-script { };
+  passthru.schedulers = [
+    "scx_beerland"
+    "scx_bpfland"
+    "scx_cake"
+    "scx_chaos"
+    "scx_cosmos"
+    "scx_flash"
+    "scx_lavd"
+    "scx_layered"
+    "scx_mitosis"
+    "scx_p2dq"
+    "scx_pandemonium"
+    "scx_rlfifo"
+    "scx_rustland"
+    "scx_rusty"
+    "scx_tickless"
+    "scx_wd40"
+  ];
 
   meta = {
     description = "Sched-ext Rust userspace schedulers";
