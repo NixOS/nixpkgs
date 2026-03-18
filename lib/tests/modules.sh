@@ -822,6 +822,7 @@ checkConfigOutput '^true$' config.viaConfig ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkMerge ./mkDefinition.nix
 checkConfigOutput '^true$' config.mkForce ./mkDefinition.nix
 
+checkConfigOutput '2' config.bar.baz ./evalOption.nix
 checkConfigError 'not of type' config.foo.bar ./extendOption.nix
 checkConfigError 'not of type' config.foo.bar ./extendSubmodule.nix
 checkConfigError 'not of type' config.foo.bar ./mkContract.nix

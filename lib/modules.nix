@@ -2078,6 +2078,32 @@ let
   };
 
   /**
+    Evaluate a configuration in the context of a corresponding module system option.
+
+    modules.evalOption :: option -> attrs -> attrs
+
+    # Inputs
+
+    `option`
+
+    : 1\. Module system option in which to evaluate the configuration
+
+    `conf`
+
+    : 2\. Configuration to evaluate within the option
+  */
+  evalOption =
+    option: conf:
+    (lib.evalModules {
+      modules = [
+        {
+          options.opt = option;
+          config.opt = conf;
+        }
+      ];
+    }).config.opt;
+
+  /**
     Extend a (sub-)module option with a set of overrides.
 
     modules.extendOption :: attrs -> option -> option
@@ -2402,6 +2428,7 @@ private
   #       are just needed by types.nix, but are not meant to be consumed
   #       externally.
   inherit
+    evalOption
     extendOption
     extendSubmodule
     defaultOrderPriority
