@@ -13,6 +13,7 @@
   openpbs,
   symlinkJoin,
   slurm,
+  gitUpdater,
 }:
 let
   restclient-cpp = fetchFromGitHub {
@@ -72,6 +73,12 @@ stdenv.mkDerivation rec {
     shopt -s extglob
     mv subprojects/restclient-cpp/librestclient_cpp.so!(*p) $out/lib
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = {
     description = "Nix build hook that forwards builds to job schedulers";
