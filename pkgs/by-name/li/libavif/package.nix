@@ -31,7 +31,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libavif";
-  version = "1.3.0";
+  version = "1.4.0";
 
   outputs = [
     "out"
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "AOMediaCodec";
     repo = "libavif";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0J56wpXa2AVh9JUp5UY2kzWijNE3i253RKhpG5oDFJE=";
+    hash = "sha256-Q9wE0E9HPkYjMfkVG/+n1nuLLMZqCSFf+Wo/wPyCjww=";
   };
 
   postPatch = ''
