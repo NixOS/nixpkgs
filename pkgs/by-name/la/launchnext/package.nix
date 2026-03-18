@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "launchnext";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchzip {
     url = "https://github.com/RoversX/LaunchNext/releases/download/${finalAttrs.version}/LaunchNext${finalAttrs.version}.zip";
-    hash = "sha256-gdfSkBWLXd1N17ruVlRs77q3VMX2nfmAYitPOVnDe3k=";
+    hash = "sha256-o52vYFr2j3AtFOpTyZ4jBnPhpfRGjyBXp5ZM4hlXqvU=";
     stripRoot = false;
   };
 
