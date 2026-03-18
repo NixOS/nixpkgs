@@ -1,12 +1,7 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  cups,
-  perl,
-  ghostscript,
-  which,
-  makeWrapper,
+  pkgsi686Linux,
 }:
 
 /*
@@ -36,14 +31,7 @@
      -  The `setupPrintcap` has totally no use in our context.
 */
 
-let
-  myPatchElf = file: ''
-    patchelf --set-interpreter \
-      ${stdenv.cc.libc}/lib/ld-linux${lib.optionalString stdenv.hostPlatform.is64bit "-x86-64"}.so.2 \
-      ${file}
-  '';
-in
-stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation rec {
   pname = "brgenml1lpr";
   version = "3.1.0-1";
 
@@ -57,13 +45,17 @@ stdenv.mkDerivation rec {
     tar xfvz data.tar.gz
   '';
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.autoPatchelfHook
+  ];
+
   buildInputs = [
-    cups
-    perl
-    stdenv.cc.libc
-    ghostscript
-    which
+    pkgsi686Linux.cups
+    pkgsi686Linux.perl
+    pkgsi686Linux.stdenv.cc.libc
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.which
   ];
 
   dontBuild = true;
@@ -76,10 +68,6 @@ stdenv.mkDerivation rec {
     substituteInPlace $LPDDIR/filter_BrGenML1 \
       --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$out/opt/brother/Printers/BrGenML1\"; #" \
       --replace "PRINTER =~" "PRINTER = \"BrGenML1\"; #"
-
-    ${myPatchElf "$INFDIR/braddprinter"}
-    ${myPatchElf "$LPDDIR/brprintconflsr3"}
-    ${myPatchElf "$LPDDIR/rawtobr3"}
   '';
 
   installPhase = ''
@@ -92,11 +80,9 @@ stdenv.mkDerivation rec {
     cp -rp $LPDDIR/* $out/$LPDDIR
 
     wrapProgram $out/$LPDDIR/filter_BrGenML1 \
-      --prefix PATH ":" "${ghostscript}/bin" \
-      --prefix PATH ":" "${which}/bin"
+      --prefix PATH ":" "${pkgsi686Linux.ghostscript}/bin" \
+      --prefix PATH ":" "${pkgsi686Linux.which}/bin"
   '';
-
-  dontPatchELF = true;
 
   meta = {
     description = "Brother BrGenML1 LPR driver";
