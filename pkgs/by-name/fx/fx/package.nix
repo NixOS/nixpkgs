@@ -32,6 +32,11 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/fx --comp zsh)
   '';
 
+  checkFlags = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
+    # flaky only on x86_64 darwin, https://hydra.nixos.org/build/319903711
+    "-skip=^TestSearchCaching"
+  ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
     writableTmpDirAsHomeHook

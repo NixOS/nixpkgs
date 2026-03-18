@@ -4,21 +4,23 @@
   fetchPypi,
   freezegun,
   hatchling,
+  logfire,
+  pydantic-settings,
   pydantic,
   pytest-vcr,
   pytestCheckHook,
-  requests,
   requests-oauthlib,
+  requests,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "garth";
-  version = "0.6.3";
+  version = "0.7.9";
   pyproject = true;
 
   src = fetchPypi {
     inherit (finalAttrs) pname version;
-    hash = "sha256-UZ1LUylEY4ZSu3QO5E3PNuHSNDIa7PCF7dfxqB6mb2k=";
+    hash = "sha256-vLNoLl6Z5w7n6u//desPqtgRCqEx66T/EiLXcFDN6Z4=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];
@@ -26,7 +28,9 @@ buildPythonPackage (finalAttrs: {
   build-system = [ hatchling ];
 
   dependencies = [
+    logfire
     pydantic
+    pydantic-settings
     requests
     requests-oauthlib
   ];
