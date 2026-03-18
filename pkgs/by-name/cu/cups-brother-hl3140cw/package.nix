@@ -1,16 +1,7 @@
 {
   lib,
-  stdenv,
   fetchurl,
-  cups,
-  dpkg,
-  gnused,
-  makeWrapper,
-  ghostscript,
-  file,
-  a2ps,
-  coreutils,
-  gawk,
+  pkgsi686Linux,
 }:
 
 let
@@ -29,17 +20,17 @@ let
     sha256 = "601f392b52ed7080f71b780181823bb8f6abfd0591146b452ba1f23e21f9f865";
   };
 in
-stdenv.mkDerivation {
+pkgsi686Linux.stdenv.mkDerivation {
   pname = "cups-brother-hl3140cw";
   inherit version;
   nativeBuildInputs = [
-    makeWrapper
-    dpkg
+    pkgsi686Linux.makeWrapper
+    pkgsi686Linux.dpkg
   ];
   buildInputs = [
-    cups
-    ghostscript
-    a2ps
+    pkgsi686Linux.cups
+    pkgsi686Linux.ghostscript
+    pkgsi686Linux.a2ps
   ];
 
   unpackPhase = ''
@@ -61,26 +52,26 @@ stdenv.mkDerivation {
 
     sed -i '/GHOST_SCRIPT=/c\GHOST_SCRIPT=gs' $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2
 
-    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/hl3140cw/lpd/brhl3140cwfilter
-    patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_hl3140cw
+    patchelf --set-interpreter ${pkgsi686Linux.stdenv.cc.libc}/lib/ld-linux.so.2 $out/opt/brother/Printers/hl3140cw/lpd/brhl3140cwfilter
+    patchelf --set-interpreter ${pkgsi686Linux.stdenv.cc.libc}/lib/ld-linux.so.2 $out/usr/bin/brprintconf_hl3140cw
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/lpd/psconvertij2 \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          gnused
-          coreutils
-          gawk
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gawk
         ]
       }
 
     wrapProgram $out/opt/brother/Printers/hl3140cw/lpd/filterhl3140cw \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          ghostscript
-          a2ps
-          file
-          gnused
-          coreutils
+          pkgsi686Linux.ghostscript
+          pkgsi686Linux.a2ps
+          pkgsi686Linux.file
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
         ]
       }
 
@@ -102,9 +93,9 @@ stdenv.mkDerivation {
     wrapProgram $out/opt/brother/Printers/hl3140cw/cupswrapper/cupswrapperhl3140cw \
       --prefix PATH ":" ${
         lib.makeBinPath [
-          gnused
-          coreutils
-          gawk
+          pkgsi686Linux.gnused
+          pkgsi686Linux.coreutils
+          pkgsi686Linux.gawk
         ]
       }
   '';
