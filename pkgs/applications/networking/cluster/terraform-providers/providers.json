@@ -1193,13 +1193,13 @@
     "vendorHash": "sha256-MIO0VHofPtKPtynbvjvEukMNr5NXHgk7BqwIhbc9+u0="
   },
   "selectel_selectel": {
-    "hash": "sha256-/1s3TQK8EkM7WgHW77a/JGsCemiustIwlLAam9CZpiY=",
+    "hash": "sha256-oY2cSjoOXpDjmKSQKzx8yQhmX69diSgN1mJPR+z+hA8=",
     "homepage": "https://registry.terraform.io/providers/selectel/selectel",
     "owner": "selectel",
     "repo": "terraform-provider-selectel",
-    "rev": "v7.5.4",
+    "rev": "v7.6.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QdfBhTY7HwPqz9qm7KE0OL4ACOWiU8gLOKKdFbMrAro="
+    "vendorHash": "sha256-mHf4ZG0hk/YTofuU80sVl1g78P6T+sbBMuPenE8uGQ0="
   },
   "siderolabs_talos": {
     "hash": "sha256-9VL2aa6wZFAfQ/rkfMKwWdDU9Vs6GwZzsvQpUfm7rME=",
