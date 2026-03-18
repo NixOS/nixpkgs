@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
   setuptools,
   lxml,
@@ -10,14 +11,16 @@
   translatehtml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argos-translate-files";
   version = "1.4.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9ufNuExfyW3gr8+pIpp6Ie03e0hE4l3l3kk6EiVH0x8=";
+  src = fetchFromGitHub {
+    owner = "LibreTranslate";
+    repo = "argos-translate-files";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XCrABdyly249dpam0pSwTWHoli/uijoUYKaHQhCqB7Y=";
   };
 
   build-system = [ setuptools ];
@@ -29,14 +32,13 @@ buildPythonPackage rec {
     translatehtml
   ];
 
+  doCheck = true;
+
   nativeCheckInputs = [
+    pytestCheckHook
     # pythonImportsCheck needs a home dir for argostranslatefiles
     writableTmpDirAsHomeHook
   ];
-
-  postPatch = ''
-    ln -s */requires.txt requirements.txt
-  '';
 
   pythonImportsCheck = [ "argostranslatefiles" ];
 
@@ -46,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})
