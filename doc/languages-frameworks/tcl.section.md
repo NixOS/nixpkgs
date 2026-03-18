@@ -13,7 +13,8 @@ Tcl packages are typically built with `tclPackages.mkTclDerivation`.
 Tcl dependencies go in `buildInputs`/`nativeBuildInputs`/... like other packages.
 For more complex package definitions, such as packages with mixed languages, use `tcl.tclPackageHook`.
 
-Where possible, make sure to enable stubs for maximum compatibility, usually with the `--enable-stubs` configure flag.
+Where possible, make sure to enable stubs for maximum compatibility.
+If you are using `mkTclDerivation`, `--enable-stubs` will be automatically added to `configureFlags`.
 
 Here is a simple package example to be called with `tclPackages.callPackage`.
 
@@ -33,7 +34,6 @@ mkTclDerivation rec {
 
   configureFlags = [
     "--with-ssl-dir=${openssl.dev}"
-    "--enable-stubs"
   ];
 
   meta = {

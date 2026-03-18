@@ -37,6 +37,8 @@ let
     "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
     "--exec-prefix=${placeholder "out"}"
+    # Enable stubs by default for compatibility across minor versions
+    "--enable-stubs"
   ];
 
   self = (
