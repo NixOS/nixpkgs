@@ -120,6 +120,11 @@ stdenv.mkDerivation (finalAttrs: {
         pname = "nim-bootstrap";
         inherit (finalAttrs) version src preBuild;
         enableParallelBuilding = true;
+        buildPhase = ''
+          runHook preBuild
+          ./build.sh
+          runHook postBuild
+        '';
         installPhase = ''
           runHook preInstall
           install -Dt $out/bin bin/nim
