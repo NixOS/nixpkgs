@@ -181,6 +181,30 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    succeed-stdout-warning =
+      pkgs.runCommand "ensure-succeed-stdout-warning"
+        {
+          failed = pkgs.testers.testBuildFailure (
+            (runTest ./nixos-test-driver/succeed-stdout-warning.nix).config.rawTestDerivation
+          );
+        }
+        ''
+          # Verify the warning appears for slow command
+          grep -F "(echo ONE; sleep 15; echo TWO) &' for the test script has exited, but not closed stdout" $failed/testBuildFailure.log
+
+          # Verify NO warning appears between fast command markers
+          if sed -n '/MARKER: before fast command/,/MARKER: after fast command/p' $failed/testBuildFailure.log | grep -F "for the test script has exited, but not closed stdout"; then
+            echo "ERROR: Warning appeared for fast command when it should not have"
+            exit 1
+          fi
+
+          # Verify User Command stderr goes to console
+          grep -F "STDERR_TEST_MARKER: user command stderr output" $failed/testBuildFailure.log
+
+          # Verify test completed
+          grep -F "Test script done and successful so far. Intentionally failing so that testBuildFailure can perform remaining log checks" $failed/testBuildFailure.log
+          touch $out
+        '';
   };
 
   # NixOS vm tests and non-vm unit tests
