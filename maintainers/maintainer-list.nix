@@ -18086,6 +18086,12 @@
     githubId = 830082;
     name = "Nathan Moos";
   };
+  mootfrost = {
+    email = "hello@mootfrost.dev";
+    github = "mootfrost";
+    githubId = 75925945;
+    name = "Andrew Semeykin";
+  };
   moraxyc = {
     name = "Moraxyc Xu";
     email = "i@qaq.li";
