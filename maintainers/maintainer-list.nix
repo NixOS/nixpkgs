@@ -22234,6 +22234,11 @@
     github = "DaRacci";
     githubId = 90304606;
   };
+  rachitvrma = {
+    name = "Rachit Kumar Verma";
+    github = "rachitvrma";
+    githubId = "155641117";
+  };
   RadxaYuntian = {
     # This is the work account for @MakiseKurisu
     name = "ZHANG Yuntian";
