@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "1.9.0";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-It/XicX3QBcaun36uksmbeEwhpCHpPM4SAfJwm6wjsQ=";
+    hash = "sha256-RmMFN1hDSU6q0ZROopsIDJ2nbmvdwW29YywX7rAbgP4=";
   };
 
   sourceRoot = "source/src/backend";
@@ -48,6 +48,7 @@ python.pkgs.buildPythonApplication rec {
       django-extensions
       django-lasuite
       django-parler
+      django-pydantic-field
       django-redis
       django-storages
       django-timezone-field
@@ -65,6 +66,7 @@ python.pkgs.buildPythonApplication rec {
       mozilla-django-oidc
       nested-multipart-parser
       psycopg
+      pydantic
       pyjwt
       pyopenssl
       python-frontmatter
