@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication {
   meta = {
     description = "XMonad-like workspace switching for i3 and sway";
     mainProgram = "i3-wk-switch";
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
     homepage = "https://travisf.net/i3-wk-switcher";
