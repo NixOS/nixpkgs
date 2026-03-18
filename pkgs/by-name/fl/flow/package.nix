@@ -82,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/facebook/flow/blob/${finalAttrs.src.tag}/Changelog.md";
     license = lib.licenses.mit;
     platforms = ocamlPackages.ocaml.meta.platforms;
-    maintainers = with lib.maintainers; [ puffnfresh ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      miniharinn
+    ];
   };
 })
