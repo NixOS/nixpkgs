@@ -129,6 +129,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-bash-completion.patch
     ./add-hidden-menu-entries.patch
+    ./bootstrap-po-downloads.patch
 
     /*
       Restore gfxterm_menu (and cmdline_cat). The NixOS installer uses it.
@@ -242,8 +243,10 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     cp -f --no-preserve=mode ${locales}/po/LINGUAS ${locales}/po/*.po po
+    mkdir po/.reference
+    cp -f --no-preserve=mode ${locales}/po/*.po po/.reference
 
-    ./bootstrap --skip-po --no-git --gnulib-srcdir=${gnulib}
+    ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
     substituteInPlace ./configure --replace-fail '/usr/share/fonts/unifont' '${unifont}/share/fonts'
   ''
