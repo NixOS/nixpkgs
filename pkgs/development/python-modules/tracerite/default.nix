@@ -7,7 +7,7 @@
   html5tagger,
   pytestCheckHook,
   beautifulsoup4,
-  torch,
+  numpy,
 }:
 
 buildPythonPackage rec {
@@ -34,10 +34,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     beautifulsoup4
-    torch
+    numpy
   ];
 
   pythonImportsCheck = [ "tracerite" ];
+
+  disabledTestPaths = [
+    # requiring torch to test tensor rendering in tracebacks is too expensive
+    "tests/test_inspector_torch.py"
+  ];
 
   meta = {
     description = "Tracebacks for Humans in Jupyter notebooks";
