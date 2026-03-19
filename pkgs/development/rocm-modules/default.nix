@@ -89,6 +89,7 @@ let
       rocprofiler-register = self.callPackage ./rocprofiler-register {
         inherit (llvm) clang;
       };
+      rocprofiler-sdk = self.callPackage ./rocprofiler-sdk { };
 
       rocprof-trace-decoder = self.callPackage ./rocprof-trace-decoder { };
 
