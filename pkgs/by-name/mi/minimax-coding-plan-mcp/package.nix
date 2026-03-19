@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     description = "MiniMax MCP server for coding-plan users with web search and image understanding";
     homepage = "https://github.com/MiniMax-AI/MiniMax-Coding-Plan-MCP";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ superherointj ];
     mainProgram = "minimax-coding-plan-mcp";
   };
 })
