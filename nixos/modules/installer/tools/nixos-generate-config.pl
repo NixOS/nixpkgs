@@ -557,6 +557,10 @@ EOF
                     my $luksDevice = "  boot.initrd.luks.devices.\"$dmName\".device";
                     if ($fileSystems !~ /^\Q$luksDevice\E/m) {
                         $fileSystems .= "$luksDevice = \"${\(findStableDevPath $slave)}\";\n\n";
+                        $dmUuid = read_file("/sys/class/block/" . basename($slaves[0]) ."/dm/uuid",  err_mode => 'quiet');
+                        if ($dmUuid =~ /^LVM/)
+                          $fileSystems .= "  boot.initrd.luks.devices.\"$dmName\".preLVM = false;\n\n";
+                        }
                     }
                 }
             }
