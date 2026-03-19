@@ -476,12 +476,6 @@
     githubId = 908758;
     name = "Abigail Bunyan";
   };
-  aborsu = {
-    email = "a.borsu@gmail.com";
-    github = "aborsu";
-    githubId = 5033617;
-    name = "Augustin Borsu";
-  };
   aboseley = {
     email = "adam.boseley@gmail.com";
     github = "aboseley";
@@ -10585,6 +10579,11 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henrikvtcodes = {
+    github = "henrikvtcodes";
+    githubId = 22358337;
+    name = "Henrik VT";
+  };
   henrirosten = {
     email = "henri.rosten@unikie.com";
     github = "henrirosten";
@@ -11990,6 +11989,11 @@
     name = "Jared Montoya";
     github = "jaredmontoya";
     githubId = 49511278;
+  };
+  jasanfarah = {
+    github = "jasanfarah";
+    githubId = 69898185;
+    name = "Jasan Farah";
   };
   jasoncarr = {
     email = "jcarr250@gmail.com";
@@ -16741,6 +16745,12 @@
     github = "mattchrist";
     githubId = 952712;
     name = "Matt Christ";
+  };
+  mattcurrie = {
+    email = "me+nixpkgs@mattcurrie.com";
+    github = "mattcurrie";
+    githubId = 455505;
+    name = "Matt Currie";
   };
   mattdef = {
     email = "mattdef@gmail.com";
@@ -23969,12 +23979,6 @@
     email = "hey@sandydoo.me";
     matrix = "@sandydoo:matrix.org";
   };
-  santosh = {
-    email = "santoshxshrestha@gmail.com";
-    name = "Santosh Shrestha";
-    github = "santoshxshrestha";
-    githubId = 182977126;
-  };
   sarahec = {
     email = "seclark@nextquestion.net";
     github = "sarahec";
@@ -26237,12 +26241,6 @@
     githubId = 12595971;
     name = "Guillaume Girol";
   };
-  synthetica = {
-    email = "nix@hilhorst.be";
-    github = "Synthetica9";
-    githubId = 7075751;
-    name = "Patrick Hilhorst";
-  };
   sysedwinistrator = {
     email = "edwin.mowen@gmail.com";
     github = "sysedwinistrator";
@@ -28449,6 +28447,12 @@
     github = "viluon";
     githubId = 7235381;
     name = "Ondřej Kvapil";
+  };
+  vimlinuz = {
+    email = "vimlinuz@gmail.com";
+    name = "Santosh Shrestha";
+    github = "vimlinuz";
+    githubId = 182977126;
   };
   vincentbernat = {
     email = "vincent@bernat.ch";

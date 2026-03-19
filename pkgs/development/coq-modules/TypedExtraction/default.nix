@@ -4,7 +4,7 @@
   which,
   coq,
   stdlib,
-  metarocq,
+  metarocq-erasure,
   version ? null,
   single ? false,
 }:
@@ -29,13 +29,15 @@ let
     lib.switch
       [
         coq.coq-version
-        metarocq.version
+        metarocq-erasure.version
       ]
       [
+        (case "9.1" "1.5.1-9.1" "0.2.1")
         (case "9.1" (lib.versions.range "1.4" "1.4.1") "0.2.0")
       ]
       null;
   release = {
+    "0.2.1".sha256 = "sha256-GWdu/l7CipeBubgS5OGHsZfpP2Fkr1cfiZMRH5d1n0g=";
     "0.2.0".sha256 = "sha256-rgg39X45IXjcnejBhh8N7wMiH+gHQrfO8pBbFEWOGVI=";
   };
   releaseRev = v: "v${v}";
@@ -87,7 +89,7 @@ let
             propagatedBuildInputs = [
               stdlib
               coq.ocamlPackages.findlib
-              metarocq
+              metarocq-erasure
             ]
             ++ typedextraction-deps;
 
