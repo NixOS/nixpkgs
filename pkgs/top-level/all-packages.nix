@@ -4967,7 +4967,6 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang
-    erlang_29
     erlang_28
     erlang_27
     erlang_26
