@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "yt-dlp-ejs";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yt-dlp";
     repo = "ejs";
     tag = version;
-    hash = "sha256-6S6O2wXfD38iMbtqMB3WA25cJJoWQRZ7gx9cpKQVYpU=";
+    hash = "sha256-+tOA9sPk0BGJHFQCoAC8y5Bz3UcjgIPDQ8WDPkRlW5k=";
   };
 
   pnpmDeps = fetchPnpmDeps {
