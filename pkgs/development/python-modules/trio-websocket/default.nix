@@ -11,7 +11,7 @@
   wsproto,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "trio-websocket";
   version = "0.12.2";
   pyproject = true;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "HyperionGray";
     repo = "trio-websocket";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-TGFf4WUeZDrjp/UiQ9O/GoaK5BRC2aaGZVPfqZ4Ip9I=";
   };
 
@@ -65,10 +65,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "trio_websocket" ];
 
   meta = {
-    changelog = "https://github.com/HyperionGray/trio-websocket/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/HyperionGray/trio-websocket/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "WebSocket client and server implementation for Python Trio";
     homepage = "https://github.com/HyperionGray/trio-websocket";
     license = lib.licenses.mit;
     maintainers = [ ];
   };
-}
+})
