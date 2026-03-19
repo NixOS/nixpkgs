@@ -19,12 +19,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmirage";
   version = "3.2.10";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/cdemu/libmirage-${finalAttrs.version}.tar.xz";
     hash = "sha256-+T5Gu3VcprCkSJcq/kTySRnNI7nc+GbRtctLkzPhgK4=";
   };
 
@@ -64,4 +64,4 @@ stdenv.mkDerivation rec {
     description = "CD-ROM image access library";
     homepage = "https://cdemu.sourceforge.io/about/libmirage/";
   };
-}
+})
