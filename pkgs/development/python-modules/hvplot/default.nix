@@ -4,7 +4,8 @@
   fetchFromGitHub,
 
   # build-system
-  setuptools-scm,
+  hatch-vcs,
+  hatchling,
 
   # dependencies
   bokeh,
@@ -37,7 +38,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools-scm
+    hatch-vcs
+    hatchling
   ];
 
   dependencies = [
@@ -94,6 +96,6 @@ buildPythonPackage rec {
     homepage = "https://hvplot.pyviz.org";
     changelog = "https://github.com/holoviz/hvplot/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ locnide ];
   };
 }
