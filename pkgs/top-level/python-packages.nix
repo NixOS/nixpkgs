@@ -19693,6 +19693,8 @@ self: super: with self; {
 
   tsplib95 = callPackage ../development/python-modules/tsplib95 { };
 
+  tstr = callPackage ../development/python-modules/tstr { };
+
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
   tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
