@@ -28753,6 +28753,12 @@
     githubId = 988849;
     name = "Vasiliy Yorkin";
   };
+  VZstless = {
+    name = "VZstless";
+    email = "i@vzstless.moe";
+    github = "atlarator";
+    githubId = 233668878;
+  };
   w-lfchen = {
     email = "w-lfchen@posteo.net";
     github = "w-lfchen";
