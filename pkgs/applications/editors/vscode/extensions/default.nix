@@ -3008,8 +3008,8 @@ let
         mktplcRef = {
           publisher = "mesonbuild";
           name = "mesonbuild";
-          version = "1.28.1";
-          hash = "sha256-Cu2sBg8wTjGLOMF4bCOG8noXZXZB2j5wSXZS2VxxNoA=";
+          version = "1.28.2";
+          hash = "sha256-Wb3cfATe8pc+LftmKyFj3q6kmdTHUMtoIHlChKKeEoU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mesonbuild.mesonbuild/changelog";
@@ -4458,8 +4458,8 @@ let
         mktplcRef = {
           name = "vscode-stylelint";
           publisher = "stylelint";
-          version = "2.0.2";
-          hash = "sha256-nJYy7HFycKXTQCHgaLP46CGl0hlgaexL1QZ8icGpeVo=";
+          version = "2.1.0";
+          hash = "sha256-cL86Gv2HAtvqNd+2vJPuKAgKVrp5pg6IECFm1Di8Eqk=";
         };
         meta = {
           description = "Official Stylelint extension for Visual Studio Code";

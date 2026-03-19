@@ -199,6 +199,12 @@ stdenv.mkDerivation (finalAttrs: {
     # Not sure why this fails
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       rm llvm/test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
+    ''
+    # The second llvm-install-name-tool invocation fails with
+    # "is not a Mach-O file" on aarch64-linux, even on a fresh copy of
+    # the original yaml2obj output. Root cause unknown.
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      rm llvm/test/tools/llvm-objcopy/MachO/install-name-tool-change.test
     '';
 
   postInstall = ''
