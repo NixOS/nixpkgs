@@ -55,6 +55,9 @@ buildPythonPackage rec {
     "test_server_close_timeout"
     "test_server_handler_exit"
     "test_server_open_timeout"
+    # Race condition
+    # ValueError: Connection already closed
+    "test_open_websocket_internal_exc"
   ];
 
   __darwinAllowLocalNetworking = true;
