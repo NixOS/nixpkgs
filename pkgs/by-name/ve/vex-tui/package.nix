@@ -5,16 +5,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "vex-tui";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "CodeOne45";
     repo = "vex-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-NHGqfdto2geJD9FUFMC/MEpGocNrRN8gtJ0J/6kSJkc=";
+    hash = "sha256-wmze6OkX8Oxm+HtHBWo1+oSVDUR4PWWTTW/Ldu5z8pc=";
   };
 
-  vendorHash = "sha256-PvaV0tJjIVppB36Cxg4aAKX0MBjgFC5S4GTs1zHxCCU=";
+  vendorHash = "sha256-jE53+VEjj5E5G2Yycwb8NDA8vDtoUtarrQgZ9ULyVh0=";
 
   ldflags = [
     "-s"
