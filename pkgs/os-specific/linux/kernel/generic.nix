@@ -75,7 +75,6 @@ lib.makeOverridable (
 
     isLTS ? false,
     isZen ? false,
-    isLibre ? false,
     isHardened ? false,
 
     # easy overrides to stdenv.hostPlatform.linux-kernel members
@@ -317,7 +316,6 @@ lib.makeOverridable (
             isLTS
             isZen
             isHardened
-            isLibre
             ;
           isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;
 

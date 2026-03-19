@@ -329,7 +329,6 @@ in
           isLTS
           isZen
           isHardened
-          isLibre
           ;
         inherit (kernel) kernelOlder kernelAtLeast;
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
