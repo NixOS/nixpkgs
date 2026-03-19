@@ -140,6 +140,7 @@ in
     users.users.pcscd = {
       isSystemUser = true;
       group = "pcscd";
+      extraGroups = [ "usb" ];
     };
 
     users.groups.pcscd = { };
