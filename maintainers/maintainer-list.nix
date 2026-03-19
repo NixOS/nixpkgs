@@ -21804,6 +21804,13 @@
     githubId = 5653911;
     name = "Rampoina";
   };
+  RamReso = {
+    email = "RamReso@gmail.com";
+    matrix = "@nmarkert:next-side.de";
+    github = "RamReso";
+    githubId = 33570732;
+    name = "Noah Markert";
+  };
   randomdude = {
     name = "Random Dude";
     email = "randomdude16671@proton.me";
