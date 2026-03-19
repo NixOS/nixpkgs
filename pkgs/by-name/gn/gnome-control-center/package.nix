@@ -68,6 +68,7 @@
   upower,
   wayland-scanner,
   libepoxy,
+  gmobile,
   gnome-user-share,
   gnome-remote-desktop,
   wrapGAppsHook4,
@@ -116,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     glib-networking
     gcr_4
+    gmobile
     gnome-bluetooth
     gnome-desktop
     gnome-online-accounts
