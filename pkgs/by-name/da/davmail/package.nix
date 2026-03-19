@@ -12,11 +12,13 @@
   libxtst,
   coreutils,
   gnugrep,
+  zulu,
   preferGtk3 ? true,
+  preferZulu ? false,
 }:
 
 let
-  jre' = jdk.override { enableJavaFX = true; };
+  jre' = (if preferZulu then zulu else jdk).override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
 stdenv.mkDerivation (finalAttrs: {
