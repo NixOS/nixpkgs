@@ -2,7 +2,7 @@ import sys
 import textwrap
 import uuid
 from pathlib import Path
-from subprocess import PIPE, CompletedProcess, Popen
+from subprocess import PIPE, CompletedProcess
 from typing import Any
 from unittest.mock import ANY, Mock, call, patch
 
@@ -83,7 +83,7 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
 def test_build_remote(
     mock_uuid4: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
-    build_host = m.Remote("user@host", [], None)
+    build_host = m.Remote("user@host", [], None, "ssh")
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     def run_wrapper_side_effect(
@@ -177,7 +177,7 @@ def test_build_remote_flake(
 ) -> None:
     monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse("/flake.nix#hostname")
-    build_host = m.Remote("user@host", [], None)
+    build_host = m.Remote("user@host", [], None, "ssh")
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     assert n.build_remote_flake(
@@ -237,12 +237,28 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, None)
         mock_run.assert_not_called()
 
-    target_host = m.Remote("user@target.host", [], None)
-    build_host = m.Remote("user@build.host", [], None)
+    target_host = m.Remote("user@target.host", [], None, "ssh")
+    build_host = m.Remote("user@build.host", [], None, "ssh")
+    target_host_ng = m.Remote("user@target.host", [], None, "ssh-ng")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
         n.copy_closure(closure, target_host)
         mock_run.assert_called_with(
             ["nix-copy-closure", "--to", "user@target.host", closure],
+            append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        )
+
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host_ng)
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command flakes",
+                "copy",
+                "--to",
+                "ssh-ng://user@target.host",
+                closure,
+            ],
             append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
         )
 
@@ -458,7 +474,32 @@ def test_get_generations(tmp_path: Path) -> None:
     (tmp_path / "system-3-link").symlink_to(nixos_path)
     (tmp_path / "system-2-link").symlink_to(nixos_path)
 
+    # An alternate profile; this shouldn't appear.
+    (tmp_path / "custom").symlink_to(tmp_path / "custom-1-link")
+    (tmp_path / "custom-1-link").symlink_to(nixos_path)
+
     assert n.get_generations(m.Profile("system", tmp_path / "system")) == [
+        m.Generation(id=1, current=False, timestamp=ANY),
+        m.Generation(id=2, current=True, timestamp=ANY),
+        m.Generation(id=3, current=False, timestamp=ANY),
+    ]
+
+
+def test_get_generations_with_profile(tmp_path: Path) -> None:
+    nixos_path = tmp_path / "nixos-system"
+    nixos_path.mkdir()
+
+    (tmp_path / "custom").symlink_to(tmp_path / "custom-2-link")
+    # In the "wrong" order on purpose to make sure we are sorting the results
+    (tmp_path / "custom-1-link").symlink_to(nixos_path)
+    (tmp_path / "custom-3-link").symlink_to(nixos_path)
+    (tmp_path / "custom-2-link").symlink_to(nixos_path)
+
+    # An alternate profile; none of these should appear.
+    (tmp_path / "system").symlink_to(tmp_path / "system-1-link")
+    (tmp_path / "system-1-link").symlink_to(nixos_path)
+
+    assert n.get_generations(m.Profile("custom", tmp_path / "custom")) == [
         m.Generation(id=1, current=False, timestamp=ANY),
         m.Generation(id=2, current=True, timestamp=ANY),
         m.Generation(id=3, current=False, timestamp=ANY),
@@ -493,7 +534,7 @@ def test_get_generations_from_nix_env(tmp_path: Path) -> None:
             sudo=False,
         )
 
-    remote = m.Remote("user@host", [], "password")
+    remote = m.Remote("user@host", [], "password", "ssh")
     with patch(
         get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
     ) as mock_run:
@@ -555,7 +596,6 @@ def test_list_generations(mock_get_generations: Mock, tmp_path: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_diff_closures(mock_run: Mock) -> None:
-
     n.diff_closures(
         Path("/run/current-system"), Path("/nix/var/nix/profiles/system"), None
     )
@@ -607,7 +647,7 @@ def test_rollback(mock_run: Mock, tmp_path: Path) -> None:
         sudo=False,
     )
 
-    target_host = m.Remote("user@localhost", [], None)
+    target_host = m.Remote("user@localhost", [], None, "ssh")
     assert n.rollback(profile, target_host, True) == profile.path
     mock_run.assert_called_with(
         ["nix-env", "--rollback", "-p", path],
@@ -647,7 +687,7 @@ def test_rollback_temporary_profile(tmp_path: Path) -> None:
             sudo=False,
         )
 
-        target_host = m.Remote("user@localhost", [], None)
+        target_host = m.Remote("user@localhost", [], None, "ssh")
         assert (
             n.rollback_temporary_profile(m.Profile("foo", path), target_host, True)
             == path.parent / "foo-2083-link"
@@ -703,159 +743,139 @@ def test_set_profile(mock_run: Mock) -> None:
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-@patch(get_qualified_name(n.run_wrapper_bg, n), autospec=True)
 def test_switch_to_configuration_without_systemd_run(
-    mock_run_bg: Mock, mock_run: Mock, monkeypatch: MonkeyPatch
+    mock_run: Any, monkeypatch: MonkeyPatch
 ) -> None:
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 1)
 
-    proc = Popen(["echo"])
-    try:
-        mock_run_bg.return_value = p
-        mock_run.return_value = CompletedProcess([], 1)
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "")
 
-        with monkeypatch.context() as mp:
-            mp.setenv("LOCALE_ARCHIVE", "")
-
-            n.switch_to_configuration(
-                profile_path,
-                m.Action.SWITCH,
-                sudo=False,
-                target_host=None,
-                specialisation=None,
-                install_bootloader=False,
-            )
-        mock_run.assert_called_with(
-            [profile_path / "bin/switch-to-configuration", "switch"],
-            env={
-                "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-                "NIXOS_NO_CHECK": p.PRESERVE_ENV,
-                "NIXOS_INSTALL_BOOTLOADER": "0",
-            },
+        n.switch_to_configuration(
+            profile_path,
+            m.Action.SWITCH,
             sudo=False,
-            remote=None,
+            target_host=None,
+            specialisation=None,
+            install_bootloader=False,
         )
+    mock_run.assert_called_with(
+        [profile_path / "bin/switch-to-configuration", "switch"],
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        },
+        sudo=False,
+        remote=None,
+    )
 
-        with pytest.raises(m.NixOSRebuildError) as e:
-            n.switch_to_configuration(
-                config_path,
-                m.Action.BOOT,
-                sudo=False,
-                target_host=None,
-                specialisation="special",
-            )
-        assert (
-            str(e.value)
-            == "error: '--specialisation' can only be used with 'switch' and 'test'"
+    with pytest.raises(m.NixOSRebuildError) as e:
+        n.switch_to_configuration(
+            config_path,
+            m.Action.BOOT,
+            sudo=False,
+            target_host=None,
+            specialisation="special",
         )
+    assert (
+        str(e.value)
+        == "error: '--specialisation' can only be used with 'switch' and 'test'"
+    )
 
-        target_host = m.Remote("user@localhost", [], None)
-        with monkeypatch.context() as mp:
-            mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
-            mp.setenv("PATH", "/path/to/bin")
-            mp.setattr(Path, Path.exists.__name__, lambda self: True)
+    target_host = m.Remote("user@localhost", [], None, "ssh")
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
+        mp.setenv("PATH", "/path/to/bin")
+        mp.setattr(Path, Path.exists.__name__, lambda self: True)
 
-            n.switch_to_configuration(
-                Path("/path/to/config"),
-                m.Action.TEST,
-                sudo=True,
-                target_host=target_host,
-                install_bootloader=True,
-                specialisation="special",
-            )
-        mock_run.assert_called_with(
-            [
-                config_path / "specialisation/special/bin/switch-to-configuration",
-                "test",
-            ],
-            env={
-                "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-                "NIXOS_NO_CHECK": p.PRESERVE_ENV,
-                "NIXOS_INSTALL_BOOTLOADER": "1",
-            },
+        n.switch_to_configuration(
+            Path("/path/to/config"),
+            m.Action.TEST,
             sudo=True,
-            remote=target_host,
+            target_host=target_host,
+            install_bootloader=True,
+            specialisation="special",
         )
-    finally:
-        proc.communicate(timeout=1)
+    mock_run.assert_called_with(
+        [
+            config_path / "specialisation/special/bin/switch-to-configuration",
+            "test",
+        ],
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1",
+        },
+        sudo=True,
+        remote=target_host,
+    )
 
 
-@patch("uuid.uuid4")
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-@patch(get_qualified_name(n.run_wrapper_bg, n), autospec=True)
 def test_switch_to_configuration_with_systemd_run(
-    mock_run_bg: Mock, mock_run: Mock, mock_uuid4: Mock, monkeypatch: MonkeyPatch
+    mock_run: Mock, monkeypatch: MonkeyPatch
 ) -> None:
-    test_uuid = uuid.UUID("58fe9784-f60a-42bc-aa94-eb8f1a7e5c17")
-    mock_uuid4.return_value = test_uuid
-
     profile_path = Path("/path/to/profile")
     config_path = Path("/path/to/config")
+    mock_run.return_value = CompletedProcess([], 0)
 
-    proc = Popen(["echo"])
-    try:
-        mock_run_bg.return_value = proc
-        mock_run.return_value = CompletedProcess([], 0)
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "")
 
-        with monkeypatch.context() as mp:
-            mp.setenv("LOCALE_ARCHIVE", "")
-
-            n.switch_to_configuration(
-                profile_path,
-                m.Action.SWITCH,
-                sudo=False,
-                target_host=None,
-                specialisation=None,
-                install_bootloader=False,
-            )
-        mock_run.assert_called_with(
-            [
-                *n.SYSTEMD_RUN_CMD_PREFIX,
-                f"--unit={n.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
-                profile_path / "bin/switch-to-configuration",
-                "switch",
-            ],
-            env={
-                "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-                "NIXOS_NO_CHECK": p.PRESERVE_ENV,
-                "NIXOS_INSTALL_BOOTLOADER": "0",
-            },
+        n.switch_to_configuration(
+            profile_path,
+            m.Action.SWITCH,
             sudo=False,
-            remote=None,
+            target_host=None,
+            specialisation=None,
+            install_bootloader=False,
         )
+    mock_run.assert_called_with(
+        [
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            profile_path / "bin/switch-to-configuration",
+            "switch",
+        ],
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "0",
+        },
+        sudo=False,
+        remote=None,
+    )
 
-        target_host = m.Remote("user@localhost", [], None)
-        with monkeypatch.context() as mp:
-            mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
-            mp.setenv("PATH", "/path/to/bin")
-            mp.setattr(Path, Path.exists.__name__, lambda self: True)
+    target_host = m.Remote("user@localhost", [], None, "ssh")
+    with monkeypatch.context() as mp:
+        mp.setenv("LOCALE_ARCHIVE", "/path/to/locale")
+        mp.setenv("PATH", "/path/to/bin")
+        mp.setattr(Path, Path.exists.__name__, lambda self: True)
 
-            n.switch_to_configuration(
-                Path("/path/to/config"),
-                m.Action.TEST,
-                sudo=True,
-                target_host=target_host,
-                install_bootloader=True,
-                specialisation="special",
-            )
-        mock_run.assert_called_with(
-            [
-                *n.SYSTEMD_RUN_CMD_PREFIX,
-                f"--unit={n.SYSTEMD_RUN_UNIT_PREFIX}-{test_uuid.hex[:8]}",
-                config_path / "specialisation/special/bin/switch-to-configuration",
-                "test",
-            ],
-            env={
-                "LOCALE_ARCHIVE": p.PRESERVE_ENV,
-                "NIXOS_NO_CHECK": p.PRESERVE_ENV,
-                "NIXOS_INSTALL_BOOTLOADER": "1",
-            },
+        n.switch_to_configuration(
+            Path("/path/to/config"),
+            m.Action.TEST,
             sudo=True,
-            remote=target_host,
+            target_host=target_host,
+            install_bootloader=True,
+            specialisation="special",
         )
-    finally:
-        proc.communicate(timeout=1)
+    mock_run.assert_called_with(
+        [
+            *n.SWITCH_TO_CONFIGURATION_CMD_PREFIX,
+            config_path / "specialisation/special/bin/switch-to-configuration",
+            "test",
+        ],
+        env={
+            "LOCALE_ARCHIVE": p.PRESERVE_ENV,
+            "NIXOS_NO_CHECK": p.PRESERVE_ENV,
+            "NIXOS_INSTALL_BOOTLOADER": "1",
+        },
+        sudo=True,
+        remote=target_host,
+    )
 
 
 @patch(
