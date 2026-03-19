@@ -48,21 +48,21 @@ index e659746ee..dfb2d3cf2 100644
        SSLeay()
  
 -    proc ERR_load_BIO_strings*() {.cdecl, dynlib: DLLUtilName, importc.}
-+    proc ERR_load_BIO_strings*() {.cdecl, gimportc.}
++    proc ERR_load_BIO_strings*() {.cdecl, importc.}
    else:
 -    proc OPENSSL_init_ssl*(opts: uint64, settings: uint8): cint {.cdecl, dynlib: DLLSSLName, importc, discardable.}
-+    proc OPENSSL_init_ssl*(opts: uint64, settings: uint8): cint {.cdecl, gimportc, discardable.}
++    proc OPENSSL_init_ssl*(opts: uint64, settings: uint8): cint {.cdecl, importc, discardable.}
      proc SSL_library_init*(): cint {.discardable.} =
        ## Initialize SSL using OPENSSL_init_ssl for OpenSSL >= 1.1.0
        return OPENSSL_init_ssl(0.uint64, 0.uint8)
  
 -    proc TLS_method*(): PSSL_METHOD {.cdecl, dynlib: DLLSSLName, importc.}
-+    proc TLS_method*(): PSSL_METHOD {.cdecl, gimportc.}
++    proc TLS_method*(): PSSL_METHOD {.cdecl, importc.}
      proc SSLv23_method*(): PSSL_METHOD =
        TLS_method()
  
 -    proc OpenSSL_version_num(): culong {.cdecl, dynlib: DLLUtilName, importc.}
-+    proc OpenSSL_version_num(): culong {.cdecl, gimportc.}
++    proc OpenSSL_version_num(): culong {.cdecl, importc.}
  
      proc getOpenSSLVersion*(): culong =
        ## Return OpenSSL version as unsigned long
@@ -71,13 +71,13 @@ index e659746ee..dfb2d3cf2 100644
  
    when defined(libressl) or defined(openssl10):
 -    proc SSL_state(ssl: SslPtr): cint {.cdecl, dynlib: DLLSSLName, importc.}
-+    proc SSL_state(ssl: SslPtr): cint {.cdecl, gimportc.}
++    proc SSL_state(ssl: SslPtr): cint {.cdecl, importc.}
      proc SSL_in_init*(ssl: SslPtr): cint {.inline.} =
        SSL_state(ssl) and SSL_ST_INIT
    else:
 -    proc SSL_in_init*(ssl: SslPtr): cint {.cdecl, dynlib: DLLSSLName, importc.}
 -    proc SSL_CTX_set_ciphersuites*(ctx: SslCtx, str: cstring): cint {.cdecl, dynlib: DLLSSLName, importc.}
-+    proc SSL_in_init*(ssl: SslPtr): cint {.cdecl, gimportc.}
++    proc SSL_in_init*(ssl: SslPtr): cint {.cdecl, importc.}
 +    proc SSL_CTX_set_ciphersuites*(ctx: SslCtx, str: cstring): cint {.cdecl, importc.}
  
    template OpenSSL_add_all_algorithms*() = discard
@@ -89,7 +89,7 @@ index e659746ee..dfb2d3cf2 100644
 +  proc SSLv23_client_method*(): PSSL_METHOD {.cdecl, importc.}
 +  proc SSLv2_method*(): PSSL_METHOD {.cdecl, importc.}
 +  proc SSLv3_method*(): PSSL_METHOD {.cdecl, importc.}
-+  proc CRYPTO_set_mem_functions(a,b,c: pointer){.cdecl, gimportc.}
++  proc CRYPTO_set_mem_functions(a,b,c: pointer){.cdecl, importc.}
  
  else:
    # Here we're trying to stay compatible between openssl versions. Some
