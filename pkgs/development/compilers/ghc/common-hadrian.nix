@@ -675,7 +675,7 @@ stdenv.mkDerivation (
       "--with-curses-includes=${lib.getDev targetLibs.ncurses}/include"
       "--with-curses-libraries=${lib.getLib targetLibs.ncurses}/lib"
     ]
-    ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs) [
+    ++ lib.optionals (libffi != null && !targetPlatform.isGhcjs && hostPlatform == targetPlatform) [
       "--with-system-libffi"
       "--with-ffi-includes=${targetLibs.libffi.dev}/include"
       "--with-ffi-libraries=${targetLibs.libffi.out}/lib"
