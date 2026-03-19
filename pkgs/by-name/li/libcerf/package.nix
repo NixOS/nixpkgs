@@ -1,19 +1,23 @@
 {
   stdenv,
   lib,
-  fetchurl,
   cmake,
-  perl,
+  fetchFromGitLab,
   gnuplot,
+  nix-update-script,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcerf";
   version = "3.2";
 
-  src = fetchurl {
-    url = "https://jugit.fz-juelich.de/mlz/libcerf/-/archive/v${finalAttrs.version}/libcerf-v${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-6o0RDXPsJKZDBCyjlARhzLsbZUHiExDstwq05NwUSu8=";
+  src = fetchFromGitLab {
+    domain = "jugit.fz-juelich.de";
+    owner = "mlz";
+    repo = "libcerf";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Q79E9YsmYFRZI21vi62d8tWA/+AU3YJMaY1CgdTLQGc=";
   };
 
   nativeBuildInputs = [
@@ -21,8 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     perl
   ];
 
-  passthru.tests = {
-    inherit gnuplot;
+  passthru = {
+    tests = {
+      inherit gnuplot;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
