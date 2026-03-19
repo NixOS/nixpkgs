@@ -8782,6 +8782,12 @@
     github = "fkautz";
     githubId = 135706;
   };
+  fkomarek = {
+    name = "Filip Komárek";
+    github = "filip2cz";
+    githubId = 82812634;
+    email = "filip@fkomarek.eu";
+  };
   FKouhai = {
     name = "Fran Cirka";
     email = "frandres00@gmail.com";
