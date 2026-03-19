@@ -155,6 +155,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
