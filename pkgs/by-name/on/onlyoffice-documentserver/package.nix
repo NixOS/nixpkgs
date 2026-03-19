@@ -1,6 +1,7 @@
 {
   buildFHSEnv,
   buildNpmPackage,
+  callPackage,
   dpkg,
   fetchFromGitHub,
   fetchurl,
@@ -13,13 +14,13 @@
   stdenv,
   vips,
   writeScript,
-  x2t,
 
   extra-fonts ? [ ],
 }:
 
 let
   version = "9.2.1";
+  x2t = callPackage ./x2t.nix { };
   server-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "server";
@@ -190,12 +191,16 @@ let
 
     passthru = {
       inherit
+        x2t
         x2t-with-fonts-and-themes
         common
         docservice
         fileconverter
         ;
-      tests = nixosTests.onlyoffice;
+      tests = {
+        nixosTest = nixosTests.onlyoffice;
+      }
+      // x2t.tests;
       fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 

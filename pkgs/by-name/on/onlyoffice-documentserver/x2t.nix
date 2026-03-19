@@ -25,7 +25,7 @@
   stdenv,
   writers,
   writeScript,
-  x2t,
+  onlyoffice-documentserver,
   grunt-cli,
 }:
 
@@ -946,8 +946,10 @@ buildCoreComponent "X2tConverter/build/Qt" {
     docxrenderer = docxrenderer.tests;
     doctrenderer = doctrenderer.tests;
     ofdfile = ofdfile.tests;
+    starmath = starmath.tests;
+    ooxmlsignature = ooxmlsignature.tests;
     x2t = runCommand "x2t-test" { } ''
-      (${x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
+      (${onlyoffice-documentserver.x2t}/bin/x2t || true) | grep "OOX/binary file converter." && mkdir -p $out
     '';
     nixos-module = nixosTests.onlyoffice;
   };
