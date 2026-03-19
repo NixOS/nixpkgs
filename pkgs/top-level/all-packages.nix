@@ -1247,8 +1247,6 @@ with pkgs;
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
-  gcdemu = callPackage ../applications/emulators/cdemu/gui.nix { };
-
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
   mame-tools = lib.addMetaAttrs {
