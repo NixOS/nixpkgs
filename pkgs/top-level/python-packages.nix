@@ -4184,6 +4184,8 @@ self: super: with self; {
 
   django-filter = callPackage ../development/python-modules/django-filter { };
 
+  django-flags = callPackage ../development/python-modules/django-flags { };
+
   django-formset-js-improved =
     callPackage ../development/python-modules/django-formset-js-improved
       { };
@@ -19690,6 +19692,8 @@ self: super: with self; {
   tskit = callPackage ../development/python-modules/tskit { };
 
   tsplib95 = callPackage ../development/python-modules/tsplib95 { };
+
+  tstr = callPackage ../development/python-modules/tstr { };
 
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 

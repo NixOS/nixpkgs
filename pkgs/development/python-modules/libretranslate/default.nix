@@ -3,7 +3,7 @@
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+  writableTmpDirAsHomeHook,
   runCommand,
   hatchling,
   argostranslate,
@@ -32,16 +32,16 @@
   lndir,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "libretranslate";
-  version = "1.9.0";
+  version = "1.9.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    tag = "v${version}";
-    hash = "sha256-bBs7gG42H4MNca5RUiedKNQkLjKpBm2SbPMRyh2gh6c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VcMo1GX+ituQOW8Dpt0ABJG5fsJbFuxAPmi59Byg5ww=";
   };
 
   build-system = [
@@ -49,6 +49,14 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = true;
+
+  # LibreTranslate has forked argos-translate [1] to fix some bugs and make stanza optional, but it's
+  # unclear what the future of this fork is.
+  #
+  # We'll stay on upstream argostranslate for now.
+  #
+  # [1]: https://github.com/Libretranslate/argos-translate/
+  pythonRemoveDeps = [ "argos-translate-lt" ];
 
   dependencies = [
     argostranslate
@@ -80,13 +88,8 @@ buildPythonPackage rec {
     ln -s $out/${python.sitePackages}/libretranslate/static $out/share/libretranslate/static
   '';
 
-  doCheck = false; # needs network access
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  # required for import check to work (argostranslate)
-  env.HOME = "/tmp";
-
+  # needed to import the argostranslate module
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
   pythonImportsCheck = [ "libretranslate" ];
 
   passthru = {
@@ -112,8 +115,8 @@ buildPythonPackage rec {
   meta = {
     description = "Free and Open Source Machine Translation API. Self-hosted, no limits, no ties to proprietary services";
     homepage = "https://libretranslate.com";
-    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${src.tag}";
+    changelog = "https://github.com/LibreTranslate/LibreTranslate/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})
