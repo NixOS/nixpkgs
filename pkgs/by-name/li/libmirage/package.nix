@@ -1,6 +1,5 @@
 {
   stdenv,
-  callPackage,
   cmake,
   pkg-config,
   gobject-introspection,
@@ -16,23 +15,18 @@
   util-linux,
   libselinux,
   libsepol,
+  fetchurl,
+  lib,
 }:
 
-let
-  inherit
-    (callPackage ./common-drv-attrs.nix {
-      version = "3.2.10";
-      pname = "libmirage";
-      hash = "sha256-+T5Gu3VcprCkSJcq/kTySRnNI7nc+GbRtctLkzPhgK4=";
-    })
-    pname
-    version
-    src
-    meta
-    ;
-in
-stdenv.mkDerivation {
-  inherit pname version src;
+stdenv.mkDerivation rec {
+  pname = "libmirage";
+  version = "3.2.10";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
+    hash = "sha256-+T5Gu3VcprCkSJcq/kTySRnNI7nc+GbRtctLkzPhgK4=";
+  };
 
   env = {
     PKG_CONFIG_GOBJECT_INTROSPECTION_1_0_GIRDIR = "${placeholder "out"}/share/gir-1.0";
@@ -47,6 +41,7 @@ stdenv.mkDerivation {
     xz
     libsamplerate
   ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -54,6 +49,7 @@ stdenv.mkDerivation {
     gobject-introspection
     vala
   ];
+
   propagatedBuildInputs = [
     pcre
     util-linux
@@ -62,11 +58,9 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    inherit (meta)
-      maintainers
-      license
-      platforms
-      ;
+    maintainers = with lib.maintainers; [ bendlas ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     description = "CD-ROM image access library";
     homepage = "https://cdemu.sourceforge.io/about/libmirage/";
   };

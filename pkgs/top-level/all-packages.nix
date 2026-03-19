@@ -1251,8 +1251,6 @@ with pkgs;
 
   kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
 
-  libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
-
   mame-tools = lib.addMetaAttrs {
     description = mame.meta.description + " (tools only)";
   } (lib.getOutput "tools" mame);
