@@ -277,6 +277,19 @@ let
           touch $out
         '';
 
+    # buildEnv's builder.pl reads all inputs from environment variables,
+    # which is incompatible with structuredAttrs (values go into a JSON file instead).
+    # This test documents the known failure so it can be tracked.
+    structuredAttrs-is-broken = pkgs.testers.testBuildFailure' {
+      drv = buildEnv {
+        name = "test-env-structuredAttrs";
+        paths = [ pkgs.hello ];
+        derivationArgs.__structuredAttrs = true;
+      };
+      expectedBuilderExitCode = 255; # Perl's `die` exits with code 255
+      expectedBuilderLogEntries = [ "malformed JSON string" ];
+    };
+
     ignoreCollisions =
       pkgs.runCommand "test-buildenv-ignoreCollisions"
         {
