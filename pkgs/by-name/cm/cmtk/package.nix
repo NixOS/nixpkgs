@@ -31,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
       'EXPORT_LIBRARY_DEPENDENCIES(''${CMTK_BINARY_DIR}/CMTKLibraryDepends.cmake)' ""
     substituteInPlace CMakeLists.txt --replace-fail \
       'INSTALL(FILES ''${CMTK_BINARY_DIR}/CMTKLibraryDepends.cmake DESTINATION ''${CMTK_INSTALL_LIB_DIR} COMPONENT libraries)' ""
+    substituteInPlace scripts/cmtk.in --replace-fail \
+      'CMD=$1' \
+      'if [ "$#" -eq 0 ]; then
+          echo "Usage: cmtk <command> [arguments...]" >&2
+          exit 1
+       fi
+
+       CMD=$1'
   '';
 
   nativeBuildInputs = [ cmake ];
