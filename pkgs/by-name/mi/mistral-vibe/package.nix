@@ -12,14 +12,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "mistral-vibe";
-  version = "2.4.2";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mistralai";
     repo = "mistral-vibe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-r/9kMhkoLfj9oEifFun/bpIQYEouqm9YEiWZVk07+S8=";
+    hash = "sha256-5su0Qfg3M+Yq4pkptDOJhvM8VFGCaOLeeDijeFeywP4=";
   };
 
   build-system = with python3Packages; [
@@ -58,12 +58,14 @@ python3Packages.buildPythonApplication (finalAttrs: {
     pyyaml
     requests
     rich
+    sounddevice
     textual
     textual-speedups
     tomli-w
     tree-sitter
     tree-sitter-bash
     watchfiles
+    websockets
     zstandard
   ];
 
@@ -81,7 +83,29 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
   versionCheckKeepEnvironment = [ "HOME" ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTests = [
+    # Fail in the sandbox
+    # vibe.core.audio_recorder.audio_recorder_port.NoAudioInputDeviceError: No audio input device available
+    "test_audio_stream_yields_chunks"
+    "test_auto_stops_after_max_duration"
+    "test_buffer_mode_audio_stream_yields_nothing"
+    "test_can_record_multiple_times"
+    "test_cancel_discards_audio"
+    "test_manual_stop_prevents_on_expire"
+    "test_on_expire_receives_audio"
+    "test_peak_clamps_to_one"
+    "test_peak_updates_from_callback"
+    "test_silent_audio_has_zero_peak"
+    "test_start_sets_recording_state"
+    "test_start_when_already_recording_raises"
+    "test_stop_from_event_loop_does_not_block"
+    "test_stop_returns_empty_data_in_stream_mode"
+    "test_stop_returns_positive_duration"
+    "test_stop_returns_valid_wav"
+    "test_stop_without_drain_returns_promptly"
+    "test_stream_audio_does_not_leak_into_buffer_recording"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError
     "test_rebuilds_index_when_mass_change_threshold_is_exceeded"
     "test_updates_index_incrementally_by_default"
