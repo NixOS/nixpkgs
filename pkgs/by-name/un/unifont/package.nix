@@ -9,21 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unifont";
-  version = "17.0.03";
+  version = "17.0.04";
 
   otf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.otf";
-    hash = "sha256-JgccWpdTPO/cvGsGRefuJ5QTBJB58J9ZKyaRbKbCG/U=";
+    hash = "sha256-0fZkqXU7nGt/81cSh0njK10+7pDHwDYYNj+r1Do5tbc=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.pcf.gz";
-    hash = "sha256-byijyRE71OdtTqYdymQV73yds1an+AuRbJFTlRsaj+0=";
+    hash = "sha256-21hNQMglGdfPrx8VWP3lMT+/Guga7uoKbm72MqXjxJY=";
   };
 
   bdf = fetchurl {
     url = "mirror://gnu/unifont/unifont-${finalAttrs.version}/unifont-${finalAttrs.version}.bdf.gz";
-    hash = "sha256-MNUDAtrKYx4s9FTZdHEX2YyfNcCxivT2fS+l4RaZIDM=";
+    hash = "sha256-mi3kgmOIJCdxEhx/4A5BJSPDGDGLjuOOa+bNRU5+yAI=";
   };
 
   nativeBuildInputs = [
