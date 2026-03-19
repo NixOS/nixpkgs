@@ -20,6 +20,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dbus ];
+  buildFeatures = [
+    "vault"
+    "awssm"
+    "gcsm"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
