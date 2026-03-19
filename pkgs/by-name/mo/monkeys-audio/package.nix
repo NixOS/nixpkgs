@@ -3,6 +3,7 @@
   stdenv,
   fetchzip,
   cmake,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,14 +16,23 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Otherwise, >> related build errors are encountered
-    "-std=c++11"
-  ];
-
   nativeBuildInputs = [
     cmake
   ];
+
+  passthru = {
+    updateScript = writeScript "update-monkeys-audio" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p curl pcre common-updater-scripts
+
+      set -eu -o pipefail
+
+      # Expect the text in format of "Monkey's Audio 12.58 SDK"'.
+      newVersion="$(curl -s https://monkeysaudio.com/developers.html |
+        pcregrep -o1 "Monkey's Audio ([0-9.]+) SDK")"
+      update-source-version ${finalAttrs.pname} "$newVersion"
+    '';
+  };
 
   meta = {
     description = "APE codec and decompressor";
