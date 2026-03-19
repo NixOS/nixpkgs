@@ -1,31 +1,31 @@
 {
   lib,
-  python3,
   fetchPypi,
   fetchFromGitHub,
+  python3,
+
   withE2BE ? true,
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      tulir-telethon = self.telethon.overridePythonAttrs (oldAttrs: rec {
-        version = "1.99.0a6";
-        pname = "tulir_telethon";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-ewqc6s5xXquZJTZVBsFmHeamBLDw6PnTSNcmTNKD0sk=";
-        };
-        patches = [ ];
-        doCheck = false;
-      });
-    };
-  };
+  tulir-telethon = python3.pkgs.telethon.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "1.99.0a6";
+      pname = "tulir_telethon";
+      src = fetchFromGitHub {
+        owner = "tulir";
+        repo = "Telethon";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-ulnA+xKbZDOTzXYmF9oBWNBNhgxSiF+mKx1ijoCyo/w=";
+      };
+      dontUsePytestCheck = true;
+    }
+  );
 in
-python.pkgs.buildPythonPackage (finalAttrs: {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mautrix-telegram";
   version = "0.15.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mautrix";
@@ -34,47 +34,50 @@ python.pkgs.buildPythonPackage (finalAttrs: {
     hash = "sha256-w3BqWyAJV/lZPoOFDzxhootpw451lYruwM9efwS6cEc=";
   };
 
-  format = "setuptools";
+  build-system = with python3.pkgs; [ setuptools ];
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
 
-  propagatedBuildInputs =
-    with python.pkgs;
-    (
-      [
-        ruamel-yaml
-        python-magic
-        commonmark
-        aiohttp
-        yarl
-        (mautrix.override { withOlm = withE2BE; })
-        tulir-telethon
-        asyncpg
-        mako
-        setuptools
-        # speedups
-        cryptg
-        aiodns
-        brotli
-        # qr_login
-        pillow
-        qrcode
-        # formattednumbers
-        phonenumbers
-        # metrics
-        prometheus-client
-        # sqlite
-        aiosqlite
-        # proxy support
-        pysocks
-      ]
-      ++ lib.optionals withE2BE [
-        # e2be
-        python-olm
-        pycryptodome
-        unpaddedbase64
-      ]
-    );
+  pythonRelaxDeps = [
+    "mautrix"
+    "ruamel.yaml"
+  ];
+
+  dependencies =
+    with python3.pkgs;
+    [
+      ruamel-yaml
+      python-magic
+      commonmark
+      aiohttp
+      yarl
+      (mautrix.override { withOlm = withE2BE; })
+      tulir-telethon
+      asyncpg
+      mako
+      setuptools
+      # speedups
+      cryptg
+      aiodns
+      brotli
+      # qr_login
+      pillow
+      qrcode
+      # formattednumbers
+      phonenumbers
+      # metrics
+      prometheus-client
+      # sqlite
+      aiosqlite
+      # proxy support
+      pysocks
+    ]
+    ++ lib.optionals withE2BE [
+      # e2be
+      python-olm
+      pycryptodome
+      unpaddedbase64
+    ];
 
   # has no tests
   doCheck = false;

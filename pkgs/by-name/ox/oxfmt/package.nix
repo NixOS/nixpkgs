@@ -94,8 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "JavaScript formatter with Prettier integration";
-    homepage = "https://github.com/oxc-project/oxc";
+    description = "High-performance formatter for the JavaScript ecosystem";
+    homepage = "https://oxc.rs/docs/guide/usage/formatter";
+    downloadPage = "https://github.com/oxc-project/oxc";
     changelog = "https://github.com/oxc-project/oxc/blob/${finalAttrs.src.tag}/apps/oxfmt/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
