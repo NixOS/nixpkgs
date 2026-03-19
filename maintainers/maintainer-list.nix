@@ -10579,6 +10579,11 @@
     githubId = 982322;
     name = "Henrik Olsson";
   };
+  henrikvtcodes = {
+    github = "henrikvtcodes";
+    githubId = 22358337;
+    name = "Henrik VT";
+  };
   henrirosten = {
     email = "henri.rosten@unikie.com";
     github = "henrirosten";
@@ -11984,6 +11989,11 @@
     name = "Jared Montoya";
     github = "jaredmontoya";
     githubId = 49511278;
+  };
+  jasanfarah = {
+    github = "jasanfarah";
+    githubId = 69898185;
+    name = "Jasan Farah";
   };
   jasoncarr = {
     email = "jcarr250@gmail.com";
