@@ -123,6 +123,12 @@ bash.runCommand "${pname}-${version}"
     ln -s ../mpc-${mpcVersion} mpc
     ln -s ../isl-${islVersion} isl
 
+    # Fix libgomp build with glibc 2.43 C23 const-preserving strchr
+    # https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=9c9d3aef2f66625d9cb03ef4baee10ed6648e681
+    # Remove when GCC >= 15.3 or >= 16.1
+    grep -q 'char \*q = strchr' libgomp/affinity-fmt.c || { echo "libgomp strchr fix no longer needed"; exit 1; }
+    sed -i 's/char \*q = strchr/const char *q = strchr/' libgomp/affinity-fmt.c
+
     # Configure
     export CC="gcc -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
     export CXX="g++ -Wl,-dynamic-linker -Wl,${musl}/lib/libc.so"
