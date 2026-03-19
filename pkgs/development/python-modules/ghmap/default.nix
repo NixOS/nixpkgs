@@ -1,0 +1,42 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tqdm,
+  pytestCheckHook,
+}:
+
+buildPythonPackage (finalAttrs: {
+  pname = "ghmap";
+  version = "2.0.3";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "sgl-umons";
+    repo = "ghmap";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UF7Zxrm+thZeAKPiCaI5t4NbDzuUU3oosPsb0Cgv9t0=";
+  };
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    tqdm
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [
+    "ghmap"
+  ];
+
+  meta = {
+    description = "A Python tool for mapping GitHub events to contributor activities";
+    homepage = "https://github.com/sgl-umons/ghmap";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ drupol ];
+  };
+})

@@ -1,0 +1,17 @@
+diff --git a/linux/Makefile b/linux/Makefile
+index 6041a89..588341c 100644
+--- a/linux/Makefile
++++ b/linux/Makefile
+@@ -5,6 +5,12 @@ LDFLAGS += -lSDL2_mixer -lvorbis -logg `sdl2-config --libs` -lm
+ 
+ CFLAGS += `sdl2-config --cflags` -DHAVE_SDL2
+ 
++UNAME_S := $(shell uname -s)
++ifeq ($(UNAME_S),Darwin)
++# Darwin-specific reproducible build flags
++LDFLAGS += -Wl,-no_uuid
++endif
++
+ opensupaplex: $(obj)
+ 	$(CC) -o $@ $^ $(LDFLAGS)
+ 

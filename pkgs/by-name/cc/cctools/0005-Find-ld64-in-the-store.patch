@@ -1,0 +1,28 @@
+From e62f7d75380540937f24f896c82736a1e653cc75 Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Mon, 22 Apr 2024 18:15:53 -0400
+Subject: [PATCH 5/6] Find ld64 in the store
+
+---
+ libstuff/execute.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/libstuff/execute.c b/libstuff/execute.c
+index 8526ab7..abbbf1b 100644
+--- a/libstuff/execute.c
++++ b/libstuff/execute.c
+@@ -149,6 +149,11 @@ char *
+ cmd_with_prefix(
+ char *str)
+ {
++	// Return the path to ld64 in the store.
++	if (strcmp(str, "ld") == 0) {
++	    return "@ld64_path@";
++	}
++
+ 	int i;
+ 	char *p;
+ 	char *prefix, buf[MAXPATHLEN], resolved_name[PATH_MAX];
+-- 
+2.45.2
+

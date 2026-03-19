@@ -1,0 +1,13 @@
+diff --git a/eng/finish-source-only.proj b/eng/finish-source-only.proj
+index f1ff97926ea..b7d9f12d1e6 100644
+--- a/eng/finish-source-only.proj
++++ b/eng/finish-source-only.proj
+@@ -135,7 +135,7 @@
+       <PrebuiltErrorMessage>$(PrebuiltErrorMessage)See https://aka.ms/dotnet/prebuilts for guidance on what prebuilts are and how to eliminate them.</PrebuiltErrorMessage>
+     </PropertyGroup>
+ 
+-    <Error Condition="'@(DetectedPrebuiltPackage)' != ''" Text="$(PrebuiltErrorMessage)" />
++    <Error Condition="'@(DetectedPrebuiltPackage)' != '' and '$(SkipErrorOnPrebuilts)' != 'true'" Text="$(PrebuiltErrorMessage)" />
+ 
+     <MakeDir Directories="$(BaseIntermediateOutputPath)" />
+     <Touch Files="$(BaseIntermediateOutputPath)ReportPrebuiltUsage.complete" AlwaysCreate="true">

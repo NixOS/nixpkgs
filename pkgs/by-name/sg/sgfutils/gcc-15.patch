@@ -1,0 +1,26 @@
+Generated as:
+$ curl -L https://github.com/yangboz/sgfutils/pull/3.diff > gcc-15.patch
+
+Fix `gcc-15` build failure related to `c23` changes.
+--- a/gib2sgf.c
++++ b/gib2sgf.c
+@@ -433,7 +433,7 @@ static void stoline(char *buf) {
+ 	readmove(buf);
+ }
+ 
+-static void (*inputline[])() = {
++static void (*inputline[])(char*) = {
+ 	inline0, inline1, iniline, stoline
+ };
+ 
+--- a/sgfinfo.c
++++ b/sgfinfo.c
+@@ -940,7 +940,7 @@ void report_on_single_game() {
+ 	if (optM) {
+ 		int imin, imax;
+ 		void (*fns[3])(int) = { outmove, outmovec, outmovex };
+-		void (*outmovefn)();
++		void (*outmovefn)(int);
+ 
+ 		/* 1..3 moves / 4..6 init / 7..9 both */
+ 		imin = ((optM < 4) ? initct : 0);
