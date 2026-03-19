@@ -31,7 +31,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
+        url = "https://vinyl-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
 
