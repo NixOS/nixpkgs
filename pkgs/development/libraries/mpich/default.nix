@@ -57,10 +57,6 @@ stdenv.mkDerivation rec {
     "--enable-shared"
     "--with-pm=${withPmStr}"
   ]
-  ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
-    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
-    "FCFLAGS=-fallow-argument-mismatch"
-  ]
   ++ lib.optionals pmixSupport [
     "--with-pmix"
   ];
