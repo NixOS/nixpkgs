@@ -1242,8 +1242,6 @@ with pkgs;
 
   cdemu-client = callPackage ../applications/emulators/cdemu/client.nix { };
 
-  cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
-
   fceux-qt5 = fceux.override { ___qtVersion = "5"; };
   fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
