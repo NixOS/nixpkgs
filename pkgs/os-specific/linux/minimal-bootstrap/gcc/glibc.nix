@@ -29,7 +29,7 @@ let
       i686-linux = "ld-linux.so.2";
       x86_64-linux = "ld-linux-x86-64.so.2";
     }
-    .${hostPlatform.system};
+    .${hostPlatform.system} or (throw "Unsupported system: ${hostPlatform.system}");
 
   src = fetchurl {
     url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
@@ -106,7 +106,7 @@ bash.runCommand "${pname}-${version}"
       homepage = "https://gcc.gnu.org";
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
-      platforms = lib.platforms.unix;
+      platforms = lib.platforms.linux;
       mainProgram = "gcc";
     };
   }

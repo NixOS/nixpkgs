@@ -42,7 +42,7 @@ let
       x86_64-linux = altSources.release;
       aarch64-linux = altSources.aarch64Backport;
     }
-    .${buildPlatform.system};
+    .${buildPlatform.system} or (throw "Unsupported system: ${buildPlatform.system}");
   src = altSource.src;
   version = altSource.version;
   dir = altSource.dir;
@@ -95,11 +95,11 @@ bash.runCommand "${pname}-${version}"
       '';
 
     meta = {
-      description = "GNU Compiler Collection, version ${version}";
+      description = "GNU Compiler Collection, version 4.7";
       homepage = "https://gcc.gnu.org";
       license = lib.licenses.gpl3Plus;
       teams = [ lib.teams.minimal-bootstrap ];
-      platforms = lib.platforms.unix;
+      platforms = lib.platforms.linux;
       mainProgram = "gcc";
     };
   }
