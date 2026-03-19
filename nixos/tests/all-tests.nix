@@ -168,6 +168,7 @@ in
     node-name = runTest ./nixos-test-driver/node-name.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
     console-log = runTest ./nixos-test-driver/console-log.nix;
+    containers = runTest ./nixos-test-driver/containers.nix;
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {
@@ -1137,9 +1138,6 @@ in
   nixos-rebuild-target-host = runTest {
     imports = [ ./nixos-rebuild-target-host.nix ];
   };
-  nixos-rebuild-target-host-interrupted = runTest {
-    imports = [ ./nixos-rebuild-target-host-interrupted.nix ];
-  };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixpkgs-config-allow-unfree =
     pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix
@@ -1648,6 +1646,7 @@ in
   teleports = runTest ./teleports.nix;
   temporal = runTest ./temporal.nix;
   terminal-emulators = handleTest ./terminal-emulators.nix { };
+  test-containers-bittorrent = runTest ./test-containers-bittorrent.nix;
   thanos = runTest ./thanos.nix;
   thelounge = handleTest ./thelounge.nix { };
   tiddlywiki = runTest ./tiddlywiki.nix;
