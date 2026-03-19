@@ -1,10 +1,10 @@
 {
     "src": {
         "args": {
-            "hash": "sha256-z+hCmu9BxN/hPIWWtjl3NY8IcAxMmZWG/Y3QsylL6H8=",
+            "hash": "sha256-1XnmNuqUVx+jpwFO1zj7TGb97IhGHQcBE6/WIjWgpK8=",
             "owner": "signalapp",
             "repo": "webrtc",
-            "tag": "7444f"
+            "tag": "7444g"
         },
         "fetcher": "fetchFromGitHub"
     },
@@ -26,10 +26,10 @@
     },
     "src/ringrtc/opus/src": {
         "args": {
-            "hash": "sha256-63JClPZ+Me6thFp6iPf++jV2K1hF0KR1n6Bly+ocNq8=",
+            "hash": "sha256-I1f+J//ZJBMj88+PQhsYBjz3fm4Ll3ckZD+fYa6/3Y0=",
             "owner": "xiph",
             "repo": "opus",
-            "rev": "55513e81d8f606bd75d0ff773d2144e5f2a732f5"
+            "rev": "22244de5a79bd1d6d623c32e72bf1954b56235be"
         },
         "fetcher": "fetchFromGitHub"
     },
