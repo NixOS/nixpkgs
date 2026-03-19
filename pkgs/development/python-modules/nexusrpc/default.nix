@@ -5,6 +5,9 @@
   hatchling,
   nix-update-script,
   typing-extensions,
+  pyright,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -20,12 +23,24 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    # Patch out uv and run tests directly
+    substituteInPlace tests/test_type_errors.py \
+      --replace-fail '["uv", "run", "pyright",' '["pyright",'
+  '';
+
   build-system = [
     hatchling
   ];
 
   dependencies = [
     typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pyright
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
