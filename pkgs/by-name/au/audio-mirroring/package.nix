@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation rec {
   pname = "audio-mirroring";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "mkg20001";
     repo = "audio-mirroring";
     tag = "v${version}";
-    hash = "sha256-f4V5ZJvXhdwqS4kx99Lr2Eb8r08PRd3T4mbRoAyyIqE=";
+    hash = "sha256-Idu15ZfY8JYVZhub0LRXYtWdiVCMVRyC3MVTX4JcbzY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-+mAdxaaQOO7AIn/o/J13FbHIvtepk8/okGxO6p6aGzI=";
+    hash = "sha256-kiDGCl3De5dhDwwCf1F38gnGtfNpAVot0G0+Gxmyyp0=";
   };
 
   nativeBuildInputs = [
