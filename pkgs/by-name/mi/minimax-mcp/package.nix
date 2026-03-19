@@ -45,7 +45,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     '';
     homepage = "https://github.com/MiniMax-AI/MiniMax-MCP";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ superherointj ];
     mainProgram = "minimax-mcp";
   };
 })
