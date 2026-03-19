@@ -8,12 +8,12 @@
   fetchurl,
   lib,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cdemu-client";
   version = "3.2.5";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/cdemu/cdemu-client-${finalAttrs.version}.tar.xz";
     hash = "sha256-py2F61v8vO0BCM18GCflAiD48deZjbMM6wqoCDZsOd8=";
   };
 
@@ -55,4 +55,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-}
+})
