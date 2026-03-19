@@ -79,7 +79,6 @@ let
     ) args);
   kernels = patchedPkgs.linuxKernel.vanillaPackages // {
     inherit (patchedPkgs.linuxKernel.packages)
-      linux_6_12_hardened
 
       linux_testing
       ;
