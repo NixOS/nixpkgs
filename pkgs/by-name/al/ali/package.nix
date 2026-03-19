@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
     owner = "nakabonne";
     repo = "ali";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iwuvWqDaaf/U8f4KDeq1gs+FlDoC11uDs+l2Z7Npd6M=";
+    hash = "sha256-+nSUDhgQHiia8sOfhUILo1sidxXkwDlTWrmuqd334r4=";
   };
 
   vendorHash = "sha256-pRxkRY0MkQGnNhA/3CtT0ohKAPNx8QeyuD6bcacYHGI=";

@@ -67,8 +67,6 @@ in
               }}"
             ];
           };
-
-        "sysctl.d/50-default.conf".source = "${systemd}/example/sysctl.d/50-default.conf";
       };
 
       users.users.systemd-coredump = {

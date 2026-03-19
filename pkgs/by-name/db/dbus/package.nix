@@ -95,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    NIX_LDFLAGS = "-lcap-ng";
+  };
+
   mesonFlags = [
     "--libexecdir=${placeholder "out"}/libexec"
     # datadir from which dbus will load files will be managed by the NixOS module:

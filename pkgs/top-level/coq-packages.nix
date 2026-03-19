@@ -68,8 +68,11 @@ let
           callPackage ../development/coq-modules/bignums { }
         else
           null;
+      CakeMLExtraction = callPackage ../development/coq-modules/CakeMLExtraction { };
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres { };
+      ceres-bs = callPackage ../development/coq-modules/ceres-bs { };
+      CertiRocq = callPackage ../development/coq-modules/CertiRocq { };
       Cheerios = callPackage ../development/coq-modules/Cheerios { };
       coinduction = callPackage ../development/coq-modules/coinduction { };
       CoLoR = callPackage ../development/coq-modules/CoLoR (
@@ -87,6 +90,7 @@ let
           ;
         ocamlPackages = ocamlPackages_4_14;
       };
+      ConCert = callPackage ../development/coq-modules/ConCert { };
       coq-bits = callPackage ../development/coq-modules/coq-bits { };
       coq-elpi = callPackage ../development/coq-modules/coq-elpi { };
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
@@ -214,9 +218,7 @@ let
       simple-io = callPackage ../development/coq-modules/simple-io { };
       smpl = callPackage ../development/coq-modules/smpl { };
       smtcoq = callPackage ../development/coq-modules/smtcoq { };
-      ssprove = callPackage ../development/coq-modules/ssprove {
-        mathcomp-word = self.mathcomp-word.override { version = "3.2"; };
-      };
+      ssprove = callPackage ../development/coq-modules/ssprove { };
       stalmarck-tactic = callPackage ../development/coq-modules/stalmarck { };
       stalmarck = self.stalmarck-tactic.stalmarck;
       stdlib = callPackage ../development/coq-modules/stdlib { };

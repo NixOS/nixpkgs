@@ -31,13 +31,13 @@
 }:
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.20.4";
+  version = "0.21.0";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f0bOg3lTcXUEZz4z5H+0KmGb9fnSAA0aOjsWY6R8VJg=";
+    hash = "sha256-tNUVhY7e1raiW1jOlx/WIIDLuJc4pzqvbCnDTaSJ1Hs=";
   };
 
   build-system = [ uv-build ];

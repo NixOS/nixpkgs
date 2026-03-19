@@ -123,6 +123,7 @@ buildPythonPackage (finalAttrs: {
     # flaky
     "test_preprocess" # KeyError: 'reflex___state____state'
     "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
+    "test_state_manager_lock" # Lock expired for token 87164611-f...
     # tries to pin the string of a traceback, doesn't account for ansi colors
     "test_state_with_invalid_yield"
     # tries to run bun or npm

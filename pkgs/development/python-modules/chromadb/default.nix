@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonAtLeast,
 
   # build inputs
   cargo,
@@ -36,6 +35,7 @@
   posthog,
   pybase64,
   pydantic,
+  pydantic-settings,
   pypika,
   pyyaml,
   requests,
@@ -68,23 +68,19 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.5.2";
+  version = "1.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
     tag = finalAttrs.version;
-    hash = "sha256-fIlev0B1PapZAO9PgrFIfIh429lcmh/dQ9aGHSNJSLw=";
+    hash = "sha256-Y/M7awTi2AJTh4xRY0MIfnC9ygy62fG7X3W9QUxW2XE=";
   };
-
-  # https://github.com/chroma-core/chroma/issues/5996
-  # https://github.com/chroma-core/chroma/issues/6546
-  disabled = pythonAtLeast "3.14";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-zoyn2IBeM5FlDpA0blYU5tpu8KFXHLG/KzvQN6Hsf2I=";
+    hash = "sha256-yx5OMZSWRAP732lRypap79vr2I72aT+TWooo+5e0wDQ=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -145,6 +141,7 @@ buildPythonPackage (finalAttrs: {
     posthog
     pybase64
     pydantic
+    pydantic-settings
     pypika
     pyyaml
     requests
@@ -250,9 +247,11 @@ buildPythonPackage (finalAttrs: {
     # ValueError: An instance of Chroma already exists for ephemeral with different settings
     "chromadb/test/test_chroma.py"
 
-    # pytest can't tell which test_schema.py to load
-    # https://github.com/chroma-core/chroma/issues/6031
-    "chromadb/test/property/test_schema.py"
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    # https://github.com/chroma-core/chroma/issues/6659
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client[async_client]"
   ];
 
   __darwinAllowLocalNetworking = true;

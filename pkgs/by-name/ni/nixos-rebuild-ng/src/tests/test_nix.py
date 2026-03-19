@@ -1,4 +1,3 @@
-import os
 import sys
 import textwrap
 import uuid
@@ -79,11 +78,6 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
     )
 
 
-@patch.dict(
-    os.environ,
-    {"NIX_SSHOPTS": "--ssh opts", "SSH_ASKPASS": "/run/user/1000/ssh-agent"},
-    clear=True,
-)
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 @patch("uuid.uuid4", autospec=True)
 def test_build_remote(
@@ -140,8 +134,7 @@ def test_build_remote(
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                env={
-                    "SSH_ASKPASS": "/run/user/1000/ssh-agent",
+                append_local_env={
                     "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
                 },
             ),
@@ -172,11 +165,6 @@ def test_build_remote(
     )
 
 
-@patch.dict(
-    os.environ,
-    {"NIX_SSHOPTS": "--ssh opts", "SSH_ASKPASS": "/run/user/1000/ssh-agent"},
-    clear=True,
-)
 @patch(
     get_qualified_name(n.run_wrapper, n),
     autospec=True,
@@ -190,6 +178,7 @@ def test_build_remote_flake(
     monkeypatch.chdir(tmpdir)
     flake = m.Flake.parse("/flake.nix#hostname")
     build_host = m.Remote("user@host", [], None)
+    monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
     assert n.build_remote_flake(
         "config.system.build.toplevel",
@@ -221,8 +210,7 @@ def test_build_remote_flake(
                     "user@host",
                     Path("/path/to/file"),
                 ],
-                env={
-                    "SSH_ASKPASS": "/run/user/1000/ssh-agent",
+                append_local_env={
                     "NIX_SSHOPTS": " ".join(["--ssh opts", *p.SSH_DEFAULT_OPTS]),
                 },
             ),
@@ -243,7 +231,6 @@ def test_build_remote_flake(
     )
 
 
-@patch.dict(os.environ, {}, clear=True)
 def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
     closure = Path("/path/to/closure")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
@@ -256,7 +243,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, target_host)
         mock_run.assert_called_with(
             ["nix-copy-closure", "--to", "user@target.host", closure],
-            env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+            append_local_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
@@ -264,7 +251,9 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
         n.copy_closure(closure, None, build_host, {"copy_flag": True})
         mock_run.assert_called_with(
             ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
-            env={"NIX_SSHOPTS": " ".join(["--ssh build-opt", *p.SSH_DEFAULT_OPTS])},
+            append_local_env={
+                "NIX_SSHOPTS": " ".join(["--ssh build-opt", *p.SSH_DEFAULT_OPTS])
+            },
         )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
@@ -284,7 +273,7 @@ def test_copy_closure(monkeypatch: MonkeyPatch) -> None:
                 "ssh://user@target.host",
                 closure,
             ],
-            env=env,
+            append_local_env=env,
         )
 
 

@@ -33,6 +33,7 @@ let
       fpletz
       lukegb
     ];
+    teams = [ lib.teams.security-review ];
     license = lib.licenses.mpl20;
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
       product = "nss";

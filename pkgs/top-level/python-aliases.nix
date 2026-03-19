@@ -93,6 +93,7 @@ mapAliases {
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
   atsim_potentials = throw "'atsim_potentials' has been renamed to/replaced by 'atsim-potentials'"; # Converted to throw 2025-10-29
+  audio-metadata = throw "'audio-metadata' has been removed as it's unmaintained since 2020"; # Added 2026-03-12
   autotrash = throw "'autotrash' has been renamed to/replaced by 'super.pkgs.autotrash'"; # Converted to throw 2025-10-29
   av_13 = throw "'av_13' has been renamed to/replaced by 'av'"; # Added 2026-02-01
   Babel = throw "'Babel' has been renamed to/replaced by 'babel'"; # Converted to throw 2025-10-29
@@ -123,6 +124,7 @@ mapAliases {
   casbin = pycasbin; # added 2025-06-12
   cchardet = throw "'cchardet' has been renamed to/replaced by 'faust-cchardet'"; # Converted to throw 2025-10-29
   characteristic = throw "'characteristic' has been removed because it is no longer maintained upstream"; # Added 2026-01-14
+  chart-studio = throw "'chart-studio' has been removed as it is no longer maintained upstream"; # Added 2026-03-12
   cirq-rigetti = throw "cirq-rigetti was removed because it is no longer provided by upstream"; # added 2025-09-13
   class-registry = throw "'class-registry' has been renamed to/replaced by 'phx-class-registry'"; # Converted to throw 2025-10-29
   ColanderAlchemy = throw "'ColanderAlchemy' has been renamed to/replaced by 'colanderalchemy'"; # Converted to throw 2025-10-29
@@ -192,6 +194,7 @@ mapAliases {
   face_recognition_models = throw "'face_recognition_models' has been renamed to/replaced by 'face-recognition-models'"; # Converted to throw 2025-10-29
   factory_boy = throw "'factory_boy' has been renamed to/replaced by 'factory-boy'"; # Converted to throw 2025-10-29
   fastnlo_toolkit = throw "'fastnlo_toolkit' has been renamed to/replaced by 'fastnlo-toolkit'"; # Converted to throw 2025-10-29
+  fasttext-predict = throw "'fasttext-predict' has been removed as the only consumer searxng removed its usage"; # Added 2026-03-11
   fb-re2 = throw "fb-re2 has been removed since it is unmaintained upstream, consider google-re2 instead"; # added 2025-10-18
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = throw "'filebrowser_safe' has been renamed to/replaced by 'filebrowser-safe'"; # Converted to throw 2025-10-29
@@ -221,6 +224,7 @@ mapAliases {
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2025-10-29
   googleapis_common_protos = throw "'googleapis_common_protos' has been renamed to/replaced by 'googleapis-common-protos'"; # Converted to throw 2025-10-29
+  gotrue = throw "'gotrue' has been replaced by 'supabase-auth'"; # Added 2026-03-08
   gpapi = throw "'gpapi' has been superseded by google-api-python-client"; # Added 2025-11-09
   gplaycli = throw "'gplaycli' has been removed as it was broken and lacked maintenance"; # Added 2025-11-09
   gpy = throw "'gpy' has been removed as it is based on 'paramz', which was removed"; # added 2025-11-10
@@ -528,12 +532,14 @@ mapAliases {
   sqlalchemy-views = throw "'sqlalchemy-views' has been removed as it was broken and unmaintained upstream"; # Added 2025-11-09
   sqlalchemy_migrate = throw "'sqlalchemy_migrate' has been renamed to/replaced by 'sqlalchemy-migrate'"; # Converted to throw 2025-10-29
   subunit2sql = throw "subunit2sql has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
+  supafunc = throw "'supafunc' has been replaced by 'supabase-functions'"; # Added 2026-03-08
   supervise_api = throw "'supervise_api' has been renamed to/replaced by 'supervise-api'"; # Converted to throw 2025-10-29
   swh-perfecthash = throw "'swh-perfecthash' has been renamed to/replaced by 'swh-shard'"; # added 2025-11-13
   synologydsm-api = throw "'synologydsm-api' has been renamed to/replaced by 'py-synologydsm-api'"; # Converted to throw 2025-10-29
   systembridge = throw "systembridge has been removed because it is unmaintained upstream"; # Added 2025-11-23
   systemd = throw "systemd was removed because it was misnamed; use systemd-python instead"; # added 2025-11-09
   sysv_ipc = throw "'sysv_ipc' has been renamed to/replaced by 'sysv-ipc'"; # Converted to throw 2025-10-29
+  tbm-utils = throw "'tbm-utils' has been removed as it is unmaintained since 2020"; # Added 2026-03-12
   tensorflow-bin_2 = throw "'tensorflow-bin_2' has been renamed to/replaced by 'tensorflow-bin'"; # Converted to throw 2025-10-29
   tensorflow-build_2 = throw "'tensorflow-build_2' has been renamed to/replaced by 'tensorflow-build'"; # Converted to throw 2025-10-29
   tensorflow-estimator = throw "'tensorflow-estimator' has been renamed to/replaced by 'tensorflow-estimator-bin'"; # Converted to throw 2025-10-29

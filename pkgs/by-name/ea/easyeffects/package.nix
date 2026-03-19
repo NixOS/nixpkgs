@@ -59,16 +59,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "easyeffects";
-  version = "8.1.2";
+  version = "8.1.4";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Tz14pjI5pNJOQH0KFaf9mJkFdup1GVxlkMnzVQusx/M=";
+    hash = "sha256-0/xbvmj7p8JE3aH84SrcEf8kr+0X1KgHMRkBca+2rtY=";
   };
-
-  patches = [ ./qmlmodule-fix.patch ];
 
   nativeBuildInputs = [
     cmake

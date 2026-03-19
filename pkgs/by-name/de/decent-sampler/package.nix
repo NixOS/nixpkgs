@@ -16,8 +16,7 @@
 
 let
   pname = "decent-sampler";
-  version = "1.15.5";
-  rlkey = "orvjprslmwn0dkfs0ncx6nxnm";
+  version = "1.16.0";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -28,9 +27,9 @@ let
     inherit pname version;
 
     src = fetchzip {
-      # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/ADKHnE9GsrZx5RepuBKy7dg/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz?rlkey=${rlkey}&dl=0";
-      hash = "sha256-uUEncrT0M4AmIokizrUdSATm8Dnvg3cBNGlH8wOPt+Y=";
+      # Download page: https://store.decentsamples.com/downloads/decent-sampler/versions
+      url = "https://cdn.decentsamples.com/production/builds/ds/${version}/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
+      hash = "sha256-KeHWdlrPEAt45YeivmPjA645x+F2cKLYNGJBToEHAok=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];

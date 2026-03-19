@@ -23,16 +23,16 @@
 }:
 
 let
-  version = "2.0.3";
+  version = "2.0.5";
   devenvNixVersion = "2.32";
-  devenvNixRev = "41eee9d3b1f611b1b90d51caa858b6d83834c44a";
+  devenvNixRev = "ef483d53f25990bf0b4fd39f5414f885977ebd85";
 
   nix_components =
     (nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
       owner = "cachix";
       repo = "nix";
       rev = devenvNixRev;
-      hash = "sha256-vtf03lfgQKNkPH9FdXdboBDS5DtFkXB8xRw5EBpuDas=";
+      hash = "sha256-eY8JFns4OeEidye8VIW68LSoykbPO0bQujvQVLLK7Qg=";
     })).overrideScope
       (
         finalScope: prevScope: {
@@ -48,10 +48,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-1DpF5F7zgOZ7QrRjz23315pUoF532dHnsU/V4UQithk=";
+    hash = "sha256-8tO3NLG9Lc/NUee0Owcf/z63TNTrUcx7eVRxSb294rk=";
   };
 
-  cargoHash = "sha256-gZFRbTDPQNKf2msBv9wOavaH1iB1Tk3shYf0/4TSZBQ=";
+  cargoHash = "sha256-ecntFSPDWblllDtS/D086UKtQJG9La4TGEBhP3q0CfY=";
 
   env = {
     RUSTFLAGS = "--cfg tracing_unstable";
@@ -78,7 +78,6 @@ rustPlatform.buildRustPackage {
     openssl
     sqlite
     dbus
-    boehmgc
     llvmPackages.clang-unwrapped
     nix_components.nix-expr-c
     nix_components.nix-store-c

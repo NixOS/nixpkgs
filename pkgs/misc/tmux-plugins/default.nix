@@ -979,12 +979,12 @@ in
 
   tmux-session-manager = mkTmuxPlugin rec {
     pluginName = "tmux-session-manager";
-    version = "1.1.1";
+    version = "1.1.2";
     src = fetchFromGitHub {
       owner = "PhilVoel";
       repo = "tmux-session-manager";
       tag = "v${version}";
-      hash = "sha256-WzzqfMRAF8vxrnYnudD6CZVn52bZyCSRaByQRRRK9X8=";
+      hash = "sha256-3uXl9N0LkS1txjaG8I+i1ACAW55tSNFzv358i3aRd/U=";
     };
     rtpFilePath = "session_manager.tmux";
     meta = {

@@ -288,7 +288,7 @@ with pkgs;
     name = "update-autotools-gnu-config-scripts-hook";
     substitutions = {
       gnu_config = gnu-config.override {
-        runtimeShell = targetPackages.stdenv.shell;
+        runtimeShell = if stdenv.buildPlatform == stdenv.hostPlatform then stdenv.shell else runtimeShell;
       };
     };
   } ../build-support/setup-hooks/update-autotools-gnu-config-scripts.sh;
@@ -1257,9 +1257,6 @@ with pkgs;
 
   winetricks = callPackage ../applications/emulators/wine/winetricks.nix { };
 
-  zsnes = pkgsi686Linux.callPackage ../applications/emulators/zsnes { };
-  zsnes2 = pkgsi686Linux.callPackage ../applications/emulators/zsnes/2.x.nix { };
-
   ### APPLICATIONS/EMULATORS/RETROARCH
 
   libretro = recurseIntoAttrs (callPackage ../applications/emulators/libretro { });
@@ -1635,7 +1632,7 @@ with pkgs;
 
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
-  intel-oneapi = callPackage ../development/libraries/intel-oneapi { };
+  intel-oneapi = recurseIntoAttrs (callPackage ../development/libraries/intel-oneapi { });
 
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
@@ -2066,7 +2063,8 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    inherit mozc mozc-ut;
+    mozc = mozc.override { withIbus = true; };
+    mozc-ut = mozc-ut.override { withIbus = true; };
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard {
       withIbusSupport = true;
@@ -4683,10 +4681,10 @@ with pkgs;
   defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   inherit (callPackages ../development/tools/rust/cargo-pgrx { })
-    cargo-pgrx_0_12_0_alpha_1
     cargo-pgrx_0_12_6
     cargo-pgrx_0_16_0
     cargo-pgrx_0_16_1
+    cargo-pgrx_0_17_0
     cargo-pgrx
     ;
 
@@ -5414,9 +5412,10 @@ with pkgs;
     apacheKafka_3_9
     apacheKafka_4_0
     apacheKafka_4_1
+    apacheKafka_4_2
     ;
 
-  apacheKafka = apacheKafka_4_1;
+  apacheKafka = apacheKafka_4_2;
 
   asn2quickder = python3Packages.callPackage ../development/tools/asn2quickder { };
 
@@ -5431,6 +5430,7 @@ with pkgs;
     electron_38-bin
     electron_39-bin
     electron_40-bin
+    electron_41-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
@@ -5438,6 +5438,7 @@ with pkgs;
     electron-chromedriver_38
     electron-chromedriver_39
     electron-chromedriver_40
+    electron-chromedriver_41
     ;
 
   inherit
@@ -5470,12 +5471,17 @@ with pkgs;
           src = electron-source.electron_40;
           bin = electron_40-bin;
         };
+        electron_41 = getElectronPkg {
+          src = electron-source.electron_41;
+          bin = electron_41-bin;
+        };
       }
     )
     electron_37
     electron_38
     electron_39
     electron_40
+    electron_41
     ;
   electron = electron_38;
   electron-bin = electron_38-bin;
@@ -5994,8 +6000,6 @@ with pkgs;
 
   reno = with python312Packages; toPythonApplication reno;
 
-  replace-secret = callPackage ../build-support/replace-secret/replace-secret.nix { };
-
   inherit (callPackage ../development/tools/replay-io { })
     replay-io
     replay-node-cli
@@ -6338,6 +6342,8 @@ with pkgs;
     fmt_11
     fmt_12
     ;
+
+  firefox_decrypt = callPackage ../by-name/fi/firefox_decrypt/package.nix { nss = nss_latest; };
 
   fmt = fmt_12;
 
@@ -7230,11 +7236,6 @@ with pkgs;
     physfs
     ;
 
-  pipelight = callPackage ../tools/misc/pipelight {
-    stdenv = stdenv_32bit;
-    wine-staging = pkgsi686Linux.wine-staging;
-  };
-
   place-cursor-at = haskell.lib.compose.justStaticExecutables haskellPackages.place-cursor-at;
 
   podofo = podofo_1_0;
@@ -7610,7 +7611,7 @@ with pkgs;
     gtkVersion = "4";
   };
 
-  inherit (callPackage ../development/libraries/vtk { }) vtk_9_5;
+  inherit (callPackage ../development/libraries/vtk { }) vtk_9_5 vtk_9_6;
 
   vtk = vtk_9_5;
 
@@ -7621,8 +7622,6 @@ with pkgs;
   };
 
   vtkWithQt6 = vtk.override { withQt6 = true; };
-
-  vulkan-caps-viewer = libsForQt5.callPackage ../tools/graphics/vulkan-caps-viewer { };
 
   wayland = callPackage ../development/libraries/wayland { };
   wayland-scanner = callPackage ../development/libraries/wayland/scanner.nix { };
@@ -8667,8 +8666,6 @@ with pkgs;
   # zen-kernel
   linuxPackages_zen = linuxKernel.packages.linux_zen;
   linux_zen = linuxPackages_zen.kernel;
-  linuxPackages_lqx = linuxKernel.packages.linux_lqx;
-  linux_lqx = linuxPackages_lqx.kernel;
 
   # XanMod kernel
   linuxPackages_xanmod = linuxKernel.packages.linux_xanmod;
@@ -9556,6 +9553,8 @@ with pkgs;
     pname = "firefox-bin";
   };
 
+  firefoxpwa = wrapFirefox firefoxpwa-unwrapped { };
+
   librewolf = wrapFirefox librewolf-unwrapped {
     inherit (librewolf-unwrapped) extraPrefsFiles extraPoliciesFiles;
     libName = "librewolf";
@@ -9881,7 +9880,7 @@ with pkgs;
     k3s_1_34
     k3s_1_35
     ;
-  k3s = k3s_1_34;
+  k3s = k3s_1_35;
 
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
@@ -10185,10 +10184,6 @@ with pkgs;
     ;
 
   taxi-cli = with python3Packages; toPythonApplication taxi;
-
-  imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
-    lua = lua5;
-  };
 
   mupdf-headless = mupdf.override {
     enableX11 = false;
@@ -11107,10 +11102,6 @@ with pkgs;
   };
   vertcoind = callPackage ../applications/blockchains/vertcoin {
     withGui = false;
-  };
-
-  zcash = callPackage ../applications/blockchains/zcash {
-    stdenv = llvmPackages.stdenv;
   };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
@@ -12161,7 +12152,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nixComponents = nixVersions.nixComponents_2_33;
+    nixComponents = nixVersions.nixComponents_2_34;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

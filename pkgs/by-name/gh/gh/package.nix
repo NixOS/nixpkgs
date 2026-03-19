@@ -1,25 +1,25 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo126Module,
   installShellFiles,
   stdenv,
   testers,
   gh,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "gh";
-  version = "2.87.3";
+  version = "2.88.1";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-F4xUwj/krB5vjIfnvmwySlztBrcxJ+k1GvXb2gs7eXY=";
+    hash = "sha256-aM5hpkI4MTQ6eNUB4FVNQRSNUmwI84dTdVMUANtrnJk=";
   };
 
-  vendorHash = "sha256-POrm4lHEO2Eti7dbohKBwXW+DTs22EUZX+tMNUCL3lg=";
+  vendorHash = "sha256-RD40Lqg6EF0T12JJ7Y4B5L2KIvwRHcgGRU1UMiU3qTo=";
 
   nativeBuildInputs = [ installShellFiles ];
 

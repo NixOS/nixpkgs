@@ -69,6 +69,8 @@ let
       # { plugin=far-vim; config = "let g:far#source='rg'"; optional = false; }
       # ]
       plugins ? [ ],
+      # the function you would have passed to lua.withPackages
+      extraLuaPackages ? (_: [ ]),
       ...
     }@attrs:
     assert
@@ -105,13 +107,29 @@ let
         packpathDirs.myNeovimPackages = vimPackageInfo.vimPackage;
         finalPackdir = neovimUtils.packDir packpathDirs;
 
-        rcContent = ''
-          ${luaRcContent}
-        ''
-        + lib.optionalString (neovimRcContent' != "") ''
-          vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
-        ''
-        + lib.optionalString autoconfigure (lib.concatStringsSep "\n" vimPackageInfo.pluginAdvisedLua);
+        luaPathLuaRc =
+          let
+            luaEnv = lua.withPackages (lp: extraLuaPackages lp ++ vimPackageInfo.luaDependencies);
+
+            # getLuaPath / getLuaCPath are not interpreter dependant at the moment and might thus cause
+            # errors between luajit/Puc lua
+            generatedLuaPath = lua.pkgs.getLuaPath luaEnv;
+            generatedLuaCPath = lua.pkgs.getLuaCPath luaEnv;
+          in
+          ''
+            package.path = "${generatedLuaPath}".. ";" .. package.path
+            package.cpath = "${generatedLuaCPath}".. ";" .. package.cpath
+          '';
+
+        rcContent = lib.concatStringsSep "\n" (
+          lib.optional (extraLuaPackages lua.pkgs != [ ]) luaPathLuaRc
+          ++ [ providerLuaRc ]
+          ++ lib.optional (luaRcContent != "") luaRcContent
+          ++ lib.optional (neovimRcContent' != "") ''
+            vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
+          ''
+          ++ lib.optionals autoconfigure vimPackageInfo.pluginAdvisedLua
+        );
 
         python3Env =
           lib.warnIf (attrs ? python3Env)
@@ -126,34 +144,37 @@ let
 
         wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-        generatedWrapperArgs = [
-          # vim accepts a limited number of commands so we join all the provider ones
-          "--add-flags"
-          ''--cmd "lua ${providerLuaRc}"''
-        ]
-        ++
-          lib.optionals
-            (
-              finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
-              || finalAttrs.packpathDirs.myNeovimPackages.opt != [ ]
-            )
-            [
-              "--add-flags"
-              ''--cmd "set packpath^=${finalPackdir}"''
-              "--add-flags"
-              ''--cmd "set rtp^=${finalPackdir}"''
-            ]
-        ++ lib.optionals finalAttrs.withRuby [
-          "--set"
-          "GEM_HOME"
-          "${rubyEnv}/${rubyEnv.ruby.gemPath}"
-        ]
-        ++ lib.optionals (finalAttrs.runtimeDeps != [ ]) [
-          "--suffix"
-          "PATH"
-          ":"
-          (lib.makeBinPath finalAttrs.runtimeDeps)
-        ];
+        generatedWrapperArgs =
+
+          # neovimUtils.legacyWrapper adds a `legacyWrapper` attribute to let us know we run in "legacy" mode
+          lib.optionals (attrs ? legacyWrapper) [
+            # vim accepts a limited number of commands so we join all the provider ones
+            "--add-flags"
+            ''--cmd "lua ${providerLuaRc}"''
+          ]
+          ++
+            lib.optionals
+              (
+                finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
+                || finalAttrs.packpathDirs.myNeovimPackages.opt != [ ]
+              )
+              [
+                "--add-flags"
+                ''--cmd "set packpath^=${finalPackdir}"''
+                "--add-flags"
+                ''--cmd "set rtp^=${finalPackdir}"''
+              ]
+          ++ lib.optionals finalAttrs.withRuby [
+            "--set"
+            "GEM_HOME"
+            "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+          ]
+          ++ lib.optionals (finalAttrs.runtimeDeps != [ ]) [
+            "--suffix"
+            "PATH"
+            ":"
+            (lib.makeBinPath finalAttrs.runtimeDeps)
+          ];
 
         providerLuaRc =
           let
@@ -201,7 +222,7 @@ let
         ++ lib.optionals finalAttrs.wrapRc [
           "--set-default"
           "VIMINIT"
-          "lua dofile('${writeText "init.lua" rcContent}')"
+          "lua dofile('${writeText "init.lua" finalAttrs.luaRcContent}')"
         ]
         ++ finalAttrs.generatedWrapperArgs;
 

@@ -44,7 +44,7 @@ buildGoModule (finalAttrs: {
       Command to enable you to reproduce the CircleCI environment locally and
       run jobs as if they were running on the hosted CirleCI application.
     '';
-    maintainers = with lib.maintainers; [ synthetica ];
+    maintainers = [ ];
     mainProgram = "circleci";
     license = lib.licenses.mit;
     homepage = "https://circleci.com/";

@@ -1,4 +1,100 @@
 {
+    "BufOnly": {
+        "date": "2026-02-04",
+        "new": "BufOnly-vim"
+    },
+    "CSApprox": {
+        "date": "2026-02-04",
+        "new": "csapprox"
+    },
+    "Colour_Sampler_Pack": {
+        "date": "2026-02-04",
+        "new": "Colour-Sampler-Pack"
+    },
+    "Cosco": {
+        "date": "2026-02-04",
+        "new": "cosco-vim"
+    },
+    "Gist": {
+        "date": "2026-02-04",
+        "new": "vim-gist"
+    },
+    "Gundo": {
+        "date": "2026-02-04",
+        "new": "gundo-vim"
+    },
+    "Hoogle": {
+        "date": "2026-02-04",
+        "new": "vim-hoogle"
+    },
+    "Solarized": {
+        "date": "2026-02-04",
+        "new": "vim-colors-solarized"
+    },
+    "Supertab": {
+        "date": "2026-02-04",
+        "new": "supertab"
+    },
+    "Syntastic": {
+        "date": "2026-02-04",
+        "new": "syntastic"
+    },
+    "SyntaxRange": {
+        "date": "2026-02-04",
+        "new": "vim-SyntaxRange"
+    },
+    "Tabular": {
+        "date": "2026-02-04",
+        "new": "tabular"
+    },
+    "Tagbar": {
+        "date": "2026-02-04",
+        "new": "tagbar"
+    },
+    "The_NERD_Commenter": {
+        "date": "2026-02-04",
+        "new": "nerdcommenter"
+    },
+    "The_NERD_tree": {
+        "date": "2026-02-04",
+        "new": "nerdtree"
+    },
+    "UltiSnips": {
+        "date": "2026-02-04",
+        "new": "ultisnips"
+    },
+    "WebAPI": {
+        "date": "2026-02-04",
+        "new": "webapi-vim"
+    },
+    "Yankring": {
+        "date": "2026-02-04",
+        "new": "YankRing-vim"
+    },
+    "airline": {
+        "date": "2026-02-04",
+        "new": "vim-airline"
+    },
+    "alternative": {
+        "date": "2026-02-04",
+        "new": "a-vim"
+    },
+    "bats": {
+        "date": "2026-02-04",
+        "new": "bats-vim"
+    },
+    "calendar": {
+        "date": "2026-02-04",
+        "new": "calendar-vim"
+    },
+    "caw": {
+        "date": "2026-02-04",
+        "new": "caw-vim"
+    },
+    "chad": {
+        "date": "2026-02-04",
+        "new": "chadtree"
+    },
     "codeium-nvim": {
         "date": "2025-04-09",
         "new": "windsurf-nvim"
@@ -187,6 +283,34 @@
         "date": "2024-10-28",
         "new": "magma-nvim"
     },
+    "maktaba": {
+        "date": "2026-02-04",
+        "new": "vim-maktaba"
+    },
+    "multiple-cursors": {
+        "date": "2026-02-04",
+        "new": "vim-multiple-cursors"
+    },
+    "necoGhc": {
+        "date": "2026-02-04",
+        "new": "neco-ghc"
+    },
+    "neocomplete": {
+        "date": "2026-02-04",
+        "new": "neocomplete-vim"
+    },
+    "neoinclude": {
+        "date": "2026-02-04",
+        "new": "neoinclude-vim"
+    },
+    "neomru": {
+        "date": "2026-02-04",
+        "new": "neomru-vim"
+    },
+    "neosnippet": {
+        "date": "2026-02-04",
+        "new": "neosnippet-vim"
+    },
     "nvim-base16": {
         "date": "2024-02-15",
         "new": "base16-nvim"
@@ -194,6 +318,30 @@
     "nvim-compe": {
         "date": "2024-11-19",
         "new": "nvim-cmp"
+    },
+    "open-browser": {
+        "date": "2026-02-04",
+        "new": "open-browser-vim"
+    },
+    "pathogen": {
+        "date": "2026-02-04",
+        "new": "vim-pathogen"
+    },
+    "polyglot": {
+        "date": "2026-02-04",
+        "new": "vim-polyglot"
+    },
+    "prettyprint": {
+        "date": "2026-02-04",
+        "new": "vim-prettyprint"
+    },
+    "quickrun": {
+        "date": "2026-02-04",
+        "new": "vim-quickrun"
+    },
+    "rainbow_parentheses": {
+        "date": "2026-02-04",
+        "new": "rainbow_parentheses-vim"
     },
     "render-markdown": {
         "date": "2024-09-16",
@@ -315,158 +463,6 @@
         "date": "2024-03-16",
         "new": "zarchive-vim-fsharp"
     },
-    "vscode-diff-nvim": {
-        "date": "2026-01-10",
-        "new": "codediff-nvim"
-    },
-    "BufOnly": {
-        "date": "2026-02-04",
-        "new": "BufOnly-vim"
-    },
-    "CSApprox": {
-        "date": "2026-02-04",
-        "new": "csapprox"
-    },
-    "Colour_Sampler_Pack": {
-        "date": "2026-02-04",
-        "new": "Colour-Sampler-Pack"
-    },
-    "Cosco": {
-        "date": "2026-02-04",
-        "new": "cosco-vim"
-    },
-    "Gist": {
-        "date": "2026-02-04",
-        "new": "vim-gist"
-    },
-    "Gundo": {
-        "date": "2026-02-04",
-        "new": "gundo-vim"
-    },
-    "Hoogle": {
-        "date": "2026-02-04",
-        "new": "vim-hoogle"
-    },
-    "Solarized": {
-        "date": "2026-02-04",
-        "new": "vim-colors-solarized"
-    },
-    "Supertab": {
-        "date": "2026-02-04",
-        "new": "supertab"
-    },
-    "Syntastic": {
-        "date": "2026-02-04",
-        "new": "syntastic"
-    },
-    "SyntaxRange": {
-        "date": "2026-02-04",
-        "new": "vim-SyntaxRange"
-    },
-    "Tabular": {
-        "date": "2026-02-04",
-        "new": "tabular"
-    },
-    "Tagbar": {
-        "date": "2026-02-04",
-        "new": "tagbar"
-    },
-    "The_NERD_Commenter": {
-        "date": "2026-02-04",
-        "new": "nerdcommenter"
-    },
-    "The_NERD_tree": {
-        "date": "2026-02-04",
-        "new": "nerdtree"
-    },
-    "UltiSnips": {
-        "date": "2026-02-04",
-        "new": "ultisnips"
-    },
-    "WebAPI": {
-        "date": "2026-02-04",
-        "new": "webapi-vim"
-    },
-    "Yankring": {
-        "date": "2026-02-04",
-        "new": "YankRing-vim"
-    },
-    "airline": {
-        "date": "2026-02-04",
-        "new": "vim-airline"
-    },
-    "alternative": {
-        "date": "2026-02-04",
-        "new": "a-vim"
-    },
-    "bats": {
-        "date": "2026-02-04",
-        "new": "bats-vim"
-    },
-    "calendar": {
-        "date": "2026-02-04",
-        "new": "calendar-vim"
-    },
-    "caw": {
-        "date": "2026-02-04",
-        "new": "caw-vim"
-    },
-    "chad": {
-        "date": "2026-02-04",
-        "new": "chadtree"
-    },
-    "maktaba": {
-        "date": "2026-02-04",
-        "new": "vim-maktaba"
-    },
-    "multiple-cursors": {
-        "date": "2026-02-04",
-        "new": "vim-multiple-cursors"
-    },
-    "necoGhc": {
-        "date": "2026-02-04",
-        "new": "neco-ghc"
-    },
-    "neocomplete": {
-        "date": "2026-02-04",
-        "new": "neocomplete-vim"
-    },
-    "neoinclude": {
-        "date": "2026-02-04",
-        "new": "neoinclude-vim"
-    },
-    "neomru": {
-        "date": "2026-02-04",
-        "new": "neomru-vim"
-    },
-    "neosnippet": {
-        "date": "2026-02-04",
-        "new": "neosnippet-vim"
-    },
-    "open-browser": {
-        "date": "2026-02-04",
-        "new": "open-browser-vim"
-    },
-    "pathogen": {
-        "date": "2026-02-04",
-        "new": "vim-pathogen"
-    },
-    "polyglot": {
-        "date": "2026-02-04",
-        "new": "vim-polyglot"
-    },
-    "prettyprint": {
-        "date": "2026-02-04",
-        "new": "vim-prettyprint"
-    },
-    "quickrun": {
-        "date": "2026-02-04",
-        "new": "vim-quickrun"
-    },
-    "rainbow_parentheses": {
-        "date": "2026-02-04",
-        "new": "rainbow_parentheses-vim"
-    },
     "vimproc": {
         "date": "2026-02-04",
         "new": "vimproc-vim"
@@ -478,6 +474,10 @@
     "vinegar": {
         "date": "2026-02-04",
         "new": "vim-vinegar"
+    },
+    "vscode-diff-nvim": {
+        "date": "2026-01-10",
+        "new": "codediff-nvim"
     },
     "watchdogs": {
         "date": "2026-02-04",

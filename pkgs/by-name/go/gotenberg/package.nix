@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo125Module,
+  buildGo126Module,
   chromium,
   fetchFromGitHub,
   libreoffice,
@@ -22,9 +22,9 @@ let
   libreoffice' = "${libreoffice}/lib/libreoffice/program/soffice.bin";
   inherit (lib) getExe;
 in
-buildGo125Module rec {
+buildGo126Module (finalAttrs: {
   pname = "gotenberg";
-  version = "8.25.1";
+  version = "8.27.0";
 
   outputs = [
     "out"
@@ -34,14 +34,14 @@ buildGo125Module rec {
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
-    tag = "v${version}";
-    hash = "sha256-qQuK7ylwKeBI+ijScFB2jTd0nmb+tGuk09AOFroDIG0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TLfIsvxKrlqNTJtdnASlGCA1XrOx7huMJ11aohVyuKI=";
   };
 
-  vendorHash = "sha256-uQDRo5TbT+9s0YZxcUqOESHU9hTvXAMrIiaz/6ZZEAY=";
+  vendorHash = "sha256-AzaN0xpQWw+Nfw22G7xgww8UsgpTIHpTPK3Bicf6gMY=";
 
   postPatch = ''
-    find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${src}#g' {} \;
+    find ./pkg -name '*_test.go' -exec sed -i -e 's#/tests#${finalAttrs.src}#g' {} \;
   '';
 
   nativeBuildInputs = [ makeBinaryWrapper ];
@@ -49,7 +49,7 @@ buildGo125Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/gotenberg/gotenberg/v8/cmd.Version=${version}"
+    "-X github.com/gotenberg/gotenberg/v8/cmd.Version=${finalAttrs.version}"
   ];
 
   checkInputs = [
@@ -112,8 +112,8 @@ buildGo125Module rec {
     description = "Converts numerous document formats into PDF files";
     mainProgram = "gotenberg";
     homepage = "https://gotenberg.dev";
-    changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${version}";
+    changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
-}
+})

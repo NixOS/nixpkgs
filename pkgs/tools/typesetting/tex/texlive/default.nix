@@ -12,10 +12,9 @@
   writeShellScript,
   writeText,
   buildEnv,
-  callPackage,
   ghostscript_headless,
   git-latexdiff,
-  harfbuzz,
+  harfbuzzFull,
   makeWrapper,
   installShellFiles,
   python3,
@@ -45,18 +44,48 @@
   extraMirrors ? [ ],
   nixfmt,
   luajit,
-}:
+  # for bin.nix
+  perlPackages,
+  python3Packages,
+  pkg-config,
+  cmake,
+  ninja,
+  libpaper,
+  graphite2,
+  zziplib,
+  potrace,
+  gmp,
+  mpfr,
+  mupdf-headless,
+  brotli,
+  cairo,
+  pixman,
+  libxi,
+  libxfixes,
+  clisp,
+  biber,
+  woff2,
+  xxHash,
+  fetchzip,
+  fetchFromGitHub,
+  buildPackages,
+  texlive,
+  zlib,
+  libiconv,
+  libpng,
+  libx11,
+  freetype,
+  ttfautohint,
+  gd,
+  libxaw,
+  icu,
+  libxpm,
+  libxmu,
+  libxext,
+}@args:
 let
   # various binaries (compiled)
-  bin = callPackage ./bin.nix {
-    ghostscript = ghostscript_headless;
-    harfbuzz = harfbuzz.override {
-      withIcu = true;
-      withGraphite2 = true;
-    };
-    inherit useFixedHashes;
-    tlpdb = overriddenTlpdb;
-  };
+  bin = import ./bin.nix (args // { tlpdb = overriddenTlpdb; });
 
   tlpdb = import ./tlpdb.nix;
 
@@ -198,7 +227,7 @@ let
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
     inherit bin tl;
-    inherit version;
+    inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
       lib

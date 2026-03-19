@@ -27,19 +27,12 @@ let
     let
       prefix = "https://${domain}/${owner}/${repo}/";
     in
-    if sha256 != null then
+    if hash != null || sha256 != null then
       fetchurl {
         url = "${prefix}releases/download/${rev}/${
           lib.concatStringsSep "-" (namePrefix ++ [ pname ])
         }-${rev}.tbz";
-        inherit sha256;
-      }
-    else if hash != null then
-      fetchurl {
-        url = "${prefix}releases/download/v${rev}/${
-          lib.concatStringsSep "-" (namePrefix ++ [ pname ])
-        }-${rev}.tbz";
-        inherit hash;
+        hash = if hash != null then hash else sha256;
       }
     else
       fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; };
@@ -51,9 +44,10 @@ mkCoqDerivation {
   repo = "coqword";
   useDune = true;
 
-  releaseRev = v: if lib.versionAtLeast v "3.3" then v else "v${v}";
+  releaseRev = v: "v${v}";
 
-  release."3.3".hash = "sha256-z+2eerYZbaEytg3A00GQ12wpj4IjKLJYf6Ny5cARwog=";
+  release."3.4".hash = "sha256-AnyiM5B7JJZI5LR0vSi6baVIx9SibYRiho7UBg1uV5w=";
+  release."3.3".hash = "sha256-Zn9245fr0OhgaXjWlIO1QwSxrQYetj7qPHwZAXTdqNc=";
   release."3.2".sha256 = "sha256-4HOFFQzKbHIq+ktjJaS5b2Qr8WL1eQ26YxF4vt1FdWM=";
   release."3.1".sha256 = "sha256-qQHis6554sG7NpCpWhT2wvelnxsrbEPVNv3fpxwxHMU=";
   release."3.0".sha256 = "sha256-xEgx5HHDOimOJbNMtIVf/KG3XBemOS9XwoCoW6btyJ4=";
@@ -78,7 +72,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (range "8.16" "9.1") (isGe "2.0") "3.3")
+        (case (range "8.16" "9.1") (isGe "2.0") "3.4")
         (case (range "8.12" "8.20") (range "1.12" "1.19") "2.4")
       ]
       null;

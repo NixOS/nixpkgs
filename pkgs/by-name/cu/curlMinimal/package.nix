@@ -285,6 +285,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Scrumplex
     ];
+    teams = [ lib.teams.security-review ];
     platforms = lib.platforms.all;
     # Fails to link against static gss
     broken = stdenv.hostPlatform.isStatic && gssSupport;

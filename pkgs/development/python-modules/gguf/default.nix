@@ -11,7 +11,6 @@
   pyside6,
   pyyaml,
   requests,
-  sentencepiece,
   tqdm,
 
   # tests
@@ -20,14 +19,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "gguf";
-  version = "8147";
+  version = "8292";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-/r/lWt+G14BsNqTBqeK4Po4QHU0GkpEBbIvt5rqB4jc=";
+    hash = "sha256-nlUG9b+LGKdQ4kfUTqWUPgqavOMVhD8mAYwf3WARO3s=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/gguf-py";
@@ -36,12 +35,14 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     numpy
-    pyside6
     pyyaml
     requests
-    sentencepiece
     tqdm
   ];
+
+  optional-dependencies = {
+    gui = [ pyside6 ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 

@@ -27,6 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     kdePackages.qmake
     kdePackages.qttools
+    kdePackages.qtbase
     kdePackages.wrapQtAppsHook
   ];
 
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     # Work around https://github.com/NixOS/nixpkgs/issues/214765
     substituteInPlace Makefile \
-      --replace-fail "$(dirname $QMAKE)/lrelease" "${lib.getBin kdePackages.qttools}/bin/lrelease"
+      --replace-fail "${lib.getBin kdePackages.qtbase}/bin/lrelease" "${lib.getBin kdePackages.qttools}/bin/lrelease"
   '';
 
   qmakeFlags = [

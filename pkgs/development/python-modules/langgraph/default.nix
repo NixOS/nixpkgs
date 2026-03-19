@@ -41,14 +41,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "langgraph";
-  version = "1.0.10";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = finalAttrs.version;
-    hash = "sha256-NJSmpVshj/x6ws+jFYXGarNKNztbk5OIIMA1neFOyIY=";
+    hash = "sha256-Dbzyp9Tl6VaLoWDnLk5UCiYnWFcZM3kljv8EdB1IEAI=";
   };
 
   postgresqlTestSetupPost = ''
@@ -135,6 +135,8 @@ buildPythonPackage (finalAttrs: {
     "tests/test_pregel_async.py"
     "tests/test_subgraph_persistence.py"
     "tests/test_subgraph_persistence_async.py"
+    "tests/test_time_travel.py"
+    "tests/test_time_travel_async.py"
   ];
 
   # Since `langgraph` is the only unprefixed package, we have to use an explicit match

@@ -1,21 +1,21 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   findutils,
-  go,
+  go_1_26,
   nix-update-script,
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "tsgolint";
-  version = "0.11.5";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XPx8yU3K2v5+FTANwXX9xs+d/WEz6L19suf1QED/Mbs=";
+    hash = "sha256-bY5oDaaKMu4KmGQFT3MyzNNKZWC8PVSRjAgWYhPVE2s=";
     fetchSubmodules = true;
   };
 
@@ -30,8 +30,9 @@ buildGoModule (finalAttrs: {
     (finalAttrs.src + "/patches/0001-Parallel-readDirectory-visitor.patch")
     (finalAttrs.src + "/patches/0002-Adapt-project-service-for-single-run-mode.patch")
     (finalAttrs.src + "/patches/0003-patch-expose-more-functions-via-the-shim-with-type-f.patch")
-    (finalAttrs.src + "/patches/0004-feat-improve-panic-message-for-extracting-TS-extensi.patch")
-    (finalAttrs.src + "/patches/0005-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
+    (finalAttrs.src + "/patches/0004-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
+    (finalAttrs.src + "/patches/0005-fix-collections-avoid-internal-json-import-in-ordere.patch")
+    (finalAttrs.src + "/patches/0006-perf-vfs-cache-ReadFile-results-in-cachedvfs.patch")
   ];
 
   postPatch =
@@ -39,7 +40,7 @@ buildGoModule (finalAttrs: {
     # the local module to the go.mod instead.
     ''
       popd
-      ${lib.getExe go} mod edit --replace=github.com/microsoft/typescript-go=./typescript-go
+      ${lib.getExe go_1_26} mod edit --replace=github.com/microsoft/typescript-go=./typescript-go
     ''
     +
     # From justfile's "init" target upstream.
@@ -49,7 +50,7 @@ buildGoModule (finalAttrs: {
     '';
 
   proxyVendor = true;
-  vendorHash = "sha256-5NX+rjdPz/ZSVmykOc5ffFg1rplF1pznIWKiydl6kKY=";
+  vendorHash = "sha256-Mb78gEN582QFTRTBefdAz8Yly2vB3zbPyViRnA1V3wI=";
 
   subPackages = [ "cmd/tsgolint" ];
 

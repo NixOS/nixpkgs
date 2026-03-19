@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
       mainProgram = "lua";
       maintainers = with lib.maintainers; [
         thoughtpolice
-        smironov
         vcunat
         lblasc
       ];

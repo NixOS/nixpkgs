@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   libGL,
@@ -13,6 +14,8 @@
   libglvnd,
   vulkan-loader,
   autoPatchelfHook,
+  installShellFiles,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -32,6 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    installShellFiles
     pkgconf
   ];
 
@@ -53,7 +57,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -D etc/jay.portal $out/share/xdg-desktop-portal/portals/jay.portal
     install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
+    install -D etc/jay.desktop $out/share/wayland-sessions/jay.desktop
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jay \
+      --bash <("$out/bin/jay" generate-completion bash) \
+      --zsh <("$out/bin/jay" generate-completion zsh) \
+      --fish <("$out/bin/jay" generate-completion fish)
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+    providedSessions = [ "jay" ];
+  };
 
   meta = {
     description = "Wayland compositor written in Rust";

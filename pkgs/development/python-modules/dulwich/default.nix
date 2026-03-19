@@ -22,21 +22,21 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dulwich";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jelmer";
     repo = "dulwich";
-    tag = "dulwich-${version}";
-    hash = "sha256-7/aXxwK6LmERD8CSo+b1uuNVBrXcbBvksZ1YY28vB8A=";
+    tag = "dulwich-${finalAttrs.version}";
+    hash = "sha256-9y7+00M2Ib5j+1fHNsJBomkyNZWhihqcIvAgGpJ5AB8=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-O35g5LflL8ZF0HNWdsqg1mp09dKFNrryz23G1WZhhPE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-NEYauayn7laPLQUomQAFEskFP5m8546jYltazR/gn1A=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +74,7 @@ buildPythonPackage rec {
     openssh # for ssh-keygen
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   enabledTestPaths = [ "tests" ];
 
@@ -105,7 +105,7 @@ buildPythonPackage rec {
       does not depend on Git itself. All functionality is available in pure Python.
     '';
     homepage = "https://www.dulwich.io/";
-    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${src.tag}/NEWS";
+    changelog = "https://github.com/jelmer/dulwich/blob/dulwich-${finalAttrs.src.tag}/NEWS";
     license = with lib.licenses; [
       asl20
       gpl2Plus
@@ -115,4 +115,4 @@ buildPythonPackage rec {
       sarahec
     ];
   };
-}
+})

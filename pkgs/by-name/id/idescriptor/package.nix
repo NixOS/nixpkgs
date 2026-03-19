@@ -28,13 +28,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "idescriptor";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "iDescriptor";
     repo = "iDescriptor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-p6iJP4duesUiYEH8pgGgX5GOdaOhaAegPPphBaXU4VM=";
+    hash = "sha256-tBTAJqXDqWAqrxQlEEi2kDcVqrB6WrBquxvKV2dkpQ4=";
     fetchSubmodules = true;
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "ipatool-go";
       inherit (finalAttrs) version src;
       modRoot = "lib/ipatool-go";
-      vendorHash = "sha256-4ZCNgLAcZtEd7zDbIu3kyP/Cyp6TaBM9gyZEohgzCk8=";
+      vendorHash = "sha256-SGdyyZU8Ze/1lJS4tKbHyfCv2yYleGcqoyA9Uzb8r/k=";
       proxyVendor = true;
       doCheck = false;
       env.GOWORK = "off";

@@ -120,7 +120,10 @@ let
       nixComponentsAttributeName
     ];
 
-  teams = [ lib.teams.nix ];
+  teams = [
+    lib.teams.nix
+    lib.teams.security-review
+  ];
 
   # Disables tests that have been flaky due to the darwin sandbox and fork safety
   # with missing shebangs.
@@ -220,6 +223,22 @@ lib.makeExtensible (
 
       nix_2_33 = addTests "nix_2_33" self.nixComponents_2_33.nix-everything;
 
+      nixComponents_2_34 =
+        (nixDependencies.callPackage ./modular/packages.nix rec {
+          version = "2.34.1";
+          inherit (self.nix_2_33.meta) teams;
+          otherSplices = generateSplicesForNixComponents "nixComponents_2_34";
+          src = fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nix";
+            tag = version;
+            hash = "sha256-qzVtneydMSjNZXzNbxQG9VvJc490keS9RNlbUCfiQas=";
+          };
+        }).appendPatches
+          patches_common;
+
+      nix_2_34 = addTests "nix_2_34" self.nixComponents_2_34.nix-everything;
+
       nixComponents_git =
         (nixDependencies.callPackage ./modular/packages.nix rec {
           version = "2.35pre20260305_${lib.substring 0 8 src.rev}";
@@ -236,7 +255,7 @@ lib.makeExtensible (
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_33;
+      latest = self.nix_2_34;
 
       # Read ./README.md before bumping a major release
       stable = addFallbackPathsCheck self.nix_2_31;

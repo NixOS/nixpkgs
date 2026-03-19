@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pyqt5,
+  pyqt6,
   pytestCheckHook,
   uv-build,
 }:
@@ -27,9 +27,10 @@ buildPythonPackage rec {
 
   build-system = [ uv-build ];
 
-  dependencies = [ pyqt5 ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyqt6
+  ];
 
   pythonImportsCheck = [ "qasync" ];
 

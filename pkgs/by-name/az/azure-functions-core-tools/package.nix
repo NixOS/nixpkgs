@@ -30,7 +30,16 @@ buildDotnetModule {
   executables = [ "func" ];
 
   nugetDeps = ./deps.json;
-  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0 // {
+    inherit
+      (dotnetCorePackages.combinePackages [
+        dotnetCorePackages.sdk_9_0
+        dotnetCorePackages.sdk_8_0
+      ])
+      packages
+      targetPackages
+      ;
+  };
   nativeBuildInputs = [ go ];
 
   linkNuGetPackagesAndSources = true;

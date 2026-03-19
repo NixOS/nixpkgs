@@ -8,19 +8,16 @@
   tqdm,
 }:
 
-let
-  version = "1.34.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "modelscope";
-  inherit version;
+  version = "1.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "modelscope";
     repo = "modelscope";
-    tag = "v${version}";
-    hash = "sha256-Uq8qmU8ZmNRegaWHn1hlDDpRjWjgfecBvJklmhW36eM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mWcMJWUdxC3Y5rcfx2urMYmYoJXbV5LudPzVB6wxRJA=";
   };
 
   build-system = [ setuptools ];
@@ -46,4 +43,4 @@ buildPythonPackage {
       doronbehar
     ];
   };
-}
+})

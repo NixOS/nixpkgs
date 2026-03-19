@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cfspeedtest";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "code-inflation";
     repo = "cfspeedtest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EVZFmTjv2j7kax4MC5HTkVa7/IiDNZcIOgsntSGfzG4=";
+    hash = "sha256-6ZlcZZSC5WPrlskxWnLheMt5sJlHI7K4UPAPsvr8zSc=";
   };
 
-  cargoHash = "sha256-cA+eRVZiZL+bbPc+Vr7nkwMLbQBKOO3uU0XzrxVajqg=";
+  cargoHash = "sha256-h9X/WKKiXri4I2DBulkNnpiTaYAL9oXAx0BiTBKaEtE=";
 
   nativeBuildInputs = [ installShellFiles ];
 

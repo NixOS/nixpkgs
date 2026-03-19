@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "retool";
-  version = "2.4.8";
+  version = "2.4.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unexpectedpanda";
     repo = "retool";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SSSHYwQtDtCONvM5Ze3G5JJ4TW5aCziS3EbxhliXx+g=";
+    hash = "sha256-FVBqmhU7nZpoFJSZBCtkmkcSLCAysNgwzOYyOwfOuGA=";
   };
 
   pythonRelaxDeps = true;

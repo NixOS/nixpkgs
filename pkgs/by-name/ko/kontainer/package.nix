@@ -22,11 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-15H4fTZ4Tja+nt0iKtFuULj/4g/0UK+W79R4kH7BFcs=";
   };
 
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "ecm_find_qmlmodule(org.kde.kirigami REQUIRED)" "ecm_find_qmlmodule(org.kde.kirigami)"
-  '';
-
   nativeBuildInputs = [
     cmake
     ninja

@@ -154,10 +154,10 @@ in
             mode = "755";
             inherit (cfg) user group;
           };
-          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."L+" = mkIf (cfg.serverConfig != { }) {
-            mode = "1400";
+          "${cfg.profileDir}/qBittorrent/config/qBittorrent.conf"."C+" = mkIf (cfg.serverConfig != { }) {
+            mode = "600";
             inherit (cfg) user group;
-            argument = "${configFile}";
+            argument = toString configFile;
           };
         };
       };

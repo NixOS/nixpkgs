@@ -170,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/linux-audit/audit-userspace/releases/tag/v4.1.2";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ grimmauld ];
+    teams = [ lib.teams.security-review ];
     pkgConfigModules = [
       "audit"
       "auparse"

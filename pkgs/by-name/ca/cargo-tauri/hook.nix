@@ -48,8 +48,18 @@ makeSetupHook {
     installScript =
       {
         darwin = ''
-          mkdir -p $out
-          mv "$targetDir"/bundle/macos $out/Applications
+          mkdir -p "$out/Applications"
+
+          shopt -s nullglob
+          appBundles=("$targetDir"/bundle/macos/*.app)
+          shopt -u nullglob
+
+          if [ "''${#appBundles[@]}" -eq 0 ]; then
+            echo "cargo-tauri.hook: no .app bundles found in $targetDir/bundle/macos" >&2
+            exit 1
+          fi
+
+          mv -- "''${appBundles[@]}" "$out/Applications/"
         '';
 
         linux = ''

@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp libEGL.so $out/opt/edhm-ui/libEGL.so
 
     # Install icon
-    install -Dm644 $out/opt/edhm-ui/resources/images/icon.png $out/share/pixmaps/edhm-ui.png
+    install -Dm644 $out/opt/edhm-ui/resources/images/icon.png $out/share/icons/hicolor/256x256/apps/edhm-ui.png
 
     runHook postInstall
   '';

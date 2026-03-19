@@ -21,8 +21,8 @@
   wolfssl,
   python3,
   pugixml,
-  flatbuffers,
-  llvm_18,
+  protobuf_33,
+  llvm,
   cubeb,
   opencv,
   enableDiscordRpc ? false,
@@ -50,19 +50,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.39-unstable-2026-01-15";
+  version = "0.0.39-unstable-2026-02-20";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
-    rev = "eaebd3426e7050c35beb8f24952d6da4d6a75360";
+    rev = "6bfb33279f6989f3ff9ea2dc40ef45d6aeb57ef8";
     postCheckout = ''
       cd $out/3rdparty
       git submodule update --init \
         fusion/fusion asmjit/asmjit yaml-cpp/yaml-cpp SoundTouch/soundtouch stblib/stb \
         feralinteractive/feralinteractive
     '';
-    hash = "sha256-iE7iZ66BSWI96a9DOeBQEx6NV+CtIyX0PXg3O2RXHWY=";
+    hash = "sha256-Cu4Zaze0FZ00sRvPtUzUkOiX5ZAHWTtmWa536gNOTNY=";
   };
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_FAUDIO" true)
     (lib.cmakeBool "USE_SYSTEM_OPENAL" true)
     (lib.cmakeBool "USE_SYSTEM_PUGIXML" true)
-    (lib.cmakeBool "USE_SYSTEM_FLATBUFFERS" true)
+    (lib.cmakeBool "USE_SYSTEM_PROTOBUF" true)
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
@@ -131,8 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     pugixml
     sdl3
-    flatbuffers
-    llvm_18
+    protobuf_33
+    llvm
     libsm
     opencv.cxxdev
     cubeb
