@@ -191,6 +191,11 @@ buildPythonPackage (finalAttrs: {
     hatchling
   ];
 
+  # Protobuf 7 is not compatible with the current version of wandb
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     click
     gitpython
