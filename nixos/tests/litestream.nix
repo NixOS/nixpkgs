@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
+let
+  dbPath = "/var/lib/grafana/data/grafana.db";
+in
 {
   name = "litestream";
   meta = with pkgs.lib.maintainers; {
@@ -13,7 +16,7 @@
         settings = {
           dbs = [
             {
-              path = "/var/lib/grafana/data/grafana.db";
+              path = dbPath;
               replicas = [
                 {
                   url = "sftp://foo:bar@127.0.0.1:22/home/foo/grafana";
@@ -23,26 +26,22 @@
           ];
         };
       };
-      systemd.services.grafana.serviceConfig.ExecStartPost =
-        "+"
-        + pkgs.writeShellScript "grant-grafana-permissions" ''
-          timeout=10
-
-          while [ ! -f /var/lib/grafana/data/grafana.db ];
-          do
-            if [ "$timeout" == 0 ]; then
-              echo "ERROR: Timeout while waiting for /var/lib/grafana/data/grafana.db."
-              exit 1
-            fi
-
-            sleep 1
-
-            ((timeout--))
-          done
-
-          find /var/lib/grafana -type d -exec chmod -v 775 {} \;
-          find /var/lib/grafana -type f -exec chmod -v 660 {} \;
-        '';
+      # Allow grafana group to traverse home dir and access data dir
+      systemd.tmpfiles.rules = [
+        "d /var/lib/grafana 0750 grafana grafana -"
+        "d /var/lib/grafana/data 2770 grafana grafana -"
+      ];
+      systemd.services.grafana.serviceConfig = {
+        # Pre-create the database in WAL mode (idempotent)
+        ExecStartPre = lib.mkAfter "+${pkgs.sqlite}/bin/sqlite3 ${dbPath} 'PRAGMA journal_mode=WAL;'";
+        # Make grafana create files as group-writable (litestream needs write access)
+        UMask = lib.mkForce "0007";
+      };
+      systemd.services.litestream = {
+        after = [ "grafana.service" ];
+        requires = [ "grafana.service" ];
+        serviceConfig.ExecStartPre = "+/bin/sh -c 'chmod g+rw ${dbPath}*'";
+      };
       services.openssh = {
         enable = true;
         allowSFTP = true;
@@ -69,7 +68,7 @@
 
           database = {
             type = "sqlite3";
-            path = "/var/lib/grafana/data/grafana.db";
+            path = dbPath;
             wal = true;
           };
         };
@@ -92,17 +91,21 @@
           "confirmNew": "newpass"
         }' http://admin:admin@127.0.0.1:3000/api/user/password
     """)
+    # Wait for litestream to sync the password change to the replica
+    machine.wait_until_succeeds(
+        "journalctl -u litestream -o cat | grep -q 'compaction complete'"
+    )
     # https://litestream.io/guides/systemd/#simulating-a-disaster
     machine.systemctl("stop litestream.service")
     machine.succeed(
-        "rm -f /var/lib/grafana/data/grafana.db "
-        "/var/lib/grafana/data/grafana.db-shm "
-        "/var/lib/grafana/data/grafana.db-wal"
+        "rm -f ${dbPath} "
+        "${dbPath}-shm "
+        "${dbPath}-wal"
     )
     machine.succeed(
-        "litestream restore /var/lib/grafana/data/grafana.db "
-        "&& chown grafana:grafana /var/lib/grafana/data/grafana.db "
-        "&& chmod 660 /var/lib/grafana/data/grafana.db"
+        "litestream restore ${dbPath} "
+        "&& chown grafana:grafana ${dbPath} "
+        "&& chmod 660 ${dbPath}"
     )
     machine.systemctl("restart grafana.service")
     machine.wait_for_open_port(3000)
