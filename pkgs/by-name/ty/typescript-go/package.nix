@@ -16,7 +16,7 @@ buildGoModule {
     owner = "microsoft";
     repo = "typescript-go";
     rev = "737e16fee4eedc201b8c70109bef965b4c73c23c";
-    hash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+    hash = "sha256-YSg/stB9my8KAEOkS2hvlVJ56EFmHSpC492+AY5YmOE=";
     fetchSubmodules = false;
   };
 
