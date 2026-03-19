@@ -858,8 +858,8 @@ in
       "sha256-NYn/N65sVAUxA4kTCi/IJNP/QQeutFjH8S7N2AeK3g8=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.42.68"
-      "sha256-aRJIk0hzRVvbGQHbXxCoLl/6xReo2f4CZHdRo2YN364=";
+    buildMypyBoto3Package "mediaconvert" "1.42.71"
+      "sha256-+Dgo1XpVUPmmUntpzFlPDeym6xUxRiXZki1j5ieS3CU=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.42.68"
