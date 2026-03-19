@@ -807,7 +807,7 @@ let
               {
                 name = "systemd_home";
                 enable = config.services.homed.enable;
-                control = "sufficient";
+                control = "[success=done authtok_expired=bad new_authtok_reqd=bad maxtries=bad acct_expired=bad default=ignore]";
                 modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
               }
               # The required pam_unix.so module has to come after all the sufficient modules
@@ -1009,7 +1009,7 @@ let
                     {
                       name = "systemd_home-early";
                       enable = config.services.homed.enable;
-                      control = "optional";
+                      control = "[success=1 authtok_err=bad perm_denied=bad maxtries=bad default=ignore]";
                       modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
                     }
                     {
@@ -1107,7 +1107,7 @@ let
                 {
                   name = "systemd_home";
                   enable = config.services.homed.enable;
-                  control = "sufficient";
+                  control = "[success=done authtok_err=bad perm_denied=bad maxtries=bad default=ignore]";
                   modulePath = "${config.systemd.package}/lib/security/pam_systemd_home.so";
                 }
                 {
