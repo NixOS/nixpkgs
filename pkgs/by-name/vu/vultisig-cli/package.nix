@@ -9,20 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vultisig-cli";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vultisig";
     repo = "vultisig-sdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vpWoKxdiUSSI8xGYXmnduJnB3zB3jpBMxz+9eGXJgvM=";
+    hash = "sha256-eQvWD0Jubtp0wfmuTBN4Mr4rKqoEvMiAGI5D8GAHYDY=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-ZJfLfaTvJKyCh4FtOs7IyZskBBjrJLjI0/9hphclFvU=";
+    hash = "sha256-SQ2C01dVSzJwzCvJUclcSiGTPz7RJfO3fYPCZbvnAHk=";
   };
 
   nativeBuildInputs = [
