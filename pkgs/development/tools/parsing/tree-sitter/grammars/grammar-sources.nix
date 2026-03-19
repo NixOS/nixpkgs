@@ -1330,7 +1330,7 @@
 
   just = {
     version = "0-unstable-2025-01-05";
-    url = "github:IndianBoy42/tree-sitter-just";
+    url = "github:casey/tree-sitter-just";
     rev = "bb0c898a80644de438e6efe5d88d30bf092935cd";
     hash = "sha256-FwEuH/2R745jsuFaVGNeUTv65xW+MPjbcakRNcAWfZU=";
     meta = {
