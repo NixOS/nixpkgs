@@ -34,19 +34,24 @@ let
                 127.0.0.1 ${certs.domain}
               '';
 
+              virtualisation.credentials = {
+                "keycloak.db_password".text = ''wzf6\"vO"Cb\nP>p#6;c&o?eu=q'THE'''H''''E'';
+                "keycloak.ssl_cert".source = "${certs.${certs.domain}.cert}";
+                "keycloak.ssl_key".source = "${certs.${certs.domain}.key}";
+              };
+
               services.keycloak = {
                 enable = true;
                 settings = {
                   hostname = certs.domain;
                 };
                 inherit initialAdminPassword;
-                sslCertificate = "${certs.${certs.domain}.cert}";
-                sslCertificateKey = "${certs.${certs.domain}.key}";
+                enableSSL = true;
                 database = {
                   type = databaseType;
                   username = "bogus";
                   name = "also bogus";
-                  passwordFile = "${pkgs.writeText "dbPassword" ''wzf6\"vO"Cb\nP>p#6;c&o?eu=q'THE'''H''''E''}";
+                  enablePassword = true;
                 };
                 plugins = with config.services.keycloak.package.plugins; [
                   keycloak-discord
