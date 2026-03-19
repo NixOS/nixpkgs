@@ -52,3 +52,35 @@ Its use is documented in `pkgs/development/tcl-modules/by-name/README.md`.
 
 All Tcl applications reside elsewhere.
 In case a package is used as both a library and an application (for example `expect`), it should be defined in `tcl-packages.nix`, with an alias elsewhere.
+
+### Using tclRequiresCheck {#using-tclrequirescheck}
+
+Although unit tests are highly preferred to validate correctness of a package, not
+all packages have test suites that can be run easily, and some have none at all.
+To help ensure the package still works, [`tclRequiresCheck`](#using-tclrequirescheck) can attempt to `package require`
+the listed modules.
+
+```nix
+{
+  tclRequiresCheck = [
+    "json"
+    "doctools"
+  ];
+}
+```
+
+roughly translates to:
+
+```nix
+{
+  preDist = ''
+    TCLLIBPATH="$out/lib $TCLLIBPATH"
+    tclsh <<<'exit [catch {package require json; package require doctools}]'
+  '';
+}
+```
+
+However, this is done in its own phase, and not dependent on whether [`doCheck = true;`](#var-stdenv-doCheck).
+
+This can also be useful in verifying that the package doesn't assume commonly
+present packages (e.g. `tcllib`).
