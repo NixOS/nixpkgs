@@ -71,7 +71,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/AsamK/signal-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.klea ];
     platforms = lib.platforms.all;
   };
 })
