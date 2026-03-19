@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pdm-backend,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -16,7 +16,12 @@ buildPythonPackage rec {
     hash = "sha256-p4eWMVayOFiEjFtlnsmmtH6HMfcIeYIpgdfjuB4mmAY=";
   };
 
-  build-system = [ pdm-backend ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"mypy>=1.10.1",' ""
+  '';
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "slhdsa" ];
 
