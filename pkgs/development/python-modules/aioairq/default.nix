@@ -11,14 +11,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "aioairq";
-  version = "0.4.8";
+  version = "0.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CorantGmbH";
     repo = "aioairq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7hgmoFu48kYr4uonB5SOtRiQ1+Z8r2hhdqipvJN6MzU=";
+    hash = "sha256-TnO9tb56lKzoQxHXedBwePB474dAOFRi6fyygpFvb+8=";
   };
 
   __darwinAllowLocalNetworking = true;
