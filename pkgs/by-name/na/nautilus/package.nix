@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
@@ -23,6 +24,8 @@
   libnotify,
   libexif,
   libjxl,
+  libglycin,
+  libglycin-gtk4,
   libseccomp,
   librsvg,
   webp-pixbuf-loader,
@@ -38,10 +41,9 @@
   gnome-user-share,
   gobject-introspection,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "nautilus";
-  version = "49.4";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -51,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/nautilus/${lib.versions.major finalAttrs.version}/nautilus-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FHbZRZpjyF8OvBjyN7MtErAIrXhgAjdkJJGXJfUOdqg=";
+    hash = "sha256-qVluu0T+EYq20HyQm7ODbWzh7tGNkVIMWoBYldFjM8w=";
   };
 
   patches = [
@@ -60,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gettext
     gobject-introspection
@@ -83,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     gtk4
     libadwaita
+    libglycin
+    libglycin-gtk4
     libportal-gtk4
     libexif
     libnotify
