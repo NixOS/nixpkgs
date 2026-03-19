@@ -8,6 +8,7 @@
   gi-docgen,
   docbook-xsl-nons,
   gettext,
+  blueprint-compiler,
   desktop-file-utils,
   wayland-scanner,
   wrapGAppsHook4,
@@ -22,6 +23,8 @@
   shared-mime-info,
   libnotify,
   libexif,
+  libglycin,
+  libglycin-gtk4,
   libjxl,
   libseccomp,
   librsvg,
@@ -60,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    blueprint-compiler
     desktop-file-utils
     gettext
     gobject-introspection
@@ -94,6 +98,8 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
     localsearch
     gnome-autoar
+    libglycin
+    libglycin-gtk4
   ];
 
   propagatedBuildInputs = [
