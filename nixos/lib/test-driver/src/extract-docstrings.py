@@ -1,7 +1,6 @@
 import ast
 import sys
 from pathlib import Path
-from typing import List
 
 """
 This program takes all the Machine class methods and prints its methods in
@@ -42,7 +41,8 @@ some_function(param1, param2)
 
 """
 
-def function_docstrings(functions: List[ast.FunctionDef]) -> str | None:
+
+def function_docstrings(functions: list[ast.FunctionDef]) -> str | None:
     """Extracts docstrings from a list of function definitions."""
     documented_functions = [f for f in functions if ast.get_docstring(f) is not None]
 
@@ -62,7 +62,10 @@ def function_docstrings(functions: List[ast.FunctionDef]) -> str | None:
         docstrings.append(f"{function.name}{args}\n\n:{docstr[1:]}\n")
     return "\n".join(docstrings)
 
-def machine_methods(class_name: str, class_definitions: List[ast.ClassDef]) -> List[ast.FunctionDef]:
+
+def machine_methods(
+    class_name: str, class_definitions: list[ast.ClassDef]
+) -> list[ast.FunctionDef]:
     """Given a class name and a list of class definitions, returns the list of function definitions
     for the class matching the given name.
     """
@@ -74,6 +77,7 @@ def machine_methods(class_name: str, class_definitions: List[ast.ClassDef]) -> L
     ]
     function_definitions.sort(key=lambda x: x.name)
     return function_definitions
+
 
 def main() -> None:
     if len(sys.argv) != 2:
@@ -88,21 +92,30 @@ def main() -> None:
     base_method_names = {method.name for method in base_machine_methods}
 
     qemu_machine_methods = [
-        method for method in machine_methods("QemuMachine", class_definitions)
+        method
+        for method in machine_methods("QemuMachine", class_definitions)
         if method.name not in base_method_names
     ]
 
     nspawn_machine_methods = [
-        method for method in machine_methods("NspawnMachine", class_definitions)
+        method
+        for method in machine_methods("NspawnMachine", class_definitions)
         if method.name not in base_method_names
     ]
 
     print("#### Generic machine objects {#ssec-all-machine-objects} \n")
     print(function_docstrings(base_machine_methods))
     print("#### QEMU VM objects {#ssec-qemu-machine-objects}\n")
-    print(function_docstrings(qemu_machine_methods) or "No methods specific to QEMU virtual machines.")
+    print(
+        function_docstrings(qemu_machine_methods)
+        or "No methods specific to QEMU virtual machines."
+    )
     print("#### `systemd-nspawn` container objects {#ssec-nspawn-machine-objects}\n")
-    print(function_docstrings(nspawn_machine_methods) or "No methods specific to `systemd-nspawn` containers.")
+    print(
+        function_docstrings(nspawn_machine_methods)
+        or "No methods specific to `systemd-nspawn` containers."
+    )
+
 
 if __name__ == "__main__":
     main()
