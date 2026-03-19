@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
-  setuptools,
+  poetry-core,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-1RzorEsGXA8mRzMSS9S5vbPqJXK0vPMlRixo+Yrq27U=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     mkdocs
