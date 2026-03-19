@@ -3320,6 +3320,12 @@
     github = "benwis";
     githubId = 6953353;
   };
+  Benzenec6h6 = {
+    name = "Benzene";
+    email = "tetrodotoxinc11h17n3o8@gmail.com";
+    github = "Benzenec6h6";
+    githubId = 86556791;
+  };
   bepri = {
     email = "imani.pelton@canonical.com";
     github = "bepri";
