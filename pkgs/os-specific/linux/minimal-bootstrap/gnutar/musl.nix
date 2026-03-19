@@ -46,6 +46,9 @@ bash.runCommand "${pname}-${version}"
     rm tar.tar
     cd tar-${version}
 
+    # untar does not preserve permissions
+    chmod +x missing configure
+
     # Configure
     export CC="tcc -B ${tinycc.libs}/lib"
     export LD=tcc
