@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "geticons";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-HEnUfOLeRTi2dRRqjDPVwVVHo/GN9wE28x5qv3qOpCY=";
   };
 

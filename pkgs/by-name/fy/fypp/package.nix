@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "aradi";
     repo = "fypp";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-MgGVlOqOIrIVoDfBMVpFLT26mhYndxans2hfo/+jdoA=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "eksctl";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-VjrR5jm4tpUz5mrW4dyTqkzPvJ0Z+zTuwSofddN3aD0=";
   };
 

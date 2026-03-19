@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "crate2nix";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-SUuruvw1/moNzCZosHaa60QMTL+L9huWdsCBN6XZIic=";
   };
 

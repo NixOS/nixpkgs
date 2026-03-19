@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "CleoMenezesJr";
     repo = "escambo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-jMlix8nlCaVLZEhqzb6LRNrD3DUZMTIjqrRKo6nFbQA=";
   };
 

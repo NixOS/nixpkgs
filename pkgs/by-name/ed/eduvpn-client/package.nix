@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromCodeberg {
     owner = "eduVPN";
     repo = "linux-app";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-oI/hc1XAddXGtwaLY6+zFoshs82lDTRESF4+xUmi+jc=";
   };
 

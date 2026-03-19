@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dtrx-py";
     repo = "dtrx";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-FNSFEGIK0vDNlvqc8BKDCB/0hoxrITfeh59JcyzX3jY=";
   };
 

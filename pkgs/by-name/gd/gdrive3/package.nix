@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   src = fetchFromGitHub {
     owner = "glotlabs";
     repo = "gdrive";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-1yJg+rEhKTGXC7mlHxnWGUuAm9/RwhD6/Xg/GBKyQMw=";
   };
 

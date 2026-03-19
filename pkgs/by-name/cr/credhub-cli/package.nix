@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cloudfoundry-incubator";
     repo = "credhub-cli";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-qp7Oj207uu2P/Jt9O5tZM0ra9fMx+DfuHPaKr5z+ef0=";
   };
 

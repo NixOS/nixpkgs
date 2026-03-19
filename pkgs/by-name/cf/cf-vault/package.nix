@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jacobbednarz";
     repo = "cf-vault";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-vp9ufjNZabY/ck2lIT+QpD6IgaVj1BkBRTjPxkb6IjQ=";
   };
 

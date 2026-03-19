@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EasyRPG";
     repo = "Player";
-    rev = version;
+    tag = version;
     hash = "sha256-fYSpFhqETkQhRK1/Uws0fWWdCr35+1J4vCPX9ZiQ3ZA=";
   };
 

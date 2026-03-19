@@ -11,7 +11,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "elfinfo";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     sha256 = "sha256-HnjHOjanStqmDXnc6Z9w0beCMJFf/ndWbYxoDEaOws4=";
   };
 
