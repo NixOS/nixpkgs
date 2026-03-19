@@ -15,13 +15,13 @@ let
   vsix = stdenv.mkDerivation (finalAttrs: {
     name = "gitlens-${finalAttrs.version}.vsix";
     pname = "gitlens-vsix";
-    version = "17.11.0";
+    version = "17.11.1";
 
     src = fetchFromGitHub {
       owner = "gitkraken";
       repo = "vscode-gitlens";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-MMUfl8Vc6mAjs0ZPWV0lHQdqRkKKY0FEx7mbz/yrk9k=";
+      hash = "sha256-BN6qgPYhZ+FuYnwmV0S3y2vOR4ZLC+VGWuEEPqfOqi4=";
     };
 
     pnpmDeps = fetchPnpmDeps {
