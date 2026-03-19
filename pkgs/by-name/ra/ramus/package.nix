@@ -17,7 +17,7 @@ let
     src = fetchFromGitHub {
       owner = "Vitaliy-Yakovchuk";
       repo = "ramus";
-      rev = "v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-2rbcUqM0YgwPLo8lNFCRJQDlHZQEivB3GRG/iIlwXiQ=";
     };
 
@@ -32,8 +32,7 @@ let
     };
 
     doCheck = false;
-    patchPhase = ''
-      runHook prePatch
+    postPatch = ''
       sed -i "/plugins {/,/^}/d" build.gradle
       sed -i "/^dependencies {/,/^}/d" build.gradle
       sed -i "/^izpack {/,/^}/d" build.gradle
@@ -42,8 +41,8 @@ let
       sed -i "/    maven {/{N;N;/freehep/d}" client/build.gradle
       sed -i "s/sourceCompatibility = 1\.6/sourceCompatibility = 8/" build.gradle
       sed -i "s/targetCompatibility = 1\.6/targetCompatibility = 8/" build.gradle
-      runHook postPatch
     '';
+
     gradleBuildTask = "copyFiles";
     installPhase = ''
       runHook preInstall
