@@ -19,13 +19,13 @@
 }:
 
 let
-  version = "9.2.1";
+  version = "9.3.1";
   x2t = callPackage ./x2t.nix { };
   server-src = fetchFromGitHub {
     owner = "ONLYOFFICE";
     repo = "server";
-    tag = "v9.2.1.1";
-    hash = "sha256-McG+PGL+ZmmnInuBhqVqMeX0o36/LbC0C5vQA1TDjO8=";
+    tag = "v9.3.1.1";
+    hash = "sha256-uN1L/4I7wrg0BqAAu3zdn8LqtdfJDAHnAMbCvzQnOvI=";
   };
   common = buildNpmPackage (finalAttrs: {
     name = "onlyoffice-server-Common";
@@ -51,7 +51,7 @@ let
     buildInputs = [
       vips.dev
     ];
-    npmDepsHash = "sha256-4t3wrO+Tt3bTRzmvB+tbVr5D3fXpn7CCU7+dNRc7xEo=";
+    npmDepsHash = "sha256-eD7hyeIcSL0nLcmBE5+gDJcjT+LdUaqIZ+g5sPcn8HQ=";
     npmFlags = [ "--loglevel=verbose" ];
     dontNpmBuild = true;
     postInstall = ''
@@ -68,7 +68,7 @@ let
 
     sourceRoot = "${finalAttrs.src.name}/FileConverter";
 
-    npmDepsHash = "sha256-JKZqbpVBNe6dwxsTg8WqlJAlAqOYmqm+LyWgIxpRb8k=";
+    npmDepsHash = "sha256-zGLZBbQYV2z0HgQKISKVhclRKbMB8RYEX13H0mB6qJw=";
 
     dontNpmBuild = true;
 
@@ -133,13 +133,13 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation {
     pname = "onlyoffice-documentserver";
-    version = "9.2.1";
+    version = "9.3.1";
 
     src = fetchFromGitHub {
       owner = "ONLYOFFICE";
       repo = "document-server-package";
-      tag = "v9.2.1.13";
-      hash = "sha256-jyXSYkWu63vdeWsRm1Pl/3p3jRjasj0whzN0CytdHks=";
+      tag = "v9.3.1.11";
+      hash = "sha256-AUXOiI6yRjbkSyCFbqMchGba5wiwQOVl1ciFXuWUOd4=";
     };
 
     buildPhase = ''
