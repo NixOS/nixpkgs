@@ -3008,8 +3008,8 @@ let
         mktplcRef = {
           publisher = "mesonbuild";
           name = "mesonbuild";
-          version = "1.28.1";
-          hash = "sha256-Cu2sBg8wTjGLOMF4bCOG8noXZXZB2j5wSXZS2VxxNoA=";
+          version = "1.28.2";
+          hash = "sha256-Wb3cfATe8pc+LftmKyFj3q6kmdTHUMtoIHlChKKeEoU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/mesonbuild.mesonbuild/changelog";
