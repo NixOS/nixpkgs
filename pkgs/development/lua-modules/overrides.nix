@@ -161,6 +161,19 @@ in
     buildInputs = old.buildInputs ++ [ enet ];
   });
 
+  etlua = prev.etlua.overrideAttrs {
+    postPatch = ''
+      # unpack was deleted in Lua 5.2
+      sed -i '1i unpack = unpack or table.unpack' spec/etlua_spec.moon
+    '';
+    doCheck = luaOlder "5.5"; # some dependency of moonscript does not support Lua 5.5
+    preCheck = "moonc spec/etlua_spec.moon";
+    nativeCheckInputs = [
+      final.bustedCheckHook
+      final.moonscript
+    ];
+  };
+
   fzf-lua = prev.fzf-lua.overrideAttrs {
     # FIXME: https://github.com/NixOS/nixpkgs/issues/431458
     # fzf-lua throws `address already in use` on darwin
