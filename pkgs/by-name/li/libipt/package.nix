@@ -13,8 +13,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libipt";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-hSC00GbVllJStgt9iA9WT54U8NQRtgJHuyZyb5ougc8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-hSC00GbVllJStgt9iA9WT54U8NQRtgJHuyZyb5ougc8=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,6 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    changelog = "https://github.com/intel/libipt/releases/tag/v${finalAttrs.version}";
     description = "Intel Processor Trace decoder library";
     homepage = "https://github.com/intel/libipt";
     license = lib.licenses.bsd3;
