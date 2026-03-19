@@ -8,11 +8,11 @@
 }:
 mkKdeDerivation rec {
   pname = "ktextaddons";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchurl {
     url = "mirror://kde/stable/ktextaddons/ktextaddons-${version}.tar.xz";
-    hash = "sha256-AQHazKYL75LSsEU0LIgOFBnz3WsemKH4UKFPR7P53nk=";
+    hash = "sha256-tSNWvgchXwrOC44qbfi82PNXLvXAr/iWMbBDsQrbDIo=";
   };
 
   extraBuildInputs = [
