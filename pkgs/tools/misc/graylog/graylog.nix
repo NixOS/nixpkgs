@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     inherit license;
     inherit maintainers;
+    knownVulnerabilities = lib.optionals (lib.versions.majorMinor version <= "6.1") [
+      "This package has been marked for EOL, please consider upgrading, see this for more information: https://go2docs.graylog.org/current/setting_up_graylog/supported_versions.htm"
+    ];
     mainProgram = "graylogctl";
     platforms = platforms.unix;
   };
