@@ -16,11 +16,11 @@ buildGoModule {
     owner = "microsoft";
     repo = "typescript-go";
     rev = "737e16fee4eedc201b8c70109bef965b4c73c23c";
-    hash = "sha256-Il2UgZ1DX0ijKZLlMNOdywOANBl9x5WSLiQbp3gogBQ=";
+    hash = "sha256-YSg/stB9my8KAEOkS2hvlVJ56EFmHSpC492+AY5YmOE=";
     fetchSubmodules = false;
   };
 
-  vendorHash = "sha256-QNKXJ9HA8WlLlTxflLt0a/Y2Lt8NG1AnNmBOESYFyRI=";
+  vendorHash = "sha256-Il2UgZ1DX0ijKZLlMNOdywOANBl9x5WSLiQbp3gogBQ=";
 
   ldflags = [
     "-s"
