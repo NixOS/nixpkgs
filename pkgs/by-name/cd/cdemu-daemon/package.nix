@@ -11,12 +11,12 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cdemu-daemon";
   version = "3.2.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/cdemu/cdemu-daemon-${finalAttrs.version}.tar.xz";
     hash = "sha256-EKh2G6RA9Yq46BpTAqN2s6TpLJb8gwDuEpGiwdGcelc=";
   };
 
@@ -60,4 +60,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ bendlas ];
     mainProgram = "cdemu-daemon";
   };
-}
+})
