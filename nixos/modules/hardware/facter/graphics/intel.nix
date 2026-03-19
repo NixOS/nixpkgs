@@ -25,7 +25,9 @@ let
   #
   # Model 42 = Sandy Bridge, first generation to use i915 kernel module
   # Older GPUs (Ironlake, GMA) use different modules (i965, gma-*)
-  needsI915 = facterLib.hasIntelCpuModelAtLeast 42 report;
+  # Xe GPUs (model >= 140, Tiger Lake+) use the xe kernel module instead,
+  # so we exclude them here.
+  needsI915 = facterLib.hasIntelCpuModelAtLeast 42 report && !isXeGraphics;
 
   # Model 61 = Broadwell, minimum for intel-media-driver
   # Pre-Broadwell GPUs should use intel-vaapi-driver instead
@@ -40,6 +42,20 @@ in
     enable = lib.mkEnableOption "Enable the Intel Graphics module" // {
       default = hasIntelGpu;
       defaultText = "hardware dependent";
+    };
+
+    driver = lib.mkOption {
+      type = lib.enum [
+        "auto"
+        "i965"
+        "iHD"
+      ];
+      default = "auto";
+      description = ''
+        VA-API driver to use. `auto` selects based on GPU generation
+        (iHD for Broadwell+, i965 otherwise). Use this to override
+        detection or force a specific driver for debugging.
+      '';
     };
   };
 
@@ -64,11 +80,11 @@ in
 
     # Tell libva which driver to use
     environment.sessionVariables = {
-      LIBVA_DRIVER_NAME = if isBroadwellOrNewer then "iHD" else "i965";
+      LIBVA_DRIVER_NAME =
+        if cfg.driver == "auto" then if isBroadwellOrNewer then "iHD" else "i965" else cfg.driver;
     };
 
     # Enable GuC submission and HuC firmware for better performance
-    # Only applies to i915 module (Sandy Bridge+)
     boot.kernelParams = lib.optionals needsI915 [ "i915.enable_guc=3" ];
 
     # Load Intel firmware blobs (needed for GPU acceleration)
