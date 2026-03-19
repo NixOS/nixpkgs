@@ -96,7 +96,7 @@ buildPythonPackage rec {
     homepage = "https://qutip.org/";
     changelog = "https://github.com/qutip/qutip/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
     badPlatforms = [
       # Tests fail at ~80%
       # ../tests/test_animation.py::test_result_state Fatal Python error: Aborted
