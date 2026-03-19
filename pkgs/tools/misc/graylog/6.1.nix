@@ -1,3 +1,4 @@
+# TODO: remove this version after 26.05
 { callPackage, lib, ... }:
 let
   buildGraylog = callPackage ./graylog.nix { };

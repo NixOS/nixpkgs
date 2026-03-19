@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     inherit license;
     inherit maintainers;
     mainProgram = "graylogctl";
+    # TODO: remove this after 26.05
+    problems = lib.optionalAttrs (lib.versions.majorMinor version <= "6.1") {
+      removal.message = "This package has been marked for removal in 26.11, Please consider upgrading to 7.0 or later to continue using this package after 26.11";
+    };
     platforms = lib.platforms.unix;
   };
 }
