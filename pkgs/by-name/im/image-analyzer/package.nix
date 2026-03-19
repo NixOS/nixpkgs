@@ -13,12 +13,12 @@
   fetchurl,
   lib,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "image-analyzer";
   version = "3.2.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/cdemu/image-analyzer-${finalAttrs.version}.tar.xz";
     hash = "sha256-7I8RUgd+k3cEzskJGbziv1f0/eo5QQXn62wGh/Y5ozc=";
   };
 
@@ -68,4 +68,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-}
+})
