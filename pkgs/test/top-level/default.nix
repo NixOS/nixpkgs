@@ -64,4 +64,22 @@ lib.recurseIntoAttrs {
     assert lib.all (p: p.stdenv.buildPlatform == p.stdenv.hostPlatform) pkgsLocal;
     assert lib.all (p: p.stdenv.buildPlatform != p.stdenv.hostPlatform) pkgsCross;
     pkgs.emptyFile;
+
+  # appendOverlays must preserve splicing so that cross-compilation
+  # works in NixOS modules (which go through appendOverlays via nixpkgs.nix).
+  appendOverlaysPreservesSplicing =
+    let
+      cross = nixpkgsFun {
+        localSystem = {
+          system = "x86_64-linux";
+        };
+        crossSystem = {
+          system = "aarch64-linux";
+        };
+      };
+      appended = cross.appendOverlays [ ];
+    in
+    assert cross.makeWrapper ? __spliced;
+    assert appended.makeWrapper ? __spliced;
+    pkgs.emptyFile;
 }
