@@ -103,6 +103,9 @@ let
         license = lib.licenses.bsd2;
         teams = [ lib.teams.flyingcircus ];
         platforms = lib.platforms.unix;
+        knownVulnerabilities = lib.optionals (lib.versions.major version == "7") [
+          "VSV00018: https://vinyl-cache.org/security/VSV00018.html"
+        ];
       };
     };
 in
