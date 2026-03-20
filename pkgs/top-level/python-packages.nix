@@ -4176,6 +4176,8 @@ self: super: with self; {
 
   django-environ = callPackage ../development/python-modules/django-environ { };
 
+  django-error-report-2 = callPackage ../development/python-modules/django-error-report-2 { };
+
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
   django-filer = callPackage ../development/python-modules/django-filer { };
@@ -4248,9 +4250,13 @@ self: super: with self; {
     callPackage ../development/python-modules/django-login-required-middleware
       { };
 
+  django-mailbox = callPackage ../development/python-modules/django-mailbox { };
+
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-maintenance-mode = callPackage ../development/python-modules/django-maintenance-mode { };
+
+  django-markdownify = callPackage ../development/python-modules/django-markdownify { };
 
   django-markdownx = callPackage ../development/python-modules/django-markdownx { };
 
