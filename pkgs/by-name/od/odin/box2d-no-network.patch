@@ -1,0 +1,21 @@
+diff --git a/vendor/box2d/build_box2d.sh b/vendor/box2d/build_box2d.sh
+index 8d2a7c0..32edb9e 100755
+--- a/vendor/box2d/build_box2d.sh
++++ b/vendor/box2d/build_box2d.sh
+@@ -2,7 +2,6 @@
+ set -eu
+ 
+-VERSION="3.1.1"
+-RELEASE="https://github.com/erincatto/box2d/archive/refs/tags/v$VERSION.tar.gz"
++VERSION="${BOX2D_VERSION:?}"
+ 
+ cd "$(dirname "$0")"
+ 
+@@ -9,2 +9,6 @@
+-curl -O -L "$RELEASE"
++if [[ -z "${BOX2D_TARBALL:-}" ]]; then
++	printf '%s\n' "BOX2D_TARBALL is required" >&2
++	exit 1
++fi
++cp "$BOX2D_TARBALL" "v$VERSION.tar.gz"
+ tar -xzvf "v$VERSION.tar.gz"
