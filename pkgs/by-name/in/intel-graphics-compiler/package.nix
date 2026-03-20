@@ -19,7 +19,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.28.4";
+  version = "2.30.1";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-bct1ntvjK738QkoumqwsMJdV+ikpLVtW061637m4vIg=";
+      hash = "sha256-S579+kK+bj0cI0BA2ccBPLMWuqZ1yIHcWiYEDPy0gxw=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
       name = "vc-intrinsics";
       owner = "intel";
       repo = "vc-intrinsics";
-      tag = "v0.24.3";
-      hash = "sha256-VRws9wzBvNph1sTFjhmigM8ZDI6VMp8ZUJR4cZaK5uA=";
+      tag = "v0.25.0";
+      hash = "sha256-ozc1w3V5RqWHwqNHuefZJMN8RAYxrJxH9bd1BEqxfiQ=";
     })
     (fetchFromGitHub {
       name = "opencl-clang";
