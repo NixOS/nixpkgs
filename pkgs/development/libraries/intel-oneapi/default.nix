@@ -16,7 +16,6 @@
   # For the updater script
   writeShellApplication,
   curl,
-  jq,
   htmlq,
   common-updater-scripts,
   writableTmpDirAsHomeHook,
@@ -133,7 +132,6 @@
       name = "update-intel-oneapi";
       runtimeInputs = [
         curl
-        jq
         htmlq
         common-updater-scripts
       ];
