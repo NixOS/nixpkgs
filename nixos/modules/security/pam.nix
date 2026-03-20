@@ -135,6 +135,7 @@ let
 
       imports = [
         (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+        (lib.mkRenamedOptionModule [ "showMotd" ] [ "motd" "enable" ])
       ];
 
       options = {
@@ -521,10 +522,49 @@ let
           '';
         };
 
-        showMotd = lib.mkOption {
-          default = false;
-          type = lib.types.bool;
-          description = "Whether to show the message of the day.";
+        motd = {
+          enable = lib.mkOption {
+            default = false;
+            type = lib.types.bool;
+            description = "Whether to show the message of the day.";
+          };
+
+          files = lib.mkOption {
+            default = [ (lib.defaultTo "/etc/motd" motd) ];
+            defaultText = lib.literalMD ''
+              `users.motd` or `users.motdFile` if defined, otherwise `"/etc/motd"`
+            '';
+            type = lib.types.listOf lib.types.path;
+            example = [
+              "/run/motd"
+              "/etc/motd"
+            ];
+            description = ''
+              List of files to try when showing the message of the day. Each
+              file will be tried in order (from first to last), and only the
+              first file that was read successfully will be shown.
+            '';
+          };
+
+          directories = lib.mkOption {
+            default = [ "/etc/motd.d" ];
+            type = lib.types.listOf lib.types.path;
+            example = [
+              "/run/motd.d"
+              "/etc/motd.d"
+            ];
+            description = ''
+              List of directories that contain message of the day snippets that
+              will be shown after the main message of the day.
+
+              Files are read in lexicographic order by name. Moreover, the
+              files are filtered by reading them with the credentials of the
+              target user authenticating on the system.
+
+              Files in directories that appear earlier in the list override
+              files with the same name in directories later in the list.
+            '';
+          };
         };
 
         makeHomeDir = lib.mkOption {
@@ -1461,11 +1501,12 @@ let
               }
               {
                 name = "motd";
-                enable = cfg.showMotd && (config.users.motd != "" || config.users.motdFile != null);
+                enable = cfg.motd.enable;
                 control = "optional";
                 modulePath = "${package}/lib/security/pam_motd.so";
                 settings = {
-                  inherit motd;
+                  motd = lib.concatStringsSep ":" cfg.motd.files;
+                  motd_dir = lib.concatStringsSep ":" cfg.motd.directories;
                 };
               }
               {

@@ -151,7 +151,7 @@ in
       timerConfig.OnCalendar = cfg.refreshInterval;
     };
 
-    security.pam.services.sshd.showMotd = lib.mkIf cfg.enableMotdInSSHD true;
+    security.pam.services.sshd.motd.enable = lib.mkIf cfg.enableMotdInSSHD true;
     users.motdFile = lib.mkIf cfg.enableMotdInSSHD "/var/lib/rust-motd/motd";
 
     programs.rust-motd.settings.global.show_legacy_warning = false;
