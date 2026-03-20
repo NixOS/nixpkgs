@@ -13149,6 +13149,11 @@
     githubId = 3170771;
     name = "Jo Vandeginste";
   };
+  Jozef833 = {
+    github = "Jozef833";
+    githubId = 172046463;
+    name = "Jozef833";
+  };
   jpagex = {
     name = "Jérémy Pagé";
     email = "contact@jeremypage.me";
