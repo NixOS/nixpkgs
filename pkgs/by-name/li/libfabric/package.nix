@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfabric";
-  version = "2.4.0";
+  version = "2.5.0";
 
   enableParallelBuilding = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ofiwg";
     repo = "libfabric";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-C8k1caArVPBTtSggvAM7S660HpP99y9vac7oyf+HW2c=";
+    sha256 = "sha256-VgVCsurXmeJdS6cUhSp6ILcL4b31FuycVB6lv7jf0JM=";
   };
 
   outputs = [
