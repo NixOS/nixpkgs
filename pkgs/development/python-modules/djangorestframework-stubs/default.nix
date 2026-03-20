@@ -10,7 +10,7 @@
   pytestCheckHook,
   requests,
   types-pyyaml,
-  setuptools,
+  uv-build,
   types-markdown,
   types-requests,
   typing-extensions,
@@ -30,10 +30,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "<79.0.0" ""
+      --replace-fail "uv_build>=0.8.19,<0.10.0" "uv_build"
   '';
 
-  build-system = [ setuptools ];
+  build-system = [ uv-build ];
 
   dependencies = [
     django-stubs
