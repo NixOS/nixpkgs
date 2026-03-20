@@ -3,18 +3,18 @@
   fetchFromGitHub,
   python3,
   makeWrapper,
-  fetchpatch,
   patch,
+  lib,
 }:
 
 {
   rev,
   hash,
+  helium-linux ? null,
 }:
 
 stdenv.mkDerivation {
   pname = "helium";
-
   version = rev;
 
   src = fetchFromGitHub {
@@ -22,6 +22,8 @@ stdenv.mkDerivation {
     repo = "helium";
     inherit rev hash;
   };
+
+  inherit helium-linux;
 
   buildPhase = ''
     runHook preBuild
@@ -31,21 +33,21 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [
-    (python3.withPackages (
-      ps: with ps; [
-        pillow
-      ]
-    ))
+    (python3.withPackages (ps: with ps; [ pillow ]))
     patch
   ];
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir $out
     cp -R * $out/
+  ''
+  + lib.optionalString (helium-linux != null) ''
+    mkdir -p $out/patches/helium/linux
+    cp -r ${helium-linux}/patches/helium/linux/* $out/patches/helium/linux/
+  ''
+  + ''
     wrapProgram $out/utils/patches.py --add-flags "apply" --prefix PATH : "${patch}/bin"
   '';
 }

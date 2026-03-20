@@ -56,6 +56,7 @@ let
         proprietaryCodecs
         cupsSupport
         variant
+        helium-linux
         ;
       gnChromium = buildPackages.gn.override upstream-info.deps.gn;
     };
@@ -71,11 +72,24 @@ let
     # patched into their shebangs.
     ungoogled-chromium = pkgsBuildBuild.callPackage ./variants/ungoogled { };
 
+    # Helium-linux provides Linux-specific patches applied during build.
+    helium-linux =
+      if variant == "helium" then
+        pkgs.fetchFromGitHub {
+          owner = "imputnet";
+          repo = "helium-linux";
+          inherit (upstream-info.deps.helium-linux) rev hash;
+        }
+      else
+        null;
+
     # so is helium.
     helium = pkgsBuildBuild.callPackage ./variants/helium { };
   };
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
+
+  browserName = if variant == "helium" then "helium" else "chromium";
 
   # We want users to be able to enableWideVine without rebuilding all of
   # chromium, so we have a separate derivation here that copies chromium
@@ -88,8 +102,8 @@ let
       runCommand (browser.name + "-wv") { version = browser.version; } ''
         mkdir -p $out
         cp -a ${browser}/* $out/
-        chmod u+w $out/libexec/chromium
-        cp -a ${widevine-cdm}/share/google/chrome/WidevineCdm $out/libexec/chromium/
+        chmod u+w $out/libexec/${browserName}
+        cp -a ${widevine-cdm}/share/google/chrome/WidevineCdm $out/libexec/${browserName}/
       ''
     else
       browser;
@@ -125,7 +139,7 @@ stdenv.mkDerivation {
 
   buildCommand =
     let
-      browserBinary = "${chromiumWV}/libexec/chromium/chromium";
+      browserBinary = "${chromiumWV}/libexec/${browserName}/${browserName}";
       libPath = lib.makeLibraryPath [
         libva
         pipewire
@@ -134,16 +148,16 @@ stdenv.mkDerivation {
         gtk4
         libkrb5
       ];
-
+      defaultDataDir = if variant == "helium" then "net.imput.helium" else browserName;
     in
     ''
       mkdir -p "$out/bin"
 
-      makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      makeWrapper "${browserBinary}" "$out/bin/${browserName}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
-      ed -v -s "$out/bin/chromium" << EOF
+      ed -v -s "$out/bin/${browserName}" << EOF
       2i
 
       if [ -x "/run/wrappers/bin/${sandboxExecutableName}" ]
@@ -154,7 +168,7 @@ stdenv.mkDerivation {
       fi
 
       # Make generated desktop shortcuts have a valid executable name.
-      export CHROME_WRAPPER='chromium'
+      export CHROME_WRAPPER='${browserName}'
 
     ''
     + lib.optionalString (libPath != "") ''
@@ -182,7 +196,7 @@ stdenv.mkDerivation {
 
       ln -sv "${chromium.browser.sandbox}" "$sandbox"
 
-      ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
+      ln -s "$out/bin/${browserName}" "$out/bin/${browserName}-browser"
 
       mkdir -p "$out/share"
       for f in '${chromiumWV}'/share/*; do
