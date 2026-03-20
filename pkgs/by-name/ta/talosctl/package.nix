@@ -54,7 +54,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.talos.dev/";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      flokli
       johanot
     ];
   };
