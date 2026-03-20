@@ -2,27 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
+  setuptools,
   typer,
 }:
 
 buildPythonPackage rec {
   pname = "aiovlc";
-  version = "0.6.6";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiovlc";
     tag = "v${version}";
-    hash = "sha256-HnMzr6yKEtPFJlaKbvKYTXXjlz1wDLdOw65IPZJkWB0=";
+    hash = "sha256-PA8meWB0LOZX503+GVep03GiUh65MsLI+C6Fe9Iz6nc=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     cli = [ typer ];
