@@ -13,6 +13,7 @@
   vampire,
   eprover-ho,
   cvc5,
+  libpoly,
   csdp,
   rlwrap,
   perl,
@@ -102,15 +103,22 @@ let
     '';
   };
 
-  cvc5' = cvc5.overrideAttrs {
-    version = "1.2.0";
-    src = fetchFromGitHub {
-      owner = "cvc5";
-      repo = "cvc5";
-      tag = "cvc5-1.2.0";
-      hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
-    };
-  };
+  cvc5' =
+    (cvc5.override {
+      libpoly = libpoly.overrideAttrs {
+        version = "0.2.0";
+        __intentionallyOverridingVersion = true;
+      };
+    }).overrideAttrs
+      {
+        version = "1.2.0";
+        src = fetchFromGitHub {
+          owner = "cvc5";
+          repo = "cvc5";
+          tag = "cvc5-1.2.0";
+          hash = "sha256-Um1x+XgQ5yWSoqtx1ZWbVAnNET2C4GVasIbn0eNfico=";
+        };
+      };
 
 in
 stdenv.mkDerivation (finalAttrs: {
