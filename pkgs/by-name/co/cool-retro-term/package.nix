@@ -1,41 +1,48 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  libsForQt5,
+  fetchgit,
+  qt6,
   nixosTests,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.2.0";
+  version = "2.0.0-beta1";
   pname = "cool-retro-term";
 
-  src = fetchFromGitHub {
-    owner = "Swordfish90";
-    repo = "cool-retro-term";
-    tag = finalAttrs.version;
-    hash = "sha256-PewHLVmo+RTBHIQ/y2FBkgXsIvujYd7u56JdFC10B4c=";
+  src = fetchgit {
+    url = "https://github.com/Swordfish90/cool-retro-term";
+    rev = "4c11f0800ba0ad3d32dd76179b58cf9ea1def412";
+    fetchSubmodules = true;
+    hash = "sha256-zr/10rBRJ40EmX1wTB9QZuQAljPHoWCDPiS2/6GVfVs=";
   };
 
-  patchPhase = ''
-    sed -i -e '/qmltermwidget/d' cool-retro-term.pro
-  '';
-
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qmltermwidget
-    libsForQt5.qtquickcontrols2
-    libsForQt5.qtgraphicaleffects
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtsvg
+    qt6.qt5compat
   ];
 
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
+  qtWrapperArgs = [
+    "--prefix NIXPKGS_QT6_QML_IMPORT_PATH : ${placeholder "out"}/lib/qt-6/qml"
+  ];
+
   preFixup = ''
+    if [ -d $out/nix/store ]; then
+      find $out/nix/store -name "QMLTermWidget" -type d | while read src; do
+        mkdir -p $out/lib/qt-6/qml
+        cp -r "$src" $out/lib/qt-6/qml/
+      done
+      rm -rf $out/nix/store
+    fi
+
     mv $out/usr/share $out/share
     mv $out/usr/bin $out/bin
     rmdir $out/usr
