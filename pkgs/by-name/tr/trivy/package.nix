@@ -10,19 +10,19 @@
 
 buildGoModule (finalAttrs: {
   pname = "trivy";
-  version = "0.69.4";
+  version = "0.69.3";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W3QCBmT6YVqYYxG62iIZ+cR6eh/OtzOz7gQgBy2FO9E=";
+    hash = "sha256-lzFcLyrORA+1LxS4nzJVvilg29GTNiGRmnjJ47ev/yU=";
   };
 
   # Hash mismatch on across Linux and Darwin
   proxyVendor = true;
 
-  vendorHash = "sha256-HtzspJxMYTEd3jtw1ltmoBh8+eQnupqVZAovQzplgac=";
+  vendorHash = "sha256-aqSB2pakYH713GSbIAHwAL9Gio17MzZtwqfh9sbzDBs=";
 
   subPackages = [ "cmd/trivy" ];
 
