@@ -26,11 +26,6 @@ buildPythonPackage rec {
 
   dependencies = [ pathos ];
 
-  # setup.py requires pytest-runner for setuptools, which is wrong
-  postPatch = ''
-    substituteInPlace setup.py --replace-fail '"pytest-runner",' ""
-  '';
-
   pythonImportsCheck = [ "lox" ];
 
   disabledTests = [
