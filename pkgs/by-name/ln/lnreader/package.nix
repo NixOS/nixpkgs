@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "lnreader";
-  version = "1.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "Yujonpradhananga";
     repo = "CLI-PDF-EPUB-reader";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JeVS0wnShlD4+UfnMsuHMYi6R7pse4Gvh0PdREwmG6k=";
+    hash = "sha256-TvfSauT9UWjQjkzQtepEVyxm/LaiCANmxMtVmjiw8kI=";
   };
 
-  vendorHash = "sha256-66rqTJeV6u4aVciifp41n2onx81w9KE0PGYHlVwsl54=";
+  vendorHash = "sha256-LCIv135ywuq494hZbrKdbqkGPSsSlSkVQ9hCE8i7www=";
 
   nativeBuildInputs = [
     pkg-config
