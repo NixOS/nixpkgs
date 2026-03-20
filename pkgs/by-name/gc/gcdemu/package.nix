@@ -13,12 +13,12 @@
   lib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "gcdemu";
   version = "3.2.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cdemu/${pname}-${version}.tar.xz";
+    url = "mirror://sourceforge/cdemu/gcdemu-${finalAttrs.version}.tar.xz";
     hash = "sha256-w4vzKoSotL5Cjfr4Cu4YhNSWXJqS+n/vySrwvbhR1zA=";
   };
 
@@ -66,4 +66,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ bendlas ];
   };
-}
+})
