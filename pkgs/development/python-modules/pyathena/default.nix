@@ -7,6 +7,7 @@
   fetchPypi,
   fsspec,
   hatchling,
+  hatch-vcs,
   pandas,
   pyarrow,
   python-dateutil,
@@ -24,7 +25,10 @@ buildPythonPackage rec {
     hash = "sha256-YOc1YTRUZxNT+Iqa2vZH8QwdwQ2mdJGaDVmTOSsFt6s=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     boto3
