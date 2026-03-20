@@ -180,6 +180,7 @@ intel-oneapi.mkIntelOneApi (finalAttrs: {
     "libffi.so.6"
     "libgdbm.so.4"
     "libopencl-clang.so.14"
+    "libreadline.so.6"
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
