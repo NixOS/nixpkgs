@@ -156,12 +156,14 @@ stdenv.mkDerivation {
         libkrb5
       ];
       browserName = if variant == "helium" then "helium" else "chromium";
+      defaultDataDir = if browserName == "helium" then "net.imput.helium" else browserName;
     in
     ''
       mkdir -p "$out/bin"
 
       makeWrapper "${browserBinary}" "$out/bin/${browserName}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "--user-data-dir=\''${CHROME_USER_DATA_DIR:-\''${CHROME_CONFIG_HOME:-\''${XDG_CONFIG_HOME:-\''${HOME}/.config}}/${defaultDataDir}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
       ed -v -s "$out/bin/${browserName}" << EOF
