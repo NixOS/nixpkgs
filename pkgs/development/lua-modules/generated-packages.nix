@@ -1608,6 +1608,37 @@ final: prev: {
     }
   ) { };
 
+  lsqlite3 = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaAtLeast,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "lsqlite3";
+      version = "0.9.6-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/lsqlite3-0.9.6-1.rockspec";
+          sha256 = "1wb51lsfllmbzrjfl0dzxpg597nd54nn06c9plpvqwwjz4l9lrjf";
+        }).outPath;
+      src = fetchzip {
+        url = "https://lua.sqlite.org/home/zip/lsqlite3_v096.zip?uuid=v0.9.6";
+        sha256 = "0p24g17y6s0x1951y9pyndggp71drh4zrzb2a05nb9sk5s3z9dnm";
+      };
+
+      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+
+      meta = {
+        homepage = "http://lua.sqlite.org/";
+        description = "A binding for Lua to the SQLite3 database library";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
   lua-cjson = callPackage (
     {
       buildLuarocksPackage,
@@ -3710,6 +3741,35 @@ final: prev: {
     }
   ) { };
 
+  md5 = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "md5";
+      version = "1.3-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/md5-1.3-1.rockspec";
+          sha256 = "08kx00ik1hly4p1a1bvvw3bvbddc64vdhpr21jy3asrj9nz86bnr";
+        }).outPath;
+      src = fetchurl {
+        url = "https://github.com/keplerproject/md5/archive/1.3.tar.gz";
+        sha256 = "193dsjgnzrnykpmx68njkv72fxh2gb3llqgx2lgbgnf5i66shiq7";
+      };
+
+      disabled = luaOlder "5.0";
+
+      meta = {
+        homepage = "http://keplerproject.github.io/md5/";
+        description = "Checksum library";
+        license.fullName = "MIT/X11";
+      };
+    }
+  ) { };
+
   mediator_lua = callPackage (
     {
       buildLuarocksPackage,
@@ -5208,6 +5268,38 @@ final: prev: {
       meta = {
         homepage = "https://github.com/nvim-orgmode/tree-sitter-org";
         description = "A fork of tree-sitter-org, for use with the orgmode Neovim plugin";
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
+  utf8 = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "utf8";
+      version = "1.3-0";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/utf8-1.3-0.rockspec";
+          sha256 = "1szsrwb15yyvrqwyqrr7g5ivihc0kl4pc7qq439q235f3x8jv2jp";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "dannote";
+        repo = "luautf8";
+        rev = "f36cc914ae9015cd3045987abadd83bbcfae98f0";
+        hash = "sha256-xLWqglAzqcxY+R8GOC+D3uzL2+9ZriEx8Kj41LkI5vU=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "http://github.com/starwing/luautf8";
+        description = "A UTF-8 support module for Lua";
         license.fullName = "MIT";
       };
     }

@@ -27,6 +27,8 @@ in
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
 
+      calibrePackage = lib.mkPackageOption pkgs "calibre" { };
+
       listen = {
         ip = mkOption {
           type = types.str;
@@ -149,8 +151,8 @@ in
             cfg.options.calibreLibrary != null
           ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
           ++ optionals cfg.options.enableBookConversion [
-            "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-            "config_binariesdir = '${pkgs.calibre}/bin/'"
+            "config_converterpath = '${cfg.calibrePackage}/bin/ebook-convert'"
+            "config_binariesdir = '${cfg.calibrePackage}/bin/'"
           ]
           ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
         );
