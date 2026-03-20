@@ -10,7 +10,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "charset-normalizer";
   version = "3.4.6";
   pyproject = true;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "charset_normalizer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-agTvOaEehTgI7JdUWWOkrKSQ0S3iiL3hkPphdiA5c4k=";
   };
 
@@ -40,9 +40,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python module for encoding and language detection";
     homepage = "https://charset-normalizer.readthedocs.io/";
-    changelog = "https://github.com/jawah/charset_normalizer/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/jawah/charset_normalizer/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "normalizer";
   };
-}
+})
