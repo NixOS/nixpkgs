@@ -5,8 +5,8 @@
 }:
 let
   pname = "oathkeeper";
-  version = "25.4.0";
-  commit = "2020997ed914fbc8c4b048effbe28841c34ac23d";
+  version = "26.2.0";
+  commit = "c84dbe07ecbf6f10154f04ec49b137a115155289";
 in
 buildGoModule {
   inherit pname version commit;
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "oathkeeper";
     rev = "v${version}";
-    hash = "sha256-J+76oQbm/CulzfJOhXVzlXWNtpl7PaEJPM96p1ko3Cg=";
+    hash = "sha256-Dux9g5AWnbj9kXoIogVneOYywgg9TnyXqP41YT/1C8k=";
   };
 
-  vendorHash = "sha256-YNpWjDOcjELCpNcxmd8eatMvPUTHos52yvDg4jsHAQk=";
+  vendorHash = "sha256-/Qgdes8EAxP9FDKbahQdCpAD7PSe4iCkUvL1+poqaWc=";
 
   tags = [
     "sqlite"
