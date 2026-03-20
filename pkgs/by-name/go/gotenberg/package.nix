@@ -109,7 +109,7 @@ buildGo126Module (finalAttrs: {
   };
 
   meta = {
-    description = "Converts numerous document formats into PDF files";
+    description = "A developer-friendly API for converting many document formats into PDF files, and more!";
     mainProgram = "gotenberg";
     homepage = "https://gotenberg.dev";
     changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${finalAttrs.version}";
