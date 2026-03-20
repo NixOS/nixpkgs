@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
@@ -68,6 +69,11 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     packaging-legacy
     webtest
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/devpi/devpi/issues/1114
+    "test_dont_index_deleted_mirror"
   ];
 
   pythonImportsCheck = [ "devpi_web" ];
