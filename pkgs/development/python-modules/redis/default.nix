@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "7.1.0";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis-py";
     tag = "v${version}";
-    hash = "sha256-EhhE2l0UdkGWhCwKAF7fuSxq4ooj75Cxwg2zXjJJRzA=";
+    hash = "sha256-25FTKtGWTO8A2LFLk6DU0ebFKIrWrE8To0ex8jOn8+A=";
   };
 
   build-system = [ hatchling ];

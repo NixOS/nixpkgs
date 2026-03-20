@@ -67,7 +67,7 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
-        boot.initrd.secrets."/etc/secret" = "/etc/nixos/secret";
+        boot.initrd.secretPaths."/etc/secret".source = "/etc/nixos/secret";
 
         ${optionalString clevisTest ''
           boot.kernelParams = [ "console=tty0" "ip=192.168.1.1:::255.255.255.0::eth1:none" ];
@@ -1385,7 +1385,7 @@ in
   };
 
   # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
-  # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  # LVM-on-LUKS and a keyfile in initrd.secretPaths to enter the passphrase once
   fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
     createPartitions = ''
       installer.succeed(
@@ -1419,7 +1419,7 @@ in
       boot.loader.grub.enableCryptodisk = true;
       boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
-      boot.initrd.secrets."/luks.key" = "/etc/nixos/luks.key";
+      boot.initrd.secretPaths."/luks.key" = "/etc/nixos/luks.key";
       boot.initrd.luks.devices.crypt =
         { device  = "/dev/vda2";
           keyFile = "/luks.key";

@@ -11,6 +11,7 @@
   findutils,
   gawk,
   getopt,
+  gettext,
   ghostscript_headless,
   git-latexdiff,
   gnugrep,
@@ -25,6 +26,7 @@
   ruby,
   zip,
   luajit,
+  texinfo,
 }:
 oldTlpdb:
 let
@@ -86,6 +88,7 @@ lib.recursiveUpdate orig rec {
   crossrefware.extraBuildInputs = [
     (perl.withPackages (
       ps: with ps; [
+        JSON
         LWP
         URI
       ]
@@ -156,7 +159,9 @@ lib.recursiveUpdate orig rec {
   dtxgen.extraBuildInputs = [
     coreutils
     getopt
+    gettext
     gnumake
+    texinfo
     zip
   ];
   dviljk.extraBuildInputs = [ coreutils ];
@@ -540,14 +545,6 @@ lib.recursiveUpdate orig rec {
   collection-plaingeneric.deps = orig.collection-plaingeneric.deps ++ [ "xdvi" ];
 
   #### misc
-
-  # FIXME: remove when https://github.com/borisveytsman/crossrefware/pull/17 is merged and included on CTAN
-  # Typo introduced in https://github.com/borisveytsman/crossrefware/commit/1e67e9773b3d3be983be156e2200478bc263dd93
-  crossrefware.postUnpack = ''
-    if [[ -f "$out"/scripts/crossrefware/ltx2crossrefxml.pl ]] ; then
-      sed -i 's/use IO::file;/use IO::File;/' "$out"/scripts/crossrefware/ltx2crossrefxml.pl
-    fi
-  '';
 
   # Use top-level git-latexdiff's version and src. NOTE that this derivation is
   # still different from top-level's `git-latexdiff`, due to __structuredAttrs

@@ -77,7 +77,7 @@
   clucene-core_2,
   libcdr,
   lcms2,
-  unixODBC,
+  unixodbc,
   sane-backends,
   mythes,
   libexttextcat,
@@ -481,7 +481,7 @@ stdenv.mkDerivation (finalAttrs: {
       libpq
       python3
       sane-backends
-      unixODBC
+      unixodbc
       util-linux
       which
       xmlsec

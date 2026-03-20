@@ -86,7 +86,7 @@ in
       description = ''
         Append an additional file's contents to `/etc/iscsid.conf`. Use a non-store path
         and store passwords in this file. Note: the file specified here must be available
-        in the initrd, see: `boot.initrd.secrets`.
+        in the initrd, see: `boot.initrd.secretPaths`.
       '';
       default = null;
       type = nullOr str;

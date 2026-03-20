@@ -76,5 +76,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/bimmerconnected/bimmer_connected";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dotlambda ];
+    # https://github.com/bimmerconnected/bimmer_connected#library-not-working-anymore-due-to-changes-at-bmw-side
+    broken = true;
   };
 }

@@ -28,7 +28,12 @@
 }:
 
 let
-  inherit (lib) optional optionals optionalString;
+  inherit (lib)
+    optional
+    optionals
+    optionalString
+    optionalAttrs
+    ;
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
@@ -73,7 +78,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin) "-I${cairo.dev}/include/cairo";
+  env = optionalAttrs (withXorg && stdenv.hostPlatform.isDarwin) {
+    CPPFLAGS = "-I${cairo.dev}/include/cairo";
+  };
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs
 

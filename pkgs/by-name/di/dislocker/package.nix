@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
   ];
 
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
+
   meta = {
     description = "Read BitLocker encrypted partitions in Linux";
     homepage = "https://github.com/Aorimn/dislocker";

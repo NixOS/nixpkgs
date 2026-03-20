@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  buildPackages,
   fetchFromGitLab,
   meson,
   pkg-config,
@@ -27,9 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
-    v4l-utils
     hwdata
     python3
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.emulatorAvailable buildPackages) [
+    # Only used for tests, which we cannot run without an emulator
+    v4l-utils
   ];
 
   postPatch = ''
@@ -41,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "di-edid-decode";
     homepage = "https://gitlab.freedesktop.org/emersion/libdisplay-info";
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
     maintainers = with lib.maintainers; [ pedrohlc ];
   };
 })

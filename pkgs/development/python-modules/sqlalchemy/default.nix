@@ -41,16 +41,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "2.0.46";
+  version = "2.0.48";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-R0d8ipiaj7IL6mHV4c1Kyd6hV+kn5NhZexruRQsyL8c=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-0MHxHcQr7XvRZ3j1wj/PMIk94TVhyixDAgeAYKd1nGk=";
   };
 
   postPatch = ''
@@ -115,11 +115,9 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
+    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/${finalAttrs.src.tag}";
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
     license = lib.licenses.mit;
   };
-}
+})

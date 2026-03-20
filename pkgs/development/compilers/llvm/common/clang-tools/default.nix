@@ -23,6 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
 
+    for script in ${clang-unwrapped.python}/share/clang/* ${clang-unwrapped.python}/bin/*; do
+      if [[ -x "$script" ]]; then
+        ln -s $script $out/bin/$(basename "$script" .py)
+      fi
+    done
+
     for toolPath in ${clang-unwrapped}/bin/clangd ${clang-unwrapped}/bin/clang-*; do
       toolName=$(basename "$toolPath")
 

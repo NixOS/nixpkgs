@@ -51,7 +51,7 @@
   imath,
   openvdb,
   c-blosc,
-  unixODBC,
+  unixodbc,
   libpq,
   libmysqlclient,
   ffmpeg,
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     alembic
     imath
     c-blosc
-    unixODBC
+    unixodbc
     libpq
     libmysqlclient
     ffmpeg

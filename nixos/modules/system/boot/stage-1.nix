@@ -148,23 +148,22 @@ let
         # Copy secrets if needed.
         #
         # TODO: move out to a separate script; see #85000.
-        ${optionalString (!config.boot.loader.supportsInitrdSecrets) (
-          concatStringsSep "\n" (
-            mapAttrsToList (
-              dest: source:
-              let
-                source' = if source == null then dest else source;
-              in
-              ''
-                mkdir -p $(dirname "$out/secrets/${dest}")
-                # Some programs (e.g. ssh) doesn't like secrets to be
-                # symlinks, so we use `cp -L` here to match the
-                # behaviour when secrets are natively supported.
-                cp -Lr ${source'} "$out/secrets/${dest}"
-              ''
-            ) config.boot.initrd.secrets
-          )
-        )}
+        ${optionalString (!config.boot.loader.supportsInitrdSecrets) ''
+          ${concatStringsSep "\n" (
+            mapAttrsToList (_: scfg: ''
+              mkdir -p $(dirname "$out/secrets${scfg.path}")
+              # Some programs (e.g. ssh) doesn't like secrets to be
+              # symlinks, so we use `cp -L` here to match the
+              # behaviour when secrets are natively supported.
+              # The assertion further up in this file (stage-1.nix)
+              # checks that all secretPaths are Nix store paths set via
+              # boot.initrd.secretPaths.*.source if the bootloader doesn't
+              # support initrd secrets.
+              cp -Lr ${scfg.source} "$out/secrets${scfg.path}"
+            '') config.boot.initrd.secretPaths
+          )}
+          ${config.boot.initrd.extraSecretsHook}
+        ''}
 
         ${config.boot.initrd.extraUtilsCommands}
 
@@ -436,7 +435,9 @@ let
         exit 0
       fi
 
-      ${lib.optionalString (config.boot.initrd.secrets == { }) "exit 0"}
+      ${lib.optionalString (
+        config.boot.initrd.secretPaths == { } && config.boot.initrd.extraSecretsHook == ""
+      ) "exit 0"}
 
       export PATH=${pkgs.coreutils}/bin:${pkgs.cpio}/bin:${pkgs.gzip}/bin:${pkgs.findutils}/bin
 
@@ -451,16 +452,24 @@ let
 
       ${lib.concatStringsSep "\n" (
         mapAttrsToList (
-          dest: source:
+          _: scfg:
           let
-            source' = if source == null then dest else toString source;
+            prefix = lib.optionalString scfg.intermediateSecretsDir "/.initrd-secrets";
           in
           ''
-            mkdir -p $(dirname "$tmp/.initrd-secrets/${dest}")
-            cp -a ${source'} "$tmp/.initrd-secrets/${dest}"
+            mkdir -p $(dirname "$tmp${prefix}${scfg.path}")
+            (
+              export out="$tmp${prefix}${scfg.path}"
+              ${scfg.generateSecretCommand}
+            )
           ''
-        ) config.boot.initrd.secrets
+        ) config.boot.initrd.secretPaths
       )}
+
+      (
+        cd "$tmp"
+        ${config.boot.initrd.extraSecretsHook}
+      )
 
       # mindepth 1 so that we don't change the mode of /
       (cd "$tmp" && find . -mindepth 1 | xargs touch -amt 197001010000 && find . -mindepth 1 -print0 | sort -z | cpio --quiet -o -H newc -R +0:+0 --reproducible --null) | \
@@ -650,21 +659,113 @@ in
     boot.initrd.secrets = mkOption {
       default = { };
       type = types.attrsOf (types.nullOr types.path);
+      visible = false;
       description = ''
-        Secrets to append to the initrd. The attribute name is the
-        path the secret should have inside the initrd, the value
-        is the path it should be copied from (or null for the same
-        path inside and out).
+        Secrets to append to the initrd. This option has been deprecated in
+        favour of `boot.initrd.secretPaths`.
+      '';
+      example = literalExpression ''
+        { "/etc/dropbear/dropbear_rsa_host_key" =
+            ./secret-dropbear-key;
+        }
+      '';
+    };
+
+    boot.initrd.secretPaths = mkOption {
+      default = { };
+      type = types.attrsOf (
+        types.submodule (
+          { config, name, ... }:
+          {
+            options = {
+              path = mkOption {
+                type = types.path;
+                default = name;
+                description = ''
+                  The path the secret should be placed at in the initrd. Defaults
+                  to the attribute name.
+                '';
+              };
+
+              intermediateSecretsDir = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  By default, the secrets will be copied over to the
+                  `/.initrd-secrets` dir at initrd generation time, and then copied
+                  over to their final location at boot time. This is because initrd secrets
+                  that are supposed to be placed in `/run` would be overridden by
+                  the tmpfs mount over `/run` otherwise.
+
+                  Set this option to `false` to skip this intermediate step and
+                  place the secret at its final location straightaway.
+                '';
+              };
+
+              source = mkOption {
+                type = types.nullOr types.path;
+                default = null;
+                description = ''
+                  The absolute path on the filesystem to copy the secret from.
+                '';
+                example = "/var/lib/secrets/initrd/ssh_host_ed25519_key";
+              };
+
+              generateSecretCommand = mkOption {
+                type = types.path;
+                description = ''
+                  The command to run to generate the secret. It should write
+                  the secret to `$out`.
+
+                  This is useful if you have a more advanced secrets provisioning
+                  mechanism.
+                '';
+                example = ''
+                  pkgs.writeShellScript "generate-secret" '''
+                    ''${lib.getExe pkgs.age} -d -i /etc/ssh/ssh_host_ed25519_key -o "$out" ''${./secret.age}
+                  '''
+                '';
+              };
+            };
+
+            config = {
+              generateSecretCommand = lib.mkIf (config.source != null) (
+                pkgs.writeShellScript "copy-secret" ''
+                  cp -Lr ${config.source} "$out"
+                ''
+              );
+            };
+          }
+        )
+      );
+      description = ''
+        Secret paths to append to the initrd. The attribute name is the
+        path the secret should have inside the initrd.
 
         Note that `nixos-rebuild switch` will generate the initrd
         also for past generations, so if secrets are moved or deleted
         you will also have to garbage collect the generations that
         use those secrets.
       '';
-      example = literalExpression ''
-        { "/etc/dropbear/dropbear_rsa_host_key" =
-            ./secret-dropbear-key;
-        }
+      example = {
+        "/etc/ssh/ssh_host_ed25519_key".source = "/var/lib/secrets/initrd/ssh_host_ed25519_key";
+      };
+    };
+
+    boot.initrd.extraSecretsHook = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Extra commands to be executed after the initrd secrets generation phase.
+
+        This script should place files into the current workdir. These files
+        will then be copied over to the initrd to the corresponding absolute
+        paths, e.g. `etc/ssh/ssh_host_ed25519_key` will be copied over to
+        `/etc/ssh/ssh_host_ed25519_key`.
+      '';
+      example = ''
+        # Generate a new SSH host key for every generation.
+        ssh-keygen -f etc/ssh/ssh_host_ed25519_key
       '';
     };
 
@@ -746,15 +847,18 @@ in
         assertion =
           !config.boot.loader.supportsInitrdSecrets
           -> all (
-            source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
-          ) (attrValues config.boot.initrd.secrets);
+            scfg:
+            builtins.isPath scfg.source
+            || (builtins.isString scfg.source && hasPrefix builtins.storeDir scfg.source)
+          ) (attrValues config.boot.initrd.secretPaths);
         message = ''
-          boot.initrd.secrets values must be unquoted paths when
-          using a bootloader that doesn't natively support initrd
-          secrets, e.g.:
+          When using a bootloader that doesn't natively support initrd secrets,
+          all `boot.initrd.secretPaths` values must be defined via
+          `boot.initrd.secretsPaths.*.source`, and the `source` values must be
+          unquoted paths, e.g.
 
-            boot.initrd.secrets = {
-              "/etc/secret" = /path/to/secret;
+            boot.initrd.secretPaths = {
+              "/etc/secret".source = /path/to/secret;
             };
 
           Note that this will result in all secrets being stored
@@ -762,6 +866,18 @@ in
         '';
       }
     ];
+
+    warnings = lib.optional (config.boot.initrd.secrets != { }) ''
+      The option `boot.initrd.secrets` has been deprecated in favour of `boot.initrd.secretPaths`.
+    '';
+
+    # Backwards compatibility to the legacy `boot.initrd.secrets` option.
+    boot.initrd.secretPaths = lib.mapAttrs' (dest: source: {
+      # The legacy boot.initrd.secrets option didn't type-check the attr
+      # names, so we need to optionally prepend a slash.
+      name = "${lib.optionalString (!lib.hasPrefix "/" dest) "/"}${dest}";
+      value.source = if dest != null then source else dest;
+    }) config.boot.initrd.secrets;
 
     system.build = mkMerge [
       {

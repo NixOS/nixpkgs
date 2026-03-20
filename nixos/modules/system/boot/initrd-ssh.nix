@@ -302,8 +302,8 @@ in
         fi
       '';
 
-      boot.initrd.secrets = listToAttrs (
-        map (path: nameValuePair (initrdKeyPath path) path) cfg.hostKeys
+      boot.initrd.secretPaths = listToAttrs (
+        map (path: nameValuePair (initrdKeyPath path) { source = path; }) cfg.hostKeys
       );
 
       # Systemd initrd stuff

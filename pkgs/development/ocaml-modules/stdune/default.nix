@@ -3,7 +3,10 @@
   dune,
   dyn,
   ordering,
+  pp,
   csexp,
+  fs-io,
+  top-closure,
 }:
 
 buildDunePackage {
@@ -15,12 +18,11 @@ buildDunePackage {
   propagatedBuildInputs = [
     dyn
     ordering
+    pp
     csexp
+    fs-io
+    top-closure
   ];
-
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
 
   meta = dune.meta // {
     description = "Dune's unstable standard library";

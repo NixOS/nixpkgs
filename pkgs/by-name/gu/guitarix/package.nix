@@ -19,7 +19,7 @@
   gtkmm3,
   hicolor-icon-theme,
   intltool,
-  ladspaH,
+  ladspa-header,
   libjack2,
   liblo,
   libsndfile,
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibmm
     gtk3
     gtkmm3
-    ladspaH
+    ladspa-header
     libjack2
     libsndfile
     lilv

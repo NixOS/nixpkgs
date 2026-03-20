@@ -461,10 +461,6 @@ let
             ++ lib.optionals (!lib.versionAtLeast version "22") [
               "test-tls-multi-key"
             ]
-            ++ lib.optionals useSharedAdaAndSimd [
-              # Different versions of Ada affect the WPT tests
-              "test-url"
-            ]
             ++ lib.optionals stdenv.hostPlatform.is32bit [
               # utime (actually utimensat) fails with EINVAL on 2038 timestamp
               "test-fs-utimes-y2K38"

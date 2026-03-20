@@ -482,7 +482,7 @@ sub addEntry {
               die "failed to create initrd secrets $!\n";
           } else {
               say STDERR "warning: failed to create initrd secrets for \"$name\", an older generation";
-              say STDERR "note: this is normal after having removed or renamed a file in `boot.initrd.secrets`";
+              say STDERR "note: this is normal after having modified or removed an entry in `boot.initrd.secretPaths`";
           }
         }
         # Check whether any secrets were actually added

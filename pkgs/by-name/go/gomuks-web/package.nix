@@ -6,57 +6,74 @@
   nodejs,
   npmHooks,
   unstableGitUpdater,
+  applyPatches,
+  fetchpatch,
+  pkg-config,
+  libheif,
 }:
 
 buildGoModule (
   finalAttrs:
   let
-    ver = "0.2025.11";
-    revDate = "2025-11-01";
-    rev = "be0d4487871c196d0c47bb1b6ac7ce9252d424de";
-    srcHash = "sha256-x7M7d8obnt8mpH1ZRev8c39PE5ZlgssgusGvrLaF/vg=";
-    vendorHash = "sha256-TDvTZ0n324pNPAPMZMhWq0LdDUqFrzBXNVNdfMlxqeQ=";
-    npmDepsHash = "sha256-4Ir4uq9Hg6Hwj21P/H7xWdVPzYrDrXiouEtjnLJj4Ko=";
+    rev = "5b3942a75ccf3dcf244d0e7e5f8e02896b86bbda";
 
   in
   {
     pname = "gomuks-web";
-    version = "${ver}-unstable-${revDate}";
+    version = "0.2602.0";
 
-    inherit vendorHash;
+    proxyVendor = true;
+    vendorHash = "sha256-VjcKxZ9hYxmha5KCuJ5ms7eclAOlsNTWZMmpNhmzX8U=";
 
-    src = fetchFromGitHub {
-      owner = "gomuks";
-      repo = "gomuks";
-      hash = srcHash;
-      inherit rev;
+    src = applyPatches {
+      src = fetchFromGitHub {
+        owner = "gomuks";
+        repo = "gomuks";
+        inherit rev;
+        hash = "sha256-IpxTlirZCXjUHaZbvDew3WWlt0kuKffJQ4BFix2iQjg=";
+      };
+      patches = [
+        # required patch to use libheif instead of goheif which won't build
+        (fetchpatch {
+          url = "https://github.com/gomuks/gomuks/commit/c794a3e9034d76dc1a8c1598f1ff957ecda9e22d.patch";
+          sha256 = "sha256-QyPX2bLuGHqdv/17Pf+N/f1gq/tAbSQKVagN+6S3rJ8=";
+        })
+      ];
     };
 
     nativeBuildInputs = [
       nodejs
       npmHooks.npmConfigHook
+      pkg-config
+    ];
+
+    buildInputs = [
+      libheif
     ];
 
     env = {
       npmRoot = "web";
       npmDeps = fetchNpmDeps {
         src = "${finalAttrs.src}/web";
-        hash = npmDepsHash;
+        hash = "sha256-ob85fZDC3Qcos53MGvf+c1eGEO/SvfUTdnjA3T/y6/A=";
       };
     };
 
     postPatch = ''
       substituteInPlace ./web/build-wasm.sh \
-        --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=v${ver}" \
+        --replace-fail 'go.mau.fi/gomuks/version.Tag=$(git describe --exact-match --tags 2>/dev/null)' "go.mau.fi/gomuks/version.Tag=v${finalAttrs.version}" \
         --replace-fail 'go.mau.fi/gomuks/version.Commit=$(git rev-parse HEAD)' "go.mau.fi/gomuks/version.Commit=${rev}"
     '';
 
     doCheck = false;
 
-    tags = [ "goolm" ];
+    tags = [
+      "goolm"
+      "libheif"
+    ];
 
     ldflags = [
-      "-X 'go.mau.fi/gomuks/version.Tag=v${ver}'"
+      "-X 'go.mau.fi/gomuks/version.Tag=v${finalAttrs.version}'"
       "-X 'go.mau.fi/gomuks/version.Commit=${rev}'"
       "-X \"go.mau.fi/gomuks/version.BuildTime=$(date -Iseconds)\""
       "-X \"maunium.net/go/mautrix.GoModVersion=$(cat go.mod | grep 'maunium.net/go/mautrix ' | head -n1 | awk '{ print $2 })\""
