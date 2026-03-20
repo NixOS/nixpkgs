@@ -138,11 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.2.2";
+  version = "11.0.0-rc4";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-eEspb/KcFBeqcjI6vLLS6pq5dxck9Xfc14XDsE8h4XY=";
+    hash = "sha256-/ugRZyAwrCVmf0cYXzY7X1lTmkXGLCZZhTTljMylp2M=";
   };
 
   depsBuildBuild = [
@@ -163,6 +163,8 @@ stdenv.mkDerivation (finalAttrs: {
     # For python changes other than simple package additions, ping @dramforever for review.
     # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
     python3Packages.distlib
+    python3Packages.setuptools
+    python3Packages.wheel
     # Hooks from the python package are needed to add `$pythonPath` so
     # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
     python3Packages.python
@@ -371,6 +373,10 @@ stdenv.mkDerivation (finalAttrs: {
   # tests can still timeout on slower systems
   doCheck = false;
   nativeCheckInputs = [ socat ];
+  checkInputs = [
+    python3Packages.pygdbmi
+    python3Packages.qemu-qmp
+  ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
     # potentially under load.
@@ -440,7 +446,7 @@ stdenv.mkDerivation (finalAttrs: {
       license = lib.licenses.gpl2Plus;
       maintainers = with lib.maintainers; [ qyliss ];
       teams = lib.optionals xenSupport xen.meta.teams;
-      platforms = lib.platforms.unix;
+      platforms = with lib.systems.inspect; patternLogicalAnd patterns.is64bit patterns.isUnix;
     }
     # toolsOnly: Does not have qemu-kvm and there's no main support tool
     # userOnly: There's one qemu-<arch> for every architecture
@@ -449,7 +455,14 @@ stdenv.mkDerivation (finalAttrs: {
     }
     # userOnly: https://qemu.readthedocs.io/en/v9.0.2/user/main.html
     // lib.optionalAttrs userOnly {
-      platforms = with lib.platforms; (linux ++ freebsd ++ openbsd ++ netbsd);
+      platforms =
+        with lib.systems.inspect;
+        patternLogicalAnd patterns.is64bit [
+          patterns.isLinux
+          patterns.isFreeBSD
+          patterns.isOpenBSD
+          patterns.isNetBSD
+        ];
       description = "QEMU User space emulator - launch executables compiled for one CPU on another CPU";
     };
 })
