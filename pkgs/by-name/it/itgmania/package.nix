@@ -19,6 +19,7 @@
   udev,
   makeWrapper,
   makeDesktopItem,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -82,6 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://www.itgmania.com/";
