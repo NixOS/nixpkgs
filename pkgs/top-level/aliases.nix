@@ -1374,6 +1374,7 @@ mapAliases {
   mullvad-closest = throw "'mullvad-closest' has been removed as it was unmaintained. Consider using 'mullvad-compass' instead."; # Added 2026-01-13
   multipass = throw "multipass was dropped since it was unmaintained."; # Added 2025-11-29
   mumps_par = throw "'mumps_par' has been renamed to/replaced by 'mumps-mpi'"; # Converted to throw 2025-10-27
+  murmur = mumble-server;
   mustache-tcl = throw "'mustache-tcl' has been renamed to/replaced by 'tclPackages.mustache-tcl'"; # Converted to throw 2025-10-27
   mutt-with-sidebar = throw "'mutt-with-sidebar' has been renamed to/replaced by 'mutt'"; # Converted to throw 2025-10-27
   mutter46 = throw "'mutter46' has been removed, no longer used by Pantheon"; # Added 2026-01-24
