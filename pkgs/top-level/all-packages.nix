@@ -334,12 +334,6 @@ with pkgs;
   dinghy = with python3Packages; toPythonApplication dinghy;
 
   djgpp = djgpp_i586;
-  djgpp_i686 = lowPrio (
-    callPackage ../development/compilers/djgpp {
-      targetArchitecture = "i686";
-      stdenv = gccStdenv;
-    }
-  );
 
   dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
 
