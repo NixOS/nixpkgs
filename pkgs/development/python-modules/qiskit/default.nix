@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "2.3.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Qiskit";
     repo = "qiskit";
     tag = version;
-    hash = "sha256-YGsBpNyM28fDG+mXs3hIA6K2kuE1getB8tTMLdHMa5k=";
+    hash = "sha256-7/7MjwA3XJ65Ylw0WljS8PQSwGJ6g8towTqn17qKBxw=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src pname version;
-    hash = "sha256-Mpy5KkqSjlTtezZ2BQnai+PBG+8qLPmYj1AocdIhhvI=";
+    hash = "sha256-/h5eCaZzGlXeoBp8+VvCrXF1RySjAKRP/QZjuB23ivU=";
   };
 
   dependencies = [
