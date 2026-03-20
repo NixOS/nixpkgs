@@ -1,17 +1,23 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
   fetchurl,
   rustPlatform,
+  cmake,
   dbus,
   libxcb,
   pkg-config,
   protobuf,
   openssl,
+  cacert,
   writableTmpDirAsHomeHook,
   nix-update-script,
   llvmPackages,
+  librusty_v8 ? callPackage ./librusty_v8.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+  },
 }:
 
 let
@@ -28,16 +34,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goose-cli";
-  version = "1.23.2";
+  version = "1.28.0";
 
   src = fetchFromGitHub {
     owner = "block";
     repo = "goose";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zwb3y9XhtmKxJG6XOIHl49YVZMBsYtOPePM7heJfEvE=";
+    hash = "sha256-/1TtsnNiLoTkvyeFR282qSpo+Jt3pvFxduJ7lyzsTXI=";
   };
 
-  cargoHash = "sha256-G6Jok2OfSlOVlkF62gxivrKM0VlGqWFNdR0pQh79A0Q=";
+  cargoHash = "sha256-bhnbSjGqyWbQd5PjZ116JH91vjVy6R/+iBlNKL6debg=";
 
   cargoBuildFlags = [
     "--bin"
@@ -47,8 +53,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     protobuf
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
@@ -57,7 +65,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libxcb ];
 
-  env.LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+  env = {
+    LIBCLANG_PATH = "${lib.getLib llvmPackages.libclang}/lib";
+    RUSTY_V8_ARCHIVE = librusty_v8;
+  };
 
   preBuild = ''
     mkdir -p tokenizer_files/Xenova--gpt-4o tokenizer_files/Xenova--claude-tokenizer
@@ -65,7 +76,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ln -s ${claude-tokenizer} tokenizer_files/Xenova--claude-tokenizer/tokenizer.json
   '';
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+    cacert
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -128,6 +142,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       cloudripper
       thardin
       brittonr
+      miniharinn
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
