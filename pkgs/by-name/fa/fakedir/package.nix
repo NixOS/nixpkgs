@@ -16,7 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wPseLfbRffX0Pr4TxJh59cmuY1OEfSDTvM2KrORafKs=";
   };
 
-  CFLAGS = "-Ofast -DSTRIP_DEBUG";
+  env.CFLAGS = toString [
+    "-Ofast"
+    "-DSTRIP_DEBUG"
+  ];
 
   installPhase = ''
     install -Dm755 libfakedir.dylib $out/lib/libfakedir.dylib
