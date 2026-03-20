@@ -37,9 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
+  doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/pass-cli";
   versionCheckProgramArg = "--version";
 
@@ -71,13 +72,22 @@ stdenv.mkDerivation (finalAttrs: {
           common-updater-scripts
         ]
       }"
-      NEW_VERSION=$(curl --silent https://proton.me/download/pass-cli/versions.json | jq '.passCliVersions.version' --raw-output)
+      NEW_VERSION=$(curl --silent https://proton.me/download/pass-cli/versions.json \
+        | jq '.passCliVersions.version' --raw-output)
+
       if [[ "${finalAttrs.version}" = "$NEW_VERSION" ]]; then
           echo "No update available."
           exit 0
       fi
+
+      PKG_FILE="pkgs/by-name/pr/proton-pass-cli/package.nix"
       for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
-        update-source-version "proton-pass-cli" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+        # After iter 1 the version field already equals $NEW_VERSION.
+        # Reset it so update-source-version detects a diff and re-prefetches.
+        sed -i "s|version = \"$NEW_VERSION\"|version = \"${finalAttrs.version}\"|" \
+          "$PKG_FILE"
+        update-source-version "proton-pass-cli" "$NEW_VERSION" \
+          --source-key="sources.$platform"
       done
     '';
   };
