@@ -10,7 +10,7 @@
   lib,
   makeWrapper,
   perl,
-  stdenv,
+  gccStdenv,
   texinfo,
   unzip,
   which,
@@ -18,6 +18,7 @@
 
 let
   s = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
+  stdenv = gccStdenv;
 in
 assert lib.elem targetArchitecture [
   "i586"
