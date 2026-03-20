@@ -11857,6 +11857,11 @@
     githubId = 7005773;
     keys = [ { fingerprint = "B982 0250 1720 D540 6A18  2DA8 188E 4945 E85B 2D21"; } ];
   };
+  jakehpark = {
+    name = "Jake Park";
+    github = "JakeHPark";
+    githubId = 268660459;
+  };
   jakeisnt = {
     name = "Jacob Chvatal";
     email = "jake@isnt.online";
