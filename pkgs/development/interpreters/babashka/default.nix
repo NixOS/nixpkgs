@@ -106,6 +106,7 @@ buildGraalvmNativeImage (finalAttrs: {
     maintainers = with lib.maintainers; [
       bandresen
       bhougland
+      deejayem
       DerGuteMoritz
       jlesquembre
     ];
