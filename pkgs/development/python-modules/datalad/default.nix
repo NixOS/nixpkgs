@@ -48,14 +48,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "datalad";
-  version = "1.3.2";
+  version = "1.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = finalAttrs.version;
-    hash = "sha256-friYRYTKhoLBu3DrG1cAc/QN3gxw6avvRYtUZ3IlStg=";
+    hash = "sha256-5PAHHN+dgMAxqUZn3vXWsoesw3lQMy6Q8nUJYa4SofM=";
   };
 
   postPatch = ''
