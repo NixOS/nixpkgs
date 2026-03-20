@@ -9,11 +9,16 @@
 let
   # https://chromium-review.googlesource.com/c/chromium/src/+/7253206
   ifElseM145 = new: old: if chromiumVersionAtLeast "145" then new else old;
+
+  browserName = if variant == "helium" then "helium" else "chromium";
+  buildBinaryName = if variant == "helium" then "helium" else "chrome";
+  crashpadBinaryName =
+    if variant == "helium" then "helium_crashpad_handler" else "chrome_crashpad_handler";
 in
 
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
-  packageName = "chromium";
+  packageName = browserName;
   buildTargets = [
     "chrome_sandbox"
     "chrome"
@@ -33,8 +38,16 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/vk_swiftshader_icd.json" "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    cp -v "$buildPath/chrome_crashpad_handler" "$libExecPath/"
-    cp -v "$buildPath/chrome" "$libExecPath/$packageName"
+    if [ -f "$buildPath/${crashpadBinaryName}" ]; then
+      cp -v "$buildPath/${crashpadBinaryName}" "$libExecPath/"
+    else
+      cat > "$libExecPath/${crashpadBinaryName}" << 'HELIUM_CRASHPAD_STUB'
+    #!/bin/sh
+    exit 0
+    HELIUM_CRASHPAD_STUB
+      chmod +x "$libExecPath/${crashpadBinaryName}"
+    fi
+    cp -v "$buildPath/${buildBinaryName}" "$libExecPath/$packageName"
 
     # Swiftshader
     # See https://stackoverflow.com/a/4264351/263061 for the find invocation.
@@ -64,21 +77,21 @@ mkChromiumDerivation (base: rec {
 
     # Install Desktop Entry
     install -D chrome/installer/linux/common/desktop.template \
-      $out/share/applications/chromium-browser.desktop
+      $out/share/applications/${browserName}-browser.desktop
 
-    substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "${ifElseM145 "@@MENUNAME" "@@MENUNAME@@"}" "Chromium" \
-      --replace-fail "${ifElseM145 "@@PACKAGE" "@@PACKAGE@@"}" "chromium" \
-      --replace-fail "${ifElseM145 "/usr/bin/@@usr_bin_symlink_name" "/usr/bin/@@USR_BIN_SYMLINK_NAME@@"}" "chromium" \
+    substituteInPlace $out/share/applications/${browserName}-browser.desktop \
+      --replace-fail "${ifElseM145 "@@MENUNAME" "@@MENUNAME@@"}" "${lib.toSentenceCase browserName}" \
+      --replace-fail "${ifElseM145 "@@PACKAGE" "@@PACKAGE@@"}" "${browserName}" \
+      --replace-fail "${ifElseM145 "/usr/bin/@@usr_bin_symlink_name" "/usr/bin/@@USR_BIN_SYMLINK_NAME@@"}" "${browserName}" \
       --replace-fail "${ifElseM145 "@@uri_scheme" "@@URI_SCHEME@@"}" "x-scheme-handler/chromium;" \
       --replace-fail "${ifElseM145 "@@extra_desktop_entries" "@@EXTRA_DESKTOP_ENTRIES@@"}" ""
 
     # See https://github.com/NixOS/nixpkgs/issues/12433
-    substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=chromium-browser"
+    substituteInPlace $out/share/applications/${browserName}-browser.desktop \
+      --replace-fail "[Desktop Entry]" "[Desktop Entry]''\nStartupWMClass=${browserName}-browser"
 
-    if grep -F '@@' $out/share/applications/chromium-browser.desktop ; then
-      echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
+    if grep -F '@@' $out/share/applications/${browserName}-browser.desktop ; then
+      echo "error: ${browserName}-browser.desktop contains unsubstituted placeholders" >&2
       exit 1
     fi
   '';

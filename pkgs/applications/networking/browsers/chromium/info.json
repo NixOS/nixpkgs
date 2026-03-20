@@ -1660,7 +1660,11 @@
         "rev": "0.13.4",
         "hash": "sha256-cPuavundinwRCZkX5pDaG0hmB/ripn0HQ/pJmOzhv5M="
       },
-      "npmHash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg="
+      "npmHash": "sha256-pF0JtwFpPC4/fodbhSJnQKkczA9WlDg4VqEAy9aDVLg=",
+      "helium-linux": {
+        "rev": "245411695fb8debded115c0cc1344758e44ae5f5",
+        "hash": "sha256-oVJQyKVPTeRS/+vjjXxcbq2BFAWNCTQEOriJ9Og7FHk="
+      }
     },
     "DEPS": {
       "src": {

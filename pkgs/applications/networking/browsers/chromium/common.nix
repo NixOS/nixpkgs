@@ -97,6 +97,7 @@
   variant ? "chromium", # Can be chromium, ungoogled, or helium
   ungoogled-chromium,
   helium,
+  helium-linux ? null,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
@@ -192,9 +193,14 @@ let
     inherit helium;
   };
 
-  ungoogler = ungooglers.${variant} {
-    inherit (upstream-info.deps.ungoogled-patches) rev hash;
-  };
+  ungoogler = ungooglers.${variant} (
+    {
+      inherit (upstream-info.deps.ungoogled-patches) rev hash;
+    }
+    // lib.optionalAttrs (variant == "helium") {
+      inherit helium-linux;
+    }
+  );
 
   # There currently isn't a (much) more concise way to get a stdenv
   # that uses lld as its linker without bootstrapping pkgsLLVM; see
@@ -839,6 +845,14 @@ let
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
       ''
       + lib.optionalString (variant == "helium") ''
+        # Apply helium-linux patches BEFORE name substitution,
+        # as the patch context expects "Chromium" not "Helium"
+        for p in ${ungoogler}/patches/helium/linux/*.patch; do
+          if [ -f "$p" ]; then
+            echo "Applying helium-linux patch: $(basename $p)"
+            patch -Np1 --fuzz=2 --no-backup-if-mismatch < "$p"
+          fi
+        done
         ${ungoogler}/utils/name_substitution.py --sub -t .
         ${ungoogler}/utils/helium_version.py --tree ${ungoogler} --chromium-tree .
         ${ungoogler}/utils/replace_resources.py ${ungoogler}/resources/helium_resources.txt ${ungoogler}/resources .
