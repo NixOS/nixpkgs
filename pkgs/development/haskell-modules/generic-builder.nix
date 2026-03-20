@@ -637,6 +637,7 @@ lib.fix (
       outputs = [
         "out"
       ]
+      ++ (optional isLibrary "dev")
       ++ (optional enableSeparateDataOutput "data")
       ++ (optional enableSeparateDocOutput "doc")
       ++ (optional enableSeparateBinOutput "bin")
@@ -888,8 +889,9 @@ lib.fix (
           # just the target specified; "install" will error here, since not all targets have been built.
           else
             ''
+              mkdir -p $out
               ${setupCommand} copy ${buildTarget}
-              local packageConfDir="$out/${ghcLibdir}/package.conf.d"
+              local packageConfDir="$dev/${ghcLibdir}/package.conf.d"
               local packageConfFile="$packageConfDir/${pname}-${version}.conf"
               mkdir -p "$packageConfDir"
               ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -918,10 +920,9 @@ lib.fix (
             cp -r dist/build/$exe/$exe.jsexe ${binDir}
           done
         ''}
-
         ${optionalString enableSeparateDocOutput ''
           for x in ${docdir "$doc"}"/html/src/"*.html; do
-            remove-references-to -t $out $x
+            remove-references-to -t $out ${optionalString isLibrary "-t $dev"} $x
           done
           mkdir -p $doc
         ''}
