@@ -11,22 +11,23 @@
 
 buildGoModule (finalAttrs: {
   pname = "hugo";
-  version = "0.155.3";
+  version = "0.158.0";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2TvzM7veSAGDqomWXHuEnYX8bGVxAxTto0Xzc+vypDY=";
+    hash = "sha256-7/zrJdoJVDVHt/2qKPkfrxjxMMpB2F2i0fCXZLkd7gw=";
   };
 
-  vendorHash = "sha256-Fh38o7wD6/gL4szvT4UmA4lzIStqITjgjulsIQlPmHU=";
+  vendorHash = "sha256-StGdZ1FP6906jFbqoYQgrbEOx1YPCsqE+01ITQgtaEU=";
 
   checkFlags =
     let
       skippedTestPrefixes = [
         # Workaround for "failed to load modules"
         "TestCommands/mod"
+        "TestCommands/hugo__static_issue14507"
         # Server tests are flaky, at least in x86_64-darwin. See #368072
         # We can try testing again after updating the `httpget` helper
         # ref: https://github.com/gohugoio/hugo/blob/v0.140.1/main_test.go#L220-L233
@@ -44,7 +45,9 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
