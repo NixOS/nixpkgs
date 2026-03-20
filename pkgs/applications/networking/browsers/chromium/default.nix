@@ -155,16 +155,16 @@ stdenv.mkDerivation {
         gtk4
         libkrb5
       ];
-
+      browserName = if variant == "helium" then "helium" else "chromium";
     in
     ''
       mkdir -p "$out/bin"
 
-      makeWrapper "${browserBinary}" "$out/bin/chromium" \
+      makeWrapper "${browserBinary}" "$out/bin/${browserName}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
-      ed -v -s "$out/bin/chromium" << EOF
+      ed -v -s "$out/bin/${browserName}" << EOF
       2i
 
       if [ -x "/run/wrappers/bin/${sandboxExecutableName}" ]
@@ -175,7 +175,7 @@ stdenv.mkDerivation {
       fi
 
       # Make generated desktop shortcuts have a valid executable name.
-      export CHROME_WRAPPER='chromium'
+      export CHROME_WRAPPER='${browserName}'
 
     ''
     + lib.optionalString (libPath != "") ''
@@ -203,7 +203,7 @@ stdenv.mkDerivation {
 
       ln -sv "${chromium.browser.sandbox}" "$sandbox"
 
-      ln -s "$out/bin/chromium" "$out/bin/chromium-browser"
+      ln -s "$out/bin/${browserName}" "$out/bin/${browserName}-browser"
 
       mkdir -p "$out/share"
       for f in '${chromium.browser}'/share/*; do # hello emacs */
