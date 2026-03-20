@@ -172,7 +172,7 @@
         fi
 
         echo "The new download URL is $url, prefetching it to store" >&2
-        hash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --quiet "$url")")"
+        hash="$(nix hash convert --hash-algo sha256 "$(nix-prefetch-url --quiet "$url")")"
 
         sed -i "s|versionYear = \".*\";|versionYear = \"$versionYear\";|" "$file"
         sed -i "s|versionMajor = \".*\";|versionMajor = \"$versionMajor\";|" "$file"
