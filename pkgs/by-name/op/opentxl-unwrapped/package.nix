@@ -72,8 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests.factorial = callPackage ./factorial-test.nix { opentxl = finalAttrs.finalPackage; };
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit osOption;
+    tests.factorial = callPackage ./factorial-test.nix { opentxl = finalAttrs.finalPackage; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Open-source compiler for the Txl language";
