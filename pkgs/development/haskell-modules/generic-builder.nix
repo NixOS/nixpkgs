@@ -905,6 +905,13 @@ lib.fix (
 
               # delete confdir if there are no libraries
               find $packageConfDir -maxdepth 0 -empty -delete;
+
+              # if there *is* anything in there, generate a package cache,
+              # allowing directly using packages with ghc -package-db without
+              # needing to create a ghc-with-packages derivation
+              if [[ -d "$packageConfDir" ]]; then
+                ${ghcCommand}-pkg recache --package-db=$packageConfDir
+              fi
             ''
         }
 
