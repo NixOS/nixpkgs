@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   certifi,
   scapy,
   urllib3,
@@ -17,14 +18,18 @@
 
 buildPythonPackage rec {
   pname = "plugp100";
-  version = "5.1.5";
-  format = "setuptools";
+  version = "5.1.7";
+  pyproject = true;
+
+  build-system = [
+    setuptools
+  ];
 
   src = fetchFromGitHub {
     owner = "petretiandrea";
     repo = "plugp100";
     tag = version;
-    sha256 = "sha256-bPjgyScHxiUke/M5S6BOw7df7wbNuSy5ouVIK5guWxw=";
+    hash = "sha256-LiOd6sB5uqcQ7rjSEDV4wiQ/ZazoSGItYBtLRq0SGE0=";
   };
 
   propagatedBuildInputs = [
