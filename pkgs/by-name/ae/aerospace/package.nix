@@ -9,7 +9,7 @@
 
 let
   appName = "AeroSpace.app";
-  version = "0.20.2-Beta";
+  version = "0.20.3-Beta";
 in
 stdenv.mkDerivation {
   pname = "aerospace";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/nikitabobko/AeroSpace/releases/download/v${version}/AeroSpace-v${version}.zip";
-    sha256 = "sha256-PyWHtM38XPNkkEZ0kACPia0doR46FRpmSoNdsOhU4uw=";
+    sha256 = "sha256-wrBcslp1W/lOmudMcW+SREL9LZY+wTwidh6Hot5ShGE=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -55,7 +55,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/nikitabobko/AeroSpace";
     description = "i3-like tiling window manager for macOS";
     platforms = lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ alexandru0-dev ];
+    maintainers = with lib.maintainers; [
+      alexandru0-dev
+      kaynetik
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
