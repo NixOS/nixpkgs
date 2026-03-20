@@ -9,7 +9,6 @@
   libnfnetlink,
   automake,
   autoconf,
-  autogen,
   libtool,
   libpq,
   libmysqlclient,
@@ -70,7 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     automake
     autoconf
-    autogen
     libtool
     linuxdoc-tools
   ];
