@@ -402,6 +402,11 @@ in
     ];
   });
 
+  lsqlite3 = prev.lsqlite3.overrideAttrs (old: {
+    src = old.src.overrideAttrs { extension = "zip"; };
+    buildInputs = old.buildInputs ++ [ sqlite.dev ];
+  });
+
   lua-cmsgpack = prev.lua-cmsgpack.overrideAttrs {
     strictDeps = false;
     meta.broken = isLuaJIT;
@@ -1128,6 +1133,16 @@ in
     # should be fixed upstream
     meta.broken = lua.luaversion != "5.1";
   });
+
+  utf8 = prev.utf8.overrideAttrs {
+    postPatch = ''
+      sed -i '/#include <assert.h>/a\
+      #ifndef lua_assert\
+        #define lua_assert(x) assert(x)\
+      #endif
+      ' lutf8lib.c
+    '';
+  };
 
   vstruct = prev.vstruct.overrideAttrs (_: {
     meta.broken = luaOlder "5.1" || luaAtLeast "5.4";
