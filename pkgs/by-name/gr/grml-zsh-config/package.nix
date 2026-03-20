@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "grml-zsh-config";
-  version = "0.19.26";
+  version = "0.19.28";
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WZ3eyX9ijsU221I4hEhWUtFmtBQ9jm1QvQZh20gcR/s=";
+    sha256 = "sha256-8QqaJ1++RlOjaQJYHjKafnFZn4dJOCsFpak0Ky7ZoyI=";
   };
 
   strictDeps = true;
