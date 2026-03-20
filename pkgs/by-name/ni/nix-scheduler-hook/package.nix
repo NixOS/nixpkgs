@@ -13,6 +13,7 @@
   openpbs,
   symlinkJoin,
   slurm,
+  gitUpdater,
 }:
 let
   restclient-cpp = fetchFromGitHub {
@@ -31,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-scheduler-hook";
-  version = "0.6.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "lisanna-dettwyler";
     repo = "nix-scheduler-hook";
     tag = "v${version}";
-    hash = "sha256-pB42rjqkASgdYQJD9nPqFSM0JAUIko1FN4d0J52BUsc=";
+    hash = "sha256-tgZ2BZuKmaoPh4h4r/nej98tvl4PvwZfA6xbTLgNZMA=";
   };
 
   sourceRoot = "source/src";
@@ -72,6 +73,12 @@ stdenv.mkDerivation rec {
     shopt -s extglob
     mv subprojects/restclient-cpp/librestclient_cpp.so!(*p) $out/lib
   '';
+
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
+  };
 
   meta = {
     description = "Nix build hook that forwards builds to job schedulers";
