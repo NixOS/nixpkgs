@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.62"
-      "sha256-WvlACL91YcF9F3JJhG96wSfCKCgMbv1XI3xLqATrqiQ=";
+    buildMypyBoto3Package "ec2" "1.42.71"
+      "sha256-nlMYh/t5dGbsfMG/epaIgUZK5AcgXBTWmFK8PPRppg0=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -858,8 +858,8 @@ in
       "sha256-NYn/N65sVAUxA4kTCi/IJNP/QQeutFjH8S7N2AeK3g8=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.42.68"
-      "sha256-aRJIk0hzRVvbGQHbXxCoLl/6xReo2f4CZHdRo2YN364=";
+    buildMypyBoto3Package "mediaconvert" "1.42.71"
+      "sha256-+Dgo1XpVUPmmUntpzFlPDeym6xUxRiXZki1j5ieS3CU=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.42.68"
