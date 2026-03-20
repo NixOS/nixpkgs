@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   flask,
+  humanize,
   mutagen,
 }:
 
@@ -19,15 +20,11 @@ buildPythonPackage rec {
     sha256 = "sha256-1Jg9bR/3qMim3q5qVwUVbxeLNaXaCU6SplBUaRXeLpo=";
   };
 
-  postPatch = ''
-    substituteInPlace podcats.py \
-      --replace-fail 'debug=True' 'debug=True, use_reloader=False'
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
     flask
+    humanize
     mutagen
   ];
 
