@@ -30,6 +30,10 @@ buildPythonPackage rec {
     scipy
   ];
 
+  # scipy has depecrated since version 1.15.0 the function `sph_harm`, and has
+  # been removed in 1.17.0 in favor of `sph_harm_y`
+  patches = [ ./scipy_sph_harm.patch ];
+
   pythonImportsCheck = [ "tess" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
