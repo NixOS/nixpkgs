@@ -56,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gnome.updateScript {
     packageName = "manuals";
+    attrPath = "gnome-manuals";
   };
 
   meta = {
