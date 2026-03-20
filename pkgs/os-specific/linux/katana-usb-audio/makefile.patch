@@ -1,0 +1,33 @@
+diff --git a/Makefile b/Makefile
+index 031cf07..52f688b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,10 +17,9 @@ install: all
+ 	@echo "Installing Katana USB Audio driver..."
+ 	mkdir -p $(MODULE_DIR)
+ 	cp katana_usb_audio.ko $(MODULE_DIR)/
+-	depmod -a
+ 	@echo "Installing udev rule for driver priority..."
++	mkdir -p $(UDEV_RULES_DIR)
+ 	cp 99-katana-usb-audio.rules $(UDEV_RULES_DIR)/
+-	udevadm control --reload-rules
+ 	@echo "Installation complete!"
+ 	@echo ""
+ 	@echo "To load the driver now, run:"
+@@ -35,8 +34,6 @@ uninstall:
+ 	modprobe -r katana_usb_audio 2>/dev/null || true
+ 	rm -f $(MODULE_DIR)/katana_usb_audio.ko
+ 	rm -f $(UDEV_RULES_DIR)/99-katana-usb-audio.rules
+-	depmod -a
+-	udevadm control --reload-rules
+ 	@echo "Uninstall complete!"
+ 
+ dkms-install:
+@@ -53,4 +50,5 @@ dkms-status:
+ 	@echo "DKMS status for katana-usb-audio:"
+ 	@dkms status katana-usb-audio 2>/dev/null || echo "Package not found in DKMS"
+ 
+-.PHONY: all clean install uninstall dkms-install dkms-uninstall dkms-status
+\ No newline at end of file
++.PHONY: all clean install uninstall dkms-install dkms-uninstall dkms-status
++

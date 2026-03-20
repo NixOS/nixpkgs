@@ -432,6 +432,12 @@ in
 
         it87 = callPackage ../os-specific/linux/it87 { };
 
+        katana-usb-audio =
+          if lib.versionAtLeast kernel.version "5.15" then
+            callPackage ../os-specific/linux/katana-usb-audio { }
+          else
+            null;
+
         asus-ec-sensors = callPackage ../os-specific/linux/asus-ec-sensors { };
 
         ena = callPackage ../os-specific/linux/ena { };
