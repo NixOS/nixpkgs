@@ -12416,6 +12416,8 @@ with pkgs;
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
 
+  olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
+
   newlib-nano = newlib.override {
     nanoizeNewlib = true;
   };
