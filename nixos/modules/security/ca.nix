@@ -94,6 +94,11 @@ in
         (Read-only) the path to the final bundle of certificate authorities as a single file.
       '';
     };
+
+    security.pki.caBundlePackage = lib.mkOption {
+      type = lib.types.path;
+      internal = true;
+    };
   };
 
   config = lib.mkMerge [
@@ -111,7 +116,10 @@ in
       # P11-Kit trust source.
       environment.etc."ssl/trust-source".source = "${cacertPackage.p11kit}/etc/ssl/trust-source";
     })
-    { security.pki.caBundle = caBundle; }
+    {
+      security.pki.caBundlePackage = caBundle;
+      security.pki.caBundle = cfg.caBundlePackage;
+    }
   ];
 
 }
