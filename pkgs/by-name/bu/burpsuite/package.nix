@@ -1,10 +1,12 @@
 {
+  config,
   lib,
   buildFHSEnv,
   fetchurl,
   jdk,
   makeDesktopItem,
   proEdition ? false,
+  licenseAccepted ? config.burpsuite.accept_license or false,
   unzip,
 }:
 
@@ -12,18 +14,26 @@ let
   version = "2026.1.2";
 
   product =
-    if proEdition then
-      {
-        productName = "pro";
-        productDesktop = "Burp Suite Professional Edition";
-        hash = "sha256-KF6VOXO3IKsysA3SBJJzL+G2yQEVpCQKL6IMYQhYFMc=";
-      }
+    if !licenseAccepted then
+      throw ''
+        You must accept the PortSwigger Ltd. Burpsuite License Agreement at
+        https://portswigger.net/burp/eula/${if proEdition then "pro" else "community"}
+        by setting nixpkgs config option 'burpsuite.accept_license = true;'
+      ''
     else
-      {
-        productName = "community";
-        productDesktop = "Burp Suite Community Edition";
-        hash = "sha256-5LNzF68VhGdWttzZCkw/Ign4x6V4EhU/EHMddeSVirk=";
-      };
+      assert licenseAccepted;
+      if proEdition then
+        {
+          productName = "pro";
+          productDesktop = "Burp Suite Professional Edition";
+          hash = "sha256-KF6VOXO3IKsysA3SBJJzL+G2yQEVpCQKL6IMYQhYFMc=";
+        }
+      else
+        {
+          productName = "community";
+          productDesktop = "Burp Suite Community Edition";
+          hash = "sha256-5LNzF68VhGdWttzZCkw/Ign4x6V4EhU/EHMddeSVirk=";
+        };
 
   src = fetchurl {
     name = "burpsuite.jar";
@@ -54,7 +64,7 @@ in
 buildFHSEnv {
   inherit pname version;
 
-  runScript = "${jdk}/bin/java -jar ${src}";
+  runScript = "${jdk}/bin/java -jar ${src} --suppress-jre-check --i-accept-the-license-agreement --disable-check-for-updates-dialog --disable-auto-update";
 
   targetPkgs =
     pkgs: with pkgs; [
