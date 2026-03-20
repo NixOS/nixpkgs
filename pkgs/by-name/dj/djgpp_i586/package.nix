@@ -29,22 +29,21 @@ stdenv.mkDerivation rec {
   version = s.gccVersion;
   src = s.src;
 
-  patchPhase = ''
-    runHook prePatch
+  postPatch = ''
     for f in "build-djgpp.sh" "script/${version}" "setenv/copyfile.sh"; do
-      substituteInPlace "$f" --replace '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
+      substituteInPlace "$f" --replace-fail '/usr/bin/env' '${buildPackages.coreutils}/bin/env'
     done
+
+    # Fix for x86_64-darwin: Apple's older cctools strip fails on GCC binaries.
+    substituteInPlace script/${version} \
+      --replace-fail '} install-strip' '} install'
   ''
   # i686 patches from https://github.com/andrewwutw/build-djgpp/issues/45#issuecomment-1484010755
   # The build script unpacks some files so we can't patch ahead of time, instead patch the script
   # to patch after it extracts
-
   + lib.optionalString (targetArchitecture == "i686") ''
     sed -i 's/i586/i686/g' setenv/setenv script/${version}
     sed -i '/Building DXE tools./a sed -i "s/i586/i686/g" src/makefile.def src/dxe/makefile.dxe' script/${version}
-  ''
-  + ''
-    runHook postPatch
   '';
 
   nativeBuildInputs = [
@@ -62,7 +61,14 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  hardeningDisable = [ "format" ];
+  # Added strictflexarrays1 to prevent the new stdenv flag from breaking old C code
+  hardeningDisable = [
+    "format"
+    "strictflexarrays1"
+  ];
+
+  # Force GCC to use the older C17 standard for GMP 6.2.1 configure compatibility
+  NIX_CFLAGS_COMPILE = "-std=gnu17";
 
   # stripping breaks static libs, causing this when you attempt to compile a binary:
   # error adding symbols: Archive has no index; run ranlib to add one
