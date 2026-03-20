@@ -5460,9 +5460,9 @@ with pkgs;
     electron_40
     electron_41
     ;
-  electron = electron_38;
-  electron-bin = electron_38-bin;
-  electron-chromedriver = electron-chromedriver_38;
+  electron = electron_41;
+  electron-bin = electron_41-bin;
+  electron-chromedriver = electron-chromedriver_41;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
