@@ -41,7 +41,7 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "jax";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -49,7 +49,7 @@ buildPythonPackage (finalAttrs: {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${finalAttrs.version}";
-    hash = "sha256-Q6pjHl102OIlGphRO4GwaWz0Kbj/4JAfIUoOdEKh8Zw=";
+    hash = "sha256-/vLCTAF46M1H0Q64RLM7+IFMofmjZmZ4IFzvm/y7zkg=";
   };
 
   patches = [

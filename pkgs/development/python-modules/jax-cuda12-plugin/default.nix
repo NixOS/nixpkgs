@@ -39,42 +39,42 @@ let
     "3.11-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp311";
-      hash = "sha256-qN7q6sJFY5tNyN5h4JYO+kMv9bDpXPda0ujWuAyayiU=";
+      hash = "sha256-1Vd82Ge9kmd2nkU7rYUNSAeoQ5a8l29jKlFe29d+SEs=";
     };
     "3.11-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp311";
-      hash = "sha256-OeCtsKTL0nwK35hweMYp+gR1QqJlgPuLJT8Ni6A7wdk=";
+      hash = "sha256-s5VfN10XkC8NJ+cFlnLNGWOlU0WVOkJpnk4HjOxyWtw=";
     };
     "3.12-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp312";
-      hash = "sha256-9MId5FB7HEQvThC+sSPkuRYFW/9MAQJymqKkny7Q/Ig=";
+      hash = "sha256-iKVZCNd1sG3akqjE9MAVd44lulw2BbV/hLAAUvZujvE=";
     };
     "3.12-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp312";
-      hash = "sha256-KEPKQnhhehmfnwo9mS2GhPq+i+r5iP95PsGdg2vcrcQ=";
+      hash = "sha256-sozPBbzAvHzLy9Mm2AKEZXTPbaA5FY52FHvZb1xvEYk=";
     };
     "3.13-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp313";
-      hash = "sha256-OJyJYham1K94cJqPTKdZFqtP97v0sa9cCdzpgjwAO3M=";
+      hash = "sha256-vX3+0Xv6nQ4wFvjCpnZ8dHnZHhvf33kW6ysHQ1zEZY4=";
     };
     "3.13-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp313";
-      hash = "sha256-0b8zdIGciofpDfBLcUQnLlrAcnpeH8SHJTHFLjh8Djg=";
+      hash = "sha256-uaJwhdiTzFnCsoaxeJdV+Rzz6rHeobW+nmMvTJc5og4=";
     };
     "3.14-x86_64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_x86_64";
       dist = "cp314";
-      hash = "sha256-VYiCVcMl+Yr5Yc9fZlyoIj0ONjY+tUT8AoYne+IyTo8=";
+      hash = "sha256-U1F0LA/LIdqeCUoZZasg/eUlhih392kYpJCxtWZk1To=";
     };
     "3.14-aarch64-linux" = getSrcFromPypi {
       platform = "manylinux_2_27_aarch64";
       dist = "cp314";
-      hash = "sha256-0ErFz/SNGPhJfZnCWibxW7LfO6KHpOXrhsYcifBYwvk=";
+      hash = "sha256-MyEmmeG7sb7V0q4Urp/3Kh7tLQkqUearzAJ4prK4KHQ=";
     };
   };
 in
