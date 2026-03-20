@@ -16,6 +16,7 @@
   zlib,
   zstd,
   alsa-lib,
+  glib,
   libxkbcommon,
   wayland,
   libglvnd,
@@ -107,7 +108,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.226.5";
+  version = "0.228.0";
 
   outputs = [
     "out"
@@ -120,7 +121,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfYwlHTWirUb2RjEIQyonIHMneCi7ZGD2kPYOfe5HiI=";
+    hash = "sha256-oQ3cW4cFBkyrO4elTXB3Etek6ilL0XkB45z/tuPwTJs=";
   };
 
   postPatch = ''
@@ -140,7 +141,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-kdGHSNfvB/GUQ/7iqzXcCF4sbyaMiLYq+/zogg9N/aU=";
+  cargoHash = "sha256-K4lxI11fEuLYBWy6Z+o0MmtJFJYawwS4UUq0Jgue2hE=";
 
   nativeBuildInputs = [
     cmake
@@ -169,6 +170,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
+    glib
     libxkbcommon
     wayland
     libxcb
