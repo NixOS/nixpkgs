@@ -731,7 +731,7 @@ in
             config = {
               generateSecretCommand = lib.mkIf (config.source != null) (
                 pkgs.writeShellScript "copy-secret" ''
-                  cp -Lr ${config.source} "$out"
+                  cp -Lr ${toString config.source} "$out"
                 ''
               );
             };
@@ -876,7 +876,7 @@ in
       # The legacy boot.initrd.secrets option didn't type-check the attr
       # names, so we need to optionally prepend a slash.
       name = "${lib.optionalString (!lib.hasPrefix "/" dest) "/"}${dest}";
-      value.source = if dest != null then source else dest;
+      value.source = if source != null then source else dest;
     }) config.boot.initrd.secrets;
 
     system.build = mkMerge [
