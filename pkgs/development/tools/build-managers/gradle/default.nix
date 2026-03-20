@@ -369,8 +369,8 @@ rec {
     defaultJava = jdk21;
   };
   gradle_8 = mkGradle {
-    version = "8.14.4";
-    hash = "sha256-8XcSmKcPbbWina9iN4xOGKF/wzybprFDYuDN9AYQOA0=";
+    version = "9.4.1";
+    hash = "sha256-KrKVjyoeURIMMmytbzhRU7sR7pOzwhbF/M6/37t+xss=";
     defaultJava = jdk21;
     # Only enable this on *one* version to avoid duplicate PRs.
     enableUpdateScript = true;
