@@ -5,7 +5,6 @@
   darwin,
   fetchurl,
   autoconf,
-  autogen,
   automake,
   gettext,
   libtool,
@@ -41,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   # option to libtool, also we have to add the modified gsed package.
   nativeBuildInputs = [
     autoconf
-    autogen
     automake
     gettext
     libtool
