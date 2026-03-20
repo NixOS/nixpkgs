@@ -1,28 +1,34 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   cryptography,
   defusedxml,
-  fetchFromGitHub,
   gql,
   graphql-core,
   marshmallow,
-  pydantic-extra-types,
   pydantic,
+  pydantic-extra-types,
+  python-box,
+  python-dateutil,
+  requests,
+  requests-toolbelt,
+  restfly,
+  semver,
+  typing-extensions,
+
+  # tests
   pytest-cov-stub,
   pytest-datafiles,
   pytest-vcr,
   pytestCheckHook,
-  python-box,
-  python-dateutil,
   requests-pkcs12,
-  requests-toolbelt,
-  requests,
   responses,
-  restfly,
-  semver,
-  setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
