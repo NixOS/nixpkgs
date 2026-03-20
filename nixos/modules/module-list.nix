@@ -79,6 +79,7 @@
   ./hardware/infiniband.nix
   ./hardware/inputmodule.nix
   ./hardware/iosched.nix
+  ./hardware/katana-usb-audio.nix
   ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
