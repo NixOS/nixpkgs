@@ -1211,8 +1211,6 @@ with pkgs;
 
   image-analyzer = callPackage ../applications/emulators/cdemu/analyzer.nix { };
 
-  kega-fusion = pkgsi686Linux.callPackage ../applications/emulators/kega-fusion { };
-
   libmirage = callPackage ../applications/emulators/cdemu/libmirage.nix { };
 
   mame-tools = lib.addMetaAttrs {

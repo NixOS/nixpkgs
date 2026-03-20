@@ -3,34 +3,24 @@
   lib,
   writeText,
   fetchurl,
-  upx,
-  libGL,
-  libGLU,
-  glib,
-  gtk2,
-  alsa-lib,
-  libsm,
-  libx11,
-  gdk-pixbuf,
-  pango,
-  libxinerama,
+  pkgsi686Linux,
   mpg123,
   runtimeShell,
 }:
 
 let
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc
-    libGL
-    libGLU
-    glib
-    gtk2
-    alsa-lib
-    libsm
-    libx11
-    gdk-pixbuf
-    pango
-    libxinerama
+    pkgsi686Linux.stdenv.cc.cc
+    pkgsi686Linux.libGL
+    pkgsi686Linux.libGLU
+    pkgsi686Linux.glib
+    pkgsi686Linux.gtk2
+    pkgsi686Linux.alsa-lib
+    pkgsi686Linux.libsm
+    pkgsi686Linux.libx11
+    pkgsi686Linux.gdk-pixbuf
+    pkgsi686Linux.pango
+    pkgsi686Linux.libxinerama
   ];
 
 in
@@ -53,6 +43,10 @@ stdenv.mkDerivation {
 
     kega_libdir="@out@/lib/kega-fusion"
     kega_localdir="$HOME/.Kega Fusion"
+
+    # Force 32-bit gdk-pixbuf loaders
+    export GDK_PIXBUF_MODULEDIR="${pkgsi686Linux.gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders"
+    export GDK_PIXBUF_MODULE_FILE="${pkgsi686Linux.gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
 
     # create local plugins directory if not present
     mkdir -p "$kega_localdir/Plugins"
@@ -83,12 +77,28 @@ stdenv.mkDerivation {
   dontStrip = true;
   dontPatchELF = true;
 
-  nativeBuildInputs = [ upx ];
+  nativeBuildInputs = [
+    pkgsi686Linux.upx
+  ];
+
+  buildInputs = [
+    pkgsi686Linux.stdenv.cc.cc
+    pkgsi686Linux.libGL
+    pkgsi686Linux.libGLU
+    pkgsi686Linux.glib
+    pkgsi686Linux.gtk2
+    pkgsi686Linux.alsa-lib
+    pkgsi686Linux.libsm
+    pkgsi686Linux.libx11
+    pkgsi686Linux.gdk-pixbuf
+    pkgsi686Linux.pango
+    pkgsi686Linux.libxinerama
+  ];
 
   installPhase = ''
     upx -d Fusion
     install -Dm755 Fusion "$out/lib/kega-fusion/Fusion"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}" "$out/lib/kega-fusion/Fusion"
+    patchelf --set-interpreter "${pkgsi686Linux.stdenv.cc.bintools.dynamicLinker}" --set-rpath "${libPath}" "$out/lib/kega-fusion/Fusion"
 
     tar -xaf $plugins
     mkdir -p "$out/lib/kega-fusion/plugins"
@@ -105,7 +115,10 @@ stdenv.mkDerivation {
     maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfreeRedistributable;
-    platforms = [ "i686-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "kega-fusion";
   };
 }
