@@ -1,22 +1,22 @@
 {
-  lib,
   buildPythonPackage,
-  fetchPypi,
   cython,
-  setuptools,
+  fetchPypi,
+  lib,
   numpy,
-  scipy,
   pytestCheckHook,
   python,
+  scipy,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tess";
   version = "0.3.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-5Ic06+K7CWRh1t2v3aJ5JlBACvHXqQyYzvU71jZJFtI=";
   };
 
@@ -50,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})
