@@ -114,9 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
       makeWrapper $out/opt/aimp/$bin $out/bin/$lower \
         "''${gappsWrapperArgs[@]}" \
         --prefix LD_LIBRARY_PATH : "$out/opt/aimp" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          libpulseaudio
-        ]}"
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            libpulseaudio
+          ]
+        }"
     done
 
     runHook postInstall
