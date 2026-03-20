@@ -8,7 +8,7 @@
     {
       # we abuse run0 for a quick login as root as to not require setting up accounts and passwords
       security.pam.services.systemd-run0 = {
-        updateWtmp = true; # enable lastlog
+        lastlog.enable = true;
       };
     };
 
