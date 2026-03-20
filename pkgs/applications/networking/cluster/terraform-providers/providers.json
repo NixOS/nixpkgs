@@ -851,11 +851,11 @@
     "vendorHash": "sha256-HzBj7TSjiv/Ov10KOt5V4oQaKK7CKjBjxpSrhmOl1lQ="
   },
   "loafoe_htpasswd": {
-    "hash": "sha256-1o2kgeTFxegzOgGXWP4OYZ3uC3WbAkCXPqScMvVpHr0=",
+    "hash": "sha256-1HCvAGWsYlcYCA8iOmBb/AawxHPLuoxxQWLzNy0x79M=",
     "homepage": "https://registry.terraform.io/providers/loafoe/htpasswd",
     "owner": "loafoe",
     "repo": "terraform-provider-htpasswd",
-    "rev": "v2.0.0",
+    "rev": "v2.1.0",
     "spdx": "MIT",
     "vendorHash": "sha256-1gzJdcSvFPE8Spkwxe24U7DUyrz4qpDoFVHm6vCWF6A="
   },
