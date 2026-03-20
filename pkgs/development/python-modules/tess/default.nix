@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Module for calculating and analyzing Voronoi tessellations";
     homepage = "https://tess.readthedocs.org";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ drawbu ];
   };
 }
