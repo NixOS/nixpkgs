@@ -2,6 +2,7 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-gGWhi0T7xDIsbzfw/KL3TSneLvQaiz/2xbpHeZt1i3I=";
   cargoDepsName = finalAttrs.pname;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Tool to sync Bluetooth pairing keys with macos on ARM Macs";

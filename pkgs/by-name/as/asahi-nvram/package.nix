@@ -2,6 +2,7 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-NW/puo/Xoum7DjSQjBgilQcKbY3mAfVgXxUK6+1H1JI=";
   cargoDepsName = finalAttrs.pname;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Tool to read and write nvram variables on ARM Macs";

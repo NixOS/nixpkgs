@@ -2,6 +2,7 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-nfSJ9RkzFAWlxlfoUKk8ZmIXDJXoSyHCGgRgMy9FDkw=";
   cargoDepsName = finalAttrs.pname;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Tool to select active boot partition on ARM Macs";

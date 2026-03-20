@@ -2,6 +2,7 @@
   lib,
   fetchCrate,
   rustPlatform,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-ZxgRxQyDID3mBpr8dhHScctk14Pm9V51Gn24d24JyVk=";
   cargoDepsName = finalAttrs.pname;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Tool to sync Wifi passwords with macos on ARM Macs";

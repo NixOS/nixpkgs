@@ -12,6 +12,7 @@
   pango,
   udev,
   udevCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -54,6 +55,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/AsahiLinux/tiny-dfr";
