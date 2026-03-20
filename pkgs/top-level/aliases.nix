@@ -1387,7 +1387,7 @@ mapAliases {
   nekoray = lib.warnOnInstantiate "nekoray has been renamed to throne" throne; # Added 2025-11-10
   neo4j-desktop = throw "neo4j-desktop has been removed as it was out-of-date"; # Added 2025-11-01
   neocities-cli = throw "'neocities-cli' has been renamed to/replaced by 'neocities'"; # Converted to throw 2025-10-27
-  neofetch = throw "'neofetch' has been removed because it is unmaintained upstream. Consider using 'fastfetch' instead."; # Added 2026-03-02
+  neofetch = throw "'neofetch' has been removed because it is unmaintained upstream. Consider using 'neowofetch' provided by the hyfetch package instead."; # Added 2026-03-02
   netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
   netbsdCross = throw "'netbsdCross' has been renamed to/replaced by 'netbsd'"; # Converted to throw 2025-10-27
   netsurf.browser = throw "'netsurf.browser' has been renamed to/replaced by 'netsurf-browser'"; # Converted to throw 2025-10-27
