@@ -166,6 +166,7 @@ stdenv.mkDerivation (
     ''
     + ''
       patchShebangs $python/bin
+      patchShebangs $python/share/clang/
 
       mkdir -p $dev/bin
       cp bin/clang-tblgen $dev/bin

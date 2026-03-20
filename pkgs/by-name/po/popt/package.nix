@@ -41,6 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
       })
     ];
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
+  configureFlags = [
+    # Otherwise, it configures sysconfdir as $out/etc.
+    "--sysconfdir=/etc"
+  ];
+
   doCheck = false; # fails
 
   meta = {

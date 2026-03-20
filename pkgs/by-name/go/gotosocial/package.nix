@@ -1,6 +1,6 @@
 {
   lib,
-  buildGo124Module,
+  buildGo125Module,
   fetchFromCodeberg,
   fetchYarnDeps,
   nodejs,
@@ -9,7 +9,7 @@
   nixosTests,
   nix-update-script,
 }:
-buildGo124Module (finalAttrs: {
+buildGo125Module (finalAttrs: {
   pname = "gotosocial";
   version = "0.21.1";
 

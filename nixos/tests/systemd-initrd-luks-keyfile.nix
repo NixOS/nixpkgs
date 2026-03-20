@@ -38,7 +38,7 @@ in
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
-        boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
+        boot.initrd.secretPaths."/etc/cryptroot.key".source = keyfile;
       };
     };
 

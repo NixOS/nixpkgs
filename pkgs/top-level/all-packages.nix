@@ -1683,12 +1683,9 @@ with pkgs;
 
   dune_2 = callPackage ../by-name/du/dune/package.nix {
     version = "2.9.3";
-    inherit ocamlPackages;
   };
 
-  dune_3 = callPackage ../by-name/du/dune/package.nix {
-    inherit ocamlPackages;
-  };
+  dune_3 = callPackage ../by-name/du/dune/package.nix { };
 
   dvc = with python3.pkgs; toPythonApplication dvc;
 
@@ -1868,8 +1865,6 @@ with pkgs;
       { };
 
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
-
-  opaline = callPackage ../by-name/op/opaline/package.nix { inherit ocamlPackages; };
 
   inherit (ocamlPackages) patdiff;
 
@@ -4635,15 +4630,15 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... }@args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_93 = callPackage ../development/compilers/rust/1_93.nix { };
-  rust = rust_1_93;
+  rust_1_94 = callPackage ../development/compilers/rust/1_94.nix { };
+  rust = rust_1_94;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
   mrustc-bootstrap = callPackage ../development/compilers/mrustc/bootstrap.nix { };
 
-  rustPackages_1_93 = rust_1_93.packages.stable;
-  rustPackages = rustPackages_1_93;
+  rustPackages_1_94 = rust_1_94.packages.stable;
+  rustPackages = rustPackages_1_94;
 
   inherit (rustPackages)
     cargo
@@ -5229,16 +5224,6 @@ with pkgs;
 
   pipx = with python3.pkgs; toPythonApplication pipx;
 
-  pipewire = callPackage ../development/libraries/pipewire {
-    # ffmpeg depends on SDL2 which depends on pipewire by default.
-    # Break the cycle by depending on ffmpeg-headless.
-    # Pipewire only uses libavcodec (via an SPA plugin), which isn't
-    # affected by the *-headless changes.
-    ffmpeg = ffmpeg-headless;
-  };
-
-  wireplumber = callPackage ../development/libraries/pipewire/wireplumber.nix { };
-
   racket-minimal = callPackage ../by-name/ra/racket/minimal.nix {
     stdenv = stdenvAdapters.makeStaticLibraries stdenv;
   };
@@ -5425,7 +5410,6 @@ with pkgs;
   electron-source = callPackage ../development/tools/electron { };
 
   inherit (callPackages ../development/tools/electron/binary { })
-    electron_37-bin
     electron_38-bin
     electron_39-bin
     electron_40-bin
@@ -5433,7 +5417,6 @@ with pkgs;
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
-    electron-chromedriver_37
     electron-chromedriver_38
     electron-chromedriver_39
     electron-chromedriver_40
@@ -5457,11 +5440,7 @@ with pkgs;
           });
       in
       {
-        electron_37 = electron_37-bin;
-        electron_38 = getElectronPkg {
-          src = electron-source.electron_38;
-          bin = electron_38-bin;
-        };
+        electron_38 = electron_38-bin;
         electron_39 = getElectronPkg {
           src = electron-source.electron_39;
           bin = electron_39-bin;
@@ -5476,7 +5455,6 @@ with pkgs;
         };
       }
     )
-    electron_37
     electron_38
     electron_39
     electron_40
@@ -7262,10 +7240,11 @@ with pkgs;
 
   # this version should align with the static protobuf version linked into python3.pkgs.tensorflow
   # $ nix-shell -I nixpkgs=$(git rev-parse --show-toplevel) -p python3.pkgs.tensorflow --run "python3 -c 'import google.protobuf; print(google.protobuf.__version__)'"
-  protobuf = protobuf_33;
+  protobuf = protobuf_34;
 
   inherit
     ({
+      protobuf_34 = callPackage ../development/libraries/protobuf/34.nix { };
       protobuf_33 = callPackage ../development/libraries/protobuf/33.nix { };
       protobuf_32 = callPackage ../development/libraries/protobuf/32.nix { };
       protobuf_31 = callPackage ../development/libraries/protobuf/31.nix { };
@@ -7283,6 +7262,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_34
     protobuf_33
     protobuf_32
     protobuf_31
@@ -7580,7 +7560,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
-  unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
+  unixodbcDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
 
@@ -7747,16 +7727,11 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_25;
-  buildGoModule = buildGo125Module;
+  go = go_1_26;
+  buildGoModule = buildGo126Module;
 
   go_latest = go_1_26;
   buildGoLatestModule = buildGo126Module;
-
-  go_1_24 = callPackage ../development/compilers/go/1.24.nix { };
-  buildGo124Module = callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_24;
-  };
 
   go_1_25 = callPackage ../development/compilers/go/1.25.nix { };
   buildGo125Module = callPackage ../build-support/go/module.nix {
@@ -9298,7 +9273,7 @@ with pkgs;
 
   cbconvert-gui = cbconvert.gui;
 
-  cdparanoia = cdparanoiaIII;
+  cdparanoia = cdparanoia-iii;
 
   cdxj-indexer = with python3Packages; toPythonApplication cdxj-indexer;
 
@@ -11579,9 +11554,18 @@ with pkgs;
 
   notus-scanner = with python3Packages; toPythonApplication notus-scanner;
 
-  openblas = callPackage ../development/libraries/science/math/openblas {
-    inherit (llvmPackages) openmp;
-  };
+  openblas =
+    callPackage
+      (
+        # FIXME: migrate everything off make.nix on mass rebuild.
+        if stdenv.system == "aarch64-darwin" then
+          ../development/libraries/science/math/openblas
+        else
+          ../development/libraries/science/math/openblas/make.nix
+      )
+      {
+        inherit (llvmPackages) openmp;
+      };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
   # standard BLAS and LAPACK.
@@ -12245,6 +12229,8 @@ with pkgs;
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
+
+  selinuxPackages = recurseIntoAttrs (callPackage ../os-specific/linux/selinux { });
 
   snscrape = with python3Packages; toPythonApplication snscrape;
 

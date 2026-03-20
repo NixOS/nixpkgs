@@ -686,6 +686,8 @@ let
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
 
+        fs-io = callPackage ../development/ocaml-modules/fs-io { };
+
         functory = callPackage ../development/ocaml-modules/functory { };
 
         ### G ###
@@ -1216,6 +1218,8 @@ let
         mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
 
         menhir = callPackage ../development/ocaml-modules/menhir { };
+
+        menhirGLR = callPackage ../development/ocaml-modules/menhir/glr.nix { };
 
         menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
 
@@ -2124,6 +2128,8 @@ let
         tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
 
         toml = callPackage ../development/ocaml-modules/toml { };
+
+        top-closure = callPackage ../development/ocaml-modules/top-closure { };
 
         topkg = callPackage ../development/ocaml-modules/topkg { };
 

@@ -5,7 +5,7 @@
   fetchurl,
   gst_all_1,
   jack2,
-  ladspaH,
+  ladspa-header,
   libGL,
   libGLU,
   libxrandr,
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
     jack2
-    ladspaH
+    ladspa-header
     libGL
     libGLU
     libxrandr

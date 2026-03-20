@@ -1,13 +1,13 @@
 {
   stdenv,
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "hubble";
   version = "1.18.6";
 

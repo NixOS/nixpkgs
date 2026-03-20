@@ -1,10 +1,10 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo124Module rec {
+buildGoModule rec {
   pname = "legitify";
   version = "1.0.11";
 
@@ -34,5 +34,6 @@ buildGo124Module rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "legitify";
+    broken = true;
   };
 }

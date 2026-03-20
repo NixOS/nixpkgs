@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   setuptools,
@@ -20,15 +19,14 @@ buildPythonPackage rec {
   version = "0.16";
   pyproject = true;
 
-  # https://github.com/home-assistant-libs/pyserial-asyncio-fast/pull/37
-  disabled = pythonAtLeast "3.14";
-
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "pyserial-asyncio-fast";
     rev = version;
     hash = "sha256-bEJySiVVy77vSF/M5f3WGxjeay/36vU8oBbmkpDCFrI=";
   };
+
+  patches = [ ./python3.14-compat.patch ];
 
   build-system = [ setuptools ];
 

@@ -1,80 +1,25 @@
 {
   lib,
-  stdenvNoCC,
-  fetchFromGitHub,
-  pnpm,
-  fetchPnpmDeps,
-  pnpmConfigHook,
-  nodejs,
   vscode-utils,
-  nix-update-script,
+  vscode-extension-update-script,
 }:
 
-let
-  vsix = stdenvNoCC.mkDerivation (finalAttrs: {
-    name = "kilo-code-${finalAttrs.version}.vsix";
-    pname = "kilo-code-vsix";
-    version = "4.124.0";
-
-    src = fetchFromGitHub {
-      owner = "Kilo-Org";
-      repo = "kilocode";
-      tag = "v${finalAttrs.version}";
-      hash = "sha256-Dy0dd07pWsSbrO6BX7GEYf7CunXD0itaeIFRv9mQJks=";
-    };
-
-    pnpmDeps = fetchPnpmDeps {
-      inherit (finalAttrs) pname version src;
-      fetcherVersion = 2;
-      hash = "sha256-hxgzmJD+Sl7E+ape1M1/Xl8XLtAhtht3AE45zHFctsQ=";
-    };
-
-    nativeBuildInputs = [
-      nodejs
-      pnpmConfigHook
-      pnpm
-    ];
-
-    buildPhase = ''
-      runHook preBuild
-
-      node --run build
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      cp ./bin/kilo-code-$version.vsix $out
-
-      runHook postInstall
-    '';
-  });
-in
-vscode-utils.buildVscodeExtension (finalAttrs: {
-  pname = "kilo-code";
-  inherit (finalAttrs.src) version;
-
-  vscodeExtPublisher = "kilocode";
-  vscodeExtName = "Kilo-Code";
-  vscodeExtUniqueId = "${finalAttrs.vscodeExtPublisher}.${finalAttrs.vscodeExtName}";
-
-  src = vsix;
-
-  passthru = {
-    vsix = finalAttrs.src;
-    updateScript = nix-update-script {
-      attrPath = "vscode-extensions.kilocode.kilo-kode.vsix";
-    };
+vscode-utils.buildVscodeMarketplaceExtension {
+  mktplcRef = {
+    publisher = "kilocode";
+    name = "Kilo-Code";
+    version = "7.0.51";
+    hash = "sha256-1NzwFTFM1gkTcrAVbP6wNctePMAGdy2T9UDn24xhixM=";
   };
+
+  passthru.updateScript = vscode-extension-update-script { };
 
   meta = {
     description = "Open Source AI coding assistant for planning, building, and fixing code";
-    homepage = "https://kilocode.ai";
+    homepage = "https://kilo.ai";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=kilocode.Kilo-Code";
-    license = lib.licenses.asl20;
+    license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
     maintainers = with lib.maintainers; [ xiaoxiangmoe ];
   };
-})
+}

@@ -38,6 +38,8 @@ buildPythonPackage rec {
     requests
   ];
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   optional-dependencies = {
     async_rest = [ google-auth ] ++ google-auth.optional-dependencies.aiohttp;
     grpc = [

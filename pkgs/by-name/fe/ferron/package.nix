@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   # ../../ is cargoDepsCopy, and obviously does not contain monoio's README.md
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/monoio-0.2.4/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/monoio-0.2.4/src/lib.rs \
       --replace-fail '#![doc = include_str!("../../README.md")]' ""
   '';
 

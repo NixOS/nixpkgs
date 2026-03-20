@@ -10,19 +10,23 @@
 
 buildPythonPackage rec {
   pname = "googleapis-common-protos";
-  version = "3.31.3";
+  version = "1.73.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-build-v${version}";
-    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
+    tag = "googleapis-common-protos-v${version}";
+    hash = "sha256-LrsmLySAOTsECwxa1NaFuyZAjar0Jbg9DHNi6uqYaxk=";
   };
 
   sourceRoot = "${src.name}/packages/googleapis-common-protos";
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     grpc

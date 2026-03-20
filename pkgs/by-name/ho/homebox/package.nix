@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  go_1_25,
+  go,
   git,
   cacert,
   nixosTests,
@@ -30,7 +30,7 @@ buildGoModule {
   # Since we do pnpm thing in those it fails if we don't explicitly remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      go_1_25
+      go
       git
       cacert
     ];

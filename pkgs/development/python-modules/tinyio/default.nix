@@ -9,6 +9,7 @@
 
   # tests
   pytestCheckHook,
+  trio,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    trio
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

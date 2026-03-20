@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "5.2.2";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-+LQX845Qw/T+kR846bNu9xTJ0zcL76rtp48e/Cgu6Vk=";
+    hash = "sha256-u9qzZFhvIapXQwxehvMieCV+4uigteSOeHVw7ycMCEU=";
   };
 
   patches = [

@@ -65,7 +65,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       gpl2Only
       lgpl21Plus
     ];
-    maintainers = [ ];
+    inherit (libsepol.meta) maintainers;
     platforms = lib.platforms.linux;
   };
 })

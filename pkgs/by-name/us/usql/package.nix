@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  unixODBC,
+  unixodbc,
   icu,
   nix-update-script,
   testers,
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
   };
 
   buildInputs = [
-    unixODBC
+    unixodbc
     icu
   ];
 

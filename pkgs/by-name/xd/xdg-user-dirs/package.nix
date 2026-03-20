@@ -22,6 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-6S3rkpwQ1LKTKTl6+KJYUQEkf35hd6xvHSjoITDtjBk=";
   };
 
+  outputs = [
+    "out"
+    "lib"
+    "man"
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
@@ -48,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace "$out/lib/systemd/user/xdg-user-dirs.service" \
       --replace-fail "/usr/bin/xdg-user-dirs-update" "$out/bin/xdg-user-dirs-update"
+
+    # Autostart, because the installed service is never explicitly enabled in NixOS
+    substituteInPlace "$out/etc/xdg/autostart/xdg-user-dirs.desktop" \
+      --replace-fail "X-systemd-skip=true" "X-systemd-skip=false"
   '';
 
   meta = {

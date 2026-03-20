@@ -673,7 +673,7 @@
     },
     "odbc": {
       "attrPath": [
-        "unixODBC"
+        "unixodbc"
       ]
     },
     "ompi": {

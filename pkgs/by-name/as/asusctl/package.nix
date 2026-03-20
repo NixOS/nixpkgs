@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 
-    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/sg-0.4.0/build.rs \
+    substituteInPlace /build/asusctl-${finalAttrs.version}-vendor/source-*/sg-*/build.rs \
       --replace-fail /usr/include ${lib.getDev glibc}/include
   '';
 
