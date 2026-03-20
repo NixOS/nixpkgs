@@ -129,7 +129,7 @@
       downloadPage,
       file,
     }:
-    writeShellApplication {
+    lib.getExe (writeShellApplication {
       name = "update-intel-oneapi";
       runtimeInputs = [
         curl
@@ -141,7 +141,7 @@
         download_page=${lib.escapeShellArg downloadPage}
         pname=${lib.escapeShellArg pname}
         nixpkgs="$(git rev-parse --show-toplevel)"
-        packageDir="$nixpkgs/pkgs/by-name/in/intel-oneapi"
+        packageDir="$nixpkgs/pkgs/development/libraries/intel-oneapi"
         file="$packageDir"/${lib.escapeShellArg file}
 
         echo 'Figuring out the download URL' >&2
@@ -164,12 +164,13 @@
             exit 1
         fi
 
-        if [[ "$(grep 'url =' "$file")" =~ "$url" ]] && [[ "''${BASH_REMATCH[0]}" == "$url" ]]; then
+        if grep -qF "url = \"$url\"" "$file"; then
             echo "The URL is the same ($url), skipping update" >&2
-        else
-            echo "The new download URL is $url, prefetching it to store" >&2
-            hash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --quiet "$url")")"
+            exit 0
         fi
+
+        echo "The new download URL is $url, prefetching it to store" >&2
+        hash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --quiet "$url")")"
 
         sed -i "s|versionYear = \".*\";|versionYear = \"$versionYear\";|" "$file"
         sed -i "s|versionMajor = \".*\";|versionMajor = \"$versionMajor\";|" "$file"
@@ -178,7 +179,7 @@
         sed -i "s|url = \".*\";|url = \"$url\";|" "$file"
         sed -i "s|hash = \".*\";|hash = \"$hash\";|" "$file"
       '';
-    };
+    });
 
   base = callPackage ./base.nix { };
   hpc = callPackage ./hpc.nix { };
