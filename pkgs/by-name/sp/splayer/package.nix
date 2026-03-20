@@ -6,7 +6,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron,
+  electron_39,
   rustPlatform,
   cargo,
   rustc,
@@ -19,6 +19,9 @@
   nix-update-script,
   removeReferencesTo,
 }:
+let
+  electron = electron_39;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
   version = "3.0.0";
