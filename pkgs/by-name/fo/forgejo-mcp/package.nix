@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "forgejo-mcp";
-  version = "2.14.0";
+  version = "2.16.0";
 
   src = fetchFromCodeberg {
     owner = "goern";
     repo = "forgejo-mcp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jjwzc9bnuOG5j9frOGmJYv7oOnXRpns8pknonDezHGQ=";
+    hash = "sha256-LiLzkpbNqY8YKhsDt1Y6SrI28YEAy2KWQiw206Q4MbQ=";
   };
 
-  vendorHash = "sha256-j5o/FZBowQvcatw14Fvs/8CTM5ZtQR6kwlroctaeKuM=";
+  vendorHash = "sha256-tQyZqtmJnbVIG8lpWeZjflv92OdOdmzJXAmq4xrI5Pw=";
 
   ldflags = [
     "-s"
