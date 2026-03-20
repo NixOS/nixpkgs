@@ -1,0 +1,16 @@
+--- a/common/common.c
++++ b/common/common.c
+@@ -1990,6 +1990,13 @@ ssize_t select_write(serial_handler_t *fd, const void *buf, const size_t buflen,
+  * communications media and/or vendor protocol.
+  */
+ static const char * search_paths_builtin[] = {
++	"@avahi@",
++	"@freeipmi@",
++	"@libgpiod@",
++	"@libusb@",
++	"@neon@",
++	"@libmodbus@",
++	"@netsnmp@",
+ 	/* Use the library path (and bitness) provided during ./configure first */
+ 	LIBDIR,
+ 	"/usr"LIBDIR,		/* Note: this can lead to bogus strings like */

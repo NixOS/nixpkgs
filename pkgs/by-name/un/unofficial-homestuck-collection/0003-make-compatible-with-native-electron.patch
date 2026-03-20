@@ -1,0 +1,101 @@
+From 6be6ba5922363b478eca447135cd2421f8c598ab Mon Sep 17 00:00:00 2001
+From: Freya Murphy <freya@freyacat.org>
+Date: Sun, 20 Jul 2025 12:01:12 -0400
+Subject: [PATCH 3/3] make compatible with native electron
+
+---
+ src/background.js                        | 15 +++++----------
+ src/components/SystemPages/Settings.vue  | 12 +++++++-----
+ src/components/UIElements/MediaEmbed.vue | 20 ++------------------
+ 3 files changed, 14 insertions(+), 33 deletions(-)
+
+diff --git a/src/background.js b/src/background.js
+index d75c5fc..6fa2256 100644
+--- a/src/background.js
++++ b/src/background.js
+@@ -314,16 +314,8 @@ if (assetDir === undefined) {
+   is_first_run = true
+ } else {
+   try {
+-    if (store.has('settings.ruffleFallback') && store.get('settings.ruffleFallback') === true) {
+-      logger.info("Ruffle fallback enabled, disabling ppapi-level flash player")
+-    } else {
+-      // Pick the appropriate flash plugin for the user's platform
+-      const flashPath = getFlashPath()
+-
+-      if (fs.existsSync(flashPath)) {
+-        app.commandLine.appendSwitch('ppapi-flash-path', flashPath)
+-      } else throw Error(`Flash plugin not located at ${flashPath}`)
+-    }
++    // MOD: always use ruffle
++    logger.info("Ruffle fallback enabled, disabling ppapi-level flash player")
+
+     if (store.has('settings.smoothScrolling') && store.get('settings.smoothScrolling') === false)
+       app.commandLine.appendSwitch('disable-smooth-scrolling')
+@@ -755,6 +747,9 @@ async function createWindow () {
+     autoHideMenuBar: true,
+     webPreferences: {
+       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
++      // MOD: disable isolation to get
++      // collection to work with electron 35
++      contextIsolation: false,
+       enableRemoteModule: true,
+       plugins: true,
+       webviewTag: true
+diff --git a/src/components/SystemPages/Settings.vue b/src/components/SystemPages/Settings.vue
+index 47c5ea6..5630625 100644
+--- a/src/components/SystemPages/Settings.vue
++++ b/src/components/SystemPages/Settings.vue
+@@ -619,11 +619,13 @@ export default {
+           label: "Reduce Motion",
+           desc: "Attempts to reduce the amount of automatic motion in the comic by replacing animated gifs with a manual scrubber, and requiring an explicit click before playing Flash animations.",
+           platform_whitelist: ['electron']
+-        }, {
+-          model: "ruffleFallback",
+-          label: "Ruffle flash emulation fallback",
+-          desc: "If the built-in flash player is non-functional, use the <a href='https://ruffle.rs/'>Ruffle</a> Flash emulator in place of Flash."
+-        }
++        },
++        // MOD: always use ruffle
++        // {
++        //   model: "ruffleFallback",
++        //   label: "Ruffle flash emulation fallback",
++        //   desc: "If the built-in flash player is non-functional, use the <a href='https://ruffle.rs/'>Ruffle</a> Flash emulator in place of Flash."
++        // }
+       ],
+       retconList: [
+         {
+diff --git a/src/components/UIElements/MediaEmbed.vue b/src/components/UIElements/MediaEmbed.vue
+index 760fec4..53f34ff 100644
+--- a/src/components/UIElements/MediaEmbed.vue
++++ b/src/components/UIElements/MediaEmbed.vue
+@@ -156,24 +156,8 @@ export default {
+       return ret
+     },
+     ruffleEmbed() {
+-      // At some point between 2025.3.14 and 2025.4.13 ruffle stopped supporting our old runtime. Damn. -->
+-      if (this.$localData.settings.ruffleFallback) {
+-        if (this.$isWebApp) {
+-          return '<script src="https://unpkg.com/@ruffle-rs/ruffle"><\/script>'
+-        } else {
+-          // 0.1.0-nightly.2024.04.13 OK
+-          // ...
+-          // 0.1.0-nightly.2024.07.19 OK
+-          // 0.1.0-nightly.2024.07.20 scale issue
+-          // ...
+-          // 0.1.0-nightly.2025.04.07 scale issue
+-          // 0.1.0-nightly.2025.04.13 syntax issue
+-          // return '<script src="https://unpkg.com/@ruffle-rs/ruffle@0.1.0-nightly.2024.7.19"><\/script>'
+-          return `<script src="${this.$getResourceURL("assets://js/ruffle/ruffle.js")}"><\/script>`
+-        }
+-      } else {
+-        return '<!-- Using real flash -->'
+-      }
++      // MOD: always use ruffle
++      return `<script src="${this.$getResourceURL("assets://js/ruffle/ruffle.js")}"><\/script>`
+     },
+     flashSrc() {
+       return `
+--
+2.50.1
+

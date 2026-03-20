@@ -1,0 +1,22 @@
+From b8c91ea6551e99e10352386cd46ea26973bb4a4d Mon Sep 17 00:00:00 2001
+From: Aleksey Kravchenko <rhash.admin@gmail.com>
+Date: Mon, 11 Sep 2023 03:49:20 +0300
+Subject: [PATCH] Fix #238: Build on Unix
+
+---
+ librhash/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/librhash/Makefile b/librhash/Makefile
+index e8ee862..34f1263 100644
+--- a/librhash/Makefile
++++ b/librhash/Makefile
+@@ -27,7 +27,7 @@ install-lib-static: $(LIBRHASH_STATIC)
+ install-lib-shared: $(LIBRHASH_SHARED) $(EXTRA_INSTALL_LIBSHARED)
+ 	$(INSTALL) -d $(SO_DIR)
+ 	$(INSTALL_SHARED) $(LIBRHASH_SHARED) $(SO_DIR)/
+-	test "x$(LIBRHASH_SO_MAJ)" != "x$(LIBRHASH_SHARED)" || ( \
++	test "x$(LIBRHASH_SO_MAJ)" = "x$(LIBRHASH_SHARED)" || ( \
+ 	  rm -f $(LIBDIR)/$(LIBRHASH_SO_MAJ) && \
+ 	  ln -s $(LIBRHASH_SHARED) $(LIBDIR)/$(LIBRHASH_SO_MAJ) )
+ 

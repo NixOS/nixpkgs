@@ -1,0 +1,45 @@
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
+  nix-update-script,
+}:
+
+rustPlatform.buildRustPackage (finalAttrs: {
+  pname = "fontfor";
+  version = "0.4.3";
+
+  src = fetchFromGitHub {
+    owner = "7sDream";
+    repo = "fontfor";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gJl9SPL/KeYFzKIjwWPVR1iVy6h/W7OP7xE7krhYaY8=";
+  };
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    expat
+    fontconfig
+    freetype
+  ];
+
+  cargoHash = "sha256-TOoNfGYQTr5UZeyasslJU9GRIAnH3p2a9UIFz8IJv7A=";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Find fonts which can show a specified character and preview them in browser";
+    homepage = "https://github.com/7sDream/fontfor";
+    license = with lib.licenses; [ gpl3Plus ];
+    platforms = lib.platforms.linux;
+    mainProgram = "fontfor";
+  };
+})

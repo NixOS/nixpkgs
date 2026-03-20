@@ -1,0 +1,108 @@
+diff --git a/GUI/Settings/settings.py b/GUI/Settings/settings.py
+index 05cf0fa..598ac87 100644
+--- a/GUI/Settings/settings.py
++++ b/GUI/Settings/settings.py
+@@ -118,7 +118,7 @@ def set_default_settings():
+     settings.setValue("bytes_per_scroll", 0x40)
+     settings.endGroup()
+     settings.beginGroup("Debug")
+-    settings.setValue("gdb_path", typedefs.PATHS.GDB)
++    settings.setValue("gdb_path", utils.get_default_gdb_path())
+     settings.setValue("gdb_logging", False)
+     settings.setValue("interrupt_signal", "SIGINT")
+     settings.setValue("handle_signals", json.dumps(default_signals))
+diff --git a/GUI/Widgets/Settings/Settings.py b/GUI/Widgets/Settings/Settings.py
+index 11ae44e..8ca87a1 100644
+--- a/GUI/Widgets/Settings/Settings.py
++++ b/GUI/Widgets/Settings/Settings.py
+@@ -91,7 +91,7 @@ class SettingsDialog(QDialog, Ui_Dialog):
+         self.settings.setValue("MemoryView/show_memory_view_on_stop", self.checkBox_ShowMemoryViewOnStop.isChecked())
+         self.settings.setValue("MemoryView/instructions_per_scroll", self.spinBox_InstructionsPerScroll.value())
+         self.settings.setValue("MemoryView/bytes_per_scroll", self.spinBox_BytesPerScroll.value())
+-        if not os.environ.get("APPDIR"):
++        if False:
+             selected_gdb_path = self.lineEdit_GDBPath.text()
+             if selected_gdb_path != states.gdb_path:
+                 if utilwidgets.InputDialog(self, tr.GDB_RESET).exec():
+@@ -147,7 +147,7 @@ class SettingsDialog(QDialog, Ui_Dialog):
+         self.spinBox_InstructionsPerScroll.setValue(self.settings.value("MemoryView/instructions_per_scroll", type=int))
+         self.spinBox_BytesPerScroll.setValue(self.settings.value("MemoryView/bytes_per_scroll", type=int))
+         self.lineEdit_GDBPath.setText(str(self.settings.value("Debug/gdb_path", type=str)))
+-        if os.environ.get("APPDIR"):
++        if True:
+             self.label_GDBPath.setDisabled(True)
+             self.label_GDBPath.setToolTip(tr.UNUSED_APPIMAGE_SETTING)
+             self.lineEdit_GDBPath.setDisabled(True)
+diff --git a/PINCE.py b/PINCE.py
+index aa5da2f..b356458 100644
+--- a/PINCE.py
++++ b/PINCE.py
+@@ -334,7 +334,7 @@ class MainForm(QMainWindow, MainWindow):
+ 
+         settings.init_settings()
+         self.settings_changed()
+-        if os.environ.get("APPDIR"):
++        if True:
+             gdb_path = utils.get_default_gdb_path()
+         else:
+             gdb_path = states.gdb_path
+@@ -1426,7 +1426,7 @@ class MainForm(QMainWindow, MainWindow):
+ 
+     # Returns: a bool value indicates whether the operation succeeded.
+     def attach_to_pid(self, pid: int):
+-        attach_result = debugcore.attach(pid, states.gdb_path)
++        attach_result = debugcore.attach(pid, utils.get_default_gdb_path())
+         if attach_result == typedefs.ATTACH_RESULT.SUCCESSFUL:
+             settings.apply_after_init()
+             scanmem.pid(pid)
+@@ -1524,7 +1524,7 @@ class MainForm(QMainWindow, MainWindow):
+         self.flashAttachButtonTimer.start(100)
+         self.label_SelectedProcess.setText(tr.NO_PROCESS_SELECTED)
+         self.memory_view_window.setWindowTitle(tr.NO_PROCESS_SELECTED)
+-        if os.environ.get("APPDIR"):
++        if True:
+             gdb_path = utils.get_default_gdb_path()
+         else:
+             gdb_path = states.gdb_path
+diff --git a/libpince/debugcore.py b/libpince/debugcore.py
+index 987762f..9779120 100644
+--- a/libpince/debugcore.py
++++ b/libpince/debugcore.py
+@@ -498,7 +498,7 @@ def init_gdb(gdb_path=utils.get_default_gdb_path()):
+     status_thread.start()
+     gdb_initialized = True
+     set_logging(False)
+-    if not is_appimage:
++    if False:
+         send_command("source ./gdbinit_venv")
+     set_pince_paths()
+     send_command("source " + utils.get_user_path(typedefs.USER_PATHS.GDBINIT))
+diff --git a/libpince/utils.py b/libpince/utils.py
+index 604aeb3..0569a7e 100644
+--- a/libpince/utils.py
++++ b/libpince/utils.py
+@@ -881,10 +881,7 @@ def get_user_path(user_path):
+ 
+ 
+ def get_default_gdb_path():
+-    appdir = os.environ.get("APPDIR")
+-    if appdir:
+-        return appdir + "/usr/bin/gdb"
+-    return typedefs.PATHS.GDB
++    return "@gdb_exe_path@"
+ 
+ 
+ def execute_script(file_path):
+diff --git a/tr/tr.py b/tr/tr.py
+index 81e156c..74aef4c 100644
+--- a/tr/tr.py
++++ b/tr/tr.py
+@@ -148,7 +148,7 @@ class TranslationConstants(QObject):
+         r"\[asdf\] --> search for opcodes that contain [asdf]"
+     )
+     SEPARATE_PROCESSES_WITH = QT_TR_NOOP("Separate processes with {}")
+-    UNUSED_APPIMAGE_SETTING = QT_TR_NOOP("This setting is unused in AppImage builds")
++    UNUSED_APPIMAGE_SETTING = QT_TR_NOOP("This setting is unused in nixpkgs-based builds")
+     SELECT_GDB_BINARY = QT_TR_NOOP("Select the gdb binary")
+     QUIT_SESSION_CRASH = QT_TR_NOOP("Quitting current session will crash PINCE")
+     CONT_SESSION_CRASH = QT_TR_NOOP("Use global hotkeys or the commands 'interrupt' and 'c&' to stop/run the inferior")

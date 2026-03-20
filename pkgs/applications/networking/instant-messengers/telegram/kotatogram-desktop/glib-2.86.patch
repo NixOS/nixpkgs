@@ -1,0 +1,37 @@
+Submodule Telegram/lib_base contains modified content
+diff --git a/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp b/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp
+index 4197367..f79d2fa 100644
+--- a/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp
++++ b/Telegram/lib_base/base/platform/linux/base_url_scheme_linux.cpp
+@@ -15,7 +15,7 @@
+ #include <kshell.h>
+ #include <ksandbox.h>
+ 
+-#include <gio/gio.hpp>
++#include <giounix/giounix.hpp>
+ #include <snapcraft/snapcraft.hpp>
+ 
+ namespace base::Platform {
+@@ -125,7 +125,7 @@ void RegisterUrlScheme(const UrlSchemeDescriptor &descriptor) {
+ 
+     const auto appId = QGuiApplication::desktopFileName().toStdString();
+     if (!appId.empty()) {
+-        Gio::AppInfo appInfo = Gio::DesktopAppInfo::new_(appId + ".desktop");
++        Gio::AppInfo appInfo = GioUnix::DesktopAppInfo::new_(appId + ".desktop");
+         if (appInfo) {
+             if (appInfo.get_commandline() == commandlineForCreator + " %u") {
+                 appInfo.set_as_default_for_type(handlerType);
+Submodule cmake contains modified content
+diff --git a/cmake/external/glib/CMakeLists.txt b/cmake/external/glib/CMakeLists.txt
+index 3c6fe4b..6f73dc5 100644
+--- a/cmake/external/glib/CMakeLists.txt
++++ b/cmake/external/glib/CMakeLists.txt
+@@ -16,7 +16,7 @@ endfunction()
+ add_cppgir()
+ 
+ include(generate_cppgir.cmake)
+-generate_cppgir(external_glib Gio-2.0)
++generate_cppgir(external_glib GioUnix-2.0)
+ 
+ find_package(PkgConfig REQUIRED)
+ pkg_check_modules(GLIB2 REQUIRED IMPORTED_TARGET glib-2.0 gobject-2.0 gio-2.0 gio-unix-2.0)

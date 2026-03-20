@@ -1,0 +1,13 @@
+diff --git i/src/ocrfeeder/studio/studioBuilder.py w/src/ocrfeeder/studio/studioBuilder.py
+index 7a2ccdc..7af19d9 100644
+--- i/src/ocrfeeder/studio/studioBuilder.py
++++ w/src/ocrfeeder/studio/studioBuilder.py
+@@ -144,7 +144,7 @@ class Studio:
+         if not self.ocr_engines:
+             engines = self.configuration_manager.getEnginesInSystem()
+             if engines:
+-                add_engines_dialog = widgetPresenter.SystemEnginesDialog(engines)
++                add_engines_dialog = widgetPresenter.SystemEnginesDialog(self.main_window, engines)
+                 response = add_engines_dialog.run()
+                 if response == Gtk.ResponseType.ACCEPT:
+                     for engine in add_engines_dialog.getChosenEngines():
