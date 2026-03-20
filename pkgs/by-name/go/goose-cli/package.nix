@@ -13,6 +13,7 @@
   openssl,
   cacert,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
   llvmPackages,
   librusty_v8 ? callPackage ./librusty_v8.nix {
@@ -130,6 +131,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_session_id_matches_across_calls"
     "--skip=test_session_id_propagation_to_llm"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
