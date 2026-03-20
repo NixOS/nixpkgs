@@ -366,9 +366,12 @@ let
 
   defaultConfigureFlags = [
     "--verbose"
-    "--prefix=$out"
+    (if isLibrary then "--prefix=$dev" else "--prefix=$out")
     # Note: This must be kept in sync manually with mkGhcLibdir
     ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
+    (optionalString isLibrary (
+      "--dynlibdir=$out/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib"
+    ))
     "--libsubdir=\\$abi/\\$libname"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
     (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
@@ -925,7 +928,7 @@ lib.fix (
             remove-references-to -t $out ${optionalString isLibrary "-t $dev"} $x
           done
           mkdir -p $doc
-        ''}
+        ''}${optionalString isLibrary "find $out -type f -exec remove-references-to -t $dev '{}' +"}
         ${optionalString enableSeparateDataOutput "mkdir -p $data"}
 
         runHook postInstall
