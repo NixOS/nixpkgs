@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  coreutils,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -14,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib-testing";
-  version = "0.1.1";
+  version = "0.2.0";
 
   outputs = [
     "out"
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pwithnall";
     repo = "libglib-testing";
     rev = finalAttrs.version;
-    sha256 = "U3epLDdLES7MA71z7Q1WXMjzySTFERWBU0u8poObbEo=";
+    hash = "sha256-OgKWC4plX4oiIakd/8bHtyiuZijV58URILXUHQqFMW8=";
   };
 
   patches = [
@@ -53,6 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
   ];
+
+  postPatch = ''
+    # Note: Does not appear to be needed by anything.
+    substituteInPlace libglib-testing/dbus-queue.c \
+      --replace-fail 'Exec=/bin/true' 'Exec=${coreutils}/bin/true'
+  '';
 
   passthru = {
     tests = {
