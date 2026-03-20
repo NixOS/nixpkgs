@@ -6,9 +6,16 @@
   variant,
 }:
 
+let
+  browserName = if variant == "helium" then "helium" else "chromium";
+  buildBinaryName = if variant == "helium" then "helium" else "chrome";
+  crashpadBinaryName =
+    if variant == "helium" then "helium_crashpad_handler" else "chrome_crashpad_handler";
+in
+
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
-  packageName = "chromium";
+  packageName = browserName;
   buildTargets = [
     "chrome_sandbox"
     "chrome"
@@ -28,8 +35,16 @@ mkChromiumDerivation (base: rec {
     cp -v "$buildPath/vk_swiftshader_icd.json" "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    cp -v "$buildPath/chrome_crashpad_handler" "$libExecPath/"
-    cp -v "$buildPath/chrome" "$libExecPath/$packageName"
+    if [ -f "$buildPath/${crashpadBinaryName}" ]; then
+      cp -v "$buildPath/${crashpadBinaryName}" "$libExecPath/"
+    else
+      cat > "$libExecPath/${crashpadBinaryName}" << 'HELIUM_CRASHPAD_STUB'
+    #!/bin/sh
+    exit 0
+    HELIUM_CRASHPAD_STUB
+      chmod +x "$libExecPath/${crashpadBinaryName}"
+    fi
+    cp -v "$buildPath/${buildBinaryName}" "$libExecPath/$packageName"
 
     # Swiftshader
     # See https://stackoverflow.com/a/4264351/263061 for the find invocation.
@@ -59,20 +74,19 @@ mkChromiumDerivation (base: rec {
 
     # Install Desktop Entry
     install -D chrome/installer/linux/common/desktop.template \
-      $out/share/applications/chromium-browser.desktop
+      $out/share/applications/${browserName}-browser.desktop
 
-    substituteInPlace $out/share/applications/chromium-browser.desktop \
-      --replace-fail "@@MENUNAME" "Chromium" \
-      --replace-fail "@@PACKAGE" "chromium" \
-      --replace-fail "/usr/bin/@@usr_bin_symlink_name" "chromium" \
+    substituteInPlace $out/share/applications/${browserName}-browser.desktop \
+      --replace-fail "@@MENUNAME" "${lib.toSentenceCase browserName}" \
+      --replace-fail "@@PACKAGE" "${browserName}" \
+      --replace-fail "/usr/bin/@@usr_bin_symlink_name" "${browserName}" \
       --replace-fail "@@uri_scheme" "x-scheme-handler/chromium;" \
-      --replace-fail "@@startup_wm_class" "chromium-browser" \
+      --replace-fail "@@startup_wm_class" "${browserName}-browser" \
       --replace-fail "@@extra_desktop_entries" ""
-
   ''
   + ''
-    if grep -F '@@' $out/share/applications/chromium-browser.desktop ; then
-      echo "error: chromium-browser.desktop contains unsubstituted placeholders" >&2
+    if grep -F '@@' $out/share/applications/${browserName}-browser.desktop ; then
+      echo "error: ${browserName}-browser.desktop contains unsubstituted placeholders" >&2
       exit 1
     fi
   '';
