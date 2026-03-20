@@ -254,7 +254,7 @@ in
           startSession = true;
           allowNullPassword = true;
           showMotd = true;
-          updateWtmp = true;
+          lastlog.enable = true;
         };
         chpasswd.rootOK = true;
       };
