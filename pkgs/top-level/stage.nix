@@ -155,7 +155,23 @@ let
           overlays
           ;
       } res self super;
+      # Check for callPackage calls that reference by-name paths
+      allPackagesPath = toString ./all-packages.nix;
+      allPackagesLines = lib.splitString "\n" (builtins.readFile ./all-packages.nix);
+      callPackageByNameAttrs = lib.filter (
+        name:
+        let
+          pos = builtins.unsafeGetAttrPos name res;
+          isFromAllPackages = pos != null && pos.file == allPackagesPath;
+          lineContent = if isFromAllPackages then lib.elemAt allPackagesLines (pos.line - 1) else "";
+          usesCallPackage = lib.hasInfix "callPackage" lineContent;
+          callsByName = lib.hasInfix "by-name" lineContent;
+        in
+        isFromAllPackages && usesCallPackage && callsByName
+      ) (lib.attrNames res);
     in
+    assert lib.assertMsg (callPackageByNameAttrs == [ ])
+      "The following attributes in `pkgs/top-level/all-packages.nix` used `callPackage` with a `pkgs/by-name/` path. Use `<package>.override { }` instead: ${lib.concatStringsSep ", " callPackageByNameAttrs}";
     res;
 
   aliases = self: super: lib.optionalAttrs config.allowAliases (import ./aliases.nix lib self super);
