@@ -3180,6 +3180,8 @@ self: super: with self; {
 
   consul = callPackage ../development/python-modules/consul { };
 
+  consumo = toPythonModule (pkgs.consumo.override { python3Packages = self; });
+
   container-inspector = callPackage ../development/python-modules/container-inspector { };
 
   contexter = callPackage ../development/python-modules/contexter { };
