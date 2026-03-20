@@ -43,6 +43,14 @@ buildPythonPackage rec {
     "etelemetry.config"
   ];
 
+  disabledTests = [
+    # RuntimeError: Connection to server could not be made
+    # due to external network access
+    "test_etrequest"
+    "test_get_project"
+    "test_check_available"
+  ];
+
   meta = {
     description = "Lightweight python client to communicate with the etelemetry server";
     homepage = "https://github.com/sensein/etelemetry-client";
