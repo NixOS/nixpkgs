@@ -14,6 +14,8 @@ buildNpmPackage {
   postPatch = ''
     substituteInPlace package.json \
       --replace-fail "--base=/BASE_PATH/" ""
+    substituteInPlace site.webmanifest \
+      --replace-fail '/BASE_PATH/' '/'
 
     substituteInPlace \
       src/pages/Exports.tsx \
