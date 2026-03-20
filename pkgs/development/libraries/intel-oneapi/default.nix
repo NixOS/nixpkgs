@@ -150,17 +150,21 @@
           | htmlq 'code' --text \
           | grep "wget.*$pname.*sh")"
 
-        regex="wget (.*$pname.([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)_offline[.]sh)"
+        # _offline is optional: Intel sometimes only links the online installer, which shares the same UUID and version.
+        regex="wget (https://registrationcenter-download[.]intel[.]com/akdlm/IRC_NAS/([0-9a-z-]+)/$pname.([0-9]+)[.]([0-9]+)[.]([0-9]+)[.]([0-9]+)(_offline)?[.]sh)"
         if [[ "$wget_command" =~ $regex ]]; then
-            url="''${BASH_REMATCH[1]}"
-            versionYear="''${BASH_REMATCH[2]}"
-            versionMajor="''${BASH_REMATCH[3]}"
-            versionMinor="''${BASH_REMATCH[4]}"
-            versionRel="''${BASH_REMATCH[5]}"
+            uuid="''${BASH_REMATCH[2]}"
+            versionYear="''${BASH_REMATCH[3]}"
+            versionMajor="''${BASH_REMATCH[4]}"
+            versionMinor="''${BASH_REMATCH[5]}"
+            versionRel="''${BASH_REMATCH[6]}"
         else
             echo "'$wget_command' does not match the expected format $regex" >&2
             exit 1
         fi
+
+        # Always reconstruct to point at the offline installer
+        url="https://registrationcenter-download.intel.com/akdlm/IRC_NAS/$uuid/$pname-$versionYear.$versionMajor.$versionMinor.''${versionRel}_offline.sh"
 
         if grep -qF "url = \"$url\"" "$file"; then
             echo "The URL is the same ($url), skipping update" >&2
