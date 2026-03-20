@@ -8,7 +8,7 @@
   nodejs,
   rustPlatform,
   rustc,
-  wasm-bindgen-cli_0_2_106,
+  wasm-bindgen-cli_0_2_108,
   wasm-pack,
   yarnConfigHook,
   yarnBuildHook,
@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.3.13";
+  version = "1.3.24";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Bfu4O+kBtXxxVyx2iC/577TPD049ifjg1ItmKN4bx4U=";
+    hash = "sha256-fM/a5V5Depkeu8hIzaYJr/0w0Mt/zM9/b+76W7ggUfw=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
@@ -48,13 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-dedLmQP15V+gAtycXx1fpWfjXWsTPLXPPcCIAcr/ME0=";
+    hash = "sha256-ftb0h5MOHyQ2iec6iE7/WdHXgrviLCy8oIqFXv5OTq8=";
   };
   cargoRoot = "packages/wasm";
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/web/yarn.lock";
-    hash = "sha256-OPmO+4VlM4Fy9vjgb2ZxDP6Ber9A+ANwix1dZSuEgUE=";
+    hash = "sha256-NhpSwesQ9B5gEeBQVjEEAKO4A68wfmBoQ3ga/baieNE=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustc
     rustc.llvmPackages.lld
     nodejs
-    wasm-bindgen-cli_0_2_106
+    wasm-bindgen-cli_0_2_108
     wasm-pack
   ];
 
