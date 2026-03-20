@@ -9486,6 +9486,13 @@
     githubId = 16470252;
     name = "Gemini Lasswell";
   };
+  gbr-ufs = {
+    email = "gabriel.santosdesouza@dcomp.ufs.br";
+    github = "gbr-ufs";
+    githubId = 211904116;
+    keys = [ { fingerprint = "6A38 69D1 3C11 18A3 B80E  60DC 34BF 0A88 061E 363F"; } ];
+    name = "Gabriel Santos de Souza";
+  };
   gbtb = {
     email = "goodbetterthebeast3@gmail.com";
     github = "gbtb";
