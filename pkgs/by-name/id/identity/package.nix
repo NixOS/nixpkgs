@@ -10,9 +10,9 @@
   glib,
   gst_all_1,
   gtk4,
-  lcms,
   libadwaita,
-  libseccomp,
+  libglycin,
+  libglycin-gtk4,
   libwebp,
   meson,
   ninja,
@@ -26,19 +26,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "identity";
-  version = "25.03";
+  version = "25.10.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "YaLTeR";
     repo = "identity";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JZyhT220ARZ2rX0CZYeFkHx8i9ops7TcfGje0NKebnU=";
+    hash = "sha256-ThccOze4BkqAprk1Yt+Ughts0DFbBwLDYd4iE8ZMwxo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-RCSTxtHXkLsH8smGp2XzQeV9SSpLx5llrFg3cgIsWKY=";
+    hash = "sha256-Do+20wh9F8xE+fA9Sg+8uyRojOF7Ih4taL/pZszU6xc=";
   };
 
   strictDeps = true;
@@ -67,9 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gst_all_1.gstreamer
     gtk4
-    lcms
     libadwaita
-    libseccomp
+    libglycin
+    libglycin-gtk4
     libwebp
   ];
 
