@@ -91,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       ftsimas
       maxwell-lt
+      ungeskriptet
     ];
     mainProgram = "itgmania";
   };
