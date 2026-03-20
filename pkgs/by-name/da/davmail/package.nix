@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       peterhoeg
       doronbehar
+      shymega
     ];
     platforms = lib.platforms.all;
     mainProgram = "davmail";
