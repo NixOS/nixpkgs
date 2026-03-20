@@ -43,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       kyehn
       doronbehar
+      ryan4yin
     ];
   };
 })
