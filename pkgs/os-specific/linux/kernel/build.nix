@@ -77,7 +77,6 @@ lib.makeOverridable (
 
     # for module compatibility
     isZen ? false,
-    isLibre ? false,
     isHardened ? false,
 
     # Whether to utilize the controversial import-from-derivation feature to parse the config
@@ -526,7 +525,6 @@ lib.makeOverridable (
       inherit
         isZen
         isHardened
-        isLibre
         withRust
         ;
       isXen = lib.warn "The isXen attribute is deprecated. All Nixpkgs kernels that support it now have Xen enabled." true;

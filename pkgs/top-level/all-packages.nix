@@ -4967,7 +4967,6 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang
-    erlang_29
     erlang_28
     erlang_27
     erlang_26
@@ -11102,10 +11101,6 @@ with pkgs;
   };
   vertcoind = callPackage ../applications/blockchains/vertcoin {
     withGui = false;
-  };
-
-  zcash = callPackage ../applications/blockchains/zcash {
-    stdenv = llvmPackages.stdenv;
   };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
