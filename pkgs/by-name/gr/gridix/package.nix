@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/MCB-SMART-BOY/Gridix";
     changelog = "https://github.com/MCB-SMART-BOY/Gridix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ mcb-smart-boy ];
+    maintainers = with lib.maintainers; [ mcbsmartboy ];
     mainProgram = "gridix";
     platforms = lib.platforms.linux;
   };
