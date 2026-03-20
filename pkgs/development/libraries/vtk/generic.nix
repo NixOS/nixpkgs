@@ -167,7 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libxfixes
     libxrender
-    libxcursor
   ]
   ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
@@ -217,9 +216,10 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libx11
+    libxcursor
     gl2ps
   ]
-  # create meta package providing dist-info for python3Pacakges.vtk that common cmake build does not do
+  # create meta package providing dist-info for python3Packages.vtk that common cmake build does not do
   ++ lib.optionals pythonSupport [
     (python3Packages.mkPythonMetaPackage {
       inherit (finalAttrs) pname version meta;
