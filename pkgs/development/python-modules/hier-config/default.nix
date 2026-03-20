@@ -10,14 +10,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hier-config";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "netdevops";
     repo = "hier_config";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XIRR73H2OnTqDNrwP/GkMVUGnCyWSecwMj/AOeRvpyQ=";
+    hash = "sha256-1E/eWODD4ESmQIZJEvFbeIa0w49i/bcPQSmxriT/m7k=";
   };
 
   build-system = [ poetry-core ];
