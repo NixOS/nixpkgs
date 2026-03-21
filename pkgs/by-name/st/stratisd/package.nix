@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   cargo,
   rustc,
@@ -43,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src;
     hash = "sha256-zA+GEKmg5iV1PaGh0yjNb4h52PH7PwpN53xLV8P9Gac=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-fixes_for_rust_1_9_2";
+      url = "https://github.com/stratis-storage/stratisd/commit/d65c3b7a7f9d7a332b4c59089b8fa96ff1fefb45.patch";
+      sha256 = "sha256-cNbx9+JgQgyO+o5YX7sLDe64qNWfpDr5itux+LZSgxs=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace udev/61-stratisd.rules \
