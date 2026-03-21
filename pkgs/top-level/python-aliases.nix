@@ -412,6 +412,7 @@ mapAliases {
   pyramid_mako = throw "'pyramid_mako' has been renamed to/replaced by 'pyramid-mako'"; # Converted to throw 2025-10-29
   pyramid_multiauth = throw "'pyramid_multiauth' has been renamed to/replaced by 'pyramid-multiauth'"; # Converted to throw 2025-10-29
   pyreadability = throw "'pyreadability' has been renamed to/replaced by 'readability-lxml'"; # Converted to throw 2025-10-29
+  pyreaderwriterlock = throw "'pyreaderwriterlock' has been removed as it was unmaintained upstream"; # Added 2026-03-21
   pyRFC3339 = throw "'pyRFC3339' has been renamed to/replaced by 'pyrfc3339'"; # Converted to throw 2025-10-29
   Pyro4 = throw "'Pyro4' has been renamed to/replaced by 'pyro4'"; # Converted to throw 2025-10-29
   Pyro5 = throw "'Pyro5' has been renamed to/replaced by 'pyro5'"; # Converted to throw 2025-10-29
