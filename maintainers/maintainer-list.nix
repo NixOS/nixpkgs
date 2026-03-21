@@ -25834,6 +25834,11 @@
     github = "StephenWithPH";
     githubId = 2990492;
   };
+  stephsi = {
+    name = "Stephan Siegl";
+    github = "stephsi";
+    githubId = 3120909;
+  };
   sterfield = {
     email = "sterfield@gmail.com";
     github = "sterfield";
