@@ -42,6 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://codeberg.org/inetutils/inetutils/commit/ccba9f748aa8d50a38d7748e2e60362edd6a32cc.patch";
       hash = "sha256-ws+ed5vb7kVMHEbqK7yj6FUT355pTv2RZEYuXs5M7Io=";
     })
+    (fetchpatch {
+      name = "CVE-2026-28372.patch";
+      url = "https://codeberg.org/inetutils/inetutils/commit/4db2f19f4caac03c7f4da6363c140bd70df31386.patch";
+      excludes = [
+        "NEWS.md"
+        "THANKS"
+      ];
+      hash = "sha256-ASgcaNC+yo3Hth4M32IVbD3jFt8mxcGtLfl+ULNt4Ag=";
+    })
+    (fetchpatch {
+      name = "CVE-2026-32746.patch";
+      url = "https://codeberg.org/inetutils/inetutils/commit/6864598a29b652a6b69a958f5cd1318aa2b258af.patch";
+      excludes = [ "NEWS.md" ];
+      hash = "sha256-gQH4BZG9rkyGtOQjBqItx+fEBda/Wgg9f46VYPV8HLw=";
+    })
   ];
 
   strictDeps = true;
