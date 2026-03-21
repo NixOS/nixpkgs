@@ -1,0 +1,15 @@
+diff --git a/frontend/svelte.config.js b/frontend/svelte.config.js
+index 397fe4d4..3a08f7a2 100644
+--- a/frontend/svelte.config.js
++++ b/frontend/svelte.config.js
+@@ -12,8 +12,8 @@ const config = {
+         },
+         adapter: adapter({
+             fallback: null,
+-            pages: '../templates/html',
+-            assets: '../static/v1',
++            pages: 'dist/templates/html',
++            assets: 'dist/static/v1',
+             precompress: true,
+             strict: true,
+         }),

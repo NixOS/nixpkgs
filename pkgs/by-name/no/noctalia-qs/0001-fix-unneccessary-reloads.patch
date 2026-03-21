@@ -1,0 +1,23 @@
+diff --git a/src/core/generation.cpp b/src/core/generation.cpp
+index c68af71..4967562 100644
+--- a/src/core/generation.cpp
++++ b/src/core/generation.cpp
+@@ -172,12 +172,18 @@ void EngineGeneration::setWatchingFiles(bool watching) {
+ 		if (this->watcher == nullptr) {
+ 			this->watcher = new QFileSystemWatcher();
+ 
++			// note: not using canonicalFilePath() here on purpose,
++			//       since the path could be a link to the nix store
++			//       and the link might change
++
+ 			for (auto& file: this->scanner.scannedFiles) {
++				if (file.startsWith("/nix/store/")) continue;
+ 				this->watcher->addPath(file);
+ 				this->watcher->addPath(QFileInfo(file).dir().absolutePath());
+ 			}
+ 
+ 			for (auto& file: this->extraWatchedFiles) {
++				if (file.startsWith("/nix/store/")) continue;
+ 				this->watcher->addPath(file);
+ 				this->watcher->addPath(QFileInfo(file).dir().absolutePath());
+ 			}

@@ -1,0 +1,117 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gitMinimal,
+  python3,
+  m4,
+  cairo,
+  libx11,
+  mesa,
+  mesa_glu,
+  ncurses,
+  tcl,
+  tcsh,
+  tk,
+  fixDarwinDylibNames,
+  nix-update-script,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "magic-vlsi";
+  version = "8.3.602";
+
+  src = fetchFromGitHub {
+    owner = "RTimothyEdwards";
+    repo = "magic";
+    tag = finalAttrs.version;
+    hash = "sha256-jNcuTdBHyVUEvdavIaB2LfMBKhHZkCxFOYyA2kBezqc=";
+    leaveDotGit = true;
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-buffer-overflow-runstats.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/6a07bc172b4bdae8bc22f51905194cdd427912cc.patch";
+      hash = "sha256-QPVl+SfUWj51u/G+EjTCVQZdG7tTdOlEFN/hS7E1Ojg=";
+    })
+
+    (fetchpatch {
+      name = "fix_txinput_termbits.patch";
+      url = "https://github.com/RTimothyEdwards/magic/commit/790f0196d4fef21dc8a3f5646ccf87a531c4d6aa.patch";
+      hash = "sha256-zpmFT813USxX3PDpi6TGlWpWX4xfdirVrVtAlBtkSF0=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    python3
+    gitMinimal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
+
+  buildInputs = [
+    cairo
+    libx11
+    m4
+    mesa_glu
+    ncurses
+    tcl
+    tcsh
+    tk
+  ];
+
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--with-tcl=${tcl}"
+    "--with-tk=${tk}"
+    "--disable-werror"
+  ];
+
+  postPatch = ''
+    patchShebangs scripts/*
+  '';
+
+  postInstall = ''
+    # Fix necessary files missing in sys directory
+    mkdir -p $out/lib/magic/sys
+
+    shopt -s nullglob
+
+    for techfile in scmos/*.tech; do
+      install -Dm644 "$techfile" $out/lib/magic/sys/$(basename "$techfile")
+    done
+
+    for dstylefile in scmos/*.dstyle; do
+      install -Dm644 "$dstylefile" $out/lib/magic/sys/$(basename "$dstylefile")
+    done
+
+    for cmapfile in scmos/*.cmap; do
+      install -Dm644 "$cmapfile" $out/lib/magic/sys/$(basename "$cmapfile")
+    done
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Fix dylib paths on macOS
+    install_name_tool -add_rpath ${mesa.out}/lib $out/lib/magic/tcl/tclmagic.dylib
+    install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/tclmagic.dylib
+    install_name_tool -add_rpath ${mesa.out}/lib $out/lib/magic/tcl/magicexec
+    install_name_tool -add_rpath ${mesa_glu.out}/lib $out/lib/magic/tcl/magicexec
+  '';
+
+  # gnu89 is needed for GCC 15 that is more strict about K&R style prototypes
+  env.NIX_CFLAGS_COMPILE = "-std=gnu89 -Wno-implicit-function-declaration";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "VLSI layout tool written in Tcl";
+    homepage = "http://opencircuitdesign.com/magic/";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
+  };
+})

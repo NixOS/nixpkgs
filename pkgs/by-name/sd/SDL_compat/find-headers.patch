@@ -1,0 +1,26 @@
+diff --git a/sdl-config.in b/sdl-config.in
+index ce332b3..359d574 100755
+--- a/sdl-config.in
++++ b/sdl-config.in
+@@ -50,14 +50,18 @@ while test $# -gt 0; do
+       echo @PROJECT_VERSION@
+       ;;
+     --cflags)
+-      echo -I${includedir}/SDL @SDL_CFLAGS@
++      SDL_CFLAGS=""
++      for i in @includedir@/SDL $SDL_PATH; do
++        SDL_CFLAGS="$SDL_CFLAGS -I$i"
++      done
++      echo $SDL_CFLAGS @SDL_CFLAGS@
+       ;;
+ @ENABLE_SHARED_TRUE@    --libs)
+-@ENABLE_SHARED_TRUE@      echo -L${libdir} @SDL_RLD_FLAGS@ @SDL_LIBS@
++@ENABLE_SHARED_TRUE@      echo -L${libdir} @SDL_RLD_FLAGS@ @SDL_LIBS@ $SDL_LIB_PATH
+ @ENABLE_SHARED_TRUE@      ;;
+ @ENABLE_STATIC_TRUE@@ENABLE_SHARED_TRUE@    --static-libs)
+ @ENABLE_STATIC_TRUE@@ENABLE_SHARED_FALSE@    --libs|--static-libs)
+-@ENABLE_STATIC_TRUE@      echo -L${libdir} @SDL_LIBS@ @SDL_STATIC_LIBS@
++@ENABLE_STATIC_TRUE@      echo -L${libdir} @SDL_LIBS@ @SDL_STATIC_LIBS@ $SDL_LIB_PATH
+ @ENABLE_STATIC_TRUE@      ;;
+     *)
+       echo "${usage}" 1>&2

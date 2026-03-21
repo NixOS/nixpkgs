@@ -1,0 +1,24 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    discourse_subscription_client (0.1.11)
+    icalendar (2.8.0)
+      ice_cube (~> 0.16)
+    icalendar-recurrence (1.1.3)
+      icalendar (~> 2.0)
+      ice_cube (~> 0.16)
+    ice_cube (0.16.4)
+    iso-639 (0.3.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  discourse_subscription_client (= 0.1.11)
+  icalendar (= 2.8.0)
+  icalendar-recurrence (= 1.1.3)
+  ice_cube (= 0.16.4)
+  iso-639 (= 0.3.5)
+
+BUNDLED WITH
+   2.5.22
