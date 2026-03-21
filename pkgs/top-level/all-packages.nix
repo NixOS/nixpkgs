@@ -6320,8 +6320,6 @@ with pkgs;
     fmt_12
     ;
 
-  firefox_decrypt = callPackage ../by-name/fi/firefox_decrypt/package.nix { nss = nss_latest; };
-
   fmt = fmt_12;
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
@@ -12417,6 +12415,8 @@ with pkgs;
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
+
+  olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
 
   newlib-nano = newlib.override {
     nanoizeNewlib = true;
