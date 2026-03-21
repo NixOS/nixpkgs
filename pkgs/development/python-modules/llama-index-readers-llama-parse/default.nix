@@ -5,20 +5,17 @@
   llama-index-core,
   llama-parse,
   hatchling,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "llama-index-readers-llama-parse";
-  version = "0.5.1";
+  version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "llama_index_readers_llama_parse";
     inherit version;
-    hash = "sha256-K3i3P6qTPjDmxp3zUeTp823+KuFC4qs5ad3SrEiTDjc=";
+    hash = "sha256-bghrcDSgAbsCBONDHLHO5bbsE/kwrL+aboLGSu1ysJ4=";
   };
 
   pythonRelaxDeps = [ "llama-parse" ];
@@ -35,10 +32,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.readers.llama_parse" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaIndex Readers Integration for files";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/readers/llama-index-readers-llama-parse";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -23,19 +23,19 @@
   wayland-protocols,
   wayland-scanner,
   wlroots_0_19,
-  xcbutilwm,
+  libxcb-wm,
   xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
-  version = "0.9.1";
+  version = "0.9.3";
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     tag = finalAttrs.version;
-    hash = "sha256-8SKSITFwbagJhuTXVHpPmQoaooktIXc1CeO9ZOUuh1w=";
+    hash = "sha256-C/u11vxHmWWb8/kl0tZTOgosAvbSNb3tCvp2r0Bcb+Q=";
   };
 
   outputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wlroots_0_19
-    xcbutilwm
+    libxcb-wm
     xwayland
   ];
 
@@ -79,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru = {
     providedSessions = [ "labwc" ];
@@ -91,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/labwc/labwc/blob/master/NEWS.md";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "labwc";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (wayland.meta) platforms;
   };
 })

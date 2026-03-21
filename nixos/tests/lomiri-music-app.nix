@@ -57,9 +57,9 @@ in
             lomiri-thumbnailer
             # To check if playback actually works, or is broken due to missing codecs, we need to make the app's icons more OCR-able
             (lib.meta.hiPrio (
-              suru-icon-theme.overrideAttrs (oa: {
+              suru-icon-theme.overrideAttrs (old: {
                 # Colour the background in special colours, which we can OCR for
-                postPatch = (oa.postPatch or "") + ''
+                postPatch = (old.postPatch or "") + ''
                   substituteInPlace suru/actions/scalable/media-playback-pause.svg \
                     --replace-fail 'fill:none' 'fill:${ocrPauseColor}'
 
@@ -133,6 +133,11 @@ in
     # mediascanner2 needs to have run, is only started automatically by Lomiri
     machine.systemctl("start mediascanner-2.0.service", "root")
 
+    # Need to wait abit to make sure our test file gets scanned & added to the database.
+    # No good feedback on when this is done... Prolly some time after extractor sub-service is started.
+    machine.wait_for_console_text("Successfully activated service 'com.lomiri.MediaScanner2.Extractor'")
+    machine.sleep(10)
+
     with subtest("lomiri music launches"):
         machine.succeed("lomiri-music-app >&2 &")
         machine.wait_for_console_text("Queue is empty")
@@ -145,13 +150,12 @@ in
     with subtest("lomiri music plays music"):
         machine.succeed("xdotool mousemove 30 720 click 1") # Skip intro
         machine.sleep(2)
-        machine.wait_for_text("Albums")
+        machine.wait_for_window("Albums")
         machine.succeed("xdotool mousemove 25 45 click 1") # Open categories
         machine.sleep(2)
-        machine.wait_for_text("Tracks")
         machine.succeed("xdotool mousemove 25 240 click 1") # Switch to Tracks category
         machine.sleep(2)
-        machine.wait_for_text("${musicFileName}") # the test file
+        machine.wait_for_window("Tracks")
         machine.screenshot("lomiri-music_listing")
 
         # Ensure pause colours isn't present already
@@ -180,8 +184,9 @@ in
 
         machine.screenshot("lomiri-music_paused")
 
-        # Lastly, check if generated cover image got extracted properly
+        # Lastly, check if song details like title & generated cover image got extracted properly
         # if not, indicates an issue with mediascanner / lomiri-thumbnailer
+        machine.wait_for_text("${musicFileName}")
         machine.wait_for_text("${ocrContent}")
 
     machine.succeed("pkill -f lomiri-music-app")
@@ -192,7 +197,7 @@ in
         machine.sleep(10)
         machine.send_key("alt-f10")
         machine.sleep(2)
-        machine.wait_for_text("Titel")
+        machine.wait_for_window("Titel")
         machine.screenshot("lomiri-music_localised")
   '';
 }

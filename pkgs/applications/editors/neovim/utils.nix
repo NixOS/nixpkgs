@@ -59,6 +59,70 @@ let
       opt = map (x: x.plugin) pluginsPartitioned.right;
     };
 
+  /**
+    * Builds a vim package (see ':h packages') with additional info:
+    - the user lua configuration (specified by user)
+    - the advised and advised by nixpkgs in passthru.initLua)
+    - runtime dependencies (specified in plugins' "runtimeDeps")
+    - plugin dependencies (vim plugins, python deps)
+  */
+  makeVimPackageInfo =
+    # a list of neovim plugin derivations, for instance
+    #  [
+    #     {
+    #       plugin   = vimPlugins.grug-far-nvim;
+    #       config   = "let g:grug_far = { 'startInInsertMode': v:false }";
+    #       optional = false;
+    #     }
+    #     vimPlugins.vim-fugitive
+    #  ]
+    plugins:
+
+    let
+      neovimConfig =
+        structuredConfigure:
+        let
+          module = import ./module.nix;
+          # Generate init.vim configuration
+          cfg = (
+            lib.evalModules {
+              modules = [
+                module
+                structuredConfigure
+              ];
+            }
+          );
+        in
+        cfg.config;
+
+      checked_cfg = neovimConfig {
+        inherit plugins;
+      };
+
+      pluginsNormalized = checked_cfg.plugins;
+
+      vimPackage = normalizedPluginsToVimPackage pluginsNormalized;
+
+    in
+    {
+
+      # viml config set by the user along with the plugin
+      inherit (checked_cfg)
+        userPluginViml
+        runtimeDeps
+        pluginAdvisedLua
+        pluginPython3Packages
+        luaDependencies
+        ;
+
+      # A Vim "package", see ':h packages'
+      # You most likely want to use vimPackage as follows:
+      #     packpathDirs.myNeovimPackages = vimPackage;
+      #     finalPackdir = neovimUtils.packDir packpathDirs;
+      inherit vimPackage;
+
+    };
+
   /*
     returns everything needed for the caller to wrap its own neovim:
     - the generated content of the future init.vim
@@ -67,8 +131,8 @@ let
     arguments (["-u" writeText "init.vim" GENERATEDRC)]).
     This makes it possible to write the config anywhere: on a per-project basis
     .nvimrc or in $XDG_CONFIG_HOME/nvim/init.vim to avoid sideeffects.
-    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
-    anymore, $MYVIMRC wont be set etc
+    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc won't be loaded
+    anymore, $MYVIMRC won't be set etc
   */
   makeNeovimConfig =
     {
@@ -109,7 +173,7 @@ let
       # the function you would have passed to python.withPackages
       extraPythonPackages ? (_: [ ]),
       # the function you would have passed to python.withPackages
-      withPython3 ? true,
+      withPython3 ? false,
       extraPython3Packages ? (_: [ ]),
       # the function you would have passed to lua.withPackages
       extraLuaPackages ? (_: [ ]),
@@ -160,7 +224,8 @@ let
       res
       // {
         wrapperArgs = lib.escapeShellArgs res.wrapperArgs + " " + extraMakeWrapperArgs;
-        wrapRc = (configure != { });
+        wrapRc = configure != { };
+        legacyWrapper = true;
       }
     );
 
@@ -175,9 +240,9 @@ let
   */
   generateProviderRc =
     {
-      withPython3 ? true,
+      withPython3 ? false,
       withNodeJs ? false,
-      withRuby ? true,
+      withRuby ? false,
       # Perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
       withPerl ? false,
 
@@ -215,66 +280,77 @@ let
 
   grammarToPlugin =
     grammar:
-    let
-      name = lib.pipe grammar [
-        lib.getName
+    # If the grammar has already been processed by this function, return it as-is.
+    # This makes the function idempotent and prevents double-wrapping which mangles
+    # the names of the generated parser files.
+    if grammar ? origGrammar then
+      grammar
+    else
+      let
+        name = lib.pipe grammar [
+          lib.getName
 
-        # added in buildGrammar
-        (lib.removeSuffix "-grammar")
+          # added in buildGrammar
+          (lib.removeSuffix "-grammar")
 
-        # grammars from tree-sitter.builtGrammars
-        (lib.removePrefix "tree-sitter-")
-        (lib.replaceStrings [ "-" ] [ "_" ])
-      ];
+          # grammars from tree-sitter.builtGrammars
+          (lib.removePrefix "tree-sitter-")
+          (lib.replaceStrings [ "-" ] [ "_" ])
+        ];
 
-      nvimGrammars = lib.mapAttrsToList (
-        name: value:
-        value.origGrammar
-          or (builtins.throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
-      ) vimPlugins.nvim-treesitter.grammarPlugins;
-      isNvimGrammar = x: builtins.elem x nvimGrammars;
+        nvimGrammars = lib.mapAttrsToList (
+          name: value:
+          value.origGrammar
+            or (throw "additions to `pkgs.vimPlugins.nvim-treesitter.grammarPlugins` set should be passed through `pkgs.neovimUtils.grammarToPlugin` first")
+        ) vimPlugins.nvim-treesitter.grammarPlugins;
+        isNvimGrammar = x: builtins.elem x nvimGrammars;
 
-      toNvimTreesitterGrammar = makeSetupHook {
-        name = "to-nvim-treesitter-grammar";
-      } ./to-nvim-treesitter-grammar.sh;
-    in
+        toNvimTreesitterGrammar = makeSetupHook {
+          name = "to-nvim-treesitter-grammar";
+        } ./to-nvim-treesitter-grammar.sh;
+      in
 
-    (toVimPlugin (
-      stdenv.mkDerivation {
-        name = "treesitter-grammar-${name}";
+      (toVimPlugin (
+        stdenv.mkDerivation (finalAttrs: {
+          pname = "nvim-treesitter-grammar-${name}";
+          inherit (grammar) version;
 
-        origGrammar = grammar;
-        grammarName = name;
+          origGrammar = grammar;
+          grammarName = name;
 
-        # Queries for nvim-treesitter's (not just tree-sitter's) officially
-        # supported languages are bundled with nvim-treesitter
-        # Queries from repositories for such languages are incompatible
-        # with nvim's implementation of treesitter.
-        #
-        # We try our best effort to only include queries for niche languages
-        # (there are grammars for them in nixpkgs, but they're in
-        # `tree-sitter-grammars.tree-sitter-*`; `vimPlugins.nvim-treesitter-parsers.*`
-        # only includes officially supported languages)
-        #
-        # To use grammar for a niche language, users usually do:
-        #   packages.all.start = with final.vimPlugins; [
-        #     (pkgs.neovimUtils.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-LANG)
-        #   ]
-        #
-        # See also https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
-        installQueries = !isNvimGrammar grammar;
+          # Queries for nvim-treesitter's (not just tree-sitter's) officially
+          # supported languages are bundled with nvim-treesitter
+          # Queries from repositories for such languages are incompatible
+          # with nvim's implementation of treesitter.
+          #
+          # We try our best effort to only include queries for niche languages
+          # (there are grammars for them in nixpkgs, but they're in
+          # `tree-sitter-grammars.tree-sitter-*`; `vimPlugins.nvim-treesitter-parsers.*`
+          # only includes officially supported languages)
+          #
+          # To use grammar for a niche language, users usually do:
+          #   packages.all.start = with final.vimPlugins; [
+          #     (pkgs.neovimUtils.grammarToPlugin pkgs.tree-sitter-grammars.tree-sitter-LANG)
+          #   ]
+          #
+          # See also https://github.com/NixOS/nixpkgs/pull/344849#issuecomment-2381447839
+          installQueries = !isNvimGrammar grammar;
 
-        dontUnpack = true;
-        __structuredAttrs = true;
+          dontUnpack = true;
+          __structuredAttrs = true;
 
-        nativeBuildInputs = [ toNvimTreesitterGrammar ];
+          nativeBuildInputs = [ toNvimTreesitterGrammar ];
 
-        meta = {
-          platforms = lib.platforms.all;
-        }
-        // grammar.meta;
-      }
-    ));
+          passthru = grammar.passthru or { } // {
+            isTreesitterGrammar = true;
+          };
+
+          meta = {
+            platforms = lib.platforms.all;
+          }
+          // grammar.meta;
+        })
+      ));
 
   /*
     Fork of vimUtils.packDir that additionally generates a propagated-build-inputs-file that
@@ -289,7 +365,6 @@ let
     packages:
     let
       rawPackDir = vimUtils.packDir packages;
-
     in
     rawPackDir.override {
       postBuild = ''
@@ -303,6 +378,7 @@ let
 in
 {
   inherit makeNeovimConfig;
+  inherit makeVimPackageInfo;
   inherit generateProviderRc;
   inherit legacyWrapper;
   inherit grammarToPlugin;
@@ -312,5 +388,5 @@ in
   inherit buildNeovimPlugin;
 }
 // lib.optionalAttrs config.allowAliases {
-  buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
+  buildNeovimPluginFrom2Nix = throw "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin; # converted to throw on 2025-12-30
 }

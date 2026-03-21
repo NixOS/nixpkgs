@@ -18,7 +18,16 @@
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel tag;
+  inherit (lib.importJSON releaseManifestFile) channel tag sdkVersion;
+
+  # version including up to the sdk feature band
+  sdkVersionPrefix =
+    let
+      parts = lib.take 3 (lib.splitVersion sdkVersion);
+      patch = lib.elemAt parts 2;
+      band = lib.substring 0 (lib.stringLength patch - 2) patch;
+    in
+    lib.concatStringsSep "." (lib.replaceElemAt parts 2 band);
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -69,7 +78,7 @@ writeScript "update-dotnet-vmr.sh" ''
               select(
                   ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
                   .draft == false and
-                  (.tag_name | startswith("v${channel}")))) |
+                  (.tag_name | startswith("v${sdkVersionPrefix}")))) |
           first
   EOF
       )
@@ -97,7 +106,8 @@ writeScript "update-dotnet-vmr.sh" ''
       read releaseUrl
       read sigUrl
 
-      tmp="$(mktemp -d)"
+      # TMPDIR might be really long, which breaks gpg
+      tmp="$(TMPDIR=/tmp mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
       cd "$tmp"
@@ -115,14 +125,18 @@ writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      curl -fssL "$sigUrl" -o release.sig
+      # recent dotnet 10 releases don't have a signature for the github tarball
+      if [[ ! $sigUrl = */dotnet-source-* ]]; then
+        curl -fssL "$sigUrl" -o release.sig
 
-      (
-          export GNUPGHOME=$PWD/.gnupg
-          trap 'gpgconf --kill all' EXIT
-          gpg --batch --import ${releaseKey}
-          gpg --batch --verify release.sig "$tarball"
-      )
+        (
+            export GNUPGHOME=$PWD/.gnupg
+            mkdir -m 700 -p $GNUPGHOME
+            trap 'gpgconf --kill all' EXIT
+            gpg --no-autostart --batch --import ${releaseKey}
+            gpg --no-autostart --batch --verify release.sig "$tarball"
+        )
+      fi
 
       tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json \*/prep\*.sh
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
@@ -133,15 +147,24 @@ writeScript "update-dotnet-vmr.sh" ''
           artifactVar=$(grep ^defaultArtifactsRid= prep-source-build.sh)
           eval "$artifactVar"
 
-          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
+          artifactsFile=Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
+          artifactsUrl=https://builds.dotnet.microsoft.com/${
+            if lib.versionAtLeast channel "10" then "dotnet/source-build" else "source-built-artifacts/assets"
+          }/$artifactsFile
+
+          curl -fsSL "$artifactsUrl" --head || {
+            [[ $? == 22 ]]
+            artifactsUrl=https://ci.dot.net/public/source-build/$artifactsFile
+          }
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))
               | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
+          artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
       fi
-      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
 
-      artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
+      artifactsHash=$(nix-prefetch-url "$artifactsUrl")
+      artifactsHash=$(nix-hash --to-sri --type sha256 "$artifactsHash")
 
       sdkVersion=$(jq -er .tools.dotnet global.json)
 

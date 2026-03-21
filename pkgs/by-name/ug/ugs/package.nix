@@ -17,13 +17,13 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ugs";
-  version = "2.1.17";
+  version = "2.1.18";
 
   src = fetchzip {
-    url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${version}/UniversalGcodeSender.zip";
-    hash = "sha256-7Ed3oz6E/9pEX01Xk1UokRxo5vf80JrcdBaPoT7hgm4=";
+    url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${finalAttrs.version}/UniversalGcodeSender.zip";
+    hash = "sha256-GRoQ9Wg+OyjhBjjRiNVZlMQ6pukvj9i3p9UA+7B/Tww=";
   };
 
   dontUnpack = true;
@@ -38,20 +38,20 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/ugs \
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
-      --add-flags "-jar ${src}/UniversalGcodeSender.jar"
+      --add-flags "-jar ${finalAttrs.src}/UniversalGcodeSender.jar"
 
     runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform G-Code sender for GRBL, Smoothieware, TinyG and G2core";
     homepage = "https://github.com/winder/Universal-G-Code-Sender";
-    maintainers = with maintainers; [ matthewcroughan ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
     mainProgram = "ugs";
   };
-}
+})

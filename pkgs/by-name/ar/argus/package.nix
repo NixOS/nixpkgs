@@ -16,12 +16,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "argus";
   version = "3.0.8.2";
 
   src = fetchurl {
-    url = "http://qosient.com/argus/src/${pname}-${version}.tar.gz";
+    url = "http://qosient.com/argus/src/argus-${finalAttrs.version}.tar.gz";
     sha256 = "1zzf688dbbcb5z2r9v1p28rddns6znzx35nc05ygza6lp7aknkna";
   };
 
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/snmpwalk ${lib.getBin net-snmp}/bin/snmpwalk
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audit Record Generation and Utilization System for networks";
     longDescription = ''
       The Argus Project is focused on developing all
@@ -70,8 +70,7 @@ stdenv.mkDerivation rec {
       you will find Argus a useful tool.
     '';
     homepage = "http://qosient.com/argus";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -38,6 +38,11 @@ buildPythonPackage rec {
     hypothesis
   ];
 
+  pytestFlags = [
+    # NumPy warning suppression and assertion utilities are deprecated.
+    "-Wignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "array_api_strict" ];
 
   disabledTests = [

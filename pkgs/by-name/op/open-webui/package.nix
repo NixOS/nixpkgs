@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.31";
+  version = "0.8.10";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-Pv+2+j5S4jokGYHGSewk33Vmf41XJj8CwyKYLMG2EWA=";
+    hash = "sha256-wXkU3j0Bzpd2H5aVkqmKyUHxukRamBYQh8HBXB8tLpM=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-HBmhRzWY7lIl3OScIlwSj/JJUlVcgFvXNHbw4jJRbl8=";
+    npmDepsHash = "sha256-ZiIEGeKee/qEhe44SGlPTDhwP+vL9K8RkFEOeUdzUI8=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -69,7 +69,7 @@ let
     '';
   };
 in
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   inherit pname version src;
   pyproject = true;
 
@@ -106,16 +106,16 @@ python3Packages.buildPythonApplication rec {
       beautifulsoup4
       black
       boto3
+      brotli
+      chardet
       chromadb
       cryptography
       ddgs
       docx2txt
       einops
-      extract-msg
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
       google-api-python-client
@@ -123,38 +123,36 @@ python3Packages.buildPythonApplication rec {
       google-auth-oauthlib
       google-cloud-storage
       google-genai
-      google-generativeai
       googleapis-common-protos
       httpx
-      iso-639
       itsdangerous
       langchain
+      langchain-classic
       langchain-community
-      langdetect
+      langchain-text-splitters
       ldap3
       loguru
       markdown
       mcp
+      msoffcrypto-tool
       nltk
       onnxruntime
       openai
       opencv-python-headless
-      openpyxl
-      opensearch-py
       opentelemetry-api
-      opentelemetry-sdk
       opentelemetry-exporter-otlp
       opentelemetry-instrumentation
+      opentelemetry-instrumentation-aiohttp-client
       opentelemetry-instrumentation-fastapi
-      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-instrumentation-httpx
+      opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-redis
       opentelemetry-instrumentation-requests
-      opentelemetry-instrumentation-logging
-      opentelemetry-instrumentation-httpx
-      opentelemetry-instrumentation-aiohttp-client
-      oracledb
+      opentelemetry-instrumentation-sqlalchemy
+      opentelemetry-sdk
+      openpyxl
+      opensearch-py
       pandas
-      passlib
       peewee
       peewee-migrate
       pgvector
@@ -170,10 +168,12 @@ python3Packages.buildPythonApplication rec {
       pypdf
       python-dotenv
       python-jose
+      python-mimeparse
       python-multipart
       python-pptx
       python-socketio
       pytube
+      pytz
       pyxlsb
       rank-bm25
       rapidocr-onnxruntime
@@ -185,7 +185,6 @@ python3Packages.buildPythonApplication rec {
       soundfile
       starlette-compress
       starsessions
-      tencentcloud-sdk-python
       tiktoken
       transformers
       unstructured
@@ -197,26 +196,34 @@ python3Packages.buildPythonApplication rec {
     ++ pyjwt.optional-dependencies.crypto
     ++ starsessions.optional-dependencies.redis;
 
-  optional-dependencies = with python3Packages; rec {
+  optional-dependencies = with python3Packages; {
     postgres = [
       pgvector
       psycopg2-binary
     ];
 
+    mariadb = [
+      mariadb
+    ];
+
     all = [
+      azure-search-documents
       colbert-ai
       elasticsearch
-      moto
+      firecrawl-py
       gcp-storage-emulator
-      playwright
+      moto
       oracledb
       pinecone-client
+      playwright
       pymilvus
       pymongo
       qdrant-client
+      weaviate-client
     ]
-    ++ moto.optional-dependencies.s3
-    ++ postgres;
+    ++ finalAttrs.passthru.optional-dependencies.mariadb
+    ++ finalAttrs.passthru.optional-dependencies.postgres
+    ++ moto.optional-dependencies.s3;
   };
 
   pythonImportsCheck = [ "open_webui" ];
@@ -258,4 +265,4 @@ python3Packages.buildPythonApplication rec {
       codgician
     ];
   };
-}
+})

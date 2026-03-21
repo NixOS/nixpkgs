@@ -26,17 +26,17 @@
   gtk3,
   krb5,
   libGL,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libdrm,
   libgbm,
   libgnome-keyring,
@@ -56,24 +56,24 @@
 
 let
   pname = "gitkraken";
-  version = "11.4.0";
+  version = "11.6.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/linux/x64/${version}/gitkraken-amd64.tar.gz";
-      hash = "sha256-mJ7BAR1cBZS4kE94kQQJc0FBR5lqId/fWTPxu62bUeA=";
+      hash = "sha256-MU/WB4RsNViEulvE6fB7S4QTjjMI/50enlyCIX+xar4=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/x64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-qMe2vIjKcAI8T53W+lL71G1HS6oy6RaCQmHVLUgCzdI=";
+      hash = "sha256-Ty+eRZJ6bnBsrs1VtGem1+m9WDZZf/PgiOvFIazQF6I=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://api.gitkraken.dev/releases/production/darwin/arm64/${version}/GitKraken-v${version}.zip";
-      hash = "sha256-HlEsSDq1DZWi6ehO66OHd57rA0jrYXWRA1V7H+DsveM=";
+      hash = "sha256-mpJNhvKIBYt3Yd+RjxSgzRP6AfnfHPRbQ0dzd5kQQIQ=";
     };
   };
 
@@ -110,15 +110,15 @@ let
       stdenv.cc.cc
       curlWithGnuTls
       udev
-      libX11
-      libXext
-      libXcursor
-      libXi
+      libx11
+      libxext
+      libxcursor
+      libxi
       libxcb
       glib
-      libXScrnSaver
+      libxscrnsaver
       libxkbfile
-      libXtst
+      libxtst
       nss
       nspr
       cups
@@ -126,16 +126,16 @@ let
       expat
       gdk-pixbuf
       dbus
-      libXdamage
-      libXrandr
+      libxdamage
+      libxrandr
       atk
       pango
       cairo
       freetype
       fontconfig
-      libXcomposite
-      libXfixes
-      libXrender
+      libxcomposite
+      libxfixes
+      libxrender
       gtk3
       libgnome-keyring
       openssl
@@ -154,11 +154,12 @@ let
 
     desktopItems = [
       (makeDesktopItem {
-        name = "GitKraken Desktop";
+        name = "gitkraken";
         exec = "gitkraken";
         icon = "gitkraken";
         desktopName = "GitKraken Desktop";
         genericName = "Git Client";
+        startupWMClass = "GitKraken";
         categories = [ "Development" ];
         comment = "Unleash your repo";
       })
@@ -184,8 +185,7 @@ let
       mkdir -p $out/share/${pname}/
       cp -R $src/* $out/share/${pname}
 
-      mkdir -p $out/share/pixmaps
-      cp gitkraken.png $out/share/pixmaps/
+      install -Dm444 gitkraken.png $out/share/icons/hicolor/512x512/apps/gitkraken.png
 
       runHook postInstall
     '';

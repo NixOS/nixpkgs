@@ -5,12 +5,12 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hpcg";
   version = "3.1";
 
   src = fetchurl {
-    url = "http://www.hpcg-benchmark.org/downloads/hpcg-${version}.tar.gz";
+    url = "http://www.hpcg-benchmark.org/downloads/hpcg-${finalAttrs.version}.tar.gz";
     sha256 = "197lw2nwmzsmfsbvgvi8z7kj69n374kgfzzp8pkmk7mp2vkk991k";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HPC conjugate gradient benchmark";
     homepage = "https://www.hpcg-benchmark.org";
-    platforms = platforms.linux;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
     mainProgram = "xhpcg";
   };
-}
+})

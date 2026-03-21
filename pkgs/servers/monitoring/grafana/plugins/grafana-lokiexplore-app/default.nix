@@ -2,12 +2,12 @@
 
 grafanaPlugin {
   pname = "grafana-lokiexplore-app";
-  version = "1.0.26";
-  zipHash = "sha256-7EztpeZIpDu/ner9EOiOjoh3J/GBgYWpZoh3usXyPqo=";
-  meta = with lib; {
+  version = "1.0.41";
+  zipHash = "sha256-hOsiRHj32ydvNsSugFviw4NMVqjg11n7hIxVNr9dcA0=";
+  meta = {
     description = "Browse Loki logs without the need for writing complex queries";
-    license = licenses.agpl3Only;
-    teams = [ lib.teams.fslabs ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ lpostula ];
+    platforms = lib.platforms.unix;
   };
 }

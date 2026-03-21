@@ -106,21 +106,24 @@ in
       example = "/run/netbox/netbox.sock";
     };
 
+    gunicornArgs = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      description = "extra args for gunicorn when serving netbox";
+      example = [
+        "--workers"
+        "9"
+      ];
+    };
+
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "25.11" then
-          pkgs.netbox_4_3
-        else if lib.versionAtLeast config.system.stateVersion "25.05" then
-          pkgs.netbox_4_2
-        else
-          pkgs.netbox_4_1;
+        if lib.versionAtLeast config.system.stateVersion "25.11" then pkgs.netbox_4_4 else pkgs.netbox_4_2;
       defaultText = lib.literalExpression ''
         if lib.versionAtLeast config.system.stateVersion "25.11"
-        then pkgs.netbox_4_3
-        else if lib.versionAtLeast config.system.stateVersion "25.05"
-        then pkgs.netbox_4_2
-        else pkgs.netbox_4_1;
+        then pkgs.netbox_4_4
+        else pkgs.netbox_4_2;
       '';
       description = ''
         NetBox package to use.
@@ -369,7 +372,8 @@ in
                   else
                     "${cfg.listenAddress}:${toString cfg.port}"
                 } \
-                --pythonpath ${pkg}/opt/netbox/netbox
+                --pythonpath ${pkg}/opt/netbox/netbox \
+                ${lib.concatStringsSep " " cfg.gunicornArgs}
             '';
             PrivateTmp = true;
             TimeoutStartSec = lib.mkDefault "5min";

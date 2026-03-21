@@ -11,14 +11,14 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ftgl";
   version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "frankheckenbach";
     repo = "ftgl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-6TDNGoMeBLnucmHRgEDIVWcjlJb7N0sTluqBwRMMWn4=";
   };
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     install -Dm644 src/FTSize.h src/FTFace.h -t $out/include/FTGL
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/frankheckenbach/ftgl";
     description = "Font rendering library for OpenGL applications";
     longDescription = ''
@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
       pixmaps, texture maps, outlines, polygon mesh, and extruded polygon
       rendering modes.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
   };
-}
+})

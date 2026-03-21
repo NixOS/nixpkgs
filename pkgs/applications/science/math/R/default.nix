@@ -4,9 +4,9 @@
   fetchurl,
   bzip2,
   gfortran,
-  libX11,
-  libXmu,
-  libXt,
+  libx11,
+  libxmu,
+  libxt,
   libjpeg,
   libpng,
   libtiff,
@@ -46,7 +46,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src =
     let
@@ -54,11 +54,12 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-      hash = "sha256-tCp5IUADhmRbEBBbkcaHKHh9tcTIPJ9sMKzc5jLhu3A=";
+      hash = "sha256-DXH/cQbsac18Z+HpXtGjzuNViAkx8ut4xTABSp43nyA=";
     };
 
   outputs = [
     "out"
+    "man"
     "tex"
   ];
 
@@ -72,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     bzip2
     gfortran
-    libX11
-    libXmu
-    libXt
-    libXt
+    libx11
+    libxmu
+    libxt
+    libxt
     libjpeg
     libpng
     libtiff
@@ -156,6 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     --disable-R-framework
     --without-x
+    --without-static-cairo
     OBJC="clang"
     CPPFLAGS="-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
     LDFLAGS="-L${lib.getLib stdenv.cc.libcxx}/lib"
@@ -215,10 +217,11 @@ stdenv.mkDerivation (finalAttrs: {
     url
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
-    license = licenses.gpl2Plus;
+    mainProgram = "R";
+    license = lib.licenses.gpl2Plus;
 
     longDescription = ''
       GNU R is a language and environment for statistical computing and
@@ -240,9 +243,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     pkgConfigModules = [ "libR" ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
 
-    maintainers = with maintainers; [ jbedo ];
-    teams = [ teams.sage ];
+    maintainers = with lib.maintainers; [ jbedo ];
+    teams = [ lib.teams.sage ];
   };
 })

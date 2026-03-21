@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cairocffi,
   dbus-fast,
+  aiohttp,
+  cairo,
+  cffi,
   glib,
   iwlib,
   libcst,
@@ -18,53 +21,58 @@
   pulsectl-asyncio,
   pygobject3,
   pytz,
-  pywayland,
-  pywlroots,
   pyxdg,
   setuptools,
   setuptools-scm,
   wayland,
+  wayland-protocols,
+  wayland-scanner,
   wlroots,
-  xcbutilcursor,
-  xcbutilwm,
+  libxcb-cursor,
+  libxcb-wm,
   xcffib,
-  xkbcommon,
   nixosTests,
   extraPackages ? [ ],
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile";
-  version = "0.33.0";
+  version = "0.35.0";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile-extras`
+
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
-    tag = "v${version}";
-    hash = "sha256-npteZR48xN3G5gDsHt8c67zzc8Tom1YxnxbnDuKZHVg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5XHzlS/Knw/VmVtnM7wToJ/F12GAa2lwdWuXBJHXnZM=";
   };
-
-  patches = [
-    ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
-  ];
-
-  postPatch = ''
-    substituteInPlace libqtile/pangocffi.py \
-      --replace-fail libgobject-2.0.so.0 ${glib.out}/lib/libgobject-2.0.so.0 \
-      --replace-fail libpangocairo-1.0.so.0 ${pango.out}/lib/libpangocairo-1.0.so.0 \
-      --replace-fail libpango-1.0.so.0 ${pango.out}/lib/libpango-1.0.so.0
-    substituteInPlace libqtile/backend/x11/xcursors.py \
-      --replace-fail libxcb-cursor.so.0 ${xcbutilcursor.out}/lib/libxcb-cursor.so.0
-    substituteInPlace libqtile/backend/wayland/cffi/build.py \
-        --replace-fail /usr/include/pixman-1 ${lib.getDev pixman}/include \
-        --replace-fail /usr/include/libdrm ${lib.getDev libdrm}/include/libdrm
-  '';
 
   build-system = [
     setuptools
     setuptools-scm
+  ];
+  nativeBuildInputs = [
     pkg-config
+    wayland-scanner
+  ];
+
+  env = {
+    "QTILE_CAIRO_PATH" = "${lib.getDev cairo}/include/cairo";
+    "QTILE_PIXMAN_PATH" = "${lib.getDev pixman}/include/pixman-1";
+    "QTILE_LIBDRM_PATH" = "${lib.getDev libdrm}/include/libdrm";
+    "QTILE_WLROOTS_PATH" =
+      "${lib.getDev wlroots}/include/wlroots-${lib.versions.majorMinor wlroots.version}";
+  };
+
+  pypaBuildFlags = [
+    "--config-setting=backend=wayland"
+    "--config-setting=GOBJECT=${lib.getLib glib}/lib/libgobject-2.0.so"
+    "--config-setting=PANGO=${lib.getLib pango}/lib/libpango-1.0.so"
+    "--config-setting=PANGOCAIRO=${lib.getLib pango}/lib/libpangocairo-1.0.so"
+    "--config-setting=XCBCURSOR=${lib.getLib libxcb-cursor}/lib/libxcb-cursor.so"
   ];
 
   dependencies = extraPackages ++ [
@@ -77,19 +85,24 @@ buildPythonPackage rec {
     pulsectl-asyncio
     pygobject3
     pytz
-    pywayland
-    pywlroots
     pyxdg
     xcffib
-    xkbcommon
   ];
 
   buildInputs = [
+    cairo
     libinput
     libxkbcommon
     wayland
     wlroots
-    xcbutilwm
+    libxcb-wm
+  ];
+
+  propagatedBuildInputs = [
+    wayland-protocols
+    cffi
+    xcffib
+    aiohttp
   ];
 
   doCheck = false;
@@ -103,15 +116,16 @@ buildPythonPackage rec {
     install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.qtile.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       arjan-s
       sigmanificient
+      doronbehar
     ];
   };
-}
+})

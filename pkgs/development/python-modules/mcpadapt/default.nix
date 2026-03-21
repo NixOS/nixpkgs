@@ -1,10 +1,12 @@
 {
   lib,
   buildPythonPackage,
+  crewai,
   fetchFromGitHub,
   hatchling,
   jsonref,
   langchain,
+  langchain-anthropic,
   langgraph,
   llama-index,
   mcp,
@@ -16,16 +18,16 @@
   torchaudio,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mcpadapt";
-  version = "0.1.16";
+  version = "0.1.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grll";
     repo = "mcpadapt";
-    tag = "v${version}";
-    hash = "sha256-uhphBJ9gab/5i8rTnEzfhCm0caJ756XdGqJeHoHP0tM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mUwGKr+QBkqMKhfEEIlF/jZDW7enKYdngNIoxG5hMU4=";
   };
 
   build-system = [ hatchling ];
@@ -41,10 +43,10 @@ buildPythonPackage rec {
       torchaudio
       soundfile
     ];
-    # crewai = [ crewai ];
+    crewai = [ crewai ];
     langchain = [
       langchain
-      # langchain-anthropic
+      langchain-anthropic
       langgraph
     ];
     llamaindex = [ llama-index ];
@@ -59,8 +61,8 @@ buildPythonPackage rec {
   meta = {
     description = "MCP servers tool";
     homepage = "https://github.com/grll/mcpadapt";
-    changelog = "https://github.com/grll/mcpadapt/releases/tag/${src.tag}";
+    changelog = "https://github.com/grll/mcpadapt/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

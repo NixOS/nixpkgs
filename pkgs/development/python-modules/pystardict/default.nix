@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pystardict";
-  version = "0.8";
+  version = "0.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "lig";
     repo = "pystardict";
-    rev = version;
-    hash = "sha256-YrZpIhyxfA3G7rP0SJ+EvzGwAXlne80AYilkj6cIDnA=";
+    tag = "v${version}";
+    hash = "sha256-VWOxggAKifN5f6nSN1xsSbg0hpKzrHDw+UqnAOzsXj0=";
   };
 
   propagatedBuildInputs = [ six ];
@@ -31,10 +31,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pystardict" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for manipulating StarDict dictionaries from within Python";
     homepage = "https://github.com/lig/pystardict";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ thornycrackers ];
   };
 }

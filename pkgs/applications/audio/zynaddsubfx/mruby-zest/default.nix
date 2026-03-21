@@ -8,17 +8,17 @@
   ruby,
   libGL,
   libuv,
-  libX11,
+  libx11,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mruby-zest";
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = "${pname}-build";
-    rev = "refs/tags/${version}";
+    owner = "mruby-zest";
+    repo = "mruby-zest-build";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     sha256 = "sha256-rIb6tQimwrUj+623IU5zDyKNWsNYYBElLQClOsP+5Dc=";
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libGL
     libuv
-    libX11
+    libx11
   ];
 
   # Force optimization to fix:
@@ -63,11 +63,11 @@ stdenv.mkDerivation rec {
     touch "$out/qml/MainWindow.qml"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zest Framework used in ZynAddSubFX's UI";
     homepage = "https://github.com/mruby-zest";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -13,17 +13,18 @@
   libass,
   python3,
   testers,
+  darwinMinVersionHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vapoursynth";
-  version = "72";
+  version = "73";
 
   src = fetchFromGitHub {
     owner = "vapoursynth";
     repo = "vapoursynth";
-    rev = "R${version}";
-    hash = "sha256-LRRz4471Rl/HwJ14zAkU/f2Acuofja8c0pGkuWihhsM=";
+    rev = "R${finalAttrs.version}";
+    hash = "sha256-cs+MEnOi1bwA52fiTIlGGzYjy5/m/FdoK55WSADR/gQ=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +41,9 @@ stdenv.mkDerivation rec {
         cython
       ]
     ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   enableParallelBuilding = true;
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = vapoursynth;
       # Check Core version to prevent false positive with API version
-      version = "Core R${version}";
+      version = "Core R${finalAttrs.version}";
     };
   };
 
@@ -102,16 +106,16 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video processing framework with the future in mind";
     homepage = "http://www.vapoursynth.com/";
-    license = licenses.lgpl21;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       rnhmjoj
       sbruder
       snaki
     ];
     mainProgram = "vspipe";
   };
-}
+})

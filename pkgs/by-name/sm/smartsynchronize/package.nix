@@ -8,7 +8,7 @@
   glib,
   adwaita-icon-theme,
   wrapGAppsHook3,
-  libXtst,
+  libxtst,
   which,
 }:
 let
@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smartsynchronize";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchurl {
     url = "https://www.syntevo.com/downloads/smartsynchronize/smartsynchronize-linux-${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }.tar.gz";
-    hash = "sha256-78CidB6d7FJH17rRT3N9tCCHNZyeyOy7DOepxVDLPUM=";
+    hash = "sha256-F+Yrr029nPnnCvFEhIxgeXloyt2JRKSw8uOmVySWKzo=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
         lib.makeLibraryPath [
           gtk3
           glib
-          libXtst
+          libxtst
         ]
       } \
       --prefix JAVA_HOME : ${jre} \

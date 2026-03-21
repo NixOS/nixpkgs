@@ -1,52 +1,67 @@
 {
-  _7zz,
   appimageTools,
   fetchurl,
-  fetchzip,
+  imagemagick,
   lib,
+  makeWrapper,
+  stdenv,
   stdenvNoCC,
-  xorg,
+  libxshmfence,
+  undmg,
 }:
 
 let
   pname = "mochi";
-  version = "1.18.11";
+  version = "1.21.1";
 
   linux = appimageTools.wrapType2 rec {
     inherit pname version meta;
 
     src = fetchurl {
-      url = "https://mochi.cards/releases/Mochi-${version}.AppImage";
-      hash = "sha256-NQ591KtWQz8hlXPhV83JEwGm+Au26PIop5KVzsyZKp4=";
+      url = "https://download.mochi.cards/releases/Mochi-${version}.AppImage";
+      hash = "sha256-JgKzq4iUqpFiB6TpC5Wv7vx+pjeqr9EzNwftiNjEl/I=";
     };
 
     appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
-    extraPkgs = pkgs: [ xorg.libxshmfence ];
+    extraPkgs = pkgs: [ libxshmfence ];
 
     extraInstallCommands = ''
       install -Dm444 ${appimageContents}/${pname}.desktop -t $out/share/applications/
-      install -Dm444 ${appimageContents}/${pname}.png -t $out/share/pixmaps/
+      ${lib.getExe imagemagick} ${appimageContents}/${pname}.png -resize 512x512 ${pname}_512.png
+      install -Dm444 ${pname}_512.png $out/share/icons/hicolor/512x512/apps/${pname}.png
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace-fail 'Exec=AppRun --no-sandbox' 'Exec=${pname}'
     '';
+
+    passthru.updateScript = ./update.sh;
   };
 
-  darwin = stdenvNoCC.mkDerivation {
+  darwin = stdenv.mkDerivation {
     inherit pname version meta;
 
-    src = fetchzip {
-      url = "https://mochi.cards/releases/Mochi-${version}.dmg";
-      hash = "sha256-5RM4eqHQoYfO5JiUH9ol+3XxOk4VX4ocE3Yia82sovI=";
-      stripRoot = false;
-      nativeBuildInputs = [ _7zz ];
+    src = fetchurl {
+      url = "https://download.mochi.cards/releases/Mochi-${version}${lib.optionalString stdenv.hostPlatform.isAarch64 "-arm64"}.dmg";
+      hash =
+        if stdenv.hostPlatform.isAarch64 then
+          "sha256-b6lANyQWbovy2XegEJ/cNFrhh3YA4G6jzl5rpexi0oQ="
+        else
+          "sha256-iHNBD8MDmH+OzM2xUVOErB3aPypFN0wCkLKgfSjzfSQ=";
     };
+
+    sourceRoot = ".";
+
+    nativeBuildInputs = [
+      makeWrapper
+      undmg
+    ];
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications
-      cp -r *.app $out/Applications
+      mkdir -p $out/{Applications,bin}
+      cp -a Mochi.app $out/Applications
+      makeWrapper $out/Applications/Mochi.app/Contents/MacOS/Mochi $out/bin/${pname}
 
       runHook postInstall
     '';
@@ -57,8 +72,12 @@ let
     homepage = "https://mochi.cards/";
     changelog = "https://mochi.cards/changelog.html";
     license = lib.licenses.unfree;
+    mainProgram = "mochi";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ poopsicles ];
+    maintainers = with lib.maintainers; [
+      piotrkwiecinski
+      poopsicles
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 in

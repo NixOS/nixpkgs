@@ -1,5 +1,7 @@
 const { classify } = require('../supportedBranches.js')
-const { postReview } = require('./reviews.js')
+const { postReview, dismissReviews } = require('./reviews.js')
+const reviewKey = 'prepare'
+const supportedSystems = require('./supportedSystems.js')
 
 module.exports = async ({ github, context, core, dry }) => {
   const pull_number = context.payload.pull_request.number
@@ -46,7 +48,7 @@ module.exports = async ({ github, context, core, dry }) => {
         `Please target \`${correctBranch}\` instead.`,
       ].join('\n')
 
-      await postReview({ github, context, core, dry, body })
+      await postReview({ github, context, core, dry, body, reviewKey })
 
       throw new Error('The PR targets a channel branch.')
     }
@@ -128,10 +130,7 @@ module.exports = async ({ github, context, core, dry }) => {
       )
 
       // Make sure that we always check the current target as well, even if its a WIP branch.
-      // If it's not a WIP branch, it was already included in either releases or secondary.
-      if (classify(base.ref).type.includes('wip')) {
-        secondary.push(classify(base.ref))
-      }
+      secondary.push(classify(base.ref))
 
       for (const branch of secondary) {
         const nextCandidate = await mergeBase(branch)
@@ -173,11 +172,13 @@ module.exports = async ({ github, context, core, dry }) => {
           '  ```',
         ].join('\n')
 
-        await postReview({ github, context, core, dry, body })
+        await postReview({ github, context, core, dry, body, reviewKey })
 
         throw new Error(`The PR contains commits from a different base.`)
       }
     }
+
+    await dismissReviews({ github, context, core, dry, reviewKey })
 
     let mergedSha, targetSha
 
@@ -209,7 +210,8 @@ module.exports = async ({ github, context, core, dry }) => {
     core.setOutput('mergedSha', mergedSha)
     core.setOutput('targetSha', targetSha)
 
-    core.setOutput('systems', require('../supportedSystems.json'))
+    const systems = await supportedSystems({ github, context, targetSha })
+    core.setOutput('systems', systems)
 
     const files = (
       await github.paginate(github.rest.pulls.listFiles, {
@@ -221,7 +223,6 @@ module.exports = async ({ github, context, core, dry }) => {
 
     const touched = []
     if (files.includes('ci/pinned.json')) touched.push('pinned')
-    if (files.includes('ci/OWNERS')) touched.push('owners')
     core.setOutput('touched', touched)
 
     return

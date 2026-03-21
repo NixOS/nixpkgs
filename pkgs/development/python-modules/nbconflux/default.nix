@@ -47,17 +47,17 @@ buildPythonPackage rec {
     rm versioneer.py
   '';
 
-  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  env.JUPYTER_PATH = "${nbconvert}/share/jupyter";
   disabledTests = [
     "test_post_to_confluence"
     "test_optional_components"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Converts Jupyter Notebooks to Atlassian Confluence (R) pages using nbconvert";
     mainProgram = "nbconflux";
     homepage = "https://github.com/Valassis-Digital-Media/nbconflux";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.arnoldfarkas ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.arnoldfarkas ];
   };
 }

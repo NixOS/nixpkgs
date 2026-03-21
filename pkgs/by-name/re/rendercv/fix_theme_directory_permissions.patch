@@ -1,0 +1,42 @@
+diff --git a/src/rendercv/cli/create_theme_command/create_theme_command.py b/src/rendercv/cli/create_theme_command/create_theme_command_fixed.py
+index 3812d5b..42a69db 100644
+--- a/src/rendercv/cli/create_theme_command/create_theme_command.py
++++ b/src/rendercv/cli/create_theme_command/create_theme_command_fixed.py
+@@ -1,3 +1,4 @@
++import os
+ import pathlib
+ import textwrap
+ from typing import Annotated
+@@ -35,11 +36,21 @@ def cli_command_create_theme(
+ 
+     copy_templates("typst", new_theme_folder)
+ 
++    # Explicit directory permissions
++    pathlib.Path.chmod(new_theme_folder, 0o755)
++    # Explicit files and sub-directories permissions recursively
++    for root, directories, files in os.walk(new_theme_folder):
++        for directory in directories:
++            pathlib.Path.chmod(pathlib.Path(root) / directory, 0o755)
++        for file in files:
++            pathlib.Path.chmod(pathlib.Path(root) / file, 0o644)
++
+     # Create the __init__.py file for the new theme:
+     create_init_file_for_theme(theme_name, new_theme_folder / "__init__.py")
+ 
+     # Build the panel
+-    message = textwrap.dedent(f"""
++    message = textwrap.dedent(
++        f"""
+         [green]✓[/green] Created your custom theme: [purple]./{theme_name}[/purple]
+ 
+         What you can do with this theme:
+@@ -52,7 +63,8 @@ def cli_command_create_theme(
+         To use your theme, set in your YAML input file:
+         [cyan]  design:
+         [cyan]    theme: {theme_name}
+-    """).strip("\n")
++    """
++    ).strip("\n")
+ 
+     print(
+         rich.panel.Panel(

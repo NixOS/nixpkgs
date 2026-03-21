@@ -4,7 +4,7 @@
   fetchPypi,
 
   # nativeBuildInputs
-  pyqtwebengine,
+  pyqt6-webengine,
 
   # build-system
   setuptools,
@@ -36,7 +36,9 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
+  pyqt6,
   python-lsp-black,
+  python-lsp-ruff,
   python-lsp-server,
   pyuca,
   pyzmq,
@@ -54,27 +56,33 @@
   three-merge,
   watchdog,
   yarl,
+  qt6,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.0a2";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KbGfG9T3XkYXntIQx325mYb0Bh8c0idb+25awFlWD9s=";
+    hash = "sha256-bgkiihfqqIHnYes5gvIvAdQ7arUAm7NmGLaqnP/Ml40=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     "ipython"
     "python-lsp-server"
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   dependencies = [
@@ -104,8 +112,9 @@ buildPythonPackage rec {
     pylint-venv
     pyls-spyder
     pyopengl
-    pyqtwebengine
+    pyqt6-webengine
     python-lsp-black
+    python-lsp-ruff
     python-lsp-server
     pyuca
     pyzmq
@@ -123,11 +132,14 @@ buildPythonPackage rec {
     three-merge
     watchdog
     yarl
+    pyqt6
   ]
   ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
+
+  env.SPYDER_QT_BINDING = "pyqt6";
 
   postInstall = ''
     # Add Python libs to env so Spyder subprocesses
@@ -153,7 +165,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

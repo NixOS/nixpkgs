@@ -14,14 +14,15 @@
   casadi,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aerosandbox";
   version = "4.2.8";
   format = "wheel";
 
   src = fetchPypi {
     pname = "AeroSandbox";
-    inherit version format;
+    inherit (finalAttrs) version;
+    format = "wheel";
 
     python = "py3";
     dist = "py3";
@@ -49,4 +50,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

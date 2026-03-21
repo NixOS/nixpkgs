@@ -2,9 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pdm-backend,
-  tomli,
   build,
   hatchling,
   pkginfo,
@@ -13,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pdm-build-locked";
-  version = "0.3.5";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm-build-locked";
     tag = version;
-    hash = "sha256-TfQYWpeE+rN1GR84W89LFAs6Bs68E9FYQm0b6kPZH2E=";
+    hash = "sha256-ONDKW3KIOKnrOWD/T/W7Do/4/CfgET4TpfYcLha5mVg=";
   };
 
   postPatch = ''
@@ -30,8 +28,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ pdm-backend ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "pdm_build_locked" ];
 

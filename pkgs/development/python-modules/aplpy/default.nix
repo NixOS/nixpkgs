@@ -56,10 +56,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aplpy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Astronomical Plotting Library in Python";
     homepage = "http://aplpy.github.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ smaret ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ smaret ];
   };
 }

@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "epitran";
-  version = "1.24";
+  version = "1.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dmort27";
     repo = "epitran";
-    tag = version;
-    hash = "sha256-AH4q8J5oMaUVJ559qe/ZlJXlCcGdxWnxMhnZKCH5Rlk=";
+    tag = "v${version}";
+    hash = "sha256-LKESBSLn2gpXx8kEXmykEkTboIMiS5gZ2Kb9rj1lDTk=";
   };
 
   build-system = [ setuptools ];
@@ -47,11 +47,11 @@ buildPythonPackage rec {
     "epitran.vector"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for transcribing languages into IPA";
     homepage = "https://github.com/dmort27/epitran";
-    changelog = "https://github.com/dmort27/epitran/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vizid ];
+    changelog = "https://github.com/dmort27/epitran/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vizid ];
   };
 }

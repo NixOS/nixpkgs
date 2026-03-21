@@ -8,7 +8,7 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? !enableShared,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libodb-sqlite";
   version = "2.5.0-b.27";
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "https://pkg.cppget.org/1/beta/odb/libodb-sqlite-${version}.tar.gz";
+    url = "https://pkg.cppget.org/1/beta/odb/libodb-sqlite-${finalAttrs.version}.tar.gz";
     hash = "sha256-jpxtY/VMkh88IzqGYgedu5TZGVIbPpy/FZNvUaOMf+w=";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "SQLite ODB runtime library";
     longDescription = ''
       ODB is an object-relational mapping (ORM) system for C++. It provides
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.codesynthesis.com/products/odb/";
     changelog = "https://git.codesynthesis.com/cgit/odb/libodb-sqlite/tree/NEWS";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ r-burns ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ r-burns ];
+    platforms = lib.platforms.all;
   };
-}
+})

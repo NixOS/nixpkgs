@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   rustPlatform,
   meson,
   ninja,
@@ -33,7 +32,6 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
   hotdoc,
-  mopidy,
   apple-sdk_gstreamer,
 }:
 
@@ -116,6 +114,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "reqwest" # tests hang on darwin
           "threadshare" # tests cannot bind to localhost on darwin
+          "uriplaylistbin" # thread reqwest-internal-sync-runtime attempred to create a NULL object (in test_cache)
           "webp" # not supported on darwin (upstream crate issue)
         ]
         ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
@@ -136,7 +135,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.14.1";
+  version = "0.14.4";
 
   outputs = [
     "out"
@@ -148,43 +147,14 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-gCT/ZcXR9VePXYtEENXxgBNvA84KT1OYUR8kSyLBzrI=";
-    # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
-    postFetch = ''
-      sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
-      \[\[package\]\]
-      name = "color-name"
-      version = "\([^"\n]*\)"
-      source = "registry+https://github.com/rust-lang/crates.io-index"
-      checksum = "[^"\n]*"
-      EOF
-      )"
-      sedReplace="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
-      [[package]]
-      name = "color-name"
-      version = "\1"
-      source = "git+https://github.com/lilyinstarlight/color-name#cac0ed5b7d2e0682c08c9bfd13089d5494e81b9a"
-      EOF
-      )"
-      sed -i -ze "s|$sedSearch|$sedReplace|g" $out/Cargo.lock
-    '';
+    hash = "sha256-MZyYHMq6gFJkVxlrmeXUjOmRYsQBHj0848cnF+7mtbU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit (finalAttrs) src patches;
+    inherit (finalAttrs) src;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-sX3P5qrG0M/vJkvzvJGzv4fcMn6FvrLPOUh++vKJ/gY=";
+    hash = "sha256-T+fdu+Oe07Uf1YoRGYl2DMb1QgdSZVLwcOqH4bBNGXU=";
   };
-
-  patches = [
-    # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
-    ./ignore-tests.patch
-    (fetchpatch {
-      name = "x264enc-test-fix.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/commit/c0c9888d66e107f9e0b6d96cd3a85961c7e97d9a.diff";
-      hash = "sha256-/ILdPDjI20k5l9Qf/klglSuhawmFUs9mR+VhBnQqsWw=";
-    })
-  ];
 
   strictDeps = true;
 
@@ -257,6 +227,10 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
+  postInstall = ''
+    install -Dm444 -t ''${!outputDev}/lib/pkgconfig gst*.pc
+  '';
+
   doInstallCheck =
     (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
@@ -276,17 +250,17 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GStreamer plugins written in Rust";
     mainProgram = "gst-webrtc-signalling-server";
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       asl20
       mit
       lgpl21Plus
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

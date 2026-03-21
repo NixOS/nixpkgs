@@ -23,13 +23,13 @@
   requests,
 }:
 let
-  version = "3.4.0";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "RapidAI";
     repo = "RapidOCR";
     tag = "v${version}";
-    hash = "sha256-yeDWs9axfVl1SlsVwqztlP7BXV+6w6dMpLmlpWaqVko=";
+    hash = "sha256-GX3dZSuK6YjARZXX4LPbCJW37ZItZvw/Ow6G4CoKoP4=";
   };
 
   models =
@@ -110,9 +110,6 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
-    # This seems to be related to https://github.com/microsoft/onnxruntime/issues/10038
-    # Also some related issue: https://github.com/NixOS/nixpkgs/pull/319053#issuecomment-2167713362
-    badPlatforms = [ "aarch64-linux" ];
     changelog = "https://github.com/RapidAI/RapidOCR/releases/tag/${src.tag}";
     description = "Cross platform OCR Library based on OnnxRuntime";
     homepage = "https://github.com/RapidAI/RapidOCR";

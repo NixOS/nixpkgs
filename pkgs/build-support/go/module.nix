@@ -16,7 +16,6 @@ lib.extendMkDerivation {
     {
       nativeBuildInputs ? [ ], # Native build inputs used for the derivation.
       passthru ? { },
-      patches ? [ ],
 
       # A function to override the `goModules` derivation.
       overrideModAttrs ? (finalAttrs: previousAttrs: { }),
@@ -25,8 +24,8 @@ lib.extendMkDerivation {
       modRoot ? "./",
 
       # The SRI hash of the vendored dependencies.
-      # If `vendorHash` is `null`, no dependencies are fetched and
-      # the build relies on the vendor folder within the source.
+      # If `null`, it means the project either has no external dependencies
+      # or the vendored dependencies are already present in the source tree.
       vendorHash ? throw (
         if args ? vendorSha256 then
           "buildGoModule: Expect vendorHash instead of vendorSha256"
@@ -224,18 +223,19 @@ lib.extendMkDerivation {
         GOTOOLCHAIN = "local";
 
         CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
-      };
 
-      GOFLAGS =
-        GOFLAGS
-        ++
-          lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
-            "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-            (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
-        ++
-          lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
-            "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-            (lib.optional (!allowGoReference) "-trimpath");
+        GOFLAGS = toString (
+          GOFLAGS
+          ++
+            lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS)
+              "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
+              (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
+          ++
+            lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
+              "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
+              (lib.optional (!finalAttrs.allowGoReference) "-trimpath")
+        );
+      };
 
       inherit enableParallelBuilding;
 
@@ -251,6 +251,9 @@ lib.extendMkDerivation {
             export GOPATH="$TMPDIR/go"
             export GOPROXY=off
             export GOSUMDB=off
+            if [ -f "$NIX_CC_FOR_TARGET/nix-support/dynamic-linker" ]; then
+              export GO_LDSO=$(cat $NIX_CC_FOR_TARGET/nix-support/dynamic-linker)
+            fi
             cd "$modRoot"
           ''
           + lib.optionalString (finalAttrs.vendorHash != null) ''
@@ -267,13 +270,6 @@ lib.extendMkDerivation {
             }
           ''
           + ''
-
-            # currently pie is only enabled by default in pkgsMusl
-            # this will respect the `hardening{Disable,Enable}` flags if set
-            if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
-              export GOFLAGS="-buildmode=pie $GOFLAGS"
-            fi
-
             runHook postConfigure
           ''
         );
@@ -395,7 +391,8 @@ lib.extendMkDerivation {
 
       strictDeps = true;
 
-      disallowedReferences = lib.optional (!allowGoReference) go;
+      inherit allowGoReference;
+      disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
 
       passthru = {
         inherit go;

@@ -12,12 +12,12 @@
   libgit2 ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pijul";
   version = "1.0.0-beta.9";
 
   src = fetchCrate {
-    inherit version pname;
+    inherit (finalAttrs) version pname;
     hash = "sha256-jy0mzgLw9iWuoWe2ictMTL3cHnjJ5kzs6TAK+pdm28g=";
   };
 
@@ -44,15 +44,15 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/pijul completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Distributed version control system";
     homepage = "https://pijul.org";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       gal_bolle
       dywedir
       fabianhjr
     ];
     mainProgram = "pijul";
   };
-}
+})

@@ -5,25 +5,30 @@
   supportCompressedPackets ? true,
   zlib,
   bzip2,
+  autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgpdump";
-  version = "0.36";
+  version = "0.37";
 
   src = fetchFromGitHub {
     owner = "kazu-yamamoto";
     repo = "pgpdump";
-    rev = "v${version}";
-    sha256 = "sha256-JKedgHCTDnvLyLR3nGl4XFAaxXDU1TgHrxPMlRFwtBo=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-nB7f6VTxRidymi9RV7W1x9JbWi9Eoa/CYzYmekYDVOo=";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   buildInputs = lib.optionals supportCompressedPackets [
     zlib
     bzip2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PGP packet visualizer";
     mainProgram = "pgpdump";
     longDescription = ''
@@ -31,8 +36,8 @@ stdenv.mkDerivation rec {
       OpenPGP (RFC 4880) and PGP version 2 (RFC 1991).
     '';
     homepage = "http://www.mew.org/~kazu/proj/pgpdump/en/";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = [ ];
   };
-}
+})

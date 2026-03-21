@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "trl";
-  version = "0.23.0";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "trl";
     tag = "v${version}";
-    hash = "sha256-LHBFcf1araJ9Eosrr2z87HrRt5en1jIZ9C9pjqi9Nik=";
+    hash = "sha256-NEvIWrirHqcLJpyA894NgNFPn/Svg+ND/xDMIRHW8d0=";
   };
 
   build-system = [

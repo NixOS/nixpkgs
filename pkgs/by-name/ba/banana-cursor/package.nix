@@ -41,14 +41,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Banana Cursor";
     homepage = "https://github.com/ful1e5/banana-cursor";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       getpsyched
       yrd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

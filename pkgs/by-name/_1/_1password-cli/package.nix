@@ -24,13 +24,13 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.32.0";
+  version = "2.33.0-beta.01";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-7t8Ar6vF8lU3fPy5Gw9jtUkcx9gYKg6AFDB8/3QBvbk=" "zip";
-    i686-linux = fetch "linux_386" "sha256-+KSi87muDH/A8LNH7iDPQC/CnZhTpvFNSw1cuewqaXI=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-4I7lSey6I4mQ7dDtuOASnZzAItFYkIDZ8UMsqb0q5tE=" "zip";
+    aarch64-linux = fetch "linux_arm64" "sha256-jCz7m3X38SM4DwBDYu7J7rxzLECKftETrXvZwzWjfXA=" "zip";
+    i686-linux = fetch "linux_386" "sha256-kM4RD1hqa1JOcsDmPcGeojL5wu359UZkJnVbwlpEgFM=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-CWYKsd3TpTUaORgXrM1CVjBMJPPhMvSAb7kJARy+oVo=" "zip";
     aarch64-darwin =
-      fetch "apple_universal" "sha256-PVSI/iYsjphNqs0DGQlzRhmvnwj4RHcNODE2nbQ8CO0="
+      fetch "apple_universal" "sha256-+rdXdnpX0ucoecv/dNRA5L/GOe0bVgEPKl7pn0qNxm8="
         "pkg";
     x86_64-darwin = aarch64-darwin;
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     if (builtins.elem system platforms) then
       sources.${system}
     else
-      throw "Source for ${pname} is not available for ${system}";
+      throw "Source for 1password-cli is not available for ${system}";
 
   nativeBuildInputs = [
     installShellFiles
@@ -63,24 +63,23 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -D ${mainProgram} $out/bin/${mainProgram}
+    install -D op $out/bin/op
     runHook postInstall
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     HOME=$TMPDIR
-    installShellCompletion --cmd ${mainProgram} \
-      --bash <($out/bin/${mainProgram} completion bash) \
-      --fish <($out/bin/${mainProgram} completion fish) \
-      --zsh <($out/bin/${mainProgram} completion zsh)
+    installShellCompletion --cmd op \
+      --bash <($out/bin/op completion bash) \
+      --fish <($out/bin/op completion fish) \
+      --zsh <($out/bin/op completion zsh)
   '';
 
   dontStrip = stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/${mainProgram}";
-  versionCheckProgramArg = "--version";
+  versionCheckProgram = "${placeholder "out"}/bin/op";
 
   passthru = {
     updateScript = ./update.sh;

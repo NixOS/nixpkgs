@@ -1,36 +1,66 @@
 {
+  autoPatchelfHook,
+  common-updater-scripts,
+  fetchzip,
   lib,
-  stdenv,
-  fetchurl,
-  deno,
-  makeWrapper,
   nixosTests,
+  stdenv,
+  stdenvNoCC,
+  writeShellScript,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "silverbullet";
-  version = "2.0.0";
+  version = "2.5.2";
 
-  src = fetchurl {
-    url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet.js";
-    hash = "sha256-O0QuzbY/ZdhOZvsUcgpZ55E+CSxbAsRxJmBQird5vCk=";
-  };
+  src =
+    finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  dontUnpack = true;
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,lib}
-    cp $src $out/lib/silverbullet.js
-    makeWrapper ${lib.getExe deno} $out/bin/silverbullet \
-        --set DENO_NO_UPDATE_CHECK "1" \
-        --add-flags "run -A --unstable-kv --unstable-worker-options ${placeholder "out"}/lib/silverbullet.js"
+    mkdir -p $out/bin
+    cp $src/silverbullet $out/bin/
     runHook postInstall
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) silverbullet;
+  passthru = {
+    sources = {
+      "x86_64-linux" = fetchzip {
+        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-linux-x86_64.zip";
+        hash = "sha256-OvwFYPxR6N/njtaaNX0TolgRxZnhX3qBIvT2okoy2cQ=";
+        stripRoot = false;
+      };
+      "aarch64-linux" = fetchzip {
+        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-linux-aarch64.zip";
+        hash = "sha256-+VhgiAvDApb7Xi3Ob+fDpq1LrhmqAANZGjLsyhbmfNQ=";
+        stripRoot = false;
+      };
+      "x86_64-darwin" = fetchzip {
+        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-darwin-x86_64.zip";
+        hash = "sha256-jC39IZlFRnZ86I6JMXaaEyET4jwmOI0XKohxxr4VvZc=";
+        stripRoot = false;
+      };
+      "aarch64-darwin" = fetchzip {
+        url = "https://github.com/silverbulletmd/silverbullet/releases/download/${finalAttrs.version}/silverbullet-server-darwin-aarch64.zip";
+        hash = "sha256-7njnFI3Ui7+6/kmbdCeEZ4f4gXKfzIx3YCfyB99k/f4=";
+        stripRoot = false;
+      };
+    };
+
+    updateScript = writeShellScript "update-silverbullet" ''
+      NEW_VERSION="$1"
+      for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+        ${lib.getExe' common-updater-scripts "update-source-version"} "silverbullet" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
+      done
+    '';
+
+    tests = {
+      inherit (nixosTests) silverbullet;
+    };
   };
 
   meta = {
@@ -40,6 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ aorith ];
     mainProgram = "silverbullet";
-    inherit (deno.meta) platforms;
+    platforms = builtins.attrNames finalAttrs.passthru.sources;
   };
 })

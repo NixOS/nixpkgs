@@ -1,28 +1,24 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
   brotli,
   libev,
   nghttp3,
-  quictls,
+  openssl,
   withJemalloc ? false,
   jemalloc,
-  curlHTTP3,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.14.0";
+  version = "1.19.0";
 
-  src = fetchFromGitHub {
-    owner = "ngtcp2";
-    repo = "ngtcp2";
-    # must match version usage in meta.changelog
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-5Pmk752i/lgO/os2SegevGN+MKaVuQii2HrVWaR15Gg=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v${finalAttrs.version}/ngtcp2-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-snZBbT1cChV4En+8Q2qXLRD0vK66g6aj2ukbQcxRqTI=";
   };
 
   outputs = [
@@ -36,18 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
     brotli
     libev
     nghttp3
-    quictls
+    openssl
   ]
   ++ lib.optional withJemalloc jemalloc;
 
   cmakeFlags = [
-    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
+    # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
+    # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
+    # Also, the examples depend on Linux-specific APIs, so we avoid them on FreeBSD/Cygwin too.
+    (lib.cmakeBool "ENABLE_LIB_ONLY" (
+      stdenv.hostPlatform.isStatic
+      || stdenv.hostPlatform.isFreeBSD
+      || stdenv.hostPlatform.isCygwin
+      || stdenv.hostPlatform.isWindows
+    ))
+    (lib.cmakeBool "ENABLE_SHARED_LIB" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "ENABLE_STATIC_LIB" stdenv.hostPlatform.isStatic)
   ];
 
   doCheck = true;
 
   passthru.tests = {
-    inherit curlHTTP3;
+    inherit curl;
   };
 
   meta = {
@@ -55,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/ngtcp2/ngtcp2/releases/tag/v${finalAttrs.version}";
     description = "Implementation of the QUIC protocol (RFC9000)";
     license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 })

@@ -4,13 +4,13 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "s4cmd";
   version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "0d4mx98i3qhvlmr9x898mjvf827smzx6x5ji6daiwgjdlxc60mj2";
   };
 
@@ -38,10 +38,9 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "s4cmd" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bloomreach/s4cmd";
     description = "Super S3 command line tool";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bhipple ];
+    license = lib.licenses.asl20;
   };
-}
+})

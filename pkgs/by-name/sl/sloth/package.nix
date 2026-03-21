@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sloth";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "slok";
     repo = "sloth";
-    rev = "v${version}";
-    hash = "sha256-rgDTLbNhs9CD+VHEo2+eLGh9amhWg/TksbXTvxvp7j8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-VwktgkJjJ1tMlGZwhr1bvaCDiatZKlylFY//8YpXPYw=";
   };
 
-  vendorHash = "sha256-8p6NYgIK5Gc+gEkNkn1nL4t605xzhF3nS8UYX+AT/Ag=";
+  vendorHash = "sha256-5TTOQ9u7BDrwGa2X8y6d0C6Vb92ZBk451V0kpsUhl9c=";
 
   subPackages = [ "cmd/sloth" ];
 
@@ -27,4 +27,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "sloth";
   };
-}
+})

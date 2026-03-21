@@ -2,14 +2,11 @@
   lib,
   stdenv,
   writeText,
-  fetchFromGitHub,
+  fetchurl,
   buildcatrust,
   blacklist ? [ ],
   extraCertificateFiles ? [ ],
   extraCertificateStrings ? [ ],
-
-  # Used by update.sh
-  nssOverride ? null,
 
   # Used for tests only
   runCommand,
@@ -23,52 +20,46 @@ let
     lib.concatStringsSep "\n\n" extraCertificateStrings
   );
 
-  srcVersion = "3.115";
-  version = if nssOverride != null then nssOverride.version else srcVersion;
-  meta = with lib; {
-    homepage = "https://curl.haxx.se/docs/caextract.html";
+  version = "3.121";
+  meta = {
+    homepage = "https://firefox-source-docs.mozilla.org/security/nss/runbooks/rootstore.html#root-store-consumers";
     description = "Bundle of X.509 certificates of public Certificate Authorities (CA)";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       fpletz
       lukegb
     ];
-    license = licenses.mpl20;
-  };
-  certdata = stdenv.mkDerivation {
-    pname = "nss-cacert-certdata";
-    inherit version;
-
-    src =
-      if nssOverride != null then
-        nssOverride.src
-      else
-        fetchFromGitHub {
-          owner = "nss-dev";
-          repo = "nss";
-          rev = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
-          hash = "sha256-8PeFeaIOtjBZJLBx3ONwZlK5SaLnjKEFoZWvVsu/3tA=";
-        };
-
-    dontBuild = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      mkdir $out
-      cp lib/ckfw/builtins/certdata.txt $out
-
-      runHook postInstall
-    '';
-
-    inherit meta;
+    teams = [ lib.teams.security-review ];
+    license = lib.licenses.mpl20;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "mozilla" version // {
+      product = "nss";
+    };
   };
 in
 stdenv.mkDerivation {
   pname = "nss-cacert";
   inherit version;
 
-  src = certdata;
+  src = fetchurl {
+    urls =
+      let
+        # This file is effectively a public interface, see the homepage link
+        file = "lib/ckfw/builtins/certdata.txt";
+        tag = "NSS_${lib.replaceStrings [ "." ] [ "_" ] version}_RTM";
+      in
+      [
+        # Prefer mercurial as the canonical source, while github is just a mirror
+        "https://hg-edge.mozilla.org/projects/nss/raw-file/${tag}/${file}"
+        "https://raw.githubusercontent.com/nss-dev/nss/refs/tags/${tag}/${file}"
+      ];
+    hash = "sha256-O5jU4/9XoybZWHwzYzA5yMOpzwtV98pYHXWY/zKesfM=";
+  };
+
+  unpackPhase = ''
+    runHook preUnpack
+    cp "$src" "$(stripHash "$src")"
+    runHook postUnpack
+  '';
 
   outputs = [
     "out"

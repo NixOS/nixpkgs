@@ -14,25 +14,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.48";
+  version = "1.1.1";
 
   src =
     {
       aarch64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-arm64.tar.gz";
-        hash = "sha256-HtgVPgxwOYvsv6Z+qG0GMnRyqzm/AlLDdIrypjzCBHo=";
+        hash = "sha256-8iHGuBaGaSkbQVaDEHcDUMix79O2vLQNaHNPzN9kt/8=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos-x64.tar.gz";
-        hash = "sha256-xtn8ozF2UdoSSYYCoYPh4AgbrYm+3vtmIRSXD8OWams=";
+        hash = "sha256-f6vMtvg2B7Ui/fJmEAFRl4SxphbWXIup3dOiOncFYmY=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-arm64.tar.gz";
-        hash = "sha256-xiEEkzdCS/HSEPLzuuDLh4iITsF2fuR51ACYQoQnzKQ=";
+        hash = "sha256-kqqSFYKoP8c8oJaoVwLeFhMIuFY2a1ulUPpZeGV5FMY=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux-x64.tar.gz";
-        hash = "sha256-CMiheW4z27awGIpAk/DQN+JAAU7ZvIyFAEAI+ZaQhpY=";
+        hash = "sha256-8si1oemPDPHdWUGSUXEslih5K6z/cdLijwymN31N2Ng=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
@@ -69,18 +69,20 @@ stdenv.mkDerivation (finalAttrs: {
       --set UCM_WEB_UI "$out/ui"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Modern, statically-typed purely functional language";
     homepage = "https://unisonweb.org/";
-    license = with licenses; [
-      mit
-      bsd3
+    license = [
+      lib.licenses.mit
+      lib.licenses.bsd3
     ];
     mainProgram = "ucm";
-    maintainers = with maintainers; [
-      ceedubs
-      sellout
-      virusdave
+    maintainers = [
+      lib.maintainers.ceedubs
+      lib.maintainers.sellout
+      lib.maintainers.virusdave
     ];
     platforms = [
       "x86_64-darwin"
@@ -88,6 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-darwin"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

@@ -14,14 +14,14 @@
   libGL,
   libGLU,
   libpulseaudio,
-  libX11,
-  libXcursor,
-  libXext,
-  libXfixes,
-  libXi,
-  libXinerama,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxcursor,
+  libxext,
+  libxfixes,
+  libxi,
+  libxinerama,
+  libxrandr,
+  libxrender,
   zlib,
   udev, # for libudev
 }:
@@ -56,14 +56,14 @@ stdenv.mkDerivation rec {
     alsa-lib
     libGL
     libGLU
-    libX11
-    libXcursor
-    libXext
-    libXfixes
-    libXi
-    libXinerama
-    libXrandr
-    libXrender
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxi
+    libxinerama
+    libxrandr
+    libxrender
     zlib
     udev
   ];
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       --set-rpath ${lib.makeLibraryPath buildInputs} \
       $out/share/lorien/lorien
 
-    install -Dm644 images/lorien.png $out/share/pixmaps/lorien.png
+    install -Dm644 images/lorien.png -t $out/share/icons/hicolor/64x64/apps
 
     runHook postInstall
   '';
@@ -126,16 +126,16 @@ stdenv.mkDerivation rec {
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mbrlabs/Lorien";
     description = "Infinite canvas drawing/note-taking app";
     longDescription = ''
       An infinite canvas drawing/note-taking app that is focused on performance,
       small savefiles and simplicity
     '';
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ hqurve ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ hqurve ];
     mainProgram = "lorien";
   };
 }

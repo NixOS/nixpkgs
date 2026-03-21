@@ -3,15 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  colorama,
   scipy,
   numpy,
-  pyqt6,
   pyopengl,
+
+  # buildInputs
+  pyqt6,
+
+  # tests
   qt6,
   pytestCheckHook,
   freefont_ttf,
   makeFontsConf,
-  setuptools,
 }:
 
 let
@@ -19,19 +28,22 @@ let
 in
 buildPythonPackage rec {
   pname = "pyqtgraph";
-  version = "0.13.7";
-  format = "pyproject";
+  version = "0.14.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
     repo = "pyqtgraph";
     tag = "pyqtgraph-${version}";
-    hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
+    hash = "sha256-T5rhaBtcKP/sYjCmYNMYR0BGttkiLhWTfEbZNeAdJJ0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    colorama
     numpy
     scipy
     pyopengl
@@ -57,22 +69,27 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  disabledTests =
-    lib.optionals (!stdenv.hostPlatform.isx86) [
-      # small precision-related differences on other architectures,
-      # upstream doesn't consider it serious.
-      # https://github.com/pyqtgraph/pyqtgraph/issues/2110
-      "test_PolyLineROI"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # https://github.com/pyqtgraph/pyqtgraph/issues/2645
-      "test_rescaleData"
-    ];
+  disabledTests = [
+    # ZeroDivisionError: float division by zero
+    "test_maps_tick_values_to_local_times"
+    "test_maps_hour_ticks_to_local_times_when_skip_greater_than_one"
+
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isx86) [
+    # small precision-related differences on other architectures,
+    # upstream doesn't consider it serious.
+    # https://github.com/pyqtgraph/pyqtgraph/issues/2110
+    "test_PolyLineROI"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # https://github.com/pyqtgraph/pyqtgraph/issues/2645
+    "test_rescaleData"
+  ];
 
   meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
-    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
+    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/${src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

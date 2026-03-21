@@ -17,9 +17,10 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.1") "3.3.0")
+        (case (range "9.0" "9.2") "3.6.1")
+        (case (range "9.0" "9.1") "3.4.5")
         (case (range "9.0" "9.1") "2.0.7")
-      ] { };
+      ] rocq-core.ocamlPackages.elpi.version;
   elpi = rocq-core.ocamlPackages.elpi.override { version = default-elpi-version; };
   propagatedBuildInputs_wo_elpi = [
     rocq-core.ocamlPackages.findlib
@@ -36,10 +37,13 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.1") "3.1.0")
+        (case (range "9.0" "9.2") "3.3.0")
+        (case (range "9.0" "9.1") "3.2.0")
         (case (range "9.0" "9.1") "2.6.0")
-        (case ("9.0") "2.5.2")
+        (case "9.0" "2.5.2")
       ] null;
+    release."3.3.0".sha256 = "sha256-wcsUpw7S+H9CaXuz+W3g22IFWO2cLllJ4xm2qLTG0nM=";
+    release."3.2.0".sha256 = "sha256-FyYG/8lEyt1L/paMez8jYAnnUE+sxIp4Da5MztmwJ/c=";
     release."3.1.0".sha256 = "sha256-ytGPGwJv+jmRT6uN0sg6q+xh8ND0PMIZ9ULB0Uwca1w=";
     release."3.0.0".sha256 = "sha256-YMe2is7duGcvAHjM4joUE90EloibjSxqfZThsJhstdU=";
     release."2.6.0".sha256 = "sha256-23BHq1NFUkI3ayXnGUwiGFySLyY3EuH4RyMgAhQqI4g=";

@@ -58,14 +58,14 @@
 let
   self = buildPythonPackage rec {
     pname = "orange3";
-    version = "3.39.0";
+    version = "3.40.0";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "biolab";
       repo = "orange3";
       tag = version;
-      hash = "sha256-P2e3Wq33UXnTmGSxkoW8kYYCBfYBB9Z50v4g7n//Fbw=";
+      hash = "sha256-AOQGqOYaP3bPZtgjsVCxhA1T34Y9EIR5VeMwhZWmI88=";
     };
 
     build-system = [
@@ -222,7 +222,7 @@ let
       homepage = "https://orangedatamining.com/";
       changelog = "https://github.com/biolab/orange3/blob/${src.tag}/CHANGELOG.md";
       license = [ lib.licenses.gpl3Plus ];
-      maintainers = [ lib.maintainers.lucasew ];
+      maintainers = [ ];
       mainProgram = "orange-canvas";
     };
   };

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "knit";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "zyedidia";
     repo = "knit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-zxwEJnQZpOEJhV7jx2ClS3XmMfGBiq8AHR26TOIBJVw=";
   };
 
@@ -24,15 +24,15 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/zyedidia/knit/info.Version=${version}"
+    "-X github.com/zyedidia/knit/info.Version=${finalAttrs.version}"
   ];
 
   meta = {
     description = "Simple and flexible build tool using Lua, similar to make/mk";
     mainProgram = "knit";
     homepage = "https://github.com/zyedidia/knit";
-    changelog = "https://github.com/zyedidia/knit/releases/tag/v${version}";
+    changelog = "https://github.com/zyedidia/knit/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DrSensor ];
   };
-}
+})

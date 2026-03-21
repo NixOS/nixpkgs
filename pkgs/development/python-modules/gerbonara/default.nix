@@ -3,40 +3,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
-  setuptools,
+  uv-build,
   click,
-  numpy,
-  scipy,
+  quart,
   rtree,
 }:
 
 buildPythonPackage rec {
   pname = "gerbonara";
-  version = "1.5.0";
+  version = "1.6.2";
+  pyproject = true;
+
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "gerbonara";
-    rev = "v${version}";
-    hash = "sha256-yxSZuBw93wqIAw1wke80Vy/dtBcQwpQ2tQ1nwXdWi4k=";
+    tag = "v${version}";
+    hash = "sha256-fT13JMoOvKMxdHoagZAmIsGhU3M1S4bEmKUHae+EJcI=";
   };
 
-  format = "setuptools";
+  build-system = [ uv-build ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     click
-    numpy
-    scipy
+    quart
     rtree
   ];
-
-  preConfigure = ''
-    # setup.py tries to execute a call to git in a subprocess, this avoids it.
-    substituteInPlace setup.py \
-      --replace "version=version()," \
-                "version='${version}',"
-  '';
 
   pythonImportsCheck = [ "gerbonara" ];
 
@@ -45,11 +36,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic library for reading/modifying/writing Gerber/Excellon/IPC-356 files";
     mainProgram = "gerbonara";
     homepage = "https://github.com/jaseg/gerbonara";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ wulfsta ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ wulfsta ];
   };
 }

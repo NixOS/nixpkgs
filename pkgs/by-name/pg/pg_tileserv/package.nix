@@ -4,14 +4,14 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pg_tileserv";
   version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "CrunchyData";
     repo = "pg_tileserv";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xTIx39eLmHBUlaUjQy9KGpi5X4AU93DzX+Ofg5PMLWE=";
   };
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.programVersion=${version}"
+    "-X main.programVersion=${finalAttrs.version}"
   ];
 
   postInstall = ''
@@ -45,11 +45,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Very thin PostGIS-only tile server in Go";
     mainProgram = "pg_tileserv";
     homepage = "https://github.com/CrunchyData/pg_tileserv";
-    license = licenses.asl20;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

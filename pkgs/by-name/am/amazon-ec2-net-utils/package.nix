@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amazon-ec2-net-utils";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "amazonlinux";
     repo = "amazon-ec2-net-utils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PtnRgNmVrIGndLjYjXWWx85z4oxjn637iZqXd6OSiQg=";
+    hash = "sha256-9dhTQLmWIOm0q51l/BgkxTFcUjub7w9Yk+QdvuZi/3k=";
   };
 
   strictDeps = true;
@@ -47,18 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     for file in bin/*.sh; do
       install -D -m 755 "$file" $out/bin/$(basename --suffix ".sh" "$file")
-      substituteInPlace $out/bin/$(basename --suffix ".sh" "$file") \
-        --replace-fail AMAZON_EC2_NET_UTILS_LIBDIR $out/share/amazon-ec2-net-utils
     done
 
+    # setup-policy-routes uses AMAZON_EC2_NET_UTILS_LIBDIR placeholder
     substituteInPlace $out/bin/setup-policy-routes \
+      --replace-fail AMAZON_EC2_NET_UTILS_LIBDIR $out/share/amazon-ec2-net-utils \
       --replace-fail /lib/systemd ${systemd}/lib/systemd
 
     wrapProgram $out/bin/setup-policy-routes \
       --prefix PATH : ${
         lib.makeBinPath [
           coreutils
-          # bin/setup-policy-roots.sh sources lib/lib.sh which needs these.
+          # bin/setup-policy-routes.sh sources lib/lib.sh which needs these.
           #
           # lib/lib.sh isn't executable so we can't use it with wrapProgram.
           curl
@@ -67,6 +67,17 @@ stdenv.mkDerivation (finalAttrs: {
           iproute2
           systemd
           util-linuxMinimal
+        ]
+      }
+
+    # set-hostname-imds uses LIBDIR_OVERRIDE environment variable
+    wrapProgram $out/bin/set-hostname-imds \
+      --set LIBDIR_OVERRIDE $out/share/amazon-ec2-net-utils \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          curl
+          systemd
         ]
       }
 
@@ -97,6 +108,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace $out/lib/systemd/system/refresh-policy-routes@.service \
       --replace-fail /usr/bin/setup-policy-routes $out/bin/setup-policy-routes
+
+    substituteInPlace $out/lib/systemd/system/set-hostname-imds.service \
+      --replace-fail /usr/bin/set-hostname-imds $out/bin/set-hostname-imds
 
     installManPage doc/*.8
 

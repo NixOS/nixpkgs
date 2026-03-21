@@ -18,12 +18,12 @@
   bash,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "recutils";
   version = "1.9";
 
   src = fetchurl {
-    url = "mirror://gnu/recutils/recutils-${version}.tar.gz";
+    url = "mirror://gnu/recutils/recutils-${finalAttrs.version}.tar.gz";
     hash = "sha256-YwFZKwAgwUtFZ1fvXUNNSfYCe45fOkmdEzYvIFxIbg4=";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/recutils/";
     description = "Tools and libraries to access human-editable, text-based databases";
     longDescription = ''
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
       text-based databases called recfiles. The data is stored as a sequence of
       records, each record containing an arbitrary number of named fields.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

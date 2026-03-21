@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch2,
+  buildPackages,
   pcre,
   pcre2,
   jemalloc,
@@ -24,16 +25,17 @@ let
     {
       version,
       hash,
-      extraNativeBuildInputs ? [ ],
     }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
+        url = "https://vinyl-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
+
+      strictDeps = true;
 
       nativeBuildInputs = with python3.pkgs; [
         pkg-config
@@ -41,6 +43,7 @@ let
         sphinx
         makeWrapper
       ];
+
       buildInputs = [
         libxslt
         groff
@@ -53,6 +56,14 @@ let
       ++ lib.optional (lib.versionAtLeast version "7") pcre2
       ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
       ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
+
+      configureFlags = [
+        # the checks behind those to not work when doing cross but for simplicity we always define them
+        "ac_cv_have_tcp_fastopen=yes"
+        "ac_cv_have_tcp_keep=yes"
+        "ac_cv_have_working_close_range=yes"
+        "PYTHON=${buildPackages.python3.interpreter}"
+      ];
 
       buildFlags = [ "localstatedir=/var/run" ];
 
@@ -75,11 +86,32 @@ let
         ];
 
       postPatch = ''
-        substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
+        substituteInPlace bin/varnishtest/vtc_main.c --replace-fail /bin/rm "${coreutils}/bin/rm"
+      '';
+
+      postConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        # prevent cache invalidation
+        substituteInPlace bin/varnishd/Makefile \
+          --replace-fail "vhp_hufdec.h: vhp_gen_hufdec" "vhp_hufdec.h:"
+
+        ln -s "${buildPackages.varnish.vhp_hufdec_h}" bin/varnishd/vhp_hufdec.h
+
+        substituteInPlace bin/varnishstat/Makefile \
+          --replace-fail "varnishstat_curses_help.c: varnishstat_help_gen" "varnishstat_curses_help.c:" \
+          --replace-fail "./varnishstat_help_gen" "${buildPackages.varnish}/bin/varnishstat_help_gen"
+
+        # the docs execute lots of commands to gather options and flags
+        substituteInPlace doc/Makefile \
+          --replace-fail "SUBDIRS = graphviz sphinx" "SUBDIRS = graphviz"
+        substituteInPlace Makefile \
+          --replace-fail "include lib bin vmod etc doc man contrib" "include lib bin vmod etc doc contrib"
       '';
 
       postInstall = ''
         wrapProgram "$out/sbin/varnishd" --prefix PATH : "${lib.makeBinPath [ stdenv.cc ]}"
+      ''
+      + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        cp bin/varnishd/vhp_hufdec.h $vhp_hufdec_h
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
@@ -88,7 +120,10 @@ let
       outputs = [
         "out"
         "dev"
+      ]
+      ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
         "man"
+        "vhp_hufdec_h" # only used for cross compilation
       ];
 
       passthru = {
@@ -97,20 +132,26 @@ let
           nixosTests."varnish${builtins.replaceStrings [ "." ] [ "" ] (lib.versions.majorMinor version)}";
       };
 
-      meta = with lib; {
+      meta = {
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
-        license = licenses.bsd2;
-        teams = [ lib.teams.flyingcircus ];
-        platforms = platforms.unix;
+        license = lib.licenses.bsd2;
+        maintainers = [
+          lib.maintainers.leona
+          lib.maintainers.osnyx
+        ];
+        platforms = lib.platforms.unix;
+        knownVulnerabilities = lib.optionals (lib.versions.major version == "7") [
+          "VSV00018: https://vinyl-cache.org/security/VSV00018.html"
+        ];
       };
     };
 in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.16";
-    hash = "sha256-ZVJxDHp9LburwlJ1LCR5CKPRaSbNixiEch/l3ZP0QyQ=";
+    version = "6.0.17";
+    hash = "sha256-CVmHd1hCDFE/WIZqjc1TfX1O2RqFetdNSO4ihmXoL5k=";
   };
   # EOL 2026-03-15
   varnish77 = common {

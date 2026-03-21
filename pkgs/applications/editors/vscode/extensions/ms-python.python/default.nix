@@ -15,19 +15,19 @@
 let
   supported = {
     x86_64-linux = {
-      hash = "sha256-AlqZTioxiL0XPRMpWMWw8fIWoDAmU1ybCaDhlaXv6lc=";
+      hash = "sha256-HQfmDV6rJX6l1pGybe8//2QrTSwE+rlEJOi4/iW69lY=";
       arch = "linux-x64";
     };
     x86_64-darwin = {
-      hash = "sha256-IWj79vUJJXt88kDiCIHVY95aKsHB84vH3iv6GgLOFQo=";
+      hash = "sha256-tAZyt2fwB/GOhffY5lhHJTmbXG8UloynPtjoMtWRHok=";
       arch = "darwin-x64";
     };
     aarch64-linux = {
-      hash = "sha256-kTSHvqS50UZ/yTMqJITyFIUZgHn1dMSwX1R3oxmTnYk=";
+      hash = "sha256-v7fatW/LMJ8CeSRrE/5b7dLqOrhNhwzUySUxtAMuBUE=";
       arch = "linux-arm64";
     };
     aarch64-darwin = {
-      hash = "sha256-LWA8LqCQrmd83icDYCmUgytPJbCV3ecNobSpWV2R3MA=";
+      hash = "sha256-XntiQmvagiSWcfVIp13CDq2RTZ4NhKOzf4QmecZjMIs=";
       arch = "darwin-arm64";
     };
   };
@@ -37,11 +37,11 @@ let
       or (throw "unsupported platform ${stdenv.hostPlatform.system}");
 
 in
-vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "python";
     publisher = "ms-python";
-    version = "2025.12.0";
+    version = "2026.4.0";
   };
 
   buildInputs = [ icu ];
@@ -80,7 +80,6 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     platforms = builtins.attrNames supported;
     maintainers = [
       lib.maintainers.jraygauthier
-      lib.maintainers.jfchevrette
     ];
   };
 }

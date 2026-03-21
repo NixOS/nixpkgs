@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchFromGitHub,
   anyio,
   async-generator,
@@ -16,8 +15,6 @@
 buildPythonPackage rec {
   pname = "asks";
   version = "3.0.0";
-
-  disabled = pythonOlder "3.6";
 
   format = "setuptools";
 

@@ -8,14 +8,14 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "devpi-client";
   version = "7.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "devpi-client";
-    inherit version;
+    inherit (finalAttrs) version;
     hash = "sha256-wUM2hFjDh4unvuah2bQY4uZZVxo4VmFPWNdriigmnXs=";
   };
 
@@ -43,6 +43,7 @@ python3.pkgs.buildPythonApplication rec {
   ++ (with python3.pkgs; [
     mercurial
     mock
+    packaging-legacy
     pypitoken
     pytestCheckHook
     sphinx
@@ -60,7 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     "--fast"
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   __darwinAllowLocalNetworking = true;
 
@@ -71,7 +72,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Client for devpi, a pypi index server and packaging meta tool";
     homepage = "http://doc.devpi.net";
-    changelog = "https://github.com/devpi/devpi/blob/client-${version}/client/CHANGELOG";
+    changelog = "https://github.com/devpi/devpi/blob/client-${finalAttrs.version}/client/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       lewo
@@ -79,4 +80,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "devpi";
   };
-}
+})

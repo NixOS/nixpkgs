@@ -11,14 +11,14 @@
   libgbm,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "woomer";
   version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "coffeeispower";
     repo = "woomer";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-LcL43Wq+5d7HPsm2bEK0vZsjP/dixtNhMKywXMi4ODw=";
   };
 
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Zoomer application for Wayland inspired by tsoding's boomer";
     homepage = "https://github.com/coffeeispower/woomer";
-    changelog = "https://github.com/coffeeispower/woomer/releases/tag/${version}";
+    changelog = "https://github.com/coffeeispower/woomer/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "woomer";
@@ -74,4 +74,4 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/raylib-rs/raylib-rs/issues/74
     broken = stdenv.hostPlatform.isAarch64;
   };
-}
+})

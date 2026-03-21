@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyserial,
-  pythonOlder,
   setuptools,
   websocket-client,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyflipper";
   version = "0.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "wh00hw";

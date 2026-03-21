@@ -15,24 +15,33 @@
   binaryen,
   writableTmpDirAsHomeHook,
   runCommand,
+  removeReferencesTo,
 }:
 
 let
   pubSources = fluffychat-web.pubspecLock.dependencySources;
+  pubCache = runCommand "fluffychat-pub-cache" { } ''
+    mkdir -p $out/hosted/pub.dev
+    pushd $out/hosted/pub.dev
+      ${lib.concatMapAttrsStringSep "; " (
+        _: p:
+        "ln -s ${p} ./${if lib.hasPrefix "pub-" p.name then lib.removePrefix "pub-" p.name else p.name}"
+      ) pubSources}
+    popd
+  '';
 
   # wasm-pack doesn't take 'RUST_SRC_PATH' into consideration
-  rustcWithLibSrc = buildPackages.rustc.override {
-    sysroot = symlinkJoin {
-      name = "rustc_unwrapped_with_libsrc";
-      paths = [
-        buildPackages.rustc.unwrapped
-      ];
-      postBuild = ''
-        mkdir -p $out/lib/rustlib/src/rust
-        ln -s ${rustPlatform.rustLibSrc} $out/lib/rustlib/src/rust/library
-      '';
-    };
+  sysroot = symlinkJoin {
+    name = "rustc_unwrapped_with_libsrc";
+    paths = [
+      buildPackages.rustc.unwrapped
+    ];
+    postBuild = ''
+      mkdir -p $out/lib/rustlib/src/rust
+      ln -s ${rustPlatform.rustLibSrc} $out/lib/rustlib/src/rust/library
+    '';
   };
+  rustcWithLibSrc = buildPackages.rustc.override { inherit sysroot; };
 in
 
 # https://github.com/krille-chan/fluffychat/blob/main/scripts/prepare-web.sh
@@ -80,10 +89,15 @@ stdenv.mkDerivation {
     wasm-bindgen-cli_0_2_100
     binaryen
     writableTmpDirAsHomeHook
+    removeReferencesTo
   ];
 
   buildPhase = ''
     runHook preBuild
+
+    export PUB_CACHE=$TMPDIR/pub-cache
+    mkdir -p $PUB_CACHE/hosted
+    ln -s ${pubCache}/hosted/pub.dev $PUB_CACHE/hosted/pub.dev
 
     pushd dart
       dart pub get --offline
@@ -103,19 +117,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+  # fix rustc leaking into closure
+  # fluffychat-web should not reference build-time dependencies
+  preFixup = ''
+    find $out -name "*.wasm" -exec remove-references-to -t ${sysroot} {} +
+  '';
+
   env = {
-    # Build a pub cache from fluffychat, as dart-vodozemac should be a subset
-    # This is required because dart-vodozemac, as a pub, doesn't have a pubspec.lock
-    # But flutter_rust_bridge_codegen still requires all dependencies of it
-    PUB_CACHE = runCommand "fluffychat-pub-cache" { } ''
-      mkdir -p $out/hosted/pub.dev
-      pushd $out/hosted/pub.dev
-        ${lib.concatMapAttrsStringSep "; " (
-          _: p:
-          "ln -s ${p} ./${if lib.hasPrefix "pub-" p.name then lib.removePrefix "pub-" p.name else p.name}"
-        ) pubSources}
-      popd
-    '';
     RUSTC_BOOTSTRAP = 1; # `-Z build-std=std,panic_abort` requires nightly toolchain
   };
 

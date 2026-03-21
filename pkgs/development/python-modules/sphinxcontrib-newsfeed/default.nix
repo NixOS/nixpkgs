@@ -16,15 +16,20 @@ buildPythonPackage rec {
     sha256 = "1d7gam3mn8v4in4p16yn3v10vps7nnaz6ilw99j4klij39dqd37p";
   };
 
+  patches = [
+    # reference: https://github.com/prometheusresearch/sphinxcontrib-newsfeed/pull/7
+    ./fix-for-sphinx-9.1.patch
+  ];
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ sphinx ];
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extension for adding a simple Blog, News or Announcements section to a Sphinx website";
     homepage = "https://github.com/prometheusresearch/sphinxcontrib-newsfeed";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
 }

@@ -5,26 +5,26 @@
 
   autoPatchelfHook,
   unzip,
-  zlib,
+  sdl3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "terraria-server";
-  version = "1.4.4.9";
-  urlVersion = lib.replaceStrings [ "." ] [ "" ] version;
+  version = "1.4.5.5";
+  urlVersion = lib.replaceStrings [ "." ] [ "" ] finalAttrs.version;
 
   src = fetchurl {
-    url = "https://terraria.org/api/download/pc-dedicated-server/terraria-server-${urlVersion}.zip";
-    sha256 = "sha256-Mk+5s9OlkyTLXZYVT0+8Qcjy2Sb5uy2hcC8CML0biNY=";
+    url = "https://terraria.org/api/download/pc-dedicated-server/terraria-server-${finalAttrs.urlVersion}.zip";
+    hash = "sha256-BmLT5ATBviSfYuc3Cx/aMHUNTBs6S56GHJF8YIJXhtU=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     unzip
   ];
+
   buildInputs = [
     stdenv.cc.cc.libgcc
-    zlib
   ];
 
   installPhase = ''
@@ -35,18 +35,21 @@ stdenv.mkDerivation rec {
     chmod +x "$out/Linux/TerrariaServer.bin.x86_64"
     ln -s "$out/Linux/TerrariaServer.bin.x86_64" $out/bin/TerrariaServer
 
+    # use our own SDL3 library
+    rm $out/Linux/lib64/libSDL3.so.0
+    ln -s ${lib.getLib sdl3}/lib/libSDL3.so.0 $out/Linux/lib64/libSDL3.so.0
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://terraria.org";
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
     platforms = [ "x86_64-linux" ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "TerrariaServer";
-    maintainers = with maintainers; [
-      ncfavier
+    maintainers = with lib.maintainers; [
       tomasajt
     ];
   };
-}
+})

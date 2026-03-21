@@ -4,22 +4,22 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clini";
   version = "0.1.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-+HnoYFRG7GGef5lV4CUsUzqPzFUzXDajprLu25SCMQo=";
   };
 
   cargoHash = "sha256-N18/pCOdwcYA3Uu6+/HAdeqf2xXQcZoaWhOEPMncDKM=";
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to do basic modification of ini files";
     homepage = "https://github.com/domgreen/clini";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Flakebi ];
     mainProgram = "clini";
   };
-}
+})

@@ -6,14 +6,14 @@
   testers,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "khard";
-  version = "0.20.0";
-  format = "pyproject";
+  version = "0.20.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-F48yzPAcBQtc2ec2KCWD3ppkRf2Y4AOI33kiB2KbvdA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
   };
 
   build-system = with python3.pkgs; [
@@ -54,4 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "khard";
   };
-}
+})

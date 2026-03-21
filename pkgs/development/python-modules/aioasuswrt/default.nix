@@ -4,25 +4,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-cov-stub,
-  pytest-asyncio_0,
+  pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aioasuswrt";
-  version = "1.4.0";
+  version = "1.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "aioasuswrt";
     tag = "V${version}";
-    hash = "sha256-RQxIgAU9KsTbcTKc/Zl+aP77lbDSeiYzR48MtIVwacc=";
+    hash = "sha256-tsvtOe3EX/Z7g6Z0MM2npYOTEJoKV9wUbhkhcROILxE=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [ asyncssh ];
 
   nativeCheckInputs = [
-    pytest-asyncio_0
+    pytest-asyncio
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
@@ -38,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioasuswrt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Asuswrt";
     homepage = "https://github.com/kennedyshead/aioasuswrt";
-    changelog = "https://github.com/kennedyshead/aioasuswrt/releases/tag/V${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/kennedyshead/aioasuswrt/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

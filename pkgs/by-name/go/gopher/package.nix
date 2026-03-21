@@ -5,14 +5,14 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gopher";
   version = "3.0.19";
 
   src = fetchFromGitHub {
     owner = "jgoerzen";
     repo = "gopher";
-    rev = "release/${version}";
+    rev = "release/${finalAttrs.version}";
     sha256 = "sha256-8J63TnC3Yq7+64PPLrlPEueMa9D/eWkPsb08t1+rPAA=";
   };
 
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "export LIBS=-lncurses";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://gopher.quux.org:70/devel/gopher";
     description = "Ncurses gopher client";
-    platforms = platforms.linux; # clang doesn't like local regex.h
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ sternenseemann ];
+    platforms = lib.platforms.linux; # clang doesn't like local regex.h
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ sternenseemann ];
   };
-}
+})

@@ -7,14 +7,14 @@
   libpng,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libharu";
   version = "2.4.5";
 
   src = fetchFromGitHub {
     owner = "libharu";
     repo = "libharu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v2vudB95OdYPiLxS9Al5lsAInsvmharhPWdnUmCl+Bs=";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Cross platform, open source library for generating PDF files";
     homepage = "http://libharu.org/";
     license = lib.licenses.zlib;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

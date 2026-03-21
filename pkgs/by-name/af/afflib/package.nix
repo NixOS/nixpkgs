@@ -9,17 +9,16 @@
   openssl,
   autoreconfHook,
   python3,
-  libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.7.22";
   pname = "afflib";
 
   src = fetchFromGitHub {
     owner = "sshock";
     repo = "AFFLIBv3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-pGInhJQBhFJhft/KfB3J3S9/BVp9D8TZ+uw2CUNVC+Q=";
   };
 
@@ -30,9 +29,10 @@ stdenv.mkDerivation rec {
     expat
     openssl
     python3
-  ]
-  ++ lib.optionals (with stdenv; isLinux || isDarwin) [ fuse3 ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+    fuse3
+  ];
+
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-DFUSE_DARWIN_ENABLE_EXTENSIONS=0";
 
   meta = {
     homepage = "http://afflib.sourceforge.net/";
@@ -42,4 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.raskin ];
     downloadPage = "https://github.com/sshock/AFFLIBv3/tags";
   };
-}
+})

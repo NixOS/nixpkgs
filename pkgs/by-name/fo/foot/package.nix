@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   fetchurl,
   runCommand,
   fcft,
@@ -27,7 +27,7 @@
 }:
 
 let
-  version = "1.24.0";
+  version = "1.26.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -40,7 +40,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      hash = "sha256-/KykHPqM0WQ1HO83bOrxJ88mvEAf0Ah3S8gSvKb3AJM=";
+      hash = "sha256-d7oE3hSStET9Bz8PcmRHSZ+ga+7lrL3/oJdx7phNei8=";
     };
 
     dontUnpack = true;
@@ -99,12 +99,11 @@ stdenv.mkDerivation {
   pname = "foot";
   inherit version;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "dnkl";
     repo = "foot";
     tag = version;
-    hash = "sha256-uex2p28rKBwnqPjO1Pen1GA3a9mEnrcpIb1oIUJv/Lk=";
+    hash = "sha256-N9/lxbz9nLIGC7VyuRbNbuX0K0XAxhytLzsU16BMCWY=";
   };
 
   separateDebugInfo = true;
@@ -139,7 +138,7 @@ stdenv.mkDerivation {
 
   # recommended build flags for performance optimized foot builds
   # https://codeberg.org/dnkl/foot/src/branch/master/INSTALL.md#release-build
-  CFLAGS = if !doPgo then "-O3" else pgoCflags;
+  env.CFLAGS = if !doPgo then "-O3" else pgoCflags;
 
   # ar with gcc plugins for lto objects
   preConfigure = ''

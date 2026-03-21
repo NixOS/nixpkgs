@@ -4,19 +4,17 @@
   fetchFromGitHub,
   python3Packages,
 }:
-let
-  version = "0.20.37";
-in
-python3Packages.buildPythonApplication {
+
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "legendary-heroic";
-  inherit version;
-  format = "pyproject";
+  version = "0.20.42";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "legendary";
-    rev = version;
-    sha256 = "sha256-mOys7lOPrrzBUBMIM/JvKygFQ/qIGD68BDNigk5BCIo=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZnOQhIGAgUvZVdPpxdothKzPElp/hdvUJA0mTpXLyIM=";
   };
 
   build-system = with python3Packages; [
@@ -25,21 +23,22 @@ python3Packages.buildPythonApplication {
 
   dependencies = with python3Packages; [
     requests
+    requests-futures
     filelock
   ];
 
   pythonImportsCheck = [ "legendary" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { };
+
+  meta = {
     description = "Free and open-source Epic Games Launcher alternative";
     longDescription = ''
       This is the Heroic Games Launcher's fork of legendary.
     '';
     homepage = "https://github.com/Heroic-Games-Launcher/legendary";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ aidalgol ];
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
     mainProgram = "legendary";
   };
-
-  passthru.updateScript = gitUpdater { };
-}
+})

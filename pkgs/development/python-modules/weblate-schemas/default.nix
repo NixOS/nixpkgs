@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "weblate-schemas";
-  version = "2025.5";
+  version = "2025.6";
 
   pyproject = true;
 
   src = fetchPypi {
     pname = "weblate_schemas";
     inherit version;
-    hash = "sha256-ZhFF3UD7lX/KXVDZFOn+Gc1w/cpzzVYVrbpVeJ9/wiE=";
+    hash = "sha256-Kxu+8CiJ343PmCdY5rSbTqsWmVMLnz9inAH726g5TQQ=";
   };
 
   build-system = [ setuptools ];
@@ -40,12 +40,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "weblate_schemas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Schemas used by Weblate";
     homepage = "https://github.com/WeblateOrg/weblate_schemas";
     changelog = "https://github.com/WeblateOrg/weblate_schemas/blob/${version}/CHANGES.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

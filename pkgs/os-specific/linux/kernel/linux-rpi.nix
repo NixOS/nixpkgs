@@ -9,22 +9,23 @@
 
 let
   # NOTE: raspberrypifw & raspberryPiWirelessFirmware should be updated with this
-  modDirVersion = "6.12.34";
-  tag = "stable_20250702";
-  hash = "sha256-lK0esjFhLvtBbyddMfa1H7ZcBbcOm2ygor338ZT5VpI=";
+  modDirVersion = "6.12.62";
+  hash = "sha256-jcSzPoCCnmZU1GDBUWAljIUjZRzbfdh2aQB9/GOc5mQ=";
 in
 lib.overrideDerivation
   (buildLinux (
     args
     // {
-      version = "${modDirVersion}-${tag}";
+      version = "${modDirVersion}-1+rpt1";
       inherit modDirVersion;
       pname = "linux-rpi";
 
       src = fetchFromGitHub {
         owner = "raspberrypi";
         repo = "linux";
-        inherit tag hash;
+        # https://github.com/RPi-Distro/linux-packaging/raw/refs/tags/pios/1%256.12.62-1+rpt1/debian/changelog
+        rev = "a1073743767f9e7fdc7017ababd2a07ea0c97c1c";
+        inherit hash;
       };
 
       defconfig =

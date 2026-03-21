@@ -7,13 +7,13 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblogging";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchurl {
-    url = "http://download.rsyslog.com/liblogging/liblogging-${version}.tar.gz";
-    sha256 = "14xz00mq07qmcgprlj5b2r21ljgpa4sbwmpr6jm2wrf8wms6331k";
+    url = "http://download.rsyslog.com/liblogging/liblogging-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ZEm3u3XcKC7GvxuYp1PJUHRupbGQ7JruCXiB5NxcS/E=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int -Wno-error=implicit-function-declaration";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.liblogging.org/";
     description = "Lightweight signal-safe logging library";
     mainProgram = "stdlogctl";
-    license = licenses.bsd2;
-    platforms = platforms.all;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.all;
   };
-}
+})

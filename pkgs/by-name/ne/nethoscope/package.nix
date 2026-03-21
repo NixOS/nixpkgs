@@ -8,14 +8,14 @@
   expect,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nethoscope";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "vvilhonen";
     repo = "nethoscope";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-v7GO+d4b0N3heN10+WSUJEpcShKmx4BPR1FyZoELWzc=";
   };
 
@@ -29,32 +29,32 @@ rustPlatform.buildRustPackage rec {
     libpcap
   ];
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
     libpcap
     alsa-lib
   ];
 
   doInstallCheck = true;
   installCheckPhase = ''
-    if [[ "$(${expect}/bin/unbuffer "$out/bin/${pname}" --help 2> /dev/null | strings | grep ${version} | tr -d '\n')" == " ${version}" ]]; then
-      echo '${pname} smoke check passed'
+    if [[ "$(${expect}/bin/unbuffer "$out/bin/${finalAttrs.meta.mainProgram}" --help 2> /dev/null | strings | grep ${finalAttrs.version} | tr -d '\n')" == " ${finalAttrs.version}" ]]; then
+      echo '${finalAttrs.pname} smoke check passed'
     else
-      echo '${pname} smoke check failed'
+      echo '${finalAttrs.pname} smoke check failed'
       return 1
     fi
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Listen to your network traffic";
     longDescription = ''
       Employ your built-in wetware pattern recognition and
       signal processing facilities to understand your network traffic.
     '';
     homepage = "https://github.com/vvilhonen/nethoscope";
-    license = licenses.isc;
-    maintainers = with maintainers; [ _0x4A6F ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ _0x4A6F ];
+    platforms = lib.platforms.linux;
     mainProgram = "nethoscope";
   };
 
-}
+})

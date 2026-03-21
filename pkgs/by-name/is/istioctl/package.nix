@@ -5,17 +5,17 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "istioctl";
-  version = "1.27.1";
+  version = "1.29.1";
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
-    rev = version;
-    hash = "sha256-APUhW1PoNmfnbScoeVbsFY1R9jJT4wABpOjxtY5fFVc=";
+    rev = finalAttrs.version;
+    hash = "sha256-+VdMmBf4YRAroMw0Jub7+Np3qEz648FqTgxCjL20WYQ=";
   };
-  vendorHash = "sha256-+dlZAO6odRCbsqm5Q172g4OMs9S4ovekajAoseHYZ94=";
+  vendorHash = "sha256-OXd29tw9UzrTF1q4ACWuA0xMOIcptDnUrkmnP576vhg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,23 +23,23 @@ buildGoModule rec {
   ldflags =
     let
       attrs = [
-        "istio.io/istio/pkg/version.buildVersion=${version}"
+        "istio.io/istio/pkg/version.buildVersion=${finalAttrs.version}"
         "istio.io/istio/pkg/version.buildStatus=Nix"
-        "istio.io/istio/pkg/version.buildTag=${version}"
+        "istio.io/istio/pkg/version.buildTag=${finalAttrs.version}"
         "istio.io/istio/pkg/version.buildHub=docker.io/istio"
       ];
     in
     [
       "-s"
       "-w"
-      "${lib.concatMapStringsSep " " (attr: "-X ${attr}") attrs}"
-    ];
+    ]
+    ++ map (attr: "-X ${attr}") attrs;
 
   subPackages = [ "istioctl/cmd/istioctl" ];
 
   doInstallCheck = true;
   installCheckPhase = ''
-    $out/bin/istioctl version --remote=false | grep ${version} > /dev/null
+    $out/bin/istioctl version --remote=false | grep ${finalAttrs.version} > /dev/null
   '';
 
   postInstall = ''
@@ -49,15 +49,14 @@ buildGoModule rec {
     installShellCompletion --zsh _istioctl
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Istio configuration command line utility for service operators to debug and diagnose their Istio mesh";
     mainProgram = "istioctl";
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      bryanasdev000
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       veehaitch
       ryan4yin
     ];
   };
-}
+})

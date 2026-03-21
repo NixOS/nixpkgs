@@ -10,19 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "geolite-legacy";
-  version = "20250129";
+  version = "20260204";
 
   # We use Arch Linux package as a snapshot, because upstream database is updated in-place.
   geoip = fetchzip {
     url = "https://archive.archlinux.org/packages/g/geoip-database/geoip-database-${version}-1-any.pkg.tar.zst";
-    hash = "sha256-/aT/ndml7a3P9/1CM3KhB4/L+F0CDHpHj/NnKWOv2G0=";
+    hash = "sha256-OJSBPAwzJO+qjjgQwpG7bsaJ8C4DpLMRbLMYfK+DSFA=";
     nativeBuildInputs = [ zstd ];
     stripRoot = false;
   };
 
   extra = fetchzip {
     url = "https://archive.archlinux.org/packages/g/geoip-database-extra/geoip-database-extra-${version}-1-any.pkg.tar.zst";
-    hash = "sha256-qFJKeLEWag5Wvzye5heDs79ai0pkJndmZgS8Ip5T3G4=";
+    hash = "sha256-L7uJtbkXD5H5bbZNsrFDzHwKZvhg/6fOwo0DM2Iuh9o=";
     nativeBuildInputs = [ zstd ];
     stripRoot = false;
   };

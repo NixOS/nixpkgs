@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   diff-cover,
   graphviz,
   hatchling,
@@ -16,24 +15,15 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
-  version = "2.28.0";
+  version = "2.30.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     tag = version;
-    hash = "sha256-PYlNMAomqN9T60b8bRqb8mnLjFRn3JnI79Tynncxje8=";
+    hash = "sha256-nDCd4Bk5P65+fnFM/kC3cbfPanj5P35/bta86/E65i0=";
   };
-
-  postPatch = ''
-    # only set to ensure py3.13 compat
-    # https://github.com/tox-dev/pipdeptree/pull/406
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pip>=24.2"' '"pip"'
-  '';
 
   build-system = [
     hatchling
@@ -55,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
     virtualenv
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "pipdeptree" ];
 
@@ -64,12 +54,12 @@ buildPythonPackage rec {
     "test_console"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";
     changelog = "https://github.com/tox-dev/pipdeptree/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       charlesbaynham
       mdaniels5757
     ];

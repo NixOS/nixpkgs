@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   removeReferencesTo,
   cppSupport ? true,
@@ -45,6 +46,14 @@ stdenv.mkDerivation rec {
     rev = "hdf5_${version}";
     hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "reproducible-build.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hdf5/-/raw/main/hdf5-make-reproducible.patch";
+      hash = "sha256-Z31dCsLjYpqjoGXooOXI81EPjPwyTK8890xCENTh8aM=";
+    })
+  ];
 
   passthru = {
     inherit
@@ -133,7 +142,7 @@ stdenv.mkDerivation rec {
     inherit (python3.pkgs) h5py;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
       HDF5 supports an unlimited variety of datatypes, and is designed for flexible and efficient
@@ -141,9 +150,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    license = licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
+    maintainers = [ lib.maintainers.markuskowa ];
     homepage = "https://www.hdfgroup.org/HDF5/";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

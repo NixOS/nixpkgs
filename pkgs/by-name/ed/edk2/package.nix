@@ -33,14 +33,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
-  version = "202508";
+  version = "202602";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YZcjPGPkUQ9CeJS9JxdHBmpdHsAj7T0ifSZWZKyNPMk=";
+    hash = "sha256-TeMGpqVpXYRaeLjjg/aWHjtvfJpEfauA7Xg7dfe3XNg=";
   };
 
   src = applyPatches {
@@ -57,10 +57,31 @@ stdenv.mkDerivation (finalAttrs: {
       ./fix-cross-compilation-antlr-dlg.patch
     ];
 
-    # FIXME: unvendor OpenSSL again once upstream updates
-    # to a compatible version.
-    # Upstream PR: https://github.com/tianocore/edk2/pull/10946
     postPatch = ''
+      # de-vendor OpenSSL
+      rm -r CryptoPkg/Library/OpensslLib/openssl
+      mkdir -p CryptoPkg/Library/OpensslLib/openssl
+      (
+      cd CryptoPkg/Library/OpensslLib/openssl
+      tar --strip-components=1 -xf ${buildPackages.openssl_3_5.src}
+
+      # Apply OpenSSL patches.
+      ${lib.pipe buildPackages.openssl_3_5.patches [
+        (builtins.filter (
+          patch:
+          !builtins.elem (baseNameOf patch) [
+            # Exclude patches not required in this context.
+            "nix-ssl-cert-file.patch"
+            "openssl-disable-kernel-detection.patch"
+            "use-etc-ssl-certs-darwin.patch"
+            "use-etc-ssl-certs.patch"
+          ]
+        ))
+        (map (patch: "patch -p1 < ${patch}\n"))
+        lib.concatStrings
+      ]}
+      )
+
       # enable compilation using Clang
       # https://bugzilla.tianocore.org/show_bug.cgi?id=4620
       substituteInPlace BaseTools/Conf/tools_def.template --replace-fail \
@@ -77,10 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   depsHostHost = [ libuuid ];
   strictDeps = true;
 
-  # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
-  ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
-
-  makeFlags = [ "-C BaseTools" ];
+  makeFlags = [ "--directory=BaseTools" ];
 
   env = {
     NIX_CFLAGS_COMPILE =
@@ -88,6 +106,9 @@ stdenv.mkDerivation (finalAttrs: {
       + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
       + lib.optionalString (stdenv.hostPlatform.isDarwin) " -Wno-error=macro-redefined";
     PYTHON_COMMAND = lib.getExe pythonEnv;
+    # trick taken from https://src.fedoraproject.org/rpms/edk2/blob/08f2354cd280b4ce5a7888aa85cf520e042955c3/f/edk2.spec#_319
+    ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+
   };
 
   hardeningDisable = [
@@ -133,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       #!nix-shell -i bash -p common-updater-scripts coreutils gnused
       set -eu -o pipefail
       version="$(list-git-tags --url="${finalAttrs.srcWithVendoring.url}" |
-                 sed -E --quiet 's/^edk2-stable([0-9]{6})$/\1/p' |
+                 sed -E --quiet 's/^edk2-stable([0-9\\.]+)$/\1/p' |
                  sort --reverse --numeric-sort |
                  head -n 1)"
       if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
@@ -160,8 +181,6 @@ stdenv.mkDerivation (finalAttrs: {
           ]
           ++ attrs.nativeBuildInputs or [ ];
           strictDeps = true;
-
-          ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
 
           prePatch = ''
             rm -rf BaseTools
@@ -190,7 +209,14 @@ stdenv.mkDerivation (finalAttrs: {
         // removeAttrs attrs [
           "nativeBuildInputs"
           "depsBuildBuild"
+          "env"
         ]
+        // {
+          env = {
+            ${"GCC5_${targetArch}_PREFIX"} = stdenv.cc.targetPrefix;
+          }
+          // (attrs.env or { });
+        }
       );
   };
 })

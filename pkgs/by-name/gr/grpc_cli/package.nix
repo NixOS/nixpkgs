@@ -9,14 +9,14 @@
   numactl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "grpc_cli";
-  version = "1.75.0";
+  version = "1.78.1";
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
-    rev = "v${version}";
-    hash = "sha256-2SeL/O6FaAnrPXMHAPKCSzx3hlcKLuC5y+ljJ1gewkE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-YgluQqrJj0NfrNqRjNkLISjEpEmXvjS5UmqAl3Xtf64=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [
@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
-  meta = with lib; {
+  meta = {
     description = "Command line tool for interacting with grpc services";
     homepage = "https://github.com/grpc/grpc";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doriath ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
     mainProgram = "grpc_cli";
   };
-}
+})

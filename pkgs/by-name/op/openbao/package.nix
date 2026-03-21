@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   buildGoModule,
   installShellFiles,
   versionCheckHook,
@@ -14,16 +15,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "openbao";
-  version = "2.4.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "openbao";
     repo = "openbao";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HfPkjeScegylpA/i8KlS3t468pmD5sRwp2Ct164fkTo=";
+    hash = "sha256-pVFsyNg9ccSFAdHb/fjeVoMBh1nKcjwcFfVBBqFalIo=";
   };
 
-  vendorHash = "sha256-4SWpWGWoesUCgSpgOpblkxOpPbBC/grC2S1m7R9qasY=";
+  vendorHash = "sha256-8F8HCbpk8st1o/64Y442lzzFXBnCs+mEYREYcj/s5KI=";
 
   proxyVendor = true;
 
@@ -36,6 +37,15 @@ buildGoModule (finalAttrs: {
     "-X github.com/openbao/openbao/version.GitCommit=${finalAttrs.src.rev}"
     "-X github.com/openbao/openbao/version.fullVersion=${finalAttrs.version}"
     "-X github.com/openbao/openbao/version.buildDate=1970-01-01T00:00:00Z"
+  ];
+
+  patches = [
+    # Fixes interactive CLI usage that needs stty https://github.com/openbao/openbao/pull/2535
+    (fetchpatch2 {
+      name = "pr2535-fix-interactive-cli.patch";
+      url = "https://github.com/openbao/openbao/commit/e3fec111e3f6fd543c79c08f46d2256cd93f78e7.patch?full_index=1";
+      hash = "sha256-ixpWKfVT1dPAjF7RKS2tBpAr1YAqNkvf4/L7Be/C8Es=";
+    })
   ];
 
   postConfigure = lib.optionalString withUi ''
@@ -57,7 +67,6 @@ buildGoModule (finalAttrs: {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/bao";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

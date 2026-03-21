@@ -10,7 +10,9 @@ in
 {
   meta.maintainers = with lib.maintainers; [
     NotAShelf
+    mdaniels5757
     viperML
+    faukah
   ];
 
   options.programs.nh = {

@@ -12,13 +12,13 @@
   nix-update,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fasmg";
-  version = "ktge";
+  version = "l45p";
 
   src = fetchzip {
-    url = "https://flatassembler.net/fasmg.${version}.zip";
-    sha256 = "sha256-z/2SeN6FgRvLg8hA+lle/f2qEkce1GF1cC0uSnXExhg=";
+    url = "https://flatassembler.net/fasmg.${finalAttrs.version}.zip";
+    sha256 = "sha256-0/P20DiRZbqZHoxWiBPs6wXqpbvRroisyF0dCdmd+j8=";
     stripRoot = false;
   };
 
@@ -85,12 +85,12 @@ stdenv.mkDerivation rec {
     nix-update fasmg --version "$version"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "x86(-64) macro assembler to binary, MZ, PE, COFF, and ELF";
     mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej ];
-    platforms = with platforms; intersectLists (linux ++ darwin) x86;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.iamanaws ];
+    platforms = with lib.platforms; lib.intersectLists (linux ++ darwin) x86;
   };
-}
+})

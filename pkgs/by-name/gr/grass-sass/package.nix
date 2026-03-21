@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "grass";
   version = "0.13.4";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-uk4XLF0QsH9Nhz73PmdSpwhxPdCh+DlNNqtbJtLWgNI=";
   };
 
@@ -18,14 +18,14 @@ rustPlatform.buildRustPackage rec {
   # tests require rust nightly
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Sass compiler written purely in Rust";
     homepage = "https://github.com/connorskees/grass";
     changelog = "https://github.com/connorskees/grass/blob/master/CHANGELOG.md#${
-      replaceStrings [ "." ] [ "" ] version
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "grass";
   };
-}
+})

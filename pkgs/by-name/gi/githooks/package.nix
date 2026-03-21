@@ -7,14 +7,14 @@
   makeWrapper,
   githooks,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "githooks";
   version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "gabyx";
     repo = "githooks";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-pTSC8ruNiPzQO1C6j+G+WFX3pz/mWPukuWkKUSYdfHw=";
   };
 
@@ -53,8 +53,8 @@ buildGoModule rec {
 
   # We need to generate some build files before building.
   postConfigure = ''
-    GH_BUILD_VERSION="${version}" \
-      GH_BUILD_TAG="v${version}" \
+    GH_BUILD_VERSION="${finalAttrs.version}" \
+      GH_BUILD_TAG="v${finalAttrs.version}" \
       go generate -mod=vendor ./...
   '';
 
@@ -73,14 +73,14 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = githooks;
     command = "githooks-cli --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git hooks manager with per-repo and shared Git hooks including version control";
     homepage = "https://github.com/gabyx/Githooks";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ gabyx ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ gabyx ];
     mainProgram = "githooks-cli";
   };
-}
+})

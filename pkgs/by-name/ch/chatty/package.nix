@@ -30,14 +30,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chatty";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Chatty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pLdl44nLRFLH76499JcaKgXRpf51wqFm174gUa7noKc=";
+    hash = "sha256-XLpvgRSvIi3Wk5SaomROp94HDT8JNFfLdRX1PJgQYkI=";
   };
 
   nativeBuildInputs = [
@@ -76,13 +76,13 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XMPP and SMS messaging via libpurple and ModemManager";
     mainProgram = "chatty";
     homepage = "https://gitlab.gnome.org/World/Chatty";
     changelog = "https://gitlab.gnome.org/World/Chatty/-/blob/${finalAttrs.src.tag}/NEWS";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.linux;
   };
 })

@@ -107,13 +107,16 @@ lib.makeOverridable (
   in
 
   stdenv.mkDerivation (
-    (builtins.removeAttrs attrs [ "source" ])
+    (removeAttrs attrs [ "source" ])
     // {
       inherit ruby;
       inherit dontBuild;
       inherit dontStrip;
       inherit suffix;
+      inherit version;
       gemType = type;
+      pname = gemName;
+      name = attrs.name or "${namePrefix}${gemName}-${suffix}";
 
       nativeBuildInputs = [
         ruby
@@ -127,9 +130,6 @@ lib.makeOverridable (
         ruby
       ]
       ++ buildInputs;
-
-      #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
-      name = attrs.name or "${namePrefix}${gemName}-${suffix}";
 
       inherit src;
 
@@ -217,7 +217,14 @@ lib.makeOverridable (
           export GEM_HOME=$out/${ruby.gemPath}
           mkdir -p $GEM_HOME
 
-          echo "buildFlags: $buildFlags"
+          # When __structuredAttrs is enabled, this is not added to the environment by default,
+          # but nix-bundle-install.rb needs it.
+          export ruby
+
+          local -a flagsArray
+          concatTo flagsArray buildFlags
+
+          echo "buildFlags: ''${flagsArray[@]}"
 
           ${lib.optionalString (type == "url") ''
             ruby ${./nix-bundle-install.rb} \
@@ -256,7 +263,7 @@ lib.makeOverridable (
               --backtrace \
               --no-env-shebang \
               ${documentFlag} \
-              $gempkg $gemFlags -- $buildFlags
+              $gempkg -- "''${flagsArray[@]}"
 
             # looks like useless files which break build repeatability and consume space
             pushd $out/${ruby.gemPath}

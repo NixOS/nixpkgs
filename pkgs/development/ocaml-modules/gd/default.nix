@@ -6,24 +6,24 @@
   gd,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "gd";
   version = "1.1";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-gd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-78cqxVEappTybRLk7Y6vW1POvZKFIxtGNVcmkKq9GEE=";
   };
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ gd ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/savonet/ocaml-gd";
     description = "OCaml bindings for gd";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ dandellion ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pgtrigger";
-  version = "4.15.4";
+  version = "4.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AmbitionEng";
     repo = "django-pgtrigger";
     tag = version;
-    hash = "sha256-3v/YWcWZAiEH9EtxC901kEqja0TTzbNSTkjoH+cEUN4=";
+    hash = "sha256-LBuqaFFHP18LPI26CcYMVO7rJsDrCBtuVKhwoTr6ACA=";
   };
 
   build-system = [ poetry-core ];

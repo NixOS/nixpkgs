@@ -1,4 +1,5 @@
 {
+  stdenv,
   fetchFromGitHub,
   cargo-tauri,
   fetchFromRadicle,
@@ -83,6 +84,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     libsoup_3
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     webkitgtk_4_1
   ];
 

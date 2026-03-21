@@ -2,10 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pythonAtLeast,
 
   ## wandb-core
-  buildGo125Module,
+  buildGoModule,
   gitMinimal,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
 
   ## gpu-stats
@@ -20,11 +22,9 @@
 
   # dependencies
   click,
-  docker-pycreds,
   gitpython,
   platformdirs,
   protobuf,
-  psutil,
   pydantic,
   pyyaml,
   requests,
@@ -32,7 +32,6 @@
   setproctitle,
   setuptools,
   pythonOlder,
-  eval-type-backport,
   typing-extensions,
 
   # tests
@@ -44,7 +43,6 @@
   bokeh,
   boto3,
   cloudpickle,
-  coverage,
   flask,
   google-cloud-artifact-registry,
   google-cloud-compute,
@@ -74,16 +72,15 @@
   torch,
   torchvision,
   tqdm,
-  writableTmpDirAsHomeHook,
 }:
 
 let
-  version = "0.21.4";
+  version = "0.25.0";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-1l68nU/rmYg/Npg1EVraGr2tu/lkNAo9M7Q0IyckEoc=";
+    hash = "sha256-ouJHMPcWiHn2p0mFatmC28xUmjzxsoDW9WBX6FzjyDc=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -93,7 +90,7 @@ let
 
     sourceRoot = "${src.name}/gpu_stats";
 
-    cargoHash = "sha256-iZinowkbBc3nuE0uRS2zLN2y97eCMD1mp/MKVKdnXaE=";
+    cargoHash = "sha256-yzvXJYkQTNOScOI3yfVBH6IGZzcFduuXqW3pI5hEZGw=";
 
     checkFlags = [
       # fails in sandbox
@@ -103,7 +100,6 @@ let
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     meta = {
@@ -111,7 +107,7 @@ let
     };
   };
 
-  wandb-core = buildGo125Module rec {
+  wandb-core = buildGoModule rec {
     pname = "wandb-core";
     inherit src version;
 
@@ -129,12 +125,12 @@ let
 
     nativeBuildInputs = [
       gitMinimal
+      writableTmpDirAsHomeHook
     ];
 
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     checkFlags =
@@ -155,7 +151,7 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "wandb";
   pyproject = true;
 
@@ -195,13 +191,16 @@ buildPythonPackage rec {
     hatchling
   ];
 
+  # Protobuf 7 is not compatible with the current version of wandb
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
+
   dependencies = [
     click
-    docker-pycreds
     gitpython
     platformdirs
     protobuf
-    psutil
     pydantic
     pyyaml
     requests
@@ -209,9 +208,6 @@ buildPythonPackage rec {
     setproctitle
     # setuptools is necessary since pkg_resources is required at runtime.
     setuptools
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [
-    eval-type-backport
   ]
   ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
@@ -228,7 +224,6 @@ buildPythonPackage rec {
     bokeh
     boto3
     cloudpickle
-    coverage
     flask
     google-cloud-artifact-registry
     google-cloud-compute
@@ -390,16 +385,19 @@ buildPythonPackage rec {
 
     # Breaks in sandbox: "Timed out waiting for wandb service to start"
     "test_setup_offline"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: '...' object has no attribute '__annotations__'
+    "test_watch_graph_torch_jit"
+    "test_watch_parameters_torch_jit"
   ];
-
-  pythonImportsCheck = [ "wandb" ];
 
   meta = {
     description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
-    changelog = "https://github.com/wandb/wandb/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/wandb/wandb/raw/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
     broken = gpu-stats.meta.broken || wandb-core.meta.broken;
   };
-}
+})

@@ -2,39 +2,74 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_29_2,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
-  electron,
+  electron_39,
+  rustPlatform,
+  cargo,
+  rustc,
+  python3,
+  pkg-config,
+  openssl,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   nix-update-script,
+  removeReferencesTo,
 }:
-stdenv.mkDerivation (final: {
+let
+  electron = electron_39;
+  pnpm = pnpm_10_29_2;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
-  version = "3.0.0-beta.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "imsyy";
     repo = "SPlayer";
-    tag = "v${final.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = false;
-    hash = "sha256-q4jMwIILuz9Uci/1m429Y5tHE2rkfxctu9QCA8jrJkk=";
+    hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
   };
 
-  pnpm = pnpm_10;
-
-  pnpmDeps = final.pnpm.fetchDeps {
-    inherit (final) pname version src;
+  pnpmDeps = fetchPnpmDeps {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    inherit pnpm;
     fetcherVersion = 2;
-    hash = "sha256-lA08+i+SpMB95MAi/N5mxbcBed0FRchroT5e2nwnXuA=";
+    hash = "sha256-PTfZopse+9RS7qh0miLu3duYlWDfifZS254tZKqgxKk=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      ;
+    hash = "sha256-gd/5f3yraTQI5bu1VE6HHsGDeKJLR1oTm2H+pg1PAOA=";
   };
 
   nativeBuildInputs = [
-    final.pnpm.configHook
+    pnpmConfigHook
+    pnpm
     nodejs
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+    python3
     makeWrapper
     copyDesktopItems
+    pkg-config
+  ];
+
+  buildInputs = [
+    openssl
   ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -43,14 +78,35 @@ stdenv.mkDerivation (final: {
     cp .env.example .env
   '';
 
+  postPatch = ''
+    # Workaround for https://github.com/electron/electron/issues/31121
+    substituteInPlace electron/main/utils/native-loader.ts \
+      --replace-fail 'process.resourcesPath' "'$out/share/splayer/resources'"
+  '';
+
   buildPhase = ''
     runHook preBuild
+
+    # After the pnpm configure, we need to build the binaries of all instances
+    # of better-sqlite3. It has a native part that it wants to build using a
+    # script which is disallowed.
+    # What's more, we need to use headers from electron to avoid ABI mismatches.
+    # Adapted from mkYarnModules.
+    for f in $(find . -path '*/node_modules/better-sqlite3' -type d); do
+      (cd "$f" && (
+      npm run build-release --offline --nodedir="${electron.headers}"
+      rm -rf build/Release/{.deps,obj,obj.target,test_extension.node}
+      find build -type f -exec \
+        ${lib.getExe removeReferencesTo} \
+        -t "${electron.headers}" {} \;
+      ))
+    done
 
     pnpm build
 
     npm exec electron-builder -- \
         --dir \
-        --config electron-builder.yml \
+        --config electron-builder.config.ts \
         -c.electronDist=${electron.dist} \
         -c.electronVersion=${electron.version}
 
@@ -93,6 +149,8 @@ stdenv.mkDerivation (final: {
         "Audio"
         "Music"
       ];
+      mimeTypes = [ "x-scheme-handler/orpheus" ];
+      extraConfig.X-KDE-Protocols = "orpheus";
     })
   ];
 
@@ -101,9 +159,18 @@ stdenv.mkDerivation (final: {
   meta = {
     description = "Simple Netease Cloud Music player";
     homepage = "https://github.com/imsyy/SPlayer";
+    changelog = "https://github.com/imsyy/SPlayer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ccicnce113424 ];
     mainProgram = "splayer";
     platforms = lib.platforms.linux;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      # public/wasm/ffmpeg.wasm
+      # source: https://github.com/apoint123/ffmpeg-audio-player
+      # native/ferrous-opencc-wasm/pkg/ferrous_opencc_wasm_bg.wasm
+      # source: native/ferrous-opencc-wasm
+      binaryBytecode
+    ];
   };
 })

@@ -24,17 +24,17 @@
   libnotify,
   libpulseaudio,
   libuuid,
-  libX11,
-  libXScrnSaver,
-  libXcomposite,
-  libXcursor,
-  libXdamage,
-  libXext,
-  libXfixes,
-  libXi,
-  libXrandr,
-  libXrender,
-  libXtst,
+  libx11,
+  libxscrnsaver,
+  libxcomposite,
+  libxcursor,
+  libxdamage,
+  libxext,
+  libxfixes,
+  libxi,
+  libxrandr,
+  libxrender,
+  libxtst,
   libxcb,
   libxshmfence,
   libgbm,
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
     cups
     libdrm
     libuuid
-    libXdamage
-    libX11
-    libXScrnSaver
-    libXtst
+    libxdamage
+    libx11
+    libxscrnsaver
+    libxtst
     libxcb
     libxshmfence
     libgbm
@@ -101,23 +101,23 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libnotify
-    libX11
-    libXcomposite
+    libx11
+    libxcomposite
     libuuid
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
     nspr
     nss
     libxcb
     pango
     systemd
-    libXScrnSaver
+    libxscrnsaver
     libappindicator-gtk3
     libdbusmenu
   ];
@@ -154,13 +154,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple, configurable utility to show your web activity as playing status on Discord";
     homepage = "https://premid.app";
     downloadPage = "https://premid.app/downloads";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ natto1784 ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ natto1784 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "premid";
   };

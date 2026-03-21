@@ -6,12 +6,12 @@
   lapack,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ergoscf";
   version = "3.8.2";
 
   src = fetchurl {
-    url = "http://www.ergoscf.org/source/tarfiles/ergo-${version}.tar.gz";
+    url = "http://www.ergoscf.org/source/tarfiles/ergo-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-U0NVREEZ8HI0Q0ZcbwvZsYA76PWMh7bqgDG1uaUc01c=";
   };
 
@@ -35,12 +35,14 @@ stdenv.mkDerivation rec {
   env = {
     # Required for compilation with gcc-14
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    LDFLAGS = "-lblas -llapack";
+    LDFLAGS = toString [
+      "-lblas"
+      "-llapack"
+    ];
+    OMP_NUM_THREADS = 2; # required for check phase
   };
 
   enableParallelBuilding = true;
-
-  OMP_NUM_THREADS = 2; # required for check phase
 
   # With "fortify3", there are test failures, such as:
   # Testing cnof CAMB3LYP/6-31G using FMM
@@ -50,12 +52,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Quantum chemistry program for large-scale self-consistent field calculations";
     mainProgram = "ergo";
     homepage = "http://www.ergoscf.org";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
-}
+})

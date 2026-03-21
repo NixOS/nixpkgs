@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "raze";
-  version = "1.11.0";
+  version = "1.11.0-unstable-2025-11-19";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
-    tag = finalAttrs.version;
-    hash = "sha256-P8iwCkLch8054PwnGmgqTPWA8O2yyMruDeUDJGxDI2Q=";
+    rev = "76fe82f5eb318fdeb30ba9fb27093a9a10bc3821";
+    hash = "sha256-QCxszreIExqWVVJL8GFNzfayeSwaelhGpimqn3spEJY=";
     leaveDotGit = true;
     postFetch = ''
       cd $out
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/raze $out/share/raze
     makeWrapper $out/share/raze/raze $out/bin/raze \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
-    install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/pixmaps/org.zdoom.Raze.png
+    install -Dm644 ../source/platform/posix/org.zdoom.Raze.256.png $out/share/icons/hicolor/256x256/apps/org.zdoom.Raze.png
     install -Dm644 ../source/platform/posix/org.zdoom.Raze.desktop $out/share/applications/org.zdoom.Raze.desktop
     install -Dm644 ../soundfont/raze.sf2 $out/share/raze/soundfonts/raze.sf2
   '';

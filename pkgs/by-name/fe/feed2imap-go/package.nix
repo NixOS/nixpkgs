@@ -4,21 +4,21 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "feed2imap-go";
   version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "Necoro";
     repo = "feed2imap-go";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-7ce2G2t+7P+7Ga+BLyGF4lW4BB2yaE9rV/dxBFvdPEU=";
   };
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/Necoro/feed2imap-go/pkg/version.version=${version}"
+    "-X github.com/Necoro/feed2imap-go/pkg/version.version=${finalAttrs.version}"
     "-X github.com/Necoro/feed2imap-go/pkg/version.commit=nixpkgs"
   ];
 
@@ -29,11 +29,14 @@ buildGoModule rec {
     rm -f $out/bin/print-cache
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Uploads rss feeds as e-mails onto an IMAP server";
     mainProgram = "feed2imap-go";
     homepage = "https://github.com/Necoro/feed2imap-go";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ nomeata ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
+      nomeata
+      Necoro
+    ];
   };
-}
+})

@@ -8,12 +8,12 @@
   lxml,
   oauthlib,
   pyjwt,
+  pytest-cov-stub,
   pytest-xdist,
   pytestCheckHook,
   python-jose,
   python3-openid,
   python3-saml,
-  pythonOlder,
   requests,
   requests-oauthlib,
   responses,
@@ -23,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "social-auth-core";
-  version = "4.7.0";
+  version = "4.8.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "python-social-auth";
     repo = "social-core";
     tag = version;
-    hash = "sha256-PQPnLTTCAUE1UmaDRmEXLozY0607e2/fLsvzcJzo4bQ=";
+    hash = "sha256-8UDJfn1NDNHM8PBTV6n18GFSmOUqXo8UGbrJLFfLlnY=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -57,13 +55,14 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytest-xdist
     pytestCheckHook
     httpretty
     responses
     typing-extensions
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # missing google-auth-stubs
@@ -76,11 +75,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "social_core" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for social authentication/registration mechanisms";
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -27,13 +27,13 @@ let
     p.mako
   ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "clightning";
-  version = "25.09";
+  version = "25.12.1";
 
   src = fetchurl {
-    url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    hash = "sha256-qX9EZHuDtEcYCU8YOMbHTo3JDAAJ8nc6N7F/+AAEpn4=";
+    url = "https://github.com/ElementsProject/lightning/releases/download/v${finalAttrs.version}/clightning-v${finalAttrs.version}.zip";
+    hash = "sha256-50rcNH9dXeRezJ3nEW/cRK5uE+IpGoHAzkU3C7p44KY=";
   };
 
   # when building on darwin we need cctools to provide the correct libtool
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-valgrind" ];
 
-  makeFlags = [ "VERSION=v${version}" ];
+  makeFlags = [ "VERSION=v${finalAttrs.version}" ];
 
   enableParallelBuilding = true;
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
   ) "-Wno-error=gnu-folding-constant";
 
-  meta = with lib; {
+  meta = {
     description = "Bitcoin Lightning Network implementation in C";
     longDescription = ''
       c-lightning is a standard compliant implementation of the Lightning
@@ -105,11 +105,11 @@ stdenv.mkDerivation rec {
       parties for any amount.
     '';
     homepage = "https://github.com/ElementsProject/lightning";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       prusnak
     ];
-    license = licenses.mit;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

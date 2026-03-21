@@ -15,7 +15,7 @@
   SDL2_mixer,
   SDL2_ttf,
   python3,
-  xorg,
+  libx11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     curl
     python3
-    xorg.libX11
+    libx11
   ];
 
   cmakeFlags = [

@@ -4,17 +4,20 @@
   fetchFromGitHub,
   makeWrapper,
   wget,
+  gnugrep,
+  nix-update-script,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "distrobox";
-  version = "1.8.1.2";
+  version = "1.8.2.4";
 
   src = fetchFromGitHub {
     owner = "89luca89";
     repo = "distrobox";
-    rev = finalAttrs.version;
-    hash = "sha256-wTu+8SQZaf8TKkjyvKqTvIWnCZTiPnozybTu5uKXEJk=";
+    tag = finalAttrs.version;
+    hash = "sha256-bttJFHgmZgN0p6eT7vGzz2DsrrUgB+uGnnPz2Ep+eB4=";
   };
 
   dontConfigure = true;
@@ -40,11 +43,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     wrapProgram "$out/bin/distrobox-generate-entry" \
       --prefix PATH ":" ${lib.makeBinPath [ wget ]}
 
+    mv "$out/bin/${finalAttrs.meta.mainProgram}" "$out/bin/.${finalAttrs.meta.mainProgram}-wrapped"
+    makeWrapper "${stdenvNoCC.shell}" "$out/bin/${finalAttrs.meta.mainProgram}" \
+      --prefix PATH ":" "${lib.makeBinPath [ gnugrep ]}" \
+      --add-flags "-c 'source \"$out/bin/.${finalAttrs.meta.mainProgram}-wrapped\"' \"\$0\""
+
     mkdir -p $out/share/distrobox
     echo 'container_additional_volumes="/nix:/nix"' > $out/share/distrobox/distrobox.conf
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+    };
+  };
+
+  meta = {
     description = "Wrapper around podman or docker to create and start containers";
     longDescription = ''
       Use any linux distribution inside your terminal. Enable both backward and
@@ -52,8 +67,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       you’re more comfortable with
     '';
     homepage = "https://distrobox.it/";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ atila ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
+    mainProgram = "distrobox";
   };
 })

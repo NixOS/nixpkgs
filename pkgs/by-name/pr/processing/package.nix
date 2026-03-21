@@ -3,21 +3,22 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  ant,
   unzip,
   makeWrapper,
+  gradle_8,
   jdk17,
   jogl,
   rsync,
-  ffmpeg,
   batik,
   stripJavaArchivesHook,
   wrapGAppsHook3,
   libGL,
 }:
 let
+  # Force use of JDK 17, see https://github.com/processing/processing4/issues/1043
+  gradle = gradle_8.override { java = jdk17; };
   jdk = jdk17;
-  buildNumber = "1295";
+  buildNumber = "1310";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -53,30 +54,28 @@ let
     url = "mirror://maven/com/google/code/gson/gson/2.9.1/gson-2.9.1.jar";
     sha256 = "sha256-N4U04znm5tULFzb7Ort28cFdG+P0wTzsbVNkEuI9pgM=";
   };
-
-  arch =
-    {
-      x86_64 = "amd64";
-    }
-    .${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.3.2";
+  version = "4.4.10";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-jUkWnkP8up5vpaXfgFJ/jQjN1KfeX5EuYXSb+W6NEms=";
+    sha256 = "sha256-u2wQl/VGCNJPd+k3DX2eW7gkA/RARMTSNGcoQuS/Oh8=";
   };
 
-  # Processing did not update the todo.txt file before tagging this release, so
-  # the "revision-check" Ant target fails.
-  patches = [ ./disable-revision-check.patch ];
+  patches = [
+    # Compose Multiplatform generates its createDistributable target too late, and we don't need it anyway
+    ./skip-distributable.patch
+
+    # dirPermissions: Without this, some gradle tasks (e.g. includeJdk) fail to copy contents of read-only subfolders within the nix store
+    ./fix-permissions.patch
+  ];
 
   nativeBuildInputs = [
-    ant
+    gradle
     unzip
     makeWrapper
     stripJavaArchivesHook
@@ -85,21 +84,27 @@ stdenv.mkDerivation rec {
   buildInputs = [
     jdk
     jogl
-    ant
     rsync
-    ffmpeg
     batik
   ];
 
-  dontWrapGApps = true;
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
-  buildPhase = ''
+  gradleFlags = [ "-Dfile.encoding=utf-8" ];
+
+  gradleBuildTask = "createDistributable";
+  gradleUpdateTask = "createDistributable";
+  enableParallelUpdating = false;
+
+  # Need to run the entire createDistributable task, otherwise the buildPhase fails at the compose checkRuntime step
+  gradleUpdateScript = ''
     runHook preBuild
+    runHook preGradleUpdate
 
-    echo "tarring jdk"
-    tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
-    cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
-    mkdir -p core/library
+    mkdir -p app/lib core/library
     ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
@@ -109,13 +114,41 @@ stdenv.mkDerivation rec {
     unzip -qo ${jna} -d app/lib/
     mv app/lib/{jna-5.10.0/dist/jna.jar,}
     mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
+
     ln -sf ${batik}/* java/libraries/svg/library/
     cp java/libraries/svg/library/share/java/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
-    echo "tarring ffmpeg"
-    tar --checkpoint=10000 -czf build/shared/tools/MovieMaker/ffmpeg-5.0.1.gz ${ffmpeg}
-    cd build
-    ant build
-    cd ..
+
+    gradle createDistributable
+
+    runHook postGradleUpdate
+  '';
+
+  dontWrapGApps = true;
+
+  postPatch = ''
+    substituteInPlace app/build.gradle.kts \
+      --replace-fail "https://github.com/processing/processing-examples/archive/refs/heads/main.zip" "https://github.com/processing/processing-examples/archive/b10c9e9a05a0d6c20d233ca7f30d315b5047720e.zip" \
+      --replace-fail "https://github.com/processing/processing-website/archive/refs/heads/main.zip" "https://github.com/processing/processing-website/archive/f11676d1b7464291a23ae834f2ef6ab00baaed8e.zip"
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    mkdir -p app/lib core/library
+    ln -s ${jogl}/share/java/* core/library/
+    ln -s ${vaqua} app/lib/VAqua9.jar
+    ln -s ${flatlaf} app/lib/flatlaf.jar
+    ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
+    ln -s ${lsp4j-jsonrpc} java/mode/org.eclipse.lsp4j.jsonrpc.jar
+    ln -s ${gson} java/mode/gson.jar
+    unzip -qo ${jna} -d app/lib/
+    mv app/lib/{jna-5.10.0/dist/jna.jar,}
+    mv app/lib/{jna-5.10.0/dist/jna-platform.jar,}
+
+    ln -sf ${batik}/* java/libraries/svg/library/
+    cp java/libraries/svg/library/share/java/batik-all-${batik.version}.jar java/libraries/svg/library/batik.jar
+
+    gradle assemble
 
     runHook postBuild
   '';
@@ -123,17 +156,19 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/
+    gradle createDistributable
+
+    mkdir -p $out/lib
+    cp -dpr app/build/compose/binaries/main/app/Processing/lib/* $out/lib/
+    cp -dpr app/build/compose/binaries/main/app/Processing/bin $out/unwrapped
+
     mkdir -p $out/share/applications/
     cp -dp build/linux/${pname}.desktop $out/share/applications/
-    cp -dpr build/linux/work $out/share/${pname}
-    rmdir $out/share/${pname}/java
-    ln -s ${jdk} $out/share/${pname}/java
-    makeWrapper $out/share/${pname}/processing $out/bin/processing \
-      ''${gappsWrapperArgs[@]} \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
-      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
-    makeWrapper $out/share/${pname}/processing-java $out/bin/processing-java \
+
+    rm -r $out/lib/app/resources/jdk
+    ln -s ${jdk}/lib/openjdk $out/lib/app/resources/jdk
+
+    makeWrapper $out/unwrapped/Processing $out/bin/Processing \
       ''${gappsWrapperArgs[@]} \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libGL ]}" \
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
@@ -141,14 +176,23 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  postFixup = ''
+    ln -s $out/bin/Processing $out/bin/processing
+  '';
+
+  meta = {
     description = "Language and IDE for electronic arts";
     homepage = "https://processing.org";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Only
       lgpl21Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ evan-goode ];
+    mainProgram = "Processing";
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ evan-goode ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 }

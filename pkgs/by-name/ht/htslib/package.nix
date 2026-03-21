@@ -7,15 +7,16 @@
   bzip2,
   xz,
   curl,
+  libdeflate,
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "htslib";
   version = "1.22";
 
   src = fetchurl {
-    url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
+    url = "https://github.com/samtools/htslib/releases/download/${finalAttrs.version}/htslib-${finalAttrs.version}.tar.bz2";
     hash = "sha256-YlDB3yl9tHdRbmCsjfRe11plLR8lsPN/EvWxcmnq/ek=";
   };
 
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     bzip2
     xz
     curl
+    libdeflate
   ];
 
   configureFlags =
@@ -68,11 +70,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "C library for reading/writing high-throughput sequencing data";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "http://www.htslib.org/";
-    platforms = platforms.unix;
-    maintainers = [ maintainers.mimame ];
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.mimame ];
   };
-}
+})

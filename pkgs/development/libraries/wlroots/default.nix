@@ -15,7 +15,11 @@
   pixman,
   libcap,
   libgbm,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-image,
+  libxcb-errors,
+  libx11,
   hwdata,
   seatd,
   vulkan-loader,
@@ -23,6 +27,7 @@
   libliftoff,
   libdisplay-info,
   lcms2,
+  evdev-proto,
   nixosTests,
   testers,
 
@@ -75,12 +80,15 @@ let
       ]
       ++ extraNativeBuildInputs;
 
+      propagatedBuildInputs = [
+        # The headers of wlroots #include <libinput.h>, and consumers of `wlroots` need not add it explicitly, hence we propagate it.
+        libinput
+      ];
+
       buildInputs = [
         libliftoff
         libdisplay-info
         libGL
-        libcap
-        libinput
         libxkbcommon
         libgbm
         pixman
@@ -88,16 +96,25 @@ let
         vulkan-loader
         wayland
         wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
+        libx11
+        libxcb-errors
+        libxcb-image
+        libxcb-render-util
+        libxcb-wm
+        lcms2
       ]
+      ++ lib.optional stdenv.hostPlatform.isLinux libcap
+      ++ lib.optional stdenv.hostPlatform.isFreeBSD evdev-proto
       ++ lib.optional finalAttrs.enableXWayland xwayland
       ++ extraBuildInputs;
 
-      mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
+      mesonFlags = [
+        (lib.mesonEnable "xwayland" finalAttrs.enableXWayland)
+      ]
+      # The other allocator, udmabuf, is a linux-specific API
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+        (lib.mesonOption "allocators" "gbm")
+      ];
 
       postFixup = ''
         # Install ALL example programs to $examples:
@@ -128,10 +145,10 @@ let
         inherit (finalAttrs.src.meta) homepage;
         changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
         license = lib.licenses.mit;
-        platforms = lib.platforms.linux;
+        platforms = lib.platforms.linux ++ lib.platforms.freebsd;
         maintainers = with lib.maintainers; [
-          synthetica
           wineee
+          doronbehar
         ];
         pkgConfigModules = [
           (
@@ -145,34 +162,14 @@ let
     });
 
 in
-rec {
-  wlroots_0_17 = generic {
-    version = "0.17.4";
-    hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
-    patches = [
-      (fetchpatch {
-        # SIGCHLD here isn't fatal: we have other means of notifying that things were
-        # successful or failure, and it causes many compositors to have to do a bunch
-        # of extra work: https://github.com/qtile/qtile/issues/5101
-        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/631e5be0d7a7e4c7086b9778bc8fac809f96d336.patch";
-        hash = "sha256-3Jnx4ZeKc3+NxraK2T7nZ2ibtWJuTEFmxa976fjAqsM=";
-      })
-    ];
-  };
-
+{
   wlroots_0_18 = generic {
-    version = "0.18.2";
-    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
-    extraBuildInputs = [
-      lcms2
-    ];
+    version = "0.18.3";
+    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
   };
 
   wlroots_0_19 = generic {
-    version = "0.19.1";
-    hash = "sha256-Q4x6obwzYYncgoUzqFVzn/scjxsiUeAIlEWY43emdvA=";
-    extraBuildInputs = [
-      lcms2
-    ];
+    version = "0.19.3";
+    hash = "sha256-J+wSVUtuizaCyCn523chFbE8VtbPjyu5XYv5eLT+GM0=";
   };
 }

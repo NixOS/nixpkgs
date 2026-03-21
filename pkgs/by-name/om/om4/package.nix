@@ -6,14 +6,14 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "om4";
   version = "6.7";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "m4";
-    tag = "om4-${version}";
+    tag = "om4-${finalAttrs.version}";
     hash = "sha256-/b+Fcz6lg2hW541TzBhB9M86wUS7BT6pHzqXxTs0BxI=";
   };
 
@@ -43,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

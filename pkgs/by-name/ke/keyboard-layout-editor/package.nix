@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   openjdk,
   wrapGAppsHook3,
-  xorg,
+  xkbcomp,
 }:
 
 let
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     cp build/libs/keyboard-layout-editor-all-1.0-SNAPSHOT.jar $out/share/java/keyboard-layout-editor.jar
     mkdir -p $out/bin
     makeWrapper ${lib.getExe jdk} $out/bin/keyboard-layout-editor \
-      --prefix PATH : ${lib.makeBinPath [ xorg.xkbcomp ]} \
+      --prefix PATH : ${lib.makeBinPath [ xkbcomp ]} \
       --add-flags "--add-opens=javafx.graphics/com.sun.prism=ALL-UNNAMED" \
       --add-flags "--add-opens=javafx.graphics/com.sun.javafx.font=ALL-UNNAMED" \
       --add-flags "--add-opens=javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED" \

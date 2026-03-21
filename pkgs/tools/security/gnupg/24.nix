@@ -36,11 +36,11 @@ assert guiSupport -> !enableMinimal;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
-  version = "2.4.8";
+  version = "2.4.9";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
-    hash = "sha256-tYyA15sE0yQ/9JwcP8a1+DE46zeEaJVjvN0GBZUxhhY=";
+    hash = "sha256-3RerLpoE/XnTnYU/WZy8hSBi3bmrUqTd60F2/YswKWQ=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -84,11 +84,10 @@ stdenv.mkDerivation rec {
   # compatibility with OpenPGP.
   #
   freepgPatches = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "freepg";
     repo = "gnupg";
-    rev = "361c223eb00ca372fbf9506f5150ddbec193936f";
-    hash = "sha256-hRuwrB6G2vjp7Md6m+cwoi7g4GtW0sazAEN5RC+AKdg=";
+    tag = "source-2.4.9-freepg";
+    hash = "sha256-wF+iR0OgnU8VI90NlFOXtN5aCRC0YY/X7sPiDXjJm5M=";
   };
 
   patches = [
@@ -128,6 +127,7 @@ stdenv.mkDerivation rec {
     "0029-Add-keyboxd-systemd-support.patch"
     "0033-Support-large-RSA-keygen-in-non-batch-mode.patch"
     "0034-gpg-Verify-Text-mode-Signatures-over-binary-Literal-.patch"
+    "0039-gpg-Do-not-use-a-default-when-asking-for-another-out.patch"
   ];
 
   postPatch =
@@ -139,7 +139,10 @@ stdenv.mkDerivation rec {
     # A significant difference between the two seems to be that keys.openpgp.org is verifying keys, while keyserver.ubuntu.com isn't: https://unix.stackexchange.com/a/694528
     # The keys.openpgp.org also has a great FAQ: https://keys.openpgp.org/about/faq
     ''
-      sed -i 's,\(hkps\|https\)://keyserver.ubuntu.com,hkps://keys.openpgp.org,g' configure configure.ac doc/dirmngr.texi doc/gnupg.info-1
+      substituteInPlace configure configure.ac \
+        --replace-fail "hkps://keyserver.ubuntu.com"  "hkps://keys.openpgp.org"
+      substituteInPlace doc/gnupg.info-1 doc/dirmngr.texi \
+        --replace-fail "https://keyserver.ubuntu.com" "https://keys.openpgp.org"
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
@@ -162,6 +165,13 @@ stdenv.mkDerivation rec {
   }"
   ++ lib.optional withTpm2Tss "--with-tss=intel"
   ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
+
+  outputs = [
+    "out"
+    "info"
+    "man"
+    "doc"
+  ];
 
   postInstall =
     if enableMinimal then
@@ -194,11 +204,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = nixosTests.gnupg;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gnupg.org";
     changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=${pname}.git;a=blob;f=NEWS;hb=refs/tags/${pname}-${version}";
     description = "Modern release of the GNU Privacy Guard, a GPL OpenPGP implementation";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     longDescription = ''
       The GNU Privacy Guard is the GNU project's complete and free
       implementation of the OpenPGP standard as defined by RFC4880.  GnuPG
@@ -210,11 +220,13 @@ stdenv.mkDerivation rec {
       frontend applications and libraries are available.  Version 2 of GnuPG
       also provides support for S/MIME.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fpletz
       sgo
     ];
-    platforms = platforms.all;
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.all;
     mainProgram = "gpg";
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnupg" version;
   };
 }

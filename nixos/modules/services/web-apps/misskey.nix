@@ -328,6 +328,9 @@ in
       };
       preStart = ''
         install -m 700 ${settingsFormat.generate "misskey-config.yml" cfg.settings} /run/misskey/default.yml
+        install -m 700 ${
+          (pkgs.formats.json { }).generate "misskey-config.json" cfg.settings
+        } /run/misskey/default.json
       ''
       + (lib.optionalString (cfg.database.passwordFile != null) ''
         ${pkgs.replace-secret}/bin/replace-secret '@DATABASE_PASSWORD@' "${cfg.database.passwordFile}" /run/misskey/default.yml

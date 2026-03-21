@@ -20,18 +20,18 @@
   withNotmuch ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "i3status-rust";
-  version = "0.34.0";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = "i3status-rust";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-E0HGF7oyffBWUT61fQZ+tjwDi7q9IhtV6DiF8TGeVsU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sfySTdcX2APZKDL2/kb/akxuv2w2tBNiwyBS1VNHnvA=";
   };
 
-  cargoHash = "sha256-S6GdPntLC0351GaPmirxVsngOtbcWaPNkzax0yZNNb4=";
+  cargoHash = "sha256-b80KJBxywvIX+kqspmUXe5xvzOhfaCabJzSaPN+w7ys=";
 
   nativeBuildInputs = [
     pkg-config
@@ -86,15 +86,14 @@ rustPlatform.buildRustPackage rec {
   # Currently no tests are implemented, so we avoid building the package twice
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Very resource-friendly and feature-rich replacement for i3status";
     homepage = "https://github.com/greshake/i3status-rust";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "i3status-rs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       backuitist
-      globin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

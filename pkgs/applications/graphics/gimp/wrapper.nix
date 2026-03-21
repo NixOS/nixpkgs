@@ -24,7 +24,13 @@ let
 
 in
 symlinkJoin {
-  name = "gimp-with-plugins-${gimp.version}";
+  pname = "gimp-with-plugins";
+  inherit (gimp) version;
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   paths = [ gimp ] ++ selectedPlugins;
 
@@ -41,6 +47,8 @@ symlinkJoin {
     for each in gimp gimp-console; do
       ln -sf "$each-${exeVersion}" $out/bin/$each
     done
+
+    ln -s ${gimp.man} $man
   '';
 
   inherit (gimp) meta;

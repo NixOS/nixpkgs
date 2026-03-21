@@ -1,9 +1,10 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   makeWrapper,
   cmake,
+  wrapQtAppsHook,
   qtbase,
   qttools,
   fftw,
@@ -11,7 +12,7 @@
   libglvnd,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "openhantek6022";
   version = "3.4.0";
 
@@ -25,6 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     makeWrapper
+    wrapQtAppsHook
   ];
   buildInputs = [
     fftw
@@ -43,12 +45,12 @@ mkDerivation rec {
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Free software for Hantek and compatible (Voltcraft/Darkwire/Protek/Acetech) USB digital signal oscilloscopes";
     mainProgram = "OpenHantek";
     homepage = "https://github.com/OpenHantek/OpenHantek6022";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ baracoder ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ baracoder ];
     platforms = qtbase.meta.platforms;
   };
 }

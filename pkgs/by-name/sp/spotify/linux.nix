@@ -3,7 +3,21 @@
   lib,
   stdenv,
   squashfsTools,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   alsa-lib,
   makeShellWrapper,
   wrapGAppsHook3,
@@ -38,7 +52,9 @@
   pname,
   meta,
   harfbuzz,
+  libayatana-indicator,
   libayatana-appindicator,
+  ayatana-ido,
   libdbusmenu,
   libGL,
   # High-DPI support: Spotify's --force-device-scale-factor argument
@@ -65,7 +81,9 @@ let
     glib
     gtk3
     harfbuzz
+    libayatana-indicator
     libayatana-appindicator
+    ayatana-ido
     libdbusmenu
     libdrm
     libgcrypt
@@ -79,21 +97,21 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxshmfence
-    xorg.libXtst
+    libice
+    libsm
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
     zlib
   ];
 in
@@ -105,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
   # If an update breaks things, one of those might have valuable info:
   # https://aur.archlinux.org/packages/spotify/
   # https://community.spotify.com/t5/Desktop-Linux
-  version = "1.2.63.394.g126b0d89";
+  version = "1.2.82.428.g0ac8be2b";
 
   # To get the latest stable revision:
   # curl -H 'X-Ubuntu-Series: 16' 'https://api.snapcraft.io/api/v1/snaps/details/spotify?channel=stable' | jq '.download_url,.version,.last_updated'
@@ -113,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
   # curl -H 'Snap-Device-Series: 16' 'https://api.snapcraft.io/v2/snaps/info/spotify' | jq '.'
   # More examples of api usage:
   # https://github.com/canonical-websites/snapcraft.io/blob/master/webapp/publisher/snaps/views.py
-  rev = "88";
+  rev = "92";
 
   # fetch from snapcraft instead of the debian repository most repos fetch from.
   # That is a bit more cumbersome. But the debian repository only keeps the last
@@ -126,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     name = "spotify-${finalAttrs.version}-${finalAttrs.rev}.snap";
     url = "https://api.snapcraft.io/api/v1/snaps/download/pOBIoZ2LrCB3rDohMxoYGnbN14EHOgD7_${finalAttrs.rev}.snap";
-    hash = "sha512-3Jk2YDXSKGJ8hGATGMt8KbOQul1VK/YApmq5j/BWBPjzRVn/j9etzIsYMWCFjpWf4KSvlrZnKuq3gL6SRyDsUA==";
+    hash = "sha512-/9lB4gLotYvM2QkHt8cKS8P4IXrBVzgoXEk4bWR3GQum0OnJqK/qCC9evmCZ7PAqbbyh5/8vSblM+QXXXiQiMA==";
   };
 
   nativeBuildInputs = [
@@ -232,7 +250,6 @@ stdenv.mkDerivation (finalAttrs: {
   meta = meta // {
     maintainers = with lib.maintainers; [
       ftrvxmtrx
-      sheenobu
       timokau
       ma27
     ];

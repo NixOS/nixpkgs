@@ -6,14 +6,14 @@
   shocco,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "roundup";
   version = "0.0.6";
 
   src = fetchFromGitHub {
     owner = "bmizerany";
     repo = "roundup";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0nxaqmbv8mdvq9wcaqxk6k5mr31i68jzxf1wxa6pp7xp4prwdc9z";
   };
 
@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unit testing tool for running test plans which are written in any POSIX shell";
     homepage = "http://bmizerany.github.io/roundup/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
+    platforms = lib.platforms.all;
     mainProgram = "roundup";
   };
-}
+})

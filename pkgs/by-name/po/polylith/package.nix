@@ -6,13 +6,13 @@
   runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "polylith";
-  version = "0.2.22";
+  version = "0.3.32";
 
   src = fetchurl {
-    url = "https://github.com/polyfy/polylith/releases/download/v${version}/poly-${version}.jar";
-    sha256 = "sha256-DKJ669TeDFK/USi7UxraAqgqnSCkG/nSIGphvpsmUv8=";
+    url = "https://github.com/polyfy/polylith/releases/download/v${finalAttrs.version}/poly-${finalAttrs.version}.jar";
+    sha256 = "sha256-bfF7YXGA6StGF1jZor/TZQ6tNU28Z8kcaiPdkmjljx4=";
   };
 
   dontUnpack = true;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       ARGS="$ARGS $1"
       shift
     done
-    exec "${jdk}/bin/java" "-jar" "${src}" $ARGS
+    exec "${jdk}/bin/java" "-jar" "${finalAttrs.src}" $ARGS
   '';
 
   installPhase = ''
@@ -42,21 +42,21 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     runHook preInstallCheck
 
-    $out/bin/poly help | fgrep -q '${version}'
+    $out/bin/poly help | fgrep -q '${finalAttrs.version}'
 
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool used to develop Polylith based architectures in Clojure";
     mainProgram = "poly";
     homepage = "https://github.com/polyfy/polylith";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.epl10;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.epl10;
+    maintainers = with lib.maintainers; [
       ericdallo
       jlesquembre
     ];
     platforms = jdk.meta.platforms;
   };
-}
+})

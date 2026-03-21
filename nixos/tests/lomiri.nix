@@ -9,7 +9,18 @@ let
   # In case it ever shows up in the VM, we could OCR for it instead
   wallpaperText = "Lorem ipsum";
 
-  # tmpfiles setup to make OCRing on terminal output more reliable
+  # setup to make OCRing on terminal output more reliable
+  terminalTextColour = {
+    r = 91;
+    g = 113;
+    b = 102;
+  };
+  terminalTextColourString =
+    lib:
+    let
+      toHex = component: lib.optionalString (component < 16) "0" + lib.trivial.toHexString component;
+    in
+    "#${toHex terminalTextColour.r}${toHex terminalTextColour.g}${toHex terminalTextColour.b}";
   terminalOcrTmpfilesSetup =
     {
       pkgs,
@@ -18,7 +29,7 @@ let
     }:
     let
       white = "255, 255, 255";
-      black = "0, 0, 0";
+      foreground = "${toString terminalTextColour.r}, ${toString terminalTextColour.g}, ${toString terminalTextColour.b}";
       colorSection = color: {
         Color = color;
         Bold = true;
@@ -27,9 +38,9 @@ let
       terminalColors = pkgs.writeText "customized.colorscheme" (
         lib.generators.toINI { } {
           Background = colorSection white;
-          Foreground = colorSection black;
-          Color2 = colorSection black;
-          Color2Intense = colorSection black;
+          Foreground = colorSection foreground;
+          Color2 = colorSection foreground;
+          Color2Intense = colorSection foreground;
         }
       );
       terminalConfig = pkgs.writeText "terminal.ubports.conf" (
@@ -75,8 +86,84 @@ let
     };
   };
 
-  sharedTestFunctions = ''
-    def wait_for_text(text):
+  sharedTestFunctions = lib: ''
+    from collections.abc import Callable
+    import tempfile
+    import subprocess
+
+    # Based on terminal-emulators.nix' check_for_pink
+    def check_for_color(color: str) -> Callable[[bool], bool]:
+      def check_for_color_retry(final=False) -> bool:
+        with tempfile.NamedTemporaryFile() as tmpin:
+          machine.send_monitor_command("screendump {}".format(tmpin.name))
+
+          cmd = 'convert {} -define histogram:unique-colors=true -format "%c" histogram:info:'.format(
+            tmpin.name
+          )
+          ret = subprocess.run(cmd, shell=True, capture_output=True)
+          if ret.returncode != 0:
+            raise Exception(
+              "image analysis failed with exit code {}".format(ret.returncode)
+            )
+
+          text = ret.stdout.decode("utf-8")
+          return color in text
+
+      return check_for_color_retry
+
+    def check_for_color_continued_presence(color: str) -> Callable[[bool], bool]:
+      colorFunc: Callable[[bool], bool] = check_for_color(color)
+      def check_for_color_continued_presence_retry(final=False) -> bool:
+        colorPresent: bool = colorFunc(final)
+
+        if final:
+          # If it fails now, retry handles the exception raising.
+          # Otherwise, we passed.
+          return colorPresent
+        else:
+          if colorPresent:
+            # We want retry to continue running us until the timeout, so signal failure.
+            return False
+          else:
+            # Color disappeared
+            raise Exception(
+              "color {} has disappeared from the screen!".format(color)
+            )
+      return check_for_color_continued_presence_retry
+
+    def ensure_terminal_running() -> None:
+      """
+      Ensure that lomiri-terminal-app has finished starting up.
+      """
+
+      terminalTextColor: str = "${terminalTextColourString lib}"
+      with machine.nested("Waiting for the screen to have terminalTextColor {} on it:".format(terminalTextColor)):
+        retry(check_for_color(terminalTextColor))
+      with machine.nested("Ensuring terminalTextColor {} stays present on the screen:".format(terminalTextColor)):
+        retry(fn=check_for_color_continued_presence(terminalTextColor), timeout_seconds=5)
+
+    def ensure_lomiri_running() -> None:
+      """
+      Ensure that Lomiri has finished starting up.
+      """
+
+      # Process runs
+      machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
+
+      # Output rendering from Lomiri has started when it starts printing performance diagnostics
+      machine.wait_for_console_text("Last frame took")
+
+      # One of the last UI elements that loads is the clock. In the past, we could OCR for AM/PM to ensure it's there. That is now flaky.
+      # The next best thing is to look for the launcher button, and ensure it stays around for awhile (DE doesn't crash).
+      launcherColor: str = "#5277C3"
+      with machine.nested("Waiting for the screen to have launcherColor {} on it:".format(launcherColor)):
+        retry(check_for_color(launcherColor))
+      with machine.nested("Ensuring launcherColor {} stays present on the screen:".format(launcherColor)):
+        retry(fn=check_for_color_continued_presence(launcherColor), timeout_seconds=30)
+
+      machine.screenshot("lomiri_launched")
+
+    def wait_for_text(text) -> None:
       """
       Wait for on-screen text, and try to optimise retry count for slow hardware.
       """
@@ -84,7 +171,7 @@ let
       machine.sleep(30)
       machine.wait_for_text(text)
 
-    def toggle_maximise():
+    def toggle_maximise() -> None:
       """
       Maximise the current window.
       """
@@ -98,7 +185,7 @@ let
       machine.send_key("esc")
       machine.sleep(5)
 
-    def mouse_click(xpos, ypos):
+    def mouse_click(xpos, ypos) -> None:
       """
       Move the mouse to a screen location and hit left-click.
       """
@@ -111,14 +198,13 @@ let
       machine.execute("ydotool click 0xC0")
       machine.sleep(2)
 
-    def open_starter():
+    def open_starter() -> None:
       """
       Open the starter, and ensure it's opened.
       """
 
       # Using the keybind has a chance of instantly closing the menu again? Just click the button
       mouse_click(15, 15)
-
   '';
 
   makeIndicatorTest =
@@ -172,19 +258,14 @@ let
 
         testScript =
           { nodes, ... }:
-          sharedTestFunctions
+          (sharedTestFunctions lib)
           + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
 
             # The session should start, and not be stuck in i.e. a crash loop
             with subtest("lomiri starts"):
-                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-                # Output rendering from Lomiri has started when it starts printing performance diagnostics
-                machine.wait_for_console_text("Last frame took")
-                # Look for datetime's clock, one of the last elements to load
-                wait_for_text(r"(AM|PM)")
-                machine.screenshot("lomiri_launched")
+                ensure_lomiri_running()
 
             # The ayatana indicators are an important part of the experience, and they hold the only graphical way of exiting the session.
             # There's a test app we could use that also displays their contents, but it's abit inconsistent.
@@ -214,7 +295,7 @@ let
       titleOcr = "r\"(${builtins.concatStringsSep "|" titles})\"";
     in
     builtins.listToAttrs (
-      builtins.map (
+      map (
         {
           name,
           left,
@@ -270,7 +351,7 @@ in
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
@@ -391,24 +472,19 @@ in
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
 
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
+              ensure_lomiri_running()
 
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
               machine.send_key("ctrl-alt-t")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.screenshot("terminal_opens")
               machine.send_key("alt-f4")
 
@@ -419,7 +495,7 @@ in
 
               # Just try the terminal again, we know that it should work
               machine.send_chars("Terminal\n")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.send_key("alt-f4")
 
           # We want support for X11 apps
@@ -543,24 +619,19 @@ in
 
       testScript =
         { nodes, ... }:
-        sharedTestFunctions
+        (sharedTestFunctions lib)
         + ''
           start_all()
           machine.wait_for_unit("multi-user.target")
 
           # The session should start, and not be stuck in i.e. a crash loop
           with subtest("lomiri starts"):
-              machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
-              # Output rendering from Lomiri has started when it starts printing performance diagnostics
-              machine.wait_for_console_text("Last frame took")
-              # Look for datetime's clock, one of the last elements to load
-              wait_for_text(r"(AM|PM)")
-              machine.screenshot("lomiri_launched")
+              ensure_lomiri_running()
 
           # Working terminal keybind is good
           with subtest("terminal keybind works"):
               machine.send_key("ctrl-alt-t")
-              wait_for_text(r"(${user}|machine)")
+              ensure_terminal_running()
               machine.screenshot("terminal_opens")
 
               # for the LSS lomiri-content-hub test to work reliably, we need to kick off peer collecting
@@ -694,7 +765,7 @@ in
 
         testScript =
           { nodes, ... }:
-          sharedTestFunctions
+          (sharedTestFunctions lib)
           + ''
             start_all()
             machine.wait_for_unit("multi-user.target")
@@ -716,19 +787,14 @@ in
 
                 # Login
                 machine.send_chars("${pwInput}\n")
-                machine.wait_until_succeeds("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
 
-                # Output rendering from Lomiri has started when it starts printing performance diagnostics
-                machine.wait_for_console_text("Last frame took")
                 # And the desktop doesn't render the wallpaper anymore. Grumble grumble...
-                # Look for datetime's clock, one of the last elements to load
-                wait_for_text(r"(AM|PM)")
-                machine.screenshot("lomiri_launched")
+                ensure_lomiri_running()
 
             # Lomiri in desktop mode should use the correct keymap
             with subtest("lomiri session keymap works"):
                 machine.send_key("ctrl-alt-t")
-                wait_for_text(r"(${user}|machine)")
+                ensure_terminal_running()
                 machine.screenshot("terminal_opens")
 
                 machine.send_chars("touch ${pwInput}\n")
@@ -775,49 +841,49 @@ in
   ];
   details = [
     # messages normally has no contents
-    ({
+    {
       name = "display";
       left = 6;
       ocr = [ "Lock" ];
-    })
-    ({
+    }
+    {
       name = "bluetooth";
       left = 5;
       ocr = [ "Bluetooth" ];
-    })
-    ({
+    }
+    {
       name = "network";
       left = 4;
       ocr = [
         "Flight"
         "Wi-Fi"
       ];
-    })
-    ({
+    }
+    {
       name = "sound";
       left = 3;
       ocr = [
         "Silent"
         "Volume"
       ];
-    })
-    ({
+    }
+    {
       name = "power";
       left = 2;
       ocr = [
         "Charge"
         "Battery"
       ];
-    })
-    ({
+    }
+    {
       name = "datetime";
       left = 1;
       ocr = [
         "Time"
         "Date"
       ];
-    })
-    ({
+    }
+    {
       name = "session";
       left = 0;
       ocr = [ "Log Out" ];
@@ -827,6 +893,6 @@ in
         mouse_click(340, 220) # confirm logout
         machine.wait_until_fails("pgrep -u ${user} -f 'lomiri --mode=full-shell'")
       '';
-    })
+    }
   ];
 }

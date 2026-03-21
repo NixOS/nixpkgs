@@ -1,44 +1,49 @@
 {
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   cmake,
   pkg-config,
+  wrapQtAppsHook,
   lib,
   qttools,
   fribidi,
   libunibreak,
+  zstd,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "coolreader";
-  version = "3.2.57";
+  version = "3.2.59";
 
   src = fetchFromGitHub {
     owner = "buggins";
     repo = "coolreader";
-    rev = "cr${version}";
-    sha256 = "sha256-ZfgaLCLvBU6xP7nx7YJTsJSpvpdQgLpSMWH+BsG8E1g=";
+    rev = "cr${finalAttrs.version}";
+    sha256 = "sha256-RgVEOaNBaEuPBC75B8PdCkbqMvEzNmnEYmiI1ny/WFQ=";
   };
+
+  patches = [ ./cmake_policy_version_3_5.patch ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
   ];
 
   buildInputs = [
     qttools
     fribidi
     libunibreak
+    zstd
   ];
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/buggins/coolreader";
     description = "Cross platform open source e-book reader";
     mainProgram = "cr3";
-    license = licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
-    maintainers = with maintainers; [ ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus; # see https://github.com/buggins/coolreader/issues/80
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -10,28 +10,35 @@
   pytest-django,
   djangorestframework,
   pyyaml,
-  setuptools,
   syrupy,
+  typing-extensions,
   uritemplate,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "django-pydantic-field";
-  version = "0.3.13";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "surenkov";
     repo = "django-pydantic-field";
     tag = "v${version}";
-    hash = "sha256-RxZxDQZdFiT67YcAQtf4t42XU3XfzT3KS7ZCyfHZUOs=";
+    hash = "sha256-pnB6kYfN67102Z3R41BHIWnWoJQgd/ixyT+bbtY9PC8=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.17,<0.10.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     django
     pydantic
+    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -49,11 +56,11 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings.django_test_settings
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/surenkov/django-pydantic-field/releases/tag/${src.tag}";
     description = "Django JSONField with Pydantic models as a Schema";
     homepage = "https://github.com/surenkov/django-pydantic-field";
     maintainers = with lib.maintainers; [ kiara ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

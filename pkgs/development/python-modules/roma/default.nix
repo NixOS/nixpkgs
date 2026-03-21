@@ -8,16 +8,16 @@
   torch,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "roma";
-  version = "1.5.4";
+  version = "1.5.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "naver";
     repo = "roma";
-    tag = "v${version}";
-    hash = "sha256-byPW58I+6mCE2fR6eVNQfNDCLbZSfoPmPbc/GuRpKGo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ssfgEz2z9IxZpjaQTySXXZ1BSRpnlCcQG2pm/Q3G514=";
   };
 
   build-system = [
@@ -38,9 +38,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://naver.github.io/roma/#changelog";
     description = "Lightweight library to deal with 3D rotations in PyTorch";
     homepage = "https://github.com/naver/roma";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

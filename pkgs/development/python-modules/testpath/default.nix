@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "testpath";
   version = "0.6.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -32,9 +32,9 @@ buildPythonPackage rec {
     export TMPDIR="/tmp"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Test utilities for code working with files and commands";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/jupyter/testpath";
   };
 }

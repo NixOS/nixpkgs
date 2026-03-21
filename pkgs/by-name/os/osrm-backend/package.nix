@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   bzip2,
@@ -10,24 +11,29 @@
   boost,
   lua,
   luabind,
-  tbb_2022,
+  onetbb,
   expat,
   nixosTests,
 }:
 
-let
-  tbb = tbb_2022;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "osrm-backend";
   version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Project-OSRM";
     repo = "osrm-backend";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-R2Sx+DbT6gROI8X1fkxqOGbMqgmsnNiw2rUX6gSZuTs=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "Fix-build-with-Boost-1.89.0.patch";
+      url = "https://github.com/Project-OSRM/osrm-backend/commit/a2e159d0d4f6b3922ee0cb058a800230cf90642e.patch?full_index=1";
+      hash = "sha256-c+4Ll660jHLnFolehCpZQLca4pmyVsBfjwSY1BHBh40=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,7 +47,7 @@ stdenv.mkDerivation rec {
     boost
     lua
     luabind
-    tbb
+    onetbb
     expat
   ];
 
@@ -64,9 +70,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://project-osrm.org/";
     description = "Open Source Routing Machine computes shortest paths in a graph. It was designed to run well with map data from the Openstreetmap Project";
-    changelog = "https://github.com/Project-OSRM/osrm-backend/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/Project-OSRM/osrm-backend/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ erictapen ];
     platforms = lib.platforms.unix;
   };
-}
+})

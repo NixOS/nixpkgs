@@ -31,7 +31,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "powershell";
-  version = "7.5.3";
+  version = "7.5.5";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -96,19 +96,19 @@ stdenv.mkDerivation rec {
     sources = {
       aarch64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-arm64.tar.gz";
-        hash = "sha256-9PrFxy6MCbo7b7hmfyGx1zVWBHgZhX/OeIMmjQI2nN4=";
+        hash = "sha256-2/P90/s2Dro1lYD9xyI9Z5oV+UhNLxY/qwdCJ3mkf1I=";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-arm64.tar.gz";
-        hash = "sha256-SmtlbdDnUegsXfm5pCRb0ex9Id5TNK+72ALf0AlZVZk=";
+        hash = "sha256-4i4PAFthzjul5ImHAPacPgbdov3gcfOCqxVnDWjw5Kc=";
       };
       x86_64-darwin = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-osx-x64.tar.gz";
-        hash = "sha256-wxAB9bwKTSNkGarwVNjAMWAnozHTPi+0HPjSdko1fgU=";
+        hash = "sha256-JIKb2lh+o5DAJ1qYHeX/nSWV8nPklI2eaediwtTnenk=";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/PowerShell/PowerShell/releases/download/v${version}/powershell-${version}-linux-x64.tar.gz";
-        hash = "sha256-XHTgu6/YvlnnImfwVwD9ZhU0TZz00wRg2bbRLNSoiow=";
+        hash = "sha256-OaYvRmlW42Bq7mY37Q0HNcHtJ2Eqdt6XOxEVMN3/Lnc=";
       };
     };
     tests.version = testers.testVersion {
@@ -138,14 +138,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Powerful cross-platform (Windows, Linux, and macOS) shell and scripting language based on .NET";
     homepage = "https://microsoft.com/PowerShell";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "pwsh";
-    maintainers = with maintainers; [ wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = builtins.attrNames passthru.sources;
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];

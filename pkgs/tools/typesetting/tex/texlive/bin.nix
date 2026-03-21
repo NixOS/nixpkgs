@@ -10,16 +10,16 @@
   zlib,
   libiconv,
   libpng,
-  libX11,
+  libx11,
   freetype,
   ttfautohint,
   gd,
-  libXaw,
+  libxaw,
   icu,
-  ghostscript,
-  libXpm,
-  libXmu,
-  libXext,
+  ghostscript_headless,
+  libxpm,
+  libxmu,
+  libxext,
   perl,
   perlPackages,
   python3Packages,
@@ -29,7 +29,7 @@
   libpaper,
   graphite2,
   zziplib,
-  harfbuzz,
+  harfbuzzFull,
   potrace,
   gmp,
   mpfr,
@@ -37,18 +37,19 @@
   brotli,
   cairo,
   pixman,
-  xorg,
+  libxi,
+  libxfixes,
   clisp,
   biber,
   woff2,
   xxHash,
   makeWrapper,
-  shortenPerlShebang,
-  useFixedHashes,
+  useFixedHashes ? true,
   asymptote,
   biber-ms,
   tlpdb,
   luajit,
+  ...
 }@args:
 
 # Useful resource covering build options:
@@ -177,6 +178,7 @@ let
       "--disable-texlive" # do not build the texlive (TeX Live scripts) package
       "--disable-linked-scripts" # do not install the linked scripts
       "-C" # use configure cache to speed up
+      "CFLAGS=-std=gnu17" # fix build with gcc15
     ]
     ++ withSystemLibs [
       # see "from TL tree" vs. "Using installed"  in configure output
@@ -250,7 +252,7 @@ rec {
       "man"
       "info"
     ]
-    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
     nativeBuildInputs = [
       pkg-config
@@ -350,17 +352,16 @@ rec {
 
     passthru = { inherit version buildInputs; };
 
-    meta = with lib; {
+    meta = {
       description = "Basic binaries for TeX Live";
       homepage = "http://www.tug.org/texlive";
       license = lib.licenses.gpl2Plus;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         veprbl
-        lovek323
         raskin
         jwiegley
       ];
-      platforms = platforms.all;
+      platforms = lib.platforms.all;
     };
   };
 
@@ -411,10 +412,10 @@ rec {
     buildInputs = core.buildInputs ++ [
       core
       cairo
-      harfbuzz
+      harfbuzzFull
       icu
       graphite2
-      libX11
+      libx11
       potrace
     ];
 
@@ -493,7 +494,7 @@ rec {
       "man"
       "info"
     ]
-    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
     # some outputs of metapost, omegaware are for ptex/uptex
     ++ [
       "ptex"
@@ -538,16 +539,16 @@ rec {
     let
       # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
       # https://github.com/gucci-on-fleek/context-packaging
-      context_packaging_release = "2025-06-12-14-21-B";
+      context_packaging_release = "2026-01-08-23-30-A";
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "luametatex";
-      version = "2.11.07";
+      version = "2.11.08";
 
       src = fetchzip {
         name = "luametatex.src.zip";
         url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
-        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
+        hash = "sha256-PY1rrgLFAXR7YRcJMx1ob9dQc1PFoBSpi1xLQGM4Lko=";
         stripRoot = false;
       };
 
@@ -557,10 +558,10 @@ rec {
         ninja
       ];
 
-      meta = with lib; {
+      meta = {
         description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
         homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
-        license = licenses.gpl2Plus;
+        license = lib.licenses.gpl2Plus;
         maintainers = with lib.maintainers; [
           apfelkuchen6
           xworld21
@@ -570,14 +571,14 @@ rec {
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
-    version = "3.2.2";
+    version = "3.6";
 
     src =
       assert lib.assertMsg (version == texlive.pkgs.dvisvgm.version)
         "dvisvgm: TeX Live version (${texlive.pkgs.dvisvgm.version}) different from source (${version}), please update dvisvgm";
       fetchurl {
         url = "https://github.com/mgieseki/dvisvgm/releases/download/${version}/dvisvgm-${version}.tar.gz";
-        hash = "sha256-8GKL6lqjMUXXWwpqbdGPrYibdSc4y8AcGUGPNUc6HQA=";
+        hash = "sha256-JkRrs7EHOf8JJcnkFrdtLSIgdcnV3Pr+biFGCdBy7Ro=";
       };
 
     configureFlags = [
@@ -595,7 +596,7 @@ rec {
     buildInputs = [
       core
       brotli
-      ghostscript
+      ghostscript_headless
       zlib
       freetype
       ttfautohint
@@ -625,7 +626,7 @@ rec {
       libpng
       freetype
       gd
-      ghostscript
+      ghostscript_headless
     ];
 
     preConfigure = ''
@@ -639,7 +640,7 @@ rec {
       "--disable-debug"
     ];
 
-    GS = "${ghostscript}/bin/gs";
+    GS = lib.getExe ghostscript_headless;
 
     enableParallelBuilding = true;
   };
@@ -647,7 +648,7 @@ rec {
   pygmentex = python3Packages.buildPythonApplication rec {
     pname = "pygmentex";
     inherit (src) version;
-    format = "other";
+    pyproject = false;
 
     src = assertFixedHash pname texlive.pkgs.pygmentex.tex;
 
@@ -668,7 +669,7 @@ rec {
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.ctan.org/pkg/pygmentex";
       description = "Auxiliary tool for typesetting code listings in LaTeX documents using Pygments";
       longDescription = ''
@@ -679,8 +680,8 @@ rec {
         software such as forum systems, wikis or other applications that need to
         prettify source code.
       '';
-      license = licenses.lppl13c;
-      maintainers = with maintainers; [ romildo ];
+      license = lib.licenses.lppl13c;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   };
 
@@ -692,7 +693,7 @@ rec {
       # so that top level updates do not break texlive
       src = fetchurl {
         url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
-        hash = "sha256-+T0n2SX9C8Mz0Fb+vkny1x+TWETC+NN67MjfD+6Twys=";
+        hash = "sha256-NcFtCjvdhppW5O//Rjj4HDqIsva2ZNGWRxAV2/TGmoc=";
       };
 
       texContainer = texlive.pkgs.asymptote.tex;
@@ -738,18 +739,16 @@ rec {
     buildInputs = [
       core # kpathsea
       freetype
-      ghostscript
-    ]
-    ++ (with xorg; [
-      libX11
-      libXaw
-      libXi
-      libXpm
-      libXmu
-      libXaw
-      libXext
-      libXfixes
-    ]);
+      ghostscript_headless
+      libx11
+      libxaw
+      libxi
+      libxpm
+      libxmu
+      libxaw
+      libxext
+      libxfixes
+    ];
 
     preConfigure = "cd texk/xdvik";
 
@@ -773,7 +772,7 @@ rec {
 
     inherit (common) src;
 
-    buildInputs = [ libX11 ];
+    buildInputs = [ libx11 ];
 
     preConfigure = "cd utils/xpdfopen";
 

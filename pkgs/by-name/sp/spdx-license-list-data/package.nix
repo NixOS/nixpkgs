@@ -3,18 +3,7 @@
   lib,
   fetchFromGitHub,
 }:
-
-stdenvNoCC.mkDerivation rec {
-  pname = "spdx-license-list-data";
-  version = "3.27.0";
-
-  src = fetchFromGitHub {
-    owner = "spdx";
-    repo = "license-list-data";
-    rev = "v${version}";
-    hash = "sha256-TRrsxk+gtxI9KqJvFzD0Cfy1h5cZAJ2kT9KUARjlXcY=";
-  };
-
+let
   # List of file formats to package.
   _types = [
     "html"
@@ -27,6 +16,17 @@ stdenvNoCC.mkDerivation rec {
     "template"
     "text"
   ];
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "spdx-license-list-data";
+  version = "3.28.0";
+
+  src = fetchFromGitHub {
+    owner = "spdx";
+    repo = "license-list-data";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FbeeEBAg9ih6DkAsXdU6ruZwkC7A2u2zYBvblpl54q0=";
+  };
 
   outputs = [ "out" ] ++ _types;
 
@@ -38,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
 
     mkdir -pv $out
-    for t in $_types
+    for t in ${lib.concatStringsSep " " _types}
     do
       _outpath=''${!t}
       mkdir -pv $_outpath
@@ -50,14 +50,13 @@ stdenvNoCC.mkDerivation rec {
 
   dontFixup = true;
 
-  meta = with lib; {
+  meta = {
     description = "Various data formats for the SPDX License List";
     homepage = "https://github.com/spdx/license-list-data";
-    license = licenses.cc0;
-    maintainers = with maintainers; [
+    license = lib.licenses.cc0;
+    maintainers = with lib.maintainers; [
       oxzi
-      c0bw3b
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

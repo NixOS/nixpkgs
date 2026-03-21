@@ -10,14 +10,14 @@
   fontconfig,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wgpu-utils";
   version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
-    tag = "wgpu-v${version}";
+    tag = "wgpu-v${finalAttrs.version}";
     hash = "sha256-Na8UWMEzY0mvw8YERZ86PH79Z5YlXITPdOYha7Ahn7k=";
   };
 
@@ -42,14 +42,14 @@ rustPlatform.buildRustPackage rec {
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Safe and portable GPU abstraction in Rust, implementing WebGPU API";
     homepage = "https://wgpu.rs/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "wgpu-info";
   };
-}
+})

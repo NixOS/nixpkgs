@@ -1,71 +1,82 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
-  setuptools,
+  # build-system
   cython,
-  oldest-supported-numpy,
-
-  requests,
-  decorator,
-  natsort,
   numpy,
-  pandas,
-  scipy,
-  h5py,
-  biom-format,
-  statsmodels,
-  patsy,
-  array-api-compat,
+  setuptools,
 
-  python,
+  # dependencies
+  array-api-compat,
+  biom-format,
+  decorator,
+  h5py,
+  natsort,
+  pandas,
+  patsy,
+  requests,
+  scipy,
+  statsmodels,
+
+  # tests
   pytestCheckHook,
+  python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-bio";
-  version = "0.7.0";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-bio";
     repo = "scikit-bio";
-    tag = version;
-    hash = "sha256-M0P5DUAMlRTkaIPbxSvO99N3y5eTrkg4NMlkIpGr4/g=";
+    tag = finalAttrs.version;
+    hash = "sha256-zBOUZukqLhTxKG9BluWB+2zTCx5ALhM1s+YP2itqg9A=";
   };
 
   build-system = [
-    setuptools
     cython
-    oldest-supported-numpy
+    numpy
+    setuptools
   ];
 
   dependencies = [
-    requests
+    array-api-compat
+    biom-format
     decorator
+    h5py
     natsort
     numpy
     pandas
-    scipy
-    h5py
-    biom-format
-    statsmodels
     patsy
-    array-api-compat
+    requests
+    scipy
+    statsmodels
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   # only the $out dir contains the built cython extensions, so we run the tests inside there
   enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
 
+  # The trick above makes test collection fail on darwin:
+  # PermissionError: [Errno 1] Operation not permitted: '/nix/.Trashes'
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   pythonImportsCheck = [ "skbio" ];
 
   meta = {
-    homepage = "http://scikit-bio.org/";
     description = "Data structures, algorithms and educational resources for bioinformatics";
+    homepage = "http://scikit-bio.org/";
+    downloadPage = "https://github.com/scikit-bio/scikit-bio";
+    changelog = "https://github.com/scikit-bio/scikit-bio/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

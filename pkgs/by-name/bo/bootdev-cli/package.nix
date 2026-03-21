@@ -9,18 +9,18 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bootdev-cli";
-  version = "1.20.4";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "bootdotdev";
     repo = "bootdev";
-    tag = "v${version}";
-    hash = "sha256-ayjHhnnP6YWKMItsAw+nnScf1/eEHN2f7cOIkskE3mM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/vVT2daJCxJDmJr9Xi27POCAKURCS171ORb7UJp/CqU=";
   };
 
-  vendorHash = "sha256-jhRoPXgfntDauInD+F7koCaJlX4XDj+jQSe/uEEYIMM=";
+  vendorHash = "sha256-ZDioEU5uPCkd+kC83cLlpgzyOsnpj2S7N+lQgsQb8uY=";
 
   ldflags = [
     "-s"
@@ -41,7 +41,6 @@ buildGoModule rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/bootdev";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -49,9 +48,9 @@ buildGoModule rec {
   meta = {
     description = "CLI used to complete coding challenges and lessons on Boot.dev";
     homepage = "https://github.com/bootdotdev/bootdev";
-    changelog = "https://github.com/bootdotdev/bootdev/releases/tag/v${version}";
+    changelog = "https://github.com/bootdotdev/bootdev/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "bootdev";
   };
-}
+})

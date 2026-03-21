@@ -11,7 +11,7 @@
   ncurses,
   openjpeg,
   zlib,
-  xorg,
+  libx11,
   cmake,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     ncurses
     openjpeg
-    xorg.libX11
+    libx11
     zlib
   ];
 
@@ -52,6 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   passthru.updateScript = nix-update-script { };
 

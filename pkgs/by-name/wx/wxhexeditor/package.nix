@@ -8,19 +8,19 @@
   gettext,
   libtool,
   python3,
-  wxGTK32,
+  wxwidgets_3_2,
   wrapGAppsHook3,
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wxhexeditor";
   version = "0.24";
 
   src = fetchFromGitHub {
     repo = "wxHexEditor";
     owner = "EUA";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-EmdWYifwewk40s1TARYoUzx/qhyMmgmUC9tr5KKCtiM=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     gettext
     libtool
     python3
-    wxGTK32
+    wxwidgets_3_2
     wrapGAppsHook3
   ];
 
@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
   preConfigure = "patchShebangs .";
 
   makeFlags = lib.optionals stdenv.cc.isGNU [
+    "CFLAGS=-std=c17"
     "OPTFLAGS=-fopenmp"
   ];
 
@@ -83,4 +84,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wxHexEditor";
     platforms = lib.platforms.unix;
   };
-}
+})

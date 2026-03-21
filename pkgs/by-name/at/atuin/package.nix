@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "atuin";
-  version = "18.8.0";
+  version = "18.13.3";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FJEXIxdeg6ExXvrQ3dtugMK5xw+NwWyB+ld9rj7okoU=";
+    hash = "sha256-hLt6CDHEPV8BVpOADVn4bLNcBz89eC2jKtIexHG0yAY=";
   };
 
-  cargoHash = "sha256-xJPSMu22Bq9Panrafsd5vUSnEQYuJB19OEZaAq8z0mw=";
+  cargoHash = "sha256-VYwzMnfc/a4Sghmr5oMfhvoMkaWlY4w4e4Flu8MWQg0=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildFeatures = [
     "client"
     "sync"
-    "server"
     "clipboard"
     "daemon"
   ];
@@ -41,13 +40,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
-  passthru = {
-    tests = {
-      inherit (nixosTests) atuin;
-    };
-    updateScript = nix-update-script { };
-  };
-
   checkFlags = [
     # tries to make a network access
     "--skip=registration"
@@ -56,10 +48,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # PermissionDenied (Operation not permitted)
     "--skip=change_password"
     "--skip=multi_user_test"
-    "--skip=store::var::tests::build_vars"
-    # Tries to touch files
-    "--skip=build_aliases"
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) atuin;
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";

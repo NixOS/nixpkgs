@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   googleapis-common-protos,
   grpcio,
@@ -12,16 +11,14 @@
 
 buildPythonPackage rec {
   pname = "clarifai-grpc";
-  version = "11.8.2";
+  version = "12.0.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Clarifai";
     repo = "clarifai-python-grpc";
     tag = version;
-    hash = "sha256-w8ZVQ7045zqdp69MFp+zbaTC5f+B+qSEQ0R/IQTzBbk=";
+    hash = "sha256-P+L9sObNYCdjYgpgWVf7Mbr3bCbYzgTypXmoxc4CC3U=";
   };
 
   build-system = [ setuptools ];

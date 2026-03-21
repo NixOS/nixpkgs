@@ -7,8 +7,12 @@
   setuptools-scm,
 
   # dependencies
-  cwcwidth,
   lxml,
+  unicode-segmentation-rs,
+  urllib3,
+
+  # optional-dependencies
+  tomlkit,
 
   # tests
   aeidon,
@@ -26,25 +30,29 @@
   vobject,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "translate-toolkit";
-  version = "3.16.1";
-
+  version = "3.19.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "translate";
     repo = "translate";
-    tag = version;
-    hash = "sha256-AEMqnTnnbqNsVQY0eE2ATn2NbV9jVPtfCo3Lve7MEmg=";
+    tag = finalAttrs.version;
+    hash = "sha256-k+gCrY2r1ILeSvjdEHT3wE2LF9Qn76ENe9RRVcaHmq4=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    cwcwidth
     lxml
+    unicode-segmentation-rs
+    urllib3
   ];
+
+  optional-dependencies = {
+    toml = [ tomlkit ];
+  };
 
   nativeCheckInputs = [
     aeidon
@@ -59,6 +67,7 @@ buildPythonPackage rec {
     pytestCheckHook
     ruamel-yaml
     syrupy
+    tomlkit
     vobject
   ];
 
@@ -77,8 +86,8 @@ buildPythonPackage rec {
   meta = {
     description = "Useful localization tools for building localization & translation systems";
     homepage = "https://toolkit.translatehouse.org/";
-    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${src.tag}.html";
+    changelog = "https://docs.translatehouse.org/projects/translate-toolkit/en/latest/releases/${finalAttrs.src.tag}.html";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ erictapen ];
   };
-}
+})

@@ -6,38 +6,36 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "azurehound";
-  version = "2.7.1";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "SpecterOps";
     repo = "AzureHound";
-    tag = "v${version}";
-    hash = "sha256-fCs9C86IO1aTzBFZiA7SaVlk0Zdm/ItWtLhE8Ii2W0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HelzDMnQOZP8LBcF5eoQfgTOk6fBK5oCx+gu4v638JA=";
   };
 
-  vendorHash = "sha256-ScFHEIarDvxd9R6eUONdECmtK+5aZRdo71khljLz8c4=";
+  vendorHash = "sha256-QCZFIDUL/RbSMrDfQ8L0A6xJPcWJorBXvHhdIA1WK4Q=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/bloodhoundad/azurehound/v2/constants.Version=${version}"
+    "-X=github.com/bloodhoundad/azurehound/v2/constants.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Azure Data Exporter for BloodHound";
     homepage = "https://github.com/SpecterOps/AzureHound";
-    changelog = "https://github.com/SpecterOps/AzureHound/releases/tag/v${version}";
+    changelog = "https://github.com/SpecterOps/AzureHound/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "azurehound";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

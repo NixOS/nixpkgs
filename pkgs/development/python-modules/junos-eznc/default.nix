@@ -12,28 +12,25 @@
   paramiko,
   pyparsing,
   pyserial,
-  pythonOlder,
   pyyaml,
   scp,
   setuptools,
   pytestCheckHook,
   six,
   transitions,
-  yamlordereddictloader,
+  yamlloader,
 }:
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.4";
+  version = "2.7.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Juniper";
     repo = "py-junos-eznc";
     tag = version;
-    hash = "sha256-iuCVfzS8k/TZ58v/OPJfSpIMYwwKRj1zyd4FF/KLjjI=";
+    hash = "sha256-+bheNSRcFnq/07Y6BaTqsUAVxEQcdQwtz39cX1nKOBs=";
   };
 
   build-system = [ setuptools ];
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     scp
     six
     transitions
-    yamlordereddictloader
+    yamlloader
   ];
 
   nativeCheckInputs = [
@@ -77,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "jnpr.junos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Junos 'EZ' automation for non-programmers";
     homepage = "https://github.com/Juniper/py-junos-eznc";
     changelog = "https://github.com/Juniper/py-junos-eznc/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ xnaveira ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ xnaveira ];
   };
 }

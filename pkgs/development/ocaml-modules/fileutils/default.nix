@@ -8,12 +8,12 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "fileutils";
   version = "0.6.6";
 
   src = fetchurl {
-    url = "https://github.com/gildor478/ocaml-fileutils/releases/download/v${version}/fileutils-${version}.tbz";
+    url = "https://github.com/gildor478/ocaml-fileutils/releases/download/v${finalAttrs.version}/fileutils-${finalAttrs.version}.tbz";
     hash = "sha256-eW1XkeK/ezv/IAz1BXp6GHhDnrzXTtDxCIz4Z1bVK+Y=";
   };
 
@@ -29,10 +29,10 @@ buildDunePackage rec {
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
-  meta = with lib; {
+  meta = {
     description = "OCaml API to manipulate real files (POSIX like) and filenames";
     homepage = "https://github.com/gildor478/ocaml-fileutils";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ vbgl ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ vbgl ];
   };
-}
+})

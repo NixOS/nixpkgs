@@ -99,6 +99,11 @@ buildPythonPackage rec {
   ]
   ++ lib.optional (!isPy3k) mock;
 
+  pythonRemoveDeps = [
+    "libclang"
+    "keras"
+  ];
+
   preConfigure = ''
     unset SOURCE_DATE_EPOCH
 
@@ -205,7 +210,12 @@ buildPythonPackage rec {
           ''}
         done
       ''
-    );
+    )
+    # Symlink nvcc besides TensorFlow so that routines that require JIT can work
+    # properly.
+    + lib.optionalString cudaSupport ''
+      ln -s ${cudaPackages.cuda_nvcc} "$out/${python.sitePackages}/tensorflow/cuda"
+    '';
 
   # Upstream has a pip hack that results in bin/tensorboard being in both tensorflow
   # and the propagated input tensorboard, which causes environment collisions.

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   python3,
   makeWrapper,
-  unstableGitUpdater,
+  nix-update-script,
   nixosTests,
   useGpiod ? false,
 }:
@@ -35,13 +35,13 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "0.9.3-unstable-2025-09-22";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Arksine";
     repo = "moonraker";
-    rev = "72ca7dbe057c00c3a34013d0c56fda0ab9bbfffe";
-    sha256 = "sha256-yQmJ78Gj2ilxKQ21tx0fimo9cYFlSyTmcVgC6OwxmkQ=";
+    tag = "v${version}";
+    hash = "sha256-jprhbO3wQF/ozOf6VUrDYqNK0TstmLc4nZsZrB6hjOY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,18 +55,15 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      url = meta.homepage;
-      tagPrefix = "v";
-    };
+    updateScript = nix-update-script { };
     tests.moonraker = nixosTests.moonraker;
   };
 
-  meta = with lib; {
+  meta = {
     description = "API web server for Klipper";
     homepage = "https://github.com/Arksine/moonraker";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zhaofengli ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ zhaofengli ];
     mainProgram = "moonraker";
   };
 }

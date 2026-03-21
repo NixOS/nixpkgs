@@ -8,18 +8,22 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-cyclonedx";
-  version = "0.5.7";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
-    rev = "${pname}-${version}";
-    hash = "sha256-T/9eHI2P8eCZAqMTeZz1yEi5nljQWfHrdNiU3h3h74U=";
+    rev = "cargo-cyclonedx-${finalAttrs.version}";
+    hash = "sha256-TLERyZ854KVIeTYu7WT+U/K9YoUmk9bYX/fp3brLFrg=";
   };
 
-  cargoHash = "sha256-deczbMPeJsnmXbVB60stKhJJZRIIwjY5vExS3x3b6aU=";
+  cargoHash = "sha256-uaZ79/4AUe3zx2uuqLEO79QrzqgXaegBxtRmnmM/rOw=";
+
+  # Test suite is broken since rustc 1.90, see:
+  # https://github.com/CycloneDX/cyclonedx-rust-cargo/issues/807
+  doCheck = false;
 
   nativeBuildInputs = [
     pkg-config
@@ -32,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     curl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Rust (Cargo) projects";
     mainProgram = "cargo-cyclonedx";
     longDescription = ''
@@ -42,7 +46,7 @@ rustPlatform.buildRustPackage rec {
       easily created, human and machine readable, and simple to parse.
     '';
     homepage = "https://github.com/CycloneDX/cyclonedx-rust-cargo";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nikstur ];
   };
-}
+})

@@ -6,35 +6,32 @@
   fetchFromGitHub,
   mashumaro,
   orjson,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   syrupy,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiotankerkoenig";
-  version = "0.5.0";
+  version = "0.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "jpbede";
     repo = "aiotankerkoenig";
-    tag = "v${version}";
-    hash = "sha256-5rxK6K10kUWEq3RMN8ojQhoy+w7NNbh/9+v8Jl7w4Ak=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LpaJyx5w0htbvWJ8kL8BlyMdlLOKlR6p+XW7qWMhXZo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+      --replace-fail 'version = "0.0.0"' 'version = "${finalAttrs.version}"'
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -53,11 +50,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiotankerkoenig" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for interacting with tankerkoenig.de";
     homepage = "https://github.com/jpbede/aiotankerkoenig";
-    changelog = "https://github.com/jpbede/aiotankerkoenig/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jpbede/aiotankerkoenig/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

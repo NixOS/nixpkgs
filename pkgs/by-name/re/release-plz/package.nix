@@ -9,18 +9,18 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "release-plz";
-  version = "0.3.147";
+  version = "0.3.157";
 
   src = fetchFromGitHub {
     owner = "MarcoIeni";
     repo = "release-plz";
-    rev = "release-plz-v${version}";
-    hash = "sha256-obqPPVUh5m24A3L8WlJxDK2Nbgb57tATNQ5k8JH/dN4=";
+    rev = "release-plz-v${finalAttrs.version}";
+    hash = "sha256-ATPf1ObepPT2Ndd72hXpqEHMGpaZz12Ee8wwCPCQrlQ=";
   };
 
-  cargoHash = "sha256-t42CsSk6i9ABJOnzqAt5cQS4VS73yjFTzhfK8YVpMZ8=";
+  cargoHash = "sha256-q1iSB+Qi8UAXajlVD6AvMrFJFliywQQauTZ+TInbvd4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -36,22 +36,25 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ${meta.mainProgram} \
-      --bash <($out/bin/${meta.mainProgram} generate-completions bash) \
-      --fish <($out/bin/${meta.mainProgram} generate-completions fish) \
-      --zsh <($out/bin/${meta.mainProgram} generate-completions zsh)
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} generate-completions bash) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} generate-completions fish) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} generate-completions zsh)
   '';
 
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
-    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
+    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ dannixon ];
+    maintainers = with lib.maintainers; [
+      dannixon
+      chrjabs
+    ];
     mainProgram = "release-plz";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

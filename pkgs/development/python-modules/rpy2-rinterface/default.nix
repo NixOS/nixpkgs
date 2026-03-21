@@ -17,8 +17,8 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.6.3";
-  format = "pyproject";
+  version = "3.6.4";
+  pyproject = true;
   pname = "rpy2-rinterface";
 
   disabled = isPyPy;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${
       builtins.replaceStrings [ "-" ] [ "_" ] pname
     }-${version}.tar.gz";
-    hash = "sha256-R3vC9R0AetG4VnxdS6GvD1mVFobufxBXagbQg03ld28=";
+    hash = "sha256-4spJyjzqu9zEGtDFk3ZgsiWvbeYfBE6xI3NWlRw3pZA=";
   };
 
   patches = [
@@ -74,6 +74,6 @@ buildPythonPackage rec {
     description = "Python interface to R";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib; [ teams.sage ];
+    teams = with lib.teams; [ sage ];
   };
 }

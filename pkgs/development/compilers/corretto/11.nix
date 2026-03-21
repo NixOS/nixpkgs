@@ -1,6 +1,6 @@
 {
   fetchFromGitHub,
-  gradle_7,
+  gradle_8,
   jdk11,
   lib,
   stdenv,
@@ -19,20 +19,19 @@ let
       testers
       ;
     jdk = jdk11;
-    gradle = gradle_7;
-    extraConfig = [
-      # jdk11 is built with --disable-warnings-as-errors (see openjdk/11.nix)
-      # because of several compile errors. We need to include this parameter for
-      # Corretto, too.
-      "--disable-warnings-as-errors"
-    ];
-    version = "11.0.26.4.1";
+    gradle = gradle_8;
+    version = "11.0.30.7.1";
     src = fetchFromGitHub {
       owner = "corretto";
       repo = "corretto-11";
       rev = version;
-      hash = "sha256-buJlSvmyOVeMwaP9oDcHhG+Sabr1exf0nRUt4O7MaIY=";
+      hash = "sha256-SUdJlTYE+RRAZa8DhFW0EYW1kHmuNDG+hk+/3MXtx1w=";
     };
   };
 in
-corretto
+corretto.overrideAttrs (oldAttrs: {
+  patches = (oldAttrs.patches or [ ]) ++ [
+    ./corretto11-gradle8.patch
+  ];
+
+})

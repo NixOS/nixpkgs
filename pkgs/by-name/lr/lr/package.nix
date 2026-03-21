@@ -4,25 +4,25 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lr";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "chneukirchen";
     repo = "lr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-zpHThIB1FS45RriE214SM9ZQJ1HyuBkBi/+PTeJjEFc=";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/chneukirchen/lr";
     description = "List files recursively";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ vikanezrimaya ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ vikanezrimaya ];
     mainProgram = "lr";
   };
-}
+})

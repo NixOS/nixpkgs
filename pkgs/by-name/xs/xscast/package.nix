@@ -6,7 +6,9 @@
   ffmpeg,
   imagemagick,
   dzen2,
-  xorg,
+  xwininfo,
+  xmodmap,
+  xinput,
 }:
 
 stdenv.mkDerivation {
@@ -34,9 +36,9 @@ stdenv.mkDerivation {
         lib.makeBinPath [
           ffmpeg
           dzen2
-          xorg.xwininfo
-          xorg.xinput
-          xorg.xmodmap
+          xwininfo
+          xinput
+          xmodmap
           imagemagick
         ]
       }
@@ -44,9 +46,9 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/KeyboardFire/xscast";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Screencasts of windows with list of keystrokes overlayed";
     maintainers = [ ];
     mainProgram = "xscast";

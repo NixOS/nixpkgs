@@ -1,11 +1,12 @@
 {
   lib,
-  buildPythonPackage,
   boto3,
+  buildPythonPackage,
   fetchFromGitHub,
   httpretty,
   keyring,
   lz4,
+  orjson,
   pytestCheckHook,
   python-dateutil,
   pytz,
@@ -21,20 +22,21 @@
 
 buildPythonPackage rec {
   pname = "trino-python-client";
-  version = "0.334.0";
+  version = "0.336.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "trino-python-client";
     owner = "trinodb";
     tag = version;
-    hash = "sha256-cSwMmzIUFYX8VgSwobth8EsARUff3hhfBf+IrhuFSYM=";
+    hash = "sha256-Vii9WMcOQZy93Dlc6d0qzswQTdcYyHoRVuCqcbWUF4s=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     lz4
+    orjson
     python-dateutil
     pytz
     requests
@@ -56,7 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testcontainers
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "trino" ];
 
@@ -76,12 +78,12 @@ buildPythonPackage rec {
     "test_multithreaded_oauth2_authentication_flow"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/trinodb/trino-python-client/blob/${src.tag}/CHANGES.md";
     description = "Client for the Trino distributed SQL Engine";
     homepage = "https://github.com/trinodb/trino-python-client";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       cpcloud
       flokli
     ];

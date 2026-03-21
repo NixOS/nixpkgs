@@ -1,28 +1,38 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
+  fetchpatch,
   extras ? [ "all" ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "browsr";
-  version = "1.21.0";
+  version = "1.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "juftin";
     repo = "browsr";
-    tag = "v${version}";
-    hash = "sha256-76OzJOunZRVSGalQiyX+TSukD8rRIFHxA713NqOn3PY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-eISOADs++ZF62qkWbhFZu6JkEVtTytg3q5nbwS2m+8g=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  patches = [
+    # https://github.com/juftin/browsr/pull/55
+    (fetchpatch {
+      name = "textual-6-compat.patch";
+      url = "https://github.com/juftin/browsr/commit/ab958ac982e14e836a0e44080a53c920ad50b256.patch";
+      hash = "sha256-vAJ+M6Eg7N2NV7Cb2DWPYqLJIeq/DY1COECEQOnkpXE=";
+    })
+  ];
+
+  build-system = with python3Packages; [
     hatchling
   ];
 
-  propagatedBuildInputs =
-    with python3.pkgs;
+  dependencies =
+    with python3Packages;
     [
       art
       click
@@ -36,9 +46,9 @@ python3.pkgs.buildPythonApplication rec {
       textual
       textual-universal-directorytree
     ]
-    ++ lib.attrVals extras optional-dependencies;
+    ++ lib.attrVals extras finalAttrs.passthru.optional-dependencies;
 
-  optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3Packages; {
     all = [
       pyarrow
       textual-universal-directorytree.optional-dependencies.remote
@@ -51,13 +61,15 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
+    pytest-cov-stub
     pytest-textual-snapshot
     pytestCheckHook
   ];
 
   pythonRelaxDeps = [
     "art"
+    "click"
     "pandas"
     "pymupdf"
     "pyperclip"
@@ -65,14 +77,11 @@ python3.pkgs.buildPythonApplication rec {
     "rich-pixels"
     "rich"
     "textual"
+    "universal-pathlib"
   ];
 
   pythonImportsCheck = [
     "browsr"
-  ];
-
-  pytestFlags = [
-    "--snapshot-update"
   ];
 
   disabledTests = [
@@ -81,16 +90,14 @@ python3.pkgs.buildPythonApplication rec {
     "test_github_screenshot_license"
     "test_textual_app_context_path_github"
     "test_mkdocs_screenshot"
-    # Different output
-    "test_textual_app_context_path"
   ];
 
   meta = {
     description = "File explorer in your terminal";
     mainProgram = "browsr";
     homepage = "https://juftin.com/browsr";
-    changelog = "https://github.com/juftin/browsr/releases/tag/v${version}";
+    changelog = "https://github.com/juftin/browsr/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
-}
+})

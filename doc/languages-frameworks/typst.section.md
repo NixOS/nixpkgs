@@ -15,6 +15,16 @@ typst.withPackages (
 )
 ```
 
+For more customisation options, you can invoke the wrapper directly:
+
+```nix
+typst.wrapper {
+  packages = p: [ ];
+  fonts = [ ];
+  extraWrapperArgs = [ ];
+}
+```
+
 ### Handling Outdated Package Hashes {#typst-handling-outdated-package-hashes}
 
 Since **Typst Universe** does not provide a way to fetch a package with a specific hash, the package hashes in `nixpkgs` can sometimes be outdated. To resolve this issue, you can manually override the package source using the following approach:
@@ -22,7 +32,7 @@ Since **Typst Universe** does not provide a way to fetch a package with a specif
 ```nix
 typst.withPackages.override
   (old: {
-    typstPackages = old.typstPackages.extend (
+    typstPackages = old.typstPackages.overrideScope (
       _: previous: {
         polylux_0_4_0 = previous.polylux_0_4_0.overrideAttrs (oldPolylux: {
           src = oldPolylux.src.overrideAttrs { outputHash = YourUpToDatePolyluxHash; };

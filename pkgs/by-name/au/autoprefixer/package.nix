@@ -3,30 +3,34 @@
   stdenv,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   fetchFromGitHub,
   callPackage,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
-  version = "10.4.21";
+  version = "10.4.24";
 
   src = fetchFromGitHub {
     owner = "postcss";
     repo = "autoprefixer";
     rev = finalAttrs.version;
-    hash = "sha256-25FVNUXMEuzPJtpld/GHEppspa2ns7fAuniBCltSync=";
+    hash = "sha256-9XZWkBDqkaBbIHq3wIbo4neToPM+NCxi9c1AyVqmnvc=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-zb/BwL//i0oly5HEXN20E3RzZXdaOn+G2yIWRas3PB4=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-PPYyEsc0o5ufBexUdiX9EJLEsQZ0wX7saBzxJGsnseU=";
   };
 
   installPhase = ''

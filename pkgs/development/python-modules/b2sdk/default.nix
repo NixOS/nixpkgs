@@ -1,82 +1,75 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  glibcLocales,
-  importlib-metadata,
   logfury,
   annotated-types,
-  packaging,
-  pdm-backend,
-  pyfakefs,
+  hatchling,
+  hatch-vcs,
   pytest-lazy-fixtures,
   pytest-mock,
+  pytest-timeout,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   requests,
+  responses,
+  tenacity,
   tqdm,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "b2sdk";
-  version = "2.9.4";
+  version = "2.10.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Backblaze";
     repo = "b2-sdk-python";
     tag = "v${version}";
-    hash = "sha256-VXdvRJvmozrDsUu1J5Jz9I2733Cwe8OBbafc1fCEuGw=";
+    hash = "sha256-Gu4MRfjNWuwEFn13U49dEndWA/HNPwrQdX9VEz1ny+M=";
   };
 
-  build-system = [ pdm-backend ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     annotated-types
-    packaging
     logfury
     requests
   ]
-  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ]
   ++ lib.optionals (pythonOlder "3.12") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-lazy-fixtures
     pytest-mock
+    pytest-timeout
     pytestCheckHook
+    responses
+    tenacity
     tqdm
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ glibcLocales ];
-
-  disabledTestPaths = [
-    # requires aws s3 auth
-    "test/integration/test_download.py"
-    "test/integration/test_upload.py"
-
-    # Requires backblaze auth
-    "test/integration/test_bucket.py"
   ];
 
-  disabledTests = [
-    # Test requires an API key
-    "test_raw_api"
-    "test_files_headers"
-    "test_large_file"
-    "test_file_info_b2_attributes"
-    "test_sync_folder"
+  enabledTestPaths = [
+    "test/unit"
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    # -     'could not be accessed (no permissions to read?)',
+    # +     'could not be accessed (broken symlink?)',
+    "test_dir_without_exec_permission"
   ];
 
   pythonImportsCheck = [ "b2sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library and utilities for access to B2 Cloud Storage (backblaze)";
     homepage = "https://github.com/Backblaze/b2-sdk-python";
     changelog = "https://github.com/Backblaze/b2-sdk-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pmw ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pmw ];
   };
 }

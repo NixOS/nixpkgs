@@ -7,24 +7,24 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bazel-watcher";
-  version = "0.26.10";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-watcher";
-    rev = "v${version}";
-    hash = "sha256-OrOJ24XdYASOgO8170M0huVGYubH8MJ0tbp0hvqmN/w=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4pM7z1GAhLxvCLwtHBcteRMQwtdvOFtRu8eF+H6UJBE=";
   };
 
-  vendorHash = "sha256-JkEJyrBY70+XO9qjw/t2qCayhVQzRkTEp/NXFTr+pXY=";
+  vendorHash = "sha256-u1Zg/M9DSkwscy49qtPQygk1gyxKaPbhlFDYNtBQ9NY=";
 
   # The dependency github.com/fsnotify/fsevents requires CGO
   env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
   ldflags = [
     "-s"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/ibazel" ];
@@ -36,12 +36,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/bazelbuild/bazel-watcher";
     description = "Tools for building Bazel targets when source files change";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ kalbasit ];
     mainProgram = "ibazel";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

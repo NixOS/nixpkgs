@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   numpy,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pwkit";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pkgw";
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pwkit" ];
 
-  meta = with lib; {
+  meta = {
     description = "Miscellaneous science/astronomy tools";
     homepage = "https://github.com/pkgw/pwkit/";
     changelog = "https://github.com/pkgw/pwkit/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

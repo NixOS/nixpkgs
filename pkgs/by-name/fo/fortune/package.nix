@@ -7,24 +7,31 @@
   perl,
   rinutils,
   fortune,
+  libxslt,
+  docbook-xsl-nons,
   withOffensive ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fortune-mod";
-  version = "3.24.0";
+  version = "3.26.0";
 
   # We use fetchurl instead of fetchFromGitHub because the release pack has some
   # special files.
   src = fetchurl {
-    url = "https://github.com/shlomif/fortune-mod/releases/download/fortune-mod-${version}/fortune-mod-${version}.tar.xz";
-    sha256 = "sha256-Hzh4dyVOleq2H5NyV7QmCfKbmU7wVxUxZVu/w6KsdKw=";
+    url = "https://github.com/shlomif/fortune-mod/releases/download/fortune-mod-${finalAttrs.version}/fortune-mod-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-rE0UhsrJuZkEkQcTa5QQb+mKSurADsY1sUTEN2S//kw=";
   };
 
   nativeBuildInputs = [
     cmake
-    perl
+    (perl.withPackages (p: [
+      p.PathTiny
+      p.AppXMLDocBookBuilder
+    ]))
     rinutils
+    libxslt
+    docbook-xsl-nons
   ]
   ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # "strfile" must be in PATH for cross-compiling builds.
@@ -61,11 +68,11 @@ stdenv.mkDerivation rec {
     rm $out/share/games/fortunes/men-women*
   '';
 
-  meta = with lib; {
+  meta = {
     mainProgram = "fortune";
     description = "Program that displays a pseudorandom message from a database of quotations";
-    license = licenses.bsdOriginal;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ vonfry ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ vonfry ];
   };
-}
+})

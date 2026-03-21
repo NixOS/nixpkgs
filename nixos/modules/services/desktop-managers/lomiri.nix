@@ -181,7 +181,7 @@ in
 
       services.gnome.evolution-data-server = {
         enable = true;
-        plugins = with pkgs; [
+        plugins = [
           # TODO: lomiri.address-book-service
         ];
       };
@@ -292,5 +292,5 @@ in
     })
   ];
 
-  meta.maintainers = lib.teams.lomiri.members;
+  meta.teams = [ lib.teams.lomiri ];
 }

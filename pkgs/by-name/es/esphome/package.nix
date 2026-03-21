@@ -8,7 +8,6 @@
   platformio,
   esptool,
   git,
-  inetutils,
   versionCheckHook,
   nixosTests,
 }:
@@ -34,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.8.4";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-L3CKfZGPEaMv9nmKX0S9qRXtZrfleQqgN3KHJjIEZew=";
+    hash = "sha256-W8xVUlgenDXL0MTWlFmWD+lHFUmhl2EKyxqAEjOuqHY=";
   };
 
   patches = [
@@ -69,20 +68,17 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==80.9.0" "setuptools" \
-      --replace-fail "wheel>=0.43,<0.46" "wheel"
+      --replace-fail "setuptools==82.0.1" "setuptools" \
+      --replace-fail "wheel>=0.43,<0.47" "wheel"
   '';
 
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
-  # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used.
-  # They have validation functions like:
-  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
+    bleak
     cairosvg
     click
     colorama
@@ -92,35 +88,33 @@ python.pkgs.buildPythonApplication rec {
     freetype-py
     icmplib
     jinja2
-    kconfiglib
-    packaging
     paho-mqtt
     pillow
     platformio
-    protobuf
     puremagic
     pyparsing
     pyserial
     pyyaml
     requests
+    resvg-py
     ruamel-yaml
+    smpclient
     tornado
     tzdata
     tzlocal
     voluptuous
+    zeroconf
   ];
 
   makeWrapperArgs = [
     # platformio is used in esphome/platformio_api.py
     # esptool is used in esphome/__main__.py
-    # git is used in esphome/writer.py
-    # inetutils is used in esphome/dashboard/status/ping.py
+    # git is used in esphome/git.py
     "--prefix PATH : ${
       lib.makeBinPath [
         platformio
         esptool
         git
-        inetutils
       ]
     }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
@@ -134,7 +128,7 @@ python.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs =
-    with python3Packages;
+    with python.pkgs;
     [
       hypothesis
       mock
@@ -143,7 +137,10 @@ python.pkgs.buildPythonApplication rec {
       pytest-mock
       pytestCheckHook
     ]
-    ++ [ versionCheckHook ];
+    ++ [
+      git
+      versionCheckHook
+    ];
 
   disabledTestPaths = [
     # platformio builds; requires networking for dependency resolution
@@ -156,7 +153,7 @@ python.pkgs.buildPythonApplication rec {
 
   postInstall =
     let
-      argcomplete = lib.getExe' python3Packages.argcomplete "register-python-argcomplete";
+      argcomplete = lib.getExe' python.pkgs.argcomplete "register-python-argcomplete";
     in
     ''
       installShellCompletion --cmd esphome \
@@ -167,7 +164,22 @@ python.pkgs.buildPythonApplication rec {
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
+  disabledTests = [
+    # tries to import platformio, which is wrapped in an fhsenv
+    "test_clean_build"
+    "test_clean_build_empty_cache_dir"
+    "test_clean_all"
+    "test_clean_all_partial_exists"
+    # tries to use esptool, which is wrapped in an fhsenv
+    "test_upload_using_esptool_path_conversion"
+    "test_upload_using_esptool_with_file_path"
+    "test_upload_using_esptool_passes_crystal_callback"
+    # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
+    "test_run_platformio_cli_sets_environment_variables"
+    # Expects a full git clone
+    "test_clang_tidy_mode_full_scan"
+    "test_clang_tidy_mode_targeted_scan"
+  ];
 
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
@@ -185,6 +197,8 @@ python.pkgs.buildPythonApplication rec {
     ];
     maintainers = with lib.maintainers; [
       hexa
+      picnoir
+      thanegill
     ];
     mainProgram = "esphome";
   };

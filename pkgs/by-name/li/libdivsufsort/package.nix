@@ -5,19 +5,20 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdivsufsort";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "y-256";
     repo = "libdivsufsort";
-    rev = "${version}";
+    rev = "${finalAttrs.version}";
     hash = "sha256-4p+L1bq9SBgWSHXx+WYWAe60V2g1AN+zlJvC+F367Tk=";
   };
 
   cmakeFlags = [
     "-DBUILD_DIVSUFSORT64=YES"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -28,4 +29,4 @@ stdenv.mkDerivation rec {
     description = "Library to construct the suffix array and the BW transformed string";
     platforms = lib.platforms.unix;
   };
-}
+})

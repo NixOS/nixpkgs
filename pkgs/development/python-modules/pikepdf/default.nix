@@ -4,10 +4,10 @@
   buildPythonPackage,
   fetchFromGitHub,
   hypothesis,
-  pythonOlder,
   jbig2dec,
   deprecated,
   lxml,
+  withMupdf ? false,
   mupdf-headless,
   numpy,
   packaging,
@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.8.1";
+  version = "10.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,13 +38,19 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-gFaGHml1F5i+w68xapmPHYUK760rT4GJzTWTkDsIwC8=";
+    hash = "sha256-fEIzmC17RYic4CFwBh5FdGbJmaWaiaPBK7eCQ7RCmr0=";
   };
 
   patches = [
     (replaceVars ./paths.patch {
       jbig2dec = lib.getExe' jbig2dec "jbig2dec";
-      mutool = lib.getExe' mupdf-headless "mutool";
+      mutool =
+        if withMupdf then
+          lib.getExe' mupdf-headless "mutool"
+        else
+          # replace with non-existing path. This is okay, as this is only
+          # called by Jupyter/iPython
+          "mutool";
     })
   ];
 
@@ -80,11 +86,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pikepdf" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pikepdf/pikepdf";
     description = "Read and write PDFs with Python, powered by qpdf";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ dotlambda ];
     changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
   };
 }

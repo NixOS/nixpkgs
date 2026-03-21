@@ -32,13 +32,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libapparmor";
-  version = "4.1.1";
+  version = "4.1.3";
 
   src = fetchFromGitLab {
     owner = "apparmor";
     repo = "apparmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f9FgowlV4lZKKuddGCirqbajhIGyTUQc7IFHSvqY6eQ=";
+    hash = "sha256-8L4skun873OMZISpGm25Ana4RzTzCmKhhK5tfyEmbd8=";
   };
   sourceRoot = "${finalAttrs.src.name}/libraries/libapparmor";
 

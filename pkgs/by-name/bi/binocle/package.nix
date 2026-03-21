@@ -4,18 +4,21 @@
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
   vulkan-loader,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "binocle";
   version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "binocle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WAk7xIrCRfVofn4w+gP5E3wnSZbXm/6MZWlNmtoLm20=";
   };
 
@@ -28,27 +31,24 @@ rustPlatform.buildRustPackage rec {
   postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     wrapProgram $out/bin/binocle \
       --suffix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath (
-          with xorg;
-          [
-            libX11
-            libXcursor
-            libXi
-            libXrandr
-          ]
-          ++ [ vulkan-loader ]
-        )
+        lib.makeLibraryPath [
+          libx11
+          libxcursor
+          libxi
+          libxrandr
+          vulkan-loader
+        ]
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical tool to visualize binary data";
     mainProgram = "binocle";
     homepage = "https://github.com/sharkdp/binocle";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
-}
+})

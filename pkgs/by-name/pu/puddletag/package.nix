@@ -9,7 +9,7 @@ let
   qt = libsForQt5;
 
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "puddletag";
   version = "2.5.0";
   format = "setuptools";
@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "puddletag";
     repo = "puddletag";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Per+olIi2yd2cNRO22Fi6cC7/90AqRP1NpRK1XU1i0A=";
   };
 
@@ -77,4 +77,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

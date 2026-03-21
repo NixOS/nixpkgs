@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   streamlit,
   poetry-core,
 }:
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "st-pages";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "blackary";

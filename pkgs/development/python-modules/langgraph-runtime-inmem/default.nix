@@ -4,6 +4,7 @@
   fetchPypi,
   hatchling,
   blockbuster,
+  croniter,
   langgraph,
   langgraph-checkpoint,
   sse-starlette,
@@ -11,24 +12,23 @@
   structlog,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-runtime-inmem";
-  version = "0.12.0";
+  version = "0.26.0";
   pyproject = true;
 
   # Not available in any repository
   src = fetchPypi {
     pname = "langgraph_runtime_inmem";
-    inherit version;
-    hash = "sha256-h1YFV8lqb929MjzOIHPI8hahjDCkShr83kevjUWFF8A=";
+    inherit (finalAttrs) version;
+    hash = "sha256-ucWH0TOTIKKlSlcKIa7K9Z7rxL4HzvHYpbA18/LGHWo=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     blockbuster
+    croniter
     langgraph
     langgraph-checkpoint
     sse-starlette
@@ -36,15 +36,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  # Can remove after blockbuster version bump
-  # https://github.com/NixOS/nixpkgs/pull/431547
-  pythonRelaxDeps = [
-    "blockbuster"
-  ];
-
-  pythonImportsCheck = [
-    "langgraph_runtime_inmem"
-  ];
+  pythonImportsCheck = [ "langgraph_runtime_inmem" ];
 
   # no tests
   doCheck = false;
@@ -56,4 +48,4 @@ buildPythonPackage rec {
     license = lib.licenses.elastic20;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

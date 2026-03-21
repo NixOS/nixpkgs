@@ -7,12 +7,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dejagnu";
   version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/dejagnu/dejagnu-${finalAttrs.version}.tar.gz";
     sha256 = "1qx2cv6qkxbiqg87jh217jb62hk3s7dmcs4cz1llm2wmsynfznl7";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ln -s ${expect}/bin/expect $out/bin/expect
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Framework for testing other programs";
 
     longDescription = ''
@@ -68,9 +68,9 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "https://www.gnu.org/software/dejagnu/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

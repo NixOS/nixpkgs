@@ -1,6 +1,8 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
+  gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
   rustPlatform,
@@ -9,30 +11,34 @@
   nixVersions,
   openssl,
   dbus,
+  protobuf,
+  sqlite,
   pkg-config,
   glibcLocalesUtf8,
+  boehmgc,
+  llvmPackages,
+  nixd,
+  bash,
   devenv, # required to run version test
 }:
 
 let
-  version = "1.9";
-  devenvNixVersion = "2.30.4";
+  version = "2.0.5";
+  devenvNixVersion = "2.32";
+  devenvNixRev = "ef483d53f25990bf0b4fd39f5414f885977ebd85";
 
-  devenv_nix =
-    (nixVersions.git.overrideSource (fetchFromGitHub {
+  nix_components =
+    (nixVersions.nixComponents_git.overrideSource (fetchFromGitHub {
       owner = "cachix";
       repo = "nix";
-      rev = "devenv-${devenvNixVersion}";
-      hash = "sha256-3+GHIYGg4U9XKUN4rg473frIVNn8YD06bjwxKS1IPrU=";
-    })).overrideAttrs
-      (old: {
-        pname = "devenv-nix";
-        version = devenvNixVersion;
-        doCheck = false;
-        doInstallCheck = false;
-        # do override src, but the Nix way so the warning is unaware of it
-        __intentionallyOverridingVersion = true;
-      });
+      rev = devenvNixRev;
+      hash = "sha256-eY8JFns4OeEidye8VIW68LSoykbPO0bQujvQVLLK7Qg=";
+    })).overrideScope
+      (
+        finalScope: prevScope: {
+          version = devenvNixVersion;
+        }
+      );
 in
 rustPlatform.buildRustPackage {
   pname = "devenv";
@@ -42,22 +48,65 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-MG+c0mo4g9UHSuqibX3OVkiADWmMn/PWDfVhD4U29PM=";
+    hash = "sha256-8tO3NLG9Lc/NUee0Owcf/z63TNTrUcx7eVRxSb294rk=";
   };
 
-  cargoHash = "sha256-7uB9oC0jHWBFeUtIyVpTjeximU6eSxSCiBzo/whoKxQ=";
+  cargoHash = "sha256-ecntFSPDWblllDtS/D086UKtQJG9La4TGEBhP3q0CfY=";
 
-  buildAndTestSubdir = "devenv";
+  env = {
+    RUSTFLAGS = "--cfg tracing_unstable";
+    LIBSQLITE3_SYS_USE_PKG_CONFIG = "1";
+    DEVENV_IS_RELEASE = true;
+  };
+
+  cargoBuildFlags = [
+    "-p"
+    "devenv"
+    "-p"
+    "devenv-run-tests"
+  ];
 
   nativeBuildInputs = [
     installShellFiles
     makeBinaryWrapper
     pkg-config
+    protobuf
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
     openssl
+    sqlite
     dbus
+    llvmPackages.clang-unwrapped
+    nix_components.nix-expr-c
+    nix_components.nix-store-c
+    nix_components.nix-util-c
+    nix_components.nix-flake-c
+    nix_components.nix-cmd-c
+    nix_components.nix-fetchers-c
+    nix_components.nix-main-c
+  ];
+
+  nativeCheckInputs = [
+    gitMinimal
+    bash
+  ];
+
+  preCheck = ''
+    # Initialize git repo for tests that use git-root-relative imports
+    pushd $NIX_BUILD_TOP/source
+    git init -b main
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+    git add -A
+    popd
+  '';
+
+  useNextest = true;
+  cargoTestFlags = [
+    "-p"
+    "devenv"
   ];
 
   postInstall =
@@ -68,16 +117,20 @@ rustPlatform.buildRustPackage {
     in
     ''
       wrapProgram $out/bin/devenv \
-        --prefix PATH ":" "$out/bin:${cachix}/bin" \
-        --set DEVENV_NIX ${devenv_nix} \
+        --prefix PATH ":" "$out/bin:${lib.getBin cachix}/bin:${lib.getBin nixd}/bin" \
+        ${setDefaultLocaleArchive}
+
+      wrapProgram $out/bin/devenv-run-tests \
+        --prefix PATH ":" "$out/bin:${lib.getBin cachix}/bin:${lib.getBin nixd}/bin" \
         ${setDefaultLocaleArchive}
 
       # Generate manpages
       cargo xtask generate-manpages --out-dir man
       installManPage man/*
 
-      # Generate shell completions
+      # Generate shell completions (devenv must be in PATH)
       compdir=./completions
+      export PATH="$out/bin:$PATH"
       for shell in bash fish zsh; do
         cargo xtask generate-shell-completion $shell --out-dir $compdir
       done
@@ -96,11 +149,14 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
-    changelog = "https://github.com/cachix/devenv/releases/tag/v${version}";
+    changelog = "https://github.com/cachix/devenv/releases";
     description = "Fast, Declarative, Reproducible, and Composable Developer Environments";
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    teams = [ lib.teams.cachix ];
+    maintainers = with lib.maintainers; [
+      domenkozar
+      sandydoo
+    ];
   };
 }

@@ -10,7 +10,9 @@
   nodejs,
   openssl,
   pkg-config,
-  pnpm_10,
+  pnpm_10_29_2,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustc,
   stdenv,
   xdg-utils,
@@ -56,7 +58,7 @@ let
     # buildRustPackage sets strictDeps = true;
     nativeCheckInputs = finalAttrs.buildInputs;
 
-    OPENSSL_NO_VENDOR = "1";
+    env.OPENSSL_NO_VENDOR = "1";
 
     postInstall = ''
       mkdir -p $out/include
@@ -73,9 +75,14 @@ let
       hash = cargoHash;
     };
 
-    pnpmDeps = pnpm_10.fetchDeps {
-      inherit src pname version;
-      fetcherVersion = 1;
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        src
+        pname
+        version
+        ;
+      pnpm = pnpm_10_29_2;
+      fetcherVersion = 2;
       hash = pnpmHash;
     };
 
@@ -83,7 +90,8 @@ let
       binaryen
       cargo
       nodejs
-      pnpm_10.configHook
+      pnpmConfigHook
+      pnpm_10_29_2
       rustc
       rustc.llvmPackages.lld
       rustPlatform.cargoSetupHook
@@ -152,7 +160,6 @@ buildGoModule (finalAttrs: {
   patches = extPatches ++ [
     ./0001-fix-add-nix-path-to-exec-env.patch
     ./rdpclient.patch
-    ./tsh.patch
   ];
 
   # Reduce closure size for client machines
@@ -203,7 +210,6 @@ buildGoModule (finalAttrs: {
       justinas
       sigma
       tomberek
-      freezeboy
       techknowlogick
       juliusfreudenberger
     ];

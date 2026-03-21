@@ -9,13 +9,13 @@
   elfutils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strace";
-  version = "6.16";
+  version = "6.19";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-PXrufk8ESy9n89UainbtoYB26fsndN5UrDUdd31Ov/o=";
+    url = "https://strace.io/files/${finalAttrs.version}/strace-${finalAttrs.version}.tar.xz";
+    hash = "sha256-4HbIUe7AlySG7IQhZP3FRUf50Xq9PRRJ3osSD10pkUM=";
   };
 
   separateDebugInfo = true;
@@ -50,19 +50,19 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://strace.io/";
     description = "System call tracer for Linux";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ]; # gpl2Plus is for the test suite
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       globin
       ma27
       qyliss
     ];
     mainProgram = "strace";
   };
-}
+})

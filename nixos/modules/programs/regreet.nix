@@ -40,9 +40,12 @@ in
 
     cageArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "-s" ];
+      default = [
+        "-s"
+        "-d"
+      ];
       example = lib.literalExpression ''
-        [ "-s" "-m" "last" ]
+        [ "-s" "-d" "-m" "last" ]
       '';
       description = ''
         Additional arguments to be passed to

@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  trubar,
 
   # dependencies
   anyqt,
@@ -15,14 +16,17 @@
   filelock,
   lockfile,
   numpy,
+  packaging,
   pip,
-  trubar,
   qasync,
+  requests,
   requests-cache,
+  truststore,
   typing-extensions,
 
   # tests
   qt5,
+  pyqt5,
   pytest-qt,
   pytestCheckHook,
 
@@ -32,32 +36,36 @@
 
 buildPythonPackage rec {
   pname = "orange-canvas-core";
-  version = "0.2.6";
+  version = "0.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-canvas-core";
     tag = version;
-    hash = "sha256-cEy9ADU/jZoKmGXVlqwG+qWKZ22STjALgCb1IxAwpO0=";
+    hash = "sha256-mJSF2OWSIxBn1blQReLFlf8Uu/vP7F3vJrcrAz0uWFY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    trubar
+  ];
 
   dependencies = [
     anyqt
-    cachecontrol
     commonmark
     dictdiffer
     docutils
     filelock
     lockfile
     numpy
+    packaging
     pip
     qasync
+    requests
     requests-cache
+    truststore
     typing-extensions
-    trubar
   ];
 
   pythonImportsCheck = [ "orangecanvas" ];
@@ -70,6 +78,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    pyqt5
     pytest-qt
     pytestCheckHook
   ];
@@ -97,7 +106,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/biolab/orange-canvas-core";
     changelog = "https://github.com/biolab/orange-canvas-core/releases/tag/${src.tag}";
     license = [ lib.licenses.gpl3 ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     # Segmentation fault during tests
     broken = stdenv.hostPlatform.isDarwin;
   };

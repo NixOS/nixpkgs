@@ -8,20 +8,25 @@
   bash,
   chromedriver,
   nodejs_24,
-  python312,
+  python3,
   makeWrapper,
+  openapi-generator-cli,
+  go,
+  typescript,
+  makeSetupHook,
+  writeShellScript,
 }:
 
 let
   nodejs = nodejs_24;
 
-  version = "2025.8.3";
+  version = "2025.12.4";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
-    rev = "version/${version}";
-    hash = "sha256-DkvxDwHCfSqEpZ9rRXNR8MP0Mz/y1kHAr38exrHQ39c=";
+    tag = "version/${version}";
+    hash = "sha256-alTyrMBbjZbw4jhEna8saabf93sqSrZCu+Z5xH3pZ7M=";
   };
 
   meta = {
@@ -39,6 +44,90 @@ let
     ];
   };
 
+  client-go = stdenvNoCC.mkDerivation {
+    pname = "authentik-client-go";
+    version = "3.${version}";
+    inherit meta;
+
+    src = fetchFromGitHub {
+      owner = "goauthentik";
+      repo = "client-go";
+      tag = "v3.${version}";
+      hash = "sha256-+/CfOE2HkBU+ZddvdXGenB/z8xNFk8cujpZpMXyh3cY=";
+    };
+
+    patches = [
+      ./client-go-config.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace ./config.yaml \
+        --replace-fail '/local' "$(pwd)"
+    '';
+
+    nativeBuildInputs = [
+      openapi-generator-cli
+      go
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      openapi-generator-cli generate \
+        -i ${src}/schema.yml -o $out \
+        -g go \
+        -c ./config.yaml
+
+      gofmt -w $out
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      cp go.mod go.sum $out
+
+      cd $out
+      rm -rf test
+      rm -f .travis.yml git_push.sh
+
+      runHook postInstall
+    '';
+  };
+
+  client-ts = stdenvNoCC.mkDerivation {
+    pname = "authentik-client-ts";
+    inherit version src meta;
+
+    postPatch = ''
+      substituteInPlace ./scripts/api/ts-config.yaml \
+        --replace-fail '/local' "$(pwd)"
+    '';
+
+    nativeBuildInputs = [
+      nodejs
+      openapi-generator-cli
+      typescript
+    ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      openapi-generator-cli generate \
+        -i ./schema.yml -o $out \
+        -g typescript-fetch \
+        -c ./scripts/api/ts-config.yaml \
+        --additional-properties=npmVersion=${version} \
+        --git-repo-id authentik --git-user-id goauthentik
+
+      cd $out
+      npm run build
+
+      runHook postBuild
+    '';
+  };
+
   # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
   website-deps = stdenvNoCC.mkDerivation {
     pname = "authentik-website-deps";
@@ -48,8 +137,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-uJe1v43d3baBUESU+CQk6fYBdiNOBiT3Tt0vFIbI/HY=";
-        "x86_64-linux" = "sha256-jVi+pgcz96Dj25T4e/s+SHqsZfonzXs1WZYe0lCI48Q=";
+        "aarch64-linux" = "sha256-GL5FPIBnoEXYtw8DPJpRPe3tT3qioN4AdoeOmCoiYsM=";
+        "x86_64-linux" = "sha256-AnceTipq6uUvTbOAZanVshAbAJ9LS1kwImbttTOcWxc=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
 
@@ -119,8 +208,8 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-4JkNwQACS3tiiLuj41cGRWNspljVQxlsJvCM9KE2JrQ=";
-        "x86_64-linux" = "sha256-LD+zXc8neRbEwq1mx9y7b+08p8hxvo/RW6QzsFQgaUs=";
+        "aarch64-linux" = "sha256-eZZ5Ynj81KwFsU5emPtYZ2CxO8MFvWbJnCHs+L88KQQ=";
+        "x86_64-linux" = "sha256-yUAyyO1NFav1EptrRYGSzC8dxCxYVj0FmzHk8IckFZM=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-webui-deps: unsupported host platform");
     outputHashMode = "recursive";
@@ -172,6 +261,10 @@ let
       find -type d -name node_modules -prune -print -exec cp -rT {} $buildRoot/{} \;
       popd
 
+      chmod -R +w node_modules/@goauthentik
+      rm -R node_modules/@goauthentik/api
+      ln -sn ${client-ts} node_modules/@goauthentik/api
+
       pushd node_modules/.bin
       patchShebangs $(readlink rollup)
       patchShebangs $(readlink wireit)
@@ -202,13 +295,50 @@ let
     ];
   };
 
-  python = python312.override {
+  python = python3.override {
     self = python;
     packageOverrides = final: prev: {
-      # https://github.com/goauthentik/authentik/pull/14709
-      django = final.django_5_1;
+      # https://github.com/goauthentik/authentik/pull/16324
+      django = final.django_5;
 
-      django-dramatiq-postgres = prev.buildPythonPackage {
+      ak-guardian = final.buildPythonPackage {
+        pname = "ak-guardian";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/ak-guardian";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs = with final; [
+          django
+          typing-extensions
+        ];
+      };
+
+      django-channels-postgres = final.buildPythonPackage {
+        pname = "django-channels-postgres";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-channels-postgres";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs =
+          with final;
+          [
+            channels
+            django
+            django-pgtrigger
+            msgpack
+            psycopg
+            structlog
+          ]
+          ++ psycopg.optional-dependencies.pool;
+      };
+
+      django-dramatiq-postgres = final.buildPythonPackage {
         pname = "django-dramatiq-postgres";
         inherit version src meta;
         pyproject = true;
@@ -222,6 +352,7 @@ let
           [
             cron-converter
             django
+            django-pglock
             django-pgtrigger
             dramatiq
             structlog
@@ -230,10 +361,25 @@ let
           ++ dramatiq.optional-dependencies.watch;
       };
 
+      django-postgres-cache = final.buildPythonPackage {
+        pname = "django-postgres-cache";
+        inherit version src meta;
+        pyproject = true;
+
+        sourceRoot = "${src.name}/packages/django-postgres-cache";
+
+        build-system = with final; [ hatchling ];
+
+        propagatedBuildInputs = with final; [
+          django
+          django-postgres-extra
+        ];
+      };
+
       # Running authentik currently requires a custom version.
       # Look in `pyproject.toml` for changes to the rev in the `[tool.uv.sources]` section.
       # See https://github.com/goauthentik/authentik/pull/14057 for latest version bump.
-      djangorestframework = prev.buildPythonPackage {
+      djangorestframework = final.buildPythonPackage {
         pname = "djangorestframework";
         version = "3.16.0";
         format = "setuptools";
@@ -286,75 +432,63 @@ let
         };
       });
 
-      tenant-schemas-celery = prev.tenant-schemas-celery.overrideAttrs (_: rec {
-        version = "3.0.0";
-
-        src = fetchFromGitHub {
-          owner = "maciej-gol";
-          repo = "tenant-schemas-celery";
-          tag = version;
-          hash = "sha256-3ZUXSAOBMtj72sk/VwPV24ysQK+E4l1HdwKa78xrDtg=";
-        };
-      });
-
-      authentik-django = prev.buildPythonPackage {
+      authentik-django = final.buildPythonPackage {
         pname = "authentik-django";
         inherit version src meta;
         pyproject = true;
 
         postPatch = ''
-          rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
             --replace-fail 'Path(__file__).absolute().parent.parent.parent' "Path(\"$out\")"
           substituteInPlace authentik/lib/default.yml \
-            --replace-fail '/blueprints' "$out/blueprints" \
-            --replace-fail './media' '/var/lib/authentik/media'
+            --replace-fail '/blueprints' "$out/blueprints"
           substituteInPlace authentik/stages/email/utils.py \
             --replace-fail 'web/' '${webui}/'
+          # allways allow file upload if the data directoy exists
+          substituteInPlace authentik/admin/files/backends/file.py \
+            --replace-fail "and (self._base_dir.is_mount() or (self._base_dir / self.usage.value).is_mount())" ""
         '';
 
-        nativeBuildInputs = [
-          prev.hatchling
-          prev.pythonRelaxDepsHook
+        build-system = [
+          final.hatchling
         ];
 
         pythonRemoveDeps = [ "dumb-init" ];
 
         pythonRelaxDeps = true;
 
-        propagatedBuildInputs =
+        dependencies =
           with final;
           [
+            ak-guardian
             argon2-cffi
-            celery
+            cachetools
             channels
-            channels-redis
             cryptography
             dacite
             deepmerge
             defusedxml
             django
+            django-channels-postgres
             django-countries
             django-cte
             django-dramatiq-postgres
             django-filter
-            django-guardian
             django-model-utils
             django-pglock
             django-pgtrigger
+            django-postgres-cache
+            django-postgres-extra
             django-prometheus
-            django-redis
             django-storages
             django-tenants
             djangoql
             djangorestframework
-            djangorestframework-guardian
             docker
             drf-orjson-renderer
             drf-spectacular
             duo-client
             fido2
-            flower
             geoip2
             geopy
             google-api-python-client
@@ -383,7 +517,6 @@ let
             setproctitle
             structlog
             swagger-spec-validator
-            tenant-schemas-celery
             twilio
             ua-parser
             unidecode
@@ -396,7 +529,6 @@ let
             zxcvbn
           ]
           ++ django-storages.optional-dependencies.s3
-          ++ opencontainers.optional-dependencies.reggie
           ++ psycopg.optional-dependencies.c
           ++ psycopg.optional-dependencies.pool
           ++ uvicorn.optional-dependencies.standard;
@@ -416,6 +548,31 @@ let
 
   inherit (python.pkgs) authentik-django;
 
+  # Provide a setup-hook to configure the Go vendor directory with up-to-date API bindings.
+  # This is done to avoid the `vendorHash` depending on anything in the `client-go` build (e.g.
+  # openapi-generator-cli version updates changing the produced content) and invalidating the hash.
+  apiGoVendorHook =
+    makeSetupHook
+      {
+        name = "authentik-api-go-vendor-hook";
+      }
+      (
+        writeShellScript "authentik-api-go-vendor-hook" ''
+          authentikApiGoVendorHook() {
+            chmod -R +w vendor/goauthentik.io/api
+            rm -rf vendor/goauthentik.io/api/v3
+            cp -r ${client-go} vendor/goauthentik.io/api/v3
+
+            echo "Finished authentikApiGoVendorHook"
+          }
+
+          # don't run for FOD, e.g. the `goModules` build
+          if [ -z ''${outputHash-} ]; then
+            postConfigureHooks+=(authentikApiGoVendorHook)
+          fi
+        ''
+      );
+
   proxy = buildGoModule {
     pname = "authentik-proxy";
     inherit version src meta;
@@ -429,9 +586,14 @@ let
         --replace-fail './web' "${authentik-django}/web"
     '';
 
+    nativeBuildInputs = [ apiGoVendorHook ];
+
     env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-wTTEDBRYCW1UFaeX49ufLT0c17sacJzcCaW/8cPNYR4=";
+    # calculate the vendorHash without other dependencies, so it is only based on the `go.sum` file
+    overrideModAttrs.postPatch = "";
+
+    vendorHash = "sha256-pdQg02f1K4nOhsnadoplQYOhEybqZxn+yDQRN5RNygM=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
@@ -476,9 +638,10 @@ stdenvNoCC.mkDerivation {
   '';
 
   passthru = {
-    inherit proxy;
+    inherit proxy apiGoVendorHook;
     outposts = callPackages ./outposts.nix {
       inherit (proxy) vendorHash;
+      inherit apiGoVendorHook;
     };
   };
 

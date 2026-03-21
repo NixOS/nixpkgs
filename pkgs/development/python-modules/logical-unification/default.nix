@@ -9,21 +9,28 @@
   pytestCheckHook,
   pytest-html,
   pytest-benchmark,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "logical-unification";
-  version = "0.4.6";
-  format = "setuptools";
+  version = "0.4.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
     tag = "v${version}";
-    hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
+    hash = "sha256-m1wB7WOGb/io4Z7Zfl/rckh08j6IKSiiwFKMvl5UzHg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = [
     toolz
     multipledispatch
   ];
@@ -48,11 +55,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unification" ];
 
-  meta = with lib; {
+  meta = {
     description = "Straightforward unification in Python that's extensible via generic functions";
     homepage = "https://github.com/pythological/unification";
     changelog = "https://github.com/pythological/unification/releases";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ Etjean ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ Etjean ];
   };
 }

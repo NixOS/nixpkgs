@@ -11,9 +11,10 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "r8168-${kernel.version}-${version}";
+  name = "${pname}-${version}-${kernel.version}";
+  pname = "r8168";
   # on update please verify that the source matches the realtek version
-  version = "8.055.00";
+  version = "8.056.02";
 
   # This is a mirror. The original website[1] doesn't allow non-interactive
   # downloads, instead emailing you a download link.
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     owner = "mtorromeo";
     repo = "r8168";
     rev = version;
-    sha256 = "sha256-qL64+jlF1biWaYc5Ga/fjz8ZY3u72bcKVtDpiozHb1g=";
+    sha256 = "sha256-KKfI03RrD+34+KSxwTwDkeB4sGFNY/tU/YbfrfVkTp8=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -36,10 +37,11 @@ stdenv.mkDerivation rec {
   # based on the ArchLinux pkgbuild: https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/r8168
   makeFlags = kernelModuleMakeFlags ++ [
     "-C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
-    "M=$(PWD)/src"
     "modules"
   ];
   preBuild = ''
+    absSrc=$(realpath src)
+    makeFlagsArray+=("M=$absSrc")
     makeFlagsArray+=("EXTRA_CFLAGS=-DCONFIG_R8168_NAPI -DCONFIG_R8168_VLAN -DCONFIG_ASPM -DENABLE_S5WOL -DENABLE_EEE")
   '';
 
@@ -51,16 +53,15 @@ stdenv.mkDerivation rec {
     find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Realtek r8168 driver";
     longDescription = ''
       A kernel module for Realtek 8168 network cards.
       If you want to use this driver, you might need to blacklist the r8169 driver
       by adding "r8169" to boot.blacklistedKernelModules.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
-    broken = lib.versionAtLeast kernel.modDirVersion "6.13";
   };
 }

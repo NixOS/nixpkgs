@@ -15,12 +15,12 @@ mkDerivation rec {
     hash = "sha256-Lmzofq2rKFmfsAoH3zIFB2QLeUhFmIO44JsF+dDrubw=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cubical type theory library for use with the Agda compiler";
     homepage = src.meta.homepage;
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       alexarice
       ryanorendorff
       ncfavier

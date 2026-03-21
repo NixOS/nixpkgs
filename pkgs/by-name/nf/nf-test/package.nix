@@ -4,18 +4,18 @@
   makeWrapper,
   nextflow,
   nf-test,
-  openjdk11,
+  openjdk17,
   stdenv,
   testers,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   pname = "nf-test";
-  version = "0.9.2";
+  version = "0.9.5";
 
   src = fetchurl {
-    url = "https://github.com/askimed/nf-test/releases/download/v${version}/nf-test-${version}.tar.gz";
-    hash = "sha256-v7LgbfKdTvQbMcs1ajdKmSQr742YQ0uL4wN79rPV1No=";
+    url = "https://github.com/askimed/nf-test/releases/download/v${finalAttrs.version}/nf-test-${finalAttrs.version}.tar.gz";
+    hash = "sha256-t2eeuQzclkK/qJ6WNNsCzm5pneU6017w4vSEdjT8FkE=";
   };
   sourceRoot = ".";
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm644 nf-test.jar $out/share/nf-test
 
     mkdir -p $out/bin
-    makeWrapper ${openjdk11}/bin/java $out/bin/nf-test \
+    makeWrapper ${openjdk17}/bin/java $out/bin/nf-test \
       --add-flags "-jar $out/share/nf-test/nf-test.jar" \
       --prefix PATH : ${lib.makeBinPath [ nextflow ]} \
 
@@ -40,13 +40,13 @@ stdenv.mkDerivation rec {
     command = "nf-test version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple test framework for Nextflow pipelines";
     homepage = "https://www.nf-test.com/";
     changelog = "https://github.com/askimed/nf-test/releases";
-    license = licenses.mit;
-    maintainers = with maintainers; [ rollf ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ rollf ];
     mainProgram = "nf-test";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

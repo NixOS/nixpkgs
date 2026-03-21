@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.328.0";
+  version = "2.332.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Q2bscLKdUBPx+5X0qxwtcy3CU6N/wE8yO1CcATSyBQ=";
+    hash = "sha256-jxeuyomWBzynwYHvmNi5CcP9+z2odl7W3uXOGVgv2PY=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -103,10 +103,12 @@ buildDotnetModule (finalAttrs: {
                      'true'
   '';
 
-  DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
-  LOCALE_ARCHIVE = lib.optionalString (
-    !finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
-  ) "${glibcLocales}/lib/locale/locale-archive";
+  env = {
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
+  }
+  // lib.optionalAttrs (!isNull glibcLocales) {
+    LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive";
+  };
 
   postConfigure = ''
     # Generate src/Runner.Sdk/BuildConstants.cs
@@ -220,7 +222,7 @@ buildDotnetModule (finalAttrs: {
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode24RuntimeVersionInAlpineContainerAsync"
   ]
-  ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
+  ++ lib.optionals finalAttrs.env.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
     "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
     "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
     "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"

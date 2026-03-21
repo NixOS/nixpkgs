@@ -10,7 +10,6 @@
   pypdf,
   pytestCheckHook,
   python-bidi,
-  pythonOlder,
   reportlab,
   setuptools,
   svglib,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "xhtml2pdf";
   version = "0.2.17";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "xhtml2pdf";
@@ -65,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = lib.licenses.asl20;
     mainProgram = "xhtml2pdf";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

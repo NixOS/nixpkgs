@@ -18,7 +18,7 @@
   gst_all_1,
   gtk3,
   libappindicator,
-  libfakeXinerama,
+  libfakexinerama,
   librsvg,
   libvpx,
   libwebp,
@@ -41,19 +41,31 @@
   libyuv,
   xauth,
   xdg-utils,
-  xorg,
-  xorgserver,
+  xkeyboard-config,
+  xf86-video-dummy,
+  libxtst,
+  libxres,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  xorgproto,
+  libxkbfile,
+  xorg-server,
   xxHash,
   clang,
   withHtml ? true,
   xpra-html5,
   udevCheckHook,
-}@args:
+}:
 
 let
   inherit (python3.pkgs) cython buildPythonApplication;
 
-  xf86videodummy = xorg.xf86videodummy.overrideDerivation (p: {
+  xf86videodummy = xf86-video-dummy.overrideDerivation (p: {
     patches = [
       # patch provided by Xpra upstream
       ./0002-Constant-DPI.patch
@@ -64,9 +76,9 @@ let
 
   xorgModulePaths = writeText "module-paths" ''
     Section "Files"
-      ModulePath "${xorgserver}/lib/xorg/modules"
-      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
-      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xorg-server}/lib/xorg/modules"
+      ModulePath "${xorg-server}/lib/xorg/modules/extensions"
+      ModulePath "${xorg-server}/lib/xorg/modules/drivers"
       ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
     EndSection
   '';
@@ -86,19 +98,20 @@ let
     mkdir -p $out/include $out/lib/pkgconfig
     substituteAll ${cudaPackages.libnvjpeg.dev}/share/pkgconfig/nvjpeg.pc $out/lib/pkgconfig/nvjpeg.pc
   '';
+  effectiveBuildPythonApplication = buildPythonApplication.override {
+    stdenv = if withNvenc then cudaPackages.backendStdenv else stdenv;
+  };
 in
-buildPythonApplication rec {
+effectiveBuildPythonApplication rec {
   pname = "xpra";
-  version = "6.3.3";
+  version = "6.3.6";
   format = "setuptools";
-
-  stdenv = if withNvenc then cudaPackages.backendStdenv else args.stdenv;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
     repo = "xpra";
     tag = "v${version}";
-    hash = "sha256-hk+C6I/QS6ihwmuNlnoNFipJ98SW6LO+Qa3Uh1h1Ji8=";
+    hash = "sha256-kXe/Pyjzf6CxYtsYP15hgYnj+qricrlXGqi/G3uQMFM=";
   };
 
   patches = [
@@ -113,7 +126,12 @@ buildPythonApplication rec {
     patchShebangs --build fs/bin/build_cuda_kernels.py
   '';
 
-  INCLUDE_DIRS = "${pam}/include";
+  env = {
+    # error: 'import_cairo' defined but not used
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
+
+    INCLUDE_DIRS = "${pam}/include";
+  };
 
   nativeBuildInputs = [
     clang
@@ -125,57 +143,55 @@ buildPythonApplication rec {
   ]
   ++ lib.optional withNvenc cudatoolkit;
 
-  buildInputs =
-    with xorg;
-    [
-      libX11
-      libXcomposite
-      libXdamage
-      libXfixes
-      libXi
-      libxkbfile
-      libXrandr
-      libXrender
-      libXres
-      libXtst
-      xorgproto
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-vaapi
-      gst-plugins-ugly
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ])
-    ++ [
-      atk.out
-      cairo
-      cython
-      ffmpeg
-      gdk-pixbuf
-      glib
-      gtk3
-      libappindicator
-      librsvg
-      libvpx
-      libwebp
-      lz4
-      pam
-      pango
-      x264
-      x265
-      libavif
-      openh264
-      libyuv
-      xxHash
-      systemd
-    ]
-    ++ lib.optional withNvenc [
-      nvencHeaders
-      nvjpegHeaders
-    ];
+  buildInputs = [
+    libx11
+    libxcomposite
+    libxdamage
+    libxfixes
+    libxi
+    libxkbfile
+    libxrandr
+    libxrender
+    libxres
+    libxtst
+    xorgproto
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-vaapi
+    gst-plugins-ugly
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ])
+  ++ [
+    atk.out
+    cairo
+    cython
+    ffmpeg
+    gdk-pixbuf
+    glib
+    gtk3
+    libappindicator
+    librsvg
+    libvpx
+    libwebp
+    lz4
+    pam
+    pango
+    x264
+    x265
+    libavif
+    openh264
+    libyuv
+    xxHash
+    systemd
+  ]
+  ++ lib.optional withNvenc [
+    nvencHeaders
+    nvjpegHeaders
+  ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -213,9 +229,6 @@ buildPythonApplication rec {
       ]
     );
 
-  # error: 'import_cairo' defined but not used
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
-
   setupPyBuildFlags = [
     "--with-Xdummy"
     "--without-Xdummy_wrapper"
@@ -237,13 +250,13 @@ buildPythonApplication rec {
       "''${gappsWrapperArgs[@]}"
       --set XPRA_INSTALL_PREFIX "$out"
       --set XPRA_COMMAND "$out/bin/xpra"
-      --set XPRA_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb"
+      --set XPRA_XKB_CONFIG_ROOT "${xkeyboard-config}/share/X11/xkb"
       --set XORG_CONFIG_PREFIX ""
-      --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
+      --prefix LD_LIBRARY_PATH : ${libfakexinerama}/lib
       --prefix PATH : ${
         lib.makeBinPath [
           getopt
-          xorgserver
+          xorg-server
           xauth
           which
           util-linux
@@ -289,7 +302,6 @@ buildPythonApplication rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
-      offline
       numinit
       mvnetbiz
       lucasew

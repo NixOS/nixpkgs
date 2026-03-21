@@ -8,7 +8,6 @@
   verlib2,
   pueblo,
   pandas,
-  pythonOlder,
   sqlalchemy,
   pytestCheckHook,
   pytz,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "crate";
   version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "crate";
@@ -67,11 +64,11 @@ buildPythonPackage rec {
     "tests/client/test_http.py"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/crate/crate-python";
     description = "Python client library for CrateDB";
     changelog = "https://github.com/crate/crate-python/blob/${version}/CHANGES.txt";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

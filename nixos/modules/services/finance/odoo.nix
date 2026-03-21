@@ -7,13 +7,23 @@
 let
   cfg = config.services.odoo;
   format = pkgs.formats.ini { };
+
+  inherit (config.system) stateVersion;
 in
 {
   options = {
     services.odoo = {
       enable = lib.mkEnableOption "odoo, an open source ERP and CRM system";
 
-      package = lib.mkPackageOption pkgs "odoo" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        description = "Which package to use for the Odoo instance.";
+        relatedPackages = [
+          "odoo17"
+          "odoo18"
+          "odoo19"
+        ];
+      };
 
       addons = lib.mkOption {
         type = with lib.types; listOf package;
@@ -100,13 +110,32 @@ in
         };
       };
 
-      services.odoo.settings.options = {
-        data_dir = "/var/lib/private/odoo/data";
-        proxy_mode = cfg.domain != null;
-      }
-      // (lib.optionalAttrs (cfg.addons != [ ]) {
-        addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
-      });
+      services.odoo = {
+        package = lib.mkDefault (
+          if pkgs ? odoo then
+            throw ''
+              The `pkgs.odoo`-attribute has been removed. If it's supposed to be the default
+              odoo defined in an overlay, please set `services.odoo.package` to
+              `pkgs.odoo`.
+            ''
+          else if lib.versionOlder stateVersion "25.05" then
+            pkgs.odoo18
+          else if lib.versionOlder stateVersion "25.11" then
+            pkgs.odoo18
+          else
+            pkgs.odoo19
+        );
+        settings.options = {
+          data_dir = "/var/lib/private/odoo/data";
+          proxy_mode = cfg.domain != null;
+          # Disable the database manager by default
+          # https://www.odoo.com/documentation/master/administration/on_premise/deploy.html#database-manager-security
+          list_db = lib.mkDefault false;
+        }
+        // (lib.optionalAttrs (cfg.addons != [ ]) {
+          addons_path = lib.concatMapStringsSep "," lib.escapeShellArg cfg.addons;
+        });
+      };
 
       users.users.odoo = {
         isSystemUser = true;

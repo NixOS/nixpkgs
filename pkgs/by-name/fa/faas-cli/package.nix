@@ -22,15 +22,15 @@ let
     }
     .${cpuName} or cpuName;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "faas-cli";
-  version = "0.17.8";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
-    rev = version;
-    sha256 = "sha256-gyd9uX5i5nl7x476SGfBwWUL1hTLsPCCdsmwo783x5Q=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-zPgSmkegq7LsdOk5MQBmv2jAMI4FIwu5jBMWiQSZxL8=";
   };
 
   vendorHash = null;
@@ -42,8 +42,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${version}"
-    "-X github.com/openfaas/faas-cli/version.Version=${version}"
+    "-X github.com/openfaas/faas-cli/version.GitCommit=ref/tags/${finalAttrs.version}"
+    "-X github.com/openfaas/faas-cli/version.Version=${finalAttrs.version}"
     "-X github.com/openfaas/faas-cli/commands.Platform=${faasPlatform stdenv.hostPlatform}"
   ];
 
@@ -66,14 +66,14 @@ buildGoModule rec {
     package = faas-cli;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official CLI for OpenFaaS";
     mainProgram = "faas-cli";
     homepage = "https://github.com/openfaas/faas-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       welteki
       techknowlogick
     ];
   };
-}
+})

@@ -14,14 +14,14 @@
   fmt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ca-certs";
   version = "1.0.1";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ca-certs/releases/download/v${version}/ca-certs-${version}.tbz";
+    url = "https://github.com/mirage/ca-certs/releases/download/v${finalAttrs.version}/ca-certs-${finalAttrs.version}.tbz";
     hash = "sha256-0818j1SLrs7yCNQlh3qBHYmOx9HZxL3qb3hlLHyDYcw=";
   };
 
@@ -42,10 +42,10 @@ buildDunePackage rec {
     fmt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Detect root CA certificates from the operating system";
-    maintainers = [ maintainers.sternenseemann ];
-    license = licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    license = lib.licenses.isc;
     homepage = "https://github.com/mirage/ca-certs";
   };
-}
+})

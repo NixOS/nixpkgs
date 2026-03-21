@@ -7,15 +7,15 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "vexctl";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "openvex";
     repo = "vexctl";
-    tag = "v${version}";
-    hash = "sha256-rJK9OTaEF0PU12m7voMUHPHI2/Je7wh6w2Zr1Ug8+1w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZPQsWTnVZ0B06QNQohUIvQN3/Wfk+LnYi/TOwDIKXug=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,14 +28,14 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-YVMg9tjwJmrqxB2GmVuLkzsGXGlpp5gmZZTmv+PGWPc=";
+  vendorHash = "sha256-G0w5auYmSED6ktTDayfOSu/9QQLTuFCkjW/f9ekn/Hw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X sigs.k8s.io/release-utils/version.gitVersion=v${version}"
+    "-X sigs.k8s.io/release-utils/version.gitVersion=v${finalAttrs.version}"
     "-X sigs.k8s.io/release-utils/version.gitTreeState=clean"
   ];
 
@@ -65,4 +65,4 @@ buildGoModule rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jk ];
   };
-}
+})

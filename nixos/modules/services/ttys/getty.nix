@@ -132,6 +132,12 @@ in
   ###### implementation
 
   config = mkIf config.console.enable {
+    assertions = [
+      {
+        assertion = cfg.loginOptions != null -> cfg.autologinUser == null;
+        message = "services.getty.autoLoginUser has no effect when services.getty.loginOptions is set.";
+      }
+    ];
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';
@@ -151,11 +157,9 @@ in
     # We can't just rely on 'Conflicts=autovt@tty1.service' because
     # 'switch-to-configuration switch' will start 'autovt@tty1.service'
     # and kill the display manager.
-    systemd.targets.getty.wants =
-      lib.mkIf (!(config.systemd.services.display-manager.enable or false))
-        [
-          "autovt@tty1.service"
-        ];
+    systemd.targets.getty.wants = lib.mkIf (!config.services.displayManager.enable) [
+      "autovt@tty1.service"
+    ];
 
     systemd.services."getty@" = {
       serviceConfig.ExecStart = [

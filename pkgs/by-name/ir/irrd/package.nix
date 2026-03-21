@@ -3,7 +3,6 @@
   python3,
   fetchPypi,
   fetchFromGitHub,
-  fetchpatch,
   git,
   postgresql,
   postgresqlTestHook,
@@ -35,26 +34,46 @@ let
         };
         doCheck = false;
       });
+
+      # https://github.com/irrdnet/irrd/blob/0fd95020279060f2bc2816c0533c825e40f4c73c/pyproject.toml#L58C1-L59C1
+      limits = prev.limits.overridePythonAttrs (oldAttrs: rec {
+        version = "5.6.0";
+        src = fetchFromGitHub {
+          owner = "alisaifee";
+          repo = "limits";
+          tag = version;
+          hash = "sha256-kghfF2ihEvyMPEGO1m9BquCdeBsYRoPyIljdLL1hToQ=";
+        };
+        doCheck = false;
+      });
+
+      # ariadne 0.29+ is missing 'convert_kwargs_to_snake_case'
+      ariadne = prev.ariadne.overridePythonAttrs (oldAttrs: rec {
+        version = "0.28.0";
+        src = fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          hash = "sha256-gW66L7djPo4nHjd/UN18IPYFo956wzSqM+p1AZF/qnw=";
+        };
+        patches = [ ];
+        doCheck = false;
+      });
+
     };
   };
 in
 
-py.pkgs.buildPythonPackage rec {
+py.pkgs.buildPythonPackage (finalAttrs: {
   pname = "irrd";
-  version = "4.5.0b1";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "irrdnet";
     repo = "irrd";
-    rev = "v${version}";
-    hash = "sha256-Hr/PbC4N/yrYeQ7bTfqIchDFmaL3c4afxV1XS7FR1F8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-98DXooabwJtjI+m/HNMGBkZKT843bEbTaXJgflVdx/A=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail py-radix py-radix-sr
-  '';
 
   pythonRelaxDeps = true;
 
@@ -122,6 +141,7 @@ py.pkgs.buildPythonPackage rec {
       jinja2
       joserfc
       time-machine
+      service-identity
     ]
     ++ py.pkgs.uvicorn.optional-dependencies.standard;
 
@@ -153,10 +173,10 @@ py.pkgs.buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://irrd.readthedocs.io/en/v${version}/releases/";
+    changelog = "https://irrd.readthedocs.io/en/${finalAttrs.src.tag}/releases/";
     description = "Internet Routing Registry database server, processing IRR objects in the RPSL format";
     license = lib.licenses.mit;
     homepage = "https://github.com/irrdnet/irrd";
-    teams = [ lib.teams.wdz ];
+    maintainers = with lib.maintainers; [ yureka-wdz ];
   };
-}
+})

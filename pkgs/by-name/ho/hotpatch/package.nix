@@ -5,7 +5,7 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hotpatch";
   version = "0.2";
 
@@ -34,15 +34,21 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-loader-test.patch ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6 FATAL_ERROR)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
+  meta = {
     description = "Hot patching executables on Linux using .so file injection";
     mainProgram = "hotpatcher";
-    homepage = src.meta.homepage;
-    license = licenses.bsd3;
+    homepage = finalAttrs.src.meta.homepage;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
     ];
   };
-}
+})

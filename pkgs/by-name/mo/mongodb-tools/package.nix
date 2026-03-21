@@ -6,17 +6,18 @@
   pkg-config,
   libpcap,
   nix-update-script,
+  krb5,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mongo-tools";
-  version = "100.13.0";
+  version = "100.15.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
-    tag = version;
-    hash = "sha256-aQrwJFFdaCIkcnofdGtZ/BMX9KPqr1pHxwm+A04LhXI=";
+    tag = finalAttrs.version;
+    hash = "sha256-BiiqCVuwXLpLO2nksYBzJwDnJYk3vMVwVgldEdvxq78=";
   };
 
   vendorHash = null;
@@ -25,6 +26,7 @@ buildGoModule rec {
   buildInputs = [
     openssl
     libpcap
+    krb5
   ];
 
   # Mongodb incorrectly names all of their binaries main
@@ -47,7 +49,7 @@ buildGoModule rec {
       runHook preBuild
 
       ${lib.concatMapStrings (t: ''
-        go build -o "$out/bin/${t}" -tags ssl -ldflags "-s -w" ./${t}/main
+        go build -o "$out/bin/${t}" -tags "gssapi ssl" -ldflags "-s -w" ./${t}/main
       '') tools}
 
       runHook postBuild
@@ -60,8 +62,7 @@ buildGoModule rec {
     description = "Tools for the MongoDB";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      bryanasdev000
       iamanaws
     ];
   };
-}
+})

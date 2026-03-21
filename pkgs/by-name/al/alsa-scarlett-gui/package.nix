@@ -11,24 +11,24 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-scarlett-gui";
   version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "geoffreybennett";
     repo = "alsa-scarlett-gui";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-DkfpMK0T67B4mnriignf4hx6Ifddls0rN0SxyfEsPZg=";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
   makeFlags = [
     "DESTDIR=\${out}"
     "PREFIX=''"
   ];
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
   postPatch = ''
     substituteInPlace file.c \
@@ -55,12 +55,12 @@ stdenv.mkDerivation rec {
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
+  meta = {
     description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3/4 Mixer Driver";
     mainProgram = "alsa-scarlett-gui";
     homepage = "https://github.com/geoffreybennett/alsa-scarlett-gui";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mdorman ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mdorman ];
+    platforms = lib.platforms.linux;
   };
-}
+})

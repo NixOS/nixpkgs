@@ -5,7 +5,6 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  xorg,
   gtk2,
   sqlite,
   openal,
@@ -17,41 +16,56 @@
   pipewire,
   libpulseaudio,
   dotnet-runtime_8,
+  x11Support ? true,
+  libxi,
+  libxcursor,
+  libx11,
+  waylandSupport ? false,
+  wayland ? null,
+  libxkbcommon ? null,
+  imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+assert x11Support || waylandSupport;
+assert waylandSupport -> wayland != null;
+assert waylandSupport -> libxkbcommon != null;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.21.1";
+  version = "1.21.6";
 
   src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-6b0IXzTawRWdm2blOpMAIDqzzv/S7O3c+5k7xOhRFvI=";
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
+    hash = "sha256-LkiL/8W9MKpmJxtK+s5JvqhOza0BLap1SsaDvbLYR0c=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
-  runtimeLibs = lib.makeLibraryPath (
-    [
-      gtk2
-      sqlite
-      openal
-      cairo
-      libGLU
-      SDL2
-      freealut
-      libglvnd
-      pipewire
-      libpulseaudio
-    ]
-    ++ (with xorg; [
-      libX11
-      libXi
-      libXcursor
-    ])
-  );
+  runtimeLibs = [
+    gtk2
+    sqlite
+    openal
+    cairo
+    libGLU
+    SDL2
+    freealut
+    libglvnd
+    pipewire
+    libpulseaudio
+  ]
+  ++ lib.optionals x11Support [
+    libx11
+    libxi
+    libxcursor
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+    libxkbcommon
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -77,30 +91,39 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/vintagestory $out/bin $out/share/pixmaps $out/share/fonts/truetype
+    mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
     cp -r * $out/share/vintagestory
-    cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
+    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
     runHook postInstall
   '';
 
-  preFixup = ''
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set-default mesa_glthread true \
-      --add-flags $out/share/vintagestory/Vintagestory.dll
+  preFixup =
+    let
+      runtimeLibs' = lib.strings.makeLibraryPath finalAttrs.runtimeLibs;
+    in
+    ''
+      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
+        --set-default mesa_glthread true \
+        ${lib.strings.optionalString waylandSupport ''
+          --set-default OPENTK_4_USE_WAYLAND 1 \
+        ''} \
+        --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
-      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set-default mesa_glthread true \
-      --add-flags $out/share/vintagestory/VintagestoryServer.dll
+      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
+        --set-default mesa_glthread true \
+        --add-flags $out/share/vintagestory/VintagestoryServer.dll
 
-    find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
-      local filename="$(basename -- "$file")"
-      ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
-    done
-  '';
+      find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
+        local filename="$(basename -- "$file")"
+        ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
+      done
+    '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "In-development indie sandbox game about innovation and exploration";
@@ -111,9 +134,8 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [
       artturin
       gigglesquid
-      niraethm
       dtomvan
     ];
     mainProgram = "vintagestory";
   };
-}
+})

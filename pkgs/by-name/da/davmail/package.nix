@@ -1,50 +1,59 @@
 {
   stdenv,
-  fetchzip,
+  fetchFromGitHub,
   lib,
+  nix-update-script,
   makeWrapper,
-  unzip,
   glib,
   gtk2,
   gtk3,
-  jdk11,
-  libXtst,
+  ant,
+  jdk,
+  libxtst,
   coreutils,
   gnugrep,
-  zulu11,
   preferGtk3 ? true,
-  preferZulu ? true,
 }:
 
 let
-  rev = 3627;
-  jre' = (if preferZulu then zulu11 else jdk11).override { enableJavaFX = true; };
+  jre' = jdk.override { enableJavaFX = true; };
   gtk' = if preferGtk3 then gtk3 else gtk2;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "davmail";
-  version = "6.3.0";
+  version = "6.5.1";
 
-  src = fetchzip {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-${toString rev}.zip";
-    hash = "sha256-zJMwCFX/uJnLeThj6/t2usBRM+LIuamZt0EFLG3N+8k=";
-    stripRoot = false;
+  src = fetchFromGitHub {
+    owner = "mguessan";
+    repo = "davmail";
+    tag = finalAttrs.version;
+    hash = "sha256-D/MEWq696PFXlarQZdSrTS9VFODg7u7yhUsbCwHV9qs=";
   };
 
-  postPatch = ''
-    sed -i -e '/^JAVA_OPTS/d' davmail
+  buildPhase = ''
+    runHook preBuild
+
+    ant prepare-dist
+    sed -i -e '/^JAVA_OPTS/d' ./dist/davmail
+
+    runHook postBuild
   '';
 
   nativeBuildInputs = [
     makeWrapper
-    unzip
+    ant
+  ];
+
+  buildInputs = [
+    jre'
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/share/davmail
-    cp -vR ./* $out/share/davmail
+    cp -R ./dist/{lib,davmail{,.jar}} $out/share/davmail
+    chmod +x $out/share/davmail/davmail
     makeWrapper $out/share/davmail/davmail $out/bin/davmail \
       --set-default JAVA_OPTS "-Xmx512M -Dsun.net.inetaddr.ttl=60 -Djdk.gtk.version=${lib.versions.major gtk'.version}" \
       --prefix PATH : ${
@@ -58,19 +67,21 @@ stdenv.mkDerivation rec {
         lib.makeLibraryPath [
           glib
           gtk'
-          libXtst
+          libxtst
         ]
       }
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Java application which presents a Microsoft Exchange server as local CALDAV, IMAP and SMTP servers";
     homepage = "https://davmail.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
     mainProgram = "davmail";
   };
-}
+})

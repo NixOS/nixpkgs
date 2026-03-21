@@ -11,23 +11,20 @@
   pillow,
   pkg-config,
   pygobject3,
-  pythonOlder,
   SDL2,
   soundtouch,
 }:
 
 buildPythonPackage rec {
   pname = "py-desmume";
-  version = "0.0.7";
+  version = "0.0.9";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "py-desmume";
     tag = version;
-    hash = "sha256-aH7f/BI89VLUGqwA8Y7ThSpmKxWffYRETT/+EjPVTg8=";
+    hash = "sha256-AlejNgCgncZGCS/xOb3FZiLuEtMsMcprnhnM759aKgY=";
     fetchSubmodules = true;
   };
 
@@ -57,10 +54,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "desmume" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to interface with DeSmuME, the Nintendo DS emulator";
     homepage = "https://github.com/SkyTemple/py-desmume";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ marius851000 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ marius851000 ];
   };
 }

@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pulsar-client";
-  version = "3.8.0";
+  version = "3.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
     tag = "v${version}";
-    hash = "sha256-0EeQiYEYdER6qPQUYsk/OwYKiPWG0oymG5eiB01Oysk=";
+    hash = "sha256-TxX+om+uKjZlgG10qcLAddiUisBWLxBfBSHEHGix1d4=";
   };
 
   build-system = [
@@ -67,7 +67,7 @@ buildPythonPackage rec {
       ratelimit
     ];
     avro = [ fastavro ];
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
   };
 
   nativeCheckInputs = [
@@ -89,6 +89,6 @@ buildPythonPackage rec {
     homepage = "https://pulsar.apache.org/docs/next/client-libraries-python/";
     changelog = "https://github.com/apache/pulsar-client-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
   };
 }

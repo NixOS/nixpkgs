@@ -1,6 +1,5 @@
 {
   fetchFromSourcehut,
-  fetchpatch,
   hareHook,
   haredo,
   lib,
@@ -9,7 +8,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "treecat";
-  version = "1.0.2-unstable-2023-11-28";
+  version = "1.0.3";
 
   outputs = [
     "out"
@@ -19,17 +18,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromSourcehut {
     owner = "~autumnull";
     repo = "treecat";
-    rev = "d277aed99eb48eef891b76916a61029989c41d2d";
-    hash = "sha256-4A01MAGkBSSzkyRw4omNbLoX8z+pHfoUO7/6QvEUu70=";
+    tag = finalAttrs.version;
+    hash = "sha256-UCGx1v+AP9BeAktrniTXctkPp5mprf77fkapdhPWrqg=";
   };
-
-  patches = [
-    # Update for Hare 0.24.2.
-    (fetchpatch {
-      url = "https://git.sr.ht/~autumnull/treecat/commit/53ad8126261051dd3b3493c34ae49f23db2c2d16.patch";
-      hash = "sha256-cF/lMZjg1hB93rBXcjecT5Rrzb2Y73u6DSW1WcP5Vek=";
-    })
-  ];
 
   nativeBuildInputs = [
     hareHook
@@ -37,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  env.PREFIX = builtins.placeholder "out";
+  env.PREFIX = placeholder "out";
 
   dontConfigure = true;
 

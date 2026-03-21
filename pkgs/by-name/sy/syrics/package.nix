@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "syrics";
-  version = "0.1.2.4";
+  version = "0.1.2.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "akashrchandran";
     repo = "syrics";
-    tag = "v${version}";
-    hash = "sha256-udW6i3nRWECXpQGGGK2U8QVRJVrsHeqjDK8QCMH5I8s=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VV/IZg30GatCGRoKnSro83ZtitnHg4+UEnXajVR7o/A=";
   };
 
   build-system = [
@@ -39,4 +39,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ yogansh ];
     mainProgram = "syrics";
   };
-}
+})

@@ -197,13 +197,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpd";
-  version = "0.24.5";
+  version = "0.24.9";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "MPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-MgepOQeOl+n65+7b8zXe2u0fCHFAviSqL1aNu2iSXiM=";
+    sha256 = "sha256-WBIPGdn8Hg/YH236epiNuenp8XwHoBcmgJa+CApIjBE=";
   };
 
   buildInputs = [
@@ -232,9 +232,15 @@ stdenv.mkDerivation (finalAttrs: {
       (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "12.0")
       ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
-          --replace kAudioObjectPropertyElement{Main,Master} \
-          --replace kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
-      '';
+          --replace-fail kAudioObjectPropertyElement{Main,Master} \
+          --replace-fail kAudioHardwareServiceDeviceProperty_Virtual{Main,Master}Volume
+      ''
+    +
+      lib.optionalString
+        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "13.3")
+        ''
+          sed -i "/subdir('time')/d" test/meson.build
+        '';
 
   # Otherwise, the meson log says:
   #
@@ -251,22 +257,26 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (builtins.elem "documentation" features_) "man";
 
-  CXXFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
-  ];
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    CXXFLAGS = toString [
+      "-D__ASSERT_MACROS_DEFINE_VERSIONS_WITHOUT_UNDERSCORES=0"
+    ];
+  };
 
   mesonFlags = [
-    "-Dtest=true"
-    "-Dmanpages=true"
-    "-Dhtml_manual=true"
+    (lib.mesonBool "test" true)
+    (lib.mesonBool "manpages" true)
+    (lib.mesonBool "html_manual" true)
   ]
-  ++ map (x: "-D${x}=enabled") features_
-  ++ map (x: "-D${x}=disabled") (lib.subtractLists features_ knownFeatures)
+  ++ map (x: lib.mesonEnable x true) features_
+  ++ map (x: lib.mesonEnable x false) (lib.subtractLists features_ knownFeatures)
   ++ lib.optional (builtins.elem "zeroconf" features_) (
-    "-Dzeroconf=" + (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
+    lib.mesonOption "zeroconf" (if stdenv.hostPlatform.isDarwin then "bonjour" else "avahi")
   )
-  ++ lib.optional (builtins.elem "systemd" features_) "-Dsystemd_system_unit_dir=etc/systemd/system"
-  ++ lib.optional (builtins.elem "qobuz" features_) "-Dnlohmann_json=enabled";
+  ++ lib.optional (builtins.elem "systemd" features_) (
+    lib.mesonOption "systemd_system_unit_dir" "etc/systemd/system"
+  )
+  ++ lib.optional (builtins.elem "qobuz" features_) (lib.mesonEnable "nlohmann_json" true);
 
   passthru.tests.nixos = nixosTests.mpd;
 
@@ -276,6 +286,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       tobim
+      doronbehar
     ];
     platforms = lib.platforms.unix;
     mainProgram = "mpd";

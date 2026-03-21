@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "mongodb-vscode";
     publisher = "mongodb";
-    version = "1.14.0";
-    hash = "sha256-cd/dJO2I9heMVNJjGlBO1+c3wGVF+EuycDa+s/aDBxM=";
+    version = "1.15.1";
+    hash = "sha256-wdZ4Ro+L6We9GScVIlOBghPFv41xJD7x11Ni3iPshOI=";
   };
 
   meta = {
@@ -14,6 +14,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=mongodb.mongodb-vscode";
     homepage = "https://github.com/mongodb-js/vscode";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

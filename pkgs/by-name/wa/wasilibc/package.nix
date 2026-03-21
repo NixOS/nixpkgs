@@ -19,6 +19,12 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # These flags break pkgsCross.wasi32.llvmPackages.libcxx
+  hardeningDisable = [
+    "libcxxhardeningfast"
+    "libcxxhardeningextensive"
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -33,9 +39,9 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
   '';
 
   preBuild = ''
-    export SYSROOT_LIB=${builtins.placeholder "out"}/lib
-    export SYSROOT_INC=${builtins.placeholder "dev"}/include
-    export SYSROOT_SHARE=${builtins.placeholder "share"}/share
+    export SYSROOT_LIB=${placeholder "out"}/lib
+    export SYSROOT_INC=${placeholder "dev"}/include
+    export SYSROOT_SHARE=${placeholder "share"}/share
     mkdir -p "$SYSROOT_LIB" "$SYSROOT_INC" "$SYSROOT_SHARE"
     makeFlagsArray+=(
       "SYSROOT_LIB:=$SYSROOT_LIB"
@@ -58,17 +64,16 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     inherit firefox-unwrapped firefox-esr-unwrapped;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-${finalAttrs.version}";
     description = "WASI libc implementation for WebAssembly";
     homepage = "https://wasi.dev";
-    platforms = platforms.wasi;
-    maintainers = with maintainers; [
-      matthewbauer
+    platforms = lib.platforms.wasi;
+    maintainers = with lib.maintainers; [
       rvolosatovs
       wucke13
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       llvm-exception
       mit

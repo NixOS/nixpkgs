@@ -14,18 +14,18 @@
   zlib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciel";
-  version = "3.9.8";
+  version = "3.10.1";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
-    tag = "v${version}";
-    hash = "sha256-swYIy+e+N4MVmNXSttLUWKmG2xj9TA9sWwCrIdo+gIA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-g1+LSu3K+GOqlHGYbJNHjWHzEnrVI/8rGq8uUPqDCLc=";
   };
 
-  cargoHash = "sha256-RBtERA9CkTdW++ikHkV1X11hg49IrvVFIdTi1qQp+ok=";
+  cargoHash = "sha256-ez+gm8sLqjcZznrvH776r1kFpeHADkA/b13zdO6UqiU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -58,15 +58,15 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_ciel
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for controlling AOSC OS packaging environments using multi-layer filesystems and containers";
     homepage = "https://github.com/AOSC-Dev/ciel-rs";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       A1ca7raz
       yisuidenghua
     ];
     mainProgram = "ciel";
   };
-}
+})

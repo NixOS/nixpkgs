@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   boost,
   gtest,
   llvmPackages,
   meson,
+  mesonEmulatorHook,
   ninja,
   nixVersions,
   nix-update-script,
@@ -22,13 +24,13 @@
 let
   nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.7.0";
+    version = "2.9.0";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-VPUX/68ysFUr1S8JW9I1rU5UcRoyZiCjL+9u2owrs6w=";
+      hash = "sha256-/IU5yJQzUwv/d4mXr+m/AKrw7ufY8r+JAysUhhaHUZY=";
     };
 
     nativeBuildInputs = [
@@ -36,6 +38,7 @@ let
       ninja
       python3
       pkg-config
+      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
@@ -71,7 +74,12 @@ in
         "dev"
       ];
 
+      nativeBuildInputs =
+        common.nativeBuildInputs
+        ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+
       buildInputs = [
+        nixComponents.nix-expr
         gtest
         boost
         nlohmann_json
@@ -125,6 +133,17 @@ in
     common
     // {
       pname = "nixd";
+
+      patches = [
+        # Pull upstream fix for boost-1.89 & boost 1.87 support:
+        #   https://github.com/nix-community/nixd/pull/783
+        (fetchpatch {
+          name = "boost-1.89.patch";
+          url = "https://github.com/nix-community/nixd/commit/11dfdf5f2db2e0fc1fea0349fb68739a9c747a41.patch";
+          hash = "sha256-aCb9wRKqZSuUXmamzjpYe0vRqEQh4tenwoScv+juYK8=";
+          stripLen = 1;
+        })
+      ];
 
       sourceRoot = "${common.src.name}/nixd";
 

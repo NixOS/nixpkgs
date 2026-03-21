@@ -15,12 +15,13 @@
   kitemviews,
   kwidgetsaddons,
   qtquickcontrols2 ? null,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kirigami ? null,
   kirigami2 ? null,
   isocodes,
-  xkeyboardconfig,
+  xkeyboard-config,
   libxkbfile,
   libplasma ? null,
   plasma-framework ? null,
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.1.10";
+  version = "5.1.13";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-Py2UDBQRqvT7kwZeQIXKrIjGAbOjjxEyEfO5tdtizW4=";
+    hash = "sha256-STx2S5fuaZCsGoM8nsihYoW+C1GdkD3K7pT84aMRI9c=";
   };
 
   cmakeFlags = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation rec {
     kitemviews
     kwidgetsaddons
     isocodes
-    xkeyboardconfig
+    xkeyboard-config
     libxkbfile
   ]
   ++ lib.optionals (lib.versions.major qtbase.version == "5") [
@@ -78,17 +79,18 @@ stdenv.mkDerivation rec {
       kirigami2
     ]
     ++ lib.optionals (lib.versions.major qtbase.version == "6") [
+      kcmutils
       libplasma
       kirigami
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "Configuration Tool for Fcitx5";
     homepage = "https://github.com/fcitx/fcitx5-configtool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ poscat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ poscat ];
+    platforms = lib.platforms.linux;
     mainProgram = "fcitx5-config-qt";
   };
 }

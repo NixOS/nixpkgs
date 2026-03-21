@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchzip,
   makeWrapper,
   premake5,
@@ -24,9 +25,9 @@
   libjpeg,
   libpng,
   libvorbis,
-  libX11,
+  libx11,
   libxkbcommon,
-  libXxf86vm,
+  libxxf86vm,
   mono,
   nlohmann_json,
   openal,
@@ -85,9 +86,9 @@ let
 
     buildInputs = [
       libGLU
-      libX11
+      libx11
       libxkbcommon
-      libXxf86vm
+      libxxf86vm
       wayland
     ];
 
@@ -216,12 +217,22 @@ let
       sqlite
     ];
 
+    patches = [
+      # fmt::localtime was deprecated and removed
+      # Remove when version > 41.0.2
+      (fetchpatch {
+        name = "0001-edopro-No-longer-depend-on-fmt-for-localtime.patch";
+        url = "https://github.com/edo9300/edopro/commit/c40951ba09f8a8b88d1d4b9b15ca9338da01522c.patch";
+        hash = "sha256-wiZRCwSTp9/G97a+zaYjJgmDrc57/5bSBSYur1dcTfA=";
+      })
+    ];
+
     # nixpkgs' gcc stack currently appears to not support LTO
     # Override where bundled ocgcore get looked up in, so we can supply ours
     # (can't use --prebuilt-core or let it build a core on its own without making core updates impossible)
     postPatch = ''
       substituteInPlace premake5.lua \
-        --replace-fail 'flags "LinkTimeOptimization"' 'removeflags "LinkTimeOptimization"'
+        --replace-fail 'flags "LinkTimeOptimization"' 'linktimeoptimization "Off"'
 
       substituteInPlace gframe/game.cpp \
         --replace-fail 'ocgcore = LoadOCGcore(Utils::GetWorkingDirectory())' 'ocgcore = LoadOCGcore("${lib.getLib ocgcore}/lib/")'
@@ -266,9 +277,9 @@ let
         --prefix LD_LIBRARY_PATH : ${
           lib.makeLibraryPath [
             libGL
-            libX11
+            libx11
             libxkbcommon
-            libXxf86vm
+            libxxf86vm
             sqlite
             wayland
             egl-wayland
@@ -385,7 +396,7 @@ let
   '';
 in
 symlinkJoin {
-  name = "edopro-application-${deps.edopro-version}";
+  pname = "edopro-application";
   version = deps.edopro-version;
   paths = [
     edopro-script

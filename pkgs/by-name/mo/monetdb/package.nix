@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
-  version = "11.53.13";
+  version = "11.55.3";
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-CTTLztClNXLFAFo0xsMqSb+FSbkEx+1E2+j/ljfME2A=";
+    hash = "sha256-40FFpQgu6GPoy2HpEyOmX6+79F9ROaORmPtrXtKaZ5A=";
   };
 
   nativeBuildInputs = [
@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) monetdb; };
 
-  meta = with lib; {
+  meta = {
     description = "Open source database system";
     homepage = "https://www.monetdb.org/";
-    license = licenses.mpl20;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.StillerHarpo ];
+    license = lib.licenses.mpl20;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.StillerHarpo ];
   };
 })

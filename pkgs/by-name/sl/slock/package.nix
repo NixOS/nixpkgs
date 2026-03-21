@@ -4,9 +4,9 @@
   fetchzip,
   writeText,
   xorgproto,
-  libX11,
-  libXext,
-  libXrandr,
+  libx11,
+  libxext,
+  libxrandr,
   libxcrypt,
   config,
   conf ? config.slock.conf or null,
@@ -27,9 +27,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     xorgproto
-    libX11
-    libXext
-    libXrandr
+    libx11
+    libxext
+    libxrandr
     libxcrypt
   ]
   ++ extraLibs;

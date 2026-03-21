@@ -8,26 +8,25 @@
   rdkafka,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustus";
   version = "1.1.3";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "s3rius";
     repo = "rustus";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ALnb6ICg+TZRuHayhozwJ5+imabgjBYX4W42ydhkzv0=";
   };
 
   cargoHash = "sha256-df92+gp/DtdHwPxJF89zKHjmVWzfrjnD8wAlrPRyyxk=";
 
-  env.OPENSSL_NO_VENDOR = 1;
+  env = {
+    OPENSSL_NO_VENDOR = 1;
 
-  # needed to dynamically link rdkafka
-  CARGO_FEATURE_DYNAMIC_LINKING = 1;
+    # needed to dynamically link rdkafka
+    CARGO_FEATURE_DYNAMIC_LINKING = 1;
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -65,4 +64,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ happysalada ];
     platforms = lib.platforms.all;
   };
-}
+})

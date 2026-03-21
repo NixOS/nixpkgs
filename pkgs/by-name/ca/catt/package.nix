@@ -3,13 +3,13 @@
   fetchPypi,
   python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "catt";
   version = "0.13.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-hlCB06l4nzafvcnBNCXWiJsJNmP8n731bQgq5xvUZvM=";
   };
 
@@ -34,9 +34,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Send media from online sources to Chromecast devices";
     homepage = "https://github.com/skorokithakis/catt";
-    changelog = "https://github.com/skorokithakis/catt/releases/tag/v${version}";
+    changelog = "https://github.com/skorokithakis/catt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.RossSmyth ];
     mainProgram = "catt";
   };
-}
+})

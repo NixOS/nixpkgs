@@ -31,11 +31,16 @@ stdenv.mkDerivation {
     "OUTPUT=$(libName)"
     "HIDOBJ="
   ];
-  NIX_LDFLAGS = [
-    "-lpugixml"
-    "-lhidapi${hidapiDriver}"
-  ];
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${hidapi}/include/hidapi" ];
+
+  env = {
+    NIX_LDFLAGS = toString [
+      "-lpugixml"
+      "-lhidapi${hidapiDriver}"
+    ];
+    NIX_CFLAGS_COMPILE = toString [
+      "-I${hidapi}/include/hidapi"
+    ];
+  };
 
   patches = [ ./bsl430.patch ];
 
@@ -60,11 +65,11 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux libusb1;
 
-  meta = with lib; {
+  meta = {
     description = "TI MSP430 FET debug driver";
     homepage = "https://www.ti.com/tool/MSPDS";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ aerialx ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ aerialx ];
   };
 }

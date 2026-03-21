@@ -11,17 +11,15 @@
   sdl3,
   stdenv,
 }:
-let
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "lite-xl";
   version = "2.1.8";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9JpD7f5vOGhLW8dBjjYUI5PSaz/XWW5sIOZCAbKhxtE=";
   };
 
@@ -39,6 +37,12 @@ stdenv.mkDerivation {
     sdl3
   ];
 
+  # Fix SDL3 static linking issue
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "dependency('sdl3', static: true)" "dependency('sdl3', static: false)"
+  '';
+
   mesonFlags = [
     "-Duse_system_lua=true"
   ];
@@ -54,4 +58,4 @@ stdenv.mkDerivation {
     platforms = lib.platforms.unix;
     mainProgram = "lite-xl";
   };
-}
+})

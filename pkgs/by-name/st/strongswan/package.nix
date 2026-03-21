@@ -120,15 +120,15 @@ let
     tss-tss2 = true;
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strongswan";
-  version = "6.0.2"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+  version = "6.0.4"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
-    tag = version;
-    hash = "sha256-wjz41gt+Xu4XJkEXRRVl3b3ryEoEtijeqmfVFoRjnA4=";
+    tag = finalAttrs.version;
+    hash = "sha256-KRfEH7puwn+PgQvOrkTEowPnGzCtXdsUqg7wBNMypkQ=";
   };
 
   patches = [
@@ -192,10 +192,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "OpenSource IPsec-based VPN solution";
     homepage = "https://www.strongswan.org/";
-    changelog = "https://github.com/strongswan/strongswan/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/strongswan/strongswan/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "swanctl";
     platforms = lib.platforms.unix;
   };
-}
+})

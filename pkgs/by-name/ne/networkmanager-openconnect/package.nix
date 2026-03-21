@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "1.2.10";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/NetworkManager-openconnect-${version}.tar.xz";
     sha256 = "hEtr9k7K25e0pox3bbiapebuflm9JLAYAihAaGMTZGQ=";
   };
 
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--enable-absolute-paths"
   ];
 
@@ -75,9 +75,9 @@ stdenv.mkDerivation rec {
     networkManagerRuntimeDeps = [ openconnect ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager’s OpenConnect plugin";
     inherit (networkmanager.meta) maintainers teams platforms;
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 }

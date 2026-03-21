@@ -1,9 +1,7 @@
 {
   lib,
-  flutter324,
+  flutter332,
   fetchFromGitHub,
-  webkitgtk_4_1,
-  sqlite,
   libayatana-appindicator,
   makeDesktopItem,
   copyDesktopItems,
@@ -15,17 +13,18 @@ let
   # which would also clone a whole copy of flutter
   simple-icons = fetchFromGitHub (lib.importJSON ./simple-icons.json);
   desktopId = "io.ente.auth";
+  flutter = flutter332;
 in
-flutter324.buildFlutterApplication rec {
+flutter.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.4";
+  version = "4.4.17";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    sparseCheckout = [ "mobile/apps/auth" ];
+    sparseCheckout = [ "mobile" ];
     tag = "auth-v${version}";
-    hash = "sha256-VpxF6BMofCgMWcxsscbYC3uYse0QZyTBf84zN03leC4=";
+    hash = "sha256-qnjOrct70TaaO91QBHcbRIkzLZGH6mbpuLAAKE9k/es=";
   };
 
   sourceRoot = "${src.name}/mobile/apps/auth";
@@ -33,10 +32,39 @@ flutter324.buildFlutterApplication rec {
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
 
-  patches = [
-    # Disable update notifications and auto-update functionality
-    ./0001-disable-updates.patch
-  ];
+  customSourceBuilders.ente_strings =
+    { version, src, ... }:
+    # There currently is no covenient way to setup the flutter SDK outside of apps
+    # and we can't move this to the app's own build phase as it would still reference
+    # the immutable source variant without the generated l10n files.
+    flutter.buildFlutterApplication {
+      inherit version src;
+      inherit (src) passthru;
+      pname = "ente_strings";
+      sourceRoot = "${src.name}/mobile/packages/strings";
+      pubspecLock = lib.importJSON ./strings.pubspec.lock.json;
+
+      buildPhase = ''
+        runHook preBuild
+
+        flutter gen-l10n
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        # The $debug output can't be disabled for buildFlutterApplication.
+        # The $out structure must match that of ente-auth to correctly resolve
+        # the package as pubspec uses relative paths for workspace packages.
+        mkdir -p $debug $out/mobile/{apps/auth,packages}
+        rm pubspec.lock
+        cp -r . $out/mobile/packages/strings
+
+        runHook postInstall
+      '';
+    };
 
   postPatch = ''
     rmdir assets/simple-icons
@@ -49,8 +77,6 @@ flutter324.buildFlutterApplication rec {
   ];
 
   buildInputs = [
-    webkitgtk_4_1
-    sqlite
     libayatana-appindicator
     # The networking client used by ente-auth (native_dio_adapter)
     # introduces a transitive dependency on Java, which technically
@@ -58,6 +84,14 @@ flutter324.buildFlutterApplication rec {
     # Unfortunately, attempts to remove it from the build entirely were
     # unsuccessful.
     jdk17_headless # JDK version used by upstream CI
+  ];
+
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
+
+  flutterBuildFlags = [
+    # Disable update notifications and auto-update functionality
+    "--dart-define=app.flavor=independent"
   ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
@@ -111,7 +145,6 @@ flutter324.buildFlutterApplication rec {
       schnow265
       zi3m5f
       gepbird
-      iedame
     ];
     mainProgram = "enteauth";
     platforms = [

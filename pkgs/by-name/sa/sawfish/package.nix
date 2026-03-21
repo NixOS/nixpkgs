@@ -6,12 +6,12 @@
   gdk-pixbuf-xlib,
   gettext,
   gtk2-x11,
-  libICE,
-  libSM,
+  libice,
+  libsm,
   libxcrypt,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libxinerama,
+  libxrandr,
+  libxtst,
   librep,
   makeWrapper,
   pango,
@@ -46,12 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gdk-pixbuf-xlib
     gtk2-x11
-    libICE
-    libSM
+    libice
+    libsm
     libxcrypt
-    libXinerama
-    libXrandr
-    libXtst
+    libxinerama
+    libxrandr
+    libxtst
     librep
     pango
     rep-gtk
@@ -77,11 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  # fixes:
+  # sawfish.h:52:13: error: 'bool' cannot be defined via 'typedef'
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
   versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   meta = {
@@ -95,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       extensibility or redefinition.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "sawfish";
   };

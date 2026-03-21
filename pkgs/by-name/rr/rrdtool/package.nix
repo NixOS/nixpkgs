@@ -15,14 +15,14 @@
 }:
 
 perl.pkgs.toPerlModule (
-  stdenv.mkDerivation rec {
+  stdenv.mkDerivation (finalAttrs: {
     pname = "rrdtool";
     version = "1.9.0";
 
     src = fetchFromGitHub {
       owner = "oetiker";
       repo = "rrdtool-1.x";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       hash = "sha256-CPbSu1mosNlfj2nqiNVH14a5C5njkfvJM8ix3X3aP8E=";
     };
 
@@ -55,12 +55,12 @@ perl.pkgs.toPerlModule (
       mv $out/lib/perl/5* $out/${perl.libPrefix}
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://oss.oetiker.ch/rrdtool/";
       description = "High performance logging in Round Robin Databases";
-      license = licenses.gpl2Only;
-      platforms = platforms.linux ++ platforms.darwin;
-      maintainers = with maintainers; [ pSub ];
+      license = lib.licenses.gpl2Only;
+      platforms = lib.platforms.linux ++ lib.platforms.darwin;
+      maintainers = with lib.maintainers; [ pSub ];
     };
-  }
+  })
 )

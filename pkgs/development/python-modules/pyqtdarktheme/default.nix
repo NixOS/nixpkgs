@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   darkdetect,
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "pyqtdarktheme";
   version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "5yutan5";
@@ -54,10 +51,10 @@ buildPythonPackage rec {
     export QT_QPA_PLATFORM=offscreen
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Flat dark theme for PySide and PyQt";
     homepage = "https://pyqtdarktheme.readthedocs.io/en/stable";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brogue-ce";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "tmewett";
     repo = "BrogueCE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-habmfq1jZa70eggLOgsPT6j1OGmmQ6qmWcCwRN2G4Fo=";
+    hash = "sha256-a+gzaBhQq9xgEVM20X+pbu7xzUcKzylxYk9qu9GQOAw=";
   };
 
   postPatch = ''
@@ -82,14 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     mv Brogue.app "$out/Applications/Brogue CE.app"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Community-lead fork of the minimalist roguelike game Brogue";
     mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

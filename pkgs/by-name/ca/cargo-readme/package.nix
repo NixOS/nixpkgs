@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-readme";
   version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "webern";
     repo = "cargo-readme";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-FFWHADATEfvZvxGwdkj+eTVoq7pnPuoUAhMGTokUkMs=";
   };
 
@@ -23,17 +23,17 @@ rustPlatform.buildRustPackage rec {
     "--lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Generate README.md from docstrings";
     mainProgram = "cargo-readme";
     homepage = "https://github.com/livioribeiro/cargo-readme";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       baloo
       matthiasbeyer
     ];
   };
-}
+})

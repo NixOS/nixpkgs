@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
-  version = "1.6.2";
+  version = "1.6.6";
 
   deps = stdenv.mkDerivation {
     name = "metals-deps-${finalAttrs.version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-WcPgX0GZSqpVVAzQ1zCxuRCkwcuR/8bwGjSCpHneeio=";
+    outputHash = "sha256-Snx4JvWOTkJcihVRwj25op4BJqmChz+1fZH/PrCCbt0=";
   };
 
   nativeBuildInputs = [
@@ -43,12 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scalameta.org/metals/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Language server for Scala";
     mainProgram = "metals";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fabianhjr
       jpaju
       tomahna

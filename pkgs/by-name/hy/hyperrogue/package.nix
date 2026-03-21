@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyperrogue";
-  version = "13.1e";
+  version = "13.1i";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-teoSI6JrqDAkyNhVaIVZcfM93LxjQah0+eJFKfI5iP4=";
+    sha256 = "sha256-JFSPbcbPuTKq9TNMCwpjDOEaI3SdAfcnSIi/uZkYT7w=";
   };
 
   env = {
@@ -32,13 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
     HYPERROGUE_USE_GLEW = 1;
     HYPERROGUE_USE_PNG = 1;
     HYPERROGUE_USE_ROGUEVIZ = 1;
-  };
 
-  CXXFLAGS = [
-    "-I${lib.getDev SDL}/include/SDL"
-    "-DHYPERPATH='\"${placeholder "out"}/share/hyperrogue/\"'"
-    "-DRESOURCEDESTDIR=HYPERPATH"
-  ];
+    CXXFLAGS = toString [
+      "-I${lib.getDev SDL}/include/SDL"
+      "-DHYPERPATH='\"${placeholder "out"}/share/hyperrogue/\"'"
+      "-DRESOURCEDESTDIR=HYPERPATH"
+    ];
+  };
 
   nativeBuildInputs = [
     pkg-config
@@ -101,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 

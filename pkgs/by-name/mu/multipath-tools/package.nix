@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "multipath-tools";
-  version = "0.12.0";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "opensvc";
     repo = "multipath-tools";
     tag = finalAttrs.version;
-    hash = "sha256-Jeiy1bM7vuy2+r/0W1nAhgsncyV6QHdlV55aepAxHAg=";
+    hash = "sha256-fkpBvadQAR+oiFeyar7flwL8N69RoWhwOaiYSwYCbXs=";
   };
 
   nativeBuildInputs = [
@@ -51,9 +51,11 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   makeFlags = [
+    "WARN_ONLY=1"
     "LIB=lib"
     "prefix=$(out)"
     "systemd_prefix=$(out)"
+    "etc_prefix=/"
     "kernel_incdir=${linuxHeaders}/include/"
     "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"

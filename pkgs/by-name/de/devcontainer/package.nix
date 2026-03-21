@@ -4,7 +4,8 @@
   fetchYarnDeps,
   fetchFromGitHub,
   fixup-yarn-lock,
-  nodejs_20,
+  nodejs,
+  node-gyp,
   python3,
   makeBinaryWrapper,
   git,
@@ -13,24 +14,20 @@
   docker-compose,
   nix-update-script,
 }:
-
-let
-  nodejs = nodejs_20; # does not build with 22
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "devcontainer";
-  version = "0.80.1";
+  version = "0.84.0";
 
   src = fetchFromGitHub {
     owner = "devcontainers";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-riDe8j/DCSuXpuFi27tmT5KjruuJiCrUeP022V4sYjU=";
+    hash = "sha256-gXhGMMSTBEK5uwtTjc/NxUiaW8unjAihbLsH6qM8ukk=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-joctNMzQXC/A9A69sJkKbED9pqMcbK1ZYiHPdJBJKCE=";
+    hash = "sha256-yTetnr4Z1qqSPwfQHuR7uqQpDFPFHlGu6+//yoIx1jA=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     makeBinaryWrapper
     nodejs
+    node-gyp
   ];
 
   buildPhase = ''

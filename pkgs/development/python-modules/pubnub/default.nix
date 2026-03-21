@@ -11,23 +11,20 @@
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pubnub";
-  version = "10.4.1";
+  version = "10.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "pubnub";
     repo = "python";
-    tag = version;
-    hash = "sha256-NI7rEudQ5sSj6cpPpFxEcqaeiQL6dJKK7C53BTJeMAg=";
+    tag = finalAttrs.version;
+    hash = "sha256-EZfJ+DAZdaF1jf2nU2dUXZ7tQlGNXUMsIGyj4cjmdOs=";
   };
 
   pythonRelaxDeps = [ "httpx" ];
@@ -66,13 +63,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pubnub" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python-based APIs for PubNub";
     homepage = "https://github.com/pubnub/python";
-    changelog = "https://github.com/pubnub/python/releases/tag/${src.tag}";
+    changelog = "https://github.com/pubnub/python/releases/tag/${finalAttrs.src.tag}";
     # PubNub Software Development Kit License Agreement
     # https://github.com/pubnub/python/blob/master/LICENSE
-    license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

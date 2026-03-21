@@ -1,9 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
-  fetchPypi,
-  hatchling,
+  fetchFromGitHub,
+  uv-build,
   scim2-models,
   pytestCheckHook,
   portpicker,
@@ -17,19 +16,23 @@
 
 buildPythonPackage rec {
   pname = "scim2-client";
-  version = "0.6.1";
+  version = "0.7.3";
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit version;
-    pname = "scim2_client";
-    hash = "sha256-5XOUOKf0vYHkewY22x5NQdhICXCd+EftKhsxtQurgHQ=";
+  src = fetchFromGitHub {
+    owner = "python-scim";
+    repo = "scim2-client";
+    tag = version;
+    hash = "sha256-jw8Dp/PekM0JrgxRkN+A896O2twkSDxQpsGsljJFdB0=";
   };
 
-  build-system = [ hatchling ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'uv_build>=0.8.9,<0.9.0' 'uv_build'
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ scim2-models ];
 
@@ -44,12 +47,6 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.httpx;
 
-  # Werkzeug returns 500, didn't deem it worth it to investigate
-  disabledTests = [
-    "test_search_request"
-    "test_query_dont_check_request_payload"
-  ];
-
   pythonImportsCheck = [ "scim2_client" ];
 
   optional-dependencies = {
@@ -57,11 +54,11 @@ buildPythonPackage rec {
     werkzeug = [ werkzeug ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Pythonically build SCIM requests and parse SCIM responses";
     homepage = "https://scim2-client.readthedocs.io/";
     changelog = "https://github.com/python-scim/scim2-client/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

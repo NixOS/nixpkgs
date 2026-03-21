@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
     mv usr $out
     mv opt $out
-    install -Dm644 $out/opt/pixeluvo/pixeluvo.png -t $out/share/pixmaps/
+    install -Dm644 $out/opt/pixeluvo/pixeluvo.png -t $out/share/icons/hicolor/48x48/apps
 
     substituteInPlace $out/share/applications/pixeluvo.desktop \
       --replace '/opt/pixeluvo/pixeluvo.png' pixeluvo
@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Beautifully Designed Image and Photo Editor for Windows and Linux";
     homepage = "http://www.pixeluvo.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
     mainProgram = "pixeluvo";

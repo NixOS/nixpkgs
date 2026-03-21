@@ -10,22 +10,19 @@
   pytest-asyncio,
   pytest-httpx,
   pytestCheckHook,
-  pythonOlder,
   rich,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "intellifire4py";
-  version = "4.2.1";
+  version = "4.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "intellifire4py";
-    tag = "v${version}";
-    hash = "sha256-kCZkIR8SmrLTm86M87juV7oQ+O01AA4pzkBMnKCnbNA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WmjsbxeAAD5b88WDIWasfNkzoY+QO1hbvTVyFLQ7uBk=";
   };
 
   build-system = [ hatchling ];
@@ -46,13 +43,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "intellifire4py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to read Intellifire fireplace status data";
     homepage = "https://github.com/jeeftor/intellifire4py";
-    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/v${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/jeeftor/intellifire4py/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "intellifire4py";
 
   };
-}
+})

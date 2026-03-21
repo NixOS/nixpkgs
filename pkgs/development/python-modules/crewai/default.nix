@@ -7,16 +7,17 @@
   hatchling,
 
   # dependencies
+  aiosqlite,
   appdirs,
-  blinker,
   chromadb,
   click,
   instructor,
   json-repair,
   json5,
   jsonref,
+  lancedb,
   litellm,
-  onnxruntime,
+  mcp,
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
@@ -25,57 +26,98 @@
   pdfplumber,
   portalocker,
   pydantic,
+  pydantic-settings,
   pyjwt,
   python-dotenv,
-  pyvis,
-  qdrant-client,
   regex,
+  textual,
   tokenizers,
   tomli,
   tomli-w,
   uv,
 
   # tests
-  pytestCheckHook,
+  a2a-sdk,
+  aiocache,
+  anthropic,
+  boto3,
+  google-genai,
+  pytest-asyncio,
+  pytest-recording,
   pytest-xdist,
+  pytestCheckHook,
+  qdrant-client,
+  vcrpy,
   versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "crewai";
-  version = "0.186.1";
+  version = "1.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
-    tag = version;
-    hash = "sha256-rSVIbRATMq0cfMdgR/+/tNjij0Sk/ErWipy0m8hKvr4=";
+    tag = finalAttrs.version;
+    hash = "sha256-oHDGn77rmjKKH4t+5xSy+r6m/GaI+q6RDwrTpWfIrxs=";
   };
+
+  postPatch = ''
+    substituteInPlace ../../conftest.py \
+      --replace-fail \
+        "import vcr.stubs.httpx_stubs as httpx_stubs" \
+        "import vcr.stubs.httpcore_stubs as httpx_stubs" \
+      --replace-fail \
+        "def _patched_make_vcr_request(httpx_request: Any, **kwargs: Any) -> Any:" \
+        "def _patched_make_vcr_request(httpx_request: Any, request_body: Any = None, **kwargs: Any) -> Any:" \
+      --replace-fail \
+        "raw_body = httpx_request.read()" \
+        "raw_body = request_body if request_body is not None else httpx_request.read()"
+  '';
+
+  sourceRoot = "${finalAttrs.src.name}/lib/crewai";
 
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [
     "chromadb"
+    "click"
     "json-repair"
+    "json5"
+    "lancedb"
     "litellm"
-    "onnxruntime"
+    "mcp"
+    "openai"
+    "opentelemetry-api"
+    "opentelemetry-exporter-otlp-proto-http"
+    "opentelemetry-sdk"
+    "pdfplumber"
     "portalocker"
-    "pyvis"
+    "pydantic"
+    "pydantic-settings"
+    "pyjwt"
+    "python-dotenv"
+    "regex"
+    "tokenizers"
+    "tomli"
+    "tomli-w"
+    "uv"
   ];
 
   dependencies = [
+    aiosqlite
     appdirs
-    blinker
     chromadb
     click
     instructor
     json-repair
     json5
     jsonref
+    lancedb
     litellm
-    onnxruntime
+    mcp
     openai
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
@@ -84,10 +126,11 @@ buildPythonPackage rec {
     pdfplumber
     portalocker
     pydantic
+    pydantic-settings
     pyjwt
     python-dotenv
-    pyvis
     regex
+    textual
     tokenizers
     tomli
     tomli-w
@@ -97,69 +140,113 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "crewai" ];
 
   disabledTestPaths = [
-    # Ignore tests that require {mem0, chromadb, telemetry, security, test_agent}
-    "tests/memory/test_external_memory.py" # require mem0ai
-    "tests/storage/test_mem0_storage.py" # require mem0ai
+    # Ignore tests that require {chromadb, telemetry, security, test_agent}
     "tests/cli/test_git.py" # require git
-    "tests/memory/test_short_term_memory.py" # require require API keys
     "tests/test_crew.py" # require require API keys
     "tests/rag/chromadb/test_client.py" # issue with chromadb
     "tests/telemetry/test_telemetry.py" # telemetry need network access
+
+    # ImportError: cannot import name 'InitFrom' from 'qdrant_client.models'
+    "tests/rag/qdrant/test_client.py"
+
+    # Tests requiring optional dependencies
+    "tests/llms/anthropic"
+    "tests/llms/azure"
+    "tests/llms/bedrock"
+    "tests/llms/google"
+    "tests/llms/litellm"
+    "tests/llms/hooks/test_anthropic_interceptor.py"
+    "tests/llms/hooks/test_unsupported_providers.py"
+    "tests/mcp/test_amp_mcp.py" # require crewai-tools
+
+    # Tests requiring network/API access
+    "tests/llms/openai"
+    "tests/telemetry"
+    "tests/tracing"
+    "tests/test_streaming_integration.py"
+    "tests/hooks"
+    "tests/llms/hooks/test_openai_interceptor.py"
+    "tests/test_llm.py"
+    "tests/agents/test_native_tool_calling.py"
+    "tests/utilities/test_agent_utils.py"
+    "tests/utilities/test_events.py"
+    "tests/utilities/test_summarize_integration.py"
+
+    # Tests requiring crewai-tools
+    "tests/agents/test_lite_agent.py"
+
+    # Tests requiring crewai-files
+    "tests/llms/test_multimodal.py"
+    "tests/llms/test_multimodal_integration.py"
+    "tests/test_agent_multimodal.py"
+    "tests/test_crew_multimodal.py"
+    "tests/test_flow_multimodal.py"
+    "tests/tools/agent_tools/test_read_file_tool.py"
+    "tests/utilities/test_file_store.py"
+    "tests/utilities/test_files.py"
   ];
 
   disabledTests = [
+    # AssertionError - json-repair behaves differently since 0.52.0
+    "test_safe_repair_json_unrepairable"
+    "test_valid_action_parsing_with_curly_braces"
+
     # Tests parser
     "test_valid_action_parsing_with_special_characters"
 
     # Tests agent - require API keys (OpenAI, Anthropic, etc)
-    "test_agent_execution_with_tools"
-    "test_llm_call"
-    "test_agent_repeated_tool_usage"
-    "test_agent_execute_task_basic"
-    "test_agent_execution"
-    "test_ensure_first_task_allow_crewai_trigger_context_is_false_does_not_inject"
-    "test_agent_use_specific_tasks_output_as_context"
-    "test_task_allow_crewai_trigger_context"
-    "test_agent_with_only_crewai_knowledge"
-    "test_logging_tool_usage"
-    "test_agent_execute_task_with_context"
-    "test_agent_repeated_tool_usage_check_even_with_disabled_cache"
-    "test_agent_step_callback"
-    "test_handle_context_length_exceeds_limit_cli_no"
-    "test_task_without_allow_crewai_trigger_context"
-    "test_cache_hitting"
-    "test_agent_knowledege_with_crewai_knowledge"
-    "test_agent_execute_task_with_tool"
-    "test_agent_moved_on_after_max_iterations"
-    "test_agent_function_calling_llm"
-    "test_task_allow_crewai_trigger_context_no_payload"
-    "test_disabling_cache_for_agent"
-    "test_do_not_allow_crewai_trigger_context_for_first_task_hierarchical"
-    "test_tool_result_as_answer_is_the_final_answer_for_the_agent"
-    "test_agent_execute_task_with_ollama"
-    "test_agent_with_knowledge_sources"
-    "test_agent_respect_the_max_rpm_set"
-    "test_agent_execution_with_specific_tools"
-    "test_llm_call_with_ollama_llama3"
-    "test_first_task_auto_inject_trigger"
-    "test_agent_respect_the_max_rpm_set_over_crew_rpm"
-    "test_agent_powered_by_new_o_model_family_that_allows_skipping_tool"
-    "test_agent_with_knowledge_with_no_crewai_knowledge"
-    "test_tool_usage_information_is_appended_to_agent"
-    "test_agent_without_max_rpm_respects_crew_rpm"
-    "test_agent_powered_by_new_o_model_family_that_uses_tool"
-    "test_agent_error_on_parsing_tool"
     "test_agent_custom_max_iterations"
-    "test_agent_remembers_output_format_after_using_tools_too_many_times"
-    "test_llm_call_with_all_attributes"
+    "test_agent_error_on_parsing_tool"
+    "test_agent_execute_task_basic"
+    "test_agent_execute_task_with_context"
     "test_agent_execute_task_with_custom_llm"
-    "test_agent_with_ollama_llama3"
-    "test_custom_llm_with_langchain"
-    "test_custom_llm_temperature_preservation"
+    "test_agent_execute_task_with_ollama"
+    "test_agent_execute_task_with_tool"
+    "test_agent_execution"
+    "test_agent_execution_with_specific_tools"
+    "test_agent_execution_with_tools"
+    "test_agent_from_repository"
     "test_agent_from_repository_override_attributes"
     "test_agent_from_repository_with_invalid_tools"
+    "test_agent_function_calling_llm"
+    "test_agent_knowledege_with_crewai_knowledge"
+    "test_agent_moved_on_after_max_iterations"
+    "test_agent_powered_by_new_o_model_family_that_allows_skipping_tool"
+    "test_agent_powered_by_new_o_model_family_that_uses_tool"
+    "test_agent_remembers_output_format_after_using_tools_too_many_times"
+    "test_agent_repeated_tool_usage"
+    "test_agent_repeated_tool_usage_check_even_with_disabled_cache"
+    "test_agent_respect_the_max_rpm_set"
+    "test_agent_respect_the_max_rpm_set_over_crew_rpm"
+    "test_agent_step_callback"
+    "test_agent_use_specific_tasks_output_as_context"
+    "test_agent_with_knowledge_sources"
+    "test_agent_with_knowledge_with_no_crewai_knowledge"
+    "test_agent_with_ollama_llama3"
+    "test_agent_with_only_crewai_knowledge"
+    "test_agent_without_max_rpm_respects_crew_rpm"
+    "test_cache_hitting"
+    "test_custom_llm_temperature_preservation"
+    "test_custom_llm_with_langchain"
+    "test_disabling_cache_for_agent"
+    "test_do_not_allow_crewai_trigger_context_for_first_task_hierarchical"
+    "test_ensure_first_task_allow_crewai_trigger_context_is_false_does_not_inject"
+    "test_first_task_auto_inject_trigger"
+    "test_first_time_user_trace_collection_user_accepts"
+    "test_first_time_user_trace_collection_with_timeout"
+    "test_first_time_user_trace_consolidation_logic"
     "test_get_knowledge_search_query"
-    "test_agent_from_repository"
+    "test_handle_context_length_exceeds_limit_cli_no"
+    "test_llm_call"
+    "test_llm_call_with_all_attributes"
+    "test_llm_call_with_ollama_llama3"
+    "test_logging_tool_usage"
+    "test_task_allow_crewai_trigger_context"
+    "test_task_allow_crewai_trigger_context_no_payload"
+    "test_task_without_allow_crewai_trigger_context"
+    "test_tool_result_as_answer_is_the_final_answer_for_the_agent"
+    "test_tool_usage_information_is_appended_to_agent"
+    "test_trace_batch_marked_as_failed_on_finalize_error"
 
     # Tests lite agent - require API keys
     "test_guardrail_is_called_using_callable"
@@ -361,25 +448,95 @@ buildPythonPackage rec {
     "test_asearch_wrong_client_type"
     "test_areset_wrong_client_type"
     "test_adelete_collection"
+
+    # Tests requiring litellm
+    "test_litellm_anthropic_error_handling"
+    "test_litellm_auth_error_handling"
+    "test_crew_agent_executor_litellm_auth_error"
+    "test_agent_with_callbacks"
+    "test_crew_memoization"
+    "test_task_guardrail"
+    "test_crew_name"
+    "test_get_conversion_instructions_non_gpt"
+    "test_supports_function_calling_false"
+
+    # Tests requiring network
+    "test_agent_events_have_event_ids"
+    "test_agent_kickoff_async_delegates_to_a2a"
+    "test_agent_kickoff_returns_lite_agent_output"
+    "test_agent_kickoff_with_failed_a2a_endpoint"
+    "test_agent_max_iterations_stops_loop"
+    "test_agent_without_a2a_works_normally"
+    "test_agent_without_tools_no_thought_in_output"
+    "test_anthropic_agent_with_native_tool_calling"
+    "test_anthropic_streaming_emits_tool_call_events"
+    "test_crew_completed_after_started"
+    "test_crew_events_have_event_ids"
+    "test_crew_memory_with_google_vertex_embedder"
+    "test_crew_parent_is_method"
+    "test_fetch_agent_card"
+    "test_flow_events_have_ids"
+    "test_gemini_agent_with_native_tool_calling"
+    "test_gemini_streaming_emits_tool_call_events"
+    "test_gemini_streaming_multiple_tool_calls_unique_ids"
+    "test_llm_events_have_parent"
+    "test_max_usage_count_limit_enforced_in_native_tool_calling"
+    "test_max_usage_count_tracked_in_native_tool_calling"
+    "test_method_parent_is_flow"
+    "test_native_tool_calling_error_handling"
+    "test_openai_agent_with_native_tool_calling"
+    "test_openai_native_tool_calling_token_usage"
+    "test_openai_streaming_emits_tool_call_events"
+    "test_polling_completes_task"
+    "test_second_crew_after_first"
+    "test_send_message_and_get_response"
+    "test_simple_task_clean_output"
+    "test_streaming_completes_task"
+    "test_streaming_distinguishes_text_and_tool_calls"
+    "test_task_output_includes_messages"
+    "test_task_parent_is_crew"
+    "test_tasks_have_correct_crew_parents"
+    "test_tool_call_event_accumulates_arguments"
+    "test_tool_call_events_have_consistent_tool_id"
+    "test_tool_usage_increments_after_successful_execution"
+    "test_two_crews_have_different_ids"
+
+    # Not work with nixpkgs-review
+    "test_concurrent_ainvoke_calls"
+
+    # Tests requiring missing dependency azure-ai-inference
+    "test_azure_agent_with_native_tool_calling"
+    "test_azure_agent_kickoff_with_tools_mocked"
+    "test_azure_streaming_emits_tool_call_events"
   ];
 
   nativeCheckInputs = [
+    a2a-sdk
+    aiocache
+    anthropic
+    boto3
+    google-genai
     pytestCheckHook
+    pytest-asyncio
+    pytest-recording
     pytest-xdist
     qdrant-client
+    vcrpy
     versionCheckHook
     writableTmpDirAsHomeHook
   ];
 
-  versionCheckProgramArg = "--version";
+  pytestFlagsArray = [
+    "--override-ini=addopts="
+  ];
 
   meta = {
     description = "Framework for orchestrating role-playing, autonomous AI agents";
     homepage = "https://github.com/crewAIInc/crewAI";
-    changelog = "https://github.com/crewAIInc/crewAI/releases/tag/${version}";
+    changelog = "https://github.com/crewAIInc/crewAI/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux;
     mainProgram = "crewai";
   };
-}
+})

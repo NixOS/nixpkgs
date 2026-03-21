@@ -14,7 +14,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "tcld";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jnm6l9Jj1mi9esDS6teKTEMhq7V1QD/dTl3qFhKsW4o=";
     # Populate values from the git repository; by doing this in 'postFetch' we
     # can delete '.git' afterwards and the 'src' should stay reproducible.
@@ -46,9 +46,10 @@ buildGoModule (finalAttrs: {
   # FIXME: Remove after https://github.com/temporalio/tcld/pull/447 lands.
   patches = [ ./compgen.patch ];
 
-  # NOTE: Some tests appear to require (local only?) network access, which
-  # doesn't work in the sandbox.
-  __darwinAllowLocalNetworking = true;
+  checkFlags = [
+    # This test appears to require network access and does not work in the sandbox.
+    "-skip=^TestFxDependencyInjection$"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
@@ -68,7 +69,9 @@ buildGoModule (finalAttrs: {
     homepage = "https://www.github.com/temporalio/tcld";
     changelog = "https://github.com/temporalio/tcld/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    teams = [ lib.teams.mercury ];
+    maintainers = with lib.maintainers; [
+      jkachmar
+    ];
     mainProgram = "tcld";
   };
 })

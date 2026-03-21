@@ -8,11 +8,12 @@
   curl,
   freetype,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
+  writableTmpDirAsHomeHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     python3
+    writableTmpDirAsHomeHook # silences build warnings
   ];
 
   buildInputs = [
@@ -39,11 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     freetype
     libGL
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
   ];
 
   makeFlags = [
@@ -51,9 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     "src/tunefish4/Builds/LinuxMakefile"
     "CONFIG=Release"
   ];
-
-  # silences build warnings
-  HOME = "/build";
 
   postPatch = ''
     patchShebangs src/tunefish4/generate-lv2-ttl.py
@@ -79,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://tunefish-synth.com/";
     description = "Virtual analog synthesizer LV2 plugin";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

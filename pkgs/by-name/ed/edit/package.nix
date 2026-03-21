@@ -3,8 +3,8 @@
   stdenv,
   fetchgit,
   cwebbin,
-  libX11,
-  libXft,
+  libx11,
+  libxft,
   ncurses,
   pkg-config,
   unzip,
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libX11
-    libXft
+    libx11
+    libxft
     ncurses
   ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     description = "Relaxing mix of Vi and ACME";
     homepage = "https://c9x.me/edit";
     license = lib.licenses.publicDomain;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "edit";
   };

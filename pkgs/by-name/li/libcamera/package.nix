@@ -27,12 +27,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
-  version = "0.5.2";
+  version = "0.7.0";
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
-    hash = "sha256-nr1LmnedZMGBWLf2i5uw4E/OMeXObEKgjuO+PUx/GDY=";
+    hash = "sha256-W9pRE8/0Cf2EEP5bbvy4FsDSeKKSklfJb6T48ZN4dzE=";
   };
 
   outputs = [
@@ -112,6 +112,7 @@ stdenv.mkDerivation rec {
     "-Dv4l2=true"
     (lib.mesonEnable "tracing" withTracing)
     (lib.mesonEnable "qcam" withQcam)
+    "-Dlibunwind=disabled"
     "-Dlc-compliance=disabled" # tries unconditionally to download gtest when enabled
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
@@ -120,21 +121,27 @@ stdenv.mkDerivation rec {
     # Given that upstream also provides public documentation,
     # we can disable it here.
     "-Ddocumentation=disabled"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # we don't have tensorflow-lite to build this
+    "-Drpi-awb-nn=disabled"
   ];
 
-  # Fixes error on a deprecated declaration
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env = {
+    # Fixes error on a deprecated declaration
+    NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  # Silence fontconfig warnings about missing config
-  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+    # Silence fontconfig warnings about missing config
+    FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Open source camera stack and framework for Linux, Android, and ChromeOS";
     homepage = "https://libcamera.org";
     changelog = "https://git.libcamera.org/libcamera/libcamera.git/tag/?h=${src.rev}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ citadelcore ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ citadelcore ];
+    platforms = lib.platforms.linux;
     badPlatforms = [
       # Mandatory shared libraries.
       lib.systems.inspect.platformPatterns.isStatic

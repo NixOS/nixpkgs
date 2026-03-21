@@ -8,19 +8,19 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "symbolicator";
-  version = "25.9.0";
+  version = "26.2.1";
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "symbolicator";
-    rev = version;
-    hash = "sha256-1pjp2ryzoiI/brXv/clrseh0LPs1ZW67vk5QT1l6KCk=";
+    rev = finalAttrs.version;
+    hash = "sha256-CuG/rfwuJeKibsYWo1lNDcJkuKXMrXSv8hk+hIjYy74=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-L3+ZQC9rVUpkkQs1KzdCtYA/hj1F6K8mf7aJpxfRh+0=";
+  cargoHash = "sha256-YddQ3E6YlcFkoQEglTNJ1lK6ivxJYtwhouFT32kV1hI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -34,20 +34,20 @@ rustPlatform.buildRustPackage rec {
   ];
 
   env = {
-    SYMBOLICATOR_GIT_VERSION = src.rev;
-    SYMBOLICATOR_RELEASE = version;
+    SYMBOLICATOR_GIT_VERSION = finalAttrs.src.rev;
+    SYMBOLICATOR_RELEASE = finalAttrs.version;
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
   # tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Native Symbolication as a Service";
     homepage = "https://getsentry.github.io/symbolicator/";
-    changelog = "https://github.com/getsentry/symbolicator/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/getsentry/symbolicator/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "symbolicator";
   };
-}
+})

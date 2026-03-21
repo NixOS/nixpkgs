@@ -3,30 +3,30 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
-  libXinerama,
-  xcbutil,
-  xcbutilkeysyms,
-  xcbutilwm,
+  libxinerama,
+  libxcb-util,
+  libxcb-keysyms,
+  libxcb-wm,
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bspwm";
-  version = "0.9.11";
+  version = "0.9.12";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "bspwm";
-    rev = version;
-    sha256 = "sha256-5mAw3uSsDozGUJdYE1gD1u0u6Xnik3/LbE654vCFU9E=";
+    tag = finalAttrs.version;
+    sha256 = "sha256-sEheWAZgKVDCEipQTtDLNfDSA2oho9zU9gK2d6W6WSU=";
   };
 
   buildInputs = [
     libxcb
-    libXinerama
-    xcbutil
-    xcbutilkeysyms
-    xcbutilwm
+    libxinerama
+    libxcb-util
+    libxcb-keysyms
+    libxcb-wm
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) startx;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiling window manager based on binary space partitioning";
     homepage = "https://github.com/baskerville/bspwm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       meisternu
       ncfavier
     ];
-    license = licenses.bsd2;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
-  version = "4.11.3";
+  version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "ccache";
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
         exit 1
       fi
     '';
-    hash = "sha256-w41e73Zh5HhYhgLPtaaSiJ48BklBNtnK9S859tol5wc=";
+    hash = "sha256-8Qw5nkY86wGJ7B2hrNk9jIoz18nJ2FK+EbPH5fS5aEc=";
   };
 
   outputs = [
@@ -60,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
     })
   ];
+
+  postPatch = ''
+    patchShebangs --build doc/scripts
+    patchShebangs --build test/fake-compilers
+  '';
 
   strictDeps = true;
 
@@ -94,8 +99,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   disabledTests = [
-    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+    "test.direct" # https://github.com/ccache/ccache/issues/1699
     "test.fileclone" # flaky on hydra, also seems to fail on zfs
+    "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test.basedir"
@@ -167,19 +173,19 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Compiler cache for fast recompilation of C/C++ code";
     homepage = "https://ccache.dev";
     downloadPage = "https://ccache.dev/download.html";
     changelog = "https://ccache.dev/releasenotes.html#_ccache_${
       builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
     }";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       kira-bruneau
       r-burns
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "ccache";
   };
 })

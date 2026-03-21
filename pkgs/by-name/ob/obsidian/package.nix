@@ -12,21 +12,26 @@
 }:
 let
   pname = "obsidian";
-  version = "1.9.12";
+  version = "1.12.4";
   appname = "Obsidian";
-  meta = with lib; {
+  meta = {
     description = "Powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     mainProgram = "obsidian";
-    license = licenses.obsidian;
-    maintainers = with maintainers; [
-      atila
+    license = lib.licenses.obsidian;
+    maintainers = with lib.maintainers; [
       conradmearns
       zaninime
-      qbit
       kashw2
       w-lfchen
+    ];
+
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 
@@ -36,9 +41,9 @@ let
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-HIcnOY/Fn/3zJTKiLxzPKbvug/wf1nc3lG2zyep68Nw="
+        "sha256-etm0JSji5H6EG6jgcie4/QxANsfEJx+zZzHLpFBNu7o="
       else
-        "sha256-qS4M9gvCs3B2kOlImH/ddm0zjsVa4Zrhu2VEBKYNuMo=";
+        "sha256-cusm388SP44HvoCD90+gRfQAxx7B/mTlirkdnMCEyN4=";
   };
 
   icon = fetchurl {
@@ -63,13 +68,8 @@ let
       src
       desktopItem
       icon
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
-    };
     nativeBuildInputs = [
       makeWrapper
       imagemagick
@@ -107,13 +107,8 @@ let
       version
       src
       appname
+      meta
       ;
-    meta = meta // {
-      platforms = [
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    };
     sourceRoot = "${appname}.app";
     nativeBuildInputs = [
       makeWrapper

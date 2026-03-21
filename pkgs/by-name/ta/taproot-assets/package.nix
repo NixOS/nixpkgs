@@ -4,18 +4,18 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "taproot-assets";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "lightninglabs";
     repo = "taproot-assets";
-    rev = "v${version}";
-    hash = "sha256-g9YG/qeXM7hmpgvhyTPTOWy37rGG/Tbc5YiuaQFIbJA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-F/I/h80+QEUpxF1fS90hgCXMubU4Hdk0ECGosSvdC1E=";
   };
 
-  vendorHash = "sha256-9d7+y3f+IGDn5wbe9PY58en3cCkWMxCqBBBrRCDDg2U=";
+  vendorHash = "sha256-W6wAa1KAE0gBWkXeZ0VEQFyRle/qT/O3CvVAmm1nQfs=";
 
   subPackages = [
     "cmd/tapcli"
@@ -27,10 +27,10 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Daemon for the Taproot Assets protocol specification";
     homepage = "https://github.com/lightninglabs/taproot-assets";
-    license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
-}
+})

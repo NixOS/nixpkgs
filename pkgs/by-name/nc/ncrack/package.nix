@@ -7,14 +7,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncrack";
   version = "0.7";
 
   src = fetchFromGitHub {
     owner = "nmap";
     repo = "ncrack";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "1gnv5xdd7n04glcpy7q1mkb6f8gdhdrhlrh8z6k4g2pjdhxlz26g";
   };
 
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network authentication tool";
     mainProgram = "ncrack";
     homepage = "https://nmap.org/ncrack/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
-}
+})

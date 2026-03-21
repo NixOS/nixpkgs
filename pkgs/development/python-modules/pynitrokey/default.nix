@@ -25,7 +25,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.10.0";
+  version = "0.11.3";
   mainProgram = "nitropy";
 in
 
@@ -35,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Kr6VtBADLvXUva7csbsHujGzBfRG1atJLF7qbIWmToM=";
+    hash = "sha256-b1Npw+FBG8Ti5VjfipgjeZ5pcufm+7K6qdhFBnmTeFs=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -80,16 +80,17 @@ buildPythonPackage {
       --fish <(_NITROPY_COMPLETE=fish_source $out/bin/${mainProgram})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Nitrokey devices";
     homepage = "https://github.com/Nitrokey/pynitrokey";
     changelog = "https://github.com/Nitrokey/pynitrokey/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       frogamic
+      panicgh
     ];
     inherit mainProgram;
   };

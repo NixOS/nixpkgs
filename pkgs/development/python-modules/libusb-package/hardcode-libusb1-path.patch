@@ -1,0 +1,48 @@
+diff --git a/setup.cfg b/setup.cfg
+index b04257d..f5c436a 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -45,7 +45,6 @@ package_dir =
+     =src
+ zip_safe = False
+ install_requires =
+-    importlib_resources
+ 
+ [options.packages.find]
+ where = src
+diff --git a/src/libusb_package/__init__.py b/src/libusb_package/__init__.py
+index 67e3e46..684be57 100644
+--- a/src/libusb_package/__init__.py
++++ b/src/libusb_package/__init__.py
+@@ -21,10 +21,9 @@ import ctypes.util
+ import functools
+ import platform
+ import sys
++from pathlib import Path
+ from typing import (Any, Optional, TYPE_CHECKING)
+ 
+-import importlib_resources
+-
+ from ._version import version as __version__
+ 
+ if TYPE_CHECKING:
+@@ -49,18 +48,7 @@ def get_library_path() -> Optional[Path]:
+     The path is valid until the process exits. If the library was extracted from a zip in order to
+     be accessible as a file, it will be cleaned up with the process exits.
+     """
+-    lib_resource = importlib_resources.files(__name__).joinpath(_LIBRARY_NAME)
+-    if lib_resource.is_file():
+-        path_context = importlib_resources.as_file(lib_resource)
+-        path = path_context.__enter__()
+-
+-        @atexit.register
+-        def cleanup():
+-            path_context.__exit__(None, None, None)
+-
+-        return path
+-    else:
+-        return None
++    return Path('@libusb1@')
+ 
+ 
+ def find_library(candidate: str) -> Optional[str]:

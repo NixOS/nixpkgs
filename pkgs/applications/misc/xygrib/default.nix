@@ -42,6 +42,11 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall =
     if stdenv.hostPlatform.isDarwin then
       ''
@@ -61,7 +66,7 @@ stdenv.mkDerivation {
           --replace 'Exec=XyGrib' 'Exec=xygrib'
       '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://opengribs.org";
     description = "Weather Forecast Visualization";
     mainProgram = "xygrib";
@@ -70,8 +75,7 @@ stdenv.mkDerivation {
       It interacts with OpenGribs's Grib server providing a choice
       of global and large area atmospheric and wave models.
     '';
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ j03 ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
   };
 }

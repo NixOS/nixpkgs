@@ -5,12 +5,12 @@
   lynx,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ifmetric";
   version = "0.3";
 
   src = fetchurl {
-    url = "http://0pointer.de/lennart/projects/${pname}/${pname}-${version}.tar.gz";
+    url = "http://0pointer.de/lennart/projects/ifmetric/ifmetric-${finalAttrs.version}.tar.gz";
     sha256 = "1v0s5x81jzwnnl7hr254d4nkyc8qcv983pzr6vqmbr9l9q553a0g";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for setting IP interface metrics";
     longDescription = ''
       ifmetric is a Linux tool for setting the metrics of all IPv4 routes
@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
       correlate with higher priorities.
     '';
     homepage = "http://0pointer.de/lennart/projects/ifmetric";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.anna328p ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.anna328p ];
+    platforms = lib.platforms.linux;
     mainProgram = "ifmetric";
   };
-}
+})

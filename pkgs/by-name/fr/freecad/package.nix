@@ -8,24 +8,21 @@
   fetchFromGitHub,
   fetchpatch,
   fmt,
-  gfortran,
   gts,
   hdf5,
   libGLU,
   libredwg,
   libspnav,
-  libXmu,
+  libxmu,
   medfile,
   ninja,
   ode,
   opencascade-occt,
+  microsoft-gsl,
   pkg-config,
   python3Packages,
-  spaceNavSupport ? stdenv.hostPlatform.isLinux,
   stdenv,
   swig,
-  vtk,
-  wrapGAppsHook3,
   xercesc,
   yaml-cpp,
   zlib,
@@ -43,7 +40,6 @@ let
     opencamlib
     pivy
     ply # for openSCAD file support
-    py-slvs
     pybind11
     pycollada
     pyside6
@@ -51,9 +47,10 @@ let
     pyyaml # (at least for) PyrateWorkbench
     scipy
     shiboken6
+    vtk
   ];
 
-  freecad-utils = callPackage ./freecad-utils.nix { };
+  freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
 in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
@@ -72,10 +69,8 @@ freecad-utils.makeCustomizable (
       cmake
       ninja
       pkg-config
-      gfortran
       swig
       doxygen
-      wrapGAppsHook3
       qt6.wrapQtAppsHook
     ];
 
@@ -86,22 +81,22 @@ freecad-utils.makeCustomizable (
       gts
       hdf5
       libGLU
-      libXmu
+      libxmu
+      libspnav
       medfile
       ode
-      vtk
       xercesc
       yaml-cpp
       zlib
       opencascade-occt
+      microsoft-gsl
       qt6.qtbase
       qt6.qtsvg
       qt6.qttools
       qt6.qtwayland
       qt6.qtwebengine
     ]
-    ++ pythonDeps
-    ++ lib.optionals spaceNavSupport [ libspnav ];
+    ++ pythonDeps;
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -109,6 +104,11 @@ freecad-utils.makeCustomizable (
 
       # https://github.com/FreeCAD/FreeCAD/pull/21710
       ./0003-FreeCad-fix-font-load-crash.patch
+
+      # Fix build for boost 1.89 or later, remove once FreeCad 1.1 is released
+      # based on https://github.com/FreeCAD/FreeCAD/commit/0f6d00d2a547df0f5c2ba5ef0f79044a49b0a2d
+      ./0004-FreeCad-fix-boost-189-build.patch
+
       (fetchpatch {
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
@@ -128,29 +128,13 @@ freecad-utils.makeCustomizable (
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_DRAWING=ON"
-      "-DBUILD_FLAT_MESH:BOOL=ON"
-      "-DINSTALL_TO_SITEPACKAGES=OFF"
-      "-DFREECAD_USE_PYBIND11=ON"
-      "-DBUILD_QT5=OFF"
-      "-DBUILD_QT6=ON"
-      "-DSHIBOKEN_INCLUDE_DIR=${python3Packages.shiboken6}/include"
-      "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
-      (
-        "-DPYSIDE_INCLUDE_DIR=${python3Packages.pyside6}/include"
-        + ";${python3Packages.pyside6}/include/PySide6/QtCore"
-        + ";${python3Packages.pyside6}/include/PySide6/QtWidgets"
-        + ";${python3Packages.pyside6}/include/PySide6/QtGui"
-      )
-      "-DPYSIDE_LIBRARY=PySide6::pyside6"
+      (lib.cmakeBool "BUILD_DRAWING" true)
+      (lib.cmakeBool "BUILD_FLAT_MESH" true)
+      (lib.cmakeBool "INSTALL_TO_SITEPACKAGES" false)
+      (lib.cmakeBool "FREECAD_USE_PYBIND11" true)
+      (lib.cmakeBool "BUILD_QT5" false)
+      (lib.cmakeBool "BUILD_QT6" true)
     ];
-
-    # This should work on both x86_64, and i686 linux
-    preBuild = ''
-      export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
-    '';
-
-    dontWrapGApps = true;
 
     qtWrapperArgs =
       let
@@ -163,7 +147,6 @@ freecad-utils.makeCustomizable (
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-        "\${gappsWrapperArgs[@]}"
       ];
 
     postFixup = ''

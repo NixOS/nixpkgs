@@ -9,14 +9,14 @@
   libiconv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "novops";
   version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "PierreBeucher";
     repo = "novops";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-F3MtDTaeLoI54/xbbIU61hb+qLDn2u4lRv+3kU5c/D0=";
   };
 
@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/novops completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform secret & config manager for development and CI environments";
     homepage = "https://github.com/PierreBeucher/novops";
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [ pbeucher ];
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [ pbeucher ];
     mainProgram = "novops";
   };
-}
+})

@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildNpmPackage,
   writeText,
   # https://codeberg.org/emersion/gamja/src/branch/master/doc/config-file.md
@@ -10,8 +10,7 @@ buildNpmPackage rec {
   pname = "gamja";
   version = "1.0.0-beta.11";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "emersion";
     repo = "gamja";
     rev = "v${version}";
@@ -31,11 +30,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple IRC web client";
     homepage = "https://codeberg.org/emersion/gamja";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       motiejus
       apfelkuchen6
     ];

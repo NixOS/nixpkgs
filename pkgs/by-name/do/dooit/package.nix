@@ -7,19 +7,19 @@
   nix-update-script,
   extraPackages ? [ ],
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "dooit";
-  version = "3.3.3";
+  version = "3.3.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dooit-org";
     repo = "dooit";
-    tag = "v${version}";
-    hash = "sha256-MWdih+j7spUVEWXCBzF2J/FVXK0TQ8VhrJNDhNfxpQE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-A3l+E9B2fWyNpDzMr8WRiiHD/fIcUzcIwtmur+2Mk0k=";
   };
 
-  build-system = with python3.pkgs; [ poetry-core ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   pythonRelaxDeps = [
     "tzlocal"
@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "TUI todo manager";
     homepage = "https://github.com/dooit-org/dooit";
-    changelog = "https://github.com/dooit-org/dooit/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/dooit-org/dooit/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       khaneliman
@@ -73,4 +73,4 @@ python3.pkgs.buildPythonApplication rec {
     ];
     mainProgram = "dooit";
   };
-}
+})

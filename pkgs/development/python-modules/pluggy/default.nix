@@ -3,15 +3,12 @@
   lib,
   fetchFromGitHub,
   setuptools-scm,
-  pythonOlder,
   callPackage,
 }:
 
 buildPythonPackage rec {
   pname = "pluggy";
   version = "1.6.0";
-
-  disabled = pythonOlder "3.8";
 
   pyproject = true;
 

@@ -8,35 +8,33 @@
   openssl,
   pkg-config,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook4,
 }:
-
-let
-  pnpm = pnpm_9;
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "test-app";
   inherit (cargo-tauri) version src;
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
   '';
 
   inherit (cargo-tauri) cargoDeps;
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       ;
+    pnpm = pnpm_9;
 
-    fetcherVersion = 1;
-    hash = "sha256-7F2vk6WUeXunTuXX9J0rVhl2I0ENYagRdqTy+WAXBB8=";
+    fetcherVersion = 3;
+    hash = "sha256-/g+2jZQq3nTJnKpj0PlT6zB3UcUBE2ND8797XRwVZ0s=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     nodejs
     pkg-config
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm_9
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
     wrapGAppsHook4
@@ -65,10 +64,40 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     pnpm --filter '@tauri-apps/api' build
   '';
+  postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    bundleDir="target/${stdenv.hostPlatform.rust.cargoShortTarget}/''${cargoBuildType:-release}/bundle/macos"
+    touch "$bundleDir/.test-hidden-entry"
+    touch "$bundleDir/test-visible-entry"
+  '';
 
   # No one should be actually running this, so lets save some time
   buildType = "debug";
   doCheck = false;
+  doInstallCheck = stdenv.hostPlatform.isDarwin;
+  installCheckPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstallCheck
+
+    test -d "$out/Applications"
+
+    shopt -s nullglob dotglob
+    appBundles=("$out"/Applications/*.app)
+    nonAppEntries=("$out"/Applications/*)
+    shopt -u nullglob dotglob
+
+    test "''${#appBundles[@]}" -gt 0
+
+    for entry in "''${nonAppEntries[@]}"; do
+      case "$entry" in
+        *.app) ;;
+        *)
+          echo "unexpected non-.app entry in Applications: $entry" >&2
+          exit 1
+          ;;
+      esac
+    done
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     inherit (cargo-tauri.hook.meta) platforms;

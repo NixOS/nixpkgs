@@ -5,12 +5,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srelay";
   version = "0.4.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/socks-relay/socks-relay/srelay-${version}/srelay-${version}.tar.gz";
+    url = "mirror://sourceforge/project/socks-relay/socks-relay/srelay-${finalAttrs.version}/srelay-${finalAttrs.version}.tar.gz";
     sha256 = "1sn6005aqyfvrlkm5445cyyaj6h6wfyskfncfmds55x34hfyxpvl";
   };
 
@@ -29,4 +29,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "srelay";
   };
-}
+})

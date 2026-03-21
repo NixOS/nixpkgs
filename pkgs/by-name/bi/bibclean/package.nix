@@ -4,12 +4,12 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bibclean";
   version = "3.07";
 
   src = fetchurl {
-    url = "http://ftp.math.utah.edu/pub/bibclean/bibclean-${version}.tar.xz";
+    url = "http://ftp.math.utah.edu/pub/bibclean/bibclean-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-kZM2eC6ePCBOYPVkhf0fjdZ562IvyP0fSDNZXuEBkaY=";
   };
 
@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Prettyprint and syntax check BibTeX and Scribe bibliography data base files";
     homepage = "http://ftp.math.utah.edu/pub/bibclean";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
-}
+})

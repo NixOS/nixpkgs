@@ -11,7 +11,7 @@
   fetchPypi,
   itsdangerous,
   motor,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytest-aiohttp,
   pytestCheckHook,
@@ -21,16 +21,16 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-client-cache";
-  version = "0.14.0";
+  version = "0.14.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aiohttp_client_cache";
     inherit version;
-    hash = "sha256-onEcLEhhTLljQ57No49shj5Jv6bqF1t9/7z1yCRfzxk=";
+    hash = "sha256-Mp9AOMao7QtBACOYC20aLEhK8z5meonOJFyJnWLB+6E=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
@@ -67,7 +67,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pytestFlags = [ "--asyncio-mode=auto" ];
 
@@ -78,11 +78,11 @@ buildPythonPackage rec {
     "test/integration/*"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Async persistent cache for aiohttp requests";
     homepage = "https://github.com/requests-cache/aiohttp-client-cache";
     changelog = "https://github.com/requests-cache/aiohttp-client-cache/blob/v${version}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ seirl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ seirl ];
   };
 }

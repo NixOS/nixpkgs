@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   pdm-backend,
@@ -39,8 +38,6 @@ buildPythonPackage rec {
   pname = "pelican";
   version = "4.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getpelican";
@@ -101,6 +98,8 @@ buildPythonPackage rec {
   pytestFlags = [
     # DeprecationWarning: 'jinja2.Markup' is deprecated and...
     "-Wignore::DeprecationWarning"
+    # PendingDeprecationWarning: `Publisher.set_components()` will be removed in ...
+    "-Wignore::PendingDeprecationWarning"
   ];
 
   disabledTests = [
@@ -128,13 +127,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pelican" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static site generator that requires no database or server-side logic";
     homepage = "https://getpelican.com/";
     changelog = "https://github.com/getpelican/pelican/blob/${src.tag}/docs/changelog.rst";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
-      offline
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       prikhi
     ];
   };

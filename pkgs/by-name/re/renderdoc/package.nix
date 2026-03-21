@@ -7,14 +7,13 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  libXdmcp,
+  libxdmcp,
   libglvnd,
-  libpthreadstubs,
+  libpthread-stubs,
   makeWrapper,
   nix-update-script,
   pcre,
   pkg-config,
-  # python3Packages.shiboken2 is currently broken
   python312Packages,
   qt5,
   stdenv,
@@ -34,13 +33,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renderdoc";
-  version = "1.40";
+  version = "1.43";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-420UV9I+jJ8sLOQVhfGfkGPqAnN+kgPy8k0rZLt5X+Y=";
+    hash = "sha256-2oojSjBSdq/1plQ093mlBeZzwg7KEJW4oDiRt1f7plM=";
   };
 
   outputs = [
@@ -61,8 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libXdmcp
-    libpthreadstubs
+    libxdmcp
+    libpthread-stubs
     python312Packages.pyside2
     python312Packages.pyside2-tools
     python312Packages.shiboken2
@@ -154,6 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
       pbsds
       ShyAssassin
     ];
-    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
+    platforms = lib.intersectLists lib.platforms.linux (
+      lib.platforms.x86_64 ++ lib.platforms.i686 ++ lib.platforms.aarch64
+    );
   };
 })

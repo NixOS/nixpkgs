@@ -8,22 +8,22 @@
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "doppler";
-  version = "3.75.1";
+  version = "3.75.3";
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
-    rev = version;
-    hash = "sha256-YyhDvBgdcy3CtVpQj60XQ0aqE2zT1LV9QXQJiJvlaic=";
+    rev = finalAttrs.version;
+    hash = "sha256-4OvU0Hy2uBjeyQibODi9WqdM0adUW2vTS9SCL+O2RFA=";
   };
 
-  vendorHash = "sha256-tSRtgkDPvDlEfwuNhahvs3Pvt4h7QAJrJtb1XQXGaFM=";
+  vendorHash = "sha256-u6SB3SXCqu7Y2aUoTAJ01mtDCxMofVQLAde1jDxVvks=";
 
   ldflags = [
     "-s -w"
-    "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${version}"
+    "-X github.com/DopplerHQ/cli/pkg/version.ProgramVersion=v${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -42,14 +42,14 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = doppler;
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Official CLI for interacting with your Doppler Enclave secrets and configuration";
     mainProgram = "doppler";
     homepage = "https://doppler.com";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ lucperkins ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ lucperkins ];
   };
-}
+})

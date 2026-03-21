@@ -8,6 +8,13 @@
 with lib;
 let
   cfg = config.services.prosody;
+  communityModulesToEnable =
+    let
+      componentSpecificModules = [ "muc_notifications" ];
+    in
+    lib.concatMap (
+      mod: lib.optional (!(lib.elem mod componentSpecificModules)) "${toLua mod};"
+    ) cfg.package.communityModules;
 
   sslOpts = _: {
     options = {
@@ -453,6 +460,11 @@ let
             or use a reverse proxy to handle the HTTP for that domain.
           '';
         };
+        http_external_url = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = "External URL in case Prosody sits behind a reverse proxy.";
+        };
         size_limit = mkOption {
           type = types.int;
           default = 10 * 1024 * 1024;
@@ -541,12 +553,12 @@ let
         ${lib.concatStringsSep "\n  " (
           lib.mapAttrsToList (name: val: optionalString val "${toLua name};") cfg.modules
         )}
-        ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
+        ${lib.concatStringsSep "\n" communityModulesToEnable}
         ${lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.extraModules)}
       };
 
       disco_items = {
-      ${lib.concatStringsSep "\n" (builtins.map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
+      ${lib.concatStringsSep "\n" (map (x: ''{ "${x.url}", "${x.description}"};'') discoItems)}
       };
 
       allow_registration = ${toLua cfg.allowRegistration}
@@ -572,7 +584,7 @@ let
 
       ${lib.concatMapStrings (muc: ''
         Component ${toLua muc.domain} "muc"
-            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''} }
+            modules_enabled = {${optionalString cfg.modules.mam ''"muc_mam",''}${optionalString muc.allowners_muc ''"muc_allowners",''}${optionalString muc.moderation ''"muc_moderation",''}${optionalString (lib.elem "muc_notifications" cfg.package.communityModules) ''"muc_notifications",''} }
             name = ${toLua muc.name}
             restrict_room_creation = ${toLua muc.restrictRoomCreation}
             max_history_messages = ${toLua muc.maxHistoryMessages}
@@ -596,7 +608,17 @@ let
         ${lib.optionalString (cfg.httpFileShare.http_host != null) ''
           http_host = "${cfg.httpFileShare.http_host}"
         ''}
-        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
+        ${lib.optionalString (cfg.httpFileShare.http_external_url != null) ''
+          http_external_url = "${cfg.httpFileShare.http_external_url}"
+        ''}
+        ${settingsToLua "  http_file_share_" (
+          cfg.httpFileShare
+          // {
+            domain = null;
+            http_host = null;
+            http_external_url = null;
+          }
+        )}
       ''}
 
       ${lib.concatStringsSep "\n" (
@@ -871,6 +893,7 @@ in
           "internal_hashed"
           "cyrus"
           "anonymous"
+          "ldap"
         ];
         default = "internal_hashed";
         example = "internal_plain";

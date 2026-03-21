@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.35.1";
+  version = "0.36.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
     tag = "v${version}";
-    hash = "sha256-VZXf1YCIFtzuBWaeYG3A+AyqnMEAKEI2nStjuPJ8ZTk=";
+    hash = "sha256-bDGiY1PR3JilEzkynUGE5IwDA+bgVQWW1jpGEfftI3U=";
   };
 
   build-system = [ setuptools ];
@@ -104,7 +104,7 @@ buildPythonPackage rec {
     torchsde
     transformers
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   preCheck =
     let

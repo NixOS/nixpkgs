@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geopard";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ranfdev";
     repo = "geopard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-etx8YPEFGSNyiSLpTNIXTZZiLSgAntQsM93On7dPGI0=";
+    hash = "sha256-wOkzylRfFJsdu9KC4TvF/qYkGf8OZVd1tRre5TbNOX4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-FHYWpMmJvcHuAHr9fFKl1qIhJb32NJEA/0j3R6/mVgQ=";
+    hash = "sha256-g7pHEBrR/tdKP+kuYJ44Py7kaAx0tXcMkC4UdsfSfDQ=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,7 @@
   fetchurl,
   dpkg,
   libuuid,
-  xorg,
+  libx11,
   curlMinimal,
   openssl_3,
   libsecret,
@@ -17,7 +17,6 @@
   sqlite,
   zlib,
   systemd,
-  msalsdk-dbusclient,
   pam,
   p11-kit,
   dbus,
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
         intune = lib.makeLibraryPath [
           stdenv.cc.cc
           libuuid
-          xorg.libX11
+          libx11
           curlMinimal_openssl_3
           openssl_3
           libsecret
@@ -59,7 +58,6 @@ stdenv.mkDerivation rec {
           sqlite
           zlib
           systemd
-          msalsdk-dbusclient
           dbus
         ];
         pam = lib.makeLibraryPath [ pam ];
@@ -111,10 +109,10 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) intune; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Intune Portal allows you to securely access corporate apps, data, and resources";
     homepage = "https://www.microsoft.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

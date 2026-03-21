@@ -12,7 +12,7 @@
   psutil,
   pydantic,
   pytestCheckHook,
-  pythonOlder,
+  pyyaml,
   rich,
   setuptools-scm,
   setuptools,
@@ -23,8 +23,8 @@ let
     owner = "emeryberger";
     repo = "heap-layers";
     name = "Heap-Layers";
-    rev = "a2048eae91b531dc5d72be7a194e0b333c06bd4c";
-    sha256 = "sha256-vl3z30CBX7hav/DM/UE0EQ9lLxZF48tMJrYMXuSulyA=";
+    tag = "v1.0.0";
+    hash = "sha256-p+8aUC124Digv3c9fZ7lLHg6H8FXoAcAQxlYzf9TYbM=";
   };
 
   printf-src = fetchFromGitHub {
@@ -32,21 +32,20 @@ let
     repo = "printf";
     name = "printf";
     tag = "v4.0.0";
-    sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
+    hash = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scalene";
-  version = "1.5.52";
+  version = "2.1.4";
   pyproject = true;
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "scalene";
-    tag = "v${version}";
-    hash = "sha256-8WE/tR0tGwdNSPtieS90QAOFlS66h/JxaV2LvpZjx2E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ISXD7QegTL0OvAGS7KYZAk9MAKTr0hMFe/9ws02Ykgk=";
   };
 
   patches = [
@@ -54,6 +53,7 @@ buildPythonPackage rec {
   ];
 
   prePatch = ''
+    mkdir vendor
     cp -r ${heap-layers-src} vendor/Heap-Layers
     mkdir vendor/printf
     cp ${printf-src}/printf.c vendor/printf/printf.cpp
@@ -62,18 +62,19 @@ buildPythonPackage rec {
     sed -i 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpickle
     jinja2
     numpy
     psutil
     pydantic
+    pyyaml
     rich
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
@@ -95,6 +96,16 @@ buildPythonPackage rec {
   disabledTests = [
     # Flaky -- socket collision
     "test_show_browser"
+    # File not found
+    "test_nested_package_relative_import"
+  ];
+
+  disabledTestPaths = [
+    # Broken pipe
+    # https://github.com/plasma-umass/scalene/issues/1017
+    "tests/test_coverup_50.py"
+    "tests/test_multiprocessing_spawn.py::TestReplacementSemLockPickling"
+    "tests/test_multiprocessing_spawn.py::TestSpawnModeIntegration"
   ];
 
   # remove scalene directory to prevent pytest import confusion
@@ -104,13 +115,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scalene" ];
 
-  meta = with lib; {
+  meta = {
     description = "High-resolution, low-overhead CPU, GPU, and memory profiler for Python with AI-powered optimization suggestions";
     homepage = "https://github.com/plasma-umass/scalene";
-    changelog = "https://github.com/plasma-umass/scalene/releases/tag/v${version}";
+    changelog = "https://github.com/plasma-umass/scalene/releases/tag/${finalAttrs.src.tag}";
     mainProgram = "scalene";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ sarahec ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarahec ];
     badPlatforms = [
       # The scalene doesn't seem to account for arm64 linux
       "aarch64-linux"
@@ -122,4 +133,4 @@ buildPythonPackage rec {
       "aarch64-darwin"
     ];
   };
-}
+})

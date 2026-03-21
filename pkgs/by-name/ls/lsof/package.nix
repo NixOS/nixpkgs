@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
-  LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
+  env.LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
   configurePhase =
     let
       genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       from it).
     '';
     license = lib.licenses.lsof;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

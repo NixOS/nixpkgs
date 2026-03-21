@@ -20,11 +20,12 @@
   rustPlatform,
   llvmPackages_19,
   gitMinimal,
+  writableTmpDirAsHomeHook,
 }:
 
 let
   pname = "cargo-llvm-cov";
-  version = "0.6.17";
+  version = "0.8.3";
 
   owner = "taiki-e";
   homepage = "https://github.com/${owner}/${pname}";
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     inherit owner;
     repo = "cargo-llvm-cov";
     rev = "v${version}";
-    sha256 = "sha256-0Dgcl1r+j86WVhkyJNJxUnk85vrtD1fBBxfJkV0mcAI=";
+    sha256 = "sha256-XMv0li/zBNE3FJpcIpja6SqNp4f5GPOET5rfPWLIzRw=";
   };
 
   # Upstream doesn't include the lockfile so we need to add it back
@@ -56,13 +57,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     };
   };
 
-  # `cargo-llvm-cov` reads these environment variables to find these binaries,
-  # which are needed to run the tests
-  LLVM_COV = "${llvm}/bin/llvm-cov";
-  LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  env = {
+    # `cargo-llvm-cov` reads these environment variables to find these binaries,
+    # which are needed to run the tests
+    LLVM_COV = "${llvm}/bin/llvm-cov";
+    LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
+  };
 
   nativeCheckInputs = [
     gitMinimal
+    writableTmpDirAsHomeHook
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.
@@ -70,6 +74,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     git init -b main
     git add .
   '';
+
+  checkFlags = [
+    "--skip=trybuild"
+    "--skip=ui_test"
+  ];
 
   meta = {
     inherit homepage;
@@ -89,9 +98,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       wucke13
       matthiasbeyer
       CobaltCause
+      chrjabs
     ];
 
-    # The profiler runtime is (currently) disabled on non-Linux platforms
-    broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
+    broken = stdenv.targetPlatform.isRedox;
   };
 })

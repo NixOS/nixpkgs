@@ -16,7 +16,7 @@ in
 
   options = {
 
-    programs.atop = rec {
+    programs.atop = {
 
       enable = lib.mkEnableOption "Atop, a tool for monitoring system resources";
 
@@ -107,7 +107,7 @@ in
       environment.etc = lib.mkIf (cfg.settings != { }) {
         atoprc.text = lib.concatStrings (
           lib.mapAttrsToList (n: v: ''
-            ${n} ${builtins.toString v}
+            ${n} ${toString v}
           '') cfg.settings
         );
       };

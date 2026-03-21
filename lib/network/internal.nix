@@ -33,7 +33,7 @@ let
     the list of strings which then can be parsed using `_parseExpanded`.
     Throws an error when the address is malformed.
 
-    # Type: String -> [ String ]
+    # Type: String -> [String]
 
     # Example:
 
@@ -94,7 +94,7 @@ let
     functions.
     Throws an error some element is not an u16 integer.
 
-    # Type: [ String ] -> IPv6
+    # Type: [String] -> IPv6
 
     # Example:
 
@@ -168,7 +168,7 @@ in
       prefix length are validated and converted to an internal representation
       that can be used by other functions.
 
-      # Type: String -> [ {address :: IPv6, prefixLength :: Int} ]
+      # Type: String -> [{ address :: IPv6; prefixLength :: Int; }]
 
       # Example:
 

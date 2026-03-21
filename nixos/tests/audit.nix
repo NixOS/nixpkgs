@@ -31,7 +31,7 @@
   };
 
   testScript = ''
-    machine.wait_for_unit("audit-rules.service")
+    machine.wait_for_unit("audit-rules-nixos.service")
     machine.wait_for_unit("auditd.service")
 
     with subtest("Audit subsystem gets enabled"):
@@ -40,14 +40,14 @@
       t.assertIn("backlog_limit 512", audit_status)
 
     with subtest("unix socket plugin activated"):
-      machine.succeed("stat /var/run/audispd_events")
+      machine.succeed("stat /run/audit/audispd_events")
 
     with subtest("Custom rule produces audit traces"):
       machine.succeed("hello")
       print(machine.succeed("ausearch -k nixos-test -sc exit_group"))
 
-    with subtest("Stopping audit-rules.service disables the audit subsystem"):
-      machine.succeed("systemctl stop audit-rules.service")
+    with subtest("Stopping audit-rules-nixos.service disables the audit subsystem"):
+      machine.succeed("systemctl stop audit-rules-nixos.service")
       t.assertIn("enabled 0", machine.succeed("auditctl -s"))
   '';
 

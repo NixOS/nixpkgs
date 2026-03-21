@@ -12,15 +12,15 @@
   zstd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "squashfs";
-  version = "4.7.2";
+  version = "4.7.5";
 
   src = fetchFromGitHub {
     owner = "plougher";
     repo = "squashfs-tools";
-    rev = version;
-    hash = "sha256-iQ+pBt+jvqI6zgZRV2MZM3CeFqiXe8Z+SS+rLOB4DLw=";
+    rev = finalAttrs.version;
+    hash = "sha256-rQ69sXvi6wY8yRyuQzcJZ6MvVGBbIw7vG+kYVHvfQQ8=";
   };
 
   strictDeps = true;
@@ -58,12 +58,12 @@ stdenv.mkDerivation rec {
     nixos-iso-boots-and-verifies = nixosTests.boot.biosCdrom;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/plougher/squashfs-tools";
     description = "Tool for creating and unpacking squashfs filesystems";
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ruuda ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ ruuda ];
     mainProgram = "mksquashfs";
   };
-}
+})

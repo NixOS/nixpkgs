@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "maturin";
-  version = "1.9.3";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "maturin";
     rev = "v${version}";
-    hash = "sha256-VhL4nKXyONXbxriEHta0vCnWY1j82oDOLoxVigaggSc=";
+    hash = "sha256-OTL6Poz6FIR+zpKiaCDGsUGkm2/jMVAuOS0bV/o4F3M=";
   };
 
-  cargoHash = "sha256-Iom4GoTBFJ9P5UQnYF5JbeQeO2Eh1MwKOwbo+PhgtQM=";
+  cargoHash = "sha256-pBhKuVfq9x4kHYmE2p5ly1EXG2Sr8hHQ7pHCaERqsw0=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     tests = {
       version = testers.testVersion { package = maturin; };
       pyo3 = python3.pkgs.callPackage ./pyo3-test {
-        format = "pyproject";
+        pyproject = true;
         buildAndTestSubdir = "examples/word-count";
         preConfigure = "";
 

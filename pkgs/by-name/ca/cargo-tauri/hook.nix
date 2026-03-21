@@ -18,6 +18,9 @@ makeSetupHook {
   propagatedBuildInputs = [
     cargo
     cargo-tauri
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    cargo-tauri.gst-plugin
   ];
 
   substitutions = {
@@ -33,12 +36,30 @@ makeSetupHook {
       }
       .${kernelName} or (throw "${kernelName} is not supported by cargo-tauri.hook");
 
+    fixupScript = lib.optionalString stdenv.hostPlatform.isLinux ''
+      gappsWrapperArgs+=(
+        --prefix WEBKIT_GST_ALLOWED_URI_PROTOCOLS : "asset"
+        # Not picked up automatically by the wrappers from the propagatedBuildInputs.
+        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${cargo-tauri.gst-plugin}/lib/gstreamer-1.0/"
+      )
+    '';
+
     # $targetDir is the path to the build artifacts (i.e., `./target/release`)
     installScript =
       {
         darwin = ''
-          mkdir -p $out
-          mv "$targetDir"/bundle/macos $out/Applications
+          mkdir -p "$out/Applications"
+
+          shopt -s nullglob
+          appBundles=("$targetDir"/bundle/macos/*.app)
+          shopt -u nullglob
+
+          if [ "''${#appBundles[@]}" -eq 0 ]; then
+            echo "cargo-tauri.hook: no .app bundles found in $targetDir/bundle/macos" >&2
+            exit 1
+          fi
+
+          mv -- "''${appBundles[@]}" "$out/Applications/"
         '';
 
         linux = ''

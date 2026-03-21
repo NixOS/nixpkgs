@@ -3,59 +3,49 @@
   fetchFromGitHub,
   nixosTests,
   fetchYarnDeps,
-  applyPatches,
   php,
   yarnConfigHook,
   yarnBuildHook,
   yarnInstallHook,
-  nodePackages,
+  grunt-cli,
   fetchzip,
 }:
 let
-  version = "1.6.3";
+  version = "1.7.1";
   # Fetch release tarball which contains language files
   # https://github.com/InvoicePlane/InvoicePlane/issues/1170
   languages = fetchzip {
     url = "https://github.com/InvoicePlane/InvoicePlane/releases/download/v${version}/v${version}.zip";
-    hash = "sha256-MuqxbkayW3GeiaorxfZSJtlwCWvnIF2ED/UUqahyoIQ=";
+    hash = "sha256-DpQazuLOJnNGrrQo7l6uQReoKZEd5es2DT0a50NuQB0=";
   };
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "invoiceplane";
   inherit version;
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "InvoicePlane";
-      repo = "InvoicePlane";
-      tag = "v${version}";
-      hash = "sha256-XNjdFWP5AEulbPZcMDXYSdDhaLWlgu3nnCSFnjUjGpk=";
-    };
-    patches = [
-      # Fix composer.json validation
-      # See https://github.com/InvoicePlane/InvoicePlane/pull/1306
-      ./fix_composer_validation.patch
-    ];
+  src = fetchFromGitHub {
+    owner = "InvoicePlane";
+    repo = "InvoicePlane";
+    tag = "v${version}";
+    hash = "sha256-Nci5GaCMYIjewq0W5emE6TDgc6JPz4bVVF3okNtHUag=";
   };
 
-  patches = [
-    # yarn.lock missing some resolved attributes and fails
-    ./fix-yarn-lock.patch
-  ];
+  # Composer.lock validation currently fails for unknown reason
+  composerStrictValidation = true;
 
-  vendorHash = "sha256-UCYAnECuIbIYg1T4I8I9maXVKXJc1zkyauBuIy5frTY=";
+  vendorHash = "sha256-adKvKWo55SSbEKpgMJzR9vJQA8DnNXOTfSzp7t8s2Nk=";
 
   nativeBuildInputs = [
     yarnConfigHook
     yarnBuildHook
     yarnInstallHook
     # Needed for executing package.json scripts
-    nodePackages.grunt-cli
+    grunt-cli
   ];
 
   offlineCache = fetchYarnDeps {
     inherit (finalAttrs) src patches;
-    hash = "sha256-0fPdxOIeQBTulPUxHtaQylm4jevQTONSN1bChqbGbGs=";
+    hash = "sha256-rJlOYMnzFKui+caIFD4d82Q/RcDYnadeJ1G56fcNNQY=";
   };
 
   postBuild = ''

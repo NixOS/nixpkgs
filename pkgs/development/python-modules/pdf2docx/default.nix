@@ -15,7 +15,7 @@
   setuptools,
 }:
 let
-  version = "0.5.8";
+  version = "0.5.12";
 in
 buildPythonPackage {
   pname = "pdf2docx";
@@ -26,7 +26,7 @@ buildPythonPackage {
     owner = "ArtifexSoftware";
     repo = "pdf2docx";
     tag = "v${version}";
-    hash = "sha256-tMITDm2NkxWS+H/hhd2LlaPbyuI86ZKaALqqHJqb8V0=";
+    hash = "sha256-fn5MnuLCmqjl99Xvs9THwerkIyUeXwPQmn+znvWtgUE=";
   };
 
   build-system = [
@@ -57,12 +57,12 @@ buildPythonPackage {
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert PDF to DOCX";
     mainProgram = "pdf2docx";
     homepage = "https://github.com/ArtifexSoftware/pdf2docx";
     changelog = "https://github.com/ArtifexSoftware/pdf2docx/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

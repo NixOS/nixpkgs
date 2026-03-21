@@ -3,6 +3,8 @@
   tl,
   bin,
 
+  tlpdbVersion,
+
   lib,
   buildEnv,
   libfaketime,
@@ -45,13 +47,19 @@ lib.fix (
     ### buildEnv with custom attributes
     buildEnv' =
       args:
-      (
-        buildEnv ({ inherit (args) name paths; })
+      (buildEnv (
+        {
+          inherit pname version;
+
+          inherit (args) paths;
+        }
         // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
-      ).overrideAttrs
+        // lib.optionalAttrs (args ? pathsToLink) { inherit (args) pathsToLink; }
+      )).overrideAttrs
         (
           removeAttrs args [
             "extraOutputsToInstall"
+            "pathsToLink"
             "name"
             "paths"
             "pkgs"
@@ -207,11 +215,20 @@ lib.fix (
       ]
     ) pkgList.bin;
 
-    name =
+    pname =
       if __combine then
-        "texlive-${__extraName}-${bin.texliveYear}${__extraVersion}" # texlive.combine: old name name
+        "texlive-${__extraName}" # texlive.combine: old name
       else
-        "texlive-${bin.texliveYear}-" + (if __formatsOf != null then "${__formatsOf.pname}-fmt" else "env");
+        "texlive";
+    version =
+      if __combine then
+        "${toString tlpdbVersion.year}${__extraVersion}" # texlive.combine: old version
+      else
+        "${toString tlpdbVersion.year}-r${toString tlpdbVersion.revision}-"
+        + (lib.optionalString tlpdbVersion.frozen "final-")
+        + (if __formatsOf != null then "${__formatsOf.pname}-fmt" else "env");
+
+    name = "${pname}-${version}";
 
     texmfdist = buildEnv' {
       name = "${name}-texmfdist";
@@ -220,11 +237,14 @@ lib.fix (
       paths = builtins.catAttrs "outPath" pkgList.nonbin;
 
       # mktexlsr
-      nativeBuildInputs = [ tl."texlive.infra" ];
+      nativeBuildInputs = [
+        tl.texlive-scripts # for mktexlsr.pl with --sort support
+        perl
+      ];
 
       postBuild = # generate ls-R database
         ''
-          mktexlsr "$out"
+          perl ${tl.texlive-scripts.tex}/scripts/texlive/mktexlsr.pl --sort "$out"
         '';
     };
 

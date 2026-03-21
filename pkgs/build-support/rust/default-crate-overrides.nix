@@ -53,6 +53,12 @@
     buildInputs = [ alsa-lib ];
   };
 
+  # Force using the cmake backend. At least on Darwin, the build else gets confused and fails.
+  aws-lc-sys = prev: {
+    nativeBuildInputs = [ cmake ];
+    env.AWS_LC_SYS_CMAKE_BUILDER = 1;
+  };
+
   cairo-rs = attrs: {
     buildInputs = [ cairo ];
   };

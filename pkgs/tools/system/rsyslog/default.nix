@@ -8,7 +8,7 @@
   json_c,
   zlib,
   docutils,
-  fastJson,
+  libfastjson,
   withKrb5 ? true,
   libkrb5,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -60,13 +60,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2508.0";
+  version = "8.2512.0";
 
   src = fetchurl {
-    url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-yJsedNNtDKSpW3Shq+Nu0LH6rIt8i+RxqEFc+ndiBv0=";
+    url = "https://www.rsyslog.com/files/download/rsyslog/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-k8UAJdkLbHlfo1DVaj2DK/zkUEPqm9aCQNnCqTlLxik=";
   };
 
   nativeBuildInputs = [
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    fastJson
+    libfastjson
     libestr
     json_c
     zlib
@@ -180,6 +180,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature true "generate-man-pages")
   ];
 
+  env.NIX_CFLAGS_LINK = "-lz";
+
   passthru.tests = {
     nixos-rsyslogd = nixosTests.rsyslogd;
   };
@@ -188,9 +190,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     mainProgram = "rsyslogd";
-    changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
+    changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

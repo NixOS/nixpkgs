@@ -9,15 +9,15 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diff-so-fancy";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
-    rev = "v${version}";
-    sha256 = "sha256-yF+LI1lsE1qwOc3u7mtc+uu0N/8m4bZD5qP+xFraaTI=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-Wbiz82mTqjJG3WeVOkaOzuPfXCdprJkCSs/Ye3OUlE0=";
   };
 
   nativeBuildInputs = [
@@ -52,19 +52,19 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/so-fancy/diff-so-fancy";
     description = "Good-looking diffs filter for git";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     longDescription = ''
       diff-so-fancy builds on the good-lookin' output of git contrib's
       diff-highlight to upgrade your diffs' appearances.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fpletz
       ma27
     ];
     mainProgram = "diff-so-fancy";
   };
-}
+})

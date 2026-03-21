@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HAvycSEZZfZwoVp3g7QWcwfbdyZKwWJKBuVmeWTajuk=";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ ladspa-header ];
 
   postPatch = ''
     substituteInPlace Makefile \

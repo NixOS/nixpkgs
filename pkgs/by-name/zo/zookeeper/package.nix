@@ -10,16 +10,16 @@
 }:
 let
   # Latest supported LTS JDK for Zookeeper 3.9:
-  # https://zookeeper.apache.org/doc/r3.9.2/zookeeperAdmin.html#sc_requiredSoftware
+  # https://zookeeper.apache.org/doc/r3.9.5/zookeeperAdmin.html#sc_requiredSoftware
   jre = jdk11_headless;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zookeeper";
-  version = "3.9.3";
+  version = "3.9.5";
 
   src = fetchurl {
-    url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
-    hash = "sha512-1E2HDBaRZi778ai68YWckBuCDcX/Fjs26BvrJ7b7880xtfHwdWl+2q9tPnpMsMyS+STc/2SylO8T1TVYm9rxQw==";
+    url = "mirror://apache/zookeeper/zookeeper-${finalAttrs.version}/apache-zookeeper-${finalAttrs.version}-bin.tar.gz";
+    hash = "sha512-uqHCHdpNVyOPynUeT6K78dr/mihhKxJeSX3M1cGI7mRJ4veZR+R0wt1NGZknidTTayexui/rgMKwxF598OIqqA==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
-    changelog = "https://zookeeper.apache.org/doc/r${version}/releasenotes.html";
+    changelog = "https://zookeeper.apache.org/doc/r${finalAttrs.version}/releasenotes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nathan-gs
@@ -62,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

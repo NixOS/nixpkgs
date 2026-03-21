@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mbuffer";
-  version = "20250809";
+  version = "20251025";
   outputs = [
     "out"
     "man"
@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.maier-komor.de/software/mbuffer/mbuffer-${finalAttrs.version}.tgz";
-    sha256 = "sha256-mGXa5CRSQ3oZrkSEZ4EKA6pG1PJeKZlettbU85xnzR4=";
+    sha256 = "sha256-R+UWtBFgOZlnN8T4iV9m563iS37sXpN1SGY3psirNgE=";
   };
 
   buildInputs = [
@@ -32,11 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   strictDeps = true;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Tool for buffering data streams with a large set of unique features";
     homepage = "https://www.maier-komor.de/mbuffer.html";
     license = lib.licenses.gpl3Only;
-    platforms = lib.platforms.linux; # Maybe other non-darwin Unix
+    platforms = lib.platforms.unix;
     mainProgram = "mbuffer";
   };
 })

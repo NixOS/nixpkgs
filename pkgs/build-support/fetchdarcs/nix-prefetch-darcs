@@ -27,10 +27,10 @@ usage() {
 while [ $# -gt 0 ]; do
 	case "$1" in
 		--quiet)
-		  quiet=1; shift 1 ;;
+			quiet=1; shift 1 ;;
 		--name)
 			name="$2"; shift 2 ;;
-		--repository)
+		--repo)
 			repository="$2"; shift 2 ;;
 		--tag)
 			tag="$2"; shift 2 ;;
@@ -127,21 +127,17 @@ if [ -z "$final_path" ]; then
 
 	cd "$tmp_clone"
 	# Do not print Darcs progress to stdout (else stdout isn’t parsable JSON)
-	if [ -t 1 ]; then
-		darcs clone $clone_args "$repository" "$name" >/dev/tty
-	else
-		darcs clone $clone_args "$repository" "$name" >/dev/null
-	fi
-	cd "$tmp_clone/$name"
+	darcs clone "$clone_args" "$repository" "$name" 1>&2
 	# Will put the current Darcs context into the store.
 	new_context="$tmp_clone/${name}-context.txt"
-	darcs log --context > "$new_context"
+	darcs log --repodir="$tmp_clone/$name" --context > "$new_context"
 	final_context="$(nix-store --add-fixed "$hash_algo" "$new_context")"
 	# Darcs has a weak hash using the XOR of the patch hashes which is useful
 	# for other scripts
 	# https://darcs.net/Internals/Hashes
-	weak_hash="$(darcs show repo | grep '^ *Weak Hash:' | cut -d: -f2- | tr -d "[:space:]")"
-	cd - >/dev/null
+	weak_hash="$(darcs show repo --repodir="$tmp_clone/$name" | awk '/^[[:space:]]*Weak Hash:/ { sub(/^[[:space:]]*Weak Hash:[[:space:]]*/, "", $0); printf $0 }')"
+	date="$(darcs log --repodir="$tmp_clone/$name" --max-count 1 | awk '/^Date:/ { sub(/^Date:[[:space:]]*/, "", $0); printf $0 }')"
+	date="$(date -u -d "$date" "+%Y-%m-%dT%H:%M:%SZ")"
 	rm -rf "$tmp_clone/$name/_darcs"
 
 	hash="$(nix-hash --type "$hash_algo" "$hash_format" "$tmp_clone/$name")"
@@ -164,7 +160,7 @@ cat <<EOF
 	"repository": $(json_escape "$repository"),
 EOF
 if [ -n "$tag" ]; then cat <<EOF
-	"tag": "$(json_escape "$tag")",
+	"tag": $(json_escape "$tag"),
 EOF
 elif [ -n "$darcs_hash" ]; then cat <<EOF
 	"darcs-hash": $(json_escape "$darcs_hash"),
@@ -176,6 +172,7 @@ fi; if [ -s "$final_context" ]; then cat <<EOF
 	"context": $(json_escape "$final_context"),
 EOF
 fi; cat <<EOF
+	"date": "$date",
 	"path": "$final_path",
 	$(json_escape "$hash_algo"): $(json_escape "$hash"),
 	"hash": "$(nix-hash --to-sri --type "$hash_algo" "$hash")"

@@ -1,49 +1,55 @@
 {
   lib,
+  stdenv,
   asn1crypto,
+  badldap,
   buildPythonPackage,
   certipy,
   cryptography,
   dnspython,
   fetchFromGitHub,
   hatchling,
-  minikerberos-bad,
-  msldap-bad,
-  pyasn1,
+  kerbad,
   pytestCheckHook,
-  pythonOlder,
   winacl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bloodyad";
-  version = "2.1.21";
+  version = "2.5.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "CravateRouge";
     repo = "bloodyAD";
-    tag = "v${version}";
-    hash = "sha256-9yzKYSEmaPMv6AWhgr4UPPEx8s75Pg/hwqJnV29WocM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6ZSJTupjVhvyU9G/eePJiXk16w9HwpsOFwdwTSLb7tU=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];
 
   pythonRemoveDeps = [
-    "minikerberos-bad"
-    "msldap-bad"
+    "kerbad"
+    "badldap"
   ];
 
   build-system = [ hatchling ];
 
+  # Upstream provides two package scripts: bloodyad and bloodyAD,
+  # but this causes a FileAlreadyExists error during installation
+  # on Darwin (case-insensitive filesystem).
+  # https://github.com/CravateRouge/bloodyAD/issues/99
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "bloodyAD = \"bloodyAD.main:main\"" ""
+  '';
+
   dependencies = [
     asn1crypto
+    badldap
     cryptography
     dnspython
-    minikerberos-bad
-    msldap-bad
+    kerbad
     winacl
   ];
 
@@ -63,13 +69,20 @@ buildPythonPackage rec {
     "test_04ComputerRbcdGetSetAttribute"
     "test_06AddRemoveGetDnsRecord"
     "test_certificate_authentications"
+    "test_04ComputerRbcdRestoreGetSetAttribute"
   ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # TypeError: applyFormatters() takes 1 positional argument but 2 were given
+    # https://github.com/CravateRouge/bloodyAD/issues/98
+    "tests/test_formatters.py"
+  ];
+
+  meta = {
     description = "Module for Active Directory Privilege Escalations";
     homepage = "https://github.com/CravateRouge/bloodyAD";
-    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/CravateRouge/bloodyAD/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

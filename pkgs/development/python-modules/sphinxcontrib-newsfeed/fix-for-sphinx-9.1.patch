@@ -1,0 +1,16 @@
+diff --git a/sphinxcontrib/newsfeed.py b/sphinxcontrib/newsfeed.py
+index 2e155cd..64b30d9 100644
+--- a/sphinxcontrib/newsfeed.py
++++ b/sphinxcontrib/newsfeed.py
+@@ -265,8 +265,9 @@ def process_feed(app, doctree, fromdocname):
+                 replacement.append(section_node)
+                 env.resolve_references(rss_item_description, docname, app.builder)
+                 if app.builder.format == 'html':
+-                    rss_item_description = app.builder.render_partial(
+-                                                    rss_item_description)['body']
++                    rendered = app.builder.render_partial(rss_item_description)
++                    # Sphinx 9.1+ changed 'body' to 'fragment'
++                    rss_item_description = rendered.get('fragment', rendered.get('body', ''))
+                     rss_item_date = meta['date']
+                     rss_item = RSSItem(rss_item_title, rss_item_link,
+                                        rss_item_description, rss_item_date)

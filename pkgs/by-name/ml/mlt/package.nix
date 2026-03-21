@@ -14,7 +14,7 @@
   libsamplerate,
   libvorbis,
   libxml2,
-  libX11,
+  libx11,
   makeWrapper,
   movit,
   opencv4,
@@ -25,6 +25,7 @@
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
   enableJackrack ? stdenv.hostPlatform.isLinux,
+  gdk-pixbuf,
   glib,
   ladspa-sdk,
   ladspaPlugins,
@@ -38,15 +39,15 @@
   libarchive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mlt";
-  version = "7.30.0";
+  version = "7.36.1";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
-    tag = "v${version}";
-    hash = "sha256-z1bW+hcVeMeibC1PUS5XNpbkNB+75YLoOWZC2zuDol4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3WZirFMrU8T8UClkUQRBjqBqycpI7pAjcVzeGpYMwhY=";
     # The submodule contains glaxnimate code, since MLT uses internally some functions defined in glaxnimate.
     # Since glaxnimate is not available as a library upstream, we cannot remove for now this dependency on
     # submodules until upstream exports glaxnimate as a library: https://gitlab.com/mattbas/glaxnimate/-/issues/545
@@ -71,6 +72,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gdk-pixbuf
     (opencv4.override { inherit ffmpeg; })
     ffmpeg
     fftw
@@ -102,7 +104,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableSDL2 [
     SDL2
-    libX11
+    libx11
   ];
 
   outputs = [
@@ -118,9 +120,18 @@ stdenv.mkDerivation rec {
   ++ lib.optionals enablePython [
     "-DSWIG_PYTHON=ON"
   ]
-  ++ lib.optionals (qt != null) [
-    "-DMOD_QT${lib.versions.major qt.qtbase.version}=ON"
-    "-DMOD_GLAXNIMATE${if lib.versions.major qt.qtbase.version == "5" then "" else "_QT6"}=ON"
+  ++ lib.optionals (qt == null) [
+    "-DMOD_QT6=OFF"
+  ]
+  ++ lib.optionals (qt != null && lib.versions.major qt.qtbase.version == "5") [
+    "-DMOD_QT=ON"
+    "-DMOD_QT6=OFF"
+    "-DMOD_GLAXNIMATE=ON"
+  ]
+  ++ lib.optionals (qt != null && lib.versions.major qt.qtbase.version == "6") [
+    "-DMOD_QT6=ON"
+    "-DMOD_QT=OFF"
+    "-DMOD_GLAXNIMATE_QT6=ON"
   ];
 
   preFixup = ''
@@ -144,14 +155,16 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source multimedia framework, designed for television broadcasting";
     homepage = "https://www.mltframework.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = [ ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      nick-linux
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})

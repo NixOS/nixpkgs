@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "donpapi";
   version = "1.2.0";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "login-securite";
     repo = "DonPAPI";
-    tag = "V${version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-60aGnsr36X3mf91nH9ud0xyLBqKgzZ4ALucrLGpAuzQ=";
   };
 
@@ -39,13 +39,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "donpapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for dumping DPAPI credentials remotely";
     homepage = "https://github.com/login-securite/DonPAPI";
-    changelog = "https://github.com/login-securite/DonPAPI/releases/tag/V${src.tag}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/login-securite/DonPAPI/releases/tag/V${finalAttrs.src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "donpapi";
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

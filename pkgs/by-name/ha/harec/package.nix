@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "0.24.2";
+  version = "0.26.0";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = finalAttrs.version;
-    hash = "sha256-YCUBdPYr/44stW9k54QoUEhNkti6ULJkVBphx7xhmKo=";
+    tag = finalAttrs.version;
+    hash = "sha256-azj37C+Uw8wqy0lf3g/kB353iufY6P7Rf20aLCRp9a8=";
   };
 
   nativeBuildInputs = [ qbe ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ qbe ];
 
   makeFlags = [
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence (
-      builtins.map (item: item.command) [
+      map (item: item.command) [
         (gitUpdater {
           attrPath = "harec";
           ignoredVersions = [ "-rc[0-9]{1,}" ];
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://harelang.org/";
     description = "Bootstrapping Hare compiler written in C for POSIX systems";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ onemoresuza ];
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "harec";
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/

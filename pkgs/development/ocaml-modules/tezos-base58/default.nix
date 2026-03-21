@@ -25,11 +25,11 @@ buildDunePackage rec {
     fmt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Base58 encoding for Tezos";
     homepage = "https://github.com/tarides/tezos-base58/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bezmuth ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bezmuth ];
   };
 
 }

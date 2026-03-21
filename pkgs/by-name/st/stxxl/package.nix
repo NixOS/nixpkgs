@@ -10,14 +10,14 @@ let
   mkFlag = optset: flag: if optset then "-D${flag}=ON" else "-D${flag}=OFF";
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stxxl";
   version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "stxxl";
     repo = "stxxl";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-U6DQ5mI83pyTmq5/ga5rI8v0h2/iEnNl8mxhIOpbF1I=";
   };
 
@@ -34,12 +34,17 @@ stdenv.mkDerivation rec {
     inherit parallelSupport;
   };
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Implementation of the C++ standard template library STL for external memory (out-of-core) computations";
     homepage = "https://github.com/stxxl/stxxl";
-    license = licenses.boost;
+    license = lib.licenses.boost;
     maintainers = [ ];
     mainProgram = "stxxl_tool";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

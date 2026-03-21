@@ -7,42 +7,34 @@
   ocamlbuild,
   topkg,
 }:
-let
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "xmlm";
-  webpage = "https://erratique.ch/software/${pname}";
-in
+  version = "1.4.0";
 
-if lib.versionOlder ocaml.version "4.05" then
-  throw "xmlm is not available for OCaml ${ocaml.version}"
-else
+  src = fetchurl {
+    url = "https://erratique.ch/software/xmlm/releases/xmlm-${finalAttrs.version}.tbz";
+    sha256 = "sha256-CRJSJY490WMgw85N2yG81X79nIwuv7eZ7mpUPtSS2fo=";
+  };
 
-  stdenv.mkDerivation rec {
-    name = "ocaml${ocaml.version}-${pname}-${version}";
-    version = "1.4.0";
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+    topkg
+  ];
+  buildInputs = [ topkg ];
 
-    src = fetchurl {
-      url = "${webpage}/releases/${pname}-${version}.tbz";
-      sha256 = "sha256-CRJSJY490WMgw85N2yG81X79nIwuv7eZ7mpUPtSS2fo=";
-    };
+  strictDeps = true;
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      ocamlbuild
-      topkg
-    ];
-    buildInputs = [ topkg ];
+  inherit (topkg) buildPhase installPhase;
 
-    strictDeps = true;
-
-    inherit (topkg) buildPhase installPhase;
-
-    meta = with lib; {
-      description = "OCaml streaming codec to decode and encode the XML data format";
-      homepage = webpage;
-      license = licenses.isc;
-      maintainers = [ maintainers.vbgl ];
-      mainProgram = "xmltrip";
-      inherit (ocaml.meta) platforms;
-    };
-  }
+  meta = {
+    description = "OCaml streaming codec to decode and encode the XML data format";
+    homepage = "https://erratique.ch/software/xmlm";
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.vbgl ];
+    mainProgram = "xmltrip";
+    inherit (ocaml.meta) platforms;
+  };
+})

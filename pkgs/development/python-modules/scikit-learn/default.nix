@@ -19,22 +19,19 @@
   pillow,
   joblib,
   threadpoolctl,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   __structuredAttrs = true;
 
   pname = "scikit-learn";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "scikit_learn";
     inherit version;
-    hash = "sha256-JLPx6XakZlqnTuD8qsK4/Mxq53yOB6sl2jum0ykrmAI=";
+    hash = "sha256-m8y7O0Dj3hA1H49QaOEF0PQIOxpl+ge2Y0+8QBpih/0=";
   };
 
   postPatch = ''
@@ -42,8 +39,9 @@ buildPythonPackage rec {
       "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
       "'${version}',"
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2,<2.3.0" numpy \
-      --replace-fail "scipy>=1.8.0,<1.16.0" scipy
+      --replace-fail "meson-python>=0.17.1,<0.19.0" meson-python \
+      --replace-fail "numpy>=2,<2.4.0" numpy \
+      --replace-fail "scipy>=1.10.0,<1.17.0" scipy
   '';
 
   buildInputs = [

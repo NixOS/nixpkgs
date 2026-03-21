@@ -18,9 +18,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "easydict" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/makinacorpus/easydict";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     description = "Access dict values as attributes (works recursively)";
   };
 }

@@ -6,12 +6,12 @@
   nix-update-script,
   versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sarif-fmt";
   version = "0.8.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-Xc9uc//5wTBWJ89mcaC/4c8/xtTvnu8g2Aa1viUhluo=";
   };
 
@@ -46,4 +46,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "sarif-fmt";
   };
-}
+})

@@ -21,6 +21,8 @@ clangStdenv.mkDerivation rec {
   version = "1.0.1";
   pname = "d-SEAMS";
 
+  strictDeps = false;
+
   src = fetchFromGitHub {
     owner = "d-SEAMS";
     repo = "seams-core";
@@ -35,6 +37,10 @@ clangStdenv.mkDerivation rec {
       hash = "sha256-PLbT1lqdw+69lIHH96MPcGRjfIeZyb88vc875QLYyqw=";
     })
   ];
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
   nativeBuildInputs = [
     cmake
     lua
@@ -52,7 +58,7 @@ clangStdenv.mkDerivation rec {
     blas
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Deferred Structural Elucidation Analysis for Molecular Simulations";
     mainProgram = "yodaStruct";
     longDescription = ''
@@ -63,8 +69,8 @@ clangStdenv.mkDerivation rec {
       interface.
     '';
     homepage = "https://dseams.info";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.HaoZeke ];
+    maintainers = [ lib.maintainers.HaoZeke ];
   };
 }

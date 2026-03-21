@@ -8,14 +8,14 @@
   libudev-zero,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rogcat";
   version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "flxo";
     repo = "rogcat";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-nXKvepuiBDIGo8Gga5tbbT/mnC6z+HipV5XYtlrURRU=";
   };
 
@@ -35,15 +35,13 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Adb logcat wrapper";
     homepage = "https://github.com/flxo/rogcat";
-    changelog = "https://github.com/flxo/rogcat/releases/tag/v${version}";
+    changelog = "https://github.com/flxo/rogcat/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "rogcat";
     platforms = lib.platforms.linux;
   };
-}
+})

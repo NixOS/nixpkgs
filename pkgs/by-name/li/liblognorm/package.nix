@@ -6,16 +6,16 @@
   libestr,
   json_c,
   pcre,
-  fastJson,
+  libfastjson,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblognorm";
-  version = "2.0.6";
+  version = "2.0.9";
 
   src = fetchurl {
     url = "http://www.liblognorm.com/files/download/liblognorm-${finalAttrs.version}.tar.gz";
-    hash = "sha256-z/BX6FwiA4mS+e0S641OY8Ra31OlpR+qoyefYFgJ9vI=";
+    hash = "sha256-dsfMLLdqPVjncy4M/yORgPg/O2NQAriqBIZciBKFd5M=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     libestr
     json_c
     pcre
-    fastJson
+    libfastjson
   ];
 
   configureFlags = [ "--enable-regexp" ];

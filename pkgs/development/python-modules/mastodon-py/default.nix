@@ -5,7 +5,8 @@
   blurhash,
   cryptography,
   decorator,
-  grapheme,
+  fetchpatch,
+  graphemeu,
   http-ece,
   python-dateutil,
   python-magic,
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     hash = "sha256-i3HMT8cabSl664UK3eopJQ9bDBpGCgbHTvBJkgeoxd8=";
   };
 
+  patches = [
+    # Switch dependency from unmaintained `grapheme` to `graphemeu`
+    (fetchpatch {
+      url = "https://github.com/halcy/Mastodon.py/commit/939c7508414e950922c518260a9ba5a5853aeef2.patch";
+      hash = "sha256-XBiAFxYUBNyynld++UwPGIIg9j+3/EF2jGqiysVqYRM=";
+    })
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -42,7 +51,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     blurhash = [ blurhash ];
-    grapheme = [ grapheme ];
+    grapheme = [ graphemeu ];
     webpush = [
       http-ece
       cryptography
@@ -56,7 +65,7 @@ buildPythonPackage rec {
     pytest-vcr
     requests-mock
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # disabledTests = [
   #   "test_notifications_dismiss_pre_2_9_2"
@@ -67,11 +76,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mastodon" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/halcy/Mastodon.py/blob/${src.tag}/CHANGELOG.rst";
     description = "Python wrapper for the Mastodon API";
     homepage = "https://github.com/halcy/Mastodon.py";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

@@ -9,15 +9,15 @@
   libunwind,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "imgproxy";
-  version = "3.30.0";
+  version = "3.30.1";
 
   src = fetchFromGitHub {
     owner = "imgproxy";
     repo = "imgproxy";
-    hash = "sha256-vT+Nyjx2TTOCzosCV/EfMLEnyT6RCebBFNu0/IRuwak=";
-    rev = "v${version}";
+    hash = "sha256-UaJ02TQ8jbebRDF5K3zFy+4ho+dt1o/o3cEDzUQY3iU=";
+    rev = "v${finalAttrs.version}";
   };
 
   vendorHash = "sha256-0NIsaSMOBenDCGvnGdLB60sp08EaC/CezWogxTrcDdY=";
@@ -35,12 +35,12 @@ buildGoModule rec {
     export CGO_LDFLAGS_ALLOW='-(s|w)'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast and secure on-the-fly image processing server written in Go";
     mainProgram = "imgproxy";
     homepage = "https://imgproxy.net";
-    changelog = "https://github.com/imgproxy/imgproxy/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ paluh ];
+    changelog = "https://github.com/imgproxy/imgproxy/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ paluh ];
   };
-}
+})

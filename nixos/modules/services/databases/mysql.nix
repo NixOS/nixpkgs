@@ -111,6 +111,9 @@ in
 
       dataDir = lib.mkOption {
         type = lib.types.path;
+        default = (
+          if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
+        );
         example = "/var/lib/mysql";
         description = ''
           The data directory for MySQL.
@@ -430,10 +433,6 @@ in
       }
     ];
 
-    services.mysql.dataDir = lib.mkDefault (
-      if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
-    );
-
     services.mysql.settings.mysqld = lib.mkMerge [
       {
         datadir = cfg.dataDir;
@@ -691,7 +690,7 @@ in
       serviceConfig = lib.mkMerge [
         {
           Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
+          Restart = "on-abnormal";
           RestartSec = "5s";
 
           # User and group

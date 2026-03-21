@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "orange-widget-base";
-  version = "4.26.0";
+  version = "4.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-widget-base";
     tag = version;
-    hash = "sha256-XoQlZaY6pAflL0vWzSALDABOPybqV28xB/AS8L0DcBc=";
+    hash = "sha256-RTPzdeqz7HRyH726qXC0FMrAcwk6qZ8gmkXL7s5bl74=";
   };
 
   build-system = [ setuptools ];
@@ -66,6 +66,6 @@ buildPythonPackage rec {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";
     homepage = "https://github.com/biolab/orange-widget-base";
     license = [ lib.licenses.gpl3Plus ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }

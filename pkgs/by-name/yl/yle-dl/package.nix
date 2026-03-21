@@ -41,14 +41,12 @@ python3Packages.buildPythonApplication {
     # python3Packages.pytestCheckHook
   ];
 
-  versionCheckProgramArg = "--version";
-
   meta = {
     description = "Downloads videos from Yle (Finnish Broadcasting Company) servers";
     homepage = "https://aajanki.github.io/yle-dl/";
     changelog = "https://github.com/aajanki/yle-dl/blob/${src.tag}/ChangeLog";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "yle-dl";
   };

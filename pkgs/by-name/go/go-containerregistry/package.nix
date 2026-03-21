@@ -13,15 +13,15 @@ let
   ];
 in
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-containerregistry";
-  version = "0.20.6";
+  version = "0.21.3";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "go-containerregistry";
-    rev = "v${version}";
-    sha256 = "sha256-fmn2SPmYecyKY7HMPjPKvovRS/Ez+SwDe+1maccq4Hc=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-BfKiBjfL5th1TPpw6hpno04MffLnXmOVq7BsGUCkPT0=";
   };
   vendorHash = null;
 
@@ -41,8 +41,8 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X ${t}/cmd/crane/cmd.Version=v${version}"
-      "-X ${t}/pkg/v1/remote/transport.Version=${version}"
+      "-X ${t}/cmd/crane/cmd.Version=v${finalAttrs.version}"
+      "-X ${t}/pkg/v1/remote/transport.Version=${finalAttrs.version}"
     ];
 
   postInstall =
@@ -65,14 +65,14 @@ buildGoModule rec {
   # NOTE: no tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tools for interacting with remote images and registries including crane and gcrane";
     homepage = "https://github.com/google/go-containerregistry";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "crane";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       yurrriq
       ryan4yin
     ];
   };
-}
+})

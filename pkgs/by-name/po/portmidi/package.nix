@@ -7,26 +7,21 @@
   alsa-lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "portmidi";
-  version = "2.0.6";
+  version = "2.0.8";
 
   src = fetchFromGitHub {
     owner = "portmidi";
     repo = "portmidi";
-    rev = "v${version}";
-    sha256 = "sha256-ou+zN4XnR+QaWC/hzgtThVbeZ/3UVLTpZ9O+eQSGVBs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-j5m/ablSzsENVzE1ghvnu+uE4nB0V91SA/mrCx5gCNk=";
   };
 
   cmakeFlags = [
     "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=Release"
     "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=Release"
     "-DCMAKE_RUNTIME_OUTPUT_DIRECTORY=Release"
-  ];
-
-  patches = [
-    # Add missing header include
-    ./missing-header.diff
   ];
 
   postInstall =
@@ -47,11 +42,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/PortMidi/portmidi";
     description = "Platform independent library for MIDI I/O";
-    license = licenses.mit;
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilytrau ];
+    platforms = lib.platforms.unix;
   };
-}
+})

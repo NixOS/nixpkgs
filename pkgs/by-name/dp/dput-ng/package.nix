@@ -5,7 +5,7 @@
   nix-update-script,
 }:
 let
-  version = "1.43";
+  version = "1.44";
 in
 python3.pkgs.buildPythonApplication {
   pname = "dput-ng";
@@ -17,8 +17,12 @@ python3.pkgs.buildPythonApplication {
     owner = "debian";
     repo = "dput-ng";
     tag = "debian/${version}";
-    hash = "sha256-zrH4h4C4y3oTiOXsidFv/rIJNzCdV2lqzNEg0SOkX4w=";
+    hash = "sha256-3MdxyTRnoK5SUJzY5DTzfOiurcbtxujhiNpMABNLxgY=";
   };
+
+  postPatch = ''
+    substituteInPlace dput/core.py --replace-fail /usr/share/dput-ng "$out/share/dput-ng"
+  '';
 
   build-system = with python3.pkgs; [
     setuptools
@@ -31,10 +35,13 @@ python3.pkgs.buildPythonApplication {
     coverage
     xdg
     python-debian
+    distro-info
   ];
 
   postInstall = ''
     cp -r bin $out/
+    mkdir -p "$out/share/dput-ng"
+    cp -r skel/* "$out/share/dput-ng/"
   '';
 
   pythonImportsCheck = [ "dput" ];
@@ -51,7 +58,7 @@ python3.pkgs.buildPythonApplication {
     # Essentially: all tags from 1.40 onwards start with `debian/`,
     # then the version, and then an optional suffix (usually reserved for backports).
     # We want to ignore the backport versions, and strip the `debian/` prefix.
-    extraArgs = [ "--version-regex=(?:debian\/)?(\d+(?:\.\d+)*)(?:[_\+].*)?" ];
+    extraArgs = [ "--version-regex=(?:debian/)?(\\d+(?:\\.\\d+)*)(?:[_+].*)?" ];
   };
 
   meta = {

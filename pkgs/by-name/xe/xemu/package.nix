@@ -1,7 +1,7 @@
 {
   lib,
-  SDL2,
-  SDL2_image,
+  sdl3,
+  sdl3-image,
   fetchFromGitHub,
   gettext,
   git,
@@ -28,17 +28,21 @@
   which,
   wrapGAppsHook3,
   cacert,
+  darwin,
+  desktopToDarwinBundle,
+  xxHash,
+  tomlplusplus,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.8.105";
+  version = "0.8.134";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1Gp/XGPCIT8qeW1YPI+mh6P0avHHFXtOGcXEEkGT12w=";
+    hash = "sha256-BWOLKa7B1GURG4Zfo65ZQrr54nRaRHYibKv71j6gtiY=";
 
     nativeBuildInputs = [
       git
@@ -51,13 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
       meson subprojects download \
         SPIRV-Reflect VulkanMemoryAllocator berkeley-softfloat-3 berkeley-testfloat-3 genconfig glslang imgui \
-        implot json keycodemapdb nv2a_vsh_cpu tomlplusplus volk xxhash || true
+        implot json keycodemapdb nv2a_vsh_cpu volk || true
       find subprojects -type d -name .git -prune -execdir rm -r {} +
     '';
   };
-  __structuredAttrs = true;
+  __structuredAttrs = false;
   nativeBuildInputs = [
-    SDL2
     meson
     cmake
     ninja
@@ -66,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     which
     wrapGAppsHook3
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    desktopToDarwinBundle
+  ]
   ++ (with python3Packages; [
     python
     pyyaml
@@ -73,28 +80,39 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   buildInputs = [
-    SDL2
-    SDL2_image
+    sdl3
+    sdl3-image
     gettext
     glib
     gtk3
     curl
-    libdrm
     libepoxy
     libpcap
     libsamplerate
     libslirp
-    libgbm
     openssl
-    vte
     vulkan-headers
     vulkan-loader
+    xxHash
+    tomlplusplus
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libdrm
+    libgbm
+    vte
   ];
 
   configureFlags = [
     "--disable-strip"
     "--target-list=i386-softmmu"
     "--disable-werror"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # As seen in the official build script ($src/build.sh)
+    "--disable-cocoa"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "--enable-hvf"
   ];
 
   buildFlags = [ "qemu-system-i386" ];
@@ -113,10 +131,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace ./scripts/xemu-version.sh \
       --replace-fail 'date -u' "date -d @$SOURCE_DATE_EPOCH '+%Y-%m-%d %H:%M:%S'"
+
+    substituteInPlace subprojects/volk/volk.c \
+      --replace-fail 'libvulkan.so' '${lib.getLib vulkan-loader}/lib/libvulkan.so'
   '';
 
   preConfigure = ''
     configureFlagsArray+=("--extra-cflags=-DXBOX=1 -Wno-error=redundant-decls")
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    configureFlagsArray+=("-Wno-implicit-function-declaration")
+  ''
+  + ''
     # When the data below can't be obtained through git, the build process tries
     # to run `XEMU_COMMIT=$(cat XEMU_COMMIT)` (and similar)
     echo '${finalAttrs.version}' > XEMU_VERSION
@@ -126,6 +152,15 @@ stdenv.mkDerivation (finalAttrs: {
     cd build
     substituteInPlace ./build.ninja --replace /usr/bin/env $(which env)
   '';
+
+  postBuild =
+    lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+      # Needed for HVF acceleration
+      codesign --entitlements $src/accel/hvf/entitlements.plist -f -s - qemu-system-i386-unsigned
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mv qemu-system-i386-unsigned qemu-system-i386
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -154,7 +189,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "xemu";
-    maintainers = with lib.maintainers; [ marcin-serwin ];
-    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      marcin-serwin
+      matteopacini
+    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

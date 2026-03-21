@@ -13,7 +13,6 @@
   # Python deps
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   python,
   # Python libraries
   numpy,
@@ -132,7 +131,7 @@ let
     }
   ];
 
-  withTensorboard = (pythonOlder "3.6") || tensorboardSupport;
+  withTensorboard = tensorboardSupport;
 
   cudaComponents = with cudaPackages; [
     (cuda_nvcc.__spliced.buildHost or cuda_nvcc)
@@ -211,7 +210,8 @@ let
   ]);
 
   rules_cc_darwin_patched = stdenv.mkDerivation {
-    name = "rules_cc-${pname}-${version}";
+    pname = "rules_cc-${pname}";
+    inherit version;
 
     src = _bazel-build.deps;
 
@@ -245,7 +245,8 @@ let
     '';
   };
   llvm-raw_darwin_patched = stdenv.mkDerivation {
-    name = "llvm-raw-${pname}-${version}";
+    pname = "llvm-raw-${pname}";
+    inherit version;
 
     src = _bazel-build.deps;
 
@@ -285,7 +286,7 @@ let
       _bazel-build;
 
   _bazel-build = buildBazelPackage.override { inherit stdenv; } {
-    name = "${pname}-${version}";
+    inherit pname version;
     #bazel = bazel_5;
     bazel = bazel;
 
@@ -328,8 +329,10 @@ let
       jsoncpp
       libjpeg_turbo
       libpng
-      (pybind11.overridePythonAttrs (_: {
-        inherit stdenv;
+      (pybind11.override (prev: {
+        buildPythonPackage = prev.buildPythonPackage.override {
+          inherit stdenv;
+        };
       }))
       snappy-cpp
       sqlite
@@ -341,84 +344,89 @@ let
     ++ lib.optionals mklSupport [ mkl ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ nsync ];
 
-    # arbitrarily set to the current latest bazel version, overly careful
-    TF_IGNORE_MAX_BAZEL_VERSION = true;
+    env = {
+      # arbitrarily set to the current latest bazel version, overly careful
+      TF_IGNORE_MAX_BAZEL_VERSION = true;
 
-    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+      LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
-    # Take as many libraries from the system as possible. Keep in sync with
-    # list of valid syslibs in
-    # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
-    TF_SYSTEM_LIBS = lib.concatStringsSep "," (
-      [
-        "absl_py"
-        "astor_archive"
-        "astunparse_archive"
-        "boringssl"
-        "com_google_absl"
-        # Not packaged in nixpkgs
-        # "com_github_googleapis_googleapis"
-        # "com_github_googlecloudplatform_google_cloud_cpp"
-        "com_github_grpc_grpc"
-        "com_google_protobuf"
-        # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
-        # "com_googlesource_code_re2"
-        "curl"
-        "cython"
-        "dill_archive"
-        "double_conversion"
-        "flatbuffers"
-        "functools32_archive"
-        "gast_archive"
-        "gif"
-        "hwloc"
-        "icu"
-        "jsoncpp_git"
-        "libjpeg_turbo"
-        "nasm"
-        "opt_einsum_archive"
-        "org_sqlite"
-        "pasta"
-        "png"
-        "pybind11"
-        "six_archive"
-        "snappy"
-        "tblib_archive"
-        "termcolor_archive"
-        "typing_extensions_archive"
-        "wrapt"
-        "zlib"
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        "nsync" # fails to build on darwin
-      ]
-    );
+      # Take as many libraries from the system as possible. Keep in sync with
+      # list of valid syslibs in
+      # https://github.com/tensorflow/tensorflow/blob/master/third_party/systemlibs/syslibs_configure.bzl
+      TF_SYSTEM_LIBS = lib.concatStringsSep "," (
+        [
+          "absl_py"
+          "astor_archive"
+          "astunparse_archive"
+          "boringssl"
+          "com_google_absl"
+          # Not packaged in nixpkgs
+          # "com_github_googleapis_googleapis"
+          # "com_github_googlecloudplatform_google_cloud_cpp"
+          "com_github_grpc_grpc"
+          "com_google_protobuf"
+          # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
+          # "com_googlesource_code_re2"
+          "curl"
+          "cython"
+          "dill_archive"
+          "double_conversion"
+          "flatbuffers"
+          "functools32_archive"
+          "gast_archive"
+          "gif"
+          "hwloc"
+          "icu"
+          "jsoncpp_git"
+          "libjpeg_turbo"
+          "nasm"
+          "opt_einsum_archive"
+          "org_sqlite"
+          "pasta"
+          "png"
+          "pybind11"
+          "six_archive"
+          "snappy"
+          "tblib_archive"
+          "termcolor_archive"
+          "typing_extensions_archive"
+          "wrapt"
+          "zlib"
+        ]
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+          "nsync" # fails to build on darwin
+        ]
+      );
 
-    INCLUDEDIR = "${includes_joined}/include";
+      INCLUDEDIR = "${includes_joined}/include";
 
-    # This is needed for the Nix-provided protobuf dependency to work,
-    # as otherwise the rule `link_proto_files` tries to create the links
-    # to `/usr/include/...` which results in build failures.
-    PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
+      # This is needed for the Nix-provided protobuf dependency to work,
+      # as otherwise the rule `link_proto_files` tries to create the links
+      # to `/usr/include/...` which results in build failures.
+      PROTOBUF_INCLUDE_PATH = "${protobuf-core}/include";
 
-    PYTHON_BIN_PATH = pythonEnv.interpreter;
+      PYTHON_BIN_PATH = pythonEnv.interpreter;
 
-    TF_NEED_GCP = true;
-    TF_NEED_HDFS = true;
-    TF_ENABLE_XLA = tfFeature xlaSupport;
+      TF_NEED_GCP = true;
+      TF_NEED_HDFS = true;
+      TF_ENABLE_XLA = tfFeature xlaSupport;
 
-    CC_OPT_FLAGS = " ";
+      CC_OPT_FLAGS = " ";
 
-    # https://github.com/tensorflow/tensorflow/issues/14454
-    TF_NEED_MPI = tfFeature cudaSupport;
+      # https://github.com/tensorflow/tensorflow/issues/14454
+      TF_NEED_MPI = tfFeature cudaSupport;
 
-    TF_NEED_CUDA = tfFeature cudaSupport;
-    TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkitDevMerged},${cudnnMerged},${lib.getLib nccl}";
-    TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
+      TF_NEED_CUDA = tfFeature cudaSupport;
+      TF_CUDA_PATHS = lib.optionalString cudaSupport "${cudatoolkitDevMerged},${cudnnMerged},${lib.getLib nccl}";
+      TF_CUDA_COMPUTE_CAPABILITIES = lib.concatStringsSep "," cudaCapabilities;
 
-    # Needed even when we override stdenv: e.g. for ar
-    GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
-    GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/cc";
+      # Needed even when we override stdenv: e.g. for ar
+      GCC_HOST_COMPILER_PREFIX = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin";
+      GCC_HOST_COMPILER_PATH = lib.optionalString cudaSupport "${cudatoolkit_cc_joined}/bin/cc";
+
+      # https://github.com/tensorflow/tensorflow/pull/39470
+      NIX_CFLAGS_COMPILE = toString [ "-Wno-stringop-truncation" ];
+    };
 
     patches = [
       "${gentoo-patches}/0002-systemlib-Latest-absl-LTS-has-split-cord-libs.patch"
@@ -449,9 +457,6 @@ let
       # https://github.com/tensorflow/tensorflow/issues/20280#issuecomment-400230560
       sed -i '/tensorboard ~=/d' tensorflow/tools/pip_package/setup.py
     '';
-
-    # https://github.com/tensorflow/tensorflow/pull/39470
-    env.NIX_CFLAGS_COMPILE = toString [ "-Wno-stringop-truncation" ];
 
     preConfigure =
       let
@@ -498,7 +503,7 @@ let
       # workaround for https://github.com/bazelbuild/bazel/issues/15359
       "--spawn_strategy=sandboxed"
     ]
-    ++ lib.optionals (mklSupport) [ "--config=mkl" ];
+    ++ lib.optionals mklSupport [ "--config=mkl" ];
 
     bazelTargets = [
       "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow"

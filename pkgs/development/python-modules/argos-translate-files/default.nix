@@ -1,7 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
   setuptools,
   lxml,
@@ -10,17 +11,30 @@
   translatehtml,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "argos-translate-files";
-  version = "1.4.1";
+  version = "1.4.4";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9ufNuExfyW3gr8+pIpp6Ie03e0hE4l3l3kk6EiVH0x8=";
+  src = fetchFromGitHub {
+    owner = "LibreTranslate";
+    repo = "argos-translate-files";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6AxVBiK0g6ajstyCQZ9ExF9MRYSLd4Frw03N7c9bvuI=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "beautifulsoup4" ];
+
+  # LibreTranslate has forked argos-translate [1] to fix some bugs and
+  # make stanza optional, but it's unclear what the future of this fork
+  # is.
+  #
+  # We'll stay on upstream argostranslate for now.
+  #
+  # [1]: https://github.com/Libretranslate/argos-translate/
+  pythonRemoveDeps = [ "argos-translate-lt" ];
 
   dependencies = [
     lxml
@@ -29,21 +43,20 @@ buildPythonPackage rec {
     translatehtml
   ];
 
+  doCheck = true;
+
   nativeCheckInputs = [
+    pytestCheckHook
     # pythonImportsCheck needs a home dir for argostranslatefiles
     writableTmpDirAsHomeHook
   ];
 
-  postPatch = ''
-    ln -s */requires.txt requirements.txt
-  '';
-
   pythonImportsCheck = [ "argostranslatefiles" ];
 
-  meta = with lib; {
+  meta = {
     description = "Translate files using Argos Translate";
     homepage = "https://www.argosopentech.com";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misuzu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misuzu ];
   };
-}
+})

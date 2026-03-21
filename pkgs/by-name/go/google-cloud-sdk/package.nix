@@ -8,6 +8,7 @@
 #
 
 {
+  cacert,
   stdenv,
   lib,
   fetchurl,
@@ -52,8 +53,8 @@ let
       crcmod
       grpcio
     ]
-    ++ lib.optional (with-gce) google-compute-engine
-    ++ lib.optional (with-numpy) numpy
+    ++ lib.optional with-gce google-compute-engine
+    ++ lib.optional with-numpy numpy
   );
 
   data = import ./data.nix { };
@@ -87,6 +88,9 @@ stdenv.mkDerivation rec {
     ./gsutil-disable-updates.patch
   ];
 
+  # Prevent Python from writing bytecode to ensure build determinism
+  env.PYTHONDONTWRITEBYTECODE = "1";
+
   installPhase = ''
     runHook preInstall
 
@@ -95,6 +99,13 @@ stdenv.mkDerivation rec {
       rm -r platform/bundledpythonunix
     fi
     cp -R * .install $out/google-cloud-sdk/
+
+    # Resolve readlink noise in shell initialization
+    # We patch the source script before wrapProgram renames it.
+    # This ensures that the resulting .gcloud-wrapped binary contains the fix.
+    substituteInPlace "$out/google-cloud-sdk/bin/gcloud" \
+      --replace-fail 'while _cloudsdk_link=$(readlink "$_cloudsdk_path")' 'while _cloudsdk_link=$(readlink "$_cloudsdk_path" 2>/dev/null)' \
+      --replace-fail 'CLOUDSDK_ROOT_DIR=$(_cloudsdk_root_dir "$0")' 'CLOUDSDK_ROOT_DIR=$(realpath "$(dirname "$0")/..")'
 
     mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
     cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
@@ -165,23 +176,33 @@ stdenv.mkDerivation rec {
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
 
+  # Replace all vendored copies of CA bundle with the one used by Nixpkgs.
+  # This search/replace is a bit overzealous and replaces some files used by tests
+  # but it should cause no harm since we're not running those tests.
+  postFixup = ''
+    while IFS= read -rd "" f; do
+      echo "rewriting certificate bundle: $f"
+      ln -sf ${cacert}/etc/ssl/certs/ca-bundle.crt "$f"
+    done < <(find "$out" '(' -name cacert.pem -o -name cacerts.txt ')' -print0)
+  '';
+
   passthru = {
     inherit components withExtraComponents;
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # anthoscli and possibly more
     ];
     # This package contains vendored dependencies. All have free licenses.
-    license = licenses.free;
+    license = lib.licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     changelog = "https://cloud.google.com/sdk/docs/release-notes";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       iammrinal0
       marcusramberg
       pradyuman

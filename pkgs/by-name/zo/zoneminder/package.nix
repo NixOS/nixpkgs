@@ -83,13 +83,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.35";
+  version = "1.36.38";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
     tag = version;
-    hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
+    hash = "sha256-c/Q+h0ntJ4XUuvgrLSlWfue4GL4nGARgmXt0En334Y4=";
     fetchSubmodules = true;
   };
 
@@ -240,11 +240,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

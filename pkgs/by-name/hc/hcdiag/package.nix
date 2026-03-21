@@ -6,23 +6,22 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hcdiag";
-  version = "0.5.9";
+  version = "0.5.11";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcdiag";
-    tag = "v${version}";
-    hash = "sha256-OLL7yrlVacw51NyroW6kalqXDrw3YKwBTPThiCYUjuw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vfW1HXhSK3B6MCkypzUXOBBLLA8uqBw9ipTnW5duhoQ=";
   };
 
-  vendorHash = "sha256-ZuG++2bItCdnTcSaeBumIS2DqF+U6ZP7UTYM2DC+YGw=";
+  vendorHash = "sha256-mUqXnUAnN052RMsMtiUpOTlDVb59Xh3+++E/BtEEQGk=";
 
   nativeInstallCheckHooks = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -32,10 +31,10 @@ buildGoModule rec {
   meta = {
     description = "Collects and bundles product and platform diagnostics supporting Consul, Nomad, TFE, and Vault";
     homepage = "https://github.com/hashicorp/hcdiag";
-    changelog = "https://github.com/hashicorp/hcdiag/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/hashicorp/hcdiag/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
     mainProgram = "hcdiag";
   };
-}
+})

@@ -27,16 +27,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.8.0";
+  version = "26.2.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    sha256 = "sha256-OJd5wlne5F2fa5pK4i1hRAIzcZlzgOwJjw2UhqkEYfY=";
+    hash = "sha256-cFFAUgUq+AxOdmHI92WYY6h9jSubXRUL4Jp8q+mDdHg=";
   };
 
-  vendorHash = "sha256-kFyOoE+WJ/3hhPg5tC3w/PrDkLgOtJGeOwZEHsTOdG8=";
+  vendorHash = "sha256-73E3fH1JUHxjphF6aPrmNJu3P1DZd28blmBxSiyuCTc=";
 
   php = phpPackage;
 
@@ -84,12 +84,10 @@ phpPackage.buildComposerProject2 rec {
       --replace-fail '"default": "rrdtool",' '"default": "${rrdtool}/bin/rrdtool",' \
       --replace-fail '"default": "snmpgetnext",' '"default": "${net-snmp}/bin/snmpgetnext",' \
       --replace-fail '"default": "traceroute",' '"default": "/run/wrappers/bin/traceroute",' \
-      --replace-fail '"default": "/usr/bin/dot",' '"default": "${graphviz}/bin/dot",' \
       --replace-fail '"default": "/usr/bin/ipmitool",' '"default": "${ipmitool}/bin/ipmitool",' \
       --replace-fail '"default": "/usr/bin/mtr",' '"default": "${mtr}/bin/mtr",' \
       --replace-fail '"default": "/usr/bin/nfdump",' '"default": "${nfdump}/bin/nfdump",' \
       --replace-fail '"default": "/usr/bin/nmap",' '"default": "${nmap}/bin/nmap",' \
-      --replace-fail '"default": "/usr/bin/sfdp",' '"default": "${graphviz}/bin/sfdp",' \
       --replace-fail '"default": "/usr/bin/snmpbulkwalk",' '"default": "${net-snmp}/bin/snmpbulkwalk",' \
       --replace-fail '"default": "/usr/bin/snmpget",' '"default": "${net-snmp}/bin/snmpget",' \
       --replace-fail '"default": "/usr/bin/snmptranslate",' '"default": "${net-snmp}/bin/snmptranslate",' \
@@ -103,7 +101,8 @@ phpPackage.buildComposerProject2 rec {
     substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/app/Listeners/CommandStartingListener.php \
+      --replace-fail "! function_exists('posix_getpwuid') || ! function_exists('posix_geteuid')" "true"
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 
@@ -123,12 +122,14 @@ phpPackage.buildComposerProject2 rec {
     tests.librenms = nixosTests.librenms;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ];
-    teams = [ teams.wdz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      netali
+      johannwagner
+    ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   python3,
   fetchFromGitHub,
+  fetchpatch2,
   zlib,
   nixosTests,
   postgresqlTestHook,
@@ -20,14 +21,14 @@
 
 let
   pname = "pgadmin";
-  version = "9.8";
-  yarnHash = "sha256-NvQlrDXn9sa4MpytFYPsC4bKO8Thx/MuqG8M6VIa2ig=";
+  version = "9.13";
+  yarnHash = "sha256-ViqjZ40M78EZ4ZOMuiAGJqx6Xyv4dqY9X7jMDbohaY8=";
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
-    hash = "sha256-gnVrMuxWV7lAol1gyONbhtuUL4EEOfOPkRUM2esMgi0=";
+    hash = "sha256-dG8oxE9g30Dz3K3PveoMjPa1/eY9RWEV2QBdx2Dz+Rg=";
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -58,7 +59,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   # from Dockerfile
-  CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
+  env.CPPFLAGS = "-DPNG_ARM_NEON_OPT=0";
 
   format = "setuptools";
 
@@ -67,6 +68,12 @@ pythonPackages.buildPythonApplication rec {
     ./expose-setup.py.patch
     # check for permission of /etc/pgadmin/config_system and don't fail
     ./check-system-config-dir.patch
+    # fix session.py See https://github.com/pgadmin-org/pgadmin4/pull/9706
+    (fetchpatch2 {
+      name = "session.patch";
+      url = "https://github.com/pgadmin-org/pgadmin4/commit/7043587387c17635f62bab8414546bb8c0dbadf4.patch?full_index=1";
+      hash = "sha256-gZrO0dBy5EklZf/dKr9j3RJ54rtzFrw53v91vqkRboY=";
+    })
   ];
 
   postPatch = ''
@@ -217,8 +224,10 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = !postgresqlTestHook.meta.broken;
+  doCheck = lib.meta.availableOn stdenv.buildPlatform postgresqlTestHook;
 
+  # for replication testing in regression tests for PostgreSql >= 17
+  env.postgresqlExtraSettings = "wal_level = logical";
   checkPhase = ''
     runHook preCheck
 
@@ -235,6 +244,18 @@ pythonPackages.buildPythonApplication rec {
     cp -v regression/test_config.json.in regression/test_config.json
     substituteInPlace regression/test_config.json --replace-fail "localhost" "$PGHOST"
     substituteInPlace regression/runtests.py --replace-fail "builtins.SERVER_MODE = None" "builtins.SERVER_MODE = False"
+
+    # test cases hardcode ports and host in subscription replication tests
+    for files in pgadmin/browser/server_groups/servers/databases/subscriptions/tests/17_plus/*
+    do
+      substituteInPlace $files --replace-quiet "5917" "5432"
+      substituteInPlace $files --replace-quiet "localhost" "$PGHOST"
+    done
+    for files in pgadmin/browser/server_groups/servers/databases/subscriptions/tests/18_plus/*
+    do
+      substituteInPlace $files --replace-quiet "5434" "5432"
+      substituteInPlace $files --replace-quiet "localhost" "$PGHOST"
+    done
 
     ## Browser test ##
     python regression/runtests.py --pkg browser --exclude ${skippedTests}

@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "eslint_d";
-  version = "14.3.0";
+  version = "15.0.0";
 
   src = fetchFromGitHub {
     owner = "mantoni";
     repo = "eslint_d.js";
     rev = "v${version}";
-    hash = "sha256-Mu3dSgRIC2L9IImKixJfaUsltlajY0cYdXOSikNQuPo=";
+    hash = "sha256-VrKtLtFAWLtpKE0HfTzPcWCx1o7Fhm8ClveWJ64hj4U=";
   };
 
-  npmDepsHash = "sha256-nZ9q+Xmd8JLs+xYEO1TVbDEmQl2UwR9D9OWqVChNHhw=";
+  npmDepsHash = "sha256-O1Y0fLkwCrDoIUVeQBXV8HVq490IR5+WjXfs3qY6vrM=";
 
   dontNpmBuild = true;
 
@@ -26,11 +26,11 @@ buildNpmPackage rec {
     version = src.rev;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Makes eslint the fastest linter on the planet";
     homepage = "https://github.com/mantoni/eslint_d.js";
-    license = licenses.mit;
-    maintainers = [ maintainers.ehllie ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ehllie ];
     mainProgram = "eslint_d";
   };
 }

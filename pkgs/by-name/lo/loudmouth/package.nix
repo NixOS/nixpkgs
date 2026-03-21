@@ -9,12 +9,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.5.3";
   pname = "loudmouth";
 
   src = fetchurl {
-    url = "https://mcabber.com/files/loudmouth/${pname}-${version}.tar.bz2";
+    url = "https://mcabber.com/files/loudmouth/loudmouth-${finalAttrs.version}.tar.bz2";
     sha256 = "0b6kd5gpndl9nzis3n6hcl0ldz74bnbiypqgqa1vgb0vrcar8cjl";
   };
 
@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight C library for the Jabber protocol";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     downloadPage = "http://mcabber.com/files/loudmouth/";
-    license = licenses.lgpl21;
+    license = lib.licenses.lgpl21;
   };
-}
+})

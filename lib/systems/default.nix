@@ -75,7 +75,7 @@ let
 
       # Those two will always be derived from "config", if given, so they should NOT
       # be overridden further down with "// args".
-      args = builtins.removeAttrs allArgs [
+      args = removeAttrs allArgs [
         "parsed"
         "system"
       ];
@@ -102,13 +102,10 @@ let
             # assume compatible cpu have all the instructions included
             final.parsed.cpu == platform.parsed.cpu
             ->
-              # if both have gcc.arch defined, check whether final can execute the given platform
+              # if platform has gcc.arch, final must also have and can execute the gcc.arch of platform
               (
-                (final ? gcc.arch && platform ? gcc.arch)
-                -> architectures.canExecute final.gcc.arch platform.gcc.arch
+                platform ? gcc.arch -> final ? gcc.arch && architectures.canExecute final.gcc.arch platform.gcc.arch
               )
-              # if platform has gcc.arch defined but final doesn't, don't assume it can be executed
-              || (platform ? gcc.arch -> !(final ? gcc.arch))
           );
 
         isCompatible =
@@ -124,6 +121,8 @@ let
             "ucrt"
           else if final.isMinGW then
             "msvcrt"
+          else if final.isCygwin then
+            "cygwin"
           else if final.isWasi then
             "wasilibc"
           else if final.isWasm && !final.isWasi then
@@ -183,7 +182,7 @@ let
             sharedLibrary =
               if final.isDarwin then
                 ".dylib"
-              else if final.isWindows then
+              else if (final.isWindows || final.isCygwin) then
                 ".dll"
               else
                 ".so";
@@ -191,7 +190,7 @@ let
           // {
             staticLibrary = if final.isWindows then ".lib" else ".a";
             library = if final.isStatic then final.extensions.staticLibrary else final.extensions.sharedLibrary;
-            executable = if final.isWindows then ".exe" else "";
+            executable = if (final.isWindows || final.isCygwin) then ".exe" else "";
           };
         # Misc boolean options
         useAndroidPrebuilt = false;
@@ -204,6 +203,7 @@ let
             {
               linux = "Linux";
               windows = "Windows";
+              cygwin = "CYGWIN_NT";
               darwin = "Darwin";
               netbsd = "NetBSD";
               freebsd = "FreeBSD";
@@ -319,7 +319,7 @@ let
           if final.isAarch32 then
             "arm"
           else if final.isAarch64 then
-            "aarch64"
+            "aarch64${optionalString final.isBigEndian "_be"}"
           else if final.isS390 && !final.isS390x then
             null
           else if final.isx86_64 then
@@ -357,8 +357,8 @@ let
             null;
         # The canonical name for this attribute is darwinSdkVersion, but some
         # platforms define the old name "sdkVer".
-        darwinSdkVersion = final.sdkVer or "11.3";
-        darwinMinVersion = final.darwinSdkVersion;
+        darwinSdkVersion = final.sdkVer or "14.4";
+        darwinMinVersion = "14.0";
         darwinMinVersionVariable =
           if final.isMacOS then
             "MACOSX_DEPLOYMENT_TARGET"
@@ -384,11 +384,13 @@ let
             if pkgs.stdenv.hostPlatform.canExecute final then
               lib.getExe (pkgs.writeShellScriptBin "exec" ''exec "$@"'')
             else if final.isWindows then
-              "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
+              "${wine}/bin/wine"
             else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null then
               "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
             else if final.isWasi then
               "${pkgs.wasmtime}/bin/wasmtime"
+            else if final.isGhcjs then
+              "${pkgs.nodejs-slim}/bin/node"
             else if final.isMmix then
               "${pkgs.mmixware}/bin/mmix"
             else
@@ -415,66 +417,75 @@ let
       // args
       // {
         rust = rust // {
-          # Once args.rustc.platform.target-family is deprecated and
-          # removed, there will no longer be any need to modify any
-          # values from args.rust.platform, so we can drop all the
-          # "args ? rust" etc. checks, and merge args.rust.platform in
-          # /after/.
-          platform = rust.platform or { } // {
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
-            arch =
-              if rust ? platform then
-                rust.platform.arch
-              else if final.isAarch32 then
-                "arm"
-              else if final.isMips64 then
-                "mips64" # never add "el" suffix
-              else if final.isPower64 then
-                "powerpc64" # never add "le" suffix
+          platform =
+            rust.platform or (
+              if lib.hasSuffix ".json" (rust.rustcTargetSpec or "") then
+                lib.importJSON rust.rustcTargetSpec
               else
-                final.parsed.cpu.name;
+                { }
+            )
 
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
-            os =
-              if rust ? platform then
-                rust.platform.os or "none"
-              else if final.isDarwin then
-                "macos"
-              else if final.isWasm && !final.isWasi then
-                "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
-              else
-                final.parsed.kernel.name;
+            # Once args.rustc.platform.target-family is deprecated and
+            # removed, there will no longer be any need to modify any
+            # values from args.rust.platform, so we can drop all the
+            # "args ? rust" etc. checks, and merge args.rust.platform in
+            # /after/.
+            // {
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_arch
+              arch =
+                if rust ? platform then
+                  rust.platform.arch
+                else if final.isAarch32 then
+                  "arm"
+                else if final.isMips64 then
+                  "mips64" # never add "el" suffix
+                else if final.isPower64 then
+                  "powerpc64" # never add "le" suffix
+                else
+                  final.parsed.cpu.name;
 
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
-            target-family =
-              if args ? rust.platform.target-family then
-                args.rust.platform.target-family
-              else if args ? rustc.platform.target-family then
-                (
-                  # Since https://github.com/rust-lang/rust/pull/84072
-                  # `target-family` is a list instead of single value.
-                  let
-                    f = args.rustc.platform.target-family;
-                  in
-                  if isList f then f else [ f ]
-                )
-              else
-                optional final.isUnix "unix" ++ optional final.isWindows "windows" ++ optional final.isWasm "wasm";
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_os
+              os =
+                if rust ? platform then
+                  rust.platform.os or "none"
+                else if final.isDarwin then
+                  "macos"
+                else if final.isWasm && !final.isWasi then
+                  "unknown" # Needed for {wasm32,wasm64}-unknown-unknown.
+                else
+                  final.parsed.kernel.name;
 
-            # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
-            vendor =
-              let
-                inherit (final.parsed) vendor;
-              in
-              rust.platform.vendor or {
-                "w64" = "pc";
-              }
-              .${vendor.name} or vendor.name;
-          };
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_family
+              target-family =
+                if args ? rust.platform.target-family then
+                  args.rust.platform.target-family
+                else if args ? rustc.platform.target-family then
+                  (
+                    # Since https://github.com/rust-lang/rust/pull/84072
+                    # `target-family` is a list instead of single value.
+                    let
+                      f = args.rustc.platform.target-family;
+                    in
+                    if isList f then f else [ f ]
+                  )
+                else
+                  optional final.isUnix "unix" ++ optional final.isWindows "windows" ++ optional final.isWasm "wasm";
 
-          # The name of the rust target, even if it is custom. Adjustments are
-          # because rust has slightly different naming conventions than we do.
-          rustcTarget =
+              # https://doc.rust-lang.org/reference/conditional-compilation.html#target_vendor
+              vendor =
+                let
+                  inherit (final.parsed) vendor;
+                in
+                rust.platform.vendor or {
+                  "w64" = "pc";
+                }
+                .${vendor.name} or vendor.name;
+            };
+
+          # The name of the rust target if it is standard, or the json file
+          # containing the custom target spec. Adjustments are because rust has
+          # slightly different naming conventions than we do.
+          rustcTargetSpec =
             let
               inherit (final.parsed) cpu kernel abi;
               cpu_ =
@@ -488,28 +499,36 @@ let
                 }
                 .${cpu.name} or cpu.name;
               vendor_ = final.rust.platform.vendor;
+              abi_ =
+                # We're very explicit about the POWER ELF ABI w/ glibc in our parsing, while Rust is not.
+                # TODO: Somehow ensure that Rust actually *uses* the correct ABI, and not just a libc-based default.
+                if (lib.strings.hasPrefix "powerpc" cpu.name) && (lib.strings.hasPrefix "gnuabielfv" abi.name) then
+                  "gnu"
+                else
+                  abi.name;
+
+              inferred =
+                if final.isWasi then
+                  # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+                  # We cannot know which subversion does the user want, and
+                  # currently use WASI 0.1 as default for compatibility. Custom
+                  # users can set `rust.rustcTargetSpec` to override it.
+                  "${cpu_}-wasip1"
+                else
+                  "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi_}"}";
             in
             # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-            args.rust.rustcTarget or args.rustc.config or (
-              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
-              # We cannot know which subversion does the user want, and
-              # currently use WASI 0.1 as default for compatibility. Custom
-              # users can set `rust.rustcTarget` to override it.
-              if final.isWasi then
-                "${cpu_}-wasip1"
+            args.rust.rustcTargetSpec or args.rustc.config or (
+              if rust ? platform then
+                # TODO: This breaks cc-rs and thus std support, so maybe remove support?
+                builtins.toFile (rust.rustcTarget or inferred + ".json") (toJSON rust.platform)
               else
-                "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+                args.rust.rustcTarget or inferred
             );
 
-          # The name of the rust target if it is standard, or the json file
-          # containing the custom target spec.
-          rustcTargetSpec =
-            rust.rustcTargetSpec or (
-              if rust ? platform then
-                builtins.toFile (final.rust.rustcTarget + ".json") (toJSON rust.platform)
-              else
-                final.rust.rustcTarget
-            );
+          # Do not use rustcTarget. Use rustcTargetSpec or cargoShortTarget.
+          # TODO: Remove all in-tree usages, and deprecate
+          rustcTarget = rust.rustcTarget or final.rust.cargoShortTarget;
 
           # The name of the rust target if it is standard, or the
           # basename of the file containing the custom target spec,
@@ -603,7 +622,7 @@ let
               "openbsd"
             else if final.isSunOS then
               "sunos"
-            else if final.isWindows then
+            else if (final.isWindows || final.isCygwin) then
               "win32"
             else
               null;

@@ -31,7 +31,7 @@ rec {
       : the [interpreter](https://en.wikipedia.org/wiki/Shebang_(Unix)) to use for the script.
     : `check` (String)
       : A command to check the script. For example, this could be a linting check.
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper].
 
     `nameOrPath` (String)
@@ -195,7 +195,7 @@ rec {
     : `strip` (Boolean, Default: true)
       : Whether to [strip](https://nixos.org/manual/nixpkgs/stable/#ssec-fixup-phase) the executable or not.
 
-    : `makeWrapperArgs` (Optional, [ String ], Default: [])
+    : `makeWrapperArgs` (Optional, [String], Default: [])
       : Arguments forwarded to (`makeWrapper`)[#fun-makeWrapper]
 
     `nameOrPath` (String)
@@ -599,7 +599,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "babashka"
       ])
       // {
@@ -692,7 +692,7 @@ rec {
     in
     makeScriptWriter
       (
-        (builtins.removeAttrs config [
+        (removeAttrs config [
           "guile"
           "libraries"
           "r6rs"
@@ -728,7 +728,7 @@ rec {
             [ "--no-auto-compile" ]
             ++ lib.optional r6rs "--r6rs"
             ++ lib.optional r7rs "--r7rs"
-            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," builtins.toString srfi)
+            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," toString srfi)
             ++ [ "-s" ]
           ))
           "!#"
@@ -812,7 +812,13 @@ rec {
       strip ? true,
     }:
     let
-      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+      optionFormat = optionName: {
+        option = "--${optionName}";
+        sep = ":";
+        explicitBool = false;
+      };
+
+      nimCompileCmdArgs = lib.cli.toCommandLineShell optionFormat (
         {
           d = "release";
           nimcache = ".";
@@ -921,7 +927,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter =
           if libraries == [ ] then "${ruby}/bin/ruby" else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
@@ -963,7 +969,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter = lua.interpreter;
         # if libraries == []
@@ -1080,7 +1086,7 @@ rec {
     in
     writeDash name ''
       export NODE_PATH=${node-env}/lib/node_modules
-      exec ${lib.getExe pkgs.nodejs} ${pkgs.writeText "js" content} "$@"
+      exec ${lib.getExe pkgs.nodejs-slim} ${pkgs.writeText "js" content} "$@"
     '';
 
   /**
@@ -1134,7 +1140,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
       }
@@ -1186,7 +1192,7 @@ rec {
           "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
     in
     makeScriptWriter (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "libraries"
         "flakeIgnore"
         "doCheck"
@@ -1333,7 +1339,7 @@ rec {
     content:
     makeScriptWriter
       (
-        (builtins.removeAttrs args [
+        (removeAttrs args [
           "dotnet-sdk"
           "fsi-flags"
           "libraries"

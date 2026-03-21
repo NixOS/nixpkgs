@@ -22,7 +22,7 @@
   libiconv,
   libogg,
   libpng,
-  libpthreadstubs,
+  libpthread-stubs,
   libvorbis,
   libzip,
   nlohmann_json,
@@ -30,21 +30,22 @@
   pkg-config,
   speexdsp,
   zlib,
+  withDiscordRpc ? false,
 }:
 
 let
-  openrct2-version = "0.4.26";
+  openrct2-version = "0.4.31";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.7.3";
+  objects-version = "1.7.6";
   openmsx-version = "1.6.1";
   opensfx-version = "1.0.6";
-  title-sequences-version = "0.4.14";
+  title-sequences-version = "0.4.26";
 
   objects = fetchurl {
     url = "https://github.com/OpenRCT2/objects/releases/download/v${objects-version}/objects.zip";
-    hash = "sha256-yBApJkV4cG7R24hmXhKnClg+cdxNPrTbJiU10vBYnqs=";
+    hash = "sha256-asoutEH76MAi/4TVn7Ue1+pXd1ZkCXDcmJ6raF/0VpY=";
   };
   openmsx = fetchurl {
     url = "https://github.com/OpenRCT2/OpenMusic/releases/download/v${openmsx-version}/openmusic.zip";
@@ -56,7 +57,7 @@ let
   };
   title-sequences = fetchurl {
     url = "https://github.com/OpenRCT2/title-sequences/releases/download/v${title-sequences-version}/title-sequences.zip";
-    hash = "sha256-FA33FOgG/tQRzEl2Pn8WsPzypIelcAHR5Q/Oj5FIqfM=";
+    hash = "sha256-2ruXh7FXY0L8pN2fZLP4z6BKfmzpwruWEPR7dikFyFg=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -67,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     tag = "v${openrct2-version}";
-    hash = "sha256-C6DK1gT/QSgI5ZDyg2FWf9H/BMskS9N2mVMaVb643PE=";
+    hash = "sha256-jXcB2lwf/2O+TMSakp32it6T8Fg0e5QFcbMU89WoMjU=";
   };
 
   nativeBuildInputs = [
@@ -79,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
-    discord-rpc
     duktape
     expat
     flac
@@ -93,20 +93,22 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv
     libogg
     libpng
-    libpthreadstubs
+    libpthread-stubs
     libvorbis
     libzip
     nlohmann_json
     openssl
     speexdsp
     zlib
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
     (lib.cmakeBool "DOWNLOAD_OPENMSX" false)
     (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
     (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
+    (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
   ];
 
   postUnpack = ''

@@ -1,12 +1,13 @@
 {
   lib,
   fetchurl,
-  version ? "0.27.0",
+  version ? "0.28.1",
   astring,
   base,
   camlp-streams,
   cmdliner_1_0,
-  cmdliner_1_1,
+  cmdliner_1,
+  cmdliner,
   csexp,
   dune-build-info,
   either,
@@ -48,6 +49,7 @@ rec {
         "0.26.1" = "sha256-2gBuQn8VuexhL7gI1EZZm9m3w+4lq+s9VVdHpw10xtc=";
         "0.26.2" = "sha256-Lk9Za/eqNnqET+g7oPawvxSyplF53cCCNj/peT0DdcU=";
         "0.27.0" = "sha256-3b9ITAdtCPmUAO6Et5DsIx9cj8vV0zJKZADVOI6EbRU=";
+        "0.28.1" = "sha256-cL2gN9C+2WHtkb21GYsu7vVCREdQqLAV2AzLlLP/Qfs=";
       }
       ."${version}";
   };
@@ -64,7 +66,13 @@ rec {
         "0.9.0";
   };
 
-  cmdliner_v = if lib.versionAtLeast version "0.21.0" then cmdliner_1_1 else cmdliner_1_0;
+  cmdliner_v =
+    if lib.versionAtLeast version "0.28.1" then
+      cmdliner
+    else if lib.versionAtLeast version "0.21.0" then
+      cmdliner_1
+    else
+      cmdliner_1_0;
 
   library_deps = [
     base

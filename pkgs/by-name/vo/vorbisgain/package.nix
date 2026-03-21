@@ -6,12 +6,12 @@
   libvorbis,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vorbisgain";
   version = "0.37";
 
   src = fetchurl {
-    url = "https://sjeng.org/ftp/vorbis/vorbisgain-${version}.tar.gz";
+    url = "https://sjeng.org/ftp/vorbis/vorbisgain-${finalAttrs.version}.tar.gz";
     sha256 = "1v1h6mhnckmvvn7345hzi9abn5z282g4lyyl4nnbqwnrr98v0vfx";
   };
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
     libvorbis
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sjeng.org/vorbisgain.html";
     description = "Utility that corrects the volume of an Ogg Vorbis file to a predefined standardized loudness";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ pSub ];
     mainProgram = "vorbisgain";
   };
-}
+})

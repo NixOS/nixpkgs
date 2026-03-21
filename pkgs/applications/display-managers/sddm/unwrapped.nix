@@ -2,17 +2,18 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   qttools,
   libxcb,
-  libXau,
+  libxau,
   pam,
   qtbase,
   qtdeclarative,
   qtquickcontrols2 ? null,
   systemd,
-  xkeyboardconfig,
+  xkeyboard-config,
   nixosTests,
   docutils,
 }:
@@ -39,11 +40,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./greeter-path.patch
     ./sddm-ignore-config-mtime.patch
     ./sddm-default-session.patch
+
+    (fetchpatch {
+      name = "sddm-fix-cmake-4.patch";
+      url = "https://github.com/sddm/sddm/commit/228778c2b4b7e26db1e1d69fe484ed75c5791c3a.patch";
+      hash = "sha256-Okt9LeZBhTDhP7NKBexWAZhkK6N6j9dFkAEgpidSnzE=";
+    })
   ];
 
   postPatch = ''
     substituteInPlace src/greeter/waylandkeyboardbackend.cpp \
-      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboard-config}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [
@@ -55,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    libXau
+    libxau
     pam
     qtbase
     qtdeclarative
@@ -101,14 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) sddm; };
 
-  meta = with lib; {
+  meta = {
     description = "QML based X11 display manager";
     homepage = "https://github.com/sddm/sddm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ttuegel
       k900
     ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
   };
 })

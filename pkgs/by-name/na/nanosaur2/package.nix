@@ -38,13 +38,13 @@ stdenv.mkDerivation {
     install -Dm755 {.,$out/bin}/Nanosaur2
     wrapProgram $out/bin/Nanosaur2 --chdir "$out/share/Nanosaur2"
     install -Dm644 $src/packaging/io.jor.nanosaur2.desktop $out/share/applications/nanosaur2.desktop
-    install -Dm644 $src/packaging/io.jor.nanosaur2.png $out/share/pixmaps/nanosaur2.png
+    install -Dm644 $src/packaging/io.jor.nanosaur2.png -t $out/share/icons/hicolor/256x256/apps
     runHook postInstall
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Port of Nanosaur2, a 2004 Macintosh game by Pangea Software, for modern operating systems";
     longDescription = ''
       Nanosaur is a 2004 Macintosh game by Pangea Software.
@@ -52,9 +52,9 @@ stdenv.mkDerivation {
       Is a continuation of the original Nanosaur storyline, only this time you get to fly a pterodactyl who’s loaded with hi-tech weaponry.
     '';
     homepage = "https://github.com/jorio/Nanosaur2";
-    license = licenses.cc-by-sa-40;
+    license = lib.licenses.cc-by-sa-40;
     mainProgram = "Nanosaur2";
-    maintainers = with maintainers; [ lux ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lux ];
+    platforms = lib.platforms.linux;
   };
 }

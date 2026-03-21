@@ -35,6 +35,7 @@
   posthog,
   pybase64,
   pydantic,
+  pydantic-settings,
   pypika,
   pyyaml,
   requests,
@@ -65,22 +66,21 @@
   nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "chromadb";
-  version = "1.1.0";
+  version = "1.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chroma-core";
     repo = "chroma";
-    tag = version;
-    hash = "sha256-RVXMjniqZ0zUVhdgcYHFgYV1WrNZzBLW9jdrvV8AnRU=";
+    tag = finalAttrs.version;
+    hash = "sha256-Y/M7awTi2AJTh4xRY0MIfnC9ygy62fG7X3W9QUxW2XE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}-vendor";
-    hash = "sha256-owy+6RttjVDCfsnn7MLuMn9/esHPwb7Z7jXqJ4IHfaE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-yx5OMZSWRAP732lRypap79vr2I72aT+TWooo+5e0wDQ=";
   };
 
   # Can't use fetchFromGitHub as the build expects a zipfile
@@ -89,20 +89,29 @@ buildPythonPackage rec {
     hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
   };
 
-  postPatch = ''
+  postPatch =
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
-    substituteInPlace pyproject.toml \
-      --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
-  '';
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
+    ''
+    # Flip anonymized telemetry to opt in versus current opt-in out for privacy
+    + ''
+      substituteInPlace chromadb/config.py \
+        --replace-fail "anonymized_telemetry: bool = True" \
+                       "anonymized_telemetry: bool = False"
+    ''
+    # error: queries overflow the depth limit!
+    + ''
+      sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
+    '';
 
   pythonRelaxDeps = [
     "fastapi"
     "posthog"
   ];
 
-  build-system = [
-    rustPlatform.maturinBuildHook
-  ];
+  build-system = [ rustPlatform.maturinBuildHook ];
 
   nativeBuildInputs = [
     cargo
@@ -138,6 +147,7 @@ buildPythonPackage rec {
     posthog
     pybase64
     pydantic
+    pydantic-settings
     pypika
     pyyaml
     requests
@@ -169,14 +179,14 @@ buildPythonPackage rec {
 
   # Disable on aarch64-linux due to broken onnxruntime
   # https://github.com/microsoft/onnxruntime/issues/10038
-  pythonImportsCheck = lib.optionals doCheck [ "chromadb" ];
+  pythonImportsCheck = lib.optionals finalAttrs.doCheck [ "chromadb" ];
 
   # Test collection breaks on aarch64-linux
   doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
-    SWAGGER_UI_DOWNLOAD_URL = "file://${swagger-ui}";
+    SWAGGER_UI_DOWNLOAD_URL = "file://${finalAttrs.swagger-ui}";
   };
 
   pytestFlags = [
@@ -212,6 +222,20 @@ buildPythonPackage rec {
     # No such file or directory: 'openssl'
     "test_ssl_self_signed_without_ssl_verify"
     "test_ssl_self_signed"
+
+    # https://github.com/chroma-core/chroma/issues/6029
+    "test_embedding_function_config_roundtrip"
+
+    # Requires network access
+    "test_persistent_client_close"
+    "test_persistent_client_context_manager"
+    "test_ephemeral_client_close"
+    "test_ephemeral_client_context_manager"
+    "test_client_close_idempotent"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails in nixpkgs-review on Darwin due to concurrent copies running and the lack of network namespaces.
+    "test_add_then_delete_n_minus_1"
   ];
 
   disabledTestPaths = [
@@ -220,6 +244,7 @@ buildPythonPackage rec {
     "chromadb/test/ef"
     "chromadb/test/property/test_cross_version_persist.py"
     "chromadb/test/stress"
+    "chromadb/test/api/test_schema_e2e.py"
 
     # Excessively slow
     "chromadb/test/property/test_add.py"
@@ -227,6 +252,12 @@ buildPythonPackage rec {
 
     # ValueError: An instance of Chroma already exists for ephemeral with different settings
     "chromadb/test/test_chroma.py"
+
+    # RuntimeError: There is no current event loop in thread 'MainThread'.
+    # https://github.com/chroma-core/chroma/issues/6659
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_host_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client_with_inconsistent_port_settings[async_client]"
+    "chromadb/test/test_client.py::test_http_client[async_client]"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -249,7 +280,7 @@ buildPythonPackage rec {
   meta = {
     description = "AI-native open-source embedding database";
     homepage = "https://github.com/chroma-core/chroma";
-    changelog = "https://github.com/chroma-core/chroma/releases/tag/${version}";
+    changelog = "https://github.com/chroma-core/chroma/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fab
@@ -257,4 +288,4 @@ buildPythonPackage rec {
     ];
     mainProgram = "chroma";
   };
-}
+})

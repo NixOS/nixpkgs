@@ -3,8 +3,8 @@
   stdenv,
   fetchurl,
   replaceVars,
-  fetchDebianPatch,
   fetchFromGitHub,
+  fetchDebianPatch,
   copyDesktopItems,
   pkg-config,
   wrapGAppsHook3,
@@ -15,43 +15,39 @@
   libidn2,
   libssh2,
   openssl,
-  wxGTK32,
+  wxwidgets_3_3,
   makeDesktopItem,
 }:
 
 let
-  wxwidgets_3_3 = wxGTK32.overrideAttrs (
+  wxwidgets_3_3_1 = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
-      version = "3.3.0-unstable-2025-02-02";
+      version = "3.3.1";
       src = fetchFromGitHub {
         owner = "wxWidgets";
         repo = "wxWidgets";
-        rev = "969c5a46b5c1da57836f721a4ce5df9feaa437f9";
+        tag = "v${finalAttrs.version}";
         fetchSubmodules = true;
-        hash = "sha256-ODPE896xc5RxdyfIzdPB5fsTeBm3O+asYJd99fuW6AY=";
+        hash = "sha256-eYmZrh9lvDnJ3VAS+TllT21emtKBPAOhqIULw1dTPhk=";
       };
       patches = [
         ./wxcolorhook.patch
       ];
-      configureFlags = lib.subtractLists [
-        "--disable-compat28"
-        "--enable-unicode"
-      ] previousAttrs.configureFlags;
     }
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.4";
+  version = "14.8";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
     # The URL only redirects to the file on the second attempt
     postFetch = ''
-      rm -f $out
-      tryDownload "$url"
+      rm -f "$out"
+      tryDownload "$url" "$out"
     '';
-    hash = "sha256-Jx/Q/RsCTy06kJfJeatqrEoTMz7wLZvPQ3bzFClvKWc=";
+    hash = "sha256-vIvM6j4gDQcsRjgczQqxbV4XvDQECCLvuTflkebMFU8=";
   };
 
   sourceRoot = ".";
@@ -73,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    touch zen/warn_static.h
+  '';
+
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3
+    wxwidgets_3_3_1
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -119,8 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp -R FreeFileSync/Build/* $out
     mv $out/{Bin,bin}
 
-    mkdir -p $out/share/pixmaps
-    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/pixmaps
+    mkdir -p $out/share/icons/hicolor/128x128/apps
+    unzip -j $out/Resources/Icons.zip '*Sync.png' -d $out/share/icons/hicolor/128x128/apps
 
     runHook postInstall
   '';
@@ -150,16 +150,16 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";
     license = [
-      licenses.gpl3Only
-      licenses.openssl
-      licenses.curl
-      licenses.bsd3
+      lib.licenses.gpl3Only
+      lib.licenses.openssl
+      lib.licenses.curl
+      lib.licenses.bsd3
     ];
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.linux;
   };
 })

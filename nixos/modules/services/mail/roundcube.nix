@@ -10,6 +10,10 @@ let
   localDB = cfg.database.host == "localhost";
   user = cfg.database.username;
   phpWithPspell = pkgs.php83.withExtensions ({ enabled, all }: [ all.pspell ] ++ enabled);
+
+  env = {
+    ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+  };
 in
 {
   options.services.roundcube = {
@@ -100,7 +104,8 @@ in
     maxAttachmentSize = lib.mkOption {
       type = lib.types.int;
       default = 18;
-      apply = configuredMaxAttachmentSize: "${toString (configuredMaxAttachmentSize * 1.37)}M";
+      apply =
+        configuredMaxAttachmentSize: "${toString (builtins.ceil (configuredMaxAttachmentSize * 1.37))}M";
       description = ''
         The maximum attachment size in MB.
         [upstream issue comment]: https://github.com/roundcube/roundcubemail/issues/7979#issuecomment-808879209
@@ -129,7 +134,7 @@ in
   config = lib.mkIf cfg.enable {
     # backward compatibility: if password is set but not passwordFile, make one.
     services.roundcube.database.passwordFile = lib.mkIf (!localDB && cfg.database.password != "") (
-      lib.mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}")
+      lib.mkDefault "${pkgs.writeText "roundcube-password" cfg.database.password}"
     );
     warnings =
       lib.optional (!localDB && cfg.database.password != "")
@@ -244,7 +249,7 @@ in
     services.phpfpm.pools.roundcube = {
       user = if localDB then user else "nginx";
       phpOptions = ''
-        error_log = 'stderr'
+        error_log = '/dev/stderr'
         log_errors = on
         post_max_size = ${cfg.maxAttachmentSize}
         upload_max_filesize = ${cfg.maxAttachmentSize}
@@ -262,7 +267,7 @@ in
         "catch_workers_output" = true;
       };
       phpPackage = phpWithPspell;
-      phpEnv.ASPELL_CONF = "dict-dir ${pkgs.aspellWithDicts (_: cfg.dicts)}/lib/aspell";
+      phpEnv = env;
     };
     systemd.services.phpfpm-roundcube.after = [ "roundcube-setup.service" ];
 
@@ -280,6 +285,8 @@ in
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];
+
+        environment = env;
 
         path = [
           (if localDB then config.services.postgresql.package else pkgs.postgresql)

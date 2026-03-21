@@ -4,12 +4,12 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpage";
   version = "2.5.8";
 
   src = fetchurl {
-    url = "https://www.mesa.nl/pub/mpage/mpage-${version}.tgz";
+    url = "https://www.mesa.nl/pub/mpage/mpage-${finalAttrs.version}.tgz";
     sha256 = "sha256-I1HpHSV5SzWN9mGPF6cBOijTUOwgQI/gb4Ej3EZz/pM=";
   };
 
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       ISO 8859.1 to print 8-bit characters.
     '';
 
-    license = "liberal"; # a non-copyleft license, see `Copyright' file
+    license = lib.licenses.gpl2Plus;
     homepage = "http://www.mesa.nl/pub/mpage/";
     platforms = lib.platforms.all;
   };
-}
+})

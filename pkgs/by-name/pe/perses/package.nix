@@ -10,6 +10,7 @@
   turbo,
   linkFarm,
   installShellFiles,
+  nixosTests,
 }:
 
 let
@@ -27,13 +28,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "perses";
-  version = "0.52.0";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "perses";
     repo = "perses";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VjjTi+RltB4gZloAcaEtRsmFmG9CruYtDphYyAx1Tkc=";
+    hash = "sha256-lr4+0MEKXOdPTsD28hu55o8SAspKbr2791dQAXhdxtA=";
   };
 
   outputs = [
@@ -52,7 +53,7 @@ buildGoModule (finalAttrs: {
     inherit (finalAttrs) version src;
     pname = "${finalAttrs.pname}-ui";
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-TteC9/1ORUl41BvhW9rTUW6ZBmDv4ScG6OzsI6WYjiE=";
+    hash = "sha256-ObQvOZ2IvU/6lfozPweVu46nohKXT0YzZeTyd0VK7GM=";
   };
 
   npmRoot = "ui";
@@ -62,7 +63,7 @@ buildGoModule (finalAttrs: {
     preBuild = null;
   };
 
-  vendorHash = "sha256-zb8LJIzCCX5bjKl6aDI/vjkaPbEQfiGKVJbpcR596WI=";
+  vendorHash = "sha256-KV0zXXzMBgsMZ543+fLXeGvYtugq5PtYJXSQgqrtbMI=";
 
   ldflags = [
     "-s"
@@ -117,6 +118,8 @@ buildGoModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
+
+    tests.nixos = nixosTests.perses;
 
     inherit pluginsArchive;
   };

@@ -7,25 +7,25 @@
 
 buildPythonPackage rec {
   pname = "rtfunicode";
-  version = "2.0";
+  version = "2.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mjpieters";
     repo = "rtfunicode";
-    tag = version;
-    hash = "sha256-mo3kuuK1epcH0Iyi9GYpZOYsUI4etWheyEPdw/S3tJE=";
+    tag = "v${version}";
+    hash = "sha256-dmPpMplCQIJMHhNFzOIjKwEHVio2mjFEbDmq1Y9UJkA=";
   };
 
   nativeBuildInputs = [ unittestCheckHook ];
 
   pythonImportsCheck = [ "rtfunicode" ];
 
-  meta = with lib; {
+  meta = {
     description = "Encoder for unicode to RTF 1.5 command sequences";
-    maintainers = [ maintainers.lucasew ];
-    license = licenses.bsd2;
+    maintainers = [ lib.maintainers.lucasew ];
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/mjpieters/rtfunicode";
-    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${version}";
+    changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${src.tag}";
   };
 }

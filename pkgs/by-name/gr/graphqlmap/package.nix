@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "graphqlmap";
   version = "0-unstable-2022-01-17";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "swisskyrepo";
@@ -31,11 +31,11 @@ python3.pkgs.buildPythonApplication {
     "graphqlmap"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to interact with a GraphQL endpoint";
     mainProgram = "graphqlmap";
     homepage = "https://github.com/swisskyrepo/GraphQLmap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

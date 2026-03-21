@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
   patches ? [ ],
   writeText,
   conf ? null,
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     hash = "sha256-QtYQB2mvw1k2LA8D+/cVnA8+GRDWjhIM6rxfi/IGjEw=";
   };
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   inherit patches;
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Modular status bar for dwm written in c";
     homepage = "https://github.com/torrinfail/dwmblocks";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sophrosyne ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sophrosyne ];
+    platforms = lib.platforms.linux;
     mainProgram = "dwmblocks";
   };
 }

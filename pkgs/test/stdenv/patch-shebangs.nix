@@ -10,6 +10,13 @@
 # strictDeps has to be disabled because the shell isn't in buildInputs
 
 let
+  earlyBash =
+    stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive or pkgs.bashNonInteractive;
+  earlyCoreutils = stdenv.__bootPackages.stdenv.__bootPackages.coreutils or pkgs.coreutils;
+  earlyDiffutils = stdenv.__bootPackages.stdenv.__bootPackages.diffutils or pkgs.diffutils;
+  earlyFindutils = stdenv.__bootPackages.stdenv.__bootPackages.findutils or pkgs.findutils;
+  earlySed = stdenv.__bootPackages.stdenv.__bootPackages.gnused or pkgs.gnused;
+
   tests = {
     bad-shebang = stdenv.mkDerivation {
       name = "bad-shebang";
@@ -110,9 +117,13 @@ let
       (derivation {
         name = "read-only-script";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyBash
+          earlyCoreutils
+          earlyDiffutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -128,7 +139,7 @@ let
             patchShebangs $out/bin/test
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -138,9 +149,12 @@ let
       (derivation {
         name = "preserves-read-only";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyBash
+          earlyCoreutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -162,7 +176,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -173,9 +187,13 @@ let
       (derivation {
         name = "preserves-timestamp";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyBash
+          earlyCoreutils
+          earlyDiffutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -199,7 +217,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };
@@ -209,9 +227,13 @@ let
       (derivation {
         name = "preserves-binary-data";
         system = stdenv.buildPlatform.system;
-        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        builder = lib.getExe earlyBash;
         initialPath = [
-          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+          earlyBash
+          earlyCoreutils
+          earlyDiffutils
+          earlyFindutils
+          earlySed
         ];
         strictDeps = false;
         args = [
@@ -237,7 +259,7 @@ let
             fi
           ''
         ];
-        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+        assertion = "grep '^#!${lib.getExe earlyBash}' $out/bin/test > /dev/null";
       })
       // {
         meta = { };

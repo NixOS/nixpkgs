@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-content-hub";
-  version = "2.1.0";
+  version = "2.2.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-content-hub";
-    rev = finalAttrs.version;
-    hash = "sha256-S/idjDdcRvqZqKmflkYJyQckz4/9k/8JY6eRDACk9Ag=";
+    tag = finalAttrs.version;
+    hash = "sha256-ukaEur2RgdIVPYm90OUCs0L+F9OQ3zaypreyx33iD5M=";
   };
 
   outputs = [
@@ -50,11 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Remove when version > 2.1.0
+    # Remove when version > 2.2.2
     (fetchpatch {
-      name = "0001-lomiri-content-hub-treewide-Add-missing-LDM-include-dirs.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/cdd3371714c183d4caf166157082288c022bb98d.patch";
-      hash = "sha256-Uubd425T+0KxPR9lJW6+ejO2fFzcDwEIpJATSZ9jYD4=";
+      name = "0001-lomiri-content-hub-Properly-include-lomiri-api-includedirs.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-content-hub/-/commit/dab1854e5ec0a91fd28c9d84f06dcdd0af39518b.patch";
+      hash = "sha256-aQB8kLL2ZkKUOvFoDQ9rottFsCSNJ66wUjUZxP+kr5k=";
     })
   ];
 
@@ -116,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_DOC" true)
     (lib.cmakeBool "ENABLE_UBUNTU_COMPAT" true) # in case something still depends on it
+    (lib.cmakeBool "ENABLE_WERROR" true)
   ];
 
   preBuild =

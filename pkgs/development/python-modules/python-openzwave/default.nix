@@ -4,7 +4,6 @@
   fetchPypi,
   isPy3k,
   pkg-config,
-  systemd,
   libyaml,
   openzwave,
   cython,
@@ -30,7 +29,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    systemd
     libyaml
     openzwave
     cython
@@ -55,10 +53,10 @@ buildPythonPackage rec {
   # no tests available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the OpenZWave C++ library";
     homepage = "https://github.com/OpenZWave/python-openzwave";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
     inherit (openzwave.meta) platforms;
   };

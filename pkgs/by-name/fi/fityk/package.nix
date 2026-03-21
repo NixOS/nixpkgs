@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
-  wxGTK32,
+  wxwidgets_3_2,
   boost186,
   lua,
   zlib,
@@ -14,14 +14,14 @@
   swig,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fityk";
   version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "wojdyr";
     repo = "fityk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-m2RaZMYT6JGwa3sOUVsBIzCdZetTbiygaInQWoJ4m1o=";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     swig
   ];
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     boost186
     lua
     zlib
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-wx-config=${lib.getExe' (lib.getDev wxGTK32) "wx-config"}"
+    "--with-wx-config=${lib.getExe' (lib.getDev wxwidgets_3_2) "wx-config"}"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -55,4 +55,4 @@ stdenv.mkDerivation rec {
     homepage = "https://fityk.nieto.pl/";
     platforms = lib.platforms.linux;
   };
-}
+})

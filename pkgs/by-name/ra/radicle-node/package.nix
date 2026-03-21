@@ -7,27 +7,30 @@
   lib,
   makeBinaryWrapper,
   man-db,
-  nixos,
   nixosTests,
   openssh,
-  radicle-node,
   runCommand,
   rustPlatform,
   stdenv,
-  testers,
   xdg-utils,
   versionCheckHook,
+
+  version ? "1.7.1",
+  srcHash ? "sha256-MPanUDVKol7mWVJDrGoGUkKqmcje+MsiK0WfqXQ27iI=",
+  cargoHash ? "sha256-Lru4ps9FYi03NVtRLtwZX9jhozAvBDsJ72ihdIpQcQ8=",
+  updateScript ? ./update.sh,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
+  inherit version cargoHash;
+
   pname = "radicle-node";
-  version = "1.4.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z3gqcJUoA1n9HaHKufZs5FCSGazv5";
     tag = "releases/${finalAttrs.version}";
-    hash = "sha256-e5Zelu3g8m9u5NtyABkIV4wOed9cq58xSaxginoDb2Q=";
+    hash = srcHash;
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse HEAD > $out/.git_head
@@ -35,8 +38,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rm -rf $out/.git
     '';
   };
-
-  cargoHash = "sha256-64SDz0wHKcp/tPGDDOlCRFr3Z1q6cWOafhP0howSFhA=";
 
   env.RADICLE_VERSION = finalAttrs.version;
 
@@ -67,6 +68,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
     # Tests want to open many files.
     ulimit -n 4096
+    # Cap test threads to avoid timing issues on loaded builders (sync timeout is 5s)
+    max_threads=4
+    if [[ -n "$NIX_BUILD_CORES" && "$NIX_BUILD_CORES" -lt "$max_threads" ]]; then
+      max_threads=$NIX_BUILD_CORES
+    fi
+    export RUST_TEST_THREADS=$max_threads
   '';
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
@@ -83,10 +90,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asciidoctor -d manpage -b manpage $page
       installManPage ''${page::-5}
     done
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rad \
+      --bash <($out/bin/rad completion bash) \
+      --fish <($out/bin/rad completion fish) \
+      --zsh <($out/bin/rad completion zsh)
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   postFixup = ''
@@ -104,19 +116,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     done
   '';
 
-  passthru.updateScript = ./update.sh;
-  passthru.tests =
-    let
-      package = radicle-node;
-    in
-    {
+  passthru = {
+    inherit updateScript;
+    tests = {
       basic =
-        runCommand "${package.name}-basic-test"
+        runCommand "radicle-node-basic-test"
           {
             nativeBuildInputs = [
               jq
               openssh
-              radicle-node
+              finalAttrs.finalPackage
             ];
           }
           ''
@@ -135,23 +144,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
             touch $out
           '';
-      nixos-build = lib.recurseIntoAttrs {
-        checkConfig-success =
-          (nixos {
-            services.radicle.settings = {
-              node.alias = "foo";
-            };
-          }).config.services.radicle.configFile;
-        checkConfig-failure =
-          testers.testBuildFailure
-            (nixos {
-              services.radicle.settings = {
-                node.alias = null;
-              };
-            }).config.services.radicle.configFile;
+      nixos-run = nixosTests.radicle.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
       };
-      nixos-run = nixosTests.radicle;
     };
+  };
 
   meta = {
     description = "Radicle node and CLI for decentralized code collaboration";
@@ -161,6 +160,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

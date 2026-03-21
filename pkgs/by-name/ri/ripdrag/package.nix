@@ -5,20 +5,22 @@
   pkg-config,
   wrapGAppsHook4,
   gtk4,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ripdrag";
-  version = "0.4.10";
+  version = "0.4.11";
 
   src = fetchFromGitHub {
     owner = "nik012003";
     repo = "ripdrag";
-    rev = "v${version}";
-    hash = "sha256-aK/1f56sHspohbYO0z2Hf1NDJsN8Dbf1NoL/QadbVSY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1IUS0PNzIoSrlBXQrUmw/lXUD8auVVKhu/irSoYoK6w=";
   };
 
-  cargoHash = "sha256-w6gy149pbzRmN3XnRqMZuxAsKGXUglQpn/7g9L8+rZU=";
+  cargoHash = "sha256-LtkSGu261rPFgofaD/t2rSilxUPL6eHBpd/Tz9gR8ZM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -27,12 +29,17 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ gtk4 ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Application that lets you drag and drop files from and to the terminal";
     homepage = "https://github.com/nik012003/ripdrag";
-    changelog = "https://github.com/nik012003/ripdrag/releases/tag/${src.rev}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/nik012003/ripdrag/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "ripdrag";
   };
-}
+})

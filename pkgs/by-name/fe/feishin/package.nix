@@ -3,94 +3,90 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
-  electron_36,
+  electron_39,
+  dart-sass,
+  mpv-unwrapped,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  pnpm_10_29_2,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
+  nix-update-script,
 }:
 let
   pname = "feishin";
-  version = "0.12.6";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
-    rev = "v${version}";
-    hash = "sha256-cnlPks/sJdcxHdIppHn8Q8d2tkwVlPMofQxjdAlBreg=";
+    tag = "v${version}";
+    hash = "sha256-LcSe7aEtTDs4JIk50zI0IFgN4ZCSJ6NClfk02uO2Sg8=";
   };
 
-  electron = electron_36;
+  electron = electron_39;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-lThh29prT/cHRrp2mEtUW4eeVfCtkk+54EPNUyGHyq8=";
 
-  npmFlags = [ "--legacy-peer-deps" ];
-  makeCacheWritable = true;
+  npmConfigHook = pnpmConfigHook;
+
+  npmDeps = null;
+  pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    pnpm = pnpm_10_29_2;
+    fetcherVersion = 3;
+    hash = "sha256-XhBcZRa66QdkjXxbefzsBUdvPIEshorq1uqzoWMXuTc=";
+  };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
-  nativeBuildInputs =
-    lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
+  nativeBuildInputs = [
+    pnpm_10_29_2
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [ copyDesktopItems ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.autoSignDarwinBinariesHook ];
 
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
-      --replace-fail "electron-builder install-app-deps &&" ""
-
-    # Don't check for updates.
-    substituteInPlace src/main/main.ts \
-      --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
+      --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # https://github.com/electron/electron/issues/31121
-    substituteInPlace src/main/main.ts \
+    substituteInPlace src/main/index.ts \
       --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
   '';
 
-  preConfigure =
-    let
-      releaseAppDeps = buildNpmPackage {
-        pname = "${pname}-release-app";
-        inherit version;
+  preBuild = ''
+    rm -r node_modules/.pnpm/sass-embedded-*
 
-        src = "${src}/release/app";
-        npmDepsHash = "sha256-kEe5HH/oslH8vtAcJuWTOLc0ZQPxlDVMS4U0RpD8enE=";
-
-        npmFlags = [ "--ignore-scripts" ];
-        dontNpmBuild = true;
-
-        env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-      };
-      releaseNodeModules = "${releaseAppDeps}/lib/node_modules/feishin/node_modules";
-    in
-    ''
-      for release_module_path in "${releaseNodeModules}"/*; do
-        rm -rf node_modules/"$(basename "$release_module_path")"
-        ln -s "$release_module_path" node_modules/
-      done
-    '';
+    test -d node_modules/.pnpm/sass-embedded@*
+    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
+    mkdir -p "$dir"
+    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
+  '';
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
       # electron-builder appears to build directly on top of Electron.app, by overwriting the files in the bundle.
       cp -r ${electron.dist}/Electron.app ./
       find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
-
-      # Disable code signing during build on macOS.
-      # https://github.com/electron-userland/electron-builder/blob/fa6fc16/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-      export CSC_IDENTITY_AUTO_DISCOVERY=false
-      sed -i "/afterSign/d" package.json
     ''
     + ''
       npm exec electron-builder -- \
         --dir \
         -c.electronDist=${if stdenv.hostPlatform.isDarwin then "./" else electron.dist} \
         -c.electronVersion=${electron.version} \
-        -c.npmRebuild=false
+        -c.npmRebuild=false \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"}
     '';
 
   installPhase = ''
@@ -98,12 +94,15 @@ buildNpmPackage {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
-    cp -r release/build/**/Feishin.app $out/Applications/
-    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
+    cp -r dist/**/Feishin.app $out/Applications/
+    makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
+      --set DISABLE_AUTO_UPDATES 1
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/feishin
-    pushd release/build/*/
+
+    pushd dist/*-unpacked/
     cp -r locales resources{,.pak} $out/share/feishin
     popd
 
@@ -111,10 +110,14 @@ buildNpmPackage {
     # Set ELECTRON_FORCE_IS_PACKAGED=1.
     # https://github.com/electron/electron/issues/35153#issuecomment-1202718531
     makeWrapper ${lib.getExe electron} $out/bin/feishin \
+      --prefix PATH : "${lib.makeBinPath [ mpv-unwrapped ]}" \
       --add-flags $out/share/feishin/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-      --set ELECTRON_FORCE_IS_PACKAGED=1 \
+      --set ELECTRON_FORCE_IS_PACKAGED 1 \
+      --set DISABLE_AUTO_UPDATES 1 \
       --inherit-argv0
+
+    install -Dm644 org.jeffvli.feishin.metainfo.xml $out/share/metainfo/org.jeffvli.feishin.metainfo.xml
 
     for size in 32 64 128 256 512 1024; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
@@ -131,19 +134,23 @@ buildNpmPackage {
     (makeDesktopItem {
       name = "feishin";
       desktopName = "Feishin";
-      comment = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+      comment = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
       icon = "feishin";
       exec = "feishin %u";
       categories = [
         "Audio"
         "AudioVideo"
+        "Player"
+        "Music"
       ];
       mimeTypes = [ "x-scheme-handler/feishin" ];
     })
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Full-featured Subsonic/Jellyfin compatible desktop music player";
+    description = "Full-featured Jellyfin, Navidrome, and OpenSubsonic Compatible Music Player";
     homepage = "https://github.com/jeffvli/feishin";
     changelog = "https://github.com/jeffvli/feishin/releases/tag/v${version}";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
@@ -151,6 +158,7 @@ buildNpmPackage {
     platforms = lib.platforms.unix;
     mainProgram = "feishin";
     maintainers = with lib.maintainers; [
+      BatteredBunny
       onny
       jlbribeiro
     ];

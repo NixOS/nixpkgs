@@ -4,6 +4,8 @@
   fetchFromGitHub,
   nodejs,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   installShellFiles,
   versionCheckHook,
   stdenv,
@@ -28,13 +30,15 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_9
     ];
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (finalAttrs) pname version src;
-      fetcherVersion = 1;
-      hash = "sha256-QIfadS2gNPtH006O86EndY/Hx2ml2FoKfUXJF5qoluw=";
+      pnpm = pnpm_9;
+      fetcherVersion = 3;
+      hash = "sha256-HypDGYb0MRCIDBHY8pVgwFoZQWC8us44cunORZRk3RM=";
     };
 
     buildPhase = ''

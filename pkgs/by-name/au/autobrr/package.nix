@@ -6,19 +6,21 @@
   stdenvNoCC,
   nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   typescript,
   versionCheckHook,
 }:
 
 let
   pname = "autobrr";
-  version = "1.66.1";
+  version = "1.74.0";
   src = fetchFromGitHub {
     owner = "autobrr";
     repo = "autobrr";
     tag = "v${version}";
-    hash = "sha256-4vfcSkTEFPqQ0r6uLg3o2pa1xcPuWn54+zYpWS/JEKE=";
+    hash = "sha256-iIKEF3b5mLKPiyR/2CqQiZz1e3M8H7HjtC0GWNSsJu8=";
   };
 
   autobrr-web = stdenvNoCC.mkDerivation {
@@ -27,21 +29,23 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpmConfigHook
+      pnpm_10
       typescript
     ];
 
     sourceRoot = "${src.name}/web";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = fetchPnpmDeps {
       inherit (autobrr-web)
         pname
         version
         src
         sourceRoot
         ;
-      fetcherVersion = 1;
-      hash = "sha256-kbLdXF5pAVIha07MCgq1yUShQwxj8xLt2mKzU4NYhwU=";
+      pnpm = pnpm_10;
+      fetcherVersion = 3;
+      hash = "sha256-euDGtNERNq3IgxggiHoLmcq2+e2SslXLSfY8TTFnqoE=";
     };
 
     postBuild = ''
@@ -53,7 +57,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   inherit
     autobrr-web
     pname
@@ -61,14 +65,14 @@ buildGoModule rec {
     src
     ;
 
-  vendorHash = "sha256-hQXXBx4pACKqwG0ctkymZpCv3VLzFx2JCHuKzqumWbg=";
+  vendorHash = "sha256-kxly/+7wnPbxs1LKzoSFRYcPBWqZg4tgzV3uYJji+yA=";
 
   preBuild = ''
     cp -r ${autobrr-web}/* web/dist
   '';
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-X main.commit=${src.tag}"
   ];
 
@@ -93,9 +97,9 @@ buildGoModule rec {
     description = "Modern, easy to use download automation for torrents and usenet";
     license = lib.licenses.gpl2Plus;
     homepage = "https://autobrr.com/";
-    changelog = "https://autobrr.com/release-notes/v${version}";
+    changelog = "https://autobrr.com/release-notes/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ av-gal ];
     mainProgram = "autobrr";
     platforms = with lib.platforms; darwin ++ freebsd ++ linux;
   };
-}
+})

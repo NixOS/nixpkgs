@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.3.2";
 
   src = fetchurl {
-    url = "https://ytrizja.de/distfiles/${pname}-${version}.tar.gz";
+    url = "https://ytrizja.de/distfiles/zs-wait4host-${version}.tar.gz";
     sha256 = "9F1264BDoGlRR7bWlRXhfyvxWio4ydShKmabUQEIz9I=";
   };
 
@@ -30,11 +30,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wait for a host to come up/go down";
     homepage = "https://ytrizja.de/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

@@ -14,11 +14,11 @@
   python3Packages,
 
   boost,
-  fmt_11,
+  fmt,
   gtest,
   icu,
   spdlog,
-  tbb_2022,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "loot";
     repo = "libloot";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-l8AdqJ0lZH4rBcf4WV3ju+sIHYam6USXCXTqyRPzgeo=";
   };
 
@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     gtest
     icu
-    (spdlog.override { fmt = fmt_11; })
-    tbb_2022
+    spdlog
+    onetbb
 
     finalAttrs.passthru.libloadorder
     finalAttrs.passthru.esplugin
@@ -119,7 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "loot";
       repo = "yaml-cpp";
       tag = "0.8.0+merge-key-support.2";
-      hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
+
+      # fixes error: 'uint16_t' was not declared in this scope
+      postFetch = ''
+        sed -e '1i #include <cstdint>' -i "$out/src/emitterutils.cpp"
+      '';
+
+      hash = "sha256-5xbqOI4L3XCqx+4k6IcZUwOdHAfbBy7nZgRKGkRJabQ=";
     };
 
     buildRustFFIPackage =

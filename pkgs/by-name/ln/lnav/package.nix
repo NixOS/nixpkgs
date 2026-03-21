@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Pi1S8tRY7Lv0R7sdLOFppuCbTb/6omyAsNW13dmWBqA=";
+    hash = "sha256-IYBcYnai7Se3/GNITzhpSV/XYvCUvcpiZDTF4Y58Zt0=";
   };
 
   enableParallelBuilding = true;
@@ -81,6 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^v(\\d+(?:\\.\\d+)*)$" ];
   };
+
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "https://github.com/tstack/lnav";

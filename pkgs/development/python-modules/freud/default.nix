@@ -13,7 +13,7 @@
   ninja,
 
   # buildInputs
-  tbb_2022,
+  onetbb,
   nanobind,
 
   # dependencies
@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "freud";
-  version = "3.4.0";
+  version = "3.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "freud";
     tag = "v${version}";
-    hash = "sha256-JX3pbzNTj85UTAtWYnDRvtJSjS27qgY/vitaAjmXbjA=";
+    hash = "sha256-NRI3cv3yQxAwkGxh0CFYEERNkjP51Z58vtCV9GlIESY=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   ];
   dontUseCmakeConfigure = true;
   buildInputs = [
-    tbb_2022
+    onetbb
     nanobind
   ];
 

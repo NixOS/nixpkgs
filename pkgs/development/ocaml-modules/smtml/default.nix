@@ -5,15 +5,18 @@
   ocaml,
   fetchFromGitHub,
   menhir,
+  bitwuzla-cxx,
   bos,
   cmdliner,
+  dolmen_model,
   dolmen_type,
+  dune-build-info,
   fpath,
   hc,
   menhirLib,
+  mtime,
   # fix eval on legacy ocaml versions
   ocaml_intrinsics ? null,
-  patricia-tree,
   prelude,
   scfg,
   yojson,
@@ -23,30 +26,38 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "smtml";
-  version = "0.10.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "formalsec";
     repo = "smtml";
-    tag = "v${version}";
-    hash = "sha256-WXGYk/zJnW6QzHKCHl0lkmYb/pG90/sAOK40wYzK35U=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VnkF+bZXeqaj9LSpyzqH5AM9EQsrW4Rlj5kvyTfYTKE=";
   };
+
+  minimalOCamlVersion = "4.14";
 
   nativeBuildInputs = [
     menhir
   ];
 
+  buildInputs = [
+    dune-build-info
+  ];
+
   propagatedBuildInputs = [
+    bitwuzla-cxx
     bos
     cmdliner
+    dolmen_model
     dolmen_type
     fpath
     hc
     menhirLib
+    mtime
     ocaml_intrinsics
-    patricia-tree
     prelude
     scfg
     yojson
@@ -63,14 +74,25 @@ buildDunePackage rec {
     mdx.bin
   ];
 
-  doCheck = !(lib.versions.majorMinor ocaml.version == "5.0" || stdenv.hostPlatform.isDarwin);
+  doCheck =
+    # Checks fail with cmdliner ≥ 2.0
+    false
+    && !(
+      lib.versions.majorMinor ocaml.version == "5.0"
+      || lib.versions.majorMinor ocaml.version == "5.4"
+      || stdenv.hostPlatform.isDarwin
+    );
 
   meta = {
     description = "SMT solver frontend for OCaml";
     homepage = "https://formalsec.github.io/smtml/smtml/";
     downloadPage = "https://github.com/formalsec/smtml";
-    changelog = "https://github.com/formalsec/smtml/releases/tag/v${version}";
+    changelog = "https://github.com/formalsec/smtml/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.ethancedwards8 ];
+    teams = with lib.teams; [ ngi ];
+    maintainers = with lib.maintainers; [
+      ethancedwards8
+      redianthus
+    ];
   };
-}
+})

@@ -32,32 +32,32 @@
   gsettings-desktop-schemas,
   gtk3,
   libdbusmenu-gtk2,
-  libXdamage,
+  libgbm,
+  libxdamage,
   nss,
   udev,
 }:
 
 let
   pname = "pcloud";
-  version = "1.14.16";
-  code = "XZbJvD5ZfXtwygX5xg7F9ywtRup5H5sBvfhy";
+  version = "2.0.3";
+  code = "XZ8opl5ZaaYsnBeCX3fLU3v8ngqAv8VMqq7k";
 
   # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=pcloud-${version}.zip";
-    hash = "sha256-6K7QPr3MtZvRZt84N8+i8QZBaKHHeTY1bXMdO+wUCr0=";
-  };
-
-  appimageContents = appimageTools.extractType2 {
-    inherit pname version;
-    src = "${src}/pcloud";
+    hash = "sha256-Few8BsMUwL5qfdtFyezoWifZcZufAhUthxQXEQwm52w=";
   };
 
 in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = appimageContents;
+  src = appimageTools.extractType2 {
+    inherit pname version;
+
+    src = "${src}/pCloud.AppImage";
+  };
 
   dontConfigure = true;
   dontBuild = true;
@@ -73,7 +73,8 @@ stdenv.mkDerivation {
     fuse
     gtk3
     libdbusmenu-gtk2
-    libXdamage
+    libgbm
+    libxdamage
     nss
     udev
   ];
@@ -83,12 +84,17 @@ stdenv.mkDerivation {
     cp -ar . "$out/app"
     cd "$out"
 
-    # Remove the AppImage runner, since users are not supposed to use it; the
-    # actual entry point is the `pcloud` binary
+    # Remove AppImage runner, users are not supposed to use it - `pcloud` binary
+    # itself is the correct entrypoint
     rm app/AppRun
 
-    # Adjust directory structure, so that the `.desktop` etc. files are
-    # properly detected
+    # Remove random stuff that causes patchelf to complain about missing deps
+    # that are not, in fact, missing deps, because those files don't get
+    # executed in the first place
+    rm app/resources/app.asar.unpacked/node_modules/koffi/build/koffi/musl_x64/koffi.node
+    rm app/resources/app.asar.unpacked/node_modules/koffi/build/koffi/openbsd_x64/koffi.node
+
+    # Adjust the directory structure, so that `.desktop` etc. files are detected
     mkdir bin
     mv app/usr/share .
     mv app/usr/lib .
@@ -99,31 +105,32 @@ stdenv.mkDerivation {
     substitute \
       app/pcloud.desktop \
       share/applications/pcloud.desktop \
-      --replace 'Name=pcloud' 'Name=pCloud' \
       --replace 'Exec=AppRun' 'Exec=${pname}'
 
-    # Build the main executable
+    # Adjust the icons
+    ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png app/.DirIcon
+    ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png app/pcloud.png
+
+    # Build the entrypoint
     cat > bin/pcloud <<EOF
     #! $SHELL -e
 
-    # This is required for the file picker dialog - otherwise pcloud just
-    # crashes
+    # Required for the file picker dialog - otherwise pcloud crashes
     export XDG_DATA_DIRS="${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS"
 
     exec "$out/app/pcloud"
     EOF
 
     chmod +x bin/pcloud
-
-    ln -snf $out/share/icons/hicolor/512x512/apps/pcloud.png $out/app/pcloud.png
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Secure and simple to use cloud storage for your files; pCloud Drive, Electron Edition";
     homepage = "https://www.pcloud.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ patryk27 ];
+    changelog = "https://www.pcloud.com/release-notes/linux.html";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ patryk27 ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "pcloud";
   };

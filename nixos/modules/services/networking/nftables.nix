@@ -67,6 +67,9 @@ in
         There are other programs that use iptables internally too, such as
         libvirt. For information on how the two firewalls interact, see
         <https://wiki.nftables.org/wiki-nftables/index.php/Troubleshooting#Question_4._How_do_nftables_and_iptables_interact_when_used_on_the_same_system.3F>.
+
+        Some network configurations may prevent VMs from having network access, see
+        <https://wiki.nixos.org/wiki/Networking#Virtualization>.
       '';
     };
 
@@ -295,7 +298,6 @@ in
         let
           enabledTables = lib.filterAttrs (_: table: table.enable) cfg.tables;
           deletionsScript = pkgs.writeScript "nftables-deletions" ''
-            #! ${pkgs.nftables}/bin/nft -f
             ${
               if cfg.flushRuleset then
                 "flush ruleset"
@@ -310,9 +312,9 @@ in
             ${cfg.extraDeletions}
           '';
           deletionsScriptVar = "/var/lib/nftables/deletions.nft";
+          makeDeletions = "${pkgs.nftables}/bin/nft -f ${deletionsScriptVar}";
           ensureDeletions = pkgs.writeShellScript "nftables-ensure-deletions" ''
             touch ${deletionsScriptVar}
-            chmod +x ${deletionsScriptVar}
           '';
           saveDeletionsScript = pkgs.writeShellScript "nftables-save-deletions" ''
             cp ${deletionsScript} ${deletionsScriptVar}
@@ -377,7 +379,7 @@ in
             saveDeletionsScript
           ];
           ExecStop = [
-            deletionsScriptVar
+            makeDeletions
             cleanupDeletionsScript
           ];
           StateDirectory = "nftables";

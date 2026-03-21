@@ -9,6 +9,7 @@
   # dependencies
   anyio,
   pycrdt,
+  pycrdt-store,
   sqlite-anyio,
 
   # optional-dependencies
@@ -30,7 +31,7 @@ buildPythonPackage rec {
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jupyter-server";
+    owner = "y-crdt";
     repo = "pycrdt-websocket";
     tag = version;
     hash = "sha256-Qux8IxJR1nGbdpGz7RZBKJjYN0qfwfEpd2UDlduOna0=";
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   dependencies = [
     anyio
     pycrdt
+    pycrdt-store
     sqlite-anyio
   ];
 
@@ -48,7 +50,7 @@ buildPythonPackage rec {
     django = [ channels ];
   };
 
-  pythonImportsCheck = [ "pycrdt_websocket" ];
+  pythonImportsCheck = [ "pycrdt.websocket" ];
 
   nativeCheckInputs = [
     httpx-ws

@@ -18,16 +18,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "turbo-unwrapped";
-  version = "2.5.6";
+  version = "2.8.15";
 
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turborepo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3J5uctVOfjzBkoTPlHdzzpso82Yulyr6RZwqVV8z1Qw=";
+    hash = "sha256-yUNUo+CAtUzeu4k4NLwz5xmZJsP4siwXKcN4xLa6nfI=";
   };
 
-  cargoHash = "sha256-MINBqzs+MpHDqAMCNBzOBHfOTv6dKJA58dVEr7MxQBg=";
+  cargoHash = "sha256-9SjOB7G59oN2HCYohc1+IMINjy19aXSe+TdfNLo77Tk=";
 
   nativeBuildInputs = [
     capnproto
@@ -81,8 +81,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/vercel/turborepo/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      dlip
       getchoo
+      hythera
     ];
     mainProgram = "turbo";
   };

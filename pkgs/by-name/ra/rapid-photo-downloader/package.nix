@@ -20,7 +20,7 @@
   gitUpdater,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rapid-photo-downloader";
   version = "0.9.36";
   pyproject = true;
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "damonlynch";
     repo = "rapid-photo-downloader";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fFmIbqymYkg2Z1/x0mNsCNlDCOyqVg65CM4a67t+kPQ=";
   };
 
@@ -36,35 +36,32 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python3Packages;
-    [
-      ifuse
-      libimobiledevice
-      # Python dependencies
-      pyqt5
-      pygobject3
-      gphoto2
-      pyzmq
-      tornado
-      psutil
-      pyxdg
-      arrow
-      python-dateutil
-      easygui
-      babel
-      colour
-      pillow
-      pymediainfo
-      sortedcontainers
-      requests
-      colorlog
-      pyprind
-      setuptools
-      show-in-file-manager
-      tenacity
-    ]
-    ++ lib.optional (pythonOlder "3.8") importlib-metadata;
+  dependencies = with python3Packages; [
+    ifuse
+    libimobiledevice
+    # Python dependencies
+    pyqt5
+    pygobject3
+    gphoto2
+    pyzmq
+    tornado
+    psutil
+    pyxdg
+    arrow
+    python-dateutil
+    easygui
+    babel
+    colour
+    pillow
+    pymediainfo
+    sortedcontainers
+    requests
+    colorlog
+    pyprind
+    setuptools
+    show-in-file-manager
+    tenacity
+  ];
 
   postPatch = ''
     # Drop broken version specifier
@@ -138,4 +135,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ philipdb ];
   };
-}
+})

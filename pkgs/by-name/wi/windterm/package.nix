@@ -10,7 +10,12 @@
   glib,
   alsa-lib,
   pulseaudio,
-  xorg,
+  libxcb-util,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxtst,
+  libxcb,
   gtk3,
   atk,
   pango,
@@ -40,12 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    xorg.libxcb
-    xorg.xcbutil
-    xorg.libXtst
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
+    libxcb
+    libxcb-util
+    libxtst
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
     libsForQt5.qtbase
     libsForQt5.qtmultimedia
     gst_all_1.gst-plugins-base
@@ -68,13 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/app $out/share/applications $out/share/pixmaps $out/share/licenses/windterm
+    mkdir -p $out/app $out/share/applications $out/share/licenses/windterm
     cp --recursive --no-preserve=mode . $out/app/windterm
     cat > $out/app/windterm/profiles.config <<EOF
     ${builtins.toJSON profiles}
     EOF
     install -Dm644 $out/app/windterm/license.txt $out/share/licenses/windterm/license.txt
-    install -Dm644 $out/app/windterm/windterm.png $out/share/pixmaps/windterm.png
+    install -Dm644 $out/app/windterm/windterm.png -t $out/share/icons/hicolor/1024x1024/apps
     substituteInPlace $out/app/windterm/windterm.desktop \
       --replace-fail "/usr/bin/" ""
     install -Dm644 $out/app/windterm/windterm.desktop $out/share/applications/windterm.desktop
@@ -98,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "windterm";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

@@ -4,16 +4,16 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "above";
-  version = "2.8";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "casterbyte";
     repo = "Above";
-    tag = "v${version}";
-    hash = "sha256-kG+eaTT72jmeC9R9IKwfd/+9oLAzHLJoKfFJhJDJzDM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wyXWGfthzJeHZoJe4OKe9k2BIwLae/aOUtiJpT4SfHw=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
@@ -23,19 +23,15 @@ python3.pkgs.buildPythonApplication rec {
     scapy
   ];
 
-  postFixup = ''
-    mv $out/bin/above.py $out/bin/$pname
-  '';
-
   # Project has no tests
   doCheck = false;
 
   meta = {
     description = "Invisible network protocol sniffer";
     homepage = "https://github.com/casterbyte/Above";
-    changelog = "https://github.com/casterbyte/Above/releases/tag/${src.tag}";
+    changelog = "https://github.com/casterbyte/Above/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "above";
   };
-}
+})

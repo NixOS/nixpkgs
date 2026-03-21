@@ -8,7 +8,7 @@
   pkg-config,
   doxygen,
   freetype,
-  libX11,
+  libx11,
   libftdi,
   libusb-compat-0_1,
   libusb1,
@@ -16,14 +16,14 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lcdproc";
   version = "0.5.9";
 
   src = fetchFromGitHub {
     owner = "lcdproc";
     repo = "lcdproc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1r885zv1gsh88j43x6fvzbdgfkh712a227d369h4fdcbnnfd0kpm";
   };
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
-    libX11
+    libx11
     libftdi
     libusb-compat-0_1
     libusb1
@@ -81,13 +81,13 @@ stdenv.mkDerivation rec {
       --replace server/drivers/ $out/lib/lcdproc/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client/server suite for controlling a wide variety of LCD devices";
     homepage = "https://lcdproc.org/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
-}
+})

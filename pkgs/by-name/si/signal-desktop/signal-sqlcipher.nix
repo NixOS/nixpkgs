@@ -3,11 +3,15 @@
   lib,
   fetchFromGitHub,
   pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   rustPlatform,
   cargo,
   dump_syms,
   python3,
+  xcodebuild,
+  cctools,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
@@ -20,10 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-70kObW6jYzaquMrj20VMTQg/rDWqIu8o2/m7S3mUZB8=";
   };
 
-  pnpmDeps = pnpm.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-regaYG+SDvIgdnHQVR1GG1A1FSBXpzFfLuyTEdMt1kQ=";
+    inherit pnpm; # may be different than top-level pnpm
+    fetcherVersion = 3;
+    hash = "sha256-/EcPuqTXXGw1dEN6l1x84cUGyx890/rujjT+zJouIvM=";
   };
 
   cargoRoot = "deps/extension";
@@ -36,11 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   nativeBuildInputs = [
     nodejs
-    pnpm.configHook
+    pnpmConfigHook
+    pnpm
     rustPlatform.cargoSetupHook
     cargo
     dump_syms
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcodebuild
+    cctools.libtool
   ];
 
   buildPhase = ''
@@ -71,6 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
       # deps/sqlcipher
       bsd3
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

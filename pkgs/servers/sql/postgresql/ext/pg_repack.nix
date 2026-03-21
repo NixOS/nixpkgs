@@ -10,7 +10,7 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pg_repack";
-  version = "1.5.2";
+  version = "1.5.3";
 
   buildInputs = postgresql.buildInputs;
 
@@ -18,7 +18,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "reorg";
     repo = "pg_repack";
     tag = "ver_${finalAttrs.version}";
-    hash = "sha256-wfjiLkx+S3zVrAynisX1GdazueVJ3EOwQEPcgUQt7eA=";
+    hash = "sha256-Ufh/dKrKumRKeQ/CpwvxbjAmgILAn04BduPZMRvS+nU=";
   };
 
   passthru.updateScript = gitUpdater {
@@ -45,7 +45,7 @@ postgresqlBuildExtension (finalAttrs: {
     '';
     homepage = "https://github.com/reorg/pg_repack";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
     mainProgram = "pg_repack";
   };

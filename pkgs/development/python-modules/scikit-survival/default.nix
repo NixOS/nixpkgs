@@ -25,16 +25,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "scikit-survival";
-  version = "0.25.0";
+  version = "0.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sebp";
     repo = "scikit-survival";
-    tag = "v${version}";
-    hash = "sha256-OvdmZ2vDptYB2tq7OtokIQzjKzhQBWwnXZLW0m6FqlI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BP4kfYt4W9QCklkJ5DDE6Zquca2LhRZGFsKmD9qb7vk=";
   };
 
   postPatch = ''
@@ -85,6 +85,10 @@ buildPythonPackage rec {
     "test_survival_svm"
     "test_tree"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Flaky numerical assertion (AssertionError)
+    "test_baseline_predict"
+  ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # floating point mismatch on aarch64
     # 27079905.88052468 to far from 27079905.880496684
@@ -94,8 +98,8 @@ buildPythonPackage rec {
   meta = {
     description = "Survival analysis built on top of scikit-learn";
     homepage = "https://github.com/sebp/scikit-survival";
-    changelog = "https://github.com/sebp/scikit-survival/releases/tag/v${version}";
+    changelog = "https://github.com/sebp/scikit-survival/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

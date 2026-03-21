@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubectx";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = "kubectx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-HVmtUhdMjbkyMpTgbsr5Mm286F9Q7zbc5rOxi7OBZEg=";
   };
 
@@ -23,17 +23,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   postInstall = ''
     installShellCompletion completion/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast way to switch between clusters and namespaces in kubectl";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/ahmetb/kubectx";
-    maintainers = with maintainers; [ jlesquembre ];
+    maintainers = with lib.maintainers; [ jlesquembre ];
   };
-}
+})

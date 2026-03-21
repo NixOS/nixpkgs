@@ -1,33 +1,34 @@
 {
   lib,
   stdenv,
+  replaceVars,
+  addDriverRunpath,
   callPackage,
-  python312Packages,
+  python313Packages,
   fetchFromGitHub,
   fetchurl,
   ffmpeg-headless,
   sqlite-vec,
   frigate,
   nixosTests,
-  fetchpatch,
 }:
 
 let
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-Uhqs9n4igP9+BtIHiEiurjvKfo2prIXnnVXqyPDbzQ8=";
+    hash = "sha256-K41tWnj0u+Fw+G++aPFfMa0uFYEvvZ0r6xNPQ7J1cYs=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python312Packages.python.override {
+  python = python313Packages.python.override {
     packageOverrides = self: super: {
       joserfc = super.joserfc.overridePythonAttrs (oldAttrs: {
         version = "1.1.0";
@@ -38,11 +39,9 @@ let
           hash = "sha256-95xtUzzIxxvDtpHX/5uCHnTQTB8Fc08DZGUOR/SdKLs=";
         };
       });
-      onnxruntime = super.onnxruntime.override (old: {
-        onnxruntime = old.onnxruntime.override (old: {
-          withFullProtobuf = true;
-        });
-      });
+
+      huggingface-hub = super.huggingface-hub_0;
+      transformers = super.transformers_4;
     };
   };
   python3Packages = python.pkgs;
@@ -77,18 +76,30 @@ in
 python3Packages.buildPythonApplication rec {
   pname = "frigate";
   inherit version;
-  format = "other";
+  pyproject = false;
 
   inherit src;
 
   patches = [
-    ./constants.patch
-    # Fixes hardcoded path /media/frigate/clips/faces. Remove in next version.
-    (fetchpatch {
-      url = "https://github.com/blakeblackshear/frigate/commit/b86e6e484f64bd43b64d7adebe78671a7a426edb.patch";
-      hash = "sha256-1+n0n0yCtjfAHkXzsZdIF0iCVdPGmsG7l8/VTqBVEjU=";
-    })
+    # Always lookup ffmpeg from config setting
     ./ffmpeg.patch
+
+    # Adjust libteflon.so location
+    (replaceVars ./libteflon-driverlink-path.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
+
+    # Use ai-edge-litert as tensorflow interpreter
+    # https://github.com/blakeblackshear/frigate/pull/21876
+    ./ai-edge-litert.patch
+
+    # Disable failing optimization in onnxruntime
+    # https://github.com/microsoft/onnxruntime/issues/26717
+    ./onnxruntime-compat.patch
+
+    # Fix excessive trailing whitespaces in process commandlines
+    # https://github.com/blakeblackshear/frigate/pull/22089
+    ./proc-cmdline-strip.patch
   ];
 
   postPatch = ''
@@ -96,7 +107,7 @@ python3Packages.buildPythonApplication rec {
 
     substituteInPlace \
       frigate/app.py \
-      frigate/test/test_{http,storage}.py \
+      frigate/test/test_storage.py \
       frigate/test/http_api/base_http_test.py \
       --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
@@ -107,7 +118,13 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "/config" "/var/lib/frigate" \
       --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-    substituteInPlace frigate/comms/{config,embeddings}_updater.py frigate/comms/{zmq_proxy,inter_process}.py \
+    substituteInPlace \
+      frigate/comms/config_updater.py \
+      frigate/comms/embeddings_updater.py \
+      frigate/comms/inter_process.py \
+      frigate/comms/object_detector_signaler.py \
+      frigate/comms/zmq_proxy.py \
+      frigate/detectors/plugins/zmq_ipc.py \
       --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
 
     substituteInPlace frigate/db/sqlitevecq.py \
@@ -129,25 +146,27 @@ python3Packages.buildPythonApplication rec {
   dontBuild = true;
 
   dependencies = with python3Packages; [
-    # docker/main/requirements.txt
-    scikit-build
     # docker/main/requirements-wheel.txt
+    # TODO: degirum (no source repo, binary wheels only)
+    ai-edge-litert
     aiofiles
     aiohttp
     appdirs
     argcomplete
-    contextlib2
     click
+    contextlib2
+    cryptography
     distlib
     fastapi
+    faster-whisper
     filelock
-    future
+    google-genai
     importlib-metadata
     importlib-resources
-    google-generativeai
     joserfc
-    levenshtein
+    librosa
     markupsafe
+    memray
     netaddr
     netifaces
     norfair
@@ -173,15 +192,18 @@ python3Packages.buildPythonApplication rec {
     py-vapid
     pywebpush
     pyzmq
+    rapidfuzz
     requests
     ruamel-yaml
     scipy
     setproctitle
     shapely
+    sherpa-onnx
     slowapi
+    soundfile
     starlette
     starlette-context
-    tensorflow-bin
+    tensorflow
     titlecase
     transformers
     tzlocal
@@ -239,7 +261,7 @@ python3Packages.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/blakeblackshear/frigate/releases/tag/${src.tag}";
     description = "NVR with realtime local object detection for IP cameras";
     longDescription = ''
@@ -248,7 +270,7 @@ python3Packages.buildPythonApplication rec {
       object detection locally for IP cameras.
     '';
     homepage = "https://github.com/blakeblackshear/frigate";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

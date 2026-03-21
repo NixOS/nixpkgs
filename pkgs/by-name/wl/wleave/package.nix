@@ -17,14 +17,14 @@
   librsvg,
   libxml2,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wleave";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "AMNatty";
     repo = "wleave";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-+0EKnaxRaHRxRvhASuvfpUijEZJFimR4zSzOyC3FOkQ=";
   };
 
@@ -49,10 +49,10 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace src/config.rs \
-      --replace-fail "/etc/wleave" "$out/etc/${pname}"
+      --replace-fail "/etc/wleave" "$out/etc/wleave"
 
     substituteInPlace layout.json \
-      --replace-fail "/usr/share/wleave" "$out/share/${pname}"
+      --replace-fail "/usr/share/wleave" "$out/share/wleave"
   '';
 
   postInstall = ''
@@ -73,12 +73,12 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Wayland-native logout script written in GTK4";
     homepage = "https://github.com/AMNatty/wleave";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "wleave";
-    maintainers = with maintainers; [ ludovicopiero ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ ludovicopiero ];
+    platforms = lib.platforms.linux;
   };
-}
+})

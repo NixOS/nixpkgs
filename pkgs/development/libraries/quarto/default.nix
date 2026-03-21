@@ -37,18 +37,14 @@ let
     ++ (extraPythonPackages ps)
   );
 in
-stdenv.mkDerivation (final: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quarto";
-  version = "1.7.34";
+  version = "1.8.26";
 
   src = fetchurl {
-    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-3WsDCkS5Y9AflLlpa6y6ca/DF4621RqcwQUzK3fqa5o=";
+    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${finalAttrs.version}/quarto-${finalAttrs.version}-linux-amd64.tar.gz";
+    hash = "sha256-rYyqbTrsw/K2pKj7gpZnfvLvlBCkij7rp7H5ockQAPA=";
   };
-
-  patches = [
-    ./deno2.patch
-  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -65,9 +61,12 @@ stdenv.mkDerivation (final: {
       --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
       --set-default QUARTO_TYPST ${lib.getExe typst} \
       ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
+      ${
+        lib.optionalString (python3 != null) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"
+      } \
       ${lib.optionalString (
-        python3 != null
-      ) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
+        rWrapper != null
+      ) "--set-default RETICULATE_PYTHON ${pythonWithPackages.interpreter}"}
   '';
 
   installPhase = ''
@@ -104,7 +103,7 @@ stdenv.mkDerivation (final: {
       Quarto documents are authored using markdown, an easy to write plain text format.
     '';
     homepage = "https://quarto.org/";
-    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${final.version}";
+    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       minijackson

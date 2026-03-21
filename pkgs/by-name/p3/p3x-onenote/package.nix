@@ -8,7 +8,7 @@
 
 let
   pname = "p3x-onenote";
-  version = "2025.10.101";
+  version = "2025.10.111";
 
   plat =
     {
@@ -20,9 +20,9 @@ let
 
   hash =
     {
-      aarch64-linux = "sha256-FB6+0Ze3d/6QETgtMtc6GztnPdSy5s7k67qsAtFdsyM=";
-      armv7l-linux = "sha256-Q45tfcGrNjd9wXt+VhXhaHrC4w68lRUIuB4cJSW5NDE=";
-      x86_64-linux = "sha256-h2U9EctjyM4FlVe/pPMWugCIe9tQ4Av4/HOcWWSUNEI=";
+      aarch64-linux = "sha256-sfnRzY+1flUdIM1ey9u00j9eiDa4u5bY/f3fupV+FKM=";
+      armv7l-linux = "sha256-ZnFSJE1VmvqSKZHBsMtvBbypsbY35z9X5T4bYT0DytU=";
+      x86_64-linux = "sha256-lgZjVVBWPloqMWX0oryNB0lxgmJCBqC7pp0AjeUMjQM=";
     }
     .${stdenv.hostPlatform.system};
 
@@ -39,22 +39,22 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-    mkdir -p $out/share/pixmaps $out/share/licenses/p3x-onenote
-    cp ${appimageContents}/p3x-onenote.png $out/share/pixmaps/
+    mkdir -p $out/share/licenses/p3x-onenote
+    install -D ${appimageContents}/p3x-onenote.png -t $out/share/icons/hicolor/512x512/apps/
     cp ${appimageContents}/p3x-onenote.desktop $out
     cp ${appimageContents}/LICENSE.electron.txt $out/share/licenses/p3x-onenote/LICENSE
 
     ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
-      --set-key Exec --set-value $out/bin/p3x-onenote \
       --set-key Comment --set-value "P3X OneNote Linux" \
+      --set-key Exec --set-value "p3x-onenote" \
       --delete-original $out/p3x-onenote.desktop
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/patrikx3/onenote";
     description = "Linux Electron Onenote - A Linux compatible version of OneNote";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tiagolobocastro ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tiagolobocastro ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

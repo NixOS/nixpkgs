@@ -8,7 +8,6 @@
   libGL,
   openal,
   luajit,
-  lua5_1,
   freetype,
   physfs,
   libmodplug,
@@ -17,32 +16,30 @@
   libogg,
   libtheora,
   which,
-  autoconf,
-  automake,
   libtool,
-  xorg,
+  libx11,
+  cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "love";
   version = "11.5";
 
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "sha256-wZktNh4UB3QH2wAIIlnYUlNoXbjEDwUmPnT4vesZNm0=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    autoconf
-    automake
+    cmake
   ];
   buildInputs = [
     SDL2
     openal
-    (if stdenv.isDarwin then lua5_1 else luajit)
+    luajit
     freetype
     physfs
     libmodplug
@@ -53,34 +50,58 @@ stdenv.mkDerivation rec {
     which
     libtool
   ]
-  ++ lib.optionals stdenv.isLinux [
-    xorg.libX11 # SDL2 optional depend, for SDL_syswm.h
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libx11 # SDL2 optional depend, for SDL_syswm.h
     libGLU
     libGL
   ];
 
-  preConfigure = "$shell ./platform/unix/automagic";
-
-  configureFlags = [
-    (if stdenv.isDarwin then "--with-lua=lua" else "--with-lua=luajit")
+  # Use CMake instead of autotools on all platforms for uniformity
+  # On Darwin, autotools doesn't compile macOS-specific module (src/common/macosx.mm),
+  # leading to stubbed functions and segfaults
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") # Required by LÖVE's CMakeLists.txt
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true) # Don't include build directory in RPATH
+    (lib.cmakeBool "CMAKE_BUILD_WITH_INSTALL_RPATH" true) # Use install RPATH even during build
+    (lib.cmakeBool "LOVE_JIT" true) # Enable LuaJIT support even though it is warned about for Apple
   ];
 
   env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
-  # Fix Darwin bundle/dylib linking and macOS function calls
-  preBuild = lib.optionalString stdenv.isDarwin ''
-    # Fix libtool to use dynamiclib instead of bundle for Darwin
-    substituteInPlace libtool \
-      --replace "-bundle" "-dynamiclib" \
-      --replace "-Wl,-bundle" "-Wl,-dynamiclib"
+  # CMake doesn't define install target for LÖVE, so install manually
+  installPhase = ''
+    runHook preInstall
 
-    substituteInPlace src/love.cpp \
-      --replace "love::macosx::checkDropEvents()" "std::string(\"\")" \
-      --replace "love::macosx::getLoveInResources()" "std::string(\"\")"
+    mkdir -p $out/bin $out/lib
+    cp love $out/bin/
+    cp libliblove.* $out/lib/
+
+    # Install man page (both Linux and Darwin)
+    mkdir -p $out/share/man/man1
+    cp $src/platform/unix/love.6 $out/share/man/man1/love.1
+    gzip -9n $out/share/man/man1/love.1
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Install Linux-specific files (desktop, mime, icons)
+    mkdir -p $out/share/applications
+    mkdir -p $out/share/mime/packages
+    mkdir -p $out/share/icons/hicolor/scalable/{apps,mimetypes}
+
+    # Generate desktop file from template
+    substitute $src/platform/unix/love.desktop.in $out/share/applications/love.desktop \
+      --replace-fail '@bindir@' "$out/bin"
+
+    cp $src/platform/unix/love.xml $out/share/mime/packages/
+    cp $src/platform/unix/love.svg $out/share/icons/hicolor/scalable/apps
+    cp $src/platform/unix/application-x-love-game.svg $out/share/icons/hicolor/scalable/mimetypes/
+  ''
+  + ''
+    runHook postInstall
   '';
 
   postFixup = lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change ".libs/liblove-11.5.so" "$out/lib/liblove-11.5.so" "$out/bin/love"
+    # Fix rpath so love binary can find libliblove.dylib
+    install_name_tool -change "@rpath/libliblove.dylib" "$out/lib/libliblove.dylib" "$out/bin/love"
   '';
 
   meta = {
@@ -91,4 +112,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ lib.maintainers.raskin ];
   };
-}
+})

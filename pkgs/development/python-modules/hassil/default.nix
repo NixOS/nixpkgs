@@ -16,7 +16,7 @@
 
 let
   pname = "hassil";
-  version = "3.2.0";
+  version = "3.5.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "home-assistant";
     repo = "hassil";
     tag = "v${version}";
-    hash = "sha256-X+VOcgOFcdb29VfJCfD1xBEqY/1qbfwViS/N9PsT2y8=";
+    hash = "sha256-ei4+eGNCzBZQYghgVuQIPgFA2Y1kf8aNtl6ZjwzxIEE=";
   };
 
   build-system = [ setuptools ];
@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "tests/test_fuzzy.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant/hassil/blob/${src.tag}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

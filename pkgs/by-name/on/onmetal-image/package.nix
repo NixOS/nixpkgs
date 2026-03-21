@@ -5,14 +5,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "onmetal-image";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "onmetal";
     repo = "onmetal-image";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KvOBvAIE9V2bj5prdcc8G5ifHsvybHBCYWrI4fWtdvE=";
   };
 
@@ -31,11 +31,11 @@ buildGoModule rec {
       --zsh <($out/bin/onmetal-image completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Onmetal OCI Image Specification, Library and Tooling";
     homepage = "https://github.com/onmetal/onmetal-image";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "onmetal-image";
   };
-}
+})

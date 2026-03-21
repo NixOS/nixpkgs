@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   libcap,
   libseccomp,
   openssl,
@@ -10,13 +11,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vsftpd";
   version = "3.0.5";
 
   src = fetchurl {
-    url = "https://security.appspot.com/downloads/vsftpd-${version}.tar.gz";
-    sha256 = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
+    url = "https://security.appspot.com/downloads/vsftpd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-JrYCrkVLC6bZnvRKCba54N+n9nIoEGc23x8njHC8kdM=";
   };
 
   buildInputs = [
@@ -27,7 +28,16 @@ stdenv.mkDerivation rec {
     libxcrypt
   ];
 
-  patches = [ ./CVE-2015-1419.patch ];
+  patches = [
+    ./CVE-2015-1419.patch
+
+    # Fix build with gcc15
+    (fetchpatch {
+      name = "vsftpd-correct-the-definition-of-setup_bio_callbacks-in-ssl.patch";
+      url = "https://src.fedoraproject.org/rpms/vsftpd/raw/c31087744900967ff4d572706a296bf6c8c4a68e/f/0076-Correct-the-definition-of-setup_bio_callbacks-in-ssl.patch";
+      hash = "sha256-eYiY2eKQ+qS3CiRZYGuRHcnAe32zLDdb/GwF6NyHch4=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/VSF_BUILD_SSL/s/^#undef/#define/" builddefs.h
@@ -46,7 +56,14 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
-  NIX_LDFLAGS = "-lcrypt -lssl -lcrypto -lpam -lcap -lseccomp";
+  env.NIX_LDFLAGS = toString [
+    "-lcrypt"
+    "-lssl"
+    "-lcrypto"
+    "-lpam"
+    "-lcap"
+    "-lseccomp"
+  ];
 
   enableParallelBuilding = true;
 
@@ -54,11 +71,11 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) vsftpd; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Very secure FTP daemon";
     mainProgram = "vsftpd";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
   };
-}
+})

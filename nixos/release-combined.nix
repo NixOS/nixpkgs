@@ -3,8 +3,9 @@
 # succeeds, and all other jobs have finished (they may fail).
 
 {
+  lib ? (import ../lib),
   nixpkgs ? {
-    outPath = (import ../lib).cleanSource ./..;
+    outPath = lib.cleanSource ./..;
     revCount = 56789;
     shortRev = "gfedcba";
   },
@@ -26,9 +27,9 @@ let
     set:
     if builtins.isAttrs set then
       if (set.type or "") == "derivation" then
-        set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
+        set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
-        pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+        lib.mapAttrs (n: v: removeMaintainers v) set
     else
       set;
 
@@ -43,7 +44,7 @@ rec {
     }
   );
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (
+  nixpkgs = removeAttrs (removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;
@@ -57,16 +58,16 @@ rec {
       onSystems =
         systems: x:
         map (system: "${x}.${system}") (
-          pkgs.lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
+          lib.intersectLists systems (supportedSystems ++ limitedSupportedSystems)
         );
     in
     pkgs.releaseTools.aggregate {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ ];
+        maintainers = [ ];
       };
-      constituents = pkgs.lib.concatLists [
+      constituents = lib.concatLists [
         [ "nixos.channel" ]
         (onFullSupported "nixos.dummy")
         (onAllSupported "nixos.iso_minimal")
@@ -98,9 +99,8 @@ rec {
 
         (onFullSupported "nixos.tests.firewall")
         (onFullSupported "nixos.tests.fontconfig-default-fonts")
-        (onFullSupported "nixos.tests.gitlab")
+        (onFullSupported "nixos.tests.gitlab.gitlab")
         (onFullSupported "nixos.tests.gnome")
-        (onFullSupported "nixos.tests.gnome-xorg")
         (onSystems [ "x86_64-linux" ] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems [ "aarch64-linux" ] "nixos.tests.installer.simpleUefiSystemdBoot")

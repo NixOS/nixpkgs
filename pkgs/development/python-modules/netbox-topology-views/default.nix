@@ -10,7 +10,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-topology-views";
-  version = "4.3.0";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "netbox-community";
     repo = "netbox-topology-views";
     tag = "v${version}";
-    hash = "sha256-K8hG2M8uWPk9+7u21z+hmedOovievkMNpn3p7I4+6t4=";
+    hash = "sha256-1KEkNfo++lX0uF0xS9JOyG7dQBQYYo2cSGkjicJ5+vE=";
   };
 
   build-system = [ setuptools ];

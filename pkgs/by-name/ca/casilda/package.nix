@@ -12,13 +12,13 @@
   libepoxy,
   wayland,
   wayland-scanner,
-  wlroots_0_18,
+  wlroots_0_19,
   libxkbcommon,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casilda";
-  version = "0.9.1";
+  version = "1.2.0";
 
   outputs = [
     "out"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpu";
     repo = "casilda";
     tag = finalAttrs.version;
-    hash = "sha256-7A3XzfUALsmkykwOqF/8fg7T7LoVzwk1+7TmRkh1Wys=";
+    hash = "sha256-JaWHKKNYeeW7QKB6DpGrXowvufeBZUnc9pP0ZAAo3gU=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wayland # for wayland-server
     libxkbcommon
-    wlroots_0_18
+    wlroots_0_19
   ];
 
   propagatedBuildInputs = [ gtk4 ];
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.gnome.org/jpu/casilda";
     description = "Simple Wayland compositor widget for Gtk 4 which can be used to embed other processes windows in Gtk 4 application";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ clerie ];
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.unix;
   };

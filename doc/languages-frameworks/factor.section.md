@@ -22,6 +22,8 @@ The package is defined in `pkgs/development/compilers/factor-lang/wrapper.nix` a
 
 The package also passes through several attributes listing the wrapped libraries and binaries, namely, `extraLibs` and `binPackages` as well as `defaultLibs` and `defaultBins`.
 Additionally, all `runtimeLibs` is the concatenation of all the above for the purpose of providing all necessary dynamic libraries as "`propagatedBuildInputs`".
+Lastly, `extraVocabs` is passed through as is for stacked composition, and the fully composed `vocabTree` is passed through as a store path.
+This makes it easier for external plugins (e.g. for editors and IDEs) to refer to the Factor vocabulary roots.
 
 `factorPackages` provides pre-configured Factor packages:
 - `factorPackages.factor-lang` is the default package with GUI support and several default library bindings (e.g. openssl, openal etc.).

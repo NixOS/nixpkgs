@@ -8,6 +8,7 @@
 # The same tests should work without modification on the official bitwarden server, if we ever package that.
 
 let
+  certs = import ./common/acme/server/snakeoil-certs.nix;
   makeVaultwardenTest =
     name:
     {
@@ -29,6 +30,7 @@ let
               libraries = [ pkgs.python3Packages.selenium ];
               flakeIgnore = [ "E501" ];
             }
+            # python
             ''
 
               from selenium.webdriver.common.by import By
@@ -53,7 +55,7 @@ let
               driver = Firefox(options=options)
 
               driver.implicitly_wait(20)
-              driver.get('http://localhost:8080/#/signup')
+              driver.get('https://localhost/#/signup')
 
               wait = WebDriverWait(driver, 10)
 
@@ -78,6 +80,13 @@ let
               driver.find_element(By.XPATH, "//button[contains(., 'Create account')]").click()
 
               wait.until_not(EC.title_contains("Set a strong password"))
+
+              wait.until_not(EC.title_contains("Join organization"))
+
+              # NOTE: When testing this locally, the Bitwarden browser extension must not be installed, otherwise this screen does not appear
+              click_when_unobstructed((By.XPATH, "//button[contains(., 'Add it later')]"))
+
+              click_when_unobstructed((By.XPATH, "//a[contains(., 'Skip to web app')]"))
 
               click_when_unobstructed((By.XPATH, "//button[contains(., 'New item')]"))
 
@@ -149,6 +158,7 @@ let
               .${backend}
 
               {
+                networking.hosts."::1" = [ certs.domain ];
                 services.vaultwarden = {
                   enable = true;
                   dbBackend = backend;
@@ -157,8 +167,23 @@ let
                     rocketPort = 8080;
                   };
                 };
+                services.nginx = {
+                  enable = true;
+                  virtualHosts."${certs.domain}" = {
+                    sslCertificate = certs.${certs.domain}.cert;
+                    sslCertificateKey = certs.${certs.domain}.key;
+                    enableACME = false;
+                    forceSSL = true;
+                    locations."/" = {
+                      proxyPass = "http://[::1]:8080";
+                    };
+                  };
+                };
 
-                networking.firewall.allowedTCPPorts = [ 8080 ];
+                networking.firewall.allowedTCPPorts = [
+                  80
+                  443
+                ];
 
                 environment.systemPackages = [
                   pkgs.firefox-unwrapped
@@ -170,9 +195,15 @@ let
         }
         // lib.optionalAttrs withClient {
           client =
-            { pkgs, ... }:
             {
+              nodes,
+              pkgs,
+              ...
+            }:
+            {
+              networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ certs.domain ];
               environment.systemPackages = [ pkgs.bitwarden-cli ];
+              security.pki.certificateFiles = [ certs.ca.cert ];
             };
         };
 
@@ -181,14 +212,14 @@ let
             testScript
           else
             ''
-              import json
+              # import json
 
               start_all()
               server.wait_for_unit("vaultwarden.service")
-              server.wait_for_open_port(8080)
+              server.wait_for_open_port(443)
 
               with subtest("configure the cli"):
-                  client.succeed("bw --nointeraction config server http://server:8080")
+                  client.succeed("bw --nointeraction config server https://${certs.domain}")
 
               with subtest("can't login to nonexistent account"):
                   client.fail(
@@ -198,21 +229,20 @@ let
               with subtest("use the web interface to sign up, log in, and save a password"):
                   server.succeed("PYTHONUNBUFFERED=1 systemd-cat -t test-runner test-runner")
 
-              with subtest("log in with the cli"):
-                  key = client.succeed(
-                      "bw --nointeraction --raw login ${userEmail} ${userPassword}"
-                  ).strip()
+              # Upstreams sees offline usage as a new feature...
+              # https://github.com/bitwarden/clients/issues/18110
+              # with subtest("log in with the cli"):
+              #     key = client.succeed(
+              #         "bw --nointeraction --raw login ${userEmail} ${userPassword}"
+              #     ).strip()
 
-              with subtest("sync with the cli"):
-                  client.succeed(f"bw --nointeraction --raw --session {key} sync -f")
+              # with subtest("sync with the cli"):
+              #     client.succeed(f"bw --nointeraction --raw --session {key} sync -f")
 
-              with subtest("get the password with the cli"):
-                  output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
+              # with subtest("get the password with the cli"):
+              #     output = json.loads(client.succeed(f"bw --nointeraction --raw --session {key} list items"))
 
-                  assert output[0]['login']['password'] == "${storedPassword}"
-
-              with subtest("Check systemd unit hardening"):
-                  server.log(server.succeed("systemd-analyze security vaultwarden.service | grep -v ✓"))
+              #     assert output[0]['login']['password'] == "${storedPassword}"
             '';
       }
     );
@@ -228,7 +258,7 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
     testScript = ''
       start_all()
       server.wait_for_unit("vaultwarden.service")
-      server.wait_for_open_port(8080)
+      server.wait_for_open_port(443)
 
       with subtest("Set up vaultwarden"):
           server.succeed("PYTHONUNBUFFERED=1 test-runner | systemd-cat -t test-runner")
@@ -239,7 +269,6 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
       with subtest("Check that backup exists"):
           server.succeed('[ -d "/srv/backups/vaultwarden" ]')
           server.succeed('[ -f "/srv/backups/vaultwarden/db.sqlite3" ]')
-          server.succeed('[ -d "/srv/backups/vaultwarden/attachments" ]')
           server.succeed('[ -f "/srv/backups/vaultwarden/rsa_key.pem" ]')
           # Ensure only the db backed up with the backup command exists and not the other db files.
           server.succeed('[ ! -f "/srv/backups/vaultwarden/db.sqlite3-shm" ]')

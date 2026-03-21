@@ -6,33 +6,31 @@
   versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "snakefmt";
-  version = "0.11.0";
+  version = "0.11.5";
   pyproject = true;
 
-  disabled = python3.pythonOlder "3.11";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-r8O5LhA8/agP/35381f2zB2rdCJy7nY0K6NC8w5yHzA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-27tt5KlTrpc463j5m6pUz89S6FqIKrtT9PA5EXeC1pM=";
   };
 
-  build-system = [ python3.pkgs.poetry-core ];
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     black
     click
-    importlib-metadata
-    toml
   ];
 
-  pythonRelaxDeps = [ "black" ];
+  pythonRelaxDeps = [
+    "black"
+    "click"
+  ];
 
   pythonImportsCheck = [ "snakefmt" ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -40,9 +38,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Uncompromising Snakemake code formatter";
     homepage = "https://pypi.org/project/snakefmt/";
-    changelog = "https://github.com/snakemake/snakefmt/releases/tag/v${version}";
+    changelog = "https://github.com/snakemake/snakefmt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jolars ];
     mainProgram = "snakefmt";
   };
-}
+})

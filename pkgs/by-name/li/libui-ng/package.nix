@@ -21,9 +21,12 @@ stdenv.mkDerivation {
     hash = "sha256-pnfrSPDIvG0tFYQoeMBONATkNRNjY/tJGp9n2I4cN/U=";
   };
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
-    substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
-  '';
+  patches = [
+    ./darwin-no-universal.patch
+
+    # https://github.com/libui-ng/libui-ng/pull/348
+    ./0001-Remove-cm_print_error-declaration.patch
+  ];
 
   nativeBuildInputs = [
     cmocka
@@ -44,11 +47,11 @@ stdenv.mkDerivation {
     tagPrefix = "alpha";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Portable GUI library for C";
     homepage = "https://github.com/libui-ng/libui-ng";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

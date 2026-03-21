@@ -29,19 +29,19 @@
 }:
 # langgraph-prebuilt isn't meant to be a standalone package but is bundled into langgraph at build time.
 # It exists so the langgraph team can iterate on it without having to rebuild langgraph.
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-prebuilt";
-  version = "0.6.4";
+  version = "1.0.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "prebuilt==${version}";
-    hash = "sha256-9jl16cKp3E7j79PXrr/3splrcJtfQQN7yFJ5sfa6c+I=";
+    tag = "prebuilt==${finalAttrs.version}";
+    hash = "sha256-Gsh2bCcity0zf9A+FENxwktK5j3WhQOG/jZmhJ18KVE=";
   };
 
-  sourceRoot = "${src.name}/libs/prebuilt";
+  sourceRoot = "${finalAttrs.src.name}/libs/prebuilt";
 
   build-system = [ hatchling ];
 
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export PYTHONPATH=${src}/libs/langgraph:$PYTHONPATH
+    export PYTHONPATH=${finalAttrs.src}/libs/langgraph:$PYTHONPATH
   '';
 
   pytestFlags = [
@@ -100,8 +100,8 @@ buildPythonPackage rec {
   meta = {
     description = "Prebuilt agents add-on for Langgraph. Should always be bundled with langgraph";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/prebuilt";
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${src.tag}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sarahec ];
   };
-}
+})

@@ -10,14 +10,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-branchless";
   version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8uv+sZRr06K42hmxgjrKk6FDEngUhN/9epixRYKwE3U=";
   };
 
@@ -67,15 +67,15 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_switch_auto_switch_interactive"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     mainProgram = "git-branchless";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       nh2
       hmenke
       bryango
     ];
   };
-}
+})

@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ ... }:
 {
   name = "commafeed";
 
@@ -15,5 +15,5 @@
     server.succeed("curl --fail --silent http://localhost:8082")
   '';
 
-  meta.maintainers = [ lib.maintainers.raroh73 ];
+  meta.maintainers = [ ];
 }

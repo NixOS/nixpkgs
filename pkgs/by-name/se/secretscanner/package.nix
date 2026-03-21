@@ -9,14 +9,14 @@
   vectorscan,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "secretscanner";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "deepfence";
     repo = "SecretScanner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-lTUZLuEiC9xpHYWn3uv4ZtbvHX6ETsjxacjd/O0kU8I=";
   };
@@ -51,7 +51,7 @@ buildGoModule rec {
     description = "Tool to find secrets and passwords in container images and file systems";
     mainProgram = "secretscanner";
     homepage = "https://github.com/deepfence/SecretScanner";
-    changelog = "https://github.com/deepfence/SecretScanner/releases/tag/v${version}";
+    changelog = "https://github.com/deepfence/SecretScanner/releases/tag/v${finalAttrs.version}";
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
@@ -59,4 +59,4 @@ buildGoModule rec {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

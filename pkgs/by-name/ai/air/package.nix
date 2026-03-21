@@ -4,32 +4,32 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "air";
-  version = "1.63.0";
+  version = "1.64.5";
 
   src = fetchFromGitHub {
     owner = "air-verse";
     repo = "air";
-    tag = "v${version}";
-    hash = "sha256-S8ARa6vZzKQTUhGt2eEdRDXCFyspSNLdGqhlIy0RjDc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vaNXG+bS+RB0Qi0kI9lBGyr8FcUxm5igG982+cOZwqw=";
   };
 
-  vendorHash = "sha256-1HUWdJc2YaLtszAswQTWn3bevDFJwY5xTCMlYM8j+GU=";
+  vendorHash = "sha256-03xZ3P/7xjznYdM9rv+8ZYftQlnjJ6ZTq0HdSvGpaWw=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.airVersion=${version}"
+    "-X=main.airVersion=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Live reload for Go apps";
     mainProgram = "air";
     homepage = "https://github.com/air-verse/air";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ Gonzih ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ Gonzih ];
   };
-}
+})

@@ -8,7 +8,7 @@ Like [`stdenv.mkDerivation`](#sec-using-stdenv), each of these build helpers cre
 
 The function `runCommandWith` returns a derivation built using the specified command(s), in a specified environment.
 
-It is the underlying base function of  all [`runCommand*` variants].
+It is the underlying base function of all [`runCommand*` variants].
 The general behavior is controlled via a single attribute set passed
 as the first argument, and allows specifying `stdenv` freely.
 
@@ -45,7 +45,7 @@ runCommandWith :: {
    :::
 
 `stdenv` (Derivation)
-:   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`
+:   The [standard environment](#chap-stdenv) to use, defaulting to `pkgs.stdenv`.
 
 `derivationArgs` (Attribute set)
 :   Additional arguments for [`mkDerivation`](#sec-using-stdenv).
@@ -160,10 +160,10 @@ runCommandWith { inherit name derivationArgs; } buildCommand
 ## Writing text files {#trivial-builder-text-writing}
 
 Nixpkgs provides the following functions for producing derivations which write text files or executable scripts into the Nix store.
-They are useful for creating files from Nix expression, and are all implemented as convenience wrappers around `writeTextFile`.
+They are useful for creating files from Nix expressions, and are all implemented as convenience wrappers around `writeTextFile`.
 
 Each of these functions will cause a derivation to be produced.
-When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`builtins.toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
+When you coerce the result of each of these functions to a string with [string interpolation](https://nixos.org/manual/nix/stable/language/string-interpolation) or [`toString`](https://nixos.org/manual/nix/stable/language/builtins#builtins-toString), it will evaluate to the [store path](https://nixos.org/manual/nix/stable/store/store-path) of this derivation.
 
 :::: {.note}
 Some of these functions will put the resulting files within a directory inside the [derivation output](https://nixos.org/manual/nix/stable/language/derivations#attr-outputs).
@@ -344,7 +344,7 @@ Write a text file to the Nix store.
 `allowSubstitutes` (Bool, _optional_)
 
 : Whether to allow substituting from a binary cache.
-  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `builtins.derivation`.
+  Passed through to [`allowSubstitutes`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-allowSubstitutes) of the underlying call to `derivation`.
 
   It defaults to `false`, as running the derivation's simple `builder` executable locally is assumed to be faster than network operations.
   Set it to true if the `checkPhase` step is expensive.
@@ -355,7 +355,7 @@ Write a text file to the Nix store.
 
 : Whether to prefer building locally, even if faster [remote build machines](https://nixos.org/manual/nix/stable/command-ref/conf-file#conf-substituters) are available.
 
-  Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `builtins.derivation`.
+  Passed through to [`preferLocalBuild`](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-preferLocalBuild) of the underlying call to `derivation`.
 
   It defaults to `true` for the same reason `allowSubstitutes` defaults to `false`.
 
@@ -651,7 +651,7 @@ Write a Bash script to a "bin" subdirectory of a directory in the Nix store.
 : The contents of the file.
 
 The file's contents will be put into `/nix/store/<store path>/bin/<name>`.
-The store path will include the the name, and it will be a directory.
+The store path will include the name, and it will be a directory.
 
 This function is a combination of [](#trivial-builder-writeShellScript) and [](#trivial-builder-writeScriptBin).
 
@@ -682,7 +682,7 @@ writeTextFile {
 ## `concatTextFile`, `concatText`, `concatScript` {#trivial-builder-concatText}
 
 These functions concatenate `files` to the Nix store in a single file. This is useful for configuration files structured in lines of text. `concatTextFile` takes an attribute set and expects two arguments, `name` and `files`. `name` corresponds to the name used in the Nix store path. `files` will be the files to be concatenated. You can also set `executable` to true to make this file have the executable bit set.
-`concatText` and`concatScript` are simple wrappers over `concatTextFile`.
+`concatText` and `concatScript` are simple wrappers over `concatTextFile`.
 
 Here are a few examples:
 ```nix
@@ -734,7 +734,80 @@ Some basic Bash options are set by default (`errexit`, `nounset`, and `pipefail`
 Extra arguments may be passed to `stdenv.mkDerivation` by setting `derivationArgs`; note that variables set in this manner will be set when the shell script is _built,_ not when it's run.
 Runtime environment variables can be set with the `runtimeEnv` argument.
 
-For example, the following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`:
+`writeShellApplication` has the following arguments:
+
+`name` (String)
+
+: The name of the script to write.
+
+`text` (String)
+
+: The shell script's text, not including a shebang.
+
+`runtimeInputs` (List of derivations or strings, _optional_)
+
+: Inputs to add to the shell script's `$PATH` at runtime.
+
+  Each elements can either be a normal derivation, or a string containing a path, in which case it will be suffixed with `/bin` to create a `PATH` expression (see [`lib.strings.makeBinPath`](#function-library-lib.strings.makeBinPath) for more information).
+
+`runtimeEnv` (Attribute set, _optional_)
+
+: Extra environment variables to set at runtime.
+
+`checkPhase` (String, _optional_)
+
+: The `checkPhase` to run.
+
+  The script path will be given as `$target` in the `checkPhase`
+
+  _Default behavior:_ run [`shellcheck`](https://github.com/koalaman/shellcheck) (on supported platforms) and `bash -n` (check syntax but don't execute commands).
+
+`excludeShellChecks` (List of strings, _optional_)
+
+: Checks to exclude when running `shellcheck`.
+
+  For example, `excludeShellChecks = [ "SC2016" ]` would prevent `shellcheck` from reporting `SC2016`, but would still detect any other problems.
+
+  See [the `shellcheck` wiki](https://www.shellcheck.net/wiki/) for a list of checks.
+
+`extraShellCheckFlags` (List of strings, _optional_)
+
+: Extra command-line flags to pass to `shellcheck`.
+
+`bashOptions` (List of strings, _optional_)
+
+: Bash options to activate with `set -o` at the start of the script
+
+  _Default:_ `[ "errexit" "nounset" "pipefail" ]`, which means:
+  1. A failing command inside of a command list or pipeline will make the script exit, except if used as a conditional (inside a `while`, `if`, `&&`, `||`, etc.);
+  2. Any attempt to expand an undefined variable will make the script exit.
+
+`inheritPath` (Bool, _optional_)
+
+: Whether the script will inherit the PATH from its parent environment.
+
+  _Default:_ `true`
+
+`meta` (Attribute set, _optional_)
+
+: `stdenv.mkDerivation`'s [`meta`](#chap-meta) argument
+
+`passthru` (Attribute set, _optional_)
+
+: `stdenv.mkDerivation`'s [`passthru`](#chap-passthru) argument
+
+`derivationArgs` (Attribute set, _optional_)
+
+: Extra arguments to pass to [`stdenv.mkDerivation`](#chap-stdenv)
+
+  ::: {.caution}
+  Certain derivation attributes are also set internally, so overriding those could cause problems.
+  :::
+
+::: {.example #ex-writeShellApplication}
+# Usage of `writeShellApplication`
+
+The following shell application can refer to `curl` directly, rather than needing to write `${curl}/bin/curl`
 
 ```nix
 writeShellApplication {
@@ -750,6 +823,7 @@ writeShellApplication {
   '';
 }
 ```
+:::
 
 ## `symlinkJoin` {#trivial-builder-symlinkJoin}
 

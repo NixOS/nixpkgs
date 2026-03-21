@@ -90,18 +90,23 @@ buildPythonPackage rec {
     pytest-dependency
   ];
 
-  disabledtests = [
+  disabledTests = [
     # flaky, timing sensitive
     "test_timing"
+
+    # flaky, depends on ssh connection
+    "test_argument_device_expansion"
+    "test_argument_file_expansion"
+    "test_local_managedfile"
   ];
 
   pytestFlags = [ "--benchmark-disable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Embedded control & testing library";
     homepage = "https://github.com/labgrid-project/labgrid";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ emantor ];
-    platforms = with platforms; linux;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ emantor ];
+    platforms = with lib.platforms; linux;
   };
 }

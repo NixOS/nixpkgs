@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  libX11,
-  libXext,
-  libXrandr,
-  libXrender,
+  libx11,
+  libxext,
+  libxrandr,
+  libxrender,
   xorgproto,
   patches ? [ ],
 }:
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11
-    libXext
-    libXrandr
-    libXrender
+    libx11
+    libxext
+    libxrandr
+    libxrender
     xorgproto
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # Allow users set their own list of patches
   inherit patches;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.6809.org.uk/evilwm/";
     description = "Minimalist window manager for the X Window System";
     license = {
@@ -45,8 +45,8 @@ stdenv.mkDerivation rec {
       url = "http://www.6809.org.uk/evilwm/";
       free = true;
     }; # like BSD/MIT, but Share-Alike'y; See README.
-    maintainers = with maintainers; [ amiloradovsky ];
-    platforms = platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
     mainProgram = "evilwm";
   };
 }

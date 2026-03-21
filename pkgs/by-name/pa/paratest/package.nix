@@ -8,22 +8,23 @@
 (php.withExtensions ({ enabled, all }: enabled ++ [ all.pcov ])).buildComposerProject2
   (finalAttrs: {
     pname = "paratest";
-    version = "7.12.0";
+    version = "7.19.2";
 
     src = fetchFromGitHub {
       owner = "paratestphp";
       repo = "paratest";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-EH9lKI61hYYmTe7T8j1CIwiuRqgkouWnapJWvqo9iQQ=";
+      hash = "sha256-LZZUqtCnZTH3UC6KqhTt3QOcwErowCxQO2uXXmizroc=";
     };
 
     composerLock = ./composer.lock;
-    vendorHash = "sha256-8IpgE/s0ooZoecd7kVMixd5EGHcu/aNuMJ5RX6Zzt6w=";
+    vendorHash = "sha256-pvd/2bxcmQGa4H2XBqbhb9l30sQ9+AXDP2EqKrtP5Pk=";
+
+    passthru.updateScript = ./update.sh;
 
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     meta = {
@@ -32,6 +33,9 @@
       homepage = "https://github.com/paratestphp/paratest";
       license = lib.licenses.mit;
       mainProgram = "paratest";
-      maintainers = [ lib.maintainers.patka ];
+      maintainers = [
+        lib.maintainers.patka
+        lib.maintainers.piotrkwiecinski
+      ];
     };
   })

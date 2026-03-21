@@ -4,19 +4,19 @@
   fetchFromGitHub,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "rendercv";
-  version = "2.2";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rendercv";
     repo = "rendercv";
-    tag = "v${version}";
-    hash = "sha256-bIEuzMGV/l8Cunc4W04ESFYTKhNH+ffkA6eXGbyu3A0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2ClS/RwfAhjo+bh1fTiir1YCVelDJPOjp+Z3GHVzF4E=";
   };
 
-  build-system = with python3Packages; [ hatchling ];
+  build-system = with python3Packages; [ uv-build ];
 
   dependencies = with python3Packages; [
     jinja2
@@ -26,9 +26,9 @@ python3Packages.buildPythonApplication rec {
     pycountry
     pydantic-extra-types
     ruamel-yaml
+    markdown
     # full
     typer
-    markdown
     watchdog
     typst
     rendercv-fonts
@@ -37,29 +37,30 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "phonenumbers"
-    "pydantic-extra-types"
-    "pydantic"
-    "ruamel-yaml"
+    "markdown"
   ];
+
+  patches = [
+    ./fix_theme_directory_permissions.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.3,<0.11.0" "uv_build"
+  '';
 
   pythonImportsCheck = [ "rendercv" ];
 
   nativeCheckInputs = with python3Packages; [
-    pypdf
+    pytest-xdist
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    "test_are_all_the_theme_files_the_same"
-    # It needs internet to download resources
-    "test_render_a_pdf_from_typst"
-    "test_render_pngs_from_typst"
-    "test_render_command_overriding_input_file_settings"
   ];
 
   disabledTestPaths = [
     # It fails due to missing internet resources
-    "tests/test_cli.py"
+    "tests/renderer/test_pdf_png.py"
+    "tests/cli/render_command/test_render_command.py"
+    "tests/test_pyodide.py"
   ];
 
   doCheck = true;
@@ -67,9 +68,9 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Typst-based CV/resume generator";
     homepage = "https://rendercv.com";
-    changelog = "https://docs.rendercv.com/changelog/#22-january-25-2025";
+    changelog = "https://docs.rendercv.com/changelog/#27-march-6-2026";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ theobori ];
     mainProgram = "rendercv";
   };
-}
+})

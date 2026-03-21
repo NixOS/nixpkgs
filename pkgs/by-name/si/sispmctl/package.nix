@@ -6,12 +6,12 @@
   libusb-compat-0_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sispmctl";
   version = "4.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sispmctl/sispmctl-${version}.tar.gz";
+    url = "mirror://sourceforge/sispmctl/sispmctl-${finalAttrs.version}.tar.gz";
     hash = "sha256-51eGOkg42m4cpypXrcWspvxH/73ccqaQUtir10PVcII=";
   };
 
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     libusb-compat-0_1
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sispmctl.sourceforge.net/";
     description = "USB controlled powerstrips management software";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "sispmctl";
-    maintainers = [ maintainers._9R ];
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers._9R ];
+    platforms = lib.platforms.unix;
   };
-}
+})

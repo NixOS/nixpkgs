@@ -11,14 +11,13 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "riemann-dash";
 
-  meta = with lib; {
+  meta = {
     description = "Javascript, websockets-powered dashboard for Riemann";
     homepage = "https://github.com/riemann/riemann-dash";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      manveru
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

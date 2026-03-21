@@ -10,11 +10,11 @@
   openssl,
   udev,
   libglvnd,
-  libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
-  libXfixes,
+  libx11,
+  libxcursor,
+  libxi,
+  libxrandr,
+  libxfixes,
   libpulseaudio,
   libva,
   ffmpeg_7,
@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation {
   buildInputs = [
     stdenv.cc.cc # libstdc++
     libglvnd
-    libX11
+    libx11
   ];
 
   runtimeDependenciesPath = lib.makeLibraryPath [
@@ -58,11 +58,11 @@ stdenvNoCC.mkDerivation {
     libpng
     libjpeg8
     curl
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    libXfixes
+    libx11
+    libxcursor
+    libxi
+    libxrandr
+    libxfixes
     vulkan-loader
   ];
 
@@ -108,16 +108,16 @@ stdenvNoCC.mkDerivation {
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://parsec.app/";
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       arcnmx
       pabloaul
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "parsecd";
   };
 }

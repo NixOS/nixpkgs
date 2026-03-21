@@ -31,9 +31,11 @@
   libimagequant,
   libjpeg,
   libjxl,
+  libraw,
   librsvg,
   libpng,
   libtiff,
+  libultrahdr,
   libwebp,
   matio,
   openexr,
@@ -44,6 +46,10 @@
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  withDevDoc ?
+    !stdenv.hostPlatform.isDarwin
+    && !stdenv.hostPlatform.isFreeBSD
+    && !(stdenv.hostPlatform.isRiscV && stdenv.isLinux),
 
   # passthru
   testers,
@@ -52,7 +58,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
-  version = "8.17.2";
+  version = "8.18.1";
 
   outputs = [
     "bin"
@@ -60,13 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
     "dev"
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [ "devdoc" ];
+  ++ lib.optionals withDevDoc [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Jwb1bH0y3lmv/IU5JqcnAxiMK4gj+aTBj5nLKZ+XnKY=";
+    hash = "sha256-PIaoijkhMKbG8IgK11h8DLemjUR1WNSYB1yfqI4kwdQ=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -85,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) [
+  ++ lib.optionals withDevDoc [
     gi-docgen
   ];
 
@@ -108,9 +114,11 @@ stdenv.mkDerivation (finalAttrs: {
     libimagequant
     libjpeg
     libjxl
+    libraw
     librsvg
     libpng
     libtiff
+    libultrahdr
     libwebp
     matio
     openexr
@@ -131,9 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "spng" false) # we want to use libpng
     (lib.mesonEnable "introspection" withIntrospection)
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) (
-    lib.mesonBool "docs" true
-  )
+  ++ lib.optional withDevDoc (lib.mesonBool "docs" true)
   ++ lib.optional (imagemagick == null) (lib.mesonEnable "magick" false);
 
   postFixup = ''

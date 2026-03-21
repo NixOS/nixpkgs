@@ -6,7 +6,6 @@
   installShellFiles,
   pkg-config,
   glib,
-  pcre,
   pcre2,
   util-linux,
   libsysprof-capture,
@@ -21,16 +20,15 @@
   versionCheckHook,
   mydumper,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mydumper";
-  version = "0.20.1-2";
+  version = "0.21.1-1";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
-    tag = "v${version}";
-    hash = "sha256-ypFXxmKnG1yiJjvHGmYJJz5ZjhhGHCRklG7y83jypms=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6x0d1Ywgy6kkfDs3KsS6pRK0/3z9Ur7klO8xMTsoDPI=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -52,7 +50,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    pcre
     pcre2
     util-linux
     libmysqlclient
@@ -84,7 +81,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
     substituteInPlace CMakeLists.txt\
-      --replace-fail "/etc" "$out/etc"
+      --replace-fail "/etc" "$out/etc" \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   # copy man files & docs over
@@ -107,13 +105,13 @@ stdenv.mkDerivation rec {
   passthru.tests = testers.testVersion {
     package = mydumper;
     command = "myloader --version";
-    version = "myloader v${version}";
+    version = "myloader v${finalAttrs.version}";
   };
 
   meta = {
     description = "High-performance MySQL backup tool";
     homepage = "https://github.com/mydumper/mydumper";
-    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
+    changelog = "https://github.com/mydumper/mydumper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
@@ -121,4 +119,4 @@ stdenv.mkDerivation rec {
       michaelglass
     ];
   };
-}
+})

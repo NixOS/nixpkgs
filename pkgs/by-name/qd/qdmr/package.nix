@@ -6,8 +6,9 @@
   cmake,
   libxslt,
   docbook_xsl_ns,
-  libsForQt5,
+  kdePackages,
   libusb1,
+  librsvg,
   yaml-cpp,
 }:
 
@@ -15,30 +16,32 @@ let
   inherit (stdenv.hostPlatform) isLinux;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qdmr";
-  version = "0.12.3";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
-    rev = "v${version}";
-    hash = "sha256-rb59zbYpIziqXWTjTApWXnkcpRiAUIqPiInEJdsYd48=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Nw5B0vbYlGkH/8SAAT4DdTp2qiiLst3hWV4n6uF7oUo=";
   };
 
   nativeBuildInputs = [
     cmake
-    libxslt
-    libsForQt5.wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
     installShellFiles
   ];
 
   buildInputs = [
+    librsvg
     libusb1
-    libsForQt5.qtlocation
-    libsForQt5.qtserialport
-    libsForQt5.qttools
-    libsForQt5.qtbase
+    libxslt
+    kdePackages.qtlocation
+    kdePackages.qtserialport
+    kdePackages.qttools
+    kdePackages.qtbase
+    kdePackages.qtpositioning
     yaml-cpp
   ];
 
@@ -59,12 +62,13 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_MAN=ON"
     "-DCMAKE_INSTALL_FULL_MANDIR=share/man"
+    "-DDOCBOOK2MAN_XSLT=docbook_man.${if isLinux then "debian" else "macports"}.xsl"
     "-DINSTALL_UDEV_RULES=OFF"
   ];
 
   postInstall = lib.optionalString isLinux ''
     mkdir -p "$out/etc/udev/rules.d"
-    cp ${src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
+    cp ${finalAttrs.src}/dist/99-qdmr.rules $out/etc/udev/rules.d/
   '';
 
   doInstallCheck = true;
@@ -73,7 +77,10 @@ stdenv.mkDerivation rec {
     description = "GUI application and command line tool for programming DMR radios";
     homepage = "https://dm3mat.darc.de/qdmr/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ _0x4A6F ];
+    maintainers = with lib.maintainers; [
+      _0x4A6F
+      juliabru
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

@@ -40,13 +40,13 @@
 }:
 
 let
-  version = "38.2.0";
+  version = "39.3.1";
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-HYHiW/izKSkn08xLY7gJfuYK1C/ArOQ2DAwleSkcZ/I=";
+    hash = "sha256-MRMMPITyjpEvWuzbeM1wTsmuHIbDDbczbFulKmOeNcU=";
   };
 in
 buildPythonPackage {

@@ -5,16 +5,19 @@
   ninja,
   python3,
   weston,
-  xorg,
+  xauth,
   xwayland,
   withCage ? false,
   cage,
   withKwin ? false,
   kdePackages,
   withMutter ? false,
-  gnome,
+  mutter,
   withDbus ? withMutter,
+  phoc,
+  withPhoc ? false,
   dbus, # Since 0.0.3, mutter compositors run with their own DBUS sessions
+  xwayland-run,
 }:
 let
   compositors = [
@@ -22,19 +25,20 @@ let
   ]
   ++ lib.optional withCage cage
   ++ lib.optional withKwin kdePackages.kwin
-  ++ lib.optional withMutter gnome.mutter
+  ++ lib.optional withMutter mutter
+  ++ lib.optional withPhoc phoc
   ++ lib.optional withDbus dbus;
 in
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "xwayland-run";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "ofourdan";
     repo = "xwayland-run";
-    rev = version;
-    hash = "sha256-FP/2KNPehZEGKXr+fKdVj4DXzRMpfc3x7K6vH6ZsGdo=";
+    rev = finalAttrs.version;
+    hash = "sha256-TVoMbFQ5OIJkTX3/tuwylW+Bdx/gl1omObj0c3JjICM=";
   };
 
   pyproject = false;
@@ -56,7 +60,7 @@ python3.pkgs.buildPythonApplication rec {
       --prefix PATH : ${
         lib.makeBinPath [
           xwayland
-          xorg.xauth
+          xauth
         ]
       }
     wrapProgram $out/bin/xwfb-run \
@@ -65,18 +69,27 @@ python3.pkgs.buildPythonApplication rec {
           compositors
           ++ [
             xwayland
-            xorg.xauth
+            xauth
           ]
         )
       }
   '';
 
+  passthru.tests = {
+    build = xwayland-run.override {
+      withCage = true;
+      withKwin = true;
+      withMutter = true;
+      withPhoc = true;
+    };
+  };
+
   meta = {
-    changelog = "https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/releases/${src.rev}";
+    changelog = "https://gitlab.freedesktop.org/ofourdan/xwayland-run/-/releases/${finalAttrs.src.rev}";
     description = "Set of small utilities revolving around running Xwayland and various Wayland compositor headless";
     homepage = "https://gitlab.freedesktop.org/ofourdan/xwayland-run";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

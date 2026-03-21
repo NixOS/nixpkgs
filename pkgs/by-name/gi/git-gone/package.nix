@@ -2,46 +2,25 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  installShellFiles,
-  asciidoctor,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-gone";
-  version = "1.2.5";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "git-gone";
-    tag = "v${version}";
-    hash = "sha256-4BhFombZCmv/GNG2OcNlWNKTk2h65yKn1ku734gCBCQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/8ujbZ7FQTZzTG4HnHg6v3rWhxt2PuSGwIJpBVTxhfM=";
   };
 
-  # remove if updating to rust 1.85
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]'
-  '';
-
-  cargoHash = "sha256-VjnnrVN+uST99paImI1uNj34CNozid7ZiPslJqvmKCs=";
-
-  # remove if updating to rust 1.85
-  env.RUSTC_BOOTSTRAP = 1;
-
-  nativeBuildInputs = [
-    installShellFiles
-    asciidoctor
-  ];
-
-  postInstall = ''
-    asciidoctor --backend=manpage git-gone.1.adoc -o git-gone.1
-    installManPage git-gone.1
-  '';
+  cargoHash = "sha256-93nZhZOtti28FetuOYtvh6LOtQJV+cEHbOkrJ+3m1m4=";
 
   meta = {
     description = "Cleanup stale Git branches of merge requests";
     homepage = "https://github.com/swsnr/git-gone";
-    changelog = "https://github.com/swsnr/git-gone/raw/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/swsnr/git-gone/raw/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       cafkafk
@@ -49,4 +28,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "git-gone";
   };
-}
+})

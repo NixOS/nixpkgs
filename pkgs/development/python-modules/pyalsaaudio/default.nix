@@ -24,11 +24,11 @@ buildPythonPackage rec {
   # Unit tests exist in test.py, but they require hardware (and therefore /dev) access.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "ALSA wrappers for Python";
     homepage = "https://github.com/larsimmisch/pyalsaaudio";
     changelog = "https://github.com/larsimmisch/pyalsaaudio/blob/${version}/CHANGES.md";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ timschumi ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ timschumi ];
   };
 }

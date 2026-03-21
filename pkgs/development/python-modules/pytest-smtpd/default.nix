@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   pytest,
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytest-smtpd";
   version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   # Pypi tarball doesn't include tests/
   src = fetchFromGitHub {
@@ -36,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_smtpd" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest fixture that creates an SMTP server";
     homepage = "https://github.com/bebleo/pytest-smtpd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

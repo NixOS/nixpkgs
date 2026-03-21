@@ -6,14 +6,14 @@
   popt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "isomd5sum";
   version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = "isomd5sum";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-c/4CQtAzatfG1Z3SfyB2OZmfJRMnyrZZTqSApsK7R+Q=";
   };
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     "install-devel"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/rhinstaller/isomd5sum";
     description = "Utilities for working with md5sum implanted in ISO images";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ knl ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ knl ];
   };
-}
+})

@@ -10,20 +10,20 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "opa-envoy-plugin";
-  version = "1.8.0-envoy";
+  version = "1.13.2-envoy-2";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa-envoy-plugin";
-    tag = "v${version}";
-    hash = "sha256-tPPF/zCwPShejBZZO1Kw7+jd4BpTU81DeIUxxz9b0RY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-2NztAdUcslKzr+OIMWWLJx76Fw0CNP1nw6056Xs6SVo=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-3NV5YNwfZgcL+VYXBDWwtb+/0bwCgLRxE3XmLGA2Nkw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,7 +32,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/open-policy-agent/opa/v1/version.Version=${version}"
+    "-X github.com/open-policy-agent/opa/v1/version.Version=${finalAttrs.version}"
   ];
 
   tags = lib.optional enableWasmEval (
@@ -53,7 +53,7 @@ buildGoModule rec {
 
     $out/bin/opa-envoy-plugin --help
     $out/bin/opa-envoy-plugin version
-    $out/bin/opa-envoy-plugin version | grep "Version: ${version}"
+    $out/bin/opa-envoy-plugin version | grep "Version: ${finalAttrs.version}"
 
     ${lib.optionalString enableWasmEval ''
       # If wasm is enabled verify it works
@@ -66,7 +66,7 @@ buildGoModule rec {
   meta = {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org/docs/latest/envoy-introduction/";
-    changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/open-policy-agent/opa-envoy-plugin/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Plugin to enforce OPA policies with Envoy";
     longDescription = ''
       OPA-Envoy extends OPA with a gRPC server that implements the Envoy
@@ -79,4 +79,4 @@ buildGoModule rec {
       charlieegan3
     ];
   };
-}
+})

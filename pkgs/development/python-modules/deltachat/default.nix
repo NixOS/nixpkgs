@@ -1,6 +1,5 @@
 {
   buildPythonPackage,
-  pythonOlder,
   pkg-config,
   pkgconfig,
   setuptools-scm,
@@ -17,7 +16,6 @@ buildPythonPackage rec {
   inherit (libdeltachat) version src;
   sourceRoot = "${src.name}/python";
 
-  disabled = pythonOlder "3.7";
   pyproject = true;
 
   nativeBuildInputs = [

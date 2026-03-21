@@ -16,7 +16,7 @@ gdversion=$1
 # Download and extract the official stable 64-bit X11 mono build of Godot.
 gddir="$(mktemp -d)"
 trap 'rm -rf -- "$gddir"' EXIT
-wget -P "$gddir" https://downloads.tuxfamily.org/godotengine/$gdversion/mono/Godot_v$gdversion-stable_mono_x11_64.zip
+wget -O "$gddir"/Godot_v$gdversion-stable_mono_x11_64.zip "https://downloads.godotengine.org/?version=$gdversion&flavor=stable&slug=mono_x11_64.zip&platform=linux.64"
 unzip "$gddir"/Godot_v$gdversion-stable_mono_x11_64.zip -d "$gddir"
 
 # Generate the mono glue from the official build.

@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "out"
+    "man"
     "dev"
     "lib"
   ]
@@ -86,13 +87,26 @@ stdenv.mkDerivation rec {
   ++ lib.optional withStatic "--enable-static";
 
   patches = [
+    # Accept multiple default kernel module dirs at build-time, instead
+    # of hardcoding a single /lib/modules, and adjust module search logic
+    # accordingly (to account for multiple default directories)
     ./module-dir.patch
+
+    # Use portable implementation for basename API
+    #
+    # musl has removed the non-prototype declaration of basename from string.h
+    # which now results in build errors with clang-17+ compiler
+    #
+    # Implement GNU basename behavior using strchr which is portable across libcs
+    #
+    # Fixes "call to undeclared function 'basename'" error on clang+musl
     (fetchpatch {
       name = "musl.patch";
       url = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/patch/?id=11eb9bc67c319900ab00523997323a97d2d08ad2";
       hash = "sha256-CYG615elMWces6QGQRg2H/NL7W4XsG9Zvz5H+xsdFFo=";
     })
   ]
+  # Force configure.ac to accept --enable-static (no other changes necessary)
   ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
@@ -110,7 +124,7 @@ stdenv.mkDerivation rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tools for loading and managing Linux kernel modules";
     longDescription = ''
       kmod is a set of tools to handle common tasks with Linux kernel modules
@@ -121,11 +135,13 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/";
     downloadPage = "https://www.kernel.org/pub/linux/utils/kernel/kmod/";
     changelog = "https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git/plain/NEWS?h=v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ]; # GPLv2+ for tools
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "kernel" version;
   };
 }

@@ -5,22 +5,19 @@
   filelock,
   lxml,
   pycryptodomex,
-  pythonOlder,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "blobfile";
-  version = "3.0.0";
+  version = "3.1.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "christopher-hesse";
     repo = "blobfile";
     tag = "v${version}";
-    hash = "sha256-/v48rLvlN4lsfWKJvXRNuIO6jdsCgRcSPlJzdOfl3xk=";
+    hash = "sha256-aTHEJ1P+v9IWXPg9LN+KG1TlEVJh0qTl8J41iWpoPWk=";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "blobfile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";
     homepage = "https://github.com/christopher-hesse/blobfile";
-    changelog = "https://github.com/christopher-hesse/blobfile/blob/v${version}/CHANGES.md";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ happysalada ];
+    changelog = "https://github.com/christopher-hesse/blobfile/blob/${src.tag}/CHANGES.md";
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

@@ -13,19 +13,16 @@
   spacy,
   pandas,
   requests,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "fastai";
-  version = "2.8.4";
+  version = "2.8.6";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AmQoXZxnaNepeJzlw3A6jhIfVg9ABneRI4uV1WbkJY4=";
+    hash = "sha256-eZW96Upogr6qws6lD8eX2kywuBmTXsbG7vaQKLwx9y8=";
   };
 
   propagatedBuildInputs = [
@@ -45,12 +42,12 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "fastai" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fastai/fastai";
     description = "Fastai deep learning library";
     mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rxiao ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rxiao ];
   };
 }

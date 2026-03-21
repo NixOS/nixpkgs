@@ -16,7 +16,7 @@ let
     {
       "--servers" = lib.concatStringsSep "," fe.servers;
       "--domain" = fe.domain;
-      "--listen" = fe.listenAddress;
+      "--listen" = stringOrConcat "," fe.listenAddresses;
       "--proxy-port" = fe.proxyPort;
       "--whois" = fe.whois;
       "--dns-interface" = fe.dnsInterface;
@@ -37,7 +37,7 @@ let
     {
       "--allowed" = lib.concatStringsSep "," px.allowedIPs;
       "--bird" = px.birdSocket;
-      "--listen" = px.listenAddress;
+      "--listen" = stringOrConcat "," px.listenAddresses;
       "--traceroute_bin" = px.traceroute.binary;
       "--traceroute_flags" = lib.concatStringsSep " " px.traceroute.flags;
       "--traceroute_raw" = px.traceroute.rawOutput;
@@ -58,6 +58,17 @@ let
     args: lib.mapAttrsToList (name: value: "${name} " + mkArgValue value) (filterNull args);
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "bird-lg" "frontend" "listenAddress" ]
+      [ "services" "bird-lg" "frontend" "listenAddresses" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "bird-lg" "proxy" "listenAddress" ]
+      [ "services" "bird-lg" "proxy" "listenAddresses" ]
+    )
+  ];
+
   options = {
     services.bird-lg = {
       package = lib.mkPackageOption pkgs "bird-lg" { };
@@ -77,8 +88,8 @@ in
       frontend = {
         enable = lib.mkEnableOption "Bird Looking Glass Frontend Webserver";
 
-        listenAddress = lib.mkOption {
-          type = lib.types.str;
+        listenAddresses = lib.mkOption {
+          type = with lib.types; either str (listOf str);
           default = "127.0.0.1:5000";
           description = "Address to listen on.";
         };
@@ -202,8 +213,8 @@ in
       proxy = {
         enable = lib.mkEnableOption "Bird Looking Glass Proxy";
 
-        listenAddress = lib.mkOption {
-          type = lib.types.str;
+        listenAddresses = lib.mkOption {
+          type = with lib.types; either str (listOf str);
           default = "127.0.0.1:8000";
           description = "Address to listen on.";
         };

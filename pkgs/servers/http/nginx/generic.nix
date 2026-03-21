@@ -117,6 +117,7 @@ stdenv.mkDerivation {
     "--sbin-path=bin/nginx"
     "--with-http_ssl_module"
     "--with-http_v2_module"
+    "--with-http_v3_module"
     "--with-http_realip_module"
     "--with-http_addition_module"
     "--with-http_xslt_module"
@@ -254,8 +255,6 @@ stdenv.mkDerivation {
       --replace-fail '@nixStoreDirLen@' "''${#NIX_STORE}"
   '' postPatch;
 
-  hardeningEnable = lib.optional (!stdenv.hostPlatform.isDarwin) "pie";
-
   enableParallelBuilding = true;
 
   preInstall = ''
@@ -298,6 +297,7 @@ stdenv.mkDerivation {
         ;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme.nginx;
+      acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
     }
     // passthru.tests;
   };
@@ -306,21 +306,18 @@ stdenv.mkDerivation {
     if meta != null then
       meta
     else
-      with lib;
       {
         description = "Reverse proxy and lightweight webserver";
         mainProgram = "nginx";
         homepage = "http://nginx.org";
-        license = [ licenses.bsd2 ] ++ concatMap (m: m.meta.license) modules;
+        license = [ lib.licenses.bsd2 ] ++ lib.concatMap (m: m.meta.license) modules;
         broken = lib.any (m: m.meta.broken or false) modules;
-        platforms = platforms.all;
-        maintainers = with maintainers; [
+        platforms = lib.platforms.all;
+        maintainers = with lib.maintainers; [
+          das_j
           fpletz
+          helsinki-Jo
           raitobezarius
-        ];
-        teams = with teams; [
-          helsinki-systems
-          stridtech
         ];
       };
 }

@@ -12,7 +12,7 @@
   # for passthru.tests
   bind,
   cmake,
-  knot-resolver,
+  knot-resolver_5,
   sbclPackages,
   luajitPackages,
   mosquitto,
@@ -24,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.51.0";
+  version = "1.52.0";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = "libuv";
     repo = "libuv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ayTk3qkeeAjrGj5ab7wF7vpWI8XWS1EeKKUqzaD/LY0=";
+    hash = "sha256-WyIBJjxsGo1sSjmbM1zRBF2cR97n6iSBK12FGbg73n0=";
   };
 
   outputs = [
@@ -174,6 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
     # routinely hangs on powerpc64le
     !stdenv.hostPlatform.isPower64;
 
+  # Tests like to time out when run in parallel to large builds
+  preCheck = ''
+    export UV_TEST_TIMEOUT_MULTIPLIER=10
+  '';
+
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
@@ -181,7 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       bind
       cmake
-      knot-resolver
+      knot-resolver_5
       mosquitto
       neovim
       nodejs
@@ -196,20 +201,21 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-platform support library with a focus on asynchronous I/O";
     homepage = "https://libuv.org/";
     changelog = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
     pkgConfigModules = [ "libuv" ];
     maintainers = [ ];
-    platforms = platforms.all;
-    license = with licenses; [
+    platforms = lib.platforms.all;
+    license = with lib.licenses; [
       mit
       isc
       bsd2
       bsd3
       cc-by-40
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libuv" finalAttrs.version;
   };
 
 })

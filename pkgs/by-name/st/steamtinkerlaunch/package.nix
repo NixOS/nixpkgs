@@ -14,7 +14,9 @@
   wget,
   writeShellApplication,
   xdotool,
-  xorg,
+  xwininfo,
+  xrandr,
+  xprop,
   yad,
 }:
 
@@ -70,9 +72,9 @@ stdenvNoCC.mkDerivation {
           util-linux
           wget
           xdotool
-          xorg.xprop
-          xorg.xrandr
-          xorg.xwininfo
+          xprop
+          xrandr
+          xwininfo
           yad
         ];
         name = "stl-head";
@@ -106,13 +108,12 @@ stdenvNoCC.mkDerivation {
       ln -sfn $out/bin/steamtinkerlaunch $steamcompattool/
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux wrapper tool for use with the Steam client for custom launch options and 3rd party programs";
     mainProgram = "steamtinkerlaunch";
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
-      urandom
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       surfaceflinger
     ];
     platforms = lib.platforms.linux;

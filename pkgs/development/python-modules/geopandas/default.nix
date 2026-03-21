@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   setuptools,
 
@@ -26,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     tag = "v${version}";
-    hash = "sha256-7ZsO4jresikA17M8cyHskdcVnTscGHxTCLJv5p1SvfI=";
+    hash = "sha256-TBb9Bb12OZ9RWiwAGU6JKqiumw1C11USycpKM8mJVdU=";
   };
 
   build-system = [ setuptools ];
@@ -85,11 +86,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "geopandas" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
     changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }

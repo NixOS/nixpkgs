@@ -20,7 +20,7 @@
 buildPythonPackage rec {
   pname = "python-creole";
   version = "1.4.10";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jedie";
@@ -68,6 +68,9 @@ buildPythonPackage rec {
     # rendering mismatches, likely docutils version mismatch
     "test_headlines1"
     "test_simple_table"
+    # - <string>:5: (ERROR/3) Document or section may not begin with a transition.
+    # + <string>:5: (WARNING/2) Document or section may not begin with a transition.
+    "test_non_valid_readme"
   ];
 
   disabledTestPaths = [
@@ -87,11 +90,11 @@ buildPythonPackage rec {
     "creole/tests/test_cross_compare_all.py::CrossCompareTests::test_link_without_title"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Creole markup tools written in Python";
     homepage = "https://github.com/jedie/python-creole";
     changelog = "https://github.com/jedie/python-creole/releases/tag/v${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

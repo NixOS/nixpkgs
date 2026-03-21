@@ -5,21 +5,21 @@
   xsel,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yank";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "mptre";
     repo = "yank";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-sZiZki2Zl0Tfmls5KrLGxT94Bdf9TA9EwoaLoFOX9B4=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];
   makeFlags = [ "YANKCMD=${xsel}/bin/xsel" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mptre/yank";
     description = "Yank terminal output to clipboard";
     longDescription = ''
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
       always treated as delimiters.
     '';
     downloadPage = "https://github.com/mptre/yank/releases";
-    license = licenses.mit;
-    maintainers = [ maintainers.dochang ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.dochang ];
+    platforms = lib.platforms.unix;
     mainProgram = "yank";
   };
 
-}
+})

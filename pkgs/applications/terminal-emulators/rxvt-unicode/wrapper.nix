@@ -16,7 +16,9 @@
 }:
 
 let
-  availablePlugins = rxvt-unicode-plugins;
+  availablePlugins = lib.filterAttrs (
+    _: v: (lib.isDerivation v && (v.meta.license.free or false))
+  ) rxvt-unicode-plugins;
 
   # Transform the string "self" to the plugin itself.
   # It's needed for plugins like bidi who depends on the perl
@@ -43,7 +45,7 @@ let
       perlDeps = (config.perlDeps or [ ]) ++ lib.concatMap mkPerlDeps plugins;
     in
     symlinkJoin {
-      name = "rxvt-unicode-${rxvt-unicode-unwrapped.version}";
+      pname = "rxvt-unicode";
 
       paths = [ rxvt-unicode-unwrapped ] ++ plugins ++ extraDeps;
 
@@ -58,7 +60,7 @@ let
           --suffix-each URXVT_PERL_LIB ':' "$out/lib/urxvt/perl"
       '';
 
-      inherit (rxvt-unicode-unwrapped) meta;
+      inherit (rxvt-unicode-unwrapped) meta version;
 
       passthru = {
         plugins = plugins;

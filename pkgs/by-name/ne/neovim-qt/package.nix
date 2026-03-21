@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation {
           --prefix PATH : ${neovim}/bin
 
         # link .desktop file
-        mkdir -p $out/share/pixmaps
+        mkdir -p $out/share
         ln -s ${unwrapped}/share/applications $out/share/applications
         ln -s ${unwrapped}/share/icons $out/share/icons
       '';

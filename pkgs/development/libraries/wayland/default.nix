@@ -33,6 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # patch from: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
     ./darwin.patch
   ];
 
@@ -94,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core Wayland window system code and protocol";
     longDescription = ''
       Wayland is a project to define a protocol for a compositor to talk to its
@@ -105,11 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
       rendering).
     '';
     homepage = "https://wayland.freedesktop.org/";
-    license = licenses.mit; # Expat version
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin; # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
-    maintainers = with maintainers; [
-      codyopel
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.unix;
+    # Builds with a large downstream patch, but breaks at least the
+    # `qt6Packages.qtbase` build. Please audit Wayland availability
+    # checks throughout the tree before enabling (and work with
+    # upstream if you want sustainable Wayland support on macOS).
+    badPlatforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       qyliss
     ];
     pkgConfigModules = [

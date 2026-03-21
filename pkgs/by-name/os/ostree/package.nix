@@ -43,6 +43,7 @@
   replaceVars,
   openssl,
   ostree-full,
+  testers,
 }:
 
 let
@@ -54,7 +55,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ostree";
-  version = "2025.2";
+  version = "2025.7";
 
   outputs = [
     "out"
@@ -65,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${finalAttrs.version}/libostree-${finalAttrs.version}.tar.xz";
-    hash = "sha256-8kSkCMkJmYp3jhJ/zCLBtQK00BPxXyaUj0fMcv/i7vQ=";
+    hash = "sha256-r40IC5WF5/0fq6jwIpZ+HCaK5i4g7PMu57NkweMHVws=";
   };
 
   patches = [
@@ -170,14 +171,18 @@ stdenv.mkDerivation (finalAttrs: {
       musl = pkgsCross.musl64.ostree;
       installedTests = nixosTests.installed-tests.ostree;
       inherit ostree-full;
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+      };
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Git for operating system binaries";
     homepage = "https://ostreedev.github.io/ostree/";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
+    pkgConfigModules = [ "ostree-1" ];
   };
 })

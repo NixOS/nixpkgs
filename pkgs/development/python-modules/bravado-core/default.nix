@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   # build inputs
   jsonref,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "bravado-core";
   version = "6.6.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Yelp";
@@ -63,12 +60,12 @@ buildPythonPackage rec {
     "tests/spec/Spec"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for adding Swagger support to clients and servers";
     homepage = "https://github.com/Yelp/bravado-core";
     changelog = "https://github.com/Yelp/bravado-core/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       vanschelven
       nickcao
     ];

@@ -17,16 +17,28 @@
   makeWrapper,
   openssl,
   stdenv,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxrender,
+  libxi,
+  libxext,
+  libxau,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ida-free";
   version = "9.2";
 
   src = requireFile {
-    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] version}_x64linux.run";
-    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${version}/ida-free";
+    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_x64linux.run";
+    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${finalAttrs.version}/ida-free";
     hash = "sha256-CQm9phkqLXhht4UQxooKmhmiGuW3lV8RIJuDrm52aNw=";
   };
 
@@ -54,22 +66,22 @@ stdenv.mkDerivation (finalAttrs: rec {
     libxkbcommon
     openssl
     stdenv.cc.cc
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXau
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrender
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
-    xorg.xcbutilcursor
+    libice
+    libsm
+    libx11
+    libxau
+    libxcb
+    libxext
+    libxi
+    libxrender
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxcb-cursor
     zlib
   ];
-  buildInputs = runtimeDependencies;
+  buildInputs = finalAttrs.runtimeDependencies;
 
   # IDA comes with its own Qt6, some dependencies are missing in the installer.
   autoPatchelfIgnoreMissingDeps = [
@@ -118,14 +130,14 @@ stdenv.mkDerivation (finalAttrs: rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
     changelog = "https://hex-rays.com/products/ida/news/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "ida";
-    maintainers = with maintainers; [ msanft ];
+    maintainers = with lib.maintainers; [ msanft ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

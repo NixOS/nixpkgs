@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   gql,
-  pythonOlder,
   pyyaml,
   requests-toolbelt,
   requests,
@@ -13,15 +12,13 @@
 
 buildPythonPackage rec {
   pname = "python-gitlab";
-  version = "6.3.0";
+  version = "8.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "python_gitlab";
     inherit version;
-    hash = "sha256-PXdklWlIlJoqOv8geObpOl7+otsKKVZrXhQgkbzAdao=";
+    hash = "sha256-Zg8V4/iJ7EMHl9JgMivGHZD42QrM/BC6N1k7Ea7Tcb0=";
   };
 
   build-system = [ setuptools ];
@@ -42,12 +39,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gitlab" ];
 
-  meta = with lib; {
+  meta = {
     description = "Interact with GitLab API";
     homepage = "https://github.com/python-gitlab/python-gitlab";
     changelog = "https://github.com/python-gitlab/python-gitlab/blob/v${version}/CHANGELOG.md";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ nyanloutre ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ nyanloutre ];
     mainProgram = "gitlab";
   };
 }

@@ -16,22 +16,22 @@
 let
   isPython3 = enablePython && python.pythonAtLeast "3";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libredwg";
-  version = "0.13.3";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "LibreDWG";
     repo = "libredwg";
-    tag = version;
-    hash = "sha256-FlBHwNsqVSBE8dTDewoKkCbs8Jd/4d69MPpEFzg6Ruc=";
+    tag = finalAttrs.version;
+    hash = "sha256-FeDQCByFGKfHJDOPQA92GslXZ33nhGfB6/63t2TeugE=";
     fetchSubmodules = true;
   };
 
   postPatch =
     let
       printVersion = writeShellScript "print-version" ''
-        echo -n ${lib.escapeShellArg version}
+        echo -n ${lib.escapeShellArg finalAttrs.version}
       '';
     in
     ''
@@ -70,11 +70,11 @@ stdenv.mkDerivation rec {
     libxml2.dev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the DWG file format";
     homepage = "https://savannah.gnu.org/projects/libredwg/";
-    maintainers = with maintainers; [ tweber ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ tweber ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
   };
-}
+})

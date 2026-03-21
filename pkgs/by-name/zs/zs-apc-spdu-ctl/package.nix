@@ -9,14 +9,14 @@
 }:
 
 # TODO: add a services entry for the /etc/zs-apc-spdu.conf file
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zs-apc-spdu-ctl";
   version = "0.0.2";
 
   src = fetchFromGitHub {
     owner = "fogti";
     repo = "zs-apc-spdu-ctl";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "TMV9ETWBVeXq6tZ2e0CrvHBXoyKfOLCQurjBdf/iw/M=";
   };
 
@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
       --replace /usr/sbin/fping "${fping}/bin/fping"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "APC SPDU control utility";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "zs-apc-spdu-ctl";
   };
-}
+})

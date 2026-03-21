@@ -17,22 +17,27 @@
   fftw,
   gtest,
   udevCheckHook,
+  versionCheckHook,
   indi-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.5.1";
+  version = "2.1.9";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mbY3iDLRcQ+pis26u6pHzB43ureaKH7KYPkV0CwHU/E=";
+    hash = "sha256-L3qZ1VgL4J4TYYdgeSrWuVC2Xy+iBxIU9GBx8cllm1o=";
   };
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
     udevCheckHook
   ];
 
@@ -60,7 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkInputs = [ gtest ];
 
-  doCheck = true;
+  # tests seem to be broken on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
   doInstallCheck = true;
 
   # Socket address collisions between tests
@@ -81,15 +87,16 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.indilib.org/";
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl2Plus;
+    mainProgram = "indiserver";
+    maintainers = with lib.maintainers; [
       sheepforce
       returntoreality
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

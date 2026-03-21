@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rime-wanxiang";
-  version = "12.4.1";
+  version = "15.2.0";
 
   src = fetchFromGitHub {
     owner = "amzxyz";
     repo = "rime_wanxiang";
     tag = "v" + finalAttrs.version;
-    hash = "sha256-Z4rHSWN784+djARztQK7b24pLk42kUwCm9mct3ojPM4=";
+    hash = "sha256-jX3QJO5gi5zk8ZbRTT2GGnevPDXzqs/H0MoxKiFOuJY=";
   };
 
   installPhase = ''
@@ -32,12 +32,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Feature-rich pinyin schema for Rime, basic edition";
+    description = "Feature-rich pinyin schema for Rime";
     longDescription = ''
-      万象拼音基础版 is a basic quanpin and shuangpin input schema for Rime based on
+      万象拼音 is a quanpin and shuangpin input schema for Rime based on
       [万象 dictionaries and grammar models](https://github.com/amzxyz/RIME-LMDG),
       supporting traditional shuangpin as well as tonal schemata such as 自然龙 and
       龙码.
+
+      This package is built from the upstream repository snapshots, and includes
+      all the auxiliary encodings.
 
       The schema requires to work the grammar model `wanxiang-lts-zh-hans.gram`.
       However, this file is

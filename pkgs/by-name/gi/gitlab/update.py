@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git go
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nurl python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git go
 
 import click
 import click_log
@@ -22,7 +22,7 @@ click_log.basic_config(logger)
 
 
 class GitLabRepo:
-    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?")
+    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?$")
 
     def __init__(self, owner: str = "gitlab-org", repo: str = "gitlab"):
         self.owner = owner
@@ -49,25 +49,35 @@ class GitLabRepo:
             reverse=True,
         )
         return versions
+
     def get_git_hash(self, rev: str):
-        return (
+        prefetch_output = (
             subprocess.check_output(
                 [
-                    "nix-prefetch-url",
+                    "nix",
+                    "store",
+                    "prefetch-file",
                     "--unpack",
+                    "--json",
                     f"https://gitlab.com/{self.owner}/{self.repo}/-/archive/{rev}/{self.repo}-{rev}.tar.gz",
                 ]
             )
             .decode("utf-8")
             .strip()
         )
+        return json.loads(prefetch_output)["hash"]
 
-    def get_yarn_hash(self, rev: str):
+    def get_yarn_hash(self, rev: str, yarn_lock_path="yarn.lock"):
         with tempfile.TemporaryDirectory() as tmp_dir:
             with open(tmp_dir + "/yarn.lock", "w") as f:
-                f.write(self.get_file("yarn.lock", rev))
-            return (
+                f.write(self.get_file(yarn_lock_path, rev))
+            hash = (
                 subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
+                .decode("utf-8")
+                .strip()
+            )
+            return (
+                subprocess.check_output(["nix-hash", "--type", "sha256", "--to-sri", hash])
                 .decode("utf-8")
                 .strip()
             )
@@ -101,6 +111,7 @@ class GitLabRepo:
             v: self.get_file(v, rev).strip()
             for v in [
                 "GITALY_SERVER_VERSION",
+                "GITLAB_KAS_VERSION",
                 "GITLAB_PAGES_VERSION",
                 "GITLAB_SHELL_VERSION",
                 "GITLAB_ELASTICSEARCH_INDEXER_VERSION",
@@ -112,6 +123,7 @@ class GitLabRepo:
             version=self.rev2version(rev),
             repo_hash=self.get_git_hash(rev),
             yarn_hash=self.get_yarn_hash(rev),
+            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/yarn.lock"),
             owner=self.owner,
             repo=self.repo,
             rev=rev,
@@ -180,21 +192,6 @@ def update_rubyenv():
         cwd=rubyenv_dir,
     )
 
-    # Un-vendor sidekiq
-    #
-    # The sidekiq dependency was vendored to maintain compatibility with Redis 6.0 (as
-    # stated in this [comment]) but unfortunately, it seems to cause a crash in the
-    # application, as noted in this [upstream issue].
-    #
-    # We can safely swap out the dependency, as our Redis release in nixpkgs is >= 7.0.
-    #
-    # [comment]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435#note_1979750600
-    # [upstream issue]: https://gitlab.com/gitlab-org/gitlab/-/issues/468435
-    subprocess.check_output(
-        ["sed", "-i", "s|gem 'sidekiq', path: 'vendor/gems/sidekiq', require: 'sidekiq'|gem 'sidekiq', '~> 7.3.9'|g", "Gemfile"],
-        cwd=rubyenv_dir,
-    )
-
     # Fetch vendored dependencies temporarily in order to build the gemset.nix
     subprocess.check_output(["mkdir", "-p", "vendor/gems", "gems"], cwd=rubyenv_dir)
     subprocess.check_output(
@@ -252,15 +249,57 @@ def update_gitaly():
     data = _get_data_json()
     gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
     repo = GitLabRepo(repo="gitaly")
-    gitaly_dir = pathlib.Path(__file__).parent / 'gitaly'
 
     makefile = repo.get_file("Makefile", f"v{gitaly_server_version}")
     makefile += "\nprint-%:;@echo $($*)\n"
 
-    git_version = subprocess.run(["make", "-f", "-", "print-GIT_VERSION"], check=True, input=makefile, text=True, capture_output=True).stdout.strip()
-
+    git_rev = subprocess.run(["make", "-f", "-", "print-GIT_VERSION"], check=True, input=makefile, text=True, capture_output=True).stdout.strip()
     _call_nix_update("gitaly", gitaly_server_version)
-    _call_nix_update("gitaly.git", git_version)
+
+    # Gitaly Git currently uses just a commit without any tag making nix-update impossible to use.
+    git_repo = GitLabRepo(repo="git")
+    git_version_generator = git_repo.get_file("GIT-VERSION-GEN", git_rev)
+    git_major_minor = None
+    for line in git_version_generator.splitlines():
+        if line.startswith("DEF_VER="):
+           git_major_minor = line.strip("DEF_VER=v").split(".GIT")[0]
+           break
+    if not git_major_minor:
+        raise RuntimeError("Could not find gitaly's git version.")
+
+    git_data_file_path = NIXPKGS_PATH / "pkgs" / "by-name" / "gi" / "gitaly" / "git-data.json"
+
+    git_repo_hash = (
+        subprocess.check_output(
+            [
+                "nurl",
+                "--fetcher",
+                "fetchFromGitLab",
+                "-n",
+                NIXPKGS_PATH,
+                "-H",
+                "-a",
+                "fetchSubmodules",
+                "true",
+                "https://gitlab.com/gitlab-org/git",
+                git_rev
+            ]
+        )
+        .decode("utf-8")
+        .strip()
+    )
+    git_data = {
+        # We use the commit hash here as part of the dervations' version because it would be quite hard to find out
+        # the actual commit date, and even than we don't want to have `unstable` as part of the derivation as GitLab
+        # considers this git version stable.
+        "version": f"{git_major_minor}-{git_rev[:8]}",
+        "rev": git_rev,
+        "hash": git_repo_hash
+    }
+    with open(git_data_file_path.as_posix(), "w") as f:
+        json.dump(git_data, f, indent=2)
+        f.write("\n")
+
 
 
 @cli.command("update-gitlab-pages")
@@ -270,6 +309,15 @@ def update_gitlab_pages():
     data = _get_data_json()
     gitlab_pages_version = data["passthru"]["GITLAB_PAGES_VERSION"]
     _call_nix_update("gitlab-pages", gitlab_pages_version)
+
+
+@cli.command("update-gitlab-kas")
+def update_gitlab_kas():
+    """Update gitlab-kas"""
+    logger.info("Updating gitlab-kas")
+    data = _get_data_json()
+    gitlab_kas_version = data["passthru"]["GITLAB_KAS_VERSION"]
+    _call_nix_update("gitlab-kas", gitlab_kas_version)
 
 
 def get_container_registry_version() -> str:
@@ -404,6 +452,7 @@ def commit_gitlab(old_version: str, new_version: str, new_rev: str) -> None:
             "pkgs/by-name/gi/gitlab",
             "pkgs/by-name/gi/gitaly",
             "pkgs/by-name/gi/gitlab-elasticsearch-indexer",
+            "pkgs/by-name/gi/gitlab-kas",
             "pkgs/by-name/gi/gitlab-pages",
         ],
         cwd=NIXPKGS_PATH,

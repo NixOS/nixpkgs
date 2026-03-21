@@ -4,7 +4,7 @@
   dbus,
   fetchFromGitHub,
   gamescope,
-  godot_4_4,
+  godot_4_6,
   hwdata,
   lib,
   libGL,
@@ -17,13 +17,12 @@
   udev,
   upower,
   vulkan-loader,
-  xorg,
   withDebug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opengamepadui";
-  version = "0.41.0";
+  version = "0.44.3";
 
   buildType = if withDebug then "debug" else "release";
 
@@ -31,18 +30,18 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ShadowBlip";
     repo = "OpenGamepadUI";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8xYLPKCmpWENzG1D8q2yJeIZ5MdBLTio3LZ1BsY1HGg=";
+    hash = "sha256-pjg5zIgytS7YxNWAJg46aOYhRG88TbK1906UK5fM3pM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src cargoRoot;
-    hash = "sha256-rs8L6dh1Ppmrez3aG9XwQAdfGnoXTlpNMXJvdAUyM6M=";
+    hash = "sha256-ZccqPWyyhVMenF8tLXQlwC5uKg5o66E5qkeNGAbSs1w=";
   };
   cargoRoot = "extensions";
 
   nativeBuildInputs = [
     cargo
-    godot_4_4
+    godot_4_6
     pkg-config
     rustPlatform.cargoSetupHook
   ];
@@ -51,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   env =
     let
-      versionAndRelease = lib.splitString "-" godot_4_4.version;
+      versionAndRelease = lib.splitString "-" godot_4_6.version;
     in
     {
-      GODOT = lib.getExe godot_4_4;
+      GODOT = lib.getExe godot_4_6;
       GODOT_VERSION = lib.elemAt versionAndRelease 0;
       GODOT_RELEASE = lib.elemAt versionAndRelease 1;
-      EXPORT_TEMPLATE = "${godot_4_4.export-template}/share/godot/export_templates";
+      EXPORT_TEMPLATE = "${godot_4_6.export-template}/share/godot/export_templates";
       BUILD_TYPE = "${finalAttrs.buildType}";
     };
 

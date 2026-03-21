@@ -7,20 +7,19 @@
   fontconfig,
   zlib,
   qtquickcontrols2,
-  libXinerama,
+  libxinerama,
   libxcb,
-  libSM,
-  libXi,
+  libsm,
+  libxi,
   libglvnd,
-  libXext,
-  libXrandr,
+  libxext,
+  libxrandr,
   mailspring,
-  libX11,
-  libICE,
-  libXrender,
+  libx11,
+  libice,
+  libxrender,
   autoPatchelfHook,
   makeWrapper,
-  mkDerivation,
   xkeyboard_config,
   fetchurl,
   buildFHSEnv,
@@ -32,12 +31,12 @@ let
   pname = "unigine-superposition";
   version = "1.1";
 
-  superposition = stdenv.mkDerivation rec {
+  superposition = stdenv.mkDerivation (finalAttrs: {
     inherit pname version;
 
     src = fetchurl {
-      url = "https://assets.unigine.com/d/Unigine_Superposition-${version}.run";
-      sha256 = "12hzlz792pf8pvxf13fww3qhahqzwzkxq9q3mq20hbhvaphbg7nd";
+      url = "https://assets.unigine.com/d/Unigine_Superposition-${finalAttrs.version}.run";
+      hash = "sha256-dJThxzv1nvIWFRPV1cudm/+9hHmSnUl2rFO2lV3lgPg=";
     };
 
     nativeBuildInputs = [
@@ -53,17 +52,17 @@ let
       fontconfig
       zlib
       qtquickcontrols2
-      libXinerama
+      libxinerama
       libxcb
-      libSM
-      libXi
+      libsm
+      libxi
       libglvnd
-      libXext
-      libXrandr
+      libxext
+      libxrandr
       mailspring
-      libX11
-      libICE
-      libXrender
+      libx11
+      libice
+      libxrender
     ];
 
     installPhase = ''
@@ -83,7 +82,7 @@ let
     postPatchMkspecs = ''
       cp -f $name/bin/superposition $out/lib/unigine/superposition/bin/superposition
     '';
-  };
+  });
 
   desktopItem = makeDesktopItem {
     name = "Superposition";
@@ -110,17 +109,17 @@ buildFHSEnv {
     fontconfig
     zlib
     qtquickcontrols2
-    libXinerama
+    libxinerama
     libxcb
-    libSM
-    libXi
+    libsm
+    libxi
     libglvnd
-    libXext
-    libXrandr
+    libxext
+    libxrandr
     mailspring
-    libX11
-    libICE
-    libXrender
+    libx11
+    libice
+    libxrender
     openal
   ];
   runScript = "superposition";
@@ -143,7 +142,7 @@ buildFHSEnv {
     homepage = "https://benchmark.unigine.com/superposition";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "unigine-superposition";
   };

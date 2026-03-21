@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  flutter329,
+  flutter338,
   gst_all_1,
   libunwind,
   makeWrapper,
@@ -18,15 +18,15 @@
   fletTarget ? "linux",
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.28.3";
+  version = "0.80.0";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     tag = "v${version}";
-    hash = "sha256-fD42AcfU3a/7sNvLE81pd1jdwUn5dEro3uKzaRBCWIU=";
+    hash = "sha256-PxSFDWo5qN9RB/E+vLu1xYttJ8CQdy86OStyLMRn6Lo=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -59,6 +59,10 @@ flutter329.buildFlutterApplication rec {
   ]
   ++ mpv-unwrapped.buildInputs
   ++ libplacebo.buildInputs;
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=nontrivial-memcall"
+  ];
 
   passthru = {
     updateScript = _experimental-update-script-combinators.sequence [

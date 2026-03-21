@@ -129,7 +129,6 @@ python.pkgs.buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
   ]);
-  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # Fails because of dbfs CLI wrong call
@@ -157,6 +156,6 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/databrickslabs/dbx";
     changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.databricks-dbx;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

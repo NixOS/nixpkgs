@@ -11,7 +11,7 @@ let
     src = fetchFromGitHub {
       owner = "jorgebucaran";
       repo = "spark.fish";
-      rev = "refs/tags/${self.version}";
+      tag = self.version;
       hash = "sha256-AIFj7lz+QnqXGMBCfLucVwoBR3dcT0sLNPrQxA5qTuU=";
     };
 

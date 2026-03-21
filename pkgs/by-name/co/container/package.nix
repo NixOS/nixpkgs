@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "container";
-  version = "0.4.1";
+  version = "0.9.0";
 
   src = fetchurl {
-    url = "https://github.com/apple/container/releases/download/${finalAttrs.version}/container-${finalAttrs.version}-installer-signed.pkg";
-    hash = "sha256-Au8Waa0kgU6bAZFTrCBWEeOBhQr6PrJ0AEiA3RsHgYg=";
+    url = "https://github.com/apple/container/releases/download/${finalAttrs.version}/container-installer-signed.pkg";
+    hash = "sha256-6KQysR85bVzlDkTqFPAvffkP/O9EHJFrL6krY+lfWAE=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

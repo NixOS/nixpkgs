@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
 
   # build-system
@@ -28,14 +27,12 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.1.3";
+  version = "3.1.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YHI86UXBkyhnl5DjKCzHWKpKYEDkuzMPU9MPpUbUR0Y=";
+    hash = "sha256-IQxr7eWkIKkTlWtHkaf01oQ6Q7b87k36CKZekwB9DSU=";
   };
 
   build-system = [ flit-core ];
@@ -53,7 +50,7 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "werkzeug" ];
 
@@ -82,7 +79,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${
+    changelog = "https://werkzeug.palletsprojects.com/en/stable/changes/#version-${
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://palletsprojects.com/p/werkzeug/";

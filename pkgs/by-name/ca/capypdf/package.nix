@@ -11,11 +11,12 @@
   libpng,
   libtiff,
   zlib,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "capypdf";
-  version = "0.17.0";
+  version = "0.20.0";
 
   outputs = [
     "out"
@@ -26,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "jpakkane";
     repo = "capypdf";
     rev = finalAttrs.version;
-    hash = "sha256-hdutgZhJwUi+wwtYt3+hSiyBImchUtbpVd0RCPWEr0Q=";
+    hash = "sha256-A2wjXYLiszWNaPChWGzBMG7OggsomT2cRi3LsjasOIQ=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,9 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libtiff
     zlib
-  ];
+  ]
+  # error: 'to_chars' is unavailable: introduced in macOS 13.3
+  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
 
   meta = {
     description = "Fully color managed PDF generation library";

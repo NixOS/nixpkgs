@@ -11,14 +11,14 @@
   llvm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kseexpr";
   version = "4.0.4.0";
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
     repo = "kseexpr";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-XjFGAN7kK2b0bLouYG3OhajhOQk4AgC4EQRzseccGCE=";
   };
   patches = [
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     qt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://invent.kde.org/graphics/kseexpr";
     description = "Embeddable expression evaluation engine";
-    maintainers = with maintainers; [ nek0 ];
-    license = licenses.lgpl3Plus;
+    maintainers = [ ];
+    license = lib.licenses.lgpl3Plus;
   };
-}
+})

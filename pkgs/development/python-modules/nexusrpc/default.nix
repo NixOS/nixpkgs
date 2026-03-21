@@ -4,24 +4,30 @@
   fetchFromGitHub,
   hatchling,
   nix-update-script,
-  pythonOlder,
   typing-extensions,
+  pyright,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "nexus-rpc";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "nexus-rpc";
     repo = "sdk-python";
-    rev = "refs/tags/${version}";
-    hash = "sha256-CZOCNgYvlQCc/Ws2cEuryyVELS/FiNgLTYHwHp70yhM=";
+    tag = version;
+    hash = "sha256-i2FfJ3aCncbqLY2oBG8zAPTbgxzH30MSmZxhDltN4JA=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    # Patch out uv and run tests directly
+    substituteInPlace tests/test_type_errors.py \
+      --replace-fail '["uv", "run", "pyright",' '["pyright",'
+  '';
 
   build-system = [
     hatchling
@@ -29,6 +35,12 @@ buildPythonPackage rec {
 
   dependencies = [
     typing-extensions
+  ];
+
+  nativeCheckInputs = [
+    pyright
+    pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [

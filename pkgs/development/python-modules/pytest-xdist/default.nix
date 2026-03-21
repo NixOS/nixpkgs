@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
+  fetchpatch,
   setuptools,
   setuptools-scm,
   pytestCheckHook,
@@ -16,15 +16,27 @@
 buildPythonPackage rec {
   pname = "pytest-xdist";
   version = "3.8.0";
-  disabled = pythonOlder "3.7";
-
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pytest_xdist";
-    inherit version;
-    hash = "sha256-fleBJeybxgUIYaqT8tWfHY0IVZXWVRwskLb0+tjTqfE=";
+  src = fetchFromGitHub {
+    owner = "pytest-dev";
+    repo = "pytest-xdist";
+    tag = "v${version}";
+    hash = "sha256-2x3znm92wo8DCshf5sYK0stnESg0oVXbxsWRAaTj6oQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "pytest9-compat-1.patch";
+      url = "https://github.com/pytest-dev/pytest-xdist/commit/44f4bea2652e06e7cd5d4a063aa2673b5ef701ee.patch";
+      hash = "sha256-BQfcr5f4S+e8xZP2UQwr65hp+iVzmbXYAzO/7iE9lmw=";
+    })
+    (fetchpatch {
+      name = "pytest9-compat-2.patch";
+      url = "https://github.com/pytest-dev/pytest-xdist/commit/0c984478f39d7a01aa24c061f2581bdfd071cb6a.patch";
+      hash = "sha256-zxdKy7Z0m5UB4qwmdrolSYeBUTgMe2bQkkeX+M0RRHs=";
+    })
+  ];
 
   build-system = [
     setuptools
@@ -62,15 +74,17 @@ buildPythonPackage rec {
     "test_internal_errors_propagate_to_controller"
     # https://github.com/pytest-dev/pytest-xdist/issues/985
     "test_workqueue_ordered_by_size"
+    # https://github.com/pytest-dev/pytest-xdist/issues/1248
+    "test_workqueue_ordered_by_input"
   ];
 
   setupHook = ./setup-hook.sh;
 
-  meta = with lib; {
-    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/v${version}/CHANGELOG.rst";
-    description = "Pytest xdist plugin for distributed testing and loop-on-failing modes";
+  meta = {
+    changelog = "https://github.com/pytest-dev/pytest-xdist/blob/${src.tag}/CHANGELOG.rst";
+    description = "Pytest plugin for distributed testing";
     homepage = "https://github.com/pytest-dev/pytest-xdist";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

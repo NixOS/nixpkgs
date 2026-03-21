@@ -22,12 +22,12 @@
   addThumbnailer ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nufraw";
   version = "0.43-3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nufraw/nufraw-${version}.tar.gz";
+    url = "mirror://sourceforge/nufraw/nufraw-${finalAttrs.version}.tar.gz";
     sha256 = "0b63qvw9r8kaqw36bk3a9zwxc41h8fr6498indkw4glrj0awqz9c";
   };
 
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     "--enable-dst-correction"
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing -Wno-error=incompatible-pointer-types -std=gnu17";
 
   postInstall = lib.optionalString addThumbnailer ''
     mkdir -p $out/share/thumbnailers
-    substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/${pname}.thumbnailer
+    substituteAll ${./nufraw.thumbnailer} $out/share/thumbnailers/nufraw.thumbnailer
   '';
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nufraw.sourceforge.io/";
     description = "Utility to read and manipulate raw images from digital cameras";
     longDescription = ''
@@ -89,8 +89,8 @@ stdenv.mkDerivation rec {
       Nufraw offers the same features (gimp plugin, batch, ecc) and the same quality of
       ufraw in a brand new improved user interface.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ asbachb ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ asbachb ];
+    platforms = lib.platforms.linux;
   };
-}
+})

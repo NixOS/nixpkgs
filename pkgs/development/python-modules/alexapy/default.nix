@@ -11,31 +11,26 @@
   fetchFromGitLab,
   poetry-core,
   pyotp,
-  pythonOlder,
   requests,
   simplejson,
   yarl,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "alexapy";
-  version = "1.29.8";
+  version = "1.29.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitLab {
     owner = "keatontaylor";
     repo = "alexapy";
-    tag = "v${version}";
-    hash = "sha256-AmczPJK7v1ymRT3XUUNzFR8GmDr9eZYGRH2FL3RvPsE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1PFHIVtFaaYRyOgzqxMCbvbSECK+9T7EuRlQ9CWuv5Y=";
   };
 
   pythonRelaxDeps = [ "aiofiles" ];
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiofiles
@@ -59,8 +54,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Package for controlling Alexa devices (echo dot, etc) programmatically";
     homepage = "https://gitlab.com/keatontaylor/alexapy";
-    changelog = "https://gitlab.com/keatontaylor/alexapy/-/blob/v${version}/CHANGELOG.md";
+    changelog = "https://gitlab.com/keatontaylor/alexapy/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

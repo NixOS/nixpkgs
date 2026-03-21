@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
-    hash = "sha256-igjjwirg3O5mC3DzGCAO9OgrH2drnE/gV6NH7ZLNnFE=";
+    hash = "sha256-poLBZDogSL2ip90Es0xJ7X/xJ8+g9FJHnXSX0+N15es=";
   };
 
   patches = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   makeFlags = [
     "PREFIX=$(out)"
-    "-C src"
+    "--directory=src"
   ];
 
   passthru.tests = {
@@ -59,19 +59,22 @@ stdenv.mkDerivation rec {
 
   # outputs = [ "out" "dev" ];
 
-  meta = with lib; {
+  __structuredAttrs = true;
+
+  meta = {
     description = "Library for loading eBPF programs and reading and manipulating eBPF objects from user-space";
     homepage = "https://github.com/libbpf/libbpf";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21 # or
       bsd2
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       thoughtpolice
       vcunat
       saschagrunert
       martinetd
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libbpf_project" version;
   };
 }

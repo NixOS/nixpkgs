@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # nativeBuildInputs
   cargo,
@@ -20,21 +21,21 @@
   transformers,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llguidance";
-  version = "1.2.0";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "llguidance";
-    tag = "v${version}";
-    hash = "sha256-Fe7cKZotjRexcSHcoT0Y9I3m+dRarhlBOjYR7rdJBRY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jbNKNygJ0T1YWxQQ25gowqx7u2cIJDNToLTmvuJyAzU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src pname version;
-    hash = "sha256-//Vjj4QIDcZEPujMfUhZd5nx5pAyF3l3CdNvI/Wi74A=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-mKQC3DXoCD/478EHj0bTMBXvcKYEbgzUd0cuwmJbHJA=";
   };
 
   nativeBuildInputs = [
@@ -91,13 +92,17 @@ buildPythonPackage rec {
     "python/torch_tests/test_llamacpp.py"
     "python/torch_tests/test_tiktoken.py"
     "scripts/tokenizer_test.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "python/torch_tests/test_bitmask.py"
   ];
 
   meta = {
     description = "Super-fast Structured Outputs";
     homepage = "https://github.com/guidance-ai/llguidance";
-    changelog = "https://github.com/guidance-ai/llguidance/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/guidance-ai/llguidance/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

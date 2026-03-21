@@ -10,17 +10,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "museum";
-  version = "1.2.4";
+  version = "1.3.22";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
     sparseCheckout = [ "server" ];
     tag = "photos-v${finalAttrs.version}";
-    hash = "sha256-2kcIXnQPNB6V8ElTxoAETFCSyIIOGme15pYVXNLPlAg=";
+    hash = "sha256-ltWY/T4QSN9Si8s4XRvvcL9yB1+lLx+zM5Ahb9DAzQE=";
   };
 
-  vendorHash = "sha256-px4pMqeH73Fe06va4+n6hklIUDMbPmAQNKKRIhwv6ec=";
+  vendorHash = "sha256-r/zAAWyLe6VYztsZuYlwg0jozGf8cScUKIcIdtZ0LvQ=";
 
   sourceRoot = "${finalAttrs.src.name}/server";
 
@@ -61,7 +61,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       pinpox
       oddlama
-      iedame
+      nicegamer7
     ];
     mainProgram = "museum";
     platforms = lib.platforms.linux;

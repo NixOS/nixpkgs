@@ -1,25 +1,25 @@
 {
   lib,
-  flutter332,
+  flutter338,
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-flutter332.buildFlutterApplication rec {
+flutter338.buildFlutterApplication rec {
   pname = "windsend";
-  version = "1.5.5";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "doraemonkeys";
     repo = "WindSend";
     tag = "v${version}";
-    hash = "sha256-u82VmMuc7+tbc1Qgs5lbyFlNTauJm6E9KFXPHBdTryA=";
+    hash = "sha256-KCtYV7z+QqufXiHzuEoX8XVIPfNPBdp0F1FLiPq+PDM=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   sourceRoot = "${src.name}/flutter/wind_send";
 
@@ -35,7 +35,7 @@ flutter332.buildFlutterApplication rec {
   ];
 
   postInstall = ''
-    install -Dm644 ../../app_icon/web/icon-512.png $out/share/pixmaps/windsend.png
+    install -Dm644 ../../app_icon/web/icon-512.png $out/share/icons/hicolor/512x512/apps/windsend.png
   '';
 
   passthru.updateScript = ./update.sh;
@@ -45,7 +45,7 @@ flutter332.buildFlutterApplication rec {
     homepage = "https://github.com/doraemonkeys/WindSend";
     mainProgram = "WindSend";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

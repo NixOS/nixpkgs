@@ -21,20 +21,21 @@ let
       repo,
       rev,
       sha256 ? null,
+      hash ? null,
       ...
     }:
     let
       prefix = "https://${domain}/${owner}/${repo}/";
     in
-    if sha256 == null then
-      fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; }
-    else
+    if hash != null || sha256 != null then
       fetchurl {
         url = "${prefix}releases/download/${rev}/${
           lib.concatStringsSep "-" (namePrefix ++ [ pname ])
         }-${rev}.tbz";
-        inherit sha256;
-      };
+        hash = if hash != null then hash else sha256;
+      }
+    else
+      fetchTarball { url = "${prefix}archive/refs/heads/${rev}.tar.gz"; };
 in
 
 mkCoqDerivation {
@@ -45,6 +46,8 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
+  release."3.4".hash = "sha256-AnyiM5B7JJZI5LR0vSi6baVIx9SibYRiho7UBg1uV5w=";
+  release."3.3".hash = "sha256-Zn9245fr0OhgaXjWlIO1QwSxrQYetj7qPHwZAXTdqNc=";
   release."3.2".sha256 = "sha256-4HOFFQzKbHIq+ktjJaS5b2Qr8WL1eQ26YxF4vt1FdWM=";
   release."3.1".sha256 = "sha256-qQHis6554sG7NpCpWhT2wvelnxsrbEPVNv3fpxwxHMU=";
   release."3.0".sha256 = "sha256-xEgx5HHDOimOJbNMtIVf/KG3XBemOS9XwoCoW6btyJ4=";
@@ -69,7 +72,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (range "8.16" "9.1") (isGe "2.0") "3.2")
+        (case (range "8.16" "9.1") (isGe "2.0") "3.4")
         (case (range "8.12" "8.20") (range "1.12" "1.19") "2.4")
       ]
       null;
@@ -81,9 +84,9 @@ mkCoqDerivation {
     stdlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Yet Another Coq Library on Machine Words";
-    maintainers = [ maintainers.vbgl ];
-    license = licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
   };
 }

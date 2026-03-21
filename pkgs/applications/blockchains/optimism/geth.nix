@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "op-geth";
   version = "1.101305.3";
 
   src = fetchFromGitHub {
     owner = "ethereum-optimism";
     repo = "op-geth";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-AKVwwvt77FZlm7089EeayYVRYLo7c3v6LFVpsQN68Zk=";
     fetchSubmodules = true;
   };
@@ -38,10 +38,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
+    # Marked broken 2025-11-28 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "";
     homepage = "https://github.com/ethereum-optimism/op-geth";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

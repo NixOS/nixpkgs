@@ -4,7 +4,7 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "bmaptool";
   version = "3.9.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "yoctoproject";
     repo = "bmaptool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9KSBv420HJvK5fUg7paFJqA2MCw36BfaeAG4NME/co8=";
   };
 
@@ -29,8 +29,8 @@ python3Packages.buildPythonApplication rec {
     description = "BMAP Tools";
     homepage = "https://github.com/yoctoproject/bmaptool";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ dezgeg ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "bmaptool";
   };
-}
+})

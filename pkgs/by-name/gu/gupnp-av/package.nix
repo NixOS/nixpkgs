@@ -13,7 +13,7 @@
   gnome,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gupnp-av";
   version = "0.14.4";
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gupnp-av/${lib.versions.majorMinor version}/gupnp-av-${version}.tar.xz";
+    url = "mirror://gnome/sources/gupnp-av/${lib.versions.majorMinor finalAttrs.version}/gupnp-av-${finalAttrs.version}.tar.xz";
     sha256 = "Idl0sydctdz1uKodmj/IDn7cpwaTX2+9AEx5eHE4+Mc=";
   };
 
@@ -66,10 +66,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://gupnp.org/";
     description = "Collection of helpers for building AV (audio/video) applications using GUPnP";
-    license = licenses.lgpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.unix;
   };
-}
+})

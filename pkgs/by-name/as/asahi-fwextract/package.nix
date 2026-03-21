@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Asahi firmware extraction script";
     homepage = "https://github.com/AsahiLinux/asahi-installer";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ normalcea ];
+    maintainers = [ ];
     mainProgram = "asahi-fwextract";
     platforms = [ "aarch64-linux" ];
   };

@@ -10,7 +10,7 @@
   mbedtls,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "librist";
   version = "0.2.11";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
   };
 
@@ -40,15 +40,15 @@ stdenv.mkDerivation rec {
     mbedtls
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library that can be used to easily add the RIST protocol to your application";
     homepage = "https://code.videolan.org/rist/librist";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd2
       mit
       isc
     ];
-    maintainers = with maintainers; [ raphaelr ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ raphaelr ];
+    platforms = lib.platforms.all;
   };
-}
+})

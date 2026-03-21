@@ -4,17 +4,13 @@
   buildDunePackage,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "cpuid";
   version = "0.1.2";
 
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.03";
-
   src = fetchurl {
-    url = "https://github.com/pqwy/cpuid/releases/download/v${version}/cpuid-v${version}.tbz";
-    sha256 = "08ng4mva6qblb5ipkrxbr0my7ndkc4qwcbswkqgbgir864s74m93";
+    url = "https://github.com/pqwy/cpuid/releases/download/v${finalAttrs.version}/cpuid-v${finalAttrs.version}.tbz";
+    hash = "sha256-I1VyNDEox7cenlwvxjFhs9njK8ir53ljWXRho3YlzyI=";
   };
 
   meta = {
@@ -23,4 +19,4 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
   };
-}
+})

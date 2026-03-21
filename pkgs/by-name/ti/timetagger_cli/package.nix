@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "timetagger_cli";
   version = "25.5.1";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = "timetagger_cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UklsHcVyCpWDHOxu+oB8RvwY+laEBFnDyjejS/GzgHE=";
   };
 
@@ -29,11 +29,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "timetagger_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Track your time from the command-line";
     homepage = "https://github.com/almarklein/timetagger_cli";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "timetagger";
   };
-}
+})

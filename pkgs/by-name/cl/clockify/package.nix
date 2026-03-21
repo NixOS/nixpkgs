@@ -19,7 +19,7 @@ appimageTools.wrapType2 rec {
     in
     ''
       install -Dm 444 ${appimageContents}/clockify.desktop -t $out/share/applications
-      install -Dm 444 ${appimageContents}/clockify.png -t $out/share/pixmaps
+      install -Dm 444 ${appimageContents}/clockify.png -t $out/share/icons/hicolor/1024x1024/apps
 
       substituteInPlace $out/share/applications/clockify.desktop \
         --replace-fail 'Exec=AppRun' 'Exec=${pname}'

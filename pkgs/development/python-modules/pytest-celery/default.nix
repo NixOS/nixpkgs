@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  celery,
   debugpy,
   docker,
   fetchFromGitHub,
@@ -10,17 +9,20 @@
   psutil,
   pytest-docker-tools,
   pytest,
-  pythonOlder,
-  setuptools,
   tenacity,
+
+  # optional dependencies
+  redis,
+  python-memcached,
+  boto3,
+  botocore,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-celery";
   version = "1.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "celery";
@@ -37,32 +39,51 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "debugpy"
-    "setuptools"
+  ];
+
+  pythonRemoveDeps = [
+    "celery" # cyclic dependency
+    "setuptools" # https://github.com/celery/pytest-celery/pull/464
   ];
 
   build-system = [ poetry-core ];
 
-  buildInput = [ pytest ];
+  buildInputs = [ pytest ];
 
   dependencies = [
-    (celery.overridePythonAttrs { doCheck = false; })
     debugpy
     docker
     kombu
     psutil
     pytest-docker-tools
-    setuptools
     tenacity
   ];
+
+  optional-dependencies = {
+    all = [
+      redis
+      python-memcached
+      boto3
+      botocore
+      urllib3
+    ];
+    redis = [ redis ];
+    memcached = [ python-memcached ];
+    sqs = [
+      boto3
+      botocore
+      urllib3
+    ];
+  };
 
   # Infinite recursion with celery
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin to enable celery.contrib.pytest";
     homepage = "https://github.com/celery/pytest-celery";
     changelog = "https://github.com/celery/pytest-celery/blob/${src.tag}/Changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

@@ -21,14 +21,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bitbox";
-  version = "4.48.1";
+  version = "4.50.1";
 
   src = fetchFromGitHub {
     owner = "BitBoxSwiss";
     repo = "bitbox-wallet-app";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-zpkjYnGsmPKjxUpp2H1qSzqthOO1mTmki3bPqo35sBo=";
+    hash = "sha256-ZK1US/RF67QPyV0xRVIw4mecNZM/82GhWvjhJ47rKHU=";
   };
 
   postPatch = ''
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     inherit version;
     inherit src;
     sourceRoot = "${src.name}/frontends/web";
-    npmDepsHash = "sha256-9NS85U4L5sLX3n/uN4p4CB5vfpWMMcnf6wESlFdQPlI=";
+    npmDepsHash = "sha256-kIYyUeaTgj4dJXfAJ1+3WDIYSADFcs5ypRGTODlxwDI=";
     installPhase = "cp -r build $out";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     cp frontends/qt/build/BitBox $out/bin/bitbox
     cp frontends/qt/build/assets.rcc $out/bin
     cp frontends/qt/server/libserver.so $out/lib
-    install -Dt $out/lib/udev/rules.d ${./rules.d}/*
+    install -m 644 -Dt $out/lib/udev/rules.d ${./rules.d}/*
 
     runHook postInstall
   '';

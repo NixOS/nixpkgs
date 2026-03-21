@@ -35,7 +35,6 @@ runTest (
               logLevel = "debug";
             };
             extraAppsEnable = true;
-            extraApps.notify_push = config.services.nextcloud.package.packages.apps.notify_push;
             # This test also validates that we can use an "external" database
             database.createLocally = false;
             config = {

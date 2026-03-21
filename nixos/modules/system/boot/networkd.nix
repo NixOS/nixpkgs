@@ -376,6 +376,7 @@ let
             "TOS"
             "TTL"
             "DiscoverPathMTU"
+            "IgnoreDontFragment"
             "IPv6FlowLabel"
             "CopyDSCP"
             "EncapsulationLimit"
@@ -398,6 +399,7 @@ let
           (assertInt "TTL")
           (assertRange "TTL" 0 255)
           (assertValueOneOf "DiscoverPathMTU" boolValues)
+          (assertValueOneOf "IgnoreDontFragment" boolValues)
           (assertValueOneOf "CopyDSCP" boolValues)
           (assertValueOneOf "Mode" [
             "ip6ip6"
@@ -746,14 +748,14 @@ let
           "both"
           "any"
         ])
-        (assertValueOneOf "ActivationPolicy" ([
+        (assertValueOneOf "ActivationPolicy" [
           "up"
           "always-up"
           "manual"
           "always-down"
           "down"
           "bound"
-        ]))
+        ])
       ];
 
       sectionNetwork = checkUnitConfig "Network" [
@@ -1058,6 +1060,7 @@ let
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
           "UseDNS"
+          "UseDNR"
           "RoutesToDNS"
           "UseNTP"
           "UseSIP"
@@ -1095,8 +1098,10 @@ let
           "Use6RD"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
         (assertValueOneOf "UseSIP" boolValues)
@@ -1129,13 +1134,16 @@ let
           "infinity"
         ])
         (assertValueOneOf "Use6RD" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
         (assertOnlyFields [
           "UseAddress"
           "UseDNS"
+          "UseDNR"
           "UseNTP"
+          "UseSIP"
           "SendHostname"
           "UseHostname"
           "Hostname"
@@ -1157,10 +1165,13 @@ let
           "SendRelease"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseNTP" boolValues)
+        (assertValueOneOf "UseSIP" boolValues)
         (assertValueOneOf "SendHostname" boolValues)
         (assertValueOneOf "UseHostname" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
@@ -1175,6 +1186,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "UseDelegatedPrefix" boolValues)
         (assertValueOneOf "SendRelease" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
       ];
 
       sectionDHCPPrefixDelegation = checkUnitConfig "DHCPPrefixDelegation" [
@@ -1198,6 +1210,7 @@ let
       sectionIPv6AcceptRA = checkUnitConfig "IPv6AcceptRA" [
         (assertOnlyFields [
           "UseDNS"
+          "UseDNR"
           "UseDomains"
           "RouteTable"
           "UseAutonomousPrefix"
@@ -1217,8 +1230,14 @@ let
           "UsePREF64"
           "NetLabel"
           "NFTSet"
+          "UseCaptivePortal"
+          "UseRedirect"
+          "UseHopLimit"
+          "UseReachableTime"
+          "UseRetransmissionTime"
         ])
         (assertValueOneOf "UseDNS" boolValues)
+        (assertValueOneOf "UseDNR" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ [ "route" ]))
         (assertRange "RouteTable" 0 4294967295)
         (assertValueOneOf "UseAutonomousPrefix" boolValues)
@@ -1228,6 +1247,11 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutePrefix" boolValues)
         (assertValueOneOf "UsePREF64" boolValues)
+        (assertValueOneOf "UseCaptivePortal" boolValues)
+        (assertValueOneOf "UseRedirect" boolValues)
+        (assertValueOneOf "UseHopLimit" boolValues)
+        (assertValueOneOf "UseReachableTime" boolValues)
+        (assertValueOneOf "UseRetransmissionTime" boolValues)
       ];
 
       sectionDHCPServer = checkUnitConfig "DHCPServer" [
@@ -1279,7 +1303,7 @@ let
         (assertValueOneOf "EmitRouter" boolValues)
         (assertValueOneOf "EmitTimezone" boolValues)
         (assertValueOneOf "BindToInterface" boolValues)
-        (assertValueOneOf "PersistLeases" boolValues)
+        (assertValueOneOf "PersistLeases" (boolValues ++ [ "runtime" ]))
       ];
 
       sectionIPv6SendRA = checkUnitConfig "IPv6SendRA" [
@@ -3009,6 +3033,15 @@ let
       type = types.listOf types.str;
       description = ''
         A list of macvlan interfaces to be added to the network section of the
+        unit.  See {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+    ipvlan = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of ipvlan interfaces to be added to the network section of the
         unit.  See {manpage}`systemd.network(5)` for details.
       '';
     };

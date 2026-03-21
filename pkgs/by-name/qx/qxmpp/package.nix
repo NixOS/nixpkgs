@@ -13,19 +13,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qxmpp";
-  version = "1.11.2";
+  version = "1.14.3";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
     repo = "qxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OR/rBp84pXv286Vd0I6IRzeUdC/+nnlRCZMAMXKgyxo=";
+    hash = "sha256-vrTPlrT+sLg4coQ0EdYLCS36LlkruJqQPhxK0dYlLL4=";
   };
 
   nativeBuildInputs = [
     cmake
-    kdePackages.wrapQtAppsNoGuiHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optionals (withGstreamer || withOmemo) [
     pkg-config

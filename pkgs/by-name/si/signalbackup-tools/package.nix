@@ -6,20 +6,21 @@
   cmake,
   pkg-config,
 
+  darwinMinVersionHook,
   dbus,
   openssl,
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "signalbackup-tools";
-  version = "20250916";
+  version = "20260306";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
-    tag = version;
-    hash = "sha256-iUX1d/bWR6JKn1CESCnp0QoEnTYA+yEXRWhB4WUowSs=";
+    tag = finalAttrs.version;
+    hash = "sha256-mGJkkE+sT+FKd2tSAXcmDAmKbsE9H9k5IyQbzxJcvjY=";
   };
 
   nativeBuildInputs = [
@@ -33,6 +34,9 @@ stdenv.mkDerivation rec {
     openssl
     sqlite
   ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
   ];
@@ -44,12 +48,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to work with Signal Backup files";
     mainProgram = "signalbackup-tools";
     homepage = "https://github.com/bepaald/signalbackup-tools";
-    license = licenses.gpl3Only;
-    maintainers = [ maintainers.malo ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.malo ];
+    platforms = lib.platforms.all;
   };
-}
+})

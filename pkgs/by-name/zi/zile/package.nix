@@ -12,12 +12,12 @@
   vala,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zile";
   version = "2.6.4";
 
   src = fetchurl {
-    url = "mirror://gnu/zile/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/zile/zile-${finalAttrs.version}.tar.gz";
     hash = "sha256-1dRLhctJBkPQcH4aIYbzoymYwvbquqlIFHm2XK7uV8A=";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.gnu.org/software/zile/";
-    changelog = "https://git.savannah.gnu.org/cgit/zile.git/plain/NEWS?h=v${version}";
+    changelog = "https://git.savannah.gnu.org/cgit/zile.git/plain/NEWS?h=v${finalAttrs.version}";
     description = "Implements Lua Editors";
     longDescription = ''
       GNU Zile is a text editor development kit, so that you can (relatively)
@@ -82,4 +82,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "zile";
   };
-}
+})

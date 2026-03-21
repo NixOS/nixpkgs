@@ -3,17 +3,17 @@
   buildNpmPackage,
   nix-update-script,
   versionCheckHook,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   lib,
 }:
 let
-  version = "0.11.3";
+  version = "0.11.4";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     repo = "gose";
     owner = "stv0g";
     tag = "v${version}";
-    hash = "sha256-dcx1uLLLFepqGTIJQNf3I1GzbXwrVPt7Jb8TW3AGnhU=";
+    hash = "sha256-T6PD6MI1IOAgtPOJuPSZp4te9BokKfj+TZHLRqt2FCo=";
   };
 
   frontend = buildNpmPackage {
@@ -37,7 +37,7 @@ buildGoModule {
   inherit version;
   inherit src;
 
-  vendorHash = "sha256-cvZLR5c8WqarhnXBFAyxUUQtqX2fhveonUtsrFjFmq0=";
+  vendorHash = "sha256-PTu4OzVjGVExuNDsK01p3/gAwNhDZbPewhI476m5i/M=";
 
   env.CGO_ENABLED = 0;
 

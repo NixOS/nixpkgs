@@ -40,17 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite.out
   ];
 
-  patches = lib.optionals isDarwin [
-    /*
-      The entry point binary $out/bin/racket is codesigned at least once. The
-      following error is triggered as a result.
-      (error 'add-ad-hoc-signature "file already has a signature")
-      We always remove the existing signature then call add-ad-hoc-signature to
-      circumvent this error.
-    */
-    ./patches/force-remove-codesign-then-add.patch
-  ];
-
   preConfigure =
     /*
       The configure script forces using `libtool -o` as AR on Darwin. But, the
@@ -118,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       }@config:
       assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
       writers.makeScriptWriter (
-        builtins.removeAttrs config [ "libraries" ]
+        removeAttrs config [ "libraries" ]
         // {
           interpreter = "${lib.getExe finalAttrs.finalPackage}";
         }

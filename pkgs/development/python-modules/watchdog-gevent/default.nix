@@ -5,7 +5,6 @@
   gevent,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
   watchdog,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "watchdog-gevent";
   version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "watchdog_gevent";
@@ -42,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "watchdog_gevent" ];
 
-  meta = with lib; {
+  meta = {
     description = "Gevent-based observer for watchdog";
     homepage = "https://github.com/Bogdanp/watchdog_gevent";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ traxys ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ traxys ];
   };
 }

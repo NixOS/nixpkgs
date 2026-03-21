@@ -8,12 +8,15 @@
   makeWrapper,
   upx,
   boehmgc,
-  xorg,
+  libxdmcp,
+  libxau,
+  libx11,
+  xorgproto,
   binaryen,
 }:
 
 let
-  version = "0.4.11";
+  version = "0.5";
   ptraceSubstitution = ''
     #include <sys/types.h>
     #include <sys/ptrace.h>
@@ -22,12 +25,12 @@ let
   # So we fix its rev to correspond to the V version.
   vc = stdenv.mkDerivation {
     pname = "v.c";
-    version = "0.4.11";
+    version = "0.5";
     src = fetchFromGitHub {
       owner = "vlang";
       repo = "vc";
-      rev = "a17f1105aa18b604ed8dac8fa5ca9424362c6e15";
-      hash = "sha256-DAsVr1wtRfGbKO74Vfq7ejci+zQabSWeir8njbHYV3o=";
+      rev = "294bff4ef87427743d0b35c0f7eb1b34a6dd061b";
+      hash = "sha256-NZR9Sxa9+iI0hGjB7Hwxl24K0Ra6ZJiUTk9yHp1J7kw=";
     };
 
     # patch the ptrace reference for darwin
@@ -60,7 +63,7 @@ stdenv.mkDerivation {
     owner = "vlang";
     repo = "v";
     rev = version;
-    hash = "sha256-K5B/fjdCYLE14LPg3ccS+sGC8CS7jZiuuxYkHvljGFA=";
+    hash = "sha256-iS9tXeEsEjxEpgJNjz/08MQfZkSfFZWHy0CMurITr+E=";
   };
 
   propagatedBuildInputs = [
@@ -76,10 +79,10 @@ stdenv.mkDerivation {
     binaryen
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.xorgproto
+    libx11
+    libxau
+    libxdmcp
+    xorgproto
   ];
 
   makeFlags = [
@@ -104,6 +107,11 @@ stdenv.mkDerivation {
     ln -s $out/lib/v $out/bin/v
     wrapProgram $out/bin/v --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
 
+    # gen_vc is a V-maintainer tool for pushing bootstrap C files to the vc
+    # repo; it requires network/SSH access and a v.mod root that doesn't exist
+    # in the installed layout, so it cannot be built in the Nix sandbox.
+    rm $out/lib/cmd/tools/gen_vc.v
+
     mkdir -p $HOME/.vmodules;
     ln -sf ${markdown} $HOME/.vmodules/markdown
     $out/lib/v -v build-tools
@@ -115,14 +123,15 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://vlang.io/";
+    changelog = "https://github.com/vlang/v/releases/tag/${version}";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       delta231
     ];
     mainProgram = "v";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

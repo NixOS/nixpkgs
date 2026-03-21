@@ -6,7 +6,7 @@
   automake,
   zlib,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.5.3";
   pname = "wiiload";
 
@@ -19,17 +19,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "devkitPro";
     repo = "wiiload";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-pZdZzCAPfAVucuiV/q/ROY3cz/wxQWep6dCTGNn2fSo=";
   };
 
   preConfigure = "./autogen.sh";
 
-  meta = with lib; {
+  meta = {
     description = "Load homebrew apps over network/usbgecko to your Wii";
     mainProgram = "wiiload";
     homepage = "https://wiibrew.org/wiki/Wiiload";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ tomsmeets ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ tomsmeets ];
   };
-}
+})

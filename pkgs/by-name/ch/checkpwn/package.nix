@@ -4,12 +4,12 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "checkpwn";
   version = "0.5.6";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-M0Jb+8rKn4KVuumNSsM6JEbSOoBOFy9mmXiCnUnDgak=";
   };
 
@@ -23,9 +23,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Check Have I Been Pwned and see if it's time for you to change passwords";
     homepage = "https://github.com/brycx/checkpwn";
-    changelog = "https://github.com/brycx/checkpwn/releases/tag/${version}";
+    changelog = "https://github.com/brycx/checkpwn/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "checkpwn";
   };
-}
+})

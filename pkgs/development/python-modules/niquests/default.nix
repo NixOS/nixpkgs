@@ -1,7 +1,9 @@
 {
+  aiofiles,
   buildPythonPackage,
   charset-normalizer,
   cryptography,
+  fastapi,
   fetchFromGitHub,
   hatchling,
   lib,
@@ -16,21 +18,17 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.15.2";
+  version = "3.18.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = "niquests";
     tag = "v${version}";
-    hash = "sha256-QRVefE/85k6fT0zhAzX4wFB79ANf7LUshWsbi+fpSgk=";
+    hash = "sha256-lZMUm1rYCsNSMz/cKTqynaLqb1P75JJCFMDZ9onFS4g=";
   };
 
   build-system = [ hatchling ];
-
-  pythonRelaxDeps = [
-    "wassima"
-  ];
 
   dependencies = [
     charset-normalizer
@@ -65,7 +63,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niquests" ];
 
   nativeCheckInputs = [
+    aiofiles
     cryptography
+    fastapi
     pytest-asyncio
     pytest-httpbin
     pytestCheckHook
@@ -78,14 +78,20 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # NameResolutionError: Failed to resolve 'localhost'
+    "tests/test_rate_limiters.py"
     "tests/test_lowlevel.py"
     "tests/test_testserver.py"
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
-    # PermissionError: [Errno 1] Operation not permitted
-    "test_use_proxy_from_environment"
-  ];
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "test_docker_version_info"
+      "test_docker_404_unknown_path"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted
+      "test_use_proxy_from_environment"
+    ];
 
   meta = {
     changelog = "https://github.com/jawah/niquests/blob/${src.tag}/HISTORY.md";

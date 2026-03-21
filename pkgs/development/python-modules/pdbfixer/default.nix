@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pdbfixer";
-  version = "1.11";
+  version = "1.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openmm";
     repo = "pdbfixer";
     tag = "v${version}";
-    hash = "sha256-Xk3m2w1p3Wu4g6qKGOH679wkKT0LKZLgGn/ARn219fQ=";
+    hash = "sha256-X2P5cWmdvAjY9dMFB+R21advkdYizR8PmevMPR0RR0o=";
   };
 
   nativeBuildInputs = [
@@ -56,12 +56,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pdbfixer" ];
 
-  meta = with lib; {
+  meta = {
     description = "PDBFixer fixes problems in PDB files";
     homepage = "https://github.com/openmm/pdbfixer";
     changelog = "https://github.com/openmm/pdbfixer/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "pdbfixer";
   };
 }

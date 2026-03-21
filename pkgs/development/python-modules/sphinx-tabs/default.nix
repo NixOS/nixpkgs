@@ -17,10 +17,10 @@
   beautifulsoup4,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "sphinx-tabs";
-  version = "3.4.7";
-  format = "pyproject";
+  version = "3.4.7-unstable-2026-01-24";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "sphinx-tabs";
-    tag = "v${version}";
-    hash = "sha256-bJXm3qMT1y7NqUA0iiEUA+USTWHxdV8tbEEiDrQKk1U=";
+    rev = "d613cb7b6bff083227e35e9b3a4c56b24f6c6ad4";
+    hash = "sha256-aYlc9bs37Mu4Beuggx0dgVdoRa+X65oDNnYg3Wa4dgc=";
   };
 
   nativeBuildInputs = [
@@ -52,10 +52,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_tabs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for creating tabbed content when building HTML";
     homepage = "https://github.com/executablebooks/sphinx-tabs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

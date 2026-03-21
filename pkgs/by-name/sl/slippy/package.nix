@@ -6,14 +6,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "slippy";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "slippy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-7Uvo5+saxwTMQjfDliyOYC6j6LbpMf/FiONfX38xepI=";
   };
 
@@ -27,15 +27,15 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Markdown slideshows in Rust";
     homepage = "https://github.com/axodotdev/slippy";
-    changelog = "https://github.com/axodotdev/slippy/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/axodotdev/slippy/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "slippy";
   };
-}
+})

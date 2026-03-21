@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-network-displays";
-  version = "0.97.0";
+  version = "0.99.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-network-displays/${lib.versions.majorMinor finalAttrs.version}/gnome-network-displays-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-zexoyPmzJrqu5UU3Sowrk8qRnkj0uKQkYcsOsjmNqyc=";
+    sha256 = "sha256-Hs5KG8gix+v3JeiEe4zomYtH0ewXFaS03bnd1xaR7YU=";
   };
 
   nativeBuildInputs = [
@@ -78,18 +78,18 @@ stdenv.mkDerivation (finalAttrs: {
     Hence, this is not necessarily an upstream issue, but could be something
     wrong with how our gst_all_1 depend on each other.
   */
-  CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
+  env.CFLAGS = "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0";
 
   preConfigure = ''
     patchShebangs ./build-aux/meson/postinstall.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-network-displays";
     description = "Miracast implementation for GNOME";
-    maintainers = with maintainers; [ doronbehar ];
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "gnome-network-displays";
   };
 })

@@ -15,29 +15,31 @@
   rustPlatform,
   cargo,
   rustc,
+  python3,
   enableProtoBuf ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdns-recursor";
-  version = "5.2.5";
+  version = "5.4.0";
 
   src = fetchurl {
-    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-qKZXp6vW6dI3zdJnU/fc9czVuMSKyBILCNK41XodhWo=";
+    url = "https://downloads.powerdns.com/releases/pdns-recursor-${finalAttrs.version}.tar.xz";
+    hash = "sha256-L2nvdYatyAW8T1A+FaNPDG3Pu/2rfZWf8TLY4s2/JQo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    sourceRoot = "pdns-recursor-${finalAttrs.version}/settings/rust";
-    hash = "sha256-A3NX1zj9+9qCLTkfca3v8Rr8oc/zL/Ruknjl3g1aMG4=";
+    sourceRoot = "pdns-recursor-${finalAttrs.version}/rec-rust-lib/rust";
+    hash = "sha256-OBC6x1yL+kVpiBittZVvwMSCAsSyS0U9853x3TBGGkc=";
   };
 
-  cargoRoot = "settings/rust";
+  cargoRoot = "rec-rust-lib/rust";
 
   nativeBuildInputs = [
     cargo
     rustc
+    python3
     rustPlatform.cargoSetupHook
     pkg-config
   ];

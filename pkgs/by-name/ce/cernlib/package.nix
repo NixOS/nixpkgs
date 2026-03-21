@@ -9,7 +9,10 @@
   openssl,
   libnsl,
   motif,
-  xorg,
+  libxt,
+  libxft,
+  libxaw,
+  libx11,
   libxcrypt,
 }:
 
@@ -35,6 +38,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)" \
+                     "cmake_minimum_required(VERSION 3.10.0 FATAL_ERROR)" \
       --replace-fail "find_program ( SED NAMES gsed" "find_program ( SED NAMES sed"
   '';
 
@@ -45,20 +50,18 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    with xorg;
-    [
-      freetype
-      gfortran
-      openssl
-      libX11
-      libXaw
-      libXft
-      libXt
-      libxcrypt
-      motif
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libnsl;
+  buildInputs = [
+    freetype
+    gfortran
+    openssl
+    libx11
+    libxaw
+    libxft
+    libxt
+    libxcrypt
+    motif
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libnsl;
 
   setupHook = ./setup-hook.sh;
 

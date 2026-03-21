@@ -8,30 +8,21 @@
   ncurses,
   pkg-config,
   runCommand,
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
   # broken on i686-linux https://github.com/tmux/tmux/issues/4597
   withUtf8proc ? !(stdenv.hostPlatform.is32bit),
   utf8proc, # gets Unicode updates faster than glibc
   withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
   libutempter,
   withSixel ? true,
+  versionCheckHook,
+  nix-update-script,
 }:
-
-let
-
-  bashCompletion = fetchFromGitHub {
-    owner = "imomaliev";
-    repo = "tmux-bash-completion";
-    rev = "f5d53239f7658f8e8fbaf02535cc369009c436d6";
-    sha256 = "0sq2g3w0h3mkfa6qwqdw93chb5f1hgkz5vdl8yw8mxwdqwhsdprr";
-  };
-
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.5a";
+  version = "3.6a";
 
   outputs = [
     "out"
@@ -41,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
-    rev = finalAttrs.version;
-    hash = "sha256-Z9XHpyh4Y6iBI4+SfFBCGA8huFJpRFZy9nEB7+WQVJE=";
+    tag = finalAttrs.version;
+    hash = "sha256-VwOyR9YYhA/uyVRJbspNrKkJWJGYFFktwPnnwnIJ97s=";
   };
 
   nativeBuildInputs = [
@@ -55,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     libevent
   ]
-  ++ lib.optionals withSystemd [ systemd ]
+  ++ lib.optionals withSystemd [ systemdLibs ]
   ++ lib.optionals withUtf8proc [ utf8proc ]
   ++ lib.optionals withUtempter [ libutempter ];
 
@@ -70,14 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
-    mkdir -p $out/share/bash-completion/completions
-    cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-V";
+  doInstallCheck = true;
 
   passthru = {
     terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (
@@ -96,10 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
           ln -sv ${ncurses}/share/terminfo/t/{tmux,tmux-256color,tmux-direct} $out/share/terminfo/t
         ''
     );
+    updateScript = nix-update-script { };
   };
 
   meta = {
     homepage = "https://tmux.github.io/";
+    downloadPage = "https://github.com/tmux/tmux";
     description = "Terminal multiplexer";
     longDescription = ''
       tmux is intended to be a modern, BSD-licensed alternative to programs such as GNU screen. Major features include:
@@ -118,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     mainProgram = "tmux";
     maintainers = with lib.maintainers; [
-      thammers
+      ethancedwards8
       fpletz
     ];
   };

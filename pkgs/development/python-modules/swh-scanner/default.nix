@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-  fetchpatch,
   setuptools,
   setuptools-scm,
   requests,
@@ -22,7 +22,7 @@
   types-requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "swh-scanner";
   version = "0.8.3";
   pyproject = true;
@@ -32,18 +32,9 @@ buildPythonPackage rec {
     group = "swh";
     owner = "devel";
     repo = "swh-scanner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-baUUuYFapBD7iuDaDP8CSR9f4glVZcS5qBpZddVf7z8=";
   };
-
-  patches = [
-    # To be removed at the next release
-    # See https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/merge_requests/160
-    (fetchpatch {
-      url = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/commit/0eb273475826b0074844c7619b767c052562cfe4.patch";
-      hash = "sha256-i3hpaQJmHpIYgix+/npICQGtJ/IKVRXcCTm2O1VsR9M=";
-    })
-  ];
 
   build-system = [
     setuptools
@@ -75,15 +66,25 @@ buildPythonPackage rec {
     types-requests
   ];
 
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Failed: Failed to start the server after 5 seconds.
+    "test_add_provenance_with_release"
+    "test_add_provenance_with_revision"
+    "test_scanner_result"
+  ];
+
   disabledTestPaths = [
     # pytestRemoveBytecodePhase fails with: "error (ignored): error: opening directory "/tmp/nix-build-python3.12-swh-scanner-0.8.3.drv-5/build/pytest-of-nixbld/pytest-0/test_randomdir_policy_info_cal0/big-directory/dir/dir/dir/ ......"
     "swh/scanner/tests/test_policy.py"
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "swh/scanner/tests/test_cli.py"
   ];
 
   meta = {
-    description = "Implementation of the Data model of the Software Heritage project, used to archive source code artifacts";
-    homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-model";
+    changelog = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner/-/tags/${finalAttrs.src.tag}";
+    description = "Source code scanner to analyze code bases and compare them with source code artifacts archived by Software Heritage";
+    homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-scanner";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ drupol ];
   };
-}
+})

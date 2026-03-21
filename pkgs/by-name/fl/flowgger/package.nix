@@ -7,12 +7,12 @@
   capnproto,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "flowgger";
   version = "0.3.2";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-eybahv1A/AIpAXGj6/md8k+b9fu9gSchU16fnAWZP2s=";
   };
 
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=flowgger::encoder::ltsv_encoder::test_ltsv_full_encode_no_sd"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/awslabs/flowgger";
     description = "Fast, simple and lightweight data collector written in Rust";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "flowgger";
   };
-}
+})

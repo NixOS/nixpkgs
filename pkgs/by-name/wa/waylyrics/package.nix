@@ -8,14 +8,14 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "waylyrics";
   version = "0.3.21";
 
   src = fetchFromGitHub {
     owner = "waylyrics";
     repo = "waylyrics";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-uXAcoy5fnnkqtmGmaEC6Ceu+dwmZKDPOFzxC4COuDbk=";
   };
 
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
   ];
 
-  WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
+  env.WAYLYRICS_THEME_PRESETS_DIR = "${placeholder "out"}/share/waylyrics/themes";
 
   postInstall = ''
     # Install themes
@@ -62,18 +62,18 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop lyrics with QQ and NetEase Music source";
     mainProgram = "waylyrics";
     homepage = "https://github.com/waylyrics/waylyrics";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       cc-by-40
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       shadowrz
       aleksana
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

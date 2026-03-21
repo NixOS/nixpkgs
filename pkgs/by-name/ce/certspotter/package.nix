@@ -5,14 +5,14 @@
   lowdown-unsandboxed,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "certspotter";
   version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "SSLMate";
     repo = "certspotter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-cJIjJyWvy/prx97jUvVToJsEdMa0MpqATD9rO8G2biY=";
   };
 
@@ -32,12 +32,12 @@ buildGoModule rec {
     mv *.8 $out/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Certificate Transparency Log Monitor";
     homepage = "https://github.com/SSLMate/certspotter";
-    changelog = "https://github.com/SSLMate/certspotter/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mpl20;
+    changelog = "https://github.com/SSLMate/certspotter/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.mpl20;
     mainProgram = "certspotter";
-    maintainers = with maintainers; [ chayleaf ];
+    maintainers = with lib.maintainers; [ chayleaf ];
   };
-}
+})

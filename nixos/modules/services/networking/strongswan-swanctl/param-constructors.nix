@@ -97,7 +97,7 @@ rec {
       default = null;
       description = documentDefault description strongswanDefault;
     };
-    render = single (b: if b then "yes" else "no");
+    render = single boolToYesNo;
   };
   yes = true;
   no = false;
@@ -147,21 +147,6 @@ rec {
         prefixedAttrs = mapAttrs' (name: nameValuePair "${prefix}-${name}") attrs;
       in
       paramsToRenderedStrings prefixedAttrs (mapAttrs (_n: _v: p) prefixedAttrs);
-  };
-
-  mkPostfixedAttrsOfParams = params: description: {
-    _type = "param";
-    option = mkOption {
-      type = types.attrsOf (types.submodule { options = paramsToOptions params; });
-      default = { };
-      description = description;
-    };
-    render =
-      postfix: attrs:
-      let
-        postfixedAttrs = mapAttrs' (name: nameValuePair "${name}-${postfix}") attrs;
-      in
-      paramsToRenderedStrings postfixedAttrs (mapAttrs (_n: _v: params) postfixedAttrs);
   };
 
 }

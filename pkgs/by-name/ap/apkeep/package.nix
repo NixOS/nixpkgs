@@ -6,16 +6,16 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "apkeep";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-YjGfnYK22RIVa8D8CWnAxHGDqXENGAPIeQQ606Q3JW8=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-Sk8CQaMXtPPJh2nGgGthyzuvkVViQ0jtqPjAqo2dtpg=";
   };
 
-  cargoHash = "sha256-CwucGAwAvxePNQu5p1OWx9o9xsvpzX1abH6HyF43nEE=";
+  cargoHash = "sha256-PTuhD73R0AxykkVeFEHaVnXrOTHJoRl0CxBJmeh3WgQ=";
 
   prePatch = ''
     rm .cargo/config.toml
@@ -32,9 +32,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line tool for downloading APK files from various sources";
     homepage = "https://github.com/EFForg/apkeep";
-    changelog = "https://github.com/EFForg/apkeep/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/EFForg/apkeep/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "apkeep";
   };
-}
+})

@@ -5,16 +5,16 @@
   bashate,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kolla";
-  version = "20.2.0";
+  version = "21.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    tag = version;
-    hash = "sha256-aqYEzBphzwB42Z0HmnCPQlV71dOi3yLKh+zL2dMTaB8=";
+    tag = finalAttrs.version;
+    hash = "sha256-wbVaPIvn4jPcb+h5yKhLDmvT6/widfSX2iV+2KNW8pM=";
   };
 
   postPatch = ''
@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "os.path.join(sys.prefix, 'share/kolla')," \
       "os.path.join(PROJECT_ROOT, '../../../share/kolla'),"
 
-    sed -e 's/git_info = .*/git_info = "${version}"/' -i kolla/version.py
+    sed -e 's/git_info = .*/git_info = "${finalAttrs.version}"/' -i kolla/version.py
   '';
 
   pythonRelaxDeps = [
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # fake version to make pbr.packaging happy
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = with python3Packages; [
     setuptools
@@ -54,7 +54,6 @@ python3Packages.buildPythonApplication rec {
     stestr
     oslotest
     hacking
-    coverage
     bashate
   ];
 
@@ -65,12 +64,12 @@ python3Packages.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";
     mainProgram = "kolla-build";
     homepage = "https://opendev.org/openstack/kolla";
-    license = licenses.asl20;
-    maintainers = [ maintainers.astro ];
-    teams = [ teams.openstack ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.astro ];
+    teams = [ lib.teams.openstack ];
   };
-}
+})

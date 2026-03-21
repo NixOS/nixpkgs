@@ -5,11 +5,13 @@
 
   # build-system
   flit-core,
+  pythonRelaxDepsHook,
 
   # dependencies
   jinja2,
   loguru,
   matplotlib,
+  natsort,
   numpy,
   orjson,
   pandas,
@@ -44,24 +46,31 @@
   pytest-regressions,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gdsfactory";
-  version = "9.17.0";
+  version = "9.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "gdsfactory";
-    tag = "v${version}";
-    hash = "sha256-1C7Cva5FZsYLpfF3EZt0RFaWRcYdUdid6Oz9iQHeTqo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uXFH+6uZx+fFo1QfozI/JVomchFlnWx805CwbAj7CPQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [
+    flit-core
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   dependencies = [
     jinja2
     loguru
     matplotlib
+    natsort
     numpy
     orjson
     pandas
@@ -101,6 +110,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "pydantic"
     "trimesh"
+    "kfactory"
   ];
 
   # tests require >32GB of RAM
@@ -111,8 +121,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python library to generate GDS layouts";
     homepage = "https://github.com/gdsfactory/gdsfactory";
-    changelog = "https://github.com/gdsfactory/gdsfactory/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/gdsfactory/gdsfactory/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fbeffa ];
   };
-}
+})

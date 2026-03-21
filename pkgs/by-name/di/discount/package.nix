@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.0.1.2";
   pname = "discount";
 
   src = fetchFromGitHub {
     owner = "Orc";
     repo = "discount";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-QZmbc3imBlQmFgTjtepEx2HqsfW93yqqUy0LN5WWKwM=";
   };
 
@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Markdown markup language in C";
     homepage = "http://www.pell.portland.or.us/~orc/Code/discount/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ shell ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ shell ];
     mainProgram = "markdown";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

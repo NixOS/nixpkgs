@@ -9,25 +9,25 @@
   librsvg,
   bluez,
   linuxHeaders,
-  libX11,
-  libXext,
-  libXfixes,
+  libx11,
+  libxext,
+  libxfixes,
   libusb1,
   udev,
   udevCheckHook,
   gtk-layer-shell,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "sc-controller";
-  version = "0.5.3";
+  version = "0.5.5";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "C0rn3j";
     repo = "sc-controller";
-    tag = "v${version}";
-    hash = "sha256-iieSKUTZwb1cInh/hz2cDvUFHf3p9Y5E4kR+YyZoNxI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IQxHa0bR8FWad9v5DfvXHskwayCgzbJm5ekzf1sjfiQ=";
   };
 
   nativeBuildInputs = [
@@ -70,10 +70,10 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace scc/device_monitor.py --replace "find_library('bluetooth')" "'libbluetooth.so.3'"
   '';
 
-  LD_LIBRARY_PATH = lib.makeLibraryPath [
-    libX11
-    libXext
-    libXfixes
+  env.LD_LIBRARY_PATH = lib.makeLibraryPath [
+    libx11
+    libxext
+    libxfixes
     libusb1
     udev
     bluez
@@ -101,8 +101,7 @@ python3Packages.buildPythonApplication rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      orivej
       rnhmjoj
     ];
   };
-}
+})

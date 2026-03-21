@@ -3,12 +3,12 @@
   stdenv,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cl-launch";
   version = "4.1.4.1";
 
   src = fetchurl {
-    url = "http://common-lisp.net/project/xcvb/cl-launch/cl-launch-${version}.tar.gz";
+    url = "http://common-lisp.net/project/xcvb/cl-launch/cl-launch-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-v5aURs2Verhn2HmGiijvY9br20OTPFrOGBWsb6cHhSQ=";
   };
 
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     sed -e 's/\t\t@/\t\t/g' -i Makefile
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Common Lisp launcher script";
-    license = licenses.llgpl21;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.llgpl21;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
-}
+})

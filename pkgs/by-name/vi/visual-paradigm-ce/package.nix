@@ -5,11 +5,12 @@
   copyDesktopItems,
   makeDesktopItem,
   openjdk,
+  writeScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "visual-paradigm-ce";
-  version = "17.3.20250906";
+  version = "18.0.20260303";
 
   src =
     let
@@ -18,11 +19,22 @@ stdenv.mkDerivation (finalAttrs: {
       suffix = lib.last splitted;
     in
     fetchurl {
-      url = "https://eu8.dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
+      url = "https://eu10-dl.visual-paradigm.com/visual-paradigm/vpce${majorMinor}/${suffix}/Visual_Paradigm_CE_${
         builtins.replaceStrings [ "." ] [ "_" ] majorMinor
       }_${suffix}_Linux64_InstallFree.tar.gz";
-      hash = "sha256-9BaAJKzK8jjQ1W+eSyJFI2NfizNCwY7PpSZoje2Zd38=";
+      hash = "sha256-n6cijv9ndliqcvcbIOnMB/mwIjkOzWe1AcJZB+HdHBg=";
     };
+
+  passthru.updateScript = writeScript "update-visual-paradigm-ce" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl gnused common-updater-scripts
+
+    set -eu -o pipefail
+
+    version = "$(curl -Ls -o /dev/null -w %{url_effective} https://www.visual-paradigm.com/downloads/vpce/checksum.html | sed -E 's#.*/vpce([0-9]+\.[0-9]+)/([0-9]+)/.*#\1.\2#')"
+
+    update-source-version visual-paradigm-ce "$version"
+  '';
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -72,7 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "All-in-one UML CASE tool for software development";
     homepage = "https://www.visual-paradigm.com/";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [
+      drupol
+      dvdznf
+    ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

@@ -6,10 +6,10 @@
   kak-tree-sitter-unwrapped,
 }:
 
-symlinkJoin rec {
+symlinkJoin (finalAttrs: {
   pname = lib.replaceStrings [ "-unwrapped" ] [ "" ] kak-tree-sitter-unwrapped.pname;
   inherit (kak-tree-sitter-unwrapped) version;
-  name = "${pname}-${version}";
+  name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   paths = [ kak-tree-sitter-unwrapped ];
   nativeBuildInputs = [ makeWrapper ];
@@ -24,4 +24,4 @@ symlinkJoin rec {
   '';
 
   inherit (kak-tree-sitter-unwrapped) meta;
-}
+})

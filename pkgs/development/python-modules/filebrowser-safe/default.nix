@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   django,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "filebrowser-safe";
   version = "1.1.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     pname = "filebrowser_safe";
@@ -24,7 +21,7 @@ buildPythonPackage rec {
   # There is no test embedded
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Snapshot of django-filebrowser for the Mezzanine CMS";
     longDescription = ''
       filebrowser-safe was created to provide a snapshot of the
@@ -33,8 +30,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/stephenmcd/filebrowser-safe";
     downloadPage = "https://pypi.python.org/pypi/filebrowser_safe/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ prikhi ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ prikhi ];
+    platforms = lib.platforms.unix;
   };
 }

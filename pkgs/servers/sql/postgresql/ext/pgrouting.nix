@@ -10,7 +10,7 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgrouting";
-  version = "3.8.0";
+  version = "4.0.1";
 
   nativeBuildInputs = [
     cmake
@@ -22,7 +22,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "pgRouting";
     repo = "pgrouting";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Lvf7TQ3GywbzZmcd9wi3s8I5sCXIQAPeXNTRk/J46to=";
+    hash = "sha256-j3dlVcENhBveVmkuzWaLfHWy73OMDpC2FxrNQ4W6m9k=";
   };
 
   meta = {

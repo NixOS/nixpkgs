@@ -17,16 +17,16 @@ buildGoModule (finalAttrs: {
     webkitgtk_4_1
   ];
   pname = "paretosecurity";
-  version = "0.3.8";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = finalAttrs.version;
-    hash = "sha256-pqqcyWFyJX5IJkkLxAafbQu/8yygBsQL1/BAENFdk4g=";
+    hash = "sha256-2oGDxnbxuyAMWjEUFKzwYz72/FYUbUZHSFoZk2pMfeY=";
   };
 
-  vendorHash = "sha256-6OQ9SPr9z+uoGeeJwo3jrr1nMECcHgULMvjn2G4uLx4=";
+  vendorHash = "sha256-jAcUf4VjtKB/Q2wHOVnCgcmPp5XNMqV8Ei9kpWoGO4Q=";
   proxyVendor = true;
 
   # Skip building the Windows installer

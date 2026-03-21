@@ -1,6 +1,10 @@
 {
   lib,
   stdenv,
+  writeShellScript,
+  nix-update,
+  curl,
+  jq,
   git,
   git-lfs,
   fetchurl,
@@ -18,7 +22,15 @@
   libgbm,
   nss,
   nspr,
-  xorg,
+  libxrandr,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxkbfile,
+  libxcb,
   libdrm,
   libsecret,
   libxkbcommon,
@@ -35,17 +47,6 @@
 }:
 
 let
-  pname = "pulsar";
-  version = "1.129.0";
-
-  sourcesPath =
-    {
-      x86_64-linux.tarname = "Linux.${pname}-${version}.tar.gz";
-      x86_64-linux.hash = "sha256-Iq+mYI8vldBroU/1ztVhWfbDUh9GiFjrSIzW0Qtgnvc=";
-      aarch64-linux.tarname = "ARM.Linux.${pname}-${version}-arm64.tar.gz";
-      aarch64-linux.hash = "sha256-hQBMxonnUSEoa0ATISuCoWh0scv/GPf6Tq55l+I1/n0=";
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   newLibpath = lib.makeLibraryPath [
     alsa-lib
@@ -62,37 +63,58 @@ let
     nss
     nspr
     libdrm
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXrandr
-    xorg.libxshmfence
+    libx11
+    libxcb
+    libxcomposite
+    libxdamage
+    libxext
+    libxfixes
+    libxrandr
+    libxshmfence
     libxkbcommon
-    xorg.libxkbfile
+    libxkbfile
     pango
     stdenv.cc.cc
     systemd
   ];
 
   # Hunspell
-  hunspellDirs = builtins.map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
+  hunspellDirs = map (lang: "${hunspellDicts.${lang}}/share/hunspell") languages;
   hunspellTargetDirs = "$out/opt/Pulsar/resources/app.asar.unpacked/node_modules/spellchecker/vendor/hunspell_dictionaries";
   hunspellCopyCommands = lib.concatMapStringsSep "\n" (
     lang: "cp -r ${lang}/* ${hunspellTargetDirs};"
   ) hunspellDirs;
+
 in
-stdenv.mkDerivation {
-  inherit pname version;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "pulsar";
+  version = "1.131.1";
 
   src =
-    with sourcesPath;
-    fetchurl {
-      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${version}/${tarname}";
-      inherit hash;
+    finalAttrs.passthru.srcs.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  passthru.srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/Linux.pulsar-${finalAttrs.version}.tar.gz";
+      hash = "sha256-Is+KAnPuHUrj87KFTjB/v/LMDflq4LbX3VP8Cv7/CNQ=";
     };
+    aarch64-linux = fetchurl {
+      url = "https://github.com/pulsar-edit/pulsar/releases/download/v${finalAttrs.version}/ARM.Linux.pulsar-${finalAttrs.version}-arm64.tar.gz";
+      hash = "sha256-P2ZBV9Al6xw347yUs3BOWnwJGWegRh52oygLFgjoBcw=";
+    };
+  };
+
+  # strip leading `.` from $0.
+  # for .pulsar.sh-wrapped to correctly set ATOM_BASE_NAME
+  # (`--argv0` shenanigans in makeWrapper does not work)
+  postPatch = ''
+    substituteInPlace resources/pulsar.sh \
+      --replace-fail \
+      'ATOM_BASE_NAME=''${ATOM_BASE_NAME%.*}' \
+      'ATOM_BASE_NAME=''${ATOM_BASE_NAME%.*}; ATOM_BASE_NAME=''${ATOM_BASE_NAME#.}'
+  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -102,7 +124,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gtk3
-    xorg.libxkbfile
+    libxkbfile
   ];
 
   dontBuild = true;
@@ -173,12 +195,17 @@ stdenv.mkDerivation {
     unlink $dugite/git/libexec/git-core/git-lfs
     ln -s ${git-lfs}/bin/git-lfs $dugite/git/libexec/git-core/git-lfs
   ''
-  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-    # We have to patch a prebuilt binary in the asar archive
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # We have to patch prebuilt binaries in the asar archive
     # But asar complains because the node_gyp unpacked dependency uses a prebuilt Python3 itself
+    (
+      shopt -s globstar
 
-    rm $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
-    ln -s ${python3.interpreter} $opt/resources/app.asar.unpacked/node_modules/tree-sitter-bash/build/node_gyp_bins/python3
+      for python3_binary in $opt/resources/app.asar.unpacked/node_modules/**/build/node_gyp_bins/python3; do
+        rm -v "$python3_binary"
+        ln -sv ${python3.interpreter} "$python3_binary"
+      done
+    )
   ''
   + ''
     # Patch the bundled node executables
@@ -200,7 +227,7 @@ stdenv.mkDerivation {
       --suffix "PATH" : "${lib.makeBinPath [ coreutils ]}" \
       --set "PULSAR_PATH" "$opt"
     ln -s $opt/resources/pulsar.sh $out/bin/pulsar
-    ln -s $opt/resources/app/ppm/bin/apm $out/bin/ppm
+    ln -s $opt/resources/app/ppm/bin/ppm $out/bin/ppm
 
     # Copy the icons
     mkdir -p $out/share/icons/hicolor/scalable/apps $out/share/icons/hicolor/1024x1024/apps
@@ -230,7 +257,16 @@ stdenv.mkDerivation {
     })
   ];
 
-  passthru.updateScript = ./update.mjs;
+  passthru.updateScript = writeShellScript "update-pulsar" ''
+    set -euo pipefail
+    PATH="${lib.getBin curl}:$PATH"
+    PATH="${lib.getBin jq}:$PATH"
+    PATH="${lib.getBin coreutils}:$PATH"
+    PATH="${lib.getBin nix-update}:$PATH"
+    version="$(curl https://api.github.com/repos/pulsar-edit/pulsar/releases/latest | jq ".tag_name" -r | tr -d 'v')"
+    nix-update pkgsCross.gnu64.pulsar --version "$version"
+    nix-update pkgsCross.aarch64-multiplatform.pulsar --version skip
+  '';
 
   meta = {
     description = "Community-led Hyper-Hackable Text Editor";
@@ -239,7 +275,7 @@ stdenv.mkDerivation {
       Designed to be deeply customizable, but still approachable using the default configuration.
     '';
     homepage = "https://github.com/pulsar-edit/pulsar";
-    changelog = "https://github.com/pulsar-edit/pulsar/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pulsar-edit/pulsar/blob/v${finalAttrs.version}/CHANGELOG.md";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
@@ -247,15 +283,8 @@ stdenv.mkDerivation {
       bryango
       pbsds
     ];
-    knownVulnerabilities = [
-      # electron 12.2.3, efforts are in place to bump it
-      "CVE-2023-5217"
-      "CVE-2022-21718"
-      "CVE-2022-29247"
-      "CVE-2022-29257"
-      "CVE-2022-36077"
-      "CVE-2023-29198"
-      "CVE-2023-39956"
-    ];
+    # https://www.electronjs.org/docs/latest/tutorial/electron-timelines
+    # a bump is expected (pulsar v1.131.0 bumped electron 12.2.3 -> 30.0.9 in february 2026)
+    knownVulnerabilities = [ "Electron version 30 is EOL" ];
   };
-}
+})

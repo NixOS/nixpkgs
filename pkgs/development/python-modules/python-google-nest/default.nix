@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   requests-oauthlib,
 }:
 
@@ -10,8 +9,6 @@ buildPythonPackage rec {
   pname = "python-google-nest";
   version = "5.2.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nest" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API and command line tool for talking to Nest thermostats";
     homepage = "https://github.com/axlan/python-nest/";
-    license = licenses.cc-by-nc-sa-30;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.cc-by-nc-sa-30;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

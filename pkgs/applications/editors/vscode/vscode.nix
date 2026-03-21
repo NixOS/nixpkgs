@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  callPackage,
+  buildVscode,
   fetchurl,
   nixosTests,
   srcOnly,
@@ -17,7 +17,6 @@
   commandLineArgs ? "",
   useVSCodeRipgrep ? stdenv.hostPlatform.isDarwin,
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
@@ -36,22 +35,27 @@ let
 
   hash =
     {
-      x86_64-linux = "sha256-y0Bjrxmp7DYV4iUDnQGC0aIYrQNM3oPicajbeVuEtqc=";
-      x86_64-darwin = "sha256-6/BiMvVp955PW0hz22+NzdvC+IC+pNYjz25n3Op6V/k=";
-      aarch64-linux = "sha256-DF8QnqvVFqNyxjrphR6NaUXOKr8Koe34NitRa5mTBYs=";
-      aarch64-darwin = "sha256-v+m8AMpPph6CztUCjneBKC9txEOAKvcHsAXr/8KjIeA=";
-      armv7l-linux = "sha256-py1FZYd77YVNloQbXm36ou4HGowmteY8HzOiUioGD8Y=";
+      x86_64-linux = "sha256-3s0UzfkufKXXm57JgKaMan/SRAlGTLmdIRXXpzxQvAo=";
+      x86_64-darwin = "sha256-1+1Lin4KH3BiriA6m0TJlVG4m9Xl+PyE5cJFborOATM=";
+      aarch64-linux = "sha256-p68lztb+e8OMXtyaqXDdElhuhmv4Og7R+tdRXG85DnU=";
+      aarch64-darwin = "sha256-DUjT+vqjct8WMiRecltPcL+Jn78DfnuyGTMWhaGVcRY=";
+      armv7l-linux = "sha256-70WqRdVnx4zTY5eUFrxz4MiREXNSvahuINcu/9VNkZU=";
     }
     .${system} or throwSystem;
 
   # Please backport all compatible updates to the stable release.
   # This is important for the extension ecosystem.
-  version = "1.104.1";
+  version = "1.111.0";
+
+  # The update server (update.code.visualstudio.com) expects the version path
+  # segment in X.Y.Z form, so we normalize X.Y to X.Y.0 (e.g. "1.110" → "1.110.0").
+  # Upstream GitHub release tags may use X.Y, which is why this normalization is needed.
+  downloadVersion = lib.versions.pad 3 version;
 
   # This is used for VS Code - Remote SSH test
-  rev = "0f0d87fa9e96c856c5212fc86db137ac0d783365";
+  rev = "ce099c1ed25d9eb3076c11e4a280f3eb52b4fbeb";
 in
-callPackage ./generic.nix {
+buildVscode {
   pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
   executableName = "code" + lib.optionalString isInsiders "-insiders";
@@ -66,8 +70,8 @@ callPackage ./generic.nix {
     ;
 
   src = fetchurl {
-    name = "VSCode_${version}_${plat}.${archive_fmt}";
-    url = "https://update.code.visualstudio.com/${version}/${plat}/stable";
+    name = "VSCode_${downloadVersion}_${plat}.${archive_fmt}";
+    url = "https://update.code.visualstudio.com/${downloadVersion}/${plat}/stable";
     inherit hash;
   };
 
@@ -82,7 +86,7 @@ callPackage ./generic.nix {
     src = fetchurl {
       name = "vscode-server-${rev}.tar.gz";
       url = "https://update.code.visualstudio.com/commit:${rev}/server-linux-x64/stable";
-      hash = "sha256-o0O/WDH+hr3R9np+WPLJo+/nIVBRjP8H2JVwa8volfg=";
+      hash = "sha256-0fEyS5/FtUBVE6J8NGghKITtIq6Yykyi5Vt8S20INP8=";
     };
     stdenv = stdenvNoCC;
   };
@@ -112,10 +116,11 @@ callPackage ./generic.nix {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       eadwu
-      synthetica
       bobby285271
       johnrtitor
       jefflabonte
+      wetrustinprize
+      oenu
     ];
     platforms = [
       "x86_64-linux"

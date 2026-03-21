@@ -6,14 +6,14 @@
   groff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wiggle";
   version = "1.3";
 
   src = fetchFromGitHub {
     owner = "neilbrown";
     repo = "wiggle";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "18ilzr9sbal1j8p1d94ilm1j5blac5cngvcvjpdmgmpw6diy2ldf";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://blog.neil.brown.name/category/wiggle/";
     description = "Tool for applying patches with conflicts";
     mainProgram = "wiggle";
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       possible. Also, wiggle will (in some cases) detect changes that have
       already been applied, and will ignore them.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

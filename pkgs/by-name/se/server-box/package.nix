@@ -1,6 +1,6 @@
 {
   lib,
-  flutter335,
+  flutter341,
   fetchFromGitHub,
   autoPatchelfHook,
   copyDesktopItems,
@@ -8,31 +8,36 @@
   runCommand,
   yq-go,
   _experimental-update-script-combinators,
-  gitUpdater,
+  nix-update-script,
+  dart,
 }:
 
 let
-  version = "1.0.1256";
+  version = "1.0.1331";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-V4Y4JoUsca2MmPJd1t+IWrNiIj5oslaj6736rPUT9hM=";
+    fetchSubmodules = true;
+    hash = "sha256-fKwOAlGVrNKqb/eYRrDWAQ+B6R1OF10IXJ1cCk1IvNY=";
   };
 in
-flutter335.buildFlutterApplication {
+flutter341.buildFlutterApplication {
   pname = "server-box";
   inherit version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = lib.importJSON ./gitHashes.json;
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [
     copyDesktopItems
     autoPatchelfHook
   ];
+
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  env.CXXFLAGS = toString [ "-Wno-deprecated-literal-operator" ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -66,18 +71,30 @@ flutter335.buildFlutterApplication {
           yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
         '';
     updateScript = _experimental-update-script-combinators.sequence [
-      (gitUpdater { rev-prefix = "v"; })
-      (_experimental-update-script-combinators.copyAttrOutputToFile "server-box.pubspecSource" ./pubspec.lock.json)
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "server-box.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
       {
-        command = [ ./update-gitHashes.py ];
-        supportedFeatures = [ "silent" ];
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
       }
     ];
   };
 
   meta = {
     description = "Server status & toolbox";
-    homepage = "https://github.com/lollipopkit/flutter_server_box";
+    homepage = "https://serverbox.lpkt.cn";
+    downloadPage = "https://serverbox.lpkt.cn/installation";
     changelog = "https://github.com/lollipopkit/flutter_server_box/releases/tag/${src.tag}";
     mainProgram = "ServerBox";
     license = lib.licenses.gpl3Plus;

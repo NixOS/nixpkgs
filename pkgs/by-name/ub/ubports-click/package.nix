@@ -26,7 +26,7 @@ let
   self = python3Packages.buildPythonApplication rec {
     pname = "click";
     version = "0.5.2";
-    format = "other";
+    pyproject = false;
 
     src = fetchFromGitLab {
       owner = "ubports";

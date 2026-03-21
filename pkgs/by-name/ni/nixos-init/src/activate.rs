@@ -1,4 +1,7 @@
-use std::{fs, path::Path};
+use std::{
+    fs,
+    path::{Path, PathBuf},
+};
 
 use anyhow::{Context, Result};
 
@@ -9,7 +12,8 @@ use crate::{config::Config, fs::atomic_symlink};
 /// This runs both during boot and during re-activation initiated by switch-to-configuration.
 pub fn activate(prefix: &str, toplevel: impl AsRef<Path>, config: &Config) -> Result<()> {
     log::info!("Setting up /run/current-system...");
-    atomic_symlink(&toplevel, format!("{prefix}/run/current-system"))?;
+    let system_path = PathBuf::from(prefix).join("run/current-system");
+    atomic_symlink(&toplevel, system_path)?;
 
     log::info!("Setting up modprobe...");
     setup_modprobe(&config.modprobe_binary)?;
@@ -42,16 +46,21 @@ fn setup_modprobe(modprobe_binary: impl AsRef<Path>) -> Result<()> {
     // a procfs in a chroot would.
     const MODPROBE_PATH: &str = "/proc/sys/kernel/modprobe";
 
-    fs::write(
-        MODPROBE_PATH,
-        modprobe_binary.as_ref().as_os_str().as_encoded_bytes(),
-    )
-    .with_context(|| {
-        format!(
-            "Failed to populate modprobe path with {}",
-            modprobe_binary.as_ref().display()
+    if Path::new(MODPROBE_PATH).exists() {
+        fs::write(
+            MODPROBE_PATH,
+            modprobe_binary.as_ref().as_os_str().as_encoded_bytes(),
         )
-    })?;
+        .with_context(|| {
+            format!(
+                "Failed to populate modprobe path with {}",
+                modprobe_binary.as_ref().display()
+            )
+        })?;
+    } else {
+        log::info!("{MODPROBE_PATH} doesn't exist. Not populating it...");
+    }
+
     Ok(())
 }
 
@@ -74,6 +83,8 @@ fn setup_firmware_search_path(firmware: impl AsRef<Path>) -> Result<()> {
                 firmware.as_ref().display()
             )
         })?;
+    } else {
+        log::info!("{FIRMWARE_SERCH_PATH} doesn't exist. Not populating it...");
     }
 
     Ok(())
@@ -85,10 +96,9 @@ fn setup_firmware_search_path(firmware: impl AsRef<Path>) -> Result<()> {
 ///
 /// We do this here accidentally. `/usr/bin/env` is currently load-bearing for `NixOS`.
 fn setup_usrbinenv(prefix: &str, env_binary: impl AsRef<Path>) -> Result<()> {
-    const USRBINENV_PATH: &str = "/usr/bin/env";
-
-    fs::create_dir_all(format!("{prefix}/usr/bin")).context("Failed to create /usr/bin")?;
-    atomic_symlink(&env_binary, format!("{prefix}{USRBINENV_PATH}"))
+    let usrbin_path = PathBuf::from(prefix).join("usr/bin");
+    fs::create_dir_all(&usrbin_path).context("Failed to create /usr/bin")?;
+    atomic_symlink(&env_binary, usrbin_path.join("env"))
 }
 
 /// Setup /bin/sh.
@@ -96,6 +106,6 @@ fn setup_usrbinenv(prefix: &str, env_binary: impl AsRef<Path>) -> Result<()> {
 /// `/bin/sh` is an essential part of a Linux system as this path is hardcoded in the `system()` call
 /// from libc. See `man systemd(3)`.
 fn setup_binsh(prefix: &str, sh_binary: impl AsRef<Path>) -> Result<()> {
-    const BINSH_PATH: &str = "/bin/sh";
-    atomic_symlink(&sh_binary, format!("{prefix}{BINSH_PATH}"))
+    let binsh_path = PathBuf::from(prefix).join("bin/sh");
+    atomic_symlink(&sh_binary, binsh_path)
 }

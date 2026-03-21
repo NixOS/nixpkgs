@@ -14,26 +14,29 @@ let
   registry = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "bazel-central-registry";
-    rev = "1f55d91e1be0e4863a698b9d7582cf097ad456ee";
-    hash = "sha256-ESHF5FhLvn4u4j//6AFiSJRJYSKrI4EKr4oDwvsrcPM=";
+    rev = "dc643526b97838ffe421b833dd8b9c95e71702e8";
+    hash = "sha256-SLtrNU5uEt8rRJDUdV/IaI37CujsTHLlE31l2zYoRss=";
   };
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.2.3";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-0RWR793+qXc5QYIc7wIL323iDkNts9w4e90FCdHT6t4=";
+    hash = "sha256-qS2oKQ9/vNX58PftEjHD+3ApXtWL90YVBHnifLtDTcU=";
   };
 
   bazelFlags = [
     "--registry"
     "file://${registry}"
   ];
-  LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LIBTOOL = "${cctools}/bin/libtool";
+  };
 
   postPatch = ''
     patchShebangs scripts/create-workspace-status.sh
@@ -42,10 +45,13 @@ buildBazelPackage rec {
   removeRulesCC = false;
 
   fetchAttrs = {
+    preInstall = ''
+      rm -rf $bazelOut/external/rules_shell~~sh_configure~local_config_shell
+    '';
     hash =
       {
-        aarch64-linux = "sha256-aGfFbeosrWhNqiHV9ng59DeMZSGjaylPRfolxatauJE";
-        x86_64-linux = "sha256-nbHHkgN4O8bWZzrpQUMZbm4+iRffqdfu7C1kkLJ3GDQ=";
+        aarch64-linux = "sha256-E70F3D7HGsyV0bPd0zbRTytx1UCHyEuNKObaG2eRy8A=";
+        x86_64-linux = "sha256-E9XAKrt16DOAne3/wY9PwWIM61YX0fWs8x1hqF3YJSU=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

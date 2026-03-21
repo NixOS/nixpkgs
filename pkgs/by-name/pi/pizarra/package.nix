@@ -11,14 +11,14 @@
   wrapGAppsHook3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pizarra";
   version = "1.7.5";
 
   src = fetchFromGitLab {
     owner = "categulario";
     repo = "pizarra-gtk";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-vnjhveX3EVIfJLiHWhlvhoPcRx1a8Nnjj7hIaPgU3Zw=";
   };
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
       --replace "Icon=/usr/share/icons/hicolor/scalable/apps/pizarra.svg" "Icon=pizarra"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple blackboard written in GTK";
     mainProgram = "pizarra";
     longDescription = ''
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       - Grids
     '';
     homepage = "https://pizarra.categulario.xyz/en/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
   };
-}
+})

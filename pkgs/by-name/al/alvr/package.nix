@@ -7,6 +7,7 @@
   pkg-config,
   autoAddDriverRunpath,
   alsa-lib,
+  android-tools,
   brotli,
   bzip2,
   celt,
@@ -14,10 +15,10 @@
   gmp,
   jack2,
   lame,
-  libX11,
-  libXi,
-  libXrandr,
-  libXcursor,
+  libx11,
+  libxi,
+  libxrandr,
+  libxcursor,
   libdrm,
   libglvnd,
   libogg,
@@ -27,6 +28,7 @@
   libva,
   libvdpau,
   libxkbcommon,
+  openapv,
   openssl,
   openvr,
   pipewire,
@@ -38,14 +40,14 @@
   x264,
   xvidcore,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alvr";
   version = "20.14.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # TODO devendor openvr
     hash = "sha256-9fckUhUPAbcmbqOdUO8RlwuK8/nf1fc7XQBrAu5YaR4=";
   };
@@ -59,6 +61,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace alvr/server_openvr/cpp/platform/linux/EncodePipelineVAAPI.cpp \
+      --replace-fail 'FF_PROFILE_H264_MAIN' 'AV_PROFILE_H264_MAIN' \
+      --replace-fail 'FF_PROFILE_H264_BASELINE' 'AV_PROFILE_H264_BASELINE' \
+      --replace-fail 'FF_PROFILE_H264_HIGH' 'AV_PROFILE_H264_HIGH' \
+      --replace-fail 'FF_PROFILE_HEVC_MAIN' 'AV_PROFILE_HEVC_MAIN' \
+      --replace-fail 'FF_PROFILE_AV1_MAIN' 'AV_PROFILE_AV1_MAIN'
+  '';
+
   env = {
     NIX_CFLAGS_COMPILE = toString [
       "-lbrotlicommon"
@@ -67,18 +78,19 @@ rustPlatform.buildRustPackage rec {
       "-lpng"
       "-lssl"
     ];
+    RUSTFLAGS = toString (
+      map (a: "-C link-arg=${a}") [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lwayland-client"
+        "-lxkbcommon"
+        "-Wl,--pop-state"
+      ]
+    );
   };
 
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-lxkbcommon"
-    "-Wl,--pop-state"
-  ];
-
   cargoBuildFlags = [
-    "--exclude alvr_xtask"
+    "--exclude=alvr_xtask"
     "--workspace"
   ];
 
@@ -91,6 +103,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     alsa-lib
+    android-tools
     brotli
     bzip2
     celt
@@ -98,10 +111,10 @@ rustPlatform.buildRustPackage rec {
     gmp
     jack2
     lame
-    libX11
-    libXcursor
-    libXi
-    libXrandr
+    libx11
+    libxcursor
+    libxi
+    libxrandr
     libdrm
     libglvnd
     libogg
@@ -111,6 +124,7 @@ rustPlatform.buildRustPackage rec {
     libva
     libvdpau
     libxkbcommon
+    openapv
     openssl
     openvr
     pipewire
@@ -128,8 +142,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm755 ${src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
-    install -Dm644 ${src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
+    install -Dm755 ${finalAttrs.src}/alvr/xtask/resources/alvr.desktop $out/share/applications/alvr.desktop
+    install -Dm644 ${finalAttrs.src}/resources/ALVR-Icon.svg $out/share/icons/hicolor/scalable/apps/alvr.svg
 
     # Install SteamVR driver
     mkdir -p $out/{libexec,lib/alvr,share}
@@ -144,7 +158,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Stream VR games from your PC to your headset via Wi-Fi";
     homepage = "https://github.com/alvr-org/ALVR/";
-    changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${version}";
+    changelog = "https://github.com/alvr-org/ALVR/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "alvr_dashboard";
     maintainers = with lib.maintainers; [
@@ -153,4 +167,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

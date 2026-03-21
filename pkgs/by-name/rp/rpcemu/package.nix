@@ -12,6 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "rpcemu";
   version = "0.9.5";
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   src = fetchhg {
     url = "http://www.home.marutan.net/hg/rpcemu";
     rev = "release_${finalAttrs.version}";
@@ -59,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
       using them with RPCEmu.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

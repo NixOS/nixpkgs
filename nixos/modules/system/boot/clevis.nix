@@ -28,12 +28,12 @@ in
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
       default = { };
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options.secretFile = lib.mkOption {
             description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
             type = lib.types.path;
           };
-        })
+        }
       );
     };
 
@@ -59,7 +59,7 @@ in
               || (fs.fsType == "zfs" && lib.hasPrefix "${device}/" fs.device)
             ) config.system.build.fileSystems)
             || (lib.hasAttr device config.boot.initrd.luks.devices);
-          message = ''No filesystem or LUKS device with the name ${device} is declared in your configuration.'';
+          message = "No filesystem or LUKS device with the name ${device} is declared in your configuration.";
         }) cfg.devices
       )
     );
@@ -77,6 +77,9 @@ in
         copy_bin_and_libs ${pkgs.jose}/bin/jose
         copy_bin_and_libs ${pkgs.curl}/bin/curl
         copy_bin_and_libs ${pkgs.bashNonInteractive}/bin/bash
+        copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
+        copy_bin_and_libs ${pkgs.gnused}/bin/sed
+        copy_bin_and_libs ${pkgs.gnugrep}/bin/grep
 
         copy_bin_and_libs ${pkgs.tpm2-tools}/bin/.tpm2-wrapped
         mv $out/bin/{.tpm2-wrapped,tpm2}
@@ -110,6 +113,9 @@ in
           cfg.package
           "${pkgs.jose}/bin/jose"
           "${pkgs.curl}/bin/curl"
+          "${pkgs.cryptsetup}/bin/cryptsetup"
+          "${pkgs.gnused}/bin/sed"
+          "${pkgs.gnugrep}/bin/grep"
           "${pkgs.tpm2-tools}/bin/tpm2_createprimary"
           "${pkgs.tpm2-tools}/bin/tpm2_flushcontext"
           "${pkgs.tpm2-tools}/bin/tpm2_load"

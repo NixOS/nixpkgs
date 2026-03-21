@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch2,
+  fetchpatch,
   writeText,
   bluez,
   cjson,
@@ -13,8 +13,7 @@
   eigen,
   elfutils,
   glslang,
-  gst-plugins-base,
-  gstreamer,
+  gst_all_1,
   hidapi,
   libbsd,
   libdrm,
@@ -28,14 +27,14 @@
   libuv,
   libuvc,
   libv4l,
-  libXau,
+  libxau,
   libxcb,
-  libXdmcp,
-  libXext,
-  libXrandr,
+  libxdmcp,
+  libxext,
+  libxrandr,
   nix-update-script,
   onnxruntime,
-  openhmd,
+  opencv4,
   openvr,
   orc,
   pcre2,
@@ -65,21 +64,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
-  version = "25.0.0";
+  version = "25.1.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VxTxvw+ftqlh3qF5qWxpK1OJsRowkRXu0xEH2bDckUA=";
+    hash = "sha256-hUSm76PV+FhvzhiYMUbGcNDQMK1TZCPYh1PNADJmdSU=";
   };
 
   patches = [
-    # Remove with v26
-    (fetchpatch2 {
-      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/2a6932d46dad9aa957205e8a47ec2baa33041076.patch";
-      hash = "sha256-CZMbGgx7mEDcjcoRJHDZ5P6BecFW8CB4fpzxQ9bpAvE=";
+    # Resolves issues with wayvr
+    # See https://github.com/NixOS/nixpkgs/pull/489154#issuecomment-4018732528
+    (fetchpatch {
+      name = "monado-cylinder-aspectRatio.patch";
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/69834fe93b84640170f8efa54b4700e5e0dc03c1.diff";
+      hash = "sha256-6lD4j7CMQk52btfxD8hOm0GWZaOxSgc1jel9hyXqktA=";
     })
   ];
 
@@ -103,8 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
     eigen
     elfutils
-    gst-plugins-base
-    gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
     hidapi
     libbsd
     libdrm
@@ -118,15 +119,13 @@ stdenv.mkDerivation (finalAttrs: {
     libuv
     libuvc
     libv4l
-    libXau
+    libxau
     libxcb
-    libXdmcp
-    libXext
-    libXrandr
+    libxdmcp
+    libxext
+    libxrandr
     onnxruntime
-    # FIXME: OpenCV support causes a segfault on start. See https://github.com/NixOS/nixpkgs/issues/439075
-    # opencv4
-    openhmd
+    opencv4
     openvr
     orc
     pcre2

@@ -6,14 +6,14 @@
   pkg-config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "task-keeper";
   version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "linux-china";
     repo = "task-keeper";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/ZmwCvoYdX733c5QkUE0KuUdHeibJkXD5wNHR7Cr7aU=";
   };
 
@@ -32,4 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ tennox ];
     mainProgram = "tk";
   };
-}
+})

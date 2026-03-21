@@ -14,7 +14,7 @@
   libGL,
   SDL2,
   SDL2_mixer,
-  xorg,
+  libx11,
   graphicsmagick,
   unstableGitUpdater,
 }:
@@ -27,14 +27,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "eduke32";
-  version = "0-unstable-2025-09-13";
+  version = "0-unstable-2026-02-03";
 
   src = fetchFromGitLab {
     domain = "voidpoint.io";
     owner = "terminx";
     repo = "eduke32";
-    rev = "e5aad188685d005f8ad65478384693fc0dc0c83f";
-    hash = "sha256-0iICExzsw/l/QjGJDJ6X+08+dzwsA+6tjaOWKNrXsjs=";
+    rev = "ba6b7bb1d50d7db820ec03d9bbd66404fab5c543";
+    hash = "sha256-hD8j2YahEWLNgeATL7ZPwU0ovjwMSmzYdDYgMHKQLTw=";
     deepClone = true;
     leaveDotGit = true;
     postFetch = ''
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libGL
-    xorg.libX11
+    libx11
   ];
 
   nativeBuildInputs = [
@@ -179,12 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
-    description = "Enhanched port of Duke Nukem 3D for various platforms";
-    homepage = "http://eduke32.com";
+    description = "Enhanced port of Duke Nukem 3D for various platforms";
+    homepage = "https://eduke32.com";
     license = with lib.licenses; [ gpl2Plus ];
     maintainers = with lib.maintainers; [
       qubitnano
-      sander
     ];
     platforms = lib.platforms.all;
   };

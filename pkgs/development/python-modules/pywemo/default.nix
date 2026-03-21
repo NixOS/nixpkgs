@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  cryptography,
   fetchFromGitHub,
   hypothesis,
   ifaddr,
@@ -8,28 +9,26 @@
   poetry-core,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pywemo";
-  version = "1.4.0";
+  version = "2.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pywemo";
     repo = "pywemo";
-    tag = version;
-    hash = "sha256-XpCRrCJYHv1so5/aHoGrtkgp3RX1NUKPUawJqK/FaG0=";
+    tag = finalAttrs.version;
+    hash = "sha256-/F9MhPmWSLT/ieI21rzJXvjEkH8xBttJYPaQ1wcVWOk=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    cryptography
     ifaddr
     lxml
     requests
@@ -46,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pywemo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to discover and control WeMo devices";
     homepage = "https://github.com/pywemo/pywemo";
-    changelog = "https://github.com/pywemo/pywemo/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/pywemo/pywemo/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

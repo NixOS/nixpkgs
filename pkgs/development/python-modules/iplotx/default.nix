@@ -12,16 +12,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "iplotx";
-  version = "0.6.5";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fabilab";
     repo = "iplotx";
-    tag = version;
-    hash = "sha256-k/psY/xwNuG5/1pLmJOpC8U3Il4v2cicwTy+pR9ZNC8=";
+    tag = finalAttrs.version;
+    hash = "sha256-pTSY7eEYKwBSDttxZqauGCofYK5SFaxjJLXYBwSr3ew=";
   };
 
   build-system = [ hatchling ];
@@ -49,13 +49,18 @@ buildPythonPackage rec {
     # These tests result in an ImageComparisonFailure
     "test_complex"
     "test_complex_rotatelabels"
+    "test_curved_waypoints"
     "test_directed_graph"
     "test_display_shortest_path"
     "test_labels"
     "test_labels_and_colors"
+    "test_vertex_labels"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   pythonImportsCheck = [ "iplotx" ];
 
@@ -65,4 +70,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jboy ];
   };
-}
+})

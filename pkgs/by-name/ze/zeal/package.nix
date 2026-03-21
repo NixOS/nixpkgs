@@ -7,20 +7,20 @@
   pkg-config,
   httplib,
   libarchive,
-  libXdmcp,
-  libpthreadstubs,
-  xcbutilkeysyms,
+  libxdmcp,
+  libpthread-stubs,
+  libxcb-keysyms,
   qt6,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-13BscKZU/wzjstEQ8ffTGFJaDXO+p8IxNqNsyoEjQUc=";
   };
 
   nativeBuildInputs = [
@@ -32,18 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     httplib
-    libXdmcp
+    libxdmcp
     libarchive
-    libpthreadstubs
+    libpthread-stubs
     qt6.qtbase
     qt6.qtimageformats
     qt6.qtwebengine
-    xcbutilkeysyms
+    libxcb-keysyms
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
   ];
+
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/{Applications,bin}
+    cp -r Zeal.app $out/Applications
+    ln -s $out/Applications/Zeal.app/Contents/MacOS/Zeal $out/bin/zeal
+
+    runHook postInstall
+  '';
 
   meta = {
     description = "Simple offline API documentation browser";

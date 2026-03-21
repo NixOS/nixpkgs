@@ -2,11 +2,11 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  jdk24,
+  gradle_9,
+  jdk25,
   wrapGAppsHook3,
-  libXxf86vm,
-  libXtst,
+  libxxf86vm,
+  libxtst,
   libglvnd,
   glib,
   alsa-lib,
@@ -16,15 +16,18 @@
   makeDesktopItem,
   writeScript,
 }:
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.255";
+  version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-V5uC+f/KqUL13mMTUDtHLbqebfj6mRV+Fmb7OAjMxXg=";
+    hash = "sha256-QqwLM2fiPmtFehB83M3yvLp8M1DKywlCxQcG4mclBkk=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
   };
 
   gradleFlags = [
-    "-Dorg.gradle.java.home=${jdk24}"
+    "-Dorg.gradle.java.home=${jdk25}"
     "--stacktrace"
   ];
 
@@ -96,9 +99,9 @@ stdenv.mkDerivation rec {
     makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
-          libXxf86vm
+          libxxf86vm
           glib
-          libXtst
+          libxtst
           libglvnd
           alsa-lib
           ffmpeg

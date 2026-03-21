@@ -6,11 +6,11 @@
 
 buildOctavePackage rec {
   pname = "queueing";
-  version = "1.2.7";
+  version = "1.2.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "1yhw277i1qgmddf6wbfb6a4zrfhvplkmfr20q1l15z4xi8afnm6d";
+    url = "https://github.com/mmarzolla/queueing/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-kJGURTYig+aImnjXu8ldyqFAJDqV+fpUzR+h6OdvwzM=";
   };
 
   meta = {

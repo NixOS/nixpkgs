@@ -17,69 +17,62 @@
 
 let
   inherit (lib) optionals versionOlder;
-
+in
+stdenv.mkDerivation (finalAttrs: {
+  name = "ocaml${ocaml.version}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "vg";
   version = "0.9.5";
-  webpage = "https://erratique.ch/software/${pname}";
-in
 
-if versionOlder ocaml.version "4.14" then
-  throw "vg is not available for OCaml ${ocaml.version}"
-else
+  src = fetchurl {
+    url = "https://erratique.ch/software/vg/releases/vg-${finalAttrs.version}.tbz";
+    hash = "sha256-qcTtvIfSUwzpUZDspL+54UTNvWY6u3BTvfGWF6c0Jvw=";
+  };
 
-  stdenv.mkDerivation {
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    ocamlbuild
+  ];
+  buildInputs = [ topkg ];
 
-    name = "ocaml${ocaml.version}-${pname}-${version}";
+  propagatedBuildInputs = [
+    uchar
+    result
+    gg
+  ]
+  ++ optionals pdfBackend [
+    otfm
+  ]
+  ++ optionals htmlcBackend [
+    brr
+  ];
 
-    src = fetchurl {
-      url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-qcTtvIfSUwzpUZDspL+54UTNvWY6u3BTvfGWF6c0Jvw=";
-    };
+  strictDeps = true;
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      ocamlbuild
-    ];
-    buildInputs = [ topkg ];
+  buildPhase =
+    topkg.buildPhase
+    + " --with-otfm ${lib.boolToString pdfBackend}"
+    + " --with-brr ${lib.boolToString htmlcBackend}"
+    + " --with-cairo2 false";
 
-    propagatedBuildInputs = [
-      uchar
-      result
-      gg
-    ]
-    ++ optionals pdfBackend [
-      otfm
-    ]
-    ++ optionals htmlcBackend [
-      brr
-    ];
+  inherit (topkg) installPhase;
 
-    strictDeps = true;
+  meta = {
+    description = "Declarative 2D vector graphics for OCaml";
+    longDescription = ''
+      Vg is an OCaml module for declarative 2D vector graphics. In Vg, images
+      are values that denote functions mapping points of the cartesian plane
+      to colors. The module provides combinators to define and compose these
+      values.
 
-    buildPhase =
-      topkg.buildPhase
-      + " --with-otfm ${lib.boolToString pdfBackend}"
-      + " --with-brr ${lib.boolToString htmlcBackend}"
-      + " --with-cairo2 false";
-
-    inherit (topkg) installPhase;
-
-    meta = with lib; {
-      description = "Declarative 2D vector graphics for OCaml";
-      longDescription = ''
-        Vg is an OCaml module for declarative 2D vector graphics. In Vg, images
-        are values that denote functions mapping points of the cartesian plane
-        to colors. The module provides combinators to define and compose these
-        values.
-
-        Renderers for PDF, SVG and the HTML canvas are distributed with the
-        module. An API allows to implement new renderers.
-      '';
-      homepage = webpage;
-      license = licenses.isc;
-      maintainers = [ maintainers.jirkamarsik ];
-      mainProgram = "vecho";
-      inherit (ocaml.meta) platforms;
-    };
-  }
+      Renderers for PDF, SVG and the HTML canvas are distributed with the
+      module. An API allows to implement new renderers.
+    '';
+    homepage = "https://erratique.ch/software/vg";
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.jirkamarsik ];
+    mainProgram = "vecho";
+    inherit (ocaml.meta) platforms;
+    broken = versionOlder ocaml.version "4.14";
+  };
+})

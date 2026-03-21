@@ -7,15 +7,12 @@
   lxml,
   poetry-core,
   pyasn1,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dploot";
   version = "3.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
@@ -42,12 +39,12 @@ buildPythonPackage rec {
   # No tests
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DPAPI looting remotely in Python";
     homepage = "https://github.com/zblurx/dploot";
     changelog = "https://github.com/zblurx/dploot/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vncsb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "dploot";
   };
 }

@@ -26,7 +26,7 @@ let
       '') debs
     );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.toLower type}-edit";
   inherit version;
 
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ${type}-Edit $out/bin/.${pname}
+    cp ${type}-Edit $out/bin/.${finalAttrs.pname}
 
-    cat >$out/bin/${pname} <<EOF
+    cat >$out/bin/${finalAttrs.pname} <<EOF
     #!${runtimeShell} -eu
     exec ${lib.getExe bubblewrap} \
       --dev-bind / / \
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
       --ro-bind "${debian}/lib64" /lib64 \
       --tmpfs /usr \
       --ro-bind "${debian}/usr/lib" /usr/lib \
-      $out/bin/.${pname}
+      $out/bin/.${finalAttrs.pname}
     EOF
-    chmod 755 $out/bin/${pname}
+    chmod 755 $out/bin/${finalAttrs.pname}
   '';
 
   passthru.deps =
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     vmTools.debClosureGenerator {
       name = "x32edit-dependencies";
       inherit (distro) urlPrefix;
-      packagesLists = [ distro.packagesList ];
+      packagesLists = [ distro.packagesLists ];
       packages = [
         "libstdc++6"
         "libcurl4"
@@ -73,12 +73,12 @@ stdenv.mkDerivation rec {
       ];
     };
 
-  meta = with lib; {
+  meta = {
     inherit homepage;
     description = "Editor for the ${brand} ${type} digital mixer";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.magnetophon ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ magnetophon ];
   };
-}
+})

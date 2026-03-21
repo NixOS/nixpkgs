@@ -1,5 +1,6 @@
 {
   lib,
+  config,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -8,13 +9,11 @@
   setuptools-scm,
 
   # dependencies
-  airportsdata,
   cloudpickle,
   datasets,
   diskcache,
   genson,
   interegular,
-  iso3166,
   jinja2,
   jsonschema,
   lark,
@@ -23,16 +22,18 @@
   outlines-core,
   pycountry,
   pydantic,
-  referencing,
-  requests,
   torch,
   transformers,
 
   # tests
+  airportsdata,
   anthropic,
   google-genai,
+  iso3166,
   jax,
+  lmstudio,
   llama-cpp-python,
+  mistralai,
   ollama,
   openai,
   pytest-asyncio,
@@ -41,17 +42,35 @@
   tensorflow,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "outlines";
-  version = "1.2.3";
+  version = "1.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outlines-dev";
     repo = "outlines";
-    tag = version;
-    hash = "sha256-t1YSkFC56De9HkdDJN9WIpKDdHxZRfGRbFOtAiJxKUI=";
+    tag = finalAttrs.version;
+    hash = "sha256-DPxtvaEbPv3go2WD9lqXB6AfTSmIA+MsqZwxXVcpyXk=";
   };
+
+  # Fix mistralai>=2.0 compatibility
+  postPatch = ''
+    substituteInPlace tests/models/test_mistral_type_adapter.py \
+      --replace-fail \
+        "from mistralai import (" \
+        "from mistralai.client.models import ("
+
+    substituteInPlace outlines/models/mistral.py \
+      --replace-fail \
+        "from mistralai import UserMessage" \
+        "from mistralai.client.models import UserMessage"
+
+    substituteInPlace outlines/models/mistral.py tests/models/test_mistral.py \
+      --replace-fail \
+        "from mistralai import Mistral" \
+        "from mistralai.client import Mistral"
+  '';
 
   build-system = [
     setuptools
@@ -59,13 +78,11 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    airportsdata
     cloudpickle
     datasets
     diskcache
     genson
     interegular
-    iso3166
     jinja2
     jsonschema
     lark
@@ -74,19 +91,27 @@ buildPythonPackage rec {
     outlines-core
     pycountry
     pydantic
-    referencing
-    requests
     torch
     transformers
   ];
 
-  pythonImportsCheck = [ "outlines" ];
+  # llama_cpp dependency cannot be imported when cudaSupport is enabled as it tries to load libcuda.so.1.
+  # This library is provided by the nvidia driver at runtime, but isn't available in the sandbox.
+  pythonImportsCheck = lib.optionals (!config.cudaSupport) [
+    "outlines"
+  ];
+  # We also have to give up on tests for the same reason.
+  doCheck = !config.cudaSupport;
 
   nativeCheckInputs = [
+    airportsdata
     anthropic
     google-genai
+    iso3166
     jax
     llama-cpp-python
+    lmstudio
+    mistralai
     ollama
     openai
     pytest-asyncio
@@ -101,11 +126,17 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # Incompatible with latest mistralai (AssertionError: assert False)
+    "test_mistral_type_adapter_input_chat"
+    "test_mistral_type_adapter_input_list"
+    "test_mistral_type_adapter_input_text"
+
     # Try to dowload models from Hugging Face Hub
     "test_application_callable_call"
     "test_application_generator_reuse"
     "test_application_template_call"
     "test_application_template_error"
+    "test_check_hf_chat_template"
     "test_generator_black_box_async_processor"
     "test_generator_black_box_sync_processor"
     "test_generator_init_multiple_output_type"
@@ -171,6 +202,28 @@ buildPythonPackage rec {
     "test_openai_simple_vision"
     "test_openai_simple_vision_pydantic"
     "test_openai_streaming"
+
+    # RuntimeError: Mistral API error: [Errno -3] Temporary failure in name resolution
+    "test_mistral_async_call"
+    "test_mistral_async_call_model_name"
+    "test_mistral_async_chat"
+    "test_mistral_async_json_schema"
+    "test_mistral_async_multiple_samples"
+    "test_mistral_async_pydantic"
+    "test_mistral_async_pydantic_refusal"
+    "test_mistral_async_streaming"
+    "test_mistral_async_vision"
+    "test_mistral_async_vision_pydantic"
+    "test_mistral_call"
+    "test_mistral_call_model_name"
+    "test_mistral_chat"
+    "test_mistral_json_schema"
+    "test_mistral_multiple_samples"
+    "test_mistral_pydantic"
+    "test_mistral_pydantic_refusal"
+    "test_mistral_streaming"
+    "test_mistral_vision"
+    "test_mistral_vision_pydantic"
   ];
 
   disabledTestPaths = [
@@ -196,8 +249,8 @@ buildPythonPackage rec {
   meta = {
     description = "Structured text generation";
     homepage = "https://github.com/outlines-dev/outlines";
-    changelog = "https://github.com/dottxt-ai/outlines/releases/tag/${version}";
+    changelog = "https://github.com/dottxt-ai/outlines/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lach ];
   };
-}
+})

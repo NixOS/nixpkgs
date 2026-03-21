@@ -12,38 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "structorizer";
-  version = "3.32-32";
-
-  desktopItems = [
-    (makeDesktopItem {
-      type = "Application";
-      name = "Structorizer";
-      desktopName = "Structorizer";
-      genericName = "Diagram creator";
-      comment = meta.description;
-      icon = pname;
-      exec = pname;
-      terminal = false;
-      mimeTypes = [ "application/nsd" ];
-      categories = [
-        "Development"
-        "Graphics"
-        "VectorGraphics"
-        "RasterGraphics"
-        "ComputerScience"
-      ];
-      keywords = [
-        "nsd"
-        "diagrams"
-      ];
-    })
-  ];
+  version = "3.32-34";
 
   src = fetchFromGitHub {
     owner = "fesch";
     repo = "Structorizer.Desktop";
     rev = version;
-    hash = "sha256-ZA+DGys4vR8W+nX8JyWiD1GPOLjYAKaqJTel8wWooHA=";
+    hash = "sha256-oTh45xoJYrJL0BbV5hdPfvv7wz49gExpvN3G5AOk3R0=";
   };
 
   patches = [
@@ -57,7 +32,6 @@ stdenv.mkDerivation rec {
     jdk11
     makeWrapper
     wrapGAppsHook3
-    copyDesktopItems
   ];
 
   buildInputs = [ jdk11 ];
@@ -82,7 +56,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -d $out/bin $out/share/mime/packages
+    install -d $out/bin $out/share/mime/packages $out/share/applications
 
     install -D ${pname}.jar -t $out/share/java/
       makeWrapper ${jdk11}/bin/java $out/bin/${pname} \
@@ -90,16 +64,8 @@ stdenv.mkDerivation rec {
       --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp" \
       ''${gappsWrapperArgs[@]}
 
-    cat << EOF > $out/share/mime/packages/structorizer.xml
-    <?xml version="1.0" encoding="UTF-8"?>
-    <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
-      <mime-type type="application/nsd">
-             <comment xml:lang="en">Nassi-Shneiderman diagram</comment>
-             <comment xml:lang="de">Nassi-Shneiderman-Diagramm</comment>
-             <glob pattern="*.nsd"/>
-      </mime-type>
-    </mime-info>
-    EOF
+    cp freedesktop/mime/packages/structorizer.xml $out/share/mime/packages/
+    cp freedesktop/applications/structorizer.desktop $out/share/applications/
 
     cd src/lu/fisch/${pname}/gui
     install -vD icons/000_${pname}.png $out/share/icons/hicolor/16x16/apps/${pname}.png
@@ -114,12 +80,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Create Nassi-Shneiderman diagrams (NSD)";
     homepage = "https://structorizer.fisch.lu";
-    license = licenses.gpl3Plus;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ annaaurora ];
     mainProgram = "structorizer";
   };
 }

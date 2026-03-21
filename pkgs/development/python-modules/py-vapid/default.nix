@@ -2,27 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  hatchling,
   mock,
   pytestCheckHook,
   cryptography,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "py-vapid";
-  version = "1.9.2";
+  version = "1.9.4";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "py_vapid";
     inherit version;
-    hash = "sha256-PIlzts+DhK0MmuZNYnDMxIDguSxwLY9eoswD5rUSR/k=";
+    hash = "sha256-oAQCNWDLxU40/AY4CgWA8E/8x4joT7bRnpM57rZVGig=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [ cryptography ];
 
@@ -31,11 +28,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for VAPID header generation";
     mainProgram = "vapid";
     homepage = "https://github.com/mozilla-services/vapid";
-    license = licenses.mpl20;
+    license = lib.licenses.mpl20;
     maintainers = [ ];
   };
 }

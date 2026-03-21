@@ -43,7 +43,7 @@ declare -r -A update_urls=(
   [truffleruby]="https://api.github.com/repos/oracle/truffleruby/releases/latest"
 )
 
-current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A "graalvmCEPackages.${product}.version" --json | jq -r)"
+current_version="$(nix-instantiate "$nixpkgs" --eval --strict -A "graalvmPackages.${product}.version" --json | jq -r)"
 readonly current_version
 
 if [[ -z "${VERSION:-}" ]]; then

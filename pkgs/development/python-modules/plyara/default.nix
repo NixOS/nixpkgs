@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
   ply,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "plyara";
   version = "2.2.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.10"; # https://github.com/plyara/plyara: "Plyara requires Python 3.10+"
 
   src = fetchFromGitHub {
     owner = "plyara";

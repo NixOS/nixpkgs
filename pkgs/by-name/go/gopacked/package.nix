@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gopacked";
   version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "tulir";
     repo = "gopacked";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-PpOLLqgUQf09grZlJ7bXTxAowzDusmVN8PHfaGlGGQ8=";
   };
 
@@ -19,10 +19,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Simple text-based Minecraft modpack manager";
-    license = licenses.agpl3Plus;
-    homepage = src.meta.homepage;
+    license = lib.licenses.agpl3Plus;
+    homepage = finalAttrs.src.meta.homepage;
     maintainers = [ ];
   };
-}
+})

@@ -21,7 +21,6 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   redis,
   uvloop,
@@ -29,16 +28,14 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.22.0";
+  version = "3.26.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "aiogram";
     repo = "aiogram";
     tag = "v${version}";
-    hash = "sha256-4LZ4+bt9n0q8WMaMEaAAIFnEuDUSd+Aq+YW49Xbcp5c=";
+    hash = "sha256-zhI84vLvL9enC5SGeK5u7OnFDxvlZDNkZ3MyVMFZTSU=";
   };
 
   build-system = [ hatchling ];
@@ -77,7 +74,12 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
+
+  pytestFlags = [
+    # DeprecationWarning: 'asyncio.get_event_loop_policy' is deprecated and slate...
+    "-Wignore::DeprecationWarning"
+  ];
 
   pythonImportsCheck = [ "aiogram" ];
 

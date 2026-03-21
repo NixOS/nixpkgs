@@ -103,18 +103,17 @@ in
     };
 
   testScript = ''
-    import crypt
-
-    def assert_password_match(machine, username, password):
+    def assert_password_sha512crypt_match(machine, username, password):
       shadow_entry = machine.succeed(f"getent shadow {username}")
       print(shadow_entry)
-      hash = shadow_entry.split(":")[1]
-      seed = "$".join(hash.split("$")[:-1])
-      assert crypt.crypt(password, seed) == hash, f"{username} user password does not match"
+      stored_hash = shadow_entry.split(":")[1]
+      salt = stored_hash.split("$")[2]
+      pass_hash = machine.succeed(f"mkpasswd -m sha512crypt {password} {salt}").strip()
+      assert stored_hash == pass_hash, f"{username} user password does not match"
 
     with subtest("alice user has correct password"):
       for machine in machines:
-        assert_password_match(machine, "alice", "${password1}")
+        assert_password_sha512crypt_match(machine, "alice", "${password1}")
         assert "${hashed_sha512crypt}" not in machine.succeed("getent shadow alice"), f"{machine}: alice user password is not correct"
 
     with subtest("bob user has correct password"):
@@ -136,7 +135,7 @@ in
       print(mutable.succeed("getent shadow greg"))
       assert "${hashed_sha512crypt}" in mutable.succeed("getent shadow greg"), "greg user password is not correct"
 
-      assert_password_match(immutable, "greg", "${password1}")
+      assert_password_sha512crypt_match(immutable, "greg", "${password1}")
       assert "${hashed_sha512crypt}" not in immutable.succeed("getent shadow greg"), "greg user password is not correct"
 
     for machine in machines:

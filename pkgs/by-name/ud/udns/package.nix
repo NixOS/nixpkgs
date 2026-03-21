@@ -7,7 +7,7 @@
 # this expression is mostly based on debian's packaging
 # https://tracker.debian.org/media/packages/u/udns/rules-0.6-1
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "udns";
   version = "0.6";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildPhase = "make staticlib sharedlib rblcheck_s dnsget_s";
 
   src = fetchurl {
-    url = "http://www.corpit.ru/mjt/udns/${pname}-${version}.tar.gz";
+    url = "http://www.corpit.ru/mjt/udns/udns-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-aWotDVGNqYXZdaZeEdFm8/V829HUI3aguFMH9JYBxug=";
   };
 
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
   # keep man3
   outputDevdoc = "out";
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.corpit.ru/mjt/udns.html";
     description = "Async-capable DNS stub resolver library";
-    license = licenses.lgpl21Plus;
-    maintainers = [ maintainers.womfoo ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = [ lib.maintainers.womfoo ];
+    platforms = lib.platforms.unix;
   };
 
-}
+})

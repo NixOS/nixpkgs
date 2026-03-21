@@ -30,7 +30,7 @@ let
     map (i: i.name) (
       lib.filter (i: if i.useDHCP != null then !i.useDHCP else i.ipv4.addresses != [ ]) interfaces
     )
-    ++ lib.mapAttrsToList (i: _: i) config.networking.sits
+    ++ lib.attrNames config.networking.sits
     ++ lib.concatLists (lib.attrValues (lib.mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ lib.flatten (
       lib.concatMap (
@@ -38,6 +38,7 @@ let
       ) (lib.attrValues config.networking.vswitches)
     )
     ++ lib.concatLists (lib.attrValues (lib.mapAttrs (n: v: v.interfaces) config.networking.bonds))
+    ++ lib.attrNames config.networking.wireguard.interfaces
     ++ config.networking.dhcpcd.denyInterfaces;
 
   arrayAppendOrNull =

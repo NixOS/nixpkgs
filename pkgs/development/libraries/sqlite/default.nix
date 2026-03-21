@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   unzip,
+  tcl,
   zlib,
   readline,
   ncurses,
@@ -27,17 +28,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.50.2";
+  version = "3.51.2";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-hKYW/9MXOORZC2W6uzqeHvk3DzY4422yIO4Oc/itIVY=";
+    url = "https://sqlite.org/2026/sqlite-src-${archiveVersion version}.zip";
+    hash = "sha256-hREPdi1QeUFNmd1deRe8P/fgWHbmzL0T2ElqOBfyCCk=";
   };
   docsrc = fetchurl {
-    url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-n4uitTo6oskWbUagLZEbhdO4sLhAxJHTIdX8YhUONBk=";
+    url = "https://sqlite.org/2026/sqlite-doc-${archiveVersion version}.zip";
+    hash = "sha256-xuMNB8XpwSaQHFTY18kKnBo3B4JFUX8GCzxpxN5Dv10=";
   };
 
   outputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     unzip
+    tcl
   ];
   buildInputs = [
     zlib
@@ -74,10 +76,13 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
+  env.TCLLIBDIR = "${placeholder "out"}/lib";
+
   configureFlags = [
     "--bindir=${placeholder "bin"}/bin"
     "--includedir=${placeholder "dev"}/include"
     "--libdir=${placeholder "out"}/lib"
+    (if stdenv.hostPlatform.isStatic then "--disable-tcl" else "--with-tcl=${lib.getLib tcl}/lib")
   ]
   ++ lib.optional (!interactive) "--disable-readline"
   # autosetup only looks up readline.h in predefined set of directories.
@@ -95,6 +100,7 @@ stdenv.mkDerivation rec {
     "-DSQLITE_ENABLE_FTS5"
     "-DSQLITE_ENABLE_GEOPOLY"
     "-DSQLITE_ENABLE_MATH_FUNCTIONS"
+    "-DSQLITE_ENABLE_PERCENTILE"
     "-DSQLITE_ENABLE_PREUPDATE_HOOK"
     "-DSQLITE_ENABLE_RBU"
     "-DSQLITE_ENABLE_RTREE"
@@ -123,7 +129,10 @@ stdenv.mkDerivation rec {
     mv sqlite-doc-${archiveVersion version} $doc/share/doc/sqlite
   '';
 
-  doCheck = false; # fails to link against tcl
+  # SQLite’s tests are unreliable on Darwin. Sometimes they run successfully, but often they do not.
+  doCheck = !stdenv.hostPlatform.isDarwin;
+  # When tcl is not available, only run test targets that don't need it.
+  checkTarget = lib.optionalString stdenv.hostPlatform.isStatic "fuzztest sourcetest";
 
   passthru = {
     tests = {
@@ -144,15 +153,17 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://www.sqlite.org/releaselog/${lib.replaceStrings [ "." ] [ "_" ] version}.html";
     description = "Self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = "https://sqlite.org/download.html";
     homepage = "https://www.sqlite.org/";
-    license = licenses.publicDomain;
+    license = lib.licenses.publicDomain;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ np ];
-    platforms = platforms.unix ++ platforms.windows;
+    maintainers = with lib.maintainers; [ np ];
+    teams = [ lib.teams.security-review ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "sqlite" version;
   };
 }

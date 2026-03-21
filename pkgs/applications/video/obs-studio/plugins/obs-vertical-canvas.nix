@@ -10,16 +10,16 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vertical-canvas";
-  version = "1.4.10";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "Aitum";
     repo = "obs-vertical-canvas";
     rev = version;
-    sha256 = "sha256-0XfJ8q8n2ANO0oDtLZhZjRunZ5S1EouQ6Ak/pxEQYOQ=";
+    sha256 = "sha256-LaVDwC+L96cvq3OpNnD33bf+tV1RZ9AdUHjG4oIFzpY=";
   };
 
-  # Remove after https://github.com/Aitum/obs-vertical-canvas/pull/25 is released :)
+  # Remove after https://github.com/Aitum/obs-vertical-canvas/pull/26 is released :)
   patches = [ ./obs-vertical-canvas.diff ];
 
   nativeBuildInputs = [ cmake ];
@@ -45,7 +45,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Plugin for OBS Studio to add vertical canvas";
     homepage = "https://github.com/Aitum/obs-vertical-canvas";
-    maintainers = with lib.maintainers; [ flexiondotorg ];
+    maintainers = with lib.maintainers; [
+      flexiondotorg
+      jonhermansen
+    ];
     license = lib.licenses.gpl2Plus;
     inherit (obs-studio.meta) platforms;
   };

@@ -17,17 +17,17 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.glibcLocales ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   preCheck = ''
     # Remove tests that rely on networking (breaks sandboxed builds)
     rm test/test_submit.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-musicbrainzngs.readthedocs.org/";
     description = "Python bindings for musicbrainz NGS webservice";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

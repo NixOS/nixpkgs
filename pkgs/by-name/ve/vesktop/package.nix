@@ -8,13 +8,16 @@
   makeDesktopItem,
   copyDesktopItems,
   vencord,
-  electron,
+  electron_40,
   libicns,
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10,
+  pnpm_10_29_2,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
+  jq,
   nix-update-script,
   withTTS ? true,
   withMiddleClickScroll ? false,
@@ -22,31 +25,37 @@
   # letting vesktop manage it's own version
   withSystemVencord ? false,
 }:
+let
+  electron = electron_40;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vesktop";
-  version = "1.5.8";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "Vencord";
     repo = "Vesktop";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9wYIg1TGcntUMMp6SqYrgDRl3P41eeOqt76OMjSAi5M=";
+    hash = "sha256-YPDlqiO+0BtDgC7aFl8B2KPYsT41WqzOQ7et2Tejs3M=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
       patches
       ;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 2;
-    hash = "sha256-rJzXbIQUxCImTqeH8EsGiyGNGoHYUqoekoa+VXpob5Y=";
+    hash = "sha256-o9dxtqXfCKTQpvNrbD/h0F3Hh39TEEA1qqYA9tN3j5I=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10_29_2
+    jq
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # vesktop uses venmic, which is a shipped as a prebuilt node module
@@ -68,11 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches = [
-    ./disable_update_checking.patch
-    ./fix_read_only_settings.patch
-  ]
-  ++ lib.optional withSystemVencord (
+  patches = lib.optional withSystemVencord (
     replaceVars ./use_system_vencord.patch {
       inherit vencord;
     }
@@ -82,16 +87,22 @@ stdenv.mkDerivation (finalAttrs: {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
   };
 
-  # disable code signing on macos
-  # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
-  '';
-
-  # electron builds must be writable on darwin
-  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  # electron builds must be writable
+  preBuild = ''
+    # Validate electron version matches upstream package.json
+    if [ "`jq -r '.devDependencies.electron' < package.json | cut -d. -f1 | tr -d '^'`" != "${lib.versions.major electron.version}" ]
+    then
+      echo "ERROR: electron version mismatch between package.json and nixpkgs"
+      exit 1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp -r ${electron.dist}/Electron.app .
     chmod -R u+w Electron.app
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
   '';
 
   buildPhase = ''
@@ -101,8 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm exec electron-builder \
       --dir \
       -c.asarUnpack="**/*.node" \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else "electron-dist"} \
+      -c.electronVersion=${electron.version} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "-c.mac.identity=null"} # disable code signing on macos, https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
 
     runHook postBuild
   '';

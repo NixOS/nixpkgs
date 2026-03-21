@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   pkg-config,
   boost186,
@@ -40,13 +39,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.2";
+  version = "0.18.4.5";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-ibwcvEHlJkMjXoJQMPVrlir5irdclJsmV7aBB4/m190=";
+    hash = "sha256-8ObxMPBpH5uonpb7E/PEfuq++7R4MU0k1khsott5J88=";
   };
 
   patches = [
@@ -97,8 +96,6 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
   ++ lib.optional trezorSupport [
     "-DUSE_DEVICE_TREZOR=ON"
-    # fix build on recent gcc versions
-    "-DCMAKE_CXX_FLAGS=-fpermissive"
   ];
 
   outputs = [

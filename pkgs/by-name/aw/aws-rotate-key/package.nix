@@ -6,14 +6,14 @@
   aws-rotate-key,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-rotate-key";
   version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Fullscreen";
     repo = "aws-rotate-key";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-fYpgHHOw0k/8WLGhq+uVOvoF4Wff6wzTXuN8r4D+TmU=";
   };
 
@@ -29,11 +29,11 @@ buildGoModule rec {
     command = "AWS_SHARED_CREDENTIALS_FILE=/dev/null aws-rotate-key --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easily rotate your AWS key";
     homepage = "https://github.com/Fullscreen/aws-rotate-key";
-    license = licenses.mit;
-    maintainers = [ maintainers.mbode ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.mbode ];
     mainProgram = "aws-rotate-key";
   };
-}
+})

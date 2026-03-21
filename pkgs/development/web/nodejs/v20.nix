@@ -1,9 +1,10 @@
 {
+  lib,
+  stdenv,
   callPackage,
   fetchpatch2,
   openssl,
   python3,
-  enableNpm ? true,
 }:
 
 let
@@ -30,13 +31,11 @@ let
     })
 
     ./gyp-patches-pre-v22-import-sys.patch
-    ./gyp-patches-set-fallback-value-for-CLT.patch
   ];
 in
 buildNodejs {
-  inherit enableNpm;
-  version = "20.19.5";
-  sha256 = "230c899f4e2489c4b8d2232edd6cc02f384fb2397c2a246a22e415837ee5da51";
+  version = "20.20.1";
+  sha256 = "e540efdd6750f838e867daf9ab9d90ea195423f915613d05d87105f4d2ecd186";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch
@@ -53,6 +52,20 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/499a5c345165f0d4a94b98d08f1ace7268781564.patch?full_index=1";
       hash = "sha256-wF4+CytC1OB5egJGOfLm1USsYY12f9kADymVrxotezE=";
+    })
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    # Fix builds with shared llhttp
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/ff3a028f8bf88da70dc79e1d7b7947a8d5a8548a.patch?full_index=1";
+      hash = "sha256-LJcO3RXVPnpbeuD87fiJ260m3BQXNk3+vvZkBMFUz5w=";
+    })
+    # update tests for nghttp2 1.65
+    ./deprecate-http2-priority-signaling.patch
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/a63126409ad4334dd5d838c39806f38c020748b9.diff?full_index=1";
+      hash = "sha256-lfq8PMNvrfJjlp0oE3rJkIsihln/Gcs1T/qgI3wW2kQ=";
+      includes = [ "test/*" ];
     })
   ]
   ++ gypPatches;

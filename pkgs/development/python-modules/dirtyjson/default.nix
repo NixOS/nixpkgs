@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "dirtyjson";
   version = "1.0.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,13 +22,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dirtyjson" ];
 
-  meta = with lib; {
+  meta = {
     description = "JSON decoder for Python that can extract data from the muck";
     homepage = "https://github.com/codecobblers/dirtyjson";
-    license = with licenses; [
+    license = with lib.licenses; [
       afl21 # and
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

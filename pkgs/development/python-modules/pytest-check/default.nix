@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pytest-check";
-  version = "2.5.4";
+  version = "2.7.6";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_check";
     inherit version;
-    hash = "sha256-M9h+KNXkkhf0Eyd+Hg0mfNZskKhaIIlExEMSycjk/3Q=";
+    hash = "sha256-D3Rd9Jrsg9b4DVPrnTqRlba5lhNHeb8QWUvItG2X+Bg=";
   };
 
   build-system = [ hatchling ];
@@ -26,11 +26,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_check" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pytest plugin allowing multiple failures per test";
     homepage = "https://github.com/okken/pytest-check";
     changelog = "https://github.com/okken/pytest-check/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

@@ -10,7 +10,7 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qxmledit";
   version = "0.9.17";
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lbellonda";
     repo = "qxmledit";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-UzN5U+aC/uKokSdeUG2zv8+mkaH4ndYZ0sfzkpQ3l1M=";
   };
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/qxmledit";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
+    changelog = "https://github.com/lbellonda/qxmledit/blob/${finalAttrs.version}/NEWS";
     mainProgram = "qxmledit";
   };
-}
+})

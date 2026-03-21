@@ -7,12 +7,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libexosip2";
   version = "5.3.0";
 
   src = fetchurl {
-    url = "mirror://savannah/exosip/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/exosip/libexosip2-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-W3gjmGQx6lztyfCV1pZKzpZvCTsq59CwhAR4i/zrycI=";
   };
 
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
-    license = licenses.gpl2Plus;
+  meta = {
+    license = lib.licenses.gpl2Plus;
     description = "Library that hides the complexity of using the SIP protocol";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

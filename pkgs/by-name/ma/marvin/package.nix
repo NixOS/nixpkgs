@@ -9,21 +9,38 @@
   gnugrep,
   gnused,
   openjdk17,
+  freetype,
+  fontconfig,
+  libxi,
+  libx11,
+  libxext,
+  libxtst,
+  libxrender,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "marvin";
-  version = "23.17.0";
+  version = "25.5.0";
 
   src = fetchurl {
-    name = "marvin-${version}.deb";
-    url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${lib.versions.majorMinor version}.deb";
-    hash = "sha256-zE/9EaOsNJwzE4Doasm9N8QG4t7wDOxqpV/Nhc4p7Ws=";
+    name = "marvin-${finalAttrs.version}.deb";
+    url = "http://dl.chemaxon.com/marvin/${finalAttrs.version}/marvin_linux_${finalAttrs.version}.deb";
+    hash = "sha256-+fTO6cEJL4QRFpLQ9CXZFt7Jg3otR3ZMWN5vH+3QXmA=";
   };
 
   nativeBuildInputs = [
     dpkg
     makeWrapper
+  ];
+
+  buildInputs = [
+    freetype
+    fontconfig
+    libxi
+    libx11
+    libxext
+    libxtst
+    libxrender
   ];
 
   unpackPhase = ''
@@ -34,6 +51,7 @@ stdenv.mkDerivation rec {
     wrapBin() {
       makeWrapper $1 $out/bin/$(basename $1) \
         --set INSTALL4J_JAVA_HOME "${openjdk17}" \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
         --prefix PATH : ${
           lib.makeBinPath [
             coreutils
@@ -44,11 +62,14 @@ stdenv.mkDerivation rec {
         }
     }
     cp -r opt $out
-    mkdir -p $out/bin $out/share/pixmaps $out/share/applications
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/{128x128,256x256}/apps
     for name in LicenseManager MarvinSketch MarvinView; do
       wrapBin $out/opt/chemaxon/marvinsuite/$name
-      ln -s {$out/opt/chemaxon/marvinsuite/.install4j,$out/share/pixmaps}/$name.png
     done
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/MarvinSketch.png $out/share/icons/hicolor/128x128/apps
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/MarvinView.png $out/share/icons/hicolor/128x128/apps
+    ln -s $out/opt/chemaxon/marvinsuite/.install4j/LicenseManager.png $out/share/icons/hicolor/256x256/apps
+
     for name in cxcalc cxtrain evaluate molconvert mview msketch; do
       wrapBin $out/opt/chemaxon/marvinsuite/bin/$name
     done
@@ -65,11 +86,11 @@ stdenv.mkDerivation rec {
     )}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Chemical modelling, analysis and structure drawing program";
     homepage = "https://chemaxon.com/products/marvin";
-    maintainers = with maintainers; [ fusion809 ];
-    license = licenses.unfree;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ fusion809 ];
+    license = lib.licenses.unfree;
+    platforms = lib.platforms.linux;
   };
-}
+})

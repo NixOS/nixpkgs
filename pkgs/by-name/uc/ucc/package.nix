@@ -15,7 +15,7 @@ inputs@{
   enableSse42 ? stdenv.hostPlatform.sse4_2Support,
 }:
 let
-  inherit (lib.attrsets) getLib;
+  inherit (lib.attrsets) getOutput;
   inherit (lib.lists) optionals;
   inherit (lib.strings) concatStringsSep;
 
@@ -40,13 +40,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   pname = "ucc";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gNLpcVvOsBCR0+KL21JSdWZyt/Z8EjQQTiHJw5vzOOo=";
+    hash = "sha256-xt138R3lSArfkxi/qJgR2xMlhhtm0hAwIUZBLpwFwvc=";
   };
 
   outputs = [
@@ -86,10 +86,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
   # referring to an array!
-  env.LDFLAGS = builtins.toString (
+  env.LDFLAGS = toString (
     optionals enableCuda [
+      # Fake libcuda.so (the real one is deployed impurely)
+      "-L${getOutput "stubs" cuda_cudart}/lib/stubs"
       # Fake libnvidia-ml.so (the real one is deployed impurely)
-      "-L${getLib cuda_nvml_dev}/lib/stubs"
+      "-L${getOutput "stubs" cuda_nvml_dev}/lib/stubs"
     ]
   );
 
@@ -112,12 +114,12 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     moveToOutput bin/ucc_info "$dev"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collective communication operations API";
     homepage = "https://openucx.github.io/ucc/";
     mainProgram = "ucc_info";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
   };
 })

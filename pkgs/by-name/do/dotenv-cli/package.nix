@@ -8,20 +8,20 @@
   nodejs,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dotenv-cli";
-  version = "10.0.0";
+  version = "11.0.0";
 
   src = fetchFromGitHub {
     owner = "entropitor";
     repo = "dotenv-cli";
-    rev = "v${version}";
-    hash = "sha256-prSGIEHf6wRqOFVsn3Ws25yG7Ga2YEbiU/IMP3QeLXU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oPgi2l6YNt7WyaOzr7EkjgXOitpw9PY7tmN86bUM88Q=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-rbG1oM1mEZSB/eYp87YMi6v9ves5YR7u7rkQRlziz7I=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-I/DzRBETcusE4YS3nC47I1igsVzophNXoVtcD+upZPc=";
   };
 
   nativeBuildInputs = [
@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "CLI to load dotenv files";
     homepage = "https://github.com/entropitor/dotenv-cli";
-    changelog = "https://github.com/entropitor/dotenv-cli/releases/tag/v${version}";
+    changelog = "https://github.com/entropitor/dotenv-cli/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "dotenv";
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
-}
+})

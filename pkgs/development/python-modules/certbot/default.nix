@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   python,
   runCommand,
   fetchFromGitHub,
+  fetchpatch,
   configargparse,
   acme,
   configobj,
@@ -12,26 +14,34 @@
   josepy,
   parsedatetime,
   pyrfc3339,
-  pytz,
   setuptools,
   dialog,
   gnureadline,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  writeShellScriptBin,
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "4.1.1";
+  version = "5.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-nlNjBbXd4ujzVx10+UwqbXliuLVVf+UHR8Dl5CQzsZo=";
+    hash = "sha256-u9qzZFhvIapXQwxehvMieCV+4uigteSOeHVw7ycMCEU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-test_rollback_too_many.patch";
+      url = "https://github.com/certbot/certbot/commit/4c61a450d4a843c66baab6d5d9a42ce0554e99d7.patch";
+      hash = "sha256-PSh2JXoEWNUrqxNh8X5QchyIP8KRHT60T/cLax6VRWo=";
+    })
+  ];
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
 
@@ -46,8 +56,6 @@ buildPythonPackage rec {
     josepy
     parsedatetime
     pyrfc3339
-    pytz
-    setuptools # for pkg_resources
   ];
 
   buildInputs = [
@@ -59,6 +67,11 @@ buildPythonPackage rec {
     python-dateutil
     pytestCheckHook
     pytest-xdist
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (writeShellScriptBin "sw_vers" ''
+      echo 'ProductVersion: 13.0'
+    '')
   ];
 
   pytestFlags = [
@@ -71,6 +84,8 @@ buildPythonPackage rec {
     "test_lock_order"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 
   # certbot.withPlugins has a similar calling convention as python*.withPackages
@@ -81,19 +96,23 @@ buildPythonPackage rec {
     let
       pythonEnv = python.withPackages f;
     in
-    runCommand "certbot-with-plugins" { } ''
-      mkdir -p $out/bin
-      cd $out/bin
-      ln -s ${pythonEnv}/bin/certbot
-    '';
+    runCommand "certbot-with-plugins-${version}"
+      {
+        inherit pname version;
+      }
+      ''
+        mkdir -p $out/bin
+        cd $out/bin
+        ln -s ${pythonEnv}/bin/certbot
+      '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/certbot/certbot";
     changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ ];
-    license = with licenses; [ asl20 ];
+    maintainers = [ ];
+    license = with lib.licenses; [ asl20 ];
   };
 }

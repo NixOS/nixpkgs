@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fuse3,
   glib,
-  jdk23,
+  zulu25,
   lib,
   libayatana-appindicator,
   makeShellWrapper,
@@ -13,22 +13,34 @@
 }:
 
 let
-  jdk = jdk23.override { enableJavaFX = true; };
+  jdk = zulu25.override { enableJavaFX = true; };
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.16.2";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-U/I18OtinWlk8d9OLLAzZHoN5d8KHx9CUoZsv2mrQtw=";
+    hash = "sha256-9JWZaTsL2sfnGQAZI56T2iQnTNhERsFNFFCeLMB7WC0=";
   };
+
+  patches = [
+    # fix for "java.lang.IllegalStateException: No fuse library found at expected path"
+    ./downgrade-fuse.patch
+  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-uQz70epBFKTyX/PpOyWBtxHOiX0OQT3aTX6KWKwLc1I=";
+  mvnHash = "sha256-IVOcDFW5YKgUHJKX3ZXYVnOevwmOwN5yEU8jfPtCY1I=";
+  mvnFetchExtraArgs.env = {
+    inherit SOURCE_DATE_EPOCH;
+  };
+
+  # fix for "date 1980-01-01T00:00:00Z is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z"
+  # this should be in env, but looks like buildMavenPackage doesn't support that
+  SOURCE_DATE_EPOCH = 315532802; # 1980-01-01T00:00:02Z
 
   preBuild = ''
     VERSION=${version}
@@ -44,7 +56,7 @@ maven.buildMavenPackage rec {
     cp target/libs/* $out/share/cryptomator/libs/
     cp target/mods/* target/cryptomator-*.jar $out/share/cryptomator/mods/
 
-    makeShellWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeShellWrapper ${jdk}/bin/java $out/bin/cryptomator \
       --add-flags "--enable-preview" \
       --add-flags "--enable-native-access=org.cryptomator.jfuse.linux.amd64,org.purejava.appindicator" \
       --add-flags "--class-path '$out/share/cryptomator/libs/*'" \

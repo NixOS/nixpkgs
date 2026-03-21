@@ -46,11 +46,11 @@ let
       libxml2,
       linux-pam,
       numactl,
-      fmt_11,
+      fmt,
       withStorageMroonga ? true,
       kytea,
       libsodium,
-      msgpack,
+      msgpack-cxx,
       zeromq,
       withStorageRocks ? true,
       withEmbedded ? false,
@@ -116,10 +116,15 @@ let
         prePatch = ''
           sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
         '';
-        env = lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
-          # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
-          NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
-        };
+        env =
+          lib.optionalAttrs (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isGnu) {
+            # MariaDB uses non-POSIX fopen64, which musl only conditionally defines.
+            NIX_CFLAGS_COMPILE = "-D_LARGEFILE64_SOURCE";
+          }
+          // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+            # Detection of netdb.h doesnt work for some reason on x86_64-darwin
+            NIX_CFLAGS_COMPILE = "-DHAVE_NETDB_H";
+          };
 
         patches = [
           ./patch/cmake-includedir.patch
@@ -211,13 +216,17 @@ let
             mysql-replication = nixosTests.mysql-replication.${testVersion};
           };
 
-        meta = with lib; {
+        meta = {
           description = "Enhanced, drop-in replacement for MySQL";
           homepage = "https://mariadb.org/";
-          license = licenses.gpl2Plus;
-          maintainers = with maintainers; [ thoughtpolice ];
-          teams = [ teams.helsinki-systems ];
-          platforms = platforms.all;
+          license = lib.licenses.gpl2Plus;
+          maintainers = with lib.maintainers; [
+            conni2461
+            das_j
+            helsinki-Jo
+            thoughtpolice
+          ];
+          platforms = lib.platforms.all;
         };
       };
 
@@ -231,7 +240,7 @@ let
           ];
 
           buildInputs =
-            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -283,10 +292,10 @@ let
           ++ lib.optionals withStorageMroonga [
             kytea
             libsodium
-            msgpack
+            msgpack-cxx
             zeromq
           ]
-          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
         propagatedBuildInputs = lib.optional withNuma numactl;
 
@@ -356,7 +365,11 @@ let
             rm -r "$out"/OFF
           '';
 
-        CXXFLAGS = lib.optionalString stdenv.hostPlatform.isi686 "-fpermissive";
+        env =
+          lib.optionalAttrs stdenv.hostPlatform.isi686 {
+            CXXFLAGS = "-fpermissive";
+          }
+          // (common.env or { });
 
         passthru = {
           inherit client;
@@ -369,22 +382,22 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.23";
-    hash = "sha256-uvS/N6BR6JLnFyTudSiRrbfPxpzSjQhzXDYH0wxpPCM=";
+    version = "10.6.24";
+    hash = "sha256-SeK63GdFcMhg48t6LAFhJKpmKMlfMBMwMEEeXImqFy8=";
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.14";
-    hash = "sha256-ilccsU+x1ONmPY6Y89QgDAQvyLKkqqq0lYYN6ot9BS8=";
+    version = "10.11.15";
+    hash = "sha256-UxHoV2VAK95agamnsmQ6c3jSAxaigiv61LbdzxBHWaU=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.8";
-    hash = "sha256-UvpNyixfgK/BZn1SOifAYXbZhTIpimsMMe1zUF9J4Vw=";
+    version = "11.4.9";
+    hash = "sha256-jkgcoptadARE1FRRyOotk3Ec9SXW+l0nvJUSz4lzsHU=";
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04
-    version = "11.8.3";
-    hash = "sha256-EBSoXHaN6PnpxtS/C0JhfzsViL4a03H3FnTqMrhxGcA=";
+    version = "11.8.5";
+    hash = "sha256-vLc5RWnAiHfCg+FkmGlQRTG+6MqvowKI8HjjDZn8ufY=";
   };
 }

@@ -8,19 +8,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmake";
-  version = "3.0.3";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "xmake-io";
     repo = "xmake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DXSqdiVw+40Ii1/j7SJ/SYoji3dLRYjhJTuAEN+6ekQ=";
+    hash = "sha256-SmvkdAo0XZF8RMP039kkmJxx3pwSPxKj3k8ScfTfYb8=";
     fetchSubmodules = true;
   };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };

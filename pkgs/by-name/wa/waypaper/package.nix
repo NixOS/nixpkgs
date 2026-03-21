@@ -5,18 +5,19 @@
   gobject-introspection,
   wrapGAppsHook3,
   killall,
+  socat,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "waypaper";
-  version = "2.6";
+  version = "2.7-unstable-2026-01-13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
-    tag = version;
-    hash = "sha256-MGfTuQcVChI4g7RONiTZZ4a5uX5SDjfLeMxbLIZ7VH4=";
+    rev = "17f60be4c6abc5ab9c5d4837d930015661ccdd3d";
+    hash = "sha256-HkWsffcK/FjXeyzp948xhvMbrdrBcGwkuTI9O16OWbo=";
   };
 
   nativeBuildInputs = [
@@ -35,7 +36,10 @@ python3Packages.buildPythonApplication rec {
     screeninfo
   ];
 
-  propagatedBuildInputs = [ killall ];
+  propagatedBuildInputs = [
+    killall
+    socat
+  ];
 
   # has no tests
   doCheck = false;
@@ -47,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${version}";
+    changelog = "https://github.com/anufrievroman/waypaper/releases/tag/${finalAttrs.version}";
     description = "GUI wallpaper setter for Wayland-based window managers";
     mainProgram = "waypaper";
     longDescription = ''
@@ -63,4 +67,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

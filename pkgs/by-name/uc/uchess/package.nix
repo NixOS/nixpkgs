@@ -6,7 +6,7 @@
   stockfish,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "uchess";
   version = "0.2.1";
 
@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tmountain";
     repo = "uchess";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1njl3f41gshdpj431zkvpv2b7zmh4m2m5q6xsijb0c0058dk46mz";
   };
 
@@ -29,11 +29,11 @@ buildGoModule rec {
     wrapProgram $out/bin/uchess --suffix PATH : ${stockfish}/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Play chess against UCI engines in your terminal";
     mainProgram = "uchess";
     homepage = "https://tmountain.github.io/uchess/";
-    maintainers = with maintainers; [ tmountain ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ tmountain ];
+    license = lib.licenses.mit;
   };
-}
+})

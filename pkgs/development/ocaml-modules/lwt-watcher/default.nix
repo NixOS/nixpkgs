@@ -5,17 +5,15 @@
   lwt,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "lwt-watcher";
   version = "0.2";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
-    repo = pname;
-    rev = "v${version}";
+    repo = "lwt-watcher";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-35Z73bSzEEgTabNH2cD9lRdDczsyIMZR2ktyKx4aN9k=";
   };
-
-  useDune2 = true;
 
   propagatedBuildInputs = [
     lwt
@@ -28,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.ulrikstrid ];
   };
-}
+})

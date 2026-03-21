@@ -12,9 +12,9 @@
   writeShellScript,
   writeText,
   buildEnv,
-  callPackage,
   ghostscript_headless,
-  harfbuzz,
+  git-latexdiff,
+  harfbuzzFull,
   makeWrapper,
   installShellFiles,
   python3,
@@ -28,6 +28,7 @@
   findutils,
   gawk,
   getopt,
+  gettext,
   gnugrep,
   gnumake,
   gnupg,
@@ -42,21 +43,51 @@
   makeFontsConf,
   useFixedHashes ? true,
   extraMirrors ? [ ],
-  recurseIntoAttrs,
   nixfmt,
   luajit,
-}:
+  texinfo,
+  # for bin.nix
+  perlPackages,
+  python3Packages,
+  pkg-config,
+  cmake,
+  ninja,
+  libpaper,
+  graphite2,
+  zziplib,
+  potrace,
+  gmp,
+  mpfr,
+  mupdf-headless,
+  brotli,
+  cairo,
+  pixman,
+  libxi,
+  libxfixes,
+  clisp,
+  biber,
+  woff2,
+  xxHash,
+  fetchzip,
+  fetchFromGitHub,
+  buildPackages,
+  texlive,
+  zlib,
+  libiconv,
+  libpng,
+  libx11,
+  freetype,
+  ttfautohint,
+  gd,
+  libxaw,
+  icu,
+  libxpm,
+  libxmu,
+  libxext,
+}@args:
 let
   # various binaries (compiled)
-  bin = callPackage ./bin.nix {
-    ghostscript = ghostscript_headless;
-    harfbuzz = harfbuzz.override {
-      withIcu = true;
-      withGraphite2 = true;
-    };
-    inherit useFixedHashes;
-    tlpdb = overriddenTlpdb;
-  };
+  bin = import ./bin.nix (args // { tlpdb = overriddenTlpdb; });
 
   tlpdb = import ./tlpdb.nix;
 
@@ -79,7 +110,9 @@ let
           findutils
           gawk
           getopt
+          gettext
           ghostscript_headless
+          git-latexdiff
           gnugrep
           gnumake
           gnupg
@@ -92,6 +125,7 @@ let
           ruby
           zip
           luajit
+          texinfo
           ;
       };
     in
@@ -99,9 +133,9 @@ let
 
   version = {
     # day of the snapshot being taken
-    year = "2025";
-    month = "07";
-    day = "03";
+    year = "2026";
+    month = "02";
+    day = "02";
     # TeX Live version
     texliveYear = 2025;
     # final (historic) release or snapshot
@@ -143,7 +177,7 @@ let
         # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
         # TODO make this less hacky
         (if version.final then mirrors else [ (lib.last mirrors) ]);
-    hash = "sha256-hTWTs5meP6X7+bBGEHP9pDv8eJTfvBZFKX0WeK8+aZg=";
+    hash = "sha256-GxJXqY6plT3wngKiuqiZUst4eTZIylUdhN2ojUApIpU=";
   };
 
   tlpdbNix =
@@ -151,9 +185,10 @@ let
       {
         inherit tlpdbxz;
         tl2nix = ./tl2nix.sed;
+        nativeBuildInputs = [ nixfmt ];
       }
       ''
-        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | ${lib.getExe nixfmt} > "$out"
+        xzcat "$tlpdbxz" | sed -rn -f "$tl2nix" | uniq | nixfmt > "$out"
       '';
 
   # map: name -> fixed-output hash
@@ -197,6 +232,7 @@ let
   # function for creating a working environment
   buildTeXEnv = import ./build-tex-env.nix {
     inherit bin tl;
+    inherit tlpdbVersion;
     ghostscript = ghostscript_headless;
     inherit
       lib
@@ -254,7 +290,7 @@ let
   };
   toSpecifiedNV = p: rec {
     name = value.tlOutputName;
-    value = builtins.removeAttrs p [ "pkgs" ] // {
+    value = removeAttrs p [ "pkgs" ] // {
       outputSpecified = true;
       tlOutputName = tlTypeToOut.${p.tlType};
     };
@@ -262,10 +298,10 @@ let
   toTLPkgSet =
     pname: drvs:
     let
-      set = lib.listToAttrs (builtins.map toSpecifiedNV drvs);
+      set = lib.listToAttrs (map toSpecifiedNV drvs);
       mainDrv = set.out or set.tex or set.tlpkg or set.texdoc or set.texsource;
     in
-    builtins.removeAttrs mainDrv [ "outputSpecified" ];
+    removeAttrs mainDrv [ "outputSpecified" ];
   toTLPkgSets = { pkgs, ... }: lib.mapAttrsToList toTLPkgSet (lib.groupBy (p: p.pname) pkgs);
 
   # export TeX packages as { pkgs = [ ... ]; } in the top attribute set
@@ -356,9 +392,11 @@ let
       x11
     ];
     scheme-full = [
+      agpl3Only
       artistic1-cl8
       artistic2
       asl20
+      bsd0
       bsd2
       bsd3
       bsdOriginal
@@ -431,6 +469,7 @@ let
     scheme-medium = [
       artistic1-cl8
       asl20
+      bsd0
       bsd2
       bsd3
       cc-by-40
@@ -500,6 +539,7 @@ let
       x11
     ];
     scheme-tetex = [
+      agpl3Only
       artistic1-cl8
       asl20
       bsd2
@@ -543,7 +583,7 @@ let
     license = licenses.scheme-infraonly;
   };
 
-  combined = recurseIntoAttrs (
+  combined = lib.recurseIntoAttrs (
     lib.genAttrs
       [
         "scheme-basic"

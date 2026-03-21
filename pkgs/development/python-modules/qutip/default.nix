@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -29,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.2.1";
+  version = "5.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qutip";
     repo = "qutip";
     tag = "v${version}";
-    hash = "sha256-iM+RptMvLFF51v7OJPESYFB4WaYF5HxnfpqjYWAjAKU=";
+    hash = "sha256-Av6OVw3dwZUA13W+5kJ2EwGzIMhNn9lZwEsk5EKTbyk=";
   };
 
   postPatch =
@@ -63,7 +62,7 @@ buildPythonPackage rec {
     pytest-rerunfailures
     writableTmpDirAsHomeHook
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.
@@ -97,7 +96,7 @@ buildPythonPackage rec {
     homepage = "https://qutip.org/";
     changelog = "https://github.com/qutip/qutip/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
     badPlatforms = [
       # Tests fail at ~80%
       # ../tests/test_animation.py::test_result_state Fatal Python error: Aborted

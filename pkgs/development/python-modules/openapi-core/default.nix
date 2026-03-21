@@ -30,21 +30,17 @@
 
 buildPythonPackage rec {
   pname = "openapi-core";
-  version = "0.19.5";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "openapi-core";
     tag = version;
-    hash = "sha256-Q7Z6bq8TztNm2QLL7g23rOGnXVfiTDjquHAhcSWYlC4=";
+    hash = "sha256-fdONzFde9k2NAd5Rd8vTLt/lQX72JdNSFJhPVWryRQw=";
   };
 
   build-system = [ poetry-core ];
-
-  pythonRelaxDeps = [
-    "werkzeug"
-  ];
 
   dependencies = [
     isodate
@@ -83,7 +79,7 @@ buildPythonPackage rec {
     responses
     webob
   ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [
     # Requires secrets and additional configuration
@@ -96,11 +92,11 @@ buildPythonPackage rec {
     "openapi_core.validation.response.validators"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/python-openapi/openapi-core/releases/tag/${version}";
     description = "Client-side and server-side support for the OpenAPI Specification v3";
     homepage = "https://github.com/python-openapi/openapi-core";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

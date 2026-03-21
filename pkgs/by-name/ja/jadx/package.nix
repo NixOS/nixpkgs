@@ -6,7 +6,7 @@
   jdk,
   quark-engine,
   makeBinaryWrapper,
-  imagemagick,
+  librsvg,
   makeDesktopItem,
   copyDesktopItems,
   desktopToDarwinBundle,
@@ -17,24 +17,24 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jadx";
-  version = "1.5.0";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "skylot";
     repo = "jadx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+F+PHAd1+FmdAlQkjYDBsUYCUzKXG19ZUEorfvBUEg0=";
+    hash = "sha256-YfA0o25A3jtqVTB8LsJGCS6+dk7zt9kWnxlzDceHjeg=";
   };
 
   patches = [
-    # Remove use of launch4j - contains platform binaries not able to be cached by mitmCache
-    ./no-native-deps.diff
+    # Remove launch4j (uncacheable Windows binaries) and OpenRewrite (build failures)
+    ./nix-build.patch
   ];
 
   nativeBuildInputs = [
     gradle
     jdk
-    imagemagick
+    librsvg
     makeBinaryWrapper
     copyDesktopItems
   ]
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
     for size in 64 128 256; do
       mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-      convert -resize "$size"x"$size" jadx-gui/src/main/resources/logos/jadx-logo.png $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
+      rsvg-convert --width "$size" jadx-gui/src/main/resources/logos/jadx-logo.svg > $out/share/icons/hicolor/"$size"x"$size"/apps/jadx.png
     done
 
     runHook postInstall
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/skylot/jadx/releases/tag/v${finalAttrs.version}";
     description = "Dex to Java decompiler";
     homepage = "https://github.com/skylot/jadx";
@@ -99,13 +99,16 @@ stdenv.mkDerivation (finalAttrs: {
       Command line and GUI tools for produce Java source code from Android Dex
       and Apk files.
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # deps
     ];
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "jadx-gui";
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      Misaka13514
+    ];
   };
 })

@@ -9,7 +9,10 @@
   python3,
   symlinkJoin,
   lib,
-  xorg,
+  libxi,
+  libxext,
+  libx11,
+  libxcb,
   wayland,
   pciutils,
   libGL,
@@ -71,10 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optionals stdenv.isLinux [
       glib
-      xorg.libxcb.dev
-      xorg.libX11.dev
-      xorg.libXext.dev
-      xorg.libXi
+      libxcb.dev
+      libx11.dev
+      libxext.dev
+      libxi
       wayland.dev
       pciutils
       libGL

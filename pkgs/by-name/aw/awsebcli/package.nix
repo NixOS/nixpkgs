@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchPypi,
   git,
+  versionCheckHook,
 }:
 
 let
@@ -23,16 +24,17 @@ let
   };
 in
 
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awsebcli";
-  version = "3.25";
+  version = "3.27";
   pyproject = true;
+  doInstallCheck = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
-    tag = version;
-    hash = "sha256-RqUVG4aIZDAVuKcT41ODKkyEidmschcFaY24P1CjosU=";
+    tag = finalAttrs.version;
+    hash = "sha256-bqGed3LCOAG5+bSwdaenxM3HtNXI6iRq191XS5Aau8c=";
   };
 
   pythonRelaxDeps = [
@@ -44,6 +46,7 @@ python.pkgs.buildPythonApplication rec {
     "six"
     "termcolor"
     "urllib3"
+    "wcwidth"
   ];
 
   dependencies = with python.pkgs; [
@@ -60,6 +63,7 @@ python.pkgs.buildPythonApplication rec {
     setuptools
     tabulate
     termcolor
+    wcwidth
     websocket-client
   ];
 
@@ -68,6 +72,7 @@ python.pkgs.buildPythonApplication rec {
     mock
     pytest-socket
     pytestCheckHook
+    versionCheckHook
   ];
 
   enabledTestPaths = [
@@ -93,12 +98,18 @@ python.pkgs.buildPythonApplication rec {
     "test_aws_eb_profile_environment_variable_found__profile_exists_in_credentials_file"
   ];
 
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
   meta = {
     description = "Command line interface for Elastic Beanstalk";
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
-    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "eb";
   };
-}
+})

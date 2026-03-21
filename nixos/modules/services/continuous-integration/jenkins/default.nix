@@ -83,13 +83,13 @@ in
 
       package = lib.mkPackageOption pkgs "jenkins" { };
 
-      javaPackage = lib.mkPackageOption pkgs "jdk21" { };
+      javaPackage = lib.mkPackageOption pkgs "jdk25" { };
 
       packages = lib.mkOption {
         default = [
           pkgs.stdenv
           pkgs.git
-          pkgs.jdk21
+          pkgs.jdk25
           config.programs.ssh.package
           pkgs.nix
         ];
@@ -251,25 +251,34 @@ in
 
       serviceConfig = {
         User = cfg.user;
+        Group = cfg.group;
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        StateDirectoryMode = "750";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
+        RuntimeDirectoryMode = "750";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
         # MemoryDenyWriteExecute = false;   Breaks execution;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectSystem = "full";
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.home
+        ];
         RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"
@@ -284,4 +293,8 @@ in
       };
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    felixsinger
+  ];
 }

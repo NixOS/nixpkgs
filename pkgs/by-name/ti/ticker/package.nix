@@ -6,15 +6,15 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ticker";
-  version = "5.0.6";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = "ticker";
-    tag = "v${version}";
-    hash = "sha256-sm/57kOiFI+mAH3VNAklXeTaZqfuJSZmLYXvj8cZQso=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GH+2as3aK462cTguGekbB4HchVzC1HdBsXwJHwAh47Q=";
   };
 
   vendorHash = "sha256-EKc9QRDSOD4WetCXORjMUlaFqh0+B3Aa3m5SR1WiKN4=";
@@ -22,7 +22,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/achannarasappa/ticker/v${lib.versions.major version}/cmd.Version=${version}"
+    "-X github.com/achannarasappa/ticker/v${lib.versions.major finalAttrs.version}/cmd.Version=${finalAttrs.version}"
   ];
 
   # Tests require internet
@@ -31,13 +31,13 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = ticker;
     command = "ticker --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
   meta = {
     description = "Terminal stock ticker with live updates and position tracking";
     homepage = "https://github.com/achannarasappa/ticker";
-    changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${version}";
+    changelog = "https://github.com/achannarasappa/ticker/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       siraben
@@ -45,4 +45,4 @@ buildGoModule rec {
     ];
     mainProgram = "ticker";
   };
-}
+})

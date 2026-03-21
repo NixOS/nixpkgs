@@ -38,8 +38,8 @@ buildBazelPackage {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-GvuOEQfzPF5J75TRlEc4oDiXXUN4G3fMfRhMDmg3FL0=";
-        x86_64-linux = "sha256-A47JJg+GUIhR7FhufxEsfsIuSg6dd7sPNzSWiQZXIEE=";
+        aarch64-linux = "sha256-Pm7iSGO3Ij3bbII/7oWqucTeg8cw6P/FV8/GMcTMyhQ=";
+        x86_64-linux = "sha256-4JForyvjZmD9e3myRamt2N2PD4fImci50EEWc+1WxM8=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };
@@ -67,11 +67,11 @@ buildBazelPackage {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to convert Linux perf files to the profile.proto format used by pprof";
     homepage = "https://github.com/google/perf_data_converter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ hzeller ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ hzeller ];
+    platforms = lib.platforms.linux;
   };
 }

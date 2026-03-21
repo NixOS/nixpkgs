@@ -9,18 +9,19 @@
 
   # tests
   pytestCheckHook,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "tinyio";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "tinyio";
     tag = "v${version}";
-    hash = "sha256-5Fk+/tT6mkyIosRKTFG5XuFtAM5wy3v0npiJjN47WV8=";
+    hash = "sha256-zAmsUe1fQeTxv0U++lU6abaP8YQMLlF3rkI7eyhTK0I=";
   };
 
   build-system = [
@@ -31,6 +32,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    trio
   ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -42,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Dead-simple event loop for Python";
     homepage = "https://github.com/patrick-kidger/tinyio";
-    changelog = "https://github.com/patrick-kidger/tinyio/releases/tag/v${version}";
+    changelog = "https://github.com/patrick-kidger/tinyio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

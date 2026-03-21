@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go9p";
   version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "knusbaum";
     repo = "go9p";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-dqaj92LwHu5VRLLEvrUTFL9i61jG2qCARWBDMt9tGH8=";
   };
 
@@ -25,4 +25,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.platforms.unix;
   };
-}
+})

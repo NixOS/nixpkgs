@@ -17,28 +17,80 @@ let
 
   cfg = config.services.kmscon;
 
-  autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
+  gettyCfg = config.services.getty;
 
   configDir = pkgs.writeTextFile {
     name = "kmscon-config";
     destination = "/kmscon.conf";
     text = cfg.extraConfig;
   };
+
+  baseLoginOptions = "-p -- \\u";
+
+  agettyCmd =
+    enableAutologin:
+    "${lib.getExe' pkgs.util-linux "agetty"} ${
+      lib.escapeShellArgs (
+        [
+          "--login-program"
+          (toString gettyCfg.loginProgram)
+          "--login-options"
+          # these options are passed as a single parameter
+          "${lib.optionalString enableAutologin "-f "}${baseLoginOptions}"
+        ]
+        ++ lib.optionals enableAutologin [
+          "--autologin"
+          gettyCfg.autologinUser
+        ]
+        ++ gettyCfg.extraArgs
+        ++ [
+          "--8bits"
+          "--noclear"
+          "--"
+          "-"
+        ]
+      )
+    } $TERM";
+
+  loginScript = pkgs.writers.writeDash "kmscon-login" ''
+    kms_tty=
+    active_tty_file=/sys/class/tty/tty0/active
+    if [ -f "$active_tty_file" ]; then
+      read -r kms_tty < "$active_tty_file"
+    fi
+
+    ${lib.optionalString (gettyCfg.autologinUser != null && gettyCfg.autologinOnce) ''
+      autologged="/run/kmscon.autologged"
+      if [ "$kms_tty" = tty1 ] && [ ! -f "$autologged" ]; then
+        touch "$autologged"
+        exec ${agettyCmd true}
+      fi
+    ''}
+
+    exec ${agettyCmd (gettyCfg.autologinUser != null && !gettyCfg.autologinOnce)}
+  '';
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "kmscon" "autologinUser" ] ''
+      Autologin is now handled by the agetty module.
+
+      Check `services.getty.autologinUser` instead.
+    '')
+  ];
+
   options = {
     services.kmscon = {
       enable = mkEnableOption ''
-        kmscon as the virtual console instead of gettys.
-        kmscon is a kms/dri-based userspace virtual terminal implementation.
-        It supports a richer feature set than the standard linux console VT,
-        including full unicode support, and when the video card supports drm
-        should be much faster
+        Use kmscon instead of autovt.
+
+        Kmscon is a simple terminal emulator based on linux kernel mode setting (KMS).
+        It is an attempt to replace the in-kernel VT implementation with a userspace console.
       '';
 
       package = mkPackageOption pkgs "kmscon" { };
 
-      hwRender = mkEnableOption "3D hardware acceleration to render the console";
+      hwRender = mkEnableOption "hardware acceleration + DRM backend";
 
       fonts = mkOption {
         description = "Fonts used by kmscon, in order of priority.";
@@ -63,8 +115,13 @@ in
           nullOr (nonEmptyListOf fontType);
       };
 
-      useXkbConfig = mkEnableOption "" // {
-        description = "Whether to configure keymap from xserver keyboard settings.";
+      useXkbConfig = mkEnableOption "configure keymap from xserver keyboard settings.";
+
+      term = mkOption {
+        description = "Value for the TERM environment variable.";
+        type = types.nullOr types.str;
+        default = null;
+        example = "xterm-256color";
       };
 
       extraConfig = mkOption {
@@ -80,33 +137,39 @@ in
         default = "";
         example = "--term xterm-256color";
       };
-
-      autologinUser = mkOption {
-        type = types.nullOr types.str;
-        default = null;
-        description = ''
-          Username of the account that will be automatically logged in at the console.
-          If unspecified, a login prompt is shown as usual.
-        '';
-      };
     };
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = gettyCfg.loginOptions == null;
+        message = "services.getty.loginOptions is not supported when services.kmscon is enabled.";
+      }
+    ];
+
+    environment.systemPackages = [ cfg.package ];
     systemd.packages = [ cfg.package ];
 
     systemd.services."kmsconvt@" = {
-      after = [
-        "systemd-logind.service"
-        "systemd-vconsole-setup.service"
-      ];
-      requires = [ "systemd-logind.service" ];
-
       serviceConfig.ExecStart = [
-        ""
-        ''
-          ${cfg.package}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p ${autologinArg}
-        ''
+        "" # override upstream default with an empty ExecStart
+        (builtins.concatStringsSep " " (
+          [
+            "${cfg.package}/bin/kmscon"
+            "--configdir"
+            configDir
+            "--vt=%I"
+            "--no-switchvt"
+            "--login"
+          ]
+          ++ lib.optional (cfg.extraOptions != "") cfg.extraOptions
+          ++ [
+            "--"
+            loginScript
+          ]
+
+        ))
       ];
 
       restartIfChanged = false;
@@ -114,9 +177,6 @@ in
     };
 
     systemd.suppressedSystemUnits = [ "autovt@.service" ];
-
-    systemd.services.systemd-vconsole-setup.enable = false;
-    systemd.services.reload-systemd-vconsole-setup.enable = false;
 
     services.kmscon.extraConfig =
       let
@@ -134,15 +194,20 @@ in
             ) config.services.xserver.xkb
           )
         );
-        render = optionals cfg.hwRender [
-          "drm"
-          "hwaccel"
-        ];
+        render =
+          if cfg.hwRender then
+            [
+              "drm"
+              "hwaccel"
+            ]
+          else
+            [ "no-drm" ];
         fonts =
           optional (cfg.fonts != null)
             "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
+        term = optional (cfg.term != null) "term=${cfg.term}";
       in
-      lib.concatLines (xkb ++ render ++ fonts);
+      lib.concatLines (xkb ++ render ++ fonts ++ term);
 
     hardware.graphics.enable = mkIf cfg.hwRender true;
 
@@ -151,4 +216,9 @@ in
       packages = map (f: f.package) cfg.fonts;
     };
   };
+
+  meta.maintainers = with lib.maintainers; [
+    hustlerone
+    ccicnce113424
+  ];
 }

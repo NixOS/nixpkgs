@@ -15,19 +15,19 @@
   tinyxml,
   boost,
   wrapGAppsHook3,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   xdg-utils,
 }:
 
 stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.68.1";
+  version = "3.69.6";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
-    rev = "11205";
-    hash = "sha256-izaNfagJYUcPRPihZ1yXwLUTHunzVXuiMITW69KPSFE=";
+    rev = "11365";
+    hash = "sha256-KJI+UxKiwmZfVG0CiS3lDnjz+YNjTy7IoTcOmlGkluk=";
   };
 
   configureFlags = [
@@ -52,14 +52,14 @@ stdenv.mkDerivation {
     pugixml
     sqlite
     tinyxml
-    wxGTK32
+    wxwidgets_3_2
     gtk3
     xdg-utils
   ];
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://filezilla-project.org/";
     description = "Graphical FTP, FTPS and SFTP client";
     longDescription = ''
@@ -68,8 +68,11 @@ stdenv.mkDerivation {
       under many platforms, binaries for Windows, Linux and macOS are
       provided.
     '';
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      iedame
+      pSub
+    ];
   };
 }

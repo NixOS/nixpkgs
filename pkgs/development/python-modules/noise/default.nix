@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "noise";
   version = "1.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "noise" ];
 
-  meta = with lib; {
+  meta = {
     description = "Native-code and shader implementations of Perlin noise";
     homepage = "https://github.com/caseman/noise";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

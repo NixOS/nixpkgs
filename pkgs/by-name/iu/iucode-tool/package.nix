@@ -7,14 +7,14 @@
   argp-standalone,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iucode-tool";
   version = "2.3.1";
 
   src = fetchFromGitLab {
     owner = "iucode-tool";
     repo = "iucode-tool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-ajDpywgyerbvgern0b8T4jJUWisMzwrhwKO1g7iOtBE=";
   };
 
@@ -32,15 +32,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel® 64 and IA-32 processor microcode tool";
     mainProgram = "iucode_tool";
     homepage = "https://gitlab.com/iucode-tool/iucode-tool";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
   };
-}
+})

@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   src = fetchgit {
     url = "https://git.torproject.org/pluggable-transports/obfsproxy.git";
-    rev = "refs/tags/${pname}-${version}";
+    tag = "${pname}-${version}";
     sha256 = "04ja1cl8xzqnwrd2gi6nlnxbmjri141bzwa5gybvr44d8h3k2nfa";
   };
 
@@ -34,9 +34,9 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Pluggable transport proxy";
     homepage = "https://www.torproject.org/projects/obfsproxy";
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
 }

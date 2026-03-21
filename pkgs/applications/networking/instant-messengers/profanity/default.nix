@@ -20,8 +20,8 @@
   readline,
   sqlite,
   autoAwaySupport ? true,
-  libXScrnSaver,
-  libX11,
+  libxscrnsaver,
+  libx11,
   notifySupport ? true,
   libnotify,
   gdk-pixbuf,
@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.15.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = finalAttrs.version;
-    hash = "sha256-h+R+hasc45NZOneuqZ+z+yjfpsPm317OXq0LYe3t+cQ=";
+    hash = "sha256-/1ae2+iY01C0TyrvviZIcwUQDJvr2qq2DM0GVbjoynI=";
   };
 
   patches = [
@@ -77,8 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
   ]
   ++ lib.optionals autoAwaySupport [
-    libXScrnSaver
-    libX11
+    libxscrnsaver
+    libx11
   ]
   ++ lib.optionals notifySupport [
     libnotify
@@ -106,18 +106,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  LC_ALL = "en_US.utf8";
+  env.LC_ALL = "en_US.utf8";
 
-  meta = with lib; {
-    homepage = "http://www.profanity.im/";
+  meta = {
+    homepage = "https://profanity-im.github.io";
     description = "Console based XMPP client";
     mainProgram = "profanity";
     longDescription = ''
       Profanity is a console based XMPP client written in C using ncurses and
       libstrophe, inspired by Irssi.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.devhell ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ lib.maintainers.devhell ];
+    platforms = lib.platforms.unix;
   };
 })

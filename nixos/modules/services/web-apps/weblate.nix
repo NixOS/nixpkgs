@@ -96,7 +96,7 @@ let
   + lib.optionalString cfg.smtp.enable ''
     EMAIL_HOST = "${cfg.smtp.host}"
     EMAIL_USE_TLS = True
-    EMAIL_PORT = ${builtins.toString cfg.smtp.port}
+    EMAIL_PORT = ${toString cfg.smtp.port}
     SERVER_EMAIL = "${cfg.smtp.from}"
     DEFAULT_FROM_EMAIL = "${cfg.smtp.from}"
   ''
@@ -130,8 +130,12 @@ let
     inherit (finalPackage) GI_TYPELIB_PATH;
   };
 
+  # Packages needed at runtime
   weblatePath = with pkgs; [
     gitSVN
+    subversion
+    gettext
+    fontconfig
     borgbackup
 
     #optional
@@ -141,6 +145,7 @@ let
     mercurial
     openssh
   ];
+
 in
 {
 
@@ -242,7 +247,6 @@ in
         locations = {
           "= /favicon.ico".alias = "${finalPackage}/${python.sitePackages}/weblate/static/favicon.ico";
           "/static/".alias = "${finalPackage.static}/";
-          "/media/".alias = "/var/lib/weblate/media/";
           "/".proxyPass = "http://unix:///run/weblate.socket";
         };
       };
@@ -369,12 +373,13 @@ in
             });
           in
           ''
-            ${gunicorn}/bin/gunicorn \
+            ${lib.getExe gunicorn} \
               --name=weblate \
               --bind='unix:///run/weblate.socket' \
+              --preload \
               weblate.wsgi
           '';
-        ExecReload = "kill -s HUP $MAINPID";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         KillMode = "mixed";
         PrivateTmp = true;
         WorkingDirectory = dataDir;

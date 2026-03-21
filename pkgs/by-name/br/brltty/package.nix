@@ -13,24 +13,24 @@
   util-linux,
   alsaSupport ? stdenv.hostPlatform.isLinux,
   alsa-lib,
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
   ncurses,
   udevCheckHook,
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "brltty";
   version = "6.8";
 
   src = fetchurl {
-    url = "https://brltty.app/archive/brltty-${version}.tar.gz";
+    url = "https://brltty.app/archive/brltty-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-MoDYjHU6aJY9e5cgjm9InOEDGCs+jvlEurMWg9wo4RY=";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
-    pkg-config
     python3.pkgs.cython
     python3.pkgs.setuptools
     tcl # One of build scripts require tclsh
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     tcl # For TCL bindings
   ]
   ++ lib.optional alsaSupport alsa-lib
-  ++ lib.optional systemdSupport systemd;
+  ++ lib.optional systemdSupport systemdMinimal;
 
   doInstallCheck = true;
 
@@ -139,6 +139,6 @@ stdenv.mkDerivation rec {
      )
      substituteInPlace $out/libexec/brltty/systemd-wrapper \
        --replace 'logger' "${util-linux}/bin/logger" \
-       --replace 'udevadm' "${systemd}/bin/udevadm"
+       --replace 'udevadm' "${systemdMinimal}/bin/udevadm"
   '';
-}
+})

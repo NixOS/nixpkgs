@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waytrogen";
-  version = "0.7.4";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "nikolaizombie1";
     repo = "waytrogen";
     tag = finalAttrs.version;
-    hash = "sha256-I7juUTIN+ZhD9w2WXSU5YMBulxcGUYDdv6eiLZ1Byyw=";
+    hash = "sha256-airVCuwwh+FujJqBHXnRcwooUJWO/mrANbmzX9HciIM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-k6n6aWEJ/8Dkbd68CJfJ7kbRTltCuQ4AtZ5dALFD3lU=";
+    hash = "sha256-FHLyVgBrTWOWyfILm7Gv9B6/WudvrwCNKoRJybKJBTM=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ];
 
-  preBuild = ''export OUT_PATH=$out'';
+  preBuild = "export OUT_PATH=$out";
 
   env = {
     OPENSSL_NO_VENDOR = 1;

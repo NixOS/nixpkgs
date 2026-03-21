@@ -6,14 +6,14 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "wormhole-william";
   version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "psanford";
     repo = "wormhole-william";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-KGJfz3nd03vcdrIsX8UUfdw96XwyU9PRzwK8O4/I8JQ=";
   };
 
@@ -40,9 +40,9 @@ buildGoModule rec {
   meta = {
     homepage = "https://github.com/psanford/wormhole-william";
     description = "End-to-end encrypted file transfers";
-    changelog = "https://github.com/psanford/wormhole-william/releases/tag/v${version}";
+    changelog = "https://github.com/psanford/wormhole-william/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ psanford ];
     mainProgram = "wormhole-william";
   };
-}
+})

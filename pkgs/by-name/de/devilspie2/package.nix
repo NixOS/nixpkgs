@@ -10,12 +10,12 @@
   libwnck,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "devilspie2";
   version = "0.44";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://savannah/devilspie2/devilspie2-${finalAttrs.version}.tar.xz";
     hash = "sha256-Cp8erdKyKjGBY+QYAGXUlSIboaQ60gIepoZs0RgEJkA=";
   };
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     cp devilspie2.1 $out/share/man/man1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Window matching utility";
     longDescription = ''
       Devilspie2 is a window matching utility, allowing the user to
@@ -46,9 +46,8 @@ stdenv.mkDerivation rec {
       on a specific workspace.
     '';
     homepage = "https://www.nongnu.org/devilspie2/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.ebzzry ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "devilspie2";
   };
-}
+})

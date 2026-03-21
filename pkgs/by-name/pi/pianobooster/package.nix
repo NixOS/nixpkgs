@@ -26,6 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1WOlAm/HXSL6QK0Kd1mnFEZxxpMseTG+6WzgMNWt+RA=";
   };
 
+  patches = [
+    # Bump cmake_minimum_required to support CMake 4
+    # https://github.com/pianobooster/PianoBooster/pull/349
+    ./bump-cmake-minimum-required-version.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/Settings.cpp src/GuiMidiSetupDialog.cpp \
       --replace "/usr/share/soundfonts" "${soundfont-fluid}/share/soundfonts" \
@@ -68,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/pianobooster/PianoBooster";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orivej ];
+    maintainers = [ ];
   };
 })

@@ -15,7 +15,7 @@ in
   arandr.propagatedBuildInputs = [
     py.tkinter
     pkgs.arandr
-    pkgs.xorg.xrandr
+    pkgs.xrandr
   ];
   # checkupdates is unpackaged
   # arch-update.propagatedBuildInputs = [checkupdates];
@@ -43,7 +43,7 @@ in
   caffeine.propagatedBuildInputs = [
     pkgs.xdg-utils
     pkgs.xdotool
-    pkgs.xorg.xprop
+    pkgs.xprop
     pkgs.libnotify
   ];
   cmus.propagatedBuildInputs = [ pkgs.cmus ];
@@ -96,24 +96,24 @@ in
   hddtemp = { };
   hostname = { };
   http_status = { };
-  indicator.propagatedBuildInputs = [ pkgs.xorg.xset ];
+  indicator.propagatedBuildInputs = [ pkgs.xset ];
   kernel = { };
   keys = { };
   # python3Packages.xkbgroup is unpackaged
   layout = {
-    buildInputs = [ pkgs.xorg.libX11 ];
+    buildInputs = [ pkgs.libx11 ];
     # propagatedBuildInputs = [py.xkbgroup];
   };
   # python3Packages.xkbgroup is unpackaged
   layout-xkb = {
-    buildInputs = [ pkgs.xorg.libX11 ];
+    buildInputs = [ pkgs.libx11 ];
     # propagatedBuildInputs = [py.xkbgroup];
   };
   layout-xkbswitch.propagatedBuildInputs = [ pkgs.xkb-switch ];
   # python3Packages.xkbgroup is unpackaged
   # NOTE: Yes, there is also a plugin named `layout-xkb` with a dash.
   layout_xkb = {
-    buildInputs = [ pkgs.xorg.libX11 ];
+    buildInputs = [ pkgs.libx11 ];
     # propagatedBuildInputs = [python3Packages.xkbgroup];
   };
   # NOTE: Yes, there is also a plugin named `layout-xkbswitch` with a dash.
@@ -162,7 +162,7 @@ in
   redshift.propagatedBuildInputs = [ pkgs.redshift ];
   # rofication is unpackaged
   # rofication.propagatedBuildInputs = [rofication];
-  rotation.propagatedBuildInputs = [ pkgs.xorg.xrandr ];
+  rotation.propagatedBuildInputs = [ pkgs.xrandr ];
   rss = { };
   sensors.propagatedBuildInputs = [ pkgs.lm_sensors ];
   sensors2.propagatedBuildInputs = [ pkgs.lm_sensors ];
@@ -205,7 +205,7 @@ in
   weather.propagatedBuildInputs = [ py.requests ];
   xkcd = { };
   # i3 is optional
-  xrandr.propagatedBuildInputs = [ pkgs.xorg.xrandr ];
+  xrandr.propagatedBuildInputs = [ pkgs.xrandr ];
   yubikey.propagatedBuildInputs = [ pkgs.yubico ];
   zpool = { };
 }

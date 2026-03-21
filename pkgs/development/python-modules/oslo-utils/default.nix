@@ -11,13 +11,11 @@
   debtcollector,
   iso8601,
   netaddr,
-  netifaces,
   oslo-i18n,
   packaging,
   psutil,
   pyparsing,
   pytz,
-  tzdata,
 
   # tests
   ddt,
@@ -29,34 +27,35 @@
   oslotest,
   pyyaml,
   qemu-utils,
-  replaceVars,
   stdenv,
   stestr,
   testscenarios,
+  tzdata,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "9.1.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_utils";
     inherit version;
-    hash = "sha256-AcOHXnzKAFtZRlxCn0ZxE7X0sEIRy9U0yawvFSJ207M=";
+    hash = "sha256-u0ZxPnYNlERqCE9elMHPJzk1NpMIrYjuW1OReSPZw5M=";
   };
 
-  patches = [
-    (replaceVars ./ctypes.patch {
-      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
+  postPatch =
+    let
+      soext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      substituteInPlace oslo_utils/secretutils.py \
+        --replace-fail "ctypes.util.find_library(\"crypt\")" '"${lib.getLib libxcrypt-legacy}/lib/libcrypt${soext}"'
 
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
+      # only a small portion of the listed packages are actually needed for running the tests
+      # so instead of removing them one by one remove everything
+      rm test-requirements.txt
+    '';
 
   build-system = [
     pbr
@@ -67,13 +66,11 @@ buildPythonPackage rec {
     debtcollector
     iso8601
     netaddr
-    netifaces
     oslo-i18n
     packaging
     psutil
     pyparsing
     pytz
-    tzdata
   ];
 
   nativeCheckInputs = [
@@ -86,6 +83,7 @@ buildPythonPackage rec {
     qemu-utils
     stestr
     testscenarios
+    tzdata
   ];
 
   # disabled tests:

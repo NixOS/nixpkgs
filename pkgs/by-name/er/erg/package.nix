@@ -8,14 +8,14 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "erg";
   version = "0.6.53";
 
   src = fetchFromGitHub {
     owner = "erg-lang";
     repo = "erg";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-VPekgbD5vQ6JsyGT4WKayl1eB9SWGemf02rXpkP6fcU=";
   };
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   env = {
     BUILD_DATE = "1970/01/01 00:00:00";
     CASE_SENSITIVE = lib.boolToString (!stdenv.hostPlatform.isDarwin);
-    GIT_HASH_SHORT = src.rev;
+    GIT_HASH_SHORT = finalAttrs.src.rev;
   };
 
   # TODO(figsoda): fix tests
@@ -56,15 +56,15 @@ rustPlatform.buildRustPackage rec {
       --set-default ERG_PATH $out/share/erg
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Statically typed language that can deeply improve the Python ecosystem";
     mainProgram = "erg";
     homepage = "https://github.com/erg-lang/erg";
-    changelog = "https://github.com/erg-lang/erg/releases/tag/${src.rev}";
-    license = with licenses; [
+    changelog = "https://github.com/erg-lang/erg/releases/tag/${finalAttrs.src.rev}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
-}
+})

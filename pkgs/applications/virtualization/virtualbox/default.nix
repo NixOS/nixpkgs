@@ -10,12 +10,12 @@
   pam,
   libxslt,
   libxml2,
-  libX11,
+  libx11,
   xorgproto,
-  libXext,
-  libXcursor,
-  libXfixes,
-  libXmu,
+  libxext,
+  libxcursor,
+  libxfixes,
+  libxmu,
   SDL2,
   libcap,
   libGL,
@@ -23,8 +23,8 @@
   libpng,
   glib,
   lvm2,
-  libXrandr,
-  libXinerama,
+  libxrandr,
+  libxinerama,
   libopus,
   libtpms,
   qt6,
@@ -72,13 +72,13 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.6";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "c58443a0e6fcc7fc7e84c1011a10823b3540c6a2b8f2e27c4d8971272baf09f7";
 
-  kvmPatchVboxVersion = "7.2.0";
-  kvmPatchVersion = "20250903";
-  kvmPatchHash = "sha256-JTE9Kr+nJ6HLeDrzL2EVyDQhxzn3UsoQVIQ6zNCwioY=";
+  kvmPatchVboxVersion = "7.2.6";
+  kvmPatchVersion = "20260201";
+  kvmPatchHash = "sha256-pq4DPLwHRRAMJjmfXympDxJK9+d+LwTOxBqxAm0pl3o=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
@@ -144,9 +144,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     libxml2
     xorgproto
-    libX11
-    libXext
-    libXcursor
+    libx11
+    libxext
+    libxcursor
     libcap
     glib
     lvm2
@@ -156,8 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     makeself
     perl
-    libXmu
-    libXrandr
+    libxmu
+    libxrandr
     libpng
     libopus
     libtpms
@@ -172,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
     qtscxml
-    libXinerama
+    libxinerama
     SDL2
     libGLU
   ]
@@ -208,17 +208,13 @@ stdenv.mkDerivation (finalAttrs: {
       s@"libdbus-1\.so\.3"@"${dbus.lib}/lib/libdbus-1.so.3"@g'
 
     grep 'libXfixes\.so\.3'     src include -rI --files-with-match | xargs sed -i -e '
-      s@"libXfixes\.so\.3"@"${libXfixes.out}/lib/libXfixes.so.3"@g'
+      s@"libXfixes\.so\.3"@"${libxfixes.out}/lib/libXfixes.so.3"@g'
 
     grep 'libasound\.so\.2'     src include -rI --files-with-match | xargs sed -i -e '
       s@"libasound\.so\.2"@"${alsa-lib.out}/lib/libasound.so.2"@g'
 
     substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
       --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
-
-    # this works in conjunction with fix-graphics-driver-loading.patch
-    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-dx-dx11.cpp \
-      --replace-fail \"VBoxDxVk\" \"$out/libexec/virtualbox/VBoxDxVk.so\"
 
     export USER=nix
     set +x
@@ -315,7 +311,7 @@ stdenv.mkDerivation (finalAttrs: {
       ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       ${optionalString enableWebService "--enable-webservice"} \
       ${optionalString (open-watcom-bin != null) "--with-ow-dir=${open-watcom-bin}"} \
-      ${optionalString (enableKvm) "--with-kvm"} \
+      ${optionalString enableKvm "--with-kvm"} \
       ${extraConfigureFlags} \
       --disable-kmods
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig@' \
@@ -418,9 +414,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     homepage = "https://www.virtualbox.org/";
     maintainers = with lib.maintainers; [
-      sander
       friedrichaltheide
-      blitz
     ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";

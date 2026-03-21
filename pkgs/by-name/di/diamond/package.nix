@@ -6,21 +6,21 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "diamond";
-  version = "2.1.14";
+  version = "2.1.16";
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
-    rev = "v${version}";
-    sha256 = "sha256-w6+lSc2YZ1PwPj3p6ieI/yTkoiSLWH2Za863n4BTClo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/rSnyOlQ7PWMpoX8vojOmD73jrvIDLjT5LOB7MyTnMo=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Accelerated BLAST compatible local sequence aligner";
     mainProgram = "diamond";
     longDescription = ''
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bbuchfink/diamond";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
-}
+})

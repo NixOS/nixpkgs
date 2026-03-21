@@ -15,11 +15,11 @@
   libpulseaudio,
   pipewire,
   libGL,
-  libX11,
-  libXcursor,
-  libXext,
-  libXrandr,
-  libXxf86vm,
+  libx11,
+  libxcursor,
+  libxext,
+  libxrandr,
+  libxxf86vm,
 
   # runtime (path)
   xrandr,
@@ -29,14 +29,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocelot-desktop";
-  version = "1.14.1";
+  version = "1.14.2";
 
   __darwinAllowLocalNetworking = true;
 
   # Cannot build from source because sbt/scala support is completely non-existent in nixpkgs
   src = fetchurl {
     url = "https://gitlab.com/api/v4/projects/9941848/packages/generic/ocelot-desktop/v${finalAttrs.version}/ocelot-desktop-v${finalAttrs.version}.jar";
-    hash = "sha256-OO+fgb9PO72znb2sU0olxFf+YuWZvgZkWdszFPpMZg8=";
+    hash = "sha256-ZnXFCcm/b4hXLUrL7QZmRYwEFksKkIGI8zDqfXB+uhc=";
   };
 
   dontUnpack = true;
@@ -63,11 +63,11 @@ stdenv.mkDerivation (finalAttrs: {
 
         # lwjgl
         libGL
-        libX11
-        libXcursor
-        libXext
-        libXrandr
-        libXxf86vm
+        libx11
+        libxcursor
+        libxext
+        libxrandr
+        libxxf86vm
       ];
       runtimePrograms = lib.optionals stdenv.hostPlatform.isLinux [
         # https://github.com/LWJGL/lwjgl/issues/128

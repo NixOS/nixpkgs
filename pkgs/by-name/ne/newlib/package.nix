@@ -26,6 +26,11 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
       url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=8a8fb570d7c5310a03a34b3dd6f9f8bb35ee9f40";
       hash = "sha256-hWS/X0jf/ZFXIR39NvNDVhkR8F81k9UWpsqDhZFxO5o=";
     })
+    (fetchpatch {
+      name = "0002-newlib-Fix-i386-libgloss-support.patch";
+      url = "https://sourceware.org/git/?p=newlib-cygwin.git;a=patch;h=351842d55ee50fab672818b72f2c6bf3be1772bd;hp=4a1144dc540423b422dbec27eb433bc7dc725ae8";
+      hash = "sha256-GMx9nQKJEnXbA5HFczp3xjrrU94j1oXq4lIjEf0um9Y=";
+    })
   ]
   ++ lib.optionals nanoizeNewlib [
     # https://bugs.gentoo.org/723756
@@ -138,7 +143,7 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     libdir = "/${stdenvNoLibc.targetPlatform.config}/lib";
   };
 
-  meta = with lib; {
+  meta = {
     description = "C library intended for use on embedded systems";
     homepage = "https://sourceware.org/newlib/";
     # arch has "bsd" while gentoo has "NEWLIB LIBGLOSS GPL-2" while COPYING has "gpl2"
@@ -148,6 +153,6 @@ stdenvNoLibc.mkDerivation (finalAttrs: {
     # COPYING.LIBGLOSS
     # COPYING.NEWLIB
     # COPYING3
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
   };
 })

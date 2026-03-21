@@ -19,7 +19,6 @@
   gawk,
   fetchFromGitHub,
   fetchgit,
-  fetchpatch2,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -127,7 +126,7 @@ let
     };
   };
 
-  beamDeps = builtins.removeAttrs allBeamDeps [
+  beamDeps = removeAttrs allBeamDeps [
     "sqlite3"
     "p1_pgsql"
     "p1_mysql"
@@ -141,7 +140,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "25.08";
+  version = "26.02";
 
   nativeBuildInputs = [
     makeWrapper
@@ -171,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-nipFr4ezo2prlpLfAW8iu8HAG8nhkIXXiAbsoM7QKTM=";
+    hash = "sha256-izP7Rz65Lr4LDOCzZPdDWb3TyXDSTd/8gOPSfovVGM8=";
   };
 
   passthru.tests = {
@@ -200,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
     touch _build/default/lib/.built
   '';
 
-  REBAR_IGNORE_DEPS = 1;
+  env.REBAR_IGNORE_DEPS = 1;
 
   postInstall = ''
     sed -i \
@@ -217,11 +216,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open-source XMPP application server written in Erlang";
     mainProgram = "ejabberdctl";
+    changelog = "https://github.com/processone/ejabberd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
-      sander
       chuangzhu
       toastal
     ];

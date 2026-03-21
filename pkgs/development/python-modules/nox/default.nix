@@ -12,6 +12,7 @@
   argcomplete,
   colorlog,
   dependency-groups,
+  humanize,
   jinja2,
   packaging,
   tomli,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2025.05.01";
+  version = "2026.02.09";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = "nox";
     tag = version;
-    hash = "sha256-qH8oh7tmiJkXOobyDZMRZ62w2sRHJF8sh4PX+6s7M70=";
+    hash = "sha256-RaB0q9gCoYqKAI8IzNh5qUd0SrzsPeOa3C6IGxpcbwE=";
   };
 
   build-system = [ hatchling ];
@@ -47,15 +48,13 @@ buildPythonPackage rec {
     attrs
     colorlog
     dependency-groups
+    humanize
     packaging
     virtualenv
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [
-    tomli
   ];
 
   optional-dependencies = {
-    tox_to_nox = [
+    tox-to-nox = [
       jinja2
       tox
     ];
@@ -65,7 +64,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
-  ];
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "nox" ];
 

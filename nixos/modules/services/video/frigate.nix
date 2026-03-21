@@ -53,6 +53,7 @@ let
         cp ${configFileUnchecked} $out
         export CONFIG_FILE=$out
         export PYTHONPATH=${cfg.package.pythonPath}
+        ${cfg.preCheckConfig}
         ${cfg.package.python.interpreter} -m frigate --validate-config || error
       '';
   configFile = if cfg.checkConfig then configFileChecked else configFileUnchecked;
@@ -208,6 +209,16 @@ in
       '';
     };
 
+    preCheckConfig = mkOption {
+      type = types.lines;
+      default = "";
+      description = ''
+        This script gets run before the config is checked. It can be used to,
+        e.g., set environment variables needed or transform the config
+        (available as `$out`) to make it checkable in the sandbox.
+      '';
+    };
+
     settings = mkOption {
       type = submodule {
         freeformType = format.type;
@@ -337,6 +348,10 @@ in
               proxy_set_header X-Forwarded-Groups $http_x_forwarded_groups;
               proxy_set_header X-Forwarded-Email $http_x_forwarded_email;
               proxy_set_header X-Forwarded-Preferred-Username $http_x_forwarded_preferred_username;
+              proxy_set_header X-Auth-Request-User $http_x_auth_request_user;
+              proxy_set_header X-Auth-Request-Groups $http_x_auth_request_groups;
+              proxy_set_header X-Auth-Request-Email $http_x_auth_request_email;
+              proxy_set_header X-Auth-Request-Preferred-Username $http_x_auth_request_preferred_username;
               proxy_set_header X-authentik-username $http_x_authentik_username;
               proxy_set_header X-authentik-groups $http_x_authentik_groups;
               proxy_set_header X-authentik-email $http_x_authentik_email;
@@ -350,6 +365,10 @@ in
             extraConfig = nginxAuthRequest + ''
               aio threads;
               vod hls;
+
+              # Use fMP4 (fragmented MP4) instead of MPEG-TS for better performance
+              # Smaller segments, faster generation, better browser compatibility
+              vod_hls_container_format fmp4;
 
               secure_token $args;
               secure_token_types application/vnd.apple.mpegurl;
@@ -496,7 +515,7 @@ in
               nginxAuthRequest
               + nginxProxySettings
               + ''
-                limit_except GET {
+                limit_except POST {
                     deny  all;
                 }
               '';
@@ -544,6 +563,16 @@ in
                     ${nginxProxySettings}
                 }
 
+                location /api/auth/first_time_login {
+                    auth_request off;
+                    limit_except GET {
+                        deny all;
+                    }
+                    rewrite ^/api(/.*)$ $1 break;
+                    proxy_pass http://frigate-api;
+                    ${nginxProxySettings}
+                }
+
                 location /api/stats {
                     ${nginxAuthRequest}
                     access_log off;
@@ -571,6 +600,14 @@ in
               add_header Cache-Control "public";
             '';
           };
+          "/fonts" = {
+            root = cfg.package.web;
+            extraConfig = ''
+              access_log off;
+              expires 1y;
+              add_header Cache-Control "public";
+            '';
+          };
           "/locales/" = {
             root = cfg.package.web;
             extraConfig = ''
@@ -578,7 +615,7 @@ in
               add_header Cache-Control "public";
             '';
           };
-          "~ ^/.*-([A-Za-z0-9]+)\.webmanifest$" = {
+          "~ ^/.*-([A-Za-z0-9]+)\\.webmanifest$" = {
             root = cfg.package.web;
             extraConfig = ''
               access_log off;
@@ -612,6 +649,8 @@ in
           vod_manifest_segment_durations_mode accurate;
           vod_ignore_edit_list on;
           vod_segment_duration 10000;
+
+          # MPEG-TS settings (not used when fMP4 is enabled, kept for reference)
           vod_hls_mpegts_align_frames off;
           vod_hls_mpegts_interleave_frames on;
 
@@ -637,6 +676,7 @@ in
         '';
       };
       appendConfig = ''
+        # frigate
         rtmp {
             server {
                 listen 1935;
@@ -653,6 +693,7 @@ in
         }
       '';
       appendHttpConfig = ''
+        # frigate
         map $sent_http_content_type $should_not_cache {
           'application/json' 0;
           default 1;
@@ -711,13 +752,20 @@ in
       serviceConfig = {
         ExecStartPre = [
           (pkgs.writeShellScript "frigate-clear-cache" ''
-            shopt -s extglob
-            rm --recursive --force /var/cache/frigate/!(model_cache)
+            ${lib.getExe pkgs.findutils} /var/cache/frigate -not -path '/var/cache/frigate/model_cache/*' -type f -delete
           '')
           (pkgs.writeShellScript "frigate-create-writable-config" ''
             cp --no-preserve=mode ${configFile} /run/frigate/frigate.yml
           '')
+        ]
+        ++ lib.optionals (!config.systemd.services.frigate.environment ? LIBAVFORMAT_VERSION_MAJOR) [
+          # Extract libavformat version to enable version-dependent flags in ffmpeg
+          (pkgs.writeShellScript "frigate-libavformat-major-version" ''
+            echo "LIBAVFORMAT_VERSION_MAJOR=$(${cfg.settings.ffmpeg.path}/bin/ffmpeg -version | ${lib.getExe pkgs.gnugrep} -Po "libavformat\W+\K\d+")" > /run/frigate/ffmpeg-env
+            echo "Detected $(cat /run/frigate/ffmpeg-env)"
+          '')
         ];
+        EnvironmentFile = [ "-/run/frigate/ffmpeg-env" ];
         ExecStart = "${cfg.package.python.interpreter} -m frigate";
         Restart = "on-failure";
         SyslogIdentifier = "frigate";
@@ -747,6 +795,9 @@ in
 
         # Sockets/IPC
         RuntimeDirectory = "frigate";
+
+        # Reduce visible process scope to cgroup
+        ProtectProc = "invisible";
       };
     };
   };

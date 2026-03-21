@@ -2,37 +2,38 @@
   lib,
   fetchFromGitHub,
   fetchYarnDeps,
-  php,
+  php85,
   yarn,
   fixup-yarn-lock,
   nixosTests,
 }:
-
+let
+  php = php85;
+in
 php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MnN6TIkNZWT+pAQf0+z5l3hj/7K/d3BfI7VAaUEKG8s=";
+    hash = "sha256-qdN+stXuwChv6IaFSX2SrSdej7Id/M0UaO2cggAvWdc=";
   };
 
-  vendorHash = "sha256-n+6yNXqarWRZt6VEuHrFe3nrTiGeHnkURmO2UuB/BVc=";
+  # Upstream composer.json file is missing the name, description and license fields
+  composerStrictValidation = false;
+  vendorHash = "sha256-xoPO/LAvMcpvx2sszSj3K9p09izeW1l67KYwpydMdNI=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Q+9hUxIfNrfdok39h04rz5I63RxOJ0qk3XlwvD1TcqI=";
+    hash = "sha256-48+u0NYZZiYvP2ADAkRdL079wmjWMHwPHi8rlDP41Eo=";
   };
 
   nativeBuildInputs = [
     yarn
     fixup-yarn-lock
   ];
-
-  # Upstream composer.json file is missing the name, description and license fields
-  composerStrictValidation = false;
 
   # NOTE: if patches are created from a git checkout, those should be modified
   # with `unix2dos` to make sure those apply here.
@@ -58,11 +59,14 @@ php.buildComposerProject2 (finalAttrs: {
     rm -r $out/share
   '';
 
-  passthru.tests = { inherit (nixosTests) grocy; };
+  passthru = {
+    phpPackage = php;
+    tests = { inherit (nixosTests) grocy; };
+  };
 
-  meta = with lib; {
-    license = licenses.mit;
-    maintainers = with maintainers; [ diogotcorreia ];
+  meta = {
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ diogotcorreia ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

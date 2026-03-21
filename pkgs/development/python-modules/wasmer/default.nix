@@ -26,7 +26,7 @@ let
     buildPythonPackage rec {
       inherit pname;
       version = "1.2.0";
-      format = "pyproject";
+      pyproject = true;
 
       outputs = [ "out" ] ++ lib.optional (pname == "wasmer") "testsout";
 
@@ -71,13 +71,13 @@ let
 
       pythonImportsCheck = [ "${lib.replaceStrings [ "-" ] [ "_" ] pname}" ];
 
-      meta = with lib; {
+      meta = {
         # https://github.com/wasmerio/wasmer-python/issues/778
         broken = pythonAtLeast "3.12";
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
-        license = licenses.mit;
-        platforms = platforms.unix;
+        license = lib.licenses.mit;
+        platforms = lib.platforms.unix;
         maintainers = [ ];
       };
     };

@@ -11,8 +11,10 @@
   fetchurl,
   writeText,
   pkg-config,
+  dune,
   customOCamlPackages ? null,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
   ncurses,
   csdp ? null,
   version,
@@ -23,7 +25,10 @@ let
 
   release = {
     "9.0.0".sha256 = "sha256-GRwYSvrJGiPD+I82gLOgotb+8Ra5xHZUJGcNwxWqZkU=";
+    "9.0.1".sha256 = "sha256-gRgQhFiYvGR/Z46TmTl1bgN9O32nifxQGdrzfw0WHrk=";
     "9.1.0".sha256 = "sha256-+QL7I1/0BfT87n7lSaOmpHj2jJuDB4idWhAxwzvVQOE=";
+    "9.1.1".sha256 = "sha256-aFsGsFzexyDnOVarHPKs35HjiV8uUCpeOKSl15wXZ4s=";
+    "9.2+rc2".sha256 = "sha256-L6V9Vyv8Q0IWpGfXqL/YKcpx/gLBa7k9rnPvRGvAO+M=";
   };
   releaseRev = v: "V${v}";
   fetched =
@@ -51,11 +56,21 @@ let
     substituteInPlace plugins/micromega/sos.ml --replace-warn "; csdp" "; ${csdp}/bin/csdp"
     substituteInPlace plugins/micromega/coq_micromega.ml --replace-warn "System.is_in_system_path \"csdp\"" "true"
   '';
-  ocamlPackages = if customOCamlPackages != null then customOCamlPackages else ocamlPackages_4_14;
+  ocamlPackages =
+    if customOCamlPackages != null then
+      customOCamlPackages
+    else
+      let
+        case = case: out: { inherit case out; };
+        inherit (lib.versions) range;
+      in
+      lib.switch rocq-version [
+        (case (range "9.0" "9.1") ocamlPackages_4_14)
+      ] ocamlPackages_5_4;
   ocamlNativeBuildInputs = [
     ocamlPackages.ocaml
     ocamlPackages.findlib
-    ocamlPackages.dune_3
+    dune
   ];
   ocamlPropagatedBuildInputs = [ ocamlPackages.zarith ];
   self = stdenv.mkDerivation {
@@ -161,7 +176,7 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Rocq Prover";
       longDescription = ''
         The Rocq Prover is an interactive theorem prover, or proof assistant. It provides
@@ -170,15 +185,15 @@ let
         semi-interactive development of machine-checked proofs.
       '';
       homepage = "https://rocq-prover.org";
-      license = licenses.lgpl21;
+      license = lib.licenses.lgpl21;
       branch = rocq-version;
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         proux01
         roconnor
         vbgl
         Zimmi48
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "rocq";
     };
   };

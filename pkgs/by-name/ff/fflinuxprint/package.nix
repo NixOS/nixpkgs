@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fflinuxprint";
-  version = "1.1.3-4";
+  version = "1.1.4-3";
 
   src = fetchurl {
     url = "https://support-fb.fujifilm.com/driver_downloads/fflinuxprint_${finalAttrs.version}_amd64.deb";
-    hash = "sha256-Q0qB4gvEWa10KGt6SngVqraxFePxIQ62nTrFZ44vyrU=";
+    hash = "sha256-oi6p4e9Uigz0TbEcmloDhv3qU98Ou1qqdorGY3942uM=";
     curlOpts = "--user-agent Mozilla/5.0"; # HTTP 410 otherwise
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/share/cups/model
-    mv {etc,usr/lib} $out
+    mv usr/lib $out
     mv usr/share/ppd/fujifilm/* $out/share/cups/model
 
     runHook postInstall

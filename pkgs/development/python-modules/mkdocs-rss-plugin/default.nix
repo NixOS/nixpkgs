@@ -9,26 +9,27 @@
   mkdocs,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
   validator-collection,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.3";
+  version = "1.17.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
-    tag = version;
-    hash = "sha256-wgR0uwme7fXNZHx7xdm0HNfXG6qT4qpTJgR2SaXDel4=";
+    tag = finalAttrs.version;
+    hash = "sha256-rUMjS0+895SsU7qNckLL3BprUQa/3lJDjpwhMkF0jYg=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     cachecontrol
@@ -65,11 +66,11 @@ buildPythonPackage rec {
     "tests/test_build.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin to generate a RSS feeds for created and updated pages, using git log and YAML frontmatter";
     homepage = "https://github.com/Guts/mkdocs-rss-plugin";
-    changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

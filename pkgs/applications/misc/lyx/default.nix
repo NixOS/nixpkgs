@@ -1,18 +1,19 @@
 {
   fetchurl,
   lib,
-  mkDerivation,
+  stdenv,
   pkg-config,
   python3,
   file,
   bc,
   qtbase,
+  wrapQtAppsHook,
   qtsvg,
   hunspell,
   makeWrapper, # , mythes, boost
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   version = "2.4.4";
   pname = "lyx";
 
@@ -27,6 +28,7 @@ mkDerivation rec {
     makeWrapper
     python3
     qtbase
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
@@ -52,11 +54,11 @@ mkDerivation rec {
   # python is run during runtime to do various tasks
   qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "WYSIWYM frontend for LaTeX, DocBook";
     homepage = "https://www.lyx.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vcunat ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.vcunat ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -13,7 +13,7 @@ let
   python = python313.override {
     self = python;
     packageOverrides = final: prev: {
-      django = final.django_5_2;
+      django = final.django_5;
       django-csp = prev.django-csp.overridePythonAttrs rec {
         version = "4.0";
         src = fetchPypi {
@@ -53,9 +53,10 @@ let
       django-organizations
       django-postgres-partition
       django-prometheus
-      django-redis
       django-storages
+      django-valkey
       google-cloud-logging
+      granian
       gunicorn
       orjson
       psycopg
@@ -68,13 +69,17 @@ let
       whitenoise
     ]
     ++ celery.optional-dependencies.redis
+    ++ celery.optional-dependencies.sqlalchemy
     ++ django-allauth.optional-dependencies.headless-spec
     ++ django-allauth.optional-dependencies.mfa
     ++ django-allauth.optional-dependencies.socialaccount
-    ++ django-redis.optional-dependencies.hiredis
     ++ django-storages.optional-dependencies.boto3
     ++ django-storages.optional-dependencies.azure
     ++ django-storages.optional-dependencies.google
+    ++ django-valkey.optional-dependencies.libvalkey
+    ++ django-valkey.optional-dependencies.lz4
+    ++ granian.optional-dependencies.reload
+    ++ granian.optional-dependencies.uvloop
     ++ psycopg.optional-dependencies.c
     ++ psycopg.optional-dependencies.pool
     ++ pydantic.optional-dependencies.email;
@@ -84,14 +89,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glitchtip";
-  version = "5.1.1";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "glitchtip";
     repo = "glitchtip-backend";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P5J4nFXQHt+vP2W1bzdw4V9Pq+YnYsjgJPnU89RYofI=";
+    hash = "sha256-FxkIbSrIyvLnD9n/Cb2udOhsnoC/bwGAfCRB1L/fhwo=";
   };
 
   propagatedBuildInputs = pythonPackages;

@@ -8,7 +8,7 @@
 
 let
   pname = "py-deprecate";
-  version = "0.3.2";
+  version = "0.4.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -17,8 +17,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Borda";
     repo = "pyDeprecate";
-    rev = "v${version}";
-    hash = "sha256-84RmQvLxwtLPQk3hX7Q6eeJeejhrO3t+mc95W1E85Fg=";
+    tag = "v${version}";
+    hash = "sha256-Rc/5Y3myEUjbXRr2uE+1iaIrCZK+eeKXy05+C75sn3g=";
   };
 
   nativeCheckInputs = [
@@ -28,10 +28,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "deprecate" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module for marking deprecated functions or classes and re-routing to the new successors' instance. Used by torchmetrics";
     homepage = "https://borda.github.io/pyDeprecate/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
   };
 }

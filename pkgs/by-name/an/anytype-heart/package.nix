@@ -26,16 +26,18 @@ buildGoModule (finalAttrs: {
 
   # Use only versions specified in anytype-ts middleware.version file:
   #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
-  version = "0.43.0-rc02";
+  version = "0.48.5";
 
+  # Update only together with 'anytype' package.
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hqDwzW1Tl44ipL1EAwlXUoKaQ0Wvfa2rtZMQy4pgQ8k=";
+    hash = "sha256-h7oXx/twHXWb97xHr5hoviYY5lRLKUnT+uMIiLlD5pw=";
   };
 
-  vendorHash = "sha256-Rs+CusvMksyXUplGk09J4CiFgl/D4KtsI9C15dSCjOI=";
+  vendorHash = "sha256-vmOEt3cpkq8JJ3s6+VUOOwr+DyF8W1pavW1P+XnrBw8=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [
@@ -95,5 +97,6 @@ buildGoModule (finalAttrs: {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

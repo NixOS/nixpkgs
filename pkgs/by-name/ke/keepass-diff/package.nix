@@ -4,22 +4,22 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "keepass-diff";
   version = "1.2.0";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-CqLH5Dosp26YfqgOVcZilfo5svAEv+pAbi1zebGMnb4=";
   };
 
   cargoHash = "sha256-QjcXeLLIvegzETIu3xbZQ+o2WYxR6xkALVOOWYWhGUo=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI-tool to diff Keepass (.kdbx) files";
     homepage = "https://keepass-diff.narigo.dev/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wamserma ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wamserma ];
     mainProgram = "keepass-diff";
   };
-}
+})

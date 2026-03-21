@@ -22,7 +22,7 @@
   eigen,
   gtest,
   pybind11,
-  tbb_2022,
+  onetbb,
 
   # tests
   pytestCheckHook,
@@ -39,18 +39,17 @@
 
 buildPythonPackage rec {
   pname = "scipp";
-  version = "25.08.0";
+  version = "26.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipp";
     repo = "Scipp";
-    # https://github.com/scipp/scipp/pull/3722
     tag = version;
-    hash = "sha256-nLccJlFnnVTpamph2oIaMxRD5ljrw6GlCnnTx7LfrO0=";
+    hash = "sha256-Jbp7dOEAnXe9kBcYt35iC01i6FnZkFY5n9okGCeuuL4=";
   };
   env = {
-    SKIP_CONAN = "true";
+    SKIP_REMOTE_SOURCES = "true";
   };
 
   build-system = [
@@ -75,7 +74,7 @@ buildPythonPackage rec {
     gtest
     pybind11
     units-llnl.passthru.top-level
-    tbb_2022
+    onetbb
   ];
 
   nativeCheckInputs = [
@@ -104,11 +103,5 @@ buildPythonPackage rec {
     homepage = "https://scipp.github.io";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ doronbehar ];
-    # Got:
-    #
-    #   error: a template argument list is expected after a name prefixed by the template keyword [-Wmissing-template-arg-list-after-template-kw]
-    #
-    # Needs debugging along with upstream.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

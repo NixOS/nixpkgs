@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "snes9x";
-  version = "0-unstable-2025-09-18";
+  version = "0-unstable-2026-02-10";
 
   src = fetchFromGitHub {
     owner = "snes9xgit";
     repo = "snes9x";
-    rev = "b43619754a595ec6feb089a387638118037ef74b";
-    hash = "sha256-b6YC4qisHPdJtM1IEsrwUjCBZ6JElZuKvakApOLGGvY=";
+    rev = "5110899f86b0facb67ebd84200e3d43e4f7f4e01";
+    hash = "sha256-DniWaYte0N7xZq8w294CVxMWYeQO3wK91ECJp+LOv3k=";
   };
 
   makefile = "Makefile";

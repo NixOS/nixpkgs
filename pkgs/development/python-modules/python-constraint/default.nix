@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "python-constraint";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-constraint";
     repo = "python-constraint";
     tag = version;
-    sha256 = "sha256-Vi+dD/QmHfUrL0l5yTb7B1ILuXj3HYfT0QINdyfoqFo=";
+    sha256 = "sha256-VTecK82VSDoUOkPnuC+PnQYPjPBsaPeWCqm2st6Wwvg=";
   };
 
   build-system = [
@@ -41,11 +41,11 @@ buildPythonPackage rec {
     "tests/test_util_benchmark.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Constraint Solving Problem resolver for Python";
     homepage = "https://labix.org/doc/constraint/";
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

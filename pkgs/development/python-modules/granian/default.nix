@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "granian";
-  version = "2.5.4";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "emmett-framework";
     repo = "granian";
     tag = "v${version}";
-    hash = "sha256-6T4ge9QrLxpkgtJvNmgUlHaxFK3KyQLJo12rjs80J3M=";
+    hash = "sha256-6CtmoY3BHO2t+ZjMzZPKUufOkaal0K+MTYhC1eiVXWQ=";
   };
 
   # Granian forces a custom allocator for all the things it runs,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-iY0vh+Y0wU1/wJVXb2GDG8vb5ovrFD+4tXKODEA35Kc=";
+    hash = "sha256-7KeidUDMH79b8qgAR5bvY8tAmW5OHmVtLIdb9LlP9w0=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -79,9 +79,21 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "tests/" ];
 
-  pythonImportsCheck = [ "granian" ];
+  disabledTests = [
+    # SSLCertVerificationError: certificate verify failed: certificate has expired
+    "test_asgi_ws_scope"
+    "test_rsgi_ws_scope"
+  ];
 
-  versionCheckProgramArg = "--version";
+  # This is a measure of last resort. Granian tests fully lock up
+  # on shutdown in >90% of cases, which makes the whole thing
+  # impossible to build without restarting it double digits
+  # numbers of times. The issue has not been fully identified,
+  # and upstream claims it does not exist.
+  # FIXME: root cause and fix this.
+  doCheck = false;
+
+  pythonImportsCheck = [ "granian" ];
 
   passthru.updateScript = nix-update-script { };
 

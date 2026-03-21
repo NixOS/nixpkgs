@@ -8,18 +8,18 @@
   ocm,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "ocm";
-  version = "1.0.8";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
-    rev = "v${version}";
-    sha256 = "sha256-v+BWmdTDJm1oElP/XV59pHm7NlsFj2sDTymtT0xpXKY=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-f5y7debNrMVTjGXyFtCjGnTtV8LuPHnblQ9tmllfsRs=";
   };
 
-  vendorHash = "sha256-GOdRYVnFPS1ovFmU+9MEnwTNg1sa9/25AjzbcbBJrQ0=";
+  vendorHash = "sha256-vlFMN0490J48+koPgB6ezVJyjda+kGWmU+d+rLgVSmg=";
 
   # Strip the final binary.
   ldflags = [
@@ -51,14 +51,14 @@ buildGoModule rec {
     command = "ocm version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI for the Red Hat OpenShift Cluster Manager";
     mainProgram = "ocm";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/openshift-online/ocm-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       stehessel
       jfchevrette
     ];
   };
-}
+})

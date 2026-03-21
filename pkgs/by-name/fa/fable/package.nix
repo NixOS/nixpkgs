@@ -6,9 +6,9 @@
 
 buildDotnetGlobalTool (finalAttrs: {
   pname = "fable";
-  version = "4.26.0";
+  version = "4.29.0";
 
-  nugetHash = "sha256-nhIGVwu6kHTW+t0hiD1Pha3+ErE5xACBrVDgFP6qMnc=";
+  nugetHash = "sha256-Eed1bb9heteWOWmv6NnXPzXbf3t218K/eHufwgtRuzI=";
 
   passthru.tests = testers.testVersion {
     package = finalAttrs.finalPackage;

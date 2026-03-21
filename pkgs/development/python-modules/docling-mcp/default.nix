@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "docling-mcp";
-  version = "1.2.0";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-mcp";
     tag = "v${version}";
-    hash = "sha256-ktJ5K+1Qb7/lUHPkmv2FMnSe6PiIQ1BvWj5qIG8xfdE=";
+    hash = "sha256-OyLL8g9fh1H9N3i5ok885IzC5pFckMoqsjd8oX/HdRY=";
   };
 
   pythonRemoveDeps = [

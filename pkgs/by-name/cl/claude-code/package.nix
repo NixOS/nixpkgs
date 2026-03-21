@@ -1,30 +1,42 @@
+# NOTE: Use the following command to update the package
+# ```sh
+# nix-shell maintainers/scripts/update.nix --argstr commit true --arg predicate '(path: pkg: builtins.elem path [["claude-code"] ["claude-code-bin"] ["vscode-extensions" "anthropic" "claude-code"]])'
+# ```
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchzip,
-  nodejs_20,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+  bubblewrap,
+  procps,
+  socat,
 }:
-
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "claude-code";
-  version = "1.0.126";
-
-  nodejs = nodejs_20; # required for sandboxed Nix builds on Darwin
+  version = "2.1.80";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${version}.tgz";
-    hash = "sha256-U6uYRkmVqMoJDAAzLHpF9G5OglPhLqPuwe6gWMQPx78=";
+    url = "https://registry.npmjs.org/@anthropic-ai/claude-code/-/claude-code-${finalAttrs.version}.tgz";
+    hash = "sha256-0Jdr7e4QcWzEWrezOfqTQW3s0w2xlUA4tVScY0y/zI8=";
   };
 
-  npmDepsHash = "sha256-m+GYa3uPfkUDV+p95uQToY3n/k0JG8hbppBn0GUeV+8=";
+  npmDepsHash = "sha256-PxQh0bXPRotAzPxOuNZHrtxmHw89e0rlnRN/zdMhIEA=";
+
+  strictDeps = true;
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
+
+    # https://github.com/anthropics/claude-code/issues/15195
+    substituteInPlace cli.js \
+          --replace-fail '#!/bin/sh' '#!/usr/bin/env sh'
   '';
 
   dontNpmBuild = true;
 
-  AUTHORIZED = "1";
+  env.AUTHORIZED = "1";
 
   # `claude-code` tries to auto-update by default, this disables that functionality.
   # https://docs.anthropic.com/en/docs/agents-and-tools/claude-code/overview#environment-variables
@@ -32,8 +44,30 @@ buildNpmPackage rec {
   postInstall = ''
     wrapProgram $out/bin/claude \
       --set DISABLE_AUTOUPDATER 1 \
-      --unset DEV
+      --set-default FORCE_AUTOUPDATE_PLUGINS 1 \
+      --set DISABLE_INSTALLATION_CHECKS 1 \
+      --unset DEV \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            # claude-code uses [node-tree-kill](https://github.com/pkrumins/node-tree-kill) which requires procps's pgrep(darwin) or ps(linux)
+            procps
+          ]
+          # the following packages are required for the sandbox to work (Linux only)
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            bubblewrap
+            socat
+          ]
+        )
+      }
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = ./update.sh;
 
@@ -43,10 +77,12 @@ buildNpmPackage rec {
     downloadPage = "https://www.npmjs.com/package/@anthropic-ai/claude-code";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
+      adeci
       malo
       markus1189
       omarjatoi
+      xiaoxiangmoe
     ];
     mainProgram = "claude";
   };
-}
+})

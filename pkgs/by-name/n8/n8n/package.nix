@@ -5,6 +5,8 @@
   fetchFromGitHub,
   nodejs,
   pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   python3,
   node-gyp,
   cctools,
@@ -14,26 +16,34 @@
   libpq,
   makeWrapper,
 }:
-
+let
+  python = python3.withPackages (
+    ps: with ps; [
+      websockets
+    ]
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.111.0";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-Ot7z6ZGOUeezp4r8mbGIhkvtkyigma1nLfVydZTVoMg=";
+    hash = "sha256-/UJ6+EpNh+jr8digBFKltxahebAeJKGwj3rbkXO0vm8=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 2;
-    hash = "sha256-uRdCxQENxAsQsYgxSVwVxpG8BhEd/VrYbNLNXCo9cRw=";
+    pnpm = pnpm_10;
+    fetcherVersion = 3;
+    hash = "sha256-2m5ftzOKzXpRDdeUDfoWkpYY982cyqHB7uTZ3/3dhsk=";
   };
 
   nativeBuildInputs = [
-    pnpm_10.configHook
+    pnpmConfigHook
+    pnpm_10
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
     makeWrapper
@@ -84,10 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out/{bin,lib/n8n}
-    mv {packages,node_modules} $out/lib/n8n
+    cp -r {packages,node_modules} $out/lib/n8n
 
     makeWrapper $out/lib/n8n/packages/cli/bin/n8n $out/bin/n8n \
       --set N8N_RELEASE_TYPE "stable"
+
+    # JavaScript runner
+    makeWrapper ${nodejs}/bin/node $out/bin/n8n-task-runner \
+      --add-flags "$out/lib/n8n/packages/@n8n/task-runner/dist/start.js"
+
+    # Python runner
+    mkdir -p $out/lib/n8n-task-runner-python
+    cp -r packages/@n8n/task-runner-python/* $out/lib/n8n-task-runner-python/
+    makeWrapper ${python}/bin/python $out/bin/n8n-task-runner-python \
+      --add-flags "$out/lib/n8n-task-runner-python/src/main.py" \
+      --prefix PYTHONPATH : "$out/lib/n8n-task-runner-python"
 
     runHook postInstall
   '';
@@ -113,6 +134,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       gepbird
       AdrienLemaire
+      sweenu
+      wrbbz
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

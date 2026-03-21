@@ -10,13 +10,13 @@
 
 skawarePackages.buildPackage {
   pname = "s6-rc";
-  version = "0.5.6.0";
-  sha256 = "sha256-gSd/aAXo2ZmtKVv5FAqQmUO2h//Ptao8Tv2EsaV0WG4=";
+  version = "0.6.0.0";
+  sha256 = "sha256-RtSmKVnvFgl7hNz7DDsxpv9JqkdtSu7Jxbe94c5oSQE=";
 
   manpages = skawarePackages.buildManPages {
     pname = "s6-rc-man-pages";
-    version = "0.5.5.0.1";
-    sha256 = "sha256-Ywke3FG/xhhUd934auDB+iFRDCvy8IJs6IkirP6O/As=";
+    version = "0.6.0.0.1";
+    sha256 = "sha256-zHkh5H0/nXsLjHJE9PT+2ga8gK1evm4ktheMqqNV1hQ=";
     description = "mdoc(7) versions of the documentation for the s6-rc service manager";
     maintainers = [ lib.maintainers.qyliss ];
   };
@@ -25,18 +25,17 @@ skawarePackages.buildPackage {
   platforms = lib.platforms.unix;
 
   outputs = [
-    "bin"
-    "lib"
+    # "bin" "lib"
+    "out"
     "dev"
     "doc"
-    "out"
   ];
 
   configureFlags = [
-    "--libdir=\${lib}/lib"
-    "--libexecdir=\${lib}/libexec"
-    "--dynlibdir=\${lib}/lib"
-    "--bindir=\${bin}/bin"
+    "--libdir=\${out}/lib"
+    "--libexecdir=\${out}/libexec"
+    "--dynlibdir=\${out}/lib"
+    "--bindir=\${out}/bin"
     "--includedir=\${dev}/include"
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"
     "--with-include=${skalibs.dev}/include"
@@ -72,7 +71,7 @@ skawarePackages.buildPackage {
   postInstall = ''
     # remove all s6 executables from build directory
     rm $(find -name "s6-rc-*" -type f -mindepth 1 -maxdepth 1 -executable)
-    rm s6-rc libs6rc.*
+    rm s6-rc libs6rc*
 
     mv doc $doc/share/doc/s6-rc/html
     mv examples $doc/share/doc/s6-rc/examples

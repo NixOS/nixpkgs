@@ -4,7 +4,6 @@
   distro,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "ruyaml";
   version = "0.91.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "pycontribs";
@@ -48,11 +45,11 @@ buildPythonPackage rec {
     "test_issue_61"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "YAML 1.2 loader/dumper package for Python";
     homepage = "https://ruyaml.readthedocs.io/";
     changelog = "https://github.com/pycontribs/ruyaml/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

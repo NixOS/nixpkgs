@@ -8,15 +8,15 @@
   sqlite,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nix-index";
-  version = "0.1.9";
+  version = "0.1.9-unstable-2026-02-05";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-index";
-    rev = "v${version}";
-    hash = "sha256-kOVmgST/D3zNOcGVu1ReuPuVrUx41iRK4rs59lqYX74=";
+    rev = "8c84f67a33c4c26ec12f166cb5f63a77fafebe21";
+    hash = "sha256-8ZMKtBbsBPbccEWH1XHCYsxXX4hckHXwQNr5OzGrU0Q=";
   };
 
   cargoHash = "sha256-0yrTPrxN/4TOALqpQ5GW7LXKisc8msx3DvEpg8uO+IQ=";
@@ -37,15 +37,15 @@ rustPlatform.buildRustPackage rec {
     install -Dm555 command-not-found.nu -t $out/etc/profile.d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Files database for nixpkgs";
     homepage = "https://github.com/nix-community/nix-index";
-    changelog = "https://github.com/nix-community/nix-index/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/nix-community/nix-index/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [
       bennofs
-      figsoda
       ncfavier
     ];
+    mainProgram = "nix-index";
   };
-}
+})

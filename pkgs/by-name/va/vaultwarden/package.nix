@@ -17,21 +17,21 @@ let
   webvault = callPackage ./webvault.nix { };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "vaultwarden";
-  version = "1.34.3";
+  version = "1.35.4";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "vaultwarden";
-    rev = version;
-    hash = "sha256-Dj0ySVRvBZ/57+UHas3VI8bi/0JBRqn0IW1Dq+405J0=";
+    tag = finalAttrs.version;
+    hash = "sha256-NphgKTlyVsH42TEGU8unhL798jTQMkS5JyNckKhk8YM=";
   };
 
-  cargoHash = "sha256-4sDagd2XGamBz1XvDj4ycRVJ0F+4iwHOPlj/RglNDqE=";
+  cargoHash = "sha256-PkFxHhFrdVB/hfSoT6j87K4IEknl+ZO1omGHrXBWEMg=";
 
   # used for "Server Installed" version in admin panel
-  env.VW_VERSION = version;
+  env.VW_VERSION = finalAttrs.version;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Unofficial Bitwarden compatible server written in Rust";
     homepage = "https://github.com/dani-garcia/vaultwarden";
-    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${version}";
+    changelog = "https://github.com/dani-garcia/vaultwarden/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       dotlambda
@@ -62,4 +62,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "vaultwarden";
   };
-}
+})

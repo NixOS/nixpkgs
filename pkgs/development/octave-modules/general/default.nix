@@ -8,11 +8,11 @@
 
 buildOctavePackage rec {
   pname = "general";
-  version = "2.1.3";
+  version = "2.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-amslJm3haXaAehdm6jYJxcGZl+ggUcnJc3i6YJ3QkyM=";
+    sha256 = "sha256-sTd31PWTLmiR8qrBPaF/IrjJuLT/jtAXllnr0ZEkFI8=";
   };
 
   nativeBuildInputs = [

@@ -19,7 +19,7 @@
   gst_all_1,
   harfbuzz,
   harfbuzzFull,
-  icu70,
+  icu74,
   lcms,
   libavif,
   libdrm,
@@ -46,19 +46,16 @@
   wayland-scanner,
   woff2,
   zlib,
-  suffix,
   revision,
   system,
   throwSystem,
 }:
 let
-  suffix' =
-    if lib.hasPrefix "linux" suffix then
-      "ubuntu-22.04" + (lib.removePrefix "linux" suffix)
-    else if lib.hasPrefix "mac" suffix then
-      "mac-14" + (lib.removePrefix "mac" suffix)
-    else
-      suffix;
+  download =
+    (import ./browser-downloads.nix {
+      name = "webkit";
+      inherit revision;
+    }).${system} or throwSystem;
   libvpx' = libvpx.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "1.12.0";
@@ -70,20 +67,6 @@ let
       };
     }
   );
-  libavif' = libavif.overrideAttrs (
-    finalAttrs: previousAttrs: {
-      version = "0.9.3";
-      src = fetchFromGitHub {
-        owner = "AOMediaCodec";
-        repo = finalAttrs.pname;
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-ME/mkaHhFeHajTbc7zhg9vtf/8XgkgSRu9I/mlQXnds=";
-      };
-      postPatch = "";
-      patches = [ ];
-    }
-  );
-
   libjxl' = libjxl.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "0.8.2";
@@ -106,6 +89,14 @@ let
         # Fix multiple definition errors by using C++17 instead of C++11
         substituteInPlace CMakeLists.txt \
           --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
+        # Fix the build with CMake 4.
+        # See:
+        # * <https://github.com/webmproject/sjpeg/commit/9990bdceb22612a62f1492462ef7423f48154072>
+        # * <https://github.com/webmproject/sjpeg/commit/94e0df6d0f8b44228de5be0ff35efb9f946a13c9>
+        substituteInPlace third_party/sjpeg/CMakeLists.txt \
+          --replace-fail \
+            'cmake_minimum_required(VERSION 2.8.7)' \
+            'cmake_minimum_required(VERSION 3.5...3.10)'
       '';
       postInstall = "";
 
@@ -125,12 +116,11 @@ let
   webkit-linux = stdenv.mkDerivation {
     name = "playwright-webkit";
     src = fetchzip {
-      url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
-      stripRoot = false;
+      inherit (download) url stripRoot;
       hash =
         {
-          x86_64-linux = "sha256-OSVHFGdcQrzmhLPdXF61tKmip/6/D+uaQgSBBQiOIZI=";
-          aarch64-linux = "sha256-b8XwVMCwSbujyqgkJKIPAVNX83Qmmsthprr2x9XSb10=";
+          x86_64-linux = "sha256-Ei08TuR+WedVAfKRSeRQq7ZhULgxXQIV0bQPcNFYhr4=";
+          aarch64-linux = "sha256-/+tven7ksYhXQxPYfazyZhNsgvE8rr3A28fZPwL4c9s=";
         }
         .${system} or throwSystem;
     };
@@ -154,9 +144,9 @@ let
       gst_all_1.gstreamer
       harfbuzz
       harfbuzzFull
-      icu70
+      icu74
       lcms
-      libavif'
+      libavif
       libdrm
       libepoxy
       libevent
@@ -206,12 +196,11 @@ let
     '';
   };
   webkit-darwin = fetchzip {
-    url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
-    stripRoot = false;
+    inherit (download) url stripRoot;
     hash =
       {
-        x86_64-darwin = "sha256-shjhozJS2VbBjpjJVlM9hwBzGWwgva1qhfEUhY8t9Bk=";
-        aarch64-darwin = "sha256-ZRl86L/OOTNPWfZDl6JQfuXL41kI/Wir99/JIbf7T7M=";
+        x86_64-darwin = "sha256-An3sdw8HltgHQ6YASsxyhoK1fd8PxZ0BBCMpnOORkv8=";
+        aarch64-darwin = "sha256-suXPCuXLMz3xoFxE5+Yjd9OXxLfNDDJiU6O1Ic0PsOI=";
       }
       .${system} or throwSystem;
   };

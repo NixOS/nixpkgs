@@ -5,7 +5,8 @@
   cmake,
   gettext,
   libuv,
-  lua,
+  lua5_1,
+  luajit,
   pkg-config,
   unibilium,
   utf8proc,
@@ -25,6 +26,11 @@
   fish ? null,
   python3 ? null,
 }:
+
+let
+  lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
+in
+
 stdenv.mkDerivation (
   finalAttrs:
   let
@@ -34,7 +40,7 @@ stdenv.mkDerivation (
         let
           luaLibDir = "$out/lib/lua/${lib.versions.majorMinor luapkgs.lua.luaversion}";
         in
-        (luapkgs.lpeg.overrideAttrs (oa: {
+        (luapkgs.lpeg.overrideAttrs (old: {
           preConfigure = ''
             # neovim wants clang .dylib
             substituteInPlace Makefile \
@@ -53,7 +59,7 @@ stdenv.mkDerivation (
             rm -f ${luaLibDir}/lpeg.so
           '';
           nativeBuildInputs =
-            oa.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
+            old.nativeBuildInputs ++ (lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames);
         }))
       else
         luapkgs.lpeg;
@@ -95,7 +101,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.11.4";
+    version = "0.11.6";
 
     __structuredAttrs = true;
 
@@ -103,8 +109,10 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-IpMHxIDpldg4FXiXPEY2E51DfO/Z5XieKdtesLna9Xw=";
+      hash = "sha256-GdfCaKNe/qPaUV2NJPXY+ATnQNWnyFTFnkOYDyLhTNg=";
     };
+
+    strictDeps = true;
 
     patches = [
       # introduce a system-wide rplugin.vim in addition to the user one
@@ -112,8 +120,6 @@ stdenv.mkDerivation (
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
     ];
-
-    dontFixCmake = true;
 
     inherit lua;
     treesitter-parsers =
@@ -145,6 +151,10 @@ stdenv.mkDerivation (
     ++ lib.optionals finalAttrs.finalPackage.doCheck [
       glibcLocales
       procps
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.libc != "glibc") [
+      # Provide libintl for non-glibc platforms
+      gettext
     ];
 
     doCheck = false;
@@ -238,7 +248,6 @@ stdenv.mkDerivation (
       versionCheckHook
     ];
     versionCheckProgram = "${placeholder "out"}/bin/nvim";
-    versionCheckProgramArg = "--version";
     doInstallCheck = true;
 
     passthru = {
@@ -255,7 +264,7 @@ stdenv.mkDerivation (
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage = "https://www.neovim.io";
+      homepage = "https://neovim.io";
       changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the

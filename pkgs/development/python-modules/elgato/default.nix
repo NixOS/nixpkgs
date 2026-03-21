@@ -10,7 +10,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "elgato";
   version = "5.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -52,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elgato" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client for Elgato Key Lights";
     homepage = "https://github.com/frenck/python-elgato";
     changelog = "https://github.com/frenck/python-elgato/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

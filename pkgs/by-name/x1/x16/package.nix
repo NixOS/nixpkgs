@@ -12,6 +12,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "x16-emulator";
   version = "48";
+  # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "X16Community";

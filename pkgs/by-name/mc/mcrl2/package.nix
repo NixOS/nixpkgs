@@ -10,13 +10,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "202407";
-  build_nr = "1";
+  version = "202507";
+  build_nr = "0";
   pname = "mcrl2";
 
   src = fetchurl {
     url = "https://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
-    hash = "sha256-VhP9BFSujxYMcQVu6P6k6yiH2UUhCB3P+Pj+9Ir7x6s=";
+    hash = "sha256-Ur7GGXbYvVmrEUq/CTRyuVNLDHKfFrYHJibo0JvYhyM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Toolset for model-checking concurrent systems and protocols";
     longDescription = ''
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
       concurrent systems and protocols
     '';
     homepage = "https://www.mcrl2.org/";
-    license = licenses.boost;
-    maintainers = with maintainers; [ moretea ];
-    platforms = platforms.unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ moretea ];
+    platforms = lib.platforms.unix;
   };
 }

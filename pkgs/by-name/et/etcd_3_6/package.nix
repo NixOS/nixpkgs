@@ -2,7 +2,6 @@
   applyPatches,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   k3s,
   lib,
@@ -12,11 +11,11 @@
 }:
 
 let
-  version = "3.6.4";
-  etcdSrcHash = "sha256-otz+06cOD2MVnMZWKId1GN+MeZfnDbdudiYfVCKdzuo=";
-  etcdCtlVendorHash = "sha256-kTH+s/SY+xwo6kt6iPJ7XDhin0jPk0FBr0eOe/717bE=";
-  etcdUtlVendorHash = "sha256-P0yx9YMMD9vT7N6LOlo26EAOi+Dj33p3ZjAYEoaL19A=";
-  etcdServerVendorHash = "sha256-kgbCT1JxI98W89veCItB7ZfW4d9D3/Ip3tOuFKEX9v4=";
+  version = "3.6.8";
+  etcdSrcHash = "sha256-dNoQ+KKHZoi9GAqjyKPOpEJUwN6FID1tKfMiMknG7Dc=";
+  etcdCtlVendorHash = "sha256-lxFvpEGsp/HS0p54JrjBps7C/c7QR2QFQXU81sO9cPU=";
+  etcdUtlVendorHash = "sha256-6vzClDji9O2SGnKL3lsv3AUbCt/BicsDy1sPeuPdGXk=";
+  etcdServerVendorHash = "sha256-4vz63r05uZOzFQYA9jz9HLsQEDFL30cOETmV/AZanmY=";
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -25,12 +24,6 @@ let
       tag = "v${version}";
       hash = etcdSrcHash;
     };
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/etcd-io/etcd/commit/31650ab0c8df43af05fc4c13b48ffee59271eec7.patch";
-        hash = "sha256-Q94HOLFx2fnb61wMQsAUT4sIBXfxXqW9YEayukQXX18=";
-      })
-    ];
   };
 
   env = {
@@ -42,7 +35,10 @@ let
     downloadPage = "https://github.com/etcd-io/etcd";
     license = lib.licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with lib.maintainers; [ dtomvan ];
+    maintainers = with lib.maintainers; [
+      dtomvan
+      superherointj
+    ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 
@@ -124,7 +120,7 @@ let
   };
 in
 symlinkJoin {
-  name = "etcd-${version}";
+  pname = "etcd";
 
   inherit meta version;
 
@@ -132,11 +128,7 @@ symlinkJoin {
     deps = {
       inherit etcdserver etcdutl etcdctl;
     };
-    # Fix-Me: Tests for etcd 3.6 needs work.
-    # tests = {
-    #   inherit (nixosTests) etcd etcd-cluster;
-    #   k3s = k3s.passthru.tests.etcd;
-    # };
+    tests = nixosTests.etcd."3_6";
     updateScript = ./update.sh;
   };
 

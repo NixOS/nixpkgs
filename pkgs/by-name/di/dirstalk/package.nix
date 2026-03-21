@@ -5,14 +5,14 @@
   fetchpatch,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dirstalk";
   version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "stefanoj3";
     repo = "dirstalk";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-gSMkTGzMDI+scG3FQ0u0liUDL4qOPPW2UWLlAQcmmaA=";
   };
 
@@ -31,17 +31,17 @@ buildGoModule rec {
   ldflags = [
     "-w"
     "-s"
-    "-X github.com/stefanoj3/dirstalk/pkg/cmd.Version=${version}"
+    "-X github.com/stefanoj3/dirstalk/pkg/cmd.Version=${finalAttrs.version}"
   ];
 
   # Tests want to write to the root directory
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to brute force paths on web servers";
     mainProgram = "dirstalk";
     homepage = "https://github.com/stefanoj3/dirstalk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

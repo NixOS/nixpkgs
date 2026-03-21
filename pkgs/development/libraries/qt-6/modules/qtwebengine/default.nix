@@ -7,6 +7,7 @@
   buildPackages,
   bison,
   coreutils,
+  fetchpatch2,
   flex,
   gperf,
   ninja,
@@ -14,19 +15,25 @@
   python3,
   which,
   nodejs,
-  xorg,
-  libXcursor,
-  libXScrnSaver,
-  libXrandr,
-  libXtst,
+  libxext,
+  libxdamage,
+  libxcomposite,
+  xrandr,
+  libxkbfile,
+  libpciaccess,
+  libxcursor,
+  libxscrnsaver,
+  libxrandr,
+  libxtst,
   libxshmfence,
-  libXi,
+  libxi,
   cups,
   fontconfig,
   freetype,
   harfbuzz,
   icu,
   dbus,
+  expat,
   libdrm,
   zlib,
   minizip,
@@ -37,7 +44,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -59,13 +65,12 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
   cctools,
   xcbuild,
-
-  fetchpatch,
 }:
 
 qtModule {
@@ -112,14 +117,14 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # Revert "Create EGLImage with eglCreateDRMImageMESA() for exporting dma_buf"
-    # Mesa 25.2 dropped eglCreateDRMImageMESA, so this no longer works.
-    # There are better ways to do this, but this is the easy fix for now.
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ddcd30454aa6338d898c9d20c8feb48f36632e16.diff";
-      revert = true;
-      hash = "sha256-ht7C3GIEaPtmMGLzQKOtMqE9sLKdqqYCgi/W6b430YU=";
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    # https://chromium-review.googlesource.com/c/chromium/src/+/6633292
+    (fetchpatch2 {
+      url = "https://github.com/chromium/chromium/commit/b0ff8c3b258a8816c05bdebf472dbba719d3c491.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/";
+      hash = "sha256-zDIlHd8bBtrThkFnrcyA13mhXYIQt6sKsi6qAyQ34yo=";
     })
   ];
 
@@ -210,7 +215,6 @@ qtModule {
 
     # Video formats
     srtp
-    libvpx
 
     # Audio formats
     libopus
@@ -228,6 +232,7 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
+    expat
     zlib
     minizip
     snappy
@@ -250,25 +255,26 @@ qtModule {
     pciutils
 
     # X11 libs
-    xorg.xrandr
-    libXScrnSaver
-    libXcursor
-    libXrandr
-    xorg.libpciaccess
-    libXtst
-    xorg.libXcomposite
-    xorg.libXdamage
+    xrandr
+    libxscrnsaver
+    libxcursor
+    libxrandr
+    libpciaccess
+    libxtst
+    libxcomposite
+    libxdamage
     libdrm
-    xorg.libxkbfile
+    libxkbfile
     libxshmfence
-    libXi
-    xorg.libXext
+    libxi
+    libxext
 
     # Pipewire
     pipewire
 
     libkrb5
     libgbm
+    libva
   ];
 
   buildInputs = [
@@ -284,7 +290,7 @@ qtModule {
   # Debug info is too big to link with LTO.
   separateDebugInfo = false;
 
-  meta = with lib; {
+  meta = {
     description = "Web engine based on the Chromium web browser";
     platforms = [
       "x86_64-darwin"

@@ -1,10 +1,12 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
   makeWrapper,
+  qttools,
+  wrapQtAppsHook,
   boost,
   doxygen,
   openssl,
@@ -14,10 +16,9 @@
   loki,
   qscintilla,
   qtbase,
-  qttools,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "tora";
   version = "3.2.176";
 
@@ -33,6 +34,7 @@ mkDerivation {
     extra-cmake-modules
     makeWrapper
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -68,17 +70,30 @@ mkDerivation {
   ];
 
   # these libraries are only searched for at runtime so we need to force-link them
-  NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl -L${libmysqlclient}/lib/mariadb";
-
-  qtWrapperArgs = [
-    ''--prefix PATH : ${lib.getBin graphviz}/bin''
+  env.NIX_LDFLAGS = toString [
+    "-lgvc"
+    "-lmysqlclient"
+    "-lecpg"
+    "-lssl"
+    "-L${libmysqlclient}/lib/mariadb"
   ];
 
-  meta = with lib; {
+  qtWrapperArgs = [
+    "--prefix PATH : ${lib.getBin graphviz}/bin"
+  ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  meta = {
     description = "Tora SQL tool";
     mainProgram = "tora";
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.linux;
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.asl20;
+    # fails to build on hydra since 2024
+    broken = true;
   };
 }

@@ -6,20 +6,23 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "zed";
-  version = "0.30.2";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "authzed";
     repo = "zed";
-    tag = "v${version}";
-    hash = "sha256-ftSgp0zxUmSTJ7lFHxFdebKrCKbsRocDkfabVpyQ5Kg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DeqfzI5+UPsR358QnummTp/cYCr2bIotB2tB/NYYd1M=";
   };
 
-  vendorHash = "sha256-2AkknaufRhv79c9WQtcW5oSwMptkR+FB+1/OJazyGSM=";
+  vendorHash = "sha256-LnmY5GikIHgOBi0hWO5B5FyBymKSZZQMK5VnDj5Ge84=";
 
-  ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${src.tag}'" ];
+  ldflags = [ "-X 'github.com/jzelinskie/cobrautil/v2.Version=${finalAttrs.src.tag}'" ];
+
+  # Version test expects '(devel)' but version is being set to the package version
+  checkFlags = [ "--skip=TestGetClientVersion" ];
 
   preCheck = ''
     export NO_COLOR=true
@@ -34,8 +37,8 @@ buildGoModule rec {
       --zsh <($out/bin/zed completion zsh)
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/authzed/zed/releases/tag/${src.tag}";
+  meta = {
+    changelog = "https://github.com/authzed/zed/releases/tag/${finalAttrs.src.tag}";
     description = "Command line for managing SpiceDB";
     mainProgram = "zed";
     longDescription = ''
@@ -43,10 +46,10 @@ buildGoModule rec {
       Google Zanzibar. zed is the command line client for SpiceDB.
     '';
     homepage = "https://authzed.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       squat
       thoughtpolice
     ];
   };
-}
+})

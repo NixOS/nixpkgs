@@ -16,13 +16,13 @@ let
 in
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "10.3";
+  version = "11.0";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    hash = "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=";
+    hash = "sha256-H7HgYT+okuVXo2SinrSs+hxAKCn4Q4su7oMbebKd/7s=";
   };
 
   nativeCheckInputs = [
@@ -57,14 +57,15 @@ buildFishPlugin rec {
       ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
   );
 
-  meta = with lib; {
+  meta = {
     description = "Augment your fish command line with fzf key bindings";
     homepage = "https://github.com/PatrickF1/fzf.fish";
     changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       euxane
       natsukium
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

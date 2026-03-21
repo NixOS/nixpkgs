@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  libpthreadstubs,
+  libpthread-stubs,
   icu,
 }:
 
@@ -20,16 +20,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    libpthreadstubs
+    libpthread-stubs
     icu
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Clock, timer, and stopwatch for the terminal";
     homepage = "https://octobanana.com/software/peaclock";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ djanatyn ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ djanatyn ];
     mainProgram = "peaclock";
   };
 }

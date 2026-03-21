@@ -7,14 +7,14 @@
   protobufc,
   xxHash,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpg_query";
   version = "17-6.1.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-UXba2WYyIO7RcFcNZeLL+Q9CwlloMZ5oFfHfL7+j4dU=";
   };
 
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/pganalyze/libpg_query";
     description = "C library for accessing the PostgreSQL parser outside of the server environment";
-    changelog = "https://github.com/pganalyze/libpg_query/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/pganalyze/libpg_query/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

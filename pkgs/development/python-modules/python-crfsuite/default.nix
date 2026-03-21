@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "python-crfsuite";
-  version = "0.9.11";
+  version = "0.9.12";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "python_crfsuite";
-    hash = "sha256-bv+WXKcFZzltgiyaNep0sPftsn2UcVJJl72r56baX1o=";
+    hash = "sha256-2zf8zDvY8MScKKdpfKecidZ7P9W/EZEihmFpJArExIA=";
   };
 
   preCheck = ''
@@ -30,10 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycrfsuite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python binding for CRFsuite";
     homepage = "https://github.com/scrapinghub/python-crfsuite";
-    license = licenses.mit;
-    teams = [ teams.tts ];
+    changelog = "https://github.com/scrapinghub/python-crfsuite/blob/${version}/CHANGES.rst";
+    license = lib.licenses.mit;
+    teams = [ lib.teams.tts ];
   };
 }

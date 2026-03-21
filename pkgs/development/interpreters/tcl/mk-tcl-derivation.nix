@@ -41,7 +41,7 @@ let
 
   self = (
     stdenv.mkDerivation (
-      (builtins.removeAttrs attrs [
+      (removeAttrs attrs [
         "addTclConfigureFlags"
         "checkPhase"
         "checkInputs"
@@ -57,7 +57,10 @@ let
         ];
         propagatedBuildInputs = propagatedBuildInputs ++ [ tcl ];
 
-        TCLSH = "${getBin tcl}/bin/tclsh";
+        env = {
+          TCLSH = "${getBin tcl}/bin/tclsh";
+        }
+        // (attrs.env or { });
 
         # Run tests after install, at which point we've done all TCLLIBPATH setup
         doCheck = false;

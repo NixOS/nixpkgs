@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
+  config,
   fetchFromGitHub,
   cmake,
   pkg-config,
   openssl,
   zeromq,
   cppzmq,
-  tbb_2022,
+  onetbb,
   spdlog,
   libsodium,
   fmt,
@@ -27,18 +28,21 @@
   wayland-protocols,
   wayland-scanner,
   enableX11 ? stdenv.hostPlatform.isLinux,
-  xorg,
+  libxcb-image,
+  libx11,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ueberzugpp";
-  version = "2.9.7";
+  version = "2.9.8";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
-    rev = "v${version}";
-    hash = "sha256-FR05vBKIMbGiOnugkBi8IkLfHU7LzNF2ihxD7FWWYGU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BTOuOS0zCdYTTc47UHaGI6wqFEv6e71cD2XBZtnKGLU=";
   };
 
   strictDeps = true;
@@ -49,13 +53,17 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals enableWayland [
     wayland-scanner
+  ]
+  # Required by opencv when cudaSupport is enabled
+  ++ lib.optionals cudaSupport [
+    (lib.getBin cudaPackages.cuda_nvcc)
   ];
 
   buildInputs = [
     openssl
     zeromq
     cppzmq
-    tbb_2022
+    onetbb
     spdlog
     libsodium
     fmt
@@ -77,29 +85,29 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ]
   ++ lib.optionals enableX11 [
-    xorg.libX11
-    xorg.xcbutilimage
+    libx11
+    libxcb-image
+  ]
+  # Required by opencv when cudaSupport is enabled
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
   ];
 
-  cmakeFlags =
-    lib.optionals (!enableOpencv) [
-      "-DENABLE_OPENCV=OFF"
-    ]
-    ++ lib.optionals enableWayland [
-      "-DENABLE_WAYLAND=ON"
-    ]
-    ++ lib.optionals (!enableX11) [
-      "-DENABLE_X11=OFF"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_OPENCV" enableOpencv)
+    (lib.cmakeBool "ENABLE_WAYLAND" enableWayland)
+    (lib.cmakeBool "ENABLE_X11" enableX11)
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop in replacement for ueberzug written in C++";
     homepage = "https://github.com/jstkdng/ueberzugpp";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/jstkdng/ueberzugpp/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       aleksana
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

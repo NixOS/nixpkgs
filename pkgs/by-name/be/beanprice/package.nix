@@ -4,22 +4,24 @@
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "beanprice";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "beanprice";
-    tag = "v${version}";
-    hash = "sha256-+bqYnTzZByJlCPUhThM2B9UjgdWzjF21Yiw3fQAZ6k4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Lhr8CRysZbI6dpPwRSN6DgvnKrxsIzH5YyZXRLU1l3Q=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     beancount
+    curl-cffi
+    diskcache
     python-dateutil
     regex
     requests
@@ -29,6 +31,12 @@ python3Packages.buildPythonApplication rec {
     click
     pytestCheckHook
     regex
+  ];
+
+  # Disable tests that require internet access
+  disabledTestPaths = [
+    "beanprice/price_test.py"
+    "beanprice/sources/yahoo_test.py"
   ];
 
   pythonImportsCheck = [ "beanprice" ];
@@ -45,4 +53,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ alapshin ];
     mainProgram = "bean-price";
   };
-}
+})

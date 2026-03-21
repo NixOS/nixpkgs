@@ -19,14 +19,14 @@
   aria2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gabutdm";
   version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "gabutakut";
     repo = "gabutdm";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-nzhEJiGBH+semfwLPdpIfPNGQLorqPwwmiAUNM91Br4=";
   };
 
@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple and fast download manager";
     homepage = "https://github.com/gabutakut/gabutdm";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     mainProgram = "com.github.gabutakut.gabutdm";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
-}
+})

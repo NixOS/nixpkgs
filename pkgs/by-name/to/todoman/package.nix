@@ -8,7 +8,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "todoman";
   version = "4.6.0";
   pyproject = true;
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-WMIXPPtW1227iDXLqG/JIYdNp5bxHxTlqpFtcIvZ8Aw=";
   };
 
@@ -32,17 +32,19 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
-    atomicwrites
     click
     click-log
-    click-repl
     humanize
     icalendar
     parsedatetime
+    python-dateutil
     pyxdg
-    tabulate
     urwid
   ];
+
+  optional-dependencies = with python3.pkgs; {
+    repl = [ click-repl ];
+  };
 
   nativeCheckInputs = with python3.pkgs; [
     freezegun
@@ -109,13 +111,12 @@ python3.pkgs.buildPythonApplication rec {
       Unsupported fields may not be shown but are never deleted or altered.
     '';
     changelog = "https://todoman.readthedocs.io/en/stable/changelog.html#v${
-      builtins.replaceStrings [ "." ] [ "-" ] version
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [
-      leenaars
       antonmosich
     ];
     mainProgram = "todo";
   };
-}
+})

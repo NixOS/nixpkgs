@@ -1,6 +1,6 @@
 {
   lib,
-  rust,
+  buildPackages,
   stdenv,
   rustPlatform,
   fetchCrate,
@@ -11,12 +11,12 @@
   rav1e,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rav1e";
   version = "0.8.1";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-GCfh2v3w5C8h4GuPKkTMUAhPspT1W0drrRpELCJWeTI=";
   };
 
@@ -43,11 +43,11 @@ rustPlatform.buildRustPackage rec {
   checkType = "debug";
 
   postBuild = ''
-    ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   postInstall = ''
-    ${rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 
   passthru = {
@@ -64,9 +64,9 @@ rustPlatform.buildRustPackage rec {
       Features: https://github.com/xiph/rav1e#features
     '';
     homepage = "https://github.com/xiph/rav1e";
-    changelog = "https://github.com/xiph/rav1e/releases/tag/v${version}";
+    changelog = "https://github.com/xiph/rav1e/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "rav1e";
   };
-}
+})

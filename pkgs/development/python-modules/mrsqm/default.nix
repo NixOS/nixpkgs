@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   cython,
   fftw,
   pandas,
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
   ];
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mlgig";
@@ -76,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.org/project/mrsqm";
     changelog = "https://github.com/mlgig/mrsqm/releases/tag/v.${src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ mbalatsko ];
+    maintainers = [ ];
   };
 }

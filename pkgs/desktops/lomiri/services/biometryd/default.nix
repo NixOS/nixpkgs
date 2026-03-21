@@ -2,10 +2,10 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
-  # https://gitlab.com/ubports/development/core/biometryd/-/issues/8
-  boost186,
+  boost,
   cmake,
   cmake-extras,
   dbus,
@@ -25,18 +25,27 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "biometryd";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/biometryd";
     rev = finalAttrs.version;
-    hash = "sha256-OTK+JAm8MnlQGZwcKJPh+N1OfUOko24G+IU9GUBjOjI=";
+    hash = "sha256-3igUyiTI47I0lf5byypmHLigyopgEQQUYURiCb6HFeg=";
   };
 
   outputs = [
     "out"
     "dev"
+  ];
+
+  patches = [
+    # Remove when version > 0.4.0
+    (fetchpatch {
+      name = "0001-biometryd-Fix-compatibility-with-Boost-1.87.patch";
+      url = "https://gitlab.com/ubports/development/core/biometryd/-/commit/8def6dfb18ee56971f0f64e3622af2a5a39ab0f6.patch";
+      hash = "sha256-PddZRML4Gc+s4aNeOyZwJJjmPSixMGFVFNcrO9dNDSI=";
+    })
   ];
 
   postPatch = ''
@@ -45,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir)' 'pkg_get_variable(SYSTEMD_SYSTEM_UNIT_DIR systemd systemdsystemunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
     substituteInPlace src/biometry/qml/Biometryd/CMakeLists.txt \
-      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+      --replace-fail "\''${CMAKE_INSTALL_FULL_LIBDIR}/qt\''${QT_VERSION_MAJOR}/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace data/biometryd.pc.in \
@@ -66,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    boost186
+    boost
     cmake-extras
     dbus
     dbus-cpp
@@ -87,8 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    # maybe-uninitialized warnings
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    (lib.cmakeBool "ENABLE_QT6" (lib.strings.versionAtLeast qtbase.version "6"))
+    (lib.cmakeBool "ENABLE_WERROR" true)
     (lib.cmakeBool "WITH_HYBRIS" false)
   ];
 

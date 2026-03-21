@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
 
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "flask-api";
   version = "3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "flask-api";
@@ -47,11 +44,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/flask-api/flask-api";
     changelog = "https://github.com/flask-api/flask-api/releases/tag/v${version}";
     description = "Browsable web APIs for Flask";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

@@ -7,14 +7,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanobench";
   version = "4.3.11";
 
   src = fetchFromGitHub {
     owner = "martinus";
     repo = "nanobench";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6OoVU31cNY0pIYpK/PdB9Qej+9IJo7+fHFQCTymBVrk=";
   };
 
@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple, fast, accurate single-header microbenchmarking functionality for C++11/14/17/20";
     homepage = "https://nanobench.ankerl.com/";
-    changelog = "https://github.com/martinus/nanobench/releases/tag/v${version}";
+    changelog = "https://github.com/martinus/nanobench/releases/tag/v${finalAttrs.version}";
     platforms = lib.platforms.all;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mtpham99 ];
   };
-}
+})

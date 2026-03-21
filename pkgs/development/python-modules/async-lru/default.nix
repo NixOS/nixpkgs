@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   setuptools,
-  typing-extensions,
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
@@ -13,19 +11,17 @@
 
 buildPythonPackage rec {
   pname = "async-lru";
-  version = "2.0.5";
+  version = "2.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "async-lru";
     tag = "v${version}";
-    hash = "sha256-FJ1q6W9IYs0OSMZc+bI4v22hOAAWAv2OW3BAqixm8Hs=";
+    hash = "sha256-/I/FFS5JC64Fsagg3hBQqk/Dw7ONHVXZtybGEmxOdIo=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -36,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "async_lru" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/aio-libs/async-lru/releases/tag/${src.tag}";
     description = "Simple lru cache for asyncio";
     homepage = "https://github.com/wikibusiness/async_lru";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

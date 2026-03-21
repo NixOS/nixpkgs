@@ -5,23 +5,26 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyprland";
-  version = "2.4.7";
-  format = "pyproject";
-
-  disabled = python3Packages.pythonOlder "3.10";
+  version = "3.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
-    tag = version;
-    hash = "sha256-rtAw6tdZY0BKb6Qjk/LHYYMB9nCPzkmw95wdjhJ191s=";
+    tag = finalAttrs.version;
+    hash = "sha256-qayntjpE3WYBl6idfpwtvkEo61oHtc80uNEm0m4XA2o=";
   };
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs = with python3Packages; [ aiofiles ];
+  propagatedBuildInputs = with python3Packages; [
+    aiofiles
+    aiohttp
+    pillow
+    questionary
+  ];
   pythonRelaxDeps = [
     "aiofiles"
   ];
@@ -32,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   # NOTE: this is required for the imports check below to work properly
-  HYPRLAND_INSTANCE_SIGNATURE = "dummy";
+  env.HYPRLAND_INSTANCE_SIGNATURE = "dummy";
 
   pythonImportsCheck = [
     "pyprland"
@@ -50,7 +53,6 @@ python3Packages.buildPythonApplication rec {
     "pyprland.plugins.lost_windows"
     "pyprland.plugins.magnify"
     "pyprland.plugins.monitors"
-    "pyprland.plugins.monitors_v0"
     "pyprland.plugins.pyprland"
     "pyprland.plugins.scratchpads"
     "pyprland.plugins.shift_monitors"
@@ -74,4 +76,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

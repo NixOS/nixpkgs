@@ -19,15 +19,15 @@
 #     };
 #   in
 #     "${edids}/lib/firmware/edid/PG278Q_2014.bin";
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linuxhw-edid-fetcher";
-  version = "0-unstable-2025-01-06";
+  version = "0-unstable-2026-01-08";
 
   src = fetchFromGitHub {
     owner = "linuxhw";
     repo = "EDID";
-    rev = "cc83e52221a9a6d98632f00b54be64fd0bee0394";
-    hash = "sha256-qwTHQOEeFG7SOM2JG9mNpJEoPI8M7GHuwYPWWfU/ID4=";
+    rev = "9c0c1bffc9c0f1cb2044115149a5ecb1652803f8";
+    hash = "sha256-kdGUAbdlS736iB9oGo46HLK3ne3BV4LmUv/3fliyQBA=";
   };
 
   fetch = lib.getExe (writeShellApplication {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       gnutar
     ];
     text = ''
-      repo="''${repo:-"${src}"}"
+      repo="''${repo:-"${finalAttrs.src}"}"
       ${builtins.readFile ./linuxhw-edid-fetch.sh}
     '';
   });
@@ -72,4 +72,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     mainProgram = "linuxhw-edid-fetch";
   };
-}
+})

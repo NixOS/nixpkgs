@@ -9,7 +9,7 @@
   nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "tlsrpt-reporter";
   version = "0.5.0";
   pyproject = true;
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sys4";
     repo = "tlsrpt-reporter";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IH8hJX9l+YonqOuszcMome4mjdIaedgGNIptxTyH1ng=";
   };
 
@@ -32,6 +32,8 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/sys4/tlsrpt-reporter/commit/32d00c13508dd7f9695b77e253e88c88dc838fbd.patch";
       hash = "sha256-RUNF86RkTu6DLv6/7eaY//fFB8kGzmZxQ70kdNpLxj8=";
     })
+    # https://github.com/sys4/tlsrpt-reporter/pull/48
+    ./logging.patch
   ];
 
   nativeBuildInputs = [
@@ -67,8 +69,8 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Application suite to receive TLSRPT datagrams and to generate and deliver TLSRPT reports";
     homepage = "https://github.com/sys4/tlsrpt-reporter";
-    changelog = "https://github.com/sys4/tlsrpt-reporter/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/sys4/tlsrpt-reporter/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

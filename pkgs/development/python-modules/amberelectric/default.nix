@@ -8,7 +8,6 @@
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   urllib3,
 }:
 
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "amberelectric";
   version = "2.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "madpilot";
@@ -42,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amberelectric" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Amber Electric API interface";
     homepage = "https://github.com/madpilot/amberelectric.py";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

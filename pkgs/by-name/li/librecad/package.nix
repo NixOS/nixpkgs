@@ -7,17 +7,18 @@
   muparser,
   pkg-config,
   qt5,
+  xcbuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librecad";
-  version = "2.2.1.2";
+  version = "2.2.1.4";
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-a/0prti7aFIzoHXyd6NsiKx4ugW/vRXURAHBrAqyp84=";
+    hash = "sha256-e6T4Bh0ik3vF9b98a90sDgYfc0xaf8WrMUQCOBg9QTU=";
   };
 
   buildInputs = [
@@ -33,6 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.qmake
     qt5.qttools
     qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
   ];
 
   qmakeFlags = [
@@ -45,7 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-warn __DATE__ 0
 
     substituteInPlace librecad/src/src.pro \
-      --replace-warn '$$[QT_INSTALL_BINS]' '${lib.getDev qt5.qttools}/bin'
+      --replace-warn '$$[QT_INSTALL_BINS]' '${lib.getDev qt5.qttools}/bin' \
+      --replace-warn '/usr/libexec/PlistBuddy' 'PlistBuddy'
     substituteInPlace librecad/src/muparser.pri \
       --replace-warn "macx|" ""
   '';
@@ -64,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       install -Dm555 -t $out/bin                unix/{librecad,ttf2lff}
       install -Dm444 -t $out/share/applications desktop/librecad.desktop
-      install -Dm644 -t $out/share/pixmaps      librecad/res/main/librecad.png
+      install -Dm644 -t $out/share/icons/hicolor/128x128/apps librecad/res/main/librecad.png
       install -Dm444 desktop/librecad.sharedmimeinfo $out/share/mime/packages/librecad.xml
       install -Dm444 desktop/graphics_icons_and_splash/Icon\ LibreCAD/Icon_Librecad.svg \
         $out/share/icons/hicolor/scalable/apps/librecad.svg

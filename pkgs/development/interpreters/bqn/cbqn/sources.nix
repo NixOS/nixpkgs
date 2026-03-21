@@ -11,13 +11,13 @@
     let
       self = {
         pname = "cbqn";
-        version = "0.9.0";
+        version = "0.11.0";
 
         src = fetchFromGitHub {
           owner = "dzaima";
           repo = "CBQN";
           rev = "v${self.version}";
-          hash = "sha256-WGQvnNVnNkz0PR/E5L05KvaaRZ9hgt9gNdzsR9OFYxA=";
+          hash = "sha256-ZXhCFLLUVJTgpJqMd97EMSoE4fwuqBJ742kzV662bnY=";
         };
       };
     in
@@ -25,37 +25,37 @@
 
   cbqn-bytecode = {
     pname = "cbqn-bytecode";
-    version = "0-unstable-2025-03-16";
+    version = "0-unstable-2026-01-24";
 
     src = fetchFromGitHub {
       owner = "dzaima";
       repo = "cbqnBytecode";
-      rev = "0bdfb86d438a970b983afbca93011ebd92152b88";
-      hash = "sha256-oUM4UwLy9tusTFLlaZbbHfFqKEcqd9Mh4tTqiyvMyvo=";
+      rev = "156b47caf895f6706811c5c34bbbbaf192b8018b";
+      hash = "sha256-xz4gs1b1yNbnR3v4Kw1xLCAb1I1uoBMdYJRQH9JVD/k=";
     };
   };
 
   replxx = {
     pname = "replxx";
-    version = "0-unstable-2023-10-31";
+    version = "0-unstable-2026-02-02";
 
     src = fetchFromGitHub {
       owner = "dzaima";
       repo = "replxx";
-      rev = "13f7b60f4f79c2f14f352a76d94860bad0fc7ce9";
-      hash = "sha256-xPuQ5YBDSqhZCwssbaN/FcTZlc3ampYl7nfl2bbsgBA=";
+      rev = "5e3bd870699007b9536d29f60e3a2b0a68ce0a7a";
+      hash = "sha256-B1N1d5K4E20OlbX4wTclEiXULM2FT3oT0btyrYCNQ20=";
     };
   };
 
   singeli = {
     pname = "singeli";
-    version = "0-unstable-2025-03-13";
+    version = "0-unstable-2025-11-19";
 
     src = fetchFromGitHub {
       owner = "mlochbaum";
       repo = "Singeli";
-      rev = "53f42ce4331176d281fa577408ec5a652bdd9127";
-      hash = "sha256-NbCNd/m0SdX2/aabeOhAzEYc5CcT/r75NR5ScuYj77c=";
+      rev = "2936c66b061b9df61cafc1f8d07a7ed53bf10bee";
+      hash = "sha256-vxxGmc0eQxKZN7G0GCGx7xjOWgB1a1jJIcbfbaQd2do=";
     };
   };
 }

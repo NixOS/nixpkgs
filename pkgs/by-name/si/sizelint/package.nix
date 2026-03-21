@@ -1,21 +1,35 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
+  git,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sizelint";
-  version = "0.1.3";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "a-kenji";
     repo = "sizelint";
-    tag = "v${version}";
-    hash = "sha256-06RJrE0w1Xhj364dUUuYadxleX12mkB8yO+h1QLZhH0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-m8Pd7Bnz++5k6J4stbKVd8Y596Y+52xbF0zFJVhdfzI=";
   };
 
-  cargoHash = "sha256-1kg1xfgzqrbZvazRavM4aW7oyRei9jKW0a+a6z2HLnc=";
+  nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ git ];
+
+  cargoHash = "sha256-7cDZrRNTGPdzbvVNt3/HTp7PgoH2txX26RCxdpeo4dM=";
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd sizelint \
+      --bash <($out/bin/sizelint completions bash) \
+      --fish <($out/bin/sizelint completions fish) \
+      --zsh <($out/bin/sizelint completions zsh)
+  '';
 
   meta = {
     description = "Lint your file tree based on file sizes";
@@ -24,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ a-kenji ];
     mainProgram = "sizelint";
   };
-}
+})

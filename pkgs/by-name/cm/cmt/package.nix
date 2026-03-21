@@ -2,19 +2,19 @@
   lib,
   stdenv,
   fetchurl,
-  ladspaH,
+  ladspa-header,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cmt";
   version = "1.18";
 
   src = fetchurl {
-    url = "http://www.ladspa.org/download/cmt_${version}.tgz";
+    url = "http://www.ladspa.org/download/cmt_${finalAttrs.version}.tgz";
     sha256 = "sha256-qC+GNt4fSto4ahmaAXqc13Wkm0nnFrEejdP3I8k99so=";
   };
 
-  buildInputs = [ ladspaH ];
+  buildInputs = [ ladspa-header ];
 
   preBuild = ''
     cd src
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ladspa
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Computer Music Toolkit";
     homepage = "https://www.ladspa.org/cmt";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
-}
+})

@@ -7,15 +7,15 @@
   isa-l,
   zlib,
 }:
-stdenv.mkDerivation (self: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "strobealign";
-  version = "0.16.1";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "ksahlin";
     repo = "strobealign";
-    tag = "v${self.version}";
-    hash = "sha256-RZxIT6iwanRuPk2sWv/QRkUaPMdterOKCo30FPZHC8o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ah21ptyfZbgdJrtCCftYhGh1hfcJ9JpXNsXUp8pZDJw=";
   };
 
   nativeBuildInputs = [

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   setuptools-scm,
+  python,
   cocotb-bus,
   find-libpython,
   pytestCheckHook,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.9.2";
+  version = "2.0.1";
   format = "setuptools";
 
   # pypi source doesn't include tests
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "cocotb";
     repo = "cocotb";
     tag = "v${version}";
-    hash = "sha256-7KCo7g2I1rfm8QDHRm3ZKloHwjDIICnJCF8KhaFdvqY=";
+    hash = "sha256-LXQNqFlvP+WBaDGWPs5+BXBtW2dhDu+v+7lR/AMG21M=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -46,6 +47,14 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "'cocotb-bus<1.0'" ""
   '';
 
+  # cocotb uses dlopen so that it's dynamic libraries are python version agnostic.
+  # Here we patch its dynamic libraries to make sure the correct libpython is found and used.
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    for lib in $out/lib/python*/site-packages/cocotb/libs/*.so; do
+      patchelf --add-rpath ${python}/lib --add-needed libpython3.so $lib
+    done
+  '';
+
   disabledTests = [
     # https://github.com/cocotb/cocotb/commit/425e1edb8e7133f4a891f2f87552aa2748cd8d2c#diff-4df986cbc2b1a3f22172caea94f959d8fcb4a128105979e6e99c68139469960cL33
     "test_cocotb"
@@ -62,7 +71,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH=$out/bin:$PATH
-    mv cocotb cocotb.hidden
   '';
 
   pythonImportsCheck = [ "cocotb" ];

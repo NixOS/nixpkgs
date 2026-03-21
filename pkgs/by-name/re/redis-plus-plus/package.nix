@@ -11,14 +11,14 @@
 # You must build at one type of library
 assert enableShared || enableStatic;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "redis-plus-plus";
   version = "1.3.15";
 
   src = fetchFromGitHub {
     owner = "sewenew";
     repo = "redis-plus-plus";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-0q+pQ2tS04RYKsikTG5QMuTPW3f6+fFIPuJZVf/aIw0=";
   };
 
@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     "-DREDIS_PLUS_PLUS_BUILD_STATIC=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sewenew/redis-plus-plus";
     description = "Redis client written in C++";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ wheelsandmetal ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ wheelsandmetal ];
   };
-}
+})

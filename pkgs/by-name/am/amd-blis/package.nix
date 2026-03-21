@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   perl,
   python3,
 
@@ -10,7 +11,7 @@
 
   # Target architecture. "amdzen" compiles kernels for all Zen
   # generations. To build kernels for specific Zen generations,
-  # use "zen", "zen2", "zen3", or "zen4".
+  # use "zen", "zen2", "zen3", "zen4", or "zen5".
   withArchitecture ? "amdzen",
 
   # Enable OpenMP-based threading.
@@ -22,16 +23,33 @@ let
   blasIntSize = if blas64 then "64" else "32";
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amd-blis";
   version = "5.1";
 
   src = fetchFromGitHub {
     owner = "amd";
     repo = "blis";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-hqb/Q1CBqtC4AXqHNd7voewGUD675hJ9IwvP3Mn9b+M=";
   };
+
+  patches = [
+    # Set the date stamp to $SOURCE_DATE_EPOCH
+    ./build-date.patch
+    # backporting a fix for a GCC15 build error
+    # ./frame/include/bli_x86_asm_macros.h:102:21: error: 'asm' operand has impossible constraints or there are not enough registers
+    (fetchpatch {
+      name = "amd-blis-gcc-15-fix-1.patch";
+      url = "https://github.com/amd/blis/commit/14e46ad83bac5fd82569a43c7cbd3e791a1eacc8.patch";
+      hash = "sha256-3vk9NSnhT64J6PUabeP58Gn7p1zheGbPxSRjVEX7WNg=";
+    })
+    (fetchpatch {
+      name = "amd-blis-gcc-15-fix-2.patch";
+      url = "https://github.com/amd/blis/commit/30c42202d78fd5ee5e54d50ad57348e5e541a7d5.patch";
+      hash = "sha256-FCMWQzfzQxCQqngULoXfh35BFGaNTu732iu3HctNcFM=";
+    })
+  ];
 
   inherit blas64;
 
@@ -66,11 +84,11 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/libcblas.so.3 $out/lib/libcblas.so
   '';
 
-  meta = with lib; {
+  meta = {
     description = "BLAS-compatible library optimized for AMD CPUs";
     homepage = "https://developer.amd.com/amd-aocl/blas-library/";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.markuskowa ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

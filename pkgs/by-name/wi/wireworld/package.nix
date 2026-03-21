@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   desktopItems = [
     (makeDesktopItem {
       name = "Wireworld";
-      exec = "wireworld";
+      exec = "Wireworld";
       comment = "";
       desktopName = "Wireworld";
       genericName = "Wireworld";
@@ -49,10 +49,10 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fascinating electronics logic puzzles, game where you'll learn how to build clocks, diodes, and logic gates";
     mainProgram = "Wireworld";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       ofl
       blueOak100

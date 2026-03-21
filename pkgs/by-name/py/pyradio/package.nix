@@ -5,16 +5,16 @@
   installShellFiles,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyradio";
-  version = "0.9.3.11.19";
+  version = "0.9.3.11.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coderholic";
     repo = "pyradio";
-    tag = version;
-    hash = "sha256-fjTaURYY2pSb3mod4Vffbczmyxsn0/4SAXkb68mRhQA=";
+    tag = finalAttrs.version;
+    hash = "sha256-a5nRSpGEbRNCZY5q2/QdlksuIXv+31OpifXY1a449ls=";
   };
 
   nativeBuildInputs = [
@@ -44,17 +44,24 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     installManPage *.1
+
+    install -Dm644 $src/devel/pyradio.desktop \
+      "$out/share/applications/pyradio.desktop"
+
+    install -Dm644 "$src/pyradio/icons/pyradio.png" \
+      "$out/share/icons/hicolor/512x512/apps/pyradio.png"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.coderholic.com/pyradio/";
     description = "Curses based internet radio player";
     mainProgram = "pyradio";
-    changelog = "https://github.com/coderholic/pyradio/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/coderholic/pyradio/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       contrun
+      magicquark
       yayayayaka
     ];
   };
-}
+})

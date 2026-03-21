@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "octodns-transip";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns-transip";
     tag = "v${version}";
-    hash = "sha256-mqrMzPnUSavSTiyjbLKQuwuwuE2Ghk94EXccpOpWLlM=";
+    hash = "sha256-O9KhHjCdRt5lejwEqpv0OCwIXaqWVc2/u4ghzbYMiBA=";
   };
 
   build-system = [

@@ -23,15 +23,22 @@
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "4.5.0";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${version}";
-    hash = "sha256-8eHYMvfjPuGgrgrlqEh061ug+yer+1nQLbeDR1dQu68=";
+    hash = "sha256-qxD3ryU1jXf8Gm5/IiG2NTOnRgA6HADPfgBj6Kn+Pj4=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"cmake>=3.27.0,<4.0.0"' \
+        '"cmake>=3.27.0"'
+  '';
 
   dontUseCmakeConfigure = true;
 
@@ -94,6 +101,9 @@ buildPythonPackage rec {
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
+    # error: no matching conversion for functional-style cast from 'bool' to 'nlohmann::basic_json<>'
+    # See https://github.com/docling-project/docling-parse/issues/172 for context
+    broken = true;
   };
 }

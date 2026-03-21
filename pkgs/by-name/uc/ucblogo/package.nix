@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  wxGTK32,
+  wxwidgets_3_2,
   texinfo,
   tetex,
   wrapGAppsHook3,
@@ -30,16 +30,16 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Berkeley Logo interpreter";
     homepage = "https://github.com/jrincayc/ucblogo-code";
     changelog = "https://github.com/jrincayc/ucblogo-code/blob/${finalAttrs.src.rev}/changes.txt";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ matthewcroughan ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ matthewcroughan ];
     mainProgram = "ucblogo-code";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

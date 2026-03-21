@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,13 +16,7 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-5aiydx8TyJG0H0F261Xg5fGWBbAIZCtVHgWs7B6+83w=";
   };
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm444 -t $out/share/fonts/truetype *.ttf
-
-    runHook postInstall
-  '';
+  nativeBuildInputs = [ installFonts ];
 
   meta = {
     homepage = "https://abrudz.github.io/APL386/";

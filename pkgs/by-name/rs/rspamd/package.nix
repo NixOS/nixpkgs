@@ -2,10 +2,9 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   cmake,
   doctest,
-  fmt_11,
+  fmt,
   perl,
   glib,
   luajit,
@@ -38,25 +37,19 @@
 assert withHyperscan -> stdenv.hostPlatform.isx86_64;
 assert (!withHyperscan) || (!withVectorscan);
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rspamd";
-  version = "3.13.0";
+  version = "3.14.3";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
-    rev = version;
-    hash = "sha256-0qX/rvcEXxzr/PGL2A59T18Mfcalrjz0KJpEWBKJsZg=";
+    tag = finalAttrs.version;
+    hash = "sha256-ntWBcwcPZwRRSTUO4a0JUNd6kc49fm+0/x+fqcZIA/o=";
   };
 
   patches = [
-    (fetchpatch2 {
-      url = "https://github.com/rspamd/rspamd/commit/d808fd75ff1db1821b1dd817eb4ba9a118b31090.patch";
-      hash = "sha256-v1Gn3dPxN/h92NYK3PTrZomnbwUcVkAWcYeQCFzQNyo=";
-    })
   ];
-
-  hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [
     cmake
@@ -67,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     doctest
-    fmt_11
+    fmt
     glib
     openssl
     pcre
@@ -111,16 +104,15 @@ stdenv.mkDerivation rec {
 
   passthru.tests.rspamd = nixosTests.rspamd;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://rspamd.com";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Advanced spam filtering system";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       avnik
       fpletz
-      globin
       lewo
     ];
-    platforms = with platforms; linux;
+    platforms = with lib.platforms; linux;
   };
-}
+})

@@ -8,8 +8,8 @@
 let
   self = REAndroidLibrary {
     pname = "arsclib";
-    # 1.3.5 is not new enough for APKEditor because of API changes
-    version = "1.3.5-unstable-2024-10-21";
+    # 1.3.8 is not new enough for APKEditor because of API changes
+    version = "1.3.8-unstable-2026-02-27";
     projectName = "ARSCLib";
 
     src = fetchFromGitHub {
@@ -18,8 +18,8 @@ let
       # This is the latest commit at the time of packaging.
       # It can be changed to a stable release ("V${version}")
       # if it is compatible with APKEditor.
-      rev = "ed6ccf00e56d7cce13e8648ad46a2678a6093248";
-      hash = "sha256-jzd7xkc4O+P9hlGsFGGl2P3pqVvV5+mDyKTRUuGfFSA=";
+      rev = "b34f2e36d29077400e5b9f24fef9af3a3d9e8100";
+      hash = "sha256-FhIZ9O1af8UcmcDcEWewMNBDr5Knd3BZL5PqEltCqxE=";
     };
 
     mitmCache = gradle.fetchDeps {

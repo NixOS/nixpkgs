@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  deprecated,
   hatchling,
   llama-cloud,
   llama-index-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,19 +13,21 @@ buildPythonPackage rec {
   version = "0.9.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_indices_managed_llama_cloud";
     inherit version;
     hash = "sha256-teAHUqswVkq/GcV1laIQf1aXw7A7CFgXtPyoSjjrvVk=";
   };
 
-  pythonRelaxDeps = [ "llama-cloud" ];
+  pythonRelaxDeps = [
+    "deprecated"
+    "llama-cloud"
+  ];
 
   build-system = [ hatchling ];
 
   dependencies = [
+    deprecated
     llama-cloud
     llama-index-core
   ];
@@ -35,10 +37,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llama_index.indices.managed.llama_cloud" ];
 
-  meta = with lib; {
+  meta = {
     description = "LlamaCloud Index and Retriever";
     homepage = "https://github.com/run-llama/llama_index/tree/main/llama-index-integrations/indices/llama-index-indices-managed-llama-cloud";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   cython,
   catalogue,
   mock,
@@ -16,14 +15,12 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.5.1";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "2.5.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qxtL9s8+Kdoj2uBJPdFRf7eHB1IGUSNRQhuJtPwnx34=";
+    hash = "sha256-QJK8hDxxt1lcbJCgMCoZeFjFuf5DBn9irmpFvDuqHBk=";
   };
 
   build-system = [
@@ -44,10 +41,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srsly" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";
     description = "Modern high-performance serialization utilities for Python";
     homepage = "https://github.com/explosion/srsly";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

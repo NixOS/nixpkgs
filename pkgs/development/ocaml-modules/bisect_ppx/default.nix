@@ -7,14 +7,14 @@
   ppxlib,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "bisect_ppx";
   version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "aantron";
     repo = "bisect_ppx";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-3qXobZLPivFDtls/3WNqDuAgWgO+tslJV47kjQPoi6o=";
   };
 
@@ -48,4 +48,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ momeemt ];
     mainProgram = "bisect-ppx-report";
   };
-}
+})

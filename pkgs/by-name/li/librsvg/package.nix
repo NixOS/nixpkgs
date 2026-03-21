@@ -23,8 +23,9 @@
   gnome,
   vala,
   shared-mime-info,
-  # Requires building a cdylib.
-  withPixbufLoader ? !stdenv.hostPlatform.isStatic,
+  # Requires building a cdylib and running a target binary
+  withPixbufLoader ?
+    !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.emulatorAvailable buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -44,12 +45,12 @@
   imagemagick,
   imlib2,
   vips,
-  xfce,
+  xfwm4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
-  version = "2.60.0";
+  version = "2.61.4";
 
   outputs = [
     "out"
@@ -61,13 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
-    hash = "sha256-C2/8zfbnCvyYdogvXSzp/88scTy6rxrZAXDap1Lh7sM=";
+    hash = "sha256-/KDqKNHyj5XIQH0lefRwLawIXnx1hkTayotA0eByygw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
-    hash = "sha256-DMkYsskjw6ARQsaHDRautT0oy8VqW/BJBfBVErxUe88=";
+    hash = "sha256-ASmibD7l97kV3u+3V9TNex+qa975JdQXRQIHdsJF+Ds=";
     dontConfigure = true;
   };
 
@@ -212,17 +213,17 @@ stdenv.mkDerivation (finalAttrs: {
         vips
         ;
       inherit (enlightenment) efl;
-      inherit (xfce) xfwm4;
+      inherit xfwm4;
       ffmpeg = ffmpeg.override { withSvg = true; };
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small library to render SVG images to Cairo surfaces";
     homepage = "https://gitlab.gnome.org/GNOME/librsvg";
-    license = licenses.lgpl2Plus;
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl2Plus;
+    teams = [ lib.teams.gnome ];
     mainProgram = "rsvg-convert";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

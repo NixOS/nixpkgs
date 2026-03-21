@@ -25,7 +25,6 @@ stdenv.mkDerivation {
 
   # By targeting the development version, we can omit the patches Arch uses
   src = fetchFromGitLab {
-    domain = "gitlab.com";
     owner = "LibreGames";
     repo = "jumpnbump";
     rev = "5744738211ca691444f779aafee3537fb3562516";
@@ -58,17 +57,17 @@ stdenv.mkDerivation {
     pillow
   ];
   preFixup = ''
-    buildPythonPath "$out $pythonPath"
+    buildPythonPath "$out ''${pythonPath[*]}"
   '';
   postFixup = ''
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cute, true multiplayer platform game with bunnies";
     homepage = "https://libregames.gitlab.io/jumpnbump/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ iblech ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ iblech ];
+    platforms = lib.platforms.unix;
   };
 }

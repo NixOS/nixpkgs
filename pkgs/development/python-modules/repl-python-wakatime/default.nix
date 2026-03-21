@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "repl-python-wakatime";
-  version = "0.1.1";
+  version = "0.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "repl-python-wakatime";
     tag = version;
-    hash = "sha256-1uzW3Q1PE4Gdpo354JewzkR8UREPrAFMXiwOKEMbW3M=";
+    hash = "sha256-U7p0TnGtjxssYAMk6QteeU1Vdq7mrjdDZvwYhyNOIoY=";
   };
 
   build-system = [
@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "repl_python_wakatime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python REPL plugin for automatic time tracking and metrics generated from your programming activity";
     homepage = "https://github.com/wakatime/repl-python-wakatime";
-    changelog = "https://github.com/wakatime/repl-python-wakatime/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jfvillablanca ];
+    changelog = "https://github.com/wakatime/repl-python-wakatime/releases/tag/${src.tag}";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jfvillablanca ];
   };
 }

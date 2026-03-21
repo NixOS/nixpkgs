@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acpica-tools";
-  version = "20250807";
+  version = "20251212";
 
   src = fetchFromGitHub {
     owner = "acpica";
     repo = "acpica";
     tag = finalAttrs.version;
-    hash = "sha256-OY7jEirUDpzhgT9iCUYWeZmbCQl2R/agGIHXqJI/UBo=";
+    hash = "sha256-R2u93OzNv2/LcuxlqXBufGVv+rI3fNPMHl3VKcPn3VU=";
   };
 
   nativeBuildInputs = [
@@ -34,20 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
     "iasl"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    "-O3"
-  ]);
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-O3"
+    ];
+
+    # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
+    # -Werror altogether to make this derivation less fragile to toolchain
+    # updates.
+    NOWERROR = "TRUE";
+
+    # We can handle stripping ourselves.
+    # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
+    INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
+  };
 
   enableParallelBuilding = true;
-
-  # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
-  # -Werror altogether to make this derivation less fragile to toolchain
-  # updates.
-  NOWERROR = "TRUE";
-
-  # We can handle stripping ourselves.
-  # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.
-  INSTALLFLAGS = lib.optionals (!stdenv.hostPlatform.isDarwin) "-m 555";
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 

@@ -2,18 +2,19 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mpdris2-rs";
-  version = "1.0.2";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "szclsya";
     repo = "mpdris2-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-E9H6bjmWZx35fZo/ZPvJL1w/YQ34pJ7z81YbB5fUZSU=";
+    hash = "sha256-OiD6nVyy8vkwTwA2aKmZN+kxYvygI0tfVFuKdy+32hQ=";
   };
-  cargoHash = "sha256-rA/za8fc2RiURaiijc49y+2QBcS6cDavZQFjVh+7Iow=";
+  cargoHash = "sha256-bPZUKpbWNUa6/XIaWB6Eel9iQo248POxY1yQybBAR8M=";
 
   postPatch = ''
     substituteInPlace misc/mpdris2-rs.service --replace-fail "/usr/local" "$out"
@@ -22,6 +23,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     install -Dm644 misc/mpdris2-rs.service -t $out/lib/systemd/user
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Exposing MPRIS V2.2 D-Bus interface for MPD";

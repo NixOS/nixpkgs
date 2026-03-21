@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
   cmake,
@@ -20,7 +20,7 @@
   python3,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "pothos";
   version = "0.7.1";
 
@@ -46,8 +46,22 @@ mkDerivation rec {
     ./cstring.patch
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.9)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace spuce/{,spuce}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace spuce/qt_{fir,iir,other,window}/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace {audio,blocks,comms,flow,plotters,python,soapy,widgets}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.9)" "cmake_minimum_required(VERSION 3.10)"
+
+  '';
+
   # poco 1.14 requires c++17
-  NIX_CFLAGS_COMPILE = [ "-std=gnu++17" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-std=gnu++17" ];
 
   nativeBuildInputs = [
     cmake
@@ -92,11 +106,11 @@ mkDerivation rec {
     wrapQtApp $out/bin/spuce_window_plot
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pothos data-flow framework";
     homepage = "https://github.com/pothosware/PothosCore/wiki";
-    license = licenses.boost;
-    platforms = platforms.linux;
+    license = lib.licenses.boost;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

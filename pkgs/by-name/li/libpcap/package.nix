@@ -24,15 +24,15 @@
   haskellPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpcap";
-  version = "1.10.5";
+  version = "1.10.6";
 
   __structuredAttrs = true;
 
   src = fetchurl {
-    url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
+    url = "https://www.tcpdump.org/release/libpcap-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hy3REzf+GrAq2dT+4EfJ2iRNaVxt3zTi67cz79Ttiqk=";
   };
 
   outputs = [
@@ -46,14 +46,14 @@ stdenv.mkDerivation rec {
     bash
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
-  ++ lib.optionals withRemote [ libxcrypt ];
+  ++ lib.optionals withRemote [ libxcrypt ]
+  ++ lib.optionals withBluez [ bluez ];
 
   nativeBuildInputs = [
     flex
     bison
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
-  ++ lib.optionals withBluez [ bluez.dev ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   # We need to force the autodetection because detection doesn't
   # work in pure build environments.
@@ -94,12 +94,12 @@ stdenv.mkDerivation rec {
     haskell-pcap = haskellPackages.pcap;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";
     mainProgram = "pcap-config";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
-    license = licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
+    license = lib.licenses.bsd3;
   };
-}
+})

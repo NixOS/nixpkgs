@@ -6,7 +6,6 @@
   lxml,
   pytest-aiohttp,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "afsapi";
   version = "0.2.8";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "wlcrs";
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "afsapi" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of the Frontier Silicon API";
     homepage = "https://github.com/wlcrs/python-afsapi";
     changelog = "https://github.com/wlcrs/python-afsapi/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   beautifulsoup4,
   boto3,
@@ -19,17 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "111";
-
-  disabled = pythonOlder "3.10";
-
+  version = "116";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
-    hash = "sha256-B+05yBjqfnBaVvRZo47Akqyap4W5do+Xsumi69Ez4iY=";
+    hash = "sha256-wrPEwYeM4HjhgRO51XyPx6e/TsX52378bFhPw1NZreM=";
   };
 
   postPatch = ''
@@ -78,13 +74,20 @@ buildPythonPackage rec {
     "test_assert_html_snapshot_by_css_selector"
     # test accesses the internet
     "test_happy_path"
-    # test assumes a virtual environment
-    "test_code_style"
+    # cli_base module not found
+    "test_doctests"
+    # leaks unix timestamp of 1980 into test fixtures
+    "test_xlsx2dict_complex"
+    "test_xlsx2dict_simple"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # depends on cli-base-utilities, which depends on bx-py-utils
+    "bx_py_utils_tests/tests/test_project_setup.py"
     # processify() doesn't work under darwin
     # https://github.com/boxine/bx_py_utils/issues/80
+    # Also not working under Linux anymore
+    # _pickle.PicklingError: Can't pickle local object <function processify.<locals>.process_func at 0x7ffff36deda0>
     "bx_py_utils_tests/tests/test_processify.py"
   ];
 

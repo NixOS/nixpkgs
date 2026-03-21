@@ -9,20 +9,20 @@ let
   py = python3.override {
     self = py;
     packageOverrides = final: prev: {
-      django = prev.django_5;
+      django = prev.django_6;
     };
   };
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "3.11.2";
-  format = "other";
+  version = "4.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = "healthchecks";
     tag = "v${version}";
-    sha256 = "sha256-EHXxb5T5+WFvhBZQ6d6abSzpBEUBz6F1ftqMWECmdpg=";
+    sha256 = "sha256-gRFqtxpXvHtiYApIpYbTVl2GrY4VfYktl58ZLNvzXPs=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -93,10 +93,10 @@ py.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/healthchecks/healthchecks";
     description = "Cron monitoring tool written in Python & Django";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

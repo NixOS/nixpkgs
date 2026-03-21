@@ -32,7 +32,7 @@
   pipewire,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cheese";
   version = "44.1";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/cheese/${lib.versions.major version}/cheese-${version}.tar.xz";
+    url = "mirror://gnome/sources/cheese/${lib.versions.major finalAttrs.version}/cheese-${finalAttrs.version}.tar.xz";
     hash = "sha256-XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
   };
 
@@ -111,11 +111,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/cheese";
-    changelog = "https://gitlab.gnome.org/GNOME/cheese/-/blob/${version}/NEWS?ref_type=tags";
+    changelog = "https://gitlab.gnome.org/GNOME/cheese/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     mainProgram = "cheese";
     maintainers = with lib.maintainers; [ aleksana ];
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

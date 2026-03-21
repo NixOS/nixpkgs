@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo126Module,
   fetchFromGitHub,
   nixosTests,
   withServer ? true, # the actual metrics server
@@ -11,18 +11,19 @@
   withVmctl ? true, # vmctl is used to migrate time series
 }:
 
-buildGoModule (finalAttrs: {
+buildGo126Module (finalAttrs: {
   pname = "VictoriaMetrics";
-  version = "1.126.0";
+  version = "1.138.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QVeg/F7oPPgSRTi5jcfTj15bD/7fQoPopahpUP9b0UA=";
+    hash = "sha256-7gEmaslhTmk72/GiL2xfWn4Pb/e/35wDXePGrvmuTUg=";
   };
 
   vendorHash = null;
+  env.CGO_ENABLED = 0;
 
   subPackages =
     lib.optionals withServer [
@@ -51,9 +52,9 @@ buildGoModule (finalAttrs: {
     # This appears to be some kind of test server for development purposes only.
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
 
-    # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.0" "go ${finalAttrs.passthru.go.version}"
+    # Relax go version to major.minor
+    sed -i -E 's/^(go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' go.mod
+    sed -i -E 's/^(## explicit; go[[:space:]]+[[:digit:]]+\.[[:digit:]]+)\.[[:digit:]]+$/\1/' vendor/modules.txt
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
@@ -76,9 +77,7 @@ buildGoModule (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   passthru = {
-    tests = {
-      inherit (nixosTests) victoriametrics;
-    };
+    tests = lib.recurseIntoAttrs nixosTests.victoriametrics;
     updateScript = ./update.sh;
   };
 
@@ -88,7 +87,6 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       yorickvp
-      ivan
       leona
       shawn8901
       ryan4yin

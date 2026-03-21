@@ -13,12 +13,12 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpdscribble";
   version = "0.24";
 
   src = fetchurl {
-    url = "https://www.musicpd.org/download/mpdscribble/${version}/mpdscribble-${version}.tar.xz";
+    url = "https://www.musicpd.org/download/mpdscribble/${finalAttrs.version}/mpdscribble-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-9rTLp0izuH5wUnC0kjyOI+lMLgD+3VC+sUaNvi+yqOc=";
   };
 
@@ -48,12 +48,12 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux systemd;
 
-  meta = with lib; {
+  meta = {
     description = "MPD client which submits info about tracks being played to a scrobbler";
     homepage = "https://www.musicpd.org/clients/mpdscribble/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.sohalt ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.sohalt ];
+    platforms = lib.platforms.unix;
     mainProgram = "mpdscribble";
   };
-}
+})

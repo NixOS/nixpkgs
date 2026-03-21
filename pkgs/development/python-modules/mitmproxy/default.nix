@@ -1,8 +1,9 @@
 {
   lib,
-  aioquic,
+  aioquic_1_2,
   argon2-cffi,
   asgiref,
+  bcrypt,
   brotli,
   buildPythonPackage,
   certifi,
@@ -17,12 +18,13 @@
   ldap3,
   mitmproxy-rs,
   msgpack,
-  passlib,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
   pyperclip,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -38,35 +40,38 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "12.1.2";
+  version = "12.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-XYZ14JlVYG/OLlEze+C1L/HP3HD5GEW+jG2YYSXW/8Y=";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
   pythonRelaxDeps = [
-    "cryptography"
-    "flask"
-    "h2"
-    "kaitaistruct"
-    "passlib"
-    "pyopenssl"
-    "tornado"
+    # requested by maintainer
+    "brotli"
+    # just keep those
     "typing-extensions"
+
     "urwid"
+    "asgiref"
+    "pyparsing"
+    "ruamel.yaml"
+    "tornado"
+    "wsproto"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic
+    aioquic_1_2
     argon2-cffi
     asgiref
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -77,7 +82,6 @@ buildPythonPackage rec {
     ldap3
     mitmproxy-rs
     msgpack
-    passlib
     publicsuffix2
     pyopenssl
     pyparsing
@@ -93,6 +97,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -100,6 +105,12 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Rename to fix pytest exception
+    substituteInPlace pyproject.toml \
+      --replace-warn "[tool.pytest.individual_coverage]" "[tool.mitmproxy.individual_coverage]"
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -127,6 +138,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
@@ -144,11 +158,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
     changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "mitmproxy";
   };
 }

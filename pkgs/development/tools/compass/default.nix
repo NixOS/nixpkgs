@@ -7,23 +7,20 @@
 
 bundlerEnv {
   pname = "compass";
-  version = "1.0.3";
 
   inherit ruby;
   gemdir = ./.;
 
   passthru.updateScript = bundlerUpdateScript "compass";
 
-  meta = with lib; {
+  meta = {
     description = "Stylesheet Authoring Environment that makes your website design simpler to implement and easier to maintain";
     homepage = "https://github.com/Compass/compass";
-    license = with licenses; mit;
-    maintainers = with maintainers; [
-      offline
-      manveru
+    license = with lib.licenses; mit;
+    maintainers = with lib.maintainers; [
       nicknovitski
     ];
     mainProgram = "compass";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

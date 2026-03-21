@@ -14,14 +14,14 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "neatvnc";
   version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = "neatvnc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-wAIifLw2rlu44jXMu/k31B7qePdJt6pT6TOhNxcyfLw=";
   };
 
@@ -59,9 +59,9 @@ stdenv.mkDerivation rec {
       - Interoperability with the Freedesktop.org ecosystem
     '';
     homepage = "https://github.com/any1/neatvnc";
-    changelog = "https://github.com/any1/neatvnc/releases/tag/v${version}";
+    changelog = "https://github.com/any1/neatvnc/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
   };
-}
+})

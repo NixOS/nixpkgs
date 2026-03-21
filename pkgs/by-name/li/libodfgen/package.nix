@@ -11,12 +11,12 @@
   librevenge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libodfgen";
   version = "0.1.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/libwpd/libodfgen/libodfgen-${version}/libodfgen-${version}.tar.xz";
+    url = "mirror://sourceforge/project/libwpd/libodfgen/libodfgen-${finalAttrs.version}/libodfgen-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-Mj5JH5VsjKKrsSyZjjUGcJMKMjF7+WYrBhXdSzkiuDE=";
   };
 
@@ -36,10 +36,10 @@ stdenv.mkDerivation rec {
     librevenge
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Base library for generating ODF documents";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.unix;
   };
-}
+})

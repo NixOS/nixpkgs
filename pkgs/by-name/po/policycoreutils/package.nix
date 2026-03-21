@@ -7,16 +7,17 @@
   libselinux,
   libsemanage,
   libxcrypt,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "policycoreutils";
-  version = "3.8.1";
+  version = "3.10";
   inherit (libsepol) se_url;
 
   src = fetchurl {
-    url = "${se_url}/${version}/policycoreutils-${version}.tar.gz";
-    hash = "sha256-7vIxlrUB0UHLlfX8Uu8acon0WbZeRBXqD+mu7cXYDvI=";
+    url = "${finalAttrs.se_url}/${finalAttrs.version}/policycoreutils-${finalAttrs.version}.tar.gz";
+    hash = "sha256-jb1Q2Gisv66dGpcva7slh/BsnsczCNEa9qyzpAHemDI=";
   };
 
   postPatch = ''
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     substituteInPlace newrole/Makefile --replace /usr/share /share
   '';
 
-  nativeBuildInputs = [ gettext ];
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+  ];
   buildInputs = [
     libsepol
     libselinux
@@ -43,9 +47,9 @@ stdenv.mkDerivation rec {
     "MAN5DIR=$(out)/share/man/man5"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SELinux policy core utilities";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     inherit (libsepol.meta) homepage platforms maintainers;
   };
-}
+})

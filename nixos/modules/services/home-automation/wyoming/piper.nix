@@ -37,10 +37,24 @@ in
       '';
       type = types.attrsOf (
         types.submodule (
-          { ... }:
+          { name, ... }:
           {
             options = {
               enable = mkEnableOption "Wyoming Piper server";
+
+              zeroconf = {
+                enable = mkEnableOption "zeroconf discovery" // {
+                  default = true;
+                };
+
+                name = mkOption {
+                  type = str;
+                  default = "piper-${name}";
+                  description = ''
+                    The advertised name for zeroconf discovery.
+                  '';
+                };
+              };
 
               voice = mkOption {
                 type = str;
@@ -93,10 +107,6 @@ in
                   Phoneme length value.
                 '';
                 apply = toString;
-              };
-
-              streaming = mkEnableOption "audio streaming on sentence boundaries" // {
-                default = true;
               };
 
               useCUDA = mkOption {
@@ -168,8 +178,9 @@ in
                 "--noise-w-scale"
                 options.noiseWidth
               ]
-              ++ lib.optionals options.streaming [
-                "--streaming"
+              ++ lib.optionals options.zeroconf.enable [
+                "--zeroconf"
+                options.zeroconf.name
               ]
               ++ lib.optionals options.useCUDA [
                 "--use-cuda"
@@ -190,11 +201,15 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            ProcSubset = "all"; # for onnxruntime, which queries cpuinfo
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
               "AF_UNIX"
+            ]
+            ++ lib.optionals options.zeroconf.enable [
+              # Zeroconf support require network interface enumeration
+              "AF_NETLINK"
             ];
             RestrictNamespaces = true;
             RestrictRealtime = true;

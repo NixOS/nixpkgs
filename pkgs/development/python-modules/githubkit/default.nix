@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "githubkit";
-  version = "0.13.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yanyongyu";
     repo = "githubkit";
     tag = "v${version}";
-    hash = "sha256-4THc5BNQGSrpf3Y3OoFisywEdKp8ZgNjle4yvVLUy1A=";
+    hash = "sha256-ia4ixtui7F8NauytXYi2aaiKXejIOHNijQrSm2RtzdU=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-xdist
   ]
-  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "githubkit" ];
 
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/yanyongyu/githubkit";
     changelog = "https://github.com/yanyongyu/githubkit/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kranzes ];
+    maintainers = [ ];
   };
 }

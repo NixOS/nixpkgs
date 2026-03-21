@@ -5,12 +5,12 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "randtype";
   version = "1.13";
 
   src = fetchzip {
-    url = "mirror://sourceforge/randtype/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/randtype/randtype-${finalAttrs.version}.tar.gz";
     sha256 = "055xs02qwpgbkn2l57bwghbsrsysg1zhm2asp0byvjpz4sc4w1rd";
   };
 
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Semi-random text typer";
     mainProgram = "randtype";
     homepage = "https://benkibbey.wordpress.com/randtype/";
-    maintainers = with maintainers; [ dandellion ];
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ dandellion ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/randtype.x86_64-darwin
   };
-}
+})

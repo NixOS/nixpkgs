@@ -9,15 +9,15 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ft2-clone";
-  version = "1.99";
+  version = "2.12";
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
-    rev = "v${version}";
-    hash = "sha256-7FA6pd8rnobvOWHqHqJseJgUniAYhpzqmJnmqYyvpm0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ca4vp2uEF7rZJ+0lAmVqC/6F+2CgbDLK2GkbG5Tn//0=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,18 +29,29 @@ stdenv.mkDerivation rec {
     libiconv
   ];
 
+  postInstall = ''
+    install -Dm444 "$src/release/other/Freedesktop.org Resources/Fasttracker II clone.desktop" \
+      $out/share/applications/ft2-clone.desktop
+    install -Dm444 "$src/release/other/Freedesktop.org Resources/Fasttracker II clone.png" \
+      $out/share/icons/hicolor/512x512/apps/ft2-clone.png
+    # gtk-update-icon-cache does not like whitespace. Note that removing this
+    # will not make the build fail, but it will make the NixOS test fail.
+    substituteInPlace $out/share/applications/ft2-clone.desktop \
+      --replace-fail "Icon=Fasttracker II clone" Icon=ft2-clone
+  '';
+
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fgaz ];
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
-    platforms = platforms.littleEndian;
+    platforms = lib.platforms.littleEndian;
     mainProgram = "ft2-clone";
   };
-}
+})

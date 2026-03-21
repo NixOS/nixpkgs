@@ -4,20 +4,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "phrase-cli";
-  version = "2.45.0";
+  version = "2.56.0";
 
   src = fetchFromGitHub {
     owner = "phrase";
     repo = "phrase-cli";
-    rev = version;
-    sha256 = "sha256-6oq9DW2h1vy2G3sjjzO8xgqSsH1wYVSXccMf1i+qmM8=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-i3MxJTj3FphsYfkGyIIxhuBzRdSIlfah5KyNxf0vUQE=";
   };
 
-  vendorHash = "sha256-nrxkELO1gxU3douXLID5HbS+rMjz9dVQ9eMEn32XpNY=";
+  vendorHash = "sha256-XJUADIbeCzbIRaPnbVeGIPImcPe3xdtBNxiAFhclWfE=";
 
-  ldflags = [ "-X=github.com/phrase/phrase-cli/cmd.PHRASE_CLIENT_VERSION=${version}" ];
+  ldflags = [ "-X=github.com/phrase/phrase-cli/cmd.PHRASE_CLIENT_VERSION=${finalAttrs.version}" ];
 
   postInstall = ''
     ln -s $out/bin/phrase-cli $out/bin/phrase
@@ -26,8 +26,8 @@ buildGoModule rec {
   meta = {
     homepage = "http://docs.phraseapp.com";
     description = "PhraseApp API v2 Command Line Client";
-    changelog = "https://github.com/phrase/phrase-cli/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/phrase/phrase-cli/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ juboba ];
   };
-}
+})

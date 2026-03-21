@@ -2,6 +2,7 @@
   buildDunePackage,
   dune_3,
   ordering,
+  pp,
 }:
 
 buildDunePackage {
@@ -11,7 +12,10 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ ordering ];
+  propagatedBuildInputs = [
+    ordering
+    pp
+  ];
 
   meta = dune_3.meta // {
     description = "Dynamic type";

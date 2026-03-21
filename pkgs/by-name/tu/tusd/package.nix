@@ -5,21 +5,21 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "tusd";
-  version = "2.8.0";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "tus";
     repo = "tusd";
-    tag = "v${version}";
-    hash = "sha256-OzXBeLDjaJk4NVgsauR/NUATh7qHbuEfWNdhytZmd0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bHC1pUx/GW3IWtGqsGOOBMWTRM65oCKg9gTL5L8GT+0=";
   };
 
-  vendorHash = "sha256-YununGyB72zE0tmqO3BREJeMTjCuy/1fhPHC5r8OLjg=";
+  vendorHash = "sha256-sNWB/qiF/DhRpF0Z+m1NQ3ydUWAr9NdsSaRx0BT8C98=";
 
   ldflags = [
-    "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${version}"
+    "-X github.com/tus/tusd/v2/cmd/tusd/cli.VersionName=v${finalAttrs.version}"
   ];
 
   # Tests need the path to the binary:
@@ -41,4 +41,4 @@ buildGoModule rec {
       Acconut
     ];
   };
-}
+})

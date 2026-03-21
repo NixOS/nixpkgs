@@ -16,18 +16,18 @@ let
   isNativeDocgen =
     (stdenv.buildPlatform.canExecute stdenv.hostPlatform) && enableDocumentationFeature;
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shh";
-  version = "2025.7.13";
+  version = "2026.1.27";
 
   src = fetchFromGitHub {
     owner = "desbma";
     repo = "shh";
-    tag = "v${version}";
-    hash = "sha256-mTBA+NPkeGF1sSnXpOz9xBsKDAihRe+TVcBAlvbBQPc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RGxxpAr8E2KriwheWXcsxRRBhZST27Xp6LSdgzxsuUM=";
   };
 
-  cargoHash = "sha256-JrtXDercjkPA5WVaq+LyhFmGqMAxQ/sVZQlmtJUTrms=";
+  cargoHash = "sha256-GjUu7QDLMs/E4l3tjMBqmfoGkdQJMzdM/Ovg04pIctU=";
 
   patches = [
     ./fix_run_checks.patch
@@ -85,9 +85,9 @@ rustPlatform.buildRustPackage rec {
 
     installManPage target/mangen/*
 
-    installShellCompletion --cmd ${pname} \
-      target/shellcomplete/${pname}.{bash,fish} \
-      --zsh target/shellcomplete/_${pname}
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      target/shellcomplete/${finalAttrs.meta.mainProgram}.{bash,fish} \
+      --zsh target/shellcomplete/_${finalAttrs.meta.mainProgram}
   '';
 
   # RUST_BACKTRACE = 1;
@@ -99,11 +99,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/desbma/shh";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    changelog = "https://github.com/desbma/shh/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/desbma/shh/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "shh";
     maintainers = with lib.maintainers; [
       erdnaxe
       kuflierl
+      jk
     ];
   };
-}
+})

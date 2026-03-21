@@ -5,16 +5,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "ubi_reader";
   version = "0.8.10";
   pyproject = true;
-  disabled = python3.pkgs.pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "onekey-sec";
     repo = "ubi_reader";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fXJiQZ1QWUmkRM+WI8DSIsay9s1w3hKloRuCcUNwZjM=";
   };
 
@@ -38,4 +37,4 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vlaci ];
   };
-}
+})

@@ -6,13 +6,13 @@
 }:
 
 let
-  version = "2.14.0";
+  version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "JonathonReinhart";
     repo = "scuba";
     tag = "v${version}";
-    hash = "sha256-AX70js/bvt88zWJlXpuHIeBsBRfAL4qZjuthPFKSnFI=";
+    hash = "sha256-kYr7JyrwDDMJkazZ1cMZNkLo19stnOtc/gSp3nRWAuU=";
   };
 
   # This must be built statically because scuba will execute unknown docker environments
@@ -61,6 +61,7 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/JonathonReinhart/scuba";
     changelog = "https://github.com/JonathonReinhart/scuba/releases/tag/${src.tag}";
     license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ tbaldwin ];
     mainProgram = "scuba";
   };

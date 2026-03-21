@@ -11,14 +11,14 @@
 buildPythonPackage rec {
   pname = "dask-gateway";
   # update dask-gateway lock step with dask-gateway-server
-  version = "2023.1.1";
-  format = "pyproject";
+  version = "2025.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask-gateway";
     tag = version;
-    hash = "sha256-+YCHIfNq8E2rXO8b91Q1D21dVzNWnJZIKZeY4AETa7s=";
+    hash = "sha256-Ezt5QkA21SDfuCMm+XY8d+xso8SDb4lmK/yd89Guu0Y=";
   };
 
   sourceRoot = "${src.name}/dask-gateway";
@@ -36,10 +36,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dask_gateway" ];
 
-  meta = with lib; {
+  meta = {
     description = "Client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

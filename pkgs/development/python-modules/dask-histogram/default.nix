@@ -16,16 +16,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "dask-histogram";
-  version = "2025.2.0";
+  version = "2026.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
-    tag = version;
-    hash = "sha256-5Ec/qzVc/7LDG6SJym1e76BbxmbVjKKQHckwtTs1+6M=";
+    tag = finalAttrs.version;
+    hash = "sha256-F48mFKP3XLYOn4TuiU3HGHTd089kPk0dF2XnJot5s+I=";
   };
 
   build-system = [
@@ -46,8 +46,8 @@ buildPythonPackage rec {
   meta = {
     description = "Histograms with task scheduling";
     homepage = "https://dask-histogram.readthedocs.io/";
-    changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${version}";
+    changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${finalAttrs.src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };
-}
+})

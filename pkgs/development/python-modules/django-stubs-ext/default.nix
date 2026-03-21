@@ -3,7 +3,7 @@
   buildPythonPackage,
   django,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   oracledb,
   pytest-mypy-plugins,
   pytest-xdist,
@@ -14,22 +14,25 @@
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "5.2.5";
+  version = "5.2.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "django-stubs";
     tag = version;
-    hash = "sha256-v+MlMy9XABb9gw3U6Xv+aXXF6AZuvu+OBdU5+8tE9Oo=";
+    hash = "sha256-42FluS2fmfgj4qk2u+Z/7TGhXY4WKUc0cI00go6rnGc=";
   };
 
   postPatch = ''
     cd ext
     ln -s ../scripts
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.9,<0.10.0" uv_build
   '';
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [
     django
@@ -56,11 +59,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_stubs_ext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensions and monkey-patching for django-stubs";
     homepage = "https://github.com/typeddjango/django-stubs";
-    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

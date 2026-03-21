@@ -1,21 +1,21 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   ledger,
   hledger,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ledger-autosync";
   version = "1.2.0";
   pyproject = true;
 
-  # no tests included in PyPI tarball
   src = fetchFromGitHub {
     owner = "egh";
     repo = "ledger-autosync";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bbFjDdxYr85OPjdvY3JYtCe/8Epwi+8JN60PKVKbqe0=";
   };
 
@@ -33,11 +33,18 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # keyring.errors.KeyringError: Can't get password from keychain: (-50, 'Unknown Error')
+    # keyring.backends.macOS.api.Error: (-50, 'Unknown Error')
+    "tests/test_cli.py"
+    "tests/test_weird_ofx.py"
+  ];
+
   meta = {
     homepage = "https://github.com/egh/ledger-autosync";
-    changelog = "https://github.com/egh/ledger-autosync/releases/tag/v${version}";
+    changelog = "https://github.com/egh/ledger-autosync/releases/tag/v${finalAttrs.version}";
     description = "OFX/CSV autosync for ledger and hledger";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ eamsden ];
   };
-}
+})

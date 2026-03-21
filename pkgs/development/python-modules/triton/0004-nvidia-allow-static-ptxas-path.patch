@@ -1,13 +1,13 @@
 diff --git a/python/triton/knobs.py b/python/triton/knobs.py
-index 30804b170..c6a3a737d 100644
+index 161f739bd..047b19d69 100644
 --- a/python/triton/knobs.py
 +++ b/python/triton/knobs.py
-@@ -203,6 +203,8 @@ class env_nvidia_tool(env_base[str, NvidiaTool]):
-             # accessible.
-             self.default(),
-         ]
+@@ -208,6 +208,8 @@ class env_nvidia_tool(env_base[str, NvidiaTool]):
+         else:
+             paths = [self.default_path]
+ 
 +        import shlex
 +        paths.extend(shlex.split("@nixpkgsExtraBinaryPaths@"))
          for path in paths:
-             if not path or not os.access(path, os.X_OK):
-                 continue
+             if tool := NvidiaTool.from_path(path):
+                 return tool

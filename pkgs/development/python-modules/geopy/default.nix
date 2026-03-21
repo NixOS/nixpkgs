@@ -6,7 +6,6 @@
   geographiclib,
   pytest7CheckHook,
   pythonAtLeast,
-  pythonOlder,
   pytz,
 }:
 
@@ -14,7 +13,6 @@ buildPythonPackage rec {
   pname = "geopy";
   version = "2.4.1";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "geopy";
@@ -44,11 +42,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/geopy/geopy";
     description = "Python Geocoding Toolbox";
     changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ ];
   };
 }

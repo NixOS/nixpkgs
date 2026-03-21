@@ -24,7 +24,7 @@
   symlinkJoin,
   rsync,
 
-  appName,
+  appName ? "vanillatd",
   CMAKE_BUILD_TYPE ? "RelWithDebInfo", # "Choose the type of build, recommended options are: Debug Release RelWithDebInfo"
 }:
 assert lib.assertOneOf "appName" appName [
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iUF9UFc0FMvOwLkGqSyLYGy5E8YqNySqDp5VVUa+u4o=";
   };
   # TODO: Remove this. Just add this flag to ignore the format-security error temporarily.
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   buildInputs = [
     SDL2
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
               rsync --archive --mkpath --chmod=a+w ${finalAttrs.finalPackage}/ $out/
 
               # Symlink the data derivation to the default data path
-              mkdir -p ${builtins.dirOf Default_Data_Path}
+              mkdir -p ${dirOf Default_Data_Path}
               ln -s ${dataDerivation} ${Default_Data_Path}
 
               # Fix `error: suspicious ownership or permission on '/nix/store/xxx-0.0.0' for output 'out'; rejecting this build output`

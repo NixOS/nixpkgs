@@ -9,17 +9,19 @@
   motif,
   openssl,
   groff,
-  xorg,
+  libxt,
+  libxmu,
+  libxext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xephem";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "XEphem";
     repo = "XEphem";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-TuzXrWoJOAHg31DrJObPcHBXgtqR/KWKFRsqddPzL4c=";
   };
 
@@ -32,9 +34,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     motif
     openssl
-    xorg.libXmu
-    xorg.libXext
-    xorg.libXt
+    libxmu
+    libxext
+    libxt
   ];
 
   patches = [
@@ -109,4 +111,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ EstebanMacanek ];
     platforms = lib.platforms.unix;
   };
-}
+})

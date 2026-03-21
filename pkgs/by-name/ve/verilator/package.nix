@@ -17,19 +17,15 @@
   gdb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "verilator";
-  version = "5.040";
-
-  # Verilator gets the version from this environment variable
-  # if it can't do git describe while building.
-  VERILATOR_SRC_VERSION = "v${version}";
+  version = "5.044";
 
   src = fetchFromGitHub {
     owner = "verilator";
     repo = "verilator";
-    tag = "v${version}";
-    hash = "sha256-S+cDnKOTPjLw+sNmWL3+Ay6+UM8poMadkyPSGd3hgnc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-z3jYNzhnZ+OocDAbmsRBWHNNPXLLvExKK1TLDi9JzPQ=";
   };
 
   enableParallelBuilding = true;
@@ -88,22 +84,25 @@ stdenv.mkDerivation rec {
   '';
 
   env = {
+    # Verilator gets the version from this environment variable
+    # if it can't do git describe while building.
+    VERILATOR_SRC_VERSION = "v${finalAttrs.version}";
+
     SYSTEMC_INCLUDE = "${lib.getDev systemc}/include";
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
+  meta = {
+    changelog = "https://github.com/verilator/verilator/blob/${finalAttrs.src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       artistic2
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
-      amiloradovsky
     ];
   };
-}
+})

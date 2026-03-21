@@ -2,48 +2,85 @@
   stdenv,
   lib,
   fetchzip,
+  fetchurl,
   dpkg,
   makeWrapper,
   addDriverRunpath,
   electron,
+  _7zz,
   withTetrioPlus ? false,
   tetrio-plus,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "tetrio-desktop";
-  version = "9";
+let
+  inherit (stdenv.hostPlatform) isDarwin system;
 
-  src = fetchzip {
-    url = "https://tetr.io/about/desktop/builds/${finalAttrs.version}/TETR.IO%20Setup.deb";
-    hash = "sha256-TgegFy+sHjv0ILaiLO1ghyUhKXoj8v43ACJOJhKyI0c=";
-    nativeBuildInputs = [ dpkg ];
+  version = "10";
+
+  srcs = {
+    x86_64-linux = fetchzip {
+      url = "https://tetr.io/about/desktop/builds/${version}/TETR.IO%20Setup.deb";
+      hash = "sha256-2FtFCajNEj7O8DGangDecs2yeKbufYLx1aZb3ShnYvw=";
+      nativeBuildInputs = [ dpkg ];
+    };
+    aarch64-darwin = fetchurl {
+      url = "https://tetr.io/about/desktop/builds/${version}/TETR.IO%20Setup%20arm64.dmg";
+      hash = "sha256-PbK9XEynpii35p6DQYiPbaRM4guPazWd5N4Dr2O4H24=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://tetr.io/about/desktop/builds/${version}/TETR.IO%20Setup%20x86.dmg";
+      hash = "sha256-I4Mj6YY7KwpLk2tZ02EdqUxnxSW/3vCM4J7YFzCLEuM=";
+    };
   };
+in
+stdenv.mkDerivation {
+  pname = "tetrio-desktop";
+  inherit version;
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  src = srcs.${system} or (throw "Unsupported system: ${system}");
+
+  nativeBuildInputs = lib.optionals (!isDarwin) [ makeWrapper ] ++ lib.optionals isDarwin [ _7zz ];
+
+  sourceRoot = lib.optionalString isDarwin "TETR.IO.app";
+
+  unpackPhase = lib.optionalString isDarwin ''
+    7zz x $src
+  '';
 
   installPhase =
-    let
-      asarPath = if withTetrioPlus then tetrio-plus else "opt/TETR.IO/resources/app.asar";
-    in
-    ''
-      runHook preInstall
+    if isDarwin then
+      ''
+        runHook preInstall
 
-      mkdir -p $out
-      cp -r usr/share/ $out
+        mkdir -p "$out/Applications/TETR.IO.app"
+        cp -R . "$out/Applications/TETR.IO.app"
 
-      mkdir -p $out/share/TETR.IO/
-      cp ${asarPath} $out/share/TETR.IO/app.asar
+        ${lib.optionalString withTetrioPlus ''
+          cp ${tetrio-plus} "$out/Applications/TETR.IO.app/Contents/Resources/app.asar"
+        ''}
 
-      substituteInPlace $out/share/applications/TETR.IO.desktop \
-        --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=$out/bin/tetrio"
+        runHook postInstall
+      ''
+    else
+      let
+        asarPath = if withTetrioPlus then tetrio-plus else "opt/TETR.IO/resources/app.asar";
+      in
+      ''
+        runHook preInstall
 
-      runHook postInstall
-    '';
+        mkdir -p $out
+        cp -r usr/share/ $out
 
-  postFixup = ''
+        mkdir -p $out/share/TETR.IO/
+        cp ${asarPath} $out/share/TETR.IO/app.asar
+
+        substituteInPlace $out/share/applications/TETR.IO.desktop \
+          --replace-fail "Exec=/opt/TETR.IO/TETR.IO" "Exec=$out/bin/tetrio"
+
+        runHook postInstall
+      '';
+
+  postFixup = lib.optionalString (!isDarwin) ''
     makeShellWrapper '${lib.getExe electron}' $out/bin/tetrio \
       --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
@@ -61,8 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
       Play multiplayer games against friends and foes all over the world, or claim a spot on the leaderboards - the stacker future is yours!
     '';
     mainProgram = "tetrio";
-    maintainers = with lib.maintainers; [ huantian ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      huantian
+      anish
+    ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
-})
+}

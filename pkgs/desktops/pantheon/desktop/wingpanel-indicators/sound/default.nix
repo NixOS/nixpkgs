@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "8.0.1";
+  version = "8.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "wingpanel-indicator-sound";
-    rev = version;
-    sha256 = "sha256-oWgq8rgdK81QsN/LhVUk6YgKYG4pFjVfu00t974n+i8=";
+    tag = version;
+    hash = "sha256-3naN6qVsAjImFDU4DPR5c/leT8ecGUbbOppmSox4QTk=";
   };
 
   nativeBuildInputs = [
@@ -52,11 +52,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sound Indicator for Wingpanel";
     homepage = "https://github.com/elementary/wingpanel-indicator-sound";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    teams = [ teams.pantheon ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

@@ -4,7 +4,6 @@
   lndir,
   buildEnv,
 
-  maintainers,
   teams,
 
   version,
@@ -35,6 +34,8 @@
   nix-cmd,
 
   nix-cli,
+
+  nix-nswrapper ? null,
 
   nix-functional-tests,
 
@@ -178,10 +179,14 @@ stdenv.mkDerivation (finalAttrs: {
       # Forwarded outputs
       ln -sT ${nix-manual} $doc
       ln -sT ${nix-manual.man} $man
+    ''
+    + lib.optionalString (stdenv.isLinux && lib.versionAtLeast version "2.34pre") ''
+      lndir ${nix-nswrapper} $out
     '';
 
   passthru = {
     inherit (nix-cli) version;
+    inherit nix-cli;
     src = patchedSrc;
 
     /**
@@ -227,7 +232,6 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = nix-cli.meta.longDescription;
     homepage = nix-cli.meta.homepage;
     license = nix-cli.meta.license;
-    maintainers = maintainers;
     teams = teams;
     platforms = nix-cli.meta.platforms;
     outputsToInstall = [
@@ -253,6 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
       "nix-util"
       "nix-util-c"
     ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "nixos" version;
   };
 
 })

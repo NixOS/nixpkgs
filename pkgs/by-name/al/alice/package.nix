@@ -4,7 +4,7 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation (attrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "Alice";
   version = "2.003";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation (attrs: {
 
   src = fetchzip {
     url =
-      with attrs;
+      with finalAttrs;
       "https://github.com/cyrealtype/${pname}/releases/download/v${version}/${pname}-v${version}.zip";
     stripRoot = false;
     hash = "sha256-p+tE3DECfJyBIPyafGZ8jDYQ1lPb+iAnEwLyaUy7DW0=";
@@ -33,11 +33,11 @@ stdenv.mkDerivation (attrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open-source font by Ksenia Erulevich";
     homepage = "https://github.com/cyrealtype/Alice";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ncfavier ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ncfavier ];
   };
 })
