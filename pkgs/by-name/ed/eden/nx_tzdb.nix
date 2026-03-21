@@ -8,14 +8,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdb_to_nx";
-  version = "120226";
+  version = "230326";
 
   src = fetchFromGitea {
     domain = "git.crueter.xyz";
     owner = "misc";
     repo = "tzdb_to_nx";
     tag = finalAttrs.version;
-    hash = "sha256-egPu8UVbj73RQ0Z5JMTjd5HVdy47WTfkUMlQaS0wUTg=";
+    hash = "sha256-koz7C63oHVfrhrf9lfdUqw6idJWi21XRKQnb5PdoEb4=";
   };
 
   nativeBuildInputs = [

@@ -10,6 +10,7 @@
   cubeb,
   enet,
   fetchFromGitea,
+  fetchpatch,
   fetchurl,
   ffmpeg-headless,
   fmt,
@@ -21,8 +22,6 @@
   libopus,
   libusb1,
   lz4,
-  mcl-cpp-utility-lib,
-  mbedtls,
   nlohmann_json,
   oaknut,
   openssl,
@@ -33,7 +32,6 @@
   simpleini,
   sirit,
   spirv-headers,
-  spirv-tools,
   stb,
   unordered_dense,
   vulkan-headers,
@@ -59,15 +57,29 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eden";
-  version = "0.1.1";
+  version = "0.2.0";
 
   src = fetchFromGitea {
     domain = "git.eden-emu.dev";
     owner = "eden-emu";
     repo = "eden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tkro7ZHgn2809Utf/Li5+OiseywyQKH15eqphxlJZQQ=";
+    hash = "sha256-Q/tJP6AHAtW9AXn9G+8dF4oTlKDfNHN4cuTKXtYq0T8=";
   };
+
+  patches = [
+    (fetchpatch {
+      # httplib uses `SameMinorVersion` compatibility for its CMake files which
+      # makes it reject the nixpkgs version which is newer
+      name = "revert-httplib-version-specification.patch";
+      url = "https://git.eden-emu.dev/eden-emu/eden/commit/9c13c71da8dcc37d03fc53bc3bc16978a65fd8f2.patch";
+      hash = "sha256-g7q40BDb9TKE8eudBS7Smajq5EYCzxSemZgsl2ialJo=";
+      revert = true;
+    })
+  ];
+
+  strictDeps = true;
+  __structuredAttrs = true;
 
   nativeBuildInputs = [
     cmake
@@ -94,23 +106,21 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     # intentionally omitted: LLVM - heavy, only used for stack traces in the debugger
     lz4
-    mcl-cpp-utility-lib
     nlohmann_json
     openssl
     qt6.qtbase
     qt6.qtmultimedia
     qt6.qtwayland
     qt6.qtwebengine
+    qt6.qtcharts
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     stb
     simpleini
-    spirv-tools
     spirv-headers
     vulkan-headers
     vulkan-memory-allocator
     vulkan-utility-libraries
-    mbedtls
     sirit
     unordered_dense
     zlib
@@ -123,11 +133,6 @@ stdenv.mkDerivation (finalAttrs: {
     oaknut
   ];
 
-  patches = [
-    # https://git.eden-emu.dev/eden-emu/eden/issues/3484
-    ./aarch64-disable-fastmem.patch
-  ];
-
   doCheck = true;
 
   checkInputs = [
@@ -135,7 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
     oaknut
   ];
 
-  __structuredAttrs = true;
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "YUZU_TESTS" false) # some timer tests are flaky
