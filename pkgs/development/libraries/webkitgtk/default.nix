@@ -61,7 +61,6 @@
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
-  woff2,
   bubblewrap,
   libseccomp,
   libbacktrace,
@@ -86,7 +85,7 @@ in
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.6";
+  version = "2.52.0";
   name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
@@ -101,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Kygav4iU/8YXIVLlZgt17u7b4cxD1ng9Cdx598hlu0I=";
+    hash = "sha256-sxxV8YGUrIO6CMm5O77/71en7P9/Qch00XqeeFPcoZ8=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -145,6 +144,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     cairo # required even when using skia
     enchant2
     flite
+    freetype
     libavif
     libepoxy
     libjxl
@@ -173,12 +173,10 @@ clangStdenv.mkDerivation (finalAttrs: {
     nettle
     p11-kit
     sqlite
-    woff2
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
-    freetype
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
@@ -221,7 +219,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]
