@@ -201,6 +201,7 @@ mapAliases {
   filesplit = throw "filesplit has been removed, since it is unmaintained"; # added 2025-08-20
   flask-security-too = throw "'flask-security-too' has been renamed to/replaced by 'flask-security'"; # Converted to throw 2025-10-29
   flask-silk = throw "flask-silk was removed, as it is unmaintained since 2018."; # added 2025-05-25
+  flask-themes2 = throw "'flask-themes2' was removed as the only consumer pyload-ng was removed"; # added 2026-03-21
   flask_assets = throw "'flask_assets' has been renamed to/replaced by 'flask-assets'"; # Converted to throw 2025-10-29
   flask_elastic = throw "'flask_elastic' has been renamed to/replaced by 'flask-elastic'"; # Converted to throw 2025-10-29
   flask_login = throw "'flask_login' has been renamed to/replaced by 'flask-login'"; # Converted to throw 2025-10-29
