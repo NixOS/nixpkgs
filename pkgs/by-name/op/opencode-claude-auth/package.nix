@@ -7,16 +7,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "opencode-claude-auth";
-  version = "0.5.5";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "griffinmartin";
     repo = "opencode-claude-auth";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ntqMpyXOyOvtZVbe5nZmQ3COxW3kM7IG8CCUbGWYYEk=";
+    hash = "sha256-gUvtvOfJLgcPu5OR+wb8nH5AFp7r5HvuGtTr4fUa+lo=";
   };
 
-  npmDepsHash = "sha256-j4h/PUVWcgW9XRnaUqpMSdfb9TZtQfp1cOfxwG4FX5A=";
+  npmDepsHash = "sha256-sEavFoCmzitfZqSVvjSYP2FzwzlY4MCGtnAMWDhSgfU=";
 
   passthru.updateScript = nix-update-script { };
 
