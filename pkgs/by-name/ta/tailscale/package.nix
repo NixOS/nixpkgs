@@ -3,7 +3,6 @@
   stdenv,
 
   buildGoModule,
-  go_1_26,
   fetchFromGitHub,
 
   makeWrapper,
@@ -23,7 +22,7 @@
   tailscale-nginx-auth,
 }:
 
-buildGoModule.override { go = go_1_26; } (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "tailscale";
   version = "1.96.3";
 
