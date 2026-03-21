@@ -2,6 +2,7 @@
   fetchFromGitHub,
   buildGoModule,
   lib,
+  versionCheckHook,
 }:
 let
   pname = "oathkeeper";
@@ -32,9 +33,29 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ory/oathkeeper/x.Version=${version}"
+    "-X github.com/ory/oathkeeper/x.Version=v${version}"
     "-X github.com/ory/oathkeeper/x.Commit=${commit}"
   ];
+
+  # 2026-03-30: tests for this package use dynamic port assignment
+  # which causes failure in sandbox on darwin systems only
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    # set version to expected pattern (vMAJOR.MINOR.PATCH)
+    export version='v${version}'
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    # https://github.com/ory/oathkeeper/blob/bc7057b07aea0f26f5c12f3f05d7372b7b682d9e/CONTRIBUTING.md?plain=1#L169-L170
+    go test -tags sqlite ./...
+    runHook postCheck
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "version" ];
 
   meta = {
     description = "Open-source identity and access proxy that authorizes HTTP requests based on sets of rules";
