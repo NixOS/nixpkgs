@@ -13011,7 +13011,13 @@ self: super: with self; {
 
   pulumi-hcloud = pkgs.pulumiPackages.pulumi-hcloud.sdks.python;
 
+  pulumi-kubernetes = pkgs.pulumiPackages.pulumi-kubernetes.sdks.python;
+
+  pulumi-linode = pkgs.pulumiPackages.pulumi-linode.sdks.python;
+
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
+
+  pulumiverse-talos = pkgs.pulumiPackages.pulumiverse-talos.sdks.python;
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
 
@@ -14812,8 +14818,6 @@ self: super: with self; {
   pyro5 = callPackage ../development/python-modules/pyro5 { };
 
   pyroaring = callPackage ../development/python-modules/pyroaring { };
-
-  pyrogram = callPackage ../development/python-modules/pyrogram { };
 
   pyroma = callPackage ../development/python-modules/pyroma { };
 
@@ -19210,8 +19214,6 @@ self: super: with self; {
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   tftpy = callPackage ../development/python-modules/tftpy { };
-
-  tgcrypto = callPackage ../development/python-modules/tgcrypto { };
 
   thefuzz = callPackage ../development/python-modules/thefuzz { };
 

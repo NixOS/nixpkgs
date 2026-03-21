@@ -99,8 +99,8 @@ in
         sed -i $out/bin/clevis-decrypt-tpm2 -e 's,tpm2_,tpm2 ,'
       '';
 
-      secretPaths = lib.mapAttrs' (
-        name: value: lib.nameValuePair "/etc/clevis/${name}.jwe" { source = value.secretFile; }
+      secrets = lib.mapAttrs' (
+        name: value: lib.nameValuePair "/etc/clevis/${name}.jwe" value.secretFile
       ) cfg.devices;
 
       systemd = {
