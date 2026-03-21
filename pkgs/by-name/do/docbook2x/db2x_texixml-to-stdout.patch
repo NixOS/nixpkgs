@@ -1,0 +1,15 @@
+--- docbook2X-0.8.8/perl/db2x_texixml.pl	2006-04-20 05:02:31.000000000 +0200
++++ docbook2X-0.8.8/perl/db2x_texixml.pl	2008-03-12 15:36:55.000000000 +0100
+@@ -432,8 +432,12 @@ sub texi_openfile {
+                 $openstr = '>-';
+             }
+         } else {
++	    if(not $self->{options}->{'to-stdout'}) {
+             $openstr .= '> ' . shell_quote($filename);
+             print "$filename\n"
+                 if $self->{options}->{'list-files'};
++	    } else {
++		$openstr = '>-';
++	    }
+         }
+     }

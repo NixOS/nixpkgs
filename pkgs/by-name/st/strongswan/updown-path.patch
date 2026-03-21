@@ -1,0 +1,26 @@
+Index: strongswan-5.2.1/src/_updown/_updown.in
+===================================================================
+--- strongswan-5.2.1.orig/src/_updown/_updown.in
++++ strongswan-5.2.1/src/_updown/_updown.in
+@@ -125,7 +125,7 @@
+ #
+ 
+ # define a minimum PATH environment in case it is not set
+-PATH="/sbin:/bin:/usr/sbin:/usr/bin:@sbindir@"
++PATH="${PATH:-/sbin:/bin:/usr/sbin:/usr/bin}"
+ export PATH
+ 
+ # uncomment to log VPN connections
+Index: strongswan-5.2.1/src/libcharon/plugins/updown/updown_listener.c
+===================================================================
+--- strongswan-5.2.1.orig/src/libcharon/plugins/updown/updown_listener.c
++++ strongswan-5.2.1/src/libcharon/plugins/updown/updown_listener.c
+@@ -240,6 +240,8 @@ static void invoke_once(private_updown_l
+ 	process_t *process;
+ 	char *envp[128] = {};
+ 
++	push_env(envp, countof(envp), "PATH=%s", getenv("PATH"));
++
+ 	me = ike_sa->get_my_host(ike_sa);
+ 	other = ike_sa->get_other_host(ike_sa);
+ 

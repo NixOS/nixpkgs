@@ -1,0 +1,13 @@
+diff --git a/themes/spinfinity/meson.build b/themes/spinfinity/meson.build
+index f48e8e55..5a2050c8 100644
+--- a/themes/spinfinity/meson.build
++++ b/themes/spinfinity/meson.build
+@@ -53,8 +53,3 @@ install_data(
+   'throbber-33.png',
+   install_dir: plymouth_theme_path / 'spinfinity',
+ )
+-
+-install_symlink('header-image.png',
+-  install_dir: plymouth_theme_path / 'spinfinity',
+-  pointing_to: plymouth_logo_file,
+-)

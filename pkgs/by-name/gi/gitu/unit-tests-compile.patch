@@ -1,0 +1,31 @@
+diff --git i/src/git/parse/status/mod.rs w/src/git/parse/status/mod.rs
+index 5595ca1..8929d79 100644
+--- i/src/git/parse/status/mod.rs
++++ w/src/git/parse/status/mod.rs
+@@ -703,10 +703,12 @@ R  old.rs -> new.rs
+             for c2 in &status_chars {
+                 input.push(*c1);
+                 input.push(*c2);
++                let c1_str = c1.to_string();
++                let c2_str = c2.to_string();
+                 input.push_str(&format!(
+                     " file_{}_{}.txt\n",
+-                    if *c1 == ' ' { "space" } else { &c1.to_string() },
+-                    if *c2 == ' ' { "space" } else { &c2.to_string() }
++                    if *c1 == ' ' { "space" } else { &c1_str },
++                    if *c2 == ' ' { "space" } else { &c2_str }
+                 ));
+                 count += 1;
+             }
+diff --git i/src/tests/remote.rs w/src/tests/remote.rs
+index 7a81a50..0ac14f5 100644
+--- i/src/tests/remote.rs
++++ w/src/tests/remote.rs
+@@ -1,6 +1,6 @@
+ use git2::{Buf, Error, Repository};
+ 
+-use crate::{git::remote::*, repo_setup_clone, setup_clone, tests::helpers::RepoTestContext};
++use crate::{git::remote::*, repo_setup_clone, tests::helpers::RepoTestContext};
+ 
+ use super::*;
+ 

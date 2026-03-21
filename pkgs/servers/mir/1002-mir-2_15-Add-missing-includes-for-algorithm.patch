@@ -1,0 +1,77 @@
+From ab00b6d09303c17ecc7a2131a95591716e9ad7a1 Mon Sep 17 00:00:00 2001
+From: Jonathan Wakely <jwakely@fedoraproject.org>
+Date: Thu, 26 Dec 2024 23:00:23 +0100
+Subject: [PATCH] Add missing includes for <algorithm>
+
+Co-authored-by: OPNA2608 <opna2608@protonmail.com>
+---
+ src/miral/external_client.cpp                                  | 1 +
+ src/miral/keymap.cpp                                           | 1 +
+ src/platform/graphics/linux_dmabuf.cpp                         | 1 +
+ src/server/scene/rendering_tracker.cpp                         | 1 +
+ tests/unit-tests/graphics/test_overlapping_output_grouping.cpp | 1 +
+ 5 files changed, 5 insertions(+)
+
+diff --git a/src/miral/external_client.cpp b/src/miral/external_client.cpp
+index 0c3d176..792b962 100644
+--- a/src/miral/external_client.cpp
++++ b/src/miral/external_client.cpp
+@@ -22,6 +22,7 @@
+ #include <mir/options/option.h>
+ #include <mir/server.h>
+ 
++#include <algorithm>
+ #include <stdexcept>
+ 
+ namespace mo = mir::options;
+diff --git a/src/miral/keymap.cpp b/src/miral/keymap.cpp
+index e494a10..010cb75 100644
+--- a/src/miral/keymap.cpp
++++ b/src/miral/keymap.cpp
+@@ -30,6 +30,7 @@
+ #define MIR_LOG_COMPONENT "miral::Keymap"
+ #include <mir/log.h>
+ 
++#include <algorithm>
+ #include <mutex>
+ #include <string>
+ #include <vector>
+diff --git a/src/platform/graphics/linux_dmabuf.cpp b/src/platform/graphics/linux_dmabuf.cpp
+index f5a750f..840c3d0 100644
+--- a/src/platform/graphics/linux_dmabuf.cpp
++++ b/src/platform/graphics/linux_dmabuf.cpp
+@@ -41,6 +41,7 @@
+ #include <mutex>
+ #include <vector>
+ #include <optional>
++#include <algorithm>
+ #include <drm_fourcc.h>
+ #include <wayland-server.h>
+ 
+diff --git a/src/server/scene/rendering_tracker.cpp b/src/server/scene/rendering_tracker.cpp
+index fe4e05e..24393a3 100644
+--- a/src/server/scene/rendering_tracker.cpp
++++ b/src/server/scene/rendering_tracker.cpp
+@@ -17,6 +17,7 @@
+ #include "rendering_tracker.h"
+ #include "mir/scene/surface.h"
+ 
++#include <algorithm>
+ #include <stdexcept>
+ #include <boost/throw_exception.hpp>
+ 
+diff --git a/tests/unit-tests/graphics/test_overlapping_output_grouping.cpp b/tests/unit-tests/graphics/test_overlapping_output_grouping.cpp
+index 4478578..7167ad1 100644
+--- a/tests/unit-tests/graphics/test_overlapping_output_grouping.cpp
++++ b/tests/unit-tests/graphics/test_overlapping_output_grouping.cpp
+@@ -22,6 +22,7 @@
+ #include <gtest/gtest.h>
+ 
+ #include <vector>
++#include <algorithm>
+ 
+ namespace mg = mir::graphics;
+ namespace geom = mir::geometry;
+-- 
+2.47.0
+

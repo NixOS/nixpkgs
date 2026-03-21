@@ -1,0 +1,231 @@
+commit 4e68d9bfd12de51d8e6dc8ac622317f7755f1080
+Author: Palmer Cox <p@lmercox.com>
+Date:   Tue May 14 23:07:48 2024 -0400
+
+    python312Packages.pybrowserid: Fix on Darwin
+    
+    The WorkerPoolVerifier works by spawning one or more child processes in
+    order to run the verification process. This is fine on Linux when using
+    the default "fork" method of the multiprocessing module. However, this
+    breaks when using the "spawn" or "forkserver" method since those methods
+    require that the arguments passed into the Process object be pickleable.
+    Specifically we're passing threading.Lock objects to the child process
+    which are not pickleable.
+    
+    Passing a Lock to a child process spawned via fork mostly does nothing -
+    the child process ends up with its own copy of the Lock which its free
+    to lock or unlock as it pleases and it has no effect on the parent
+    process. So, we don't actually need to pass the Lock to the child
+    process since it has never done anything. All we need to do is _not_
+    pass it since it causes errors when its passed because its not
+    pickleable. We don't need to re-create its functionality.
+    
+    Anyway, there are two places where we are passing locks to the child
+    process. The first is the WorkerPoolVerifier class. This lock isn't
+    actually being used - its just passed because we're passing the "self"
+    object to the worker thread. So, we can fix this by making the target
+    method to run in the worker thread a free-function and only passing the
+    object we need - thus avoiding passing the unused Lock that triggers the
+    pickle error.
+    
+    The other place that a Lock is passed ia via the FIFOCache. We can work
+    around this by making the Lock a global variable instead of an instance
+    variable. This shouldn't cause any significant performance issues
+    because the FIFOCache only holds this lock for brief periods when its
+    updating itself - its not doing any network call or long running
+    operations. Anyway, because its a global variable now, its not passed to
+    the process and we avoid the pickle error.
+    
+    The other problem we have to fix are the tests on Darwin. There are two
+    problems - both due to Darwin defaulting to the "spawn" start method
+    for child Processes:
+    
+    1. When we spawn a new Python process, it inherits the same __main__
+       module as its parent. When running tests, this __main__ module is the
+       unittest module. And, it start trying to run tests when its loaded.
+       This spawns more processes which also try to run tests, and so on.
+    
+    2. The test code tries to mock out the network access. However, when we
+       spawn a new Python process these mocks are lost.
+    
+    Anyway, we fix this issues by creating a temporary replacement for the
+    __main__ module which we install before running the WorkerPoolVerifier
+    tests. This module avoids trying to run the unit tests and also applies
+    the necessary mock to avoid network access.
+
+diff --git a/browserid/supportdoc.py b/browserid/supportdoc.py
+index d995fed..249b37e 100644
+--- a/browserid/supportdoc.py
++++ b/browserid/supportdoc.py
+@@ -26,6 +26,9 @@ DEFAULT_TRUSTED_SECONDARIES = ("browserid.org", "diresworb.org",
+                                "login.persona.org")
+ 
+ 
++FIFO_CACHE_LOCK = threading.Lock()
++
++
+ class SupportDocumentManager(object):
+     """Manager for mapping hostnames to their BrowserID support documents.
+ 
+@@ -131,7 +134,6 @@ class FIFOCache(object):
+         self.max_size = max_size
+         self.items_map = {}
+         self.items_queue = collections.deque()
+-        self._lock = threading.Lock()
+ 
+     def __getitem__(self, key):
+         """Lookup the given key in the cache.
+@@ -147,7 +149,7 @@ class FIFOCache(object):
+                 # it hasn't been updated by another thread in the meantime.
+                 # This is a little more work during eviction, but it means we
+                 # can avoid locking in the common case of non-expired items.
+-                self._lock.acquire()
++                FIFO_CACHE_LOCK.acquire()
+                 try:
+                     if self.items_map[key][0] == timestamp:
+                         # Just delete it from items_map.  Trying to find
+@@ -157,7 +159,7 @@ class FIFOCache(object):
+                 except KeyError:
+                     pass
+                 finally:
+-                    self._lock.release()
++                    FIFO_CACHE_LOCK.release()
+                     raise KeyError
+         return value
+ 
+@@ -168,7 +170,7 @@ class FIFOCache(object):
+         there's enough room in the cache and evicting items if necessary.
+         """
+         now = time.time()
+-        with self._lock:
++        with FIFO_CACHE_LOCK:
+             # First we need to make sure there's enough room.
+             # This is a great opportunity to evict any expired items,
+             # helping to keep memory small for sparse caches.
+diff --git a/browserid/tests/dummy_main_module_for_unit_test_worker_processes.py b/browserid/tests/dummy_main_module_for_unit_test_worker_processes.py
+new file mode 100644
+index 0000000..388f86f
+--- /dev/null
++++ b/browserid/tests/dummy_main_module_for_unit_test_worker_processes.py
+@@ -0,0 +1,29 @@
++"""
++This module is necessary as a hack to get tests to pass on Darwin.
++
++The reason is that the tests attempt to start up a multiprocessing.Process.
++Doing that spawns a new Python process with the same __main__ module as the
++parent process. The first problem is that the default start mode for Processes
++on Darwin with "spawn" as opposed to "fork" as on Linux. This means that a
++fully new Python interpretter is started with the same __main__ module. When
++running tests, that __main__ module is the standard library unittest module.
++Unfortunately, that module unconditionally runs unit tests without checking
++that __name__ == "__main__". The end result is that every time a worker process
++is spawned it immediately attemps to run the tests which spawn more processes
++and so on.
++
++So, we work around that by replacing the __main__ module with this one before
++any processes are spawned. This prevents the infinite spawning of processes
++since this module doesn't try to run any unit tests.
++
++Additionally, this also patches the supportdoc fetching methods - which is
++necessary to actually get the tests to pass.
++"""
++
++import multiprocessing
++
++from browserid.tests.support import patched_supportdoc_fetching
++
++if multiprocessing.current_process().name != "MainProcess":
++    patched_supportdoc_fetching().__enter__()
++
+diff --git a/browserid/tests/test_verifiers.py b/browserid/tests/test_verifiers.py
+index d95ff8f..e8b867f 100644
+--- a/browserid/tests/test_verifiers.py
++++ b/browserid/tests/test_verifiers.py
+@@ -454,15 +454,27 @@ class TestDummyVerifier(unittest.TestCase, VerifierTestCases):
+ class TestWorkerPoolVerifier(TestDummyVerifier):
+ 
+     def setUp(self):
++        from browserid.tests import dummy_main_module_for_unit_test_worker_processes
++        import sys
++
+         super(TestWorkerPoolVerifier, self).setUp()
++
++        self.__old_main = sys.modules["__main__"]
++        sys.modules["__main__"] = dummy_main_module_for_unit_test_worker_processes
++
+         self.verifier = WorkerPoolVerifier(
+                 verifier=LocalVerifier(["*"])
+         )
+ 
+     def tearDown(self):
++        import sys
++
+         super(TestWorkerPoolVerifier, self).tearDown()
++
+         self.verifier.close()
+ 
++        sys.modules["__main__"] = self.__old_main
++
+ 
+ class TestShortcutFunction(unittest.TestCase):
+ 
+diff --git a/browserid/verifiers/workerpool.py b/browserid/verifiers/workerpool.py
+index c669107..d250222 100644
+--- a/browserid/verifiers/workerpool.py
++++ b/browserid/verifiers/workerpool.py
+@@ -32,7 +32,6 @@ class WorkerPoolVerifier(object):
+         if verifier is None:
+             verifier = LocalVerifier()
+         self.num_procs = num_procs
+-        self.verifier = verifier
+         # Create the various communication channels.
+         # Yes, this duplicates a lot of the logic from multprocessing.Pool.
+         # I don't want to have to constantly pickle the verifier object
+@@ -53,7 +52,7 @@ class WorkerPoolVerifier(object):
+         self._result_thread.start()
+         self._processes = []
+         for n in range(num_procs):
+-            proc = multiprocessing.Process(target=self._run_worker)
++            proc = multiprocessing.Process(target=_run_worker, args=(self._work_queue, verifier, self._result_queue))
+             self._processes.append(proc)
+             proc.start()
+ 
+@@ -128,21 +127,21 @@ class WorkerPoolVerifier(object):
+                 self._waiting_conds[job_id] = (ok, result)
+                 cond.notify()
+ 
+-    def _run_worker(self):
+-        """Method to run for the background worker processes.
++def _run_worker(work_queue, verifier, result_queue):
++    """Method to run for the background worker processes.
+ 
+-        This method loops through jobs from the work queue, executing them
+-        with the verifier object and pushing the result back via the result
+-        queue.
+-        """
+-        while True:
+-            job_id, args, kwds = self._work_queue.get()
+-            if job_id is None:
+-                break
+-            try:
+-                result = self.verifier.verify(*args, **kwds)
+-                ok = True
+-            except Exception as e:
+-                result = e
+-                ok = False
+-            self._result_queue.put((job_id, ok, result))
++    This method loops through jobs from the work queue, executing them
++    with the verifier object and pushing the result back via the result
++    queue.
++    """
++    while True:
++        job_id, args, kwds = work_queue.get()
++        if job_id is None:
++            break
++        try:
++            result = verifier.verify(*args, **kwds)
++            ok = True
++        except Exception as e:
++            result = e
++            ok = False
++        result_queue.put((job_id, ok, result))

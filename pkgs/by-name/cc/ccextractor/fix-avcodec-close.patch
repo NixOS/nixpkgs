@@ -1,0 +1,13 @@
+diff --git a/src/lib_ccx/hardsubx.c b/src/lib_ccx/hardsubx.c
+index 20b4388..fa6b5fa 100644
+--- a/src/lib_ccx/hardsubx.c
++++ b/src/lib_ccx/hardsubx.c
+@@ -125,7 +125,7 @@ int hardsubx_process_data(struct lib_hardsubx_ctx *ctx, struct lib_ccx_ctx *ctx_
+ 	if (ctx->frame)
+ 		av_frame_free(&ctx->frame);
+ 	if (ctx->rgb_frame)
+ 		av_frame_free(&ctx->rgb_frame);
+-	avcodec_close(ctx->codec_ctx);
++	avcodec_free_context(&ctx->codec_ctx);
+ 	avformat_close_input(&ctx->format_ctx);
+ }

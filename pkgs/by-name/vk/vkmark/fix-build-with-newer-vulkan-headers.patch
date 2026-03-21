@@ -1,0 +1,73 @@
+From abc5fc8495692df968636c29f44719e0999a73b5 Mon Sep 17 00:00:00 2001
+From: Philipp Zabel <p.zabel@pengutronix.de>
+Date: Wed, 10 Dec 2025 10:59:49 +0100
+Subject: [PATCH 1/2] core: Register custom dispatcher with isDispatchLoader
+
+Since Vulkan 1.4.333, custom dispatch loaders must be registered
+with isDispatchLoader to be recognized.
+---
+ src/vulkan_state.cpp | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/vulkan_state.cpp b/src/vulkan_state.cpp
+index a36b2994dbba3e74cb1fb378e4dbb054157ae516..847095147bf5e050e558065623921ac3f06eb7e7 100644
+--- a/src/vulkan_state.cpp
++++ b/src/vulkan_state.cpp
+@@ -65,6 +65,18 @@ class DebugUtilsDispatcher
+ 
+ }
+ 
++#if VK_HEADER_VERSION >= 333
++namespace vk::detail {
++
++template <>
++struct isDispatchLoader<::DebugUtilsDispatcher>
++{
++    static VULKAN_HPP_CONST_OR_CONSTEXPR bool value = true;
++};
++
++}
++#endif
++
+ VulkanState::VulkanState(VulkanWSI& vulkan_wsi, ChoosePhysicalDeviceStrategy const& pd_strategy, bool debug)
+     : debug_enabled(debug)
+ {
+
+From ab3f3d709e2f93859b528b1ace56423675940290 Mon Sep 17 00:00:00 2001
+From: Philipp Zabel <p.zabel@pengutronix.de>
+Date: Wed, 10 Dec 2025 10:59:49 +0100
+Subject: [PATCH 2/2] kms: Register custom dispatcher with isDispatchLoader
+
+Since Vulkan 1.4.333, custom dispatch loaders must be registered
+with isDispatchLoader to be recognized.
+---
+ src/ws/kms_window_system.cpp | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/src/ws/kms_window_system.cpp b/src/ws/kms_window_system.cpp
+index 4bf7838cee0512925ef084b641de3c2a11389c6d..1bc04581eee233f33ad3ea7a719ec4c3894b1104 100644
+--- a/src/ws/kms_window_system.cpp
++++ b/src/ws/kms_window_system.cpp
+@@ -474,6 +474,22 @@ class GetFormatProperties2Dispatcher
+     PFN_vkGetPhysicalDeviceFormatProperties2KHR vkGetPhysicalDeviceFormatProperties2KHR;
+ };
+ 
++}
++
++#if VK_HEADER_VERSION >= 333
++namespace vk::detail {
++
++template <>
++struct isDispatchLoader<::GetFormatProperties2Dispatcher>
++{
++    static VULKAN_HPP_CONST_OR_CONSTEXPR bool value = true;
++};
++
++}
++#endif
++
++namespace {
++
+ std::vector<uint64_t> vk_get_supported_mods_for_format(VulkanState& vulkan,
+                                                        vk::Format format)
+ {

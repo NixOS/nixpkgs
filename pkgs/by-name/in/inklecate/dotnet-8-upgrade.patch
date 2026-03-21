@@ -1,0 +1,65 @@
+diff --git a/InkTestBed/InkTestBed.csproj b/InkTestBed/InkTestBed.csproj
+index d729fee..ea3e9e6 100644
+--- a/InkTestBed/InkTestBed.csproj
++++ b/InkTestBed/InkTestBed.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <TieredCompilation>true</TieredCompilation>
+     <RootNamespace>InkTestBed</RootNamespace>
+     <AssemblyName>InkTestBed</AssemblyName>
+diff --git a/compiler/ink_compiler.csproj b/compiler/ink_compiler.csproj
+index a6dd06b..c4708cc 100644
+--- a/compiler/ink_compiler.csproj
++++ b/compiler/ink_compiler.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace>Ink</RootNamespace>
+     <AssemblyName>ink_compiler</AssemblyName>
+   </PropertyGroup>
+diff --git a/ink-engine-runtime/ink-engine-runtime.csproj b/ink-engine-runtime/ink-engine-runtime.csproj
+index caba6df..777c109 100644
+--- a/ink-engine-runtime/ink-engine-runtime.csproj
++++ b/ink-engine-runtime/ink-engine-runtime.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFrameworks>net6.0</TargetFrameworks>
++    <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace>Ink.Runtime</RootNamespace>
+     <AssemblyName>ink-engine-runtime</AssemblyName>
+   </PropertyGroup>
+diff --git a/inklecate/inklecate.csproj b/inklecate/inklecate.csproj
+index 0a02264..cf7b254 100644
+--- a/inklecate/inklecate.csproj
++++ b/inklecate/inklecate.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace>Ink</RootNamespace>
+     <AssemblyName>inklecate</AssemblyName>
+   </PropertyGroup>
+diff --git a/tests/tests.csproj b/tests/tests.csproj
+index 8d3bd6b..a9731c5 100644
+--- a/tests/tests.csproj
++++ b/tests/tests.csproj
+@@ -1,7 +1,7 @@
+ ﻿<Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <RootNamespace>tests</RootNamespace>
+     <AssemblyName>ink-tests</AssemblyName>
+ 
