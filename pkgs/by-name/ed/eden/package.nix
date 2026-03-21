@@ -136,14 +136,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     # use system libraries
     (lib.cmakeBool "CPMUTIL_FORCE_SYSTEM" true)
-    (lib.cmakeBool "YUZU_USE_EXTERNAL_SDL2" false)
-    (lib.cmakeBool "YUZU_USE_BUNDLED_FFMPEG" false)
     (lib.cmakeFeature "YUZU_TZDB_PATH" "${nx_tzdb}")
 
     # enable some optional features
     (lib.cmakeBool "YUZU_USE_QT_WEB_ENGINE" true)
     (lib.cmakeBool "YUZU_USE_QT_MULTIMEDIA" true)
     (lib.cmakeBool "ENABLE_QT_TRANSLATION" true)
+    (lib.cmakeBool "ENABLE_LTO" true)
 
     # We dont want to bother upstream with potentially outdated compat reports
     (lib.cmakeBool "YUZU_ENABLE_COMPATIBILITY_REPORTING" false)
