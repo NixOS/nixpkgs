@@ -21,16 +21,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ovito";
-  version = "3.14.1";
+  version = "3.15.0";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SKE07bk/8cZ2etQtLrGZyp2DrNiyVk6mrgxlvJmG+Xk=";
+    hash = "sha256-017GjyHPHqrZt03lRFJn9yxFhD6HHyhX5vxsRX06PdA=";
     fetchSubmodules = true;
   };
-  patches = [ ./zstd.patch ];
+
+  postPatch = ''
+    substituteInPlace src/ovito/core/CMakeLists.txt \
+      --replace-fail " IF(OVITO_BUILD_CONDA)" " IF(TRUE)"
+  '';
 
   nativeBuildInputs = [
     cmake
