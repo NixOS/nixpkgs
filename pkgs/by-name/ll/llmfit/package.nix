@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "llmfit";
-  version = "0.6.9";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "AlexsJones";
     repo = "llmfit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qrdumfjdzjZPhlubc9R4ila59nvNKVCH6HmeXhVcf0g=";
+    hash = "sha256-ftzvoUxid6t1VTVGvGjruSMIi7tYcbzS53MOEh3PPBE=";
   };
 
-  cargoHash = "sha256-1M4E9cFSYaKU41FO8lyFvkB+2GnNxUjxifk6ibmVd5I=";
+  cargoHash = "sha256-ag051opJrIO1l8lCMZMZX/ac+LKBvgNCqZtI9eZC7Vw=";
 
   meta = {
     description = "Find what runs on your hardware";
