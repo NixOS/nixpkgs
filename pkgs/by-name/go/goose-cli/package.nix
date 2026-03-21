@@ -123,6 +123,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=context_mgmt::auto_compact::tests::test_auto_compact_respects_config"
     "--skip=scheduler::tests::test_scheduled_session_has_schedule_id"
   ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Broken on aarch64-linux: request capture races across session_id_propagation_test cases
+    "--skip=test_session_id_matches_across_calls"
+    "--skip=test_session_id_propagation_to_llm"
+  ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=logging::tests::test_log_file_name_no_session"
     "--skip=recipes::extract_from_cli::tests::test_extract_recipe_info_from_cli_basic"
