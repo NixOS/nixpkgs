@@ -497,6 +497,7 @@ mapAliases {
   ruamel_base = throw "'ruamel_base' has been renamed to/replaced by 'ruamel-base'"; # Converted to throw 2025-10-29
   ruamel_yaml = throw "'ruamel_yaml' has been renamed to/replaced by 'ruamel-yaml'"; # Converted to throw 2025-10-29
   ruamel_yaml_clib = throw "'ruamel_yaml_clib' has been renamed to/replaced by 'ruamel-yaml-clib'"; # Converted to throw 2025-10-29
+  ruffus = throw "'ruffus' has been removed as it was unmaintained and abandoned upstream"; # Added 2026-03-21
   sapi-python-client = throw "'sapi-python-client' has been renamed to/replaced by 'kbcstorage'"; # Converted to throw 2025-10-29
   schemainspect = throw "schemainspect has been removed because it has transitively been marked broken since May 2024, and is unmaintained upstream."; # Added 2025-10-11
   scikitimage = throw "'scikitimage' has been renamed to/replaced by 'scikit-image'"; # Converted to throw 2025-10-29
