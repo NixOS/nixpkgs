@@ -3,16 +3,15 @@
   buildNpmPackage,
   cargo,
   copyDesktopItems,
-  dart,
+  dart-sass,
   darwin,
-  electron_37,
+  electron_39,
   fetchFromGitHub,
   gnome-keyring,
   jq,
   llvmPackages_18,
   makeDesktopItem,
   makeWrapper,
-  napi-rs-cli,
   nix-update-script,
   nodejs_22,
   pkg-config,
@@ -25,7 +24,7 @@
 let
   description = "Secure and free password manager for all of your devices";
   icon = "bitwarden";
-  electron = electron_37;
+  electron = electron_39;
 
   # argon2 npm dependency is using `std::basic_string<uint8_t>`, which is no longer allowed in LLVM 19
   buildNpmPackage' = buildNpmPackage.override {
@@ -34,13 +33,13 @@ let
 in
 buildNpmPackage' rec {
   pname = "bitwarden-desktop";
-  version = "2025.11.2";
+  version = "2026.2.1";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-0djpeXHHqA8tVcQsE/yCDZVnoEuYwUpln2Hhj2chGNc=";
+    hash = "sha256-BiL9ugimdDKIzIoehGqdBfJkTOjbOMl8XV+0g/aGS/k=";
   };
 
   patches = [
@@ -53,8 +52,6 @@ buildNpmPackage' rec {
     ./set-desktop-proxy-path.patch
     # on linux: don't flip fuses, don't create wrapper script, on darwin: don't try copying safari extensions, don't try re-signing app
     ./skip-afterpack-and-aftersign.patch
-    # since out arch doesn't match upstream, we'll generate and use desktop_napi.node instead of desktop_napi.${platform}-${arch}.node
-    ./dont-use-platform-triple.patch
   ];
 
   postPatch = ''
@@ -87,7 +84,7 @@ buildNpmPackage' rec {
     "--ignore-scripts"
   ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-l5Lcm1ggF7qFqNuSYRoRPf1Gbt/gH3g6dYu30YTXgsI=";
+  npmDepsHash = "sha256-S34Lxr9dH9wjBmpDYA530z2/HiY4D4b/3rswWDqsrFU=";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit
@@ -97,7 +94,7 @@ buildNpmPackage' rec {
       cargoRoot
       patches
       ;
-    hash = "sha256-WhiKqN+FCR/c9BuwhQT0EoidGUkP2ueSlsnupUflVlM=";
+    hash = "sha256-qK7cwrTzGKgHdaxaGcpR6bKJP/Tai2F+KFLu/PI6qqA=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -108,9 +105,9 @@ buildNpmPackage' rec {
 
   nativeBuildInputs = [
     cargo
+    dart-sass
     jq
     makeWrapper
-    napi-rs-cli
     pkg-config
     rustc
     rustPlatform.cargoCheckHook
@@ -130,8 +127,11 @@ buildNpmPackage' rec {
       exit 1
     fi
 
-    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
-      --replace-fail "\''${compiler_module_1.compilerModule}/dart-sass/src/dart" "${lib.getExe' dart "dartaotruntime"}"
+    # force our dart-sass executable
+    echo "export const compilerCommand = ['dart-sass'];" > node_modules/sass-embedded/dist/lib/src/compiler-path.js
+
+    # needed so that the napi executable actually is usable
+    patchShebangs apps/desktop/node_modules
 
     pushd apps/desktop/desktop_native/napi
     npm run build
