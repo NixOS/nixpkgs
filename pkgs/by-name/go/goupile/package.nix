@@ -43,7 +43,9 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   # pipe2() is only exposed with _GNU_SOURCE
-  NIX_CFLAGS_COMPILE = [ "-D_GNU_SOURCE" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-D_GNU_SOURCE"
+  ];
 
   buildPhase = ''
     runHook preBuild
