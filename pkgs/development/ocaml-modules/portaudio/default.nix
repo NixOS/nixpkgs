@@ -6,14 +6,14 @@
   portaudio,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "portaudio";
   version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-portaudio";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-rMSE+ta7ughjjCnz4oho1D3VGaAsUlLtxizvxZT0/cQ=";
   };
 
@@ -26,4 +26,4 @@ buildDunePackage rec {
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ dandellion ];
   };
-}
+})

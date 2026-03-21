@@ -8,13 +8,13 @@
   ounit2,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "mustache";
   version = "3.3.0";
   src = fetchFromGitHub {
     owner = "rgrinberg";
     repo = "ocaml-mustache";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7rdp7nrjc25/Nuj/cf78qxS3Qy4ufaNcKjSnYh4Ri8U=";
   };
 
@@ -31,6 +31,6 @@ buildDunePackage rec {
     description = "Mustache logic-less templates in OCaml";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.vbgl ];
-    inherit (src.meta) homepage;
+    inherit (finalAttrs.src.meta) homepage;
   };
-}
+})
