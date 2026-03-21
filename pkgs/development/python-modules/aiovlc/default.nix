@@ -2,27 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
+  setuptools,
   typer,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "aiovlc";
-  version = "0.6.6";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aiovlc";
-    tag = "v${version}";
-    hash = "sha256-HnMzr6yKEtPFJlaKbvKYTXXjlz1wDLdOw65IPZJkWB0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PA8meWB0LOZX503+GVep03GiUh65MsLI+C6Fe9Iz6nc=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   optional-dependencies = {
     cli = [ typer ];
@@ -34,15 +34,15 @@ buildPythonPackage rec {
     pytest-timeout
     pytestCheckHook
   ]
-  ++ lib.concatAttrValues optional-dependencies;
+  ++ lib.flatten (builtins.attrValues finalAttrs.passthru.optional-dependencies);
 
   pythonImportsCheck = [ "aiovlc" ];
 
   meta = {
     description = "Python module to control VLC";
     homepage = "https://github.com/MartinHjelmare/aiovlc";
-    changelog = "https://github.com/MartinHjelmare/aiovlc/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/MartinHjelmare/aiovlc/blob/v${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
