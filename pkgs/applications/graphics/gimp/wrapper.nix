@@ -18,8 +18,7 @@ let
     ++ lib.optionals (gimp.majorVersion == "2.0") [
       ''--prefix GTK_PATH : "${gnome-themes-extra}/lib/gtk-2.0"''
     ];
-  exeVersion =
-    if gimp.majorVersion == "2.0" then lib.versions.majorMinor gimp.version else gimp.majorVersion;
+  exeVersion = lib.versions.majorMinor gimp.version;
   majorVersion = lib.versions.major gimp.version;
 
 in

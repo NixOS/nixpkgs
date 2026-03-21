@@ -60,7 +60,7 @@
   gexiv2,
   harfbuzz,
   makeFontsConf,
-  mypaint-brushes1,
+  mypaint-brushes,
   libwebp,
   libheif,
   gjs,
@@ -71,7 +71,6 @@
   adwaita-icon-theme,
   alsa-lib,
   desktopToDarwinBundle,
-  fetchpatch,
   qoi,
 }:
 
@@ -84,7 +83,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "3.0.8";
+  version = "3.2.0";
 
   outputs = [
     "out"
@@ -95,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/rSYrMAbJoJ8/x/5Wqj7gs3Wpg16v3c8/NGavq/KM4Y=";
+    hash = "sha256-Jhg5FBblG+PGk9+e+Q44YO1yqz02Nj6h8ZbjC3Wy4IM=";
   };
 
   patches = [
@@ -117,31 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     # so we need to pick up the one from the package.
     (replaceVars ./tests-dbus-conf.patch {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
-    })
-
-    # Allow calling tests from other directories.
-    # Required for the next patch.
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/fd58ab3bee7a79cb0a7870c6858f3b64c84a7917.patch";
-      hash = "sha256-fpysKWwt5rilqp7ukdWx7kutkDquL/6YhYjR1zQfu/Q=";
-    })
-
-    # Do not go through ui for save-and-export test.
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/608ad0a528b5b31101c021d96aeb95558d207497.patch";
-      hash = "sha256-0oA5u+uAT0l3WT90fy0RGOR8xy/fGIHevBb69oUzfGs=";
-      excludes = [
-        # Other changes would prevent deletion, removing it from build is sufficient.
-        "app/tests/test-save-and-export.c"
-      ];
-    })
-
-    # Disable broken UI tests.
-    # https://gitlab.gnome.org/GNOME/gimp/-/issues/15763
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/c34fe3e94f1019eafcb38edf1c07bff12a57431e.patch";
-      hash = "sha256-yVauEpoGEOIfCXnGnWMGWjXbIDizDhJ3hipeCy3XSBM=";
     })
   ];
 
@@ -216,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxmu
     glib-networking
     libmypaint
-    mypaint-brushes1
+    mypaint-brushes
     qoi
 
     # New file dialogue crashes with “Icon 'image-missing' not present in theme Symbolic” without an icon theme.
