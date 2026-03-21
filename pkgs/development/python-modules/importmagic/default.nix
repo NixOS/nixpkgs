@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   pytestCheckHook,
 }:
@@ -11,9 +11,11 @@ buildPythonPackage rec {
   version = "0.2.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-O25fBjkVMJHzdJpBtx7ifiNOGkkc929hGu8Q220Uoso=";
+  src = fetchFromGitHub {
+    owner = "alecthomas";
+    repo = "importmagic";
+    tag = version;
+    hash = "sha256-776HbSRl5hIrSyIyIF7jnNAJF41QzdjXe0vDaKwlCnc=";
   };
 
   build-system = [ hatchling ];
