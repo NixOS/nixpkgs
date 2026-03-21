@@ -570,7 +570,7 @@ in
     imports = [ ./firefox.nix ];
     _module.args.firefoxPackage = pkgs.firefox-esr-140;
   };
-  firefox-syncserver = runTest ./firefox-syncserver.nix;
+  firefox-syncserver = discoverTests (import ./firefox-syncserver.nix);
   firefox_decrypt = runTest ./firefox_decrypt.nix;
   firefoxpwa = runTest ./firefoxpwa.nix;
   firejail = runTest ./firejail.nix;
