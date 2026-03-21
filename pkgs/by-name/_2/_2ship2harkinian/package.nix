@@ -106,13 +106,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "2ship2harkinian";
-  version = "4.0.0";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "HarbourMasters";
     repo = "2ship2harkinian";
     tag = finalAttrs.version;
-    hash = "sha256-fG9HIJChPGngb8vouLsQTo9xQXBq6qIZn7oyYssvNhI=";
+    hash = "sha256-zrV1iSI6d6vtzIyvYmSrbgijP3qZnwBkKG9L6+pq8+0=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
