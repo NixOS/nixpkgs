@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhdhomerun";
-  version = "20250506";
+  version = "20260313";
 
   src = fetchurl {
     url = "https://download.silicondust.com/hdhomerun/libhdhomerun_${finalAttrs.version}.tgz";
-    hash = "sha256-h5sbxHbJuT537igKhPwRV+fMR9Q+2cg5jYiorF81wDQ=";
+    hash = "sha256-eS1DuYvcFG+ohy+CBfT4/rHB1VV+PHft2mtrHt6bnbA=";
   };
 
   patches = [
