@@ -75,9 +75,7 @@ buildGoModule (finalAttrs: {
     mv $out/bin/gomuks $out/bin/gomuks-web
   '';
 
-  passthru.updateScript = {
-    inherit (finalAttrs) frontend;
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     mainProgram = "gomuks-web";
