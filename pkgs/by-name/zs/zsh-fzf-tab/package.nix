@@ -11,14 +11,14 @@
 let
   INSTALL_PATH = "${placeholder "out"}/share/fzf-tab";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zsh-fzf-tab";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-8atbysoOyCBW2OYKmdc91x9V/Mk3eyg3hvzvhJpQ32w=";
   };
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://github.com/Aloxaf/fzf-tab";
     description = "Replace zsh's default completion selection menu with fzf";
-    changelog = "https://github.com/Aloxaf/fzf-tab/releases/tag/v${finalAttrs.version}"
+    changelog = "https://github.com/Aloxaf/fzf-tab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       diredocks
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
