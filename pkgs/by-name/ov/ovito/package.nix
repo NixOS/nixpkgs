@@ -15,6 +15,7 @@
   openssl,
   python3,
   qt6Packages,
+  imagemagick,
   copyDesktopItems,
   nix-update-script,
 }:
@@ -39,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     qt6Packages.wrapQtAppsHook
+    imagemagick
     copyDesktopItems
   ];
 
@@ -83,7 +85,8 @@ stdenv.mkDerivation (finalAttrs: {
       };
     in
     ''
-      install -Dm644 ${icon} $out/share/pixmaps/ovito.png
+      mkdir -p $out/share/icons/hicolor/512x512/apps
+      magick ${icon} -resize 512x512 $out/share/icons/hicolor/512x512/apps/ovito.png
     '';
 
   passthru.updateScript = nix-update-script { };
