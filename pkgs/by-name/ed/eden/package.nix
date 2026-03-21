@@ -22,7 +22,6 @@
   libusb1,
   lz4,
   mcl-cpp-utility-lib,
-  mbedtls,
   nlohmann_json,
   oaknut,
   openssl,
@@ -59,14 +58,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "eden";
-  version = "0.1.1";
+  version = "0.2.0-rc2";
 
   src = fetchFromGitea {
     domain = "git.eden-emu.dev";
     owner = "eden-emu";
     repo = "eden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tkro7ZHgn2809Utf/Li5+OiseywyQKH15eqphxlJZQQ=";
+    hash = "sha256-keLkB5qeQch+tM2J6zVh9oQGhP5TuxItqrZRN24apJw=";
   };
 
   nativeBuildInputs = [
@@ -101,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtmultimedia
     qt6.qtwayland
     qt6.qtwebengine
+    qt6.qtcharts
     # intentionally omitted: renderdoc - heavy, developer only
     SDL2
     stb
@@ -110,7 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     vulkan-memory-allocator
     vulkan-utility-libraries
-    mbedtls
     sirit
     unordered_dense
     zlib
@@ -121,11 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     oaknut
-  ];
-
-  patches = [
-    # https://git.eden-emu.dev/eden-emu/eden/issues/3484
-    ./aarch64-disable-fastmem.patch
   ];
 
   doCheck = true;
