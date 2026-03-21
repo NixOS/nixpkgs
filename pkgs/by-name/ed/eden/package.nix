@@ -23,7 +23,6 @@
   lz4,
   mcl-cpp-utility-lib,
   mbedtls,
-  nix-update-script,
   nlohmann_json,
   oaknut,
   openssl,
@@ -179,7 +178,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nx_tzdb compat-list;
 
-    updateScript = nix-update-script { };
+    updateScript = writeScript "update-eden" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p nix-update
+
+      set -eu -o pipefail
+
+      nix-update eden
+      nix-update eden.nx_tzdb
+    '';
   };
 
   meta = {
