@@ -47,7 +47,7 @@ in
           };
         };
         virtualisation.rootDevice = "/dev/mapper/cryptroot";
-        boot.initrd.secretPaths."/etc/cryptroot.key".source = keyfile;
+        boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
       };
 
       specialisation.boot-luks-missing-keyfile.configuration = {

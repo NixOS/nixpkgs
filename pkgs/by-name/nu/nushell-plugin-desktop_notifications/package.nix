@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_desktop_notifications";
-  version = "0.110.0";
+  version = "0.111.0";
 
   src = fetchFromGitHub {
     owner = "FMotalleb";
     repo = "nu_plugin_desktop_notifications";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jd4T0+id/1rpjOWuzqbqxnyvmoe4LCiYux/dJlO3F6c=";
+    hash = "sha256-hcjJa+Y0N7QgVpxc/OJYCpYaZ6FLQiabvk7RLUjhZAI=";
   };
 
-  cargoHash = "sha256-7ZiQr8RBQCNQK3/tLasilZcu+HWp066iDFI67L8iZMg=";
+  cargoHash = "sha256-nDRu9gaJGfuCKMgBptZPS5ANaPwKJ7BGAe10QI8skRM=";
 
   passthru.updateScript = nix-update-script { };
 
