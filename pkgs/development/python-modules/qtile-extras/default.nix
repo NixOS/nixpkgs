@@ -21,7 +21,7 @@
   xorg-server,
   nixosTests,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
   version = "0.35.0";
   # nixpkgs-update: no auto update
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xZ1pxe1EUnnjqz+46R4R9DWKi7M2j1pgvY4uy1dBak8=";
   };
 
@@ -97,8 +97,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.tag}/CHANGELOG";
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${finalAttrs.src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ arjan-s ];
   };
-}
+})
