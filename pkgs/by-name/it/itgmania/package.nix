@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "itgmania";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "itgmania";
     repo = "itgmania";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-C9qVUZdRnKbQgfgbXnzT+lI2+FEXBaMQv/U6UF5wyzo=";
+    hash = "sha256-RkV/OIDudt2XemhaFRY7IA5o7Q2w+j01tauD7KpzYpA=";
   };
 
   nativeBuildInputs = [

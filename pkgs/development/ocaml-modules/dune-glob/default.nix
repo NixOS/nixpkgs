@@ -3,6 +3,7 @@
   buildDunePackage,
   dune_3,
   dune-private-libs,
+  re,
 }:
 
 buildDunePackage {
@@ -13,11 +14,10 @@ buildDunePackage {
 
   dontAddPrefix = true;
 
-  propagatedBuildInputs = [ dune-private-libs ];
-
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
+  propagatedBuildInputs = [
+    dune-private-libs
+    re
+  ];
 
   meta = {
     inherit (dune_3.meta) homepage;

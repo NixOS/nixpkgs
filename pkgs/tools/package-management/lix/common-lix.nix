@@ -280,7 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
     # would be in a Cargo registry cache.
     MESON_PACKAGE_CACHE_DIR =
       if finalAttrs.cargoDeps != null then
-        finalAttrs.cargoDeps
+        "${finalAttrs.cargoDeps}/source-registry-0"
       else
         "lix: no `MESON_PACKAGE_CACHE_DIR`, set `cargoDeps`";
   };

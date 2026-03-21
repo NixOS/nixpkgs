@@ -36,11 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
-    substituteInPlace src/google/protobuf/testing/googletest.cc \
-      --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
-  '';
-
   patches =
     lib.optionals (lib.versionOlder version "22") [
       # fix protobuf-targets.cmake installation paths, and allow for CMAKE_INSTALL_LIBDIR to be absolute
@@ -69,7 +64,32 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/protocolbuffers/protobuf/commit/211f52431b9ec30d4d4a1c76aafd64bd78d93c43.patch";
         hash = "sha256-2/vc4anc+kH7otfLHfBtW8dRowPyObiXZn0+HtQktak=";
       })
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "34") [
+      # upb linker-array fix for newer toolchains (notably GCC 15):
+      # `UPB_linkarr_internal_empty_upb_AllExts` can conflict with extension
+      # entries in `linkarr_upb_AllExts` during test builds.
+      # Context: https://github.com/protocolbuffers/protobuf/issues/21021
+      ./fix-upb-linkarr-sentinel-init.patch
     ];
+
+  postPatch =
+    lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder version "29") ''
+      substituteInPlace src/google/protobuf/testing/googletest.cc \
+        --replace-fail 'tmpnam(b)' '"'$TMPDIR'/foo"'
+    ''
+    # Keep the sentinel macro non-retained for GCC 15+ to match generated
+    # extension objects in linker arrays and avoid section type conflicts.
+    + lib.optionalString (lib.versionAtLeast version "34") ''
+      substituteInPlace upb/port/def.inc \
+        --replace-fail \
+          '#define UPB_LINKARR_SENTINEL UPB_RETAIN __attribute__((weak, used))' \
+          '#define UPB_LINKARR_SENTINEL            __attribute__((weak, used))'
+    ''
+    # Fix gcc15 build failures due to missing <cstring>
+    + lib.optionalString ((lib.versions.major version) == "25") ''
+      sed -i '1i #include <cstring>' third_party/utf8_range/utf8_validity.cc
+    '';
 
   preHook = ''
     export build_protobuf=${
@@ -102,14 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = if lib.versionOlder version "22" then "../cmake" else null;
   cmakeFlags = [
-    "-Dprotobuf_USE_EXTERNAL_GTEST=ON"
-    "-Dprotobuf_ABSL_PROVIDER=package"
+    (lib.cmakeBool "protobuf_USE_EXTERNAL_GTEST" true)
+    (lib.cmakeFeature "protobuf_ABSL_PROVIDER" "package")
+    (lib.cmakeBool "protobuf_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ]
   ++ lib.optionals enableShared [
-    "-Dprotobuf_BUILD_SHARED_LIBS=ON"
-  ]
-  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    "-Dprotobuf_BUILD_TESTS=OFF"
+    (lib.cmakeBool "protobuf_BUILD_SHARED_LIBS" true)
   ];
 
   doCheck =
@@ -122,7 +140,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = [ "${placeholder "out"}/bin/protoc" ];
   doInstallCheck = true;
 
   env = lib.optionalAttrs (lib.versions.major version == "29") {
@@ -133,6 +150,8 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       pythonProtobuf = python3.pkgs.protobuf;
       inherit grpc;
+      inherit (python3.pkgs) celery;
+
       version = testers.testVersion { package = protobuf; };
     };
 

@@ -7,7 +7,7 @@
   libGL,
   liblo,
   libjack2,
-  ladspaH,
+  ladspa-header,
   lv2,
   pkg-config,
   rubberband,
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     liblo
     libjack2
-    ladspaH
+    ladspa-header
     lv2
     rubberband
     libsndfile

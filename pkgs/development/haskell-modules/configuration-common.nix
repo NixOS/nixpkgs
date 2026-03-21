@@ -496,6 +496,21 @@ with haskellLib;
   # 2025-02-14: Too strict bounds on attoparsec < 0.14
   attoparsec-varword = doJailbreak (dontCheck super.attoparsec-varword);
 
+  # Fix t_iter test which fails randomly, but frequently. No upstream feedback so far.
+  # https://github.com/haskell/attoparsec/issues/232
+  attoparsec = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.buf.t_iter\""
+    ];
+  }) super.attoparsec;
+  attoparsec-isotropic = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p"
+      "$0!=\"tests.leftToRight.buf.t_iter\""
+    ];
+  }) super.attoparsec-isotropic;
+
   # These packages (and their reverse deps) cannot be built with profiling enabled.
   ghc-heap-view = lib.pipe super.ghc-heap-view [
     disableLibraryProfiling
@@ -3710,13 +3725,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.10.1";
+    version = "1.11.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
+      hash = "sha256-CWhnwL2M83/ItapPVeJqCevRoQttesYxJ1h0Mo6ZCXs=";
     };
   in
   {
@@ -3730,9 +3745,6 @@ with haskellLib;
         inherit version;
         src = src + "/cachix";
       })
-      (addBuildDepends [
-        self.pqueue
-      ])
       (
         drv:
         drv.override {

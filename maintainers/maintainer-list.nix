@@ -13697,6 +13697,13 @@
     github = "karaolidis";
     githubId = 46189100;
   };
+  karlbeecken = {
+    name = "Karl Beecken";
+    email = "karl@beecken.berlin";
+    github = "karlbeecken";
+    githubId = 32744028;
+    keys = [ { fingerprint = "7577 13A4 9609 0C2F 51C4  018C B5C8 89A2 F195 28F6"; } ];
+  };
   KarlJoad = {
     email = "karl@hallsby.com";
     github = "KarlJoad";
@@ -14175,6 +14182,12 @@
     email = "kl@kenzymele.com";
     github = "klDen";
     githubId = 5478260;
+  };
+  klea = {
+    email = "klea+nixos@iwnp.org";
+    github = "notklea";
+    githubId = 231780064;
+    name = "Klea";
   };
   klntsky = {
     email = "klntsky@gmail.com";
@@ -15049,6 +15062,12 @@
     github = "lelgenio";
     githubId = 31388299;
     name = "Leonardo Eugênio";
+  };
+  lenianiva = {
+    name = "Leni Aniva";
+    email = "aniva@stanford.edu";
+    github = "lenianiva";
+    githubId = 107011294;
   };
   lenivaya = {
     name = "Danylo Osipchuk";

@@ -4,7 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  python313,
+  python314,
   replaceVars,
   ffmpeg-headless,
   inetutils,
@@ -244,7 +244,7 @@ let
     })
   ];
 
-  python = python313.override {
+  python = python314.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
@@ -263,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.2.3";
+  hassVersion = "2026.3.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -284,13 +284,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-BEE27D1P3cbxjQMRh3VHL6KDXa7bZDfqK316VQg0/SM=";
+    hash = "sha256-ehvHw+/JZkQEYf4m+BbFc/2izomLsm7T4IPGzB8ehWk=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-UkIxZx3IU0IZh8gbjZ9xRkEZS97UW85FT5isNyPyiHQ=";
+    hash = "sha256-MICjwxCNwb5XvSayN13gf4b7/iPT4dCFYvi+nec+ctk=";
   };
 
   build-system = with python.pkgs; [
@@ -306,6 +306,9 @@ python.pkgs.buildPythonApplication rec {
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    # https://github.com/home-assistant/core/pull/165143
+    ./pyjwt-2.11.patch
+
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
@@ -332,6 +335,7 @@ python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiogithubapi
     aiohasupervisor
     aiohttp
     aiohttp-asyncmdnsresolver

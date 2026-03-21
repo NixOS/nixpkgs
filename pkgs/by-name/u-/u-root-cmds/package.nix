@@ -181,7 +181,6 @@ u-root.overrideAttrs (prevAttrs: {
     "cmds/exp/watch"
     "cmds/exp/zbi"
     "cmds/exp/zimage"
-    "cmds/extra/tsort"
     "cmds/fwtools/flash"
     "cmds/fwtools/spidev"
   ];

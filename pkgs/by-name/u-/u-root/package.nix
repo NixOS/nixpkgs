@@ -1,29 +1,34 @@
 {
   lib,
-  # Build fails with Go 1.25, with the following error:
-  # 'vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go:64:9: invalid array length -delta * delta (constant -256 of type int64)'
-  # Wait for upstream to update their vendored dependencies before unpinning.
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   coreutils,
   bash,
   nix-update-script,
+  fetchpatch,
 
   linuxManualConfig,
   fetchurl,
   linux_latest,
 }:
 
-buildGo124Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "u-root";
-  version = "0.15.0";
+  version = "0.15.0-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "u-root";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-8B2H3AwGo9friveBk4bijOph9bSSNR7PPKJYEuywgm4=";
+    rev = "0f23b8374acf4f00b457c69c13c3fe73dd5bab86";
+    hash = "sha256-RwEegwzBpw0r0fPyNhB35hyaAcqSt8dUmYf2N5WrpQQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/u-root/u-root/commit/aeeb2aafd6a35416d5941b496e44a94594021424.patch";
+      hash = "sha256-h+b/s9NkreQfFWezEup1DpQjfyiJpHQGTD/RyKmkF8s=";
+    })
+  ];
 
   vendorHash = null;
 

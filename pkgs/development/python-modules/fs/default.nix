@@ -68,6 +68,7 @@ buildPythonPackage rec {
     # pyftpdlib removed tests from installation in 2.1.0, resulting in
     #     ModuleNotFoundError: No module named 'pyftpdlib.test'
     "tests/test_ftpfs.py"
+    "tests/test_encoding.py" # fails under zfs normalization=formD
   ];
 
   disabledTests = [

@@ -1,32 +1,44 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   google-api-core,
   google-auth,
-  google-cloud-testutils,
   grpcio,
-  mock,
   proto-plus,
   protobuf,
+
+  # tests
+  google-cloud-testutils,
+  mock,
   pytest-asyncio,
   pytestCheckHook,
-  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-ai-generativelanguage";
   version = "0.10.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "google_ai_generativelanguage";
-    inherit version;
-    hash = "sha256-F+mYCUADpWbg+lIkn91J6PTAMM6+f+DFIbQNYFq6eD4=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "google-cloud-python";
+    tag = "google-ai-generativelanguage-v${finalAttrs.version}";
+    hash = "sha256-dVgcnnInqjUjySL7wjxGzI33t1YZJ8e9mSsmjAJ+fBI=";
   };
+
+  sourceRoot = "${finalAttrs.src.name}/packages/google-ai-generativelanguage";
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
   dependencies = [
     google-api-core
     google-auth
@@ -51,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Google Ai Generativelanguage API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-ai-generativelanguage";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-ai-generativelanguage-v${version}/packages/google-ai-generativelanguage/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-ai-generativelanguage/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

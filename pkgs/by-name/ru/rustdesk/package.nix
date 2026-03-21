@@ -112,8 +112,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   postPatch = ''
-    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
-    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-1.1.0/src/sys/libwebm/mkvparser/mkvparser.cc
+    sed -e '1i #include <cstdint>' -i $cargoDepsCopy/*/webm-sys-1.0.4/libwebm/mkvparser/mkvparser.cc
   '';
 
   # Add static ui resources and libsciter to same folder as binary so that it

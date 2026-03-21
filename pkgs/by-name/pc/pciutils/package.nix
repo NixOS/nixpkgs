@@ -49,6 +49,15 @@ stdenv.mkDerivation (finalAttrs: {
     "install-lib"
   ];
 
+  # Since this package doesn't use an autotools generated configure script,
+  # splitting the dev or lib outputs produces incorrect files, evident by e.g
+  # pkg-config files which point to wrong paths. manual pages OTH are moved to
+  # the $man outputs naturally by stdenv.
+  outputs = [
+    "out"
+    "man"
+  ];
+
   postInstall = ''
     # Remove update-pciids as it won't work on nixos
     rm $out/sbin/update-pciids $out/man/man8/update-pciids.8

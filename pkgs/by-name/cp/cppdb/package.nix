@@ -6,7 +6,7 @@
   sqlite,
   libmysqlclient,
   libpq,
-  unixODBC,
+  unixodbc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     libmysqlclient
     libpq
-    unixODBC
+    unixodbc
   ];
 
   cmakeFlags = [ "--no-warn-unused-cli" ];

@@ -39,6 +39,8 @@ buildPythonPackage (finalAttrs: {
   ]
   ++ google-api-core.optional-dependencies.grpc;
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   nativeCheckInputs = [
     freezegun
     google-cloud-testutils

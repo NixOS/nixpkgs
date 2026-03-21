@@ -12,6 +12,7 @@
   src,
   meta ? { },
   generate ? false,
+  excludeBrokenTreeSitterJson ? false,
   ...
 }@args:
 
@@ -39,6 +40,13 @@ stdenv.mkDerivation (
     ];
 
     stripDebugList = [ "parser" ];
+
+    # Not all tree-sitter.json files follow the schema. If they're invalid,
+    # remove them. Note: these tree-sitter.json files are not validated here,
+    # but are validated in python3Packages.tree-sitter-grammars.
+    postPatch = lib.optionalString excludeBrokenTreeSitterJson ''
+      rm tree-sitter.json
+    '';
 
     # Tree-sitter grammar packages contain a `tree-sitter.json` file at their
     # root. This provides package metadata that can be used to infer build
@@ -101,6 +109,9 @@ stdenv.mkDerivation (
       runHook preInstall
       mkdir $out
       mv parser $out/
+      if [[ -f tree-sitter.json ]]; then
+        cp tree-sitter.json $out/
+      fi
       if [[ -d queries ]]; then
         cp -r queries $out
       fi
@@ -124,6 +135,7 @@ stdenv.mkDerivation (
   })
   // removeAttrs args [
     "generate"
+    "excludeBrokenTreeSitterJson"
     "meta"
   ]
 )

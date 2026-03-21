@@ -9,7 +9,7 @@ from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from enum import Enum
 from ipaddress import AddressValueError, IPv6Address
-from typing import Final, Literal, NamedTuple, Self, TextIO, TypedDict, Unpack, override
+from typing import Final, Literal, Self, TextIO, TypedDict, Unpack, override
 
 from . import tmpdir
 
@@ -46,6 +46,7 @@ class Remote:
     host: str
     opts: list[str]
     sudo_password: str | None
+    store_type: str
 
     @classmethod
     def from_arg(
@@ -57,13 +58,18 @@ class Remote:
         if not host:
             return None
 
+        try:
+            store_type, host = host.split("://", 1)
+        except ValueError:
+            store_type = "ssh"
+
         opts = shlex.split(os.getenv("NIX_SSHOPTS", ""))
         if validate_opts:
             cls._validate_opts(opts, ask_sudo_password)
         sudo_password = None
         if ask_sudo_password:
             sudo_password = getpass.getpass(f"[sudo] password for {host}: ")
-        return cls(host, opts, sudo_password)
+        return cls(host, opts, sudo_password, store_type)
 
     @staticmethod
     def _validate_opts(opts: list[str], ask_sudo_password: bool | None) -> None:
@@ -117,18 +123,17 @@ def cleanup_ssh() -> None:
 atexit.register(cleanup_ssh)
 
 
-class _RunParams(NamedTuple):
-    args: Args
-    popen_env: dict[str, str] | None
-    process_input: str | None
-
-
-def _build_run_params(
+def run_wrapper(
     args: Args,
-    env: Mapping[str, EnvValue] | None,
-    remote: Remote | None,
-    sudo: bool,
-) -> _RunParams:
+    *,
+    check: bool = True,
+    env: Mapping[str, EnvValue] | None = None,
+    append_local_env: Mapping[str, str] | None = None,
+    remote: Remote | None = None,
+    sudo: bool = False,
+    **kwargs: Unpack[RunKwargs],
+) -> subprocess.CompletedProcess[str]:
+    "Wrapper around `subprocess.run` that supports extra functionality."
     process_input = None
     run_args: list[Arg] = list(args)
     final_args: list[Arg]
@@ -190,64 +195,9 @@ def _build_run_params(
             final_args = run_args
             popen_env = None if env is None else resolved_env
 
-    return _RunParams(final_args, popen_env, process_input)
-
-
-def run_wrapper_bg(
-    args: Args,
-    env: Mapping[str, EnvValue] | None = None,
-    remote: Remote | None = None,
-    sudo: bool = False,
-) -> subprocess.Popen[str]:
-    "Wrapper around `subprocess.Popen` that supports extra functionality."
-    (final_args, popen_env, process_input) = _build_run_params(args, env, remote, sudo)
-
-    logger.debug(
-        "calling Popen with args=%r",
-        _sanitize_env_run_args(list(final_args)),
-    )
-
-    if process_input:
-        stdin = subprocess.PIPE
-    else:
-        stdin = None
-
-    r = subprocess.Popen(
-        final_args,
-        env=popen_env,
-        stdin=stdin,
-        # Hope nobody is using NixOS with non-UTF8 encodings, but
-        # "surrogateescape" should still work in those systems.
-        text=True,
-        errors="surrogateescape",
-    )
-
-    if r.stdin and process_input:
-        r.stdin.write(process_input)
-        r.stdin.write("\n")
-        r.stdin.close()
-
-    return r
-
-
-def run_wrapper(
-    args: Args,
-    *,
-    check: bool = True,
-    env: Mapping[str, EnvValue] | None = None,
-    append_local_env: Mapping[str, str] | None = None,
-    remote: Remote | None = None,
-    sudo: bool = False,
-    **kwargs: Unpack[RunKwargs],
-) -> subprocess.CompletedProcess[str]:
-    "Wrapper around `subprocess.run` that supports extra functionality."
-    (final_args, popen_env, process_input) = _build_run_params(
-        list(args), env, remote, sudo
-    )
-
     logger.debug(
         "calling run with args=%r, kwargs=%r, env=%r, append_local_env=%r",
-        _sanitize_env_run_args(list(final_args)),
+        _sanitize_env_run_args(remote_run_args if remote else run_args),
         kwargs,
         env,
         append_local_env,

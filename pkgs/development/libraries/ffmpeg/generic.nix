@@ -265,7 +265,7 @@
   harfbuzz,
   intel-media-sdk,
   kvazaar,
-  ladspaH,
+  ladspa-header,
   lame,
   lcevcdec,
   lcms2,
@@ -892,7 +892,7 @@ stdenv.mkDerivation (
       ++ optionals withJack [ libjack2 ]
       ++ optionals withJxl [ libjxl ]
       ++ optionals withKvazaar [ kvazaar ]
-      ++ optionals withLadspa [ ladspaH ]
+      ++ optionals withLadspa [ ladspa-header ]
       ++ optionals withLc3 [ liblc3 ]
       ++ optionals withLcevcdec [ lcevcdec ]
       ++ optionals withLcms2 [ lcms2 ]

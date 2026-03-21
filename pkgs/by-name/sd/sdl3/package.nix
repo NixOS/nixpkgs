@@ -70,7 +70,7 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.4.0";
+  version = "3.4.2";
 
   outputs = [
     "lib"
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-/A1y/NaZVebzI58F4TlwtDwuzlcA33Y1YuZqd5lz/Sk=";
+    hash = "sha256-ev0QiKyj0O6gtk7cK/V0X5Noft0Zo/fMS+oM6emwynE=";
   };
 
   postPatch =
@@ -172,6 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
     (lib.cmakeBool "SDL_DBUS" dbusSupport)
+    (lib.cmakeBool "SDL_HIDAPI_LIBUSB" libusbSupport)
     (lib.cmakeBool "SDL_IBUS" ibusSupport)
     (lib.cmakeBool "SDL_JACK" jackSupport)
     (lib.cmakeBool "SDL_KMSDRM" drmSupport)
@@ -182,6 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
     (lib.cmakeBool "SDL_TEST_LIBRARY" true)
     (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
+    (lib.cmakeBool "SDL_VULKAN" vulkanSupport)
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
@@ -198,11 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
       && !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAndroid)
       && !(x11Support || waylandSupport)
     ))
-  ]
-  ++ lib.optional (libusbSupport != stdenv.hostPlatform.isLinux) (
-    lib.cmakeBool "SDL_HIDAPI_LIBUSB" libusbSupport
-  )
-  ++ lib.optional (!vulkanSupport) (lib.cmakeBool "SDL_VULKAN" vulkanSupport);
+  ];
 
   doCheck = true;
 
