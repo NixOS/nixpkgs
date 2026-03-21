@@ -23,7 +23,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/catppuccin/whiskers";
     description = "Templating tool to simplify the creation of Catppuccin ports";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Name ];
+    maintainers = with lib.maintainers; [
+      Name
+      isabelroses
+    ];
     mainProgram = "whiskers";
   };
 }
