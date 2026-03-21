@@ -92,9 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/opt/UltimateDoomBuilder/builder --replace-fail mono ${mono}/bin/mono
     substituteInPlace $out/opt/UltimateDoomBuilder/builder --replace-fail Builder.exe $out/opt/UltimateDoomBuilder/Builder.exe
 
-    # GTK is loaded dynamically by Mono at runtime
+    # GTK, OpenGL, and other libraries are loaded dynamically by Mono at runtime
     wrapProgram $out/opt/UltimateDoomBuilder/builder \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ gtk2-x11 ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          gtk2-x11
+          libGL
+          libpng
+          libx11
+        ]
+      }"
 
     ln -s $out/opt/UltimateDoomBuilder/builder $out/bin/ultimate-doom-builder
 

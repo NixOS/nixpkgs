@@ -29,6 +29,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     installShellFiles
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   # These fail based on timestamp issues with bundled certificates
   # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
   checkFlags = [
