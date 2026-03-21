@@ -27,6 +27,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Python Import Magic - automagically add, remove and manage imports";
     homepage = "https://github.com/alecthomas/importmagic";
+    changelog = "https://github.com/alecthomas/importmagic/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd0;
     maintainers = with lib.maintainers; [ onny ];
   };
