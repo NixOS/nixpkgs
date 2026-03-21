@@ -1,14 +1,14 @@
 {
-  lib,
-  stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  ntpd-rs,
+  fetchpatch2,
   installShellFiles,
-  pandoc,
-  nixosTests,
+  lib,
   nix-update-script,
-  testers,
+  nixosTests,
+  pandoc,
+  rustPlatform,
+  stdenvNoCC,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,35 +25,31 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-DXAy/K70sNhVOjDOd6G/juE7JgmewPzGHZDeXAOZ1+s=";
 
   nativeBuildInputs = [
-    pandoc
     installShellFiles
+    pandoc
   ];
 
-  # These fail based on timestamp issues with bundled certificates
-  # See https://github.com/NixOS/nixpkgs/issues/497682 & https://github.com/pendulum-project/ntpd-rs/pull/2133
+  # https://github.com/pendulum-project/ntpd-rs/issues/2152
   checkFlags = [
-    "--skip=daemon::keyexchange::tests::key_exchange_connection_limiter"
-    "--skip=daemon::keyexchange::tests::key_exchange_roundtrip_with_port_server"
     "--skip=daemon::ntp_source::tests::test_deny_stops_poll"
     "--skip=daemon::ntp_source::tests::test_timeroundtrip"
     "--skip=daemon::server::tests::test_server_serves"
-    "--skip=nts::tests::test_key_exchange_roundtrip_no_cookies"
-    "--skip=nts::tests::test_keyexchange_fixed_key_no_permission"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_keep_alive"
-    "--skip=nts::tests::test_keyexchange_roundtrip_fixed_key_no_permit"
-    "--skip=nts::tests::test_keyexchange_roundtrip_no_proto_overlap"
-    "--skip=nts::tests::test_keyexchange_roundtrip_no_upgrade_possible"
-    "--skip=nts::tests::test_keyexchange_roundtrip_supports"
-    "--skip=nts::tests::test_keyexchange_roundtrip_upgrading"
-    "--skip=nts::tests::test_keyexchange_roundtrip_v4"
-    "--skip=nts::tests::test_keyexchange_roundtrip_v5"
-    "--skip=nts::tests::test_keyexchange_supports_no_permission"
+  ];
+
+  # These fail based on timestamp issues with bundled certificates.
+  # See https://github.com/NixOS/nixpkgs/issues/497682 &
+  # https://github.com/pendulum-project/ntpd-rs/pull/2133
+  # Remove after ntpd-rs > 1.7.1
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/pendulum-project/ntpd-rs/commit/1df0cc959248612faf705f2fd69f53057fd0372e.patch";
+      hash = "sha256-2Yicq8P4TQJbhOSOVOXGmVAWEJdsDdaXKiQX40Z/oZY=";
+    })
   ];
 
   postPatch = ''
     substituteInPlace utils/generate-man.sh \
-      --replace-fail 'utils/pandoc.sh' 'pandoc'
+      --replace-fail 'utils/pandoc.sh' '${lib.getExe pandoc}'
   '';
 
   postBuild = ''
@@ -61,41 +57,38 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm444 -t $out/lib/systemd/system docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service
     installManPage docs/precompiled/man/{ntp.toml.5,ntp-ctl.8,ntp-daemon.8,ntp-metrics-exporter.8}
+    install -Dm444 docs/examples/conf/{ntpd-rs,ntpd-rs-metrics}.service \
+      --target-directory="$out"/lib/systemd/system
   '';
 
   outputs = [
-    "out"
     "man"
+    "out"
   ];
 
-  passthru = {
-    tests = {
-      nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.ntpd-rs;
-      version = testers.testVersion {
-        package = ntpd-rs;
-        inherit (finalAttrs) version;
-      };
-    };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
+  passthru = {
+    tests.nixos = lib.optionalAttrs stdenvNoCC.hostPlatform.isLinux nixosTests.ntpd-rs;
     updateScript = nix-update-script { };
   };
 
   meta = {
+    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Full-featured implementation of the Network Time Protocol";
     homepage = "https://tweedegolf.nl/en/pendulum";
-    changelog = "https://github.com/pendulum-project/ntpd-rs/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
-      mit # or
-      asl20
+      asl20 # OR
+      mit
     ];
+    mainProgram = "ntp-ctl";
     maintainers = with lib.maintainers; [
       fpletz
       getchoo
     ];
-    mainProgram = "ntp-ctl";
     # note: Undefined symbols for architecture x86_64: "_ntp_adjtime"
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    broken = with stdenvNoCC.hostPlatform; (isDarwin && isx86_64);
   };
 })
