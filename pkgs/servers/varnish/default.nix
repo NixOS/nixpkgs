@@ -31,7 +31,7 @@ let
       inherit version;
 
       src = fetchurl {
-        url = "https://varnish-cache.org/_downloads/${pname}-${version}.tgz";
+        url = "https://vinyl-cache.org/_downloads/${pname}-${version}.tgz";
         inherit hash;
       };
 
@@ -103,14 +103,17 @@ let
         license = lib.licenses.bsd2;
         teams = [ lib.teams.flyingcircus ];
         platforms = lib.platforms.unix;
+        knownVulnerabilities = lib.optionals (lib.versions.major version == "7") [
+          "VSV00018: https://vinyl-cache.org/security/VSV00018.html"
+        ];
       };
     };
 in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.16";
-    hash = "sha256-ZVJxDHp9LburwlJ1LCR5CKPRaSbNixiEch/l3ZP0QyQ=";
+    version = "6.0.17";
+    hash = "sha256-CVmHd1hCDFE/WIZqjc1TfX1O2RqFetdNSO4ihmXoL5k=";
   };
   # EOL 2026-03-15
   varnish77 = common {
