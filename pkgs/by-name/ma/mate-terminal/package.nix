@@ -21,14 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mate-terminal";
-  version = "1.28.2";
+  version = "1.28.3";
 
   src = fetchFromGitHub {
     owner = "mate-desktop";
     repo = "mate-terminal";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tyYHMn+qwytpSNUZg4xfwnuVClxj2IcyB4C4Dsn+1Nc=";
+    hash = "sha256-fgmYqcv+36QjOFVB7gdBrUi6eZhWFLsJa3Pm27Idx8E=";
   };
 
   strictDeps = true;
