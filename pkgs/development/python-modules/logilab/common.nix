@@ -4,7 +4,6 @@
   fetchPypi,
   mypy-extensions,
   pytestCheckHook,
-  pythonAtLeast,
   pytz,
   setuptools,
   typing-extensions,
@@ -12,18 +11,14 @@
 
 buildPythonPackage rec {
   pname = "logilab-common";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ojvR2k3Wpj5Ej0OS57I4aFX/cGFVeL/PmT7riCTelws=";
+    pname = "logilab_common";
+    inherit version;
+    hash = "sha256-2GPHkd6gj85dPpMrrC8DwyK/wOuT1i1r+XTnZZ4r+34=";
   };
-
-  postPatch = lib.optionals (pythonAtLeast "3.12") ''
-    substituteInPlace logilab/common/testlib.py \
-      --replace-fail "_TextTestResult" "TextTestResult"
-  '';
 
   build-system = [ setuptools ];
 
@@ -45,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python packages and modules used by Logilab";
     homepage = "https://logilab-common.readthedocs.io/";
-    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/branch/default/CHANGELOG.md";
+    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/${version}/CHANGELOG.md";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     mainProgram = "logilab-pytest";
