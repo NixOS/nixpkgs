@@ -414,7 +414,7 @@ in
 
           ln -s ${initrdPath} $out/initrd
 
-          ${optionalString (config.boot.initrd.secretPaths != { }) ''
+          ${optionalString (config.boot.initrd.secrets != { }) ''
             ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
           ''}
 

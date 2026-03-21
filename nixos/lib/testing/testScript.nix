@@ -14,6 +14,13 @@ in
   options = {
     testScript = mkOption {
       type = either str (functionTo str);
+      apply =
+        v:
+        if lib.isFunction v then
+          # Only pass args the testScript function expects.
+          args: v (builtins.intersectAttrs (lib.functionArgs v) args)
+        else
+          v;
       description = ''
         A series of python declarations and statements that you write to perform
         the test.

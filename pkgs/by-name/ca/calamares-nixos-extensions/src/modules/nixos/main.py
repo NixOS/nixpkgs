@@ -60,8 +60,8 @@ cfgbootnone = """  # Disable bootloader.
 """
 
 cfgbootgrubcrypt = """  # Setup keyfile
-  boot.initrd.secretPaths = {
-    "/boot/crypto_keyfile.bin".source = null;
+  boot.initrd.secrets = {
+    "/boot/crypto_keyfile.bin" = null;
   };
 
   boot.loader.grub.enableCryptodisk = true;
