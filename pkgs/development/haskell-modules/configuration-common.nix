@@ -3708,13 +3708,13 @@ with haskellLib;
 # Manually maintained
 // (
   let
-    version = "1.10.1";
+    version = "1.11.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-kNwoplCrqAymyFIzoR1rpEj0I1Ass+wuP8YsVS61630=";
+      hash = "sha256-CWhnwL2M83/ItapPVeJqCevRoQttesYxJ1h0Mo6ZCXs=";
     };
   in
   {
@@ -3728,9 +3728,6 @@ with haskellLib;
         inherit version;
         src = src + "/cachix";
       })
-      (addBuildDepends [
-        self.pqueue
-      ])
       (
         drv:
         drv.override {

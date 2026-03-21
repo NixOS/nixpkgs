@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gdu";
-  version = "5.34.0";
+  version = "5.34.1";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = "gdu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-y3a43CLn76Aq/jCPhrurbZk3wTQOg3t5FmObbTUOidQ=";
+    hash = "sha256-u/71Zt5LRt0pHiGyuiE57OYdjA9wtliRI+2rLjFzchg=";
   };
 
   vendorHash = "sha256-Dtjirx2sHbN4AWxED5weRGtCRNc2VIdaz7RHssGuJeQ=";
