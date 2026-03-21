@@ -27,16 +27,16 @@
   universal-pathlib,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tyro";
-  version = "1.0.8";
+  version = "1.0.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "brentyi";
     repo = "tyro";
-    tag = "v${version}";
-    hash = "sha256-GTgbzGIIZrkMUgjqMWZVXRVhp9mcxfnDQ/dRApotjww=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-k8f0eSeBBCROSsf7WooapDIFoy1G4Guxpbb7eNbj6ps=";
   };
 
   build-system = [ hatchling ];
@@ -80,8 +80,8 @@ buildPythonPackage rec {
   meta = {
     description = "CLI interfaces & config objects, from types";
     homepage = "https://github.com/brentyi/tyro";
-    changelog = "https://github.com/brentyi/tyro/releases/tag/${src.tag}";
+    changelog = "https://github.com/brentyi/tyro/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ hoh ];
   };
-}
+})
