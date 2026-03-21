@@ -7,20 +7,20 @@
 }:
 
 let
-  install-freedesktop = python3Packages.buildPythonPackage rec {
+  install-freedesktop = python3Packages.buildPythonPackage (finalAttrs: {
     pname = "install-freedesktop";
     version = "0.1.2-1-g2673e8d";
     format = "setuptools";
 
     src = fetchurl {
-      name = "Thann-install_freedesktop-${version}.tar.gz";
+      name = "Thann-install_freedesktop-${finalAttrs.version}.tar.gz";
       url = "https://github.com/thann/install_freedesktop/tarball/2673e8da4a67bee0ffc52a0ea381a541b4becdd4";
       hash = "sha256-O08G0iMGsF1DSyliXOHTIsOxDdJPBabNLXRhz5osDUk=";
     };
 
     # package has no tests
     doCheck = false;
-  };
+  });
 in
 python3Packages.buildPythonApplication {
   pname = "play-with-mpv";

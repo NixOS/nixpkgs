@@ -9,7 +9,7 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage (finalAttrs: {
   pname = "niriswitcher";
   version = "0.7.1";
   pyproject = true;
@@ -17,7 +17,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "isaksamsten";
     repo = "niriswitcher";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-qsw2D9Q9ZJYBsRECzT+qoytYMda4uZxX321/YxNWk9o=";
   };
 
@@ -54,4 +54,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "niriswitcher";
     platforms = lib.platforms.linux;
   };
-}
+})
