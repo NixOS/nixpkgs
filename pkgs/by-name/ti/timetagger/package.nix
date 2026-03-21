@@ -24,7 +24,6 @@ python3.pkgs.buildPythonApplication {
     timetagger
   ];
 
-  format = "custom";
   installPhase = ''
     mkdir -p $out/bin
     echo "#!${python3.interpreter}" >> $out/bin/timetagger
