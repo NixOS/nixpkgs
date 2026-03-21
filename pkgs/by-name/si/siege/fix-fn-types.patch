@@ -1,0 +1,63 @@
+--- a/src/crew.h
++++ b/src/crew.h
+@@ -28,7 +28,7 @@
+ 
+ typedef struct work
+ {
+-  void          (*routine)();
++  void          (*routine)(void *);
+   void          *arg;
+   struct work   *next;
+ } WORK;
+diff --git a/src/date.h b/src/date.h
+index 5956883..64dcff4 100644
+--- a/src/date.h
++++ b/src/date.h
+@@ -34,7 +34,7 @@ extern  size_t DATESIZE;
+  * because then we have one destroyer
+  * that we can pass to the HASH
+  */
+-DATE   new_date();
++DATE   new_date(char *);
+ DATE   new_etag(char *etag);
+ 
+ DATE    date_destroy(DATE this);
+diff --git a/src/handler.h b/src/handler.h
+index 42df64b..aa51dee 100644
+--- a/src/handler.h
++++ b/src/handler.h
+@@ -26,7 +26,7 @@
+ #include <signal.h>
+ #include <crew.h>
+ 
+-void spin_doctor();
++void spin_doctor(struct CREW_T *);
+ void sig_handler(CREW crew); 
+ 
+ #endif/*HANDLER_H*/
+diff --git a/src/page.h b/src/page.h
+index 2ffe6b0..6f5f005 100644
+--- a/src/page.h
++++ b/src/page.h
+@@ -7,7 +7,7 @@
+  */
+ typedef struct PAGE_T *PAGE;
+ 
+-PAGE   new_page();
++PAGE   new_page(char *);
+ PAGE   page_destroy(PAGE this);
+ void   page_concat(PAGE this, const char *str, const int len);
+ void   page_clear(PAGE this);
+diff --git a/src/setup.h b/src/setup.h
+index a8e8a28..54fa962 100644
+--- a/src/setup.h
++++ b/src/setup.h
+@@ -96,7 +96,7 @@ char *strchr (), *strrchr ();
+ 
+ 
+ #ifndef HAVE_STRCASECMP
+-int strcasecmp();
++int strcasecmp(const char *, const char *);
+ #endif
+ #ifndef HAVE_STRNCASECMP
+ int strncasecmp();

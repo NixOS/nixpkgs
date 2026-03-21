@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index d318edc..40c1226 100755
+--- a/configure
++++ b/configure
+@@ -11997,6 +11997,8 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
++$ac_includes_default
++
+ int
+ main ()
+ {

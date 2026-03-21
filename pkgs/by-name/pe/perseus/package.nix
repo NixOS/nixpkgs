@@ -1,11 +1,11 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchurl,
   unzip,
 }:
 
-stdenv.mkDerivation {
+gcc14Stdenv.mkDerivation {
   pname = "perseus";
   version = "4-beta";
   nativeBuildInputs = [ unzip ];

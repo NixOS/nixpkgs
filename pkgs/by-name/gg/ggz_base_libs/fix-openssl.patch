@@ -1,0 +1,26 @@
+diff --git a/configure b/configure
+index d318edc..40c1226 100755
+--- a/configure
++++ b/configure
+@@ -11997,6 +11997,8 @@ cat confdefs.h >>conftest.$ac_ext
+ cat >>conftest.$ac_ext <<_ACEOF
+ /* end confdefs.h.  */
+ 
++$ac_includes_default
++
+ int
+ main ()
+ {
+diff --git a/libggz/security/ggz_tls_openssl.c b/libggz/security/ggz_tls_openssl.c
+index 968dad8..b1f1a1b 100644
+--- a/libggz/security/ggz_tls_openssl.c
++++ b/libggz/security/ggz_tls_openssl.c
+@@ -210,7 +210,7 @@ int ggz_tls_enable_fd(int fd, GGZTLSType mode, GGZTLSVerificationType verify)
+ 	{
+ 		cipherlist = NULL;
+ 		stack = SSL_get_ciphers(_tls);
+-		while((cipher = (SSL_CIPHER*)sk_pop(stack)) != NULL)
++		while((cipher = (SSL_CIPHER*)sk_SSL_CIPHER_pop(stack)) != NULL)
+ 		{
+ 			printf("* Cipher: %s\n", SSL_CIPHER_get_name(cipher));
+ 			printf("  Bits: %i\n", SSL_CIPHER_get_bits(cipher, &bits));

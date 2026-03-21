@@ -24,7 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
   ];
 
-  patchPhase = ''
+  patches = [
+    ./configure-c99-string.patch
+    ./fix-openssl.patch
+  ];
+
+  prePatch = ''
     substituteInPlace configure \
       --replace "/usr/local/ssl/include" "${openssl.dev}/include" \
       --replace "/usr/local/ssl/lib" "${lib.getLib openssl}/lib"

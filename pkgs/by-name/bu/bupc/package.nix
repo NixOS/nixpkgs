@@ -24,6 +24,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ perl ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   meta = {
     description = "Compiler for the Berkely Unified Parallel C language";
     longDescription = ''
