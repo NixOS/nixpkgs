@@ -44,7 +44,8 @@
   xbyak,
   zlib,
   zstd,
-  tzdata,
+  writeScript,
+  callPackage,
 }:
 
 let
@@ -54,38 +55,7 @@ let
     hash = "sha256-OC22KdawYK9yKiffqc1rtgrBanVExYMi9jqhvkwMD6w=";
   };
 
-  nx_tzdb = stdenv.mkDerivation (finalAttrs: {
-    name = "tzdb_to_nx";
-    version = "120226";
-
-    src = fetchFromGitea {
-      domain = "git.crueter.xyz";
-      owner = "misc";
-      repo = "tzdb_to_nx";
-      tag = finalAttrs.version;
-      hash = "sha256-egPu8UVbj73RQ0Z5JMTjd5HVdy47WTfkUMlQaS0wUTg=";
-    };
-
-    nativeBuildInputs = [
-      cmake
-      ninja
-    ];
-
-    cmakeFlags = [
-      (lib.cmakeFeature "TZDB2NX_ZONEINFO_DIR" "${tzdata}/share/zoneinfo")
-      (lib.cmakeFeature "TZDB2NX_VERSION" tzdata.version)
-    ];
-
-    ninjaFlags = [ "x80e" ];
-
-    installPhase = ''
-      runHook preInstall
-
-      cp -r src/tzdb/nx $out
-
-      runHook postInstall
-    '';
-  });
+  nx_tzdb = callPackage ./nx_tzdb.nix { };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -232,9 +202,6 @@ stdenv.mkDerivation (finalAttrs: {
       cc-by-40
       cc-by-sa-30
       cc0
-
-      # Timezone data
-      publicDomain
 
       # Vendored/incorporated libs
       apsl20
