@@ -2,26 +2,21 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  six,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "importmagic";
-  version = "0.1.7";
-  format = "setuptools";
+  version = "0.2.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-P3dXpbdMmikeIOEgI7s79xvC+jrfsVoIVwZIq4Pq+Ng=";
+    hash = "sha256-O25fBjkVMJHzdJpBtx7ifiNOGkkc929hGu8Q220Uoso=";
   };
 
-  patches = [
-    # https://github.com/alecthomas/importmagic/issues/67
-    ./python-312.patch
-  ];
-
-  propagatedBuildInputs = [ six ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
