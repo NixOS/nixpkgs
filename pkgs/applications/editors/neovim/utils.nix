@@ -82,7 +82,7 @@ let
       neovimConfig =
         structuredConfigure:
         let
-          module = import ./module.nix;
+          module = import ./plugin-submodule.nix;
           # Generate init.vim configuration
           cfg = (
             lib.evalModules {
@@ -97,6 +97,7 @@ let
 
       checked_cfg = neovimConfig {
         inherit plugins;
+        _file = "pkgs/applications/editors/neovim/plugin-submodule.nix";
       };
 
       pluginsNormalized = checked_cfg.plugins;
