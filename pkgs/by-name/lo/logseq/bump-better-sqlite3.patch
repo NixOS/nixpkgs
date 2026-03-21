@@ -1,5 +1,18 @@
+diff --git a/resources/package.json b/resources/package.json
+index de39ccc..d42b7fb 100644
+--- a/resources/package.json
++++ b/resources/package.json
+@@ -25,7 +25,7 @@
+     "@logseq/rsapi": "0.0.92",
+     "@sentry/electron": "2.5.1",
+     "abort-controller": "3.0.0",
+-    "better-sqlite3": "12.4.1",
++    "better-sqlite3": "12.8.0",
+     "chokidar": "^3.5.1",
+     "command-exists": "1.2.9",
+     "diff-match-patch": "1.0.5",
 diff --git a/static/yarn.lock b/static/yarn.lock
-index 36b4476..0e7c5ee 100644
+index 36b4476..4738ef9 100644
 --- a/static/yarn.lock
 +++ b/static/yarn.lock
 @@ -1444,11 +1444,6 @@ ansi-regex@^5.0.1:
@@ -26,6 +39,21 @@ index 36b4476..0e7c5ee 100644
  anymatch@~3.1.2:
    version "3.1.3"
    resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-3.1.3.tgz#790c58b19ba1720a84205b57c618d5ad8524973e"
+@@ -1653,10 +1643,10 @@ baseline-browser-mapping@^2.8.25:
+   resolved "https://registry.yarnpkg.com/baseline-browser-mapping/-/baseline-browser-mapping-2.8.28.tgz#9ef511f5a7c19d74a94cafcbf951608398e9bdb3"
+   integrity sha512-gYjt7OIqdM0PcttNYP2aVrr2G0bMALkBaoehD4BuRGjAOtipg0b6wHg1yNL+s5zSnLZZrGHOw4IrND8CD+3oIQ==
+ 
+-better-sqlite3@12.4.1:
+-  version "12.4.1"
+-  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.4.1.tgz#f78df6c80530d1a0b750b538033e6199b7d30d26"
+-  integrity sha512-3yVdyZhklTiNrtg+4WqHpJpFDd+WHTg2oM7UcR80GqL05AOV0xEJzc6qNvFYoEtE+hRp1n9MpN6/+4yhlGkDXQ==
++better-sqlite3@12.8.0:
++  version "12.8.0"
++  resolved "https://registry.yarnpkg.com/better-sqlite3/-/better-sqlite3-12.8.0.tgz#ec9ccd4a426a35f3b9355c147af6c92a6ddd6862"
++  integrity sha512-RxD2Vd96sQDjQr20kdP+F+dK/1OUNiVOl200vKBZY8u0vTwysfolF6Hq+3ZK2+h8My9YvZhHsF+RSGZW2VYrPQ==
+   dependencies:
+     bindings "^1.5.0"
+     prebuild-install "^7.1.1"
 @@ -3081,11 +3071,6 @@ get-caller-file@^2.0.5:
    resolved "https://registry.yarnpkg.com/get-caller-file/-/get-caller-file-2.0.5.tgz#4f94412a82db32f36e3b0b9741f8a97feb031f7e"
    integrity sha512-DyFP3BM/3YHTQOCUL/w0OZHR0lpKeGrxotcHWcqNEdnltqFwXVfhEBQ94eIo34AfQpo0rGki4cyIiftY06h2Fg==
