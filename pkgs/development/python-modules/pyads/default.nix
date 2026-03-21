@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   adslib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -23,12 +24,24 @@ buildPythonPackage rec {
 
   buildInputs = [ adslib ];
 
-  patchPhase = ''
-    substituteInPlace pyads/pyads_ex.py \
-      --replace-fail "ctypes.CDLL(adslib)" "ctypes.CDLL(\"${adslib}/lib/adslib.so\")"
+  postPatch = ''
+    # Skip compilation of bundled adslib - we provide it as a separate nix package
+    substituteInPlace setup.py \
+      --replace-fail \
+        'return sys.platform.startswith("linux") or sys.platform.startswith("darwin")' \
+        'return False'
+
+    # Load adslib from nix store instead of searching sys.path
+    substituteInPlace src/pyads/pyads_ex.py \
+      --replace-fail \
+        'ctypes.CDLL(adslib_path)' \
+        'ctypes.CDLL("${lib.getLib adslib}/lib/adslib.so")'
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  # Test suite has port reuse races and UDP timing issues on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "pyads" ];
 
