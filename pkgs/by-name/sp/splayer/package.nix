@@ -21,6 +21,7 @@
 }:
 let
   electron = electron_39;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
@@ -34,15 +35,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E29TJlp7nMokJbbi/YLuYf9qWmwvo/r4qQckKrVyumI=";
   };
 
-  pnpm = pnpm_10;
-
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
       pname
       version
       src
-      pnpm
       ;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-PTfZopse+9RS7qh0miLu3duYlWDfifZS254tZKqgxKk=";
   };
@@ -58,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    finalAttrs.pnpm
+    pnpm
     nodejs
     rustPlatform.cargoSetupHook
     cargo
