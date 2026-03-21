@@ -7,7 +7,6 @@
   pkg-config,
   python3,
   nix-update-script,
-  jemalloc,
   xxHash,
   fmt,
   libxml2,
@@ -193,7 +192,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withQt qt6.wrapQtAppsHook;
 
   buildInputs = [
-    jemalloc
     xxHash
     fmt
     libxml2
