@@ -45,19 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  # TODO: think on a less ugly fixup
   postPatch = ''
-    ed -v -s Makefile << EOS
-    # - remove reference to now-inexistent git index file
-    /version.h:/ s| .git/index||
-    # - manually insert the git revision string
-    /v=/ c
-    ${"\t"}v=${builtins.substring 0 7 finalAttrs.src.rev}
-    .
-    /\.git\/index:/ d
-    w
-    q
-    EOS
+    sed -i '/main.o: version.h/ d' Makefile
+    cat << EOF > version.h
+    #define VERSION "1.7.4+${finalAttrs.src.rev}"
+    EOF
   '';
 
   nativeBuildInputs = [
