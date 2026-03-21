@@ -3393,6 +3393,44 @@ runTests {
     ];
   };
 
+  testEmptyValueOption = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options = {
+              "empty-value" = lib.mkOption {
+                type = lib.mkOptionType {
+                  name = "propagate-empty-value-to-default";
+                  emptyValue.value = 2;
+                };
+              };
+            };
+          };
+        eval = evalModules {
+          modules = [ module ];
+        };
+      in
+      filter (o: o.name == "empty-value") (optionAttrSetToDocList eval.options);
+    expected = [
+      {
+        declarations = [ ];
+        default = {
+          _type = "literalExpression";
+          text = "2";
+        };
+        description = null;
+        internal = false;
+        loc = [ "empty-value" ];
+        name = "empty-value";
+        readOnly = false;
+        type = "propagate-empty-value-to-default";
+        visible = true;
+      }
+    ];
+  };
+
   testDocOptionVisiblity = {
     expr =
       let
