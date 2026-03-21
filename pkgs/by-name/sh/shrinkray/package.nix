@@ -38,6 +38,10 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail 'which("clang-format")' '"${lib.getExe' clang-tools "clang-format"}"'
     substituteInPlace src/shrinkray/passes/clangdelta.py \
       --replace-fail 'which("clang_delta")' '"${cvise}/libexec/cvise/clang_delta"'
+    substituteInPlace src/shrinkray/subprocess/client.py \
+      --replace-fail 'sys.executable,
+                "-m",
+                "shrinkray.subprocess.worker"' "\"$out/bin/shrinkray-worker\""
   '';
 
   build-system = [ python3.pkgs.setuptools ];
