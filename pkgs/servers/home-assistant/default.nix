@@ -263,7 +263,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.3.2";
+  hassVersion = "2026.3.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -274,7 +274,7 @@ python.pkgs.buildPythonApplication rec {
   pyproject = true;
 
   # check REQUIRED_PYTHON_VER in homeassistant/const.py
-  disabled = python.pythonOlder "3.13";
+  disabled = python.pythonOlder "3.14";
 
   # don't try and fail to strip 6600+ python files, it takes minutes!
   dontStrip = true;
@@ -284,13 +284,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-ehvHw+/JZkQEYf4m+BbFc/2izomLsm7T4IPGzB8ehWk=";
+    hash = "sha256-NCrrG2jlbt879qo6peoBqtbU+d/lmbKqswEJbfvVUUI=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-MICjwxCNwb5XvSayN13gf4b7/iPT4dCFYvi+nec+ctk=";
+    hash = "sha256-/8yJBUNcMLx7ONLY5rvbWsVA1+OtTSpZd3dNgEsG+0I=";
   };
 
   build-system = with python.pkgs; [
