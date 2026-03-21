@@ -1,6 +1,5 @@
 {
   stdenv,
-  gcc14Stdenv,
   lib,
   buildBazelPackage,
   bazel_7,
@@ -8,65 +7,57 @@
   cctools,
 }:
 
-let
-  # fails to build with gcc15, see https://github.com/NixOS/nixpkgs/issues/475586
-  buildBazelPackage' =
-    if stdenv.cc.isGNU then
-      buildBazelPackage.override {
-        stdenv = gcc14Stdenv;
-      }
-    else
-      buildBazelPackage;
-in
-buildBazelPackage' rec {
+buildBazelPackage rec {
   pname = "protoc-gen-js";
-  version = "3.21.4";
+  version = "4.0.2";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf-javascript";
-    rev = "v${version}";
-    hash = "sha256-eIOtVRnHv2oz4xuVc4aL6JmhpvlODQjXHt1eJHsjnLg=";
+    tag = "v${version}";
+    hash = "sha256-vFTR7dwquZht4st90bFQ9CJMYBPbL+DWO0uQ3xsXIBU=";
   };
 
   bazel = bazel_7;
   bazelTargets = [ "generator:protoc-gen-js" ];
-  bazelBuildFlags = lib.optionals stdenv.cc.isClang [
-    "--cxxopt=-x"
-    "--cxxopt=c++"
-    "--host_cxxopt=-x"
-    "--host_cxxopt=c++"
+  bazelBuildFlags = [
+    # error: module zlib~//:z does not depend on a module exporting 'stddef.h'
+    "--features=-module_maps"
+    # error: module abseil-cpp~//absl/crc:crc_internal does not depend on a module exporting 'arm_acle.h'
+    "--host_features=-module_maps"
+    # error: 'clock_gettime' is only available on macOS 10.12 or newer
+    "--macos_minimum_os=10.12"
+    "--host_macos_minimum_os=10.12"
   ];
-  removeRulesCC = false;
-  removeLocalConfigCC = false;
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    LIBTOOL = "${cctools}/bin/libtool";
+    LIBTOOL = lib.getExe' cctools "libtool";
   };
 
   fetchAttrs = {
-    preInstall = ''
-      rm -rv "$bazelOut/external/host_platform"
-    '';
-
-    hash = "sha256-znkwUs984vbinz/BLo1uxQ+PvxkpXo719lJu4TD1Vmg=";
+    hash = "sha256-Oy7FiOCDmDBBPfKvkz8JTDt45iw8uJvgUvCAnhay4Bw=";
   };
 
   buildAttrs.installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -Dm755 bazel-bin/generator/protoc-gen-js $out/bin/
+
+    runHook postInstall
   '';
 
   meta = {
     description = "Protobuf plugin for generating JavaScript code";
     mainProgram = "protoc-gen-js";
     homepage = "https://github.com/protocolbuffers/protobuf-javascript";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     license = with lib.licenses; [
       asl20
       bsd3
     ];
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [
+      prince213
+    ];
   };
 }
