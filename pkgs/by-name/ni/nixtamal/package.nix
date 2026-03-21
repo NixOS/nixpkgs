@@ -18,7 +18,7 @@
 
 ocamlPackages.buildDunePackage (finalAttrs: {
   pname = "nixtamal";
-  version = "1.1.4";
+  version = "1.1.5";
   release_year = 2026;
 
   minimalOCamlVersion = "5.3";
@@ -27,7 +27,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     url = "https://darcs.toastal.in.th/nixtamal/stable/";
     mirrors = [ "https://smeder.ee/~toastal/nixtamal.darcs" ];
     rev = finalAttrs.version;
-    hash = "sha256-iLjVuNS0pgoWoXp/Yr6ovEazXqhe5bflqtuzFupxmw0=";
+    hash = "sha256-viMbqPq/XyvRt7AsVk/wT1hbWlZGXqiOfp4SccqyOI8=";
   };
 
   nativeBuildInputs = [
@@ -119,7 +119,8 @@ ocamlPackages.buildDunePackage (finalAttrs: {
       Nixtamal’s keys features
 
       • Automate the manual work of input pinning, allowing to lock & refresh inputs
-      • Declaritive KDL manifest file over imperative CLI flags
+      • Declarative KDL manifest file over imperative CLI flags
+      • diff/grep-friendly lockfile
       • Host, forge, VCS-agnostic
       • Choose eval time fetchers (builtins) or build time fetchers (Nixpkgs, default) — which opens up fetching Darcs, Pijul, & Fossil
       • Supports mirrors
