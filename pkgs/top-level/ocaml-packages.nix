@@ -1746,6 +1746,8 @@ let
 
         posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
 
+        posix-errno = callPackage ../development/ocaml-modules/posix/errno.nix { };
+
         posix-math2 = callPackage ../development/ocaml-modules/posix/math2.nix { };
 
         posix-socket = callPackage ../development/ocaml-modules/posix/socket.nix { };
