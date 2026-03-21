@@ -136,6 +136,39 @@ final: prev: {
     }
   ) { };
 
+  bcrypt = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "bcrypt";
+      version = "2.3-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/bcrypt-2.3-1.rockspec";
+          sha256 = "1zjy7sflyd50jvp603hmw0sg3rw5xyray0spzv5x5ky9hxivcdrf";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "mikejsavage";
+        repo = "lua-bcrypt";
+        tag = "v2.3-1";
+        hash = "sha256-wd9AbzfD3j9fyTq3toscitPsTEE49YoeSstwfO+3QGo=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "http://github.com/mikejsavage/lua-bcrypt";
+        description = "A Lua wrapper for bcrypt";
+        maintainers = with lib.maintainers; [ ulysseszhan ];
+        license.fullName = "ISC";
+      };
+    }
+  ) { };
+
   binaryheap = callPackage (
     {
       buildLuarocksPackage,
@@ -638,6 +671,72 @@ final: prev: {
         homepage = "https://dkolf.de/dkjson-lua/";
         description = "David Kolf's JSON module for Lua";
         license.fullName = "MIT/X11";
+      };
+    }
+  ) { };
+
+  enet = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "enet";
+      version = "1.2-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/enet-1.2-1.rockspec";
+          sha256 = "0jf0qxf3lsrmc1dww7b7i6srqp2cy8caqv9f1rbva7f6rnppxzra";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "leafo";
+        repo = "lua-enet";
+        tag = "v1.2";
+        hash = "sha256-GomfJAPbR+y469LuaNPrkab0Wd3xAsAhT4uqbDo8BUA=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "http://leafo.net/lua-enet";
+        description = "A library for doing network communication in Lua";
+        maintainers = with lib.maintainers; [ ulysseszhan ];
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
+  etlua = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "etlua";
+      version = "1.3.0-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/etlua-1.3.0-1.rockspec";
+          sha256 = "1g98ibp7n2p4js39din2balncjnxxdbaq6msw92z072s2cccx9cf";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "leafo";
+        repo = "etlua";
+        tag = "v1.3.0";
+        hash = "sha256-CVCNeivP6tefUMseoZjiO5wMYBEPNWMy2+0KnmEIuT0=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/leafo/etlua";
+        description = "Embedded templates for Lua";
+        maintainers = with lib.maintainers; [ ulysseszhan ];
+        license.fullName = "MIT";
       };
     }
   ) { };
@@ -2413,6 +2512,39 @@ final: prev: {
     }
   ) { };
 
+  luacov-reporter-lcov = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchurl,
+      fetchzip,
+      luaOlder,
+      luacov,
+    }:
+    buildLuarocksPackage {
+      pname = "luacov-reporter-lcov";
+      version = "0.2-0";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/luacov-reporter-lcov-0.2-0.rockspec";
+          sha256 = "16w0vsv9q69zr0rw61x0p3cly755nzi83c83jk579qhxk16ja6c2";
+        }).outPath;
+      src = fetchzip {
+        url = "https://github.com/daurnimator/luacov-reporter-lcov/archive/v0.2.zip";
+        sha256 = "0bw0wyq9zqpcjbqpnlkpxs5g1i015n2rsh0iic4vapmcy7sxlx7w";
+      };
+
+      disabled = luaOlder "5.1";
+      propagatedBuildInputs = [ luacov ];
+
+      meta = {
+        homepage = "https://github.com/daurnimator/luacov-reporter-lcov";
+        description = "A luacov reporter for use with lcov";
+        maintainers = with lib.maintainers; [ ulysseszhan ];
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
   luadbi = callPackage (
     {
       buildLuarocksPackage,
@@ -4056,6 +4188,39 @@ final: prev: {
         homepage = "https://github.com/nvim-neotest/neotest";
         description = "An extensible framework for interacting with tests within NeoVim.";
         maintainers = with lib.maintainers; [ mrcjkb ];
+        license.fullName = "MIT";
+      };
+    }
+  ) { };
+
+  nginx-lua-prometheus = callPackage (
+    {
+      buildLuarocksPackage,
+      fetchFromGitHub,
+      fetchurl,
+      luaOlder,
+    }:
+    buildLuarocksPackage {
+      pname = "nginx-lua-prometheus";
+      version = "0.20240525-1";
+      knownRockspec =
+        (fetchurl {
+          url = "mirror://luarocks/nginx-lua-prometheus-0.20240525-1.rockspec";
+          sha256 = "0xw21h7bl7l8kijbmw98v0lc7910r5pwnx7h3w894dv63d413ixr";
+        }).outPath;
+      src = fetchFromGitHub {
+        owner = "knyar";
+        repo = "nginx-lua-prometheus";
+        tag = "0.20240525";
+        hash = "sha256-ovLpOQKgTfrrgCxCF/OtdPUuAQ9J4RtT9F68Bbzu1XQ=";
+      };
+
+      disabled = luaOlder "5.1";
+
+      meta = {
+        homepage = "https://github.com/knyar/nginx-lua-prometheus";
+        description = "Prometheus metric library for Nginx";
+        maintainers = with lib.maintainers; [ ulysseszhan ];
         license.fullName = "MIT";
       };
     }

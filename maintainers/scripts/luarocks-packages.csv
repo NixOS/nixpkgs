@@ -3,6 +3,7 @@ alt-getopt,,,,,,arobyn
 ansicolors,,,,,,Freed-Wu
 argparse,,,,,,
 basexx,,,,,,
+bcrypt,,,,,,ulysseszhan
 binaryheap,,,,,,vcunat
 bit32,,,,,5.1,lblasc
 busted,,,,,,
@@ -18,6 +19,8 @@ cyan,,,,,,
 datafile,,,,,,
 digestif,,,,,5.3,
 dkjson,,,,,,
+enet,,,,,,ulysseszhan
+etlua,,,,,,ulysseszhan
 fennel,,,,,,misterio77
 fidget.nvim,,,,,5.1,mrcjkb
 fifo,,,,,,
@@ -73,6 +76,7 @@ lua_cliargs,,,,,,
 luabitop,https://raw.githubusercontent.com/teto/luabitop/master/luabitop-1.0.2-3.rockspec,,,,,
 luacheck,,,,,,
 luacov,,,,,,
+luacov-reporter-lcov,,,,,,ulysseszhan
 luadbi,,,,,,
 luadbi-mysql,,,,,,
 luadbi-postgresql,,,,,,
@@ -124,6 +128,7 @@ mpack,,,,,,
 neorg,,,,,5.1,GaetanLepage
 neorg-interim-ls,,,,,,
 neotest,,,,,5.1,mrcjkb
+nginx-lua-prometheus,,,,,,ulysseszhan
 nlua,,,,,,teto
 nui.nvim,,,,,5.1,mrcjkb
 nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.rockspec,,,,5.1,
