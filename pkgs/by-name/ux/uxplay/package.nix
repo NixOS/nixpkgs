@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
-  version = "1.73.3";
+  version = "1.73.5";
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Fz9zraaFBqdUdRZ/OhoFe/kSGyBMkNKClhQXnTUhqKY=";
+    hash = "sha256-c/2WRQcNCFdCd9NZuNpbz8iPWXC9FDdMmtoLr6+rQAI=";
   };
 
   postPatch = ''
