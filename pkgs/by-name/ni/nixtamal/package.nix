@@ -80,17 +80,32 @@ ocamlPackages.buildDunePackage (finalAttrs: {
 
   outputs = [
     "bin"
+    "data"
+    "doc"
     "lib"
+    "man"
     "out"
   ];
 
   installPhase = ''
     runHook preInstall
-    dune install --prefix="$bin" --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" nixtamal
-    for dep in ${ocamlPackages.ocaml} ${ocamlPackages.camomile}
+
+    dune install \
+       -j "$NIX_BUILD_CORES" \
+       --cache="disabled" \
+       --prefix="$out" \
+       --bindir="$bin/bin" \
+       --datadir="$data/share" \
+       --docdir="$doc/share/doc" \
+       --mandir="$man/share/man" \
+       --libdir="$lib/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib" \
+       nixtamal
+
+    for dep in "${ocamlPackages.ocaml}" "${ocamlPackages.camomile}"
     do
-        remove-references-to -t $dep $bin/bin/nixtamal
+        remove-references-to -t "$dep" "$bin/bin/nixtamal"
     done
+
     wrapProgram "$bin/bin/nixtamal" --prefix PATH : ${
       lib.makeBinPath [
         coreutils
@@ -100,6 +115,7 @@ ocamlPackages.buildDunePackage (finalAttrs: {
         nix-prefetch-pijul
       ]
     }
+
     runHook postInstall
   '';
 
@@ -112,6 +128,12 @@ ocamlPackages.buildDunePackage (finalAttrs: {
     license = with lib.licenses; [ gpl3Plus ];
     platforms = lib.platforms.unix;
     mainProgram = "nixtamal";
+    outputsToInstall = [
+      "bin"
+      "data"
+      "doc"
+      "man"
+    ];
     homepage = "https://nixtamal.toast.al";
     changelog = "https://nixtamal.toast.al/changelog/";
     description = "Fulfilling input pinning for Nix";
