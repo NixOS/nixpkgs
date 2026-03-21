@@ -72,6 +72,9 @@ stdenv.mkDerivation rec {
 
     # dirPermissions: Without this, some gradle tasks (e.g. includeJdk) fail to copy contents of read-only subfolders within the nix store
     ./fix-permissions.patch
+
+    # Use jogl from nixpkgs instead of downloading from maven
+    ./use-nixpkgs-jogl.patch
   ];
 
   nativeBuildInputs = [
@@ -104,8 +107,7 @@ stdenv.mkDerivation rec {
     runHook preBuild
     runHook preGradleUpdate
 
-    mkdir -p app/lib core/library
-    ln -s ${jogl}/share/java/* core/library/
+    mkdir -p app/lib
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
     ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
@@ -129,13 +131,15 @@ stdenv.mkDerivation rec {
     substituteInPlace app/build.gradle.kts \
       --replace-fail "https://github.com/processing/processing-examples/archive/refs/heads/main.zip" "https://github.com/processing/processing-examples/archive/b10c9e9a05a0d6c20d233ca7f30d315b5047720e.zip" \
       --replace-fail "https://github.com/processing/processing-website/archive/refs/heads/main.zip" "https://github.com/processing/processing-website/archive/f11676d1b7464291a23ae834f2ef6ab00baaed8e.zip"
+
+    substituteInPlace core/build.gradle.kts \
+      --replace-fail "@@joglPath@@" "${jogl}"
   '';
 
   buildPhase = ''
     runHook preBuild
 
-    mkdir -p app/lib core/library
-    ln -s ${jogl}/share/java/* core/library/
+    mkdir -p app/lib
     ln -s ${vaqua} app/lib/VAqua9.jar
     ln -s ${flatlaf} app/lib/flatlaf.jar
     ln -s ${lsp4j} java/mode/org.eclipse.lsp4j.jar
