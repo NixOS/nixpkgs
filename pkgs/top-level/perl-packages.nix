@@ -599,7 +599,7 @@ with self;
     };
     postPatch = ''
       substituteInPlace Build.PL \
-        --replace "gtk+-2.0" "gtk+-3.0"
+        --replace-fail "gtk+-2.0" "gtk+-3.0"
     '';
     propagatedBuildInputs = [
       pkgs.pkg-config
@@ -1098,9 +1098,9 @@ with self;
       mv $out/bin/clusterssh_bash_completion.dist \
         $out/share/bash-completion/completions/clusterssh_bash_completion
       substituteInPlace $out/share/bash-completion/completions/clusterssh_bash_completion \
-        --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
-        --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
-        --replace 'sed' '${pkgs.gnused}/bin/sed'
+        --replace-fail '/bin/true' '${pkgs.coreutils}/bin/true' \
+        --replace-fail 'grep' '${pkgs.gnugrep}/bin/grep' \
+        --replace-fail 'sed' '${pkgs.gnused}/bin/sed'
     '';
     meta = {
       description = "Cluster administration tool";
@@ -2312,7 +2312,7 @@ with self;
     # This uses an updated version from the ZBar repo that works with the current ZBar library
     src = "${pkgs.zbar.src}/perl";
     postPatch = ''
-      substituteInPlace Makefile.PL --replace "-lzbar" "-L${pkgs.zbar.lib}/lib -lzbar"
+      substituteInPlace Makefile.PL --replace-fail "-lzbar" "-L${pkgs.zbar.lib}/lib -lzbar"
       rm t/Processor.t
     '';
     buildInputs = [ ExtUtilsMakeMaker ];
@@ -4630,7 +4630,7 @@ with self;
     };
     preConfigure = ''
       # fix error 'Unescaped left brace in regex is illegal here in regex'
-      substituteInPlace lib/CHI/t/Driver/Subcache/l1_cache.pm --replace 'qr/CHI stats: {' 'qr/CHI stats: \{'
+      substituteInPlace lib/CHI/t/Driver/Subcache/l1_cache.pm --replace-fail 'qr/CHI stats: {' 'qr/CHI stats: \{'
     '';
     buildInputs = [
       TestClass
@@ -4704,7 +4704,7 @@ with self;
       ]
     );
     postPatch = ''
-      substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
+      substituteInPlace Makefile.PL --replace-fail pkg-config $PKG_CONFIG
     '';
     env.NIX_CFLAGS_LINK = "-L${lib.getLib pkgs.pcsclite}/lib -lpcsclite";
     # tests fail; look unfinished
@@ -5114,7 +5114,7 @@ with self;
     };
     preConfigure = ''
       # fix error 'Unescaped left brace in regex is illegal here in regex'
-      substituteInPlace tests/xemulator/class_methodmaker/Test.pm --replace 's/(TEST\s{)/$1/g' 's/(TEST\s\{)/$1/g'
+      substituteInPlace tests/xemulator/class_methodmaker/Test.pm --replace-fail 's/(TEST\s{)/$1/g' 's/(TEST\s\{)/$1/g'
     '';
     meta = {
       description = "Generate common types of methods";
@@ -7880,7 +7880,7 @@ with self;
     };
     preConfigure = ''
       substituteInPlace makeConfig \
-        --replace '#! /usr/bin/perl' '#!${perl}/bin/perl'
+        --replace-fail '#! /usr/bin/perl' '#!${perl}/bin/perl'
     '';
     propagatedBuildInputs = [ pkgs.ncurses ];
     env.NIX_CFLAGS_LINK = "-L${pkgs.ncurses.out}/lib -lncurses";
@@ -12725,7 +12725,7 @@ with self;
     postPatch = ''
       # no pkg-config binary when cross-compiling so the check fails
       substituteInPlace Makefile.PL \
-        --replace "pkg-config" "$PKG_CONFIG"
+        --replace-fail "pkg-config" "$PKG_CONFIG"
       # use correctly prefixed pkg-config binary
       substituteInPlace lib/ExtUtils/PkgConfig.pm \
         --replace-fail '`pkg-config' '`${stdenv.cc.targetPrefix}pkg-config' \
@@ -13618,7 +13618,7 @@ with self;
     makeMakerFlags = [ "--lib=${pkgs.file}/lib" ];
     preCheck = ''
       substituteInPlace t/oo-api.t \
-        --replace "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
+        --replace-fail "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
     '';
     meta = {
       description = "Determine MIME types of data or files using libmagic";
@@ -17254,8 +17254,8 @@ with self;
     ];
     postPatch = ''
       substituteInPlace lib/Image/OCR/Tesseract.pm \
-        --replace "which('tesseract')" "\"${pkgs.tesseract}/bin/tesseract\"" \
-        --replace "which('convert')" "\"${pkgs.imagemagick}/bin/convert"\"
+        --replace-fail "which('tesseract')" "\"${pkgs.tesseract}/bin/tesseract\"" \
+        --replace-fail "which('convert')" "\"${pkgs.imagemagick}/bin/convert"\"
     '';
     postInstall = ''
       wrapProgram $out/bin/ocr --prefix PATH : ${
@@ -17716,7 +17716,7 @@ with self;
     # Fix path to default certificate store.
     postPatch = ''
       substituteInPlace lib/IO/Socket/SSL.pm \
-        --replace "\$openssldir/cert.pem" "/etc/ssl/certs/ca-certificates.crt"
+        --replace-fail "\$openssldir/cert.pem" "/etc/ssl/certs/ca-certificates.crt"
     '';
     doCheck = false; # tries to connect to facebook.com etc.
     meta = {
@@ -18616,10 +18616,10 @@ with self;
     ];
     preConfigure = ''
       # override broken prereq check
-      substituteInPlace configure --replace "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
+      substituteInPlace configure --replace-fail "prereq_check=\"\$PERL \$PERL_OPTS build/version_check.pl\"" "prereq_check=\"echo\""
     '';
     preBuild = ''
-      substituteInPlace apreq2-config --replace "dirname" "${pkgs.coreutils}/bin/dirname"
+      substituteInPlace apreq2-config --replace-fail "dirname" "${pkgs.coreutils}/bin/dirname"
     '';
     installPhase = ''
       mkdir $out
@@ -19909,7 +19909,7 @@ with self;
     buildInputs = [ pkgs.systemd ];
     postPatch = ''
       substituteInPlace Build.PL \
-        --replace "libsystemd-journal" "libsystemd"
+        --replace-fail "libsystemd-journal" "libsystemd"
     '';
     meta = {
       description = "Send messages to a systemd journal";
@@ -19976,7 +19976,7 @@ with self;
     '';
     # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
     postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      substituteInPlace Makefile.PL --replace 'if has_module' 'if 0; #'
+      substituteInPlace Makefile.PL --replace-fail 'if has_module' 'if 0; #'
     '';
     doCheck = !stdenv.hostPlatform.isDarwin;
     nativeCheckInputs = [
@@ -21397,7 +21397,7 @@ with self;
     # Most tests are online, so we only include offline tests
     postPatch = ''
       substituteInPlace Makefile.PL \
-        --replace '"t/*.t t/api/*.t"' \
+        --replace-fail '"t/*.t t/api/*.t"' \
         '"t/00-report-prereqs.t t/api/_get.t t/api/_get_or_search.t t/api/_search.t t/entity.t t/request.t t/resultset.t"'
     '';
 
@@ -22926,7 +22926,7 @@ with self;
     preBuild = ''
       # This module needs the deprecated Mojo::IOLoop::Delay
       substituteInPlace lib/Mojo/IOLoop/ForkCall.pm \
-        --replace "use Mojo::IOLoop;" "use Mojo::IOLoop; use Mojo::IOLoop::Delay;"
+        --replace-fail "use Mojo::IOLoop;" "use Mojo::IOLoop; use Mojo::IOLoop::Delay;"
     '';
     meta = {
       description = "(DEPRECATED) run blocking functions asynchronously by forking";
@@ -24651,7 +24651,7 @@ with self;
     buildInputs = [ pkgs.unzip ];
 
     postPatch = ''
-      substituteInPlace Makefile.PL --replace "'PL_FILES'" "#'PL_FILES'"
+      substituteInPlace Makefile.PL --replace-fail "'PL_FILES'" "#'PL_FILES'"
     '';
     postFixup = ''
       perl data_pod.PL PERL5LIB:$PERL5LIB
@@ -25384,7 +25384,7 @@ with self;
     };
 
     postPatch = ''
-      substituteInPlace Makefile.PL --replace pkg-config $PKG_CONFIG
+      substituteInPlace Makefile.PL --replace-fail pkg-config $PKG_CONFIG
     '';
 
     meta = {
@@ -26338,7 +26338,7 @@ with self;
 
     # https://rt.cpan.org/Public/Bug/Display.html?id=99377
     postPatch = ''
-      substituteInPlace IP.pm --replace " AutoLoader" ""
+      substituteInPlace IP.pm --replace-fail " AutoLoader" ""
     '';
     buildInputs = [ RegexpIPv6 ];
     meta = {
@@ -26718,7 +26718,7 @@ with self;
 
     configurePhase = ''
       substituteInPlace Makefile.PL \
-        --replace "@@libpaths@@" '${lib.concatStringsSep "\n" (map (f: "-L${f}/lib") buildInputs)}'
+        --replace-fail "@@libpaths@@" '${lib.concatStringsSep "\n" (map (f: "-L${f}/lib") buildInputs)}'
 
       cp -v ${../development/perl-modules/perl-opengl-gl-extensions.txt} utils/glversion.txt
 
@@ -27569,7 +27569,7 @@ with self;
       hash = "sha256-9uoJTs6EXJUqAsJ4kzJXk1TejUEKcH+bcEW9JBIGSH0=";
     };
     preConfigure = ''
-      substituteInPlace lib/Path/Tiny.pm --replace 'use File::Spec 3.40' \
+      substituteInPlace lib/Path/Tiny.pm --replace-fail 'use File::Spec 3.40' \
         'use File::Spec 3.39'
     '';
     # This appears to be currently failing tests, though I don't know why.
@@ -27586,7 +27586,7 @@ with self;
     pname = "PathTools";
     version = "3.75";
     preConfigure = ''
-      substituteInPlace Cwd.pm --replace '/usr/bin/pwd' '${pkgs.coreutils}/bin/pwd'
+      substituteInPlace Cwd.pm --replace-fail '/usr/bin/pwd' '${pkgs.coreutils}/bin/pwd'
     '';
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XS/XSAWYERX/PathTools-3.75.tar.gz";
@@ -28158,7 +28158,7 @@ with self;
     };
     # support cross-compilation by simplifying the way we get version during build
     postPatch = ''
-      substituteInPlace Makefile.PL --replace \
+      substituteInPlace Makefile.PL --replace-fail \
         'do { require "./lib/PkgConfig.pm"; $PkgConfig::VERSION; }' \
         '"${version}"'
     '';
@@ -33098,7 +33098,7 @@ with self;
 
     # Makefile.PL looks for ncurses in Glibc's prefix.
     preConfigure = ''
-      substituteInPlace Makefile.PL --replace '$Config{libpth}' \
+      substituteInPlace Makefile.PL --replace-fail '$Config{libpth}' \
         "'${pkgs.ncurses.out}/lib'"
     '';
 
@@ -36755,7 +36755,7 @@ with self;
     buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkgs.glibcLocales ];
     propagatedBuildInputs = [ TextCharWidth ];
     preConfigure = ''
-      substituteInPlace WrapI18N.pm --replace '/usr/bin/locale' '${pkgs.unixtools.locale}/bin/locale'
+      substituteInPlace WrapI18N.pm --replace-fail '/usr/bin/locale' '${pkgs.unixtools.locale}/bin/locale'
     '';
     meta = {
       description = "Line wrapping module with support for multibyte, fullwidth, and combining characters and languages without whitespaces between words";
@@ -37846,7 +37846,7 @@ with self;
           # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/uapi/asm-generic/unistd.h
           # printf SYS_getrandom | gcc -include sys/syscall.h -E -
           substituteInPlace lib/UUID4/Tiny.pm \
-            --replace "syscall( 318" "syscall( 278"
+            --replace-fail "syscall( 318" "syscall( 278"
         '';
     meta = {
       description = "Cryptographically secure v4 UUIDs for Linux x64";
@@ -38127,7 +38127,7 @@ with self;
     ];
     preConfigure = ''
       substituteInPlace t/cgi-bin/script.cgi \
-        --replace '#!/usr/bin/perl' '#!${perl}/bin/perl'
+        --replace-fail '#!/usr/bin/perl' '#!${perl}/bin/perl'
     '';
     meta = {
       description = "Use WWW::Mechanize with CGI applications";
@@ -38272,7 +38272,7 @@ with self;
     # DND.c:453:15: error: incompatible integer to pointer conversion assigning to 'NativeFormat' (aka 'const __CFString *') from 'wxDataFormatId'
     postPatch = ''
       substituteInPlace ext/dnd/XS/DataObject.xs \
-        --replace "#ifdef __WXGTK20__" "#if wxUSE_GUI"
+        --replace-fail "#ifdef __WXGTK20__" "#if wxUSE_GUI"
     '';
     # Build system attempts to compile c++ files with clang.
     preConfigure = ''
@@ -38783,7 +38783,7 @@ with self;
     patches = [ ../development/perl-modules/xml-parser-0001-HACK-Assumes-Expat-paths-are-good.patch ];
     postPatch =
       lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-        substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
+        substituteInPlace Expat/Makefile.PL --replace-fail 'use English;' '#'
       ''
       + lib.optionalString stdenv.hostPlatform.isCygwin ''
         sed -i -e "s@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. \$Config{_exe};@my \$compiler = File::Spec->catfile(\$path, \$cc\[0\]) \. (\$^O eq 'cygwin' ? \"\" : \$Config{_exe});@" inc/Devel/CheckLib.pm
