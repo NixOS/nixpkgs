@@ -6,7 +6,6 @@
   lib,
   stdenv,
   writableTmpDirAsHomeHook,
-  go_1_26,
 }:
 
 let
@@ -22,7 +21,7 @@ let
   };
 in
 
-buildGoModule.override { go = go_1_26; } rec {
+buildGoModule rec {
   pname = "fluxcd";
   inherit vendorHash version;
 
