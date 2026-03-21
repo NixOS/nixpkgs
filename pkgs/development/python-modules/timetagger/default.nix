@@ -80,7 +80,10 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://github.com/almarklein/timetagger";
     changelog = "https://github.com/almarklein/timetagger/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      phanirithvij
+    ];
     mainProgram = "timetagger";
   };
 })
