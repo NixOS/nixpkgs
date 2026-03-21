@@ -90,6 +90,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    inherit rubyEnv;
     updateScript = ./update.sh;
   };
 
