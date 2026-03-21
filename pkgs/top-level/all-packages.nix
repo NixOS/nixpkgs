@@ -3061,8 +3061,6 @@ with pkgs;
     isl_0_27
     ;
 
-  jackett = callPackage ../servers/jackett { };
-
   jamesdsp-pulse = callPackage ../by-name/ja/jamesdsp/package.nix {
     usePipewire = false;
     usePulseaudio = true;
