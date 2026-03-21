@@ -25,7 +25,7 @@
 
 buildGoModule.override { go = go_1_26; } (finalAttrs: {
   pname = "tailscale";
-  version = "1.96.2";
+  version = "1.96.3";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ buildGoModule.override { go = go_1_26; } (finalAttrs: {
     owner = "tailscale";
     repo = "tailscale";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6taTRKYFxCNK7BUnNZ3lljqVS7AeYEfm46gmilf6eEk=";
+    hash = "sha256-zEXRhnofNxDslnvT3NiAyVjZM1V9I7i4pXzhsIVEIZo=";
   };
 
   vendorHash = "sha256-rhuWEEN+CtumVxOw6Dy/IRxWIrZ2x6RJb6ULYwXCQc4=";
