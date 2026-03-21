@@ -633,23 +633,25 @@ in
 
     boot.initrd.luks.cryptoModules = mkOption {
       type = types.listOf types.str;
-      default = [
-        "aes"
-        "aes_generic"
-        "blowfish"
-        "twofish"
-        "serpent"
-        "cbc"
-        "xts"
-        "lrw"
-        "sha1"
-        "sha256"
-        "sha512"
-        "af_alg"
-        "algif_skcipher"
-        "cryptd"
-        "input_leds" # for capslock LED on most keyboards in case decryption requires password
-      ];
+      defaultText = lib.literalExpression ''
+        [
+          "aes"
+          "blowfish"
+          "twofish"
+          "serpent"
+          "cbc"
+          "xts"
+          "lrw"
+          "sha1"
+          "sha256"
+          "sha512"
+          "af_alg"
+          "algif_skcipher"
+          "cryptd"
+          "input_leds" # for capslock LED on most keyboards in case decryption requires password
+        ]
+        ++ (lib.optional (lib.versionOlder config.boot.kernelPackages.kernel.version "7.0") "aes_generic");
+      '';
       description = ''
         A list of cryptographic kernel modules needed to decrypt the root device(s).
         The default includes all common modules.
@@ -1126,12 +1128,40 @@ in
       }
     ];
 
+    warnings =
+      optional
+        (
+          (versionAtLeast kernelPackages.kernel.version "7.0")
+          && (builtins.elem "aes_generic" luks.cryptoModules)
+        )
+        ''
+          boot.initrd.luks.cryptoModules: "aes_generic" is no longer provided in kernel versions >= 7.0. This will fail if provided in a future version.
+        '';
+
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
     boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks [
       "firewire_ohci"
       "firewire_core"
       "firewire_sbp2"
     ];
+
+    boot.initrd.luks.cryptoModules = [
+      "aes"
+      "blowfish"
+      "twofish"
+      "serpent"
+      "cbc"
+      "xts"
+      "lrw"
+      "sha1"
+      "sha256"
+      "sha512"
+      "af_alg"
+      "algif_skcipher"
+      "cryptd"
+      "input_leds" # for capslock LED on most keyboards in case decryption requires password
+    ]
+    ++ (lib.optional (lib.versionOlder config.boot.kernelPackages.kernel.version "7.0") "aes_generic");
 
     # Some modules that may be needed for mounting anything ciphered
     boot.initrd.availableKernelModules = [
