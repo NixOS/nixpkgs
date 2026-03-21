@@ -7,12 +7,12 @@
   logs,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "ppx_irmin";
   version = "3.11.0";
 
   src = fetchurl {
-    url = "https://github.com/mirage/irmin/releases/download/${version}/irmin-${version}.tbz";
+    url = "https://github.com/mirage/irmin/releases/download/${finalAttrs.version}/irmin-${finalAttrs.version}.tbz";
     hash = "sha256-CZlvvMLEPhF6m9jpAoxjXoHMyyZNXgLUJauLBrus29s=";
   };
 
@@ -33,4 +33,4 @@ buildDunePackage rec {
       sternenseemann
     ];
   };
-}
+})
