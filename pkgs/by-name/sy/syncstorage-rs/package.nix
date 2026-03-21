@@ -6,10 +6,13 @@
   python3,
   cmake,
   libmysqlclient,
+  libpq,
+  openssl,
   makeBinaryWrapper,
   lib,
   nix-update-script,
   nixosTests,
+  dbBackend ? "mysql",
 }:
 
 let
@@ -46,9 +49,26 @@ rustPlatform.buildRustPackage (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    libmysqlclient
-  ];
+  buildInputs =
+    lib.optional (dbBackend == "mysql") libmysqlclient
+    ++ lib.optionals (dbBackend == "postgresql") [
+      libpq
+      openssl
+    ];
+
+  buildNoDefaultFeatures = true;
+  # The syncserver "postgres" feature only enables syncstorage-db/postgres.
+  # tokenserver-db/postgres must be enabled separately so the tokenserver
+  # can also connect to PostgreSQL (it dispatches on the URL scheme at runtime).
+  buildFeatures =
+    let
+      cargoFeature = if dbBackend == "postgresql" then "postgres" else dbBackend;
+    in
+    [
+      cargoFeature
+      "tokenserver-db/${cargoFeature}"
+      "py_verifier"
+    ];
 
   SWAGGER_UI_DOWNLOAD_URL = "file://${swaggerUi}";
 
