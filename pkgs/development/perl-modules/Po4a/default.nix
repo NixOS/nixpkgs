@@ -34,6 +34,14 @@ buildPerlPackage rec {
     hash = "sha256-JfwyPyuje71Iw68Ov0mVJkSw5GgmH5hjPpEhmoOP58I=";
   };
 
+  patches = [
+    # Fix compatibility with gettext >= 1.0, whose msginit merges into
+    # existing files instead of overwriting, producing broken PO headers
+    # when the output file already exists but is empty.
+    # https://github.com/mquinson/po4a/issues/636
+    ./gettext-1.0-msginit-compat.patch
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs =
