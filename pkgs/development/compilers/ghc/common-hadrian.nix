@@ -325,6 +325,10 @@
         ./ghc-9.6-or-later-docs-sphinx-9.patch
       ]
 
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.targetPlatform || stdenv.buildPlatform != stdenv.hostPlatform) [
+        ./hadrian-headers-hack.patch
+      ]
+
       ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     stdenv = stdenvNoCC;
@@ -770,6 +774,11 @@ stdenv.mkDerivation (
       buildCC
       # stage0 builds terminfo unconditionally, so we always need ncurses
       ncurses
+    ] ++ lib.optionals (!enableNativeBignum) [
+      gmp
+    ] ++ lib.optionals (libffi != null) [
+      # TODO(@AlexandreTunstall,@alexfmpe,@sternenseemann): revisit w.r.t. libffi handling in GHC >= 10
+      libffi
     ];
 
     # Prevent stage0 ghc from leaking into the final result. This was an issue
