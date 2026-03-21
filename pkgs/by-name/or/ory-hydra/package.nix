@@ -29,9 +29,25 @@ buildGoModule (finalAttrs: {
 
   ldflags = [
     "-s"
-    "-X github.com/ory/hydra/v2/driver/config.Version=v${finalAttrs.version}"
+    "-X github.com/ory/hydra/v2/driver/config.Version=${finalAttrs.src.tag}"
     "-X github.com/ory/hydra/v2/driver/config.Commit=${finalAttrs.src.rev}"
   ];
+
+  # tests use dynamic port assignment via port `0`
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = ''
+    export version='${finalAttrs.src.tag}'
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    export GOFLAGS=''${GOFLAGS//-trimpath/}
+    # full test suite expects pristine/fresh database(s), thus opting to use `-short` flag to skip those integration tests
+    # https://github.com/ory/hydra/blob/83559dffbb7b1bdd3a05dd6210654c3f5a876771/Makefile#L71
+    go test -short -tags sqlite,sqlite_omit_load_extension ./...
+    runHook postCheck
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
