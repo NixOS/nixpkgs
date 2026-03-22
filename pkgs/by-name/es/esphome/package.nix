@@ -33,14 +33,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2026.2.4";
+  version = "2026.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-SN9XfXFFogxKwstcS4ZQxJEGHpLpjyGzRWz2X0XQdIc=";
+    hash = "sha256-W8xVUlgenDXL0MTWlFmWD+lHFUmhl2EKyxqAEjOuqHY=";
   };
 
   patches = [
@@ -68,7 +68,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==82.0.0" "setuptools" \
+      --replace-fail "setuptools==82.0.1" "setuptools" \
       --replace-fail "wheel>=0.43,<0.47" "wheel"
   '';
 
@@ -98,6 +98,7 @@ python.pkgs.buildPythonApplication rec {
     requests
     resvg-py
     ruamel-yaml
+    smpclient
     tornado
     tzdata
     tzlocal
@@ -172,6 +173,7 @@ python.pkgs.buildPythonApplication rec {
     # tries to use esptool, which is wrapped in an fhsenv
     "test_upload_using_esptool_path_conversion"
     "test_upload_using_esptool_with_file_path"
+    "test_upload_using_esptool_passes_crystal_callback"
     # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
     "test_run_platformio_cli_sets_environment_variables"
     # Expects a full git clone

@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.8.2";
 
   src = fetchurl {
-    url = "http://www.opencsg.org/OpenCSG-${finalAttrs.version}.tar.gz";
+    url = "https://www.opencsg.org/OpenCSG-${finalAttrs.version}.tar.gz";
     hash = "sha256-WsXfc7GtM0DdZwX/kOAJ8alGu5U2whwiY6b5dCZWZMA=";
   };
 

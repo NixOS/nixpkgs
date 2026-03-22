@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   srcName = "libunique-${version}";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/libunique/${majorVer}/${srcName}.tar.xz";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/libunique/${majorVer}/${srcName}.tar.xz";
     sha256 = "0f70lkw66v9cj72q0iw1s2546r6bwwcd8idcm3621fg2fgh2rw58";
   };
 
