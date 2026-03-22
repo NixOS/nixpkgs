@@ -7108,8 +7108,6 @@ self: super: with self; {
 
   homematicip = callPackage ../development/python-modules/homematicip { };
 
-  homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
-
   homf = callPackage ../development/python-modules/homf { };
 
   hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
@@ -20516,6 +20514,8 @@ self: super: with self; {
   uplink = callPackage ../development/python-modules/uplink { };
 
   uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
+
+  uploadserver = callPackage ../development/python-modules/uploadserver { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
 

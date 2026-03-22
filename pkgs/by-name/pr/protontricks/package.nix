@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "protontricks";
-  version = "1.13.1";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = "protontricks";
     tag = finalAttrs.version;
-    hash = "sha256-YJUNp+8n1LPlD7lCAy6AMNxToloPBn8ZaRfREiwS9ls=";
+    hash = "sha256-36Yst8j5xhXulNp/YGO3pDnvxpyT4ZuEjwSvJIESUSw=";
   };
 
   patches = [
