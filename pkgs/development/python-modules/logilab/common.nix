@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   mypy-extensions,
   pytestCheckHook,
   pytz,
@@ -14,10 +14,12 @@ buildPythonPackage rec {
   version = "2.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "logilab_common";
-    inherit version;
-    hash = "sha256-2GPHkd6gj85dPpMrrC8DwyK/wOuT1i1r+XTnZZ4r+34=";
+  src = fetchFromGitLab {
+    domain = "forge.extranet.logilab.fr";
+    owner = "open-source";
+    repo = "logilab-common";
+    tag = version;
+    hash = "sha256-cKodCj9m3n4P54CZ2X+BXN62ewd9nHSZBMENlo8S1iY=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +42,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python packages and modules used by Logilab";
     homepage = "https://logilab-common.readthedocs.io/";
-    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/${version}/CHANGELOG.md";
+    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     mainProgram = "logilab-pytest";
