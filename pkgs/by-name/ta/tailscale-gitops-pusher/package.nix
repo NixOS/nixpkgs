@@ -2,10 +2,9 @@
   lib,
   tailscale,
   buildGoModule,
-  go_1_26,
 }:
 
-buildGoModule.override { go = go_1_26; } {
+buildGoModule {
   pname = "tailscale-gitops-pusher";
   inherit (tailscale) version;
 

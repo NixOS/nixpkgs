@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.1";
 
   src = fetchurl {
-    url = "http://xearth.org/xearth-${finalAttrs.version}.tar.gz";
+    url = "https://xearth.org/xearth-${finalAttrs.version}.tar.gz";
     hash = "sha256-vLFAfMNbP23TYGssYHInO2qRLL2e0a4i+y0maUVBMJw=";
   };
 
