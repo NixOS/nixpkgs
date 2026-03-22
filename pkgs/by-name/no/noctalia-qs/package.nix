@@ -26,13 +26,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "noctalia-qs";
-  version = "0.0.9";
+  version = "0.0.10";
 
   src = fetchFromGitHub {
     owner = "noctalia-dev";
     repo = "noctalia-qs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oRqz+5AbNKfUWWwN5c83CsSOsUWVGITh0HZg+wX5Q/8=";
+    hash = "sha256-tscUYNjBfi52Uwu40epdAhoFztsmroKBEBvr22oCnv4=";
   };
 
   patches = [
