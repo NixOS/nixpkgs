@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "5.1.0";
+  version = "5.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "asdf-format";
     repo = "asdf";
     tag = version;
-    hash = "sha256-pET6isOd8u0mK+axgedUcQkz4y5PCSzPMy+LOqEgtEs=";
+    hash = "sha256-StudmLkXINe/lIJneid763jBdo6jAHlnjj4PHsGFxwM=";
   };
 
   build-system = [
