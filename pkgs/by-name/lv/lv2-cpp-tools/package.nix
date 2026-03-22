@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.5";
 
   src = fetchzip {
-    url = "http://deb.debian.org/debian/pool/main/l/lv2-c++-tools/lv2-c++-tools_${finalAttrs.version}.orig.tar.bz2";
+    url = "https://deb.debian.org/debian/pool/main/l/lv2-c++-tools/lv2-c++-tools_${finalAttrs.version}.orig.tar.bz2";
     sha256 = "039bq7d7s2bhfcnlsfq0mqxr9a9iqwg5bwcpxfi24c6yl6krydsi";
   };
 
