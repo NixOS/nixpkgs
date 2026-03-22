@@ -50,7 +50,10 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  makeFlags = [ "HAVE_ICONV=1" ];
+  makeFlags = [
+    "HAVE_ICONV=1"
+    "CONFIG_FILE=/etc/whois.conf"
+  ];
   buildFlags = [ "whois" ];
 
   installTargets = [ "install-whois" ];
