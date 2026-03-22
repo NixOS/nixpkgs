@@ -327,7 +327,19 @@ let
             }
 
             challenge="$(echo -n $salt | openssl-wrap dgst -binary -sha512 | rbtohex)"
-            response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
+
+            while true; do
+                echo "Waiting for YubiKey challenge-response. Touch your YubiKey if required..."
+                response="$(ykchalresp -${toString dev.yubikey.slot} -x $challenge 2>/dev/null)"
+                if [ $? -ne 0 ] || [ -z "$response" ]; then
+                    echo "YubiKey challenge timed out."
+                    echo -n "Press Enter to retry..."
+                    read
+                    echo
+                else
+                    break
+                fi
+            done
 
             for try in $(seq 3); do
                 ${optionalString dev.yubikey.twoFactor ''
