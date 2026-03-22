@@ -220,8 +220,8 @@ lib.fix (self: {
           (
             if __structuredAttrs then
               ''
-                echo -n "$package" > package.json
-                echo -n "$packageLock" > package-lock.json
+                printf "%s" "$package" > package.json
+                printf "%s" "$packageLock" > package-lock.json
               ''
             else
               ''
