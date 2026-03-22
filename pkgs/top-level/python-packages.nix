@@ -13522,6 +13522,8 @@ self: super: with self; {
 
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
+  pydantic-docs = callPackage ../development/python-modules/pydantic-docs { };
+
   pydantic-extra-types = callPackage ../development/python-modules/pydantic-extra-types { };
 
   pydantic-graph = callPackage ../development/python-modules/pydantic-graph { };
