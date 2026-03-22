@@ -6152,6 +6152,8 @@ self: super: with self; {
     pkgs.gepetto-viewer-corba.override { python3Packages = self; }
   );
 
+  gephipy = callPackage ../development/python-modules/gephipy { };
+
   gerbonara = callPackage ../development/python-modules/gerbonara { };
 
   get-video-properties = callPackage ../development/python-modules/get-video-properties { };
