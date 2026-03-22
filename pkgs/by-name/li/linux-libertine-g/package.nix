@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "20120116";
 
   src = fetchzip {
-    url = "http://www.numbertext.org/linux/e7a384790b13c29113e22e596ade9687-LinLibertineG-${finalAttrs.version}.zip";
+    url = "https://www.numbertext.org/linux/e7a384790b13c29113e22e596ade9687-LinLibertineG-${finalAttrs.version}.zip";
     hash = "sha256-UGTB7jsI6peivCtEt96RCSi5XHCrnjCSs0Ud5bF7uxk=";
   };
 
