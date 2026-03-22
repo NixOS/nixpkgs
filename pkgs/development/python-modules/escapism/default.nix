@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   setuptools-scm,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,8 +22,9 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  # No tests distributed
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   meta = {
     description = "Simple, generic API for escaping strings";
