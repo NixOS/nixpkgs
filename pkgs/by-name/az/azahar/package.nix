@@ -46,6 +46,7 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
+  darwinMinVersionHook,
 }:
 let
   inherit (lib)
@@ -120,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
+    (darwinMinVersionHook "13.4")
   ];
 
   postPatch = ''
