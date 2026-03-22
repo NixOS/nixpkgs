@@ -9,31 +9,18 @@
   setuptools,
   toml,
   pytestCheckHook,
-  fetchpatch,
 }:
 buildPythonPackage rec {
   pname = "exiv2";
-  version = "0.18.0";
+  version = "0.18.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jim-easterbrook";
     repo = "python-exiv2";
     tag = version;
-    hash = "sha256-lYz0TWiiBtpwZ56Oiy2v8DFBXoofMv60hxsG0q7Cx9Y=";
+    hash = "sha256-3r0qGsCkfe2sQuXiCipXzW0vF2JRg77L1IcOiLTPslM=";
   };
-
-  patches = [
-    # Disable refcount tests for python >= 3.14
-    (fetchpatch {
-      url = "https://github.com/jim-easterbrook/python-exiv2/commit/fe98ad09ff30f1b6cc5fd5dcc0769f9505c09166.patch";
-      hash = "sha256-+KepYfzocG6qkak+DwXFtCaMiLEAE+FegONgL4vo21o=";
-    })
-    (fetchpatch {
-      url = "https://github.com/jim-easterbrook/python-exiv2/commit/e0a5284620e8d020771bf8c1fa73d6113e662ebf.patch";
-      hash = "sha256-n/yfhP/Z4Is/+2bKsFZtcNXnQe61DjoE9Ryi2q9yTSA=";
-    })
-  ];
 
   build-system = [
     setuptools
