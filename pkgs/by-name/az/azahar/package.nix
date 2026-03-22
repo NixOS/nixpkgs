@@ -156,6 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      ${optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ moltenvk ]
+      }"}
     )
   '';
 
