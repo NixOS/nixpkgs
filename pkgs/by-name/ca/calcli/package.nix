@@ -21,8 +21,10 @@ rustPlatform.buildRustPackage rec {
     description = "A lightweight TUI scientific calculator with Vi-style keybindings";
     homepage = "https://github.com/Siphcy/calcli";
     license = licenses.mit;
-    maintainers = [ Siphcy ];
     mainProgram = "calcli";
     platforms = platforms.all;
+    maintainers = with lib.maintainers; [
+      Siphcy
+    ];
   };
 }
