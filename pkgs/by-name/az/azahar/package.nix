@@ -145,6 +145,13 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
+  installPhase = optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications $out/bin
+
+    cp ./bin/Release/${finalAttrs.pname}-room $out/bin
+    cp -r ./bin/Release/${finalAttrs.pname}.app $out/Applications
+  '';
+
   preFixup = ''
     qtWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
