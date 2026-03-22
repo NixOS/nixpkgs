@@ -6,7 +6,7 @@
   qpdf,
   ocrmypdf,
   poppler-utils,
-  unoconv,
+  unoserver,
   pngquant,
   tesseract,
   python3,
@@ -101,7 +101,7 @@ in
               qpdf
               ocrmypdf
               poppler-utils
-              unoconv # TODO package and move to unoserver https://github.com/NixOS/nixpkgs/pull/380655#issuecomment-2692128291
+              unoserver
               pngquant
               tesseract
               (python3.withPackages (
