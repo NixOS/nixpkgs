@@ -275,11 +275,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "claws-mail";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchurl {
     url = "https://claws-mail.org/download.php?file=releases/claws-mail-${finalAttrs.version}.tar.xz";
-    hash = "sha256-2K3yEMdnq1glLfxas8aeYD1//bcoGh4zQNLYYGL0aKY=";
+    hash = "sha256-A+BUnV8PzXpZgEGGUkEF0F67XlNNQqS4apqQ9ynKJVs=";
   };
 
   outputs = [
@@ -300,9 +300,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd([./get-git-version])' '${finalAttrs.version}'
+      --replace-fail 'm4_esyscmd([./get-git-version])' '${finalAttrs.version}'
     substituteInPlace src/procmime.c \
-        --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
+      --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
   nativeBuildInputs = [
