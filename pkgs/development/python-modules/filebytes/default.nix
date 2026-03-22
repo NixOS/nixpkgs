@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://scoding.de/filebytes-introduction";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.bsd3;
     description = "Scripts to parse ELF, PE, Mach-O and OAT (Android Runtime)";
     maintainers = with lib.maintainers; [ bennofs ];
   };
