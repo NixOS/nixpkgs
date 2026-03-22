@@ -2139,7 +2139,8 @@
       ];
     "ghost" =
       ps: with ps; [
-      ]; # missing inputs: aioghost
+        aioghost
+      ];
     "gios" =
       ps: with ps; [
         gios
@@ -7670,6 +7671,7 @@
     "geofency"
     "geonetnz_quakes"
     "geonetnz_volcano"
+    "ghost"
     "gios"
     "github"
     "glances"
