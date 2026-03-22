@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "pyrra";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "pyrra-dev";
     repo = "pyrra";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XJIYCGv9XOIMxqOjq7u536EhfSIAjLNCNeuwnXUhBMs=";
+    hash = "sha256-Xy+obHLxu8qQSKtZXSIO/JP8C7w548WeTYa2f1W99kw=";
   };
 
   vendorHash = "sha256-E2/OrAC2Wkv7OYPjs9ROE1RL4UUXYTByJZRY1qZB3gE=";
