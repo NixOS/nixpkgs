@@ -2534,7 +2534,8 @@
       ];
     "homevolt" =
       ps: with ps; [
-      ]; # missing inputs: homevolt
+        homevolt
+      ];
     "homewizard" =
       ps: with ps; [
         python-homewizard-energy
@@ -7604,6 +7605,7 @@
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
+    "homevolt"
     "homewizard"
     "homeworks"
     "honeywell"
