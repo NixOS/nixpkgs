@@ -20517,6 +20517,8 @@ self: super: with self; {
 
   uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
 
+  uploadserver = callPackage ../development/python-modules/uploadserver { };
+
   upnpy = callPackage ../development/python-modules/upnpy { };
 
   uproot = callPackage ../development/python-modules/uproot { };
