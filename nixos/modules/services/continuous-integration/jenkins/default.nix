@@ -86,14 +86,16 @@ in
       javaPackage = lib.mkPackageOption pkgs "jdk25" { };
 
       packages = lib.mkOption {
-        default = [
-          pkgs.stdenv
-          pkgs.git
-          pkgs.jdk25
-          config.programs.ssh.package
-          pkgs.nix
-        ];
-        defaultText = lib.literalExpression "[ pkgs.stdenv pkgs.git pkgs.jdk17 config.programs.ssh.package pkgs.nix ]";
+        default = [ ];
+        example = lib.literalExpression ''
+          [
+            pkgs.stdenv
+            pkgs.git
+            pkgs.jdk25
+            config.programs.ssh.package
+            pkgs.nix
+          ]
+        '';
         type = lib.types.listOf lib.types.package;
         description = ''
           Packages to add to PATH for the jenkins process.
