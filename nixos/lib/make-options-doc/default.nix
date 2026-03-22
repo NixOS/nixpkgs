@@ -214,13 +214,15 @@ rec {
           pkgs.brotli
           pkgs.python3
         ];
-        passAsFile = [ "options" ];
         options = builtins.unsafeDiscardStringContext (builtins.toJSON optionsNix);
         # merge with an empty set if baseOptionsJSON is null to run markdown
         # processing on the input options
         baseJSON = if baseOptionsJSON == null then builtins.toFile "base.json" "{}" else baseOptionsJSON;
+        __structuredAttrs = true;
       }
       ''
+          optionsPath=$TMPDIR/options
+          printf "%s" "$options" > "$optionsPath"
           # Export list of options in different format.
           dst=$out/share/doc/nixos
           mkdir -p $dst
