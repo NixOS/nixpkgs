@@ -219,13 +219,13 @@
     "vendorHash": "sha256-6MKWpiDq4yI3mfIJyzEsWLa7gi0+DScI5jKcOcM6Qs0="
   },
   "cloudposse_utils": {
-    "hash": "sha256-TcCDv6IB6Z4llvogKWasAK4u2NFsOG4UKAUERDH6SXg=",
+    "hash": "sha256-Fjb+9NG+p+oTvKziRYHaNdAZaUv8Rs/FYLXmtwrfkOI=",
     "homepage": "https://registry.terraform.io/providers/cloudposse/utils",
     "owner": "cloudposse",
     "repo": "terraform-provider-utils",
-    "rev": "v1.31.0",
+    "rev": "v2.4.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-djz3kNV+13Sz9prRPhWaWi50hvYXq3I3cp4neLexeEs="
+    "vendorHash": "sha256-LNsJygeBSpY4xawhWfIcYOB0TEVK4DMeyiSgyn8PJ2A="
   },
   "cloudscale-ch_cloudscale": {
     "hash": "sha256-r+0HrY+5ciNb3+JHV05ez/uPElbD7LcQqlUHWYp865Q=",
@@ -679,13 +679,13 @@
     "vendorHash": "sha256-OvotUEh+P2b3ngaD/8lVbemnM3lrtwqduPXPjF/bqVA="
   },
   "hashicorp_vault": {
-    "hash": "sha256-Rg18X+VFDA9p3Dx/fA/C982X4XEvSRPU0+Zkq8HWqas=",
+    "hash": "sha256-e0BcPLQFUjdZPlKAnuxBB3se+MjDSj78KJy5zNlsHKA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vault",
     "owner": "hashicorp",
     "repo": "terraform-provider-vault",
-    "rev": "v5.7.0",
+    "rev": "v5.8.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-XnyEPnB0995S7LzGAlkB/O3VKWXAm1rp9NQcDvIhRVw="
+    "vendorHash": "sha256-XBXkDvblC/u3lYq/dfjm38Hw8uGwumz4ZAiG+kJkNUQ="
   },
   "hashicorp_vsphere": {
     "hash": "sha256-vRO6vxzi4d0hNc0MmQLhN7roONnsjxPBtFt0fyvxWd8=",
@@ -1148,13 +1148,13 @@
     "vendorHash": null
   },
   "sacloud_sakuracloud": {
-    "hash": "sha256-gcl4ClYxmZbACn8rmcZzn/XeYMeLAuhAr2IVuQRqXoQ=",
+    "hash": "sha256-CVM56qxegsJrH+4SxHhfSR/iuXitgW0HCQH8l+Ay0G0=",
     "homepage": "https://registry.terraform.io/providers/sacloud/sakuracloud",
     "owner": "sacloud",
     "repo": "terraform-provider-sakuracloud",
-    "rev": "v2.34.2",
+    "rev": "v2.35.0",
     "spdx": "Apache-2.0",
-    "vendorHash": "sha256-LQAEOSSqpR8ipYkL6dcJvJvgs17VOYRolYn7Qt4Oer4="
+    "vendorHash": "sha256-SY13J+aguuOicQnNBgutjIGh0njrLubpNl0c0b4kNwo="
   },
   "sap-cloud-infrastructure_sci": {
     "hash": "sha256-m3degJZruqRkA/lSnNQrLfJIlpl5k8qCpbyIcsyV5/U=",
