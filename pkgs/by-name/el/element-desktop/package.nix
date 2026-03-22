@@ -18,6 +18,7 @@
   asar,
   copyDesktopItems,
   darwin,
+  actool,
 }:
 
 let
@@ -58,6 +59,7 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.autoSignDarwinBinariesHook
+      actool
     ];
 
     inherit seshat;
@@ -161,6 +163,10 @@ stdenv.mkDerivation (
           "x-scheme-handler/io.element.desktop"
         ];
       })
+    ];
+
+    stripDebugList = lib.optionals stdenv.hostPlatform.isDarwin [
+      "Applications/Element.app/Contents/MacOS"
     ];
 
     passthru = {
