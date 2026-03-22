@@ -32,8 +32,8 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
-    rev = "v${version}";
-    sha256 = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
+    tag = "v${version}";
+    hash = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
   };
 
   mvnJdk = jdk11;
