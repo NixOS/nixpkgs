@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-i6QYJ2kVXpYVbGyY/5EeGbCVCkxLeqf1mgvrXKRdup0=";
+  cargoHash = "sha256-rFwbHsGkKLD9UgkdTbxMIjARmU0Ewal1NIwlbzRL/vc=";
 
   buildInputs = [ libdrm ];
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage {
       --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
 
     # This is supposed to be a "nix-compatible file path", but there is nothing that actually does the substitution
-    substituteInPlace ../../coolercontrold-${version}-vendor/pciid-parser-*/src/lib.rs \
+    substituteInPlace daemon/src/repositories/hwmon/pci_ids.rs \
       --replace-fail '@hwdata@' '${hwdata}'
   '';
 
