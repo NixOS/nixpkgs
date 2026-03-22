@@ -267,11 +267,6 @@ stdenv.mkDerivation (finalAttrs: {
     # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2607
     substituteInPlace meson.build \
       --replace-fail "import('python').find_installation()" "import('python').find_installation('python3')"
-
-    # Broken test
-    # https://github.com/NixOS/nixpkgs/pull/484971#issuecomment-3846759517
-    substituteInPlace app/tests/meson.build \
-      --replace-fail "{${"\n"}    'name': 'save-and-export',${"\n"}  }${"\n"}" ""
   '';
 
   preBuild =
