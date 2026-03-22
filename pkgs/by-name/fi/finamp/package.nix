@@ -7,6 +7,12 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
+  runCommand,
+  yq,
+  finamp,
+  _experimental-update-script-combinators,
+  nix-update-script,
+  dart,
 }:
 let
   version = "0.9.22-beta";
@@ -20,26 +26,16 @@ flutter338.buildFlutterApplication {
     rev = version;
     hash = "sha256-SPt1p9+uyvfSry8Ry2BJyLC7HyWZe43wfAPK9BVkcnc=";
   };
+
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = lib.importJSON ./git-hashes.json;
 
   nativeBuildInputs = [
     patchelf
     copyDesktopItems
   ];
   buildInputs = [ mpv-unwrapped ];
-
-  gitHashes = {
-    balanced_text = "sha256-U+gtC9AaUFp3gVkUzYMWAUSuUV7kYB8ZE2BsclnxwkA=";
-    isar_generator = "sha256-EthUFM+YI3bnM0U0sECoNOCRXpo4qjP71VXYBuO/u+I=";
-    isar_flutter_libs = "sha256-Z5IdfiaZ7348XwYSQb81z0YZEoIHWmsSZr6mYqqz4Oo=";
-    media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
-    palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
-    split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
-    flutter_user_certificates_android = "sha256-HL1Qd0D3CLYJysWLX2jqWt1FJRGm/BE8EjVFPztOIPo=";
-    smtc_windows = "sha256-ESR6qw8ciJvo1YG3wNK7Uy/N0zzl6OX6q40Dmgsvx6A=";
-    just_audio = "sha256-I+HTDx3IpaQw3VBVO7KGzl0vDcFrNZhN5455i7TNxxs=";
-    just_audio_media_kit = "sha256-dSlZETFqNQs7jxNN+8MWQzval31zA7zCs+7WiPPPZMw=";
-  };
 
   postFixup = ''
     patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-needed libflutter_discord_rpc.so --add-rpath ${
@@ -69,6 +65,37 @@ flutter338.buildFlutterApplication {
       ];
     })
   ];
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          nativeBuildInputs = [ yq ];
+          inherit (finamp) src;
+        }
+        ''
+          cat $src/pubspec.lock | yq > $out
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { extraArgs = [ "--version=unstable" ]; })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "finamp.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+      {
+        command = [
+          dart.fetchGitHashesScript
+          "--input"
+          ./pubspec.lock.json
+          "--output"
+          ./git-hashes.json
+        ];
+        supportedFeatures = [ ];
+      }
+    ];
+  };
 
   meta = {
     # Finamp depends on `ìsar`, which for Linux is only compiled for x86_64. https://github.com/jmshrv/finamp/issues/766
