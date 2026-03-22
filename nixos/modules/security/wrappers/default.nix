@@ -356,8 +356,7 @@ in
 
           echo -n "Checking that Nix store paths of all wrapped programs exist... "
 
-          declare -A wrappers
-          ${lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "wrappers['${n}']='${v.source}'") wrappers)}
+          ${lib.toShellVar "wrappers" (lib.mapAttrs (n: v: v.source) wrappers)}
 
           for name in "''${!wrappers[@]}"; do
             path="''${wrappers[$name]}"
