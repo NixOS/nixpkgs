@@ -28,6 +28,14 @@
     patch = ./request-key-helper.patch;
   };
 
+  fix_iommu = {
+    name = "fix-iommu";
+    patch = fetchpatch {
+      url = "https://lore.kernel.org/linux-iommu/20260227080638.208693-1-lkml@antheas.dev/raw";
+      hash = "sha256-AnV6jRyUbHFjYwQzF6qb7k59OpyKiFZDzMcHmLUWTLo=";
+    };
+  };
+
   hardened =
     let
       mkPatch =

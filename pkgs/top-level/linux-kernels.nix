@@ -209,6 +209,7 @@ in
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
+            kernelPatches.fix_iommu
           ];
         };
 
