@@ -17,6 +17,7 @@
   vulkan-loader,
   wayland,
   zlib,
+  apple-sdk,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -49,12 +50,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
     libx11
     libxcb
-  ];
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ apple-sdk ];
 
   runtimeDependencies = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     vulkan-loader
     wayland
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    -framework AppKit
+    -framework CoreGraphics
+    -framework Foundation
+    -framework Metal
+    -framework MetalKit
+  '';
 
   postInstall = ''
     install -Dm644 assets/linux/gitcomet.desktop \
