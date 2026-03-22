@@ -37,7 +37,7 @@ let
         ;
       pnpm = pnpm_10;
       fetcherVersion = 1;
-      hash = "sha256-F9vvthDDlj3WCmfejNlWvF52YW8p3X4DipceEbCUMSs=";
+      hash = "sha256-j84UVbLIqPz56Djy0vafhAOn9ZFM+kuTcBhfYZBYEDI=";
     };
 
     nativeBuildInputs = [
