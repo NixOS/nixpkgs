@@ -221,17 +221,17 @@ rec {
         __structuredAttrs = true;
       }
       ''
-          optionsPath=$TMPDIR/options
-          printf "%s" "$options" > "$optionsPath"
-          # Export list of options in different format.
-          dst=$out/share/doc/nixos
-          mkdir -p $dst
+        optionsPath=$TMPDIR/options
+        printf "%s" "$options" > "$optionsPath"
+        # Export list of options in different format.
+        dst=$out/share/doc/nixos
+        mkdir -p $dst
 
-          TOUCH_IF_DB=$dst/.used-docbook \
-          python ${./mergeJSON.py} \
-            ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
-            $baseJSON $optionsPath \
-            > $dst/options.json
+        TOUCH_IF_DB=$dst/.used-docbook \
+        python ${./mergeJSON.py} \
+          ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
+          $baseJSON $optionsPath \
+          > $dst/options.json
 
         if grep /nixpkgs/nixos/modules $dst/options.json; then
           echo "The manual appears to depend on the location of Nixpkgs, which is bad"
@@ -241,10 +241,10 @@ rec {
           exit 1
         fi
 
-          brotli -9 < $dst/options.json > $dst/options.json.br
+        brotli -9 < $dst/options.json > $dst/options.json.br
 
-          mkdir -p $out/nix-support
-          echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
-          echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
+        mkdir -p $out/nix-support
+        echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
+        echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
       '';
 }
