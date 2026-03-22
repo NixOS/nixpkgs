@@ -15,14 +15,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ramalama";
-  version = "0.17.1";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "ramalama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BXUWNP3yxuDsL1gY28oWhlu+vTIezYpDbScUsOulyYA=";
+    hash = "sha256-AqX8pNbeDPCxlwaSJg4+XVrfypvXGR77q8tkI7t3vTY=";
   };
 
   build-system = with python3Packages; [
