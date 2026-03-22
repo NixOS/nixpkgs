@@ -21,9 +21,15 @@ buildPythonPackage rec {
     hash = "sha256-UaE5JQhv2AtzXKY7YD2/g6Kj1igKhmnY3zlf1P9B/iQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "versioneer.get_version()" "'${version}'"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     ci-info
     ci-py
     requests

@@ -4,23 +4,19 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonAtLeast,
   typing-extensions,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "asyncstdlib";
-  version = "3.13.3";
+  version = "3.14.0";
   pyproject = true;
-
-  # https://github.com/maxfischer2781/asyncstdlib/issues/189
-  disabled = pythonAtLeast "3.14";
 
   src = fetchFromGitHub {
     owner = "maxfischer2781";
     repo = "asyncstdlib";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3mM97zB/pEw8/kPO6jUL7dz6Q7kVatfsURy+5zSq9Bs=";
+    hash = "sha256-zp6F+Otb1d8kqdLO99shBA7ny7Zjq027T2dtTGHTcqI=";
   };
 
   build-system = [ flit-core ];
