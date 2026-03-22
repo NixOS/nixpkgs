@@ -9,6 +9,7 @@
   pcsclite,
   proot,
   zlib,
+  versionCheckHook,
 }:
 
 let
@@ -68,6 +69,9 @@ maven.buildMavenPackage rec {
       --add-flags "-jar '$out/share/java/gp.jar'" \
       --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line utility for managing applets and keys on Java Cards";
