@@ -3,6 +3,7 @@
   buildGoModule,
   lib,
   stdenv,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
@@ -24,9 +25,12 @@ buildGoModule (finalAttrs: {
 
   # Pass versioning information via ldflags
   ldflags = [
-    "-X github.com/ory/kratos/driver/config.Version=${finalAttrs.version}"
+    "-X github.com/ory/kratos/driver/config.Version=v${finalAttrs.version}"
   ];
 
+  # large portion of tests fail due to:
+  #     provider.go:39: building the Go binary returned error: exit status 1
+  #        cannot find module providing package github.com/ory/x/jsonnetsecure/cmd: import lookup disabled by -mod=vendor
   doCheck = false;
 
   preBuild = ''
@@ -42,6 +46,10 @@ buildGoModule (finalAttrs: {
     # patchShebangs doesn't work for this Makefile, do it manually
     substituteInPlace Makefile --replace-fail '/usr/bin/env bash' '${stdenv.shell}'
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "version" ];
 
   meta = {
     mainProgram = "kratos";
