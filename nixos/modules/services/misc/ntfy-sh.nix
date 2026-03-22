@@ -73,11 +73,26 @@ in
         This can be used to pass secrets such as creating declarative users or token without putting them in the Nix store.
       '';
     };
+
+    credentialsFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/ntfy-secrets.yml";
+      description = ''
+        Path to a YAML file to be merged with the settings at runtime.
+        Useful for secrets that should not be stored in the Nix store,
+        such as `smtp-sender-pass` or `web-push-private-key`.
+
+        Works with secret management tools like sops-nix and agenix.
+      '';
+    };
   };
 
   config =
     let
       configuration = settingsFormat.generate "server.yml" cfg.settings;
+      runtimeConfig = "/run/ntfy-sh/server.yml";
+      hasCredentials = cfg.credentialsFile != null;
     in
     lib.mkIf cfg.enable {
       # to configure access control via the cli
@@ -100,8 +115,11 @@ in
         after = [ "network.target" ];
 
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
+          ExecStart = "${cfg.package}/bin/ntfy serve -c ${
+            if hasCredentials then runtimeConfig else "${configuration}"
+          }";
           User = cfg.user;
+          RuntimeDirectory = lib.mkIf hasCredentials "ntfy-sh";
           StateDirectory = "ntfy-sh";
 
           DynamicUser = true;
@@ -122,6 +140,17 @@ in
           # Upstream Recommendation
           LimitNOFILE = 20500;
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+
+          ExecStartPre = lib.mkIf hasCredentials [
+            (
+              "+"
+              + pkgs.writeShellScript "ntfy-sh-prestart" ''
+                ${pkgs.yq-go}/bin/yq eval-all 'select(fileIndex == 0) * select(fileIndex == 1)' \
+                  ${configuration} '${cfg.credentialsFile}' \
+                  | install -m 600 -o '${cfg.user}' /dev/stdin ${runtimeConfig}
+              ''
+            )
+          ];
         };
       };
 
