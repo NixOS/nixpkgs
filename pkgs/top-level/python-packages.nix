@@ -6958,6 +6958,8 @@ self: super: with self; {
 
   hebg = callPackage ../development/python-modules/hebg { };
 
+  hegel-ip-client = callPackage ../development/python-modules/hegel-ip-client { };
+
   helion = callPackage ../development/python-modules/helion { };
 
   helium = callPackage ../development/python-modules/helium { };
