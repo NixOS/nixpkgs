@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bubblewrap";
-  version = "0.11.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "bubblewrap";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-8IDMLQPeO576N1lizVudXUmTV6hNOiowjzRpEWBsZ+U=";
+    hash = "sha256-sp5XYkTuoL778p5xQRDtFbX0ocdJuRbVxJCkKbEUgZs=";
   };
 
   outputs = [
