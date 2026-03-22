@@ -10,10 +10,10 @@
   aubio,
   boost,
   cairomm,
+  cctools,
   cppunit,
   curl,
   curlMinimal,
-  darwin,
   dbus,
   doxygen,
   ffmpeg,
@@ -105,27 +105,27 @@ let
   commonPatches = [
     ./as-flags.patch
     ./default-plugin-search-paths.patch
-  ] ++ lib.optional isDarwin ./arm64-fix.patch;
+  ]
+  ++ lib.optional isDarwin ./arm64-fix.patch;
 
-  commonPostPatch =
-    ''
-      printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
-    ''
-    + lib.optionalString (!isDarwin) ''
-      sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
-    ''
-    + ''
-      patchShebangs ./tools/
-      substituteInPlace libs/ardour/video_tools_paths.cc \
-        --replace-fail 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
-        --replace-fail 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
-    ''
-    + lib.optionalString isDarwin ''
-      substituteInPlace wscript \
-        --replace "rev, rev_date = fetch_tarball_revision_date()" "rev, rev_date = '${version}', 'unknown'" \
-        --replace "rev, rev_date = fetch_git_revision_date()" "rev, rev_date = '${version}', 'unknown'"
-      chmod +x waf
-    '';
+  commonPostPatch = ''
+    printf '#include "libs/ardour/ardour/revision.h"\nnamespace ARDOUR { const char* revision = "${version}"; const char* date = ""; }\n' > libs/ardour/revision.cc
+  ''
+  + lib.optionalString (!isDarwin) ''
+    sed 's|/usr/include/libintl.h|${glibc.dev}/include/libintl.h|' -i wscript
+  ''
+  + ''
+    patchShebangs ./tools/
+    substituteInPlace libs/ardour/video_tools_paths.cc \
+      --replace-fail 'ffmpeg_exe = X_("");' 'ffmpeg_exe = X_("${ffmpeg}/bin/ffmpeg");' \
+      --replace-fail 'ffprobe_exe = X_("");' 'ffprobe_exe = X_("${ffmpeg}/bin/ffprobe");'
+  ''
+  + lib.optionalString isDarwin ''
+    substituteInPlace wscript \
+      --replace "rev, rev_date = fetch_tarball_revision_date()" "rev, rev_date = '${version}', 'unknown'" \
+      --replace "rev, rev_date = fetch_git_revision_date()" "rev, rev_date = '${version}', 'unknown'"
+    chmod +x waf
+  '';
 
   commonMeta = {
     description = "Multi-track hard disk recording software";
@@ -252,30 +252,29 @@ let
       LINKFLAGS = "-lpthread";
     };
 
-    postInstall =
-      ''
-        install -vDm 644 "build/gtk2_ardour/ardour.xml" \
-          -t "$out/share/mime/packages"
-        install -vDm 644 "build/gtk2_ardour/ardour${majorVersion}.desktop" \
-          -t "$out/share/applications"
-        for size in 16 22 32 48 256 512; do
-          install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
-            "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${majorVersion}.png"
-        done
-        install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
+    postInstall = ''
+      install -vDm 644 "build/gtk2_ardour/ardour.xml" \
+        -t "$out/share/mime/packages"
+      install -vDm 644 "build/gtk2_ardour/ardour${majorVersion}.desktop" \
+        -t "$out/share/applications"
+      for size in 16 22 32 48 256 512; do
+        install -vDm 644 "gtk2_ardour/resources/Ardour-icon_''${size}px.png" \
+          "$out/share/icons/hicolor/''${size}x''${size}/apps/ardour${majorVersion}.png"
+      done
+      install -vDm 644 "ardour.1"* -t "$out/share/man/man1"
 
-        mkdir -p "$out/share/ardour${majorVersion}/media"
-        cp -rp ${bundledContent}/. "$out/share/ardour${majorVersion}/media"
-      ''
-      + lib.optionalString videoSupport ''
-        wrapProgram "$out/bin/ardour${majorVersion}" \
-          --prefix PATH : "${
-            lib.makeBinPath [
-              harvid
-              xjadeo
-            ]
-          }"
-      '';
+      mkdir -p "$out/share/ardour${majorVersion}/media"
+      cp -rp ${bundledContent}/. "$out/share/ardour${majorVersion}/media"
+    ''
+    + lib.optionalString videoSupport ''
+      wrapProgram "$out/bin/ardour${majorVersion}" \
+        --prefix PATH : "${
+          lib.makeBinPath [
+            harvid
+            xjadeo
+          ]
+        }"
+    '';
 
     meta = commonMeta;
   };
@@ -395,7 +394,7 @@ let
     dontPatchShebangs = true;
 
     nativeBuildInputs = [
-      darwin.cctools
+      cctools
       file
       makeWrapper
       python3

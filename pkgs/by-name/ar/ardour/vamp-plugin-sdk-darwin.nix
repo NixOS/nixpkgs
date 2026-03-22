@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     "PLUGIN_EXT=.dylib"
     "VAMP_HOSTSDK_DYNAMIC_EXTENSION=.dylib"
     "VAMP_SDK_DYNAMIC_EXTENSION=.dylib"
-  ] ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-o test";
+  ]
+  ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "-o test";
 
   postInstall = ''
     for dylib in "$out"/lib/*.so; do

@@ -19,7 +19,12 @@ let
       meta ? { },
     }:
     stdenv.mkDerivation {
-      inherit pname version buildInputs meta;
+      inherit
+        pname
+        version
+        buildInputs
+        meta
+        ;
 
       src = fetchurl {
         inherit url hash;
