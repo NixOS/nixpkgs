@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch,
 }:
 
@@ -10,9 +10,11 @@ buildPythonPackage rec {
   version = "0.10.2";
   format = "setuptools";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0h97i6h525hg401dvvaa5krxi184qpvldbdn0izmirvr9pvh4hkn";
+  src = fetchFromGitHub {
+    owner = "sashs";
+    repo = "filebytes";
+    tag = "v${version}";
+    hash = "sha256-8DGVCqWnEiqLCKWAYWrAjr50ZB6SMPMH+VqMqpALnVo=";
   };
 
   patches = [
