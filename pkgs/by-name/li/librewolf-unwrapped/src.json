@@ -1,8 +1,8 @@
 {
-  "packageVersion": "148.0.2-2",
+  "packageVersion": "148.0.2-3",
   "source": {
-    "rev": "148.0.2-2",
-    "hash": "sha256-vP2m9iewrQdPXIfTIl7d331AAJMo4Hz7BQCBJqI4FcQ="
+    "rev": "148.0.2-3",
+    "hash": "sha256-HPmzhmDvM3wccpKT9auKsV3w0tA9wQEs3sxFyBKCfqQ="
   },
   "firefox": {
     "version": "148.0.2",
