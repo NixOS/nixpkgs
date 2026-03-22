@@ -11393,6 +11393,11 @@
     githubId = 39416660;
     name = "Mladen Branković";
   };
+  imcvampire = {
+    github = "imcvampire";
+    githubId = 9426721;
+    name = "Quoc-Anh Nguyen";
+  };
   imgabe = {
     email = "gabrielpmonte@hotmail.com";
     github = "ImGabe";
