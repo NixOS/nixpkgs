@@ -420,10 +420,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0n4ymlgik3xcg94h52dzmh583ss40rl3sn0kni63v56sq8g6l62k";
+      sha256 = "04y4zgh4bbcb8wmkxwfqg4saky1d1f3xw8z6yk543q13h8ky8rz5";
       type = "gem";
     };
-    version = "2.5.1";
+    version = "2.4.15";
   };
   bootsnap = {
     dependencies = [ "msgpack" ];
@@ -743,6 +743,22 @@
     };
     version = "4.9.4";
   };
+  devise-two-factor = {
+    dependencies = [
+      "activesupport"
+      "devise"
+      "railties"
+      "rotp"
+    ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1d5day3h573faxsy24h9pbidjm04hs4ql8qxi1wdmrwsbcxs5qq9";
+      type = "gem";
+    };
+    version = "6.4.0";
+  };
   diff-lcs = {
     groups = [
       "default"
@@ -985,6 +1001,17 @@
       type = "gem";
     };
     version = "1.17.2";
+  };
+  fit4ruby = {
+    dependencies = [ "bindata" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "1j76m0npyjc228jlnsx1n3gpshxms0qqrm0dsafvsv2djh9cin7h";
+      type = "gem";
+    };
+    version = "3.13.0";
   };
   foreman = {
     dependencies = [ "thor" ];
@@ -2568,6 +2595,16 @@
       type = "gem";
     };
     version = "2.2.0";
+  };
+  rotp = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0m48hv6wpmmm6cjr6q92q78h1i610riml19k5h1dil2yws3h1m3m";
+      type = "gem";
+    };
+    version = "6.3.0";
   };
   rqrcode = {
     dependencies = [
