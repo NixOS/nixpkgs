@@ -358,7 +358,6 @@ mapAliases {
   postgrest-py = postgrest; # added 2025-08-29
   powerlineMemSegment = throw "'powerlineMemSegment' has been renamed to/replaced by 'powerline-mem-segment'"; # Converted to throw 2025-10-29
   prayer-times-calculator = throw "'prayer-times-calculator' has been renamed to/replaced by 'prayer-times-calculator-offline'"; # Converted to throw 2025-10-29
-  primp = throw "primp was removed as it required a very outdated version of boringssl"; # added 2025-10-20
   prometheus_client = throw "'prometheus_client' has been renamed to/replaced by 'prometheus-client'"; # Converted to throw 2025-10-29
   prompt_toolkit = throw "'prompt_toolkit' has been renamed to/replaced by 'prompt-toolkit'"; # Converted to throw 2025-10-29
   protonup = throw "'protonup' has been renamed to/replaced by 'protonup-ng'"; # Converted to throw 2025-10-29
