@@ -42,6 +42,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.ui.com";
     description = "Controller for Ubiquiti UniFi access points";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    knownVulnerabilities = [
+      "The following vulnerabilities are fixed in version 9.0.118 and 10.1.89:"
+      "CVE-2026-22557 (CVSSv3.1 10.0/Critical)"
+      "CVE-2026-22558 (CVSSv3.1 7.7/High)"
+      "Version 10.1.89 is packaged in Nixpkgs' unstable branch, and contains some breaking changes compared to this version."
+      "Please see https://community.ui.com/releases/Security-Advisory-Bulletin-062-062/c29719c0-405e-4d4a-8f26-e343e99f931b for more information."
+    ];
     license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
