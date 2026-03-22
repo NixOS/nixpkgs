@@ -23,6 +23,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = true;
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   patches = [
     # fix unknown type name '__vector128' on powerpc64*
     # https://www.spinics.net/lists/bpf/msg28613.html

@@ -69,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     #     void foo();
     #
     # declaration.
-    NIX_CFLAGS_COMPILE = "-std=gnu17" + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
+    NIX_CFLAGS_COMPILE =
+      "-std=gnu17 -Wno-error=discarded-qualifiers"
+      + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
   };
 
   configureFlags = [

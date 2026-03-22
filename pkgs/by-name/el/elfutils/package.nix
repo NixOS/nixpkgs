@@ -115,6 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
+
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [

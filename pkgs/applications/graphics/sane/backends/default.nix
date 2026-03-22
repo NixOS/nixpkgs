@@ -66,6 +66,15 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-9KKTr7p1vCgvGr6hFY83K5gbL7Ilm4Uzc86JIxv+ahI=";
       revert = true;
     })
+    # Fix gphoto2 backend build with glibc 2.43 C23 const-preserving strchr
+    (fetchpatch {
+      url = "https://gitlab.com/sane-project/backends/-/commit/d04d17b456d9847021b6df6eb08a3419a75172cf.patch";
+      hash = "sha256-4iAzwA+uh8W+xSpUkZgvShQ71kq/OVJ26pKsD1NwiXs=";
+    })
+    (fetchpatch {
+      url = "https://gitlab.com/sane-project/backends/-/commit/ebd4d82bd7a6b8c57870dbfb492e4c186cf584d8.patch";
+      hash = "sha256-vHtv+OMA0f9JR1ReshTg8IOgcZf7cnV7chitRBBCAg4=";
+    })
   ];
 
   postPatch = ''

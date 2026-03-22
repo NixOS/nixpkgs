@@ -76,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Required for installation of Python library and is innocuous otherwise.
   env.DESTDIR = "/";
+  # glibc 2.43 C23 const-preserving strchr/strstr macros
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=discarded-qualifiers";
 
   mesonAutoFeatures = "auto";
   mesonFlags = [
