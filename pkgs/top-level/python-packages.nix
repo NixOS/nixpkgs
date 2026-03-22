@@ -7473,6 +7473,8 @@ self: super: with self; {
 
   incremental = callPackage ../development/python-modules/incremental { };
 
+  indevolt-api = callPackage ../development/python-modules/indevolt-api { };
+
   indexed-bzip2 = callPackage ../development/python-modules/indexed-bzip2 { };
 
   indexed-gzip = callPackage ../development/python-modules/indexed-gzip { inherit (pkgs) zlib; };
