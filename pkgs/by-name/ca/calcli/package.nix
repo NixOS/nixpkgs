@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     mainProgram = "calcli";
     platforms = platforms.all;
-    maintainers = with lib.maintainers; [
-      Siphcy
-    ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
