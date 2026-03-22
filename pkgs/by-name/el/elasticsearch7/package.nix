@@ -24,12 +24,12 @@ let
   };
   util-linux = util-linuxMinimal;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "elasticsearch";
   version = elk7Version;
 
   src = fetchurl {
-    url = "https://artifacts.elastic.co/downloads/elasticsearch/${pname}-${version}-${plat}-${arch}.tar.gz";
+    url = "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-${finalAttrs.version}-${plat}-${arch}.tar.gz";
     hash = hashes.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
       basvandijk
     ];
   };
-}
+})
