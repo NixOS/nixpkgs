@@ -2826,7 +2826,8 @@
       ];
     "indevolt" =
       ps: with ps; [
-      ]; # missing inputs: indevolt-api
+        indevolt-api
+      ];
     "indianamichiganpower" =
       ps: with ps; [
       ];
@@ -7642,6 +7643,7 @@
     "immich"
     "improv_ble"
     "incomfort"
+    "indevolt"
     "inels"
     "influxdb"
     "inkbird"
