@@ -1,11 +1,11 @@
 {
-  config,
   lib,
   pkgs,
   ...
 }:
 let
   domain = "example.test";
+  ip = "192.168.1.2";
 in
 {
   name = "http01-builtin";
@@ -34,6 +34,7 @@ in
         environment.systemPackages = [ pkgs.openssl ];
 
         security.acme.certs."${config.networking.fqdn}" = {
+          extraDomainNames = [ ip ];
           listenHTTP = ":80";
         };
 
@@ -124,6 +125,7 @@ in
 
                 [ alt_names ]
                 DNS.1 = ${config.networking.fqdn}
+                IP.1 = ${ip}
               '';
               csrData =
                 pkgs.runCommand "csr-and-key"
@@ -142,6 +144,7 @@ in
               security.acme.certs."${config.networking.fqdn}" = {
                 csr = "${csrData}/request.csr";
                 csrKey = "${csrData}/key.pem";
+                extraDomainNames = lib.mkForce [ ];
               };
             };
         };
@@ -158,6 +161,7 @@ in
       ${(import ./utils.nix).pythonUtils}
 
       domain = "${domain}"
+      ip = "${ip}"
       cert = "${certName}"
       cert2 = "builtin-2." + domain
       cert3 = "builtin-3." + domain
@@ -173,6 +177,7 @@ in
 
           check_issuer(builtin, cert, "pebble")
           check_domain(builtin, cert, cert)
+          check_ip(builtin, cert, ip)
 
       with subtest("Validate permissions"):
           check_permissions(builtin, cert, "acme")
@@ -300,6 +305,7 @@ in
           builtin.wait_for_unit("renew-triggered.target")
 
           check_issuer(builtin, cert, "pebble")
+          check_ip(builtin, cert, ip)
 
       with subtest("Generate self-signed certs"):
           acme.shutdown()
