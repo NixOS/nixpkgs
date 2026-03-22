@@ -2665,7 +2665,8 @@
       ];
     "hypontech" =
       ps: with ps; [
-      ]; # missing inputs: hyponcloud
+        hyponcloud
+      ];
     "ialarm" =
       ps: with ps; [
         pyialarm
@@ -7635,6 +7636,7 @@
     "hvv_departures"
     "hydrawise"
     "hyperion"
+    "hypontech"
     "ialarm"
     "iaqualink"
     "ibeacon"

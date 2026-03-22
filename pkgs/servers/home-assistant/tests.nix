@@ -167,6 +167,10 @@ let
   };
 
   extraDisabledTestPaths = {
+    hypontech = [
+      # outdated snapshot
+      "tests/components/hypontech/test_sensor.py::test_sensors"
+    ];
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "tests/components/jellyfin/test_media_source.py::test_resolve"
