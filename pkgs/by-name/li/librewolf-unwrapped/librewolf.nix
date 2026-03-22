@@ -40,6 +40,11 @@ rec {
     echo "patching appstrings.properties"
     find . -path '*/appstrings.properties' -exec sed -i s/Firefox/LibreWolf/ {} \;
 
+    for fn in $(find "${source}/l10n/en-US/browser/chrome/browser" -type f -name '*.inc.properties'); do
+      target_fn=$(echo "$fn" | sed "s,${source}/l10n/en-US/browser,browser/locales/en-US," | sed "s,\.inc\.properties$,.properties,")
+      cat "$fn" >> "$target_fn"
+    done
+
     for fn in $(find "${source}/l10n/en-US/browser" -type f -name '*.inc.ftl'); do
       target_fn=$(echo "$fn" | sed "s,${source}/l10n,browser/locales," | sed "s,\.inc\.ftl$,.ftl,")
       cat "$fn" >> "$target_fn"
