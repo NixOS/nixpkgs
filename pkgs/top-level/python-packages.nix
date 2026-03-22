@@ -3654,8 +3654,6 @@ self: super: with self; {
 
   datashader = callPackage ../development/python-modules/datashader { };
 
-  datashape = callPackage ../development/python-modules/datashape { };
-
   datashaper = callPackage ../development/python-modules/datashaper { };
 
   datasketch = callPackage ../development/python-modules/datasketch { };
