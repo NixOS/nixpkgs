@@ -22,7 +22,6 @@ let
     };
 
   exampleConfig = {
-    _file = "${__curPos.file}:${toString __curPos.line}";
     services = {
       service1 = {
         process = {
