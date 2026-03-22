@@ -8,17 +8,17 @@
 
 buildGoModule rec {
   pname = "trickster";
-  version = "1.1.5";
+  version = "2.0.1";
   rev = "4595bd6a1ae1165ef497251ad85c646dadc8a925";
 
   src = fetchFromGitHub {
     owner = "trickstercache";
     repo = "trickster";
     rev = "v${version}";
-    sha256 = "sha256-BRD8IF3s9RaDorVtXRvbKLVVVXWiEQTQyKBR9jFo1eM=";
+    sha256 = "sha256-weE73/yOOSghkXCp5hQ0RM+yPOQVk4bBbynz5ZJpryU=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-PiKslgnXQUaw+kWnF5B8GQMedr8t1d5zQZAie7d8LhI=";
 
   subPackages = [ "cmd/trickster" ];
 
