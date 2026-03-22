@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitea,
-  fetchFromGitHub,
   clojure,
   graalvmPackages,
   git,
   cmake,
+  ninja,
   zlib,
   cacert,
 }:
@@ -19,15 +19,8 @@ let
     domain = "codeberg.org";
     owner = "jyn514";
     repo = "flower";
-    rev = "fc051518d4";
+    rev = "fc051518d4ff298344f869b184574ae6a4a2df79";
     hash = "sha256-etVQnrdGzOfrohZ4rWAk3Pk1PylUFIho30JLwwfOMHo=";
-  };
-
-  ninjaSrc = fetchFromGitHub {
-    owner = "ninja-build";
-    repo = "ninja";
-    rev = "bee2e3943ca5d853a6ea7a2091e88b5149ced9cf";
-    hash = "sha256-meb5gtUWt8LI+gqxVN3+nxlDsbQJXevsPcUWlYrzhf8=";
   };
 
   # Pre-download Clojure dependencies into a Fixed-Output Derivation.
@@ -92,10 +85,6 @@ stdenv.mkDerivation {
     [ -d ${deps}/.gitlibs ] && cp -R ${deps}/.gitlibs $HOME/
     chmod -R u+w $HOME/.m2 $HOME/.gitlibs || true
 
-    mkdir -p target/ninja
-    cp -R ${ninjaSrc}/* target/ninja/
-    chmod -R u+w target/ninja
-
     # Provide a dummy git repository. `native.clj` uses `git describe --always`
     # and expects a tracked `defaults` folder to generate `MANIFEST.txt`.
     git init -b main || git init
@@ -129,18 +118,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Static site generator that grows with you";
     homepage = "https://flower.jyn.dev";
     changelog = "https://codeberg.org/jyn514/flower/src/branch/main/CHANGELOG.md";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "flower";
-    maintainers = with maintainers; [ philocalyst ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
+    maintainers = with lib.maintainers; [ philocalyst ];
+    platforms = lib.platforms.unix;
   };
 }
