@@ -56,7 +56,7 @@ makeScope newScope (
   in
   {
 
-    inherit callPackage buildOctavePackage computeRequiredOctavePackages;
+    inherit buildOctavePackage computeRequiredOctavePackages;
 
     inherit (callPackage ../development/interpreters/octave/hooks { })
       writeRequiredOctavePackagesHook
