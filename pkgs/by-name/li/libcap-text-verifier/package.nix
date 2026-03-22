@@ -1,6 +1,7 @@
 {
   lib,
   libcap,
+  nixosTests,
   stdenv,
 }:
 
@@ -16,6 +17,12 @@ stdenv.mkDerivation {
   buildInputs = [ libcap ];
 
   doCheck = true;
+
+  passthru = {
+    tests = {
+      vm = nixosTests.wrappers;
+    };
+  };
 
   meta = {
     description = "Verify textual POSIX capability sets";

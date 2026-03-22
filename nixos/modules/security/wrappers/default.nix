@@ -363,6 +363,7 @@ in
     system.checks = lib.singleton (
       pkgs.runCommandLocal "ensure-all-wrappers-paths-exist"
         {
+          nativeBuildInputs = [ pkgs.libcap-text-verifier ];
           preferLocalBuild = true;
         }
         ''
@@ -370,9 +371,7 @@ in
           mkdir -p $out
 
           echo -n "Checking that Nix store paths of all wrapped programs exist... "
-
           ${lib.toShellVar "wrappers" (lib.mapAttrs (n: v: v.source) wrappers)}
-
           for name in "''${!wrappers[@]}"; do
             path="''${wrappers[$name]}"
             if [[ "$path" =~ /nix/store ]] && [ ! -e "$path" ]; then
@@ -384,7 +383,21 @@ in
               exit 1
             fi
           done
+          echo "OK"
 
+          echo -n "Checking that all capabilities of all wrapped programs are valid... "
+          ${lib.toShellVar "capabilities" (lib.mapAttrs (n: v: v.capabilities) wrappers)}
+          for name in "''${!capabilities[@]}"; do
+            capability="''${capabilities[$name]}"
+            if ! libcap-text-verifier "$capability" > /dev/null; then
+              test -t 1 && echo -ne '\033[1;31m'
+              echo "FAIL"
+              echo "The capability $capability is invalid!"
+              echo 'Please, check the value of `security.wrappers."'$name'".capabilities`.'
+              test -t 1 && echo -ne '\033[0m'
+              exit 1
+            fi
+          done
           echo "OK"
         ''
     );
