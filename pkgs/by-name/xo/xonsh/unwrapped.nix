@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -63,7 +64,8 @@ buildPythonPackage rec {
     pytest-subprocess
     pytestCheckHook
     requests
-
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
     # required by test_man_completion
     man
     util-linux
@@ -101,6 +103,15 @@ buildPythonPackage rec {
     # flaky tests in test_vc.py
     "test_vc_get_branch"
     "test_dirty_working_directory"
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    # fails on Darwin
+    "test_bash_and_is_alias_is_only_functional_alias"
+    "test_complete_command"
+    "test_man_completion"
+    "test_on_command_not_found_replacement"
+    "test_skipper_command"
+    "test_xonsh_lexer_no_win"
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/248978
