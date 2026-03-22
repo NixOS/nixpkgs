@@ -26760,6 +26760,12 @@
     githubId = 156964;
     name = "Thomas Boerger";
   };
+  tbutter = {
+    email = "tbutter@gmail.com";
+    github = "tbutter";
+    githubId = 1336537;
+    name = "Thomas Butter";
+  };
   tc-kaluza = {
     github = "tc-kaluza";
     githubId = 101565936;
