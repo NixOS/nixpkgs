@@ -47,10 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for audio labelling";
     homepage = "https://aubio.org/";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [
-      marcweber
-      fpletz
-    ];
     platforms = [ "aarch64-darwin" ];
   };
 })

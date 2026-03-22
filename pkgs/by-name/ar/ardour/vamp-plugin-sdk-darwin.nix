@@ -50,7 +50,6 @@ stdenv.mkDerivation rec {
     description = "Audio processing plugin system for descriptive audio analysis plugins";
     homepage = "https://vamp-plugins.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ lib.maintainers.marcweber ];
     platforms = [ "aarch64-darwin" ];
   };
 }
