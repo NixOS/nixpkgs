@@ -3262,6 +3262,8 @@ self: super: with self; {
 
   cppy = callPackage ../development/python-modules/cppy { };
 
+  cprint = callPackage ../development/python-modules/cprint { };
+
   cpufeature = callPackage ../development/python-modules/cpufeature { };
 
   cpyparsing = callPackage ../development/python-modules/cpyparsing { };
