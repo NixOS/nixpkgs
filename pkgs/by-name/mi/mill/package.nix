@@ -26,16 +26,16 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "mill";
-  version = "1.1.2";
+  version = "1.1.3-8-524103";
 
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/com/lihaoyi/mill-dist-${suffix}/${version}/mill-dist-${suffix}-${version}.exe";
     sha256 =
       {
-        aarch64-darwin = "sha256-UiooqMbxceUepk4uJV8ZSL1o4VLeTZgWs3URQFXFmQs=";
-        x86_64-darwin = "sha256-EvIH0GHrdFtE5m6WqHAu7XDJn/8rElpmSxLrdCx5CKY=";
-        aarch64-linux = "sha256-Az/NCaFVrKANJvgIHx9QlW/fPyFVc4XiJ6BZr4ahfxk=";
-        x86_64-linux = "sha256-YhygFs8+ffOgoOSpggrYQ+xS19q8koYbN9UnozlLTPY=";
+        aarch64-darwin = "sha256-fs7f/zO9S2owFQQgRyFLqjdklyLCoRHUHOQhm1Zw4v8=";
+        x86_64-darwin = "sha256-pLXGd3BMN0lan+TRq7UCQHvGXJklbiCGTgJzPbwU6wU=";
+        aarch64-linux = "sha256-40HRk4d3soDGZv+y/d9I3EmaZ8lsQ7Lj1oLFtJAhoKw=";
+        x86_64-linux = "sha256-B6My+zPO5vr9MvHp1UFE/gJm/YsYThHMoZFJwzMctAo=";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
