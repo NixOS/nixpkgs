@@ -52,7 +52,9 @@ let
       ]
       ++ args.nativeBuildInputs or [ ];
 
-      env.JAVA_HOME = mvnJdk;
+      env = mvnFetchExtraArgs.env or { } // {
+        JAVA_HOME = mvnJdk;
+      };
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -119,7 +121,7 @@ let
       outputHashMode = "recursive";
       outputHash = mvnHash;
     }
-    // mvnFetchExtraArgs
+    // (removeAttrs mvnFetchExtraArgs [ "env" ])
   );
 in
 stdenv.mkDerivation (
@@ -131,7 +133,9 @@ stdenv.mkDerivation (
       maven
     ];
 
-    env.JAVA_HOME = mvnJdk;
+    env = args.env or { } // {
+      JAVA_HOME = mvnJdk;
+    };
 
     buildPhase = ''
       runHook preBuild
