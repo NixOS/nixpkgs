@@ -1,10 +1,4 @@
-{
-  lib,
-  stdenv,
-  callPackage,
-  fetchurl,
-  ...
-}@args:
+{ callPackage, fetchurl, ... }@args:
 
 callPackage ./generic.nix (
   args
@@ -21,7 +15,5 @@ callPackage ./generic.nix (
       # SHA256 from http://www.boost.org/users/history/version_1_89_0.html
       sha256 = "85a33fa22621b4f314f8e85e1a5e2a9363d22e4f4992925d4bb3bc631b5a0c7a";
     };
-
-    patches = lib.optional stdenv.hostPlatform.isCygwin ./Fix-cygwin-build-189.patch;
   }
 )

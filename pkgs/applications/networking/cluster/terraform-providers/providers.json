@@ -101,11 +101,11 @@
     "vendorHash": "sha256-quoFrJbB1vjz+MdV+jnr7FPACHuUe5Gx9POLubD2IaM="
   },
   "baidubce_baiducloud": {
-    "hash": "sha256-zCv7K1+lGPVhroEySEV9gKSHTIqIsYHtfYlrv6LBH3c=",
+    "hash": "sha256-LEGtcyDWGcTj9A1NKH80E4BkCoze2ktUqVr1GIIoNHc=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
     "owner": "baidubce",
     "repo": "terraform-provider-baiducloud",
-    "rev": "v1.22.20",
+    "rev": "v1.22.21",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -571,11 +571,11 @@
     "vendorHash": "sha256-xIagZvWtlNpz5SQfxbA7r9ojAeS3CW2pwV337ObKOwU="
   },
   "hashicorp_google": {
-    "hash": "sha256-ulwx4+m/7mTTr0+1kSO1g4qkKhd/Yx5of4K7moDik88=",
+    "hash": "sha256-OF5Sa7ccS5z5d1hBKm43xmUQ8EibNMpOoBLa65EtTJg=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "repo": "terraform-provider-google",
-    "rev": "v7.23.0",
+    "rev": "v7.24.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-v/XHGUEpAIpGHErv7GPqfosVLL3xaqBwZHbJKS8fkn4="
   },

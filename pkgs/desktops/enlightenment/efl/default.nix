@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   version = "1.28.1";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
+    url = "https://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-hM9hRfnMgr//aQAFviQ5LI88UvjgD/BNjuo3FCnAlCQ=";
   };
 

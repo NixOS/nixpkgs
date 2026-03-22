@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.8";
 
   src = fetchurl {
-    url = "http://download.rsyslog.com/liblogging/liblogging-${finalAttrs.version}.tar.gz";
+    url = "https://download.rsyslog.com/liblogging/liblogging-${finalAttrs.version}.tar.gz";
     hash = "sha256-ZEm3u3XcKC7GvxuYp1PJUHRupbGQ7JruCXiB5NxcS/E=";
   };
 

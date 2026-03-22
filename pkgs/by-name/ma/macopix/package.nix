@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   # GitHub does not contain tags
   # https://github.com/chimari/MaCoPiX/issues/6
   src = fetchurl {
-    url = "http://rosegray.sakura.ne.jp/macopix/macopix-${finalAttrs.version}.tar.gz";
+    url = "https://rosegray.sakura.ne.jp/macopix/macopix-${finalAttrs.version}.tar.gz";
     hash = "sha256-1AjqdPPCc9UQWqLdWlA+Va+MmvKL8dAIfJURPifN7RI=";
   };
 
