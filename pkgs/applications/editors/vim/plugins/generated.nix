@@ -21783,6 +21783,18 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-syntax-shakespeare = buildVimPlugin {
+    pname = "vim-syntax-shakespeare";
+    version = "0-unstable-2018-06-25";
+    src = fetchgit {
+      url = "https://codeberg.org/pbrisbin/vim-syntax-shakespeare";
+      rev = "2f4f61eae55b8f1319ce3a086baf9b5ab57743f3";
+      hash = "sha256-sdCXJOvB+vJE0ir+qsT/u1cHNxrksMnqeQi4D/Vg6UA=";
+    };
+    meta.homepage = "https://codeberg.org/pbrisbin/vim-syntax-shakespeare";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-tabby = buildVimPlugin {
     pname = "vim-tabby";
     version = "2.0.2-unstable-2025-01-13";
