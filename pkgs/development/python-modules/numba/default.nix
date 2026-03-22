@@ -6,6 +6,7 @@
   replaceVars,
   fetchpatch,
   symlinkJoin,
+  runCommand,
 
   # nativeBuildInputs
   setuptools,
@@ -194,6 +195,47 @@ buildPythonPackage (finalAttrs: {
     numpy_1 = numba.override {
       numpy = numpy_1;
     };
+    # Tests whether the various numba threading backends work.
+    threadingLayers =
+      let
+        numbaTestScript = writers.writePython3 "numba-test" { } ''
+          import numba
+          import numpy as np
+          from numba import njit
+
+
+          print("numba from:", numba.__file__)
+
+
+          @njit(parallel=True)
+          def test():
+              return np.sum(np.arange(100))
+
+
+          print("Result:", test())
+          print("Threading layer:", numba.threading_layer())
+          print("Success")
+        '';
+        makeThreadingLayerTest =
+          threadingLayerName:
+          runCommand "${finalAttrs.pname}-test-${threadingLayerName}"
+            {
+              nativeBuildInputs = [
+                (python.withPackages (ps: [
+                  finalAttrs.finalPackage
+                ]))
+              ];
+            }
+            ''
+              NUMBA_THREADING_LAYER=${threadingLayerName} python ${numbaTestScript} > $out
+            '';
+      in
+
+      {
+        workqueue = makeThreadingLayerTest "workqueue";
+        omp = makeThreadingLayerTest "omp";
+        tbb = makeThreadingLayerTest "tbb";
+      };
   };
 
   meta = {
