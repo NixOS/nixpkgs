@@ -50,9 +50,9 @@
 }@args:
 
 let
-  version = "2.42";
-  patchSuffix = "-61";
-  sha256 = "sha256-0XdeMuRijmTvkw9DW2e7Y691may2viszW58Z8WUJ8X8=";
+  version = "2.43";
+  patchSuffix = "-21";
+  sha256 = "sha256-2chsa12920Oj4IJwxYRPxRd9GUQs9bjfS+fAfNX6ODE=";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -68,18 +68,18 @@ stdenv.mkDerivation (
     patches = [
       /*
         No tarballs for stable upstream branch, only https://sourceware.org/git/glibc.git and using git would complicate bootstrapping.
-         $ git fetch --all -p && git checkout origin/release/2.40/master && git describe
-         glibc-2.42-61-ga56a2943d2
-         $ git show --minimal --reverse glibc-2.42.. ':!ADVISORIES' > 2.42-master.patch
+         $ git fetch --all -p && git checkout origin/release/2.43/master && git describe
+         glibc-2.43-21-gce1013a197eb
+         $ git log --reverse --format="%H" glibc-2.43..release/2.43/master | while read hash; do git show --minimal "$hash" -- . ':(exclude)ADVISORIES'; done > 2.43-master.patch
 
         To compare the archive contents zdiff can be used.
-         $ diff -u 2.42-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.42-master.patch
+         $ diff -u 2.43-master.patch ../nixpkgs/pkgs/development/libraries/glibc/2.43-master.patch
 
         Please note that each commit has changes to the file ADVISORIES excluded since
         that conflicts with the directory advisories/ making cross-builds from
         hosts with case-insensitive file-systems impossible.
       */
-      ./2.42-master.patch
+      ./2.43-master.patch
 
       # Allow NixOS and Nix to handle the locale-archive.
       ./nix-locale-archive.patch
@@ -96,8 +96,6 @@ stdenv.mkDerivation (
         patch extends the search path by "/run/current-system/sw/bin".
       */
       ./fix_path_attribute_in_getconf.patch
-
-      ./fix-x64-abi.patch
 
       # https://github.com/NixOS/nixpkgs/pull/137601
       ./nix-nss-open-files.patch

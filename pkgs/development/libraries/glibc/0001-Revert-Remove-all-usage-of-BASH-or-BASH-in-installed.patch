@@ -21,11 +21,11 @@ Co-authored-by: Maximilian Bosch <maximilian@mbosch.me>
  timezone/Makefile  | 3 ++-
  8 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/debug/Makefile b/debug/Makefile
-index 6a05205ce6..dd63b16ae8 100644
---- a/debug/Makefile
-+++ b/debug/Makefile
-@@ -345,8 +345,9 @@ $(objpfx)pcprofiledump: $(objpfx)pcprofiledump.o
+diff --git i/debug/Makefile w/debug/Makefile
+index c6c1069b..ccecf6b7 100644
+--- i/debug/Makefile
++++ w/debug/Makefile
+@@ -407,8 +407,9 @@ $(objpfx)pcprofiledump: $(objpfx)pcprofiledump.o
  
  $(objpfx)xtrace: xtrace.sh
  	rm -f $@.new
@@ -37,21 +37,21 @@ index 6a05205ce6..dd63b16ae8 100644
  	    -e 's|@REPORT_BUGS_TO@|$(REPORT_BUGS_TO)|' $^ > $@.new \
  	&& rm -f $@ && mv $@.new $@ && chmod +x $@
  
-diff --git a/debug/xtrace.sh b/debug/xtrace.sh
-index 00bafd33db..d0f9fca9a9 100755
---- a/debug/xtrace.sh
-+++ b/debug/xtrace.sh
+diff --git i/debug/xtrace.sh w/debug/xtrace.sh
+index a1bb50ee..01383c7c 100755
+--- i/debug/xtrace.sh
++++ w/debug/xtrace.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2025 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
-diff --git a/elf/Makefile b/elf/Makefile
-index 4b1d0d8741..bbcf688c99 100644
---- a/elf/Makefile
-+++ b/elf/Makefile
-@@ -250,7 +250,8 @@ $(objpfx)sotruss-lib.so: $(common-objpfx)libc.so $(objpfx)ld.so \
+diff --git i/elf/Makefile w/elf/Makefile
+index 01cc5163..0bb7edd4 100644
+--- i/elf/Makefile
++++ w/elf/Makefile
+@@ -253,7 +253,8 @@ $(objpfx)sotruss-lib.so: $(common-objpfx)libc.so $(objpfx)ld.so \
  	$(common-objpfx)libc_nonshared.a
  
  $(objpfx)sotruss: sotruss.sh $(common-objpfx)config.make
@@ -61,7 +61,7 @@ index 4b1d0d8741..bbcf688c99 100644
  	    -e 's%@TEXTDOMAINDIR@%$(localedir)%g' \
  	    -e 's%@PREFIX@%$(prefix)%g' \
  	    -e 's|@PKGVERSION@|$(PKGVERSION)|g' \
-@@ -1556,6 +1557,7 @@ ldd-rewrite = -e 's%@RTLD@%$(rtlddir)/$(rtld-installed-name)%g' \
+@@ -1617,6 +1618,7 @@ ldd-rewrite = -e 's%@RTLD@%$(rtlddir)/$(rtld-installed-name)%g' \
  	      -e 's%@VERSION@%$(version)%g' \
  	      -e 's|@PKGVERSION@|$(PKGVERSION)|g' \
  	      -e 's|@REPORT_BUGS_TO@|$(REPORT_BUGS_TO)|g' \
@@ -69,31 +69,31 @@ index 4b1d0d8741..bbcf688c99 100644
  	      -e 's%@TEXTDOMAINDIR@%$(localedir)%g'
  
  ifeq ($(ldd-rewrite-script),no)
-diff --git a/elf/ldd.bash.in b/elf/ldd.bash.in
-index 2d3df6e57e..0faf83dc86 100644
---- a/elf/ldd.bash.in
-+++ b/elf/ldd.bash.in
+diff --git i/elf/ldd.bash.in w/elf/ldd.bash.in
+index bfc40f65..59ca54e2 100644
+--- i/elf/ldd.bash.in
++++ w/elf/ldd.bash.in
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1996-2025 Free Software Foundation, Inc.
+ # Copyright (C) 1996-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
-diff --git a/elf/sotruss.sh b/elf/sotruss.sh
-index 8944645df9..1c36981b22 100755
---- a/elf/sotruss.sh
-+++ b/elf/sotruss.sh
+diff --git i/elf/sotruss.sh w/elf/sotruss.sh
+index 06216e61..6038a6e9 100755
+--- i/elf/sotruss.sh
++++ w/elf/sotruss.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 2011-2025 Free Software Foundation, Inc.
+ # Copyright (C) 2011-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
-diff --git a/malloc/Makefile b/malloc/Makefile
-index e2b2c1ae1b..67a399f1dd 100644
---- a/malloc/Makefile
-+++ b/malloc/Makefile
-@@ -359,8 +359,9 @@ $(objpfx)mtrace: mtrace.pl
+diff --git i/malloc/Makefile w/malloc/Makefile
+index bd7383dc..0f42cc3a 100644
+--- i/malloc/Makefile
++++ w/malloc/Makefile
+@@ -465,8 +465,9 @@ $(objpfx)mtrace: mtrace.pl
  
  $(objpfx)memusage: memusage.sh
  	rm -f $@.new
@@ -105,21 +105,21 @@ index e2b2c1ae1b..67a399f1dd 100644
  	    -e 's|@REPORT_BUGS_TO@|$(REPORT_BUGS_TO)|' $^ > $@.new \
  	&& rm -f $@ && mv $@.new $@ && chmod +x $@
  
-diff --git a/malloc/memusage.sh b/malloc/memusage.sh
-index 8ae435d2f8..c929d16af7 100755
---- a/malloc/memusage.sh
-+++ b/malloc/memusage.sh
+diff --git i/malloc/memusage.sh w/malloc/memusage.sh
+index 309991a7..28117c45 100755
+--- i/malloc/memusage.sh
++++ w/malloc/memusage.sh
 @@ -1,4 +1,4 @@
 -#!/bin/bash
 +#! @BASH@
- # Copyright (C) 1999-2025 Free Software Foundation, Inc.
+ # Copyright (C) 1999-2026 Free Software Foundation, Inc.
  # This file is part of the GNU C Library.
  
-diff --git a/timezone/Makefile b/timezone/Makefile
-index ebe5cf73a1..e9cf92861c 100644
---- a/timezone/Makefile
-+++ b/timezone/Makefile
-@@ -139,7 +139,8 @@ $(testdata)/XT5: testdata/gen-XT5.sh
+diff --git i/timezone/Makefile w/timezone/Makefile
+index 386731ab..4f910bb1 100644
+--- i/timezone/Makefile
++++ w/timezone/Makefile
+@@ -141,7 +141,8 @@ $(testdata)/XT5: testdata/gen-XT5.sh
  	mv $@.tmp $@
  
  $(objpfx)tzselect: tzselect.ksh $(common-objpfx)config.make
@@ -131,4 +131,3 @@ index ebe5cf73a1..e9cf92861c 100644
  	    -e '/REPORT_BUGS_TO=/s|=.*|="$(REPORT_BUGS_TO)"|' \
 -- 
 2.47.2
-

@@ -56,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     PREFIX = placeholder "out";
     LIBDIRNAME = "/lib";
     NIX_CFLAGS_COMPILE = toString (
-      lib.optionals stdenv.cc.isClang [
+      [
+        # glibc 2.43 C23 const-preserving strchr/strstr macros
+        "-Wno-error=discarded-qualifiers"
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
         "-Wno-error=cast-function-type"
         "-Wno-error=format-truncation"
       ]

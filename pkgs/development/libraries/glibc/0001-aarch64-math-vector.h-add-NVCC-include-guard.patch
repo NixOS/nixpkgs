@@ -7,13 +7,13 @@ Subject: [PATCH] aarch64/math-vector.h: add NVCC include guard
  sysdeps/aarch64/fpu/bits/math-vector.h | 6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/sysdeps/aarch64/fpu/bits/math-vector.h b/sysdeps/aarch64/fpu/bits/math-vector.h
-index 7c200599c1..583a426494 100644
---- a/sysdeps/aarch64/fpu/bits/math-vector.h
-+++ b/sysdeps/aarch64/fpu/bits/math-vector.h
-@@ -25,17 +25,17 @@
- /* Get default empty definitions for simd declarations.  */
- #include <bits/libm-simd-decl-stubs.h>
+diff --git i/sysdeps/aarch64/fpu/bits/math-vector.h w/sysdeps/aarch64/fpu/bits/math-vector.h
+index 442cd2a0..3b9481e6 100644
+--- i/sysdeps/aarch64/fpu/bits/math-vector.h
++++ w/sysdeps/aarch64/fpu/bits/math-vector.h
+@@ -187,17 +187,17 @@
+ # define __DECL_SIMD_tanpif __DECL_SIMD_aarch64
+ #endif
  
 -#if __GNUC_PREREQ(9, 0)
 +#if __GNUC_PREREQ(9, 0) && !defined(__CUDACC__)
@@ -34,4 +34,3 @@ index 7c200599c1..583a426494 100644
  typedef __SVFloat64_t __sv_f64_t;
 -- 
 2.42.0
-
