@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "nutils";
-  version = "9.1";
+  version = "9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "evalf";
     repo = "nutils";
     tag = "v${version}";
-    hash = "sha256-NmWoRDYOfSweqUhw0KTdXubWgXmVr+odrs1dMLXdHEI=";
+    hash = "sha256-Q55nSs7SmB76vG8xJNaSu11vtSuWCXrNn0PRCkTWji4=";
   };
 
   build-system = [ flit-core ];
