@@ -5,7 +5,7 @@
   fetchurl,
   makeWrapper,
   jre_headless,
-  util-linux,
+  util-linuxMinimal,
   gnugrep,
   coreutils,
   autoPatchelfHook,
@@ -22,6 +22,7 @@ let
     aarch64-linux = "sha512-MPrDfBMcwNCgWW8dpOeAtlz9Odfk/0z8i+Rn08hTp35kU849KdPQLTmexlvnf/jVwqfwzN2xWJtNF0sQO26pUA==";
     aarch64-darwin = "sha512-uq5VVwvbOX4Rv32iLFw+RalFPBxQqA+1hBjFw3svzOaD1caOOrGHD4lJVHFxsFw0xl//AZuSG7S3r7Eh9AmWvQ==";
   };
+  util-linux = util-linuxMinimal;
 in
 stdenv.mkDerivation rec {
   pname = "elasticsearch";

@@ -2264,10 +2264,6 @@ with pkgs;
   # When updating make sure to update all plugins or they will break!
   elk7Version = "7.17.27";
 
-  elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
-    util-linux = util-linuxMinimal;
-    jre_headless = jdk11_headless; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
-  };
   elasticsearch = elasticsearch7;
 
   elasticsearchPlugins = recurseIntoAttrs (
