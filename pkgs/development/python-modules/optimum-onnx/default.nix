@@ -9,7 +9,7 @@
   # dependencies
   onnx,
   optimum,
-  transformers,
+  transformers_4,
 
   # optional-dependencies
   onnxruntime,
@@ -33,13 +33,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "transformers"
-  ];
   dependencies = [
     onnx
     optimum
-    transformers
+    transformers_4
   ];
 
   optional-dependencies = {
