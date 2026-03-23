@@ -7092,6 +7092,8 @@ self: super: with self; {
 
   homematicip = callPackage ../development/python-modules/homematicip { };
 
+  homevolt = callPackage ../development/python-modules/homevolt { };
+
   homf = callPackage ../development/python-modules/homf { };
 
   hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
