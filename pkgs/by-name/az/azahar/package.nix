@@ -148,10 +148,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = optionalString stdenv.isDarwin ''
+    runHook preInstall
+
     mkdir -p $out/Applications $out/bin
 
     cp ./bin/Release/${finalAttrs.pname}-room $out/bin
     cp -r ./bin/Release/${finalAttrs.pname}.app $out/Applications
+
+    runHook postInstall
   '';
 
   preFixup = ''
