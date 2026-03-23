@@ -39,6 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sql-formatter-org.github.io/sql-formatter";
     license = lib.licenses.mit;
     mainProgram = "sql-formatter";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
