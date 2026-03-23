@@ -6490,7 +6490,8 @@
       ];
     "trane" =
       ps: with ps; [
-      ]; # missing inputs: steamloop
+        steamloop
+      ];
     "transmission" =
       ps: with ps; [
         transmission-rpc
@@ -8174,6 +8175,7 @@
     "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
+    "trane"
     "transmission"
     "transport_nsw"
     "trend"
