@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geonames";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/geonames";
-    rev = finalAttrs.version;
-    hash = "sha256-AhRnUoku17kVY0UciHQXFDa6eCH6HQ4ZGIOobCaGTKQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-jXjhhCrY0tURd4N4D5weCJEckS5cctUfBgpGLTkC2cI=";
   };
 
   outputs = [
@@ -40,12 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals withDocumentation [
     "devdoc"
-  ];
-
-  patches = [
-    # Fix compat with CMake 4
-    # Remove when https://gitlab.com/ubports/development/core/geonames/-/merge_requests/4 merged & in release
-    ./1001-geonames-cmake4-compat.patch
   ];
 
   postPatch = ''
@@ -105,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = gitUpdater { };
   };
 
@@ -120,7 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Cross requires hostPlatform emulation during build
     # https://gitlab.com/ubports/development/core/geonames/-/issues/1
     broken =
-      stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.emulatorAvailable buildPackages;
+      !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
+      && !stdenv.hostPlatform.emulatorAvailable buildPackages;
     pkgConfigModules = [
       "geonames"
     ];
