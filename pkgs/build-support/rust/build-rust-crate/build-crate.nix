@@ -32,6 +32,12 @@ let
     (if release then "-C opt-level=3" else "-C debuginfo=2")
     "-C codegen-units=${toString codegenUnits}"
     "--remap-path-prefix=$NIX_BUILD_TOP=/"
+    # When the rust-src component is present (common with rust-overlay
+    # toolchains), rustc unvirtualises libstd source paths. Panic
+    # locations from monomorphised generic std code then embed the
+    # toolchain store path in .rodata, pulling the entire toolchain into
+    # the closure. Remap to a stable placeholder to break the reference.
+    "--remap-path-prefix=${rustc}=/rustc"
     (mkRustcDepArgs dependencies crateRenames)
     (mkRustcFeatureArgs crateFeatures)
   ]
