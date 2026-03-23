@@ -23,9 +23,8 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    # Version detection doesn't work for schema_salad
     substituteInPlace pyproject.toml \
-      --replace '"schema_salad",' ""
+      --replace-fail "ruamel.yaml >= 0.16.0, < 0.19" "ruamel.yaml"
   '';
 
   nativeBuildInputs = [ setuptools ];
