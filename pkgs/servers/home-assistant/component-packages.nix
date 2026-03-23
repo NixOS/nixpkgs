@@ -4048,7 +4048,8 @@
       ];
     "myneomitis" =
       ps: with ps; [
-      ]; # missing inputs: pyaxencoapi
+        pyaxencoapi
+      ];
     "myq" =
       ps: with ps; [
       ];
@@ -7808,6 +7809,7 @@
     "music_assistant"
     "mutesync"
     "my"
+    "myneomitis"
     "myq"
     "mysensors"
     "mystrom"
