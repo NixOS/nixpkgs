@@ -71,6 +71,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://uppy.io/";
     license = lib.licenses.mit;
     mainProgram = "companion";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
