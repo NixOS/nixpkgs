@@ -6,13 +6,13 @@
   kernelModuleMakeFlags,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dpdk-kmods";
   version = "2023-02-05";
 
   src = fetchzip {
     url = "https://git.dpdk.org/dpdk-kmods/snapshot/dpdk-kmods-e721c733cd24206399bebb8f0751b0387c4c1595.tar.xz";
-    sha256 = "sha256-AG5Lthp+CPR4R7I23DUmoWAmET8gLEFHHdjk2TUbQn4=";
+    hash = "sha256-AG5Lthp+CPR4R7I23DUmoWAmET8gLEFHHdjk2TUbQn4=";
   };
 
   hardeningDisable = [ "pic" ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   preBuild = "cd linux/igb_uio";
 
   installPhase = ''
-    make -C ${env.KSRC} M=$(pwd) modules_install $makeFlags
+    make -C ${finalAttrs.env.KSRC} M=$(pwd) modules_install $makeFlags
   '';
 
   enableParallelBuilding = true;
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.mic92 ];
     platforms = lib.platforms.linux;
   };
-}
+})
