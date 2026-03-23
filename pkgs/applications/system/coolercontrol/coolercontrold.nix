@@ -1,6 +1,7 @@
 {
   rustPlatform,
   testers,
+  hwdata,
   libdrm,
   coolercontrol,
   runtimeShell,
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrold";
 
-  cargoHash = "sha256-5YYodScAAs6ERVbj+irvyNS9IOkVaBHR4DCXTrrtyVI=";
+  cargoHash = "sha256-rFwbHsGkKLD9UgkdTbxMIjARmU0Ewal1NIwlbzRL/vc=";
 
   buildInputs = [ libdrm ];
 
@@ -39,8 +40,12 @@ rustPlatform.buildRustPackage {
     cp -R ${coolercontrol.coolercontrol-ui-data}/* resources/app/
 
     # Hardcode a shell
-    substituteInPlace src/repositories/utils.rs \
+    substituteInPlace daemon/src/repositories/utils.rs \
       --replace-fail 'Command::new("sh")' 'Command::new("${runtimeShell}")'
+
+    # This is supposed to be a "nix-compatible file path", but there is nothing that actually does the substitution
+    substituteInPlace daemon/src/repositories/hwmon/pci_ids.rs \
+      --replace-fail '@hwdata@' '${hwdata}'
   '';
 
   postInstall = ''
