@@ -99,3 +99,45 @@ index 538f600404..111692d4ca 100644
  
    auto run_model = [&](TransformerLevel level, std::vector<OrtValue>& fetches) {
      SessionOptions session_options;
+diff --git a/onnxruntime/test/ir/graph_test.cc b/onnxruntime/test/ir/graph_test.cc
+index 47a3e87..d3e8e12 100644
+--- a/onnxruntime/test/ir/graph_test.cc
++++ b/onnxruntime/test/ir/graph_test.cc
+@@ -1247,1 +1247,1 @@
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+@@ -1316,1 +1316,1 @@
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+@@ -1345,1 +1345,1 @@
+-    model_proto.SerializeToString(&s1);
++    ASSERT_TRUE(model_proto.SerializeToString(&s1));
+@@ -1943,1 +1943,1 @@
+-    model_proto.SerializeToString(&s1);
++    ASSERT_TRUE(model_proto.SerializeToString(&s1));
+diff --git a/onnxruntime/test/framework/inference_session_test.cc b/onnxruntime/test/framework/inference_session_test.cc
+index 4566782..8991234 100644
+--- a/onnxruntime/test/framework/inference_session_test.cc
++++ b/onnxruntime/test/framework/inference_session_test.cc
+@@ -1080,1 +1080,1 @@
+-  p_model->ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(p_model->ToProto().SerializeToString(&s1));
+@@ -1113,1 +1113,1 @@
+-  p_model->ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(p_model->ToProto().SerializeToString(&s1));
+diff --git a/onnxruntime/test/providers/compare_provider_test_utils.cc b/onnxruntime/test/providers/compare_provider_test_utils.cc
+index 5678912..6789012 100644
+--- a/onnxruntime/test/providers/compare_provider_test_utils.cc
++++ b/onnxruntime/test/providers/compare_provider_test_utils.cc
+@@ -85,1 +85,1 @@ void CompareProviderTestUtils::Run(const Model& model,
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+@@ -106,1 +106,1 @@ void CompareProviderTestUtils::Run(const Model& model,
+-  tp_model.ToProto().SerializeToString(&s2);
++  ASSERT_TRUE(tp_model.ToProto().SerializeToString(&s2));
+@@ -161,1 +161,1 @@ void CompareProviderTestUtils::Run(const Model& model,
+-  model.ToProto().SerializeToString(&s1);
++  ASSERT_TRUE(model.ToProto().SerializeToString(&s1));
+@@ -183,1 +183,1 @@ void CompareProviderTestUtils::Run(const Model& model,
+-    tp_model.ToProto().SerializeToString(&s2);
++    ASSERT_TRUE(tp_model.ToProto().SerializeToString(&s2));
