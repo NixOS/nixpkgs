@@ -13,6 +13,7 @@ in
 
 testing.makeTest {
   name = "initrd-secrets-changing";
+  meta.broken = pkgs.stdenv.hostPlatform.isAarch64;
 
   nodes.machine =
     { ... }:
@@ -21,16 +22,16 @@ testing.makeTest {
 
       boot.loader.grub.device = "/dev/vda";
 
-      boot.initrd.secretPaths = {
-        "/test".source = secret1InStore;
-        "/run/keys/test".source = secret1InStore;
+      boot.initrd.secrets = {
+        "/test" = secret1InStore;
+        "/run/keys/test" = secret1InStore;
       };
       boot.initrd.postMountCommands = "cp /test /mnt-root/secret-from-initramfs";
 
       specialisation.secrets2System.configuration = {
-        boot.initrd.secretPaths = lib.mkForce {
-          "/test".source = secret2InStore;
-          "/run/keys/test".source = secret2InStore;
+        boot.initrd.secrets = lib.mkForce {
+          "/test" = secret2InStore;
+          "/run/keys/test" = secret2InStore;
         };
       };
     };

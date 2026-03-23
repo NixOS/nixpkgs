@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-django";
-  version = "0.74.1";
+  version = "0.75.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry-django";
     tag = version;
-    hash = "sha256-8T5lYM5JrxbeDCgvSGvBsimsF+tMwjS1hroqw2Gf7aA=";
+    hash = "sha256-vosD0JZYZzzl6Mp+AAxdXVox/7ay4FqnwqE6f1lSw3s=";
   };
 
   postPatch = ''

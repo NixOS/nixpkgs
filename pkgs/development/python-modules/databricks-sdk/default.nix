@@ -36,6 +36,11 @@ buildPythonPackage (finalAttrs: {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    # For protobuf 7
+    "protobuf"
+  ];
+
   dependencies = [
     google-auth
     protobuf

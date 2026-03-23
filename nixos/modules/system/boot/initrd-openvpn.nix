@@ -29,7 +29,7 @@ in
     };
 
     boot.initrd.network.openvpn.configuration = mkOption {
-      type = types.path; # Same type as boot.initrd.secretPaths.*.source
+      type = types.path; # Same type as boot.initrd.secrets
       description = ''
         The configuration file for OpenVPN.
 
@@ -74,8 +74,8 @@ in
       "${pkgs.glibc}/lib/libnss_dns.so.2"
     ];
 
-    boot.initrd.secretPaths = {
-      "/etc/initrd.ovpn".source = cfg.configuration;
+    boot.initrd.secrets = {
+      "/etc/initrd.ovpn" = cfg.configuration;
     };
 
     # openvpn --version would exit with 1 instead of 0

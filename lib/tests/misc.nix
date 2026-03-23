@@ -4789,6 +4789,58 @@ runTests {
       };
     };
 
+  # Check that makeScope provides a default callPackage
+  testMakeScopeDefaultCallPackage =
+    let
+      scope = lib.makeScope lib.callPackageWith (self: {
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value";
+    };
+
+  # Check that callPackage can be overridden by the scope function
+  testMakeScopeOverrideCallPackage =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value-custom";
+    };
+
+  # Check that overriding callPackage persists through overrideScope
+  testMakeScopeOverrideCallPackagePersistsThroughOverrideScope =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+      overridden = scope.overrideScope (
+        _final: _prev: {
+          bar = scope.callPackage ({ }: "bar-value") { };
+        }
+      );
+    in
+    {
+      expr = { inherit (overridden) foo bar; };
+      expected = {
+        foo = "foo-value-custom";
+        bar = "bar-value-custom";
+      };
+    };
+
   testFilesystemResolveDefaultNixFile1 = {
     expr = lib.filesystem.resolveDefaultNix ./foo.nix;
     expected = ./foo.nix;

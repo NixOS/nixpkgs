@@ -89,16 +89,22 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-H+kXxA/6rKzYA19v7Zlx2HbIg/DGicD5FDIs0noVGSk=";
   };
 
-  postPatch = ''
+  postPatch =
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
-    substituteInPlace pyproject.toml \
-      --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
-
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "dynamic = [\"version\"]" "version = \"${finalAttrs.version}\""
+    ''
     # Flip anonymized telemetry to opt in versus current opt-in out for privacy
-    substituteInPlace chromadb/config.py \
-      --replace-fail "anonymized_telemetry: bool = True" \
-                     "anonymized_telemetry: bool = False"
-  '';
+    + ''
+      substituteInPlace chromadb/config.py \
+        --replace-fail "anonymized_telemetry: bool = True" \
+                       "anonymized_telemetry: bool = False"
+    ''
+    # error: queries overflow the depth limit!
+    + ''
+      sed -i '1i #![recursion_limit = "256"]' rust/segment/src/lib.rs
+    '';
 
   pythonRelaxDeps = [
     "fastapi"

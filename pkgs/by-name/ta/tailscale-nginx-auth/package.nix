@@ -2,11 +2,10 @@
   lib,
   stdenv,
   buildGoModule,
-  go_1_26,
   tailscale,
 }:
 
-buildGoModule.override { go = go_1_26; } {
+buildGoModule {
   pname = "tailscale-nginx-auth";
   inherit (tailscale) version src vendorHash;
 

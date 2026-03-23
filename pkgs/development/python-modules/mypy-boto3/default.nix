@@ -163,8 +163,8 @@ in
       "sha256-G3kwLm2IEgXNFrs8V2uCj0su2S3P72FzmWSOEYjlV4c=";
 
   mypy-boto3-batch =
-    buildMypyBoto3Package "batch" "1.42.59"
-      "sha256-RYL6s/uF5iFEIEFewaq2gXX7YeKgC1EWomCRyerJZS4=";
+    buildMypyBoto3Package "batch" "1.42.72"
+      "sha256-n5buQA3+fBUS3DFwl1s0Oe8h4xyikw7hCmy5ByIQxSg=";
 
   mypy-boto3-billingconductor =
     buildMypyBoto3Package "billingconductor" "1.42.7"
@@ -443,8 +443,8 @@ in
       "sha256-92qhSUqTiLgbtvCdi/Mmgve18mcYR00ABL+bNy7/OnY=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.42.71"
-      "sha256-nlMYh/t5dGbsfMG/epaIgUZK5AcgXBTWmFK8PPRppg0=";
+    buildMypyBoto3Package "ec2" "1.42.72"
+      "sha256-UPFFQExnYTNMXUMU0MojPlWMa8V6aDG9te6yu464F5k=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.42.3"
@@ -1046,8 +1046,8 @@ in
       "sha256-315QgDF/CNolDYIYUcEGqdc5rQotI1uw0q8aQN9sW08=";
 
   mypy-boto3-polly =
-    buildMypyBoto3Package "polly" "1.42.66"
-      "sha256-uAOOFj4S9ip3VVjuS6bceXpUpVhOXHBklkfPbOT7Hzg=";
+    buildMypyBoto3Package "polly" "1.42.72"
+      "sha256-0/LaF7Oqt3d7fPNc9TWSXqB3JS43PodvmscfauqAU1U=";
 
   mypy-boto3-pricing =
     buildMypyBoto3Package "pricing" "1.42.3"

@@ -136,6 +136,7 @@ mapAliases {
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
+  datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
@@ -243,6 +244,7 @@ mapAliases {
   hijri-converter = hijridate; # added 2025-08-07
   holistic-trace-analysis = throw "'holistic-trace-analysis' was removed because there is no such package on PyPI"; # added 2026-02-28
   homeassistant-bring-api = throw "'homeassistant-bring-api' has been renamed to/replaced by 'bring-api'"; # Converted to throw 2025-10-29
+  homepluscontrol = throw "'homepluscontrol' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   HTSeq = throw "'HTSeq' has been renamed to/replaced by 'htseq'"; # Converted to throw 2025-10-29
   IMAPClient = throw "'IMAPClient' has been renamed to/replaced by 'imapclient'"; # Converted to throw 2025-10-29
   inlinestyler = throw "inlinestyler has been removed because it is no longer maintained"; # added 2025-08-09
@@ -358,7 +360,6 @@ mapAliases {
   postgrest-py = postgrest; # added 2025-08-29
   powerlineMemSegment = throw "'powerlineMemSegment' has been renamed to/replaced by 'powerline-mem-segment'"; # Converted to throw 2025-10-29
   prayer-times-calculator = throw "'prayer-times-calculator' has been renamed to/replaced by 'prayer-times-calculator-offline'"; # Converted to throw 2025-10-29
-  primp = throw "primp was removed as it required a very outdated version of boringssl"; # added 2025-10-20
   prometheus_client = throw "'prometheus_client' has been renamed to/replaced by 'prometheus-client'"; # Converted to throw 2025-10-29
   prompt_toolkit = throw "'prompt_toolkit' has been renamed to/replaced by 'prompt-toolkit'"; # Converted to throw 2025-10-29
   protonup = throw "'protonup' has been renamed to/replaced by 'protonup-ng'"; # Converted to throw 2025-10-29
@@ -415,6 +416,7 @@ mapAliases {
   pyRFC3339 = throw "'pyRFC3339' has been renamed to/replaced by 'pyrfc3339'"; # Converted to throw 2025-10-29
   Pyro4 = throw "'Pyro4' has been renamed to/replaced by 'pyro4'"; # Converted to throw 2025-10-29
   Pyro5 = throw "'Pyro5' has been renamed to/replaced by 'pyro5'"; # Converted to throw 2025-10-29
+  pyrogram = throw "'pyrogram' has been removed as it was archived upstream"; # Added 2026-03-21
   pyrr = throw "pyrr has been removed because it is incompatible with NumPy 2.0+"; # Added 2026-02-18
   PyRSS2Gen = throw "'PyRSS2Gen' has been renamed to/replaced by 'pyrss2gen'"; # Converted to throw 2025-10-29
   pyside6-fluent-widgets = throw "pyside6-fluent-widgets has been removed, since it is unmaintained"; # added 2025-08-20
@@ -548,6 +550,7 @@ mapAliases {
   tensorflow-tensorboard = throw "'tensorflow-tensorboard' has been renamed to/replaced by 'tensorboard'"; # Converted to throw 2025-10-29
   tensorflow-tensorboard_2 = throw "'tensorflow-tensorboard_2' has been renamed to/replaced by 'tensorflow-tensorboard'"; # Converted to throw 2025-10-29
   testing-postgresql = throw "testing-postgresql has been removed, since it is unmaintained since 2017"; # added 2025-05-25
+  tgcrypto = throw "'tgcrypto' has been removed as it was archived upstream"; # Added 2026-03-21
   Theano = throw "'Theano' has been renamed to/replaced by 'theano'"; # Converted to throw 2025-10-29
   TheanoWithCuda = throw "'TheanoWithCuda' has been renamed to/replaced by 'theanoWithCuda'"; # Converted to throw 2025-10-29
   TheanoWithoutCuda = throw "'TheanoWithoutCuda' has been renamed to/replaced by 'theanoWithoutCuda'"; # Converted to throw 2025-10-29

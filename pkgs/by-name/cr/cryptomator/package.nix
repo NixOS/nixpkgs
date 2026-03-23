@@ -17,18 +17,29 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "cryptomator";
-  version = "1.18.1";
+  version = "1.19.2";
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     tag = version;
-    hash = "sha256-C2pvToxIK8gPzmqcRKYCu4B2FBrOGcH2Uzpjdt3nZZs=";
+    hash = "sha256-9JWZaTsL2sfnGQAZI56T2iQnTNhERsFNFFCeLMB7WC0=";
   };
+
+  patches = [
+    # fix for "java.lang.IllegalStateException: No fuse library found at expected path"
+    ./downgrade-fuse.patch
+  ];
 
   mvnJdk = jdk;
   mvnParameters = "-Dmaven.test.skip=true -Plinux";
-  mvnHash = "sha256-dOpvojr6gVtDFE52eghOVZWGspRLQrTDotOMkVGaG9k=";
+  mvnHash = "sha256-IVOcDFW5YKgUHJKX3ZXYVnOevwmOwN5yEU8jfPtCY1I=";
+  mvnFetchExtraArgs.env = {
+    inherit (env) SOURCE_DATE_EPOCH;
+  };
+
+  # fix for "date 1980-01-01T00:00:00Z is not within the valid range 1980-01-01T00:00:02Z to 2099-12-31T23:59:59Z"
+  env.SOURCE_DATE_EPOCH = 315532802; # 1980-01-01T00:00:02Z
 
   preBuild = ''
     VERSION=${version}

@@ -8,6 +8,8 @@
   numpy,
   pillow,
   materialyoucolor,
+  python-magic,
+  pywal16,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -28,6 +30,8 @@ buildPythonPackage (finalAttrs: {
     numpy
     pillow
     materialyoucolor
+    python-magic
+    pywal16
   ];
 
   pythonImportsCheck = [ "kde_material_you_colors" ];

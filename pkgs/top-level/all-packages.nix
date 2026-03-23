@@ -2996,7 +2996,7 @@ with pkgs;
   };
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_4;
+  netbox = netbox_4_5;
 
   netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
     withDpi = false;
@@ -4600,6 +4600,7 @@ with pkgs;
   inherit (ocamlPackages)
     ocamlformat # latest version
     ocamlformat_0_28_1
+    ocamlformat_0_29_0
     ;
 
   inherit (ocamlPackages) odig;
@@ -5460,9 +5461,9 @@ with pkgs;
     electron_40
     electron_41
     ;
-  electron = electron_38;
-  electron-bin = electron_38-bin;
-  electron-chromedriver = electron-chromedriver_38;
+  electron = electron_41;
+  electron-bin = electron_41-bin;
+  electron-chromedriver = electron-chromedriver_41;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
@@ -6319,8 +6320,6 @@ with pkgs;
     fmt_11
     fmt_12
     ;
-
-  firefox_decrypt = callPackage ../by-name/fi/firefox_decrypt/package.nix { nss = nss_latest; };
 
   fmt = fmt_12;
 
@@ -11002,11 +11001,6 @@ with pkgs;
     SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
-  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
-    guiModule = "zest";
-    fftw = fftwSinglePrec;
-  };
-
   zynaddsubfx-fltk = zynaddsubfx.override {
     guiModule = "fltk";
   };
@@ -12417,6 +12411,8 @@ with pkgs;
   xp-pen-deco-01-v2-driver = libsForQt5.xp-pen-deco-01-v2-driver;
 
   radicle-node-unstable = callPackage ../by-name/ra/radicle-node/unstable.nix { };
+
+  olivetin-3k = callPackage ../by-name/ol/olivetin/3k.nix { };
 
   newlib-nano = newlib.override {
     nanoizeNewlib = true;
