@@ -4023,7 +4023,8 @@
       ];
     "mta" =
       ps: with ps; [
-      ]; # missing inputs: py-nymta
+        py-nymta
+      ];
     "mullvad" =
       ps: with ps; [
         mullvad-api
@@ -7800,6 +7801,7 @@
     "mqtt_json"
     "mqtt_room"
     "mqtt_statestream"
+    "mta"
     "mullvad"
     "music_assistant"
     "mutesync"
