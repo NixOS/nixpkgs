@@ -21521,6 +21521,8 @@ self: super: with self; {
 
   zimports = callPackage ../development/python-modules/zimports { };
 
+  zinvolt = callPackage ../development/python-modules/zinvolt { };
+
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
