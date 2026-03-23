@@ -20,7 +20,7 @@
 }:
 let
   dovecotMajorMinor = lib.versions.majorMinor dovecot.version;
-  isCurrentOnDarwin = lib.strings.versionAtLeast version "2.4" && stdenv.hostPlatform.isDarwin;
+  isCurrent = lib.strings.versionAtLeast version "2.4";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dovecot-pigeonhole";
@@ -34,19 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  patches = patches fetchpatch ++ lib.optional isCurrentOnDarwin ./max_lookup_size.patch;
+  patches = patches fetchpatch;
 
-  postPatch = lib.optionalString isCurrentOnDarwin ''
+  postPatch = lib.optionalString isCurrent ''
     patchShebangs src/plugins/settings/settings-get.pl
   '';
 
-  nativeBuildInputs = lib.optional isCurrentOnDarwin perl;
+  nativeBuildInputs = lib.optional isCurrent perl;
 
   buildInputs = [
     dovecot
     openssl
   ]
-  ++ lib.optional isCurrentOnDarwin libstemmer
+  ++ lib.optional (isCurrent && stdenv.hostPlatform.isDarwin) libstemmer
   ++ lib.optionals withLDAP [
     cyrus_sasl
     openldap
