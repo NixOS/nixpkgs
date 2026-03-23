@@ -28,9 +28,10 @@ runCommand "allowed-patterns.json"
         ]
       ) allowedPatterns.${name}.paths
     ) (builtins.attrNames allowedPatterns);
-    env.storeDir = "${builtins.storeDir}/";
-    shallowConfig = builtins.toJSON allowedPatterns;
-    passAsFile = [ "shallowConfig" ];
+    env = {
+      storeDir = "${builtins.storeDir}/";
+      shallowConfigPath = builtins.toFile "shallow-config.json" (builtins.toJSON allowedPatterns);
+    };
   }
   ''
     python ${./scripts/nix_required_mounts_closure.py}
