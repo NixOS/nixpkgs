@@ -8,7 +8,7 @@
 # Dropbox client to bootstrap installation.
 # The client is self-updating, so the actual version may be newer.
 let
-  version = "217.4.4417";
+  version = "246.4.3513";
   installer = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.x86_64-${version}.tar.gz";
 
   desktopItem = makeDesktopItem {
