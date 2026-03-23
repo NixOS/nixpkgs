@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     inherit url hash;
   };
 
+  passthru.updateScript = ./update.sh;
+
   nativeBuildInputs = [
     makeWrapper
   ]
