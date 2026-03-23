@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "gh-token";
-  version = "2.0.8";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "Link-";
     repo = "gh-token";
     rev = "v${version}";
-    hash = "sha256-aoi5w2iryz8bbzt6ZQ9t7nR0Kh7mXdYbZBjpyoivEYw=";
+    hash = "sha256-ff3Dzajh/7p0yNSKCHJzJcqkTpf09zuZ6Hp0ygDv6o0=";
   };
 
   vendorHash = "sha256-brAFqWdvaJwURdWb9m8x21nhuXeRxIJX6FsUfGiFIWQ=";
