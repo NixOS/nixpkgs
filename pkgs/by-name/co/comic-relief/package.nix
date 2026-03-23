@@ -2,11 +2,17 @@
   lib,
   stdenvNoCC,
   fetchzip,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "comic-relief";
   version = "1.1";
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchzip {
     url = "https://fontlibrary.org/assets/downloads/comic-relief/45c456b6db2aaf2f7f69ac66b5ac7239/comic-relief.zip";
@@ -14,15 +20,14 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-lvkMfaQvLMZ8F0Q5JnpmMsIAkR+XfihoHIoS4z5QEvA=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/etc/fonts/conf.d
-    mkdir -p $out/share/doc/${pname}-${version}
-    mkdir -p $out/share/fonts/truetype
     cp -v ${./comic-sans-ms-alias.conf}     $out/etc/fonts/conf.d/30-comic-sans-ms.conf
-    cp *.ttf      -d $out/share/fonts/truetype
-    cp FONTLOG.txt -d $out/share/doc/${pname}-${version}
+    install -D FONTLOG.txt -t $doc/share/doc/${pname}-${version}
 
     runHook postInstall
   '';
