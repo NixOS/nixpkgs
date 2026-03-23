@@ -32,6 +32,22 @@
   libxcb-wm,
   xcffib,
   nixosTests,
+  anyio,
+  fontconfig,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  isort,
+  librsvg,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-xdist,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
+  wxsvg,
+  xorg-server,
+  xterm,
+  xvfb,
   extraPackages ? [ ],
 }:
 
@@ -50,10 +66,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-5XHzlS/Knw/VmVtnM7wToJ/F12GAa2lwdWuXBJHXnZM=";
   };
 
+  patches = [
+    # https://github.com/qtile/qtile/pull/5889
+    ./fix-test-net.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
   ];
+
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
@@ -105,7 +127,61 @@ buildPythonPackage (finalAttrs: {
     aiohttp
   ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "libqtile" ];
+
+  checkInputs = [
+    gtk3
+    librsvg
+  ];
+
+  nativeCheckInputs = [
+    anyio
+    fontconfig
+    gdk-pixbuf
+    gobject-introspection
+    isort
+    pytest-asyncio
+    pytest-httpbin
+    pytest-xdist
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+    wxsvg
+    xorg-server
+    xterm
+    xvfb
+  ];
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
+
+  disabledTests = [
+    # ModuleNotFoundError: No module named 'libqtile'
+    # known issue upstream: https://github.com/qtile/qtile/issues/5883
+    "test_identify_output"
+
+    # caused by dbus-fast trying to read '/var/lib/dbus/machine-id'
+    "test_defaults"
+    "test_device_actions"
+    "test_adapter_actions"
+    "test_statusnotifier_defaults"
+    "test_custom_symbols"
+    "test_statusnotifier_defaults_vertical_bar"
+    "test_default_show_battery"
+    "test_statusnotifier_icon_size"
+    "test_missing_adapter"
+    "test_statusnotifier_left_click"
+    "test_default_text"
+    "test_statusnotifier_left_click_vertical_bar"
+    "test_default_device"
+
+    # PermissionError: [Errno 13] Permission denied: '/var'
+    "test_thermal_zone_getting_value"
+
+    # Probably won't work in the Nix sandbox due to `xcffib.ConnectionException`
+    "test_urgent_hook_fire"
+  ];
+
   passthru = {
     tests.qtile = nixosTests.qtile;
     providedSessions = [ "qtile" ];
