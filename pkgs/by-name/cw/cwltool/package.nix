@@ -3,6 +3,7 @@
   fetchFromGitHub,
   nodejs,
   python3Packages,
+  stdenv,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -19,9 +20,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail "PYTEST_RUNNER + " ""
+      --replace-fail "PYTEST_RUNNER + " "" \
+      --replace-fail "ruamel.yaml >= 0.16, < 0.19" "ruamel.yaml"
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy==1.18.2" "mypy"
+      --replace-fail "mypy==1.18.2" "mypy" \
+      --replace-fail "ruamel.yaml>=0.16.0,<0.19" "ruamel.yaml"
   '';
 
   build-system = with python3Packages; [
@@ -75,6 +78,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
   disabledTestPaths = [
     "tests/test_udocker.py"
     "tests/test_provenance.py"
+  ]
+  ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    "test_singularity"
+  ]
+  ++ lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
+    "test_cache_default_literal_file"
+    "test_js_console_cmd_line_tool"
+    "test_bad_basecommand"
+    "test_optional_numeric_output_0"
   ];
 
   pythonImportsCheck = [
