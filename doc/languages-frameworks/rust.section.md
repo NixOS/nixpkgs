@@ -842,6 +842,17 @@ general. A number of other parameters can be overridden:
   (hello { }).override { extraRustcOpts = "-Z debuginfo=2"; }
   ```
 
+- The lint level cap passed to `rustc` (`allow` by default, which
+  silences all lints). Because `rustc` only honours the first
+  `--cap-lints` it receives, this cannot be changed via
+  `extraRustcOpts`; use this attribute instead. Useful when overriding
+  the `rust` attribute to point at `clippy-driver`, since clippy lints
+  are also capped by this flag:
+
+  ```nix
+  (hello { }).override { capLints = "warn"; }
+  ```
+
 - Phases, just like in any other derivation, can be specified using
   the following attributes: `preUnpack`, `postUnpack`, `prePatch`,
   `patches`, `postPatch`, `preConfigure` (in the case of a Rust crate,

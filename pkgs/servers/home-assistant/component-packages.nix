@@ -2826,7 +2826,8 @@
       ];
     "indevolt" =
       ps: with ps; [
-      ]; # missing inputs: indevolt-api
+        indevolt-api
+      ];
     "indianamichiganpower" =
       ps: with ps; [
       ];
@@ -3423,7 +3424,8 @@
       ];
     "liebherr" =
       ps: with ps; [
-      ]; # missing inputs: pyliebherrhomeapi
+        pyliebherrhomeapi
+      ];
     "life360" =
       ps: with ps; [
       ];
@@ -7642,6 +7644,7 @@
     "immich"
     "improv_ble"
     "incomfort"
+    "indevolt"
     "inels"
     "influxdb"
     "inkbird"
@@ -7713,6 +7716,7 @@
     "lg_thinq"
     "libre_hardware_monitor"
     "lidarr"
+    "liebherr"
     "life360"
     "lifx"
     "light"
