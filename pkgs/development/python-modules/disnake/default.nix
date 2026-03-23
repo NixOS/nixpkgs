@@ -4,6 +4,7 @@
   aiohttp,
   buildPythonPackage,
   fetchFromGitHub,
+  typing-extensions,
   libopus,
   pynacl,
   withVoice ? true,
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
+    typing-extensions
   ]
   ++ lib.optionals withVoice [
     libopus
