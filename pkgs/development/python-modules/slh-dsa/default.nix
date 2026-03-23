@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  mypy,
+  pytestCheckHook,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -16,12 +19,17 @@ buildPythonPackage rec {
     hash = "sha256-p4eWMVayOFiEjFtlnsmmtH6HMfcIeYIpgdfjuB4mmAY=";
   };
 
+  env.SLHDSA_BUILD_OPTIMIZED = "1";
+
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"mypy>=1.10.1",' ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    mypy
+  ];
 
   pythonImportsCheck = [ "slhdsa" ];
 
