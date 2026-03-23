@@ -31,6 +31,7 @@ let
         name = "pulseaudio${lib.optionalString fullVersion "Full"}${lib.optionalString systemWide "-systemWide"}";
         meta = {
           maintainers = pkgs.pulseaudio.meta.maintainers;
+          broken = pkgs.stdenv.hostPlatform.isAarch64;
         };
 
         nodes.machine =

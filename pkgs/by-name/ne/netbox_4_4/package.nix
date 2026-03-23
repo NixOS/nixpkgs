@@ -111,7 +111,7 @@ py.pkgs.buildPythonApplication rec {
     pythonPath = py.pkgs.makePythonPath dependencies;
     inherit (py.pkgs) gunicorn;
     tests = {
-      netbox = nixosTests.netbox_4_3;
+      netbox = nixosTests.netbox_4_4;
       inherit (nixosTests) netbox-upgrade;
     };
     updateScript = nix-update-script { };
@@ -123,6 +123,9 @@ py.pkgs.buildPythonApplication rec {
     description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
     mainProgram = "netbox";
     license = lib.licenses.asl20;
+    knownVulnerabilities = [
+      "Netbox Version ${version} is EOL; please upgrade by following the current release notes instructions"
+    ];
     maintainers = with lib.maintainers; [
       minijackson
       raitobezarius
