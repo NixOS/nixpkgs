@@ -17,6 +17,11 @@ stdenv.mkDerivation {
     hash = "sha256-pdeEtQXxL2pd9qTfLOEmPDn3POgo5qxRqbK807WN98s=";
   };
 
+  patches = [
+    # Fix uninitialized struct members passed to ldaclib_set_config_info in decode init
+    ./fix-decode-init.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   # Upstream CMakeLists.txt doesn't have install rules

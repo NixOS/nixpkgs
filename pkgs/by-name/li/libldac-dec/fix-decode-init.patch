@@ -1,0 +1,24 @@
+--- a/src/ldacBT_api.o.c
++++ b/src/ldacBT_api.o.c
+@@ -165,6 +165,10 @@
+   // tbl_ldacbt_config[0].frmlen_1ch;
+   // frmlen = 165 * channel - LDACBT_FRMHDRBYTES;
+   frmlen = tbl_ldacbt_config[0].frmlen_1ch * channel - LDACBT_FRMHDRBYTES;
++  hLdacBT->frmlen = frmlen;
++  hLdacBT->cm = cm;
++  hLdacBT->cci = cci;
++  hLdacBT->frm_status = 0;
+   /* Set Configuration Information */
+   result = ldaclib_set_config_info(
+       hLdacBT->hLDAC, hLdacBT->sfid, hLdacBT->cci, hLdacBT->frmlen, hLdacBT->frm_status);
+@@ -174,10 +178,6 @@
+   } else if (result != LDAC_S_OK) {
+     hLdacBT->error_code_api = LDACBT_GET_LDACLIB_ERROR_CODE;
+   }
+-  hLdacBT->frmlen = frmlen;
+-  hLdacBT->cm = cm;
+-  hLdacBT->cci = cci;
+-  hLdacBT->frm_status = 0;
+   hLdacBT->sfid = sfid;
+   result = ldaclib_init_decode(hLdacBT->hLDAC, nshift);
+   if (LDAC_FAILED(result)) {
