@@ -2739,7 +2739,8 @@
     "idrive_e2" =
       ps: with ps; [
         aiobotocore
-      ]; # missing inputs: idrive-e2-client
+        idrive-e2-client
+      ];
     "idteck_prox" =
       ps: with ps; [
         rfk101py
@@ -7628,6 +7629,7 @@
     "ibeacon"
     "icloud"
     "idasen_desk"
+    "idrive_e2"
     "ifttt"
     "igloohome"
     "ign_sismologia"
