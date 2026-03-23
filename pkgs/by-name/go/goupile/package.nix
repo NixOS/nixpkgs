@@ -12,6 +12,8 @@
   # https://goupile.org/en/build recommends a Paranoid build
   # which is not bit by bit reproducible, whereas others are
   profile ? "Paranoid",
+
+  nix-update-script,
 }:
 
 assert lib.assertOneOf "profile" profile [
@@ -25,14 +27,14 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "goupile";
-  version = "3.12.1";
+  version = "3.12.4";
 
   # https://github.com/Koromix/rygel/tags
   src = fetchFromGitHub {
     owner = "Koromix";
     repo = "rygel";
     tag = "goupile/${finalAttrs.version}";
-    hash = "sha256-Pn/0tjezVKJedAtqj69avxeIK2l3l9FGioYSyEao12E=";
+    hash = "sha256-2lHCOsvjTZeRkboefIdyh7JoSmes3KgvjFnXKnQ4On4=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +67,10 @@ stdenv'.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.tests = { inherit (nixosTests) goupile; };
+  passthru = {
+    tests = { inherit (nixosTests) goupile; };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=goupile/(.*)" ]; };
+  };
 
   meta = {
     changelog = "https://github.com/Koromix/rygel/blob/${finalAttrs.src.rev}/src/goupile/CHANGELOG.md";
