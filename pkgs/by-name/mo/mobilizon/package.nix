@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  writeShellScriptBin,
+  writeScript,
   beam,
   mix2nix,
   fetchFromGitHub,
@@ -51,8 +51,8 @@ beamPackages.mixRelease rec {
             repo = "cldr";
             rev = "v${old.version}";
             hash =
-              assert old.version == "2.44.1";
-              "sha256-5XLPQYDW9yV0ZkWbyiB2s213GTccFjdqckBmx09n4eE=";
+              assert old.version == "2.47.2";
+              "sha256-XiShurm4i/Qxop1nE4Z/8tMj5953kUqn+4kBrILxO+Y=";
           };
           postInstall = ''
             cp $src/priv/cldr/locales/* $out/lib/erlang/lib/ex_cldr-${old.version}/priv/cldr/locales/
@@ -141,11 +141,11 @@ beamPackages.mixRelease rec {
 
   passthru = {
     tests = { inherit (nixosTests) mobilizon; };
-    updateScript = writeShellScriptBin "update.sh" ''
-      set -eou pipefail
+    updateScript = writeScript "update-mobilizon" ''
+      set -euo pipefail
 
-      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/servers/mobilizon/mix.nix
-      ${lib.getExe nixfmt} pkgs/servers/mobilizon/mix.nix
+      ${lib.getExe mix2nix} '${src}/mix.lock' > pkgs/by-name/mo/mobilizon/mix.nix
+      ${lib.getExe nixfmt} pkgs/by-name/mo/mobilizon/mix.nix
     '';
     elixirPackage = beamPackages.elixir;
     inherit mixNixDeps;
@@ -154,7 +154,7 @@ beamPackages.mixRelease rec {
   meta = {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
     homepage = "https://joinmobilizon.org/";
-    changelog = "https://framagit.org/framasoft/mobilizon/-/releases/${src.tag}";
+    changelog = "https://framagit.org/kaihuri/mobilizon/-/releases/${src.tag}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       minijackson
