@@ -5,7 +5,7 @@
   setuptools,
   aiohttp,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   aioresponses,
   pytestCheckHook,
 }:
@@ -30,7 +30,7 @@ buildPythonPackage (finalAttrs: {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     aioresponses
     pytestCheckHook
   ];

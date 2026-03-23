@@ -11,18 +11,18 @@
   vimUtils,
 }:
 let
-  version = "1001eb8-unstable-2026-03-13";
+  version = "0.4.3-nightly.dd56a3a-unstable-2026-03-20";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "fcdf4a9172fba824ca6834731b93b74eba51d1c3";
-    hash = "sha256-AYxWrqru0/HCrfTXRqTExiOT6mNzNMk+pT6APRs0BUM=";
+    rev = "dd56a3a8a8a5a85522badaf6485f28c8f7a7c840";
+    hash = "sha256-F9fnjCwBEJfuK0TuRr7XjMcacMep5K0SuzGft2IFXtQ=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-nXtJPE6HNZx5Ra4CwYi/f4EWww//1XwsiwtRG77RPJk=";
+    cargoHash = "sha256-Xhn+EpVF7XQOgHQpmoHHrZ/swi2xgdEFYh8D6mYJMSc=";
 
     nativeBuildInputs = [
       pkg-config
@@ -40,8 +40,6 @@ let
     ];
 
     env = {
-      RUSTC_BOOTSTRAP = 1; # We need rust unstable features
-
       OPENSSL_NO_VENDOR = true;
 
       # Allow undefined symbols on Darwin - they will be provided by Neovim's LuaJIT runtime

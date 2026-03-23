@@ -15,6 +15,8 @@
   cgal,
   gmp,
   mpfr,
+  suitesparse,
+  onnxruntime,
   poselib,
   lz4,
   autoAddDriverRunpath,
@@ -52,6 +54,8 @@ let
     mpfr
     lz4
     qt5.qtbase
+    suitesparse
+    onnxruntime
   ]
   ++ lib.optionals cudaSupport [
     cudatoolkit
@@ -63,26 +67,30 @@ let
   inherit (cudaPackages) cudatoolkit;
 in
 stdenv'.mkDerivation {
-  version = "unstable-3.12.5-openimageio";
+  version = "4.0.2";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = "f8edccaa36909713b9d3930e1ca65cb364a38b26";
-    hash = "sha256-0lD7ywM48ODe11u9D3XSk9btqQ4gs/APBFf9IyiXe6g=";
+    rev = "d927f7e518fc20afa33390712c4cc20d85b730b8";
+    hash = "sha256-+cPkksfCLyEo7A70nuRWnOBEkhx8BFevQ9XWTipEkpM=";
   };
 
-  # TODO: remove this when https://github.com/colmap/colmap/pull/3459 is in a release
-  # This was produced with:
-  # git diff f8edccaa36909713b9d3930e1ca65cb364a38b26 e40c0730020938587c9d4eb7634cbff93cbc2f81
-  patches = [ ./openimageio.patch ];
+  patches = [
+    ./suitesparse-no-include-subdir.patch
+    # Remove when https://github.com/colmap/colmap/pull/4265 is merged
+    ./disambiguate-gradientchecker.patch
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_ENABLED" false)
     (lib.cmakeBool "UNINSTALL_ENABLED" false)
     (lib.cmakeBool "FETCH_POSELIB" false)
     (lib.cmakeBool "FETCH_FAISS" false)
+    (lib.cmakeBool "FETCH_ONNX" false)
     (lib.cmakeBool "TESTS_ENABLED" true)
+    (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${suitesparse.dev}/include")
+    (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${suitesparse}/lib")
   ]
   ++ lib.optionals cudaSupport [
     (lib.cmakeBool "CUDA_ENABLED" cudaSupport)
