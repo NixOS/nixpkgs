@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.antigravity;
@@ -53,5 +58,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ milas0 ];
+  meta.maintainers = with lib.maintainers; [ milas ];
 }
