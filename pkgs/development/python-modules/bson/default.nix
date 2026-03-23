@@ -51,7 +51,10 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "BSON codec for Python";
     homepage = "https://github.com/py-bson/bson";
-    license = lib.licenses.asl20;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.bsd3
+    ];
     maintainers = with lib.maintainers; [ fab ];
   };
 })
