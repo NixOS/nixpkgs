@@ -3,7 +3,7 @@
   lib,
   nixosTests,
   nix-update-script,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   installShellFiles,
   pkg-config,
@@ -65,7 +65,9 @@ let
   };
   component = availableComponents.${componentName};
 in
-buildGoModule (finalAttrs: {
+# Vendored gvisor has a build-tag conflict with Go 1.26 (netbirdio/netbird#5290).
+# TODO: revert to 'buildGoModule' when a release includes netbirdio/netbird#5447.
+buildGo125Module (finalAttrs: {
   pname = "netbird-${componentName}";
   version = "0.65.3";
 

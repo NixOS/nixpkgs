@@ -8,17 +8,17 @@
   ctypes-foreign,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "srt";
-  version = "0.3.3";
+  version = "0.3.4";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-srt";
-    rev = "v${version}";
-    hash = "sha256-FVgOEBPYZz7SQ5c6mLAssDwY1NuXsV3ghP7OyLRd9Kw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+1/TffqssRA9YR3KLfbAr/ZpDF5XUKw24gj4HWrhObU=";
   };
 
   buildInputs = [ dune-configurator ];
@@ -31,10 +31,10 @@ buildDunePackage rec {
   meta = {
     description = "OCaml bindings for the libsrt library";
     license = lib.licenses.gpl2Plus;
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/savonet/ocaml-srt";
     maintainers = with lib.maintainers; [
       vbgl
       dandellion
     ];
   };
-}
+})
