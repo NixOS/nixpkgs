@@ -75,7 +75,7 @@ stdenv.mkDerivation (
       description = "High-quality data compression program";
       homepage = "https://www.sourceware.org/bzip2";
       changelog = "https://sourceware.org/git/?p=bzip2.git;a=blob;f=CHANGES;hb=HEAD";
-      license = lib.licenses.bsdOriginal;
+      license = lib.licenses.bzip2;
       pkgConfigModules = [ "bzip2" ];
       platforms = lib.platforms.all;
       maintainers = with lib.maintainers; [ mic92 ];
