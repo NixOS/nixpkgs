@@ -13,7 +13,6 @@
   libjpeg,
   libtool,
   libxkbcommon,
-  nss,
   nspr,
   udev,
   gtk3,
