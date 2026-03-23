@@ -15,7 +15,7 @@ build_lib() {
     $lib_src \
     --out-dir target/lib \
     -L dependency=target/deps \
-    --cap-lints allow \
+    --cap-lints $CAP_LINTS \
     $LINK \
     $EXTRA_LINK_ARGS \
     $EXTRA_LINK_ARGS_LIB \
@@ -52,7 +52,7 @@ build_bin() {
     $EXTRA_LINK_ARGS \
     $EXTRA_LINK_ARGS_BINS \
     $EXTRA_LIB \
-    --cap-lints allow \
+    --cap-lints $CAP_LINTS \
     $BUILD_OUT_DIR \
     $EXTRA_BUILD \
     $EXTRA_FEATURES \
