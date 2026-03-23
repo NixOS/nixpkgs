@@ -1373,13 +1373,13 @@
     "vendorHash": "sha256-Bat/S4e5vzT0/XOhJ9zCWLa4IE4owLC6ec1yvEh+c0Y="
   },
   "topicusonderwijs_octodns": {
-    "hash": "sha256-fjLJkIXW7KkxJZwpCxE8upJ5J4D9bt46rmfCVtXFcZ8=",
+    "hash": "sha256-ZfQ7OgW0kKfcoBNBe+wDFKL+hlyxyb80LrfArPBjtv4=",
     "homepage": "https://registry.terraform.io/providers/topicusonderwijs/octodns",
     "owner": "topicusonderwijs",
     "repo": "terraform-provider-octodns",
-    "rev": "v1.1.4",
+    "rev": "v1.1.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-6QgkZp3Ay5bRLwy8dxT5904KW2rBcz5yrYqIlvQToJk="
+    "vendorHash": "sha256-6qQ1k/fCxJGseqU+kjsE29kWYOpzorCeCTldXZo4ukY="
   },
   "trozz_pocketid": {
     "hash": "sha256-/rEdOnAbVM69mA/eP6SlZhk1FZfzrYpej2aO0NUP6E4=",
