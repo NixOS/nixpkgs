@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildDotnetModule,
   fetchFromGitHub,
   fetchpatch,
   dotnetCorePackages,
   copyDesktopItems,
   makeDesktopItem,
+  desktopToDarwinBundle,
   nix-update-script,
   imagemagick,
   libbass,
@@ -50,7 +52,8 @@ buildDotnetModule {
   nativeBuildInputs = [
     copyDesktopItems
     imagemagick
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   projectFile = "interlude/src/Interlude.fsproj";
   nugetDeps = ./deps.json;
@@ -63,9 +66,9 @@ buildDotnetModule {
     libbass_fx
     # replace the bundled one by OpenTK
     glfw
-    # not sure why this is needed but no audio devices can be found by libbass without this
-    alsa-lib
-  ];
+  ]
+  # not sure why this is needed but no audio devices can be found by libbass without this
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib;
 
   executables = [ "Interlude" ];
 
@@ -99,7 +102,9 @@ buildDotnetModule {
     })
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=interlude-v(.+)" ];
+  };
 
   meta = {
     description = "Keyboard rhythm game built for fun, part of the YAVSRG project";
@@ -110,7 +115,7 @@ buildDotnetModule {
       mit
     ];
     maintainers = with lib.maintainers; [ ulysseszhan ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "Interlude";
   };
 }
