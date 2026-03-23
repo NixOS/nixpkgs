@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "pylru";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jlhutch";
     repo = "pylru";
     rev = "v${version}";
-    hash = "sha256-dTYiD+/zt0ZSP+sefYyeD87To1nRXyoFodlBg8pm1YE=";
+    hash = "sha256-TShFfwcF1FfIORzv71hTL4RGAIFh5Dxb+J3mpe1ovn4=";
   };
 
   # Check with the next release if tests are ready
