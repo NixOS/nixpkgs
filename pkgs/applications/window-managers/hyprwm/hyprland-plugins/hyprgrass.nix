@@ -17,7 +17,7 @@ mkHyprlandPlugin {
   src = fetchFromGitHub {
     owner = "horriblename";
     repo = "hyprgrass";
-    rev = "hl-0.54.2";
+    tag = "hl-0.54.2";
     hash = "sha256-XI9j4gXRMeMR+dycRMZ1QwbVK5xYoXDBbihFeGapv04=";
   };
 
