@@ -18,13 +18,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   build-system = with python3.pkgs; [
     setuptools
     setuptools-scm
-    sphinxHook
-    sphinx-argparse
-    sphinx-autoapi
-    sphinx-autodoc-typehints
   ];
-
-  sphinxBuilders = [ "man" ];
 
   dependencies = with python3.pkgs; [
     configobj
