@@ -189,7 +189,7 @@ else
 
       for i in $out/share/applications/*; do
         substituteInPlace $i \
-          --replace-fail /usr/bin $out/bin
+          --replace-fail /usr/bin/ ""
       done
 
       runHook postInstall
