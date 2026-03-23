@@ -3476,23 +3476,7 @@ self: super: with self; {
 
   cynthion = callPackage ../development/python-modules/cynthion { };
 
-  cypari = callPackage ../development/python-modules/cypari {
-
-    inherit (pkgs.pkgsStatic) gmp;
-
-    pari = pkgs.pari.overrideAttrs rec {
-      version = "2.15.4";
-      src = pkgs.fetchurl {
-        url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/pari-${version}.tar.gz";
-        hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
-      };
-      installTargets = [
-        "install"
-        "install-lib-sta"
-      ];
-    };
-
-  };
+  cypari = callPackage ../development/python-modules/cypari { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 

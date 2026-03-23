@@ -28,7 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [ "-fsigned-char" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-fsigned-char"
+  ];
 
   nativeBuildInputs = [ ctags ];
   buildInputs = [ slang ];

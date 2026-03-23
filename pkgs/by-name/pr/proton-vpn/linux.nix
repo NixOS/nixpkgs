@@ -1,5 +1,6 @@
 {
   lib,
+  meta,
   python3Packages,
   fetchFromGitHub,
   gobject-introspection,
@@ -7,11 +8,12 @@
   libayatana-appindicator,
   libnotify,
   wrapGAppsHook4,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
   withIndicator ? true,
 }:
-
 python3Packages.buildPythonApplication (finalAttrs: {
-  pname = "protonvpn-gui";
+  pname = "proton-vpn";
   version = "4.15.0";
   pyproject = true;
 
@@ -69,31 +71,26 @@ python3Packages.buildPythonApplication (finalAttrs: {
   '';
 
   preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
     export XDG_RUNTIME_DIR=$(mktemp -d)
   '';
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook
+  ]
+  ++ (with python3Packages; [
     pytestCheckHook
     pytest-cov-stub
-  ];
+  ]);
 
   disabledTestPaths = [
     # Segmentation fault during widgets tests
     "tests/unit/widgets"
   ];
 
-  meta = {
-    description = "Proton VPN GTK app for Linux";
-    homepage = "https://github.com/ProtonVPN/proton-vpn-gtk-app";
-    license = lib.licenses.gpl3Plus;
+  passthru.updateScript = nix-update-script { };
+
+  meta = meta // {
     platforms = lib.platforms.linux;
     mainProgram = "protonvpn-app";
-    maintainers = with lib.maintainers; [
-      anthonyroussel
-      sebtm
-      rapiteanu
-    ];
   };
 })
