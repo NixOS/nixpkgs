@@ -44,6 +44,7 @@ buildPythonPackage rec {
 
   # TODO: doesn't pass because `can_use` fails and `task --version` seems not to be answering.
   # pythonImportsCheck = [ "taskw_ng" ];
+  passthru.skipBulkUpdate = true;
 
   meta = {
     description = "Module to interact with the Taskwarrior API";
