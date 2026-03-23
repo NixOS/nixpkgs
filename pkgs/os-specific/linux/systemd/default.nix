@@ -206,13 +206,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "260";
+  version = "260.1";
 
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tg3sqC+wRAqkHNwcWGttfvQbgmHoj8zk/tH8bcrRM7c=";
+    hash = "sha256-FUKj3lvjz8TIsyu8NyJYtiNele+1BhdJPdw7r7nW6as=";
   };
 
   # On major changes, or when otherwise required, you *must* :

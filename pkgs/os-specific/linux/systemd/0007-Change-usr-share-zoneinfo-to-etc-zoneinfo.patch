@@ -13,7 +13,7 @@ NixOS uses this path.
  5 files changed, 15 insertions(+), 18 deletions(-)
 
 diff --git a/man/localtime.xml b/man/localtime.xml
-index 3a13e04..4fd5806 100644
+index 3a13e04a27..4fd58068a1 100644
 --- a/man/localtime.xml
 +++ b/man/localtime.xml
 @@ -20,7 +20,7 @@
@@ -35,7 +35,7 @@ index 3a13e04..4fd5806 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index 5dd00af..e682337 100644
+index 5dd00af952..e682337ef0 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
 @@ -1443,7 +1443,7 @@ static int get_timezones_from_zone1970_tab(char ***ret) {
@@ -75,10 +75,10 @@ index 5dd00af..e682337 100644
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index 38e3ada..953ad05 100644
+index ae1899593c..20d3071114 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
-@@ -576,7 +576,7 @@ static int prompt_timezone(int rfd, sd_varlink **mute_console_link) {
+@@ -584,7 +584,7 @@ static int prompt_timezone(int rfd, sd_varlink **mute_console_link) {
  
  static int process_timezone(int rfd, sd_varlink **mute_console_link) {
          _cleanup_close_ int pfd = -EBADF;
@@ -87,7 +87,7 @@ index 38e3ada..953ad05 100644
          const char *e;
          int r;
  
-@@ -622,12 +622,9 @@ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
+@@ -630,12 +630,9 @@ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
          if (isempty(arg_timezone))
                  return 0;
  
@@ -103,7 +103,7 @@ index 38e3ada..953ad05 100644
                  return log_error_errno(r, "Failed to create /etc/localtime symlink: %m");
  
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index a0052c1..39f2b1f 100644
+index a0052c1c88..39f2b1f1e5 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
 @@ -1856,8 +1856,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
@@ -118,7 +118,7 @@ index a0052c1..39f2b1f 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 1455830..532fe36 100644
+index 1455830cba..532fe3684b 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
 @@ -268,7 +268,7 @@ static int context_read_data(Context *c) {

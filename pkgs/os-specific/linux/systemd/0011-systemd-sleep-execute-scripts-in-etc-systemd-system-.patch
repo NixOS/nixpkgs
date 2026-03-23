@@ -9,7 +9,7 @@ This is needed for NixOS to use such scripts as systemd directory is immutable.
  1 file changed, 1 insertion(+)
 
 diff --git a/src/sleep/sleep.c b/src/sleep/sleep.c
-index 43aaede..a8e5a75 100644
+index 43aaede5b0..a8e5a75e39 100644
 --- a/src/sleep/sleep.c
 +++ b/src/sleep/sleep.c
 @@ -248,6 +248,7 @@ static int execute(

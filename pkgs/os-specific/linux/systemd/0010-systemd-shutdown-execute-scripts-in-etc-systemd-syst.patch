@@ -10,7 +10,7 @@ This is needed for NixOS to use such scripts as systemd directory is immutable.
  1 file changed, 1 insertion(+)
 
 diff --git a/src/shutdown/shutdown.c b/src/shutdown/shutdown.c
-index fc6df23..cb8b45a 100644
+index fc6df238be..cb8b45a41b 100644
 --- a/src/shutdown/shutdown.c
 +++ b/src/shutdown/shutdown.c
 @@ -330,6 +330,7 @@ static void notify_supervisor(void) {
