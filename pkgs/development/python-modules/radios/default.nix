@@ -35,6 +35,8 @@ buildPythonPackage rec {
       --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
 
+  pythonRelaxDeps = [ "pycountry" ];
+
   build-system = [
     poetry-core
   ];
