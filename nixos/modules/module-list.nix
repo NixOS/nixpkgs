@@ -1447,6 +1447,7 @@
   ./services/networking/wireguard-networkd.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
+  ./services/networking/wprs.nix
   ./services/networking/wstunnel.nix
   ./services/networking/wvdial.nix
   ./services/networking/x2goserver.nix
