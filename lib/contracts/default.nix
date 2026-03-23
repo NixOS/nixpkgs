@@ -1,7 +1,13 @@
 { lib, ... }:
 let
   inherit (lib) mkOption modules types;
-  inherit (types) attrsOf listOf option submodule str;
+  inherit (types)
+    attrsOf
+    listOf
+    option
+    submodule
+    str
+    ;
   contractModule = mkOption {
     type = submodule {
       options = {
