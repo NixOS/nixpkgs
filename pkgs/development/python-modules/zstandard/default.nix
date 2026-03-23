@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "Zstandard bindings for Python";
     homepage = "https://github.com/indygreg/python-zstandard";
-    license = lib.licenses.bsdOriginal;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
