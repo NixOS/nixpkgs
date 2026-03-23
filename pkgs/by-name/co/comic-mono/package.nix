@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  installFonts,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -15,11 +16,10 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-q8NxrluWuH23FfRlntIS0MDdl3TkkGE7umcU2plS6eU=";
   };
 
+  nativeBuildInputs = [ installFonts ];
+
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/share/fonts
-    cp *.ttf $out/share/fonts
 
     mkdir -p $out/etc/fonts/conf.d
     ln -s ${./comic-mono-weight.conf} $out/etc/fonts/conf.d/30-comic-mono.conf
