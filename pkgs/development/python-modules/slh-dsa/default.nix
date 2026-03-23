@@ -33,6 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "slhdsa" ];
 
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ];
+
   meta = {
     description = "Pure Python implementation of the SLH-DSA algorithm";
     homepage = "https://github.com/colinxu2020/slhdsa";
