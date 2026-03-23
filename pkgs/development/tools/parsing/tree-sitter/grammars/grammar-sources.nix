@@ -106,9 +106,9 @@
   };
 
   beancount = {
-    version = "2.5.0";
+    version = "2.5.1";
     url = "github:polarmutex/tree-sitter-beancount";
-    hash = "sha256-eJ1XAPrVCoGQtrRJdcB/V4ULUmYXemUAE3FQijpH8q8=";
+    hash = "sha256-UJ8bswQJB7UYspNKLWaEXMOR4XlKVHfd7rvV5iaA5Tw=";
     meta = {
       license = lib.licenses.mit;
     };
