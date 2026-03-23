@@ -104,6 +104,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/OpenPrinting/libcupsfilters";
     description = "Backends, filters, and other software that was once part of the core CUPS distribution but is no longer maintained by Apple Inc";
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.all;
   };
 }
