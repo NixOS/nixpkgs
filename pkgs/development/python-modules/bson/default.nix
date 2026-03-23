@@ -3,20 +3,21 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  setuptools,
   python-dateutil,
   six,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "bson";
   version = "0.5.10";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-bson";
     repo = "bson";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-mirRpo27RoOBlwxVOKnHaDIzJOErp7c2VxCOunUm/u4=";
   };
 
@@ -36,7 +37,9 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     python-dateutil
     six
   ];
@@ -51,4 +54,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
