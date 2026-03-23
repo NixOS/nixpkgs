@@ -8,6 +8,7 @@
   runCommandCC,
   stdenv,
   symlinkJoin,
+  testers,
   writeTextFile,
   pkgsCross,
 }:
@@ -726,6 +727,26 @@ rec {
             ];
           };
         };
+        # The `lints` attr mirrors Cargo.toml's `[lints]` table and is
+        # translated to rustc `-A`/`-W`/`-D`/`-F` flags. Lower-priority
+        # entries are emitted first so that higher-priority specific lints
+        # can override them. Here `-D unused` (priority -1) is followed by
+        # `-A dead_code` (default priority 0); the build only succeeds if
+        # both flags reach rustc in that order.
+        lintsPriority = {
+          lints.rust = {
+            unused = {
+              level = "deny";
+              priority = -1;
+            };
+            dead_code = "allow";
+          };
+          src = mkFile "src/lib.rs" ''
+            #![allow(nonstandard_style)]
+            fn dead() {}
+            pub fn alive() {}
+          '';
+        };
       };
       brotliCrates = (callPackage ./brotli-crates.nix { });
       rcgenCrates = callPackage ./rcgen-crates.nix {
@@ -892,6 +913,25 @@ rec {
           ''
             test -e ${pkg}/bin/brotli-decompressor && touch $out
           '';
+
+      # A `deny` lint from the lints table should actually fail the build.
+      lintsDenyFails =
+        let
+          crate = mkHostCrate {
+            crateName = "lintsDenyFails";
+            lints.rust.dead_code = "deny";
+            src = mkFile "src/lib.rs" ''
+              fn dead() {}
+              pub fn alive() {}
+            '';
+          };
+          failed = testers.testBuildFailure crate;
+        in
+        runCommand "assert-lintsDenyFails" { inherit failed; } ''
+          grep -q 'function .dead. is never used' "$failed/testBuildFailure.log"
+          grep -q '\-D dead.code' "$failed/testBuildFailure.log"
+          touch $out
+        '';
 
       rcgenTest =
         let

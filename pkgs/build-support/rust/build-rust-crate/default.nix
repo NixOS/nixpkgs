@@ -62,6 +62,65 @@ let
   # Create feature arguments for rustc.
   mkRustcFeatureArgs = lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'');
 
+  # Translate a Cargo.toml `[lints]` table into rustc flags.
+  #
+  # See <https://doc.rust-lang.org/cargo/reference/manifest.html#the-lints-section>.
+  #
+  # Cargo normally translates `[lints.<tool>]` entries into `-A`/`-W`/`-D`/`-F`
+  # flags when invoking rustc. Since buildRustCrate calls rustc directly we
+  # must perform that translation ourselves.
+  #
+  # Example:
+  #
+  #   lintsToRustcFlags {
+  #     rust = {
+  #       unsafe_code = "forbid";
+  #       unused = { level = "deny"; priority = -1; };
+  #     };
+  #     clippy.all = "warn";
+  #   }
+  #   => [ "-D unused" "-W clippy::all" "-F unsafe_code" ]
+  #
+  # Entries are sorted by ascending priority (default 0) so that lower-priority
+  # groups are emitted first and can be overridden by higher-priority specific
+  # lints — matching cargo's behaviour where later rustc flags win.
+  lintsToRustcFlags =
+    lints:
+    let
+      levelFlag = {
+        allow = "-A";
+        warn = "-W";
+        force-warn = "--force-warn";
+        deny = "-D";
+        forbid = "-F";
+      };
+      toolPrefix = tool: if tool == "rust" then "" else "${tool}::";
+      normalize =
+        val:
+        if builtins.isString val then
+          {
+            level = val;
+            priority = 0;
+          }
+        else
+          { priority = 0; } // val;
+      entries = lib.concatMap (
+        tool:
+        lib.mapAttrsToList (
+          name: val:
+          let
+            e = normalize val;
+          in
+          {
+            inherit (e) priority;
+            flag = "${levelFlag.${e.level}} ${toolPrefix tool}${name}";
+          }
+        ) lints.${tool}
+      ) (builtins.attrNames lints);
+      sorted = lib.sort (a: b: a.priority < b.priority) entries;
+    in
+    map (e: e.flag) sorted;
+
   # Whether we need to use unstable command line flags
   #
   # Currently just needed for standard library dependencies, which have a
@@ -203,9 +262,35 @@ lib.makeOverridable
       # second one via `extraRustcOpts` has no effect. Use this parameter
       # instead if you need lints to fire (e.g. when running clippy).
       #
+      # When left at `null`, resolves to `"allow"` if `lints` is empty (the
+      # usual case for third-party dependencies), or `"forbid"` if `lints`
+      # is set (so your own crate's lint policy actually applies).
+      #
       # Example: "warn"
-      # Default: "allow"
+      # Default: null (auto: "allow" or "forbid" depending on `lints`)
       capLints,
+      # Lint configuration mirroring Cargo.toml's `[lints]` table.
+      # See <https://doc.rust-lang.org/cargo/reference/manifest.html#the-lints-section>.
+      #
+      # Keys are tool names (`rust`, `clippy`, `rustdoc`); values are attrsets
+      # mapping lint names to either a level string (`"allow"`, `"warn"`,
+      # `"force-warn"`, `"deny"`, `"forbid"`) or an attrset
+      # `{ level = "..."; priority = <int>; }`. Lower priorities are emitted
+      # first so that higher-priority (more specific) lints can override them.
+      #
+      # Setting a non-empty `lints` raises the default `capLints` from
+      # `"allow"` to `"forbid"` so the lints actually fire.
+      #
+      # Example:
+      #   {
+      #     rust = {
+      #       unsafe_code = "forbid";
+      #       unused = { level = "deny"; priority = -1; };
+      #     };
+      #     clippy.all = "warn";
+      #   }
+      # Default: {}
+      lints,
       # Whether to enable building tests.
       # Use true to enable.
       # Default: false
@@ -260,14 +345,26 @@ lib.makeOverridable
         "codegenUnits"
         "links"
         "capLints"
+        "lints"
       ];
       extraDerivationAttrs = removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
       extraRustcOptsForBuildRs_ = extraRustcOptsForBuildRs;
-      capLints_ = capLints;
       buildTests_ = buildTests;
+      resolvedLints = crate.lints or lints;
+      lintFlags = lintsToRustcFlags resolvedLints;
+      resolvedCapLints =
+        let
+          requested = crate.capLints or capLints;
+        in
+        if requested != null then
+          requested
+        else if resolvedLints != { } then
+          "forbid"
+        else
+          "allow";
 
       # crate2nix has a hack for the old bash based build script that did split
       # entries at `,`. No we have to work around that hack.
@@ -390,12 +487,14 @@ lib.makeOverridable
         extraRustcOpts =
           lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
           ++ extraRustcOpts_
+          ++ lintFlags
           ++ (lib.optional (edition != null) "--edition ${edition}");
         extraRustcOptsForBuildRs =
           lib.optionals (crate ? extraRustcOptsForBuildRs) crate.extraRustcOptsForBuildRs
           ++ extraRustcOptsForBuildRs_
+          ++ lintFlags
           ++ (lib.optional (edition != null) "--edition ${edition}");
-        capLints = crate.capLints or capLints_;
+        capLints = resolvedCapLints;
 
         configurePhase = configureCrate {
           inherit
@@ -487,7 +586,8 @@ lib.makeOverridable
     verbose = crate_.verbose or true;
     extraRustcOpts = [ ];
     extraRustcOptsForBuildRs = [ ];
-    capLints = "allow";
+    capLints = null;
+    lints = { };
     features = [ ];
     nativeBuildInputs = [ ];
     buildInputs = [ ];
