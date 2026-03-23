@@ -4,6 +4,8 @@
   fetchFromGitHub,
   mkdocs,
   poetry-core,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
@@ -23,8 +25,10 @@ buildPythonPackage rec {
     mkdocs
   ];
 
-  # This package has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
