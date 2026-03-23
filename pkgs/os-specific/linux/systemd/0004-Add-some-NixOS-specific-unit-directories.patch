@@ -16,7 +16,7 @@ Original-Author: Eelco Dolstra <eelco.dolstra@logicblox.com>
  2 files changed, 7 insertions(+), 21 deletions(-)
 
 diff --git a/src/core/systemd.pc.in b/src/core/systemd.pc.in
-index 862d57d..8ba0ca4 100644
+index 862d57dcb6..8ba0ca4486 100644
 --- a/src/core/systemd.pc.in
 +++ b/src/core/systemd.pc.in
 @@ -46,10 +46,10 @@ systemdsystemconfdir=${systemd_system_conf_dir}
@@ -46,7 +46,7 @@ index 862d57d..8ba0ca4 100644
  
  systemd_sleep_dir=${prefix}/lib/systemd/system-sleep
 diff --git a/src/libsystemd/sd-path/path-lookup.c b/src/libsystemd/sd-path/path-lookup.c
-index 32c14fb..7f0bf62 100644
+index 32c14fb14a..7f0bf62844 100644
 --- a/src/libsystemd/sd-path/path-lookup.c
 +++ b/src/libsystemd/sd-path/path-lookup.c
 @@ -102,11 +102,7 @@ int runtime_directory(RuntimeScope scope, const char *fallback_suffix, char **re
