@@ -87,9 +87,6 @@ stdenv.mkDerivation rec {
     ./gsutil-disable-updates.patch
   ];
 
-  # Prevent Python from writing bytecode to ensure build determinism
-  PYTHONDONTWRITEBYTECODE = "1";
-
   installPhase = ''
     runHook preInstall
 
@@ -109,7 +106,7 @@ stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
-            --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
+            --set CLOUDSDK_PYTHON_ARGS "-S -B -W ignore" \
             --prefix PYTHONPATH : "${pythonEnv}/${python3.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
@@ -158,6 +155,36 @@ stdenv.mkDerivation rec {
     done
 
     runHook postInstall
+  '';
+
+  postInstall = ''
+    # create cached byte-code at build time, see https://docs.python.org/3/library/compileall.html
+    # the excluded files contain python 2 syntax that fails to compile with python 3
+    find $out/google-cloud-sdk -name "*.py" \
+      -not -path "*/lib/third_party/yaml/scanner.py" \
+      -not -path "*/lib/third_party/yaml/error.py" \
+      -not -path "*/lib/third_party/yaml/constructor.py" \
+      -not -path "*/lib/third_party/yaml/parser.py" \
+      -not -path "*/lib/third_party/yaml/reader.py" \
+      -not -path "*/lib/third_party/yaml/loader.py" \
+      -not -path "*/lib/third_party/yaml/resolver.py" \
+      -not -path "*/yaml/lib2/scanner.py" \
+      -not -path "*/yaml/lib2/constructor.py" \
+      -not -path "*/yaml/lib2/reader.py" \
+      -not -path "*/yaml/lib2/resolver.py" \
+      -not -path "*/gcloud_crcmod/python2/crcmod.py" \
+      -not -path "*/gcloud_crcmod/python2/_crcfunpy.py" \
+      -not -path "*/concurrent/python2/concurrent/futures/_base.py" \
+      -not -path "*/third_party/gflags/__init__.py" \
+      -not -path "*/third_party/gflags/setup.py" \
+      -not -path "*/third_party/gflags/gflags2man.py" \
+      -not -path "*/third_party/apitools/setup.py" \
+      -not -path "*/third_party/apitools/ez_setup.py" \
+      -not -path "*/lib/third_party/pytz/lazy.py" \
+      -not -path "*/lib/third_party/fancy_urllib/__init__.py" \
+      -not -path "*/oauth2client/_pkce.py" \
+      -not -path "*/ext-runtime/nodejs/test/runtime_test.py" \
+      -exec ${pythonEnv}/bin/python -OO -m compileall {} +
   '';
 
   doInstallCheck = true;
