@@ -4090,7 +4090,8 @@
       ];
     "nanoleaf" =
       ps: with ps; [
-      ]; # missing inputs: aionanoleaf2
+        aionanoleaf2
+      ];
     "nasweb" =
       ps: with ps; [
         webio-api
@@ -7835,6 +7836,7 @@
     "myuplink"
     "nam"
     "namecheapdns"
+    "nanoleaf"
     "nasweb"
     "neato"
     "nederlandse_spoorwegen"
