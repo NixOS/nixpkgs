@@ -2,8 +2,7 @@
   lib,
   python3,
   fetchPypi,
-  khard,
-  testers,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -45,7 +44,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "khard" ];
 
-  passthru.tests.version = testers.testVersion { package = khard; };
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
     homepage = "https://github.com/lucc/khard";
