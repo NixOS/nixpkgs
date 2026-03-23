@@ -1,6 +1,5 @@
 {
   autoconf,
-  autogen,
   automake,
   clangStdenv,
   fetchfossil,
@@ -21,7 +20,6 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     automake
-    autogen
     autoconf
   ];
 
