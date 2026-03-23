@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   preCheck = ''
-    # see https://github.com/scheibler/khard/issues/263
+    # see https://github.com/lucc/khard/issues/263
     export COLUMNS=80
   '';
 
@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   passthru.tests.version = testers.testVersion { package = khard; };
 
   meta = {
-    homepage = "https://github.com/scheibler/khard";
+    homepage = "https://github.com/lucc/khard";
     description = "Console carddav client";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ matthiasbeyer ];
