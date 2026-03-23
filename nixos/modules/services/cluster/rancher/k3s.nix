@@ -114,13 +114,11 @@ in
 
   # implementation
 
-  config = lib.mkIf cfg.enable (
-    lib.recursiveUpdate baseModule.config {
-      warnings = (
-        lib.optional (
-          cfg.disableAgent && cfg.images != [ ]
-        ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node."
-      );
+  config = lib.mkIf cfg.enable (lib.mkMerge [
+    baseModule.config
+    {
+      warnings = lib.optional (cfg.disableAgent && cfg.images != [ ])
+        "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node.";
 
       assertions = [
         {
@@ -133,5 +131,5 @@ in
         }
       ];
     }
-  );
+  ]);
 }
