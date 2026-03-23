@@ -7307,6 +7307,7 @@
     name = "jan Lemata";
     github = "DuskyElf";
     githubId = 91879372;
+    email = "nixpkgs@duskyelf.me";
   };
   dustyhorizon = {
     name = "Kenneth Tan";
