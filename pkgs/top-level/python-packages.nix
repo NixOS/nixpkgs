@@ -1108,8 +1108,6 @@ self: super: with self; {
 
   async-cache = callPackage ../development/python-modules/async-cache { };
 
-  async-dns = callPackage ../development/python-modules/async-dns { };
-
   async-generator = callPackage ../development/python-modules/async-generator { };
 
   async-interrupt = callPackage ../development/python-modules/async-interrupt { };

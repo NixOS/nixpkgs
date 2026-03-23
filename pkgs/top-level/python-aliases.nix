@@ -89,6 +89,7 @@ mapAliases {
   argon2_cffi = throw "'argon2_cffi' has been renamed to/replaced by 'argon2-cffi'"; # Converted to throw 2025-10-29
   astropy-extension-helpers = extension-helpers; # Added 2025-10-15
   asyauth-bad = throw "'asyauth-bad' has been renamed to/replaced by 'badauth'"; # added 2025-11-06
+  async-dns = throw "'async-dns' has been removed as it was unmaintained upstream"; # Added 2026-03-23
   async_generator = throw "'async_generator' has been renamed to/replaced by 'async-generator'"; # Converted to throw 2025-10-29
   async_stagger = throw "'async_stagger' has been renamed to/replaced by 'async-stagger'"; # Converted to throw 2025-10-29
   asyncio-nats-client = throw "'asyncio-nats-client' has been renamed to/replaced by 'nats-py'"; # Converted to throw 2025-10-29
