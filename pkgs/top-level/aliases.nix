@@ -1466,7 +1466,6 @@ mapAliases {
   oathToolkit = throw "'oathToolkit' has been renamed to/replaced by 'oath-toolkit'"; # Converted to throw 2025-10-27
   obb = throw "obb has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   obliv-c = throw "obliv-c has been removed from Nixpkgs, as it has been unmaintained upstream for 4 years and does not build with supported GCC versions"; # Added 2025-08-18
-  oclgrind = throw "oclgrind has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   oil = throw "'oil' has been renamed to/replaced by 'oils-for-unix'"; # Converted to throw 2025-10-27
   olaris-server = throw "'olaris-server' has been removed as it failed to build since 2024"; # Added 2026-01-15
   oneDNN = onednn; # Added 2026-02-08
