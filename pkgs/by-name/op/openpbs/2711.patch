@@ -1,0 +1,58 @@
+diff --git a/src/cmds/qstat.c b/src/cmds/qstat.c
+index 440e37cb..cb7fe62c 100644
+--- a/src/cmds/qstat.c
++++ b/src/cmds/qstat.c
+@@ -76,7 +76,6 @@ extern char *tcl_atrsep;
+ /* default server */
+ char *def_server;
+ 
+-static void states();
+ static char *cvtResvstate(char *);
+ static int cmp_est_time(struct batch_status *a, struct batch_status *b);
+ char *cnvt_est_start_time(char *start_time, int shortform);
+diff --git a/src/cmds/qsub.c b/src/cmds/qsub.c
+index f02bb5ef..54871a08 100644
+--- a/src/cmds/qsub.c
++++ b/src/cmds/qsub.c
+@@ -89,6 +89,7 @@
+ #include <assert.h>
+ #include <sys/un.h>
+ #include <syslog.h>
++#include <unistd.h>
+ #include "pbs_ifl.h"
+ #include "cmds.h"
+ #include "libpbs.h"
+@@ -1944,7 +1945,6 @@ job_env_basic(void)
+ 	struct utsname uns;
+ #endif
+ 	int len = 0;
+-	char *getcwd();
+ 
+ 	/* Calculate how big to make the variable string. */
+ 	len = 0;
+diff --git a/src/include/qmgr.h b/src/include/qmgr.h
+index eb021c53..17ae6522 100644
+--- a/src/include/qmgr.h
++++ b/src/include/qmgr.h
+@@ -143,7 +143,7 @@ struct objname {
+ /* prototypes */
+ struct objname *commalist2objname(char *, int);
+ struct server *find_server(char *);
+-struct server *make_connection();
++struct server *make_connection(char *);
+ struct server *new_server();
+ struct objname *new_objname();
+ struct objname *strings2objname(char **, int, int);
+diff --git a/src/tools/pbs_tclWrap.c b/src/tools/pbs_tclWrap.c
+index 558528ad..1a9dd1d4 100644
+--- a/src/tools/pbs_tclWrap.c
++++ b/src/tools/pbs_tclWrap.c
+@@ -273,7 +273,7 @@ int
+ GetREQ(ClientData clientData, Tcl_Interp *interp, int objc, Tcl_Obj *CONST objv[])
+ {
+ 	int fd;
+-	char *ret, *getreq();
++	char *ret;
+ 	char *cmd;
+ 
+ 	cmd = Tcl_GetStringFromObj(objv[0], NULL);

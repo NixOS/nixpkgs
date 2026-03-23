@@ -1,0 +1,18 @@
+diff --git a/froide/helper/templatetags/permission_helper.py b/froide/helper/templatetags/permission_helper.py
+index c9d692e2..5bddaa21 100644
+--- a/froide/helper/templatetags/permission_helper.py
++++ b/froide/helper/templatetags/permission_helper.py
+@@ -1,7 +1,5 @@
+ from django import template
+ 
+-from ..auth import can_moderate_object
+-
+ register = template.Library()
+ 
+ 
+@@ -12,4 +10,4 @@ def has_perm(user, perm):
+ 
+ @register.filter
+ def can_moderate(obj, request):
+-    return can_moderate_object(obj, request)
++    return False

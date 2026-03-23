@@ -1,0 +1,14 @@
+diff --git a/algebra/_common/lin_sys/qdldl/qdldl.cmake b/algebra/_common/lin_sys/qdldl/qdldl.cmake
+index ac777bd0..3e419097 100644
+--- a/algebra/_common/lin_sys/qdldl/qdldl.cmake
++++ b/algebra/_common/lin_sys/qdldl/qdldl.cmake
+@@ -5,8 +5,7 @@ list(APPEND CMAKE_MESSAGE_INDENT "  ")
+ 
+ FetchContent_Declare(
+   qdldl
+-  GIT_REPOSITORY https://github.com/osqp/qdldl.git
+-  GIT_TAG v0.1.8
++  URL @qdldl_src@
+   )
+ 
+ # Make QDLDL use the same types as OSQP

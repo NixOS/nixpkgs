@@ -1,0 +1,30 @@
+--- a/tests/integration.rs
++++ b/tests/integration.rs
+@@ -16,20 +16,13 @@ impl CommandUnderTest {
+     fn new() -> CommandUnderTest {
+         // To find the directory where the built binary is, we walk up the directory tree of the test binary until the
+         // parent is "target/".
+-        let mut binary_path = env::current_exe().expect("need current binary path to find binary to test");
+-        loop {
+-            {
+-                let parent = binary_path.parent();
+-                if parent.is_none() {
+-                    panic!("Failed to locate binary path from original path: {:?}", env::current_exe());
+-                }
+-                let parent = parent.unwrap();
+-                if parent.is_dir() && parent.file_name().unwrap() == "target" {
+-                    break;
+-                }
+-            }
+-            binary_path.pop();
+-        }
++        let mut binary_path = PathBuf::from(
++            env::current_dir()
++                .unwrap()
++                .join("target")
++                .join("@shortTarget@")
++                .join(env!("cargoBuildType")),
++        );
+ 
+         binary_path.push(
+             if cfg!(target_os = "windows") {
