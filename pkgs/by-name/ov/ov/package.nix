@@ -73,9 +73,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      farcaller
-    ];
+    maintainers = [ ];
     mainProgram = "ov";
   };
 })
