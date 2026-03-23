@@ -55,7 +55,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/chojs23/ec";
     changelog = "https://github.com/chojs23/ec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kpbaks ];
+    maintainers = with lib.maintainers; [
+      kpbaks
+      neo
+    ];
     mainProgram = "ec";
   };
 })
