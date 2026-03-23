@@ -17665,6 +17665,12 @@
     name = "Marcin Mikuła";
     keys = [ { fingerprint = "5547 2A56 AC30 69C9 15C8  B98D 997F 71FA 1D74 6E37"; } ];
   };
+  milas = {
+    email = "antonbergmark@gmail.com";
+    github = "milas0";
+    githubId = 56896821;
+    name = "Anton Bergmark";
+  };
   milesbreslin = {
     email = "milesbreslin@gmail.com";
     github = "MilesBreslin";
