@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
-  version = "1.26.0";
+  version = "1.26.11";
 
   format = "other";
 
@@ -32,21 +32,14 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-python/gst-python-${version}.tar.xz";
-    hash = "sha256-5QRqBdd6uxVnGtAc0ZCNF9YuWgb114Qb5DQq3io/uNs=";
+    hash = "sha256-ETFrp2m1bSbYsUZMcZipkkyurkgTT321kXH68ac9xDY=";
   };
 
-  patches = [
-    # Fix segfault with PyGObject>=3.52.0
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8653
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/69bba61e548c7a63bc18137e63e41489a7de9d36.patch";
-      stripLen = 2;
-      hash = "sha256-BfWPc8dsB09KiEm9bNT8e+jH76jiDefQlEhhLJoq7tI=";
-    })
-
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
-    ./skip-failing-test-not-initialized.patch
-  ];
+  # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
+  postPatch = ''
+    substituteInPlace testsuite/meson.build \
+      --replace-fail "['gstinit', 'test_gst_init.py']," ""
+  '';
 
   # Python 2.x is not supported.
   disabled = !isPy3k;
