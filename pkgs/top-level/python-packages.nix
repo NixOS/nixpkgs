@@ -2196,8 +2196,6 @@ self: super: with self; {
 
   boa-api = callPackage ../development/python-modules/boa-api { };
 
-  boiboite-opener-framework = callPackage ../development/python-modules/boiboite-opener-framework { };
-
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
   bokeh = callPackage ../development/python-modules/bokeh { };
