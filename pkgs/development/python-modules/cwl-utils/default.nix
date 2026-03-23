@@ -28,6 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-A9+JvtSTPfXK/FGJ8pplT06kkuatZu1fgjjmg74oTvE=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "ruamel.yaml >= 0.17.6, < 0.19" "ruamel.yaml"
+  '';
+
   build-system = [ setuptools ];
 
   dependencies = [
