@@ -63,12 +63,12 @@
     "vendorHash": "sha256-kg6RylB2sW5XLWxJLmIDq3h54rzQoCKrxVu7L76lvCE="
   },
   "argoproj-labs_argocd": {
-    "hash": "sha256-OhuU3XGFRRn6oBiGaT4eRUB3+Lew1PonsshBXMcMA5k=",
+    "hash": "sha256-Nj7czoKDRDk4i75T7M990EBQr0yOU1Zwc0nU2wQ6YoY=",
     "homepage": "https://registry.terraform.io/providers/argoproj-labs/argocd",
     "owner": "argoproj-labs",
     "proxyVendor": true,
     "repo": "terraform-provider-argocd",
-    "rev": "v7.15.0",
+    "rev": "v7.15.1",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-CO09y7rdbY27VFX85pV2ocnO0rvhGJg3hXfLWaF+HTI="
   },
@@ -1418,13 +1418,13 @@
     "vendorHash": null
   },
   "vancluever_acme": {
-    "hash": "sha256-R0tbT4DBzRkXiJdvGL3AOY9ALXwWIH90WaWbqe8xtkk=",
+    "hash": "sha256-V/dkcnlqYyAdDAWpMp2ib0mlnDb1A6YlJHQhKyjKBo4=",
     "homepage": "https://registry.terraform.io/providers/vancluever/acme",
     "owner": "vancluever",
     "repo": "terraform-provider-acme",
-    "rev": "v2.45.1",
+    "rev": "v2.46.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-PN9r9rTJChmhZd/l5BrsEMGfhzHNbcRhjtEoYJ+Vzuc="
+    "vendorHash": "sha256-JayuT74/oNcmwtq/VePYRRQ5iyc2HfunDWYOVJsLTrE="
   },
   "venafi_venafi": {
     "hash": "sha256-wpAckNRqZjSDt7KpCRpLSYkn6Gm+QPzn5sIJ90wRXjI=",

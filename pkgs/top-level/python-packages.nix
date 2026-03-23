@@ -7092,6 +7092,8 @@ self: super: with self; {
 
   homematicip = callPackage ../development/python-modules/homematicip { };
 
+  homevolt = callPackage ../development/python-modules/homevolt { };
+
   homf = callPackage ../development/python-modules/homf { };
 
   hoomd-blue = callPackage ../development/python-modules/hoomd-blue { };
@@ -7353,6 +7355,8 @@ self: super: with self; {
   idna = callPackage ../development/python-modules/idna { };
 
   idna-ssl = callPackage ../development/python-modules/idna-ssl { };
+
+  idrive-e2-client = callPackage ../development/python-modules/idrive-e2-client { };
 
   idstools = callPackage ../development/python-modules/idstools { };
 
