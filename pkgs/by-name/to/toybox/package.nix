@@ -43,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = "patchShebangs .";
 
   inherit extraConfig;
-  passAsFile = [ "extraConfig" ];
 
   configurePhase = ''
     make ${
@@ -57,7 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
         "defconfig"
     }
 
-    cat $extraConfigPath .config > .config-
+    printf "%s" "$extraConfig" > .config-
+    cat .config >> .config-
     mv .config- .config
 
     make oldconfig
@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   checkTarget = "tests";
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Lightweight implementation of some Unix command line utilities";
