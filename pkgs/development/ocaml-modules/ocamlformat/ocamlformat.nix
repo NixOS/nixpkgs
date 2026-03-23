@@ -17,8 +17,6 @@ buildDunePackage {
   pname = "ocamlformat";
   inherit src version;
 
-  minimalOCamlVersion = "4.08";
-
   nativeBuildInputs = if lib.versionAtLeast version "0.25.1" then [ ] else [ menhir ];
 
   buildInputs = [
@@ -43,6 +41,7 @@ buildDunePackage {
       || lib.versionAtLeast ocaml.version "5.1" && !lib.versionAtLeast version "0.25"
       || lib.versionAtLeast ocaml.version "5.2" && !lib.versionAtLeast version "0.26.2"
       || lib.versionAtLeast ocaml.version "5.3" && !lib.versionAtLeast version "0.27"
-      || lib.versionAtLeast ocaml.version "5.4" && !lib.versionAtLeast version "0.28";
+      || lib.versionAtLeast ocaml.version "5.4" && !lib.versionAtLeast version "0.28"
+      || lib.versionAtLeast version "0.29.0" && !lib.versionAtLeast ocaml.version "4.14";
   };
 }
