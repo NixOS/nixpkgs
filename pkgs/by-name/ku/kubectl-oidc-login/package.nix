@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectl-oidc-login";
-  version = "1.35.2";
+  version = "1.36.0";
 
   src = fetchFromGitHub {
     owner = "int128";
     repo = "kubelogin";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jSPNvr+spZvilTooK7s6l8CyvP5tzSWxqJzaoJCA5AM=";
+    hash = "sha256-v6kNz75+xRQHfTfBKpKaNZodQzZNmJiF+WX0wJfGZ2M=";
   };
 
-  vendorHash = "sha256-otzcOmW3mkiJrIv69wme5cHp5/iO2YSH+ecZgeX2aV0=";
+  vendorHash = "sha256-f9Umpdlb6m38J05CanNJktS1T31SBSy1T1rOCzBUYkQ=";
 
   ldflags = [
     "-X main.version=${finalAttrs.version}"

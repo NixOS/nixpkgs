@@ -2534,7 +2534,8 @@
       ];
     "homevolt" =
       ps: with ps; [
-      ]; # missing inputs: homevolt
+        homevolt
+      ];
     "homewizard" =
       ps: with ps; [
         python-homewizard-energy
@@ -2738,7 +2739,8 @@
     "idrive_e2" =
       ps: with ps; [
         aiobotocore
-      ]; # missing inputs: idrive-e2-client
+        idrive-e2-client
+      ];
     "idteck_prox" =
       ps: with ps; [
         rfk101py
@@ -7604,6 +7606,7 @@
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
+    "homevolt"
     "homewizard"
     "homeworks"
     "honeywell"
@@ -7626,6 +7629,7 @@
     "ibeacon"
     "icloud"
     "idasen_desk"
+    "idrive_e2"
     "ifttt"
     "igloohome"
     "ign_sismologia"
