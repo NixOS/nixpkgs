@@ -17,7 +17,7 @@ let
       in
       with lib.versions;
       lib.switch rocq-core.rocq-version [
-        (case (range "9.0" "9.2") "3.6.1")
+        (case (range "9.0" "9.2") "3.6.2")
         (case (range "9.0" "9.1") "3.4.5")
         (case (range "9.0" "9.1") "2.0.7")
       ] rocq-core.ocamlPackages.elpi.version;
