@@ -34,6 +34,7 @@ pythonPackages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "importlib-metadata"
     "pathspec"
+    "voluptuous"
   ];
   dependencies = with pythonPackages; [
     importlib-metadata
