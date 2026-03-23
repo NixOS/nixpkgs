@@ -7307,6 +7307,7 @@
     name = "jan Lemata";
     github = "DuskyElf";
     githubId = 91879372;
+    email = "nixpkgs@duskyelf.me";
   };
   dustyhorizon = {
     name = "Kenneth Tan";
@@ -24750,6 +24751,12 @@
     github = "sheepforce";
     githubId = 16844216;
     name = "Phillip Seeber";
+  };
+  sheevy = {
+    email = "mw.kubica@gmail.com";
+    github = "sheevy";
+    githubId = 1525683;
+    name = "Mateusz Kubica";
   };
   sheganinans = {
     email = "sheganinans@gmail.com";
