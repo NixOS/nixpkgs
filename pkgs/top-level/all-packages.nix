@@ -2343,10 +2343,6 @@ with pkgs;
 
   fluentd = callPackage ../tools/misc/fluentd { };
 
-  lp_solve = callPackage ../applications/science/math/lp_solve {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   fpm = callPackage ../tools/package-management/fpm { };
 
   ferdium = callPackage ../applications/networking/instant-messengers/ferdium {

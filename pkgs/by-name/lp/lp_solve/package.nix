@@ -4,7 +4,7 @@
   fetchurl,
   cctools,
   fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
+  darwin,
   replaceVars,
   buildPackages,
   binutils,
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       fixDarwinDylibNames
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
+      darwin.autoSignDarwinBinariesHook
     ];
 
   env = {
