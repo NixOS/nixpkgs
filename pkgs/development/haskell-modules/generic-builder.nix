@@ -343,6 +343,8 @@ let
     END { print "" }
   '';
 
+  makeGhcOptions = opts: map (opt: "--ghc-option=${opt}") opts;
+
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
@@ -355,27 +357,30 @@ let
     "--with-hsc2hs=${ghc.targetPrefix}hsc2hs"
     "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ]
-  ++ optionals (!isHaLVM) [
-    "--hsc2hs-option=--cross-compile"
-    (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
+  ++ optionals (!isHaLVM) (
+    [
+      "--hsc2hs-option=--cross-compile"
+    ]
+    ++ optionals enableHsc2hsViaAsm [
+      "--hsc2hs-option=--via-asm"
+    ]
+  )
+  ++ optionals (allPkgconfigDepends != [ ]) [
+    "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
   ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
-
   ++ optionals enableExternalInterpreter (
-    map (opt: "--ghc-option=${opt}") (
+    makeGhcOptions (
       [
         "-fexternal-interpreter"
         "-pgmi"
         crossSupport.iservWrapper
       ]
-      ++ lib.optionals stdenv.hostPlatform.isWindows [
+      ++ optionals stdenv.hostPlatform.isWindows [
         "-L${windows.pthreads}/bin"
         "-L${windows.pthreads}/lib"
       ]
     )
   );
-
-  makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
   defaultConfigureFlags = [
     "--verbose"
@@ -383,38 +388,48 @@ let
     # Note: This must be kept in sync manually with mkGhcLibdir
     ("--libdir=\\$prefix/lib/\\$compiler" + lib.optionalString (ghc ? hadrian) "/lib")
     "--libsubdir=\\$abi/\\$libname"
-    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghcNameWithPrefix}")
-    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
+  ]
+  ++ optionals enableSeparateDataOutput [
+    "--datadir=$data/share/${ghcNameWithPrefix}"
+  ]
+  ++ optionals enableSeparateDocOutput [
+    "--docdir=${docdir "$doc"}"
   ]
   ++ optionals stdenv.hasCC [
     "--with-gcc=$CC" # Clang won't work without that extra information.
   ]
   ++ [
     "--package-db=$packageConfDir"
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isLinux
-    ) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
-    (optionalString (
-      enableSharedExecutables && stdenv.hostPlatform.isDarwin
-    ) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
-    (optionalString enableParallelBuilding (makeGhcOptions [
-      "-j$NIX_BUILD_CORES"
-      "+RTS"
-      "-A64M"
-      "-RTS"
-    ]))
-    (optionalString useCpphs (
-      "--with-cpphs=${cpphs}/bin/cpphs "
-      + (makeGhcOptions [
-        "-cpp"
-        "-pgmP${cpphs}/bin/cpphs"
-        "-optP--cpp"
-      ])
-    ))
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isLinux) [
+    "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}"
+  ]
+  ++ optionals (enableSharedExecutables && stdenv.hostPlatform.isDarwin) [
+    "--ghc-option=-optl=-Wl,-headerpad_max_install_names"
+  ]
+  ++ optionals enableParallelBuilding (makeGhcOptions [
+    "-j$NIX_BUILD_CORES"
+    "+RTS"
+    "-A64M"
+    "-RTS"
+  ])
+  ++ optionals useCpphs (
+    [
+      "--with-cpphs=${cpphs}/bin/cpphs"
+    ]
+    ++ (makeGhcOptions [
+      "-cpp"
+      "-pgmP${cpphs}/bin/cpphs"
+      "-optP--cpp"
+    ])
+  )
+  ++ [
     (enableFeature enableLibraryProfiling "library-profiling")
-    (optionalString (
-      enableExecutableProfiling || enableLibraryProfiling
-    ) "--profiling-detail=${profilingDetail}")
+  ]
+  ++ optionals (enableExecutableProfiling || enableLibraryProfiling) [
+    "--profiling-detail=${profilingDetail}"
+  ]
+  ++ [
     (enableFeature enableExecutableProfiling "profiling")
     (enableFeature enableSharedLibraries "shared")
     (enableFeature doCoverage "coverage")
@@ -444,12 +459,17 @@ let
     "--ghc-option=-haddock"
   ];
 
-  postPhases = optional doInstallIntermediates "installIntermediatesPhase";
-
-  setupCompileFlags = [
-    (optionalString (!coreSetup) "-package-db=$setupPackageConfDir")
-    "-threaded" # https://github.com/haskell/cabal/issues/2398
+  postPhases = optionals doInstallIntermediates [
+    "installIntermediatesPhase"
   ];
+
+  setupCompileFlags =
+    optionals (!coreSetup) [
+      "-package-db=$setupPackageConfDir"
+    ]
+    ++ [
+      "-threaded" # https://github.com/haskell/cabal/issues/2398
+    ];
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
@@ -513,7 +533,7 @@ let
   ]
   # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
   # platform. See crossCabalFlags above for more details.
-  ++ lib.optionals (!stdenv.hasCC) [ buildPackages.stdenv.cc ];
+  ++ optionals (!stdenv.hasCC) [ buildPackages.stdenv.cc ];
   collectedToolDepends =
     buildTools
     ++ libraryToolDepends
@@ -524,13 +544,17 @@ let
     ghc
     removeReferencesTo
   ]
-  ++ optional (allPkgconfigDepends != [ ]) (
-    assert pkg-config != null;
-    pkg-config
-  )
+  ++ optionals (allPkgconfigDepends != [ ]) [
+    (
+      assert pkg-config != null;
+      pkg-config
+    )
+  ]
   ++ setupHaskellDepends
   ++ collectedToolDepends
-  ++ optional stdenv.hostPlatform.isGhcjs nodejs;
+  ++ optionals (stdenv.hostPlatform.isGhcjs) [
+    nodejs
+  ];
   propagatedBuildInputs =
     buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -650,10 +674,18 @@ lib.fix (
       outputs = [
         "out"
       ]
-      ++ (optional enableSeparateDataOutput "data")
-      ++ (optional enableSeparateDocOutput "doc")
-      ++ (optional enableSeparateBinOutput "bin")
-      ++ (optional enableSeparateIntermediatesOutput "intermediates");
+      ++ optionals enableSeparateDataOutput [
+        "data"
+      ]
+      ++ optionals enableSeparateDocOutput [
+        "doc"
+      ]
+      ++ optionals enableSeparateBinOutput [
+        "bin"
+      ]
+      ++ optionals enableSeparateIntermediatesOutput [
+        "intermediates"
+      ];
 
       setOutputFlags = false;
 
@@ -817,8 +849,10 @@ lib.fix (
       # Note: the options here must be always added, regardless of whether the
       # package specifies `hardeningDisable`.
       hardeningDisable =
-        lib.optionals (args ? hardeningDisable) hardeningDisable
-        ++ lib.optional (ghc.isHaLVM or false) "all";
+        optionals (args ? hardeningDisable) hardeningDisable
+        ++ optionals (ghc.isHaLVM or false) [
+          "all"
+        ];
 
       configurePhase = ''
         runHook preConfigure
@@ -1063,7 +1097,7 @@ lib.fix (
               buildHaskellPackages.ghcWithPackages (_: setupHaskellDepends);
 
             ghcEnv = withPackages (
-              _: otherBuildInputsHaskell ++ propagatedBuildInputs ++ lib.optionals (!isCross) setupHaskellDepends
+              _: otherBuildInputsHaskell ++ propagatedBuildInputs ++ optionals (!isCross) setupHaskellDepends
             );
 
             ghcCommandCaps = lib.toUpper ghcCommand';
@@ -1071,11 +1105,15 @@ lib.fix (
           runCommandCC name {
             inherit shellHook;
 
-            depsBuildBuild = lib.optional isCross ghcEnvForBuild;
+            depsBuildBuild = optionals isCross [
+              ghcEnvForBuild
+            ];
             nativeBuildInputs = [
               ghcEnv
             ]
-            ++ optional (allPkgconfigDepends != [ ]) pkg-config
+            ++ optionals (allPkgconfigDepends != [ ]) [
+              pkg-config
+            ]
             ++ collectedToolDepends;
             buildInputs = otherBuildInputsSystem;
 
