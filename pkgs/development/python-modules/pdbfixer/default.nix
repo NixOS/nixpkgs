@@ -4,6 +4,7 @@
   fetchFromGitHub,
   setuptools,
   wheel,
+  legacy-cgi,
   numpy,
   openmm,
   pytestCheckHook,
@@ -21,12 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-X2P5cWmdvAjY9dMFB+R21advkdYizR8PmevMPR0RR0o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    legacy-cgi
     numpy
     openmm
   ];
