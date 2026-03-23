@@ -18,22 +18,21 @@ python3.pkgs.buildPythonPackage (finalAttrs: {
     hash = "sha256-1wCvoqlFBgC7SSPdq13q4CjR/rJnhv5g/xrty9YUQtg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'idna = "3.7"' 'idna = "*"' \
-      --replace-fail 'kubernetes = "^26.1.0"' 'kubernetes = "*"' \
-      --replace-fail 'numpy = ">=1.26.4,<1.27.0"' 'numpy = "*"' \
-      --replace-fail 'pandas = "2.2.2"' 'pandas = "*"' \
-      --replace-fail 'prometheus-api-client = "0.5.3"' 'prometheus-api-client = "*"' \
-      --replace-fail 'pydantic = "^1.10.7"' 'pydantic = "*"' \
-      --replace-fail 'pyyaml = "6.0.1"' 'pyyaml = "*"' \
-      --replace-fail 'setuptools = "^80.9.0"' 'setuptools = "*"' \
-      --replace-fail 'tenacity = "^9.0.0"' 'tenacity = "*"' \
-      --replace-fail 'typing-extensions = "4.6.0"' 'typing-extensions = "*"' \
-      --replace-fail 'typer = { extras = ["all"], version = "^0.7.0" }' 'typer = { extras =  ["all"], version = "*" }'
-  '';
+  pythonRelaxDeps = [
+    "idna"
+    "kubernetes"
+    "numpy"
+    "pandas"
+    "prometheus-api-client"
+    "pydantic"
+    "pyyaml"
+    "setuptools"
+    "tenacity"
+    "typing-extensions"
+    "typer"
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiostream
     alive-progress
     cachetools
