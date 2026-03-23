@@ -440,8 +440,8 @@ in
       description = ''
         Whether to configure nginx as a reverse proxy for Invidious.
 
-        It serves it under the domain specified in {option}`services.invidious.settings.domain` with enabled TLS and ACME.
-        Further configuration can be done through {option}`services.nginx.virtualHosts.''${config.services.invidious.settings.domain}.*`,
+        It serves it under the domain specified in {option}`services.invidious.domain` with enabled TLS and ACME.
+        Further configuration can be done through {option}`services.nginx.virtualHosts.''${config.services.invidious.domain}.*`,
         which can also be used to disable AMCE and TLS.
       '';
     };
