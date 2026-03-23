@@ -2157,7 +2157,7 @@ mapAliases {
   xflux = throw "'xflux' has been removed as it was unmaintained"; # Added 2025-08-22
   xflux-gui = throw "'xflux-gui' has been removed as it was unmaintained"; # Added 2025-08-22
   xinput_calibrator = xinput-calibrator; # Added 2025-08-28
-  xjump = throw "'xjump' has been removed as it is unmaintained"; # Added 2025-08-22
+  xjump = throw "'xjump' has been removed as it is unmaintained, consider using its reimplementation xjump-sdl"; # Added 2025-08-22
   xkeyboardconfig = xkeyboard-config; # Added 2026-02-04
   xkeyboardconfig_custom = xkeyboard-config_custom; # Added 2026-01-19
   xmlada = throw "'xmlada' has been renamed to/replaced by 'gnatPackages.xmlada'"; # Converted to throw 2025-10-27
