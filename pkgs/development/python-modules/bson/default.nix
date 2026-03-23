@@ -21,6 +21,12 @@ buildPythonPackage rec {
   };
 
   patches = [
+    # Upstream PR: https://github.com/py-bson/bson/pull/113
+    (fetchpatch {
+      name = "python-3.11.patch";
+      url = "https://github.com/py-bson/bson/commit/5346e73124de8a1f9e2a1960501416529e4cee02.patch";
+      hash = "sha256-kNs00j/FDjb2av+0WMORrCo75NcuaJXUl4SbYlksnfo=";
+    })
     # Upstream PR: https://github.com/py-bson/bson/pull/140
     (fetchpatch {
       name = "python-3.14.patch";
@@ -29,10 +35,6 @@ buildPythonPackage rec {
       hash = "sha256-JOmW/KMqzFdXKH4TMR/PG1YU3SvLTBc3L3E9kXag3bQ=";
     })
   ];
-
-  postPatch = ''
-    find . -type f -name '*.py' -exec sed -i 's|assertEquals|assertEqual|g' {} +
-  '';
 
   propagatedBuildInputs = [
     python-dateutil
