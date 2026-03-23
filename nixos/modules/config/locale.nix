@@ -90,6 +90,25 @@ in
       NIXOS_STATIC_TIMEZONE = "1";
     };
 
+    # When time.timeZone is set declaratively, NixOS patches systemd-timedated
+    # to reject timedatectl set-timezone (via NIXOS_STATIC_TIMEZONE). This means
+    # the PropertiesChanged dbus signal for the Timezone property is never emitted
+    # on activation, so running GUI applications (Thunderbird, Chromium, etc.)
+    # don't pick up timezone changes until restarted. Emit the signal manually
+    # after the etc activation updates the /etc/localtime symlink.
+    system.activationScripts.timezone-notify = lib.mkIf (config.time.timeZone != null) (lib.stringAfter [ "etc" ] ''
+      ${pkgs.systemd}/bin/busctl emit \
+        /org/freedesktop/timedate1 \
+        org.freedesktop.DBus.Properties \
+        PropertiesChanged \
+        "sa{sv}as" \
+        org.freedesktop.timedate1 \
+        1 \
+          Timezone s ${lib.escapeShellArg config.time.timeZone} \
+        0 \
+        2>/dev/null || true
+    '');
+
     environment.etc = {
       zoneinfo.source = tzdir;
     }
