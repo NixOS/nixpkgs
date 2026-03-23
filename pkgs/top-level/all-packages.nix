@@ -1071,7 +1071,7 @@ with pkgs;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
-  winbox = winbox3;
+  winbox = winbox4;
 
   ### APPLICATIONS/VERSION-MANAGEMENT
 
