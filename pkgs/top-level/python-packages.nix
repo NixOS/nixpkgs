@@ -15882,6 +15882,8 @@ self: super: with self; {
 
   python-smarttub = callPackage ../development/python-modules/python-smarttub { };
 
+  python-sn2 = callPackage ../development/python-modules/python-sn2 { };
+
   python-snap7 = callPackage ../development/python-modules/python-snap7 { inherit (pkgs) snap7; };
 
   python-snappy = callPackage ../development/python-modules/python-snappy {
