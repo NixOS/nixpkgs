@@ -9,9 +9,8 @@
   # dependencies
   cloudpathlib,
   confection,
-  packaging,
+  httpx,
   pydantic,
-  requests,
   smart-open,
   srsly,
   typer,
@@ -19,33 +18,30 @@
 
   # tests
   pytestCheckHook,
+
+  # passthru
+  nix-update-script,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weasel";
-  version = "0.4.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "weasel";
-    tag = "release-v${version}";
-    hash = "sha256-Xd7cJlUi/a8gwtnuO9wqZiHT1xVMbp6V6Ha+Kyr4tFE=";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-yiLoLdnDfKby1Ez1hKGL9DxazQto57Zn0DlRmGLurOs=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "typer-slim" "typer"
-  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
     cloudpathlib
     confection
-    packaging
+    httpx
     pydantic
-    requests
     smart-open
     srsly
     typer
@@ -65,12 +61,21 @@ buildPythonPackage rec {
     "test_project_git_file_asset"
   ];
 
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "release-v(.*)"
+      ];
+    };
+  };
+
   meta = {
     description = "Small and easy workflow system";
     homepage = "https://github.com/explosion/weasel/";
-    changelog = "https://github.com/explosion/weasel/releases/tag/${src.tag}";
+    changelog = "https://github.com/explosion/weasel/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "weasel";
   };
-}
+})

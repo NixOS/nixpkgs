@@ -26,11 +26,9 @@ python3Packages.buildPythonApplication (finalAttrs: {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    anthropic
     pytestCheckHook
     pytest-asyncio
-    pytest-cov
-    python-dotenv
+    pytest-cov-stub
   ];
 
   disabledTestPaths = [
