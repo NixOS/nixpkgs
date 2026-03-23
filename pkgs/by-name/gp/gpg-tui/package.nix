@@ -14,14 +14,14 @@
   libxkbcommon,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gpg-tui";
   version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-qGm0eHpVFGn8tNdEnmQ4oIfjCxyixMFYdxih7pHvGH0=";
   };
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Terminal user interface for GnuPG";
     homepage = "https://github.com/orhun/gpg-tui";
-    changelog = "https://github.com/orhun/gpg-tui/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/orhun/gpg-tui/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dotlambda
@@ -58,4 +58,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "gpg-tui";
   };
-}
+})
