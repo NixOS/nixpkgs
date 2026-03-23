@@ -33,10 +33,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<9"]' '["setuptools_scm"]'
+      --replace-fail 'pytest_runner + ["setuptools_scm>=8.0.4,<10"]' '["setuptools_scm"]' \
+      --replace-fail "ruamel.yaml >= 0.17.6, < 0.19" "ruamel.yaml"
     substituteInPlace pyproject.toml \
-      --replace-fail '"setuptools_scm[toml]>=8.0.4,<9"' '"setuptools_scm[toml]"' \
-      --replace-fail "mypy[mypyc]==1.17.0" "mypy"
+      --replace-fail '"setuptools_scm[toml]>=8.0.4,<10"' '"setuptools_scm[toml]"' \
+      --replace-fail "mypy[mypyc]==1.18.2" "mypy" \
+      --replace-fail "ruamel.yaml>=0.17.6, < 0.19" "ruamel-yaml"
     sed -i "/black>=/d" pyproject.toml
   '';
 
