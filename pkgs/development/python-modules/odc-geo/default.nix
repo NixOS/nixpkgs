@@ -28,16 +28,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "odc-geo";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opendatacube";
     repo = "odc-geo";
-    tag = "v${version}";
-    hash = "sha256-qFHFT68hJKCBcYKZypSoQufHYXVm3LiD7mn5eQtYYO8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rFhCY5rkZgVXM8aqsV0PoT8iPPpgNEQRI9MVqk6OQFQ=";
   };
 
   build-system = [
@@ -80,7 +80,7 @@ buildPythonPackage rec {
     matplotlib
     pytestCheckHook
   ]
-  ++ optional-dependencies.all;
+  ++ finalAttrs.passthru.optional-dependencies.all;
 
   disabledTestMarks = [ "network" ];
 
@@ -113,8 +113,8 @@ buildPythonPackage rec {
       with geospatial metadata and geo-registered `xarray` rasters.
     '';
     homepage = "https://github.com/opendatacube/odc-geo/";
-    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${src.tag}";
+    changelog = "https://github.com/opendatacube/odc-geo/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ daspk04 ];
   };
-}
+})
