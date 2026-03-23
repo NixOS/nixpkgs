@@ -32,6 +32,18 @@ stdenv.mkDerivation {
     hash = "sha256-WEcg+NSsny/N1VAR1ejytM+3nOF3JlNuIUPf4w6N2ew=";
   };
 
+  # Undefined symbols for architecture x86_64:
+  #   "_iconv", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  #   "_iconv_close", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  #   "_iconv_open", referenced from:
+  #       _cfFilterTextToText in libcupsfilters_la-texttotext.o
+  # ld: symbol(s) not found for architecture x86_64
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
   patches = [
     (fetchpatch {
       # https://github.com/OpenPrinting/cups-filters/security/advisories/GHSA-893j-2wr2-wrh9
