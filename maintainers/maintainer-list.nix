@@ -25080,6 +25080,11 @@
     githubId = 42943030;
     email = "ayfpan@ucla.edu";
   };
+  siphcy = {
+    name = "Siphcy";
+    github = "Siphcy";
+    githubId = 97303914;
+  };
   sir4ur0n = {
     github = "sir4ur0n";
     githubId = 1204125;
