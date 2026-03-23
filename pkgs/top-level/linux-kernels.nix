@@ -387,6 +387,8 @@ in
 
         dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
 
+        dxgkrnl = callPackage ../os-specific/linux/dxgkrnl { };
+
         ecapture = callPackage ../by-name/ec/ecapture/package.nix {
           withNonBTF = true;
           inherit kernel;
