@@ -12,8 +12,8 @@ python3Packages.buildPythonApplication (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "external-engine";
-    rev = finalAttrs.version;
-    sha256 = "18dwzrcvzycmgjsij3lyrih0n1824kv87bl3bl7f4zg9rr46ksci";
+    rev = "a6ef15a8e395eb609535857aabf18837ea7696cf";
+    hash = "sha256-kelpSM7pfeIOXYOug/YkAgULYMyeDhm1fJX5v1n+vKE=";
   };
 
   dependencies = with python3Packages; [
