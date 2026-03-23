@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
   fetchPnpmDeps,
@@ -20,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "rolldown";
     repo = "rolldown";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uqgJN7jn70z3cQlEEyk+0TeiHDn1AkvMmCaEOksHxhM=";
   };
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -86,7 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Fast Rust-based bundler for JavaScript (built for openclaw)";
+    changelog = "https://github.com/rolldown/rolldown/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    description = "Fast Rust-based bundler for JavaScript";
+    homepage = "https://github.com/rolldown/rolldown";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.chrisportela ];
     inherit (nodejs_22.meta) platforms;
   };
 })
