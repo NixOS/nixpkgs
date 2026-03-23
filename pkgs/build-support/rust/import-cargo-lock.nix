@@ -283,12 +283,12 @@ let
             mkdir -p $out/.cargo
 
             ${
-              if lockFile != null then
-                "ln -s ${lockFile} $out/Cargo.lock"
-              else
+              if lockFile == null then
                 ''
                   printf "%s" "$lockFileContents" > "$out/Cargo.lock"
                 ''
+              else
+                "ln -s ${lockFile} $out/Cargo.lock"
             }
 
             cat > $out/.cargo/config.toml <<EOF
