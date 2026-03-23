@@ -45,6 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://github.com/caderek/gramma/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     mainProgram = "gramma";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
