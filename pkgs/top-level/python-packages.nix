@@ -18533,6 +18533,8 @@ self: super: with self; {
 
   steam = callPackage ../development/python-modules/steam { };
 
+  steamloop = callPackage ../development/python-modules/steamloop { };
+
   steamodd = callPackage ../development/python-modules/steamodd { };
 
   steampy = callPackage ../development/python-modules/steampy { };
