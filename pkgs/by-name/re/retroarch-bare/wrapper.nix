@@ -14,10 +14,10 @@ let
     runCommand "declarative-retroarch.cfg"
       {
         value = lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: "${n} = \"${v}\"") settings);
-        passAsFile = [ "value" ];
+        __structuredAttrs = true;
       }
       ''
-        cp "$valuePath" "$out"
+        printf "%s" "$value" > "$out"
       '';
 
   # All cores should be located in the same path after symlinkJoin,
