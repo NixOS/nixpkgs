@@ -29,6 +29,7 @@
   crateVersion,
   extraLinkFlags,
   extraRustcOptsForBuildRs,
+  capLints,
   libName,
   libPath,
   release,
@@ -195,7 +196,7 @@ in
      fi
      noisily rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
        ${mkRustcFeatureArgs crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
-       -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
+       -L dependency=target/buildDeps ${buildDeps} --cap-lints ${capLints} $EXTRA_BUILD_FLAGS --color ${colors}
 
      mkdir -p target/build/${crateName}.out
      export RUST_BACKTRACE=1

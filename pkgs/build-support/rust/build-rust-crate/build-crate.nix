@@ -24,6 +24,7 @@
   colors,
   buildTests,
   codegenUnits,
+  capLints,
 }:
 
 let
@@ -73,6 +74,7 @@ in
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"
   LIB_PATH="${libPath}"
   LIB_NAME="${libName}"
+  CAP_LINTS="${capLints}"
 
   CRATE_NAME='${lib.replaceStrings [ "-" ] [ "_" ] libName}'
 
