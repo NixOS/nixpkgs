@@ -105,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/victoralvesf/aonsoku/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      autrimpo
       genga898
     ];
     mainProgram = "Aonsoku";
