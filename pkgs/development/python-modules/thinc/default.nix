@@ -23,9 +23,7 @@
   wasabi,
 
   # tests
-  coverage,
   hypothesis,
-  mock,
   pytestCheckHook,
 }:
 
@@ -40,6 +38,11 @@ buildPythonPackage (finalAttrs: {
     tag = "release-v${finalAttrs.version}";
     hash = "sha256-8nf+AWAD7Fy50XRJDINmyk42F7KMDhGgATwqbln3r04=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail coverage.exceptions.CoverageWarning ""
+  '';
 
   build-system = [
     blis
@@ -71,9 +74,7 @@ buildPythonPackage (finalAttrs: {
   pythonImportsCheck = [ "thinc" ];
 
   nativeCheckInputs = [
-    coverage
     hypothesis
-    mock
     pytestCheckHook
   ];
 

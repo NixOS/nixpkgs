@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   setuptools,
 
@@ -21,17 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-LAai0yRenGhBRdgTKA/T0bBrL0Aq+idFHt0NDMSLHMk=";
   };
 
-  patches = [
-    # fix collision
-    # https://github.com/bauman/python-idzip/pull/23
-    (fetchpatch {
-      name = "fix-bin-folder-collisions.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/bauman/python-idzip/pull/23.patch";
-      hash = "sha256-4fPhLdY9MaH1aX6tqMT+NNNNDsyv87G0xBh4MC+5yQE=";
-    })
-  ];
-
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
