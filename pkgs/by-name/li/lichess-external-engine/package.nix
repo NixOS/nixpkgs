@@ -22,10 +22,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin
     install -Dm755 example-provider.py $out/bin/lichess-external-engine
-
     runHook postInstall
   '';
 
