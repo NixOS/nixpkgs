@@ -50,6 +50,8 @@ mod logind_manager {
     include!(concat!(env!("OUT_DIR"), "/logind_manager.rs"));
 }
 
+mod isolate_stdio;
+
 use crate::systemd_manager::OrgFreedesktopSystemd1Manager;
 use crate::{
     logind_manager::OrgFreedesktopLogin1Manager,
@@ -995,6 +997,8 @@ dry-activate: show what would be done if this configuration were activated
 
 /// Performs switch-to-configuration functionality for the entire system
 fn do_system_switch(action: Action) -> anyhow::Result<()> {
+    let threads = isolate_stdio::init()?;
+
     log::debug!("Performing system switch");
 
     let out = PathBuf::from(required_env("OUT")?);
@@ -2030,7 +2034,7 @@ won't take effect until you reboot the system.
             exit_code
         );
     }
-
+    isolate_stdio::close(threads);
     std::process::exit(exit_code);
 }
 
