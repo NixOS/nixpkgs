@@ -126,6 +126,19 @@ let
         rcContent = lib.concatStringsSep "\n" (
           lib.optional (luaDeps != [ ]) luaPathLuaRc
           ++ [ providerLuaRc ]
+          ++ lib.optionals
+              (
+                finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
+                || finalAttrs.packpathDirs.myNeovimPackages.opt != [ ]
+              )
+              [
+                ''if vim.g.nixpkgs_set_rtp /= false then
+                      vim.opt.packpath:prepend("${finalPackdir}")
+                      vim.opt.runtimepath:prepend("${finalPackdir}")
+                  end
+                  ''
+              ]
+
           ++ lib.optional (luaRcContent != "") luaRcContent
           ++ lib.optional (neovimRcContent' != "") ''
             vim.cmd.source "${writeText "init.vim" neovimRcContent'}"
@@ -154,18 +167,6 @@ let
             "--add-flags"
             ''--cmd "lua ${providerLuaRc}"''
           ]
-          ++
-            lib.optionals
-              (
-                finalAttrs.packpathDirs.myNeovimPackages.start != [ ]
-                || finalAttrs.packpathDirs.myNeovimPackages.opt != [ ]
-              )
-              [
-                "--add-flags"
-                ''--cmd "set packpath^=${finalPackdir}"''
-                "--add-flags"
-                ''--cmd "set rtp^=${finalPackdir}"''
-              ]
           ++ lib.optionals finalAttrs.withRuby [
             "--set"
             "GEM_HOME"
