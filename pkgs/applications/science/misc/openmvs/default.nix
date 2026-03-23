@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options system serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})' \
+      'FIND_PACKAGE(Boost REQUIRED COMPONENTS iostreams program_options serialization OPTIONAL_COMPONENTS ''${Boost_EXTRA_COMPONENTS})'
+  '';
+
   buildInputs = [
     boostWithZstd
     ceres-solver
