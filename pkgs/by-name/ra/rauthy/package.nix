@@ -11,6 +11,7 @@
   wasm-bindgen-cli_0_2_108,
   binaryen,
   lld,
+  rust-jemalloc-sys-unprefixed,
 }:
 let
   version = "0.34.3";
@@ -97,6 +98,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     perl
   ];
+
+  buildInputs = [ rust-jemalloc-sys-unprefixed ];
 
   preBuild = ''
     cp -r ${frontend}/lib/node_modules/frontend/dist/templates/html/ templates/html
