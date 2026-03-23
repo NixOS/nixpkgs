@@ -61,7 +61,9 @@ stdenv.mkDerivation {
       url = "https://github.com/OpenPrinting/libcupsfilters/commit/b69dfacec7f176281782e2f7ac44f04bf9633cfa.patch";
       hash = "sha256-rPUbgtTu7j3uUZrtUhUPO1vFbV6naxIWsHf6x3JhS74=";
     })
-  ];
+  ]
+  # build on platforms without execvpe
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./execve.patch;
 
   nativeBuildInputs = [
     autoreconfHook
@@ -89,7 +91,9 @@ stdenv.mkDerivation {
     "--with-ippfind-path=${lib.getExe' cups "ippfind"}"
     "--enable-imagefilters"
     "--with-test-font-path=${dejavu_fonts}/share/fonts/truetype/DejaVuSans.ttf"
-  ];
+  ]
+  # build on platforms without execvpe (path to Ghostscript must be absolute)
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--with-gs-path=${lib.getExe ghostscript}";
   makeFlags = [
     "CUPS_SERVERBIN=$(out)/lib/cups"
     "CUPS_DATADIR=$(out)/share/cups"
