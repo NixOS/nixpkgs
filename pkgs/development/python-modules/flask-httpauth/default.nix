@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miguelgrinberg/Flask-HTTPAuth";
     changelog = "https://github.com/miguelgrinberg/Flask-HTTPAuth/blob/v${version}/CHANGES.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }
