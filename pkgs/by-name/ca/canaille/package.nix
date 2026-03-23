@@ -48,7 +48,6 @@ python.pkgs.buildPythonApplication rec {
     [
       pytestCheckHook
       postgresql
-      coverage
       flask-webtest
       pyquery
       pytest-cov-stub
