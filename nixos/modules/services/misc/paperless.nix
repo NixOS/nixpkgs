@@ -666,6 +666,9 @@ in
           serviceConfig = {
             User = cfg.user;
             WorkingDirectory = cfg.dataDir;
+            ExecStart = "${manage}/bin/paperless-manage document_exporter ${cfg.exporter.directory} ${
+              lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
+            }";
           };
           unitConfig =
             let
@@ -684,13 +687,7 @@ in
               OnFailure = services;
               OnSuccess = services;
             };
-          enableStrictShellChecks = true;
           path = [ manage ];
-          script = ''
-            paperless-manage document_exporter ${cfg.exporter.directory} ${
-              lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
-            }
-          '';
         };
       })
     ]

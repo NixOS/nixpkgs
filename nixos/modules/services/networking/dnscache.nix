@@ -108,17 +108,16 @@ in
         daemontools
         djbdns
       ];
+      environment.FORWARDONLY = lib.mkIf cfg.forwardOnly "1";
       preStart = ''
         rm -rf /var/lib/dnscache
         dnscache-conf dnscache dnscache /var/lib/dnscache ${config.services.dnscache.ip}
         rm -rf /var/lib/dnscache/root
         ln -sf ${dnscache-root} /var/lib/dnscache/root
       '';
-      script = ''
-        cd /var/lib/dnscache/
-        ${lib.optionalString cfg.forwardOnly "export FORWARDONLY=1"}
-        exec ./run
-      '';
+      serviceConfig.StateDirectory = "dnscache";
+      serviceConfig.WorkingDirectory = "/var/lib/dnscache";
+      serviceConfig.ExecStart = "/var/lib/dnscache/run";
     };
   };
 }
