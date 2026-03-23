@@ -1788,10 +1788,6 @@ with pkgs;
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
-  gpg-tui = callPackage ../tools/security/gpg-tui {
-    inherit (darwin) libresolv;
-  };
-
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };

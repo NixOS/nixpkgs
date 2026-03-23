@@ -8,7 +8,7 @@
   pkg-config,
   python3,
   libiconv,
-  libresolv,
+  darwin,
   x11Support ? true,
   libxcb,
   libxkbcommon,
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    libresolv
+    darwin.libresolv
   ];
 
   meta = {
