@@ -17089,8 +17089,6 @@ self: super: with self; {
 
   ruff-api = callPackage ../development/python-modules/ruff-api { };
 
-  ruffus = callPackage ../development/python-modules/ruffus { };
-
   rules = callPackage ../development/python-modules/rules { };
 
   rumps = callPackage ../development/python-modules/rumps { };
