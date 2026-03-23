@@ -3,7 +3,7 @@
   appstream,
   blueprint-compiler,
   desktop-file-utils,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   glib,
   glib-networking,
   gobject-introspection,
@@ -19,14 +19,14 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "cartridges";
-  version = "2.12.1";
+  version = "2.13.1";
   pyproject = false;
 
-  src = fetchFromGitHub {
-    owner = "kra-mo";
+  src = fetchFromCodeberg {
+    owner = "kramo";
     repo = "cartridges";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pGEh9ugDWjaAjVL8mFUVqU+WFwcpRcstc11ikDxhihI=";
+    hash = "sha256-VWOKsSOEAtngrDx7tJ+notoMBfBuO40Z2x9VTj710+8=";
   };
 
   strictDeps = true;
@@ -83,7 +83,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
       You can sort and hide games or download cover art from SteamGridDB.
     '';
     homepage = "https://apps.gnome.org/Cartridges/";
-    changelog = "https://github.com/kra-mo/cartridges/releases/tag/${finalAttrs.version}";
+    changelog = "https://codeberg.org/kramo/cartridges/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     teams = [ lib.teams.gnome-circle ];
     mainProgram = "cartridges";
