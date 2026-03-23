@@ -1,0 +1,37 @@
+{
+  "expat": {
+    "url": "https://chromium.googlesource.com/external/github.com/libexpat/libexpat.git",
+    "rev": "8e49998f003d693213b538ef765814c7d21abada",
+    "sha256": "sha256-zP2kiB4nyLi0/I8OsRhxKG0qRGPe2ALLQ+HHfqlBJ6Y="
+  },
+  "libjpeg-turbo": {
+    "url": "https://chromium.googlesource.com/chromium/deps/libjpeg_turbo.git",
+    "rev": "e14cbfaa85529d47f9f55b0f104a579c1061f9ad",
+    "sha256": "sha256-Ig+tmprZDvlf/M72/DTar2pbxat9ZElgSqdXdoM0lPs="
+  },
+  "icu": {
+    "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
+    "rev": "364118a1d9da24bb5b770ac3d762ac144d6da5a4",
+    "sha256": "sha256-frsmwYMiFixEULsE91x5+p98DvkyC0s0fNupqjoRnvg="
+  },
+  "zlib": {
+    "url": "https://chromium.googlesource.com/chromium/src/third_party/zlib",
+    "rev": "646b7f569718921d7d4b5b8e22572ff6c76f2596",
+    "sha256": "sha256-jNj6SuTZ5/a7crtYhxW3Q/TlfRMNMfYIVxDlr7bYdzQ="
+  },
+  "harfbuzz": {
+    "url": "https://chromium.googlesource.com/external/github.com/harfbuzz/harfbuzz.git",
+    "rev": "08b52ae2e44931eef163dbad71697f911fadc323",
+    "sha256": "sha256-sP9FQLUEgTZFlvfYqSZnzZqBMxVotzD0FKKsu3/OdUw="
+  },
+  "wuffs": {
+    "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
+    "rev": "e3f919ccfe3ef542cfc983a82146070258fb57f8",
+    "sha256": "sha256-373d2F/STcgCHEq+PO+SCHrKVOo6uO1rqqwRN5eeBCw="
+  },
+  "libpng": {
+    "url": "https://skia.googlesource.com/third_party/libpng.git",
+    "rev": "ed217e3e601d8e462f7fd1e04bed43ac42212429",
+    "sha256": "sha256-Mo1M8TuVaoSIb7Hy2u6zgjZ1DKgpmgNmGRP6dGg/aTs="
+  }
+}

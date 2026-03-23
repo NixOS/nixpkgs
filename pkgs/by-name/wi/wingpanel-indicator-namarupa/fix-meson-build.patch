@@ -1,0 +1,32 @@
+diff --git a/meson.build b/meson.build
+index 47a0da6..7aa49f4 100644
+--- a/meson.build
++++ b/meson.build
+@@ -8,6 +8,9 @@ project(
+ gettext_name = meson.project_name() + '-indicator'
+ i18n = import('i18n')
+ 
++prefix = get_option('prefix')
++libdir = prefix / get_option('libdir')
++
+ add_global_arguments(
+     '-DGETTEXT_PACKAGE="@0@"'.format(gettext_name),
+     language:'c'
+@@ -25,7 +28,7 @@ add_project_arguments(
+ config_data = configuration_data()
+ config_data.set_quoted('GETTEXT_PACKAGE', gettext_name)
+ config_data.set_quoted('LOCALEDIR', get_option('prefix') / get_option('localedir'))
+-config_data.set_quoted('AYATANAINDICATORDIR', dependency('indicator3-0.4').get_variable('indicatordir'))
++config_data.set_quoted('AYATANAINDICATORDIR', '@indicator_application@/lib/indicators3/7/')
+ 
+ shared_module(
+     meson.project_name(),
+@@ -44,7 +47,7 @@ shared_module(
+         dependency('indicator3-0.4')
+     ],
+     install: true,
+-    install_dir : dependency('wingpanel').get_variable('indicatorsdir')
++    install_dir : dependency('wingpanel').get_variable('indicatorsdir', pkgconfig_define: ['libdir', libdir])
+ )
+ 
+ subdir('po')

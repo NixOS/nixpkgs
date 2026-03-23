@@ -1,0 +1,101 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  fontconfig,
+  gettext,
+  groff,
+  libsm,
+  libx11,
+  libxext,
+  libxft,
+  libxinerama,
+  libxrandr,
+  lua,
+  makeWrapper,
+  pkg-config,
+  readline,
+  which,
+  xmessage,
+  xterm,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "notion";
+  version = "4.0.4";
+
+  src = fetchFromGitHub {
+    owner = "raboof";
+    repo = "notion";
+    tag = finalAttrs.version;
+    hash = "sha256-L7WL8zn1Qkf5sqrhqZJqFe4B1l9ULXI3pt3Jpc87huk=";
+  };
+
+  patches = [
+    # GCC 15 fix
+    (fetchpatch2 {
+      url = "https://github.com/raboof/notion/commit/89c92f49abfeae1168ad343d4f529a52d0edd78c.patch?full_index=1";
+      hash = "sha256-+4GGeY2j7B54Ffw5gFNpG4704Egc7rA6w5z0sZG8210=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    gettext
+    groff
+    lua
+    makeWrapper
+    pkg-config
+    which
+  ];
+
+  buildInputs = [
+    fontconfig
+    libsm
+    libx11
+    libxext
+    libxft
+    libxinerama
+    libxrandr
+    lua
+    readline
+  ];
+
+  outputs = [
+    "out"
+    "man"
+  ];
+
+  strictDeps = true;
+
+  buildFlags = [
+    "LUA_DIR=${lua}"
+    "X11_PREFIX=/no-such-path"
+  ];
+
+  makeFlags = [
+    "NOTION_RELEASE=${finalAttrs.version}"
+    "PREFIX=${placeholder "out"}"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/notion \
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          xmessage
+          xterm
+        ]
+      }" \
+  '';
+
+  meta = {
+    description = "Tiling tabbed window manager";
+    homepage = "https://notionwm.net";
+    license = lib.licenses.lgpl21;
+    mainProgram = "notion";
+    maintainers = with lib.maintainers; [
+      raboof
+      NotAShelf
+    ];
+    platforms = lib.platforms.linux;
+  };
+})

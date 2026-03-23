@@ -1,0 +1,13 @@
+diff --git a/prep-source-build.sh b/prep-source-build.sh
+index 1db309bf2c5..8d938b66e04 100755
+--- a/prep-source-build.sh
++++ b/prep-source-build.sh
+@@ -249,7 +249,7 @@ if [ "$removeBinaries" == true ]; then
+   fi
+ 
+   # Initialize source-only toolset for binary detection (includes custom SDK setup, MSBuild resolver, and source-built resolver)
+-  source_only_toolset_init "$customSdkDir" "$psbDir" "true" "" "/p:DotNetBuildSourceOnly=true"
++  source_only_toolset_init "$customSdkDir" "$psbDir" "true" "" "/p:DotNetBuildSourceOnly=true" "/p:CustomPreviouslySourceBuiltPackagesPath=$psbDir"
+ 
+   "$_InitializeBuildTool" build \
+     "$REPO_ROOT/eng/init-detect-binaries.proj" \
