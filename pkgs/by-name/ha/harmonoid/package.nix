@@ -16,7 +16,7 @@
   mpv-unwrapped,
 }:
 let
-  version = "0.3.21";
+  version = "0.3.22";
   url_base = "https://github.com/alexmercerind2/harmonoid-releases/releases/download/v${version}";
   url =
     rec {
@@ -29,9 +29,9 @@ let
       or (throw "${stdenv.hostPlatform.system} is an unsupported platform");
   hash =
     rec {
-      x86_64-linux = "sha256-RZDRb/afXbalNbLBGaQgx5Qd4UEbNrvIsa3h+e6osJE=";
-      aarch64-linux = "sha256-1ys7uyCjXe4IBeXRk8mFjqmP9OottNefQrrtTkxq/qU=";
-      x86_64-darwin = "sha256-mo7Rj6c89KZrsL29i99x4E7b6soWlGUsC6KpSB7y5iY=";
+      x86_64-linux = "sha256-+fEx30uu0rZiORrtE00xG2piJzpFbfxSZw3OjrhLJyg=";
+      aarch64-linux = "sha256-jXN5i+LudsODNZUzb5SXClqgQxYzanrbZCqB8X0pJRQ=";
+      x86_64-darwin = "sha256-YYMKrb7ZilfEztL2JTxSdeoDd8xQMrHFtN9N9fmsm3w=";
       aarch64-darwin = x86_64-darwin;
     }
     .${stdenv.hostPlatform.system};
