@@ -2628,10 +2628,6 @@ with pkgs;
     packages = config.ihaskell.packages or (_: [ ]);
   };
 
-  ilspycmd = callPackage ../development/tools/ilspycmd {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
-
   incus-lts = callPackage ../by-name/in/incus/lts.nix { };
 
   indexed-bzip2 = with python3Packages; toPythonApplication indexed-bzip2;

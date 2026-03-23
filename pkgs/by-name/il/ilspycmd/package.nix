@@ -5,7 +5,7 @@
   buildDotnetModule,
   dotnetCorePackages,
   powershell,
-  autoSignDarwinBinariesHook,
+  darwin,
   glibcLocales,
 }:
 buildDotnetModule (finalAttrs: {
@@ -23,7 +23,7 @@ buildDotnetModule (finalAttrs: {
     powershell
   ]
   ++ lib.optionals (stdenvNoCC.hostPlatform.isDarwin && stdenvNoCC.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
+    darwin.autoSignDarwinBinariesHook
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/38991
