@@ -13127,6 +13127,8 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+  py-nymta = callPackage ../development/python-modules/py-nymta { };
+
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
 
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
