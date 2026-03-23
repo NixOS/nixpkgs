@@ -14102,6 +14102,8 @@ self: super: with self; {
 
   pylibsrtp = callPackage ../development/python-modules/pylibsrtp { };
 
+  pyliebherrhomeapi = callPackage ../development/python-modules/pyliebherrhomeapi { };
+
   pylink-square = callPackage ../development/python-modules/pylink-square { };
 
   pylint = callPackage ../development/python-modules/pylint { };

@@ -3424,7 +3424,8 @@
       ];
     "liebherr" =
       ps: with ps; [
-      ]; # missing inputs: pyliebherrhomeapi
+        pyliebherrhomeapi
+      ];
     "life360" =
       ps: with ps; [
       ];
@@ -7715,6 +7716,7 @@
     "lg_thinq"
     "libre_hardware_monitor"
     "lidarr"
+    "liebherr"
     "life360"
     "lifx"
     "light"
