@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "outline";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tGKnn+pzo9uzHR0L3cmsfnihW/Zd3zGC0Ju0gbA8Srk=";
+    hash = "sha256-T9oMnDYbkT50IOCflL7tay0iUXui7sW+gxddGKOvzbk=";
   };
 
   missingHashes = ./missing-hashes.json;
