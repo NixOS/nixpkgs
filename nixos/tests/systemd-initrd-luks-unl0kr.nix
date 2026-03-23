@@ -14,6 +14,7 @@ in
   name = "systemd-initrd-luks-unl0kr";
   meta = {
     maintainers = [ ];
+    broken = pkgs.stdenv.hostPlatform.isAarch64;
   };
 
   # TODO: Fix OCR: #302965

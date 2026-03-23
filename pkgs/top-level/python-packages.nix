@@ -3476,23 +3476,7 @@ self: super: with self; {
 
   cynthion = callPackage ../development/python-modules/cynthion { };
 
-  cypari = callPackage ../development/python-modules/cypari {
-
-    inherit (pkgs.pkgsStatic) gmp;
-
-    pari = pkgs.pari.overrideAttrs rec {
-      version = "2.15.4";
-      src = pkgs.fetchurl {
-        url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/pari-${version}.tar.gz";
-        hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
-      };
-      installTargets = [
-        "install"
-        "install-lib-sta"
-      ];
-    };
-
-  };
+  cypari = callPackage ../development/python-modules/cypari { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
@@ -7107,8 +7091,6 @@ self: super: with self; {
   homelink-integration-api = callPackage ../development/python-modules/homelink-integration-api { };
 
   homematicip = callPackage ../development/python-modules/homematicip { };
-
-  homepluscontrol = callPackage ../development/python-modules/homepluscontrol { };
 
   homf = callPackage ../development/python-modules/homf { };
 
@@ -12812,6 +12794,8 @@ self: super: with self; {
   primepy = callPackage ../development/python-modules/primepy { };
 
   primer3 = callPackage ../development/python-modules/primer3 { };
+
+  primp = callPackage ../development/python-modules/primp { };
 
   print-color = callPackage ../development/python-modules/print-color { };
 
@@ -20514,6 +20498,8 @@ self: super: with self; {
   uplink = callPackage ../development/python-modules/uplink { };
 
   uplink-protobuf = callPackage ../development/python-modules/uplink-protobuf { };
+
+  uploadserver = callPackage ../development/python-modules/uploadserver { };
 
   upnpy = callPackage ../development/python-modules/upnpy { };
 

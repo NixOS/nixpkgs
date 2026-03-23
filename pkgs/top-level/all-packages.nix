@@ -2996,7 +2996,7 @@ with pkgs;
   };
 
   # Not in aliases because it wouldn't get picked up by callPackage
-  netbox = netbox_4_4;
+  netbox = netbox_4_5;
 
   netcap-nodpi = callPackage ../by-name/ne/netcap/package.nix {
     withDpi = false;
@@ -10998,11 +10998,6 @@ with pkgs;
     # or xterm -ti 340
     SDL = SDL_sixel;
     SDL_image = SDL_image.override { SDL = SDL_sixel; };
-  };
-
-  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
-    guiModule = "zest";
-    fftw = fftwSinglePrec;
   };
 
   zynaddsubfx-fltk = zynaddsubfx.override {
