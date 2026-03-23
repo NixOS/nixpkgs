@@ -11,14 +11,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "iaito";
-  version = "6.0.4";
+  version = "6.1.0";
 
   srcs = [
     (fetchFromGitHub {
       owner = "radareorg";
       repo = "iaito";
       tag = finalAttrs.version;
-      hash = "sha256-99SuUTwHcpyJ5V9Cnanm6ylH3NVgyk3TmDoaFVwFE4E=";
+      hash = "sha256-nvMx0zbfsphfBgxdQnk+EhRpQnJ2Qv05rF7w+zQUUQg=";
       name = "main";
     })
     (fetchFromGitHub {
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dwith_qt6=true"
+    (lib.mesonBool "with_qt6" true)
   ];
 
   postBuild = ''
