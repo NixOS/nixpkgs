@@ -4,13 +4,13 @@
   pkgsi686Linux,
 }:
 
-pkgsi686Linux.stdenv.mkDerivation rec {
+pkgsi686Linux.stdenv.mkDerivation (finalAttrs: {
   pname = "mfcl2700dnlpr";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf102085/${pname}-${version}.i386.deb";
-    sha256 = "170qdzxlqikzvv2wphvfb37m19mn13az4aj88md87ka3rl5knk4m";
+    url = "https://download.brother.com/welcome/dlf102085/mfcl2700dnlpr-${finalAttrs.version}.i386.deb";
+    hash = "sha256-lUw7C81DzYNaRUgq8tUItqZQz1huw8vF3n9GTPtvGJw=";
   };
 
   nativeBuildInputs = [
@@ -55,4 +55,4 @@ pkgsi686Linux.stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.tv ];
     platforms = [ "i686-linux" ];
   };
-}
+})
