@@ -39,6 +39,6 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/mandiant/GoReSym";
     changelog = "https://github.com/mandiant/GoReSym/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
