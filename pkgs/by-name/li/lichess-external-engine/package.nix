@@ -20,8 +20,6 @@ python3Packages.buildPythonApplication (finalAttrs: {
     requests
   ];
 
-  doBuild = false;
-
   installPhase = ''
     runHook preInstall
 
