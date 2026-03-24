@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   playwright-driver,
+  playwright-test,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -22,6 +23,13 @@ buildNpmPackage (finalAttrs: {
   dontNpmBuild = true;
 
   nativeBuildInputs = [ makeBinaryWrapper ];
+
+  postInstall = ''
+    rm -rf "$out/lib/node_modules/@playwright/cli/node_modules/playwright"
+    rm -rf "$out/lib/node_modules/@playwright/cli/node_modules/playwright-core"
+    ln -s ${playwright-test}/lib/node_modules/playwright "$out/lib/node_modules/@playwright/cli/node_modules/playwright"
+    ln -s ${playwright-test}/lib/node_modules/playwright-core "$out/lib/node_modules/@playwright/cli/node_modules/playwright-core"
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/playwright-cli \
