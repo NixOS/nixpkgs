@@ -4,18 +4,13 @@
   src,
   passthru,
   meta,
-  lib,
   stdenvNoCC,
   appimageTools,
   asar,
   autoPatchelfHook,
   makeWrapper,
   electron,
-  libXScrnSaver,
-  libXtst,
-  libappindicator,
   libgcc,
-  musl,
   vips,
 }:
 let
@@ -37,14 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libgcc
-    musl
     vips
-  ];
-
-  libPath = lib.makeLibraryPath [
-    libXScrnSaver
-    libXtst
-    libappindicator
   ];
 
   installPhase = ''
@@ -71,11 +59,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper "${electron}/bin/electron" "$out/bin/fastmail" \
       --add-flags "$out/opt/fastmail/app.asar.unpacked" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-wayland-ime=true --wayland-text-input-version=3}}" \
-      --prefix LD_LIBRARY_PATH : ${finalAttrs.libPath}:$out/opt/fastmail \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
     runHook postInstall
+  '';
+
+  # remove musl-libc dependencies before the autoPatchelfHook
+  preFixup = ''
+    rm -r "$out/opt/fastmail/app.asar.unpacked/node_modules/@img/"{sharp-linuxmusl-x64,sharp-libvips-linuxmusl-x64}
   '';
 
   meta = meta // {
