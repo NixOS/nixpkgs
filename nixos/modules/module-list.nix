@@ -414,6 +414,7 @@
   ./security/wrappers/default.nix
   ./services/accessibility/orca.nix
   ./services/accessibility/speechd.nix
+  ./services/accessibility/voxinput.nix
   ./services/admin/docuum.nix
   ./services/admin/komodo-periphery.nix
   ./services/admin/meshcentral.nix
