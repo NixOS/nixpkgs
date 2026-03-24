@@ -688,7 +688,7 @@ in
               machine.screenshot("settings_lomiri-content-hub_peers")
 
               # Select Gallery as content source
-              mouse_click(460, 80)
+              mouse_click(540, 80)
 
               # Expect Gallery to be brought into the foreground, with its sharing page open
               wait_for_text("Photos")
