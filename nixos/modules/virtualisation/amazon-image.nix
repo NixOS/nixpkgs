@@ -101,6 +101,7 @@ in
         curl
         file
         gzip
+        lzip
         mktemp
         xz
         zstd

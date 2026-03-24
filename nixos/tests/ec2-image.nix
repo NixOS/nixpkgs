@@ -291,6 +291,14 @@ in
             )
             test_userdata_decompression(machine, user_data_path, proc.stdout, "zstd")
 
+        with subtest("Decompression of lzip-compressed user-data"):
+            test_data = b"#!/bin/bash\necho lzip-decompression-test\n"
+            proc = subprocess.run(
+                ["${hostPkgs.lzip}/bin/lzip", "-c"],
+                input=test_data, capture_output=True, check=True,
+            )
+            test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
+
     finally:
         machine.shutdown()
         temp_dir.cleanup()

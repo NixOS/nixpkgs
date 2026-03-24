@@ -72,6 +72,7 @@ try_decompress() {
     bzip2*)      decompress_cmd=bzcat ;;
     XZ*)         decompress_cmd=xzcat ;;
     Zstandard*)  decompress_cmd=zstdcat ;;
+    lzip*)       decompress_cmd="lzip -dc" ;;
     *)           return ;;
   esac
   echo "decompressing: $1"
