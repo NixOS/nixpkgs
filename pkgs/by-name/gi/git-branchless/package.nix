@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # - https://github.com/facebook/sapling/commit/9e27acb84605079bf4e305afb637a4d6801831ac
   postPatch = ''
     (
-      cd ../git-branchless-*-vendor/esl01-indexedlog-*/
+      cd $cargoDepsCopy/*/esl01-indexedlog-*/
       patch -p1 < ${./fix-esl01-indexedlog-for-rust-1_89.patch}
     )
   '';
