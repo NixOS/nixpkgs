@@ -165,6 +165,13 @@ let
         url = "https://github.com/Aider-AI/aider/commit/7201abc56539ae8ee2bf4ea0926f584c9ec5558c.patch";
         hash = "sha256-bjL9nbEQGGNkFczm1hDOMP3b48eRJk17zcivXjOdVnw=";
       })
+
+      # https://github.com/Aider-AI/aider/commit/38716cc5a2621499c50454aa77ee379aa2b0c590
+      (fetchpatch {
+        name = "add-permission-denied-error-to-litellm-exceptions.patch";
+        url = "https://github.com/Aider-AI/aider/commit/38716cc5a2621499c50454aa77ee379aa2b0c590.patch";
+        hash = "sha256-uDIUHbauAmzCfaqx6aswnkUHcmgJi4X2OdMPyn4NeYU=";
+      })
     ];
 
     disabledTestPaths = [
