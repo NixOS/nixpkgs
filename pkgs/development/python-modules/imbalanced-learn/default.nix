@@ -9,6 +9,7 @@
   numpy,
   pandas,
   scikit-learn,
+  sklearn-compat,
   scipy,
   tensorflow,
   threadpoolctl,
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     joblib
     numpy
     scikit-learn
+    sklearn-compat
     scipy
     threadpoolctl
   ];
