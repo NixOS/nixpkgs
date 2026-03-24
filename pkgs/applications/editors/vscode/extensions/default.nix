@@ -5360,8 +5360,8 @@ let
         mktplcRef = {
           name = "pretty-ts-errors";
           publisher = "yoavbls";
-          version = "0.8.4";
-          hash = "sha256-FyoT9S58aBkq9Q95fC8NaaHlCoUOpCBcOO8+/I33V70=";
+          version = "0.8.6";
+          hash = "sha256-fogib4cYjuogiSfpY935zgm/vfpwGY3vwnknQeQK5Is=";
         };
         meta = {
           description = "Make TypeScript errors prettier and human-readable in VSCode";
