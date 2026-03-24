@@ -22,6 +22,10 @@ in
       '';
     };
 
+    resizeHelper.enable = mkEnableOption "lvresize_fs_helper" // {
+      default = true;
+    };
+
     package = mkOption {
       type = types.package;
       default = pkgs.lvm2;
@@ -60,7 +64,7 @@ in
 
       services.udev.packages = [ cfg.package.out ];
       environment.etc."lvm/lvm.conf".text =
-        "global/lvresize_fs_helper_executable = ${pkgs.lvm2.scripts}/libexec/lvresize_fs_helper";
+        mkIf cfg.resizeHelper.enable "global/lvresize_fs_helper_executable = ${pkgs.lvm2.scripts}/libexec/lvresize_fs_helper";
     })
     (mkIf config.boot.initrd.services.lvm.enable {
       # We need lvm2 for the device-mapper rules
