@@ -11,26 +11,28 @@
   ml-dtypes,
   numpy,
   onnx,
+  sympy,
   typing-extensions,
 
   # tests
   onnxruntime,
   parameterized,
   pytestCheckHook,
+  safetensors,
   torch,
   tqdm,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "onnx-ir";
-  version = "0.1.14_1";
+  version = "0.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "ir-py";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mlUz5LGMtW4q78lBcbjo96V7k6NL+mt1lSvOU/6GEOY=";
+    hash = "sha256-U6N1vnsvp2Tr2qSIl9gsUnrKDjeUuUXAXx6ZyRnUTKM=";
   };
 
   build-system = [
@@ -41,6 +43,7 @@ buildPythonPackage (finalAttrs: {
     ml-dtypes
     numpy
     onnx
+    sympy
     typing-extensions
   ];
 
@@ -50,6 +53,7 @@ buildPythonPackage (finalAttrs: {
     onnxruntime
     parameterized
     pytestCheckHook
+    safetensors
     torch
     tqdm
   ];
