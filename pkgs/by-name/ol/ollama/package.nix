@@ -145,6 +145,7 @@ goBuild (finalAttrs: {
 
   patches = [
     ./ollama-no-openclaw-daemon.patch
+    ./interactive-launch-fix.patch
   ];
 
   src = fetchFromGitHub {

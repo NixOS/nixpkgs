@@ -1,0 +1,72 @@
+From e1a18fe294f6f088641edd69b54804e8d842903d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Tue, 24 Mar 2026 12:03:05 +0100
+Subject: [PATCH] launch: skip interactive model picker in non-interactive
+ auto-approve mode
+
+When --yes --config --model are all provided, the launcher would still
+try to show the interactive model picker because --config sets
+ForceConfigure unconditionally. Now both launchSingleIntegration and
+launchEditorIntegration check for auto-approve policy with a model
+already resolved and skip the picker, using ensureModelsReady directly.
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+---
+ cmd/launch/launch.go | 32 ++++++++++++++++++++++++--------
+ 1 file changed, 24 insertions(+), 8 deletions(-)
+
+diff --git a/cmd/launch/launch.go b/cmd/launch/launch.go
+index 0734bf31..b563826c 100644
+--- a/cmd/launch/launch.go
++++ b/cmd/launch/launch.go
+@@ -458,11 +458,19 @@ func (c *launcherClient) launchSingleIntegration(ctx context.Context, name strin
+ 	}
+ 
+ 	if needsConfigure {
+-		selected, err := c.selectSingleModelWithSelector(ctx, fmt.Sprintf("Select model for %s:", runner), target, DefaultSingleSelector)
+-		if err != nil {
+-			return err
++		if c.policy.Confirm == LaunchConfirmAutoApprove && target != "" {
++			// Non-interactive auto-approve with a model already specified:
++			// skip the interactive picker and use the target directly.
++			if err := c.ensureModelsReady(ctx, []string{target}); err != nil {
++				return err
++			}
++		} else {
++			selected, err := c.selectSingleModelWithSelector(ctx, fmt.Sprintf("Select model for %s:", runner), target, DefaultSingleSelector)
++			if err != nil {
++				return err
++			}
++			target = selected
+ 		}
+-		target = selected
+ 	} else if err := c.ensureModelsReady(ctx, []string{target}); err != nil {
+ 		return err
+ 	}
+@@ -484,11 +492,19 @@ func (c *launcherClient) launchEditorIntegration(ctx context.Context, name strin
+ 	models, needsConfigure := c.resolveEditorLaunchModels(ctx, saved, req)
+ 
+ 	if needsConfigure {
+-		selected, err := c.selectMultiModelsForIntegration(ctx, runner, models)
+-		if err != nil {
+-			return err
++		if c.policy.Confirm == LaunchConfirmAutoApprove && len(models) > 0 {
++			// Non-interactive auto-approve with models already resolved:
++			// skip the interactive picker and use the resolved models directly.
++			if err := c.ensureModelsReady(ctx, models); err != nil {
++				return err
++			}
++		} else {
++			selected, err := c.selectMultiModelsForIntegration(ctx, runner, models)
++			if err != nil {
++				return err
++			}
++			models = selected
+ 		}
+-		models = selected
+ 	} else if err := c.ensureModelsReady(ctx, models); err != nil {
+ 		return err
+ 	}
+-- 
+2.53.0
+
