@@ -6733,8 +6733,6 @@ self: super: with self; {
 
   gepa = callPackage ../development/python-modules/gepa { };
 
-  gepetto-gui = toPythonModule (gepetto-viewer.withPlugins [ gepetto-viewer-corba ]);
-
   gepetto-viewer = toPythonModule (pkgs.gepetto-viewer.override { python3Packages = self; });
 
   gepetto-viewer-corba = toPythonModule (
