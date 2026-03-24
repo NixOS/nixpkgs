@@ -96,7 +96,7 @@ in
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
-      ''f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos\n''
+      "f /root/.nix-channels - - - - ${config.system.defaultChannel} nixos"
     ];
 
     system.activationScripts.no-nix-channel = mkIf (!cfg.channel.enable) (
