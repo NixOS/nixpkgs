@@ -28,7 +28,7 @@
   webp-pixbuf-loader,
   tinysparql,
   localsearch,
-  gexiv2,
+  gexiv2_0_16,
   libselinux,
   libcloudproviders,
   gdk-pixbuf,
@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gexiv2
+    gexiv2_0_16
     glib-networking
     icu
     gnome-desktop
