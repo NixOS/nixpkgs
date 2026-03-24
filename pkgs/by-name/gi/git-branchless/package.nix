@@ -8,6 +8,7 @@
   rustPlatform,
   sqlite,
   stdenv,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -66,6 +67,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=test_next_ambiguous_interactive"
     "--skip=test_switch_auto_switch_interactive"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
