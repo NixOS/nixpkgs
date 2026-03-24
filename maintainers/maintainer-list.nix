@@ -27537,6 +27537,12 @@
     github = "uxodb";
     githubId = 20535246;
   };
+  uzlkav = {
+    name = "Uzlkav";
+    github = "Uzlkav";
+    githubId = 177883133;
+    matrix = "@capybara_squash:unredacted.org";
+  };
   V = {
     name = "V";
     email = "v@anomalous.eu";
