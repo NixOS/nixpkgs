@@ -3,6 +3,7 @@
   stdenv,
   kdePackages,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     + ''
       rm -rf $out/usr
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Preset-oriented graphical launcher of various ported Doom engines";
