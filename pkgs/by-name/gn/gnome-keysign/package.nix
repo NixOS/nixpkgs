@@ -12,7 +12,7 @@
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "gnome-keysign";
-  version = "0.9";
+  version = "1.3.0";
   format = "setuptools";
 
   src = fetchFromGitLab {
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     owner = "GNOME";
     repo = "gnome-keysign";
     rev = finalAttrs.version;
-    hash = "sha256-wLw3yUqCzuSDqD+C4ttYWFsnNTeGojQW6uYsCGnTepk=";
+    hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
   };
 
   patches = [
