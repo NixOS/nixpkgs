@@ -10,29 +10,22 @@ let
 
   settingsFormat = pkgs.formats.json { };
 
-  rawDefaultConfig = lib.importJSON (
+  defaultConfig =
     pkgs.runCommand "kubo-default-config"
       {
-        nativeBuildInputs = [ cfg.package ];
+        nativeBuildInputs = [
+          cfg.package
+          pkgs.jq
+        ];
       }
       ''
         export IPFS_PATH="$TMPDIR"
         ipfs init --empty-repo --profile=${profile}
-        ipfs --offline config show > "$out"
-      ''
-  );
+        # Remove the variable key to make the result deterministic.
+        ipfs --offline config show | jq 'del(.Identity)' > $out
+      '';
 
-  # Remove the PeerID (an attribute of "Identity") of the temporary Kubo repo.
-  # The "Pinning" section contains the "RemoteServices" section, which would prevent
-  # the daemon from starting as that setting can't be changed via ipfs config replace.
-  defaultConfig = removeAttrs rawDefaultConfig [
-    "Identity"
-    "Pinning"
-  ];
-
-  customizedConfig = lib.recursiveUpdate defaultConfig cfg.settings;
-
-  configFile = settingsFormat.generate "kubo-config.json" customizedConfig;
+  configFile = settingsFormat.generate "kubo-config.json" cfg.settings;
 
   # Create a fake repo containing only the file "api".
   # $IPFS_PATH will point to this directory instead of the real one.
@@ -392,8 +385,20 @@ in
       ''
       + ''
         fi
+
+        # We need the Identity and Pinning configuration from the current settings.
         ipfs --offline config show |
-          ${pkgs.jq}/bin/jq -s '.[0].Pinning as $Pinning | .[0].Identity as $Identity | .[1] + {$Identity,$Pinning}' - '${configFile}' |
+          ${lib.getExe pkgs.jq} '{ Identity, Pinning, }' |
+
+          # Now we deep-merge all configuration sources (later data wins):
+          # 1. the default configuration
+          # 2. the user-provided configuration
+          # 3. the dynamic keys from the existing configuration
+          ${lib.getExe pkgs.jq} -s 'reduce .[] as $config ({}; . * $config)' \
+            ${defaultConfig} \
+            ${configFile} \
+            - \
+          |
 
           # This command automatically injects the private key and other secrets from
           # the old config file back into the new config file.
