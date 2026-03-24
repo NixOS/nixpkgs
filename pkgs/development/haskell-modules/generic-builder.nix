@@ -135,7 +135,7 @@ in
     !stdenv.hostPlatform.isStatic
     && (ghc.enableShared or false)
     && !stdenv.hostPlatform.useAndroidPrebuilt, # TODO: figure out why /build leaks into RPATH
-  enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin), # TODO: use -dead_strip for darwin
+  enableDeadCodeElimination ? true,
   # Disabling this for JS prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
   enableStaticLibraries ?
     !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs),
