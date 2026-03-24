@@ -11,6 +11,7 @@
   glib,
   liburing,
   gnome,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     vala
+    python3
   ];
 
   buildInputs = [
@@ -47,6 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  # test-dbus tries to access /etc/machine-id
+  postPatch = ''
+    substituteInPlace "testsuite/meson.build" --replace-fail \
+      "'test-dbus': {'extra-sources': dbus_foo, 'disable': not have_gdbus_codegen}," \
+      "'test-dbus': {'extra-sources': dbus_foo, 'disable': true},"
+  '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
