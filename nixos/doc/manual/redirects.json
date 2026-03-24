@@ -62,6 +62,24 @@
   "module-boot-plymouth-tpm2-totp-quick-start-enable": [
     "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
   ],
+  "module-services-go-avahi-cname": [
+    "index.html#module-services-go-avahi-cname"
+  ],
+  "module-services-go-avahi-cname-configuration": [
+    "index.html#module-services-go-avahi-cname-configuration"
+  ],
+  "module-services-go-avahi-cname-configuration-basic-implementation": [
+    "index.html#module-services-go-avahi-cname-configuration-basic-implementation"
+  ],
+  "module-services-go-avahi-cname-configuration-mode": [
+    "index.html#module-services-go-avahi-cname-configuration-mode"
+  ],
+  "module-services-go-avahi-cname-configuration-prerequisites": [
+    "index.html#module-services-go-avahi-cname-configuration-prerequisites"
+  ],
+  "module-services-go-avahi-cname-motivation": [
+    "index.html#module-services-go-avahi-cname-motivation"
+  ],
   "module-services-keycloak-unix-socket": [
     "index.html#module-services-keycloak-unix-socket"
   ],
