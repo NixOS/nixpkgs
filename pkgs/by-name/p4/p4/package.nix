@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ jam ];
 
   outputs = [
-    "out"
     "bin"
+    "out"
     "dev"
   ];
 
