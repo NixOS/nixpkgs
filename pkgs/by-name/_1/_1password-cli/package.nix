@@ -92,6 +92,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       joelburget
       khaneliman
+      savtrip
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
