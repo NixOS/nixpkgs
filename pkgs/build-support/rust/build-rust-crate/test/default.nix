@@ -91,9 +91,15 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (
+        removeAttrs crateArgs [
+          "expectedTestOutputs"
+          "expectedTestBinaries"
+        ]
+      );
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
+      expectedTestBinaries = crateArgs.expectedTestBinaries or [ ];
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
       isLib = crateArgs ? libName || crateArgs ? libPath;
       crateName = crateArgs.crateName or "nixtestcrate";
@@ -134,6 +140,10 @@ let
           ''
         else if stdenv.hostPlatform == stdenv.buildPlatform then
           ''
+            ${lib.concatMapStringsSep "\n" (
+              b:
+              "test -x ${crate}/tests/${lib.escapeShellArg b} || { echo 'expected test binary \"${b}\" not found in:'; ls ${crate}/tests; exit 23; }"
+            ) expectedTestBinaries}
             for file in ${crate}/tests/*; do
               $file 2>&1 >> $out
             done
@@ -419,10 +429,32 @@ rec {
             ];
           };
           buildTests = true;
+          # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main.
+          expectedTestBinaries = [
+            "foo"
+            "bar"
+          ];
           expectedTestOutputs = [
             "test src_main ... ok"
             "test tests_foo ... ok"
             "test tests_bar ... ok"
+          ];
+        };
+        rustBinTestsFlatMainSuffix = {
+          # A flat-style test whose name happens to end in _main must keep
+          # its suffix — only tests/<dir>/main.rs gets the _main stripped.
+          src = symlinkJoin {
+            name = "rust-bin-tests-flat-main-suffix";
+            paths = [
+              (mkTestFileWithMain "src/main.rs" "src_main")
+              (mkTestFile "tests/foo_main.rs" "flat_test")
+            ];
+          };
+          buildTests = true;
+          expectedTestBinaries = [ "foo_main" ];
+          expectedTestOutputs = [
+            "test src_main ... ok"
+            "test flat_test ... ok"
           ];
         };
         linkAgainstRlibCrate = {
