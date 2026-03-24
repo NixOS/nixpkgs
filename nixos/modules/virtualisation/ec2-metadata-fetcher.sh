@@ -62,22 +62,24 @@ get_imds() {
 }
 
 try_decompress() {
-  local temp ftype
+  local temp ftype decompress_cmd
   if [ ! -s "$1" ]; then
     return
   fi
   ftype=$(file --brief "$1")
   case $ftype in
-    gzip*)
-      echo "decompressing: $1"
-      temp=$(mktemp)
-      if zcat "$1" > "$temp"; then
-        mv "$temp" "$1"
-      else
-        echo "failed to decompress: $1"
-        rm -f "$temp"
-      fi
+    gzip*)  decompress_cmd=zcat ;;
+    bzip2*) decompress_cmd=bzcat ;;
+    *)      return ;;
   esac
+  echo "decompressing: $1"
+  temp=$(mktemp)
+  if $decompress_cmd "$1" > "$temp"; then
+    mv "$temp" "$1"
+  else
+    echo "failed to decompress: $1"
+    rm -f "$temp"
+  fi
 }
 
 get_imds -o "$metaDir/ami-manifest-path" http://169.254.169.254/1.0/meta-data/ami-manifest-path

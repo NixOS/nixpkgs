@@ -273,6 +273,11 @@ in
             test_data = b"#!/bin/bash\necho gzip-decompression-test\n"
             test_userdata_decompression(machine, user_data_path, gzip_mod.compress(test_data), "gzip")
 
+        with subtest("Decompression of bzip2-compressed user-data"):
+            import bz2
+            test_data = b"#!/bin/bash\necho bzip2-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, bz2.compress(test_data), "bzip2")
+
     finally:
         machine.shutdown()
         temp_dir.cleanup()

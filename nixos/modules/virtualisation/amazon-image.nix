@@ -97,6 +97,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       path = with pkgs; [
+        bzip2
         curl
         file
         gzip
