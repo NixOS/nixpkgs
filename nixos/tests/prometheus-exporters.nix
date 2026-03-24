@@ -1739,6 +1739,16 @@ let
           enable = true;
           tokenFile = "/tmp/faketoken";
         };
+        metricProvider = {
+          networking = {
+            # The exporter tries to access Hetzner on startup and crashes.
+            # Blocking this on the firewall level allows the exporter to start.
+            extraHosts = "127.0.0.1 api.hetzner.com";
+            firewall.extraCommands = ''
+              iptables -A OUTPUT -p tcp --dport 443 -d 127.0.0.1 -j DROP
+            '';
+          };
+        };
         exporterTest = ''
           succeed(
             'echo faketoken > /tmp/faketoken'
