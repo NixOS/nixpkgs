@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "glycin-gtk4-1"
+      "glycin-gtk4-2"
     ];
   };
 })

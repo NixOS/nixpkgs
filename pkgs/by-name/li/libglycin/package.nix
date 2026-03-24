@@ -163,7 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
     teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
-      "glycin-1"
+      "glycin-2"
     ];
   };
 })
