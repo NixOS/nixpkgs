@@ -63,6 +63,7 @@ buildGo126Module rec {
     maintainers = with lib.maintainers; [
       mdaniels5757
       zowoq
+      savtrip
     ];
   };
 }
