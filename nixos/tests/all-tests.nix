@@ -150,7 +150,9 @@ in
     node-name = runTest ./nixos-test-driver/node-name.nix;
     busybox = runTest ./nixos-test-driver/busybox.nix;
     console-log = runTest ./nixos-test-driver/console-log.nix;
-    containers = runTest ./nixos-test-driver/containers.nix;
+    # Disabled until we figure out if we want to expose `/dev/net` in the build
+    # sandbox on Hydra. See <https://github.com/NixOS/infra/issues/987>.
+    # containers = runTest ./nixos-test-driver/containers.nix;
     driver-timeout =
       pkgs.runCommand "ensure-timeout-induced-failure"
         {
