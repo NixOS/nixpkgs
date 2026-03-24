@@ -4,10 +4,14 @@
   fetchPypi,
   setuptools,
   pytestCheckHook,
-  urllib3,
   certifi,
+  cryptography,
+  lazy-imports,
+  pydantic,
   python-dateutil,
   six,
+  typing-extensions,
+  urllib3,
 }:
 
 buildPythonPackage rec {
@@ -22,10 +26,14 @@ buildPythonPackage rec {
   };
 
   dependencies = [
-    urllib3
     certifi
+    cryptography
+    lazy-imports
+    pydantic
     python-dateutil
     six
+    typing-extensions
+    urllib3
   ];
 
   build-system = [ setuptools ];

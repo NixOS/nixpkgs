@@ -7,16 +7,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "kubectx";
-  version = "0.9.5";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = "kubectx";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HVmtUhdMjbkyMpTgbsr5Mm286F9Q7zbc5rOxi7OBZEg=";
+    hash = "sha256-LgZz/fRpIf/D3WmRic/P8O+wOrgKbDyAyBWzdOxXjKQ=";
   };
 
-  vendorHash = "sha256-3xetjviMuH+Nev12DB2WN2Wnmw1biIDAckUSGVRHQwM=";
+  vendorHash = "sha256-BbGXJM1RMn7dgd8aaaGxRkqgs398rwpONWUcCcWNZow=";
 
   nativeBuildInputs = [ installShellFiles ];
 

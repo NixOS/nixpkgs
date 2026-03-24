@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "CLI for localtunnel";
     homepage = "https://localtunnel.me";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "lt";
   };
 })

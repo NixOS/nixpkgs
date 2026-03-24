@@ -39,6 +39,6 @@ buildNpmPackage (finalAttrs: {
     description = "Concise grammar of interactive graphics, built on Vega";
     homepage = "https://vega.github.io/vega-lite/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 })
