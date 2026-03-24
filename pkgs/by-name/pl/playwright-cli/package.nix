@@ -2,18 +2,18 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   playwright-driver,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "playwright-cli";
   version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-cli";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ao3phIPinliFDK04u/V3ouuOfwMDVf/qBUpQPESziFQ=";
   };
 
@@ -21,19 +21,19 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   postFixup = ''
     wrapProgram $out/bin/playwright-cli \
       --set-default PLAYWRIGHT_BROWSERS_PATH ${playwright-driver.browsers}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Playwright CLI for browser automation";
     homepage = "https://github.com/microsoft/playwright-cli";
-    changelog = "https://github.com/microsoft/playwright-cli/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ imalison ];
+    changelog = "https://github.com/microsoft/playwright-cli/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ imalison ];
     mainProgram = "playwright-cli";
   };
-}
+})
