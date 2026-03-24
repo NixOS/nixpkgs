@@ -222,6 +222,7 @@ mapAliases {
   garminconnect-ha = throw "'garminconnect-ha' has been renamed to/replaced by 'garminconnect'"; # Converted to throw 2025-10-29
   GeoIP = throw "'GeoIP' has been renamed to/replaced by 'geoip'"; # Converted to throw 2025-10-29
   gepetto-gui = throw "'gepetto-gui' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
+  gepetto-viewer-corba = throw "'gepetto-viewer-corba' has been removed, as authors and most users moved to viser"; # Added 2026-03-24
   github3_py = throw "'github3_py' has been renamed to/replaced by 'github3-py'"; # Converted to throw 2025-10-29
   GitPython = throw "'GitPython' has been renamed to/replaced by 'gitpython'"; # Converted to throw 2025-10-29
   google_api_python_client = throw "'google_api_python_client' has been renamed to/replaced by 'google-api-python-client'"; # Converted to throw 2025-10-29
