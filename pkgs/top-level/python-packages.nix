@@ -3068,6 +3068,8 @@ self: super: with self; {
 
   columnize = callPackage ../development/python-modules/columnize { };
 
+  com2ann = callPackage ../development/python-modules/com2ann { };
+
   comet-ml = callPackage ../development/python-modules/comet-ml { };
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
