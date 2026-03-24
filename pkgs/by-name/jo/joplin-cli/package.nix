@@ -8,7 +8,6 @@
   pkg-config,
   libsecret,
   rsync,
-  xcbuild,
   buildPackages,
   clang_20,
 }:
@@ -45,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     rsync
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
     buildPackages.cctools
     clang_20 # clang_21 breaks keytar, sqlite
   ];
