@@ -8299,6 +8299,8 @@ self: super: with self; {
 
   kml2geojson = callPackage ../development/python-modules/kml2geojson { };
 
+  kmock = callPackage ../development/python-modules/kmock { };
+
   kmsxx = toPythonModule (
     pkgs.kmsxx.override {
       withPython = true;
