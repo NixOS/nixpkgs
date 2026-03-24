@@ -80,10 +80,6 @@ let
   kernels = patchedPkgs.linuxKernel.vanillaPackages // {
     inherit (patchedPkgs.linuxKernel.packages)
       linux_6_12_hardened
-      linux_rt_5_10
-      linux_rt_5_15
-      linux_rt_6_1
-      linux_rt_6_6
 
       linux_testing
       ;
