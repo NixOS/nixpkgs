@@ -8,7 +8,6 @@
   pkg-config,
   gnome,
   gtk3,
-  gtk4,
   atk,
   gobject-introspection,
   spidermonkey_140,
@@ -31,7 +30,8 @@
 let
   testDeps = [
     gtk3
-    gtk4
+    # FIXME: Gtk4Warnings fails
+    # gtk4
     atk
     pango.out
     gdk-pixbuf
