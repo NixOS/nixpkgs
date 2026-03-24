@@ -143,6 +143,10 @@ goBuild (finalAttrs: {
   pname = "ollama";
   version = "0.23.4";
 
+  patches = [
+    ./ollama-no-openclaw-daemon.patch
+  ];
+
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
