@@ -195,7 +195,7 @@ in
         test_marker = f"{format_name}-decompression-test"
         with open(user_data_path, "wb") as f:
             f.write(compressed_data)
-        machine.succeed("systemctl restart fetch-ec2-metadata")
+        machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
         result = machine.succeed("cat /etc/ec2-metadata/user-data")
         assert test_marker in result, f"Expected '{test_marker}' in decompressed {format_name} content, got: {result}"
         journal = machine.succeed("journalctl -u fetch-ec2-metadata --no-pager -b")
