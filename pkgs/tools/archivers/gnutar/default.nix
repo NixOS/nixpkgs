@@ -3,11 +3,11 @@
   stdenv,
   fetchurl,
   autoreconfHook,
-  updateAutotoolsGnuConfigScriptsHook,
   libintl,
   gettext,
   aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl,
   acl,
+  versionCheckHook,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -15,12 +15,12 @@
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnutar";
   version = "1.35";
 
   src = fetchurl {
-    url = "mirror://gnu/tar/tar-${version}.tar.xz";
+    url = "mirror://gnu/tar/tar-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-TWL/NzQux67XSFNTI5MMfPlKz3HDWRiCsmp+pQ8+3BY=";
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # which is not safe on darwin.
   # see http://article.gmane.org/gmane.os.macosx.fink.devel/21882
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/system.c --replace '_(' 'N_('
+    substituteInPlace src/system.c --replace-fail '_(' 'N_('
   '';
 
   outputs = [
@@ -57,11 +57,12 @@ stdenv.mkDerivation rec {
     stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS
   ) "1";
 
-  doCheck = false; # fails
-  doInstallCheck = false; # fails
+  doCheck = true;
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
-    description = "GNU implementation of the `tar' archiver";
+    description = "GNU implementation of the `tar` archiver";
     longDescription = ''
       The Tar program provides the ability to create tar archives, as
       well as various other kinds of manipulation.  For example, you
@@ -77,13 +78,10 @@ stdenv.mkDerivation rec {
       archives).
     '';
     homepage = "https://www.gnu.org/software/tar/";
-
     license = lib.licenses.gpl3Plus;
-
-    maintainers = with lib.maintainers; [ RossComputerGuy ];
     mainProgram = "tar";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = lib.platforms.all;
-
     priority = 10;
   };
-}
+})
