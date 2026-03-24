@@ -4819,8 +4819,6 @@ self: super: with self; {
 
   dynalite-panel = callPackage ../development/python-modules/dynalite-panel { };
 
-  dynd = callPackage ../development/python-modules/dynd { };
-
   e2b = callPackage ../development/python-modules/e2b { };
 
   e2b-code-interpreter = callPackage ../development/python-modules/e2b-code-interpreter { };
