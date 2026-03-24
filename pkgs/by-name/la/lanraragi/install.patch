@@ -1,8 +1,8 @@
 diff --git a/tools/install.pl b/tools/install.pl
-index 0931979..50745d7 100644
+index db85048..736360e 100644
 --- a/tools/install.pl
 +++ b/tools/install.pl
-@@ -92,36 +92,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
+@@ -93,36 +93,6 @@ if ( $ENV{HOMEBREW_FORMULA_PREFIX} ) {
      $cpanopt = " -l " . $ENV{HOMEBREW_FORMULA_PREFIX} . "/libexec";
  }
  
@@ -12,11 +12,11 @@ index 0931979..50745d7 100644
 -IPC::Cmd->import('can_run');
 -require Config::AutoConf;
 -
--
 -say("\r\nWill now check if all LRR software dependencies are met. \r\n");
 -
 -#Fails on win even if redis is in the path
--if ( IS_UNIX ) {
+-if (IS_UNIX) {
+-
 -    #Check for Redis
 -    say("Checking for Redis...");
 -    can_run('redis-server')
@@ -39,7 +39,7 @@ index 0931979..50745d7 100644
  #Check for PerlMagick
  say("Checking for ImageMagick/PerlMagick...");
  my $imgk;
-@@ -170,13 +140,6 @@ if ( $back || $full ) {
+@@ -177,13 +147,6 @@ if ( $back || $full ) {
  #Clientside Dependencies with Provisioning
  if ( $front || $full ) {
  

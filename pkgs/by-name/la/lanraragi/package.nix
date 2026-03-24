@@ -13,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "lanraragi";
-  version = "0.9.60";
+  version = "0.9.70";
 
   src = fetchFromGitHub {
     owner = "Difegue";
     repo = "LANraragi";
     tag = "v.${version}";
-    hash = "sha256-ieYil/3n8iSWdfO6MQ1sW8q/TnQekpCx24n/BDfeLNg=";
+    hash = "sha256-QL6m++vxryWA6dEJ0ZWUkKIkqKYy0dowiygqII/7mnI=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ buildNpmPackage rec {
     ./expose-password-hashing.patch
   ];
 
-  npmDepsHash = "sha256-9SuimhLvEuruvFXuFm62DzgldngfiJneV6MDedGy6LY=";
+  npmDepsHash = "sha256-FFbv43DtRN4Wu+aFHnqSyMdPO05zi68nkix0cJ2vnn4=";
 
   nativeBuildInputs = [
     perl
@@ -77,6 +77,7 @@ buildNpmPackage rec {
       Mojolicious
       MojoliciousPluginTemplateToolkit
       MojoliciousPluginRenderFile
+      MojoliciousPluginOpenAPI
       IOSocketSocks
       IOSocketSSL
       CpanelJSONXS

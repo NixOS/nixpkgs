@@ -1,8 +1,8 @@
 diff --git a/tools/cpanfile b/tools/cpanfile
-index e70c6e7..1fb5860 100644
+index c65d26d..e3629d6 100644
 --- a/tools/cpanfile
 +++ b/tools/cpanfile
-@@ -33,7 +33,7 @@ requires 'Test::Harness',    3.42;
+@@ -33,13 +33,13 @@ requires 'Test::Harness',    3.42;
  requires 'Test::MockObject', 1.20200122;
  requires 'Test::Trap',       0.3.4;
  requires 'Test::Deep',       1.130;
@@ -11,3 +11,10 @@ index e70c6e7..1fb5860 100644
  
  # Mojo stuff
  requires 'Mojolicious',                          9.39;
+ requires 'Mojolicious::Plugin::TemplateToolkit', 0.005;
+ requires 'Mojolicious::Plugin::RenderFile',      0.12;
+-requires 'Mojolicious::Plugin::OpenAPI',         5.11;
++requires 'Mojolicious::Plugin::OpenAPI',         5.09;
+ requires 'IO::Socket::Socks',                    0.74;
+ requires 'IO::Socket::SSL',                      2.067;
+ requires 'Cpanel::JSON::XS',                     4.06;
