@@ -1,0 +1,64 @@
+diff -r 1c168e428a22 hggit/git2hg.py
+--- a/hggit/git2hg.py	Mon Nov 18 20:33:10 2024 +0100
++++ b/hggit/git2hg.py	Fri Mar 20 01:49:29 2026 +0000
+@@ -5,8 +5,8 @@
+ 
+ from dulwich import config as dul_config
+ from dulwich.objects import Commit, Tag
++from dulwich.protocol import PEELED_TAG_SUFFIX
+ from dulwich.refs import (
+-    ANNOTATED_TAG_SUFFIX,
+     LOCAL_BRANCH_PREFIX,
+     LOCAL_TAG_PREFIX,
+ )
+@@ -306,7 +306,7 @@
+                     raise error.RepoLookupError(msg)
+     else:
+         for ref, sha in refs.items():
+-            if not ref.endswith(ANNOTATED_TAG_SUFFIX) and (
++            if not ref.endswith(PEELED_TAG_SUFFIX) and (
+                 ref.startswith(LOCAL_BRANCH_PREFIX)
+                 or ref.startswith(LOCAL_TAG_PREFIX)
+                 or ref == b'HEAD'
+diff -r 1c168e428a22 hggit/git_handler.py
+--- a/hggit/git_handler.py	Mon Nov 18 20:33:10 2024 +0100
++++ b/hggit/git_handler.py	Fri Mar 20 01:49:29 2026 +0000
+@@ -9,8 +9,8 @@
+ from dulwich.errors import HangupException, GitProtocolError, ApplyDeltaError
+ from dulwich.objects import Blob, Commit, Tag, Tree, parse_timezone
+ from dulwich.pack import apply_delta
++from dulwich.protocol import PEELED_TAG_SUFFIX
+ from dulwich.refs import (
+-    ANNOTATED_TAG_SUFFIX,
+     LOCAL_BRANCH_PREFIX,
+     LOCAL_TAG_PREFIX,
+ )
+@@ -1638,8 +1638,8 @@
+             # pull tags pointing to known revisions, including
+             # annotated tags
+             for ref, sha in refs.items():
+-                if ref.endswith(ANNOTATED_TAG_SUFFIX) and sha in self._map_git:
+-                    actual_ref = ref[: -len(ANNOTATED_TAG_SUFFIX)]
++                if ref.endswith(PEELED_TAG_SUFFIX) and sha in self._map_git:
++                    actual_ref = ref[: -len(PEELED_TAG_SUFFIX)]
+                     filteredrefs.setdefault(actual_ref, refs[actual_ref])
+ 
+             return [x for x in filteredrefs.values() if x not in self.git]
+@@ -1855,7 +1855,7 @@
+         repotags = self.repo.tags()
+         new_refs = {}
+         for k in refs:
+-            if k.endswith(ANNOTATED_TAG_SUFFIX) or not k.startswith(
++            if k.endswith(PEELED_TAG_SUFFIX) or not k.startswith(
+                 LOCAL_TAG_PREFIX
+             ):
+                 continue
+@@ -2036,7 +2036,7 @@
+ 
+         for ref_name, sha in refs.items():
+             if (
+-                ref_name.endswith(ANNOTATED_TAG_SUFFIX)
++                ref_name.endswith(PEELED_TAG_SUFFIX)
+                 or sha not in self.git.object_store
+             ):
+                 # the sha points to a peeled tag; we should either
