@@ -75,7 +75,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
-    license = lib.licenses.gpl2Only;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.mit
+    ];
     mainProgram = "git-branchless";
     maintainers = with lib.maintainers; [
       nh2
