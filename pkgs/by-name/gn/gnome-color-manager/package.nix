@@ -11,14 +11,8 @@
   gnome,
   glib,
   gtk3,
-  libexif,
-  libtiff,
   colord,
-  colord-gtk,
-  libcanberra-gtk3,
   lcms2,
-  vte,
-  exiv2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,8 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor finalAttrs.version}/gnome-color-manager-${finalAttrs.version}.tar.xz";
     hash = "sha256-OQTUKrtOpWbfC4gOgr8Ln4Y4bGkvFbMYRppMe+M6iH8=";
   };
-
-  patches = [ ./0001-Fix-build-with-Exiv2-0.28.patch ];
 
   nativeBuildInputs = [
     meson
@@ -45,14 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libexif
-    libtiff
     colord
-    colord-gtk
-    libcanberra-gtk3
     lcms2
-    vte
-    exiv2
   ];
 
   strictDeps = true;
