@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nono";
-  version = "0.5.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "always-further";
     repo = "nono";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-32PiM84dwZ3dPIAIak1DL3iencguXCzehFCDsulDyhI=";
+    hash = "sha256-m88lr8nt6mgu0RrV5n66Rth9ja4Z9laut74lbXf6RJY=";
   };
 
-  cargoHash = "sha256-nE0vVBThXnqo8VnFCkOyqhpZZ40MIkXSqUoJUZcDVhE=";
+  cargoHash = "sha256-l87Pn6zVZ8ZRPp6m7Aet5uc+5aVjKVbQsHvtaEuTTD8==";
 
   nativeBuildInputs = [
     pkg-config
@@ -28,6 +28,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     dbus
   ];
+
+  preCheck = ''
+    # Integration test env_nono_allow_comma_separated expects these paths to exist
+    mkdir -p /tmp/a /tmp/b
+  '';
 
   meta = {
     description = "Secure, kernel-enforced sandbox for AI agents, MCP and LLM workloads";
