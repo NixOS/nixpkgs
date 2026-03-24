@@ -44,6 +44,13 @@ let
             ];
           };
 
+          # Packages needed for IPv6 IMDS fallback test
+          environment.systemPackages = [
+            pkgs.socat
+            pkgs.micro-httpd
+            pkgs.iptables
+          ];
+
           nixpkgs.pkgs = pkgs;
         }
       ];
@@ -298,6 +305,65 @@ in
                 input=test_data, capture_output=True, check=True,
             )
             test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
+
+        with subtest("IPv6 IMDS fallback"):
+            # Save hostname fetched via IPv4 for later comparison
+            original_hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()
+
+            # Assign the EC2 IPv6 IMDS address to loopback
+            machine.succeed("ip -6 addr add fd00:ec2::254/128 dev lo")
+
+            # Create metadata directory structure for the IPv6 endpoint
+            machine.succeed(
+                "mkdir -p /tmp/ipv6-metadata/1.0/meta-data/public-keys/0"
+                " && mkdir -p /tmp/ipv6-metadata/latest/api"
+                " && cp /etc/ec2-metadata/hostname /tmp/ipv6-metadata/1.0/meta-data/hostname"
+                " && cp /etc/ec2-metadata/ami-manifest-path /tmp/ipv6-metadata/1.0/meta-data/ami-manifest-path"
+                " && echo i-1234567890abcdef0 > /tmp/ipv6-metadata/1.0/meta-data/instance-id"
+                " && echo ipv6-test-token > /tmp/ipv6-metadata/latest/api/token"
+                " && touch /tmp/ipv6-metadata/1.0/user-data"
+            )
+            machine.execute(
+                "test -f /etc/ec2-metadata/public-keys-0-openssh-key"
+                " && cp /etc/ec2-metadata/public-keys-0-openssh-key"
+                " /tmp/ipv6-metadata/1.0/meta-data/public-keys/0/openssh-key"
+            )
+
+            # Serve metadata on the IPv6 IMDS address via socat + micro_httpd (inetd-style)
+            machine.succeed(
+                "systemd-run --unit=ipv6-imds --"
+                " socat TCP6-LISTEN:80,bind=[fd00:ec2::254],fork,reuseaddr"
+                " SYSTEM:'${lib.getExe pkgs.micro-httpd} /tmp/ipv6-metadata'"
+            )
+
+            # Wait for IPv6 IMDS to become reachable
+            machine.wait_until_succeeds(
+                "curl -sf http://[fd00:ec2::254]/1.0/meta-data/hostname"
+            )
+
+            # Block IPv4 IMDS to force fallback to IPv6
+            machine.succeed(
+                "iptables -I OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REJECT"
+            )
+
+            # Verify IPv4 IMDS is now unreachable
+            machine.fail(
+                "curl -sf --connect-timeout 2 http://169.254.169.254/1.0/meta-data/hostname"
+            )
+
+            # Clear fetched metadata and re-run the fetcher
+            machine.succeed("rm -f /etc/ec2-metadata/*")
+            machine.succeed("systemctl restart fetch-ec2-metadata")
+
+            # Verify metadata was successfully re-fetched via IPv6
+            hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()
+            assert hostname == original_hostname, f"Expected '{original_hostname}', got '{hostname}'"
+
+            # Clean up: restore IPv4 IMDS access
+            machine.succeed(
+                "iptables -D OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REJECT"
+            )
+            machine.succeed("systemctl stop ipv6-imds")
 
     finally:
         machine.shutdown()
