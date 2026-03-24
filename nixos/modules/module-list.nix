@@ -1329,7 +1329,6 @@
   ./services/networking/oink.nix
   ./services/networking/onedrive.nix
   ./services/networking/openconnect.nix
-  ./services/networking/opengfw.nix
   ./services/networking/openvpn.nix
   ./services/networking/opkssh/opkssh.nix
   ./services/networking/ostinato.nix
