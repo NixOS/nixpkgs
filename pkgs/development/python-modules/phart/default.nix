@@ -53,6 +53,8 @@ buildPythonPackage rec {
     pydot
   ];
 
+  pytestFlags = [ "-Wignore::DeprecationWarning" ];
+
   pythonImportsCheck = [
     "phart"
   ];
