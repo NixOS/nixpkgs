@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Command-line-interface for CDK for Kubernetes";
     homepage = "https://github.com/cdk8s-team/cdk8s-cli";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "cdk8s";
   };
 })

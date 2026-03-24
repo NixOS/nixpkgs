@@ -12,6 +12,7 @@
   filecheck,
   psutil,
   rich,
+  scikit-learn,
   torch,
   tqdm,
   triton,
@@ -23,16 +24,16 @@
   helion,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "helion";
-  version = "0.2.10";
+  version = "0.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "helion";
-    tag = "v${version}";
-    hash = "sha256-kZyay9X2RcN3by+2oFAjt17Zuu34i3p+MeApBuhejmg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MR8fo6MhMSAXlBsx//ODIprXPXFhMy6K5Mno9BnZGHc=";
   };
 
   build-system = [
@@ -44,6 +45,7 @@ buildPythonPackage rec {
     filecheck
     psutil
     rich
+    scikit-learn
     torch
     tqdm
     triton
@@ -75,10 +77,10 @@ buildPythonPackage rec {
   meta = {
     description = "Python-embedded DSL that makes it easy to write fast, scalable ML kernels with minimal boilerplate";
     homepage = "https://github.com/pytorch/helion";
-    changelog = "https://github.com/pytorch/helion/releases/tag/${src.tag}";
+    changelog = "https://github.com/pytorch/helion/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # This package explicitly requires CUDA-enabled pytorch
     broken = !config.cudaSupport;
   };
-}
+})

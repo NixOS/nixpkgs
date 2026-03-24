@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Webpack's Command Line Interface";
     homepage = "https://webpack.js.org/api/cli/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "webpack";
   };
 })

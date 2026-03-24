@@ -396,8 +396,8 @@ let
         mktplcRef = {
           name = "astro-vscode";
           publisher = "astro-build";
-          version = "2.16.8";
-          hash = "sha256-hNEGLJMBPPb5J5jg0lJwBGaD6z0rtb2xAqU9bchWTA8=";
+          version = "2.16.13";
+          hash = "sha256-lSYNRq7D/ggdNKO0ccqbIz5gAhsr/LdX2U8S6FsTktY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/astro-build.astro-vscode/changelog";
@@ -1902,8 +1902,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.18.7";
-          hash = "sha256-8zT3nFWyMmOmGxAqEjulh/K+45gUnKDgI7easR+ErpU=";
+          version = "1.18.8";
+          hash = "sha256-rhtf1JJMi8eGYmuKFUA1TAnf2gdMbckQ8Vke2owMoyI=";
         };
 
         meta = {
@@ -1955,8 +1955,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "vscode-pull-request-github";
-          version = "0.132.0";
-          hash = "sha256-2+hB2qENwiVawP3mavUAObjWwXlsDrKXa4u9TyXV3AM=";
+          version = "0.132.1";
+          hash = "sha256-iWDKJVgVhpycTNE044DSOf/uN0ZG4s2/JdpwBkka8sQ=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -3073,8 +3073,8 @@ let
         mktplcRef = {
           name = "compare-folders";
           publisher = "moshfeu";
-          version = "0.27.0";
-          hash = "sha256-v4ZIcrYa+5RXSX0OM5atXMcmN/EgAH6qqWS1vksxXpI=";
+          version = "0.28.0";
+          hash = "sha256-QoaZ/P2lIaJQjD9RF7+pUJkOneR9olCe6xuT/9vsiZ4=";
         };
 
         meta = {
@@ -4772,8 +4772,8 @@ let
         mktplcRef = {
           name = "emacs-mcx";
           publisher = "tuttieee";
-          version = "0.109.1";
-          hash = "sha256-ndhIA9g0cONzs+nDPcY0wLjnelfyBUXV9HWfZL/nfmg=";
+          version = "0.109.2";
+          hash = "sha256-rrTM/xzp8IoQRtUrg8rsP6gUPwUeZ6TMz1Sc7QyA5r0=";
         };
         meta = {
           changelog = "https://github.com/whitphx/vscode-emacs-mcx/blob/main/CHANGELOG.md";
@@ -5493,8 +5493,8 @@ let
         mktplcRef = {
           name = "vscode-zig";
           publisher = "ziglang";
-          version = "0.6.17";
-          hash = "sha256-OIGe981dupmyyhjxq11/AYaV2cjvNEe4FvXBospNgu0=";
+          version = "0.6.18";
+          hash = "sha256-jn/2Nmz6N84BCWnRdnM8w5AdiF2hh55h39SDTmRry5I=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";

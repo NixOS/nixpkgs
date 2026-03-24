@@ -29,6 +29,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "questionary"
     "rich-click"
     "textual"
+    "tomlkit"
     "tree-sitter"
     "tree-sitter-sql"
   ];

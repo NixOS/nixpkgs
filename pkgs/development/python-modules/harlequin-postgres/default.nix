@@ -4,6 +4,8 @@
   fetchPypi,
   hatchling,
   psycopg,
+  duckdb,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +26,8 @@ buildPythonPackage rec {
   dependencies = [
     psycopg
     psycopg.pool
-  ];
+  ]
+  ++ lib.optional (pythonAtLeast "3.14") duckdb;
 
   # To prevent circular dependency
   # as harlequin-postgres requires harlequin which requires harlequin-postgres
