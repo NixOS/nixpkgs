@@ -12,7 +12,7 @@ buildGoModule (finalAttrs: {
     owner = "fosrl";
     repo = "olm";
     tag = finalAttrs.version;
-    hash = "sha256-4dzbSW9AoFitypVOD/N4/mnUJwh0USgOwVqcopLkcYs=";
+    hash = "sha256-2FqtucYOfnyOcsEivhZFh18gofcqCGOMhPrr2V91OAM=";
   };
 
   vendorHash = "sha256-D93SPwXAeoTLCbScjyH8AB9TJIF2b/UbLNMIQYi+B+c=";
