@@ -47,20 +47,15 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "spacy";
-  version = "3.8.11";
+  version = "3.8.13";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "spaCy";
     tag = "release-v${finalAttrs.version}";
-    hash = "sha256-pLn3fq6SDstkRIv+1fj1yEGTlAd1IAiVgRu25CnEV8E=";
+    hash = "sha256-mjl4s3uUEdwPTvyq5HGDtxxREdnHAmUU8IpN/7+YxTc=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements.txt setup.cfg \
-      --replace-fail typer-slim typer
-  '';
 
   build-system = [
     cymem
@@ -123,6 +118,10 @@ buildPythonPackage (finalAttrs: {
     # Tests for presence of outdated (and thus missing) spacy models
     # https://github.com/explosion/spaCy/issues/13856
     "test_registry_entries"
+
+    # AssertionError: confection has different version in setup.cfg and in requirements.txt:
+    # >=1.3.2,<2.0.0 and >=1.1.0,<2.0.0 respectively
+    "test_build_dependencies"
   ];
 
   pythonImportsCheck = [ "spacy" ];
