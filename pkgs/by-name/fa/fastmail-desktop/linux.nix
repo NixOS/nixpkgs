@@ -55,16 +55,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     asar extract "$out/opt/fastmail/app.asar" "$out/opt/fastmail/app.asar.unpacked"
     rm "$out/opt/fastmail/app.asar"
 
-    install -D "${appimageContents}/production.desktop" "$out/share/applications/fastmail.desktop"
+    install -Dt "$out/share/applications" "${appimageContents}/fastmail.desktop"
     substituteInPlace "$out/share/applications/fastmail.desktop" \
       --replace-fail "Exec=AppRun --no-sandbox %U" "Exec=fastmail %U" \
-      --replace-fail "Icon=production" "Icon=fastmail" \
+      --replace-fail "Name=com.fastmail.Fastmail" "Name=Fastmail"
 
     for res in 16 24 32 48 64 128 256 512 1024; do
       resdir="''${res}x''${res}"
       mkdir -p "$out/share/icons/hicolor/$resdir/apps"
       cp -r --no-preserve=mode \
-        "${appimageContents}/usr/share/icons/hicolor/$resdir/apps/production.png" \
+        "${appimageContents}/usr/share/icons/hicolor/$resdir/apps/fastmail.png" \
         "$out/share/icons/hicolor/$resdir/apps/fastmail.png"
     done
 
