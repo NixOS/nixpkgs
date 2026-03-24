@@ -5579,6 +5579,8 @@ self: super: with self; {
 
   flake8-class-newline = callPackage ../development/python-modules/flake8-class-newline { };
 
+  flake8-comprehensions = callPackage ../development/python-modules/flake8-comprehensions { };
+
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
   flake8-deprecated = callPackage ../development/python-modules/flake8-deprecated { };
