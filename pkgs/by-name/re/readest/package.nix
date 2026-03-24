@@ -12,6 +12,7 @@
   gtk3,
   librsvg,
   openssl,
+  glib-networking,
   autoPatchelfHook,
   lib,
   nix-update-script,
@@ -83,6 +84,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     librsvg
     openssl
+    glib-networking
     # TTS
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
