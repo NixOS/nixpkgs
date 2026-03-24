@@ -103,6 +103,7 @@ in
         gzip
         mktemp
         xz
+        zstd
       ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";

@@ -283,6 +283,14 @@ in
             test_data = b"#!/bin/bash\necho xz-decompression-test\n"
             test_userdata_decompression(machine, user_data_path, lzma.compress(test_data), "xz")
 
+        with subtest("Decompression of zstd-compressed user-data"):
+            test_data = b"#!/bin/bash\necho zstd-decompression-test\n"
+            proc = subprocess.run(
+                ["${hostPkgs.zstd}/bin/zstd", "-c"],
+                input=test_data, capture_output=True, check=True,
+            )
+            test_userdata_decompression(machine, user_data_path, proc.stdout, "zstd")
+
     finally:
         machine.shutdown()
         temp_dir.cleanup()

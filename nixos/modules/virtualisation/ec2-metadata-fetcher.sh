@@ -68,10 +68,11 @@ try_decompress() {
   fi
   ftype=$(file --brief "$1")
   case $ftype in
-    gzip*)  decompress_cmd=zcat ;;
-    bzip2*) decompress_cmd=bzcat ;;
-    XZ*)    decompress_cmd=xzcat ;;
-    *)      return ;;
+    gzip*)       decompress_cmd=zcat ;;
+    bzip2*)      decompress_cmd=bzcat ;;
+    XZ*)         decompress_cmd=xzcat ;;
+    Zstandard*)  decompress_cmd=zstdcat ;;
+    *)           return ;;
   esac
   echo "decompressing: $1"
   temp=$(mktemp)
