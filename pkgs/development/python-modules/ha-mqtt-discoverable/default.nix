@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ha-mqtt-discoverable";
-  version = "0.23.0";
+  version = "0.24.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unixorn";
     repo = "ha-mqtt-discoverable";
     tag = "v${version}";
-    hash = "sha256-RITgyY9aAkDDm+SrBpfL4s2DJ2ssWddtbm0IvXswXxM=";
+    hash = "sha256-8UgYtWB6CsTF9yCpwwjeYIyjfFH8IM3M0sZpvrSqb3M=";
   };
 
   pythonRelaxDeps = [
