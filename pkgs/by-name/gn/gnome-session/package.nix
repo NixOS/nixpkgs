@@ -34,7 +34,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-session";
   # Also bump ./ctl.nix when bumping major version.
-  version = "49.2";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${lib.versions.major finalAttrs.version}/gnome-session-${finalAttrs.version}.tar.xz";
-    hash = "sha256-/NtPRdamDYTp7K4eN0C6tuVbqwy0ng+zgoDps486hIU=";
+    hash = "sha256-vncIzZ0mDhrBg4FTE9u2ILGHbq1bo5zn6i5tx629ckY=";
   };
 
   patches = [
