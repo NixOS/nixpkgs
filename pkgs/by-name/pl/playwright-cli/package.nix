@@ -21,6 +21,9 @@ buildNpmPackage (finalAttrs: {
 
   dontNpmBuild = true;
 
+  # playwright-cli imports playwright/lib/cli/client/program, which current
+  # nixpkgs playwright-test does not export, so keep the vendored Playwright
+  # until nixpkgs Playwright is updated to a compatible version.
   nativeBuildInputs = [ makeBinaryWrapper ];
 
   postFixup = ''
