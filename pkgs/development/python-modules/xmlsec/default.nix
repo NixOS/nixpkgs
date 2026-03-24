@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -68,6 +69,11 @@ buildPythonPackage (finalAttrs: {
   disabledTestPaths = [
     # Full git clone required for test_doc_examples
     "tests/test_doc_examples.py"
+  ];
+
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: memory leak detected
+    "test_reinitialize_module"
   ];
 
   pythonImportsCheck = [ "xmlsec" ];
