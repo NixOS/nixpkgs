@@ -171,11 +171,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
     ];
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [
-      amesgen
-      lorenzleutgeb
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad";
   };
 })
