@@ -59,27 +59,34 @@ def respond(status, body):
 def main():
     base_dir = sys.argv[1] if len(sys.argv) > 1 else "."
 
-    # Load expected token from file
+    # Load expected token from file. If no token file exists, IMDSv2
+    # authentication is disabled — requests are served without tokens.
+    # This supports both EC2 (IMDSv2 with tokens) and OpenStack (plain GET)
+    # metadata fetchers.
     token_path = os.path.join(base_dir, "latest", "api", "token")
     if os.path.isfile(token_path):
         with open(token_path) as f:
             expected_token = f.read().strip()
     else:
-        expected_token = "test-imdsv2-token"
+        expected_token = None
 
     method, path, headers = read_request()
     rel_path = path.lstrip("/")
 
     # PUT /latest/api/token — IMDSv2 token acquisition
     if method == "PUT" and rel_path == "latest/api/token":
-        respond("200 OK", expected_token)
+        if expected_token is not None:
+            respond("200 OK", expected_token)
+        else:
+            respond("404 Not Found", "IMDSv2 token endpoint not configured\n")
         return
 
-    # All other requests require a valid token
-    request_token = headers.get("x-aws-ec2-metadata-token", "")
-    if request_token != expected_token:
-        respond("401 Unauthorized", "Invalid or missing IMDSv2 token\n")
-        return
+    # Token validation (only when a token file is present)
+    if expected_token is not None:
+        request_token = headers.get("x-aws-ec2-metadata-token", "")
+        if request_token != expected_token:
+            respond("401 Unauthorized", "Invalid or missing IMDSv2 token\n")
+            return
 
     # Serve file from the metadata directory
     file_path = os.path.join(base_dir, rel_path)

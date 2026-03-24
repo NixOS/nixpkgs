@@ -23,12 +23,10 @@ in
         name = "metadata";
         buildCommand = ''
           mkdir -p $out/1.0/meta-data
-          mkdir -p $out/latest/api
           ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
           echo "${hostname}" > $out/1.0/meta-data/hostname
           echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
           echo "i-1234567890abcdef0" > $out/1.0/meta-data/instance-id
-          echo "test-imdsv2-token" > $out/latest/api/token
         ''
         + optionalString (sshPublicKey != null) ''
           mkdir -p $out/1.0/meta-data/public-keys/0
