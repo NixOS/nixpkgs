@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdex";
-  version = "1.0.0";
+  version = "1.1.0";
 
   outputs = [
     "out"
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libdex/${lib.versions.majorMinor finalAttrs.version}/libdex-${finalAttrs.version}.tar.xz";
-    hash = "sha256-e49cXbN5bhThLhBCLiNWdmuoMLkoFf7nC7yGe1sgf10=";
+    hash = "sha256-qeBMir7gHJp88RSMW3qma6N37+avbYOAHU/RqlUhmqo=";
   };
 
   nativeBuildInputs = [
