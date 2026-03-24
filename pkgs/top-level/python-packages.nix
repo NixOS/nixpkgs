@@ -18238,8 +18238,6 @@ self: super: with self; {
     inherit (pkgs) mscgen;
   };
 
-  sphinxcontrib-newsfeed = callPackage ../development/python-modules/sphinxcontrib-newsfeed { };
-
   sphinxcontrib-nwdiag = callPackage ../development/python-modules/sphinxcontrib-nwdiag { };
 
   sphinxcontrib-openapi = callPackage ../development/python-modules/sphinxcontrib-openapi { };
