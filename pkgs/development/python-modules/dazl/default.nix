@@ -3,6 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  attrs,
+  httpx,
+  python-dateutil,
   googleapis-common-protos,
   grpcio,
   protobuf,
@@ -28,11 +31,15 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "grpcio"
+    "httpx"
   ];
 
   build-system = [ poetry-core ];
 
   dependencies = [
+    attrs
+    httpx
+    python-dateutil
     googleapis-common-protos
     grpcio
     protobuf
