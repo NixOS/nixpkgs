@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   help2man,
   lz4,
   lzo,
@@ -22,6 +23,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = finalAttrs.version;
     hash = "sha256-rQ69sXvi6wY8yRyuQzcJZ6MvVGBbIw7vG+kYVHvfQQ8=";
   };
+
+  patches = [
+    # Fix for Darwin: struct stat uses st_atimespec instead of st_atim.
+    (fetchpatch {
+      url = "https://github.com/plougher/squashfs-tools/commit/f88f4a659d6ab432a57e90fe2f6191149c6b343f.patch";
+      hash = "sha256-XRDV6qtd5jVwt2jbIlLDYKiI1tbVcuij5/vaPj9SN5w=";
+    })
+  ];
 
   strictDeps = true;
   nativeBuildInputs = [
