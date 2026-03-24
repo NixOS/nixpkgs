@@ -41,6 +41,7 @@ configured with the following settings:
       "auto-allocate-uids"
       "cgroups"
     ];
+    sandbox-paths = [ "/dev/net" ]; # to make nspawn↔qemu networking work
   };
 }
 ```
