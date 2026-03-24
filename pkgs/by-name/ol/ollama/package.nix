@@ -100,6 +100,9 @@ let
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
+
+    # cuda_ccl and cuda_cudart both have a LICENSE file in their output
+    ignoreCollisions = true;
   };
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
