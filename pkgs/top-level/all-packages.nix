@@ -6666,11 +6666,6 @@ with pkgs;
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
 
-  libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
-  libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
-  libbassmidi = (callPackage ../development/libraries/audio/libbass { }).bassmidi;
-  libbassmix = (callPackage ../development/libraries/audio/libbass { }).bassmix;
-
   libcamera-qcam = callPackage ../by-name/li/libcamera/package.nix { withQcam = true; };
 
   libcanberra-gtk2 = pkgs.libcanberra.override {
