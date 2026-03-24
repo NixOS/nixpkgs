@@ -544,19 +544,7 @@ let
     ++ allPkgconfigDepends
     ++ optionals doCheck (testSystemDepends ++ testFrameworkDepends)
     ++ optionals doBenchmark (benchmarkSystemDepends ++ benchmarkFrameworkDepends);
-  # TODO next rebuild just define as `otherBuildInputsHaskell ++ otherBuildInputsSystem`
-  otherBuildInputs =
-    extraLibraries
-    ++ librarySystemDepends
-    ++ executableSystemDepends
-    ++ executableFrameworkDepends
-    ++ allPkgconfigDepends
-    ++ optionals doCheck (
-      testDepends ++ testHaskellDepends ++ testSystemDepends ++ testFrameworkDepends
-    )
-    ++ optionals doBenchmark (
-      benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkFrameworkDepends
-    );
+  otherBuildInputs = otherBuildInputsHaskell ++ otherBuildInputsSystem;
 
   setupCommand = "./Setup";
 
