@@ -36,6 +36,14 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-Vjv62cYDIuTLE7MxRt4Havy7DMOiMTyIixbs4LGFGGs=";
   };
 
+  # TypeError: NDArray.record() missing 1 required keyword-only argument: 'in_warmup'
+  postPatch = ''
+    substituteInPlace bambi/backend/pymc.py \
+      --replace-fail \
+        "strace.record(point=dict(zip(varnames, value)))" \
+        "strace.record(point=dict(zip(varnames, value)), in_warmup=False)"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
