@@ -37,6 +37,6 @@ buildNpmPackage rec {
     homepage = "https://mixu.net/gr/";
     license = lib.licenses.bsd3;
     mainProgram = "gr";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

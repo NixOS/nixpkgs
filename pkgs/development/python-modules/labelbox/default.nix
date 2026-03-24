@@ -20,6 +20,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  pyyaml,
   requests,
   shapely,
   strenum,
@@ -87,6 +88,7 @@ buildPythonPackage rec {
     tqdm
     geojson
     mypy
+    pyyaml
   ];
 
   optional-dependencies = {

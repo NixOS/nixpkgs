@@ -1,29 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   mypy-extensions,
   pytestCheckHook,
-  pythonAtLeast,
   pytz,
   setuptools,
   typing-extensions,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "logilab-common";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ojvR2k3Wpj5Ej0OS57I4aFX/cGFVeL/PmT7riCTelws=";
+  src = fetchFromGitLab {
+    domain = "forge.extranet.logilab.fr";
+    owner = "open-source";
+    repo = "logilab-common";
+    tag = finalAttrs.version;
+    hash = "sha256-cKodCj9m3n4P54CZ2X+BXN62ewd9nHSZBMENlo8S1iY=";
   };
-
-  postPatch = lib.optionals (pythonAtLeast "3.12") ''
-    substituteInPlace logilab/common/testlib.py \
-      --replace-fail "_TextTestResult" "TextTestResult"
-  '';
 
   build-system = [ setuptools ];
 
@@ -45,9 +42,9 @@ buildPythonPackage rec {
   meta = {
     description = "Python packages and modules used by Logilab";
     homepage = "https://logilab-common.readthedocs.io/";
-    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/branch/default/CHANGELOG.md";
+    changelog = "https://forge.extranet.logilab.fr/open-source/logilab-common/-/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
     mainProgram = "logilab-pytest";
   };
-}
+})
