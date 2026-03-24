@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  ffmpeg,
   meson,
   ninja,
   gettext,
@@ -24,6 +23,7 @@
   icu,
   libgweather,
   libadwaita,
+  vorbis-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,8 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    ffmpeg
     vala
+    vorbis-tools
     meson
     ninja
     pkg-config
