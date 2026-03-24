@@ -17,6 +17,7 @@ let
           inherit pname version;
           hash = "sha256-NC4n21SmYW3RiS7QuzWXoifO4z3C2FVgQm3xf8qQcFg=";
         };
+        patches = [ ];
         build-system = old.build-system or [ ] ++ (with python.pkgs; [ setuptools ]);
         doCheck = false;
       });
