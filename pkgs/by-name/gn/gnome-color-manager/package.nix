@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-color-manager";
-      freeze = true;
+      versionPolicy = "odd-unstable";
     };
   };
 
