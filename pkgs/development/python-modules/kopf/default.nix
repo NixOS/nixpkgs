@@ -20,6 +20,7 @@
   freezegun,
   certvalidator,
   aresponses,
+  looptime,
 }:
 
 buildPythonPackage rec {
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     freezegun
     certvalidator
     aresponses
+    looptime
   ];
 
   disabledTestPaths = [
