@@ -25,8 +25,8 @@ in
       "apparmor"
       "profiles"
     ] "Please use the new option: `security.apparmor.policies'.")
-    apparmor/includes.nix
-    apparmor/profiles.nix
+    ./apparmor/includes.nix
+    ./apparmor/profiles.nix
   ];
 
   options = {
