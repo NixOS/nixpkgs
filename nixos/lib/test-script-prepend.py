@@ -45,6 +45,8 @@ subtest: Callable[[str], ContextManager[None]]
 retry: RetryProtocol
 test_script: Callable[[], None]
 machines: List[BaseMachine]
+machines_qemu: List[QemuMachine]
+machines_nspawn: List[NspawnMachine]
 vlans: List[VLan]
 driver: Driver
 log: AbstractLogger

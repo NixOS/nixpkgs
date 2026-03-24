@@ -228,6 +228,7 @@ class Driver:
         general_symbols = dict(
             start_all=self.start_all,
             test_script=self.test_script,
+            machines=self.machines,
             machines_qemu=self.machines_qemu,
             machines_nspawn=self.machines_nspawn,
             vlans=self.vlans,
