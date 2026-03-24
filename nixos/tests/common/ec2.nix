@@ -12,7 +12,7 @@ in
     {
       name,
       image,
-      userData,
+      userData ? null,
       script,
       hostname ? "ec2-instance",
       sshPublicKey ? null,
@@ -23,7 +23,10 @@ in
         name = "metadata";
         buildCommand = ''
           mkdir -p $out/1.0/meta-data
-          ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
+          ${optionalString (
+            userData != null
+          ) "ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data"}
+          ${optionalString (userData == null) "touch $out/1.0/user-data"}
           echo "${hostname}" > $out/1.0/meta-data/hostname
           echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
           echo "i-1234567890abcdef0" > $out/1.0/meta-data/instance-id
