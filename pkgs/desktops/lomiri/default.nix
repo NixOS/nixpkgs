@@ -44,6 +44,7 @@ let
       lomiri-ui-toolkit = callPackage ./qml/lomiri-ui-toolkit { };
 
       #### Services
+      biometryd = callPackage ./services/biometryd { };
       lomiri-content-hub = callPackage ./services/lomiri-content-hub {
         # Check for working qdoc: not found
         withDocumentation = !useQt6;
@@ -88,7 +89,6 @@ let
       qqc2-suru-style = callPackage ./qml/qqc2-suru-style { };
 
       #### Services
-      biometryd = callPackage ./services/biometryd { };
       hfd-service = callPackage ./services/hfd-service { };
       lomiri-history-service = callPackage ./services/lomiri-history-service { };
       lomiri-indicator-datetime = ayatana-indicator-datetime.override { enableLomiriFeatures = true; };
