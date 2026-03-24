@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-color-manager";
-  version = "3.32.0";
+  version = "3.36.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor finalAttrs.version}/gnome-color-manager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fDwXj6rPy/EdVt4izSZZRqfViqEOPNlowpOOL79Q/e4=";
+    hash = "sha256-OQTUKrtOpWbfC4gOgr8Ln4Y4bGkvFbMYRppMe+M6iH8=";
   };
 
   patches = [ ./0001-Fix-build-with-Exiv2-0.28.patch ];
