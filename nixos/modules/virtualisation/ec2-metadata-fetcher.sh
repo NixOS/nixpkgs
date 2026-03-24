@@ -62,14 +62,21 @@ get_imds() {
 }
 
 try_decompress() {
-  local temp
+  local temp ftype
+  if [ ! -s "$1" ]; then
+    return
+  fi
   ftype=$(file --brief "$1")
   case $ftype in
     gzip*)
       echo "decompressing: $1"
       temp=$(mktemp)
-      zcat "$1" > "$temp"
-      mv "$temp" "$1"
+      if zcat "$1" > "$temp"; then
+        mv "$temp" "$1"
+      else
+        echo "failed to decompress: $1"
+        rm -f "$temp"
+      fi
   esac
 }
 
