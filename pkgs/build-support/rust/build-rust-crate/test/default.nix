@@ -477,6 +477,7 @@ rec {
           crateName = "build-script-feature-env";
           features = [
             "some-feature"
+            "some-c++17-thing"
             "crate/another_feature"
           ];
           src = symlinkJoin {
@@ -488,6 +489,10 @@ rec {
                 fn feature_not_visible() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_err());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_err());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
                 fn main() {}
               '')
@@ -495,6 +500,10 @@ rec {
                 fn main() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_ok());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_ok());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
               '')
             ];
