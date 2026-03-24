@@ -52,13 +52,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ferrum-language.github.io/Ferrum/";
     license = lib.licenses.gpl3Only;
-    maintainers = [ ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "aarch64-darwin"
-      "x86_64-darwin"
-    ];
+    maintainers = with lib.maintainers; [ tomymartingrinberg-cpu ];
+    platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     mainProgram = "ferrumc";
   };
