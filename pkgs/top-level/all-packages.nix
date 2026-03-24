@@ -307,6 +307,8 @@ with pkgs;
   buildFHSEnvChroot = callPackage ../build-support/build-fhsenv-chroot { }; # Deprecated; use buildFHSEnv/buildFHSEnvBubblewrap
   buildFHSEnvBubblewrap = callPackage ../build-support/build-fhsenv-bubblewrap { };
 
+  buildLakePackage = callPackage ../build-support/lake { };
+
   cameractrls-gtk4 = cameractrls.override { withGtk = 4; };
 
   cameractrls-gtk3 = cameractrls.override { withGtk = 3; };
@@ -2151,7 +2153,7 @@ with pkgs;
     cudaPackages_13_2
     ;
 
-  cudaPackages_12 = cudaPackages_12_8;
+  cudaPackages_12 = cudaPackages_12_9;
 
   cudaPackages_13 = cudaPackages_13_0;
 
@@ -2844,6 +2846,8 @@ with pkgs;
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   leanblueprint = with python3Packages; toPythonApplication leanblueprint;
+
+  leanPackages = callPackage ../top-level/lean-packages.nix { };
 
   inherit (callPackage ../development/tools/lerna { })
     lerna_6
