@@ -8,14 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zrc";
-  version = "2.3h";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "Edd12321";
     repo = "zrc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3DGXVQ1HWRsfe4AHjN0Rm4JEIlzr4fhvNvPIKIZbI5Q=";
+    hash = "sha256-zhSrLzC4dCfx6Y7xc/yZHj+8EQd0senY7TWJ6S3Atf8=";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '$(DESTDIR)/etc' '$(DESTDIR)$(PREFIX)/etc'
+  '';
 
   nativeBuildInputs = [
     bison
