@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pickpack";
-  version = "2.0.0";
+  version = "2.0.0-1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anafvana";
     repo = "pickpack";
     rev = "v${version}";
-    hash = "sha256-IUIs+Cgl2fvjSougyVSzhmY2SeEYL2T2ODrBWBg3zZM=";
+    hash = "sha256-C3Nh8+9TEmTTGACC/LF/GWlVvgNMsOCkWviijku+gu0=";
   };
 
   build-system = [
