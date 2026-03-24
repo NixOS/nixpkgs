@@ -1,0 +1,32 @@
+From cacd75fc0aeba7cf1733193c28c6118e2c249999 Mon Sep 17 00:00:00 2001
+From: Martin Weinelt <hexa@darmstadt.ccc.de>
+Date: Tue, 24 Mar 2026 16:07:00 +0100
+Subject: [PATCH] =?UTF-8?q?=F0=9F=90=9B(backend):=20fix=20module=20inclusi?=
+ =?UTF-8?q?on=20with=20uv-build?=
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+After migrating to uv-build only the module matching the project name was
+included in sdist/wheel packages. Without a src layout additional modules
+need to be tracked manually to ship them in built packages.
+---
+ pyproject.toml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 1f7757146..4a04e995d 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -90,6 +90,11 @@ dev = [
+ ]
+
+ [tool.uv.build-backend]
++module-name = [
++    "core",
++    "demo",
++    "meet"
++]
+ module-root = ""
+ source-exclude = [
+     "**/tests/**",
