@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       compiled to native code through LLVM 18.
     ';
     homepage = "https://ferrum-language.github.io/Ferrum/";
-    license = lib.licenses.mit;
+    license = lib.licenses.gpl3Only;
     maintainers = [];
     platforms = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
