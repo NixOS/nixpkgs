@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "lsassy";
-  version = "3.1.15";
+  version = "3.1.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Hackndo";
     repo = "lsassy";
     tag = "v${version}";
-    hash = "sha256-cQfyRCZv0ZTaj7Ay7zTzFnU7PQluP3VweeFof8+W70M=";
+    hash = "sha256-lPbZnoR6qWfVBSRAbTJsKpjBieidNsYgAXI3CXHEt1w=";
   };
 
   pythonRelaxDeps = [
