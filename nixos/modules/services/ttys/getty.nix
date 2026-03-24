@@ -132,12 +132,6 @@ in
   ###### implementation
 
   config = mkIf config.console.enable {
-    assertions = [
-      {
-        assertion = cfg.loginOptions != null -> cfg.autologinUser == null;
-        message = "services.getty.autoLoginUser has no effect when services.getty.loginOptions is set.";
-      }
-    ];
     # Note: this is set here rather than up there so that changing
     # nixos.label would not rebuild manual pages
     services.getty.greetingLine = mkDefault ''<<< Welcome to ${config.system.nixos.distroName} ${config.system.nixos.label} (\m) - \l >>>'';

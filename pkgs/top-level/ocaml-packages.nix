@@ -1187,6 +1187,8 @@ let
           cohttp = cohttp_5_3; # due to cohttp_static_handler pulling in cohttp_5_3
         };
 
+        malfunction = callPackage ../development/ocaml-modules/malfunction { };
+
         mariadb = callPackage ../development/ocaml-modules/mariadb {
           inherit (pkgs) mariadb;
         };
