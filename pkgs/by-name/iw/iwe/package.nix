@@ -8,26 +8,34 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "iwe";
-  version = "0.0.60";
+  version = "0.0.64";
 
   src = fetchFromGitHub {
     owner = "iwe-org";
     repo = "iwe";
     tag = "iwe-v${finalAttrs.version}";
-    hash = "sha256-PSSH8uytCPtTgxte/wc0TfTiKD96DiVrWFJN9QjuHo8=";
+    hash = "sha256-aqoUTatYUUFKw3ZQYagQ0KchQM3JMgSzL/hG6CiyG9U=";
   };
 
-  cargoHash = "sha256-PqINghZ88FsXj4HEFp0ugFH30lbQfBcoiv86PPOCzLI=";
+  cargoHash = "sha256-iTudRDC53wZvWwuPYGG3rQfsC/th+3FwpiqZsZnbekg=";
 
   cargoBuildFlags = [
     "--package=iwe"
     "--package=iwes"
   ];
 
-  postPatch = ''
-    substituteInPlace crates/iwe/tests/common/mod.rs --replace-fail \
+  preCheck = ''
+    substituteInPlace crates/iwe/tests/common.rs --replace-fail \
       'binary_path.push("target");' \
       'binary_path.push("target/${stdenv.hostPlatform.rust.rustcTarget}");'
+
+    # Tests here are looking for /usr to exist, which is not present in a build environment
+    substituteInPlace crates/iwes/tests/transform_test.rs --replace-fail \
+      'cwd: Some("/usr".to_string()),' \
+      'cwd: Some("/tmp".to_string()),'
+    substituteInPlace crates/iwes/tests/transform_test.rs --replace-fail \
+      'vec![uri(1).to_edit("/usr\n")]' \
+      'vec![uri(1).to_edit("/tmp\n")]'
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
