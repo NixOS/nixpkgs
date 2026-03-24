@@ -117,7 +117,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.env = finalAttrs.env;
+  passthru = {
+    inherit (finalAttrs) env;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Radicle desktop app";
