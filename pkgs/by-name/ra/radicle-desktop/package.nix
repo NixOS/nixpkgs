@@ -25,13 +25,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "radicle-desktop";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromRadicle {
     seed = "seed.radicle.xyz";
     repo = "z4D5UCArafTzTQpDZNQRuqswh3ury";
-    rev = "aeb405aaf53b56a426ab8d68c7f89b8953683224";
-    hash = "sha256-Z/6GdXf3ag/89H8UMD2GNU4CXA8TWyX8dl8uh0CTem8=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-ruBHhJ0JvbtXd0GonL5rNp733mulVSQJsVzkikQKCK0=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-lcSNGmIv6u7DT47lOC69BRbVSK5IPiwjtdAS8aVxwqM=";
+    hash = "sha256-x0u75on1Kc+u1u1R1SLLOfmTG5kFVvn2PsaWdH/RB3w=";
   };
 
   cargoHash = "sha256-z5fnwc7EjSvkyu4zTUyAvVfs6quwH2p9VFDK/TdzZJE=";
@@ -85,9 +85,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libsoup_3
     openssl
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [
-    webkitgtk_4_1
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ webkitgtk_4_1 ];
 
   preBuild = ''
     export GIT_HEAD=$(<$src/.git_head)
