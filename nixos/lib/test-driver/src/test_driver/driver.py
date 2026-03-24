@@ -244,6 +244,8 @@ class Driver:
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
             BaseMachine=BaseMachine,  # for typing
+            QemuMachine=QemuMachine,  # for typing
+            NspawnMachine=NspawnMachine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
         )
