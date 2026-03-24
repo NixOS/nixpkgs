@@ -8,7 +8,7 @@ IMDS_BASE_URL="http://169.254.169.254"
 IMDS_TOKEN=""
 
 get_imds_token() {
-  endpoint=$1
+  local endpoint=$1
   # retry-delay of 1 selected to give the system a second to get going,
   # but not add a lot to the bootup time
   curl \
@@ -24,7 +24,7 @@ get_imds_token() {
 }
 
 preflight_imds_token() {
-  endpoint=$1
+  local endpoint=$1
   # retry-delay of 1 selected to give the system a second to get going,
   # but not add a lot to the bootup time
   curl \
@@ -59,17 +59,7 @@ fi
 try=1
 while [ $try -le 10 ]; do
   echo "(attempt $try/10) validating the EC2 instance metadata service v2 token..."
-  preflight_ok=""
-  for endpoint in $IMDS_ENDPOINTS; do
-    if preflight_imds_token "$endpoint"; then
-      IMDS_BASE_URL=$endpoint
-      preflight_ok=1
-      break
-    fi
-  done
-  if [ -n "$preflight_ok" ]; then
-    break
-  fi
+  preflight_imds_token "$IMDS_BASE_URL" && break
   try=$((try + 1))
   sleep 1
 done
