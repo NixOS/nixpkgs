@@ -71,7 +71,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "49.4";
+  version = "50.0";
 
   outputs = [
     "out"
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-wWZuxQVhUwviXLiNk5wrzCrzTwHGO4sWuCuJLuM9eFU=";
+    hash = "sha256-mHBZUCOpqv3kvcEfeopsR10TgupWs2nHYje97q1yFls=";
   };
 
   mesonFlags = [
@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    libmutter_api_version = "17"; # bumped each dev cycle
+    libmutter_api_version = "18"; # bumped each dev cycle
     libdir = "${finalAttrs.finalPackage}/lib/mutter-${finalAttrs.passthru.libmutter_api_version}";
 
     tests = {
