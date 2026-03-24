@@ -27577,6 +27577,12 @@
     githubId = 6740669;
     name = "Tom Smeets";
   };
+  tomymartingrinberg-cpu = {
+    email = "tomy.martin.grinberg@gmail.com";
+    github = "tomymartingrinberg-cpu";
+    githubId = 234853832;
+    name = "Tomy Martin Grinberg";
+  };
   tonybanters = {
     email = "tony@tonybtw.com";
     github = "tonybanters";
