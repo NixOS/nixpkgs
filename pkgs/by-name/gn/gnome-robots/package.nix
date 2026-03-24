@@ -24,17 +24,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-robots";
-  version = "41.2";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-robots/${lib.versions.major finalAttrs.version}/gnome-robots-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kSHC+DaBIEP+7yumYc1dD9SOPWMZxDlBuf3RWLmw65E=";
+    hash = "sha256-YX5XTBX5Bhi4JJPJk51xdZatLOH/HeCq1cnDl2Yz03k=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
     name = "gnome-robots-${finalAttrs.version}";
-    hash = "sha256-1h9+XPmkapzdYsI6qtPPHtlwEEmyIzaAogLiYvIHJak=";
+    hash = "sha256-T3o4zlRLQzrLexSDI9A98bubehYFwJY1zBVUUNmrc9o=";
   };
 
   nativeBuildInputs = [
