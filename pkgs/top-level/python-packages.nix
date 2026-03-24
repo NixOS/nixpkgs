@@ -15266,6 +15266,8 @@ self: super: with self; {
 
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
+  pytest-flake8-path = callPackage ../development/python-modules/pytest-flake8-path { };
+
   pytest-flakes = callPackage ../development/python-modules/pytest-flakes { };
 
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
