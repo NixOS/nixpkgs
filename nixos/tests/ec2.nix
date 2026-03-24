@@ -59,7 +59,7 @@ let
         }
       ];
     }).config;
-  image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.imageFile}";
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.image.fileName}";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
