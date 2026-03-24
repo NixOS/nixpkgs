@@ -37,6 +37,7 @@
   libuuid,
   libwebp,
   libxml2,
+  libzip,
   poppler,
   systemd,
   taglib,
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     libuuid
     libwebp
     libxml2
+    libzip
     poppler
     taglib
   ]
