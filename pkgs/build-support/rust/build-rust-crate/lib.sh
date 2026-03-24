@@ -87,6 +87,12 @@ build_bin_test_file() {
     # above.
     derived_crate_name=${derived_crate_name#"tests_"}
     derived_crate_name="${derived_crate_name%.rs}"
+    # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main — strip the
+    # trailing _main that the `/`→`_` substitution produced. Guarded so
+    # a flat-style tests/<name>_main.rs keeps its _main suffix.
+    if [[ "$file" == */main.rs ]]; then
+        derived_crate_name="${derived_crate_name%_main}"
+    fi
     build_bin_test "$derived_crate_name" "$file"
 }
 
