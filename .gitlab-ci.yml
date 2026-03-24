@@ -1,0 +1,10 @@
+build:
+  tags:
+  - nix
+  script:
+    - bash build.sh
+  stage: build
+  artifacts:
+    paths:
+      - nixpkgs.tar.xz
+
