@@ -13974,13 +13974,6 @@
     githubId = 788813;
     name = "Bryan Gardiner";
   };
-  khushraj = {
-    email = "khushraj.rathod@gmail.com";
-    github = "khrj";
-    githubId = 44947946;
-    name = "Khushraj Rathod";
-    keys = [ { fingerprint = "1988 3FD8 EA2E B4EC 0A93  1E22 B77B 2A40 E770 2F19"; } ];
-  };
   kiara = {
     name = "kiara";
     email = "cinereal@riseup.net";
