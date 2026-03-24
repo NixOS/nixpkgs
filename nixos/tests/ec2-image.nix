@@ -13,6 +13,11 @@ let
   inherit (lib) mkAfter mkForce;
   pkgs = config.node.pkgs;
 
+  # Minimal IMDSv2-compatible metadata server (inetd-mode, drop-in for micro_httpd)
+  imdsServer = pkgs.writers.writePython3Bin "imds-server" { } (
+    builtins.readFile ./common/imds-server.py
+  );
+
   # Build an EC2 image configuration
   imageCfg =
     (import ../lib/eval-config.nix {
@@ -47,7 +52,7 @@ let
           # Packages needed for IPv6 IMDS fallback test
           environment.systemPackages = [
             pkgs.socat
-            pkgs.micro-httpd
+            imdsServer
             pkgs.iptables
           ];
 
@@ -94,11 +99,8 @@ in
 
     # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
     # TODO: Use 'latest' metadata version instead of '1.0'
-    #       - Consider https://github.com/aws/amazon-ec2-metadata-mock
-    #         - Blocked on https://github.com/aws/amazon-ec2-metadata-mock/issues/234
-    #       - Consider https://github.com/purpleclay/imds-mock
-    #       - [Test matrix] also test providing the host key through IMDS
-    #         - i.e. a test module argument to select between writing or reading the host key
+    # TODO: [Test matrix] also test providing the host key through IMDS
+    #       - i.e. a test module argument to select between writing or reading the host key
     def create_ec2_metadata_dir(temp_dir, client_pubkey):
         """Create fake EC2 metadata directory structure with mock data"""
         metadata_dir = os.path.join(temp_dir.name, "ec2-metadata")
@@ -178,7 +180,7 @@ in
         )
         metadata_net = (
             " -device virtio-net-pci,netdev=ec2meta"
-            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd {metadata_dir}'"
+            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
         )
 
         start_command = (
@@ -227,7 +229,16 @@ in
         machine_ip = "${config.nodes.machine.networking.primaryIPAddress}"
 
         with subtest("EC2 metadata service connectivity"):
-            hostname_response = machine.succeed("curl --fail -s http://169.254.169.254/1.0/meta-data/hostname")
+            # Obtain an IMDSv2 token, then use it to fetch metadata
+            imds_token = machine.succeed(
+                "curl -sf -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 600'"
+                " http://169.254.169.254/latest/api/token"
+            ).strip()
+            assert imds_token, "Failed to obtain IMDSv2 token"
+            hostname_response = machine.succeed(
+                f"curl -sf -H 'X-aws-ec2-metadata-token: {imds_token}'"
+                " http://169.254.169.254/1.0/meta-data/hostname"
+            )
             assert "test-instance" in hostname_response, f"Expected 'test-instance', got: {hostname_response}"
 
         with subtest("SSH host key extraction from console"):
@@ -329,16 +340,17 @@ in
                 " /tmp/ipv6-metadata/1.0/meta-data/public-keys/0/openssh-key"
             )
 
-            # Serve metadata on the IPv6 IMDS address via socat + micro_httpd (inetd-style)
+            # Serve metadata on the IPv6 IMDS address via socat + imds-server (inetd-style)
             machine.succeed(
                 "systemd-run --unit=ipv6-imds --"
                 " socat TCP6-LISTEN:80,bind=[fd00:ec2::254],fork,reuseaddr"
-                " SYSTEM:'${lib.getExe pkgs.micro-httpd} /tmp/ipv6-metadata'"
+                " SYSTEM:'${lib.getExe imdsServer} /tmp/ipv6-metadata'"
             )
 
-            # Wait for IPv6 IMDS to become reachable
+            # Wait for IPv6 IMDS to become reachable (token endpoint doesn't require auth)
             machine.wait_until_succeeds(
-                "curl -sf http://[fd00:ec2::254]/1.0/meta-data/hostname"
+                "curl -sf -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 600'"
+                " http://[fd00:ec2::254]/latest/api/token"
             )
 
             # Block IPv4 IMDS to force fallback to IPv6
