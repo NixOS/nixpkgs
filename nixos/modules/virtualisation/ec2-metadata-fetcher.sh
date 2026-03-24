@@ -70,6 +70,7 @@ try_decompress() {
   case $ftype in
     gzip*)  decompress_cmd=zcat ;;
     bzip2*) decompress_cmd=bzcat ;;
+    XZ*)    decompress_cmd=xzcat ;;
     *)      return ;;
   esac
   echo "decompressing: $1"

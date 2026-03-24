@@ -278,6 +278,11 @@ in
             test_data = b"#!/bin/bash\necho bzip2-decompression-test\n"
             test_userdata_decompression(machine, user_data_path, bz2.compress(test_data), "bzip2")
 
+        with subtest("Decompression of xz-compressed user-data"):
+            import lzma
+            test_data = b"#!/bin/bash\necho xz-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, lzma.compress(test_data), "xz")
+
     finally:
         machine.shutdown()
         temp_dir.cleanup()
