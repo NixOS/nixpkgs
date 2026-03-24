@@ -13,10 +13,7 @@ let
   inherit (lib) mkAfter mkForce;
   pkgs = config.node.pkgs;
 
-  # Minimal IMDSv2-compatible metadata server (inetd-mode, drop-in for micro_httpd)
-  imdsServer = pkgs.writers.writePython3Bin "imds-server" { } (
-    builtins.readFile ./common/imds-server.py
-  );
+  imdsServer = import ./common/imds-server.nix { inherit pkgs; };
 
   # Build an EC2 image configuration
   imageCfg =
