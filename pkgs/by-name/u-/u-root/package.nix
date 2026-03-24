@@ -14,7 +14,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "u-root";
-  version = "0.15.0-unstable-2026-02-12";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "u-root";
