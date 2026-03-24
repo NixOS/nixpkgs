@@ -49,6 +49,8 @@ buildNpmPackage rec {
     mv "$out/bin/pyright-langserver" "$out/bin/basedpyright-langserver"
     # Remove dangling symlinks created during installation (remove -delete to just see the files, or -print '%l\n' to see the target
     find -L $out -type l -print -delete
+    # Remove native module build artifacts that reference nodejs source
+    rm -rf "$out/lib/node_modules/pyright-root/node_modules/keytar/build"
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
