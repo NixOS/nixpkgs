@@ -10,5 +10,7 @@ build() {
 
 build openclaw
 upload openclaw
-build ollama
-upload ollama
+for flavour in cpu rocm cuda vulkan; do
+  build "ollama-$flavour"
+  upload "ollama/$flavour"
+done
