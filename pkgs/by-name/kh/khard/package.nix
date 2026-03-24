@@ -2,8 +2,7 @@
   lib,
   python3,
   fetchPypi,
-  khard,
-  testers,
+  versionCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication (finalAttrs: {
@@ -19,13 +18,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   build-system = with python3.pkgs; [
     setuptools
     setuptools-scm
-    sphinxHook
-    sphinx-argparse
-    sphinx-autoapi
-    sphinx-autodoc-typehints
   ];
-
-  sphinxBuilders = [ "man" ];
 
   dependencies = with python3.pkgs; [
     configobj
@@ -39,19 +32,24 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
   '';
 
   preCheck = ''
-    # see https://github.com/scheibler/khard/issues/263
+    # see https://github.com/lucc/khard/issues/263
     export COLUMNS=80
   '';
 
   pythonImportsCheck = [ "khard" ];
 
-  passthru.tests.version = testers.testVersion { package = khard; };
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
-    homepage = "https://github.com/scheibler/khard";
+    homepage = "https://github.com/lucc/khard";
     description = "Console carddav client";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      doronbehar
+    ];
     mainProgram = "khard";
   };
 })

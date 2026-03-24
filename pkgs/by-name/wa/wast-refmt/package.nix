@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "WAST Reformatter";
     homepage = "https://webassembly.js.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     mainProgram = "wast-refmt";
   };
 })

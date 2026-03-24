@@ -3,7 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
-  setuptools,
+  poetry-core,
+  pytestCheckHook,
+  pytest-cov-stub,
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
@@ -17,14 +19,16 @@ buildPythonPackage rec {
     hash = "sha256-1RzorEsGXA8mRzMSS9S5vbPqJXK0vPMlRixo+Yrq27U=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     mkdocs
   ];
 
-  # This package has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "mkdocs_simple_blog" ];
 
