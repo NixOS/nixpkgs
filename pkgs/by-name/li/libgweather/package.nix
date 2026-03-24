@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libgweather";
-  version = "4.4.4";
+  version = "4.6.0";
 
   outputs = [
     "out"
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgweather/${lib.versions.majorMinor version}/libgweather-${version}.tar.xz";
-    hash = "sha256-cBdnd1PN99H9w1Xkv82x66g2l5Oo3yTSQUJ6k5y/QoM=";
+    hash = "sha256-f10OjJaF7y/0bC86V8rkjXvzVAstg5IfiJ7yjmqHZ4g=";
   };
 
   patches = [
