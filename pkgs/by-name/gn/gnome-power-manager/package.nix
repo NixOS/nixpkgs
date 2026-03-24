@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-power-manager";
-  version = "43.0";
+  version = "50.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major finalAttrs.version}/gnome-power-manager-${finalAttrs.version}.tar.xz";
-    hash = "sha256-faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
+    hash = "sha256-vyQ9Y4n4v6cclYU07SZpspllxH9Vw8vkmDspbQ+Z5dc=";
   };
 
   nativeBuildInputs = [
