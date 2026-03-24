@@ -14,6 +14,7 @@
   wrapGAppsHook4,
   gnome,
   harfbuzz,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     libxml2
     glib
+    desktop-file-utils
   ];
 
   buildInputs = [
@@ -44,9 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     fribidi
   ];
-
-  # Do not run meson-postinstall.sh
-  preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
 
   env = lib.optionalAttrs stdenv.cc.isGNU {
     NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
