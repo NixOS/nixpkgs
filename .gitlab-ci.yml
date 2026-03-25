@@ -1,4 +1,5 @@
 build:
+  timeout: 10h
   tags:
   - nix
   script:
