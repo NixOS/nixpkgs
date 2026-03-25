@@ -85,16 +85,6 @@
      createDoc("shape.fodt");
  
      SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
---- a/sw/qa/extras/odfexport/odfexport2.cxx
-+++ b/sw/qa/extras/odfexport/odfexport2.cxx
-@@ -1711,6 +1711,7 @@ CPPUNIT_TEST_FIXTURE(Test, testMidnightRedlineDatetime)
-     // - Error: "2001-01-01" does not satisfy the "dateTime" type
-     // because "2001-01-01T00:00:00" became "2001-01-01" on roundtrip.
-     loadAndReload("midnight_redline.fodt");
-+    return; // fails on aarch64
- 
-     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
-     assertXPathContent(pXmlDoc,
 --- a/sdext/qa/unit/pdfimport.cxx	2025-03-22 14:46:52.202082763 +0100
 +++ b/sdext/qa/unit/pdfimport.cxx	2025-03-22 14:49:22.947719369 +0100
 @@ -785,6 +785,7 @@

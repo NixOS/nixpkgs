@@ -4,6 +4,7 @@
   fetchurl,
   fetchgit,
   fetchpatch2,
+  fetchFromGitLab,
   lib,
   pam,
   python3,
@@ -39,9 +40,11 @@
   which,
   icu,
   boost,
+  boost188,
   jdk21,
   ant,
   cups,
+  libixion,
   libxtst,
   libxi,
   libxinerama,
@@ -219,6 +222,26 @@ let
     ];
   };
 
+  # required for libreoffice-still version 25.8.5.2
+  liborcus_0_20 = liborcus.overrideAttrs {
+    version = "0.20.1";
+
+    src = fetchFromGitLab {
+      owner = "orcus";
+      repo = "orcus";
+      rev = "0.20.1";
+      hash = "sha256-+YTK0EPgGHN4yKurJjuWWrAHzgtbc1dOvtppcvuRei4=";
+    };
+
+    buildInputs = [
+      boost188
+      libixion
+      mdds
+      python3
+      zlib
+    ];
+  };
+
   importVariant = f: import (./. + "/src-${variant}/${f}");
   # Update these files with:
   # nix-shell maintainers/scripts/update.nix --argstr package libreoffice-$VARIANT.unwrapped
@@ -313,26 +336,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
-  ]
-  ++ lib.optionals (lib.versionOlder version "25.8.2.1") [
-    # Backport patch to fix build with Poppler 25.09
-    (fetchpatch2 {
-      url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
-      includes = [ "sdext/*" ];
-      hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
-    })
-    # Fix build with Poppler 25.10
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
-      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
-    })
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "25.8.2.2" && lib.versionOlder version "26.2.1.2") [
-    # Fix build with Poppler 25.10
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/f7b0e4385108b95c134599502a7bccf0a41925c8/poppler-25.10.patch";
-      hash = "sha256-KMsjDtRRH8Vy/FXaVwxUo0Ww10PCE0sK8+ZL0Ja2kJQ=";
-    })
   ]
   ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.05
@@ -463,7 +466,6 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      liborcus
       libpthread-stubs
       librdf_redland
       librevenge
@@ -508,8 +510,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals withJava [
       jre'
     ]
+    ++ optionals (lib.versionOlder version "26.2.1.2") [
+      liborcus_0_20
+    ]
     ++ optionals (lib.versionAtLeast version "26.2.1.2") [
       fast-float
+      liborcus
       md4c
     ];
 

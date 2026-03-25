@@ -103,40 +103,6 @@ index eb9abea5a538..a2d511607a48 100644
      // Verify that line breaking inside a bidi portion triggers underflow to previous bidi portions
      createSwDoc("tdf157829-rtl.fodt");
      auto pXmlDoc = parseLayoutDump();
-diff --git i/sw/qa/extras/layout/layout5.cxx w/sw/qa/extras/layout/layout5.cxx
-index b1b6c9cc9d23..3f920d00f996 100644
---- i/sw/qa/extras/layout/layout5.cxx
-+++ w/sw/qa/extras/layout/layout5.cxx
-@@ -721,6 +721,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf117028)
-
- CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf106390)
- {
-+    return; // fails due to missing font: DejaVu Sans
-     createSwDoc("tdf106390.odt");
-     SwDocShell* pShell = getSwDocShell();
-
-diff --git i/sw/qa/extras/layout/layout5.cxx w/sw/qa/extras/layout/layout5.cxx
-index b1b6c9cc9d23..72990739711f 100644
---- i/sw/qa/extras/layout/layout5.cxx
-+++ w/sw/qa/extras/layout/layout5.cxx
-@@ -739,6 +739,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTdf106390)
-
- CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion1)
- {
-+    return; // fails due to missing font: DejaVu Sans
-+
-     createSwDoc("table-extrusion1.odt");
-     SwDocShell* pShell = getSwDocShell();
-
-@@ -759,6 +761,8 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion1)
-
- CPPUNIT_TEST_FIXTURE(SwLayoutWriter5, testTableExtrusion2)
- {
-+    return; // fails due to missing font: DejaVu Sans
-+
-     createSwDoc("table-extrusion2.odt");
-     SwDocShell* pShell = getSwDocShell();
-
 diff --git a/sw/qa/extras/layout/layout5.cxx b/sw/qa/extras/layout/layout5.cxx
 index 5f008a55b1c0..c6ae2a9023de 100644
 --- a/sw/qa/extras/layout/layout5.cxx
@@ -199,52 +165,6 @@ index 0537b6e4f4ffdae3b094457db0034f2de8676608..8ce4deaa368f11fdc7eb36fec4e75501
      uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, uno::UNO_QUERY_THROW);
      uno::Reference<container::XIndexAccess> xIndex(xDoc->getSheets(), uno::UNO_QUERY_THROW);
      uno::Reference<sheet::XSpreadsheet> xSheet(xIndex->getByIndex(0), uno::UNO_QUERY_THROW);
-diff --git i/sc/qa/unit/subsequent_export_test2.cxx w/sc/qa/unit/subsequent_export_test2.cxx
-index 956838656b28..70b38e4d59ba 100644
---- i/sc/qa/unit/subsequent_export_test2.cxx
-+++ w/sc/qa/unit/subsequent_export_test2.cxx
-@@ -100,6 +100,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringXLSX)
- 
- CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
- {
-+    return;
-     // this doc is configured with CalcA1 ref syntax
-     createScDoc("xlsx/empty.xlsx");
- 
-@@ -137,6 +138,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
- 
- CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringUnspecified)
- {
-+    return;
-     createScDoc();
- 
-     ScDocument* pDoc = getScDoc();
-diff --git i/sw/qa/extras/tiledrendering/tiledrendering.cxx w/sw/qa/extras/tiledrendering/tiledrendering.cxx
-index 4ebc4be96149..28ebf8c0d446 100644
---- i/sw/qa/extras/tiledrendering/tiledrendering.cxx
-+++ w/sw/qa/extras/tiledrendering/tiledrendering.cxx
-@@ -1262,6 +1262,7 @@ static void addDarkLightThemes(const Color& rDarkColor, const Color& rLightColor
- 
- CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testGetViewRenderState)
- {
-+    return;
-     addDarkLightThemes(COL_BLACK, COL_WHITE);
-     SwXTextDocument* pXTextDocument = createDoc();
-     int nFirstViewId = SfxLokHelper::getView();
-diff --git i/vcl/qa/cppunit/complextext.cxx w/vcl/qa/cppunit/complextext.cxx
-index 9be428b59128..b5a5493c53e8 100644
---- i/vcl/qa/cppunit/complextext.cxx
-+++ w/vcl/qa/cppunit/complextext.cxx
-@@ -794,6 +794,8 @@ CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf165510)
- 
- CPPUNIT_TEST_FIXTURE(VclComplexTextTest, testTdf154104)
- {
-+    return;
-+
-     ScopedVclPtrInstance<VirtualDevice> pOutDev;
- 
-     vcl::Font aBaseFont{ u"David Libre"_ustr, u"Regular"_ustr, Size{ 0, 72 } };
-
 diff --git i/reportdesign/qa/unit/ReportDesignBasicTests.cxx w/reportdesign/qa/unit/ReportDesignBasicTests.cxx
 index 875aca028be9..41df1e3e7ab0 100644
 --- i/reportdesign/qa/unit/ReportDesignBasicTests.cxx
@@ -450,15 +370,3 @@ index 7766c3aa3e76..bb00df6ba673 100644
      vcl::filter::PDFDocument aDocument;
      load(u"tdf105093.odp", aDocument);
 
-diff --git i/vcl/qa/cppunit/pdfexport/pdfexport2.cxx w/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-index b9c560f422b5..e415b1fcc807 100644
---- i/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-+++ w/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-@@ -6320,6 +6320,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTextBoxRuby)
-
- CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
- {
-+    return; // fails due to missing font: Noto Sans Lao
-     saveAsPDF(u"tdf166044-cont-footnote-one-pgnum.fodt");
-
-     auto pPdfDocument = parsePDFExport();
