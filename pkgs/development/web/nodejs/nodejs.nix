@@ -630,6 +630,7 @@ let
         done
       '';
 
+      passthru.slim = self;
       passthru.tests = {
         version = testers.testVersion {
           package = self;
