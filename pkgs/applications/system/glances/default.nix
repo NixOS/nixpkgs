@@ -26,7 +26,7 @@
   shtab,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "glances";
   version = "4.5.0.5";
   pyproject = true;
@@ -36,7 +36,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IHgMZw+X7C/72w4vXaP37GgnhLVg7EF5/sd9QlmE0NM=";
   };
 
@@ -106,10 +106,10 @@ buildPythonApplication rec {
     homepage = "https://nicolargo.github.io/glances/";
     description = "Cross-platform curses-based monitoring tool";
     mainProgram = "glances";
-    changelog = "https://github.com/nicolargo/glances/blob/${src.tag}/NEWS.rst";
+    changelog = "https://github.com/nicolargo/glances/blob/${finalAttrs.src.tag}/NEWS.rst";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       koral
     ];
   };
-}
+})
