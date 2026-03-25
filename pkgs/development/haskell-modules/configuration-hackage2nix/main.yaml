@@ -127,6 +127,8 @@ extra-packages:
 
 # keep-sorted start skip_lines=1 case=no
 package-maintainers:
+  Ai-Ya-Ya:
+    - duckdb-ffi
   alexfmpe:
     - basic-sop
     - commutative-semigroups
