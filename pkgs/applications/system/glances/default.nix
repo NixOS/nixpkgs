@@ -4,6 +4,7 @@
   fetchFromGitHub,
   isPyPy,
   lib,
+  chevron,
   defusedxml,
   packaging,
   psutil,
@@ -28,7 +29,7 @@
 
 buildPythonApplication (finalAttrs: {
   pname = "glances";
-  version = "4.5.0.5";
+  version = "4.5.2";
   pyproject = true;
 
   disabled = isPyPy;
@@ -37,7 +38,7 @@ buildPythonApplication (finalAttrs: {
     owner = "nicolargo";
     repo = "glances";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IHgMZw+X7C/72w4vXaP37GgnhLVg7EF5/sd9QlmE0NM=";
+    hash = "sha256-o/q/zW7lRKQg+u4XblwNIswCVIroMdeUaPTNkN8QKwo=";
   };
 
   build-system = [ setuptools ];
@@ -77,6 +78,7 @@ buildPythonApplication (finalAttrs: {
   };
 
   nativeCheckInputs = [
+    chevron
     which
     pytestCheckHook
     selenium
@@ -100,6 +102,8 @@ buildPythonApplication (finalAttrs: {
     # Test always returns 3 plugin updates, but needs >=5 to not fail
     # May be an upstream bug, see: https://github.com/nicolargo/glances/issues/3430
     "test_perf_update"
+    # Upstream pipe handling currently fails under the new 4.5.2 sanitization coverage
+    "test_pipe"
   ];
 
   meta = {
@@ -110,6 +114,7 @@ buildPythonApplication (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [
       koral
+      miniharinn
     ];
   };
 })
