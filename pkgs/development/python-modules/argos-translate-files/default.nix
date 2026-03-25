@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -11,6 +12,10 @@
   translatehtml,
 }:
 
+let
+  inherit (stdenv.hostPlatform) isLinux isAarch64;
+  isAarch64Linux = isLinux && isAarch64;
+in
 buildPythonPackage (finalAttrs: {
   pname = "argos-translate-files";
   version = "1.4.4";
@@ -43,15 +48,16 @@ buildPythonPackage (finalAttrs: {
     translatehtml
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     pytestCheckHook
     # pythonImportsCheck needs a home dir for argostranslatefiles
     writableTmpDirAsHomeHook
   ];
 
-  pythonImportsCheck = [ "argostranslatefiles" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  pythonImportsCheck = lib.optional (!isAarch64Linux) "argostranslatefiles";
+  doCheck = !isAarch64Linux;
 
   meta = {
     description = "Translate files using Argos Translate";

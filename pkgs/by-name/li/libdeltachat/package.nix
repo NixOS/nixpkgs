@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdeltachat";
-  version = "2.46.0";
+  version = "2.47.0";
 
   src = fetchFromGitHub {
     owner = "chatmail";
     repo = "core";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oghFI9DMqSoTBMt/kMPj1ETkzDZUX187SKR9mHEK4VA=";
+    hash = "sha256-EF86Jl6rP46UMlWCPJ607akWZYDictH6vGptAuSc6NQ=";
   };
 
   patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     pname = "chatmail-core";
     inherit (finalAttrs) version src;
-    hash = "sha256-6YW1HqiSXpmEQ8jJiklIqrr70sawvPK0g1UX7Nvmdxk=";
+    hash = "sha256-slzAUiOmCsUv9yGhFMeEyZ6+kmPNUOsiwZXiF0j+Roc=";
   };
 
   nativeBuildInputs = [

@@ -27,6 +27,7 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

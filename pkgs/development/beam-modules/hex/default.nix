@@ -18,13 +18,13 @@ let
     self:
     stdenv.mkDerivation rec {
       pname = "hex";
-      version = "2.4.0";
+      version = "2.4.1";
 
       src = fetchFromGitHub {
         owner = "hexpm";
         repo = "hex";
         rev = "v${version}";
-        sha256 = "sha256-EuzDALjyXLT4TadLzgsGcSAYONJqVBKTl0L+YfNuS3I=";
+        sha256 = "sha256-K6ucUWoh5QOXWAciJ04Jo3UIiRxHfcWSKRY/EL/qHjw=";
       };
 
       setupHook = writeText "setupHook.sh" ''

@@ -2,21 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  cmake,
+  scikit-build-core,
   torch,
-  ninja,
-  scipy,
-  which,
-  pybind11,
-  pytest-xdist,
   pytestCheckHook,
+  scipy,
 }:
 
-let
-  linePatch = ''
-    import os
-    os.environ['PATH'] = os.environ['PATH'] + ':${ninja}/bin'
-  '';
-in
 buildPythonPackage rec {
   pname = "deepwave";
   version = "0.0.26";
@@ -29,36 +21,26 @@ buildPythonPackage rec {
     hash = "sha256-gjFbBn7fJiLZUm+97xf6xd7C+OkEoeFe3061tFkJhFk=";
   };
 
-  # unable to find ninja although it is available, most likely because it looks for its pip version
-  postPatch = ''
-    substituteInPlace setup.cfg --replace "ninja" ""
-
-    # Adding ninja to the path forcibly
-    mv src/deepwave/__init__.py tmp
-    echo "${linePatch}" > src/deepwave/__init__.py
-    cat tmp >> src/deepwave/__init__.py
-    rm tmp
-  '';
-
-  # The source files are compiled at runtime and cached at the
-  # $HOME/.cache folder, so for the check phase it is needed to
-  # have a temporary home. This is also the reason ninja is not
-  # needed at the nativeBuildInputs, since it will only be used
-  # at runtime.
+  # Return to project root to locate `pyproject.toml` for build
   preBuild = ''
-    export HOME=$(mktemp -d)
+    cd ..
   '';
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    cmake
+  ];
+
+  build-system = [
+    scikit-build-core
+  ];
+
+  dependencies = [
     torch
-    pybind11
   ];
 
   nativeCheckInputs = [
-    which
-    scipy
-    pytest-xdist
     pytestCheckHook
+    scipy
   ];
 
   pythonImportsCheck = [ "deepwave" ];

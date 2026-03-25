@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   pkgs,
   buildPythonPackage,
   fetchFromGitHub,
@@ -32,6 +33,10 @@
   lndir,
 }:
 
+let
+  inherit (stdenv.hostPlatform) isLinux isAarch64;
+  isAarch64Linux = isLinux && isAarch64;
+in
 buildPythonPackage (finalAttrs: {
   pname = "libretranslate";
   version = "1.9.5";
@@ -90,7 +95,11 @@ buildPythonPackage (finalAttrs: {
 
   # needed to import the argostranslate module
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
-  pythonImportsCheck = [ "libretranslate" ];
+
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  pythonImportsCheck = lib.optional (!isAarch64Linux) "libretranslate";
+  doCheck = !isAarch64Linux;
 
   passthru = {
     static-compressed =

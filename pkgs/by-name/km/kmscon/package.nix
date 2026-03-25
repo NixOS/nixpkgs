@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     pkg-config
     libxslt # xsltproc
+    docbook_xml_dtd_42
   ];
 
   outputs = [
@@ -71,14 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
   ];
-
-  postPatch = ''
-    for i in ./docs/man/*.in; do
-      substituteInPlace "''${i}" \
-        --replace-fail "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
-                       "${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd"
-    done
-  '';
 
   postFixup = ''
     substituteInPlace $out/bin/kmscon \

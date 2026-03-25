@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.2.4";
+  version = "2.3.0";
 in
 buildGoModule {
   pname = "go-toml";
@@ -14,7 +14,7 @@ buildGoModule {
     owner = "pelletier";
     repo = "go-toml";
     rev = "v${version}";
-    sha256 = "sha256-VKUrpSaGzkewNSyE0sB6PWVIQiraY7UxE5Wve+76UFk=";
+    sha256 = "sha256-bA8UYvYx5avw+3yzGL9TTZYGSrFUA6RxtomlSJnQHNA=";
   };
 
   vendorHash = null;
