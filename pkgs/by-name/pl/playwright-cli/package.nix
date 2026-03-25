@@ -4,6 +4,8 @@
   fetchFromGitHub,
   makeBinaryWrapper,
   playwright-driver,
+  versionCheckHook,
+  writeShellScript,
 }:
 
 buildNpmPackage (finalAttrs: {
@@ -32,13 +34,12 @@ buildNpmPackage (finalAttrs: {
   '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    $out/bin/playwright-cli --version >/dev/null
-
-    runHook postInstallCheck
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = writeShellScript "version-check" ''
+    "$1" --version >/dev/null
+    echo "${finalAttrs.version}"
   '';
+  versionCheckProgramArg = "${placeholder "out"}/bin/playwright-cli";
 
   meta = {
     description = "Playwright CLI for browser automation";
