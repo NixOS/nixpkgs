@@ -2225,6 +2225,15 @@ builtins.intersectAttrs super {
         }
       );
 
+  duckdb-ffi = overrideCabal (drv: {
+    librarySystemDepends = (drv.librarySystemDepends or [ ]) ++ [ pkgs.duckdb ];
+
+    configureFlags = (drv.configureFlags or [ ]) ++ [
+      "--extra-include-dirs=${lib.getDev pkgs.duckdb}/include"
+      "--extra-lib-dirs=${pkgs.duckdb}/lib"
+    ];
+  }) super.duckdb-ffi;
+
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24
   cpython = doJailbreak super.cpython;
 
