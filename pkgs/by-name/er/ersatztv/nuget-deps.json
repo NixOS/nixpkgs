@@ -126,13 +126,13 @@
   },
   {
     "pname": "Elastic.Clients.Elasticsearch",
-    "version": "9.2.2",
-    "hash": "sha256-5wzN9SoLH/zU3WScLryzfVmk078TpO/5EY2iUflB5IY="
+    "version": "9.3.0",
+    "hash": "sha256-h2ExrklcO6tVFV2ecxnGXA4uY9D1tiQ3sqmmN7wrRoM="
   },
   {
     "pname": "Elastic.Transport",
-    "version": "0.10.1",
-    "hash": "sha256-eX9H+arnuPnIzOFQvle4pdDTTpZ0Rw+t7rJ1ohlxbh0="
+    "version": "0.10.3",
+    "hash": "sha256-9AcJAN3uP3wywsm52caPg6Qgt4iZS0nhjIl2bb0hlx8="
   },
   {
     "pname": "ExtendedNumerics.BigDecimal",
@@ -161,8 +161,13 @@
   },
   {
     "pname": "Hardware.Info",
-    "version": "101.1.0.1",
-    "hash": "sha256-R2kxac5rNQ9mEsD3OR5LmXiBP4uakmcRBrHazzs+EMU="
+    "version": "101.1.1.1",
+    "hash": "sha256-JPd8B7bvz8jMtVXsJH9mwW+wd71cTtC7O3RyRbrR0X4="
+  },
+  {
+    "pname": "Hardware.Info.Core",
+    "version": "101.1.1.1",
+    "hash": "sha256-NHPzZZ286Wtj4Fv53gLUf5duqSx6GhXtyufbwe49nyM="
   },
   {
     "pname": "HarfBuzzSharp",
@@ -191,8 +196,8 @@
   },
   {
     "pname": "HtmlSanitizer",
-    "version": "9.0.889",
-    "hash": "sha256-0U6K39KkovhpFujGNhjUCv5/JCbESCiiAJbvHCYi9f0="
+    "version": "9.0.892",
+    "hash": "sha256-8ZVGH6RJ3QjgmwSGdVadS2pd3Tgq9IHXW7VHOX0slH0="
   },
   {
     "pname": "Humanizer.Core",
@@ -216,18 +221,18 @@
   },
   {
     "pname": "Json.More.Net",
-    "version": "2.2.0",
-    "hash": "sha256-Hb4ylcT/6bLHVADpnjoBJKyTR3cU+WjYlblO79A+SSU="
+    "version": "3.0.0",
+    "hash": "sha256-zlJb9Wi9ErFqN8FYphzog9paPxI3DBVnoTL0c12Bfks="
   },
   {
     "pname": "JsonPointer.Net",
-    "version": "6.0.1",
-    "hash": "sha256-iIvOHz6jjTsGnXyxOK71z2F8gh21TmQS4A9SLB4u93A="
+    "version": "7.0.0",
+    "hash": "sha256-/1GemlLhmYnz/HDQTpEEaGxaofoFkFUMNNPInKhAvM4="
   },
   {
     "pname": "JsonSchema.Net",
-    "version": "8.0.5",
-    "hash": "sha256-zFSEmqckius1fa/vxhJEMoNC/RU25kF3AStyMwxHCPM="
+    "version": "9.0.0",
+    "hash": "sha256-N5bp2OswdoQI5fe/ZaKmk7LwL9woJ5cV4D43IUeFJ3E="
   },
   {
     "pname": "LanguageExt.Core",
@@ -1046,8 +1051,8 @@
   },
   {
     "pname": "Scalar.AspNetCore",
-    "version": "2.12.10",
-    "hash": "sha256-KBFz5usTX/6AZnzMwkcEA7TbMksEmR9K7g9a/t0AKXs="
+    "version": "2.12.32",
+    "hash": "sha256-0EZAD43NpMpX3P8quuctTLSGBxwjxxbyfQodo0e+nII="
   },
   {
     "pname": "Scriban.Signed",

@@ -2520,6 +2520,32 @@ with pkgs;
     withXorg = false;
   };
 
+  grub2 = callPackage ../tools/misc/grub/default.nix { };
+
+  grub2_efi = grub2.override {
+    efiSupport = true;
+  };
+
+  grub2_ieee1275 = grub2.override {
+    ieee1275Support = true;
+  };
+
+  grub2_light = grub2.override {
+    zfsSupport = false;
+  };
+
+  grub2_xen = grub2.override {
+    xenSupport = true;
+  };
+
+  grub2_xen_pvh = grub2.override {
+    xenPvhSupport = true;
+  };
+
+  grub2_pvgrub_image = grub2_pvhgrub_image.override {
+    grubPlatform = "xen";
+  };
+
   gruut = with python3.pkgs; toPythonApplication gruut;
 
   gruut-ipa = with python3.pkgs; toPythonApplication gruut-ipa;

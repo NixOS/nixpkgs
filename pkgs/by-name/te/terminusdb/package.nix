@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix MAKEFLAGS order in vendored tikv-jemalloc-sys
     # TODO: remove when tikv-jemalloc-sys 0.6.2+ is released
     # equivalent to https://github.com/tikv/jemallocator/pull/152
-    substituteInPlace $cargoDepsCopy/tikv-jemalloc-sys-*/build.rs \
+    substituteInPlace $cargoDepsCopy/*/tikv-jemalloc-sys-*/build.rs \
       --replace-fail 'format!("{orig_makeflags} {makeflags}")' \
                      'format!("{makeflags} {orig_makeflags}")'
   '';

@@ -438,6 +438,9 @@ lib.makeOverridable (
       # Keep root and arch-specific Makefiles
       chmod u-w Makefile arch/*/Makefile*
 
+      # Keep rust Makefile
+      ${lib.optionalString withRust "chmod u-w rust/Makefile"}
+
       # Keep whole scripts dir
       chmod u-w -R scripts
 
