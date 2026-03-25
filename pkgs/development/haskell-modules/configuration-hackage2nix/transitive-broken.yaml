@@ -805,7 +805,6 @@ dont-distribute-packages:
  - dsmc-tools
  - DSTM
  - dtd
- - duckdb-simple
  - duoidal-transformers
  - duoids-hedgehog
  - Dust
