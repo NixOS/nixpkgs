@@ -149,6 +149,7 @@ buildPythonPackage (finalAttrs: {
     "orbax/checkpoint/_src/path/snapshot/snapshot_test.py"
 
     # Circular dependency flax
+    "orbax/checkpoint/_src/handlers/pytree_checkpoint_handler_test.py"
     "orbax/checkpoint/_src/metadata/empty_values_test.py"
     "orbax/checkpoint/_src/metadata/tree_rich_types_test.py"
     "orbax/checkpoint/_src/metadata/tree_test.py"
@@ -159,13 +160,12 @@ buildPythonPackage (finalAttrs: {
     "orbax/checkpoint/checkpoint_manager_test.py"
     "orbax/checkpoint/single_host_test.py"
     "orbax/checkpoint/transform_utils_test.py"
-    "orbax/checkpoint/_src/handlers/pytree_checkpoint_handler_test.py"
   ];
 
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/blob/v${finalAttrs.version}/checkpoint/CHANGELOG.md";
+    changelog = "https://github.com/google/orbax/blob/${finalAttrs.src.tag}/checkpoint/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };
