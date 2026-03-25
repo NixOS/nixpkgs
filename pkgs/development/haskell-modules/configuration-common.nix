@@ -2096,6 +2096,16 @@ with haskellLib;
     jailbreak = true;
   } super.feed;
 
+  # 2026-03-25: one test fails
+  # https://github.com/Tritlo/duckdb-haskell/issues/8
+  # TODO: remove after PR https://github.com/Tritlo/duckdb-haskell/pull/9 is merged
+  duckdb-ffi = overrideCabal (drv: {
+    testFlags = (drv.testFlags or [ ]) ++ [
+      "--pattern"
+      "!/bind every supported value type/"
+    ];
+  }) super.duckdb-ffi;
+
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
     # let testsuite discover the resulting binary
