@@ -373,12 +373,15 @@ let
     text = ''
       # Instance data baked in at eval time (name:host:port:metrics:slots)
       INSTANCES=(
-        ${lib.concatStringsSep "\n        " (lib.mapAttrsToList (name: inst:
-          let
-            connectHost = if inst.host == "0.0.0.0" then "127.0.0.1" else inst.host;
-          in
-          ''"${name}:${connectHost}:${toString inst.port}:${lib.boolToString inst.enableMetrics}:${lib.boolToString inst.slots}"''
-        ) enabledInstances)}
+        ${lib.concatStringsSep "\n        " (
+          lib.mapAttrsToList (
+            name: inst:
+            let
+              connectHost = if inst.host == "0.0.0.0" then "127.0.0.1" else inst.host;
+            in
+            ''"${name}:${connectHost}:${toString inst.port}:${lib.boolToString inst.enableMetrics}:${lib.boolToString inst.slots}"''
+          ) enabledInstances
+        )}
       )
 
       RED='\033[0;31m'
