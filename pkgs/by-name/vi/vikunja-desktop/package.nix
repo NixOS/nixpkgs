@@ -40,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmInstallFlags
       ;
     pnpm = pnpm_10_29_2;
-    fetcherVersion = 1;
-    hash = "sha256-4+r+1Yi3BS7LHFIY4VOGMhG2RW/KcTy67oqkfXiMW7k=";
+    fetcherVersion = 3;
+    hash = "sha256-/dPjUxD01G1H3nRZfW8x046x33OaiChYuiLhZYOPrTo=";
   };
 
   env = {
