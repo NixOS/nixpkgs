@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  callPackage,
   cargo,
   fontconfig,
   glib,
@@ -61,6 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
     )
   '';
+
+  passthru.tests.thumbnailer = callPackage ./tests.nix { };
 
   meta = {
     description = "Glycin thumbnailers for several formats";
