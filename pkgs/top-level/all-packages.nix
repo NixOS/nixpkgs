@@ -5756,8 +5756,6 @@ with pkgs;
 
   m4 = gnum4;
 
-  gnumake = callPackage ../development/tools/build-managers/gnumake { };
-
   gradle-packages = callPackage ../development/tools/build-managers/gradle { };
 
   gradle_7-unwrapped = gradle-packages.gradle_7;
