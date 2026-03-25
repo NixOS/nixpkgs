@@ -102,6 +102,12 @@ in
       [ "services" "xserver" "displayManager" "gdm" "autoLogin" "delay" ]
       [ "services" "displayManager" "gdm" "autoLogin" "delay" ]
     )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "displayManager"
+      "gdm"
+      "wayland"
+    ] "Disabling this option is no longer supported with GNOME 50.")
   ];
 
   meta = {
@@ -124,14 +130,6 @@ in
         default = 0;
         description = ''
           Seconds of inactivity after which the autologin will be performed.
-        '';
-      };
-
-      wayland = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = ''
-          Allow GDM to run on Wayland instead of Xserver.
         '';
       };
 
@@ -347,7 +345,6 @@ in
     # presented and there's a little delay.
     services.displayManager.gdm.settings = {
       daemon = lib.mkMerge [
-        { WaylandEnable = cfg.wayland; }
         # nested if else didn't work
         (lib.mkIf (config.services.displayManager.autoLogin.enable && cfg.autoLogin.delay != 0) {
           TimedLoginEnable = true;
