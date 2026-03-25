@@ -24,19 +24,19 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnote";
   version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-bNe9PW7hkSmdU6HTDwD7bMbHZFs8fRDrIEC9f6xjliI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
+    inherit (finalAttrs) pname version src;
     hash = "sha256-15TOc+X0E/uGVUfgIOM6pEIp2LZUmDrM7BRzdbLarbc=";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.tag}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${finalAttrs.src.tag}";
     description = "Simple drawing application to create handwritten notes";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -96,4 +96,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
