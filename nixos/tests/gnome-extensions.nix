@@ -23,10 +23,9 @@
 
       # Configure GDM
       services.xserver.enable = true;
-      services.xserver.displayManager.gdm = {
+      services.displayManager.gdm = {
         enable = true;
         debug = true;
-        wayland = true;
       };
       services.displayManager.autoLogin = {
         enable = true;
