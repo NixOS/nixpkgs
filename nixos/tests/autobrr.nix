@@ -11,7 +11,7 @@
         enable = true;
         # We create this secret in the Nix store (making it readable by everyone).
         # DO NOT DO THIS OUTSIDE OF TESTS!!
-        secretFile = pkgs.writeText "session_secret" "not-secret";
+        environmentFile = pkgs.writeText "session_secret" "AUTOBRR__SESSION_SECRET=not-secret";
       };
     };
 

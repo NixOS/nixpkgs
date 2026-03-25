@@ -8,10 +8,18 @@
 let
   cfg = config.services.autobrr;
   configFormat = pkgs.formats.toml { };
-  configTemplate = configFormat.generate "autobrr.toml" cfg.settings;
-  templaterCmd = ''${lib.getExe pkgs.dasel} put -f '${configTemplate}' -v "$(${config.systemd.package}/bin/systemd-creds cat sessionSecret)" -o %S/autobrr/config.toml "sessionSecret"'';
+  configFile = configFormat.generate "autobrr.toml" cfg.settings;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "autobrr" "secretFile" ] ''
+      The services.autobrr.secretFile option has been removed.
+      Instead, please provide this secret by setting the
+      AUTOBRR__SESSION_SECRET environment variable using
+      services.autobrr.environmentFile.
+    '')
+  ];
+
   options = {
     services.autobrr = {
       enable = lib.mkEnableOption "Autobrr";
@@ -22,9 +30,17 @@ in
         description = "Open ports in the firewall for the Autobrr web interface.";
       };
 
-      secretFile = lib.mkOption {
-        type = lib.types.path;
-        description = "File containing the session secret for the Autobrr web interface.";
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = ''
+          Environment file to be passed to the systemd service. Useful for
+          passing secrets to the service.
+
+          Refer to
+          <https://autobrr.com/installation/docker#environment-variables> for a
+          list of environment variables.
+        '';
       };
 
       settings = lib.mkOption {
@@ -57,7 +73,8 @@ in
           Session secrets should not be passed via settings, as
           these are stored in the world-readable nix store.
 
-          Use the secretFile option instead.'';
+          Use the environmentFile option to set the AUTOBRR__SESSION_SECRET
+          variable instead.'';
       }
     ];
 
@@ -73,11 +90,10 @@ in
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
-        LoadCredential = "sessionSecret:${cfg.secretFile}";
         StateDirectory = "autobrr";
-        ExecStartPre = "${lib.getExe pkgs.bash} -c '${templaterCmd}'";
-        ExecStart = "${lib.getExe cfg.package} --config %S/autobrr";
+        ExecStart = "${lib.getExe cfg.package} --config ${configFile}";
         Restart = "on-failure";
+        EnvironmentFile = cfg.environmentFile;
       };
     };
 
