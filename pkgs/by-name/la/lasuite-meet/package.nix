@@ -13,14 +13,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "lasuite-meet";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "meet";
     tag = "v${version}";
-    hash = "sha256-CvpGDfdK1+EJ+Tj9NLrfRfK4VpJVcDqezVJL6ZVdOQ8=";
+    hash = "sha256-xm9NhsoM4ggLdtULfiUqJkB41n8q6eS8g4Q/zBaKRbs=";
   };
 
   sourceRoot = "source/src/backend";
@@ -28,10 +28,6 @@ python.pkgs.buildPythonApplication rec {
   patches = [
     # Support configuration throught environment variables for SECURE_*
     ./secure_settings.patch
-    # Fix module inclusion after switching to uv-build
-    # https://github.com/suitenumerique/meet/pull/1199
-    ./gh1199.patch
-
   ];
 
   postPatch = ''
