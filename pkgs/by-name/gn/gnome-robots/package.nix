@@ -9,6 +9,8 @@
   gtk4,
   itstool,
   libadwaita,
+  libglycin,
+  libglycin-gtk4,
   librsvg,
   libxml2,
   gst_all_1,
@@ -54,6 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
+    libglycin
+    libglycin-gtk4
     librsvg
     libxml2
     # Sound playback, not checked at build time.
