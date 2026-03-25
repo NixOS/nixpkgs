@@ -88,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_CACHE_HOME=$(mktemp -d)
   '';
 
+  # Thumbnailer files are provided by glycin-thumbnailer
+  postInstall = ''
+    rm -r $out/share/thumbnailers
+  '';
+
   env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru = {
