@@ -1,8 +1,8 @@
 {
   "linux-canary": {
-    "hash": "sha256-0/A5x/5F60fGN/V6n+OZh6dqsi7D2zuSNABflXK0zF4=",
-    "url": "https://canary.dl2.discordapp.net/apps/linux/0.0.902/discord-canary-0.0.902.tar.gz",
-    "version": "0.0.902"
+    "hash": "sha256-byxxEliSZCecwxzsAP5GvrS5tz+fCj0/erBDC9hToug=",
+    "url": "https://canary.dl2.discordapp.net/apps/linux/0.0.925/discord-canary-0.0.925.tar.gz",
+    "version": "0.0.925"
   },
   "linux-development": {
     "hash": "sha256-Xe5PjHDWXU+eIAcBID34gjuADmAl1JAQLmXUAi/p4tg=",
