@@ -11,16 +11,12 @@
 
 stdenv.mkDerivation rec {
   pname = "socat";
-  version = "1.8.1.0";
+  version = "1.8.1.1";
 
   src = fetchurl {
     url = "http://www.dest-unreach.org/socat/download/socat-${version}.tar.bz2";
-    hash = "sha256-kfIi7mVVkDZgDCUFuZms6+1IuJnw4uU64cnDHWmGtqQ=";
+    hash = "sha256-Xrxja39CcFP5iAZpZSFlOmFMfgZGSRA1PL9U4jJ63Bs=";
   };
-
-  patches = [
-    ./musl.patch
-  ];
 
   postPatch = ''
     patchShebangs test.sh

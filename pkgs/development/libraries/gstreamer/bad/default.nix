@@ -29,7 +29,7 @@
   liblc3,
   libass,
   lrdf,
-  ladspaH,
+  ladspa-header,
   lcms2,
   libnice,
   webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
@@ -242,7 +242,7 @@ stdenv.mkDerivation (finalAttrs: {
     spandsp
 
     # ladspa plug-in
-    ladspaH
+    ladspa-header
     lrdf # TODO: make build on Darwin
 
     # lv2 plug-in

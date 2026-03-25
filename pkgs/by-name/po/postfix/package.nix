@@ -31,12 +31,13 @@
 }:
 
 let
+  cyrus_sasl' = cyrus_sasl.override { enableMySQL = true; };
   ccargs = lib.concatStringsSep " " (
     [
       "-DUSE_TLS"
       "-DUSE_SASL_AUTH"
       "-DUSE_CYRUS_SASL"
-      "-I${cyrus_sasl.dev}/include/sasl"
+      "-I${cyrus_sasl'.dev}/include/sasl"
       "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
       # Fix build with gcc15, no upstream fix for stable releases:
       # https://www.mail-archive.com/postfix-devel@postfix.org/msg01270.html
@@ -74,11 +75,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "postfix";
-  version = "3.10.8";
+  version = "3.11.1";
 
   src = fetchurl {
     url = "http://ftp.porcupine.org/mirrors/postfix-release/official/postfix-${finalAttrs.version}.tar.gz";
-    hash = "sha256-MdSz64CT2CO1oVH1cXGf98BGJXG8leZEDYfKUlv7CWw=";
+    hash = "sha256-ZZJlYG7ZtiQpZLbUSiqvXmB9j7mtJUECekoyDd+4ncE=";
   };
 
   nativeBuildInputs = [
@@ -88,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     db
     openssl
-    cyrus_sasl
+    cyrus_sasl'
     icu
     libnsl
     pcre2

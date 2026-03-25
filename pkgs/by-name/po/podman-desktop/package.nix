@@ -6,7 +6,7 @@
   copyDesktopItems,
   electron_39,
   nodejs,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   makeDesktopItem,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    pnpm = pnpm_10;
+    pnpm = pnpm_10_29_2;
     fetcherVersion = 2;
     hash = "sha256-nBjAmXzjR0qGCM91UAonQKP0NG7+DXImueSbhbnMK/k=";
   };
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     nodejs
     pnpmConfigHook
-    pnpm_10
+    pnpm_10_29_2
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems

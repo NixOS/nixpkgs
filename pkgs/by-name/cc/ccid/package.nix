@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccid";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "CCID";
     tag = finalAttrs.version;
-    hash = "sha256-6eaznSIQZl1bpIe1F9EtwotF9BjOruJ9g/c2QrTgfUg=";
+    hash = "sha256-5GkpsrjGFfiGDNIhU9zsx0p7/MSVra1fse9yFhjGSFU=";
   };
 
   postPatch = ''

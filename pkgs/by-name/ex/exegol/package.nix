@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exegol";
-  version = "5.1.2";
+  version = "5.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThePorgs";
     repo = "Exegol";
     tag = version;
-    hash = "sha256-eoOCVYKHWPsaSxdOF3FTg6dS5JdTSlfNTM6Hrf6KTlc=";
+    hash = "sha256-nYtJkLpg7kaaENodSNJ9lf91/ry+jR+QuKjM0P39qIw=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
@@ -73,6 +73,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       _0b11stan
       charB66
+      macbucheron
     ];
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.4.3";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdcss/${finalAttrs.version}/libdvdcss-${finalAttrs.version}.tar.bz2";
+    url = "https://get.videolan.org/libdvdcss/${finalAttrs.version}/libdvdcss-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-IzzJL13AHF06lvWzWCvn1c7lo1pS06CBWHRdPYYHAHk=";
   };
 

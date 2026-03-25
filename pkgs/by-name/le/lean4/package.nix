@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       danielbritten
       jthulhu
+      nadja-y
     ];
     mainProgram = "lean";
   };

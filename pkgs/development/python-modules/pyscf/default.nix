@@ -22,16 +22,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyscf";
-  version = "2.12.1";
+  version = "2.12.1-unstable-2026-03-21";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = "pyscf";
-    tag = "v${version}";
-    hash = "sha256-voiXNoJ7lHQeqroOs9AxqX55NDEhHVNMLeB+XzJgBQM=";
+    rev = "e8642fb7220248bd750c34ef6adf88a9744977ee";
+    hash = "sha256-RVv5vTmTtHDAbgOXHW1DUzYVsf+NvrYh9++WfNGJ07k=";
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.

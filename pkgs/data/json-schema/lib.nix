@@ -43,6 +43,7 @@ let
         derivation = drv;
         passthru = {
           name = "catalog-${name}";
+          pname = "catalog-${name}";
           internals = drv;
         }
         // lib.optionalAttrs (version != null) {

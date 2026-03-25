@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pepit";
-  version = "0.4.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PerformanceEstimation";
     repo = "PEPit";
     tag = version;
-    hash = "sha256-6HF/BkDFUvui7CaVfOeJUQhl3QLLyE7aabDWcZ4tgXc=";
+    hash = "sha256-PCWYfJ1h4P0X4KLNdIivLrPVAR7205K1Ii5ROuGHULo=";
   };
 
   postPatch = ''

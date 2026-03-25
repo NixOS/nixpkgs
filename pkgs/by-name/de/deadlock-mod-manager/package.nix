@@ -27,19 +27,19 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadlock-mod-manager";
-  version = "0.14.1";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "deadlock-mod-manager";
     repo = "deadlock-mod-manager";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-A7RsgPi3NlcLSBkLg7/pWcSduaZyCspz19sjGjzEkqM=";
+    hash = "sha256-rsOaCgP7ub4FkTkg1VWPZyf+N2I0qM0DCIIqBpJZCVg=";
   };
 
   cargoRoot = "apps/desktop";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-L4orWiK1s1hfC2QDJ8G4hI1iqrdPHBaVTVHoW0hdlGo=";
+  cargoHash = "sha256-aUtJzgjc9reFxUVMRwqCd2lNMRALlfMkfIRN4QT3g+E=";
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm = pnpm_9;
     fetcherVersion = 2;
     sourceRoot = "source";
-    hash = "sha256-KhBWFujjo3FW3intvGA2Y7eLIdJ1B/4P5xIRPvzygT8=";
+    hash = "sha256-oQxW0q+myMllwLQd+GRXXvnce+bYtwTLEEwFU0nupv4=";
   };
 
   patches = [

@@ -206,6 +206,12 @@ stdenv.mkDerivation (finalAttrs: {
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    ctest --output-on-failure -E "python_math_opt_.*"
+    runHook postCheck
+  '';
+
   # This extra configure step prevents the installer from littering
   # $out/bin with sample programs that only really function as tests,
   # and disables the upstream installation of a zipped Python egg that

@@ -1,4 +1,4 @@
-{ lib }:
+{ fetchpatch, lib }:
 
 {
 
@@ -106,12 +106,15 @@
   };
 
   beancount = {
-    version = "2.5.0";
+    version = "2.5.1";
     url = "github:polarmutex/tree-sitter-beancount";
-    hash = "sha256-eJ1XAPrVCoGQtrRJdcB/V4ULUmYXemUAE3FQijpH8q8=";
+    hash = "sha256-UJ8bswQJB7UYspNKLWaEXMOR4XlKVHfd7rvV5iaA5Tw=";
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/polarmutex/tree-sitter-beancount/pull/137>.
+    excludeBrokenTreeSitterJson = true;
   };
 
   bibtex = {
@@ -414,6 +417,13 @@
     meta = {
       license = lib.licenses.mit;
     };
+    patches = [
+      (fetchpatch {
+        name = "Fix invalid `tree-sitter.json`";
+        url = "https://github.com/UserNobody14/tree-sitter-dart/commit/81638dbbdb76a0e88ea8c31b95ec76b9625ddb84.diff";
+        hash = "sha256-oaxuKQPN/gprO4OFWYItkj5dqd2xlq3SV6qr4YkSFjM=";
+      })
+    ];
   };
 
   dbml = {
@@ -863,6 +873,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/ember-tooling/tree-sitter-glimmer/pull/189>
+    excludeBrokenTreeSitterJson = true;
   };
 
   glsl = {
@@ -1207,6 +1220,9 @@
     meta = {
       license = lib.licenses.cc0;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/sogaiu/tree-sitter-janet-simple/pull/7>
+    excludeBrokenTreeSitterJson = true;
   };
 
   java = {
@@ -1635,6 +1651,9 @@
     meta = {
       license = lib.licenses.mit;
     };
+    # The tree-sitter.json in this repo is invalid, see
+    # <https://github.com/Norgate-AV/tree-sitter-netlinx/pull/82>
+    excludeBrokenTreeSitterJson = true;
   };
 
   nginx = {
@@ -1660,10 +1679,10 @@
   };
 
   nim = {
-    version = "0.6.2-unstable-2026-01-11";
+    version = "0.6.2-unstable-2026-03-21";
     url = "github:alaviss/tree-sitter-nim";
-    rev = "9b4ede21a6ca866d29263f6b66c070961bc622b4";
-    hash = "sha256-3BHcQrLNcXe1RMkV7ECCMzzEukgTlARH3+DDo2M5b0w=";
+    rev = "3878440d9398515ae053c6f6024986e69868bb74";
+    hash = "sha256-mdAT1jTFeVP8TYi4H36sjd826KmxHQ1EZ+8gd37NGfY=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [
@@ -2496,9 +2515,9 @@
   };
 
   t32 = {
-    version = "7.2.2";
+    version = "7.2.5";
     url = "github:xasc/tree-sitter-t32";
-    hash = "sha256-BUao6oveuWWPn2jDUWAjzoi9YMsDEA5B+hKJHvCUtD0=";
+    hash = "sha256-ysdKgzF5VFV0BeeXlV8gZ5pW7WzYJtYnyBE+MaxG3Jo=";
     meta = {
       maintainers = with lib.maintainers; [
         aciceri
@@ -2635,8 +2654,14 @@
   };
 
   tlaplus = rec {
-    # FIXME: remove language override after release is available that includes
+    # FIXME: remove patch after release is available that includes
     # https://github.com/tlaplus-community/tree-sitter-tlaplus/pull/138
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/tlaplus-community/tree-sitter-tlaplus/commit/2d831940c782850f64dabf5b7b17e9e51f7f0ebb.diff";
+        hash = "sha256-ski2aYo25kHXz3T+Z2Coitdywot3tUiEbDY7gH7mTHE=";
+      })
+    ];
     version = "1.5.0";
     url = "github:tlaplus-community/tree-sitter-tlaplus?ref=${version}";
     hash = "sha256-k34gkAd0ueXEAww/Hc1mtBfn0Kp1pIBQtjDZ9GQeB4Q=";

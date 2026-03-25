@@ -385,6 +385,7 @@ let
         license = lib.licenses.openssl;
         mainProgram = "openssl";
         maintainers = with lib.maintainers; [ thillux ];
+        teams = [ lib.teams.security-review ];
         pkgConfigModules = [
           "libcrypto"
           "libssl"
@@ -520,7 +521,9 @@ in
       )
     ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      ./3.5/fix-mingw-linking.patch
+      # Fix from https://github.com/openssl/openssl/pull/29826
+      # Merged, will be in 3.6.2
+      ./3.6/mingw-define-netreset.patch
     ]
     ++
       # https://cygwin.com/cgit/cygwin-packages/openssl/plain/openssl-3.0.18-skip-dllmain-detach.patch?id=219272d762128451822755e80a61db5557428598

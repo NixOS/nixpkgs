@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeWrapper,
-  electron_39,
+  electron_40,
   vulkan-loader,
   makeDesktopItem,
   copyDesktopItems,
@@ -18,20 +18,20 @@
 }:
 
 let
-  electron = electron_39;
+  electron = electron_40;
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.26.1";
+  version = "1.27.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7kDk85tN4uP0WJnof8yyn0M85Qairls5ZqhKwwhRQxc=";
+    hash = "sha256-T1MgcqCi9rwN86vgCAshokznMXh+masFLcO43sz2bo0=";
   };
 
-  npmDepsHash = "sha256-Sft5fEf86o1uUJ+yszx9XgQBGNRc+9aKRyR5rOelgQw=";
+  npmDepsHash = "sha256-5tZQCxql6jZAEU+e/hkQYnaHy1l5dWaH/p2rbGDAX14=";
 
   postPatch = ''
     substituteInPlace package.json \

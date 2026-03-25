@@ -1,6 +1,7 @@
 {
   lib,
   stdenvNoCC,
+  buildPackages,
   fetchFromGitHub,
   fetchPnpmDeps,
   pnpmConfigHook,
@@ -10,7 +11,8 @@
   versionCheckHook,
   nix-update-script,
   rolldown,
-  version ? "2026.2.26",
+  installShellFiles,
+  version ? "2026.3.12",
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "openclaw";
@@ -20,10 +22,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "openclaw";
     repo = "openclaw";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9kej1aK7j3/FU2X/bN983YqQClfnWfFPvByEkQKlQ4E=";
+    hash = "sha256-dGKfXkC7vHflGbg+SkgSMfM5LW8w1YQIWicgp3BKDQ8=";
   };
 
-  pnpmDepsHash = "sha256-Jcj0i/2Mh8Z5lp909Fkotw/isfLTIVMxtJgWwAtctEw=";
+  pnpmDepsHash = "sha256-GHTkpwOj2Y29YUcS/kbZlCdo9DL8C3WW3WHe0PMIN/M=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
@@ -39,6 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pnpm_10
     nodejs_22
     makeWrapper
+    installShellFiles
   ];
 
   preBuild = ''
@@ -81,6 +84,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  postInstall = lib.optionalString (stdenvNoCC.hostPlatform.emulatorAvailable buildPackages) (
+    let
+      emulator = stdenvNoCC.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd openclaw \
+        --bash <(${emulator} $out/bin/openclaw completion --shell bash) \
+        --fish <(${emulator} $out/bin/openclaw completion --shell fish) \
+        --zsh <(${emulator} $out/bin/openclaw completion --shell zsh)
+    ''
+  );
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

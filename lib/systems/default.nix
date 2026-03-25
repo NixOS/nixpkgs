@@ -319,7 +319,7 @@ let
           if final.isAarch32 then
             "arm"
           else if final.isAarch64 then
-            "aarch64"
+            "aarch64${optionalString final.isBigEndian "_be"}"
           else if final.isS390 && !final.isS390x then
             null
           else if final.isx86_64 then

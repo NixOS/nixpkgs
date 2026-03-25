@@ -298,7 +298,6 @@ in
         let
           enabledTables = lib.filterAttrs (_: table: table.enable) cfg.tables;
           deletionsScript = pkgs.writeScript "nftables-deletions" ''
-            #! ${pkgs.nftables}/bin/nft -f
             ${
               if cfg.flushRuleset then
                 "flush ruleset"
@@ -313,9 +312,9 @@ in
             ${cfg.extraDeletions}
           '';
           deletionsScriptVar = "/var/lib/nftables/deletions.nft";
+          makeDeletions = "${pkgs.nftables}/bin/nft -f ${deletionsScriptVar}";
           ensureDeletions = pkgs.writeShellScript "nftables-ensure-deletions" ''
             touch ${deletionsScriptVar}
-            chmod +x ${deletionsScriptVar}
           '';
           saveDeletionsScript = pkgs.writeShellScript "nftables-save-deletions" ''
             cp ${deletionsScript} ${deletionsScriptVar}
@@ -380,7 +379,7 @@ in
             saveDeletionsScript
           ];
           ExecStop = [
-            deletionsScriptVar
+            makeDeletions
             cleanupDeletionsScript
           ];
           StateDirectory = "nftables";

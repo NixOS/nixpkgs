@@ -17,23 +17,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.54.2";
+  version = "0.54.9";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MzEgG//wptk0G9kn1c491qyqn62do9Z2nt8I6HtOaJQ=";
+    hash = "sha256-Ciah+JSy4j4u0FvHugZTYJAf8a0kv9jmgWnNSqdzKhw=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "d8c621ecfde8eab1123a4338fe50823cba047be1";
-    hash = "sha256-IUr9VJqPduW9gHdFZSwIyFAEycc6nfS/Rfz2vXO0iCY=";
+    rev = "d22d8b4175dfca766c00cca6e575da19f0390bd4";
+    hash = "sha256-LEKdZPs/TkDeT1glUNUBhWBly63P4Im4fHeuEvzLYUI=";
   };
 
-  npmDepsHash = "sha256-fGn1L32bcyDI72Qlt9lf84zJDqlvSwbI4Vubj4DL388=";
+  npmDepsHash = "sha256-GIGqaB7GeLDtxr8rV19o/nBqIlkjlLF/pR/mwGSogQE=";
 
   # npm dependency install fails with nodejs_24: https://github.com/NixOS/nixpkgs/issues/474535
   nodejs = nodejs_22;

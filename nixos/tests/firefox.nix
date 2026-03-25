@@ -46,7 +46,7 @@
 
 
       @contextmanager
-      def record_audio(machine: Machine):
+      def record_audio(machine: BaseMachine):
           """
           Perform actions while recording the
           machine audio output.
@@ -56,7 +56,7 @@
           machine.systemctl("stop audio-recorder")
 
 
-      def wait_for_sound(machine: Machine):
+      def wait_for_sound(machine: BaseMachine):
           """
           Wait until any sound has been emitted.
           """

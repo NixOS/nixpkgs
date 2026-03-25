@@ -11,7 +11,7 @@
   pytest-asyncio,
   pytest-cov-stub,
   python-dateutil,
-  setuptools,
+  hatchling,
   urllib3,
 }:
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-bkDeIQJ+5VDMkBDorEMczsN7Ex04SaxhxulXLtUW/CM=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp

@@ -37,6 +37,11 @@ buildPythonPackage rec {
     hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
   };
 
+  patches = [
+    # Upstream PR: https://github.com/itamarst/eliot/pull/520
+    ./python-3.14.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [

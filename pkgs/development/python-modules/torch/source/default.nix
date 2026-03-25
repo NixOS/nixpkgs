@@ -118,7 +118,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.8.0/torch/utils/cpp_extension.py#L2411-L2414
+  # https://github.com/pytorch/pytorch/blob/v2.10.0/torch/utils/cpp_extension.py#L2411-L2414
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -140,10 +140,9 @@ let
         "9.0"
         "9.0a"
         "10.0"
-        "10.0"
         "10.0a"
-        "10.1"
-        "10.1a"
+        "11.0"
+        "11.0a"
         "10.3"
         "10.3a"
         "12.0"
@@ -248,6 +247,7 @@ let
       && !(builtins.elem cudaPackages.cudaMajorVersion [
         "11"
         "12"
+        "13"
       ]);
     "MPI cudatoolkit does not match cudaPackages.cudatoolkit" =
       MPISupport && cudaSupport && (mpi.cudatoolkit != cudaPackages.cudatoolkit);
@@ -746,6 +746,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       rocmSupport
       rocmPackages
       unroll-src
+      gpuTargetString
+      rocmtoolkit_joined
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
@@ -762,6 +764,7 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     homepage = "https://pytorch.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
+      caniko
       GaetanLepage
       LunNova # esp. for ROCm
       teh

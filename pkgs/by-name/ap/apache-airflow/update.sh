@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p common-updater-scripts curl jq nixfmt-tree
+#!nix-shell -i bash -p common-updater-scripts curl jq nixfmt-tree nix-update
 
 set -euo pipefail
 
@@ -40,7 +40,8 @@ echo "Latest tag found: $LATEST_TAG"
 # Update the version and hash in the package definition
 # This uses the standard nixpkgs script `update-source-version`.
 echo "Updating source version for $PACKAGE_NAME to $LATEST_TAG..."
-update-source-version "$PACKAGE_NAME" "$LATEST_TAG"
+nix-update --subpackage airflowUi --subpackage airflowSimpleAuthUi "$PACKAGE_NAME" \
+  --version "$LATEST_TAG"
 
 # After updating the main package, run the providers update script.
 # It will automatically pick up the new version from the nix file.

@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "wiki-go";
-  version = "1.8.5";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "leomoon-studios";
     repo = "wiki-go";
     tag = "v${version}";
-    hash = "sha256-6GgX2wEaQvW5ccayavbQ4FV3yQKUdcsbUfmLrO4Jxng=";
+    hash = "sha256-5Swnr/V/lfXxF1tGhmq2mo+ZDmob9nLOS5pAYY58G/E=";
   };
 
   vendorHash = null;

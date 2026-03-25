@@ -1251,4 +1251,35 @@ rec {
       maintainers = with lib.maintainers; [ honnip ];
     };
   };
+
+  # According to https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes
+  # we should use `cy` for Cymraeg but it's cy_GB in Hunspell.
+  # WELSH / CYMRAEG
+  cy_GB = cy-gb;
+  cy-gb = mkDict rec {
+    pname = "hunspell-dict-cy-gb";
+    version = "25.03";
+
+    src = fetchFromGitHub {
+      owner = "techiaith";
+      repo = "hunspell-cy";
+      tag = version;
+      hash = "sha256-T1p0LbCUTKN7xfogbI2RqxdONgcMxDpjjFW+dN8IGa4=";
+    };
+
+    shortName = "cy-GB";
+    dictFileName = "cy_GB";
+    readmeFile = "README.md";
+
+    meta = {
+      description = "Hunspell dictionary for Welsh (Cymraeg)";
+      homepage = "https://github.com/techiaith/hunspell-cy";
+      license = with lib.licenses; [
+        lgpl3
+      ];
+      maintainers = with lib.maintainers; [
+        fin-w
+      ];
+    };
+  };
 }

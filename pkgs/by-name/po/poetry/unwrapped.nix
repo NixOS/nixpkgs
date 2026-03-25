@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.3.1";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-JhSseoXoNc4NZ/fuvf3ztQD6MhyaErE2pqmLLeBf0ak=";
+    hash = "sha256-zJ7HA/NNBh9gy0WUXTxKBUsC74Yt+ANZuBxMrQrS6XU=";
   };
 
   build-system = [
@@ -51,12 +51,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ];
-
-  pythonRelaxDeps = [
-    "dulwich"
-    "keyring"
-    "pbs-installer"
   ];
 
   dependencies = [

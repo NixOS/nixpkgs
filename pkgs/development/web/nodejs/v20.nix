@@ -34,8 +34,8 @@ let
   ];
 in
 buildNodejs {
-  version = "20.20.1";
-  sha256 = "e540efdd6750f838e867daf9ab9d90ea195423f915613d05d87105f4d2ecd186";
+  version = "20.20.2";
+  sha256 = "7aeeacdb858299e09a3e0510d4bb8b266923894a9e3ac0058ba89d4ecf4a4cca";
   patches = [
     ./configure-emulator.patch
     ./configure-armv6-vfpv2.patch

@@ -1,5 +1,6 @@
 {
   fetchurl,
+  fetchpatch2,
   lib,
   stdenv,
   libtool,
@@ -23,6 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/global/global-${finalAttrs.version}.tar.gz";
     hash = "sha256-9uf9C2iu0pLoW7aGYWuvZVHVyUJK3N3KEdgIujGMsyA=";
   };
+
+  patches = [
+    # Fix for GCC 15 / C23, which interprets empty function parameter lists as
+    # having no parameters instead of an unspecified signature.
+    (fetchpatch2 {
+      url = "https://src.fedoraproject.org/rpms/global/raw/5a1ababa270e571f3133c03edcdb0e65f95e763f/f/libdb-dbpanic-function-pointers.patch";
+      hash = "sha256-o8u90h8ufF0Yr049fR9iMba+xq1tHXeiPdrHFSZMir0=";
+    })
+  ];
 
   nativeBuildInputs = [
     libtool

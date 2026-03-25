@@ -2,12 +2,17 @@
 
 with pkgs.lib;
 
+let
+  imdsServer = import ./imds-server.nix { inherit pkgs; };
+in
 {
+  inherit imdsServer;
+
   makeEc2Test =
     {
       name,
       image,
-      userData,
+      userData ? null,
       script,
       hostname ? "ec2-instance",
       sshPublicKey ? null,
@@ -18,9 +23,13 @@ with pkgs.lib;
         name = "metadata";
         buildCommand = ''
           mkdir -p $out/1.0/meta-data
-          ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data
+          ${optionalString (
+            userData != null
+          ) "ln -s ${pkgs.writeText "userData" userData} $out/1.0/user-data"}
+          ${optionalString (userData == null) "touch $out/1.0/user-data"}
           echo "${hostname}" > $out/1.0/meta-data/hostname
           echo "(unknown)" > $out/1.0/meta-data/ami-manifest-path
+          echo "i-1234567890abcdef0" > $out/1.0/meta-data/instance-id
         ''
         + optionalString (sshPublicKey != null) ''
           mkdir -p $out/1.0/meta-data/public-keys/0
@@ -67,7 +76,7 @@ with pkgs.lib;
         start_command = (
             "qemu-kvm -m 1024"
             + " -device virtio-net-pci,netdev=vlan0"
-            + " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd ${metaData}'"
+            + " -netdev 'user,id=vlan0,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${getExe imdsServer} ${metaData}'"
             + f" -drive file={disk_image},if=virtio,werror=report"
             + " $QEMU_OPTS"
         )

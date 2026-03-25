@@ -674,6 +674,17 @@ checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
 checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
 
+## defaults
+checkConfigOutput "\[\]" config.list ./defaults.nix
+checkConfigOutput "{}" config.attrs ./defaults.nix
+checkConfigOutput "{}" config.attrsOf ./defaults.nix
+checkConfigOutput "null" config.null ./defaults.nix
+checkConfigOutput "{}" config.submodule ./defaults.nix
+checkConfigOutput "\[\]" config.unique ./defaults.nix
+checkConfigOutput "\[\]" config.coercedTo ./defaults.nix
+# These types don't have empty values
+checkConfigError 'The option .int. was accessed but has no value defined. Try setting the option.' config.int ./defaults.nix
+
 # types.unique
 #   requires a single definition
 checkConfigError 'The option .examples\.merged. is defined multiple times while it.s expected to be unique' config.examples.merged.a ./types-unique.nix

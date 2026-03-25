@@ -295,7 +295,6 @@ with lib.maintainers;
 
   gcc = {
     members = [
-      synthetica
       vcunat
       ericson2314
     ];
@@ -485,14 +484,7 @@ with lib.maintainers;
   };
 
   lxc = {
-    members = [
-      aanderse
-      adamcstephens
-      megheaiulian
-      mkg20001
-    ];
-    scope = "All things linuxcontainers. Incus, LXC, and related packages.";
-    shortName = "lxc";
+    github = "lxc";
   };
 
   lxqt = {
@@ -717,6 +709,10 @@ with lib.maintainers;
   sdl = {
     github = "sdl";
     enableFeatureFreezePing = true;
+  };
+
+  security-review = {
+    github = "security-review";
   };
 
   stdenv = {

@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Generate a CHANGELOG from git metadata";
     homepage = "https://github.com/conventional-changelog/conventional-changelog";
     license = lib.licenses.isc;
-    maintainers = [ lib.maintainers.pyrox0 ];
+    maintainers = [ ];
     mainProgram = "conventional-changelog";
   };
 })

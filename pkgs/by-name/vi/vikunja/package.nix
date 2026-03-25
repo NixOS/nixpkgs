@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   nodejs_24,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   buildGoModule,
@@ -14,12 +14,12 @@
 }:
 
 let
-  version = "2.1.0";
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-R9PNhH5s3W9c1qHYmV9H5CkBvUtUFU+yzF+eEU2ybdo=";
+    hash = "sha256-QmFuPKbhPX+pgUPmeUglmg2OvqBRpeeA9Xz0l1tscfM=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -35,16 +35,16 @@ let
         src
         sourceRoot
         ;
-      pnpm = pnpm_10;
+      pnpm = pnpm_10_29_2;
       fetcherVersion = 1;
-      hash = "sha256-oY8DXJFFwLBjUno3EithLhmnA8hTksq4xgMSSOGtwuo=";
+      hash = "sha256-j84UVbLIqPz56Djy0vafhAOn9ZFM+kuTcBhfYZBYEDI=";
     };
 
     nativeBuildInputs = [
       nodejs_24
       dart-sass
       pnpmConfigHook
-      pnpm_10
+      pnpm_10_29_2
     ];
 
     doCheck = true;
@@ -97,7 +97,7 @@ buildGoModule {
       mage
     ];
 
-  vendorHash = "sha256-VLy5yybeueVEjb9SijYPQnXoTz7lxBksHTzBxt+TdG4=";
+  vendorHash = "sha256-yRSrsVbIEav+ye7wTehIzEh5/YqfOZpIqx2xFCpTfDo=";
 
   inherit frontend;
 

@@ -4,7 +4,6 @@ import os
 import platform
 import shutil
 import sys
-import urllib.error
 import urllib.parse
 import urllib.request
 
@@ -24,13 +23,14 @@ def abort(message):
     print(message, file=sys.stderr)
     sys.exit(1)
 
-try:
-    API_KEY = os.environ[ENV['apiKeyVar']]
-except KeyError:
+API_KEY = os.environ.get(ENV['apiKeyVar'])
+
+if not API_KEY:
     abort(
-        f'Either set {ENV['apiKeyVar']} for the nix building process '
+        f'Error: Either set the environment variable {ENV['apiKeyVar']} '
+        '(for the nix-daemon in multi user mode) '
         f'or manually download {ENV.get('uploadName', 'the required file')} '
-        f'from {GAME_URL} and add it to nix store.'
+        f'from {GAME_URL} and add it to the nix store.'
     )
 
 def urlopen(url_or_request):

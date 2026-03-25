@@ -45,14 +45,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "scipy";
-  version = "1.17.0";
+  version = "1.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scipy";
     repo = "scipy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bDcM/RGfce/ZTYpTBNpKmX/7rXDqQs7rYkAmeXtzkZk=";
+    hash = "sha256-lFmqdbCf7pcosdZ7RFMv+8H9+ztMJbDS5g5fQs8Nws8=";
     fetchSubmodules = true;
   };
 

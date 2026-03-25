@@ -41,6 +41,7 @@
   rustPlatform,
   snappy,
   stdenv,
+  symlinkJoin,
   systemd,
   zlib,
 
@@ -66,13 +67,13 @@ stdenv.mkDerivation (
   finalAttrs:
   {
     pname = "netdata";
-    version = "2.8.5";
+    version = "2.9.0";
 
     src = fetchFromGitHub {
       owner = "netdata";
       repo = "netdata";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-NO6KE2Gf09Y9Ff6uJQj5XAZ+05WMdvRV2iSBdWTs2CE=";
+      hash = "sha256-QA8YI1cHiPjrTZc9fy81i9YGgGTdE98Eo3xQtVn4/nY=";
       fetchSubmodules = true;
     };
 
@@ -244,10 +245,12 @@ stdenv.mkDerivation (
       (lib.cmakeBool "ENABLE_JEMALLOC" true)
       (lib.cmakeBool "ENABLE_LIBBACKTRACE" withLibbacktrace)
       (lib.cmakeBool "ENABLE_ML" withML)
+      (lib.cmakeBool "ENABLE_NETDATA_JOURNAL_FILE_READER" withSystemdJournal)
       (lib.cmakeBool "ENABLE_PLUGIN_CUPS" withCups)
       (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
       (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
       (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+      (lib.cmakeBool "ENABLE_PLUGIN_OTEL_SIGNAL_VIEWER" withOtel)
       (lib.cmakeBool "ENABLE_PLUGIN_OTEL" withOtel)
       (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
       (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
@@ -305,7 +308,7 @@ stdenv.mkDerivation (
 
           sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-          vendorHash = "sha256-AVNUbKCvO+Z3eKE+bJ/VFDo1tS9DdlmMw6M3OSdHiIU=";
+          vendorHash = "sha256-VBr6VZvTKh2GFtcVSHCVNhzS8gvl4VFTNLtrK81Y92I=";
           proxyVendor = true;
           doCheck = false;
 
@@ -348,11 +351,26 @@ stdenv.mkDerivation (
     };
   }
   // lib.optionalAttrs (withOtel || withSystemdJournal) {
-    cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "${finalAttrs.pname}-nd-jf";
-      inherit (finalAttrs) version src cargoRoot;
-      hash = "sha256-HY6OtKHP75mO9X+F2a6H6e+3M0pgZBOIIaxAI9OhgkQ=";
+    cargoDeps = symlinkJoin {
+      name = "cargo-vendor-dir";
+      paths = [
+        (rustPlatform.fetchCargoVendor {
+          inherit (finalAttrs)
+            pname
+            version
+            src
+            cargoRoot
+            ;
+          hash = "sha256-M9XECeLu58vBTJE4hFkoshc/ze/HF6rBERcjbjAHOJ0=";
+        })
+        (rustPlatform.fetchCargoVendor {
+          pname = "${finalAttrs.pname}-nd-jf";
+          inherit (finalAttrs) version src;
+          cargoRoot = "${finalAttrs.cargoRoot}/jf";
+          hash = "sha256-6spr8WRt2G6tzaUQACxIcVMoDNKOFTg6rSPEOihMgLE=";
+        })
+      ];
     };
-    cargoRoot = "src/crates/jf";
+    cargoRoot = "src/crates";
   }
 )

@@ -26,6 +26,6 @@ buildNpmPackage {
     homepage = "https://github.com/rhysd/fixjson";
     license = lib.licenses.mit;
     mainProgram = "fixjson";
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

@@ -9,14 +9,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "ghmap";
-  version = "2.0.3";
+  version = "2.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sgl-umons";
     repo = "ghmap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UF7Zxrm+thZeAKPiCaI5t4NbDzuUU3oosPsb0Cgv9t0=";
+    hash = "sha256-FXeLSCoZRkHVXDtV/L75mACdU3MvOOSe3Cw6U2+6FfE=";
   };
 
   build-system = [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   removeReferencesTo,
   cppSupport ? true,
@@ -45,6 +46,14 @@ stdenv.mkDerivation rec {
     rev = "hdf5_${version}";
     hash = "sha256-mJTax+VWAL3Amkq3Ij8fxazY2nfpMOTxYMUQlTvY/rg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "reproducible-build.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/hdf5/-/raw/main/hdf5-make-reproducible.patch";
+      hash = "sha256-Z31dCsLjYpqjoGXooOXI81EPjPwyTK8890xCENTh8aM=";
+    })
+  ];
 
   passthru = {
     inherit

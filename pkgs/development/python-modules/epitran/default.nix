@@ -6,7 +6,9 @@
   unittestCheckHook,
 
   setuptools,
+  setuptools-scm,
 
+  jamo,
   regex,
   panphon,
   marisa-trie,
@@ -25,9 +27,13 @@ buildPythonPackage rec {
     hash = "sha256-LKESBSLn2gpXx8kEXmykEkTboIMiS5gZ2Kb9rj1lDTk=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
+    jamo
     regex
     panphon
     marisa-trie

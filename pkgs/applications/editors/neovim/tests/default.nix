@@ -348,12 +348,12 @@ pkgs.lib.recurseIntoAttrs rec {
     configure.packages.foo.start = with vimPlugins; [ deoplete-nvim ];
   };
 
-  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" (makeNeovimConfig {
+  nvimWithLuaPackages = wrapNeovim2 "-with-lua-packages" {
     extraLuaPackages = ps: [ ps.mpack ];
-    customRC = ''
-      lua require("mpack")
+    luaRcContent = ''
+      require("mpack")
     '';
-  });
+  };
 
   nvim_with_lua_packages = runTest nvimWithLuaPackages ''
     ${nvimWithLuaPackages}/bin/nvim -V3log.txt -i NONE --noplugin +quitall! -e
@@ -415,7 +415,7 @@ pkgs.lib.recurseIntoAttrs rec {
   # check that bringing in one plugin with lua deps makes those deps visible from wrapper
   # for instance luasnip has a dependency on jsregexp
   can_require_transitive_deps = runTest nvim-with-luasnip ''
-    ${nvim-with-luasnip}/bin/nvim -i NONE --cmd "lua require'jsregexp'" -e +quitall!
+    ${nvim-with-luasnip}/bin/nvim -i NONE -c "lua require'jsregexp'" -e +quitall!
   '';
 
   inherit nvim_with_rocks_nvim;

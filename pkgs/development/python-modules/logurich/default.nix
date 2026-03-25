@@ -26,6 +26,8 @@ buildPythonPackage (finalAttrs: {
       --replace-fail "uv_build>=0.9.20,<0.10.0" "uv_build"
   '';
 
+  pythonRelaxDeps = [ "rich" ];
+
   build-system = [ uv-build ];
 
   dependencies = [

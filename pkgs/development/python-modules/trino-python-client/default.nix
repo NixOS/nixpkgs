@@ -1,11 +1,12 @@
 {
   lib,
-  buildPythonPackage,
   boto3,
+  buildPythonPackage,
   fetchFromGitHub,
   httpretty,
   keyring,
   lz4,
+  orjson,
   pytestCheckHook,
   python-dateutil,
   pytz,
@@ -35,6 +36,7 @@ buildPythonPackage rec {
 
   dependencies = [
     lz4
+    orjson
     python-dateutil
     pytz
     requests

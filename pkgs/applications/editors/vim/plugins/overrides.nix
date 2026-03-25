@@ -1127,6 +1127,12 @@ assertNoAdditions {
     dependencies = [ self.image-nvim ];
   };
 
+  diffs-nvim = super.diffs-nvim.overrideAttrs {
+    nvimSkipModules = [
+      "minimal_init"
+    ];
+  };
+
   diffview-nvim = super.diffview-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
 
@@ -4362,7 +4368,6 @@ assertNoAdditions {
       homepage = "https://github.com/Valloric/YouCompleteMe";
       license = lib.licenses.gpl3;
       maintainers = with lib.maintainers; [
-        marcweber
         mel
       ];
       platforms = lib.platforms.unix;

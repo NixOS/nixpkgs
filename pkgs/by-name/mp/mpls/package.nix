@@ -7,16 +7,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "mpls";
-  version = "0.17.1";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "mhersson";
     repo = "mpls";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RJadJEIwBdDtZZxPSm12WYVKrIAOc1EvSxLrkhs4sx4=";
+    hash = "sha256-SdCWtz/BmuOBLuwQiif5YnnNctaOQpb6iHqDT6j35ZM=";
   };
 
-  vendorHash = "sha256-QtNQnJtYLmSTTLwKKQ8P6O6wyctgwN8OcGZkMXa+Ark=";
+  vendorHash = "sha256-pi7KBA/313cG0AYWM/mUDng2M9L2tMLkonY4LI5XiW0=";
 
   ldflags = [
     "-s"

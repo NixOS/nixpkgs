@@ -12,6 +12,7 @@
   cgal_5,
   curl,
   dbus,
+  draco,
   eigen,
   expat,
   ffmpeg,
@@ -41,6 +42,7 @@
   libx11,
   libnoise,
   withSystemd ? stdenv.hostPlatform.isLinux,
+  withNvidiaGLWorkaround ? false,
 }:
 let
   wxGTK' =
@@ -48,23 +50,26 @@ let
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
+      withEGL = false;
     }).overrideAttrs
       (old: {
+        buildInputs = old.buildInputs ++ [ libsecret ];
         configureFlags = old.configureFlags ++ [
           # Disable noisy debug dialogs
           "--enable-debug=no"
+          "--enable-secretstore"
         ];
       });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "SoftFever";
     repo = "OrcaSlicer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RdMBx/onLq58oI1sL0cHmF2SGDfeI9KkPPCbjyMqECI=";
+    hash = "sha256-c1WTODLrXGtyJWkEueOz5jHhPbA/JFcMeAwhpvoKnKo=";
   };
 
   nativeBuildInputs = [
@@ -90,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     cgal_5
     curl
     dbus
+    draco
     eigen
     expat
     ffmpeg
@@ -196,13 +202,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGL_SILENCE_DEPRECATION")
     (lib.cmakeFeature "CMAKE_EXE_LINKER_FLAGS" "-Wl,--no-as-needed")
     (lib.cmakeBool "ORCA_VERSION_CHECK_DEFAULT" false)
-    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include/noise")
-    (lib.cmakeFeature "LIBNOISE_LIBRARY" "${libnoise}/lib/libnoise-static.a")
+    (lib.cmakeFeature "LIBNOISE_INCLUDE_DIR" "${libnoise}/include")
+    (lib.cmakeFeature "LIBNOISE_LIBRARY_RELEASE" "${libnoise}/lib/libnoise-static.a")
     "-Wno-dev"
-
-    # cmake 4 compatibility, remove in next update
-    # see: https://github.com/SoftFever/OrcaSlicer/commit/883607e1d4a0b2bb719f2f4bcd9fd72f8c2174fa
-    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.13")
   ];
 
   # Generate translation files
@@ -216,6 +218,13 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
       --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      ${lib.optionalString withNvidiaGLWorkaround ''
+        --set __GLX_VENDOR_LIBRARY_NAME mesa
+        --set __EGL_VENDOR_LIBRARY_FILENAMES /run/opengl-driver/share/glvnd/egl_vendor.d/50_mesa.json
+        --set MESA_LOADER_DRIVER_OVERRIDE zink
+        --set GALLIUM_DRIVER zink
+        --set WEBKIT_DISABLE_DMABUF_RENDERER 1
+      ''}
     )
   '';
 

@@ -12,7 +12,7 @@ buildPythonPackage {
   pyproject = true;
 
   postPatch = ''
-    substituteInPlace ../mitmproxy-rs-*-vendor/aya-build-*/src/lib.rs \
+    substituteInPlace ../mitmproxy-rs-*-vendor/*/aya-build-*/src/lib.rs \
       --replace-fail '"+nightly",' "" \
       --replace-fail '"-Z",' "" \
       --replace-fail '"build-std=core",' ""

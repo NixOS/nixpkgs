@@ -6,21 +6,27 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "overturemaps";
-  version = "0.17.0";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s8/yV3eneSsQgK8vJqhEBoidgLurz84XgS7qiuLWOEQ=";
+    hash = "sha256-y91x+S6YKBldy7OWIXCJQ5HuR3KrFRdfBkfMmkaeXy8=";
   };
 
-  build-system = with python3Packages; [ poetry-core ];
+  nativeBuildInputs = with python3Packages; [
+    hatchling
+  ];
 
   dependencies = with python3Packages; [
     click
+    geopandas
+    numpy
     pyarrow
     shapely
   ];
+
+  pythonImportsCheck = [ "overturemaps" ];
 
   meta = {
     description = "Official command-line tool of the Overture Maps Foundation";

@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
   # Drop when Lightway bumps wolfSSL past commit 5c2c459, or > 5.8.4.
   postPatch = ''
     patch -Np1 \
-      -d $cargoDepsCopy/wolfssl-sys-2.0.0/wolfssl-src \
+      -d $cargoDepsCopy/*/wolfssl-sys-2.0.0/wolfssl-src \
       -i ${./backport-darwin-address-calc-fix.patch}
   '';
 

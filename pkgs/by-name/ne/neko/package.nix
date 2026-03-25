@@ -82,7 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
       lib.licenses.boehmGC # boehm gc
     ];
     maintainers = with lib.maintainers; [
-      marcweber
       locallycompact
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

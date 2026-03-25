@@ -65,9 +65,6 @@ let
     }
   );
 
-  # We must escape interfaces due to the systemd interpretation
-  subsystemDevice = interface: "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
-
   addrOpts =
     v:
     assert v == 4 || v == 6;
@@ -1062,6 +1059,54 @@ in
               type = types.nullOr types.str;
               example = "vepa";
               description = "The mode of the macvlan device.";
+            };
+
+          };
+
+        });
+    };
+
+    networking.ipvlans = mkOption {
+      default = { };
+      example = literalExpression ''
+        {
+          wan = {
+            interface = "enp2s0";
+            mode = "l2";
+            flags = "vepa";
+          };
+        }
+      '';
+      description = ''
+        This option allows you to define ipvlan interfaces which should
+        be automatically created.
+      '';
+      type =
+        with types;
+        attrsOf (submodule {
+          options = {
+
+            interface = mkOption {
+              example = "enp4s0";
+              type = types.str;
+              description = "The interface the ipvlan will transmit packets through.";
+            };
+
+            mode = mkOption {
+              default = "l2";
+              type = types.enum [
+                "l2"
+                "l3"
+                "l3s"
+              ];
+              description = "The mode of the interface.";
+            };
+
+            flags = mkOption {
+              default = null;
+              type = types.nullOr types.str;
+              example = "vepa";
+              description = "The flags of the ipvlan device.";
             };
 
           };

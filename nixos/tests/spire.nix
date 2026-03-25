@@ -59,7 +59,7 @@ in
   };
 
   testScript =
-    { nodes }:
+    { nodes, ... }:
     let
       adminSocket = nodes.server.services.spire.server.settings.server.socket_path;
       workloadSocket = nodes.agent.services.spire.agent.settings.agent.socket_path;

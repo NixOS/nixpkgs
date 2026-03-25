@@ -189,6 +189,29 @@ buildRedist (finalAttrs: {
           --replace-fail \
             "rsqrtf(float x);" \
             "rsqrtf(float x) noexcept (true);"
+
+        # math_functions.hpp has the same functions wrapped in __func__() macros.
+        # These also need throw() annotations to match glibc 2.42's declarations.
+        nixLog "Patching math_functions.hpp signatures to match glibc's ones"
+        substituteInPlace "''${!outputInclude:?}/include/crt/math_functions.hpp" \
+          --replace-fail \
+            "__func__(double rsqrt(const double a))" \
+            "__func__(double rsqrt(const double a) throw())" \
+          --replace-fail \
+            "__func__(double sinpi(double a))" \
+            "__func__(double sinpi(double a) throw())" \
+          --replace-fail \
+            "__func__(double cospi(double a))" \
+            "__func__(double cospi(double a) throw())" \
+          --replace-fail \
+            "__func__(float rsqrtf(const float a))" \
+            "__func__(float rsqrtf(const float a) throw())" \
+          --replace-fail \
+            "__func__(float sinpif(const float a))" \
+            "__func__(float sinpif(const float a) throw())" \
+          --replace-fail \
+            "__func__(float cospif(const float a))" \
+            "__func__(float cospif(const float a) throw())"
       ''
     );
 

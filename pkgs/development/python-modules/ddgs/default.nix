@@ -1,53 +1,44 @@
 {
-  lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  setuptools,
   click,
+  fastapi,
+  fetchFromGitHub,
+  lib,
   lxml,
-  httpx,
-  h2,
-  fake-useragent,
+  mcp,
+  primp,
+  setuptools,
+  uvicorn,
   versionCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ddgs";
-  version = "9.10.0";
+  version = "9.11.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
-    tag = "v${version}";
-    hash = "sha256-NNXGvDGynu6QtVqxVr74b/qehQ7qhq1NiVxyuKw2C4w=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+UefNpWKq1Rcm90M+hQavEORYZF4FWC1FzH7TfAH6WA=";
   };
-
-  patches = [
-    # We're removing the HTTP client primp below for security reasons,
-    # but can use the already included httpx instead.
-    # Note that while httpx is only used for HTTP/2 by upstream,
-    # it can handle HTTP/1.1 just fine as well.
-    ./replace-primp.patch
-  ];
-
-  pythonRemoveDeps = [
-    # primp requires a very outdated, potentially insecure version of boringssl
-    "primp"
-  ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
     lxml
-    httpx
-    h2
-    fake-useragent
-  ]
-  ++ httpx.optional-dependencies.http2
-  ++ httpx.optional-dependencies.socks
-  ++ httpx.optional-dependencies.brotli;
+    primp
+  ];
+
+  optional-dependencies = {
+    api = [
+      fastapi
+      mcp
+      uvicorn
+    ];
+  };
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
@@ -55,11 +46,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ddgs" ];
 
   meta = {
-    description = "D.D.G.S. | Dux Distributed Global Search. A metasearch library that aggregates results from diverse web search services";
+    description = "A metasearch library that aggregates results from diverse web search services";
     mainProgram = "ddgs";
     homepage = "https://github.com/deedy5/ddgs";
-    changelog = "https://github.com/deedy5/ddgs/releases/tag/${src.tag}";
+    changelog = "https://github.com/deedy5/ddgs/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ drawbu ];
   };
-}
+})

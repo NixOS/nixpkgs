@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Knio/pynmea2";
     changelog = "https://github.com/Knio/pynmea2/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

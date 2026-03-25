@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   # NEWS needs to exist or else the build fails
   postPatch = ''
     touch NEWS
+    substituteInPlace utils/captest.c \
+      --replace-fail /usr/bin/captest ${placeholder "out"}/bin/captest
   '';
 
   strictDeps = true;
@@ -63,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ grimmauld ];
+    teams = [ lib.teams.security-review ];
     identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap-ng_project" finalAttrs.version;
   };
 })

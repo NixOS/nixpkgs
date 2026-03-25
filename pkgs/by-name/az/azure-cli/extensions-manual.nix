@@ -272,6 +272,10 @@
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/rdbms_connect-${version}-py2.py3-none-any.whl";
     hash = "sha256-66mX1K1azQvbuApyKBwvVuiKCbLaqezCDdrv0lhvVD0=";
     description = "Support for testing connection to Azure Database for MySQL & PostgreSQL servers";
+    pythonRelaxDeps = [
+      "mycli"
+      "pgcli"
+    ];
     propagatedBuildInputs =
       (with python3Packages; [
         pgcli
@@ -336,9 +340,9 @@
 
   vm-repair = mkAzExtension rec {
     pname = "vm-repair";
-    version = "2.1.3";
+    version = "2.2.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/vm_repair-${version}-py2.py3-none-any.whl";
-    hash = "sha256-atqfMIN0FjLZjSIRh+T9MBxt34y6VWpxexCEBFsPTaM=";
+    hash = "sha256-ppsK4rJa/nFFkO2XJvjnK0PIRp9/haVwWfqfF7oN5WQ=";
     description = "Support for repairing Azure Virtual Machines";
     propagatedBuildInputs = with python3Packages; [ opencensus ];
     meta.maintainers = [ ];

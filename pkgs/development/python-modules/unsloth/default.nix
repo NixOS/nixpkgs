@@ -51,16 +51,16 @@ let
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "unsloth";
-  version = "2026.1.3";
+  version = "2026.3.8";
   pyproject = true;
 
   # Tags on the GitHub repo don't match
   src = fetchPypi {
     pname = "unsloth";
-    inherit version;
-    hash = "sha256-Vq47dKdOyRm+sQmGkfEQ8vM1A1Xq7NwqyE2NGhgyK/s=";
+    inherit (finalAttrs) version;
+    hash = "sha256-2HXsaYhsMxNEm6ctKDZDrA9MY/fUKhAo0EPYC5RwBNc=";
   };
 
   build-system = [
@@ -140,8 +140,8 @@ buildPythonPackage rec {
   meta = {
     description = "Finetune Llama 3.3, DeepSeek-R1 & Reasoning LLMs 2x faster with 70% less memory";
     homepage = "https://github.com/unslothai/unsloth";
-    changelog = "https://github.com/unslothai/unsloth/releases/tag/${version}";
+    changelog = "https://github.com/unslothai/unsloth/releases/tag/${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ hoh ];
   };
-}
+})

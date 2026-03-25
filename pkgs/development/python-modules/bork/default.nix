@@ -8,9 +8,12 @@
   setuptools,
   build,
   coloredlogs,
+  homf,
   packaging,
   pip,
+  pydantic,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -38,8 +41,10 @@ buildPythonPackage rec {
   dependencies = [
     build
     coloredlogs
+    homf
     packaging
     pip
+    pydantic
     urllib3
   ];
 
@@ -49,13 +54,18 @@ buildPythonPackage rec {
     "bork.cli"
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # tries to call python -m bork
     "test_repo"
+    # Attempt to install packages via pip
+    "test_builder_cwd"
+    "test_builder_order"
   ];
 
   passthru.tests = callPackage ./tests.nix { };

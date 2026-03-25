@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.99.5";
 
   src = fetchurl {
-    url = "http://mirrors.ibiblio.org/pub/mirrors/ggzgamingzone/ggz/snapshots/ggz-base-libs-snapshot-${finalAttrs.version}.tar.gz";
+    url = "https://mirrors.ibiblio.org/pub/mirrors/ggzgamingzone/ggz/snapshots/ggz-base-libs-snapshot-${finalAttrs.version}.tar.gz";
     sha256 = "1cw1vg0fbj36zyggnzidx9cbjwfc1yr4zqmsipxnvns7xa2awbdk";
   };
 

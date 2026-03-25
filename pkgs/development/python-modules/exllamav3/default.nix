@@ -27,14 +27,14 @@ let
 in
 buildPythonPackage (finalAttrs: {
   pname = "exllamav3";
-  version = "0.0.23";
+  version = "0.0.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "turboderp-org";
     repo = "exllamav3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wAT+zntPxjIjrXaa2ZJpjImRt1V8vFqWfSNjgZYGGJk=";
+    hash = "sha256-CltM0bQ3mvQwUYulsVByS7mcIIy6O/P1+nq4h5UAO6E=";
   };
 
   pythonRelaxDeps = [

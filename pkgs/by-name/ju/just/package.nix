@@ -17,7 +17,7 @@
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 let
-  version = "1.46.0";
+  version = "1.48.0";
 in
 rustPlatform.buildRustPackage {
   inherit version;
@@ -34,10 +34,10 @@ rustPlatform.buildRustPackage {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-NE54LKS2bYBfQL+yLJPaG4iF7EiJfDqBfnsrlPo1+OE=";
+    hash = "sha256-U/o9MyT/DMybfV/LHi50KL7sh6ZqJ6rvqAY5pzlJAA8=";
   };
 
-  cargoHash = "sha256-yyaJAWp6luizA/aQuUGhdxRX2Ofri4CeLIO3/ndSCzc=";
+  cargoHash = "sha256-1cSk7dGuh5ZX4XrYgOvqM89e54o8yrr13VpTtdFbtEA=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -65,10 +65,6 @@ rustPlatform.buildRustPackage {
     export PATH=${bashInteractive}/bin:$PATH
     patchShebangs tests
   '';
-
-  patches = [
-    ./fix-just-path-in-tests.patch
-  ];
 
   cargoBuildFlags = [
     "--package=just"

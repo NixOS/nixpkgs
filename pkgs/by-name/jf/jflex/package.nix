@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   version = "1.9.1";
 
   src = fetchurl {
-    url = "http://jflex.de/release/jflex-${version}.tar.gz";
+    url = "https://jflex.de/release/jflex-${version}.tar.gz";
     sha256 = "sha256-4MHp7vkf9t8E1z+l6v8T86ArZ5/uFHTlzK4AciTfbfY=";
   };
 

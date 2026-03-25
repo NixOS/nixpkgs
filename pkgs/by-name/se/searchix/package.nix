@@ -19,17 +19,24 @@ in
 
 buildGoModule (finalAttrs: {
   pname = "searchix";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "alinnow";
     repo = "searchix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-R8/iR8QoeUwNQCFkr+JtoPq/iKkJRIe8dsbvGfFqinE=";
+    hash = "sha256-2pffyKBX+ICYEN+42gwN2byjw+T9H4esi2+oTqs52GE=";
   };
 
   vendorHash = "sha256-yfcQgy4cQFRvtsyLHLojnJaWhle1ZR3unmaFQj8ljuw=";
+
+  overrideModAttrs = old: {
+    # netdb.go allows /etc/protocols and /etc/services to not exist and happily proceeds, but it panic()s if they exist but return permission denied.
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   subPackages = [ "cmd/searchix-web" ];
 
@@ -45,7 +52,7 @@ buildGoModule (finalAttrs: {
     cp ${simpleCss}/simple.css frontend/static/base.css
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postInstall = ''
     $out/bin/searchix-web generate-error-page --outdir $out/share/searchix/
   '';
 

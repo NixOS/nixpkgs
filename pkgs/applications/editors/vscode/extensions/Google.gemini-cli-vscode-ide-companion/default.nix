@@ -1,6 +1,7 @@
 {
   lib,
   vscode-utils,
+  vsce,
   gemini-cli,
 }:
 vscode-utils.buildVscodeExtension (finalAttrs: {
@@ -18,7 +19,12 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
     installPhase = ''
       runHook preInstall
 
-      npm --workspace=gemini-cli-vscode-ide-companion run package -- --out $out
+      npm --workspace=gemini-cli-vscode-ide-companion run prepackage
+
+      # the bundled vsce is broken, using our packaged version
+      pushd packages/vscode-ide-companion
+      ${vsce}/bin/vsce package --no-dependencies --out $out
+      popd
 
       runHook postInstall
     '';

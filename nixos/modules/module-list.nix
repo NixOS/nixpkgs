@@ -365,6 +365,8 @@
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/xppen.nix
+  ./programs/xscreensaver/sonar.nix
+  ./programs/xscreensaver/xscreensaver.nix
   ./programs/xss-lock.nix
   ./programs/xwayland.nix
   ./programs/yazi.nix
@@ -609,6 +611,7 @@
   ./services/development/lorri.nix
   ./services/development/nixseparatedebuginfod2.nix
   ./services/development/rstudio-server/default.nix
+  ./services/development/turborepo-remote-cache.nix
   ./services/development/vsmartcard-vpcd.nix
   ./services/development/zammad.nix
   ./services/display-managers/cosmic-greeter.nix
@@ -973,6 +976,7 @@
   ./services/misc/taskchampion-sync-server.nix
   ./services/misc/taskserver
   ./services/misc/tautulli.nix
+  ./services/misc/tdarr
   ./services/misc/tee-supplicant
   ./services/misc/tiddlywiki.nix
   ./services/misc/tp-auto-kbbl.nix
@@ -1118,6 +1122,7 @@
   ./services/networking/atalkd.nix
   ./services/networking/atftpd.nix
   ./services/networking/atticd.nix
+  ./services/networking/autossh-ng.nix
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/ax25/axlisten.nix
@@ -1325,7 +1330,6 @@
   ./services/networking/oink.nix
   ./services/networking/onedrive.nix
   ./services/networking/openconnect.nix
-  ./services/networking/opengfw.nix
   ./services/networking/openvpn.nix
   ./services/networking/opkssh/opkssh.nix
   ./services/networking/ostinato.nix
@@ -1647,6 +1651,7 @@
   ./services/web-apps/goatcounter.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/gotosocial.nix
+  ./services/web-apps/goupile.nix
   ./services/web-apps/grav.nix
   ./services/web-apps/grocy.nix
   ./services/web-apps/guacamole-client.nix
@@ -1768,6 +1773,7 @@
   ./services/web-apps/strfry.nix
   ./services/web-apps/suwayomi-server.nix
   ./services/web-apps/szurubooru.nix
+  ./services/web-apps/tabbyapi.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/tuliprox.nix
@@ -1775,6 +1781,7 @@
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
   ./services/web-apps/weblate.nix
+  ./services/web-apps/websurfx.nix
   ./services/web-apps/whitebophir.nix
   ./services/web-apps/whoami.nix
   ./services/web-apps/wiki-js.nix

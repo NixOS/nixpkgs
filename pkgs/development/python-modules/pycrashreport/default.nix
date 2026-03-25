@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pycrashreport";
-  version = "1.2.7";
+  version = "1.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "doronz88";
     repo = "pycrashreport";
     tag = "v${version}";
-    hash = "sha256-QhHjQO/swoFYKlHaqpaU1qIGwHIK5Eq3ZHrFJEHZbWs=";
+    hash = "sha256-CjFMixbnRlCT2tnBgpYjnOXg+SJgUtzsVNazPtNyfYQ=";
   };
 
   build-system = [

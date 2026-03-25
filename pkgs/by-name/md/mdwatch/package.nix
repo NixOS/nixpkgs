@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdwatch";
-  version = "0.1.18";
+  version = "0.1.22";
 
   src = fetchFromGitHub {
-    owner = "santoshxshrestha";
+    owner = "vimlinuz";
     repo = "mdwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XXDBDyX4XrGVC0cgkPNXyR1qULqJPA/azZbTyKU+m8k=";
+    hash = "sha256-aAa9Y1aKfZVnUyNkEUM7FJKEvQsX9BUqGlTb9zhZzTk=";
   };
 
-  cargoHash = "sha256-rjo7TcKJ0TwLANQ822SIAubJnT6fZFDPV2GOc5MRHn4=";
+  cargoHash = "sha256-boa/Y0PfINniA3WNS6DailBcHZ2K6yhxjOE0Eanevc8=";
 
   updateScript = nix-update-script { };
 
@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Simple CLI tool to live-preview Markdown files in your browser";
-    homepage = "https://github.com/santoshxshrestha/mdwatch";
-    changelog = "https://github.com/santoshxshrestha/mdwatch/releases/tag/${finalAttrs.src.tag}";
+    homepage = "https://github.com/vimlinuz/mdwatch";
+    changelog = "https://github.com/vimlinuz/mdwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "mdwatch";

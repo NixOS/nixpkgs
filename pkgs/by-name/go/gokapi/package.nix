@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gokapi";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "Forceu";
     repo = "Gokapi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v4MgpnKFrxDUOerc7+3N6PjhlZZgGcOHOGwbZi6zpds=";
+    hash = "sha256-N9rV8/IJy4eMwdXXh+7z3raPcalSFUWP7EwN84tfbk8=";
   };
 
   vendorHash = "sha256-oZyZD4kPqgSIaphXRyXVzY+8gYd7kpWAAo1cfiE1ln8=";

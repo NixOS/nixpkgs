@@ -40,11 +40,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "9.4.0";
+  version = "9.5.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-3anPEeVB5C7RuS5ZCFMvow5WhkIopgCpxpmcstsIgX4=";
+    hash = "sha256-NDz3SxR8GyJi/POdpgEJzRdYNVV88/NkHczrA0JylfM=";
   };
 
   patches =
@@ -135,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
         pykakasi
         pyqt-builder
         pyqt6
+        pystache
         python
         regex
         sip
@@ -295,7 +296,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
     license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ pSub ];
+    maintainers = with lib.maintainers; [
+      pSub
+      sempiternal-aurora
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

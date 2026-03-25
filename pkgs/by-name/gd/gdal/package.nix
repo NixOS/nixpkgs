@@ -83,13 +83,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
-  version = "3.12.2";
+  version = "3.12.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-W9MSZP+qmG7r2SzjOXbeYebY5vx8z8cpySv/sGyj42Y=";
+    hash = "sha256-tGyZB0e2DNyi3OpiOb1Mk8R8SdQRwhxCy8fOQrauVso=";
   };
 
   nativeBuildInputs = [
@@ -318,7 +318,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gdal.org/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      marcweber
       dotlambda
     ];
     teams = [ lib.teams.geospatial ];

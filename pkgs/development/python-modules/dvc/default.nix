@@ -64,14 +64,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "dvc";
-  version = "3.66.1";
+  version = "3.67.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iterative";
     repo = "dvc";
     tag = finalAttrs.version;
-    hash = "sha256-IvO5JEM3P0ggmufrBFv7fUBwoKzNIgWMUnOo31rYJRk=";
+    hash = "sha256-JNwlZFDW/qRkGuGiXnqmp+Dfp1hod9ZfMwMJgWJ8X00=";
   };
 
   pythonRelaxDeps = [

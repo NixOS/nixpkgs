@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
   typing-extensions,
+  uv-build,
 }:
 
 buildPythonPackage rec {
@@ -17,9 +17,14 @@ buildPythonPackage rec {
     hash = "sha256-yT+80LBKnpwvVdVUCspKoepMwGqHDAyN7lBi/dWWY/4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.18,<0.10.0" "uv_build"
+  '';
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ uv-build ];
+
+  dependencies = [ typing-extensions ];
 
   doCheck = false;
 

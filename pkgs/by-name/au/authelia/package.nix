@@ -6,7 +6,7 @@
   pnpmConfigHook,
   pnpm,
   fetchFromGitHub,
-  buildGo124Module,
+  buildGo125Module,
   installShellFiles,
   callPackage,
   nixosTests,
@@ -22,7 +22,7 @@
 }:
 
 let
-  buildGoModule = buildGo124Module;
+  buildGoModule = buildGo125Module;
 
   inherit (import ./sources.nix { inherit fetchFromGitHub; })
     pname

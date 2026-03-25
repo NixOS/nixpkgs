@@ -123,9 +123,7 @@ let
   # - values: lists of `packagePlatformPath`s
   diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
 
-  changedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.changed;
   rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
-  removedPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.removed;
 
   changed-paths =
     let
@@ -160,11 +158,14 @@ let
       }
     );
 
+  getMaintainers = callPackage ./maintainers.nix { };
+
   inherit
-    (callPackage ./maintainers.nix {
-      changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
-      changedpathsjson = touchedFilesJson;
-      removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
+    (getMaintainers {
+      affectedAttrPaths = map (a: a.packagePath) (
+        convertToPackagePlatformAttrs (diffAttrs.changed ++ diffAttrs.removed)
+      );
+      changedFiles = lib.importJSON touchedFilesJson;
     })
     users
     teams
@@ -181,7 +182,7 @@ runCommand "compare"
     ];
     users = builtins.toJSON users;
     teams = builtins.toJSON teams;
-    packages = builtins.toJSON packages;
+    packages = builtins.toJSON (lib.map (lib.concatStringsSep ".") packages);
     passAsFile = [
       "users"
       "teams"

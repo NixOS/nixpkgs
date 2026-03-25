@@ -36,14 +36,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "py3dtiles";
-  version = "12.1.0";
+  version = "12.1.1";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "py3dtiles";
     repo = "py3dtiles";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qzTbpUkfrETAcCUk6mqJexA+6oIQrZjUIZJOubaHxCg=";
+    hash = "sha256-5zKp32Rn+bwUKVPb1XJxenHzRz0V7cgNmRwjWDYyKnI=";
   };
 
   build-system = [

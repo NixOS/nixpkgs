@@ -37,7 +37,10 @@ buildPythonPackage (finalAttrs: {
 
   build-system = [ setuptools ];
 
-  pythonRelaxDeps = [ "packaging" ];
+  pythonRelaxDeps = [
+    "packaging"
+    "protobuf"
+  ];
 
   dependencies = [
     altair

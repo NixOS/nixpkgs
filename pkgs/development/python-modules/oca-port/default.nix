@@ -4,6 +4,7 @@
   fetchFromGitHub,
   gitpython,
   giturlparse,
+  git-filter-repo,
   lib,
   nix-update-script,
   requests,
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     giturlparse
     gitpython
     requests
+    git-filter-repo
   ];
 
   passthru.updateScript = nix-update-script { };

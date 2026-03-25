@@ -136,31 +136,29 @@ in
 
   };
 
-  testScript =
-    { nodes }:
-    ''
-      start_all()
-      machine.wait_for_unit("maddy.service")
-      machine.wait_for_open_port(143)
-      machine.wait_for_open_port(993)
-      machine.wait_for_open_port(587)
-      machine.wait_for_open_port(465)
+  testScript = ''
+    start_all()
+    machine.wait_for_unit("maddy.service")
+    machine.wait_for_open_port(143)
+    machine.wait_for_open_port(993)
+    machine.wait_for_open_port(587)
+    machine.wait_for_open_port(465)
 
-      # Send test mail to spam@domain
-      machine.succeed("send-testmail")
+    # Send test mail to spam@domain
+    machine.succeed("send-testmail")
 
-      # Create mail directories required for rspamd-trainer and copy mail from
-      # INBOX into INBOX/report_ham
-      machine.succeed("create-mail-dirs")
+    # Create mail directories required for rspamd-trainer and copy mail from
+    # INBOX into INBOX/report_ham
+    machine.succeed("create-mail-dirs")
 
-      # Start rspamd-trainer. It should read mail from INBOX/report_ham
-      machine.wait_for_unit("rspamd.service")
-      machine.wait_for_unit("redis-rspamd.service")
-      machine.wait_for_file("/run/rspamd/rspamd.sock")
-      machine.succeed("systemctl start rspamd-trainer.service")
+    # Start rspamd-trainer. It should read mail from INBOX/report_ham
+    machine.wait_for_unit("rspamd.service")
+    machine.wait_for_unit("redis-rspamd.service")
+    machine.wait_for_file("/run/rspamd/rspamd.sock")
+    machine.succeed("systemctl start rspamd-trainer.service")
 
-      # Check if mail got processed by rspamd-trainer successfully and check for
-      # it in INBOX/learned_ham
-      machine.succeed("test-imap")
-    '';
+    # Check if mail got processed by rspamd-trainer successfully and check for
+    # it in INBOX/learned_ham
+    machine.succeed("test-imap")
+  '';
 }

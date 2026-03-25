@@ -667,6 +667,8 @@ in
 
         "systemd/system-environment-generators/env-generator".source =
           "${config.system.nixos-init.package}/bin/env-generator";
+
+        "sysctl.d/50-default.conf".source = "${cfg.package}/example/sysctl.d/50-default.conf";
       };
 
     services.dbus.enable = true;
@@ -851,6 +853,16 @@ in
         minsize = "1M";
       };
     };
+
+    # Remove with systemd 259.4
+    security.polkit.extraConfig = mkIf config.security.polkit.enable ''
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.machine1.register-machine" &&
+              subject.user != "root") {
+              return polkit.Result.AUTH_ADMIN_KEEP;
+          }
+      });
+    '';
 
     # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
     # part, run0 would fail to run the command even if authentication is successful and the user has

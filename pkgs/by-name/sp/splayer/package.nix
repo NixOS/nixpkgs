@@ -2,11 +2,11 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_10,
+  pnpm_10_29_2,
   fetchPnpmDeps,
   pnpmConfigHook,
   nodejs,
-  electron,
+  electron_39,
   rustPlatform,
   cargo,
   rustc,
@@ -19,6 +19,10 @@
   nix-update-script,
   removeReferencesTo,
 }:
+let
+  electron = electron_39;
+  pnpm = pnpm_10_29_2;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "splayer";
   version = "3.0.0";
@@ -37,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       ;
-    pnpm = pnpm_10;
+    inherit pnpm;
     fetcherVersion = 2;
     hash = "sha256-PTfZopse+9RS7qh0miLu3duYlWDfifZS254tZKqgxKk=";
   };
@@ -53,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pnpmConfigHook
-    pnpm_10
+    pnpm
     nodejs
     rustPlatform.cargoSetupHook
     cargo

@@ -100,6 +100,9 @@ let
       (lib.getOutput "static" cudaPackages.cuda_cudart)
       (lib.getBin (cudaPackages.cuda_nvcc.__spliced.buildHost or cudaPackages.cuda_nvcc))
     ];
+
+    # cuda_ccl and cuda_cudart both have a LICENSE file in their output
+    ignoreCollisions = true;
   };
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
@@ -137,13 +140,13 @@ let
 in
 goBuild (finalAttrs: {
   pname = "ollama";
-  version = "0.17.7";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cAqc38NHvUo5gphq1csTyosTcpUjFcs0dzB0wreEGjs=";
+    hash = "sha256-BDCYczTZO6LKwD8+LY625pZwvJVMYUE0VwVG5pVYfGk=";
   };
 
   vendorHash = "sha256-Lc1Ktdqtv2VhJQssk8K1UOimeEjVNvDWePE9WkamCos=";

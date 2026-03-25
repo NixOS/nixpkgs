@@ -34,7 +34,7 @@
   gvfs,
   libheif,
   glib-networking,
-  nodejs_20,
+  nodejs_24,
   npmHooks,
   cargo-tauri,
   writableTmpDirAsHomeHook,
@@ -42,13 +42,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rapidraw";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "CyberTimon";
     repo = "RapidRAW";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PzPw7TJQK6ojsdw8cypS/drtc/ec93IYGIjTEdpIraI=";
+    hash = "sha256-C6U3xU/rL+Og6DgJTnPESf+LPlm+svTNS5bSGhrn7dQ=";
     fetchSubmodules = true;
 
     # darwin/linux hash mismatch in rawler submodule
@@ -62,21 +62,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
-    hash = "sha256-4PbNSM4BIMOpmPcys/Vt5gzy/Pu9L6rPcG0lGnTDvGo=";
+    hash = "sha256-YpM/EQ4eFqziwEpSXpBNEO8A5fCmjVtCrgr11YxLKxY=";
   };
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     wrapGAppsHook4
-    nodejs_20
+    nodejs_24
     npmHooks.npmConfigHook
     cargo-tauri.hook
     writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
-    nodejs_20
+    nodejs_24
     glib-networking
     openssl
     gtk3
@@ -136,22 +136,32 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ORT_STRATEGY = "system";
   };
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # Patch the .desktop file to set the Categories field
-    sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Patch the .desktop file to set the Categories field
+      sed -i '/^Categories=/c\Categories=Graphics;Photography' "$out/share/applications/RapidRAW.desktop"
 
-    # Ensure the resources directory exists before linking
-    mkdir -p $out/lib/RapidRAW/resources
+      # Ensure the resources directory exists before linking
+      mkdir -p $out/lib/RapidRAW/resources
 
-    # link the .so file
-    ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
-  '';
+      # link the .so file
+      ln -sf ${onnxruntime}/lib/libonnxruntime.so $out/lib/RapidRAW/resources/libonnxruntime.so
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Add rpath for onnxruntime so the binary can find libonnxruntime.dylib at runtime
+      install_name_tool -add_rpath "${onnxruntime}/lib" "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw"
+    '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapGApp $out/bin/rapidraw \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
-      --set ORT_STRATEGY "system"
-  '';
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapGApp $out/bin/rapidraw \
+        --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.buildInputs} \
+        --set ORT_STRATEGY "system"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapGApp "$out/Applications/RapidRAW.app/Contents/MacOS/rapidraw" \
+        --set ORT_STRATEGY "system"
+    '';
 
   meta = {
     description = "Blazingly-fast, non-destructive, and GPU-accelerated RAW image editor built with performance in mind";

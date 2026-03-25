@@ -18,19 +18,21 @@
   ninja,
   check,
   bash,
+  gawk,
+  inotify-tools,
   buildPackages,
   nix-update-script,
   nixosTests,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "kmscon";
-  version = "9.3.1";
+  version = "9.3.2";
 
   src = fetchFromGitHub {
     owner = "kmscon";
     repo = "kmscon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pH+dBcUKXrVh9/y6mNWmYBx6HVbuSZX/F2sCG/Yj5UQ=";
+    hash = "sha256-a1H9/j92Z/vjvFp226Ps9PFy5dAS8yg+RErgJWIb9HQ=";
   };
 
   strictDeps = true;
@@ -59,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xsl
     pkg-config
     libxslt # xsltproc
+    docbook_xml_dtd_42
   ];
 
   outputs = [
@@ -70,12 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./sandbox.patch # Generate system units where they should be (nix store) instead of /etc/systemd/system
   ];
 
-  postPatch = ''
-    for i in ./docs/man/*.in; do
-      substituteInPlace "''${i}" \
-        --replace-fail "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd" \
-                       "${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd"
-    done
+  postFixup = ''
+    substituteInPlace $out/bin/kmscon \
+      --replace-fail "awk" "${lib.getExe gawk}"
+    substituteInPlace $out/bin/kmscon-launch-gui \
+      --replace-fail "inotifywait" "${lib.getExe' inotify-tools "inotifywait"}"
   '';
 
   passthru = {

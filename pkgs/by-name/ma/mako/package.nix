@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
-      synthetica
     ];
     platforms = lib.platforms.linux;
     mainProgram = "mako";

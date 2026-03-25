@@ -22,6 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/ARDOPC";
 
+  postPatch = ''
+    substituteInPlace pktSession.c \
+      --replace-fail 'VOID L2SENDCOMMAND();' 'VOID L2SENDCOMMAND(struct _LINKTABLE * LINK, int CMD);' \
+      --replace-fail 'VOID CONNECTFAILED();' 'VOID CONNECTFAILED(struct _LINKTABLE * LINK);'
+    substituteInPlace ARDOPC.h \
+      --replace-fail 'BOOL CheckForPktData();' 'BOOL CheckForPktData(int Channel);'
+    substituteInPlace ALSASound.c \
+      --replace-fail 'void InitSound(BOOL Quiet)' 'void InitSound()'
+    substituteInPlace ARQ.c \
+      --replace-fail 'SendData(FALSE);' 'SendData();'
+    substituteInPlace Modulate.c \
+      --replace-fail 'SoundFlush(Number);' 'SoundFlush();'
+  '';
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config

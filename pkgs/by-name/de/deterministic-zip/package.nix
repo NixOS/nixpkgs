@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
     description = "Simple (almost drop-in) replacement for zip that produces deterministic files";
     mainProgram = "deterministic-zip";
     homepage = "https://github.com/timo-reymann/deterministic-zip";
-    license = lib.licenses.unfreeRedistributable;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ rhysmdnz ];
   };
 })

@@ -4,9 +4,11 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  cargo,
   clang,
   cmake,
   gitMinimal,
+  libcap,
   libclang,
   makeBinaryWrapper,
   nix-update-script,
@@ -18,18 +20,18 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codex";
-  version = "0.92.0";
+  version = "0.116.0";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "codex";
     tag = "rust-v${finalAttrs.version}";
-    hash = "sha256-m/g+5wdehyaHDw6i5vik4HXiisY/iWFtPX0gKjCFPNY=";
+    hash = "sha256-PTsKphg3gPlBUs5oMM34RhJJ4jxvD6hand5aVjXcuZ4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/codex-rs";
 
-  cargoHash = "sha256-fuT8vPb9/7fZam129nR6y+r+3j46WBhlf73Htkcjpzc=";
+  cargoHash = "sha256-X5Yh8+3UrCZfzIplb4OzFfcfoklMu3FikU9vZ6CJbfc=";
 
   nativeBuildInputs = [
     clang
@@ -43,6 +45,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = [
     libclang
     openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
   ];
 
   # NOTE: set LIBCLANG_PATH so bindgen can locate libclang, and adjust
@@ -86,6 +91,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [
+        "--use-github-releases"
         "--version-regex"
         "^rust-v(\\d+\\.\\d+\\.\\d+)$"
       ];
@@ -99,8 +105,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.asl20;
     mainProgram = "codex";
     maintainers = with lib.maintainers; [
-      malo
       delafthi
+      jeafleohj
+      malo
     ];
     platforms = lib.platforms.unix;
   };

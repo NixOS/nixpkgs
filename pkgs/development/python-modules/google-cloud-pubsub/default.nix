@@ -43,6 +43,8 @@ buildPythonPackage rec {
   ]
   ++ google-api-core.optional-dependencies.grpc;
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   optional-dependencies = {
     libcst = [ libcst ];
   };

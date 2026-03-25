@@ -171,7 +171,7 @@ in
 
   meta = {
     buildDocsInSandbox = false;
-    maintainers = lib.teams.home-assistant.members;
+    teams = [ lib.teams.home-assistant ];
   };
 
   options.services.home-assistant = {
@@ -563,6 +563,16 @@ in
       '';
       description = ''
         The Home Assistant package to use.
+      '';
+    };
+
+    finalPackage = mkOption {
+      default = package;
+      internal = true;
+      readOnly = true;
+      type = types.package;
+      description = ''
+        The final Home Assistant package which is being used in the service.
       '';
     };
 

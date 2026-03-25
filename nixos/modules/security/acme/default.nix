@@ -15,10 +15,32 @@ let
   numCerts = lib.length (builtins.attrNames cfg.certs);
   _24hSecs = 60 * 60 * 24;
 
+  # The placerholder email address used by lego in case none gets passed
+  placeholderEmail = "noemail@example.com";
+
   # Used to make unique paths for each cert/account config set
   mkHash = with builtins; val: lib.substring 0 20 (hashString "sha256" val);
-  mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
+  mkAccountHash =
+    acmeServer: data:
+    mkHash (
+      lib.concatStringsSep " " [
+        (toString acmeServer)
+        data.keyType
+        (if (data.email != null) then data.email else placeholderEmail)
+      ]
+
+    );
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
+
+  isIP =
+    address:
+    let
+      isIPv6 = lib.length (lib.splitString ":" address) > 2;
+      isIPv4 = (lib.match "^([0-9]+\\.){3}[0-9]+$" address) != null;
+    in
+    isIPv6 || isIPv4;
+
+  isDomainName = name: !isIP name;
 
   # Lockdir is acme-setup.service's RuntimeDirectory.
   # Since that service is a oneshot with RemainAfterExit,
@@ -263,6 +285,8 @@ let
         "--accept-tos" # Checking the option is covered by the assertions
         "--path"
         "."
+      ]
+      ++ lib.optionals (data.email != null) [
         "--email"
         data.email
       ]
@@ -332,7 +356,7 @@ let
           # the course of the day to avoid rate limits.
           AccuracySec = "${toString (_24hSecs / numCerts)}s";
           # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
-          RandomizedDelaySec = "24h";
+          RandomizedDelaySec = data.renewJitter;
           FixedRandomDelay = true;
         };
       };
@@ -389,10 +413,14 @@ let
             exit 0
           fi
 
-          minica \
-            --ca-key ca/key.pem \
-            --ca-cert ca/cert.pem \
-            --domains ${lib.escapeShellArg (builtins.concatStringsSep "," ([ data.domain ] ++ extraDomains))}
+          minica ${
+            lib.cli.toCommandLineShellGNU { } {
+              ca-key = "ca/key.pem";
+              ca-cert = "ca/cert.pem";
+              domains = lib.concatStringsSep "," (lib.filter isDomainName ([ data.domain ] ++ extraDomains));
+              ip-addresses = lib.concatStringsSep "," (lib.filter isIP ([ data.domain ] ++ extraDomains));
+            }
+          }
 
           # Create files to match directory layout for real certificates
           (
@@ -523,20 +551,42 @@ let
 
             [[ -e $pem ]]
 
-            expiration_line="$(
-              set -euxo pipefail
-              openssl x509 -noout -enddate <"$pem" \
-                    | grep notAfter \
-                    | sed -e 's/^notAfter=//'
-            )"
-            [[ -n "$expiration_line" ]]
+            # Read certificate valid duration
+            not_before=$(openssl x509 -in "$pem" -noout -startdate | cut -d= -f2)
+            not_after=$(openssl x509 -in "$pem" -noout -enddate | cut -d= -f2)
 
-            expiration_date="$(date -d "$expiration_line" +%s)"
-            now="$(date +%s)"
-            expiration_s=$((expiration_date - now))
-            expiration_days=$((expiration_s / (3600 * 24)))   # rounds down
+            # Convert timestamp to seconds since epoch
+            not_before_epoch=$(date -d "$not_before" +%s)
+            not_after_epoch=$(date -d "$not_after" +%s)
+            now_epoch=$(date +%s)
 
-            [[ $expiration_days -gt ${toString data.validMinDays} ]]
+            # Determine total and remaining duration
+            total_duration=$((not_after_epoch - not_before_epoch))
+            remaining_duration=$((not_after_epoch - now_epoch))
+
+            ${
+              if (data.validMinDays != null) then
+                ''
+                  # Convert to days and round down
+                  total_days=$((total_duration / 86400))
+                  remaining_days=$((remaining_duration / 86400))
+
+                  [[ $remaining_days -gt ${toString data.validMinDays} ]]
+                ''
+              else
+                ''
+                  # Recreate --dynamic logic from lego
+                  if (( total_duration < 864000 )); then
+                    # 1/2 for shortlived certificates with total lifetime < 10 days
+                    threshold=$(( total_duration / 2))
+                  else
+                    # 1/3 for longer validity durations with total lifetime >= 10 days
+                    threshold=$(( total_duration / 3))
+                  fi
+
+                  [[ $remaining_duration -gt $threshold ]]
+                ''
+            }
           }
 
           echo '${domainHash}' > domainhash.txt
@@ -544,13 +594,20 @@ let
           # Check if a new order is needed
           # We can only renew if the list of domains has not changed.
           # We also need an account key. Avoids #190493
-          if cmp -s domainhash.txt certificates/domainhash.txt && [ -e '${certificateKey}' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
+          if cmp -s domainhash.txt certificates/domainhash.txt && [ -e '${certificateKey}' ] && \
+            [ -e 'certificates/${keyName}.crt' ] && \
+            [ -n "$(find accounts -name '${
+              if (data.email != null) then data.email else placeholderEmail
+            }.key')" ];
+          then
             # Even if a cert is not expired, it may be revoked by the CA.
             # Try to renew, and silently fail if the cert is not expired.
             # Avoids #85794 and resolves #129838
-            if ! lego ${renewOpts} --days ${toString data.validMinDays}; then
+            if ! lego ${renewOpts} ${
+              if data.validMinDays != null then "--days ${toString data.validMinDays}" else "--dynamic"
+            }; then
               if is_expiration_skippable out/full.pem; then
-                echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't within the coming ${toString data.validMinDays} days"
+                echo 1>&2 "nixos-acme: Ignoring failed renewal because expiration isn't due yet"
               else
                 # High number to avoid Systemd reserved codes.
                 exit 11
@@ -626,9 +683,15 @@ let
 
       options = {
         validMinDays = lib.mkOption {
-          type = lib.types.int;
-          inherit (defaultAndText "validMinDays" 30) default defaultText;
-          description = "Minimum remaining validity before renewal in days.";
+          type = lib.types.nullOr lib.types.int;
+          default = null;
+          description = ''
+            Minimum remaining validity before renewal in days.
+
+            If unset, the renewal time is calculated dynamically:
+            - for regular certificates, renewal occurs when less than one-third of the lifetime remains
+            - for short-lived certificates, renewal occurs when less than half of the lifetime remains
+          '';
         };
 
         renewInterval = lib.mkOption {
@@ -637,6 +700,18 @@ let
           description = ''
             Systemd calendar expression when to check for renewal. See
             {manpage}`systemd.time(7)`.
+
+            If you reduce this from daily you might also want to adapt {option}`security.acme.defaults.renewJitter`.
+          '';
+        };
+
+        renewJitter = lib.mkOption {
+          type = lib.types.str;
+          inherit (defaultAndText "renewJitter" "24h") default defaultText;
+          description = ''
+            Maximum jitter applied to a timer to stretch its execution
+            intervals to prevent multiple timers from firing simultaneously. See
+            `RandomizedDelaySecs=` in {manpage}`systemd.timer(5)`.
           '';
         };
 
@@ -1063,14 +1138,6 @@ in
         in
         [
           {
-            assertion = cfg.defaults.email != null || lib.all (certOpts: certOpts.email != null) certs;
-            message = ''
-              You must define `security.acme.certs.<name>.email` or
-              `security.acme.defaults.email` to register with the CA. Note that using
-              many different addresses for certs may trigger account rate limits.
-            '';
-          }
-          {
             assertion = cfg.acceptTerms;
             message = ''
               You must accept the CA's terms of service before using
@@ -1218,7 +1285,7 @@ in
   ];
 
   meta = {
-    maintainers = lib.teams.acme.members;
+    teams = [ lib.teams.acme ];
     doc = ./default.md;
   };
 }

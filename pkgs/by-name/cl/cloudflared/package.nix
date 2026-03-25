@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cloudflared";
-  version = "2026.2.0";
+  version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     tag = finalAttrs.version;
-    hash = "sha256-UYMFajks3KThWq36BrRnKJk8y8H9s4hIRuYEnftcm50=";
+    hash = "sha256-oGe6ZZeIcFC+ST78m54upFJmbPL2udwtFHaC8vrH4cg=";
   };
 
   vendorHash = null;
@@ -105,6 +105,7 @@ buildGoModule (finalAttrs: {
       piperswe
       qjoly
       wrbbz
+      ryand56
     ];
     mainProgram = "cloudflared";
   };

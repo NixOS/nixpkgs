@@ -230,6 +230,7 @@
       "kloenk": 12898828,
       "konradmalik": 13033392,
       "kubukoz": 894884,
+      "lilyball": 714,
       "lutzmor": 9321736,
       "magistau": 43097806,
       "maljub01": 350635,
@@ -268,6 +269,7 @@
       "willcohen": 5185341,
       "willjr": 5904828,
       "wldhx": 15619766,
+      "yamashitax": 99486674,
       "yeongsheng-tan": 809030,
       "youhaveme9": 58213083,
       "yzx9": 41458459,
@@ -278,9 +280,11 @@
   "documentation-team": {
     "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
     "id": 6590023,
-    "maintainers": {},
+    "maintainers": {
+      "hsjobeki": 50398876
+    },
     "members": {
-      "hsjobeki": 50398876,
+      "friedow": 17351844,
       "wamirez": 24505474
     },
     "name": "Documentation Team"
@@ -548,7 +552,6 @@
       "lf-": 6652840
     },
     "members": {
-      "9999years": 15312184,
       "Qyriad": 1542224,
       "RaitoBezarius": 314564
     },
@@ -615,9 +618,8 @@
     },
     "members": {
       "aanderse": 7755101,
-      "jnsgruk": 668505,
-      "megheaiulian": 1788114,
-      "mkg20001": 7735145
+      "herbetom": 15121114,
+      "megheaiulian": 1788114
     },
     "name": "LXC"
   },
@@ -683,12 +685,11 @@
     "description": "Maintain the official Nix formatter and apply it to Nixpkgs: https://nixos.org/community/teams/formatting/",
     "id": 9676823,
     "maintainers": {
-      "infinisil": 20525370,
+      "MattSturgeon": 5046562,
       "jfly": 277474
     },
     "members": {
       "0x4A6F": 9675338,
-      "MattSturgeon": 5046562,
       "Sereja313": 112060595,
       "dyegoaurelio": 42411160
     },
@@ -715,7 +716,7 @@
     "id": 3620128,
     "maintainers": {
       "jopejoe1": 34899572,
-      "leona-ya": 11006031
+      "yayayayaka": 73759599
     },
     "members": {},
     "name": "nixos-release-managers"
@@ -925,7 +926,9 @@
       "balsoft": 18467667,
       "infinisil": 20525370
     },
-    "members": {},
+    "members": {
+      "pyrox0": 35778371
+    },
     "name": "Security review"
   },
   "static": {
@@ -967,7 +970,8 @@
     "description": "Maintain systemd for NixOS",
     "id": 3894007,
     "maintainers": {
-      "flokli": 183879
+      "flokli": 183879,
+      "nikstur": 61635709
     },
     "members": {
       "ElvishJerricco": 1365692,

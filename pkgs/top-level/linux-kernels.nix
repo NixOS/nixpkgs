@@ -231,20 +231,7 @@ in
 
         linux_latest = packageAliases.linux_latest.kernel;
 
-        # Using zenKernels like this due lqx&zen came from one source, but may have different base kernel version
-        # https://github.com/NixOS/nixpkgs/pull/161773#discussion_r820134708
-        zenKernels = callPackage ../os-specific/linux/kernel/zen-kernels.nix;
-
-        linux_zen = zenKernels {
-          variant = "zen";
-          kernelPatches = [
-            kernelPatches.bridge_stp_helper
-            kernelPatches.request_key_helper
-          ];
-        };
-
-        linux_lqx = zenKernels {
-          variant = "lqx";
+        linux_zen = callPackage ../os-specific/linux/kernel/zen-kernels.nix {
           kernelPatches = [
             kernelPatches.bridge_stp_helper
             kernelPatches.request_key_helper
@@ -281,6 +268,7 @@ in
         linux_hardened = linux_6_12_hardened;
       }
       // lib.optionalAttrs config.allowAliases {
+        linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
         linux_libre = throw "linux_libre has been removed due to lack of maintenance";
         linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 
@@ -341,7 +329,6 @@ in
           isLTS
           isZen
           isHardened
-          isLibre
           ;
         inherit (kernel) kernelOlder kernelAtLeast;
         kernelModuleMakeFlags = self.kernel.commonMakeFlags ++ [
@@ -493,7 +480,6 @@ in
         nvidia_x11_production = nvidiaPackages.production;
         nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
         nvidia_dc = nvidiaPackages.dc;
-        nvidia_dc_535 = nvidiaPackages.dc_535;
 
         # this is not a replacement for nvidia_x11*
         # only the opensource kernel driver exposed for hydra to build
@@ -724,6 +710,7 @@ in
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
         nvidia_dc_565 = throw "nvidiaPackages.dc_565 has reached end of life, see https://endoflife.date/nvidia"; # added 2026-02-10
+        nvidia_dc_535 = throw "nvidiaPackages.dc_535 removed, soon reaches end of life, see https://endoflife.date/nvidia"; # added 2026-03-08
       }
     )).extend
       (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
@@ -785,12 +772,12 @@ in
       linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
 
       linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
-      linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
       linux_xanmod = recurseIntoAttrs (packagesFor kernels.linux_xanmod);
       linux_xanmod_stable = recurseIntoAttrs (packagesFor kernels.linux_xanmod_stable);
       linux_xanmod_latest = recurseIntoAttrs (packagesFor kernels.linux_xanmod_latest);
     }
     // lib.optionalAttrs config.allowAliases {
+      linux_lqx = throw "linux_lqx has been removed due to lack of maintenance";
       linux_libre = throw "linux_libre has been removed due to lack of maintenance";
       linux_latest_libre = throw "linux_latest_libre has been removed due to lack of maintenance";
 

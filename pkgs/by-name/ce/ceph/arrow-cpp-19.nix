@@ -117,34 +117,69 @@ stdenv.mkDerivation (finalAttrs: {
   # versions are all taken from
   # https://github.com/apache/arrow/blob/apache-arrow-${version}/cpp/thirdparty/versions.txt
 
-  # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
-  # collisions as well as custom build flags
-  ${if enableJemalloc then "ARROW_JEMALLOC_URL" else null} = fetchurl {
-    url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
-    hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
-  };
+  env =
+    lib.optionalAttrs enableJemalloc {
+      # jemalloc: arrow uses a custom prefix to prevent default allocator symbol
+      # collisions as well as custom build flags
+      ARROW_JEMALLOC_URL = fetchurl {
+        url = "https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2";
+        hash = "sha256-LbgtHnEZ3z5xt2QCGbbf6EeJvAU3mDw7esT3GJrs/qo=";
+      };
+    }
+    // {
+      # mimalloc: arrow uses custom build flags for mimalloc
+      ARROW_MIMALLOC_URL = fetchFromGitHub {
+        owner = "microsoft";
+        repo = "mimalloc";
+        rev = "v2.0.6";
+        hash = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
+      };
 
-  # mimalloc: arrow uses custom build flags for mimalloc
-  ARROW_MIMALLOC_URL = fetchFromGitHub {
-    owner = "microsoft";
-    repo = "mimalloc";
-    rev = "v2.0.6";
-    hash = "sha256-u2ITXABBN/dwU+mCIbL3tN1f4c17aBuSdNTV+Adtohc=";
-  };
+      ARROW_XSIMD_URL = fetchFromGitHub {
+        owner = "xtensor-stack";
+        repo = "xsimd";
+        rev = "13.0.0";
+        hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
+      };
 
-  ARROW_XSIMD_URL = fetchFromGitHub {
-    owner = "xtensor-stack";
-    repo = "xsimd";
-    rev = "13.0.0";
-    hash = "sha256-qElJYW5QDj3s59L3NgZj5zkhnUMzIP2mBa1sPks3/CE=";
-  };
-
-  ARROW_SUBSTRAIT_URL = fetchFromGitHub {
-    owner = "substrait-io";
-    repo = "substrait";
-    rev = "v0.44.0";
-    hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
-  };
+      ARROW_SUBSTRAIT_URL = fetchFromGitHub {
+        owner = "substrait-io";
+        repo = "substrait";
+        rev = "v0.44.0";
+        hash = "sha256-V739IFTGPtbGPlxcOi8sAaYSDhNUEpITvN9IqdPReug=";
+      };
+    }
+    // lib.optionalAttrs finalAttrs.doInstallCheck {
+      ARROW_TEST_DATA = "${arrow-testing}/data";
+      PARQUET_TEST_DATA = "${parquet-testing}/data";
+      GTEST_FILTER =
+        let
+          # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
+          filteredTests =
+            lib.optionals stdenv.hostPlatform.isAarch64 [
+              "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
+              "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
+              "TestCompareKernel.PrimitiveRandomTests"
+            ]
+            ++ lib.optionals enableS3 [
+              "S3OptionsTest.FromUri"
+              "S3RegionResolutionTest.NonExistentBucket"
+              "S3RegionResolutionTest.PublicBucket"
+              "S3RegionResolutionTest.RestrictedBucket"
+              "TestMinioServer.Connect"
+              "TestS3FS.*"
+              "TestS3FSGeneric.*"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [
+              # TODO: revisit at 12.0.0 or when
+              # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
+              # is available, see
+              # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
+              "ExecPlanExecution.StressSourceSinkStopped"
+            ];
+        in
+        "-${lib.concatStringsSep ":" filteredTests}";
+    };
 
   nativeBuildInputs = [
     cmake
@@ -249,35 +284,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doInstallCheck = true;
-  ARROW_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${arrow-testing}/data";
-  PARQUET_TEST_DATA = lib.optionalString finalAttrs.doInstallCheck "${parquet-testing}/data";
-  GTEST_FILTER =
-    let
-      # Upstream Issue: https://issues.apache.org/jira/browse/ARROW-11398
-      filteredTests =
-        lib.optionals stdenv.hostPlatform.isAarch64 [
-          "TestFilterKernelWithNumeric/3.CompareArrayAndFilterRandomNumeric"
-          "TestFilterKernelWithNumeric/7.CompareArrayAndFilterRandomNumeric"
-          "TestCompareKernel.PrimitiveRandomTests"
-        ]
-        ++ lib.optionals enableS3 [
-          "S3OptionsTest.FromUri"
-          "S3RegionResolutionTest.NonExistentBucket"
-          "S3RegionResolutionTest.PublicBucket"
-          "S3RegionResolutionTest.RestrictedBucket"
-          "TestMinioServer.Connect"
-          "TestS3FS.*"
-          "TestS3FSGeneric.*"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
-          # TODO: revisit at 12.0.0 or when
-          # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
-          # is available, see
-          # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
-          "ExecPlanExecution.StressSourceSinkStopped"
-        ];
-    in
-    lib.optionalString finalAttrs.doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
 
   __darwinAllowLocalNetworking = true;
 
@@ -306,6 +312,8 @@ stdenv.mkDerivation (finalAttrs: {
 
       runHook postInstallCheck
     '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Cross-language development platform for in-memory data";

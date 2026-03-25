@@ -7,7 +7,7 @@
   openssl,
   openjdk11,
   python3,
-  unixODBC,
+  unixodbc,
   withJdbc ? false,
   withOdbc ? false,
   versionCheckHook,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optionals withJdbc [ openjdk11 ]
-  ++ lib.optionals withOdbc [ unixODBC ];
+  ++ lib.optionals withOdbc [ unixodbc ];
 
   cmakeFlags = [
     (lib.cmakeFeature "DUCKDB_EXTENSION_CONFIGS" "${finalAttrs.src}/.github/config/in_tree_extensions.cmake")

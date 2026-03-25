@@ -15,9 +15,9 @@
   xdg-utils,
   versionCheckHook,
 
-  version ? "1.6.1",
-  srcHash ? "sha256-7kwtWuYdYG3MDHThCkY5OZmx4pWaQXMYoOlJszmV2rM=",
-  cargoHash ? "sha256-59RyfSUJNoQ7EtQK3OSYOIO/YVEjeeM9ovbojHFX4pI=",
+  version ? "1.7.1",
+  srcHash ? "sha256-MPanUDVKol7mWVJDrGoGUkKqmcje+MsiK0WfqXQ27iI=",
+  cargoHash ? "sha256-Lru4ps9FYi03NVtRLtwZX9jhozAvBDsJ72ihdIpQcQ8=",
   updateScript ? ./update.sh,
 }:
 
@@ -149,6 +149,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
           services.radicle.package = finalAttrs.finalPackage;
         };
       };
+      ci-broker = nixosTests.radicle-ci-broker.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
     };
   };
 
@@ -160,6 +165,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       Repositories are replicated across peers in a decentralized manner, and users are in full control of their data and workflow.
     '';
     homepage = "https://radicle.xyz";
+    changelog = "https://app.radicle.xyz/nodes/seed.radicle.xyz/rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5/tree/CHANGELOG.md";
     license = with lib.licenses; [
       asl20
       mit

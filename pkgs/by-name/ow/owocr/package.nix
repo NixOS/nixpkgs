@@ -3,18 +3,25 @@
   python3Packages,
   fetchFromGitHub,
 }:
-
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "owocr";
-  version = "1.7.5-unstable-2024-06-26";
+  version = "1.26.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AuroraWright";
     repo = "owocr";
-    rev = "743c64aa16a760f87bf5ea1f54364d828eb3eddb"; # no tags
-    hash = "sha256-TXQwJRgRp7fZBN0r4XGVtlb+iOMRqEUf+LbfBG/vsr8=";
+    tag = finalAttrs.version;
+    hash = "sha256-ZISL0K16Ilmne8SZ5+L7FSxjZJd8j7tDklUOjPvw7HM=";
   };
+
+  # we use pystray directly to avoid making a new package
+  # that only carries a single patch for windows double click support.
+  # pythonRelaxDeps was not successful in patching
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pystrayfix>=0.19.8" "pystray"
+  '';
 
   build-system = [ python3Packages.setuptools ];
 
@@ -41,6 +48,13 @@ python3Packages.buildPythonApplication {
     manga-ocr
     rapidocr
     requests # winRT OCR
+    python3Packages.obsws-python
+    python3Packages.pystray
+    python3Packages.pynputfix
+    curl-cffi
+    pygobject3
+    dbus-python
+    pywayland
   ];
 
   doCheck = false; # no tests
@@ -51,4 +65,4 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

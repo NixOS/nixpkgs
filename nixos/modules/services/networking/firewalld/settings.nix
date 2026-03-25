@@ -1,20 +1,20 @@
 {
   config,
   lib,
-  pkgs,
   ...
 }:
 
 let
   cfg = config.services.firewalld;
-  format = pkgs.formats.keyValue { };
   inherit (lib) mkOption;
   inherit (lib.types)
+    attrsOf
     bool
     commas
     either
     enum
     nonEmptyStr
+    oneOf
     separatedString
     submodule
     ;
@@ -27,7 +27,10 @@ in
     '';
     default = { };
     type = submodule {
-      freeformType = format.type;
+      freeformType = attrsOf (oneOf [
+        bool
+        nonEmptyStr
+      ]);
       options = {
         DefaultZone = mkOption {
           type = nonEmptyStr;
@@ -191,8 +194,8 @@ in
       }
     ];
 
-    environment.etc."firewalld/firewalld.conf" = {
-      source = format.generate "firewalld.conf" cfg.settings;
-    };
+    environment.etc."firewalld/firewalld.conf".text = lib.concatMapAttrsStringSep "\n" (
+      k: v: "${k}=${if lib.isBool v then lib.boolToYesNo v else v}"
+    ) cfg.settings;
   };
 }

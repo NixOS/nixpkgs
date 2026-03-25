@@ -24,7 +24,7 @@ mkLibretroCore rec {
       minizip-src = runCommand "minizip-src" { } ''
         mkdir $out
         unpackFile ${zlib.src}
-        cp */contrib/minizip/{unzip.*,ioapi.*,crypt.h} $out/
+        cp */contrib/minizip/{unzip.*,ioapi.*,ints.h,crypt.h} $out/
       '';
     in
     ''

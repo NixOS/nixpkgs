@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "mcphost";
-  version = "0.33.4";
+  version = "0.34.0";
 
   src = fetchFromGitHub {
     owner = "mark3labs";
     repo = "mcphost";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RtNm5+MoB/VndGFTBYf1yC60dBaT3YrJqIuaT+f++L4=";
+    hash = "sha256-xqz6K0e/LSX77qpkmwmqgStPAfkkJdqKKDZOeYWnrRo=";
   };
 
-  vendorHash = "sha256-yRRe1LBdB4vdW1WM6jOi58gv2tLs2eeSFHFG/d4afyY=";
+  vendorHash = "sha256-mzrCIDMr1INzwqktZIc9m0SgynQC0FpyVlSlAba//sY=";
 
   doCheck = false;
 

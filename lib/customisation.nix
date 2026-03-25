@@ -631,9 +631,12 @@ rec {
   makeScope =
     newScope: f:
     let
-      self = f self // {
-        newScope = scope: newScope (self // scope);
+      self = {
         callPackage = self.newScope { };
+      }
+      // f self
+      // {
+        newScope = scope: newScope (self // scope);
         overrideScope = g: makeScope newScope (extends g f);
         packages = f;
       };

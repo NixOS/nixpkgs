@@ -27,12 +27,12 @@
 
 buildPythonPackage rec {
   pname = "werkzeug";
-  version = "3.1.5";
+  version = "3.1.6";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-alSLDoiVXdB8yyVTnX0MyXQX7p4XlnfSLHBByPB4zmc=";
+    hash = "sha256-IQxr7eWkIKkTlWtHkaf01oQ6Q7b87k36CKZekwB9DSU=";
   };
 
   build-system = [ flit-core ];
@@ -79,7 +79,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://werkzeug.palletsprojects.com/en/${lib.versions.majorMinor version}.x/changes/#version-${
+    changelog = "https://werkzeug.palletsprojects.com/en/stable/changes/#version-${
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://palletsprojects.com/p/werkzeug/";

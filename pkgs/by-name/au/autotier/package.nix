@@ -41,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    # Fix build with boost 1.89+ where boost_system stub library has been removed
+    substituteInPlace makefile --replace-fail "-lboost_system" ""
+  '';
+
   # Required by rocksdb after 10.7.5
   env.EXTRA_CFLAGS = "-std=c++20 -fno-char8_t";
 

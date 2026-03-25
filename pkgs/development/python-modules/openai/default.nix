@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "2.21.0";
+  version = "2.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     tag = "v${version}";
-    hash = "sha256-Pe9Odm/0tHnXigu9Ix2EYrb9ttMjF3itvXFLlpiOM98=";
+    hash = "sha256-Ea8dnhxpgLwiApqB2GjBUb8wEgFEojlIvteo7FHXHF8=";
   };
 
   postPatch = ''substituteInPlace pyproject.toml --replace-fail "hatchling==1.26.3" "hatchling"'';
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     description = "Python client library for the OpenAI API";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/blob/${src.tag}/CHANGELOG.md";
-    license = lib.licenses.mit;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.malo ];
     mainProgram = "openai";
   };
