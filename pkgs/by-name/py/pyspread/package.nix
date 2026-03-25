@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   copyDesktopItems,
   libsForQt5,
@@ -13,15 +13,17 @@ let
     wrapQtAppsHook
     ;
 in
-python3.pkgs.buildPythonApplication (finalAttrs: {
-  format = "setuptools";
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyspread";
   version = "2.4";
+
   src = fetchPypi {
     pname = "pyspread";
     inherit (finalAttrs) version;
     hash = "sha256-MZlR2Rap5oMRfCmswg9W//FYFkSEki7eyMNhLoGZgJM=";
   };
+
+  pyproject = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -32,20 +34,18 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     qtsvg
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     python-dateutil
     markdown2
     matplotlib
     numpy
     pyenchant
     pyqt5
-    setuptools
   ];
 
   strictDeps = true;
 
-  doCheck = false; # it fails miserably with a core dump
-
+  doCheck = true;
   pythonImportsCheck = [ "pyspread" ];
 
   desktopItems = [
@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
       icon = "pyspread";
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
-      comment = "A Python-oriented spreadsheet application";
+      comment = "Python-oriented spreadsheet application";
       categories = [
         "Office"
         "Development"
@@ -84,5 +84,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
     maintainers = with lib.maintainers; [ Merikei ];
+    platforms = lib.platforms.linux;
   };
 })
