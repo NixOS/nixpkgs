@@ -35,8 +35,8 @@
     "version": "0.0.226"
   },
   "osx-stable": {
-    "hash": "sha256-zMIBZtvmncIAR3IEYblss7oP7miyRpmCkqao/NSA67k=",
-    "url": "https://stable.dl2.discordapp.net/apps/osx/0.0.380/Discord.dmg",
-    "version": "0.0.380"
+    "hash": "sha256-vBadXUHrYhvkqzkCvGnKf25A19TKcFs5D0tzC54E0Hk=",
+    "url": "https://stable.dl2.discordapp.net/apps/osx/0.0.382/Discord.dmg",
+    "version": "0.0.382"
   }
 }
