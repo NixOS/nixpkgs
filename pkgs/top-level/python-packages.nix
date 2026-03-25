@@ -9047,10 +9047,6 @@ self: super: with self; {
     callPackage ../development/python-modules/llama-index-graph-stores-neptune
       { };
 
-  llama-index-indices-managed-llama-cloud =
-    callPackage ../development/python-modules/llama-index-indices-managed-llama-cloud
-      { };
-
   llama-index-instrumentation =
     callPackage ../development/python-modules/llama-index-instrumentation
       { };
