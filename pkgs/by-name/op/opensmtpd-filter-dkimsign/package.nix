@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     "HAVE_ED25519=1"
     "DESTDIR=$(out)"
     "LOCALBASE="
-    "BINDIR=/libexec/smtpd/"
   ];
 
   meta = {
