@@ -69,6 +69,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    maintainers = with lib.maintainers; [ aprl ];
     description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
