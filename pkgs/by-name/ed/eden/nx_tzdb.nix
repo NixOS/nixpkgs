@@ -11,8 +11,8 @@ stdenv.mkDerivation (finalAttrs: {
   version = "120226";
 
   src = fetchFromGitea {
-    domain = "git.crueter.xyz";
-    owner = "misc";
+    domain = "git.eden-emu.dev";
+    owner = "eden-emu";
     repo = "tzdb_to_nx";
     tag = finalAttrs.version;
     hash = "sha256-egPu8UVbj73RQ0Z5JMTjd5HVdy47WTfkUMlQaS0wUTg=";
