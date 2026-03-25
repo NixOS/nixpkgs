@@ -59,7 +59,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyamg/pyamg";
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ stephen-huan ];
     broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast python.version "3.14";
   };
 }
