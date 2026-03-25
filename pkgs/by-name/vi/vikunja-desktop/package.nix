@@ -29,7 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version src;
 
   sourceRoot = "${finalAttrs.src.name}/desktop";
-  pnpmInstallFlags = [ "--shamefully-hoist" ];
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs)
@@ -37,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
       version
       src
       sourceRoot
-      pnpmInstallFlags
       ;
     pnpm = pnpm_10_29_2;
     fetcherVersion = 3;
