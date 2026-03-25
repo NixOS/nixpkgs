@@ -14,3 +14,5 @@ for flavour in cpu rocm cuda vulkan; do
   build "ollama-$flavour"
   upload "ollama/$flavour"
 done
+build nix
+upload nix
