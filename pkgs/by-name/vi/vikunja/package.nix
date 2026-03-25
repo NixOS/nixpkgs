@@ -36,8 +36,8 @@ let
         sourceRoot
         ;
       pnpm = pnpm_10_29_2;
-      fetcherVersion = 1;
-      hash = "sha256-j84UVbLIqPz56Djy0vafhAOn9ZFM+kuTcBhfYZBYEDI=";
+      fetcherVersion = 3;
+      hash = "sha256-5eTw3W5cmdD8dEfZyJ+2cUBMbkPhF1S5gJMEojJYV2w=";
     };
 
     nativeBuildInputs = [
