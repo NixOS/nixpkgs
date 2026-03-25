@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   libsecret,
-  nodejs,
+  nodejs-slim,
   clang_20,
   versionCheckHook,
   nix-update-script,
@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    nodejs.python
+    nodejs-slim.python
   ]
   ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 

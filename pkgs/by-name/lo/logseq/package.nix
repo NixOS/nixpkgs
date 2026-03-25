@@ -15,6 +15,7 @@
   makeDesktopItem,
   makeWrapper,
   nodejs,
+  nodejs-slim,
   removeReferencesTo,
   yarnBuildHook,
   yarnConfigHook,
@@ -148,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
       fakeGit
       makeWrapper
       nodejs
-      (nodejs.python.withPackages (ps: [ ps.setuptools ]))
+      (nodejs-slim.python.withPackages (ps: [ ps.setuptools ]))
       removeReferencesTo
       yarnBuildHook
       yarnConfigHook
