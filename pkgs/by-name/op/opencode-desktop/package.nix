@@ -14,6 +14,7 @@
   dbus,
   glib,
   gtk3,
+  gst_all_1,
   libsoup_3,
   librsvg,
   libappindicator-gtk3,
@@ -47,17 +48,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook4 ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    dbus
-    glib
-    gtk3
-    libsoup_3
-    librsvg
-    libappindicator-gtk3
-    glib-networking
-    openssl
-    webkitgtk_4_1
-  ];
+  buildInputs = (
+    lib.optionals stdenv.isLinux [
+      dbus
+      glib
+      gtk3
+      libsoup_3
+      librsvg
+      libappindicator-gtk3
+      glib-networking
+      openssl
+      webkitgtk_4_1
+    ]
+    ++ (with gst_all_1; [
+      gst-plugins-bad # fakevideosink
+      gst-plugins-base # appsink and autoaudiosink
+      gst-plugins-good # autoaudiosink
+    ])
+  );
 
   strictDeps = true;
 
