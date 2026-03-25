@@ -273,6 +273,10 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.optional (
+      config.networking.firewall.extraCommands != "" || config.networking.firewall.extraStopCommands != ""
+    ) "ip_tables specific option set while ip_tables is blacklisted";
+
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     # versionOlder for backportability, remove afterwards
