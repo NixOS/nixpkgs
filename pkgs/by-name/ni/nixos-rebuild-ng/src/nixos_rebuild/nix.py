@@ -270,8 +270,8 @@ def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
-        stdout=PIPE,
         check=False,
+        capture_output=True,
     )
     if r.returncode:
         return None
@@ -670,6 +670,8 @@ def set_profile(
         remote=target_host,
         sudo=sudo,
     )
+
+
 def switch_to_configuration(
     path_to_config: Path,
     action: Literal[Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE],
