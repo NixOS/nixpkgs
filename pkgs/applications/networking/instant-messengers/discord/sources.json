@@ -20,9 +20,9 @@
     "version": "0.0.130"
   },
   "osx-canary": {
-    "hash": "sha256-cK3Yo7NT7MIUJYzaatO9qxNeAFwEDikPsv4CQPUZKZQ=",
-    "url": "https://canary.dl2.discordapp.net/apps/osx/0.0.1007/DiscordCanary.dmg",
-    "version": "0.0.1007"
+    "hash": "sha256-ZLsg7pjWc6MZtcJ6BeH+wrPteyoSQtxKpBUagNFeJwQ=",
+    "url": "https://canary.dl2.discordapp.net/apps/osx/0.0.1038/DiscordCanary.dmg",
+    "version": "0.0.1038"
   },
   "osx-development": {
     "hash": "sha256-UWZYRgykAiYPXPQ63cRIRiPdvG3a8lml84zgNABd0/E=",
