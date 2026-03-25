@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "magi";
-  version = "0.1.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "anddani";
     repo = "magi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3hJL2ewKEH5w5G4FOvXKjo9jXGQW3rQ14cEBE9+Rtzs=";
+    hash = "sha256-DflZiEdwd+WcMCfiYmwt/b5gujK0I+TTsdVEv3Ll7kM=";
   };
 
-  cargoHash = "sha256-vuLXA0W5MP9hylCb6nhml6EdC8WoFhjDQHJE18F+Mfo=";
+  cargoHash = "sha256-643nTZziD7Arr2MuL06Q6ZhTOFZb4zcBY5yKz2sVW68=";
 
   nativeBuildInputs = [ pkg-config ];
   nativeCheckInputs = [ git ];
