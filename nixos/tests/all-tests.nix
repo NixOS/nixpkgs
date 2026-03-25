@@ -1126,7 +1126,6 @@ in
   nixpkgs-config-allow-unfree-packages-and-predicate =
     pkgs.callPackage ../../pkgs/stdenv/generic/check-meta-test.nix
       { };
-  nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nohang = runTest ./nohang.nix;

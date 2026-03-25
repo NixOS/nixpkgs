@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   pkg-config,
   makeWrapper,
   alsa-lib,
@@ -14,13 +16,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cliamp";
-  version = "1.21.5";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "bjarneo";
     repo = "cliamp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xqiFtMw5kFRAnc4CSkc7/RcAejWxlJAoGFkQ2f5Z3bc=";
+    hash = "sha256-SE8uUdA3u+bm3A65J2nMyG+17NCaq5mQgji7eYUQKd8=";
   };
 
   vendorHash = "sha256-UMDCpfSGfvJmI+sImaFzgZpLNaLMgEnmGCqERwPokHM=";
@@ -31,10 +33,12 @@ buildGoModule (finalAttrs: {
   ];
 
   buildInputs = [
-    alsa-lib
     libogg
     libvorbis
     flac
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
   ];
 
   postInstall = ''
@@ -46,6 +50,11 @@ buildGoModule (finalAttrs: {
         ]
       }
   '';
+
+  # this is set due to failure of testset `net/http/httptest` on darwin
+  __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal Winamp - a retro terminal music player inspired by Winamp 2.x";
