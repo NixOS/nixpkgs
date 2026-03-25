@@ -12,7 +12,7 @@
 
 let
   version = "0.23a";
-  debianRevision = "12";
+  debianRevision = "16";
   debianPatch =
     patchname: hash:
     fetchpatch {
@@ -41,6 +41,7 @@ stdenv.mkDerivation {
     (debianPatch "08_windowed_mode" "sha256-QyzwHMyl9TMArq1aJ3YXEbniksGz7Ua+pvHZQsgj3U4=")
     (debianPatch "09_rootage_make_highres_default" "sha256-VwigGUdGWP8d4Lv06dbERlXmvBosxbYrrhLRTIpGH/8=")
     (debianPatch "10_deg_out_of_range" "sha256-UDGCV4epCDzKGd5w7CuChn8lGf52tp6kemHTTL4yJ/M=")
+    (debianPatch "11_gcc_15" "sha256-CQSZh+7u8yocn7hn18u9FCFHARhuGeY3YDR13vNPW+A=")
   ];
 
   postPatch = ''
