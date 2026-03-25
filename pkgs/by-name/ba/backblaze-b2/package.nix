@@ -42,7 +42,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     tqdm
   ];
 
-  pythonRelaxDeps = [ "docutils" ];
+  pythonRelaxDeps = [
+    "docutils"
+    "tabulate"
+  ];
 
   nativeCheckInputs = with python3Packages; [
     backoff
