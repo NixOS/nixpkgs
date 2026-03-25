@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.7.15";
 
   src = fetchFromGitHub {
-    owner = "kolunmi";
+    owner = "bazaar-org";
     repo = "bazaar";
     tag = "v${finalAttrs.version}";
     hash = "sha256-+52W2iU8rdzN4cCxjkKe80qAbvyeqkvDYRRIiBB5yCg=";
