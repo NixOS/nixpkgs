@@ -208,6 +208,48 @@ in
     ];
   };
 
+  commonmarker =
+    attrs:
+    lib.optionalAttrs (lib.versionAtLeast attrs.version "2.0") {
+      cargoDeps = rustPlatform.fetchCargoVendor {
+        src = stdenv.mkDerivation {
+          name = "commonmarker-${attrs.version}-src";
+          src = (buildRubyGem { inherit (attrs) gemName version source; }).src;
+          nativeBuildInputs = [ ruby ];
+          dontBuild = true;
+          unpackPhase = ''
+            ${ruby}/bin/gem unpack $src --target=unpacked
+          '';
+          installPhase = ''
+            cp -R unpacked/*/. $out
+          '';
+        };
+        hash = "sha256-y0w9rJa2HG9zbX1thf0JznuhSvi7VL5pzMoskZzziUc=";
+      };
+
+      dontBuild = false;
+
+      nativeBuildInputs = [
+        cargo
+        rustc
+        rustPlatform.cargoSetupHook
+        rustPlatform.bindgenHook
+      ];
+
+      disallowedReferences = [
+        rustc.unwrapped
+      ];
+
+      preInstall = ''
+        export CARGO_HOME="$PWD/../.cargo/"
+        export CARGO_NET_OFFLINE=true
+      '';
+
+      postInstall = ''
+        find $out -type f -name .rustc_info.json -delete
+      '';
+    };
+
   cld3 = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ protobuf ];
