@@ -87,6 +87,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       Frostman
       savtrip
+      miniharinn
     ];
   };
 })
