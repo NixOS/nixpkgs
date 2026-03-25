@@ -15,9 +15,9 @@
     "version": "0.0.183"
   },
   "linux-stable": {
-    "hash": "sha256-90XmXUbkzwiMXh1UGpeO8xqkXb589+dwUlt7iHGEwQU=",
-    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.128/discord-0.0.128.tar.gz",
-    "version": "0.0.128"
+    "hash": "sha256-FMIM/CWPk3Kcqp8iIg+gxiCpjD2DNk7dSBqnCBvzn5w=",
+    "url": "https://stable.dl2.discordapp.net/apps/linux/0.0.130/discord-0.0.130.tar.gz",
+    "version": "0.0.130"
   },
   "osx-canary": {
     "hash": "sha256-cK3Yo7NT7MIUJYzaatO9qxNeAFwEDikPsv4CQPUZKZQ=",
