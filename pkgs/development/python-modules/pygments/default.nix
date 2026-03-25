@@ -22,6 +22,12 @@ let
       hash = "sha256-Y2yyR3zsf4lSU2lwvFM7xDdDVC9wOSrgJjdGAK3VuIc=";
     };
 
+    patches = [
+      # https://github.com/NixOS/nixpkgs/issues/502540
+      # https://github.com/pygments/pygments/issues/3058
+      ./CVE-2026-4539.patch
+    ];
+
     nativeBuildInputs = [ hatchling ];
 
     # circular dependencies if enabled by default
