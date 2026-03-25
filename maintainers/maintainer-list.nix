@@ -28257,10 +28257,10 @@
     name = "Vaibhav Sagar";
   };
   vaisriv = {
-    email = "vai.sriv@icloud.com";
+    email = "vaisriv@icloud.com";
     github = "vaisriv";
     githubId = 46390109;
-    name = "Vai";
+    name = "Vai Srivastava";
   };
   valebes = {
     email = "valebes@gmail.com";
