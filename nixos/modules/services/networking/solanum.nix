@@ -45,6 +45,10 @@ in
             port = 6667;
           };
 
+          class "users" {
+            number_per_ip = 3;
+          };
+
           auth {
             user = "*@*";
             class = "users";
