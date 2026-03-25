@@ -2,7 +2,8 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  gitUpdater,
+  fetchurl,
+  nix-update-script,
   cmake,
   boost,
   ceres-solver,
@@ -31,6 +32,9 @@
   sqlite,
   llvmPackages,
   gtest,
+  curl,
+
+  enableTests ? true,
 }:
 
 assert cudaSupport -> cudaPackages != { };
@@ -65,30 +69,54 @@ let
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
+
+  # COLMAP needs these model files to run the ONNX tests
+  # Based on: https://github.com/colmap/colmap/blob/79efc74b2b614935a3c69b1f983f2bad23a836a1/src/colmap/feature/resources.h#L36
+  modelsForTesting = [
+    {
+      name = "aliked-n16rot.onnx";
+      url = "https://github.com/colmap/colmap/releases/download/3.13.0/aliked-n16rot.onnx";
+      sha256 = "39c423d0a6f03d39ec89d3d1d61853765c2fb6a8b8381376c703e5758778a547";
+    }
+    {
+      name = "aliked-n32.onnx";
+      url = "https://github.com/colmap/colmap/releases/download/3.13.0/aliked-n32.onnx";
+      sha256 = "a077728a02d2de1a775c66df6de8cfeb7c6b51ca57572c64c680131c988c8b3c";
+    }
+    {
+      name = "aliked-lightglue.onnx";
+      url = "https://github.com/colmap/colmap/releases/download/3.13.0/aliked-lightglue.onnx";
+      sha256 = "b9a5de7204648b18a8cf5dcac819f9d30de1a5961ef03756803c8b86c2dceb8d";
+    }
+    {
+      name = "bruteforce-matcher.onnx";
+      url = "https://github.com/colmap/colmap/releases/download/3.13.0/bruteforce-matcher.onnx";
+      sha256 = "3c1282f96d83f5ffc861a873298d08bbe5219f59af59223f5ceab5c41a182a47";
+    }
+    {
+      name = "sift-lightglue.onnx";
+      url = "https://github.com/colmap/colmap/releases/download/3.13.0/sift-lightglue.onnx";
+      sha256 = "e0500228472b43f92b3d36881a09b3310d3b058b56187b246cc7b9ab6429096e";
+    }
+  ];
 in
 stdenv'.mkDerivation {
-  version = "4.0.2";
+  version = "4.0.3";
   pname = "colmap";
   src = fetchFromGitHub {
     owner = "colmap";
     repo = "colmap";
-    rev = "d927f7e518fc20afa33390712c4cc20d85b730b8";
-    hash = "sha256-+cPkksfCLyEo7A70nuRWnOBEkhx8BFevQ9XWTipEkpM=";
+    rev = "e5b4a3e2276fe0cb81c3643d8ffdf124020c372e";
+    hash = "sha256-VV+ROjhrg7bEMV3QU6r4zCcMzC7tAPwTu6gV6/cmiH0=";
   };
 
-  patches = [
-    ./suitesparse-no-include-subdir.patch
-    # Remove when https://github.com/colmap/colmap/pull/4265 is merged
-    ./disambiguate-gradientchecker.patch
-  ];
-
   cmakeFlags = [
-    (lib.cmakeBool "DOWNLOAD_ENABLED" false)
+    (lib.cmakeBool "DOWNLOAD_ENABLED" true) # We want COLMAP to be able to fetch models like LightGlue.
     (lib.cmakeBool "UNINSTALL_ENABLED" false)
     (lib.cmakeBool "FETCH_POSELIB" false)
     (lib.cmakeBool "FETCH_FAISS" false)
     (lib.cmakeBool "FETCH_ONNX" false)
-    (lib.cmakeBool "TESTS_ENABLED" true)
+    (lib.cmakeBool "TESTS_ENABLED" enableTests)
     (lib.cmakeFeature "CHOLMOD_INCLUDE_DIR_HINTS" "${suitesparse.dev}/include")
     (lib.cmakeFeature "CHOLMOD_LIBRARY_DIR_HINTS" "${suitesparse}/lib")
   ]
@@ -114,6 +142,7 @@ stdenv'.mkDerivation {
     gmp
     mpfr
     libsm
+    curl
   ]
   ++ depsAlsoForPycolmap;
 
@@ -126,7 +155,19 @@ stdenv'.mkDerivation {
     autoAddDriverRunpath
   ];
 
+  doCheck = enableTests;
+  preCheck = lib.optionalString enableTests ''
+    export GTEST_FILTER='-*Gpu*:*GPU*:*OpenGL*' # Disable any test involving OpenGL or GPU, these won't work in the sandbox.
+    export HOME=$PWD
+    # Pre-fetch the ONNX models into COLMAP's cache dir so we can run their tests.
+    mkdir -p .cache/colmap
+    ${lib.concatMapStringsSep "\n" (model: ''
+      ln -s ${fetchurl model} .cache/colmap/${model.sha256}-${model.name}
+    '') modelsForTesting}
+  '';
+
   passthru.depsAlsoForPycolmap = depsAlsoForPycolmap;
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Structure-From-Motion and Multi-View Stereo pipeline";
