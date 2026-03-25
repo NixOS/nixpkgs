@@ -5,6 +5,7 @@
   fetchNpmDeps,
   libsecret,
   nodejs,
+  nodejs-slim,
   npmHooks,
   pkg-config,
   clang_20,
@@ -37,7 +38,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      nodejs.python
+      nodejs-slim.python
       npmHooks.npmConfigHook
     ]
     ++ lib.optionals stdenv.isLinux [

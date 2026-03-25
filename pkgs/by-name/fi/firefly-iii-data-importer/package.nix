@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenvNoCC,
-  nodejs,
+  nodejs-slim,
   fetchNpmDeps,
   buildPackages,
   php84,
@@ -25,8 +25,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   buildInputs = [ php84 ];
 
   nativeBuildInputs = [
-    nodejs
-    nodejs.python
+    nodejs-slim
+    nodejs-slim.npm
+    nodejs-slim.python
     buildPackages.npmHooks.npmConfigHook
     php84.composerHooks.composerInstallHook
     php84.packages.composer-local-repo-plugin
