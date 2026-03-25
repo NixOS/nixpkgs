@@ -5397,6 +5397,8 @@ self: super: with self; {
 
   fastexcel = callPackage ../development/python-modules/fastexcel { };
 
+  fastf1 = callPackage ../development/python-modules/fastf1 { };
+
   fastgit = callPackage ../development/python-modules/fastgit { };
 
   fasthtml = callPackage ../development/python-modules/fasthtml { };
