@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "litestream";
-  version = "0.5.9";
+  version = "0.5.10";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-GYYg1XyLhRBaUCY6RL8xLuaPL7k8KI2WjiGI8k86AW4=";
+    hash = "sha256-xp1Ic7sF3yzpR4FgMOfx/uRp/jv/qzTgSlItOIrl2pI=";
   };
 
   ldflags = [
