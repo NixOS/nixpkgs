@@ -913,15 +913,15 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "fzf-lua";
-      version = "0.0.2545-1";
+      version = "0.0.2547-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/fzf-lua-0.0.2545-1.rockspec";
-          sha256 = "0hinizjvfw1ana0wkjqvrn8d3nvmcvhczda144jj6kf7y96xwazr";
+          url = "mirror://luarocks/fzf-lua-0.0.2547-1.rockspec";
+          sha256 = "0i39ds4gr0s7cdns6lmkjdgkj3lv2v4bh9pxcwslc0ifgwh4iwkc";
         }).outPath;
       src = fetchzip {
-        url = "https://github.com/ibhagwan/fzf-lua/archive/8a79ee54d6216d10b2f153921a12b152be0c1a20.zip";
-        sha256 = "128slx673pgpyf9cpkl58gp0b1bgbv7fc23a8hn74n90r628pg4i";
+        url = "https://github.com/ibhagwan/fzf-lua/archive/3b01dc83a893749f5ae4639f1aa0af523821840a.zip";
+        sha256 = "1a39fx5w3xl05h4k30iddk60gbf5a4g463s4z80c3hfjg9h20b2m";
       };
 
       disabled = luaOlder "5.1";
@@ -3435,18 +3435,18 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "luaunbound";
-      version = "1.0.0-1";
+      version = "1.1.0-1";
       knownRockspec =
         (fetchurl {
-          url = "mirror://luarocks/luaunbound-1.0.0-1.rockspec";
-          sha256 = "1zlkibdwrj5p97nhs33cz8xx0323z3kiq5x7v0h3i7v6j0h8ppvn";
+          url = "mirror://luarocks/luaunbound-1.1.0-1.rockspec";
+          sha256 = "0d0qybfl309yqnl8h35m6xynj4wnwmvm1cxl31jqrnahym30w5d8";
         }).outPath;
       src = fetchurl {
-        url = "https://code.zash.se/dl/luaunbound/luaunbound-1.0.0.tar.gz";
-        sha256 = "1lsh0ylp5xskygxl5qdv6mhkm1x8xp0vfd5prk5hxkr19jk5mr3d";
+        url = "https://code.zash.se/dl/luaunbound/luaunbound-1.1.0.tar.gz";
+        sha256 = "0i02m7ivbjgj3271yvpac5pvm01nrynsff1pgp6d8qfc3r35jq93";
       };
 
-      disabled = luaOlder "5.1" || luaAtLeast "5.5";
+      disabled = luaOlder "5.1" || luaAtLeast "5.6";
 
       meta = {
         homepage = "https://www.zash.se/luaunbound.html";
@@ -4301,8 +4301,8 @@ final: prev: {
       src = fetchFromGitHub {
         owner = "hrsh7th";
         repo = "nvim-cmp";
-        rev = "da88697d7f45d16852c6b2769dc52387d1ddc45f";
-        hash = "sha256-/jk8pM7VmZ6mr7BspZjslMHNmCGZ8K/csmALo/Cj1hQ=";
+        rev = "a1d504892f2bc56c2e79b65c6faded2fd21f3eca";
+        hash = "sha256-uzfM8DLRKshESsYmUAbSfXtos9COWpe/fVkxNJPIUFw=";
       };
 
       disabled = luaOlder "5.1" || luaAtLeast "5.4";
