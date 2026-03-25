@@ -1335,6 +1335,9 @@
     hash = "sha256-YV+vab/QqGHVPV1e3wjd0w1nFskJEIU4ukq/yIlojk0=";
     meta = {
       license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        Stebalien
+      ];
     };
   };
 
