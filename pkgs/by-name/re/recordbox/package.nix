@@ -3,13 +3,11 @@
   stdenv,
   appstream-glib,
   blueprint-compiler,
-  bubblewrap,
   cargo,
   dbus,
   desktop-file-utils,
   fetchFromCodeberg,
   glib,
-  glycin-loaders,
   gst_all_1,
   gtk4,
   hicolor-icon-theme,
@@ -21,18 +19,11 @@
   ninja,
   nix-update-script,
   pkg-config,
-  replaceVars,
   rustPlatform,
   rustc,
   sqlite,
   wrapGAppsHook4,
 }:
-
-let
-  glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
-    bwrap = "${bubblewrap}/bin/bwrap";
-  };
-in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "recordbox";
@@ -91,22 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   cargoCheckType = if (finalAttrs.mesonBuildType != "debug") then "release" else "debug";
-
-  # Workaround copied from https://github.com/NixOS/nixpkgs/blob/e39fe935fc7537bee0440935c12f5c847735a291/pkgs/by-name/lo/loupe/package.nix#L60-L74
-  preConfigure = ''
-    # Dirty approach to add patches after cargoSetupPostUnpackHook
-    # We should eventually use a cargo vendor patch hook instead
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycinPathsPatch}
-    popd
-  '';
-  preFixup = ''
-    # Needed for the glycin crate to find loaders.
-    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   checkPhase = ''
     runHook preCheck
