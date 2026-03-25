@@ -18,16 +18,16 @@
   python,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "lineax";
-  version = "0.0.8";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick-kidger";
     repo = "lineax";
-    tag = "v${version}";
-    hash = "sha256-VMTDCExgxfCcd/3UZAglfAxAFaSjzFJJuvSWJAx2tJs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oUqJRp4pge3t9g7o/9PCZTb7e4EPkBEGLclHMIdUqiw=";
   };
 
   build-system = [ hatchling ];
@@ -59,8 +59,8 @@ buildPythonPackage rec {
   meta = {
     description = "Linear solvers in JAX and Equinox";
     homepage = "https://github.com/patrick-kidger/lineax";
-    changelog = "https://github.com/patrick-kidger/lineax/releases/tag/${src.tag}";
+    changelog = "https://github.com/patrick-kidger/lineax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

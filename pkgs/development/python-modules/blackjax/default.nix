@@ -15,11 +15,12 @@
   typing-extensions,
 
   # checks
+  chex,
   pytestCheckHook,
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blackjax";
   version = "1.3";
   pyproject = true;
@@ -27,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-ystvPfIsnMFYkC+LNtcRQsI19i/y/905SnPSApM8v4E=";
   };
 
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    chex
     pytestCheckHook
     pytest-xdist
   ];
@@ -83,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
-    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
+    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

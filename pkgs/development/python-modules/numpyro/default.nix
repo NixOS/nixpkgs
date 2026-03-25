@@ -81,6 +81,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # Failing with jax>=0.9.0
+    # TypeError: Error interpreting argument to closed_call as a JAX value
+    "test_provenance_call"
+    "test_provenance_closed_call"
+    "test_numpyrooptim_no_double_jit"
+
     # ValueError: Found unexpected Arrays on value of type <class 'list'> in static attribute 'layers'
     # of Pytree type '<class 'test_module.test_random_nnx_module_mcmc_sequence_params.<locals>.MLP'>'.
     # This is an error starting from Flax version 0.12.0.

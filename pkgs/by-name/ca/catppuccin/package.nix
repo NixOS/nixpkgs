@@ -125,8 +125,8 @@ let
       name = "kvantum";
       owner = "catppuccin";
       repo = "Kvantum";
-      rev = "c7cb144b041395e83e4f510a62526b7adfb79911";
-      hash = "sha256-YNUkri+no+rNLTJHf6cPdy4AmQLzPiRK1Jbp2o8e1LE=";
+      rev = "71105d224fef95dd023691303477ce3eea487457";
+      hash = "sha256-gcvCVZjVbj5fRZWaM+mZTwH/g158MH36JmMuMgCBuqQ=";
     };
 
     lazygit = fetchFromGitHub {
@@ -149,16 +149,16 @@ let
       name = "palette";
       owner = "catppuccin";
       repo = "palette";
-      rev = "0df7db6fe201b437d91e7288fa22807bb0e44701";
-      hash = "sha256-R52Q1FVAclvBk7xNgj/Jl+GPCIbORNf6YbJ1nxH3Gzs=";
+      rev = "07d02aa110ef9eb7e7427afca5c73ba9cf7f8ebd";
+      hash = "sha256-hsy+GhuM4MSjnwGq1YJSLBFIbVm67SSdPRgObP00mxw=";
     };
 
     plymouth = fetchFromGitHub {
       name = "plymouth";
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "e0f58d6fcf3dbc2d35dfc4fec394217fbfa92666";
-      hash = "sha256-He6ER1QNrJCUthFoBBGHBINouW/tozxQy3R79F5tsuo=";
+      rev = "da38011d25f6f36152f2409372dfadb11c8f047c";
+      hash = "sha256-3JK4lX2ZmxysITDEEkhBLkyINUeCzvu5nUgrpvWZ+ZE=";
     };
 
     qt5ct = fetchFromGitHub {
@@ -222,7 +222,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "unstable-2025-10-07";
+    version = "0-unstable-2026-03-24";
 
     srcs = selectedSources;
 

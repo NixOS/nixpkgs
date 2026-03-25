@@ -20,7 +20,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "distrax";
   version = "0.1.7";
   pyproject = true;
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "distrax";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-R6rGGNzup3O6eZ2z4vygYWTjroE/Irt3aog8Op+0hco=";
   };
 
@@ -57,6 +57,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "distrax" ];
 
   disabledTests = [
+    # execnet.gateway_base.DumpError: can't serialize <class 'method'>
+    "test_raises_on_invalid_input_shape"
+
     # Flaky: AssertionError: 1 not less than 0.7000000000000001
     "test_von_mises_sample_uniform_ks_test"
 
@@ -124,7 +127,7 @@ buildPythonPackage rec {
   meta = {
     description = "Probability distributions in JAX";
     homepage = "https://github.com/deepmind/distrax";
-    changelog = "https://github.com/google-deepmind/distrax/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/distrax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
     badPlatforms = [
@@ -132,4 +135,4 @@ buildPythonPackage rec {
       lib.systems.inspect.patterns.isDarwin
     ];
   };
-}
+})

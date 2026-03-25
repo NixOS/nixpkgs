@@ -13,6 +13,8 @@ let
   inherit (lib) mkAfter mkForce;
   pkgs = config.node.pkgs;
 
+  imdsServer = import ./common/imds-server.nix { inherit pkgs; };
+
   # Build an EC2 image configuration
   imageCfg =
     (import ../lib/eval-config.nix {
@@ -43,6 +45,13 @@ let
               }
             ];
           };
+
+          # Packages needed for IPv6 IMDS fallback test
+          environment.systemPackages = [
+            pkgs.socat
+            imdsServer
+            pkgs.iptables
+          ];
 
           nixpkgs.pkgs = pkgs;
         }
@@ -87,11 +96,8 @@ in
 
     # Instance Metadata Service (IMDSv2 with 1.0 metadata version)
     # TODO: Use 'latest' metadata version instead of '1.0'
-    #       - Consider https://github.com/aws/amazon-ec2-metadata-mock
-    #         - Blocked on https://github.com/aws/amazon-ec2-metadata-mock/issues/234
-    #       - Consider https://github.com/purpleclay/imds-mock
-    #       - [Test matrix] also test providing the host key through IMDS
-    #         - i.e. a test module argument to select between writing or reading the host key
+    # TODO: [Test matrix] also test providing the host key through IMDS
+    #       - i.e. a test module argument to select between writing or reading the host key
     def create_ec2_metadata_dir(temp_dir, client_pubkey):
         """Create fake EC2 metadata directory structure with mock data"""
         metadata_dir = os.path.join(temp_dir.name, "ec2-metadata")
@@ -171,7 +177,7 @@ in
         )
         metadata_net = (
             " -device virtio-net-pci,netdev=ec2meta"
-            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${pkgs.micro-httpd}/bin/micro_httpd {metadata_dir}'"
+            + f" -netdev 'user,id=ec2meta,net=169.0.0.0/8,guestfwd=tcp:169.254.169.254:80-cmd:${lib.getExe imdsServer} {metadata_dir}'"
         )
 
         start_command = (
@@ -189,7 +195,7 @@ in
         test_marker = f"{format_name}-decompression-test"
         with open(user_data_path, "wb") as f:
             f.write(compressed_data)
-        machine.succeed("systemctl restart fetch-ec2-metadata")
+        machine.succeed("systemctl reset-failed fetch-ec2-metadata; systemctl restart fetch-ec2-metadata")
         result = machine.succeed("cat /etc/ec2-metadata/user-data")
         assert test_marker in result, f"Expected '{test_marker}' in decompressed {format_name} content, got: {result}"
         journal = machine.succeed("journalctl -u fetch-ec2-metadata --no-pager -b")
@@ -220,7 +226,16 @@ in
         machine_ip = "${config.nodes.machine.networking.primaryIPAddress}"
 
         with subtest("EC2 metadata service connectivity"):
-            hostname_response = machine.succeed("curl --fail -s http://169.254.169.254/1.0/meta-data/hostname")
+            # Obtain an IMDSv2 token, then use it to fetch metadata
+            imds_token = machine.succeed(
+                "curl -sf -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 600'"
+                " http://169.254.169.254/latest/api/token"
+            ).strip()
+            assert imds_token, "Failed to obtain IMDSv2 token"
+            hostname_response = machine.succeed(
+                f"curl -sf -H 'X-aws-ec2-metadata-token: {imds_token}'"
+                " http://169.254.169.254/1.0/meta-data/hostname"
+            )
             assert "test-instance" in hostname_response, f"Expected 'test-instance', got: {hostname_response}"
 
         with subtest("SSH host key extraction from console"):
@@ -298,6 +313,66 @@ in
                 input=test_data, capture_output=True, check=True,
             )
             test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
+
+        with subtest("IPv6 IMDS fallback"):
+            # Save hostname fetched via IPv4 for later comparison
+            original_hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()
+
+            # Assign the EC2 IPv6 IMDS address to loopback
+            machine.succeed("ip -6 addr add fd00:ec2::254/128 dev lo")
+
+            # Create metadata directory structure for the IPv6 endpoint
+            machine.succeed(
+                "mkdir -p /tmp/ipv6-metadata/1.0/meta-data/public-keys/0"
+                " && mkdir -p /tmp/ipv6-metadata/latest/api"
+                " && cp /etc/ec2-metadata/hostname /tmp/ipv6-metadata/1.0/meta-data/hostname"
+                " && cp /etc/ec2-metadata/ami-manifest-path /tmp/ipv6-metadata/1.0/meta-data/ami-manifest-path"
+                " && echo i-1234567890abcdef0 > /tmp/ipv6-metadata/1.0/meta-data/instance-id"
+                " && echo ipv6-test-token > /tmp/ipv6-metadata/latest/api/token"
+                " && touch /tmp/ipv6-metadata/1.0/user-data"
+            )
+            machine.execute(
+                "test -f /etc/ec2-metadata/public-keys-0-openssh-key"
+                " && cp /etc/ec2-metadata/public-keys-0-openssh-key"
+                " /tmp/ipv6-metadata/1.0/meta-data/public-keys/0/openssh-key"
+            )
+
+            # Serve metadata on the IPv6 IMDS address via socat + imds-server (inetd-style)
+            machine.succeed(
+                "systemd-run --unit=ipv6-imds --"
+                " socat TCP6-LISTEN:80,bind=[fd00:ec2::254],fork,reuseaddr"
+                " SYSTEM:'${lib.getExe imdsServer} /tmp/ipv6-metadata'"
+            )
+
+            # Wait for IPv6 IMDS to become reachable (token endpoint doesn't require auth)
+            machine.wait_until_succeeds(
+                "curl -sf -X PUT -H 'X-aws-ec2-metadata-token-ttl-seconds: 600'"
+                " http://[fd00:ec2::254]/latest/api/token"
+            )
+
+            # Block IPv4 IMDS to force fallback to IPv6
+            machine.succeed(
+                "iptables -I OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REJECT"
+            )
+
+            # Verify IPv4 IMDS is now unreachable
+            machine.fail(
+                "curl -sf --connect-timeout 2 http://169.254.169.254/1.0/meta-data/hostname"
+            )
+
+            # Clear fetched metadata and re-run the fetcher
+            machine.succeed("rm -f /etc/ec2-metadata/*")
+            machine.succeed("systemctl restart fetch-ec2-metadata")
+
+            # Verify metadata was successfully re-fetched via IPv6
+            hostname = machine.succeed("cat /etc/ec2-metadata/hostname").strip()
+            assert hostname == original_hostname, f"Expected '{original_hostname}', got '{hostname}'"
+
+            # Clean up: restore IPv4 IMDS access
+            machine.succeed(
+                "iptables -D OUTPUT -d 169.254.169.254 -p tcp --dport 80 -j REJECT"
+            )
+            machine.succeed("systemctl stop ipv6-imds")
 
     finally:
         machine.shutdown()
