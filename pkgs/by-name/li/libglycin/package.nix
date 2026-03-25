@@ -15,6 +15,7 @@
   glib,
   gobject-introspection,
   glycin-loaders,
+  glycin-thumbnailer,
   libglycin-gtk4,
   fontconfig,
   libseccomp,
@@ -146,6 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       inherit
         glycin-loaders
+        glycin-thumbnailer
         libglycin-gtk4
         ;
     };
