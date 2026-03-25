@@ -83,6 +83,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "pyspread";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ Merikei ];
   };
 })
