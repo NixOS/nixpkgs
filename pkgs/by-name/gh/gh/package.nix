@@ -63,6 +63,7 @@ buildGo126Module (finalAttrs: {
     maintainers = with lib.maintainers; [
       mdaniels5757
       zowoq
+      savtrip
     ];
   };
 })
