@@ -72,7 +72,7 @@ in
     from typing import Dict, Optional
 
 
-    def get_machine_env(machine: Machine, user: Optional[str] = None) -> Dict[str, str]:
+    def get_machine_env(machine: BaseMachine, user: Optional[str] = None) -> Dict[str, str]:
         """
         Gets the environment from a given machine, and returns it as a
         dictionary in the form:
