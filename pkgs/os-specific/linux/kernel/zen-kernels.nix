@@ -12,7 +12,7 @@ let
   # override options if they need using lib.mkForce (that has 50 priority)
   mkKernelOverride = lib.mkOverride 90;
 
-  suffix = "zen1"; # zen
+  suffix = "zen1";
 in
 
 buildLinux (
