@@ -24787,6 +24787,12 @@
     name = "Serval";
     keys = [ { fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C"; } ];
   };
+  sesav = {
+    email = "hello@8am.dev";
+    github = "sesav";
+    githubId = 1636488;
+    name = "Sergey Silaev";
+  };
   sestrella = {
     email = "sestrella.me@gmail.com";
     github = "sestrella";

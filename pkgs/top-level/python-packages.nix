@@ -4272,6 +4272,8 @@ self: super: with self; {
 
   django-modeltranslation = callPackage ../development/python-modules/django-modeltranslation { };
 
+  django-modern-rest = callPackage ../development/python-modules/django/django-modern-rest { };
+
   django-money = callPackage ../development/python-modules/django-money { };
 
   django-mptt = callPackage ../development/python-modules/django-mptt { };
