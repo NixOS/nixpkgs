@@ -498,6 +498,10 @@ in
     # Put the default value for matchers in here (as in, not as an *actual* mkDefault default value),
     # to force it being merged with any custom values instead of being overridden.
     problems.matchers = [
+      {
+        kind = "broken";
+        handler = "error";
+      }
       # Be loud and clear about package removals
       {
         kind = "removal";

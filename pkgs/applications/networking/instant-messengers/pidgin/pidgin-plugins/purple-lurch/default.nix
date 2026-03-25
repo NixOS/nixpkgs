@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace lib/axc/lib/libsignal-protocol-c/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     pidgin
