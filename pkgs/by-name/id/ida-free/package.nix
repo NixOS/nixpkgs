@@ -34,12 +34,12 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ida-free";
-  version = "9.2";
+  version = "9.3";
 
   src = requireFile {
     name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_x64linux.run";
     url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${finalAttrs.version}/ida-free";
-    hash = "sha256-CQm9phkqLXhht4UQxooKmhmiGuW3lV8RIJuDrm52aNw=";
+    hash = "sha256-eSX6/nT9joEMs48qFq92qT8Qr25B38xy4FxxaPIOwLw=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     "libQt6Network.so.6"
     "libQt6EglFSDeviceIntegration.so.6"
     "libQt6WaylandEglClientHwIntegration.so.6"
+    "libQt6WaylandCompositor.so.6"
     "libQt6WlShellIntegration.so.6"
   ];
 
