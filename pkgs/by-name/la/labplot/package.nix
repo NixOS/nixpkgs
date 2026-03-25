@@ -5,28 +5,11 @@
   fetchpatch,
   cmake,
   pkg-config,
-  extra-cmake-modules,
+  kdePackages,
+  qt6,
   shared-mime-info,
   bison,
   flex,
-  wrapQtAppsHook,
-
-  qtbase,
-
-  karchive,
-  kcompletion,
-  kconfig,
-  kcoreaddons,
-  kcrash,
-  kdoctools,
-  ki18n,
-  kiconthemes,
-  kio,
-  knewstuff,
-  kparts,
-  ktextwidgets,
-  kxmlgui,
-  syntax-highlighting,
 
   gsl,
 
@@ -36,21 +19,19 @@
   netcdf,
   cfitsio,
   libcerf,
-  cantor,
   zlib,
   lz4,
   readstat,
   matio,
-  qtserialport,
   discount,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "labplot";
   version = "2.12.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/labplot/labplot-${version}.tar.xz";
+    url = "mirror://kde/stable/labplot/labplot-${finalAttrs.version}.tar.xz";
     hash = "sha256-4oFVv930DltvfEeRMTVW0eSBOARPIW8hDVFbn21sEGo=";
   };
 
@@ -70,45 +51,45 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    extra-cmake-modules
+    kdePackages.extra-cmake-modules
     shared-mime-info
     bison
     flex
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    qt6.qtbase
 
-    karchive
-    kcompletion
-    kconfig
-    kcoreaddons
-    kcrash
-    kdoctools
-    ki18n
-    kiconthemes
-    kio
-    knewstuff
-    kparts
-    ktextwidgets
-    kxmlgui
+    kdePackages.karchive
+    kdePackages.kcompletion
+    kdePackages.kconfig
+    kdePackages.kcoreaddons
+    kdePackages.kcrash
+    kdePackages.kdoctools
+    kdePackages.ki18n
+    kdePackages.kiconthemes
+    kdePackages.kio
+    kdePackages.knewstuff
+    kdePackages.kparts
+    kdePackages.ktextwidgets
+    kdePackages.kxmlgui
 
-    syntax-highlighting
+    kdePackages.syntax-highlighting
     gsl
 
-    poppler
+    kdePackages.poppler
     fftw
     hdf5
     netcdf
     cfitsio
     libcerf
-    cantor
+    kdePackages.cantor
     zlib
     lz4
     readstat
     matio
-    qtserialport
+    qt6.qtserialport
     discount
   ];
 
@@ -131,4 +112,4 @@ stdenv.mkDerivation rec {
     mainProgram = "labplot2";
     platforms = lib.platforms.unix;
   };
-}
+})
