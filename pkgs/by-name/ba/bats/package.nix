@@ -152,6 +152,8 @@ resholve.mkDerivation rec {
         wrapProgram "$out/bin/bats" \
           --suffix BATS_LIB_PATH : "$out/share/bats"
       '';
+
+      inherit meta;
     };
 
   passthru.tests = {
