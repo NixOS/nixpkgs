@@ -25,7 +25,7 @@
       services.desktopManager.gnome.debug = true;
 
       systemd.user.services = {
-        "org.gnome.Shell@wayland" = {
+        "org.gnome.Shell@" = {
           serviceConfig = {
             ExecStart = [
               # Clear the list before overriding it.
