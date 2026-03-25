@@ -30,6 +30,10 @@ buildGoModule (finalAttrs: {
 
   # replace the build phase to use the GNUMakefile instead
   buildPhase = ''
+    # Remove -linkmode=external on Darwin as it's incompatible with CGO_ENABLED=0
+    # The original fix (direnv#194) was for macOS 10.10 DYLD_INSERT_LIBRARIES issues
+    # which is no longer relevant
+    substituteInPlace GNUmakefile --replace-fail '-linkmode=external' ""
     make BASH_PATH=$BASH_PATH
   '';
 
