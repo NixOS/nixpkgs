@@ -6,7 +6,7 @@
   nix-update-script,
   versionCheckHook,
   writeShellScript,
-  xcbuild,
+  re-plistbuddy,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = writeShellScript "version-check" ''
-    ${xcbuild}/bin/PlistBuddy -c "Print :CFBundleShortVersionString" "$1"
+    ${lib.getExe' re-plistbuddy "PlistBuddy"} -c "Print :CFBundleShortVersionString" "$1"
   '';
   versionCheckProgramArg = [
     "${placeholder "out"}/Applications/BetterDisplay.app/Contents/Info.plist"
