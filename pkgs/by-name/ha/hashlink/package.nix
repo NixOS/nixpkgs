@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nVr+fDdna8EEHvIiXsccWFRTYzXfb4GG1zrfL+O6zLA=";
   };
 
+  # backport of https://github.com/HaxeFoundation/hashlink/pull/767
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+     --replace-warn \
+       "cmake_minimum_required(VERSION 3.1)" \
+       "cmake_minimum_required(VERSION 3.13)"
+  '';
+
   buildInputs = [
     libGL
     libGLU
