@@ -5,6 +5,7 @@
   hatchling,
   hatch-vcs,
   colorcet,
+  hypothesis,
   multipledispatch,
   numba,
   numpy,
@@ -23,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.18.2";
+  version = "0.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "datashader";
     tag = "v${version}";
-    hash = "sha256-ad1L0QyqLtMafFr+ZK1dItlFuPQZ0Caa96RgkLsqNkA=";
+    hash = "sha256-Pc2mORxJA2JKioIzuBYU/LjUkij6ecqQh6tN/8z9ttI=";
   };
 
   build-system = [
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     writableTmpDirAsHomeHook
+    hypothesis
   ];
 
   disabledTestPaths = [
