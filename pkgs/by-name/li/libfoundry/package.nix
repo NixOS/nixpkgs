@@ -13,9 +13,12 @@
   gtk4,
   gtksourceview5,
   json-glib,
+  libadwaita,
   libdex,
   libgit2,
+  libpanel,
   libpeas2,
+  libsecret,
   libsoup_3,
   libspelling,
   libssh2,
@@ -25,6 +28,7 @@
   meson,
   ninja,
   pkg-config,
+  readline,
   template-glib,
   vte-gtk4,
   webkitgtk_6_0,
@@ -64,12 +68,16 @@ stdenv.mkDerivation (finalAttrs: {
     editorconfig-core-c
     flatpak
     gom
+    libadwaita
     libgit2
+    libpanel
+    libsecret
     libsoup_3
     libssh2
     libsysprof-capture
     libxml2
     libyaml
+    readline
     template-glib
   ]
   ++ lib.optionals withGtk [
