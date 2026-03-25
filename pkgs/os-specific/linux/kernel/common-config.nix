@@ -685,6 +685,8 @@ let
       FANOTIFY = yes;
       FANOTIFY_ACCESS_PERMISSIONS = yes;
 
+      FS_DAX = yes;
+
       TMPFS = yes;
       TMPFS_POSIX_ACL = yes;
       FS_ENCRYPTION = yes;
