@@ -5,8 +5,7 @@
   qtbase,
   qttools,
   qtwebengine,
-  qtxmlpatterns,
-  binutils,
+  qt5compat,
   wrapQtAppsHook,
   openmodelica,
   openscenegraph,
@@ -34,25 +33,13 @@ mkOpenModelicaDerivation {
 
   buildInputs = [
     qtwebengine
+    qt5compat
     openscenegraph
-    qtxmlpatterns
-    binutils
   ];
 
   postPatch = ''
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
 
-    #remove remnants of qtwebkit
-    sed -i OMEdit/OMEdit.config.pre.pri -e '
-      s|webkit|webengine|g
-    '
-    sed -i OMEdit/OMEditGUI/OMEditGUI.pro -e '
-      s|webkit|webengine|g
-    '
-    sed -i OMEdit/OMEdit.config.pre.pri -e '
-      s|webkit|webengine|g
-      s|OM_HAVE_PTHREADS|OM_HAVE_PTHREADS OM_OMEDIT_ENABLE_QTWEBENGINE|
-    '
     # here, the build system seems to assume that the current OPENMODELICAHOME is a subdirectory of the source
     # directory. Our packaging of Openmodelica breaks this assumption, so point OMEditLIB.pro towards the correct
     # source dir.

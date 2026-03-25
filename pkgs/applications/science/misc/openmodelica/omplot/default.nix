@@ -2,6 +2,7 @@
   lib,
   qtbase,
   qttools,
+  qt5compat,
   qmake,
   wrapQtAppsHook,
   openmodelica,
@@ -19,6 +20,10 @@ mkOpenModelicaDerivation {
     qttools
     qmake
     wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    qt5compat
   ];
 
   postPatch = with openmodelica; ''
