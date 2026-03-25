@@ -40,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i "/install_emptydir/d" meson.build
   '';
 
+  mesonBuildType = "debugoptimized";
   mesonFlags = [
     # (lib.mesonOption "custom_version" finalAttrs.src.rev)
     (lib.mesonBool "fhs_paths" true)
