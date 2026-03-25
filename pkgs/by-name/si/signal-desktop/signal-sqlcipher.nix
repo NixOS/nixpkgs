@@ -15,13 +15,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-sqlcipher";
-  version = "2.4.4";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "node-sqlcipher";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-70kObW6jYzaquMrj20VMTQg/rDWqIu8o2/m7S3mUZB8=";
+    hash = "sha256-lkSQXiplkY5sBpHsAhW4odWe+MCalAo100EL7h4VKbg=";
   };
 
   pnpmDeps = fetchPnpmDeps {
