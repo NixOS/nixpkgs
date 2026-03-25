@@ -1,0 +1,106 @@
+From 4a33fe91516aa3adf19ff8b61a6133edc0e15a85 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 25 Mar 2026 19:02:46 +0530
+Subject: [PATCH 3/5] tests fix endpoint path
+
+_endpoint_path is not a function anymore
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/override_test.py  | 4 ++--
+ tests/overrides_test.py | 4 ++--
+ tests/synonym_test.py   | 4 ++--
+ tests/synonyms_test.py  | 4 ++--
+ 4 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/tests/override_test.py b/tests/override_test.py
+index 89526c7..47fc81b 100644
+--- a/tests/override_test.py
++++ b/tests/override_test.py
+@@ -47,7 +47,7 @@ def test_init(fake_api_call: ApiCall) -> None:
+         fake_api_call.config.nearest_node,
+     )
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+@@ -104,7 +104,7 @@ def test_init_async(fake_async_api_call: AsyncApiCall) -> None:
+         fake_async_api_call.config.nearest_node,
+     )
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+diff --git a/tests/overrides_test.py b/tests/overrides_test.py
+index a9376b5..de4de73 100644
+--- a/tests/overrides_test.py
++++ b/tests/overrides_test.py
+@@ -61,7 +61,7 @@ def test_get_missing_override(fake_overrides: Overrides) -> None:
+     )
+     assert override.collection_name == "companies"
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+@@ -186,7 +186,7 @@ def test_get_missing_override_async(fake_async_overrides) -> None:
+     )
+     assert override.collection_name == "companies"
+     assert (
+-        override._endpoint_path()  # noqa: WPS437
++        override._endpoint_path  # noqa: WPS437
+         == "/collections/companies/overrides/company_override"
+     )
+ 
+diff --git a/tests/synonym_test.py b/tests/synonym_test.py
+index cfe6e51..d9affd9 100644
+--- a/tests/synonym_test.py
++++ b/tests/synonym_test.py
+@@ -45,7 +45,7 @@ def test_init(fake_api_call: ApiCall) -> None:
+         fake_api_call.config.nearest_node,
+     )
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+@@ -99,7 +99,7 @@ def test_init_async(fake_async_api_call: AsyncApiCall) -> None:
+         fake_async_api_call.config.nearest_node,
+     )
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+diff --git a/tests/synonyms_test.py b/tests/synonyms_test.py
+index 3402493..afe8638 100644
+--- a/tests/synonyms_test.py
++++ b/tests/synonyms_test.py
+@@ -62,7 +62,7 @@ def test_get_missing_synonym(fake_synonyms: Synonyms) -> None:
+     )
+     assert synonym.collection_name == "companies"
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+@@ -174,7 +174,7 @@ def test_get_missing_synonym_async(fake_async_synonyms) -> None:
+     )
+     assert synonym.collection_name == "companies"
+     assert (
+-        synonym._endpoint_path()  # noqa: WPS437
++        synonym._endpoint_path  # noqa: WPS437
+         == "/collections/companies/synonyms/company_synonym"
+     )
+ 
+-- 
+2.53.0
+

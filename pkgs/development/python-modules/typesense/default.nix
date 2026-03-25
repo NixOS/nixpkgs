@@ -7,29 +7,36 @@
   pytestCheckHook,
   typesense,
   curl,
-  pytest-mock,
-  requests-mock,
-  python-dotenv,
   faker,
+  httpx,
   isort,
+  pytest-asyncio,
+  pytest-httpx,
+  pytest-mock,
+  python-dotenv,
+  requests-mock,
+  respx,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "typesense";
-  version = "1.3.0";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "typesense";
     repo = "typesense-python";
-    tag = "v${version}";
-    hash = "sha256-b3t4l02tOiSMrkqZACV6l5f+Kb5Wfcnq9ZZCld1SKBU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GzapEl26FS6yMGeLC54y9ysl0mt9l6ceYHr84E6BqBo=";
   };
 
   patches = [
     # See <https://github.com/typesense/typesense-python/pull/103>.
-    ./linux-only-metrics.patch
-    ./generated-temp-path.patch
+    ./0001-linux-only-metrics.patch
+    ./0002-generated-temp-path.patch
+    ./0003-tests-fix-endpoint-path.patch
+    ./0004-tests-fix-rule_id.patch
+    ./0005-tests-fix-removed-fields.patch
   ];
 
   build-system = [ setuptools ];
@@ -40,11 +47,15 @@ buildPythonPackage rec {
     pytestCheckHook
     typesense
     curl
-    pytest-mock
-    requests-mock
-    python-dotenv
     faker
+    httpx
     isort
+    pytest-asyncio
+    pytest-httpx
+    pytest-mock
+    python-dotenv
+    requests-mock
+    respx
   ];
   disabledTestMarks = [ "open_ai" ];
   disabledTests = [ "import_typing_extensions" ];
@@ -75,4 +86,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     teams = [ lib.teams.ngi ];
   };
-}
+})

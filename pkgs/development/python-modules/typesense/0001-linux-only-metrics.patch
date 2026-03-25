@@ -1,0 +1,43 @@
+From b898f9af88a0e07d189de7430c0bc2b477cd98a8 Mon Sep 17 00:00:00 2001
+From: phanirithvij <phanirithvij2000@gmail.com>
+Date: Wed, 25 Mar 2026 18:30:32 +0530
+Subject: [PATCH 1/5] linux only metrics
+
+Signed-off-by: phanirithvij <phanirithvij2000@gmail.com>
+---
+ tests/metrics_test.py | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/tests/metrics_test.py b/tests/metrics_test.py
+index 12fc300..3c5e5c0 100644
+--- a/tests/metrics_test.py
++++ b/tests/metrics_test.py
+@@ -42,18 +42,22 @@ def test_init_async(fake_async_api_call: AsyncApiCall) -> None:
+     )
+     assert metrics.resource_path == "/metrics.json"  # noqa: WPS437
+ 
++import platform
++
+ 
+ def test_actual_retrieve(actual_metrics: Metrics) -> None:
+     """Test that the Metrics object can retrieve metrics on Typesense server and verify response structure."""
+     response = actual_metrics.retrieve()
+ 
+-    assert "system_cpu_active_percentage" in response
++    if platform.system() == "Linux":
++        assert "system_cpu_active_percentage" in response
++        assert "system_network_received_bytes" in response
++        assert "system_network_sent_bytes" in response
++
+     assert "system_disk_total_bytes" in response
+     assert "system_disk_used_bytes" in response
+     assert "system_memory_total_bytes" in response
+     assert "system_memory_used_bytes" in response
+-    assert "system_network_received_bytes" in response
+-    assert "system_network_sent_bytes" in response
+     assert "typesense_memory_active_bytes" in response
+     assert "typesense_memory_allocated_bytes" in response
+     assert "typesense_memory_fragmentation_ratio" in response
+-- 
+2.53.0
+
