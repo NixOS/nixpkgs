@@ -359,6 +359,151 @@ let
   # Filter to only enabled instances
   enabledInstances = lib.filterAttrs (_: inst: inst.enable) cfg.instances;
 
+  llama-cpp-verify = pkgs.writeShellApplication {
+    name = "llama-cpp-verify";
+    runtimeInputs = with pkgs; [
+      curl
+      jq
+      systemd
+    ];
+    bashOptions = [
+      "nounset"
+      "pipefail"
+    ];
+    text = ''
+      # Instance data baked in at eval time (name:host:port:metrics:slots)
+      INSTANCES=(
+        ${lib.concatStringsSep "\n        " (lib.mapAttrsToList (name: inst:
+          let
+            connectHost = if inst.host == "0.0.0.0" then "127.0.0.1" else inst.host;
+          in
+          ''"${name}:${connectHost}:${toString inst.port}:${lib.boolToString inst.enableMetrics}:${lib.boolToString inst.slots}"''
+        ) enabledInstances)}
+      )
+
+      RED='\033[0;31m'
+      GREEN='\033[0;32m'
+      YELLOW='\033[0;33m'
+      BOLD='\033[1m'
+      NC='\033[0m'
+
+      PASS=0
+      FAIL=0
+      WARN=0
+      DO_INFERENCE=false
+
+      for arg in "$@"; do
+        case "$arg" in
+          --inference) DO_INFERENCE=true ;;
+          *) echo "Usage: llama-cpp-verify [--inference]"; exit 1 ;;
+        esac
+      done
+
+      pass() { echo -e "  ''${GREEN}PASS''${NC} $1"; PASS=$((PASS + 1)); }
+      fail() { echo -e "  ''${RED}FAIL''${NC} $1"; FAIL=$((FAIL + 1)); }
+      warn() { echo -e "  ''${YELLOW}WARN''${NC} $1"; WARN=$((WARN + 1)); }
+
+      check_service() {
+        local svc="llama-cpp-$1.service"
+        if systemctl is-active --quiet "$svc"; then
+          pass "systemd service $svc is active"
+        else
+          fail "systemd service $svc is not active"
+        fi
+      }
+
+      check_health() {
+        local url="http://$2:$3/health"
+        local resp
+        if resp=$(curl -sf --max-time 5 --connect-timeout 2 "$url" 2>/dev/null); then
+          local status
+          status=$(echo "$resp" | jq -r '.status // empty' 2>/dev/null)
+          if [ "$status" = "ok" ]; then
+            pass "/health ($url) status=ok"
+          else
+            warn "/health ($url) responded but status='$status'"
+          fi
+        else
+          fail "/health ($url) unreachable"
+        fi
+      }
+
+      check_metrics() {
+        if [ "$4" != "true" ]; then return; fi
+        local url="http://$2:$3/metrics"
+        if curl -sf --max-time 5 --connect-timeout 2 "$url" >/dev/null 2>&1; then
+          pass "/metrics ($url) reachable"
+        else
+          fail "/metrics ($url) unreachable"
+        fi
+      }
+
+      check_slots() {
+        if [ "$4" != "true" ]; then return; fi
+        local url="http://$2:$3/slots"
+        if curl -sf --max-time 5 --connect-timeout 2 "$url" >/dev/null 2>&1; then
+          pass "/slots ($url) reachable"
+        else
+          fail "/slots ($url) unreachable"
+        fi
+      }
+
+      check_security() {
+        local svc="llama-cpp-$1.service"
+        local output
+        if output=$(systemd-analyze security --no-pager "$svc" 2>/dev/null | tail -1); then
+          if [ -n "$output" ]; then
+            pass "security: $output"
+          else
+            warn "could not read security score for $svc"
+          fi
+        else
+          warn "systemd-analyze security failed for $svc"
+        fi
+      }
+
+      check_inference() {
+        if [ "$DO_INFERENCE" != "true" ]; then return; fi
+        local url="http://$2:$3/v1/chat/completions"
+        local resp
+        if resp=$(curl -sf --max-time 30 --connect-timeout 2 \
+          -H "Content-Type: application/json" \
+          -d '{"messages":[{"role":"user","content":"Say hello in one word."}],"max_tokens":16}' \
+          "$url" 2>/dev/null); then
+          local content
+          content=$(echo "$resp" | jq -r '.choices[0].message.content // empty' 2>/dev/null)
+          if [ -n "$content" ]; then
+            pass "inference ($url): $(echo "$content" | head -c 60)"
+          else
+            fail "inference ($url): empty response"
+          fi
+        else
+          fail "inference ($url): request failed"
+        fi
+      }
+
+      echo -e "''${BOLD}llama-cpp instance verification''${NC}"
+      echo -e "Instances: ''${#INSTANCES[@]}\n"
+
+      for entry in "''${INSTANCES[@]}"; do
+        IFS=: read -r name host port metrics slots <<< "$entry"
+        echo -e "''${BOLD}[$name]''${NC} http://$host:$port"
+        check_service "$name"
+        check_health "$name" "$host" "$port"
+        check_metrics "$name" "$host" "$port" "$metrics"
+        check_slots "$name" "$host" "$port" "$slots"
+        check_security "$name"
+        check_inference "$name" "$host" "$port"
+        echo
+      done
+
+      echo -e "''${BOLD}Summary:''${NC} ''${GREEN}$PASS passed''${NC}, ''${RED}$FAIL failed''${NC}, ''${YELLOW}$WARN warnings''${NC}"
+      if [ "$FAIL" -gt 0 ]; then
+        exit 1
+      fi
+    '';
+  };
+
 in
 {
   options.services.llama-cpp = {
@@ -616,6 +761,8 @@ in
     networking.firewall.allowedTCPPorts = lib.mapAttrsToList (_: inst: inst.port) (
       lib.filterAttrs (_: inst: inst.openFirewall) enabledInstances
     );
+
+    environment.systemPackages = [ llama-cpp-verify ];
 
   };
 

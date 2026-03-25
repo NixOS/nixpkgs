@@ -8,7 +8,7 @@
     {
       environment.systemPackages = [ pkgs.llama-cpp ];
 
-      services.llama-cpp = {
+      services.llama-cpp.instances.test = {
         enable = true;
         # Model path does not need to exist — we're testing module
         # evaluation and service unit configuration, not inference.
@@ -31,7 +31,7 @@
 
     machine.succeed("llama-server --help")
 
-    unit = machine.succeed("systemctl cat llama-cpp.service")
+    unit = machine.succeed("systemctl cat llama-cpp-test.service")
     print(f"Service unit:\n{unit}")
 
     for directive in [
@@ -39,8 +39,8 @@
         "NoNewPrivileges=true",
         "ProtectSystem=strict",
         "CapabilityBoundingSet=",
-        "StateDirectory=llama-cpp",
-        "CacheDirectory=llama-cpp",
+        "StateDirectory=llama-cpp-test",
+        "CacheDirectory=llama-cpp-test",
     ]:
         assert directive in unit, f"Missing {directive} in service unit"
 
@@ -63,5 +63,11 @@
         "--alias",
     ]:
         assert flag in unit, f"Typed option {flag} not reflected in ExecStart"
+
+    # Verify llama-cpp-verify is installed and config-aware
+    machine.succeed("command -v llama-cpp-verify")
+    verify_script = machine.succeed("cat $(command -v llama-cpp-verify)")
+    assert "test:" in verify_script, \
+        "verify script should contain instance name 'test'"
   '';
 }
