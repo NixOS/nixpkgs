@@ -1648,6 +1648,10 @@ in
     imports = [ ./varnish.nix ];
     _module.args.package = pkgs.varnish77;
   };
+  varnish80 = runTest {
+    imports = [ ./varnish.nix ];
+    _module.args.package = pkgs.varnish80;
+  };
   vault = runTest ./vault.nix;
   vault-agent = runTest ./vault-agent.nix;
   vault-dev = runTest ./vault-dev.nix;

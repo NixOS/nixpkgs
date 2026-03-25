@@ -69,6 +69,9 @@ in
       ];
     };
 
+  interactive.sshBackdoor.enable = true;
+  interactive.defaults.virtualisation.graphics = false;
+
   testScript = ''
     import json
     import time

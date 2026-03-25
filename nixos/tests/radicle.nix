@@ -65,6 +65,7 @@ in
 
   meta = with pkgs.lib.maintainers; {
     maintainers = [
+      defelo
       julm
       lorenzleutgeb
     ];
