@@ -64,24 +64,24 @@ def update_file(relpath, version, suffix, sha256):
         for line in f:
             result = line
             result = re.sub(
-                fr'^  version = ".+";',
-                f'  version = "{version}";',
+                r'^(\s*)version = ".+";',
+                fr'\1version = "{version}";',
                 result)
             result = re.sub(
-                fr'^  suffix = ".+";',
-                f'  suffix = "{suffix}";',
+                r'^(\s*)suffix = ".+";',
+                fr'\1suffix = "{suffix}";',
                 result)
             result = re.sub(
-                fr'^    sha256 = ".+";',
-                f'    sha256 = "{sha256}";',
+                r'^(\s*)sha256 = ".+";',
+                fr'\1sha256 = "{sha256}";',
                 result)
             print(result, end='')
 
 
 def read_file(relpath):
     file_path = os.path.join(DIR, relpath)
-    re_version = re.compile(fr'^\s*version = "(.+)";')
-    re_suffix = re.compile(fr'^\s*suffix = "(.+)";')
+    re_version = re.compile(r'^\s*version = "(.+)";')
+    re_suffix = re.compile(r'^\s*suffix = "(.+)";')
     version = None
     suffix = None
     with fileinput.FileInput(file_path, mode='r') as f:
