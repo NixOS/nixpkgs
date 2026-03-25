@@ -144,6 +144,10 @@ lib.makeOverridable (
         pkgs = builtins.toJSON chosenOutputs;
         extraPathsFrom = lib.optionalString finalAttrs.includeClosures (writeClosure pathsForClosure);
 
+        # Explicitly opt out: builder.pl reads all configuration from %ENV,
+        # which is fundamentally incompatible with __structuredAttrs = true.
+        __structuredAttrs = false;
+
         preferLocalBuild = derivationArgs.preferLocalBuild or true;
         allowSubstitutes = derivationArgs.allowSubstitutes or false;
         passAsFile = [

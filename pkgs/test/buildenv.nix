@@ -277,18 +277,22 @@ let
           touch $out
         '';
 
-    # buildEnv's builder.pl reads all inputs from environment variables,
-    # which is incompatible with structuredAttrs (values go into a JSON file instead).
-    # This test documents the known failure so it can be tracked.
-    structuredAttrs-is-broken = pkgs.testers.testBuildFailure' {
-      drv = buildEnv {
-        name = "test-env-structuredAttrs";
-        paths = [ pkgs.hello ];
-        derivationArgs.__structuredAttrs = true;
-      };
-      expectedBuilderExitCode = 255; # Perl's `die` exits with code 255
-      expectedBuilderLogEntries = [ "malformed JSON string" ];
-    };
+    # buildEnv explicitly sets __structuredAttrs = false because builder.pl
+    # reads all inputs from environment variables. Verify the build succeeds
+    # even when derivationArgs tries to enable structuredAttrs.
+    structuredAttrs-overridden =
+      pkgs.runCommand "test-buildenv-structuredAttrs-overridden"
+        {
+          testEnv = buildEnv {
+            name = "test-env-structuredAttrs";
+            paths = [ pkgs.hello ];
+            derivationArgs.__structuredAttrs = true;
+          };
+        }
+        ''
+          test -x "$testEnv/bin/hello" || { echo "FAIL: hello not present after structuredAttrs override"; exit 1; }
+          touch $out
+        '';
 
     ignoreCollisions =
       pkgs.runCommand "test-buildenv-ignoreCollisions"
@@ -311,13 +315,38 @@ let
         '';
   };
 
+  # buildEnv's builder.pl reads all inputs from %ENV, which is
+  # fundamentally incompatible with __structuredAttrs = true.
+  # buildEnv explicitly forces __structuredAttrs = false.
+  tests-structuredAttrs = {
+    testStructuredAttrsExplicitlyFalse = {
+      expr =
+        (buildEnv {
+          name = "test-env";
+          paths = [ ];
+        }).__structuredAttrs;
+      expected = false;
+    };
+
+    testStructuredAttrsCantBeOverriddenViaDerivationArgs = {
+      expr =
+        (buildEnv {
+          name = "test-env";
+          paths = [ ];
+          derivationArgs.__structuredAttrs = true;
+        }).__structuredAttrs;
+      expected = false;
+    };
+  };
+
   tests =
     tests-name
     // tests-passthru-paths
     // tests-finalAttrs
     // tests-overrideAttrs
     // tests-passthru-merging
-    // tests-derivationArgs;
+    // tests-derivationArgs
+    // tests-structuredAttrs;
 in
 
 stdenvNoCC.mkDerivation (finalAttrs: {
