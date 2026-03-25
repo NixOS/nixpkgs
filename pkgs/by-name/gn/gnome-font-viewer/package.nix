@@ -47,10 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     fribidi
   ];
 
-  env = lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-  };
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gnome-font-viewer";
