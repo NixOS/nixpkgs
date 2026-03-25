@@ -6,7 +6,7 @@
 
 buildGo124Module rec {
   pname = "gitlab-container-registry";
-  version = "4.37.0";
+  version = "4.39.0";
   rev = "v${version}-gitlab";
 
   # nixpkgs-update: no auto update
@@ -14,10 +14,14 @@ buildGo124Module rec {
     owner = "gitlab-org";
     repo = "container-registry";
     inherit rev;
-    hash = "sha256-ZsnmJEzoLSH5bspxTQjOV8EOeQVeFn+rYCl8QqfzGaA=";
+    hash = "sha256-7dGKV2Pc3OPdM4OZqYjp3B9/s6DHtPvrqcWnWb3wHYw=";
   };
 
-  vendorHash = "sha256-xUkfcgsw6nRDxq1Tj5Y1CYgnJ7rbCcncB94Aeh9Ek+M=";
+  vendorHash = "sha256-s08LsgYZTRJm0sWkbEUsmTYGkfb/5PJl9o9ozY1KOms=";
+
+  excludedPackages = [
+    "devvm/*"
+  ];
 
   checkFlags =
     let
