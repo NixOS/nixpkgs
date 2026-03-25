@@ -59,6 +59,7 @@
           security = {
             admin_user = "admin";
             admin_password = "admin";
+            secret_key = "SW2YcwTIb9zpOOhoPsMm";
           };
 
           server = {
