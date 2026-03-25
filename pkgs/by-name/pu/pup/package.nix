@@ -4,24 +4,25 @@
   fetchFromGitHub,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "pup";
-  version = "unstable-2022-03-06";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
-    owner = "ericchiang";
+    owner = "gromgit";
     repo = "pup";
-    rev = "5a57cf111366c7c08999a34b2afd7ba36d58a96d";
-    hash = "sha256-Ledg3xPbu71L5qUY033bru/lw03jws3s4YlAarIuqaA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FnMPrgALABCQ9WKYEqEvB7guKHyYaXa3nU4jxZILzYw=";
   };
 
-  vendorHash = "sha256-/MDSWIuSYNxKbTslqIooI2qKA8Pye0yJF2dY8g8qbWI=";
+  vendorHash = "sha256-VoCot34BhtrY0bjgm1z6LBbtsiBdw7fjLqVB3/hxTlM=";
 
   meta = {
-    description = "Parsing HTML at the command line";
+    description = "CLI HTML parser";
     mainProgram = "pup";
-    homepage = "https://github.com/ericchiang/pup";
+    homepage = "https://github.com/gromgit/pup";
+    changelog = "https://github.com/gromgit/pup/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.giorgiga ];
   };
-}
+})
