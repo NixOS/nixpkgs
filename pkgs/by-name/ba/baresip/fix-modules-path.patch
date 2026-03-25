@@ -1,0 +1,29 @@
+commit 46479c52695cc5f8c01370fd2594468666c45c8e
+Author: rnhmjoj <rnhmjoj@inventati.org>
+Date:   Sun Aug 3 00:18:47 2025 +0200
+
+    Fix the modules path at build time
+    
+    The location of the modules is determined by reading the `module_path`
+    setting, which is set to "$out/lib/baresip/modules" when the
+    configuration file is generated during the first run. If the package is
+    updated and the store path changes, baresip breaks completely, forcing
+    the user to manually fix the configuration.
+    
+    This patch fixes the location of the modules at build time, ignoring the
+    `module_path` setting, to avoid this issue.
+
+diff --git a/src/module.c b/src/module.c
+index 9f2135c6..b62d0bdd 100644
+--- a/src/module.c
++++ b/src/module.c
+@@ -141,8 +141,7 @@ int module_init(const struct conf *conf)
+ 	if (!conf)
+ 		return EINVAL;
+ 
+-	if (conf_get(conf, "module_path", &path))
+-		pl_set_str(&path, ".");
++	pl_set_str(&path, MOD_PATH);
+ 
+ 	err = conf_apply(conf, "module", module_handler, &path);
+ 	if (err)

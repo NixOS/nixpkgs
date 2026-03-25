@@ -1,0 +1,24 @@
+diff --git a/bin/chmod/Makefile b/bin/chmod/Makefile
+index 82854bae3a3..39813dc8882 100644
+--- a/bin/chmod/Makefile
++++ b/bin/chmod/Makefile
+@@ -3,17 +3,8 @@
+ PROG=	chmod
+ MAN=	chmod.1 chgrp.1 chown.8 chflags.1
+ LINKS=	${BINDIR}/chmod ${BINDIR}/chgrp \
+-	${BINDIR}/chmod /sbin/chown
+-
+-# XXX compatibility
+-afterinstall:
+-	(cd ${DESTDIR}/usr/sbin && \
+-	    ln -sf ../../sbin/chown . && \
+-	    ln -sf ../../bin/chgrp . && \
+-	    chown -h ${BINOWN}:${BINGRP} chown chgrp)
+-	(cd ${DESTDIR}/usr/bin && \
+-	    ln -sf ../../bin/chmod chflags && \
+-	    chown -h ${BINOWN}:${BINGRP} chflags)
++	${BINDIR}/chmod ${BINDIR}/chown \
++	${BINDIR}/chmod ${BINDIR}/chflags
+ 
+ 
+ .include <bsd.prog.mk>

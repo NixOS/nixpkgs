@@ -1,0 +1,21 @@
+diff --git a/src/contour/CMakeLists.txt b/src/contour/CMakeLists.txt
+index 92afdf31..19416460 100644
+--- a/src/contour/CMakeLists.txt
++++ b/src/contour/CMakeLists.txt
+@@ -496,11 +496,11 @@ elseif(APPLE)
+         endforeach()
+ 
+         include(BundleUtilities)
+-        fixup_bundle(
+-            \"${BUNDLE_APP}\"
+-            \"\${PLUGIN_PATHS}\"
+-            \"${LIBS_SEARCH_DIRS}\"
+-        )
++        # fixup_bundle(
++        #     \"${BUNDLE_APP}\"
++        #     \"\${PLUGIN_PATHS}\"
++        #     \"${LIBS_SEARCH_DIRS}\"
++        # )
+ 
+         # Post-fix libqcocoa.dylib platform plugin's rpath,
+         # The already provided rpath (@loader_path/../../../../lib) does not work

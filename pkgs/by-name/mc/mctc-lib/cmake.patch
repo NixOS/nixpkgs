@@ -1,0 +1,29 @@
+diff --git a/config/template.cmake b/config/template.cmake
+index 2b3abcbb..59fcd728 100644
+--- a/config/template.cmake
++++ b/config/template.cmake
+@@ -8,9 +8,7 @@ if(NOT TARGET "@PROJECT_NAME@::@PROJECT_NAME@")
+ 
+   include(CMakeFindDependencyMacro)
+ 
+-  if(NOT TARGET "OpenMP::OpenMP_Fortran" AND "@PROJECT_NAME@_WITH_OpenMP")
+-    find_dependency("OpenMP")
+-  endif()
++  find_dependency("OpenMP")
+ 
+   if(NOT TARGET "toml-f::toml-f" AND "@PROJECT_NAME@_WITH_JSON")
+     find_dependency("toml-f")
+diff --git a/config/template.pc b/config/template.pc
+index 84c3498c..2da50191 100644
+--- a/config/template.pc
++++ b/config/template.pc
+@@ -1,6 +1,6 @@
+-prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++prefix=@CMAKE_INSTALL_PREFIX@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: @PROJECT_NAME@
+ Description: @PROJECT_DESCRIPTION@

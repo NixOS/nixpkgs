@@ -1,0 +1,28 @@
+diff --git a/Common/3dParty/v8/v8.pri b/Common/3dParty/v8/v8.pri
+index 11c7c72d1b..eef42d3fc5 100644
+--- a/Common/3dParty/v8/v8.pri
++++ b/Common/3dParty/v8/v8.pri
+@@ -57,7 +57,7 @@ core_windows {
+ 
+ core_linux {
+     use_v8_monolith {
+-        LIBS += -L$$CORE_V8_PATH_LIBS -lv8_monolith
++        LIBS += -L$$CORE_V8_PATH_LIBS -lv8
+     } else {
+         SNAPSHOT_LIB=v8_snapshot
+         !exists($$CORE_V8_PATH_LIBS/libv8_snapshot.a) {
+diff --git a/DesktopEditor/doctrenderer/js_internal/v8/inspector/v8_inspector_client.cpp b/DesktopEditor/doctrenderer/js_internal/v8/inspector/v8_inspector_client.cpp
+index dbfda9807c..78af9a4e3a 100644
+--- a/DesktopEditor/doctrenderer/js_internal/v8/inspector/v8_inspector_client.cpp
++++ b/DesktopEditor/doctrenderer/js_internal/v8/inspector/v8_inspector_client.cpp
+@@ -22,7 +22,9 @@ namespace NSJSBase
+ 		// initialize all V8 inspector stuff
+ 		m_pChannel.reset(new CV8InspectorChannelImpl(m_pIsolate, fOnResponse));
+ 		m_pInspector = v8_inspector::V8Inspector::create(m_pIsolate, this);
+-		m_pSession = m_pInspector->connect(m_nContextGroupId, m_pChannel.get(), v8_inspector::StringView());
++		m_pSession = m_pInspector->connect(m_nContextGroupId, m_pChannel.get(), v8_inspector::StringView(),
++		    v8_inspector::V8Inspector::kFullyTrusted,
++		    v8_inspector::V8Inspector::kNotWaitingForDebugger);
+ 		context->SetAlignedPointerInEmbedderData(1, this);
+ 
+ 		v8_inspector::StringView oContextName = convertToStringView("inspector" + std::to_string(nContextGroupId));

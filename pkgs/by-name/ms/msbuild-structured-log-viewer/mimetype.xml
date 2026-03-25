@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-binlog">
+    <comment xml:lang="en">MSBuild Structured Log</comment>
+    <glob pattern="*.binlog"/>
+    <icon name="msbuild-structured-log-viewer" />
+  </mime-type>
+</mime-info>

@@ -1,0 +1,27 @@
+commit da8992f44b84a337b4edaa67fc8b36b55eaef696
+Date:   Wed Jan 22 23:18:54 2025 +0100
+
+    Reject huge pattern lengths, ticket #185
+    
+    Reject patterned lines, e.g., dashed lines, where the
+    pattern length exceeds 80 inches.
+
+diff --git a/fig2dev/object.h b/fig2dev/object.h
+index 29f5a62..7f83939 100644
+--- a/fig2dev/object.h
++++ b/fig2dev/object.h
+@@ -57,12 +57,13 @@ typedef struct f_comment {
+ 	struct f_comment	*next;
+ } F_comment;
+ 
++#define	STYLE_VAL_MAX	6400.0	/* dash length 80 inches, that is enough */
+ #define COMMON_PROPERTIES(o)						\
+ 	o->style < SOLID_LINE || o->style > DASH_3_DOTS_LINE ||		\
+ 	o->thickness < 0 || o->depth < 0 || o->depth > 999 ||		\
+ 	o->fill_style < UNFILLED ||					\
+ 	o->fill_style >= NUMSHADES + NUMTINTS + NUMPATTERNS ||		\
+-	o->style_val < 0.0
++	o->style_val < 0.0 || o->style_val > STYLE_VAL_MAX
+ 
+ typedef struct f_ellipse {
+ 	int			type;

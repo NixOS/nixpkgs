@@ -1,0 +1,139 @@
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  zlib,
+  bzip2,
+  perl,
+  cpio,
+  gawk,
+  coreutils,
+  curl,
+  sqlite,
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "blast";
+  version = "2.17.0";
+
+  src = fetchurl {
+    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${finalAttrs.version}/ncbi-blast-${finalAttrs.version}+-src.tar.gz";
+    sha256 = "sha256-UCBXqI6ZkONOYnWL4h6kdMwK1o1qY6LjeyNyrx5eoUc=";
+  };
+
+  sourceRoot = "ncbi-blast-${finalAttrs.version}+-src/c++";
+
+  configureFlags = [
+    # With flat Makefile we can use all_projects in order not to build extra.
+    # These extra cause clang to hang on Darwin.
+    "--with-flat-makefile"
+    "--without-makefile-auto-update"
+    "--with-dll" # build dynamic libraries (static are default)
+    "--with-sqlite3=${sqlite.dev}"
+  ];
+
+  makeFlags = [ "all_projects=app/" ];
+
+  preConfigure = ''
+    export NCBICXX_RECONF_POLICY=warn
+    export PWD=$(pwd)
+    export HOME=$PWD
+
+    # The configure scripts wants to set AR="ar cr" unless it is already set in
+    # the environment. Because stdenv sets AR="ar", the result is a bad call to
+    # the assembler later in the process. Thus, we need to unset AR
+    unset AR
+
+    for awks in scripts/common/impl/is_log_interesting.awk \
+        scripts/common/impl/report_duplicates.awk; do
+
+        substituteInPlace $awks \
+              --replace-fail "/usr/bin/awk" "${gawk}/bin/awk"
+    done
+
+    for mk in src/build-system/Makefile.meta.in \
+        src/build-system/helpers/run_with_lock.c ; do
+
+        substituteInPlace $mk \
+        --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+    done
+
+    for mk in src/build-system/Makefile.meta.gmake=no \
+        src/build-system/Makefile.meta_l \
+        src/build-system/Makefile.meta_r \
+        src/build-system/Makefile.requirements \
+        src/build-system/Makefile.rules_with_autodep.in; do
+
+        substituteInPlace $mk \
+            --replace-fail "/bin/echo" "${coreutils}/bin/echo"
+    done
+    for mk in src/build-system/Makefile.meta_p \
+        src/build-system/Makefile.rules_with_autodep.in \
+        src/build-system/Makefile.protobuf.in ; do
+
+        substituteInPlace $mk \
+            --replace-fail "/bin/mv" "${coreutils}/bin/mv"
+    done
+
+
+    substituteInPlace src/build-system/configure \
+        --replace-fail "/bin/pwd" "${coreutils}/bin/pwd" \
+        --replace-fail "/bin/ln" "${coreutils}/bin/ln"
+
+    substituteInPlace src/build-system/configure.ac \
+        --replace-fail "/bin/pwd" "${coreutils}/bin/pwd" \
+        --replace-fail "/bin/ln" "${coreutils}/bin/ln"
+
+    substituteInPlace src/build-system/Makefile.meta_l \
+        --replace-fail "/bin/date" "${coreutils}/bin/date"
+  '';
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [
+    cpio
+    perl
+  ];
+
+  # perl is necessary in buildInputs so that installed perl scripts get patched
+  # correctly
+  buildInputs = [
+    coreutils
+    perl
+    gawk
+    zlib
+    bzip2
+    sqlite
+  ];
+
+  strictDeps = true;
+
+  hardeningDisable = [ "format" ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/get_species_taxids.sh \
+        --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+
+    substituteInPlace $out/bin/update_blastdb.pl \
+        --replace-fail 'qw(/usr/local/bin /usr/bin)' 'qw(${lib.getBin curl}/bin)'
+  '';
+  patches = [ ./no_slash_bin.patch ];
+
+  enableParallelBuilding = true;
+
+  # Many tests require either network access or locally available databases
+  doCheck = false;
+
+  meta = {
+    description = "Basic Local Alignment Search Tool (BLAST) finds regions of similarity between biological sequences";
+    homepage = "https://blast.ncbi.nlm.nih.gov/Blast.cgi";
+    license = lib.licenses.publicDomain;
+
+    # Version 2.10.0 fails on Darwin
+    # See https://github.com/NixOS/nixpkgs/pull/61430
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      luispedro
+      mulatta
+    ];
+  };
+})

@@ -1,0 +1,179 @@
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  alsa-lib,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  pango,
+  nspr,
+  nss,
+  gtk3,
+  libgbm,
+  libGL,
+  wayland,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libxshmfence,
+  libxcb,
+  autoPatchelfHook,
+  systemd,
+  libnotify,
+  libappindicator,
+  makeWrapper,
+  coreutils,
+  gnugrep,
+
+  versionCheckHook,
+}:
+
+let
+  deps = [
+    alsa-lib
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    pango
+    gtk3
+    libappindicator
+    libnotify
+    libgbm
+    libx11
+    libxscrnsaver
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxtst
+    libxcb
+    libxshmfence
+    nspr
+    nss
+    systemd
+  ];
+
+  version = "2025.14";
+
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  platform = selectSystem {
+    x86_64-linux = "amd64";
+    aarch64-linux = "arm64";
+  };
+
+  hash = selectSystem {
+    x86_64-linux = "sha256-JHuYHi4uBHzMopa45ipwsdx/3Ox/FxN3lYhBACQOCkE=";
+    aarch64-linux = "sha256-miCh1x6sCcAbg9iX7SJzYcxJ8DIQVNdrg6b39ht8gTw=";
+  };
+in
+
+stdenv.mkDerivation {
+  pname = "mullvad-vpn";
+  inherit version;
+
+  src = fetchurl {
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_${platform}.deb";
+    inherit hash;
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeWrapper
+  ];
+
+  buildInputs = deps;
+
+  dontBuild = true;
+  dontConfigure = true;
+
+  runtimeDependencies = [
+    (lib.getLib systemd)
+    libGL
+    libnotify
+    libappindicator
+    wayland
+  ];
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/mullvad $out/bin
+
+    mv usr/share/* $out/share
+    mv usr/bin/* $out/bin
+    mv opt/Mullvad\ VPN/* $out/share/mullvad
+
+    ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
+    ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
+
+    wrapProgram $out/bin/mullvad-vpn \
+      --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1 \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+        ]
+      }
+
+    wrapProgram $out/bin/mullvad-daemon \
+        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
+
+    wrapProgram $out/bin/mullvad-gui \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
+
+    sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
+
+    runHook postInstall
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
+    homepage = "https://github.com/mullvad/mullvadvpn-app";
+    description = "Client for Mullvad VPN";
+    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
+    mainProgram = "mullvad-vpn";
+    platforms = lib.platforms.unix;
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
+    maintainers = with lib.maintainers; [
+      ymarkus
+    ];
+  };
+}

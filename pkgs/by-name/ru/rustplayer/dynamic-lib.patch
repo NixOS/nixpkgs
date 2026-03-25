@@ -1,0 +1,13 @@
+diff --git a/thirdparty/ffmpeg-decoder-rs/Cargo.toml b/thirdparty/ffmpeg-decoder-rs/Cargo.toml
+index 9db9ac9..4546253 100644
+--- a/thirdparty/ffmpeg-decoder-rs/Cargo.toml
++++ b/thirdparty/ffmpeg-decoder-rs/Cargo.toml
+@@ -20,7 +20,7 @@ default = []
+ rodio_source = ['rodio']
+ 
+ [dependencies]
+-ffmpeg-sys-next = { git="https://github.com/KetaDotCC/rust-ffmpeg-sys.git", branch="master", default-features=false, features=["avcodec", "avformat", "swresample", "static"] }
++ffmpeg-sys-next = { git="https://github.com/KetaDotCC/rust-ffmpeg-sys.git", branch="master", default-features=false, features=["avcodec", "avformat", "swresample"] }
+ 
+ thiserror = "1.0"
+ log = "0.4"

@@ -1,0 +1,73 @@
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  makeWrapper,
+  setuptools,
+  setuptools-scm,
+  numpy,
+  scipy,
+  distutils,
+  pytestCheckHook,
+  mock,
+  pytest-mock,
+  pythonAtLeast,
+}:
+
+buildPythonPackage rec {
+  pname = "i-pi";
+  version = "3.1.11";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "i-pi";
+    repo = "i-pi";
+    tag = "v${version}";
+    hash = "sha256-9APlG1P+4G5GRZ7LG2Vvfr0l9ZcIxWkHW1M7wT7W1sk=";
+  };
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
+
+  nativeBuildInputs = [
+    gfortran
+    makeWrapper
+  ];
+
+  dependencies = [
+    numpy
+    scipy
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    mock
+    pytest-mock
+  ]
+  ++ lib.optional (pythonAtLeast "3.12") distutils;
+
+  enabledTestPaths = [ "ipi_tests/unit_tests" ];
+  disabledTests = [
+    "test_driver_base"
+    "test_driver_forcebuild"
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/i-pi \
+      --set IPI_ROOT $out
+  '';
+
+  meta = {
+    description = "Universal force engine for ab initio and force field driven (path integral) molecular dynamics";
+    license = with lib.licenses; [
+      gpl3Only
+      mit
+    ];
+    homepage = "https://ipi-code.org/";
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
+  };
+}
