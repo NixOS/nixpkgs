@@ -18,6 +18,8 @@
   ninja,
   vala,
   desktop-file-utils,
+  libsndfile,
+  openal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     libmanette
     gsound
+    # for libgnome-games-support + sound feature
+    libsndfile
+    openal
   ];
 
   passthru = {
