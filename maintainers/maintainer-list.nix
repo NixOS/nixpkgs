@@ -2532,6 +2532,11 @@
     name = "Dmitriy";
     keys = [ { fingerprint = "922D A6E7 58A0 FE4C FAB4 E4B2 FD26 6B81 0DF4 8DF2"; } ];
   };
+  atemo-c = {
+    name = "Atemo Cajaku";
+    github = "atemo-c";
+    githubId = "160250128";
+  };
   atemu = {
     name = "Atemu";
     email = "nixpkgs@mail.atemu.net";
