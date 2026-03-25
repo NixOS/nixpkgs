@@ -65,7 +65,20 @@ mkOpenModelicaDerivation (
           ./OMCompiler/3rdParty/libzmq/CMakeLists.txt
       # Fixes https://github.com/OpenModelica/OpenModelica/issues/10982
       sed -i 's|@BOOSTHOME@|${boost.dev}/include|g' $(find ./OMCompiler -name 'Makefile*')
+
+      # Bundled TBB uses enum values outside valid range, rejected by newer clang.
+      # Add the internal values directly to the enum and alias binding_required to bound.
+      sed -i OMCompiler/3rdParty/tbb/include/tbb/task.h -e '
+        s/        bound/        bound, binding_completed, detached, dying/
+        /static const kind_type binding_required/s|kind_type(bound+1)|binding_completed|
+        /static const kind_type binding_completed/d
+        /static const kind_type detached/d
+        /static const kind_type dying/d
+      '
     '';
+
+    # Bundled 3rdParty CMakeLists use old cmake_minimum_required incompatible with cmake 4.x
+    env.CMAKE_POLICY_VERSION_MINIMUM = "3.5";
 
     env.CFLAGS = toString [
       "-Wno-error=dynamic-exception-spec"

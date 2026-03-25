@@ -30,15 +30,9 @@
     stripRoot = true;
   }
   {
-    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/34fe8cf3c7127ae09ca5f41e26b48fb6044e1e34.zip";
-    sha256 = "18kgc83dwgv6gcbpnp51swsylqyhq6ghviflw615d9939w3m1wr5";
-    folderName = "OpenModelica-ModelicaStandardLibrary-34fe8cf3c7127ae09ca5f41e26b48fb6044e1e34";
-    stripRoot = true;
-  }
-  {
-    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/74d056ef1b4a89463408ba70fc4ea4db83a6296f.zip";
-    sha256 = "0pnkw5xaq6kz1ixyas4gjmiw84qs6l9wa3g4s2lb5jc36clf1f10";
-    folderName = "OpenModelica-ModelicaStandardLibrary-74d056ef1b4a89463408ba70fc4ea4db83a6296f";
+    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/7a4bf7de77a3986e8eb1e88cbb515d646f78f834.zip";
+    sha256 = "079bypl4rlcl267amwnxki34kddjhijf2izm45i3nrqimbpnydnq";
+    folderName = "OpenModelica-ModelicaStandardLibrary-7a4bf7de77a3986e8eb1e88cbb515d646f78f834";
     stripRoot = true;
   }
   {
@@ -54,21 +48,21 @@
     stripRoot = true;
   }
   {
+    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/96032134c36668898e1693e69bd9f81aa38de3dd.zip";
+    sha256 = "1zr2mf8hmgkcp5jdz41v2y4b3jz9ck9ay8j0qf86f9wm8rz0cg2q";
+    folderName = "OpenModelica-ModelicaStandardLibrary-96032134c36668898e1693e69bd9f81aa38de3dd";
+    stripRoot = true;
+  }
+  {
     url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/c1feaafc23b4a122d20966109d76efd4f8853c58.zip";
     sha256 = "0b4v0nm7ssa54lpw6lvva9c6apqggr8r4rb1yc97v8y5an2a821s";
     folderName = "OpenModelica-ModelicaStandardLibrary-c1feaafc23b4a122d20966109d76efd4f8853c58";
     stripRoot = true;
   }
   {
-    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/e68d7a0317c565ee00c1b8d44c527979ea0304bf.zip";
-    sha256 = "0dsw2vm1s158vnyrjwsql19gjr9xz5yky9fxxl0m1v0b5p9i43wi";
-    folderName = "OpenModelica-ModelicaStandardLibrary-e68d7a0317c565ee00c1b8d44c527979ea0304bf";
-    stripRoot = true;
-  }
-  {
-    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/fad7348c3ee4dae4cf0d762e3153c1336f4e0878.zip";
-    sha256 = "0x0wd1cbdkxkxs3sy7xz7rsi3d6nl6n2jzrg6pnp8jfhi27hm2az";
-    folderName = "OpenModelica-ModelicaStandardLibrary-fad7348c3ee4dae4cf0d762e3153c1336f4e0878";
+    url = "https://github.com/OpenModelica/OpenModelica-ModelicaStandardLibrary/archive/efd981a1176f124938d6d6759f7c09e0fbf55ddf.zip";
+    sha256 = "0npyk4vrl4rc66nblg1xdxldyipzbqv1ji9q5fa9shxz8ics84pp";
+    folderName = "OpenModelica-ModelicaStandardLibrary-efd981a1176f124938d6d6759f7c09e0fbf55ddf";
     stripRoot = true;
   }
   {
@@ -78,9 +72,9 @@
     stripRoot = true;
   }
   {
-    url = "https://github.com/casella/ThermoPower/archive/133554afb8e79a959eeea0b6cddf811f87d681f5.zip";
-    sha256 = "00alccgmhvggc7srrd1jpr84syj7la9jwbfqw1zs248s6gsxyvdf";
-    folderName = "ThermoPower-133554afb8e79a959eeea0b6cddf811f87d681f5";
+    url = "https://github.com/casella/ThermoPower/archive/e2b011ac7fd90f9cf5771f29f1aefa160550b6ee.zip";
+    sha256 = "0paqg3bbyiaqq9jgf6m3xdgpm9wxm2295g3c5vcmbi70yh7s9l4z";
+    folderName = "ThermoPower-e2b011ac7fd90f9cf5771f29f1aefa160550b6ee";
     stripRoot = true;
   }
   {
@@ -102,9 +96,9 @@
     stripRoot = true;
   }
   {
-    url = "https://github.com/modelica/Modelica-Compliance/archive/8a91e75d8a26acc4de30fc0e5d5e9db83c970bd6.zip";
-    sha256 = "1cym1wlgsvfrryq8zqzzrgs4wam1l7pc20q07hk3d615nhq21lg6";
-    folderName = "Modelica-Compliance-8a91e75d8a26acc4de30fc0e5d5e9db83c970bd6";
+    url = "https://github.com/modelica/Modelica-Compliance/archive/f5a011e42b01e26ed85e32fb2a7a41e4cb260bf9.zip";
+    sha256 = "07qx69jwmdl3psk1rsx20h7w7v36smgmn6xjvd9bc265b47wb96m";
+    folderName = "Modelica-Compliance-f5a011e42b01e26ed85e32fb2a7a41e4cb260bf9";
     stripRoot = true;
   }
   {

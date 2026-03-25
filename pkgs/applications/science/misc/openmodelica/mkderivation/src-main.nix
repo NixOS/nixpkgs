@@ -1,7 +1,6 @@
 {
   url = "https://github.com/OpenModelica/OpenModelica/";
-  rev = "66757f39f530bc032d5c1a71c105bd568207444a";
-  sha256 = "1b6nbakh5iyasc068bkd6k8crwbpvl84rah64gr0b16vh9yppgyn";
+  rev = "a5fe1bbd228501a9fd4c9b427ec332963ca57388";
+  sha256 = "09lm9ry227xbw27cvddhsb3xxab2smzyysdb53wcl7knq6y3rrhs";
   fetchSubmodules = true;
 }
-# Update with: nix shell -f ./nixpkgs/default.nix nix-prefetch-git -c nix-prefetch-git 'https://github.com/OpenModelica/OpenModelica/' 'v1.22.3' --fetch-submodules

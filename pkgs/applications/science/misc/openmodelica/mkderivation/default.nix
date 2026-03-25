@@ -61,13 +61,20 @@ let
 
   # Simple to to m4 configuration scripts
   postPatch = ''
-    sed -i '/OM_USE_CCACHE/s|ON|OFF|g' CMakeLists.txt
-    #patch refs to $HOME and patch out the check against MODELICAPATH
-    #these must be done in omc rather than omlibrary since omc contains PackageManagement.mo
-    sed -i OMCompiler/Compiler/Script/PackageManagement.mo -e '
-      s|listMember(userLibraries.*|true then|g
-      s|getInstallationCachePath()|getCachePath()|g
-    '
+      sed -i '/OM_USE_CCACHE/s|ON|OFF|g' CMakeLists.txt
+      #patch refs to $HOME and patch out the check against MODELICAPATH
+      #these must be done in omc rather than omlibrary since omc contains PackageManagement.mo
+      sed -i OMCompiler/Compiler/Script/PackageManagement.mo -e '
+        s|listMember(userLibraries.*|true then|g
+        s|getInstallationCachePath()|getCachePath()|g
+      '
+      # Add Qt6 detection to qmake.m4
+      sed -i ''$(find -name qmake.m4) -e '
+        /grep "Qt version 5"/i\
+    elif "$QMAKE" -v 2>\&1 | grep "Qt version 6"; then\
+      true\
+      QT4BUILD="-DQT4_BUILD:Boolean=OFF"
+      '
   ''
   + lib.optionalString ifDeps ''
     sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
@@ -121,7 +128,7 @@ stdenv.mkDerivation (
       ;
 
     src = fetchgit (import ./src-main.nix);
-    version = "1.25.1";
+    version = "1.26.3";
 
     nativeBuildInputs = getAttrDef "nativeBuildInputs" [ ] pkg ++ [
       autoconf

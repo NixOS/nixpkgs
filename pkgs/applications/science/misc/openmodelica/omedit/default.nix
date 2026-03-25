@@ -40,6 +40,11 @@ mkOpenModelicaDerivation {
   postPatch = ''
     sed -i ''$(find -name qmake.m4) -e '/^\s*LRELEASE=/ s|LRELEASE=.*$|LRELEASE=${lib.getDev qttools}/bin/lrelease|'
 
+    # Define OM_OMEDIT_ENABLE_QTWEBENGINE for Qt6 (uses WebEngine instead of WebKit)
+    sed -i OMEdit/OMEdit.config.pre.pri -e '
+      s|DEFINES += OM_HAVE_PTHREADS|DEFINES += OM_HAVE_PTHREADS OM_OMEDIT_ENABLE_QTWEBENGINE|
+    '
+
     # here, the build system seems to assume that the current OPENMODELICAHOME is a subdirectory of the source
     # directory. Our packaging of Openmodelica breaks this assumption, so point OMEditLIB.pro towards the correct
     # source dir.
