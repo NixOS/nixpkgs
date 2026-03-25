@@ -180,11 +180,16 @@ in
     };
 
     postBuildCommands = mkOption {
+      type = types.lines;
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
-        Shell commands to run after the image is built.
-        Can be used for boards requiring to dd u-boot SPL before actual partitions.
+        Shell commands to run after the SD image has been assembled.
+
+        The path to the image is available in the {var}`img` shell
+        variable. This hook is typically used for boards that require
+        writing a bootloader (such as u-boot SPL) to a fixed offset
+        before the first partition.
       '';
     };
 
