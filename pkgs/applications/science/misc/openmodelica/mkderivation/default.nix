@@ -60,20 +60,19 @@ let
   omdir = getAttrDef "omdir" pkg.pname pkg;
 
   # Simple to to m4 configuration scripts
-  postPatch =
-    ''
-      sed -i '/OM_USE_CCACHE/s|ON|OFF|g' CMakeLists.txt
-      #patch refs to $HOME and patch out the check against MODELICAPATH
-      #these must be done in omc rather than omlibrary since omc contains PackageManagement.mo
-      sed -i OMCompiler/Compiler/Script/PackageManagement.mo -e '
-        s|listMember(userLibraries.*|true then|g
-        s|getInstallationCachePath()|getCachePath()|g
-      '
-    ''
-    + lib.optionalString ifDeps ''
-      sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
-    ''
-    + appendByAttr "postPatch" "\n" pkg;
+  postPatch = ''
+    sed -i '/OM_USE_CCACHE/s|ON|OFF|g' CMakeLists.txt
+    #patch refs to $HOME and patch out the check against MODELICAPATH
+    #these must be done in omc rather than omlibrary since omc contains PackageManagement.mo
+    sed -i OMCompiler/Compiler/Script/PackageManagement.mo -e '
+      s|listMember(userLibraries.*|true then|g
+      s|getInstallationCachePath()|getCachePath()|g
+    '
+  ''
+  + lib.optionalString ifDeps ''
+    sed -i ''$(find -name omhome.m4) -e 's|if test ! -z "$USINGPRESETBUILDDIR"|if test ! -z "$USINGPRESETBUILDDIR" -a -z "$OMHOME"|'
+  ''
+  + appendByAttr "postPatch" "\n" pkg;
 
   # Update shebangs in the scripts before running configuration.
   preAutoreconf = "patchShebangs --build common" + appendByAttr "preAutoreconf" "\n" pkg;

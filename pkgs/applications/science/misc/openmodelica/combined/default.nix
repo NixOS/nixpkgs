@@ -23,20 +23,23 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
 
   postBuild = ''
-    wrapProgram $out/bin/OMEdit \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          gnumake
-          stdenv.cc
-        ]
-      } \
-      --prefix LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          blas
-          lapack
-        ]
-      }" \
-      --set-default OPENMODELICALIBRARY "${openmodelica.omlibrary}/lib/omlibrary"
+    for prog in $out/bin/omc $out/bin/OMEdit; do
+      test -e "$prog" || continue
+      wrapProgram "$prog" \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            gnumake
+            stdenv.cc
+          ]
+        } \
+        --prefix LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            blas
+            lapack
+          ]
+        }" \
+        --set-default OPENMODELICALIBRARY "${openmodelica.omlibrary}/.openmodelica/libraries"
+    done
   '';
 
   meta = {
