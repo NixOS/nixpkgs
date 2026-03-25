@@ -14125,6 +14125,13 @@
     githubId = 148352;
     name = "Jim Fowler";
   };
+  Kitsune = {
+    name = "Lunae V";
+    github = "KitsuneDev";
+    githubId = 11809449;
+    email = "kitsune@akitsune.dev";
+    matrix = "@kitsune:akitsune.dev";
+  };
   kitsunoff = {
     github = "kitsunoff";
     githubId = 58953114;
