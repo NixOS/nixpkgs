@@ -182,7 +182,18 @@ in
             + " $QEMU_OPTS"
         )
 
-        return create_machine(start_command)
+        return create_machine(start_command), metadata_dir
+
+    def test_userdata_decompression(machine, user_data_path, compressed_data, format_name):
+        """Test that compressed user-data is decompressed by fetch-ec2-metadata"""
+        test_marker = f"{format_name}-decompression-test"
+        with open(user_data_path, "wb") as f:
+            f.write(compressed_data)
+        machine.succeed("systemctl restart fetch-ec2-metadata")
+        result = machine.succeed("cat /etc/ec2-metadata/user-data")
+        assert test_marker in result, f"Expected '{test_marker}' in decompressed {format_name} content, got: {result}"
+        journal = machine.succeed("journalctl -u fetch-ec2-metadata --no-pager -b")
+        assert "decompressing:" in journal, f"Expected decompression log in journal for {format_name}"
 
     # Create temporary directory for metadata (scoped for cleanup)
     temp_dir = tempfile.TemporaryDirectory()
@@ -194,7 +205,8 @@ in
     client_pubkey, client_private_key = generate_client_ssh_key()
 
     # Set up machine with client's public key in metadata service
-    machine = setup_machine(temp_dir, client_pubkey)
+    machine, metadata_dir = setup_machine(temp_dir, client_pubkey)
+    user_data_path = os.path.join(metadata_dir, "1.0", "user-data")
 
     try:
         machine.start()
@@ -255,6 +267,37 @@ in
 
         with subtest("Basic EC2 functionality"):
             machine.succeed("findmnt / -o SIZE -n | grep -E '[0-9]+G'")
+
+        with subtest("Decompression of gzip-compressed user-data"):
+            import gzip as gzip_mod
+            test_data = b"#!/bin/bash\necho gzip-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, gzip_mod.compress(test_data), "gzip")
+
+        with subtest("Decompression of bzip2-compressed user-data"):
+            import bz2
+            test_data = b"#!/bin/bash\necho bzip2-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, bz2.compress(test_data), "bzip2")
+
+        with subtest("Decompression of xz-compressed user-data"):
+            import lzma
+            test_data = b"#!/bin/bash\necho xz-decompression-test\n"
+            test_userdata_decompression(machine, user_data_path, lzma.compress(test_data), "xz")
+
+        with subtest("Decompression of zstd-compressed user-data"):
+            test_data = b"#!/bin/bash\necho zstd-decompression-test\n"
+            proc = subprocess.run(
+                ["${hostPkgs.zstd}/bin/zstd", "-c"],
+                input=test_data, capture_output=True, check=True,
+            )
+            test_userdata_decompression(machine, user_data_path, proc.stdout, "zstd")
+
+        with subtest("Decompression of lzip-compressed user-data"):
+            test_data = b"#!/bin/bash\necho lzip-decompression-test\n"
+            proc = subprocess.run(
+                ["${hostPkgs.lzip}/bin/lzip", "-c"],
+                input=test_data, capture_output=True, check=True,
+            )
+            test_userdata_decompression(machine, user_data_path, proc.stdout, "lzip")
 
     finally:
         machine.shutdown()
