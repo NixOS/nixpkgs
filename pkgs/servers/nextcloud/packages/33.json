@@ -120,9 +120,9 @@
     ]
   },
   "files_retention": {
-    "hash": "sha256-+BWPFD86OnNGeuAM49ST0AHsOpCxLhwRYVYJDAtSB8E=",
-    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v4.0.0/files_retention-v4.0.0.tar.gz",
-    "version": "4.0.0",
+    "hash": "sha256-67MPooGJuSX/sL/l44z/9CYSlv5/ACVRpl1Z5QTJ/xw=",
+    "url": "https://github.com/nextcloud-releases/files_retention/releases/download/v4.0.1/files_retention-v4.0.1.tar.gz",
+    "version": "4.0.1",
     "description": "An app for Nextcloud to control automatic deletion of files after a given time.\nOptionally the users can be informed the day before.",
     "homepage": "https://github.com/nextcloud/files_retention",
     "licenses": [
