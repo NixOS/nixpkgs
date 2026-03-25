@@ -90,6 +90,10 @@ buildPythonPackage (finalAttrs: {
 
     # AssertionError: equal_computations failed
     "test_infer_shape_db_handles_xtensor_lowering"
+
+    # Crashes with jax>=0.9.0
+    # in .../jax/_src/compiler.py", line 362 in backend_compile_and_load
+    "test_higher_order_derivatives"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Numerical assertion error
