@@ -4,14 +4,14 @@
   gettext,
   fetchurl,
   pkg-config,
-  gtk3,
+  gtk4,
   glib,
   meson,
   ninja,
   upower,
   python3,
   desktop-file-utils,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   gnome,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
     gettext
 
     # needed by meson_post_install.sh
@@ -38,10 +38,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
     glib
     upower
   ];
+
+  postPatch = ''
+    substituteInPlace meson_post_install.sh \
+      --replace-fail "gtk-update-icon-cache" "gtk4-update-icon-cache"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript { packageName = "gnome-power-manager"; };
