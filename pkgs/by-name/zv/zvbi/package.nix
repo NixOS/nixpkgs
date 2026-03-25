@@ -49,7 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    && !stdenv.hostPlatform.isDarwin
+    &&
+      # musl does not support TZDIR, used by the tzdata setup hook.
+      !stdenv.hostPlatform.isMusl;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
