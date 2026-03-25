@@ -1532,13 +1532,6 @@
     github = "amerinor01";
     githubId = 22280447;
   };
-  amesgen = {
-    email = "amesgen@amesgen.de";
-    github = "amesgen";
-    githubId = 15369874;
-    name = "Alexander Esgen";
-    matrix = "@amesgen:amesgen.de";
-  };
   ametrine = {
     name = "Matilde Ametrine";
     email = "matilde@diffyq.xyz";
