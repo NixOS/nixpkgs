@@ -5,12 +5,10 @@
   pkg-config,
   gtk4,
   libadwaita,
-  libgee,
   pango,
   gnome,
   gdk-pixbuf,
   librsvg,
-  gsound,
   libmanette,
   blueprint-compiler,
   wrapGAppsHook4,
@@ -44,12 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    libgee
     pango
     gdk-pixbuf
     librsvg
     libmanette
-    gsound
     # for libgnome-games-support + sound feature
     libsndfile
     openal
