@@ -5750,3 +5750,910 @@ index a69b732801..9df4bb7424 100644
      }
  
    if ((flags & WRDE_APPEND) == 0)
+
+commit 912d89a766847649a3857985a3b5e6065c51bfd4
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Thu Jan 8 12:35:08 2026 +0100
+
+    Switch currency symbol for the bg_BG locale to euro
+    
+    Bulgaria joined the eurozone on 2026-01-01.
+    
+    Suggested-by: Йордан Гигов <jgigov@abv.bg>
+    Reviewed-by: Collin Funk <collin.funk1@gmail.com>
+    (cherry picked from commit 78fdb2d6b1c34ea8e779fd48f9436dfbd50b6387)
+
+diff --git a/localedata/locales/bg_BG b/localedata/locales/bg_BG
+index 159a6c3334..eda2a8d01b 100644
+--- a/localedata/locales/bg_BG
++++ b/localedata/locales/bg_BG
+@@ -248,8 +248,8 @@ reorder-end
+ END LC_COLLATE
+ 
+ LC_MONETARY
+-int_curr_symbol           "BGN "
+-currency_symbol           "лв."
++int_curr_symbol           "EUR "
++currency_symbol           "€"
+ mon_decimal_point         ","
+ mon_thousands_sep         " "
+ mon_grouping              3
+
+commit 39897805917ab1c44dbf4452b9c4c2bbafc7117b
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Feb 13 09:02:07 2026 +0100
+
+    nss: Introduce dedicated struct nss_database_for_fork type
+    
+    The initialized field in struct nss_database_data is rather confusing
+    because it is not used by the regular NSS code, only by the fork
+    state synchronization code.  Introduce a separate type and place
+    the initialized field there.
+    
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit 7bb859f4198d0be19c31a9937eae4f6c2c9a079e)
+
+diff --git a/nss/nss_database.c b/nss/nss_database.c
+index a7ac32beb9..a6b7d5c956 100644
+--- a/nss/nss_database.c
++++ b/nss/nss_database.c
+@@ -56,7 +56,6 @@ global_state_allocate (void *closure)
+     {
+       result->data.nsswitch_conf.size = -1; /* Force reload.  */
+       memset (result->data.services, 0, sizeof (result->data.services));
+-      result->data.initialized = true;
+       result->data.reload_disabled = false;
+       __libc_lock_init (result->lock);
+       result->root_ino = 0;
+@@ -451,8 +450,8 @@ nss_database_check_reload_and_get (struct nss_database_state *local,
+   /* Avoid overwriting the global configuration until we have loaded
+      everything successfully.  Otherwise, if the file change
+      information changes back to what is in the global configuration,
+-     the lookups would use the partially-written  configuration.  */
+-  struct nss_database_data staging = { .initialized = true, };
++     the lookups would use the partially-written configuration.  */
++  struct nss_database_data staging = { };
+ 
+   bool ok = nss_database_reload (&staging, &initial);
+ 
+@@ -503,7 +502,7 @@ __nss_database_freeres (void)
+ }
+ 
+ void
+-__nss_database_fork_prepare_parent (struct nss_database_data *data)
++__nss_database_fork_prepare_parent (struct nss_database_for_fork *data)
+ {
+   /* Do not use allocate_once to trigger loading unnecessarily.  */
+   struct nss_database_state *local = atomic_load_acquire (&global_database_state);
+@@ -515,20 +514,21 @@ __nss_database_fork_prepare_parent (struct nss_database_data *data)
+          because it avoids acquiring the lock during the actual
+          fork.  */
+       __libc_lock_lock (local->lock);
+-      *data = local->data;
++      data->data = local->data;
+       __libc_lock_unlock (local->lock);
++      data->initialized = true;
+     }
+ }
+ 
+ void
+-__nss_database_fork_subprocess (struct nss_database_data *data)
++__nss_database_fork_subprocess (struct nss_database_for_fork *data)
+ {
+   struct nss_database_state *local = atomic_load_acquire (&global_database_state);
+   if (data->initialized)
+     {
+       /* Restore the state at the point of the fork.  */
+       assert (local != NULL);
+-      local->data = *data;
++      local->data = data->data;
+       __libc_lock_init (local->lock);
+     }
+   else if (local != NULL)
+diff --git a/nss/nss_database.h b/nss/nss_database.h
+index 0eaea49685..c170da03f6 100644
+--- a/nss/nss_database.h
++++ b/nss/nss_database.h
+@@ -70,15 +70,21 @@ struct nss_database_data
+   struct file_change_detection nsswitch_conf;
+   nss_action_list services[NSS_DATABASE_COUNT];
+   int reload_disabled;          /* Actually bool; int for atomic access.  */
+-  bool initialized;
++};
++
++/* Use to store a consistent state snapshot across fork.  */
++struct nss_database_for_fork
++{
++  bool initialized;  /* Set to true if the data field below is initialized.  */
++  struct nss_database_data data;
+ };
+ 
+ /* Called by fork in the parent process, before forking.  */
+-void __nss_database_fork_prepare_parent (struct nss_database_data *data)
++void __nss_database_fork_prepare_parent (struct nss_database_for_fork *)
+   attribute_hidden;
+ 
+ /* Called by fork in the new subprocess, after forking.  */
+-void __nss_database_fork_subprocess (struct nss_database_data *data)
++void __nss_database_fork_subprocess (struct nss_database_for_fork *)
+   attribute_hidden;
+ 
+ #endif /* _NSS_DATABASE_H */
+diff --git a/posix/fork.c b/posix/fork.c
+index 011e92fc1d..7f2370f2eb 100644
+--- a/posix/fork.c
++++ b/posix/fork.c
+@@ -50,7 +50,7 @@ __libc_fork (void)
+ 
+   lastrun = __run_prefork_handlers (multiple_threads);
+ 
+-  struct nss_database_data nss_database_data;
++  struct nss_database_for_fork nss_database_data;
+ 
+   /* If we are not running multiple threads, we do not have to
+      preserve lock state.  If fork runs from a signal handler, only
+
+commit 937ef7aaf3ce41038b3e12675a6298b86b389af2
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Feb 13 09:02:07 2026 +0100
+
+    Linux: In getlogin_r, use utmp fallback only for specific errors
+    
+    Most importantly, if getwpuid_r fails, it does not make sense to retry
+    via utmp because the user ID obtained from there is less reliable than
+    the one from /proc/self/loginuid.
+    
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit 28660f4b45afa8921c2faebaec2846f95f670ba0)
+
+diff --git a/sysdeps/unix/sysv/linux/getlogin_r.c b/sysdeps/unix/sysv/linux/getlogin_r.c
+index f03ecd4da9..0e66944570 100644
+--- a/sysdeps/unix/sysv/linux/getlogin_r.c
++++ b/sysdeps/unix/sysv/linux/getlogin_r.c
+@@ -37,7 +37,12 @@ __getlogin_r_loginuid (char *name, size_t namesize)
+ {
+   int fd = __open_nocancel ("/proc/self/loginuid", O_RDONLY);
+   if (fd == -1)
+-    return -1;
++    {
++      if (errno == ENOENT)
++	/* Trigger utmp fallback.  */
++	return -1;
++      return errno;
++    }
+ 
+   /* We are reading a 32-bit number.  12 bytes are enough for the text
+      representation.  If not, something is wrong.  */
+@@ -45,6 +50,8 @@ __getlogin_r_loginuid (char *name, size_t namesize)
+   ssize_t n = TEMP_FAILURE_RETRY (__read_nocancel (fd, uidbuf,
+ 						   sizeof (uidbuf)));
+   __close_nocancel_nostatus (fd);
++  if (n < 0)
++    return errno;
+ 
+   uid_t uid;
+   char *endp;
+@@ -53,12 +60,13 @@ __getlogin_r_loginuid (char *name, size_t namesize)
+       || (uidbuf[n] = '\0',
+ 	  uid = strtoul (uidbuf, &endp, 10),
+ 	  endp == uidbuf || *endp != '\0'))
+-    return -1;
++    return EINVAL;
+ 
+   /* If there is no login uid, linux sets /proc/self/loginid to the sentinel
+      value of, (uid_t) -1, so check if that value is set and return early to
+      avoid making unneeded nss lookups. */
+   if (uid == (uid_t) -1)
++    /* Trigger utmp fallback.  */
+     return -1;
+ 
+   struct passwd pwd;
+@@ -78,9 +86,14 @@ __getlogin_r_loginuid (char *name, size_t namesize)
+ 	}
+     }
+ 
+-  if (res != 0 || tpwd == NULL)
++  if (res != 0)
++    {
++      result = res;
++      goto out;
++    }
++  if (tpwd == NULL)
+     {
+-      result = -1;
++      result = ENOENT;
+       goto out;
+     }
+ 
+
+commit ebd45473f5421e0fced5ba2cde0f1aaa36e79b61
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Feb 13 09:02:07 2026 +0100
+
+    nss: Missing checks in __nss_configure_lookup, __nss_database_get (bug 28940)
+    
+    This avoids a null pointer dereference in the
+    nss_database_check_reload_and_get function, and assertion failures.
+    
+    Reviewed-by: Sam James <sam@gentoo.org>
+    (cherry picked from commit 5b713b49443eb6a4e54e50e2f0147105f86dab02)
+
+diff --git a/nss/Makefile b/nss/Makefile
+index 1991b7482a..f690c29b94 100644
+--- a/nss/Makefile
++++ b/nss/Makefile
+@@ -326,6 +326,7 @@ tests := \
+   tst-gshadow \
+   tst-nss-getpwent \
+   tst-nss-hash \
++  tst-nss-malloc-failure-getlogin_r \
+   tst-nss-test1 \
+   tst-nss-test2 \
+   tst-nss-test4 \
+diff --git a/nss/nss_database.c b/nss/nss_database.c
+index a6b7d5c956..7aa460c7df 100644
+--- a/nss/nss_database.c
++++ b/nss/nss_database.c
+@@ -250,9 +250,12 @@ __nss_configure_lookup (const char *dbname, const char *service_line)
+ 
+   /* Force any load/cache/read whatever to happen, so we can override
+      it.  */
+-  __nss_database_get (db, &result);
++  if (!__nss_database_get (db, &result))
++    return -1;
+ 
+   local = nss_database_state_get ();
++  if (local == NULL)
++    return -1;
+ 
+   result = __nss_action_parse (service_line);
+   if (result == NULL)
+@@ -477,6 +480,8 @@ bool
+ __nss_database_get (enum nss_database db, nss_action_list *actions)
+ {
+   struct nss_database_state *local = nss_database_state_get ();
++  if (local == NULL)
++    return false;
+   return nss_database_check_reload_and_get (local, actions, db);
+ }
+ libc_hidden_def (__nss_database_get)
+diff --git a/nss/tst-nss-malloc-failure-getlogin_r.c b/nss/tst-nss-malloc-failure-getlogin_r.c
+new file mode 100644
+index 0000000000..0e2985ad57
+--- /dev/null
++++ b/nss/tst-nss-malloc-failure-getlogin_r.c
+@@ -0,0 +1,345 @@
++/* Test NSS/getlogin_r with injected allocation failures (bug 28940).
++   Copyright (C) 2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <errno.h>
++#include <getopt.h>
++#include <malloc.h>
++#include <netdb.h>
++#include <nss.h>
++#include <stdbool.h>
++#include <stdlib.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/namespace.h>
++#include <support/support.h>
++#include <support/xstdio.h>
++#include <unistd.h>
++
++/* This test calls getpwuid_r via getlogin_r (on Linux).
++
++   This test uses the NSS system configuration to exercise that code
++   path.  It means that it can fail (crash) if malloc failure is not
++   handled by NSS modules for the passwd database.  */
++
++/* Data structure allocated via MAP_SHARED, so that writes from the
++   subprocess are visible.  */
++struct shared_data
++{
++  /* Number of tracked allocations performed so far.  */
++  volatile unsigned int allocation_count;
++
++  /* If this number is reached, one allocation fails.  */
++  volatile unsigned int failing_allocation;
++
++  /* The number of allocations performed during initialization
++     (before the actual getlogin_r call).  */
++  volatile unsigned int init_allocation_count;
++
++  /* Error code of an expected getlogin_r failure.  */
++  volatile int expected_failure;
++
++  /* The subprocess stores the expected name here.  */
++  char name[100];
++};
++
++/* Allocation count in shared mapping.  */
++static struct shared_data *shared;
++
++/* Returns true if a failure should be injected for this allocation.  */
++static bool
++fail_this_allocation (void)
++{
++  if (shared != NULL)
++    {
++      unsigned int count = shared->allocation_count;
++      shared->allocation_count = count + 1;
++      return count == shared->failing_allocation;
++    }
++  else
++    return false;
++}
++
++/* Failure-injecting wrappers for allocation functions used by glibc.  */
++
++void *
++malloc (size_t size)
++{
++  if (fail_this_allocation ())
++    {
++      errno = ENOMEM;
++      return NULL;
++    }
++  extern __typeof (malloc) __libc_malloc;
++  return __libc_malloc (size);
++}
++
++void *
++calloc (size_t a, size_t b)
++{
++  if (fail_this_allocation ())
++    {
++      errno = ENOMEM;
++      return NULL;
++    }
++  extern __typeof (calloc) __libc_calloc;
++  return __libc_calloc (a, b);
++}
++
++void *
++realloc (void *ptr, size_t size)
++{
++  if (fail_this_allocation ())
++    {
++      errno = ENOMEM;
++      return NULL;
++    }
++  extern __typeof (realloc) __libc_realloc;
++  return __libc_realloc (ptr, size);
++}
++
++/* No-op subprocess to verify that support_isolate_in_subprocess does
++   not perform any heap allocations.  */
++static void
++no_op (void *ignored)
++{
++}
++
++/* Perform a getlogin_r call in a subprocess, to obtain the number of
++   allocations used and the expected result of a successful call.  */
++static void
++initialize (void *configure_lookup)
++{
++  shared->init_allocation_count = 0;
++  if (configure_lookup != NULL)
++    {
++      TEST_COMPARE (__nss_configure_lookup ("passwd", configure_lookup), 0);
++      shared->init_allocation_count = shared->allocation_count;
++    }
++
++  shared->name[0] = '\0';
++  int ret = getlogin_r (shared->name, sizeof (shared->name));
++  if (ret != 0)
++    {
++      printf ("info: getlogin_r failed: %s (%d)\n",
++              strerrorname_np (ret), ret);
++      shared->expected_failure = ret;
++    }
++  else
++    {
++      shared->expected_failure = 0;
++      if (shared->name[0] == '\0')
++        FAIL ("error: getlogin_r succeeded without result\n");
++      else
++        printf ("info: getlogin_r: \"%s\"\n", shared->name);
++    }
++}
++
++/* Perform getlogin_r in a subprocess with fault injection.  */
++static void
++test_in_subprocess (void *configure_lookup)
++{
++  if (configure_lookup != NULL
++      && __nss_configure_lookup ("passwd", configure_lookup) < 0)
++    {
++      printf ("info: __nss_configure_lookup failed: %s (%d)\n",
++              strerrorname_np (errno), errno);
++      TEST_COMPARE (errno, ENOMEM);
++      TEST_VERIFY (shared->allocation_count <= shared->init_allocation_count);
++      return;
++    }
++
++  unsigned int inject_at = shared->failing_allocation;
++  char name[sizeof (shared->name)] = "name not set";
++  int ret = getlogin_r (name, sizeof (name));
++  shared->failing_allocation = ~0U;
++
++  if (ret == 0)
++    {
++      TEST_COMPARE (shared->expected_failure, 0);
++      TEST_COMPARE_STRING (name, shared->name);
++    }
++  else
++    {
++      printf ("info: allocation %u failure results in error %s (%d)\n",
++              inject_at, strerrorname_np (ret), ret);
++
++      if (ret != ENOMEM)
++        {
++          if (shared->expected_failure != 0)
++            TEST_COMPARE (ret, shared->expected_failure);
++          else if (configure_lookup == NULL)
++            /* The ENOENT failure can happen due to an issue related
++               to bug 22041: dlopen failure does not result in ENOMEM.  */
++            TEST_COMPARE (ret, ENOENT);
++          else
++            FAIL ("unexpected getlogin_r error");
++        }
++    }
++
++  if (shared->expected_failure == 0)
++    {
++      /* The second call should succeed.  */
++      puts ("info: about to perform second getlogin_r call");
++      ret = getlogin_r (name, sizeof (name));
++      if (configure_lookup == NULL)
++        {
++          /* This check can fail due to bug 22041 if the malloc error
++             injection causes a failure internally in dlopen.  */
++          if (ret != 0)
++            {
++              printf ("warning: second getlogin_r call failed with %s (%d)\n",
++                      strerrorname_np (ret), ret);
++              TEST_COMPARE (ret, ENOENT);
++            }
++        }
++      else
++        /* If __nss_configure_lookup has been called, the error caching
++           bug does not happen because nss_files is built-in, and the
++           second getlogin_r is expected to succeed.  */
++        TEST_COMPARE (ret, 0);
++      if (ret == 0)
++        TEST_COMPARE_STRING (name, shared->name);
++    }
++}
++
++/* Set by the --failing-allocation command line option.  Together with
++   --direct, this can be used to trigger an allocation failure in the
++   original process, which may help with debugging.  */
++static int option_failing_allocation = -1;
++
++/* Set by --override, to be used with --failing-allocation.  Turns on
++   the __nss_configure_lookup call for passwd/files, which is disabled
++   by default.  */
++static int option_override = 0;
++
++static int
++do_test (void)
++{
++  char files[] = "files";
++
++  if (option_failing_allocation >= 0)
++    {
++      /* The test was invoked with --failing-allocation.  Perform just
++         one test, using the original nsswitch.conf.  This is a
++         condensed version of the probing/testing loop below.  */
++      printf ("info: testing with failing allocation %d\n",
++              option_failing_allocation);
++      shared = support_shared_allocate (sizeof (*shared));
++      shared->failing_allocation = ~0U;
++      char *configure_lookup = option_override ? files : NULL;
++      support_isolate_in_subprocess (initialize, configure_lookup);
++      shared->allocation_count = 0;
++      shared->failing_allocation = option_failing_allocation;
++      test_in_subprocess (configure_lookup); /* No subprocess.  */
++      support_shared_free (shared);
++      shared = NULL;
++      return 0;
++    }
++
++  bool any_success = false;
++
++  for (int do_configure_lookup = 0; do_configure_lookup < 2;
++       ++do_configure_lookup)
++    {
++      if (do_configure_lookup)
++        puts ("info: testing with nsswitch.conf override");
++      else
++        puts ("info: testing with original nsswitch.conf");
++
++      char *configure_lookup = do_configure_lookup ? files : NULL;
++
++      shared = support_shared_allocate (sizeof (*shared));
++
++      /* Disable fault injection.  */
++      shared->failing_allocation = ~0U;
++
++      support_isolate_in_subprocess (no_op, NULL);
++      TEST_COMPARE (shared->allocation_count, 0);
++
++      support_isolate_in_subprocess (initialize, configure_lookup);
++
++      if (shared->name[0] != '\0')
++        any_success = true;
++
++      /* The number of allocations in the successful case.  Once the
++         number of expected allocations is exceeded, injecting further
++         failures does not make a difference (assuming that the number
++         of malloc calls is deterministic).  */
++      unsigned int maximum_allocation_count = shared->allocation_count;
++      printf ("info: initial getlogin_r performed %u allocations\n",
++              maximum_allocation_count);
++
++      for (unsigned int inject_at = 0; inject_at <= maximum_allocation_count;
++           ++inject_at)
++        {
++          printf ("info: running fault injection at allocation %u\n",
++                  inject_at);
++          shared->allocation_count = 0;
++          shared->failing_allocation = inject_at;
++          support_isolate_in_subprocess (test_in_subprocess, configure_lookup);
++        }
++
++      support_shared_free (shared);
++      shared = NULL;
++    }
++
++  {
++    FILE *fp = fopen (_PATH_NSSWITCH_CONF, "r");
++    if (fp == NULL)
++      printf ("info: no %s file\n", _PATH_NSSWITCH_CONF);
++    else
++      {
++        printf ("info: %s contents follows\n", _PATH_NSSWITCH_CONF);
++        int last_ch = '\n';
++        while (true)
++          {
++            int ch = fgetc (fp);
++            if (ch == EOF)
++              break;
++            putchar (ch);
++            last_ch = ch;
++          }
++        if (last_ch != '\n')
++          putchar ('\n');
++        printf ("(end of %s contents)\n", _PATH_NSSWITCH_CONF);
++        xfclose (fp);
++      }
++  }
++
++  support_record_failure_barrier ();
++
++  if (!any_success)
++    FAIL_UNSUPPORTED ("no successful getlogin_r calls");
++
++  return 0;
++}
++
++static void
++cmdline_process (int c)
++{
++  if (c == 'F')
++    option_failing_allocation = atoi (optarg);
++}
++
++#define CMDLINE_OPTIONS                                                 \
++  { "failing-allocation", required_argument, NULL, 'F' },               \
++  { "override", no_argument, &option_override, 1 },
++
++#define CMDLINE_PROCESS cmdline_process
++
++#include <support/test-driver.c>
+
+commit 9cd9c9054409d192aab06bfea32624af9ffa8121
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Fri Nov 28 11:46:09 2025 +0100
+
+    iconvdata: Fix invalid pointer arithmetic in ANSI_X3.110 module
+    
+    The expression inptr + 1 can technically be invalid: if inptr == inend,
+    inptr may point one element past the end of an array.
+    
+    Reviewed-by: Adhemerval Zanella  <adhemerval.zanella@linaro.org>
+    (cherry picked from commit e98bd0c54d5e296ad1be91b6fe35260c6b87e733)
+
+diff --git a/iconvdata/ansi_x3.110.c b/iconvdata/ansi_x3.110.c
+index c5506b13b8..94e6e6b745 100644
+--- a/iconvdata/ansi_x3.110.c
++++ b/iconvdata/ansi_x3.110.c
+@@ -407,7 +407,7 @@ static const char from_ucs4[][2] =
+ 	   is also available.  */					      \
+ 	uint32_t ch2;							      \
+ 									      \
+-	if (inptr + 1 >= inend)						      \
++	if (inend - inptr <= 1)						      \
+ 	  {								      \
+ 	    /* The second character is not available.  */		      \
+ 	    result = __GCONV_INCOMPLETE_INPUT;				      \
+
+commit 1a19d5a507eb82a2cf1cf8bd1c14ca1758fb8a82
+Author: Florian Weimer <fweimer@redhat.com>
+Date:   Mon Jan 26 17:12:37 2026 +0100
+
+    posix: Run tst-wordexp-reuse-mem test
+    
+    The test was not properly scheduled for execution with a Makefile
+    dependency.
+    
+    Fixes commit 80cc58ea2de214f85b0a1d902a3b668ad2ecb302 ("posix: Reset
+    wordexp_t fields with WRDE_REUSE (CVE-2025-15281 / BZ 33814").
+    
+    (cherry picked from commit bed2db02f3183e93f21d506786c5f884a1dec9e7)
+
+diff --git a/posix/Makefile b/posix/Makefile
+index 1ea86efcc1..0b29c9aa4e 100644
+--- a/posix/Makefile
++++ b/posix/Makefile
+@@ -495,7 +495,7 @@ tests-special += \
+   $(objpfx)tst-pcre-mem.out \
+   $(objpfx)tst-rxspencer-no-utf8-mem.out \
+   $(objpfx)tst-vfork3-mem.out \
+-  $(objpfx)tst-wordexp-reuse.out \
++  $(objpfx)tst-wordexp-reuse-mem.out \
+   # tests-special
+ endif
+ endif
+
+commit 8e863fb1c92360520704a69dc948be6bb4a17cb3
+Author: Carlos O'Donell <carlos@redhat.com>
+Date:   Fri Mar 20 16:43:33 2026 -0400
+
+    resolv: Count records correctly (CVE-2026-4437)
+    
+    The answer section boundary was previously ignored, and the code in
+    getanswer_ptr would iterate past the last resource record, but not
+    beyond the end of the returned data.  This could lead to subsequent data
+    being interpreted as answer records, thus violating the DNS
+    specification.  Such resource records could be maliciously crafted and
+    hidden from other tooling, but processed by the glibc stub resolver and
+    acted upon by the application.  While we trust the data returned by the
+    configured recursive resolvers, we should not trust its format and
+    should validate it as required.  It is a security issue to incorrectly
+    process the DNS protocol.
+    
+    A regression test is added for response section crossing.
+    
+    No regressions on x86_64-linux-gnu.
+    
+    Reviewed-by: Collin Funk <collin.funk1@gmail.com>
+    (cherry picked from commit 9f5f18aab40ec6b61fa49a007615e6077e9a979b)
+
+diff --git a/resolv/Makefile b/resolv/Makefile
+index 8fa3398d76..0ba5fba710 100644
+--- a/resolv/Makefile
++++ b/resolv/Makefile
+@@ -104,6 +104,7 @@ tests += \
+   tst-resolv-basic \
+   tst-resolv-binary \
+   tst-resolv-byaddr \
++  tst-resolv-dns-section \
+   tst-resolv-edns \
+   tst-resolv-invalid-cname \
+   tst-resolv-network \
+@@ -115,6 +116,7 @@ tests += \
+   tst-resolv-semi-failure \
+   tst-resolv-short-response \
+   tst-resolv-trailing \
++  # tests
+ 
+ # This test calls __res_context_send directly, which is not exported
+ # from libresolv.
+@@ -293,6 +295,8 @@ $(objpfx)tst-resolv-aliases: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-basic: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-binary: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-byaddr: $(objpfx)libresolv.so $(shared-thread-library)
++$(objpfx)tst-resolv-dns-section: $(objpfx)libresolv.so \
++  $(shared-thread-library)
+ $(objpfx)tst-resolv-edns: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-network: $(objpfx)libresolv.so $(shared-thread-library)
+ $(objpfx)tst-resolv-res_init: $(objpfx)libresolv.so
+diff --git a/resolv/nss_dns/dns-host.c b/resolv/nss_dns/dns-host.c
+index 14da73ee1d..27096edad2 100644
+--- a/resolv/nss_dns/dns-host.c
++++ b/resolv/nss_dns/dns-host.c
+@@ -820,7 +820,7 @@ getanswer_ptr (unsigned char *packet, size_t packetlen,
+   /* expected_name may be updated to point into this buffer.  */
+   unsigned char name_buffer[NS_MAXCDNAME];
+ 
+-  while (ancount > 0)
++  for (; ancount > 0; --ancount)
+     {
+       struct ns_rr_wire rr;
+       if (!__ns_rr_cursor_next (&c, &rr))
+diff --git a/resolv/tst-resolv-dns-section.c b/resolv/tst-resolv-dns-section.c
+new file mode 100644
+index 0000000000..1171baef51
+--- /dev/null
++++ b/resolv/tst-resolv-dns-section.c
+@@ -0,0 +1,162 @@
++/* Test handling of invalid section transitions (bug 34014).
++   Copyright (C) 2022-2026 Free Software Foundation, Inc.
++   This file is part of the GNU C Library.
++
++   The GNU C Library is free software; you can redistribute it and/or
++   modify it under the terms of the GNU Lesser General Public
++   License as published by the Free Software Foundation; either
++   version 2.1 of the License, or (at your option) any later version.
++
++   The GNU C Library is distributed in the hope that it will be useful,
++   but WITHOUT ANY WARRANTY; without even the implied warranty of
++   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
++   Lesser General Public License for more details.
++
++   You should have received a copy of the GNU Lesser General Public
++   License along with the GNU C Library; if not, see
++   <https://www.gnu.org/licenses/>.  */
++
++#include <array_length.h>
++#include <errno.h>
++#include <netdb.h>
++#include <resolv.h>
++#include <stdlib.h>
++#include <string.h>
++#include <support/check.h>
++#include <support/format_nss.h>
++#include <support/resolv_test.h>
++#include <support/support.h>
++
++/* Name of test, and the second section type.  */
++struct item {
++  const char *test;
++  int ns_section;
++};
++
++static const struct item test_items[] =
++  {
++    { "Test crossing from ns_s_an to ns_s_ar.", ns_s_ar },
++    { "Test crossing from ns_s_an to ns_s_an.", ns_s_ns },
++
++    { NULL, 0 },
++  };
++
++/* The response is designed to contain the following:
++   - An Answer section with one T_PTR record that is skipped.
++   - A second section with a semantically invalid T_PTR record.
++   The original defect is that the response parsing would cross
++   section boundaries and handle the additional section T_PTR
++   as if it were an answer.  A conforming implementation would
++   stop as soon as it reaches the end of the section.  */
++static void
++response (const struct resolv_response_context *ctx,
++          struct resolv_response_builder *b,
++          const char *qname, uint16_t qclass, uint16_t qtype)
++{
++  TEST_COMPARE (qclass, C_IN);
++
++  /* We only test PTR.  */
++  TEST_COMPARE (qtype, T_PTR);
++
++  unsigned int count;
++  char *tail = NULL;
++
++  if (strstr (qname, "in-addr.arpa") != NULL
++      && sscanf (qname, "%u.%ms", &count, &tail) == 2)
++    TEST_COMPARE_STRING (tail, "0.168.192.in-addr.arpa");
++  else if (sscanf (qname, "%x.%ms", &count, &tail) == 2)
++    {
++    TEST_COMPARE_STRING (tail, "\
++0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa");
++    }
++  else
++    FAIL_EXIT1 ("invalid QNAME: %s\n", qname);
++  free (tail);
++
++  /* We have a bounded number of possible tests.  */
++  TEST_VERIFY (count >= 0);
++  TEST_VERIFY (count <= 15);
++
++  struct resolv_response_flags flags = {};
++  resolv_response_init (b, flags);
++  resolv_response_add_question (b, qname, qclass, qtype);
++  resolv_response_section (b, ns_s_an);
++
++  /* Actual answer record, but the wrong name (skipped).  */
++  resolv_response_open_record (b, "1.0.0.10.in-addr.arpa", qclass, qtype, 60);
++
++  /* Record the answer.  */
++  resolv_response_add_name (b, "test.ptr.example.net");
++  resolv_response_close_record (b);
++
++  /* Add a second section to test section boundary crossing.  */
++  resolv_response_section (b, test_items[count].ns_section);
++  /* Semantically incorrect, but hide a T_PTR entry.  */
++  resolv_response_open_record (b, qname, qclass, qtype, 60);
++  resolv_response_add_name (b, "wrong.ptr.example.net");
++  resolv_response_close_record (b);
++}
++
++
++/* Perform one check using a reverse lookup.  */
++static void
++check_reverse (int af, int count)
++{
++  TEST_VERIFY (af == AF_INET || af == AF_INET6);
++  TEST_VERIFY (count < array_length (test_items));
++
++  char addr[sizeof (struct in6_addr)] = { 0 };
++  socklen_t addrlen;
++  if (af == AF_INET)
++    {
++      addr[0] = (char) 192;
++      addr[1] = (char) 168;
++      addr[2] = (char) 0;
++      addr[3] = (char) count;
++      addrlen = 4;
++    }
++  else
++    {
++      addr[0] = 0x20;
++      addr[1] = 0x01;
++      addr[2] = 0x0d;
++      addr[3] = 0xb8;
++      addr[4] = addr[5] = addr[6] = addr[7] = 0x0;
++      addr[8] = addr[9] = addr[10] = addr[11] = 0x0;
++      addr[12] = 0x0;
++      addr[13] = 0x0;
++      addr[14] = 0x0;
++      addr[15] = count;
++      addrlen = 16;
++    }
++
++  h_errno = 0;
++  struct hostent *answer = gethostbyaddr (addr, addrlen, af);
++  TEST_VERIFY (answer == NULL);
++  TEST_VERIFY (h_errno == NO_RECOVERY);
++  if (answer != NULL)
++    printf ("error: unexpected success: %s\n",
++	    support_format_hostent (answer));
++}
++
++static int
++do_test (void)
++{
++  struct resolv_test *obj = resolv_test_start
++    ((struct resolv_redirect_config)
++     {
++       .response_callback = response
++     });
++
++  for (int i = 0; test_items[i].test != NULL; i++)
++    {
++      check_reverse (AF_INET, i);
++      check_reverse (AF_INET6, i);
++    }
++
++  resolv_test_end (obj);
++
++  return 0;
++}
++
++#include <support/test-driver.c>
