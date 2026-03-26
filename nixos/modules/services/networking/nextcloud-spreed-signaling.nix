@@ -352,7 +352,6 @@ in
             etcd = {
               endpoints = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [ "127.0.0.1:2379" ];
                 description = "List of static etcd endpoints to connect to.";
                 apply = v: if v == [ ] then null else (builtins.concatStringsSep "," v);

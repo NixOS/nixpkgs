@@ -26,7 +26,6 @@ in
       type = attrsOf str;
     };
     parityFiles = lib.mkOption {
-      default = [ ];
       example = [
         "/mnt/diskp/snapraid.parity"
         "/mnt/diskq/snapraid.2-parity"
@@ -39,7 +38,6 @@ in
       type = listOf str;
     };
     contentFiles = lib.mkOption {
-      default = [ ];
       example = [
         "/var/snapraid.content"
         "/mnt/disk1/snapraid.content"

@@ -154,7 +154,6 @@ in
           `services.btrbk.instances.<name>.settings` option.
         '';
         type = types.listOf types.package;
-        default = [ ];
         example = literalExpression "[ pkgs.xz ]";
       };
       niceness = mkOption {

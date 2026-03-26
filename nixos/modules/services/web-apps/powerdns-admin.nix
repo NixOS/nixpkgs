@@ -28,7 +28,6 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = literalExpression ''
         [ "-b" "127.0.0.1:8000" ]
       '';

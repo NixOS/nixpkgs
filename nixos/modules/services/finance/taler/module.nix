@@ -16,7 +16,6 @@ in
     enable = lib.mkEnableOption "the GNU Taler system" // lib.mkOption { internal = true; };
     includes = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       description = ''
         Files to include into the config file using Taler's `@inline@` directive.
 

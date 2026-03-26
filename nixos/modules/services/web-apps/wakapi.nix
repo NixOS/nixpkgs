@@ -70,7 +70,6 @@ in
 
     environmentFiles = mkOption {
       type = types.listOf types.path;
-      default = [ ];
       description = ''
         Use this to set `WAKAPI_PASSWORD_SALT` and `WAKAPI_MAIL_SMTP_PASS`.
       '';

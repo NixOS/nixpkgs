@@ -24,7 +24,6 @@ in
     enable = lib.mkEnableOption "the Zapret DPI bypass service.";
     package = lib.mkPackageOption pkgs "zapret" { };
     params = lib.mkOption {
-      default = [ ];
       type = with lib.types; listOf str;
       example = [
         "--dpi-desync=fake,disorder2"
@@ -57,7 +56,6 @@ in
       '';
     };
     blacklist = lib.mkOption {
-      default = [ ];
       type = with lib.types; listOf str;
       example = [
         "example.com"
@@ -116,7 +114,6 @@ in
       '';
     };
     udpPorts = lib.mkOption {
-      default = [ ];
       type = with lib.types; listOf str;
       example = [
         "50000:50099"

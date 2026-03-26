@@ -110,7 +110,6 @@ in
     };
     listenDoH = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       example = [
         "198.51.100.1:443"
         "[2001:db8::1]:443"

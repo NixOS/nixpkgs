@@ -58,7 +58,6 @@ in
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Extra flags to pass to the calibre-server command.
           See the [calibre-server documentation](${generatedDocumentationLink}) for details.

@@ -30,7 +30,6 @@ in
 
       exports = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           List the file systems that clients will be allowed to mount. All paths should
           be fully qualified. The exports table can include two types of element:
@@ -57,7 +56,6 @@ in
 
       exportopts = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Establish a default set of export options. These are overridden, not appended
           to, by opts attributes in an "exports" entry.

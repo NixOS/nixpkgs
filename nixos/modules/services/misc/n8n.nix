@@ -76,7 +76,6 @@ in
 
     customNodes = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression "[ pkgs.n8n-nodes-carbonejs ]";
       description = ''
         List of custom n8n community node packages to load.
@@ -289,7 +288,6 @@ in
 
                 args = lib.mkOption {
                   type = with lib.types; listOf str;
-                  default = [ ];
                   description = "Additional command-line arguments to pass to the task runner.";
                 };
 

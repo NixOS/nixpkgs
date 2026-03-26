@@ -72,7 +72,6 @@ in
 
       extraNodes = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           List of additional peer IP addresses to connect to.
         '';

@@ -106,7 +106,6 @@ in
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Extra commandline options when launching the Pushgateway.
         '';

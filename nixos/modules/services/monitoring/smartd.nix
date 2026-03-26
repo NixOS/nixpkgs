@@ -254,7 +254,6 @@ in
       };
 
       devices = lib.mkOption {
-        default = [ ];
         example = [
           { device = "/dev/sda"; }
           {

@@ -60,7 +60,6 @@ in
     };
     disabledCollectors = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "sources.with-ntpdata" ];
       description = ''
         Collectors to disable which are enabled by default.

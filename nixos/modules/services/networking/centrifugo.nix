@@ -42,7 +42,6 @@ in
 
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       description = ''
         Files to load environment variables from. Options set via environment
         variables take precedence over {option}`settings`.

@@ -170,7 +170,6 @@ in
 
       extraModules = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
         example = lib.literalExpression "[ pkgs.varnishPackages.geoip ]";
         description = ''
           Varnish modules (except 'std').

@@ -64,7 +64,6 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = "Additional command line parameters";
         example = [ "-v" ];
       };

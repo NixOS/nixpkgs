@@ -100,7 +100,6 @@ in
 
     plugins = mkOption {
       type = types.listOf types.package;
-      default = [ ];
       example = literalExpression ''
         with config.services.pretix.package.plugins; [
           passbook

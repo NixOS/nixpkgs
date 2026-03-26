@@ -56,7 +56,6 @@ in
 
     hostKeys = mkOption {
       type = types.listOf (types.either types.str types.path);
-      default = [ ];
       example = [
         "/etc/secrets/initrd/ssh_host_rsa_key"
         "/etc/secrets/initrd/ssh_host_ed25519_key"

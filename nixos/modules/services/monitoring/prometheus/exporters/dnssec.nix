@@ -48,7 +48,6 @@ in
 
     resolvers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         DNSSEC capable resolver to be used for the check.
       '';

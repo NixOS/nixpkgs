@@ -74,7 +74,6 @@ in
     };
     extraPath = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       description = ''
         Extra packages to add to beszel path (such as nvidia-smi or rocm-smi).
       '';

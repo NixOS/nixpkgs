@@ -90,7 +90,6 @@ in
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "-detectsleep" ];
         description = ''
           Additional command-line arguments to pass to

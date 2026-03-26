@@ -28,7 +28,6 @@ in
       };
 
       extraPackages = lib.mkOption {
-        default = [ ];
         description = ''
           Additional packages to add to the code-server {env}`PATH`.
         '';

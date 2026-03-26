@@ -114,7 +114,6 @@ in
               mkOption {
                 type = listOf peer;
                 description = "List of peers to exchange keys with.";
-                default = [ ];
               };
           };
         };

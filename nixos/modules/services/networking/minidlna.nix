@@ -24,7 +24,6 @@ in
 
       options.media_dir = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "/data/media"
           "V,/home/alice/video"

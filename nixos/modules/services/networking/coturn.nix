@@ -98,7 +98,6 @@ in
       };
       listening-ips = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "203.0.113.42"
           "2001:DB8::42"
@@ -111,7 +110,6 @@ in
       };
       relay-ips = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "203.0.113.42"
           "2001:DB8::42"

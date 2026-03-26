@@ -282,7 +282,6 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           Additional arguments to be passed to the service.
         '';

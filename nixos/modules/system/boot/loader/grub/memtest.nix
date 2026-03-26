@@ -28,7 +28,6 @@ in
       };
 
       params = mkOption {
-        default = [ ];
         example = [ "console=ttyS0,115200" ];
         type = types.listOf types.str;
         description = ''

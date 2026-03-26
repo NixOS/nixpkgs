@@ -180,7 +180,6 @@ in
       capabilities = mkOption {
         type = types.listOf types.str;
         apply = caps: caps ++ optionals isEmperor imperialPowers;
-        default = [ ];
         example = literalExpression ''
           [
             "CAP_NET_BIND_SERVICE" # bind on ports <1024

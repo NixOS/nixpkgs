@@ -170,7 +170,6 @@ in
 
           platforms = lib.mkOption {
             description = "Homebridge Platforms";
-            default = [ ];
             apply = validatePlatforms;
             type = listOf (submodule {
               freeformType = settingsFormat.type;
@@ -189,7 +188,6 @@ in
 
           accessories = lib.mkOption {
             description = "Homebridge Accessories";
-            default = [ ];
             type = listOf (submodule {
               freeformType = settingsFormat.type;
               options = {

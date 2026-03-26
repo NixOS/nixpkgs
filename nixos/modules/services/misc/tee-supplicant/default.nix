@@ -42,7 +42,6 @@ in
 
     trustedApplications = mkOption {
       type = types.listOf types.path;
-      default = [ ];
       description = ''
         A list of full paths to trusted applications that will be loaded at
         runtime by tee-supplicant.

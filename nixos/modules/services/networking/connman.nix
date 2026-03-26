@@ -88,7 +88,6 @@ in
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [ "--nodnsproxy" ];
         description = ''
           Extra flags to pass to connmand

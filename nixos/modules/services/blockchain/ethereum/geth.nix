@@ -160,7 +160,6 @@ let
         extraArgs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           description = "Additional arguments passed to Go Ethereum.";
-          default = [ ];
         };
 
         package = lib.mkPackageOption pkgs [ "go-ethereum" "geth" ] { };

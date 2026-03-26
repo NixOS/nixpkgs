@@ -280,7 +280,6 @@ in
     };
 
     packages = mkOption {
-      default = [ ];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.systemd-cryptsetup-generator ]";
       description = "Packages providing systemd units and hooks.";
@@ -317,7 +316,6 @@ in
     };
 
     mounts = mkOption {
-      default = [ ];
       type = systemdUtils.types.mounts;
       description = ''
         Definition of systemd mount units; see {manpage}`systemd.mount(5)`.
@@ -328,7 +326,6 @@ in
     };
 
     automounts = mkOption {
-      default = [ ];
       type = systemdUtils.types.automounts;
       description = ''
         Definition of systemd automount units; see {manpage}`systemd.automount(5)`.
@@ -373,7 +370,6 @@ in
 
     generatorPath = mkOption {
       type = types.listOf types.package;
-      default = [ ];
       example = lib.literalExpression "[ pkgs.hello ]";
       description = ''
         Packages added to the `PATH` environment variable of all systemd generators.

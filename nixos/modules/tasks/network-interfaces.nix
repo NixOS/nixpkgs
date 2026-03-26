@@ -226,7 +226,6 @@ let
         };
 
         ipv4.addresses = mkOption {
-          default = [ ];
           example = [
             {
               address = "10.0.0.1";
@@ -293,7 +292,6 @@ let
         };
 
         ipv6.routes = mkOption {
-          default = [ ];
           example = [
             {
               address = "fdfd:b3f0::";
@@ -686,7 +684,6 @@ in
 
     networking.nameservers = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "130.161.158.4"
         "130.161.33.17"
@@ -697,7 +694,6 @@ in
     };
 
     networking.search = mkOption {
-      default = [ ];
       example = [
         "example.com"
         "home.arpa"
@@ -802,7 +798,6 @@ in
 
             controllers = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               example = [ "ptcp:6653:[::1]" ];
               description = ''
                 Specify the controller targets. For the allowed options see `man 8 ovs-vsctl`.

@@ -112,7 +112,6 @@ in
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Extra args to pass to `vmagent`. See the docs:
         <https://docs.victoriametrics.com/vmagent.html#advanced-usage>

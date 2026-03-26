@@ -152,7 +152,6 @@ in
       packages = mkOption {
         description = "List of network plugin packages to install.";
         type = listOf package;
-        default = [ ];
       };
 
       config = mkOption {
@@ -267,7 +266,6 @@ in
 
     seedDockerImages = mkOption {
       description = "List of docker images to preload on system";
-      default = [ ];
       type = listOf package;
     };
 

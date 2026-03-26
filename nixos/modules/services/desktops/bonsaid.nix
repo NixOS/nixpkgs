@@ -68,7 +68,6 @@ in
     package = lib.mkPackageOption pkgs "bonsai" { };
     extraFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Extra flags to pass to `bonsaid`, such as `[ "-v" ]` to enable verbose logging.
       '';

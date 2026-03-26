@@ -16,7 +16,6 @@ in
   options = {
     environment.unixODBCDrivers = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression "with pkgs.unixodbcDrivers; [ sqlite psql ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in

@@ -72,7 +72,6 @@ in
 
       procPackages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
 

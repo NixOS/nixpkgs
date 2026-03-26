@@ -120,7 +120,6 @@ in
 
               extraArgs = mkOption {
                 type = listOf str;
-                default = [ ];
                 description = ''
                   Extra arguments to pass to the server commandline.
                 '';

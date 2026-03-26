@@ -112,7 +112,6 @@ in
 
     extraCompatPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression ''
         with pkgs; [
           proton-ge-bin

@@ -396,7 +396,6 @@ in
 
               search_domains = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = [ ];
                 description = ''
                   Search domains to inject to Tailscale clients.
                 '';

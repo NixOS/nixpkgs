@@ -170,7 +170,6 @@ in
       };
       whitelistRecipients = mkOption {
         type = listOf path;
-        default = [ ];
         description = "Recipient address whitelist files (see {manpage}`postgrey(8)`)";
       };
     };

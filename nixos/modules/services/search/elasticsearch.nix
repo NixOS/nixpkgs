@@ -138,7 +138,6 @@ in
 
     plugins = mkOption {
       description = "Extra elasticsearch plugins";
-      default = [ ];
       type = types.listOf types.package;
       example = lib.literalExpression "[ pkgs.elasticsearchPlugins.discovery-ec2 ]";
     };

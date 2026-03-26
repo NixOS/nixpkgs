@@ -152,7 +152,6 @@ in
         addon manager, flannel and proxy services.
         Node role will enable flannel, docker, kubelet and proxy services.
       '';
-      default = [ ];
       type = lib.types.listOf (
         lib.types.enum [
           "master"
@@ -207,7 +206,6 @@ in
     path = lib.mkOption {
       description = "Packages added to the services' PATH environment variable. Both the bin and sbin subdirectories of each package are added.";
       type = lib.types.listOf lib.types.package;
-      default = [ ];
     };
 
     clusterCidr = lib.mkOption {

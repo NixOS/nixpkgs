@@ -480,7 +480,6 @@ in
 
       trustedProxies = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = "A list of trusted proxies";
       };
     };

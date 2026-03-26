@@ -424,7 +424,6 @@ in
             };
             registrationFlags = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               example = [ "--docker-helper-image my/gitlab-runner-helper" ];
               description = ''
                 Extra command-line flags passed to
@@ -519,7 +518,6 @@ in
             };
             dockerExtraHosts = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               example = [ "other-host:127.0.0.1" ];
               description = ''
                 Add a custom host-to-IP mapping.
@@ -540,7 +538,6 @@ in
             };
             dockerAllowedServices = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               example = [
                 "postgres:9"
                 "redis:*"
@@ -579,7 +576,6 @@ in
             };
             tagList = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               description = ''
                 Tag list.
 
@@ -660,7 +656,6 @@ in
 
       flags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "prune" ];
         description = ''
           Any additional flags passed to {command}`clear-docker-cache`.

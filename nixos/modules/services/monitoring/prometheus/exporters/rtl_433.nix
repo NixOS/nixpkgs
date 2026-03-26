@@ -46,7 +46,6 @@ in
       };
       channels = lib.mkOption {
         type = mkMatcherOptionType "channel" "Channel to match.";
-        default = [ ];
         example = [
           {
             name = "Acurite";

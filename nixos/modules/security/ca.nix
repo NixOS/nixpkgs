@@ -52,7 +52,6 @@ in
 
     security.pki.certificates = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = lib.literalExpression ''
         [ '''
             NixOS.org

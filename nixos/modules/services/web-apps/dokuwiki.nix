@@ -292,7 +292,6 @@ let
 
         plugins = mkOption {
           type = types.listOf types.path;
-          default = [ ];
           description = ''
             List of path(s) to respective plugin(s) which are copied into the 'plugin' directory.
 
@@ -319,7 +318,6 @@ let
 
         templates = mkOption {
           type = types.listOf types.path;
-          default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied into the 'tpl' directory.
 

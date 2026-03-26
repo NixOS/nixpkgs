@@ -104,7 +104,6 @@ let
       options = {
         addresses = mkOption {
           type = types.listOf (types.submodule addressSubmodule);
-          default = [ ];
           description = ''
             The external address where the host can be reached. This will set this
             host's {option}`settings.Address` option.
@@ -115,7 +114,6 @@ let
 
         subnets = mkOption {
           type = types.listOf (types.submodule subnetSubmodule);
-          default = [ ];
           description = ''
             The subnets which this tinc daemon will serve. This will set this
             host's {option}`settings.Subnet` option.

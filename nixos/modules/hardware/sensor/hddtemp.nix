@@ -64,7 +64,6 @@ in
       dbEntries = mkOption {
         description = "Additional DB entries";
         type = types.listOf types.str;
-        default = [ ];
       };
 
       extraArgs = mkOption {

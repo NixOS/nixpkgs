@@ -18,7 +18,6 @@ in
       package = lib.mkPackageOption pkgs "openvscode-server" { };
 
       extraPackages = lib.mkOption {
-        default = [ ];
         description = ''
           Additional packages to add to the openvscode-server {env}`PATH`.
         '';
@@ -83,7 +82,6 @@ in
       };
 
       extraGroups = lib.mkOption {
-        default = [ ];
         description = ''
           An array of additional groups for the `${defaultUser}` user.
         '';

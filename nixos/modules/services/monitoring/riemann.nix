@@ -40,7 +40,6 @@ in
       };
       configFiles = lib.mkOption {
         type = with lib.types; listOf path;
-        default = [ ];
         description = ''
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
@@ -65,7 +64,6 @@ in
       };
       extraJavaOpts = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         description = ''
           Extra Java options used when launching Riemann.
         '';

@@ -14,7 +14,6 @@ in
     package = lib.mkPackageOption pkgs "byedpi" { };
     extraArgs = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       example = [
         "--split"
         "1"

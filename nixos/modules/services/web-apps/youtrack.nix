@@ -90,7 +90,6 @@ in
           "-Xmx1024m"
         ];
       '';
-      default = [ ];
     };
 
     environmentalParameters = lib.mkOption {

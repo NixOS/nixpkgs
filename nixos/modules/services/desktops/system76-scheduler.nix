@@ -270,7 +270,6 @@ in
 
       exceptions = mkOption {
         type = types.listOf str;
-        default = [ ];
         example = literalExpression ''
           [
             "include descends=\"schedtool\""

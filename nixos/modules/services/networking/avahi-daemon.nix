@@ -90,7 +90,6 @@ in
 
     browseDomains = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "0pointer.de"
         "zeroconf.org"

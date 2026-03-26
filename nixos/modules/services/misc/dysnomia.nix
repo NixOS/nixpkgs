@@ -138,7 +138,6 @@ in
 
       extraContainerPaths = lib.mkOption {
         description = "A list of paths containing additional container configurations that are added to the search folders";
-        default = [ ];
         type = lib.types.listOf lib.types.path;
       };
 

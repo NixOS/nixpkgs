@@ -188,7 +188,6 @@ in
             };
             options.watch = mkOption {
               type = with types; listOf str;
-              default = [ ];
               description = "Paths for {manpage}`public-inbox-watch(1)` to monitor for new mail.";
               example = [ "maildir:/path/to/test.example.com.git" ];
             };
@@ -245,7 +244,6 @@ in
       enable = mkEnableOption "the public-inbox Mail Delivery Agent";
       args = mkOption {
         type = with types; listOf str;
-        default = [ ];
         description = "Command-line arguments to pass to {manpage}`public-inbox-mda(1)`.";
       };
     };
@@ -282,12 +280,10 @@ in
 
             options.css = mkOption {
               type = with types; listOf str;
-              default = [ ];
               description = "The local path name of a CSS file for the PSGI web interface.";
             };
             options.imapserver = mkOption {
               type = with types; listOf str;
-              default = [ ];
               example = [ "imap.public-inbox.org" ];
               description = "IMAP URLs to this public-inbox instance";
             };
@@ -302,7 +298,6 @@ in
             };
             options.pop3server = mkOption {
               type = with types; listOf str;
-              default = [ ];
               example = [ "pop.public-inbox.org" ];
               description = "POP3 URLs to this public-inbox instance";
             };

@@ -68,7 +68,6 @@ in
       factorySteps = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Factory Steps";
-        default = [ ];
         example = [
           "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
@@ -87,7 +86,6 @@ in
       configurators = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Configurator Steps, see <https://docs.buildbot.net/latest/manual/configuration/configurators.html>";
-        default = [ ];
         example = [
           "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
         ];
@@ -144,7 +142,6 @@ in
       };
 
       reporters = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.str;
         description = "List of reporter objects used to present build status to various users.";
       };
@@ -163,7 +160,6 @@ in
 
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = "List of extra groups that the buildbot user should be a part of.";
       };
 

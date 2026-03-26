@@ -48,7 +48,6 @@ in
 
     virtualHosts = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         A list of nginx virtual hosts to put behind tailscale.nginx-auth
       '';

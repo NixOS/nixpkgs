@@ -514,7 +514,6 @@ in
     };
 
     boot.initrd.prepend = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         Other initrd files to prepend to the final initrd we are building.

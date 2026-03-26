@@ -60,7 +60,6 @@ in
 
       extraSettingsPlugins = mkOption {
         type = types.listOf (types.either types.package types.path);
-        default = [ ];
         description = ''
           Additional plugins dir used to configure nomad.
         '';

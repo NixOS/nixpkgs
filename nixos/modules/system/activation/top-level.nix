@@ -198,7 +198,6 @@ in
     };
 
     system.forbiddenDependenciesRegexes = mkOption {
-      default = [ ];
       example = [ "-dev$" ];
       type = types.listOf types.str;
       description = ''
@@ -209,7 +208,6 @@ in
 
     system.extraDependencies = mkOption {
       type = types.listOf types.pathInStore;
-      default = [ ];
       description = ''
         A list of paths that should be included in the system
         closure but generally not visible to users.
@@ -222,7 +220,6 @@ in
 
     system.checks = mkOption {
       type = types.listOf types.package;
-      default = [ ];
       description = ''
         Packages that are added as dependencies of the system's build, usually
         for the purpose of validating some part of the configuration.

@@ -1304,7 +1304,6 @@ in
 
         extraConfigFiles = mkOption {
           type = types.listOf types.path;
-          default = [ ];
           description = ''
             Extra config files to include.
 

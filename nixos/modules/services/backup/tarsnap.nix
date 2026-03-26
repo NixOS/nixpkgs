@@ -174,7 +174,6 @@ in
 
                 directories = lib.mkOption {
                   type = lib.types.listOf lib.types.path;
-                  default = [ ];
                   description = "List of filesystem paths to archive.";
                 };
 

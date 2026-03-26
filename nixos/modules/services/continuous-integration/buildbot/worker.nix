@@ -70,7 +70,6 @@ in
 
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 

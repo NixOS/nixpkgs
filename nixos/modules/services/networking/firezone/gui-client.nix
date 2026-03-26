@@ -24,7 +24,6 @@ in
 
       allowedUsers = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           All listed users will become part of the `firezone-client` group so
           they can control the tunnel service. This is a convenience option.

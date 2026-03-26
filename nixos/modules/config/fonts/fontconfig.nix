@@ -320,7 +320,6 @@ in
         confPackages = lib.mkOption {
           internal = true;
           type = with lib.types; listOf path;
-          default = [ ];
           description = ''
             Fontconfig configuration packages.
           '';

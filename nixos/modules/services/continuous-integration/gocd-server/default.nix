@@ -34,7 +34,6 @@ in
       };
 
       extraGroups = mkOption {
-        default = [ ];
         type = types.listOf types.str;
         example = [
           "wheel"
@@ -149,7 +148,6 @@ in
       };
 
       extraOptions = mkOption {
-        default = [ ];
         type = types.listOf types.str;
         example = [
           "-X debug"

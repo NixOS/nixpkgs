@@ -700,7 +700,6 @@ in
               extraParameters = mkOption {
                 type = listOf str;
                 description = "Extra parameters of this listen directive.";
-                default = [ ];
                 example = [
                   "backlog=1024"
                   "deferred"
@@ -1137,7 +1136,6 @@ in
           options = {
             addresses = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               example = literalExpression ''[ "[::1]" "127.0.0.1:5353" ]'';
               description = "List of resolvers to use";
             };

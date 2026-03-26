@@ -46,7 +46,6 @@ in
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "--allow-all"
           "--user"

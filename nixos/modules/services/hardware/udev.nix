@@ -240,7 +240,6 @@ in
 
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           List of packages containing {command}`udev` rules.
           All files found in
@@ -253,7 +252,6 @@ in
 
       path = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           Packages added to the {env}`PATH` environment variable when
           executing programs from Udev rules.
@@ -358,7 +356,6 @@ in
 
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           *This will only be used when systemd is used in stage 1.*
 

@@ -62,7 +62,6 @@ in
     environment.cosmic.excludePackages = lib.mkOption {
       description = "List of packages to exclude from the COSMIC environment.";
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression "[ pkgs.cosmic-player ]";
     };
   };

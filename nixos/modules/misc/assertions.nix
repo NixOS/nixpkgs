@@ -6,7 +6,6 @@
     assertions = lib.mkOption {
       type = lib.types.listOf lib.types.unspecified;
       internal = true;
-      default = [ ];
       example = [
         {
           assertion = false;

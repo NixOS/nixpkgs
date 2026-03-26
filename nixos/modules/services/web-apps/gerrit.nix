@@ -124,7 +124,6 @@ in
 
       builtinPlugins = lib.mkOption {
         type = lib.types.listOf (lib.types.enum cfg.package.passthru.plugins);
-        default = [ ];
         description = ''
           List of builtins plugins to install. Those are shipped in the
           `gerrit.war` file.

@@ -38,7 +38,6 @@ in
     keep = mkOption {
       description = "Prevents deletion of images for which repository:tag matches the specified regex.";
       type = types.listOf types.str;
-      default = [ ];
       example = [ "^my-image" ];
     };
 

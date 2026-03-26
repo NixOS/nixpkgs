@@ -16,7 +16,6 @@ in
     package = mkPackageOption pkgs "uni-sync" { };
 
     devices = mkOption {
-      default = [ ];
       example = literalExpression ''
         [
           {

@@ -114,7 +114,6 @@ in
 
             metricbeat.modules = mkOption {
               type = types.listOf settingsFormat.type;
-              default = [ ];
               internal = true;
               description = ''
                 The metric collecting modules. Use [](#opt-services.metricbeat.modules) instead.

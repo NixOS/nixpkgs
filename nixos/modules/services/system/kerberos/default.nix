@@ -48,7 +48,6 @@ in
         description = ''
           Extra arguments to pass to the KDC process. See {manpage}`kdc(8)`.
         '';
-        default = [ ];
       };
     };
   };

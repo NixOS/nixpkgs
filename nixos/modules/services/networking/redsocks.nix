@@ -156,7 +156,6 @@ in
 
               doNotRedirect = mkOption {
                 type = with types; listOf str;
-                default = [ ];
                 description = ''
                   Iptables filters that if matched will get the packet off of
                   redsocks.

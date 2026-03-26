@@ -60,7 +60,6 @@ in
 
       environmentFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         example = "/run/secrets/fider.env";
         description = ''
           Files to load environment variables from. Loaded variables override

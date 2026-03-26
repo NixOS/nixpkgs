@@ -46,7 +46,6 @@ in
 
     extraFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "--max-table-size 1000"
         "--max-matching-size 1000"

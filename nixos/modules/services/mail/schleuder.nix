@@ -38,7 +38,6 @@ in
         schleuder-cli.
       '';
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "widget-team@example.com"
         "security@example.com"

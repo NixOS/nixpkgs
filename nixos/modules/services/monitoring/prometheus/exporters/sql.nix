@@ -38,7 +38,6 @@ let
       };
       startupSql = mkOption {
         type = listOf str;
-        default = [ ];
         description = "A list of SQL statements to execute once after making a connection.";
       };
       queries = mkOption {

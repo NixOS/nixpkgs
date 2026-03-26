@@ -40,7 +40,6 @@ in
         Extra arguments passed to the server subcommand, see <https://routinator.docs.nlnetlabs.nl/en/stable/manual-page.html#subcmd-server> for options.";
       '';
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--rtr-client-metrics" ];
     };
 

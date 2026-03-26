@@ -22,7 +22,6 @@ in
 
     extraOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       description = "Additional options with which to start corosync.";
     };
 

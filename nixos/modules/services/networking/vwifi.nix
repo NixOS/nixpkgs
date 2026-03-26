@@ -70,7 +70,6 @@ in
               the radios up using vwifi-client instead of at boot.
             '';
             type = with types; listOf str;
-            default = [ ];
             example = [
               "--number"
               "3"
@@ -93,7 +92,6 @@ in
               changing the ports or inducing packet loss.
             '';
             type = with types; listOf str;
-            default = [ ];
             example = [ "--lost-packets" ];
           };
         };

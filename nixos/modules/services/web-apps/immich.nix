@@ -212,7 +212,6 @@ in
 
     accelerationDevices = mkOption {
       type = types.nullOr (types.listOf types.str);
-      default = [ ];
       example = [ "/dev/dri/renderD128" ];
       description = ''
         A list of device paths to hardware acceleration devices that immich should

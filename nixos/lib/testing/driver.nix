@@ -198,7 +198,6 @@ in
         They become part of [{option}`driver`](#test-opt-driver) via `wrapProgram`.
       '';
       type = types.listOf types.str;
-      default = [ ];
     };
 
     skipLint = mkOption {

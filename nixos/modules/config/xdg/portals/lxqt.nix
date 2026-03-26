@@ -24,7 +24,6 @@ in
 
     styles = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression ''
         [
           pkgs.libsForQt5.qtstyleplugin-kvantum

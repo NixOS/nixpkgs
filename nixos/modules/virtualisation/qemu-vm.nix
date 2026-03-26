@@ -578,7 +578,6 @@ in
 
     virtualisation.additionalPaths = mkOption {
       type = types.listOf types.path;
-      default = [ ];
       description = ''
         A list of paths whose closure should be made available to
         the VM.

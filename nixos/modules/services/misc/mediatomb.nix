@@ -332,7 +332,6 @@ in
 
       mediaDirectories = lib.mkOption {
         type = with lib.types; listOf (submodule mediaDirectory);
-        default = [ ];
         description = ''
           Declare media directories to index.
         '';

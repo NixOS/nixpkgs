@@ -114,7 +114,6 @@ in
 
         extraArgs = mkOption {
           type = listOf str;
-          default = [ ];
           description = ''
             Extra command line arguments for Yggdrasil Jumper.
           '';

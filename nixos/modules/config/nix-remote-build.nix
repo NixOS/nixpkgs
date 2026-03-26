@@ -112,7 +112,6 @@ in
               };
               systems = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [
                   "x86_64-linux"
                   "aarch64-linux"
@@ -179,7 +178,6 @@ in
               };
               supportedFeatures = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [
                   "kvm"
                   "big-parallel"

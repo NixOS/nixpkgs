@@ -46,7 +46,6 @@ in
         freeformType = format.type;
         options = {
           RegistrationOIDC = lib.mkOption {
-            default = [ ];
             description = "List of OpenID connect providers.";
             type = lib.types.listOf (
               lib.types.submodule {

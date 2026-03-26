@@ -46,7 +46,6 @@ in
             };
           options.admin = lib.mkOption {
             type = with lib.types; listOf str;
-            default = [ ];
             example = [ "admin@example.org" ];
             apply = lib.concatStringsSep ":";
             description = ''

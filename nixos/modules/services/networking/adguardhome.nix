@@ -134,7 +134,6 @@ in
     };
 
     extraArgs = lib.mkOption {
-      default = [ ];
       type = listOf str;
       description = ''
         Extra command line parameters to be passed to the adguardhome binary.

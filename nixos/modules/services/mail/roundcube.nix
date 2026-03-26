@@ -86,7 +86,6 @@ in
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         List of roundcube plugins to enable. Currently, only those directly shipped with Roundcube are supported.
       '';

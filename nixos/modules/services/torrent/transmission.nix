@@ -296,7 +296,6 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "--log-debug" ];
         description = ''
           Extra flags passed to the transmission command in the service definition.

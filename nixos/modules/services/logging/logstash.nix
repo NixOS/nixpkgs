@@ -70,7 +70,6 @@ in
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         example = lib.literalExpression "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
       };

@@ -50,7 +50,6 @@ in
 
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       description = ''
         Files containing additional config environment variables for gotify-server.
         Secrets should be set in environmentFiles instead of environment.

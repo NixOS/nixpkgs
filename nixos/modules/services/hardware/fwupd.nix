@@ -88,7 +88,6 @@ in
 
       extraRemotes = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         example = [ "lvfs-testing" ];
         description = ''
           Enables extra remotes in fwupd. See `/etc/fwupd/remotes.d`.
@@ -103,7 +102,6 @@ in
           options = {
             DisabledDevices = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               example = [ "2082b5e0-7a64-478a-b1b2-e3404fab6dad" ];
               description = ''
                 List of device GUIDs to be disabled.
@@ -112,7 +110,6 @@ in
 
             DisabledPlugins = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               example = [ "udev" ];
               description = ''
                 List of plugins to be disabled.

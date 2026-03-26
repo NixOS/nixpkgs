@@ -216,7 +216,6 @@ in
   options = {
 
     swapDevices = mkOption {
-      default = [ ];
       example = [
         { device = "/dev/hda7"; }
         { device = "/var/swapfile"; }

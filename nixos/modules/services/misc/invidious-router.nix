@@ -84,7 +84,6 @@ in
       };
       extraDomains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Additional domains to serve invidious-router on.
         '';

@@ -120,7 +120,6 @@ in
 
       extraFlags = mkOption {
         type = with types; listOf str;
-        default = [ ];
         description = ''
           List of extra flags to pass to the tlsrpt-reportd executable.
 
@@ -267,7 +266,6 @@ in
 
       extraFlags = mkOption {
         type = with types; listOf str;
-        default = [ ];
         description = ''
           List of extra flags to pass to the tlsrpt-reportd executable.
 

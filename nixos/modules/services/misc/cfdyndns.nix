@@ -44,7 +44,6 @@ in
       };
 
       records = lib.mkOption {
-        default = [ ];
         example = [ "host.tld" ];
         type = lib.types.listOf lib.types.str;
         description = ''

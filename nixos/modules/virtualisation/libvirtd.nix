@@ -272,7 +272,6 @@ in
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--verbose" ];
       description = ''
         Extra command line arguments passed to libvirtd on startup.

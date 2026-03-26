@@ -90,7 +90,6 @@ in
 
     extraArgs = mkOption {
       type = with types; listOf str;
-      default = [ ];
       example = [
         "--max-jobs=4"
         "--debug"
@@ -239,7 +238,6 @@ in
 
       extraArgs = mkOption {
         type = with types; listOf str;
-        default = [ ];
         description = ''
           List of arguments to be passed to {command}`guix gc`.
 

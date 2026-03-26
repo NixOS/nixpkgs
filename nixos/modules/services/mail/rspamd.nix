@@ -140,7 +140,6 @@ let
         };
         includes = mkOption {
           type = types.listOf types.str;
-          default = [ ];
           description = ''
             List of files to include in configuration
           '';

@@ -120,7 +120,6 @@ in
               description = ''
                 The usernames / UIDs this rule should apply for.
               '';
-              default = [ ];
             };
 
             groups = lib.mkOption {

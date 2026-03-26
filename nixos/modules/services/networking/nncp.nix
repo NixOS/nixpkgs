@@ -28,7 +28,6 @@ in
         extraArgs = mkOption {
           type = with types; listOf str;
           description = "Extra command-line arguments to pass to caller.";
-          default = [ ];
           example = [ "-autotoss" ];
         };
       };
@@ -53,7 +52,6 @@ in
         extraArgs = mkOption {
           type = with types; listOf str;
           description = "Extra command-line arguments to pass to daemon.";
-          default = [ ];
           example = [ "-autotoss" ];
         };
       };

@@ -66,7 +66,6 @@ in
       };
 
       extraConfigFiles = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.str;
         description = ''
           Extra config file read by Mopidy when the service starts.

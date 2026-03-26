@@ -88,7 +88,6 @@ in
       };
 
       customPkgs = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.package;
         description = ''
           List of custom packages that should be loaded into `oh-my-zsh`.

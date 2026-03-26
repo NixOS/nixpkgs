@@ -38,7 +38,6 @@ let
 
       path = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
         example = [ "" ];
         description = ''
           Additional packages that should be added to the agent's `PATH`.

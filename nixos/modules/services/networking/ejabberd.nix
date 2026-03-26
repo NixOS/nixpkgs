@@ -74,7 +74,6 @@ in
 
       loadDumps = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = "Configuration dumps that should be loaded on the first startup";
         example = lib.literalExpression "[ ./myejabberd.dump ]";
       };

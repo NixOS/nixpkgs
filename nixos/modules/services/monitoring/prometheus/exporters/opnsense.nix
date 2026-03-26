@@ -66,7 +66,6 @@ in
     };
     enabledExporter = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "disable-openvpn" ];
       description = ''
         Collectors to enable or disable.
@@ -75,7 +74,6 @@ in
     };
     disabledExporter = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "disable-openvpn" ];
       description = ''
         Collectors to enable or disable.

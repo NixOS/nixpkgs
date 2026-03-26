@@ -18,7 +18,6 @@ with lib;
 
     serverAliases = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "www.example.org"
         "example.org"

@@ -128,7 +128,6 @@ in
 
       users = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         description = ''
           Usernames to be added to the "openrazer" group, so that they
           can start and interact with the OpenRazer userspace daemon.

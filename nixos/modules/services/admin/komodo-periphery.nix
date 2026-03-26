@@ -142,7 +142,6 @@ in
 
     allowedIps = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = "IP addresses or subnets allowed to call the periphery API. Empty list allows all.";
       example = [
         "::ffff:12.34.56.78"
@@ -203,7 +202,6 @@ in
 
     includeDiskMounts = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = "Only include these mount paths in disk reporting.";
       example = [
         "/mnt/data"

@@ -210,7 +210,6 @@ in
 
                   extraParams = lib.mkOption {
                     type = with types; listOf str;
-                    default = [ ];
                     description = "Extra parameters to append to redis-server invocation";
                     example = [ "--sentinel" ];
                   };

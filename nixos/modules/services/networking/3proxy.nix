@@ -178,7 +178,6 @@ in
                     };
                     targets = lib.mkOption {
                       type = lib.types.listOf lib.types.str;
-                      default = [ ];
                       example = [
                         "127.0.0.1"
                         "192.168.1.0/24"

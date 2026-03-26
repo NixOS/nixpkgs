@@ -70,7 +70,6 @@ in
     };
     extraTypes = lib.mkOption {
       type = with lib.types; listOf attrs;
-      default = [ ];
       description = ''
         Types to write in 'nixTypes.types'. See:
         <https://gitlab.com/ananicy-cpp/ananicy-cpp/#types>
@@ -91,7 +90,6 @@ in
     };
     extraCgroups = lib.mkOption {
       type = with lib.types; listOf attrs;
-      default = [ ];
       description = ''
         Cgroups to write in 'nixCgroups.cgroups'. See:
         <https://gitlab.com/ananicy-cpp/ananicy-cpp/#cgroups>

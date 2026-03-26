@@ -624,7 +624,6 @@ in
                             ))
                           ]
                         );
-                        default = [ ];
                         description = ''
                           The devices this folder should be shared with. Each device must
                           be defined in the [devices](#opt-services.syncthing.settings.devices) option.
@@ -857,7 +856,6 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "--reset-deltas" ];
         description = ''
           Extra flags passed to the syncthing command in the service definition.

@@ -636,7 +636,6 @@ in
                 If, for example, your preHook script needs to dump files
                 somewhere, put those directories here.
               '';
-              default = [ ];
               example = [
                 "/var/backup/mysqldump"
               ];
@@ -817,7 +816,6 @@ in
                 Additional arguments for {command}`borg prune`.
                 Can also be set at runtime using `$extraPruneArgs`.
               '';
-              default = [ ];
               example = [ "--save-space" ];
             };
 

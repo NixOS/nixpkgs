@@ -30,7 +30,6 @@ in
     };
     collStats = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "db1.coll1"
         "db2"
@@ -41,7 +40,6 @@ in
     };
     indexStats = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "db1.coll1"
         "db2"
@@ -52,7 +50,6 @@ in
     };
     collector = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "diagnosticdata"
         "replicasetstatus"

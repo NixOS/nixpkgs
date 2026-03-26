@@ -198,7 +198,6 @@ in
       };
 
       devices = mkOption {
-        default = [ ];
         example = [ "/dev/disk/by-id/wwn-0x500001234567890a" ];
         type = types.listOf types.str;
         description = ''

@@ -22,7 +22,6 @@ in
       extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Additional arguments passed to Erigon";
-        default = [ ];
       };
 
       secretJwtPath = lib.mkOption {

@@ -64,7 +64,6 @@ in
 
     virtualisation.googleComputeImage.contents = mkOption {
       type = with types; listOf attrs;
-      default = [ ];
       description = ''
         The files and directories to be placed in the image.
         This is a list of attribute sets {source, target, mode, user, group} where

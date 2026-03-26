@@ -32,7 +32,6 @@ in
 
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "wheel"
           "dialout"
@@ -143,7 +142,6 @@ in
 
       extraJavaOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [ "-Xmx80m" ];
         description = ''
           Additional command line arguments to pass to the Java run time (as opposed to Jenkins).

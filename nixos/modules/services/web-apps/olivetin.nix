@@ -80,7 +80,6 @@ in
 
     extraConfigFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       example = [ "/run/secrets/olivetin.yaml" ];
       description = ''
         Config files to merge into the settings defined in [](#opt-services.olivetin.settings).

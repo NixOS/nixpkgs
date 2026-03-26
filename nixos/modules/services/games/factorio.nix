@@ -98,7 +98,6 @@ in
 
       admins = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [ "username" ];
         description = ''
           List of player names which will be admin.
@@ -177,7 +176,6 @@ in
       };
       mods = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
         description = ''
           Mods the server should install and activate.
 
@@ -294,7 +292,6 @@ in
       };
       extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "--rcon-bind=localhost:27015"
           "--rcon-password=..."

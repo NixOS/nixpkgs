@@ -60,7 +60,6 @@ in
         Each line must follow the `PRETALX_SECTION_KEY=value` pattern.
       '';
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       example = [ "/run/secrets/pretalx/env" ];
     };
 
@@ -121,7 +120,6 @@ in
 
       extraArgs = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         description = ''
           Extra arguments to pass to celery.
 

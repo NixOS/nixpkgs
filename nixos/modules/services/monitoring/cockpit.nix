@@ -54,7 +54,6 @@ in
 
       plugins = lib.mkOption {
         type = types.listOf types.package;
-        default = [ ];
         description = ''
           List of cockpit plugins.
 
@@ -69,7 +68,6 @@ in
 
       allowed-origins = lib.mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           List of allowed origins.
 

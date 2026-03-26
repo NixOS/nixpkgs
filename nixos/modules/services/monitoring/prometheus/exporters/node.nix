@@ -24,7 +24,6 @@ in
   extraOpts = {
     enabledCollectors = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "systemd" ];
       description = ''
         Collectors to enable. The collectors listed here are enabled in addition to the default ones.

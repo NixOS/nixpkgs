@@ -224,7 +224,6 @@ in
 
     boot = {
       params = mkOption {
-        default = [ ];
         example = literalExpression ''
           [
             "iommu=force:true,qinval:true,debug:true"

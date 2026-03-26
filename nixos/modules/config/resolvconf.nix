@@ -124,7 +124,6 @@ in
 
       extraOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "ndots:1"
           "rotate"

@@ -306,7 +306,6 @@ in
 
     customLovelaceModules = mkOption {
       type = types.listOf types.package;
-      default = [ ];
       example = literalExpression ''
         with pkgs.home-assistant-custom-lovelace-modules; [
           mini-graph-card

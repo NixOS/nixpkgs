@@ -138,7 +138,6 @@ in
 
       plugins = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           Keycloak plugin jar, ear files or derivations containing
           them. Packaged plugins are available through
@@ -305,7 +304,6 @@ in
             ./another/realm.json
           ]
         '';
-        default = [ ];
         description = ''
           Realm files that the server is going to import during startup.
           If a realm already exists in the server, the import operation is

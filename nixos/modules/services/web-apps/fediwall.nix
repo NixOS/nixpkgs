@@ -38,7 +38,6 @@ in
           };
           tags = lib.mkOption {
             type = with lib.types; listOf str;
-            default = [ ];
             example = lib.literalExpression "[ \"cats\" \"dogs\"]";
             description = "Tags to follow";
           };

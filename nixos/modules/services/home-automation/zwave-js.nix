@@ -100,7 +100,6 @@ in
 
     extraFlags = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       example = [ "--mock-driver" ];
       description = ''
         Extra flags to pass to command

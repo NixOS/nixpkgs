@@ -116,21 +116,18 @@ in
         Extra flags to pass to {command}`tailscale up`. Only applied if {option}`services.tailscale.authKeyFile` is specified.
       '';
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--ssh" ];
     };
 
     extraSetFlags = mkOption {
       description = "Extra flags to pass to {command}`tailscale set`.";
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--advertise-exit-node" ];
     };
 
     extraDaemonFlags = mkOption {
       description = "Extra flags to pass to {command}`tailscaled`.";
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--no-logs-no-support" ];
     };
   };

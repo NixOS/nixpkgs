@@ -726,7 +726,6 @@ in
 
         extraFlags = mkOption {
           type = with types; listOf str;
-          default = [ ];
           description = "Extra flags to pass to Erlang";
           example = [
             "+sbwt"

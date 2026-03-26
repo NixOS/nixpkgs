@@ -506,7 +506,6 @@ in
                 description = "List of kanidm entities (persons, groups, ...) which are part of this group.";
                 type = types.listOf types.str;
                 apply = unique;
-                default = [ ];
               };
 
               overwriteMembers = mkOption {
@@ -563,7 +562,6 @@ in
                 description = "List of groups this person should belong to.";
                 type = types.listOf types.str;
                 apply = unique;
-                default = [ ];
               };
             };
           }

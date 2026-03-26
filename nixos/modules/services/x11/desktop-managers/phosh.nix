@@ -50,7 +50,6 @@ let
           One or more modelines.
         '';
         type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
-        default = [ ];
         example = [
           "87.25 720 776 848  976 1440 1443 1453 1493 -hsync +vsync"
           "65.13 768 816 896 1024 1024 1025 1028 1060 -HSync +VSync"

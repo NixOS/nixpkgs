@@ -126,21 +126,18 @@ rec {
       freeformType = attrsOf sectionType;
       options = {
         include = mkOption {
-          default = [ ];
           description = ''
             Files to include in the Kerberos configuration.
           '';
           type = coercedTo path singleton (listOf path);
         };
         includedir = mkOption {
-          default = [ ];
           description = ''
             Directories containing files to include in the Kerberos configuration.
           '';
           type = coercedTo path singleton (listOf path);
         };
         module = mkOption {
-          default = [ ];
           description = ''
             Modules to obtain Kerberos configuration from.
           '';

@@ -102,7 +102,6 @@ in
           "--vendor"
           "ACME Inc."
         ];
-        default = [ ];
         description = ''
           Parameters passed to the Virtualbox export command.
 

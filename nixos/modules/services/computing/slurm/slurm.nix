@@ -242,7 +242,6 @@ in
 
       nodeName = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = lib.literalExpression ''[ "linux[1-32] CPUs=1 State=UNKNOWN" ];'';
         description = ''
           Name that SLURM uses to refer to a node (or base partition for BlueGene
@@ -253,7 +252,6 @@ in
 
       partitionName = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = lib.literalExpression ''[ "debug Nodes=linux[1-32] Default=YES MaxTime=INFINITE State=UP" ];'';
         description = ''
           Name by which the partition may be referenced. Note that now you have
@@ -354,7 +352,6 @@ in
 
       extraConfigPaths = lib.mkOption {
         type = with lib.types; listOf path;
-        default = [ ];
         description = ''
           Slurm expects config files for plugins in the same path
           as {file}`slurm.conf`. Add extra nix store

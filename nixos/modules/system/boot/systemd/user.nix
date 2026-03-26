@@ -130,7 +130,6 @@ in
 
       rules = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "D %C - - - 7d" ];
         description = ''
           Global user rules for creation, deletion and cleaning of volatile and
@@ -151,7 +150,6 @@ in
             options = {
               rules = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [ "D %C - - - 7d" ];
                 description = ''
                   Per-user rules for creation, deletion and cleaning of volatile and

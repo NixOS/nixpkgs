@@ -62,7 +62,6 @@ let
     optionName:
     lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       description = (descriptionGeneric optionName);
     };
   optionAddress = lib.mkOption {
@@ -93,7 +92,6 @@ let
     optionName:
     lib.mkOption {
       type = with lib.types; listOf port;
-      default = [ ];
       description = (descriptionGeneric optionName);
     };
   optionIsolablePort =
@@ -130,7 +128,6 @@ let
   optionIsolablePorts =
     optionName:
     lib.mkOption {
-      default = [ ];
       type = with lib.types; either optionIsolablePort (listOf optionIsolablePort);
       description = (descriptionGeneric optionName);
     };
@@ -203,7 +200,6 @@ let
   optionORPort =
     optionName:
     lib.mkOption {
-      default = [ ];
       example = 443;
       type =
         with lib.types;
@@ -732,7 +728,6 @@ in
                     ${descriptionGeneric "_client_authorization"}
                   '';
                   type = with lib.types; listOf str;
-                  default = [ ];
                   example = [ "descriptor:x25519:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" ];
                 };
                 options.map = lib.mkOption {
@@ -969,7 +964,6 @@ in
           options.DirPolicy = lib.mkOption {
             description = (descriptionGeneric "DirPolicy");
             type = with lib.types; listOf str;
-            default = [ ];
             example = [ "accept *:*" ];
           };
           options.DirPort = optionORPort "DirPort";

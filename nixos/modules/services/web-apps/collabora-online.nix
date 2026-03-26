@@ -100,7 +100,6 @@ in
 
             aliases = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               example = [
                 "scheme://aliasname1:port"
                 "scheme://aliasname2:port"

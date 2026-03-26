@@ -204,7 +204,6 @@ in
           The PCR registers which are used by the system.
         '';
         type = lib.types.listOf lib.types.int;
-        default = [ ];
       };
 
       logDir = lib.mkOption {

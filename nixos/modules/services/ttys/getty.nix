@@ -100,7 +100,6 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           Additional arguments passed to agetty.
         '';

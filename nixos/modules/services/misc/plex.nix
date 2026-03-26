@@ -54,7 +54,6 @@ in
 
       extraPlugins = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           A list of paths to extra plugin bundles to install in Plex's plugin
           directory. Every time the systemd unit for Plex starts up, all of the

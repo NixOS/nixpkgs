@@ -154,7 +154,6 @@
                 Changing this option triggers a new runner registration.
               '';
               example = lib.literalExpression ''[ "nixos" ]'';
-              default = [ ];
             };
 
             noDefaultLabels = lib.mkOption {

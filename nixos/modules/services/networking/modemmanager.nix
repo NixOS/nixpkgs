@@ -42,7 +42,6 @@ in
             };
           }
         );
-        default = [ ];
         example = literalExpression ''[{ id = "03f0:4e1d"; path = "''${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/03f0:4e1d"; }]'';
         description = ''
           List of FCC unlock scripts to enable on the system, behaving as described in

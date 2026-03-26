@@ -26,7 +26,6 @@ in
             '';
           };
           namespaces = mkOption {
-            default = [ ];
             type = types.listOf (types.attrsOf types.anything);
 
             description = ''

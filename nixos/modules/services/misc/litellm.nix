@@ -80,7 +80,6 @@ in
               description = ''
                 List of supported models on the server, with model-specific configs.
               '';
-              default = [ ];
             };
             router_settings = lib.mkOption {
               type = settingsFormat.type;

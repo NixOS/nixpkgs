@@ -60,7 +60,6 @@ in
           };
           readme = mkOption {
             type = types.listOf types.str;
-            default = [ ];
             description = "Readme files to look for.";
           };
           mainBranch = mkOption {
@@ -73,7 +72,6 @@ in
           };
           ignore = mkOption {
             type = types.listOf types.str;
-            default = [ ];
             description = "Repositories to ignore.";
           };
         };

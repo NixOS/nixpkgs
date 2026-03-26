@@ -138,7 +138,6 @@ in
 
     extraConfigFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       example = [ "/run/secrets/alertmanager-ntfy.yml" ];
       description = ''
         Config files to merge into the settings defined in [](#opt-services.prometheus.alertmanager-ntfy.settings).

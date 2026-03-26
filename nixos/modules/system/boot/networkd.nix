@@ -2206,7 +2206,6 @@ let
     };
 
     wireguardPeers = mkOption {
-      default = [ ];
       example = [
         {
           Endpoint = "192.168.1.1:51820";
@@ -2435,7 +2434,6 @@ let
     };
 
     ipv6PREF64Prefixes = mkOption {
-      default = [ ];
       example = [ { Prefix = "64:ff9b::/96"; } ];
       type = types.listOf (
         mkSubsectionType "ipv6PREF64PrefixConfig" check.network.sectionIPv6PREF64Prefix
@@ -2464,7 +2462,6 @@ let
     };
 
     ipv6Prefixes = mkOption {
-      default = [ ];
       example = [
         {
           AddressAutoconfiguration = true;
@@ -2479,7 +2476,6 @@ let
     };
 
     ipv6RoutePrefixes = mkOption {
-      default = [ ];
       example = [
         {
           Route = "fd00::/64";
@@ -2508,7 +2504,6 @@ let
     };
 
     bridgeFDBs = mkOption {
-      default = [ ];
       example = [
         {
           MACAddress = "90:e2:ba:43:fc:71";
@@ -2923,7 +2918,6 @@ let
     };
 
     bridgeVLANs = mkOption {
-      default = [ ];
       example = [ { VLAN = "10-20"; } ];
       type = types.listOf (mkSubsectionType "bridgeVLANConfig" check.network.sectionBridgeVLAN);
       description = ''
@@ -2956,7 +2950,6 @@ let
     };
 
     address = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of addresses to be added to the network section of the
@@ -2965,7 +2958,6 @@ let
     };
 
     gateway = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of gateways to be added to the network section of the
@@ -2974,7 +2966,6 @@ let
     };
 
     dns = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of dns servers to be added to the network section of the
@@ -2983,7 +2974,6 @@ let
     };
 
     ntp = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of ntp servers to be added to the network section of the
@@ -2992,7 +2982,6 @@ let
     };
 
     bridge = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of bridge interfaces to be added to the network section of the
@@ -3001,7 +2990,6 @@ let
     };
 
     bond = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of bond interfaces to be added to the network section of the
@@ -3010,7 +2998,6 @@ let
     };
 
     vrf = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of vrf interfaces to be added to the network section of the
@@ -3019,7 +3006,6 @@ let
     };
 
     vlan = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of vlan interfaces to be added to the network section of the
@@ -3028,7 +3014,6 @@ let
     };
 
     macvlan = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of macvlan interfaces to be added to the network section of the
@@ -3037,7 +3022,6 @@ let
     };
 
     ipvlan = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of ipvlan interfaces to be added to the network section of the
@@ -3046,7 +3030,6 @@ let
     };
 
     macvtap = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of macvtap interfaces to be added to the network section of the
@@ -3055,7 +3038,6 @@ let
     };
 
     vxlan = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of vxlan interfaces to be added to the network section of the
@@ -3064,7 +3046,6 @@ let
     };
 
     tunnel = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of tunnel interfaces to be added to the network section of the
@@ -3073,7 +3054,6 @@ let
     };
 
     xfrm = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       description = ''
         A list of xfrm interfaces to be added to the network section of the
@@ -3082,7 +3062,6 @@ let
     };
 
     addresses = mkOption {
-      default = [ ];
       example = [ { Address = "192.168.0.100/24"; } ];
       type = types.listOf (mkSubsectionType "addressConfig" check.network.sectionAddress);
       description = ''
@@ -3319,7 +3298,6 @@ let
           See {manpage}`systemd-networkd-wait-online.service(8)` for all available options.
         '';
         type = with types; listOf str;
-        default = [ ];
       };
     };
 

@@ -44,7 +44,6 @@ let
 
         address = mkOption {
           example = [ "192.168.2.1/24" ];
-          default = [ ];
           type = with types; listOf str;
           description = "The IP addresses of the interface.";
         };

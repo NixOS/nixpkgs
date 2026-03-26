@@ -88,7 +88,6 @@ in
             };
           }
         );
-        default = [ ];
         example = [
           {
             callbackURL = "https://example.com/client/oidc/callback";

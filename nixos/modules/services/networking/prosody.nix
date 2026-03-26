@@ -790,7 +790,6 @@ in
 
       s2sInsecureDomains = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "insecure.example.com" ];
         description = ''
           Some servers have invalid or self-signed certificates. You can list
@@ -839,7 +838,6 @@ in
 
       muc = mkOption {
         type = types.listOf (types.submodule mucOpts);
-        default = [ ];
         example = [
           {
             domain = "conference.my-xmpp-example-host.org";

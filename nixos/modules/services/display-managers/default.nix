@@ -152,7 +152,6 @@ in
                 '';
           }
         );
-        default = [ ];
         description = ''
           A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';

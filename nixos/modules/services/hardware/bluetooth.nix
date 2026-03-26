@@ -64,7 +64,6 @@ in
 
       disabledPlugins = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = "Built-in plugins to disable";
       };
 

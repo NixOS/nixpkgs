@@ -150,7 +150,6 @@ in
             capabilities = {
               disable = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [ "APPM" ];
                 description = "A list of capabilities to disable (for example, DHTV to say you cannot store DHT information).";
               };

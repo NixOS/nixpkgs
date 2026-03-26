@@ -104,7 +104,6 @@ in
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = "Heisenbridge is configured over the command line. Append extra arguments here";
-      default = [ ];
     };
   };
 

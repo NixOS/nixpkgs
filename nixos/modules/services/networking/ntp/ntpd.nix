@@ -122,7 +122,6 @@ in
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
         example = literalExpression ''[ "--interface=eth0" ]'';
-        default = [ ];
       };
 
     };

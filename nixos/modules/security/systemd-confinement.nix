@@ -46,7 +46,6 @@ in
 
           options.confinement.packages = lib.mkOption {
             type = types.listOf (types.either types.str types.package);
-            default = [ ];
             description =
               let
                 mkScOption = optName: "{option}`serviceConfig.${optName}`";

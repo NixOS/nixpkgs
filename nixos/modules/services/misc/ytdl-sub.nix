@@ -52,7 +52,6 @@ in
                 description = ''
                   List of paths that ytdl-sub can write to.
                 '';
-                default = [ ];
               };
 
               config = lib.mkOption {

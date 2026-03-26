@@ -16,7 +16,6 @@ in
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = lib.literalExpression ''
         [
           # Change the update interval

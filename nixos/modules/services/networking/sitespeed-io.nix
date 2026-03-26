@@ -46,7 +46,6 @@ in
           options = {
             urls = lib.mkOption {
               type = with lib.types; listOf str;
-              default = [ ];
               description = ''
                 URLs the service should monitor.
               '';

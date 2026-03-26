@@ -170,7 +170,6 @@ in
 
       extraModules = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
         example = lib.literalExpression "[ pkgs.pulseaudio-modules-bt ]";
         description = ''
           Extra pulseaudio modules to use. This is intended for out-of-tree

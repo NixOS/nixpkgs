@@ -58,7 +58,6 @@ in
 
     extraFlags = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       example = [
         "--server.http.listen-addr=127.0.0.1:12346"
         "--disable-reporting"

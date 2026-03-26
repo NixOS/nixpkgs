@@ -166,7 +166,6 @@ in
 
     jvmOpts = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         Populate the `JVM_OPT` environment variable.
       '';
@@ -317,7 +316,6 @@ in
 
     fullRepairOptions = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--partitioner-range" ];
       description = ''
         Options passed through to the full repair command.
@@ -340,7 +338,6 @@ in
 
     incrementalRepairOptions = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--partitioner-range" ];
       description = ''
         Options passed through to the incremental repair command.

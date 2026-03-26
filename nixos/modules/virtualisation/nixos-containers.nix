@@ -744,7 +744,6 @@ in
 
               interfaces = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [
                   "eth1"
                   "eth2"

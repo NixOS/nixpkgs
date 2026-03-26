@@ -64,7 +64,6 @@
     name:
     lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       description = ''
         Environment file to pass secret configuration values.
         Each line must follow the `${lib.toUpper name}__SECTION__KEY=value` pattern.

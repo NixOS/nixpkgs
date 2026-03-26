@@ -118,7 +118,6 @@ let
 
               extraBots = mkDefaultOption "policy.extraBots" {
                 type = types.listOf jsonFormat.type;
-                default = [ ];
                 example = lib.literalExpression ''
                   [
                     {
@@ -163,7 +162,6 @@ let
         };
 
         extraFlags = mkDefaultOption "extraFlags" {
-          default = [ ];
           description = "A list of extra flags to be passed to Anubis.";
           example = [ "-metrics-bind \"\"" ];
           type = types.listOf types.str;

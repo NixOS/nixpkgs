@@ -80,7 +80,6 @@ in
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "--forecast" ];
       description = ''
         Extra command line arguments to pass to hledger-web.

@@ -510,7 +510,6 @@ let
         };
 
         limits = lib.mkOption {
-          default = [ ];
           type = limitsType;
           description = ''
             Attribute set describing resource limits.  Defaults to the
@@ -1657,7 +1656,6 @@ in
     security.pam.package = lib.mkPackageOption pkgs "pam" { };
 
     security.pam.loginLimits = lib.mkOption {
-      default = [ ];
       type = limitsType;
       example = [
         {

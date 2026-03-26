@@ -42,7 +42,6 @@ in
 
     nixos.tags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [ "with-xen" ];
       description = ''
         Strings to prefix to the default

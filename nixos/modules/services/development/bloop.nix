@@ -14,7 +14,6 @@ in
   options.services.bloop = {
     extraOptions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "-J-Xmx2G"
         "-J-XX:MaxInlineLevel=20"

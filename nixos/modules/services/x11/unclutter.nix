@@ -50,7 +50,6 @@ in
     extraOptions = mkOption {
       description = "More arguments to pass to the unclutter command";
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "noevent"
         "grab"

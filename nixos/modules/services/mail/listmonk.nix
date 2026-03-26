@@ -64,7 +64,6 @@ let
 
       "privacy.domain_blocklist" = lib.mkOption {
         type = listOf str;
-        default = [ ];
         description = "E-mail addresses with these domains are disallowed from subscribing.";
       };
 

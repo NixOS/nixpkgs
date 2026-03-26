@@ -126,7 +126,6 @@ in
                   };
                 }
               );
-              default = [ ];
               description = ''
                 Path translations between server and node for cross-platform or
                 cross-mount-point file access.

@@ -82,7 +82,6 @@ in
           Note that this should be a last resort; patching the package is preferred (see GPaste).
         '';
         type = types.listOf types.package;
-        default = [ ];
         example = literalExpression "[ pkgs.gpaste ]";
       };
 
@@ -95,7 +94,6 @@ in
       extraGSettingsOverridePackages = mkOption {
         description = "List of packages for which GSettings are overridden.";
         type = types.listOf types.path;
-        default = [ ];
       };
 
       extraPlugins = mkOption {

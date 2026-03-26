@@ -184,7 +184,6 @@ in
 
     skipAuthRegexes = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Skip authentication for requests matching any of these regular
         expressions.
@@ -195,7 +194,6 @@ in
     email = {
       domains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Authenticate emails with the specified domains. Use
           `*` to authenticate any email.
@@ -324,7 +322,6 @@ in
     # UPSTREAM Configuration
     upstream = lib.mkOption {
       type = with lib.types; coercedTo str (x: [ x ]) (listOf str);
-      default = [ ];
       description = ''
         The http url(s) of the upstream endpoint or `file://`
         paths for static files. Routing is based on the path.

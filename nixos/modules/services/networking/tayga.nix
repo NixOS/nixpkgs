@@ -140,7 +140,6 @@ in
 
       log = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = "Packet errors to log (drop, reject, icmp, self)";
         example = literalExpression ''
           [ "drop" "reject" "icmp" "self" ]

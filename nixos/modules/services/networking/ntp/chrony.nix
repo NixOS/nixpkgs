@@ -230,7 +230,6 @@ in
       };
 
       extraFlags = lib.mkOption {
-        default = [ ];
         example = [ "-s" ];
         type = lib.types.listOf lib.types.str;
         description = "Extra flags passed to the chronyd command.";

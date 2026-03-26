@@ -18,7 +18,6 @@ in
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
-    default = [ ];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
     description = ''

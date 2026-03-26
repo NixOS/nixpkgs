@@ -56,7 +56,6 @@ in
     };
 
     environment.cinnamon.excludePackages = mkOption {
-      default = [ ];
       example = literalExpression "[ pkgs.blueman ]";
       type = types.listOf types.package;
       description = "Which packages cinnamon should exclude from the default environment";

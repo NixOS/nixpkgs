@@ -146,7 +146,6 @@ in
 
     dataDirs = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       example = [
         "/opt/peertube/storage"
         "/var/cache/peertube"

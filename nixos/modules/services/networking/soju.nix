@@ -86,7 +86,6 @@ in
 
     httpOrigins = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         List of allowed HTTP origins for WebSocket listeners. The parameters are
         interpreted as shell patterns, see

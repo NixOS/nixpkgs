@@ -134,7 +134,6 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "-g"
         "--prefer"

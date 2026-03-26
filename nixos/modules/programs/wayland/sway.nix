@@ -84,7 +84,6 @@ in
 
     extraOptions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "--verbose"
         "--debug"

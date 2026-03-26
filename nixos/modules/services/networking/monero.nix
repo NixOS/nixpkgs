@@ -210,7 +210,6 @@ in
 
       exclusiveNodes = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           List of peer IP addresses to connect to *only*.
           If given the other peer options will be ignored.

@@ -40,7 +40,6 @@ in
         format expected by systemd's `EnvironmentFile` directory. For the
         IMAP account password use `PASSWORD = mypassword`.
       '';
-      default = [ ];
     };
 
   };

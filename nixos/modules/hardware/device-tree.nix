@@ -140,7 +140,6 @@ in
       };
 
       dtboBuildExtraPreprocessorFlags = lib.mkOption {
-        default = [ ];
         example = lib.literalExpression "[ \"-DMY_DTB_DEFINE\" ]";
         type = lib.types.listOf lib.types.str;
         description = ''
@@ -149,7 +148,6 @@ in
       };
 
       dtboBuildExtraIncludePaths = lib.mkOption {
-        default = [ ];
         example = lib.literalExpression ''
           [
             ./my_custom_include_dir_1

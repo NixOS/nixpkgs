@@ -56,7 +56,6 @@ in
 
       options = lib.mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "--bind=/home:/home" ];
         description = ''
           Options passed to systemd-nspawn.

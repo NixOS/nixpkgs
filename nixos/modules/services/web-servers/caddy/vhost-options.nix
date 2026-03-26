@@ -34,7 +34,6 @@ in
       description = ''
         A list of host interfaces to bind to for this virtual host.
       '';
-      default = [ ];
       example = [
         "127.0.0.1"
         "::1"

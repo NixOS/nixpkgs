@@ -46,7 +46,6 @@ in
 
     extraOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       description = ''
         Extra command line options.
       '';

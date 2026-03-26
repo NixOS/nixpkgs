@@ -56,7 +56,6 @@ in
 
     providers = mkOption {
       type = listOf (enum cfg.package.providerNames);
-      default = [ ];
       example = [
         "opensubsonic"
         "snapcast"

@@ -132,7 +132,6 @@ in
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [ ];
       description = ''
         Extra arguments passed to qbittorrent. See `qbittorrent -h`, or the [source code](https://github.com/qbittorrent/qBittorrent/blob/master/src/app/cmdoptions.cpp), for the available arguments.
       '';

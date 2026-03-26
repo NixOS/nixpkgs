@@ -96,7 +96,6 @@ in
 
     boot.kernelPatches = mkOption {
       type = types.listOf types.attrs;
-      default = [ ];
       example = literalExpression ''
         [
           {
@@ -285,7 +284,6 @@ in
     system.modulesTree = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [ ];
       description = ''
         Tree of kernel modules.  This includes the kernel, plus modules
         built outside of the kernel.  Combine these into a single tree of
@@ -300,7 +298,6 @@ in
     };
 
     system.requiredKernelConfig = mkOption {
-      default = [ ];
       example = literalExpression ''
         with config.lib.kernelConfig; [
           (isYes "MODULES")

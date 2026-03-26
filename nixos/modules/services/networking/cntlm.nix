@@ -80,7 +80,6 @@ in
       description = ''
         A list of domains where the proxy is skipped.
       '';
-      default = [ ];
       type = lib.types.listOf lib.types.str;
       example = [
         "*.example.com"

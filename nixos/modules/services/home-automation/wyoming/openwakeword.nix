@@ -54,7 +54,6 @@ in
 
     customModelsDirectories = mkOption {
       type = listOf types.path;
-      default = [ ];
       description = ''
         Paths to directories with custom wake word models (*.tflite model files).
       '';
@@ -95,7 +94,6 @@ in
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [ ];
       description = ''
         Extra arguments to pass to the server commandline.
       '';

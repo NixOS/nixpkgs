@@ -118,7 +118,6 @@ in
         interfaces = mkOption {
           type = listOf nonEmptyStr;
           description = "Interfaces to bind.";
-          default = [ ];
         };
         sources = mkOption {
           type = listOf (attrTag {
@@ -141,7 +140,6 @@ in
             };
           });
           description = "Source addresses, address ranges, MAC addresses or ipsets to bind.";
-          default = [ ];
         };
         icmpBlockInversion = mkOption {
           type = bool;
@@ -170,22 +168,18 @@ in
         services = mkOption {
           type = listOf nonEmptyStr;
           description = "Services to allow in the zone.";
-          default = [ ];
         };
         ports = mkOption {
           type = listOf (submodule portProtocolOptions);
           description = "Ports to allow in the zone.";
-          default = [ ];
         };
         protocols = mkOption {
           type = listOf nonEmptyStr;
           description = "Protocols to allow in the zone.";
-          default = [ ];
         };
         icmpBlocks = mkOption {
           type = listOf nonEmptyStr;
           description = "ICMP types to block in the zone.";
-          default = [ ];
         };
         masquerade = mkOption {
           type = bool;
@@ -206,17 +200,14 @@ in
             };
           });
           description = "Ports to forward in the zone.";
-          default = [ ];
         };
         sourcePorts = mkOption {
           type = listOf (submodule portProtocolOptions);
           description = "Source ports to allow in the zone.";
-          default = [ ];
         };
         rules = mkOption {
           type = listOf (format.type);
           description = "Rich rules for the zone.";
-          default = [ ];
         };
       };
     });

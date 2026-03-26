@@ -286,7 +286,6 @@ let
 
         subUidRanges = mkOption {
           type = with types; listOf (submodule subordinateUidRange);
-          default = [ ];
           example = [
             {
               startUid = 1000;

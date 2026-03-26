@@ -234,7 +234,6 @@ in
         Store paths to copy into the initrd as well.
       '';
       type = utils.systemdUtils.types.initrdStorePath;
-      default = [ ];
     };
 
     extraBin = mkOption {
@@ -303,7 +302,6 @@ in
     };
 
     additionalUpstreamUnits = mkOption {
-      default = [ ];
       type = types.listOf types.str;
       example = [
         "debug-shell.service"
@@ -404,7 +402,6 @@ in
     };
 
     automounts = mkOption {
-      default = [ ];
       type = systemdUtils.types.automounts;
       visible = "shallow";
       description = ''

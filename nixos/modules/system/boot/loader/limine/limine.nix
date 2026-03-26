@@ -240,7 +240,6 @@ in
 
     style = {
       wallpapers = lib.mkOption {
-        default = [ ];
         example = lib.literalExpression "[ pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath ]";
         type = lib.types.listOf lib.types.path;
         description = ''

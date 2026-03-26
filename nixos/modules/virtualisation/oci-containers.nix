@@ -94,7 +94,6 @@ let
 
         cmd = mkOption {
           type = with types; listOf str;
-          default = [ ];
           description = "Commandline arguments to pass to the image's entrypoint.";
           example = [ "--port=9000" ];
         };
@@ -127,7 +126,6 @@ let
 
         environmentFiles = mkOption {
           type = with types; listOf path;
-          default = [ ];
           description = "Environment files for this container.";
           example = [
             /path/to/.env
@@ -224,7 +222,6 @@ let
 
         dependsOn = mkOption {
           type = with types; listOf str;
-          default = [ ];
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
@@ -365,7 +362,6 @@ let
 
         networks = mkOption {
           type = with types; listOf str;
-          default = [ ];
           description = ''
             Networks to attach the container to
           '';

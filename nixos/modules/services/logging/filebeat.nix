@@ -180,7 +180,6 @@ in
               };
               modules = mkOption {
                 type = types.listOf json.type;
-                default = [ ];
                 internal = true;
                 description = ''
                   Filebeat modules provide a quick way to get started

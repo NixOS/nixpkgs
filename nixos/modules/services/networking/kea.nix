@@ -218,7 +218,6 @@ in
 
           extraArgs = lib.mkOption {
             type = listOf str;
-            default = [ ];
             description = ''
               List of additional arguments to pass to the daemon.
             '';

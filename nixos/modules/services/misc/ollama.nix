@@ -150,7 +150,6 @@ in
       loadModels = lib.mkOption {
         type = types.listOf types.str;
         apply = builtins.filter (model: model != "");
-        default = [ ];
         example = [
           "dolphin3"
           "gemma3"

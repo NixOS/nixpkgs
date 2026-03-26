@@ -18,7 +18,6 @@ in
 
     extraFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = "Extra command line options to pass to alertmanager-irc-relay.";
     };
 

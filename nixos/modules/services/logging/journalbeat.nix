@@ -32,7 +32,6 @@ in
 
       tags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = "Tags to place on the shipped log messages";
       };
 

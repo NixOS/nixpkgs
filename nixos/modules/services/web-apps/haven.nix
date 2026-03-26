@@ -26,7 +26,6 @@ in
 
     blastrRelays = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = "List of relay configurations for blastr";
       example = lib.literalExpression ''
         [
@@ -37,7 +36,6 @@ in
 
     importRelays = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = "List of relay configurations for importing historical events";
       example = lib.literalExpression ''
         [

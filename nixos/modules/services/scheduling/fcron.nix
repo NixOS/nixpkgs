@@ -58,7 +58,6 @@ in
 
       deny = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = "Users forbidden from using fcron.";
       };
 

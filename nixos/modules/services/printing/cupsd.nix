@@ -334,7 +334,6 @@ in
 
       drivers = mkOption {
         type = types.listOf types.path;
-        default = [ ];
         example = literalExpression "with pkgs; [ gutenprint hplip splix ]";
         description = ''
           CUPS drivers to use. Drivers provided by CUPS, cups-filters,

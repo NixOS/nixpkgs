@@ -268,7 +268,6 @@ in
       description = ''
         List of plugins to add to Reposilite.
       '';
-      default = [ ];
       example = "with reposilitePlugins; [ checksum groovy ]";
     };
 
@@ -315,7 +314,6 @@ in
       description = ''
         Extra arguments/parameters passed to the Reposilite. Can be used for first token generation.
       '';
-      default = [ ];
       example = lib.literalExpression ''[ "--token" "name:tempsecrettoken" ]'';
     };
 

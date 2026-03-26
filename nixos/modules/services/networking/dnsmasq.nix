@@ -84,7 +84,6 @@ in
 
           options.server = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             example = [
               "8.8.8.8"
               "8.8.4.4"

@@ -60,7 +60,6 @@ in
 
         relayHosts = mkOption {
           type = listOf str;
-          default = [ ];
           # reference: https://rustdesk.com/docs/en/self-host/rustdesk-server-pro/relay/
           description = ''
             The relay server IP addresses or DNS names of the RustDesk relay.
@@ -69,7 +68,6 @@ in
 
         extraArgs = mkOption {
           type = listOf str;
-          default = [ ];
           example = [
             "-k"
             "_"

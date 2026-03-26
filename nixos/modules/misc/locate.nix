@@ -52,7 +52,6 @@ in
 
     extraFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Extra flags to pass to {command}`updatedb`.
       '';

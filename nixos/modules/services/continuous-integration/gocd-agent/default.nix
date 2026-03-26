@@ -128,7 +128,6 @@ in
       };
 
       extraOptions = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.str;
         example = [
           "-X debug"

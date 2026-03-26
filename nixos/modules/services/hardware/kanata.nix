@@ -16,7 +16,6 @@ let
       options = {
         devices = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [ ];
           example = [ "/dev/input/by-id/usb-0000_0000-event-kbd" ];
           description = ''
             Paths to keyboard devices.
@@ -69,7 +68,6 @@ let
         };
         extraArgs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [ ];
           description = "Extra command line arguments passed to kanata.";
         };
         port = lib.mkOption {

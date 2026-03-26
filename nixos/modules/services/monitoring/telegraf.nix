@@ -20,7 +20,6 @@ in
 
       environmentFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         example = [ "/run/keys/telegraf.env" ];
         description = ''
           File to load as environment file. Environment variables from this file

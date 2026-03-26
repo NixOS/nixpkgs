@@ -242,7 +242,6 @@ in
           "zh-TW"
         ]
       );
-      default = [ ];
       description = ''
         The language packs to install.
       '';
@@ -261,7 +260,6 @@ in
 
     autoConfigFiles = lib.mkOption {
       type = with lib.types; listOf path;
-      default = [ ];
       description = ''
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
@@ -274,7 +272,6 @@ in
 
     nativeMessagingHosts.packages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       description = ''
         Additional packages containing native messaging hosts that should be made available to Firefox extensions.
       '';

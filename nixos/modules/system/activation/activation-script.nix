@@ -100,7 +100,6 @@ let
       scriptOptions = {
         deps = mkOption {
           type = types.listOf types.str;
-          default = [ ];
           description = "List of dependencies. The script will run after these.";
         };
         text = mkOption {

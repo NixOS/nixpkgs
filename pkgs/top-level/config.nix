@@ -54,7 +54,6 @@ let
     };
     assertions = mkOption {
       type = types.listOf types.anything;
-      default = [ ];
       internal = true;
     };
 
@@ -235,7 +234,6 @@ let
 
     allowUnfreePackages = mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       example = [ "ut1999" ];
       description = ''
         Allows specific unfree packages to be used.
@@ -292,7 +290,6 @@ let
 
     cudaCapabilities = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         A list of CUDA capabilities to build for.
 
@@ -371,7 +368,6 @@ let
 
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
-      default = [ ];
       description = ''
         Which warnings to display for potentially dangerous
         or deprecated values passed into `stdenv.mkDerivation`.

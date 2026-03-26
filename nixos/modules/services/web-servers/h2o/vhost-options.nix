@@ -130,7 +130,6 @@ in
                   };
                 }
               );
-              default = [ ];
               description = ''
                 Key / certificate pairs for the virtual host.
               '';

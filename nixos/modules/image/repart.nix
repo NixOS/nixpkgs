@@ -284,7 +284,6 @@ in
 
     assertions = lib.mkOption {
       type = options.assertions.type;
-      default = [ ];
       internal = true;
       visible = false;
       description = ''

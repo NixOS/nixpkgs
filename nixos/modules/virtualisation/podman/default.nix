@@ -148,7 +148,6 @@ in
 
       flags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "--all" ];
         description = ''
           Any additional flags passed to {command}`podman system prune`.

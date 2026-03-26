@@ -216,7 +216,6 @@ in
       };
 
       extraGroups = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.str;
         example = [
           "postdrop"

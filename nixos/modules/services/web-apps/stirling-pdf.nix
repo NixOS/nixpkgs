@@ -34,7 +34,6 @@ in
 
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       description = ''
         Files containing additional environment variables to pass to Stirling PDF.
         Secrets should be added in environmentFiles instead of environment.

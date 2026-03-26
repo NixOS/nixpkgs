@@ -100,7 +100,6 @@ in
 
     extraFlags = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "--backend-retry-delay"
         "100"

@@ -192,7 +192,6 @@ in
       };
 
       blockedNetworks = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.str;
         description = ''
           What networks are just blocked.
@@ -303,7 +302,6 @@ in
 
       extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Additional command-line arguments to pass to named.
         '';

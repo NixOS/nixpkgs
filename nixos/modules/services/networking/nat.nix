@@ -42,7 +42,6 @@ in
 
     networking.nat.internalInterfaces = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "eth0" ];
       description = ''
         The interfaces for which to perform NAT. Packets coming from
@@ -53,7 +52,6 @@ in
 
     networking.nat.internalIPs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "192.168.1.0/24" ];
       description = ''
         The IP address ranges for which to perform NAT.  Packets
@@ -64,7 +62,6 @@ in
 
     networking.nat.internalIPv6s = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "fc00::/64" ];
       description = ''
         The IPv6 address ranges for which to perform NAT.  Packets

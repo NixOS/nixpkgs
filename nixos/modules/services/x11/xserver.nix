@@ -372,7 +372,6 @@ in
       };
 
       excludePackages = mkOption {
-        default = [ ];
         example = literalExpression "[ pkgs.xterm ]";
         type = types.listOf types.package;
         description = "Which X11 packages to exclude from the default environment";
@@ -413,7 +412,6 @@ in
 
       inputClassSections = mkOption {
         type = types.listOf types.lines;
-        default = [ ];
         example = literalExpression ''
           [ '''
               Identifier      "Trackpoint Wheel Emulation"
@@ -436,7 +434,6 @@ in
 
       resolutions = mkOption {
         type = types.listOf types.attrs;
-        default = [ ];
         example = [
           {
             x = 1600;

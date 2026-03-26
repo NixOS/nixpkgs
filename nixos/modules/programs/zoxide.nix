@@ -36,7 +36,6 @@ in
 
     flags = mkOption {
       type = listOf str;
-      default = [ ];
       example = [
         "--no-cmd"
         "--cmd j"

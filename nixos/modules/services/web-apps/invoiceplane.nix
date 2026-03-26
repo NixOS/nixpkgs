@@ -162,7 +162,6 @@ let
 
         invoiceTemplates = mkOption {
           type = types.listOf types.path;
-          default = [ ];
           description = ''
             List of path(s) to respective template(s) which are copied from the 'invoice_templates/pdf' directory.
 

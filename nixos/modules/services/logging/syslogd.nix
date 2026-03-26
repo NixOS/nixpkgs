@@ -86,7 +86,6 @@ in
 
       extraParams = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [ "-m 0" ];
         description = ''
           Additional parameters passed to {command}`syslogd`.

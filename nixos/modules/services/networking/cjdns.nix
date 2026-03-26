@@ -138,7 +138,6 @@ in
 
       authorizedPasswords = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "snyrfgkqsc98qh1y4s5hbu0j57xw5s0"
           "z9md3t4p45mfrjzdjurxn4wuj0d8swv"

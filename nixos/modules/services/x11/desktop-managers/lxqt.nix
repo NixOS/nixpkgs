@@ -30,7 +30,6 @@ in
 
     services.xserver.desktopManager.lxqt.extraPackages = lib.mkOption {
       type = with lib.types; listOf package;
-      default = [ ];
       defaultText = lib.literalExpression "[ ]";
       example = lib.literalExpression "with pkgs; [ xscreensaver ]";
       description = "Extra packages to be installed system wide.";

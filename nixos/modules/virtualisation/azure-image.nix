@@ -40,7 +40,6 @@ in
 
     contents = mkOption {
       type = with types; listOf attrs;
-      default = [ ];
       description = ''
         Extra contents to add to the image.
       '';

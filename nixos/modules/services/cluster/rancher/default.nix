@@ -276,7 +276,6 @@ let
 
             extraDeploy = lib.mkOption {
               type = with lib.types; listOf (either path attrs);
-              default = [ ];
               example = lib.literalExpression ''
                 [
                   ../manifests/my-extra-deployment.yaml
@@ -465,7 +464,6 @@ let
         extraFlags = lib.mkOption {
           description = "Extra flags to pass to the ${name} command.";
           type = with lib.types; either str (listOf str);
-          default = [ ];
           example = [
             "--etcd-expose-metrics"
             "--cluster-cidr 10.24.0.0/16"
@@ -488,7 +486,6 @@ let
         disable = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           description = "Disable default components via the `--disable` flag.";
-          default = [ ];
         };
 
         nodeName = lib.mkOption {
@@ -499,7 +496,6 @@ let
         nodeLabel = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           description = "Registering and starting kubelet with set of labels.";
-          default = [ ];
         };
 
         nodeTaint = lib.mkOption {

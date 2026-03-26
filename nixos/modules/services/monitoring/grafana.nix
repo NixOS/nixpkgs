@@ -1038,7 +1038,6 @@ in
                 List of additional allowed URLs to pass by the CSRF check.
                 Suggested when authentication comes from an IdP.
               '';
-              default = [ ];
               type = types.oneOf [
                 types.str
                 (types.listOf types.str)
@@ -1357,7 +1356,6 @@ in
 
                   datasources = mkOption {
                     description = "List of datasources to insert/update.";
-                    default = [ ];
                     type = types.listOf grafanaTypes.datasourceConfig;
                   };
 
@@ -1432,7 +1430,6 @@ in
 
                 options.providers = mkOption {
                   description = "List of dashboards to insert/update.";
-                  default = [ ];
                   type = types.listOf grafanaTypes.dashboardConfig;
                 };
               }
@@ -1491,7 +1488,6 @@ in
 
                   groups = mkOption {
                     description = "List of rule groups to import or update.";
-                    default = [ ];
                     type = types.listOf (
                       types.submodule {
                         freeformType = provisioningSettingsFormat.type;
@@ -1516,7 +1512,6 @@ in
 
                   deleteRules = mkOption {
                     description = "List of alert rule UIDs that should be deleted.";
-                    default = [ ];
                     type = types.listOf (
                       types.submodule {
                         options.orgId = mkOption {
@@ -1619,7 +1614,6 @@ in
 
                   contactPoints = mkOption {
                     description = "List of contact points to import or update.";
-                    default = [ ];
                     type = types.listOf (
                       types.submodule {
                         freeformType = provisioningSettingsFormat.type;
@@ -1634,7 +1628,6 @@ in
 
                   deleteContactPoints = mkOption {
                     description = "List of receivers that should be deleted.";
-                    default = [ ];
                     type = types.listOf (
                       types.submodule {
                         options.orgId = mkOption {
@@ -1705,7 +1698,6 @@ in
 
                   policies = mkOption {
                     description = "List of contact points to import or update.";
-                    default = [ ];
                     type = types.listOf (
                       types.submodule {
                         freeformType = provisioningSettingsFormat.type;
@@ -1878,7 +1870,6 @@ in
 
                   deleteMuteTimes = mkOption {
                     description = "List of mute time intervals that should be deleted.";
-                    default = [ ];
                     type = types.listOf (
                       types.submodule {
                         options.orgId = mkOption {

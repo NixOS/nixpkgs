@@ -118,7 +118,6 @@ in
 
     fadeExclude = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "window_type *= 'menu'"
         "name ~= 'Firefox$'"
@@ -227,7 +226,6 @@ in
 
     opacityRules = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "95:class_g = 'URxvt' && !_NET_WM_STATE@:32a"
         "0:_NET_WM_STATE@:32a *= '_NET_WM_STATE_HIDDEN'"

@@ -148,7 +148,6 @@ in
   options = {
     systemd.tmpfiles.rules = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "d /tmp 1777 root root 10d" ];
       description = ''
         Rules for creation, deletion and cleaning of volatile and temporary files

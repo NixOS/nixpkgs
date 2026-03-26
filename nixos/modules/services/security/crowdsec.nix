@@ -68,7 +68,6 @@ in
         options = {
           acquisitions = lib.mkOption {
             type = lib.types.listOf format.type;
-            default = [ ];
             description = ''
               A list of acquisition specifications, which define the data sources you want to be parsed.
 
@@ -109,7 +108,6 @@ in
               options = {
                 s00Raw = lib.mkOption {
                   type = lib.types.listOf format.type;
-                  default = [ ];
                   description = ''
                     A list of stage s00-raw specifications. Most of the time, those are already included in the hub, but are presented here anyway.
 
@@ -118,7 +116,6 @@ in
                 };
                 s01Parse = lib.mkOption {
                   type = lib.types.listOf format.type;
-                  default = [ ];
                   description = ''
                     A list of stage s01-parse specifications.
 
@@ -227,7 +224,6 @@ in
                 };
               }
             ];
-            default = [ ];
           };
           notifications = lib.mkOption {
             type = lib.types.listOf format.type;
@@ -248,7 +244,6 @@ in
                 method = "POST";
               }
             ];
-            default = [ ];
           };
           profiles = lib.mkOption {
             type = lib.types.listOf format.type;
@@ -319,7 +314,6 @@ in
             description = ''
               A list of files containing custom grok patterns.
             '';
-            default = [ ];
             example = lib.literalExpression ''
               [ (pkgs.writeTextDir "custom_service_logs" (builtins.readFile ./custom_service_logs)) ]
             '';
@@ -344,35 +338,30 @@ in
 
           scenarios = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = "List of hub scenarios to install";
             example = [ "crowdsecurity/ssh-bf" ];
           };
 
           parsers = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = "List of hub parsers to install";
             example = [ "crowdsecurity/sshd-logs" ];
           };
 
           postOverflows = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = "List of hub postoverflows to install";
             example = [ "crowdsecurity/auditd-nix-wrappers-whitelist-process" ];
           };
 
           appSecConfigs = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = "List of hub appsec configurations to install";
             example = [ "crowdsecurity/appsec-default" ];
           };
 
           appSecRules = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = "List of hub appsec rules to install";
             example = [ "crowdsecurity/base-config" ];
           };

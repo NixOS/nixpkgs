@@ -22,7 +22,6 @@ in
 
     enabledNVIDIADevices = lib.mkOption {
       type = lib.types.listOf lib.types.int;
-      default = [ ];
       example = [
         0
         1

@@ -146,7 +146,6 @@ in
 
             command = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               description = ''
                 Command to pass to --stdin-from-command. If null or an empty array, and `paths`/`dynamicFilesFrom`
                 are also null, no backup command will be run.
@@ -161,7 +160,6 @@ in
 
             exclude = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               description = ''
                 Patterns to exclude when backing up. See
                 https://restic.readthedocs.io/en/latest/040_backup.html#excluding-files for
@@ -234,7 +232,6 @@ in
 
             pruneOpts = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               description = ''
                 A list of options (--keep-\* et al.) for 'restic forget
                 --prune', to automatically prune old snapshots.  The
@@ -259,7 +256,6 @@ in
 
             checkOpts = lib.mkOption {
               type = lib.types.listOf lib.types.str;
-              default = [ ];
               description = ''
                 A list of options for 'restic check'.
               '';

@@ -620,7 +620,6 @@ in
 
               relayhost = mkOption {
                 type = with types; nullOr (listOf str);
-                default = [ ];
                 example = [ "[relay.example.com]:587" ];
                 description = ''
                   List of hosts to use for relaying outbound mail.
@@ -635,7 +634,6 @@ in
 
               relay_domains = mkOption {
                 type = with types; nullOr (listOf str);
-                default = [ ];
                 example = [ "lists.example.com" ];
                 description = ''
                   List of domains delivered via the relay transport.
@@ -840,7 +838,6 @@ in
 
       headerChecks = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule headerCheckOptions);
-        default = [ ];
         example = [
           {
             pattern = "/^X-Spam-Flag:/";

@@ -78,7 +78,6 @@ in
     };
     loadCredential = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [ "private_key:/path/to/my_private_key" ];
       description = ''
         This can be used to pass secrets to the systemd service without adding them to

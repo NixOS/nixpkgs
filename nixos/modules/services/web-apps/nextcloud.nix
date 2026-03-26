@@ -912,7 +912,6 @@ in
           };
           trusted_domains = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = ''
               Trusted domains, from which the nextcloud installation will be
               accessible. You don't need to add
@@ -921,7 +920,6 @@ in
           };
           trusted_proxies = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             description = ''
               Trusted proxies, to provide if the nextcloud installation is being
               proxied to secure against e.g. spoofing.

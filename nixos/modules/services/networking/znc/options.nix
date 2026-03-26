@@ -52,7 +52,6 @@ let
 
       channels = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "nixos" ];
         description = ''
           IRC channels to join.

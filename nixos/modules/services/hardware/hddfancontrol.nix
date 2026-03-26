@@ -54,7 +54,6 @@ in
               options = {
                 disks = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
-                  default = [ ];
                   description = ''
                     Drive(s) to get temperature from
 
@@ -95,7 +94,6 @@ in
 
                 extraArgs = lib.mkOption {
                   type = lib.types.listOf lib.types.str;
-                  default = [ ];
                   description = ''
                     Extra commandline arguments for hddfancontrol
                   '';

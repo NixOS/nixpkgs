@@ -120,7 +120,6 @@ in
 
       environmentFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         example = [ "/run/secrets/glitchtip.env" ];
         description = ''
           Files to load environment variables from in addition to [](#opt-services.glitchtip.settings).
@@ -147,7 +146,6 @@ in
 
       gunicorn.extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = "Extra arguments for gunicorn.";
       };
 

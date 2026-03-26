@@ -252,7 +252,6 @@ in
 
             trusted-substituters = mkOption {
               type = types.listOf types.str;
-              default = [ ];
               example = [ "https://hydra.nixos.org/" ];
               description = ''
                 List of binary cache URLs that non-root users can use (in

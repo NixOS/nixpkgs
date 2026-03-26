@@ -100,7 +100,6 @@ in
     };
 
     environment.xfce.excludePackages = mkOption {
-      default = [ ];
       example = literalExpression "[ pkgs.xfce4-volumed-pulse ]";
       type = types.listOf types.package;
       description = "Which packages XFCE should exclude from the default environment";

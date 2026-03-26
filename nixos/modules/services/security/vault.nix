@@ -162,7 +162,6 @@ in
 
       extraSettingsPaths = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           Configuration files to load besides the immutable one defined by the NixOS module.
           This can be used to avoid putting credentials in the Nix store, which can be read by any user.

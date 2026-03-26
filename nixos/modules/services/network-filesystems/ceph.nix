@@ -320,7 +320,6 @@ in
       enable = lib.mkEnableOption "Ceph MDS daemon";
       daemons = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         example = [
           "name1"
           "name2"
@@ -345,7 +344,6 @@ in
       package = lib.mkPackageOption pkgs "ceph" { };
       daemons = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         example = [
           "name1"
           "name2"

@@ -192,7 +192,6 @@ in
                 lib.types.str
                 (lib.types.listOf lib.types.str)
               ];
-              default = [ ];
               description = ''
                 Multiaddr or array of multiaddrs describing the address to serve the local HTTP API on.
                 In addition to the multiaddrs listed here, the daemon will also listen on a Unix domain socket.
@@ -271,7 +270,6 @@ in
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Extra flags passed to the Kubo daemon";
-        default = [ ];
       };
 
       localDiscovery = lib.mkOption {

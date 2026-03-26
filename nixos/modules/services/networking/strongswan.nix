@@ -160,7 +160,6 @@ in
 
     enabledPlugins = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         A list of additional plugins to enable if
         {option}`managePlugins` is true.

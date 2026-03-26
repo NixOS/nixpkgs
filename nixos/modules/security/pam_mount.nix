@@ -34,7 +34,6 @@ in
 
       extraVolumes = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           List of volume definitions for pam_mount.
           For more information, visit <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
@@ -43,7 +42,6 @@ in
 
       additionalSearchPaths = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [ ];
         example = lib.literalExpression "[ pkgs.bindfs ]";
         description = ''
           Additional programs to include in the search path of pam_mount.

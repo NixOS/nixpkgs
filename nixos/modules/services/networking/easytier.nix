@@ -102,7 +102,6 @@ let
 
       peers = mkOption {
         type = with types; listOf str;
-        default = [ ];
         description = ''
           Peers to connect initially. Valid format is: `<proto>://<addr>:<port>`.
         '';
@@ -179,7 +178,6 @@ let
 
         extraArgs = mkOption {
           type = with types; listOf str;
-          default = [ ];
           description = ''
             Extra args append to the easytier command-line.
           '';

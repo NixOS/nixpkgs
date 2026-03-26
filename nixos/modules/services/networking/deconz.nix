@@ -64,7 +64,6 @@ in
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [
         "--dbg-info=1"
         "--dbg-err=2"

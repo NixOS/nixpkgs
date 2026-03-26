@@ -26,7 +26,6 @@ in
     package = mkPackageOption pkgs "vikunja" { };
     environmentFiles = mkOption {
       type = types.listOf types.path;
-      default = [ ];
       description = ''
         List of environment files set in the vikunja systemd service.
         For example passwords should be set in one of these files.

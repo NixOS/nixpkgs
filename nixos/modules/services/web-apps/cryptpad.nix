@@ -90,7 +90,6 @@ in
           };
           adminKeys = mkOption {
             type = types.listOf types.str;
-            default = [ ];
             description = "List of public signing keys of users that can access the admin panel";
             example = [ "[cryptpad-user1@my.awesome.website/YZgXQxKR0Rcb6r6CmxHPdAGLVludrAF2lEnkbx1vVOo=]" ];
           };

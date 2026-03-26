@@ -48,7 +48,6 @@ in
 
     interfaces = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         Specifies the interface(s) passed to the wg show <interface> dump parameter.
         By default all interfaces are used.

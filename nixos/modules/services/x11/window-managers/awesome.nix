@@ -28,7 +28,6 @@ in
       enable = mkEnableOption "Awesome window manager";
 
       luaModules = mkOption {
-        default = [ ];
         type = types.listOf types.package;
         description = "List of lua packages available for being used in the Awesome configuration.";
         example = literalExpression "[ pkgs.luaPackages.vicious ]";

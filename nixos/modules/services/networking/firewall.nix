@@ -42,7 +42,6 @@ let
 
     allowedUDPPorts = lib.mkOption {
       type = lib.types.listOf lib.types.port;
-      default = [ ];
       apply = canonicalizePortList;
       example = [ 53 ];
       description = ''
@@ -163,7 +162,6 @@ in
 
       trustedInterfaces = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [ "enp0s2" ];
         description = ''
           Traffic coming in from these interfaces will be accepted
@@ -244,7 +242,6 @@ in
 
       connectionTrackingModules = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "ftp"
           "irc"

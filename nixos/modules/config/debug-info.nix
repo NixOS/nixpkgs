@@ -30,7 +30,6 @@
 
     environment.debuginfodServers = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         List of urls of debuginfod servers for tools like {command}`gdb` and {command}`valgrind` to use.
 

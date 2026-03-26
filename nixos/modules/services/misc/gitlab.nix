@@ -752,7 +752,6 @@ in
             listen-http = mkOption {
               type = with types; listOf str;
               apply = x: if x == [ ] then null else lib.concatStringsSep "," x;
-              default = [ ];
               description = ''
                 The address(es) to listen on for HTTP requests.
               '';
@@ -761,7 +760,6 @@ in
             listen-https = mkOption {
               type = with types; listOf str;
               apply = x: if x == [ ] then null else lib.concatStringsSep "," x;
-              default = [ ];
               description = ''
                 The address(es) to listen on for HTTPS requests.
               '';

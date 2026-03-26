@@ -112,7 +112,6 @@ in
 
               extensionRepos = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 example = [
                   "https://raw.githubusercontent.com/MY_ACCOUNT/MY_REPO/repo/index.min.json"
                 ];

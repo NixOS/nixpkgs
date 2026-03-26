@@ -162,7 +162,6 @@ in
 
             setEnv = lib.mkOption {
               type = with types; listOf str;
-              default = [ ];
               description = ''
                 Keep or set the specified variables. Variables may also be
                 removed with a leading '-' or set using
@@ -181,7 +180,6 @@ in
 
             users = lib.mkOption {
               type = with types; listOf (either str int);
-              default = [ ];
               description = "The usernames / UIDs this rule should apply for.";
             };
 

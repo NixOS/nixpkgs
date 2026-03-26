@@ -138,7 +138,6 @@ in
 
       extraPluginPaths = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         example = lib.literalExpression ''
           [ "/path/to/plugins.d" ]
         '';

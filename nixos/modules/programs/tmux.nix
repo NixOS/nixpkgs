@@ -208,7 +208,6 @@ in
       };
 
       plugins = mkOption {
-        default = [ ];
         type = types.listOf types.package;
         description = "List of plugins to install.";
         example = lib.literalExpression "[ pkgs.tmuxPlugins.nord ]";

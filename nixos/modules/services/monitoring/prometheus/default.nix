@@ -1778,7 +1778,6 @@ in
 
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         Extra commandline options when launching Prometheus.
       '';
@@ -1829,7 +1828,6 @@ in
 
     remoteWrite = mkOption {
       type = types.listOf promTypes.remote_write;
-      default = [ ];
       description = ''
         Parameters of the endpoints to send samples to.
         See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_write) for more information.
@@ -1838,7 +1836,6 @@ in
 
     rules = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         Alerting and/or Recording rules to evaluate at runtime.
       '';
@@ -1873,7 +1870,6 @@ in
           } ];
         } ]
       '';
-      default = [ ];
       description = ''
         A list of alertmanagers to send alerts to.
         See [the official documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config) for more information.

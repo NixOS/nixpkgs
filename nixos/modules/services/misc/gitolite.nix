@@ -56,7 +56,6 @@ in
 
       commonHooks = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         description = ''
           A list of custom git hooks that get copied to `~/.gitolite/hooks/common`.
         '';

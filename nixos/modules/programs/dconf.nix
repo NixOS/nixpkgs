@@ -134,7 +134,6 @@ let
         };
         locks = lib.mkOption {
           type = with lib.types; listOf str;
-          default = [ ];
           description = ''
             A list of dconf keys to be lockdown. This doesn't take effect if `lockAll`
             is set.
@@ -169,7 +168,6 @@ let
               package
               dconfDatabase
             ]);
-          default = [ ];
           description = ''
             List of data sources for the profile. An element can be an attrset,
             or the path of an already compiled database. Each element is converted

@@ -56,7 +56,6 @@ in
 
       session = mkOption {
         internal = true;
-        default = [ ];
         example = [
           {
             name = "wmii";

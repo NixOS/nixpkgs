@@ -104,7 +104,6 @@ let
             "read A/B"
             "readwrite A/#"
           ];
-          default = [ ];
           description = ''
             Control client access to topics on the broker.
           '';
@@ -319,7 +318,6 @@ let
             Refer to the [mosquitto.conf documentation](https://mosquitto.org/man/mosquitto-conf-5.html)
             for details on authentication plugins.
           '';
-          default = [ ];
         };
 
         users = lib.mkOption {
@@ -354,7 +352,6 @@ let
             "pattern read #"
             "topic readwrite anon/report/#"
           ];
-          default = [ ];
         };
 
         settings = lib.mkOption {
@@ -457,7 +454,6 @@ let
             Refer to the [
             mosquitto.conf documentation](https://mosquitto.org/man/mosquitto-conf-5.html) for details on the format.
           '';
-          default = [ ];
           example = [ "# both 2 local/topic/ remote/topic/" ];
         };
 
@@ -538,7 +534,6 @@ let
 
     listeners = lib.mkOption {
       type = listOf listenerOptions;
-      default = [ ];
       description = ''
         Listeners to configure on this broker.
       '';
@@ -587,7 +582,6 @@ let
       description = ''
         Types of messages to log.
       '';
-      default = [ ];
     };
 
     persistence = lib.mkOption {

@@ -48,7 +48,6 @@ in
       package = lib.mkPackageOption pkgs "syslogng" { };
       extraModulePaths = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           A list of paths that should be included in syslog-ng's
           `--module-path` option. They should usually

@@ -174,7 +174,6 @@ in
       };
 
       extraGSettingsOverridePackages = mkOption {
-        default = [ ];
         type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
@@ -215,7 +214,6 @@ in
               };
             }
           );
-          default = [ ];
           description = "Other GNOME Flashback sessions to enable.";
         };
 

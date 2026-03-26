@@ -58,7 +58,6 @@ in
     extraNftablesRules = lib.mkOption {
       description = "Extra nftables rules to prepend to the generated ones";
       type = lib.types.listOf lib.types.singleLineStr;
-      default = [ ];
       example = [ "ip daddr 1.1.1.1 udp dport accept" ];
     };
   };

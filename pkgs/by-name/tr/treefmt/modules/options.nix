@@ -12,7 +12,6 @@
 
     runtimeInputs = lib.mkOption {
       type = with lib.types; listOf package;
-      default = [ ];
       description = ''
         Packages to include on treefmt's PATH.
       '';

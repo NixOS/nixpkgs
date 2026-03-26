@@ -312,7 +312,6 @@ in
 
               extraArgs = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = [ ];
                 example = [ "--sshport 2222" ];
                 description = "Extra syncoid arguments for this command.";
               };

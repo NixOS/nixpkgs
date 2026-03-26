@@ -152,7 +152,6 @@ in
 
         extraPackages = lib.mkOption {
           type = lib.types.listOf lib.types.package;
-          default = [ ];
           description = ''
             Extra packages available at runtime to enable Deluge's plugins. For example,
             extraction utilities are required for the built-in "Extractor" plugin.

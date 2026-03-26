@@ -296,7 +296,6 @@ in
 
     protocols = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = "Additional listeners to start when Dovecot is enabled.";
     };
 
@@ -327,7 +326,6 @@ in
             options = {
               enable = mkOption {
                 type = types.listOf types.str;
-                default = [ ];
                 description = "mail plugins to enable as a list of strings to append to the ${hint} `$mail_plugins` configuration variable";
               };
             };
@@ -496,7 +494,6 @@ in
     };
 
     imapsieve.mailbox = mkOption {
-      default = [ ];
       description = "Configure Sieve filtering rules on IMAP actions";
       type = types.listOf (
         types.submodule (
@@ -579,7 +576,6 @@ in
       };
 
       extensions = mkOption {
-        default = [ ];
         description = "Sieve extensions for use in user scripts";
         example = [
           "notify"
@@ -590,7 +586,6 @@ in
       };
 
       globalExtensions = mkOption {
-        default = [ ];
         example = [ "vnd.dovecot.environment" ];
         description = "Sieve extensions for use in global scripts";
         type = types.listOf types.str;
@@ -603,7 +598,6 @@ in
       };
 
       pipeBins = mkOption {
-        default = [ ];
         example = literalExpression ''
           map lib.getExe [
             (pkgs.writeShellScriptBin "learn-ham.sh" "exec ''${pkgs.rspamd}/bin/rspamc learn_ham")

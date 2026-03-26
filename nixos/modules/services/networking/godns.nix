@@ -56,7 +56,6 @@ in
 
     loadCredential = lib.mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [ "login_token:/path/to/login_token" ];
       description = ''
         This can be used to pass secrets to the systemd service without adding

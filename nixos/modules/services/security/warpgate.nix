@@ -180,7 +180,6 @@ in
               };
               sni_certificates = mkOption {
                 description = "Certificates for additional domains.";
-                default = [ ];
                 type = listOf (submodule {
                   freeformType = yaml.type;
                   options = {

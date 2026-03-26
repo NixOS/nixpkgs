@@ -48,7 +48,6 @@ in
 
     extraFlags = mkOption {
       type = listOf str;
-      default = [ ];
       example = [ "--server.http-listen-port=3101" ];
       description = ''
         Specify a list of additional command line flags,

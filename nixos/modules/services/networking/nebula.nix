@@ -164,7 +164,6 @@ in
 
               lighthouses = lib.mkOption {
                 type = lib.types.listOf lib.types.str;
-                default = [ ];
                 description = ''
                   List of IPs of lighthouse hosts this node should report to and query from. This should be empty on lighthouse
                   nodes. The IPs should be the lighthouse's Nebula IPs, not their external IPs.
@@ -215,7 +214,6 @@ in
 
               firewall.outbound = lib.mkOption {
                 type = lib.types.listOf lib.types.attrs;
-                default = [ ];
                 description = "Firewall rules for outbound traffic.";
                 example = [
                   {
@@ -228,7 +226,6 @@ in
 
               firewall.inbound = lib.mkOption {
                 type = lib.types.listOf lib.types.attrs;
-                default = [ ];
                 description = "Firewall rules for inbound traffic.";
                 example = [
                   {

@@ -248,7 +248,6 @@ in
 
       interfaces = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [
           "wlan0"
           "wlan1"
@@ -629,7 +628,6 @@ in
 
       extraConfigFiles = mkOption {
         type = types.listOf types.path;
-        default = [ ];
         description = ''
           Extra wpa_supplicant configuration files to load.
         '';

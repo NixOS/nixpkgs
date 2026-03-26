@@ -228,7 +228,6 @@ let
 
       listen = lib.mkOption {
         type = with lib.types; listOf (submodule listenOptions);
-        default = [ ];
         example = [
           {
             address = "192.168.50.1";
@@ -415,7 +414,6 @@ let
 
       actions = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         description = ''
           Allow the user to do certain things with upsd.
           See `man upsd.users` for details.
@@ -424,7 +422,6 @@ let
 
       instcmds = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         description = ''
           Let the user initiate specific instant commands. Use "ALL" to grant all commands automatically. For the full list of what your UPS supports, use "upscmd -l".
           See `man upsd.users` for details.

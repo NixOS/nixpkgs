@@ -598,7 +598,6 @@ in
 
           publicKeys = lib.mkOption {
             type = lib.types.listOf lib.types.str;
-            default = [ ];
             example = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
             description = ''
               A list of public keys of upstream caches in the format

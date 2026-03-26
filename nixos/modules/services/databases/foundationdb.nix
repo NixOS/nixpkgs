@@ -318,7 +318,6 @@ in
     };
 
     extraReadWritePaths = lib.mkOption {
-      default = [ ];
       type = lib.types.listOf lib.types.path;
       description = ''
         An extra set of filesystem paths that FoundationDB can read to

@@ -100,7 +100,6 @@ let
 
           features = mkOption {
             type = listOf singleLineStr;
-            default = [ ];
             description = ''
               Features to enable via dlopen ELF notes. These will be in
               addition to anything included via 'usePriority',

@@ -148,7 +148,6 @@ let
 
         MountOptions = mkOption {
           type = with types; listOf str;
-          default = [ ];
           example = [
             "nodev"
             "nosuid"
@@ -245,7 +244,6 @@ in
     package = lib.mkPackageOption pkgs "waagent" { };
 
     extraPackages = lib.mkOption {
-      default = [ ];
       description = ''
         Additional packages to add to the waagent {env}`PATH`.
       '';

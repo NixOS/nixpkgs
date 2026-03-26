@@ -54,7 +54,6 @@ with lib;
 
       pem-files = mkOption {
         type = types.listOf types.path;
-        default = [ ];
         description = "PEM files to use";
       };
 

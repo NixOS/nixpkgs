@@ -34,7 +34,6 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           Extra CLI arguments to pass to buffyboard.
         '';

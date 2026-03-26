@@ -90,7 +90,6 @@ in
     };
 
     plugins = mkOption {
-      default = [ ];
       type = types.listOf types.package;
       example = literalExpression "[ pkgs.theLoungePlugins.themes.solarized ]";
       description = ''

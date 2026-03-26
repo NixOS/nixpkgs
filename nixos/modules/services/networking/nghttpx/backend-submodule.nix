@@ -24,7 +24,6 @@
         "host.org/v2/mypath"
         "/somepath"
       ];
-      default = [ ];
       description = ''
         List of nghttpx backend patterns.
 

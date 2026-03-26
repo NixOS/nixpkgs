@@ -422,7 +422,6 @@ let
 
       requestXFR = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           Format: `[AXFR|UDP] <ip-address> <key-name | NOKEY>`
         '';
@@ -443,7 +442,6 @@ let
             "positive"
             "all"
           ]);
-        default = [ ];
         description = ''
           Whitelists the given rrl-types.
         '';

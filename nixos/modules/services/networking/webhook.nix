@@ -156,7 +156,6 @@ in
       };
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "-secure" ];
         description = ''
           These are arguments passed to the webhook command in the systemd service.

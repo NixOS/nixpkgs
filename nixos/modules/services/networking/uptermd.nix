@@ -50,7 +50,6 @@ in
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [ "--debug" ];
         description = ''
           Extra flags passed to the uptermd command.

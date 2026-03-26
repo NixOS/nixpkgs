@@ -16,7 +16,6 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = "Additional passed arguments";
     };
   };

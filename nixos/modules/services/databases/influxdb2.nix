@@ -258,7 +258,6 @@ let
                       `buckets` grants read access to all associated buckets. Use `readBuckets` to define
                       more granular access permissions.
                     '';
-                    default = [ ];
                     type = types.listOf (types.enum validPermissions);
                   };
 
@@ -277,7 +276,6 @@ let
                       `buckets` grants write access to all associated buckets. Use `writeBuckets` to define
                       more granular access permissions.
                     '';
-                    default = [ ];
                     type = types.listOf (types.enum validPermissions);
                   };
 

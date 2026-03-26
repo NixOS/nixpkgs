@@ -120,7 +120,6 @@ rec {
     };
 
     wantedBy = mkOption {
-      default = [ ];
       type = types.listOf unitNameType;
       description = ''
         Units that want (i.e. depend on) this unit. The default method for
@@ -185,7 +184,6 @@ rec {
       };
 
       wants = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           Start the specified units when this unit is started.
@@ -210,7 +208,6 @@ rec {
       };
 
       before = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           If the specified units are started at the same time as
@@ -219,7 +216,6 @@ rec {
       };
 
       bindsTo = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           Like ‘requires’, but in addition, if the specified units
@@ -228,7 +224,6 @@ rec {
       };
 
       partOf = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           If the specified units are stopped or restarted, then this
@@ -237,7 +232,6 @@ rec {
       };
 
       conflicts = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           If the specified units are started, then this unit is stopped
@@ -246,7 +240,6 @@ rec {
       };
 
       requisite = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           Similar to requires. However if the units listed are not started,
@@ -277,7 +270,6 @@ rec {
       };
 
       onSuccess = mkOption {
-        default = [ ];
         type = types.listOf unitNameType;
         description = ''
           A list of one or more units that are activated when
@@ -360,7 +352,6 @@ rec {
         };
 
         path = mkOption {
-          default = [ ];
           type =
             with types;
             listOf (oneOf [
@@ -599,7 +590,6 @@ rec {
 
       startAt = mkOption {
         type = with types; either str (listOf str);
-        default = [ ];
         example = "Sun 14:00:00";
         description = ''
           Automatically start this unit at the given date/time, which
@@ -624,7 +614,6 @@ rec {
     options = {
 
       listenStreams = mkOption {
-        default = [ ];
         type = types.listOf types.str;
         example = [
           "0.0.0.0:993"
@@ -637,7 +626,6 @@ rec {
       };
 
       listenDatagrams = mkOption {
-        default = [ ];
         type = types.listOf types.str;
         example = [
           "0.0.0.0:993"

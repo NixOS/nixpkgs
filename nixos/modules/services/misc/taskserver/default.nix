@@ -108,7 +108,6 @@ let
     {
       options.users = lib.mkOption {
         type = lib.types.uniq (lib.types.listOf lib.types.str);
-        default = [ ];
         example = [
           "alice"
           "bob"

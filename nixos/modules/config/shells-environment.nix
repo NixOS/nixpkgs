@@ -96,7 +96,6 @@ in
     };
 
     environment.profiles = lib.mkOption {
-      default = [ ];
       description = ''
         A list of profiles used to setup the global environment.
       '';
@@ -207,7 +206,6 @@ in
     };
 
     environment.shells = lib.mkOption {
-      default = [ ];
       example = lib.literalExpression "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.

@@ -48,7 +48,6 @@ in
       };
 
     presets = lib.mkOption {
-      default = [ ];
       example = [ "nerd-font-symbols" ];
       type = with lib.types; listOf str;
       description = ''

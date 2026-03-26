@@ -46,7 +46,6 @@ in
       };
       plugins = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         description = ''
           Load additional plugins.
         '';

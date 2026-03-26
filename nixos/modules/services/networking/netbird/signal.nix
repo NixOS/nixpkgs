@@ -54,7 +54,6 @@ in
 
     extraOptions = mkOption {
       type = listOf str;
-      default = [ ];
       description = ''
         Additional options given to netbird-signal as commandline arguments.
       '';

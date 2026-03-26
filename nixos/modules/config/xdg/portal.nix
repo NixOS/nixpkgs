@@ -44,7 +44,6 @@ in
 
     extraPortals = mkOption {
       type = types.listOf types.package;
-      default = [ ];
       description = ''
         List of additional portals to add to path. Portals allow interaction
         with system, like choosing files or taking screenshots. At minimum,
@@ -99,7 +98,6 @@ in
 
     configPackages = mkOption {
       type = types.listOf types.package;
-      default = [ ];
       example = lib.literalExpression "[ pkgs.gnome-session ]";
       description = ''
         List of packages that provide XDG desktop portal configuration, usually in

@@ -102,7 +102,6 @@ in
             };
 
             inhibit = lib.mkOption {
-              default = [ ];
               type = types.listOf (types.strMatching "^[^:]+$");
               example = [
                 "sleep"

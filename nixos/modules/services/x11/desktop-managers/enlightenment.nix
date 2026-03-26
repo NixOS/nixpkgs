@@ -44,7 +44,6 @@ in
     };
 
     environment.enlightenment.excludePackages = mkOption {
-      default = [ ];
       example = literalExpression "[ pkgs.enlightenment.ephoto ]";
       type = types.listOf types.package;
       description = "Which packages Enlightenment should exclude from the default environment";

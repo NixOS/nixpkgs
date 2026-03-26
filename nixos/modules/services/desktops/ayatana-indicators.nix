@@ -16,7 +16,6 @@ in
 
     packages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression "with pkgs; [ ayatana-indicator-messages ]";
       description = ''
         List of packages containing Ayatana Indicator services

@@ -96,7 +96,6 @@ let
     options.openssh.authorizedKeys = {
       keys = lib.mkOption {
         type = lib.types.listOf lib.types.singleLineStr;
-        default = [ ];
         description = ''
           A list of verbatim OpenSSH public keys that should be added to the
           user's authorized keys. The keys are added to a file that the SSH
@@ -127,7 +126,6 @@ let
 
     options.openssh.authorizedPrincipals = lib.mkOption {
       type = with lib.types; listOf lib.types.singleLineStr;
-      default = [ ];
       description = ''
         A list of verbatim principal names that should be added to the user's
         authorized principals.
@@ -280,7 +278,6 @@ in
 
       sftpFlags = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         example = [
           "-f AUTHPRIV"
           "-l INFO"
@@ -413,7 +410,6 @@ in
 
       authorizedKeysFiles = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = ''
           Specify the rules for which files to read on the host.
 

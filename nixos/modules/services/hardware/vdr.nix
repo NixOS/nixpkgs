@@ -34,7 +34,6 @@ in
 
       extraArguments = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = "Additional command line arguments to pass to VDR.";
       };
 

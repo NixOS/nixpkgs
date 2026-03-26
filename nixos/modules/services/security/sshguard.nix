@@ -82,7 +82,6 @@ in
       };
 
       whitelist = lib.mkOption {
-        default = [ ];
         example = [
           "198.51.100.56"
           "198.51.100.2"

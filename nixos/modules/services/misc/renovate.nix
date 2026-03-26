@@ -84,7 +84,6 @@ in
     runtimePackages = mkOption {
       type = with types; listOf package;
       description = "Packages available to renovate.";
-      default = [ ];
     };
     validateSettings = mkOption {
       type = types.bool;

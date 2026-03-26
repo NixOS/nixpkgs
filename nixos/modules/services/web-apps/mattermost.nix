@@ -486,7 +486,6 @@ in
 
       plugins = mkOption {
         type = with types; listOf (either path package);
-        default = [ ];
         example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
         description = ''
           Plugins to add to the configuration. Overrides any installed if non-null.
@@ -723,7 +722,6 @@ in
         package = mkPackageOption pkgs "matterircd" { };
         parameters = mkOption {
           type = types.listOf types.str;
-          default = [ ];
           example = [
             "-mmserver chat.example.com"
             "-bind [::]:6667"

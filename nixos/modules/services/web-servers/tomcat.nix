@@ -72,7 +72,6 @@ in
 
       extraEnvironment = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [ "ENVIRONMENT=production" ];
         description = "Environment Variables to pass to the tomcat service";
       };
@@ -125,7 +124,6 @@ in
 
       commonLibs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications and the servlet container";
       };
 
@@ -160,7 +158,6 @@ in
             };
           }
         );
-        default = [ ];
         description = "List consisting of a virtual host name and a list of web applications to deploy on each virtual host";
       };
 

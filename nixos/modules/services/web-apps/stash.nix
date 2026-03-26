@@ -318,7 +318,6 @@ let
     kind:
     mkOption {
       type = types.listOf types.package;
-      default = [ ];
       description = ''
         The ${kind} Stash should be started with.
       '';

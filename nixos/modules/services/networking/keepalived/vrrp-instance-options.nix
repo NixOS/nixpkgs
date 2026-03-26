@@ -114,7 +114,6 @@ with lib;
 
     trackScripts = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = [
         "chk_cmd1"
         "chk_cmd2"

@@ -214,7 +214,6 @@ in
     celery = {
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           Extra arguments to pass to the celery process.
         '';

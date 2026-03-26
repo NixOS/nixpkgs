@@ -72,7 +72,6 @@ in
           "--numa"
           "numactl"
         ];
-        default = [ ];
       };
 
       host = lib.mkOption {

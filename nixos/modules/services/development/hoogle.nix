@@ -62,7 +62,6 @@ in
 
     extraOptions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [ "--no-security-headers" ];
       description = ''
         Additional command-line arguments to pass to

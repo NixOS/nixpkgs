@@ -246,7 +246,6 @@ in
       };
 
       extraFlags = mkOption {
-        default = [ ];
         example = [ "--debug" ];
         type = types.listOf types.str;
         description = ''

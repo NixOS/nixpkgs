@@ -90,7 +90,6 @@ in
 
       bindings = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule bindingCfg);
-        default = [ ];
         example = lib.literalExpression ''
           [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]

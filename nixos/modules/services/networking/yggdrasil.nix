@@ -96,7 +96,6 @@ in
 
             Listen = mkOption {
               type = listOf str;
-              default = [ ];
               example = [
                 "tcp://0.0.0.0:xxxxx"
                 "tls://[::]:yyyyy"
@@ -109,7 +108,6 @@ in
 
             AllowedPublicKeys = mkOption {
               type = listOf str;
-              default = [ ];
               description = ''
                 List of peer public keys to allow incoming peering connections from.
                 If left empty, all connections are allowed by default.
@@ -210,7 +208,6 @@ in
 
       extraArgs = mkOption {
         type = listOf str;
-        default = [ ];
         example = [
           "-loglevel"
           "info"

@@ -28,14 +28,12 @@ in
       debug = mkEnableOption "mate-session debug messages";
 
       extraPanelApplets = mkOption {
-        default = [ ];
         example = literalExpression "with pkgs; [ mate-applets ]";
         type = types.listOf types.package;
         description = "Extra applets to add to mate-panel.";
       };
 
       extraCajaExtensions = mkOption {
-        default = [ ];
         example = lib.literalExpression "with pkgs; [ caja-extensions ]";
         type = types.listOf types.package;
         description = "Extra extensions to add to caja.";

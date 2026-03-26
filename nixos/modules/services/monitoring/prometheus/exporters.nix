@@ -212,7 +212,6 @@ let
       };
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           Extra commandline options to pass to the ${name} exporter.
         '';

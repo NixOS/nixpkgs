@@ -142,7 +142,6 @@ in
 
       extraOutputsToInstall = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "dev"
           "info"

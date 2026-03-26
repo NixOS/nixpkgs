@@ -392,7 +392,6 @@ in
 
       initdbArgs = mkOption {
         type = with types; listOf str;
-        default = [ ];
         example = [
           "--data-checksums"
           "--allow-group-access"
@@ -485,7 +484,6 @@ in
             };
           }
         );
-        default = [ ];
         description = ''
           Ensures that the specified users exist.
           The PostgreSQL users will be identified using peer authentication. This authenticates the Unix user with the

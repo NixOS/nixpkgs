@@ -378,7 +378,6 @@ rec {
     in
     {
       # x86_64 Generic
-      default = [ ];
       x86-64 = [ ];
       x86-64-v2 = [ "x86-64" ];
       x86-64-v3 = [ "x86-64-v2" ] ++ inferiors.x86-64-v2;

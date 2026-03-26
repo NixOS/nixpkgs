@@ -26,7 +26,6 @@ in
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = "Extra command line arguments to pass to whoami. See <https://github.com/traefik/whoami#flags> for details.";
-      default = [ ];
     };
   };
 

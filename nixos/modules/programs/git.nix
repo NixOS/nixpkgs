@@ -54,7 +54,6 @@ in
               in
               [ (gitini.merge loc config.unordered) ] ++ config.ordered;
           };
-        default = [ ];
         example = {
           init.defaultBranch = "main";
           url."https://github.com/".insteadOf = [

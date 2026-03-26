@@ -20,7 +20,6 @@
     };
     xdg.icons.fallbackCursorThemes = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Names of the fallback cursor themes, in order of preference, to be used when no other icon source can be found.
         Set to `[]` to disable the fallback entirely.

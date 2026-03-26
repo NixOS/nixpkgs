@@ -64,7 +64,6 @@ in
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Extra startup options for the FAHClient. Run
         `fah-client --help` to find all the available options.

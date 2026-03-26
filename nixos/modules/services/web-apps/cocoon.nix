@@ -124,7 +124,6 @@ in
 
     environmentFiles = mkOption {
       type = types.listOf types.path;
-      default = [ ];
       description = ''
         File to load environment variables from. Loaded variables override
         values set in {option}`environment`.

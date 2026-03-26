@@ -186,7 +186,6 @@ let
 
         extraCmdLineOptions = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [ ];
           example = [
             "-workers=1"
             "-dbcache=0"

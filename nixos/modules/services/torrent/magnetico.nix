@@ -102,7 +102,6 @@ in
 
     crawler.extraOptions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Extra command line arguments to pass to magneticod.
       '';
@@ -173,7 +172,6 @@ in
 
     web.extraOptions = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       description = ''
         Extra command line arguments to pass to magneticow.
       '';

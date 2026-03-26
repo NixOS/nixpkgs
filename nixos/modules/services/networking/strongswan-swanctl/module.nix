@@ -32,7 +32,6 @@ in
     swanctl = paramsToOptions swanctlParams;
     includes = mkOption {
       type = types.listOf types.path;
-      default = [ ];
       description = ''
         Extra configuration files to include in the swanctl configuration. This can be used to provide secret values from outside the nix store.
       '';

@@ -250,7 +250,6 @@ in
       };
 
       knownHostsFiles = lib.mkOption {
-        default = [ ];
         type = with lib.types; listOf path;
         description = ''
           Files containing SSH host keys to set as global known hosts.

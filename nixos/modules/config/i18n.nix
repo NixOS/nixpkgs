@@ -72,7 +72,6 @@ in
 
       extraLocales = lib.mkOption {
         type = lib.types.either (lib.types.listOf lib.types.str) (lib.types.enum [ "all" ]);
-        default = [ ];
         example = [ "nl_NL.UTF-8/UTF-8" ];
         description = ''
           Additional locales that the system should support, besides the ones

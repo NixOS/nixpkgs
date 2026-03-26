@@ -28,7 +28,6 @@ let
 
       extraFlags = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [ ];
         example = lib.literalExpression ''[ "--backup" ]'';
         description = "Extra flags for the ${name} service.";
       };

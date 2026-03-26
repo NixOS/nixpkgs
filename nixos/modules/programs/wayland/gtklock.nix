@@ -48,7 +48,6 @@ in
 
     modules = mkOption {
       type = with types; listOf package;
-      default = [ ];
       example = lib.literalExpression ''
         with pkgs; [
           gtklock-playerctl-module

@@ -92,7 +92,6 @@ in
 
     hardware.sane.disabledDefaultBackends = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [ "v4l" ];
       description = ''
         Names of backends which are enabled by default but should be disabled.

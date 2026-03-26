@@ -158,7 +158,6 @@ in
 
       xserverArgs = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         example = [
           "-ac"
           "-logverbose"

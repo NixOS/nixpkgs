@@ -72,7 +72,6 @@ in
         options = {
           dataDirs = mkOption {
             type = types.listOf types.path;
-            default = [ ];
             description = ''
               Paths to be searched for matching data.
 

@@ -108,7 +108,6 @@ in
       };
 
       extraPackages = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.package;
         example = lib.literalExpression "[ pkgs.ipset ]";
         description = ''
@@ -223,7 +222,6 @@ in
       };
 
       ignoreIP = lib.mkOption {
-        default = [ ];
         type = lib.types.listOf lib.types.str;
         example = [
           "192.168.0.0/16"

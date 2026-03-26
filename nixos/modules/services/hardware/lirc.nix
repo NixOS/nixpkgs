@@ -32,7 +32,6 @@ in
 
       extraArguments = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         description = "Extra arguments to lircd.";
       };
     };

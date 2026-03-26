@@ -60,7 +60,6 @@ in
 
     extraOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [ ];
       example = [
         "-conn_type=tcp4"
         "-max_clients=8192"

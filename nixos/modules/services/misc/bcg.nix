@@ -26,7 +26,6 @@ in
       package = lib.mkPackageOption pkgs [ "python3Packages" "bcg" ] { };
       environmentFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
-        default = [ ];
         example = [ "/run/keys/bcg.env" ];
         description = ''
           File to load as environment file. Environment variables from this file

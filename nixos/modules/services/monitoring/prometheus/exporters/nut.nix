@@ -48,7 +48,6 @@ in
     };
     nutVariables = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = ''
         List of NUT variable names to monitor.
 

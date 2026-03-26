@@ -258,7 +258,6 @@ in
 
       configPackages = mkOption {
         type = listOf package;
-        default = [ ];
         example = literalExpression ''
           [
                     (pkgs.writeTextDir "share/pipewire/pipewire.conf.d/10-loopback.conf" '''
@@ -293,7 +292,6 @@ in
 
       extraLv2Packages = mkOption {
         type = listOf package;
-        default = [ ];
         example = literalExpression "[ pkgs.lsp-plugins ]";
         description = ''
           List of packages that provide LV2 plugins in `lib/lv2` that should

@@ -88,7 +88,6 @@ in
 
       bindings = lib.mkOption {
         type = lib.types.listOf (lib.types.submodule bindingCfg);
-        default = [ ];
         example = lib.literalExpression ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${lib.getExe pkgs.mpc} -q toggle"; } ]
         '';

@@ -42,7 +42,6 @@ in
 
     extraGroups = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [ "podman" ];
       description = ''
         Additional groups for the systemd service.
@@ -51,7 +50,6 @@ in
 
     extraPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression "[ pkgs.jre ]";
       description = ''
         Packages to add to the PATH environment variable. Both the {file}`bin`

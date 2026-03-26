@@ -714,7 +714,6 @@ in
 
       extraEnvFiles = lib.mkOption {
         type = with lib.types; listOf path;
-        default = [ ];
         description = ''
           Extra environment files to pass to all mastodon services. Useful for passing down environmental secrets.
         '';

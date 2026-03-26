@@ -206,7 +206,6 @@ in
 
       unmanaged = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
@@ -235,7 +234,6 @@ in
             };
           in
           types.listOf networkManagerPluginPackage;
-        default = [ ];
         example = literalExpression ''
           with pkgs; [
             networkmanager-fortisslvpn
@@ -294,7 +292,6 @@ in
 
       insertNameservers = mkOption {
         type = types.listOf types.str;
-        default = [ ];
         description = ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
@@ -379,7 +376,6 @@ in
             };
           }
         );
-        default = [ ];
         example = literalExpression ''
           [ {
             source = pkgs.writeText "upHook" '''

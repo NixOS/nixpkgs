@@ -78,7 +78,6 @@
         };
 
         csv-files = lib.mkOption {
-          default = [ ];
           type = lib.types.listOf lib.types.path;
           description = ''
             The path to the list of CSV files to use when generating the CDI specification in CSV mode.
@@ -87,7 +86,6 @@
 
         mounts = lib.mkOption {
           type = lib.types.listOf (lib.types.submodule mountType);
-          default = [ ];
           description = "Mounts to be added to every container under the Nvidia CDI profile.";
         };
 
@@ -132,7 +130,6 @@
 
         enable-hooks = lib.mkOption {
           type = lib.types.listOf lib.types.nonEmptyStr;
-          default = [ ];
           description = ''
             List of hooks to enable when generating the CDI specification.
             Each hook name will be passed as `--enable-hook <hook-name>` to nvidia-ctk.

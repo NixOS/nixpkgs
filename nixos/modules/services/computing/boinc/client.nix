@@ -56,7 +56,6 @@ in
 
     extraEnvPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [ ];
       example = lib.literalExpression "[ pkgs.virtualbox ]";
       description = ''
         Additional packages to make available in the environment in which

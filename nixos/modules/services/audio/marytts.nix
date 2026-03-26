@@ -54,7 +54,6 @@ in
 
     voices = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       example = lib.literalExpression ''
         [
           (pkgs.fetchzip {
@@ -73,7 +72,6 @@ in
 
     userDictionaries = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       example = lib.literalExpression ''
         [
           (pkgs.writeTextFile {

@@ -106,7 +106,6 @@ in
           Allow client if common name appears in the list.
         '';
         type = types.listOf types.str;
-        default = [ ];
       };
 
       allowOU = mkOption {

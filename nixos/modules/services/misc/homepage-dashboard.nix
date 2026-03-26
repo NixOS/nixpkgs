@@ -60,7 +60,6 @@ in
 
           <https://gethomepage.dev/installation/docker/#using-environment-secrets>
         '';
-        default = [ ];
       };
 
       customCSS = lib.mkOption {
@@ -117,7 +116,6 @@ in
             ];
           }
         ];
-        default = [ ];
       };
 
       services = lib.mkOption {
@@ -150,7 +148,6 @@ in
             ];
           }
         ];
-        default = [ ];
       };
 
       widgets = lib.mkOption {

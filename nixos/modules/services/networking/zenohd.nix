@@ -50,7 +50,6 @@ in
       backends = mkOption {
         description = "Storage backend packages to add to zenohd search paths.";
         type = with types; listOf package;
-        default = [ ];
         example = lib.literalExpression ''
           [ pkgs.zenoh-backend-rocksdb ]
         '';
@@ -73,7 +72,6 @@ in
       extraOptions = mkOption {
         description = "Extra command line options for zenohd.";
         type = with types; listOf str;
-        default = [ ];
       };
     };
   };

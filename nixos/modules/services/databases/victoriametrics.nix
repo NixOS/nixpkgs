@@ -130,7 +130,6 @@ in
 
     extraOptions = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       example = literalExpression ''
         [
           "-loggerLevel=WARN"

@@ -452,7 +452,6 @@ in
       description = ''
         List of patterns that Athens sum db proxy will return a 403 for.
       '';
-      default = [ ];
       example = [ "github.com/mycompany/*" ];
     };
 
@@ -561,7 +560,6 @@ in
         endpoints = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           description = "URLs that determine all distributed etcd servers.";
-          default = [ ];
           example = [ "localhost:2379" ];
         };
       };

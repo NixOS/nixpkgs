@@ -72,7 +72,6 @@ in
       portList = {
         include = mkOption {
           type = types.listOf types.str;
-          default = [ ];
           example = [
             "eth*"
             "lo*"

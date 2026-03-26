@@ -204,7 +204,6 @@ in
 
     extraOptions = mkOption {
       type = listOf str;
-      default = [ ];
       description = ''
         Additional options given to netbird-mgmt as commandline arguments.
       '';

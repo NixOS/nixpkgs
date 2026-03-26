@@ -58,7 +58,6 @@ in
     watchlist = lib.mkOption {
       type = with lib.types; listOf str;
       description = "Domain names to watch. To monitor a domain with all subdomains, prefix its name with `.` (e.g. `.example.org`).";
-      default = [ ];
       example = [
         ".example.org"
         "another.example.com"

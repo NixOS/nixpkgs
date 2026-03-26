@@ -210,7 +210,6 @@ rec {
             }
           )
         );
-        default = [ ];
         description = ''
           A more powerful and less ergonomic version of `problems.handlers`.
           Each value is a matcher, that may match onto certain properties of a problem and specify a handler for them.

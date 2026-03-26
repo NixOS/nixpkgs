@@ -66,7 +66,6 @@ in
 
     environmentFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [ ];
       description = ''
         File to load environment variables from. Loaded variables override
         values set in {option}`environment`.
@@ -75,7 +74,6 @@ in
 
     extraGroups = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ ];
       example = [ "tlskeys" ];
       description = ''
         Additional groups for the systemd service.

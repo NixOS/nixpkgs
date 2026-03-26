@@ -54,7 +54,6 @@ let
     };
     extraFlags = mkOption {
       type = types.listOf types.str;
-      default = [ ];
       description = "Extra flags to pass to iperf3(1).";
     };
   };

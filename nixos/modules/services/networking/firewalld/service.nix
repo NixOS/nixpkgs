@@ -48,17 +48,14 @@ in
         ports = mkOption {
           type = listOf (submodule portProtocolOptions);
           description = "Ports of the service.";
-          default = [ ];
         };
         protocols = mkOption {
           type = listOf nonEmptyStr;
           description = "Protocols for the service.";
-          default = [ ];
         };
         sourcePorts = mkOption {
           type = listOf (submodule portProtocolOptions);
           description = "Source ports for the service.";
-          default = [ ];
         };
         destination = mkOption {
           type = submodule {
@@ -79,12 +76,10 @@ in
         includes = mkOption {
           type = listOf nonEmptyStr;
           description = "Services to include for the service.";
-          default = [ ];
         };
         helpers = mkOption {
           type = listOf nonEmptyStr;
           description = "Helpers for the service.";
-          default = [ ];
         };
       };
     });

@@ -42,7 +42,6 @@ in
   options = {
     plugins = lib.mkOption {
       type = with lib.types; listOf (either package pluginWithConfigType);
-      default = [ ];
       apply = normalizePlugins;
       example = lib.literalExpression ''
         with pkgs.vimPlugins; [

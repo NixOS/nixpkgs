@@ -380,7 +380,6 @@ in
 
                 capabilities = mkOption {
                   type = types.listOf types.str;
-                  default = [ ];
                   example = [
                     "SHORT-GI-80"
                     "TX-STBC-2BY1"

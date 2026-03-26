@@ -246,7 +246,6 @@ in
 
           flags = lib.mkOption {
             type = with lib.types; listOf str;
-            default = [ ];
             description = "Flags for traceroute process";
           };
 
@@ -259,7 +258,6 @@ in
 
         extraArgs = lib.mkOption {
           type = with lib.types; listOf str;
-          default = [ ];
           description = ''
             Extra parameters documented [here](https://github.com/xddxdd/bird-lg-go#proxy).
           '';

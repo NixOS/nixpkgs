@@ -42,7 +42,6 @@ in
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [ ];
         example = [
           "-label kbfs"
           "-mount-type normal"
