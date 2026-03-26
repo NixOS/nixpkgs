@@ -98,7 +98,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = extraPackages ++ [
+    aiohttp
     (cairocffi.override { withXcffib = true; })
+    cffi
     dbus-fast
     iwlib
     libcst
@@ -122,8 +124,6 @@ buildPythonPackage (finalAttrs: {
 
   propagatedBuildInputs = [
     wayland-protocols
-    cffi
-    aiohttp
   ];
 
   pythonImportsCheck = [ "libqtile" ];
