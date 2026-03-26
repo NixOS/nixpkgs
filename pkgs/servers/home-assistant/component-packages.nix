@@ -7210,7 +7210,8 @@
       ];
     "zinvolt" =
       ps: with ps; [
-      ]; # missing inputs: zinvolt
+        zinvolt
+      ];
     "zodiac" =
       ps: with ps; [
       ];
@@ -8287,6 +8288,7 @@
     "zeversolar"
     "zha"
     "zimi"
+    "zinvolt"
     "zodiac"
     "zone"
     "zoneminder"
