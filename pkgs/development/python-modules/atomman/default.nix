@@ -21,8 +21,8 @@
 
   # tests
   phonopy,
+  spglib,
   pytestCheckHook,
-
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -69,6 +69,7 @@ buildPythonPackage (finalAttrs: {
   nativeCheckInputs = [
     phonopy
     pytestCheckHook
+    spglib
   ];
 
   disabledTests = [
