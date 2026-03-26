@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "huum";
-  version = "0.8.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "frwickst";
     repo = "pyhuum";
     tag = version;
-    hash = "sha256-8wldXJAdo1PK4bKX0rKJjNwwTS5FSgr9RcwiyVhESb8=";
+    hash = "sha256-PM1At/AqKZ0QIJWlQeeTYqnQqK1wOnd4eRLyd7MvFLk=";
   };
 
   build-system = [ poetry-core ];
