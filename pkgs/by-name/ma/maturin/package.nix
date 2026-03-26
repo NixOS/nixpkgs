@@ -64,7 +64,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [ getchoo ];
+    maintainers = with lib.maintainers; [
+      getchoo
+      miniharinn
+    ];
     mainProgram = "maturin";
   };
 })
