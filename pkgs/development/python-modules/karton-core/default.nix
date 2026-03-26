@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "5.9.0";
+  version = "5.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = "karton";
     tag = "v${version}";
-    hash = "sha256-m7A7Fbl6VZtgR4+FhmV2T+K6kgHRNtdeyin1uhvw04U=";
+    hash = "sha256-b/wOkOk6LB8uTDsXJrNQ2iru2H6mgaMhIyWSU5y2mx0=";
   };
 
   build-system = [ setuptools ];
