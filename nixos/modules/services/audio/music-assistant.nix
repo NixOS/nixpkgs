@@ -98,6 +98,7 @@ in
 
     services.avahi = lib.mkIf (lib.elem "airplay_receiver" cfg.providers) {
       enable = true;
+      openFirewall = lib.mkIf cfg.openFirewall true;
       publish = {
         enable = true;
         userServices = true;
