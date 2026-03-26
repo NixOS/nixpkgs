@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
+      chrjabs
     ];
   };
 })
