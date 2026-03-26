@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  cmake,
   gfortran,
   blas,
   lapack,
@@ -19,9 +20,12 @@ let
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if enableCuda then cudaPackages.backendStdenv else inputs.stdenv;
 in
-effectiveStdenv.mkDerivation rec {
+effectiveStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
   pname = "suitesparse";
-  version = "5.13.0";
+  version = "7.10.0";
 
   outputs = [
     "out"
@@ -32,17 +36,20 @@ effectiveStdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
-    rev = "v${version}";
-    sha256 = "sha256-Anen1YtXsSPhk8DpA4JtADIz9m8oXFl9umlkb4iImf8=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-FcEyOvt96FLwCTil4l52ug+faiRlEG+mMUvKWipMxng=";
   };
 
-  nativeBuildInputs =
-    lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals enableCuda [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ]
+  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals enableCuda [
+    cudaPackages.cuda_nvcc
+  ];
 
   # Use compatible indexing for lapack and blas used
   buildInputs =
@@ -65,46 +72,49 @@ effectiveStdenv.mkDerivation rec {
     ];
 
   preConfigure = ''
-    # Mongoose and GraphBLAS are packaged separately
-    sed -i "Makefile" -e '/GraphBLAS\|Mongoose/d'
+    export GRAPHBLAS_CACHE_PATH="$(mktemp -d)"
   '';
 
-  makeFlags = [
-    "INSTALL=${placeholder "out"}"
-    "INSTALL_INCLUDE=${placeholder "dev"}/include"
-    "JOBS=$(NIX_BUILD_CORES)"
-    "MY_METIS_LIB=-lmetis"
+  cmakeFlags = [
+    (lib.cmakeBool "SUITESPARSE_USE_PYTHON" false)
+    (lib.cmakeFeature "BLAS_LIBRARIES" "${lib.getLib blas}/lib/libblas${effectiveStdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeFeature "LAPACK_LIBRARIES" "${lib.getLib lapack}/lib/liblapack${effectiveStdenv.hostPlatform.extensions.sharedLibrary}")
+    (lib.cmakeBool "SUITESPARSE_USE_64BIT_BLAS" blas.isILP64)
   ]
-  ++ lib.optionals blas.isILP64 [
-    "CFLAGS=-DBLAS64"
-  ]
-  ++ lib.optionals enableCuda [
-    "CUDA_PATH=${lib.getBin cudaPackages.cuda_nvcc}"
-    "CUDART_LIB=${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so"
-    "CUBLAS_LIB=${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
-  ]
-  ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-    # Unless these are set, the build will attempt to use `Accelerate` on darwin, see:
-    # https://github.com/DrTimothyAldenDavis/SuiteSparse/blob/v5.13.0/SuiteSparse_config/SuiteSparse_config.mk#L368
-    "BLAS=-lblas"
-    "LAPACK=-llapack"
+  ++ lib.optionals (effectiveStdenv.hostPlatform != effectiveStdenv.buildPlatform) [
+    # GraphBLAS JIT builds a native helper binary (grb_jitpackage) but uses
+    # the cross compiler, so it can't execute on the build host.
+    (lib.cmakeBool "GRAPHBLAS_USE_JIT" false)
   ];
 
-  env = {
-    # in GCC14 these two warnings were promoted to error
-    # let's make them warnings again to fix the build failure
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types";
-  }
-  // lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
+  env = lib.optionalAttrs effectiveStdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
     # update the install names of the output dylibs.
     NIX_LDFLAGS = "-headerpad_max_install_names";
   };
 
-  buildFlags = [
-    # Build individual shared libraries, not demos
-    "library"
-  ];
+  # CMAKE build does not automatically provide doc output, so we make it ourselves
+  postInstall = ''
+    docdir=$doc/share/doc/${finalAttrs.pname}-${finalAttrs.version}
+    mkdir -p $docdir
+
+    # Top-level docs
+    cp $src/LICENSE.txt $src/ChangeLog $src/README.md $docdir/
+
+    # Per-component READMEs, licenses, and changelogs
+    for f in $src/*/README.txt $src/*/README.md $src/*/LICENSE $src/*/LICENSE.txt $src/*/ChangeLog; do
+      [ -f "$f" ] || continue
+      component=$(basename $(dirname "$f"))
+      cp "$f" "$docdir/''${component}_$(basename "$f")"
+    done
+
+    # User guides and papers from Doc directories
+    for dir in $src/*/Doc; do
+      [ -d "$dir" ] || continue
+      component=$(basename $(dirname "$dir"))
+      find "$dir" -name '*.pdf' -exec cp {} "$docdir/" \;
+    done
+  '';
 
   meta = {
     homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
@@ -117,4 +127,4 @@ effectiveStdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ttuegel ];
     platforms = with lib.platforms; unix;
   };
-}
+})
