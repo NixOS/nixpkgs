@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "sseclient-py";
   version = "1.9.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mpetazzoni";
@@ -17,11 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-AIldZFElGgSbw38aZWCWI1N35MiE+b9D1s/XhD7aIvo=";
   };
 
+  build-system = [ hatchling ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sseclient" ];
-
-  enabledTestPaths = [ "tests/unittests.py" ];
 
   meta = {
     description = "Pure-Python Server Side Events (SSE) client";
