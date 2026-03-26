@@ -2351,7 +2351,8 @@
       ];
     "hegel" =
       ps: with ps; [
-      ]; # missing inputs: hegel-ip-client
+        hegel-ip-client
+      ];
     "heicko" =
       ps: with ps; [
       ];
@@ -7592,6 +7593,7 @@
     "hddtemp"
     "hdfury"
     "hdmi_cec"
+    "hegel"
     "heos"
     "here_travel_time"
     "hikvision"
