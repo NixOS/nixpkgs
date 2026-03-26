@@ -59,7 +59,7 @@ let
         callTest =
           config:
           if attrNamesOnly then
-            hydraJob config.test
+            hydraJob config.driver
           else
             {
               ${system} = hydraJob config.driver;
