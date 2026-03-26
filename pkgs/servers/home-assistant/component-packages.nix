@@ -5156,7 +5156,8 @@
       ];
     "redgtech" =
       ps: with ps; [
-      ]; # missing inputs: redgtech-api
+        redgtech-api
+      ];
     "refoss" =
       ps: with ps; [
         refoss-ha
@@ -7980,6 +7981,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "redgtech"
     "refoss"
     "rehlko"
     "remember_the_milk"
