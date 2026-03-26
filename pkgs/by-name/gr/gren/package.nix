@@ -3,8 +3,9 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs-slim,
   git,
+  haskell,
   haskellPackages,
   versionCheckHook,
 }:
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-eWs2Qsg3jCrBWAP7GAtBkG8RSoljjES6EpdN4IfpxaA=";
   };
 
-  buildInputs = [ nodejs ];
+  buildInputs = [
+    nodejs-slim
+    git
+  ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
@@ -32,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/gren \
       --set-default GREN_BIN ${lib.getExe finalAttrs.passthru.backend} \
-      --suffix PATH : ${lib.makeBinPath [ git ]}
 
     runHook postInstall
   '';
@@ -42,7 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgram = "${placeholder "out"}/bin/gren";
 
   passthru = {
-    backend = haskellPackages.callPackage ./generated-backend-package.nix { };
+    backend = haskell.lib.justStaticExecutables (
+      haskellPackages.callPackage ./generated-backend-package.nix { }
+    );
     updateScript = ./update.sh;
   };
 
@@ -50,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Programming language for simple and correct applications";
     homepage = "https://gren-lang.org";
     license = lib.licenses.bsd3;
-    platforms = lib.intersectLists haskellPackages.ghc.meta.platforms nodejs.meta.platforms;
+    platforms = lib.intersectLists haskellPackages.ghc.meta.platforms nodejs-slim.meta.platforms;
     mainProgram = "gren";
     maintainers = with lib.maintainers; [
       robinheghan
