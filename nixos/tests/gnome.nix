@@ -9,8 +9,6 @@
     {
       imports = [ ./common/user-account.nix ];
 
-      services.xserver.enable = true;
-
       services.displayManager.gdm = {
         enable = true;
         debug = true;
