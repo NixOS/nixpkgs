@@ -15,10 +15,10 @@ let
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
       music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: {
-        version = "1.1.86";
+        version = "1.1.115";
 
         src = oldAttrs.src.override {
-          hash = "sha256-dQwFsuelp/3s2CO/5jxNrZcmWxE9xYhrpx0O37Tq/TQ=";
+          hash = "sha256-oEXL0B8JNH4PcltpES375ov7QGs+gtYKlMGr1B7BlKY=";
         };
       });
     };
@@ -32,16 +32,20 @@ let
 
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
+
+assert
+  (lib.elem "ariacast" providers) -> throw "music-assistant: ariacast has not been packaged, yet.";
+
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.7.11";
+  version = "2.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     tag = version;
-    hash = "sha256-HLd7PAYdBzpzdfCRPc4elPq3KfzusIXYXTV8fRmo1lU=";
+    hash = "sha256-/yKnUklNQMsumzj68KIfMN/h7Xsr3Brmwpicam9xuAY=";
   };
 
   patches = [
@@ -81,14 +85,11 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "0.0.0" "${version}" \
       --replace-fail "==" ">="
 
-    # get-mac is a deprecated alias of getmac since 2018
-    substituteInPlace pyproject.toml \
-      --replace-fail "get-mac" "getmac"
-
     rm -rv \
       music_assistant/providers/airplay/bin/{cliap2-*,cliraop-*} \
       music_assistant/providers/airplay_receiver/bin/{build_binaries.sh,shairport-sync-*} \
-      music_assistant/providers/spotify/bin
+      music_assistant/providers/ariacast_receiver/bin/ariacast_* \
+      music_assistant/providers/spotify/bin/librespot-*
 
     found_bins=$(find music_assistant/ -wholename '*/bin/*' -type f -executable -print0 | tr '\0' ' ')
     if [[ -n $found_bins ]]; then
@@ -101,49 +102,64 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "aiohttp"
+    "aiosqlite"
+    "cryptography"
+    "mashumaro"
+    "orjson"
+    "xmltodict"
+  ];
+
   pythonRemoveDeps = [
     # no runtime dependency resolution
     "uv"
   ];
 
-  dependencies = with python.pkgs; [
-    # Only packages required in pyproject.toml
-    aiodns
-    aiofiles
-    aiohttp
-    aiohttp-asyncmdnsresolver
-    aiohttp-fast-zlib
-    aiortc
-    aiorun
-    aiosqlite
-    awesomeversion
-    brotli
-    certifi
-    chardet
-    colorlog
-    cryptography
-    getmac
-    gql
-    ifaddr
-    librosa
-    mashumaro
-    music-assistant-frontend
-    music-assistant-models
-    mutagen
-    orjson
-    pillow
-    podcastparser
-    propcache
-    python-slugify
-    shortuuid
-    unidecode
-    xmltodict
-    zeroconf
+  dependencies =
+    with python.pkgs;
+    [
+      # Only packages required in pyproject.toml
+      aiodns
+      aiofiles
+      aiohttp
+      aiohttp-asyncmdnsresolver
+      aiohttp-fast-zlib
+      aiohttp-socks
+      aiortc
+      aiosqlite
+      awesomeversion
+      brotli
+      certifi
+      chardet
+      colorlog
+      cryptography
+      getmac
+      gql
+      ifaddr
+      librosa
+      mashumaro
+      music-assistant-frontend
+      music-assistant-models
+      mutagen
+      numpy
+      orjson
+      pillow
+      podcastparser
+      propcache
+      pyjwt
+      python-slugify
+      shortuuid
+      unidecode
+      xmltodict
+      zeroconf
 
-    # Used in music_assistant/controllers/webserver/helpers/auth_providers.py
-    # but somehow not part of pyproject.toml
-    hass-client
-  ];
+      # Used in music_assistant/controllers/webserver/helpers/auth_providers.py
+      # but somehow not part of pyproject.toml
+      hass-client
+    ]
+    ++ gql.optional-dependencies.all
+    ++ pyjwt.optional-dependencies.crypto;
 
   optional-dependencies = with python.pkgs; {
     # Required subset of optional-dependencies in pyproject.toml
@@ -160,19 +176,26 @@ python.pkgs.buildPythonApplication rec {
       pytestCheckHook
     ]
     ++ lib.concatAttrValues optional-dependencies
+    ++ (providerPackages.audible python.pkgs)
+    ++ (providerPackages.dlna python.pkgs)
     ++ (providerPackages.jellyfin python.pkgs)
     ++ (providerPackages.opensubsonic python.pkgs)
+    ++ (providerPackages.sendspin python.pkgs)
     ++ (providerPackages.tidal python.pkgs);
 
   disabledTestPaths = [
     # no multicast support in build sandbox:
     # "OSError: [Errno 19] No such device"
-    "tests/providers/jellyfin/test_init.py::test_initial_sync"
-    "tests/core/test_server_base.py::test_start_and_stop_server"
-    "tests/core/test_server_base.py::test_events"
+    "tests/core/test_genres.py"
     # provider is missing dependencies
-    "tests/providers/nicovideo"
     "tests/providers/apple_music"
+    "tests/providers/bandcamp"
+    "tests/providers/kion_music"
+    "tests/providers/nicovideo"
+    "tests/providers/yandex_music"
+    "tests/providers/zvuk_music"
+    # mocking music_assistant.providers.airplay.pairing.AirPlayPairing does not work
+    "tests/providers/airplay/test_player.py::test_start_pairing__pin_decision"
   ];
 
   pythonImportsCheck = [ "music_assistant" ];
