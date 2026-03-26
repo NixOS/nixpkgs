@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build-system
   pybind11,
@@ -86,8 +85,7 @@ buildPythonPackage (finalAttrs: {
 
     # hangs forever on some CPUs
     "test_map_iter_interrupt_early"
-  ]
-  ++ lib.optionals (pythonAtLeast "3.14") [
+
     # AssertionError: assert 'a string!' == 'a metadata!'
     "test_save_load_memmap"
   ]
