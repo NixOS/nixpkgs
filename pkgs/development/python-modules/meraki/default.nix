@@ -22,6 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-B9eda7ccpCRGuBB2XfRI/Fz+MVBUIjFZzHYWfckQT2g=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=78.1.1,<79.0.0" "setuptools"
+  '';
+
   pythonRelaxDeps = [
     "pytest"
     "setuptools"
