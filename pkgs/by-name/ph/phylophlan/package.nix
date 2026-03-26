@@ -11,14 +11,14 @@
 let
   finalAttrs = {
     pname = "phylophlan";
-    version = "3.1.1";
+    version = "3.2.1";
     pyproject = true;
 
     src = fetchFromGitHub {
       owner = "biobakery";
       repo = "phylophlan";
       tag = finalAttrs.version;
-      hash = "sha256-KlWKt2tH2lQBh/eQ2Hbcu2gXHEFfmFEc6LrybluxINc=";
+      hash = "sha256-rPTEdu0W3LD27tDIWCOQ3K+RJuj97I9aEeYFdM77jOs=";
     };
 
     build-system = with python3Packages; [ setuptools ];
@@ -35,6 +35,8 @@ let
       seaborn
       distutils
       requests
+      scipy
+      tqdm
     ];
 
     # Minimum needed external tools
