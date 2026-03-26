@@ -1,6 +1,5 @@
 {
   config,
-  options,
   pkgs,
   lib,
   ...
@@ -20,23 +19,22 @@ let
     ;
 
   cfg = config.services.aesmd;
-  opt = options.services.aesmd;
-
   sgx-psw = cfg.package;
 
+  # See `psw/ae/aesm_service/source/utils/aesm_config.cpp` for available options
   configFile =
-    with cfg.settings;
-    pkgs.writeText "aesmd.conf" (
-      concatStringsSep "\n" (
-        optional (whitelistUrl != null) "whitelist url = ${whitelistUrl}"
-        ++ optional (proxy != null) "aesm proxy = ${proxy}"
-        ++ optional (proxyType != null) "proxy type = ${proxyType}"
-        ++ optional (defaultQuotingType != null) "default quoting type = ${defaultQuotingType}"
+    let
+      c = cfg.settings;
+      lines =
+        optional (c.defaultQuotingType != null) "default quoting type = ${c.defaultQuotingType}"
+        ++ optional (c.qplLogLevel != null) "qpl log level = ${c.qplLogLevel}"
+        ++ optional (c.proxy != null) "aesm proxy = ${c.proxy}"
+        ++ optional (c.proxyType != null) "proxy type = ${c.proxyType}"
         ++
           # Newline at end of file
-          [ "" ]
-      )
-    );
+          [ "" ];
+    in
+    pkgs.writeText "aesmd.conf" (concatStringsSep "\n" lines);
 in
 {
   imports = [
@@ -45,13 +43,19 @@ in
 
           services.aesmd.package = pkgs.sgx-psw.override { debug = true; };
     '')
+    (mkRemovedOptionModule [
+      "services"
+      "aesmd"
+      "settings"
+      "whitelistUrl"
+    ] "sgx-psw-v2.28 no longer supports Intel enclave signer cert whitelist management.")
   ];
 
   options.services.aesmd = {
     enable = mkEnableOption "Intel's Architectural Enclave Service Manager (AESM) for Intel SGX";
     package = mkPackageOption pkgs "sgx-psw" { };
     environment = mkOption {
-      type = with types; attrsOf str;
+      type = types.attrsOf types.str;
       default = { };
       description = "Additional environment variables to pass to the AESM service.";
       # Example environment variable for `sgx-azure-dcap-client` provider library
@@ -61,59 +65,55 @@ in
       };
     };
     quoteProviderLibrary = mkOption {
-      type = with types; nullOr path;
+      type = types.nullOr types.path;
       default = null;
       example = literalExpression "pkgs.sgx-azure-dcap-client";
       description = "Custom quote provider library to use.";
     };
-    settings = mkOption {
-      description = "AESM configuration";
-      default = { };
-      type = types.submodule {
-        options.whitelistUrl = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          example = "http://whitelist.trustedservices.intel.com/SGX/LCWL/Linux/sgx_white_list_cert.bin";
-          description = "URL to retrieve authorized Intel SGX enclave signers.";
-        };
-        options.proxy = mkOption {
-          type = with types; nullOr str;
-          default = null;
-          example = "http://proxy_url:1234";
-          description = "HTTP network proxy.";
-        };
-        options.proxyType = mkOption {
-          type =
-            with types;
-            nullOr (enum [
-              "default"
-              "direct"
-              "manual"
-            ]);
-          default = if (cfg.settings.proxy != null) then "manual" else null;
-          defaultText = literalExpression ''
-            if (config.${opt.settings}.proxy != null) then "manual" else null
-          '';
-          example = "default";
-          description = ''
-            Type of proxy to use. The `default` uses the system's default proxy.
-            If `direct` is given, uses no proxy.
-            A value of `manual` uses the proxy from
-            {option}`services.aesmd.settings.proxy`.
-          '';
-        };
-        options.defaultQuotingType = mkOption {
-          type =
-            with types;
-            nullOr (enum [
-              "ecdsa_256"
-              "epid_linkable"
-              "epid_unlinkable"
-            ]);
-          default = null;
-          example = "ecdsa_256";
-          description = "Attestation quote type.";
-        };
+    settings = {
+      proxy = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "http://proxy_url:1234";
+        description = "HTTP network proxy.";
+      };
+      proxyType = mkOption {
+        type = types.nullOr (
+          types.enum [
+            "default"
+            "direct"
+            "manual"
+          ]
+        );
+        default = if (cfg.settings.proxy != null) then "manual" else null;
+        defaultText = literalExpression ''
+          if (cfg.settings.proxy != null) then "manual" else null
+        '';
+        example = "default";
+        description = ''
+          Type of proxy to use. The `default` uses the system's default proxy.
+          If `direct` is given, uses no proxy.
+          A value of `manual` uses the proxy from
+          {option}`services.aesmd.settings.proxy`.
+        '';
+      };
+      defaultQuotingType = mkOption {
+        # As of sgx-psw-v2.28 EPID attestation is no longer supported.
+        type = types.nullOr (types.enum [ "ecdsa_256" ]);
+        default = null;
+        example = "ecdsa_256";
+        description = "Attestation quote type.";
+      };
+      qplLogLevel = mkOption {
+        type = types.nullOr (
+          types.enum [
+            "info"
+            "error"
+          ]
+        );
+        default = null;
+        example = "error";
+        description = "Set the log level for the default quote provider library";
       };
     };
   };
@@ -131,8 +131,6 @@ in
     systemd.services.aesmd =
       let
         storeAesmFolder = "${sgx-psw}/aesm";
-        # Hardcoded path AESM_DATA_FOLDER in psw/ae/aesm_service/source/oal/linux/aesm_util.cpp
-        aesmDataFolder = "/var/opt/aesmd/data";
       in
       {
         description = "Intel Architectural Enclave Service Manager";
@@ -155,12 +153,9 @@ in
 
         serviceConfig = {
           # Run with elevated privileges to create /var/opt/aesmd/... before
-          # dropping to DynamicUser.
-          ExecStartPre = ''
-            +${lib.getExe' pkgs.coreutils "install"} -m 644 -D \
-                "${storeAesmFolder}/data/white_list_cert_to_be_verify.bin" \
-                "${aesmDataFolder}/white_list_cert_to_be_verify.bin"
-          '';
+          # dropping to DynamicUser. This is a hardcoded path `AESM_DATA_FOLDER`
+          # in `psw/ae/aesm_service/source/oal/linux/aesm_util.cpp`.
+          ExecStartPre = "+${lib.getExe' pkgs.coreutils "mkdir"} -p -m 755 /var/opt/aesmd/data";
           ExecStart = "${sgx-psw}/bin/aesm_service --no-daemon";
           ExecReload = ''${pkgs.coreutils}/bin/kill -SIGHUP "$MAINPID"'';
 
@@ -267,5 +262,11 @@ in
           UMask = "0066";
         };
       };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      phlip9
+    ];
   };
 }

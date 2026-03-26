@@ -1,8 +1,8 @@
 diff --git a/Makefile b/Makefile
-index 144f4e4..834c23e 100644
+index 0dd0e66..64d3715 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -50,22 +50,17 @@ tips:
+@@ -50,17 +50,13 @@ tips:
  preparation:
  # As SDK build needs to clone and patch openmp, we cannot support the mode that download the source from github as zip.
  # Only enable the download from git
@@ -11,17 +11,21 @@ index 144f4e4..834c23e 100644
  	git apply ../0001-Add-a-macro-to-disable-time-support-in-jwt-for-SGX.patch -R --check
 -	./external/dcap_source/QuoteVerification/prepare_sgxssl.sh nobuild
  	cd external/openmp/openmp_code && git apply ../0001-Enable-OpenMP-in-SGX.patch >/dev/null 2>&1 ||  git apply ../0001-Enable-OpenMP-in-SGX.patch --check -R
- 	cd external/protobuf/protobuf_code && git apply ../sgx_protobuf.patch >/dev/null 2>&1 ||  git apply ../sgx_protobuf.patch --check -R
- 	cd external/protobuf/protobuf_code && git apply ../0001-bumped-protobuf-to-1.33.0.patch >/dev/null 2>&1 ||  git apply ../0001-bumped-protobuf-to-1.33.0.patch --check -R
--	cd external/protobuf/protobuf_code && git submodule update --init --recursive && cd third_party/abseil-cpp && git apply ../../../sgx_abseil.patch>/dev/null 2>&1 || git apply ../../../sgx_abseil.patch --check -R
- 	./external/sgx-emm/create_symlink.sh
- 	cd external/cbor && cp -r libcbor sgx_libcbor
- 	cd external/cbor/libcbor && git apply ../raw_cbor.patch >/dev/null 2>&1 || git apply ../raw_cbor.patch --check -R
+ 	cd external/protobuf/protobuf_code && \
+ 		git apply ../sgx_protobuf.patch >/dev/null 2>&1 || git apply ../sgx_protobuf.patch --check -R && \
+ 		git apply ../0001-bumped-protobuf-to-1.33.0.patch >/dev/null 2>&1 || git apply ../0001-bumped-protobuf-to-1.33.0.patch --check -R && \
+-		git submodule update --init --recursive && \
+ 		cd third_party/abseil-cpp && \
+-		git reset --hard && \
+ 		git apply ../../../sgx_abseil.patch >/dev/null 2>&1 || git apply ../../../sgx_abseil.patch --check -R && \
+ 		git apply ../../../0001-fix-to-make-SGX-Linux-build-on-GCC14.patch >/dev/null 2>&1 || git apply ../../../0001-fix-to-make-SGX-Linux-build-on-GCC14.patch --check -R && \
+ 		git apply ../../../0001-abseil-fix-missing-abort.patch >/dev/null 2>&1 || git apply ../../../0001-abseil-fix-missing-abort.patch --check -R
+@@ -70,8 +66,6 @@ preparation:
  	cd external/cbor/sgx_libcbor && git apply ../sgx_cbor.patch >/dev/null 2>&1 || git apply ../sgx_cbor.patch --check -R
  	cd external/ippcp_internal/ipp-crypto && git apply ../0001-IPP-crypto-for-SGX.patch > /dev/null 2>&1 || git apply ../0001-IPP-crypto-for-SGX.patch --check -R
  	cd external/ippcp_internal/ipp-crypto && mkdir -p build
 -	./download_prebuilt.sh
 -	./external/dcap_source/QuoteGeneration/download_prebuilt.sh
+ 	cd external/libcxxrt/libcxxrt_code && git apply ../sgx_libcxxrt.patch >/dev/null 2>&1 || git apply ../sgx_libcxxrt.patch --check -R
  
  psw:
- 	$(MAKE) -C psw/ USE_OPT_LIBS=$(USE_OPT_LIBS)
