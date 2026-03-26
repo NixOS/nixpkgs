@@ -1,0 +1,7 @@
+[package]
+name = "im_using_workspaces"
+version = { workspace = true }
+publish = false
+
+[dependencies]
+foo = { workspace = true, no-default-features = true }
