@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "celery-types";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "celery_types";
     inherit version;
-    hash = "sha256-yT+80LBKnpwvVdVUCspKoepMwGqHDAyN7lBi/dWWY/4=";
+    hash = "sha256-+jGBNv2tg/g/FTHe7Nn+Zktd///ynzwx6RIKRrjjkI8=";
   };
 
   postPatch = ''

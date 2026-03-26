@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.24.3";
+  version = "3.24.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "IBM";
     repo = "python-sdk-core";
     tag = "v${version}";
-    hash = "sha256-S4GKOJ7H0a4zWaqzXR3yT5xRSLuRCDm9uR7G3A9QR9c=";
+    hash = "sha256-j16E4IDGuabxhHqI/b1yLLv5EdkWYsIJQ2CQzUodFsU=";
   };
 
   pythonRelaxDeps = [ "requests" ];

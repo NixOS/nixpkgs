@@ -18,9 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-rNrGlgUvPezX7RnKhprRjl9DiJ/Crt4phmxnfY9tNXA=";
 
-  # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
-  preCheck = ''
-    find docker/public -exec touch -m {} \;
+  # static-web-server already has special handling for files with modification
+  # time = unix epoch, but the nix store is unix epoch + 1 second.
+  patches = [ ./include-unix-time-plus-one.diff ];
+
+  # Some tests which implicitly relied on the above behavior now break.  Force
+  # an mtime update to fix.
+  postUnpack = ''
+    find . -exec touch -m {} +
   '';
 
   # Need to copy in the systemd units for systemd.packages to discover them

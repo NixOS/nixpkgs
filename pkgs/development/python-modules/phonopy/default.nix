@@ -9,7 +9,6 @@
   ninja,
   numpy,
   scikit-build-core,
-  setuptools,
   setuptools-scm,
 
   # dependencies
@@ -23,17 +22,22 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "phonopy";
-  version = "2.47.1";
+  version = "3.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phonopy";
     repo = "phonopy";
-    tag = "v${version}";
-    hash = "sha256-zHEhYzSQKGre3LLtY555F3oTA8BowBy6InU79Mn2Cxo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-JSLwABXVYhGm9nb4W9M0AKCU98grBpfyHp5JB8KcIJc=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "nanobind<2.10.0" "nanobind"
+  '';
 
   build-system = [
     cmake
@@ -41,7 +45,6 @@ buildPythonPackage rec {
     ninja
     numpy
     scikit-build-core
-    setuptools
     setuptools-scm
   ];
   dontUseCmakeConfigure = true;
@@ -75,4 +78,4 @@ buildPythonPackage rec {
       chn
     ];
   };
-}
+})

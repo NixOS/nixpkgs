@@ -16,14 +16,14 @@ let
 in
 pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "tclint";
-  version = "0.7.0";
+  version = "0.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nmoroze";
     repo = "tclint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GkWQlOmPh/IpkdcNKkaHJoVDD2r5wCSFeMZA96dxiXM=";
+    hash = "sha256-HEmNdDq8xeGHCLJRvGGa13KaX7iLyyNkv3nYcJsZjrw=";
   };
 
   build-system = with pythonPackages; [

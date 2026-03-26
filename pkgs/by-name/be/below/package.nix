@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   rustPlatform,
   clang,
   pkg-config,
@@ -12,24 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "below";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "facebookincubator";
     repo = "below";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tPweJFqhZMOL+M08bDjW6HPmtuhr9IXJNP0c938O7Cg=";
+    hash = "sha256-Paf3+aVsJpC8wyNqszCp3y5qQS8LEAyXvJBp9VG4uFM=";
   };
 
-  cargoPatches = [
-    (fetchpatch {
-      name = "update-Cargo.lock.patch";
-      url = "https://github.com/facebookincubator/below/commit/f46f9936ac29fa23f5cb02cafe93ae724649bafc.patch";
-      hash = "sha256-J+M8FIuo8ToT3+9eZi5qfwfAW98XcNRqTIJd6O8z1Ig=";
-    })
-  ];
-
-  cargoHash = "sha256-JrSSIwREHSg5YJivSdBIPjOkOtdw8qGCsa4yE7rJz/E=";
+  cargoHash = "sha256-8+8mBbQSFPcjfBB7y+dgyno+EW82ojhPNxx836gCMik=";
 
   prePatch = ''
     sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service

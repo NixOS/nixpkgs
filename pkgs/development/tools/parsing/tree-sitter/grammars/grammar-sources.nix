@@ -1329,12 +1329,15 @@
   };
 
   just = {
-    version = "0-unstable-2025-01-05";
-    url = "github:IndianBoy42/tree-sitter-just";
-    rev = "bb0c898a80644de438e6efe5d88d30bf092935cd";
-    hash = "sha256-FwEuH/2R745jsuFaVGNeUTv65xW+MPjbcakRNcAWfZU=";
+    version = "0-unstable-2026-03-15";
+    url = "github:casey/tree-sitter-just";
+    rev = "d9da862c156020c1a83d3c6ccdda32be6d8a5d4a";
+    hash = "sha256-YV+vab/QqGHVPV1e3wjd0w1nFskJEIU4ukq/yIlojk0=";
     meta = {
       license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        Stebalien
+      ];
     };
   };
 
