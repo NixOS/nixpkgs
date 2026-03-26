@@ -16,9 +16,22 @@
   versionCheckHook,
   nix-update-script,
   llvmPackages,
+  makeWrapper,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
+
+  # Extension(s) Dependencies
+  python3,
+  bash,
+  # X11
+  xdotool,
+  wmctrl,
+  xclip,
+  xwininfo,
+  # Wayland
+  wtype,
+  wl-clipboard,
 }:
 
 let
@@ -58,6 +71,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
     protobuf
     rustPlatform.bindgenHook
+    makeWrapper
   ];
 
   buildInputs = [
@@ -75,6 +89,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mkdir -p tokenizer_files/Xenova--gpt-4o tokenizer_files/Xenova--claude-tokenizer
     ln -s ${gpt-4o-tokenizer} tokenizer_files/Xenova--gpt-4o/tokenizer.json
     ln -s ${claude-tokenizer} tokenizer_files/Xenova--claude-tokenizer/tokenizer.json
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/goose \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          [
+            bash
+            python3
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isLinux [
+            # X11
+            xdotool
+            wmctrl
+            xclip
+            xwininfo
+            # Wayland
+            wtype
+            wl-clipboard
+          ]
+        )
+      }
   '';
 
   nativeCheckInputs = [
