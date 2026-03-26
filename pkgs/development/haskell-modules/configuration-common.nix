@@ -1977,6 +1977,8 @@ with haskellLib;
   # TODO: remove after PR https://github.com/Tritlo/duckdb-haskell/pull/9 is merged
   duckdb-ffi = dontCheck super.duckdb-ffi;
 
+  duckdb-simple = doJailbreak super.duckdb-simple;
+
   spacecookie = overrideCabal (old: {
     buildTools = (old.buildTools or [ ]) ++ [ pkgs.buildPackages.installShellFiles ];
     # let testsuite discover the resulting binary
