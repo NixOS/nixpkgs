@@ -8,18 +8,19 @@
   setuptools-scm,
   pytestCheckHook,
   typing-extensions,
+  types-lxml,
 }:
 
 buildPythonPackage rec {
   pname = "docx2python";
-  version = "4.0.0";
+  version = "3.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShayHill";
     repo = "docx2python";
     tag = version;
-    hash = "sha256-seOm5u5PDqDaPytQ8kfVr0CJV/Uv4NtWhmANWcSLp/M=";
+    hash = "sha256-1/v8slL7EYwXM8ybcJKIdjLBKNBxHgdF4gQHDYyJg6w=";
   };
 
   build-system = [
@@ -29,6 +30,7 @@ buildPythonPackage rec {
 
   dependencies = [
     lxml
+    types-lxml
     paragraphs
     typing-extensions
   ];
