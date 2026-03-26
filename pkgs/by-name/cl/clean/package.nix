@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail /usr/bin/gcc ${gcc}/bin/gcc
   '';
 
+  env.NIX_CFLAGS_COMPILE = "-std=gnu17";
+
   buildFlags = [ "-C src/" ];
 
   # do not strip libraries and executables since all symbols since they are

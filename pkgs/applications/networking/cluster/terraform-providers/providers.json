@@ -1157,13 +1157,13 @@
     "vendorHash": "sha256-SY13J+aguuOicQnNBgutjIGh0njrLubpNl0c0b4kNwo="
   },
   "sap-cloud-infrastructure_sci": {
-    "hash": "sha256-m3degJZruqRkA/lSnNQrLfJIlpl5k8qCpbyIcsyV5/U=",
+    "hash": "sha256-eQA4mY+Rx5PLbTgGqfefYFc5gZKIvt1w2eag8ipE0PI=",
     "homepage": "https://registry.terraform.io/providers/sap-cloud-infrastructure/sci",
     "owner": "SAP-cloud-infrastructure",
     "repo": "terraform-provider-sci",
-    "rev": "v2.2.1",
+    "rev": "v2.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-WDyULPLN+uZ5OaE/j3FgurHbXKRU93S3nbXk8mW5dc4="
+    "vendorHash": "sha256-InCRL4k6v0avmnNja+b6Ozg5+injxa8EmrRHIWrq4Ag="
   },
   "sap_btp": {
     "hash": "sha256-5b8XFH7aPnjuf/yaMBecjM964e36KBclZZC+/kyhZDk=",
@@ -1301,11 +1301,11 @@
     "vendorHash": "sha256-Hzq97ElAjs7Y4tmJ2x7+g4j74MEdEvI2bD8pkvi5ZXg="
   },
   "temporalio_temporalcloud": {
-    "hash": "sha256-ZoDn6s4YlgoMrrAeUVmKx0rASEDoZVbcV4eFjZxaFQA=",
+    "hash": "sha256-8jui3CeYBu2xWHO5SgLvVKBfh2icUCQrKAFoRwdrev8=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v1.2.1",
+    "rev": "v1.3.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-omxEb+ntQuHDfS2Rmt0rj0BF0Q2T8DLhobLua2uU/0o="
   },

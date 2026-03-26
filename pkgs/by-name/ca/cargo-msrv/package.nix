@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-msrv";
-  version = "0.19.2";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "cargo-msrv";
     tag = "v${finalAttrs.version}";
-    sha256 = "sha256-GsreJpQ+WsiKIRbQx4gXyH24JnoMUgJSVLFvljWxJq8=";
+    sha256 = "sha256-qt1Mlj4/DSh8V/SkgorLJFRdLwbtXyOvrISU1vmXzyg=";
   };
 
-  cargoHash = "sha256-+7O+9wS72QCHNYcXJUFyc4I9PFH5B8OvisVKf5bBDdY=";
+  cargoHash = "sha256-cqTSLpmS/9BgtuVXlqBrxpFCPPs+wFhqOalOVhPD5r8=";
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
+      chrjabs
     ];
   };
 })

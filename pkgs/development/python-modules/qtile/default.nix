@@ -2,37 +2,70 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  pkg-config,
+  wayland-scanner,
+
+  # dependencies
   cairocffi,
   dbus-fast,
-  aiohttp,
-  cairo,
-  cffi,
-  glib,
   iwlib,
   libcst,
-  libdrm,
-  libinput,
-  libxkbcommon,
   mpd2,
-  pango,
-  pixman,
-  pkg-config,
   psutil,
   pulsectl-asyncio,
   pygobject3,
   pytz,
   pyxdg,
-  setuptools,
-  setuptools-scm,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots,
-  libxcb-cursor,
-  libxcb-wm,
   xcffib,
-  nixosTests,
   extraPackages ? [ ],
+
+  # buildInputs
+  cairo,
+  libinput,
+  libxcb-wm,
+  libxkbcommon,
+  wayland,
+  wlroots,
+  # environment & pypaBuildFlags
+  libdrm,
+  pixman,
+  glib,
+  pango,
+  libxcb-cursor,
+
+  # propagatedBuildInputs
+  aiohttp,
+  cffi,
+  wayland-protocols,
+
+  # checkInputs
+  gtk3,
+  librsvg,
+
+  # nativeCheckInputs
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-xdist,
+  writableTmpDirAsHomeHook,
+  anyio,
+  fontconfig,
+  gdk-pixbuf,
+  gobject-introspection,
+  isort,
+  wxsvg,
+  xorg-server,
+  xterm,
+  xvfb,
+
+  # passthru.tests
+  nixosTests,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -50,10 +83,16 @@ buildPythonPackage (finalAttrs: {
     hash = "sha256-5XHzlS/Knw/VmVtnM7wToJ/F12GAa2lwdWuXBJHXnZM=";
   };
 
+  patches = [
+    # https://github.com/qtile/qtile/pull/5889
+    ./fix-test-net.patch
+  ];
+
   build-system = [
     setuptools
     setuptools-scm
   ];
+
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
@@ -76,7 +115,9 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = extraPackages ++ [
+    aiohttp
     (cairocffi.override { withXcffib = true; })
+    cffi
     dbus-fast
     iwlib
     libcst
@@ -92,20 +133,71 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     cairo
     libinput
+    libxcb-wm
     libxkbcommon
     wayland
     wlroots
-    libxcb-wm
   ];
 
   propagatedBuildInputs = [
     wayland-protocols
-    cffi
-    xcffib
-    aiohttp
   ];
 
-  doCheck = false;
+  pythonImportsCheck = [ "libqtile" ];
+
+  checkInputs = [
+    gtk3
+    librsvg
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-httpbin
+    pytest-xdist
+    writableTmpDirAsHomeHook
+    anyio
+    fontconfig
+    gdk-pixbuf
+    gobject-introspection
+    isort
+    wxsvg
+    xorg-server
+    xterm
+    xvfb
+  ];
+
+  preCheck = ''
+    export PATH=$PATH:$out/bin
+  '';
+
+  disabledTests = [
+    # ModuleNotFoundError: No module named 'libqtile'
+    # known issue upstream: https://github.com/qtile/qtile/issues/5883
+    "test_identify_output"
+
+    # caused by dbus-fast trying to read '/var/lib/dbus/machine-id'
+    "test_defaults"
+    "test_device_actions"
+    "test_adapter_actions"
+    "test_statusnotifier_defaults"
+    "test_custom_symbols"
+    "test_statusnotifier_defaults_vertical_bar"
+    "test_default_show_battery"
+    "test_statusnotifier_icon_size"
+    "test_missing_adapter"
+    "test_statusnotifier_left_click"
+    "test_default_text"
+    "test_statusnotifier_left_click_vertical_bar"
+    "test_default_device"
+
+    # PermissionError: [Errno 13] Permission denied: '/var'
+    "test_thermal_zone_getting_value"
+
+    # Probably won't work in the Nix sandbox due to `xcffib.ConnectionException`
+    "test_urgent_hook_fire"
+  ];
+
   passthru = {
     tests.qtile = nixosTests.qtile;
     providedSessions = [ "qtile" ];
