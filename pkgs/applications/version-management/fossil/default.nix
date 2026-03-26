@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fossil";
-  version = "2.27";
+  version = "2.28";
 
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
-    hash = "sha256-XzP5IKhlYi+ZBpWrKO7xc2Nb4i0ylYctd2aUG8S31DQ=";
+    hash = "sha256-y5joXR+QZAyYniRSHpD+vJjtjuPyZj2Lg6RFsVvMg9M=";
   };
 
   # required for build time tool `./tools/translate.c`
@@ -53,11 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   preBuild = ''
     export USER=nonexistent-but-specified-user
-  '';
-
-  # see https://fossil-scm.org/home/vinfo/4619d2efab946460?diff=1
-  preCheck = ''
-    mv test/settings.test test/settings.test.off
   '';
 
   installPhase = ''
