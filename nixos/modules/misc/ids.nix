@@ -337,7 +337,7 @@ in
       hadoop = 297;
       #hydron = 298; # removed 2024-08-03
       cfssl = 299;
-      cassandra = 300;
+      #cassandra = 300; # removed 2026-03-26
       qemu-libvirtd = 301;
       # kvm = 302; # unused
       # render = 303; # unused
@@ -663,7 +663,7 @@ in
       hadoop = 297;
       #hydron = 298; # removed 2024-08-03
       cfssl = 299;
-      cassandra = 300;
+      #cassandra = 300; # removed 2026-03-26
       qemu-libvirtd = 301;
       kvm = 302; # default udev rules from systemd requires these
       render = 303; # default udev rules from systemd requires these

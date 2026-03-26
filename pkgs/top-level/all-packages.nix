@@ -8043,14 +8043,6 @@ with pkgs;
 
   appdaemon = callPackage ../servers/home-assistant/appdaemon.nix { };
 
-  cassandra_4 = callPackage ../servers/nosql/cassandra/4.nix {
-    # Effective Cassandra 4.0.2 there is full Java 11 support
-    #  -- https://cassandra.apache.org/doc/latest/cassandra/new/java11.html
-    jre = pkgs.jdk11_headless;
-    python = python3;
-  };
-  cassandra = cassandra_4;
-
   inherit (callPackages ../servers/asterisk { })
     asterisk
     asterisk-stable
