@@ -1301,11 +1301,11 @@
     "vendorHash": "sha256-Hzq97ElAjs7Y4tmJ2x7+g4j74MEdEvI2bD8pkvi5ZXg="
   },
   "temporalio_temporalcloud": {
-    "hash": "sha256-ZoDn6s4YlgoMrrAeUVmKx0rASEDoZVbcV4eFjZxaFQA=",
+    "hash": "sha256-8jui3CeYBu2xWHO5SgLvVKBfh2icUCQrKAFoRwdrev8=",
     "homepage": "https://registry.terraform.io/providers/temporalio/temporalcloud",
     "owner": "temporalio",
     "repo": "terraform-provider-temporalcloud",
-    "rev": "v1.2.1",
+    "rev": "v1.3.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-omxEb+ntQuHDfS2Rmt0rj0BF0Q2T8DLhobLua2uU/0o="
   },
