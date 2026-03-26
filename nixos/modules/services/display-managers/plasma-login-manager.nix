@@ -53,18 +53,36 @@ in
   };
 
   config = mkIf cfg.enable {
-    services.displayManager.enable = true;
+    # Use NixOS's display-manager.service instead of upstream's plasmalogin.service.
+    # The upstream unit has Alias=display-manager.service, which causes systemd to
+    # establish a ConsistsOf relationship with graphical.target. When
+    # switch-to-configuration restarts graphical.target, PLM gets stopped as a
+    # side effect, killing the user session.
+    services.displayManager = {
+      enable = true;
+      execCmd = "exec ${cfg.package}/bin/plasmalogin";
+    };
 
     environment.systemPackages = [ cfg.package ];
-    systemd.packages = [ cfg.package ];
+    # Don't use systemd.packages as it imports the upstream plasmalogin.service
     systemd.tmpfiles.packages = [ cfg.package ];
     services.dbus.packages = [ cfg.package ];
 
-    systemd.services.plasmalogin = {
-      aliases = [ "display-manager.service" ];
+    # Force enable display-manager.service (default.nix disables it when no
+    # known DM like sddm/gdm is enabled)
+    systemd.services.display-manager.enable = true;
+
+    # Copy the After/Conflicts from the upstream unit and add PLM to PATH
+    systemd.services.display-manager = {
+      after = [
+        "systemd-user-sessions.service"
+        "plymouth-quit.service"
+        "systemd-logind.service"
+      ];
+      conflicts = [
+        "getty@tty1.service"
+      ];
       path = [ cfg.package ];
-      wantedBy = [ "graphical.target" ];
-      restartIfChanged = false;
     };
 
     systemd.defaultUnit = "graphical.target";
