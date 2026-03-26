@@ -9013,10 +9013,6 @@ self: super: with self; {
 
   llama-index-core = callPackage ../development/python-modules/llama-index-core { };
 
-  llama-index-embeddings-gemini =
-    callPackage ../development/python-modules/llama-index-embeddings-gemini
-      { };
-
   llama-index-embeddings-huggingface =
     callPackage ../development/python-modules/llama-index-embeddings-huggingface
       { };
