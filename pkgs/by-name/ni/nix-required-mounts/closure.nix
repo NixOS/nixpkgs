@@ -8,6 +8,7 @@
   runCommand,
   python3Packages,
   allowedPatterns,
+  formats,
 }:
 runCommand "allowed-patterns.json"
   {
@@ -30,7 +31,7 @@ runCommand "allowed-patterns.json"
     ) (builtins.attrNames allowedPatterns);
     env = {
       storeDir = "${builtins.storeDir}/";
-      shallowConfigPath = builtins.toFile "shallow-config.json" (builtins.toJSON allowedPatterns);
+      shallowConfigPath = (formats.json { }).generate "shallow-config.json" allowedPatterns;
     };
   }
   ''
