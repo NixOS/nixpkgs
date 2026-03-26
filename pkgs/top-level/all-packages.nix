@@ -273,11 +273,6 @@ with pkgs;
 
   # addDriverRunpath is the preferred package name, as this enables
   # many more scenarios than just opengl now.
-  aocd = with python3Packages; toPythonApplication aocd;
-
-  cve = with python3Packages; toPythonApplication cvelib;
-
-  bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
   # wheel building fail with:
@@ -333,8 +328,6 @@ with pkgs;
 
   dhallToNix = callPackage ../build-support/dhall/to-nix.nix { };
 
-  dinghy = with python3Packages; toPythonApplication dinghy;
-
   djgpp = djgpp_i586;
   djgpp_i586 = callPackage ../development/compilers/djgpp {
     targetArchitecture = "i586";
@@ -346,8 +339,6 @@ with pkgs;
       stdenv = gccStdenv;
     }
   );
-
-  dnf-plugins-core = with python3Packages; toPythonApplication dnf-plugins-core;
 
   dnf4 = python3Packages.callPackage ../development/python-modules/dnf4/wrapper.nix { };
 
@@ -376,8 +367,6 @@ with pkgs;
   deviceTree = callPackage ../os-specific/linux/device-tree { };
 
   octodns-providers = octodns.providers;
-
-  oletools = with python3.pkgs; toPythonApplication oletools;
 
   ollama-cpu = callPackage ../by-name/ol/ollama/package.nix { acceleration = false; };
   ollama-rocm = callPackage ../by-name/ol/ollama/package.nix { acceleration = "rocm"; };
@@ -493,8 +482,6 @@ with pkgs;
     ;
 
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
-
-  magika = with python3Packages; toPythonApplication magika;
 
   mysql-shell = mysql-shell_8;
 
@@ -977,17 +964,11 @@ with pkgs;
 
   _7zz-rar = _7zz.override { enableUnfree = true; };
 
-  acquire = with python3Packages; toPythonApplication acquire;
-
-  actdiag = with python3.pkgs; toPythonApplication actdiag;
-
   opnplug = adlplug.override { type = "OPN"; };
 
   aflplusplus = callPackage ../tools/security/aflplusplus { wine = null; };
 
   libdislocator = callPackage ../tools/security/aflplusplus/libdislocator.nix { };
-
-  aioblescan = with python3Packages; toPythonApplication aioblescan;
 
   inherit (recurseIntoAttrs (callPackage ../tools/package-management/akku { }))
     akku
@@ -997,24 +978,16 @@ with pkgs;
   alice-tools-qt5 = alice-tools.override { withQt5 = true; };
   alice-tools-qt6 = alice-tools.override { withQt6 = true; };
 
-  auditwheel = with python3Packages; toPythonApplication auditwheel;
-
   btrsync = with python3Packages; toPythonApplication btrsync;
 
   davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix {
     studioVariant = true;
   };
 
-  dehinter = with python3Packages; toPythonApplication dehinter;
-
   gamescope-wsi = callPackage ../by-name/ga/gamescope/package.nix {
     enableExecutable = false;
     enableWsi = true;
   };
-
-  font-v = with python3Packages; toPythonApplication font-v;
-
-  fontbakery = with python3Packages; toPythonApplication fontbakery;
 
   genealogos-api = genealogos-cli.override {
     crate = "api";
@@ -1042,17 +1015,9 @@ with pkgs;
     withUsdView = true;
   };
 
-  py7zr = with python3Packages; toPythonApplication py7zr;
-
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
 
   inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
-
-  sdkmanager = with python3Packages; toPythonApplication sdkmanager;
-
-  shaperglot = with python3Packages; toPythonApplication shaperglot;
-
-  ufolint = with python3Packages; toPythonApplication ufolint;
 
   ventoy-full = ventoy.override {
     withCryptsetup = true;
@@ -1068,8 +1033,6 @@ with pkgs;
   ventoy-full-qt = ventoy-full.override {
     defaultGuiType = "qt5";
   };
-
-  vprof = with python3Packages; toPythonApplication vprof;
 
   waydroid-nftables = waydroid.override { withNftables = true; };
 
@@ -1111,13 +1074,7 @@ with pkgs;
     withpcre2 = false;
   };
 
-  bump2version = with python3Packages; toPythonApplication bump2version;
-
   cgit = callPackage ../applications/version-management/cgit { };
-
-  datalad = with python3Packages; toPythonApplication datalad;
-
-  datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
   forgejo-lts = callPackage ../by-name/fo/forgejo/lts.nix { };
 
@@ -1161,12 +1118,6 @@ with pkgs;
   inherit (haskellPackages) git-brunch;
 
   git-autofixup = perlPackages.GitAutofixup;
-
-  ghrepo-stats = with python3Packages; toPythonApplication ghrepo-stats;
-
-  git-filter-repo = with python3Packages; toPythonApplication git-filter-repo;
-
-  git-revise = with python3Packages; toPythonApplication git-revise;
 
   ### APPLICATIONS/EMULATORS
 
@@ -1251,8 +1202,6 @@ with pkgs;
     in
     ppsspp.override argset;
 
-  py65 = with python3.pkgs; toPythonApplication py65;
-
   rmg-wayland = callPackage ../by-name/rm/rmg/package.nix {
     withWayland = true;
   };
@@ -1332,8 +1281,6 @@ with pkgs;
     termite = termite-unwrapped;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
-
-  twine = with python3Packages; toPythonApplication twine;
 
   inherit (callPackages ../development/tools/ammonite { })
     ammonite_2_12
@@ -1424,8 +1371,6 @@ with pkgs;
     ;
 
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
-
-  blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
   bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
   bucklespring = bucklespring-x11;
