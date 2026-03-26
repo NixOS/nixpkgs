@@ -189,6 +189,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       thardin
       brittonr
       miniharinn
+      caniko
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
