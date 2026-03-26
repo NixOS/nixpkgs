@@ -28,7 +28,7 @@
   c-ares,
 }:
 let
-  version = "2024.1.4";
+  version = "2024.1.5";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "simgear";
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flightgear";
     repo = "simgear";
     tag = finalAttrs.version;
-    hash = "sha256-WJI15egN1H+EAIaFuI3svYCvM0xzsIGcIPsZgLsvBc0=";
+    hash = "sha256-WONlVdfDWIcoj/UfcFA4Vw5edlgr0vlT/fjIPDti7fk=";
   };
 
   nativeBuildInputs = [ cmake ];
