@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-BYgY9kC91ftpw/eXlFT5ryNhjz138pzPoIh89k46GZ8=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v4.1.0/collectives-4.1.0.tar.gz",
-    "version": "4.1.0",
+    "hash": "sha256-h6Krtrm9YLZ0TEfsInN2bmY+/2v4Gyef5x0TIo9n/Ns=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v4.2.0/collectives-4.2.0.tar.gz",
+    "version": "4.2.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -420,9 +420,9 @@
     ]
   },
   "twofactor_admin": {
-    "hash": "sha256-tZG2NCd4WxnPwf1KJq5mBX7Zfy0rDjigJGOw2qypUlU=",
-    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.11.0/twofactor_admin-v4.11.0.tar.gz",
-    "version": "4.11.0",
+    "hash": "sha256-dx8bEsC/rSAKN9rwP2hf3d8G3f3J1RzCrSqU6BbcvRY=",
+    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.11.1/twofactor_admin-v4.11.1.tar.gz",
+    "version": "4.11.1",
     "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
     "homepage": "",
     "licenses": [
@@ -460,9 +460,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-Xl35Ss/P6PvK6pvm7i/J+0EHJaLPbOCffR8ZT5c3XA4=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v8.6.1/user_oidc-v8.6.1.tar.gz",
-    "version": "8.6.1",
+    "hash": "sha256-wAAooaPTsCjCS6UCzUuFeSJ6EUnXPYo3TK6jXLs/Lfk=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v8.7.0/user_oidc-v8.7.0.tar.gz",
+    "version": "8.7.0",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
@@ -470,9 +470,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-oezyc/YXOG1vlw8kNLfVkhA7/WVWfTnL/hb1KSY78ho=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v7.1.3/user_saml-v7.1.3.tar.gz",
-    "version": "7.1.3",
+    "hash": "sha256-A4e4LYCcrt+LcyrSK9vQoNGG/a+bZU6K4umajrgDBIM=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v7.1.4/user_saml-v7.1.4.tar.gz",
+    "version": "7.1.4",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
