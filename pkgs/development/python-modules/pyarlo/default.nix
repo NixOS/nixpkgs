@@ -6,13 +6,14 @@
   pytestCheckHook,
   requests,
   requests-mock,
+  setuptools,
   sseclient-py,
 }:
 
 buildPythonPackage rec {
   pname = "pyarlo";
   version = "0.2.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tchellomello";
@@ -21,7 +22,9 @@ buildPythonPackage rec {
     sha256 = "0pp7y2llk4xnf6zh57j5xas0gw5zqm42qaqssd8p4qa3g5rds8k3";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     sseclient-py
   ];
