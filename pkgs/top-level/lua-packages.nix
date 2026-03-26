@@ -132,7 +132,7 @@ rec {
       };
 
       # The makefile tries to link to `-llua<luaversion>`
-      LUA_LIBS = "-llua";
+      env.LUA_LIBS = "-llua";
 
       buildInputs =
         lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ]

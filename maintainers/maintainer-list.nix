@@ -27942,6 +27942,12 @@
     githubId = 131159000;
     name = "Nitin Passa";
   };
+  twoneis = {
+    email = "nix@chpu.eu";
+    github = "twoneis";
+    githubId = 48321566;
+    name = "Mira Chacku Purakal";
+  };
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
