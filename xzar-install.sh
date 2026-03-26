@@ -3,6 +3,7 @@
 set -euo pipefail
 
 nix-shell -p rustc cargo gcc pkg-config openssl --run "cargo install --git https://github.com/mkg20001/xzar xzar-client --bin xzar"
+nix profile install nixpkgs#pixz
 ~/.cargo/bin/xzar config add-server planai https://xzar.plan.ai "$XZAR_TOKEN"
 
 cp -L /etc/nix/nix.conf /etc/nix/nix.conf.
