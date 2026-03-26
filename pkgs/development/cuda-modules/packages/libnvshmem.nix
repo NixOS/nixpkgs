@@ -192,7 +192,10 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = [ maintainers.connorbaker ];
+    maintainers = with maintainers; [
+      connorbaker
+      GaetanLepage
+    ];
     teams = [ teams.cuda ];
   };
 })
