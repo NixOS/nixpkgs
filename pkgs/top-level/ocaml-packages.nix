@@ -2104,6 +2104,12 @@ let
 
         terml = callPackage ../development/ocaml-modules/terml { };
 
+        testo = callPackage ../development/ocaml-modules/testo { };
+
+        testo-diff = callPackage ../development/ocaml-modules/testo/diff.nix { };
+
+        testo-util = callPackage ../development/ocaml-modules/testo/util.nix { };
+
         tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
         tezt = callPackage ../development/ocaml-modules/tezt { };
