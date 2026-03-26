@@ -18,13 +18,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdmr";
-  version = "0.13.3";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Nw5B0vbYlGkH/8SAAT4DdTp2qiiLst3hWV4n6uF7oUo=";
+    hash = "sha256-9YYMU64AWBp3YAyWEQiER0lH8OeI7AczEztw6UHqmOE=";
   };
 
   nativeBuildInputs = [

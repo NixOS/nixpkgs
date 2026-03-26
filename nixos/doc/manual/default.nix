@@ -64,6 +64,7 @@ let
       eval = nixos-lib.evalTest {
         # Avoid evaluating a NixOS config prototype.
         config.node.type = types.deferredModule;
+        config.hostPkgs = pkgs;
         options._module.args = mkOption { internal = true; };
       };
     in

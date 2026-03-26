@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gitUpdater,
@@ -28,14 +29,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "devpi-web";
-  version = "5.0.1";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "devpi";
     repo = "devpi";
     tag = "web-${finalAttrs.version}";
-    hash = "sha256-p52uwkXeCPPsnD9BLfqEa8NK4bAfIdpYIzdNgmwucms=";
+    hash = "sha256-rAku3oHcmzFNA/MP/64382gCTgqopwjjy4S4HTEFZiY=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/web";
@@ -68,6 +69,11 @@ buildPythonPackage (finalAttrs: {
     pytest-cov-stub
     packaging-legacy
     webtest
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/devpi/devpi/issues/1114
+    "test_dont_index_deleted_mirror"
   ];
 
   pythonImportsCheck = [ "devpi_web" ];

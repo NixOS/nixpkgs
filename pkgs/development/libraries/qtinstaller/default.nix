@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ];
 
   setOutputFlags = false;
-  NIX_QT_SUBMODULE = true;
+  env.NIX_QT_SUBMODULE = true;
   dontWrapQtApps = true;
 
   installPhase = ''
