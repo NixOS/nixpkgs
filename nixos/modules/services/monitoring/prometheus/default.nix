@@ -59,7 +59,7 @@ let
 
   # This becomes the main config file for Prometheus
   promConfig = {
-    global = filterValidPrometheus cfg.globalConfig;
+    global = filterValidPrometheus (cfg.extraGlobalConfig // cfg.globalConfig);
     scrape_configs = filterValidPrometheus cfg.scrapeConfigs;
     remote_write = filterValidPrometheus cfg.remoteWrite;
     remote_read = filterValidPrometheus cfg.remoteRead;
@@ -1816,6 +1816,16 @@ in
       description = ''
         Parameters that are valid in all  configuration contexts. They
         also serve as defaults for other configuration sections
+      '';
+    };
+
+    extraGlobalConfig = mkOption {
+      type = types.anything;
+      default = { };
+      description = ''
+        Extra global config that which is not type checked by nixos. Options
+        configurable via {option}`services.prometheus.globalConfig` will get
+        overridden and must be configured there.
       '';
     };
 
