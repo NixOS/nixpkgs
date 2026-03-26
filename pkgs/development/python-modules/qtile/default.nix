@@ -2,53 +2,70 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # nativeBuildInputs
+  pkg-config,
+  wayland-scanner,
+
+  # dependencies
   cairocffi,
   dbus-fast,
-  aiohttp,
-  cairo,
-  cffi,
-  glib,
   iwlib,
   libcst,
-  libdrm,
-  libinput,
-  libxkbcommon,
   mpd2,
-  pango,
-  pixman,
-  pkg-config,
   psutil,
   pulsectl-asyncio,
   pygobject3,
   pytz,
   pyxdg,
-  setuptools,
-  setuptools-scm,
-  wayland,
-  wayland-protocols,
-  wayland-scanner,
-  wlroots,
-  libxcb-cursor,
-  libxcb-wm,
   xcffib,
-  nixosTests,
+  extraPackages ? [ ],
+
+  # buildInputs
+  cairo,
+  libinput,
+  libxcb-wm,
+  libxkbcommon,
+  wayland,
+  wlroots,
+  # environment & pypaBuildFlags
+  libdrm,
+  pixman,
+  glib,
+  pango,
+  libxcb-cursor,
+
+  # propagatedBuildInputs
+  aiohttp,
+  cffi,
+  wayland-protocols,
+
+  # checkInputs
+  gtk3,
+  librsvg,
+
+  # nativeCheckInputs
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-httpbin,
+  pytest-xdist,
+  writableTmpDirAsHomeHook,
   anyio,
   fontconfig,
   gdk-pixbuf,
   gobject-introspection,
-  gtk3,
   isort,
-  librsvg,
-  pytest-asyncio,
-  pytest-httpbin,
-  pytest-xdist,
-  pytestCheckHook,
-  writableTmpDirAsHomeHook,
   wxsvg,
   xorg-server,
   xterm,
   xvfb,
-  extraPackages ? [ ],
+
+  # passthru.tests
+  nixosTests,
 }:
 
 buildPythonPackage (finalAttrs: {
@@ -116,10 +133,10 @@ buildPythonPackage (finalAttrs: {
   buildInputs = [
     cairo
     libinput
+    libxcb-wm
     libxkbcommon
     wayland
     wlroots
-    libxcb-wm
   ];
 
   propagatedBuildInputs = [
@@ -134,16 +151,16 @@ buildPythonPackage (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-httpbin
+    pytest-xdist
+    writableTmpDirAsHomeHook
     anyio
     fontconfig
     gdk-pixbuf
     gobject-introspection
     isort
-    pytest-asyncio
-    pytest-httpbin
-    pytest-xdist
-    pytestCheckHook
-    writableTmpDirAsHomeHook
     wxsvg
     xorg-server
     xterm
