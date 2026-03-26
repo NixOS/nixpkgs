@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.34.1";
+  version = "2.35.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-ot+yN5PzMS4BP4G0XMsG2ZYWTjEfZrQ6glcmoRUUzDY=";
+    hash = "sha256-H3Oa0SJR74dzZvg9u2drLmH/FNsc1hVUz2MEz/TV1rg=";
   };
   patches = [
   ];
