@@ -320,7 +320,6 @@ in
               };
               port = lib.mkOption {
                 type = lib.types.nullOr lib.types.port;
-                default = null;
                 description = ''
                   Port to listen to.
                 '';
@@ -475,7 +474,6 @@ in
             options = {
               AcceptEnv = lib.mkOption {
                 type = lib.types.nullOr (lib.types.listOf lib.types.str);
-                default = null;
                 description = ''
                   Specifies what environment variables sent by the client will be copied into the session's
                   environment. The TERM environment variable is always accepted whenever the client requests
@@ -632,7 +630,6 @@ in
               };
               AllowUsers = lib.mkOption {
                 type = with lib.types; nullOr (listOf str);
-                default = null;
                 description = ''
                   If specified, login is allowed only for the listed users.
                   See {manpage}`sshd_config(5)` for details.
@@ -649,7 +646,6 @@ in
               };
               AllowGroups = lib.mkOption {
                 type = with lib.types; nullOr (listOf str);
-                default = null;
                 description = ''
                   If specified, login is allowed only for users part of the
                   listed groups.
@@ -658,7 +654,6 @@ in
               };
               DenyGroups = lib.mkOption {
                 type = with lib.types; nullOr (listOf str);
-                default = null;
                 description = ''
                   If specified, login is denied for all users part of the listed
                   groups. Takes precedence over

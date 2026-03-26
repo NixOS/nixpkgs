@@ -82,7 +82,6 @@ in
             };
             runnerDescription = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               example = "Runner for video transcription";
               description = "Runner description declared to the PeerTube instance.";
             };

@@ -272,7 +272,6 @@ in
         options = {
           RELEASE_COOKIE = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique secret identifier for the Erlang
               cluster. All Firezone components in your cluster must use the
@@ -287,7 +286,6 @@ in
 
           TOKENS_KEY_BASE = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique base64 encoded secret for the
               `TOKENS_KEY_BASE`. All Firezone components in your cluster must
@@ -302,7 +300,6 @@ in
 
           SECRET_KEY_BASE = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique base64 encoded secret for the
               `SECRET_KEY_BASE`. All Firezone components in your cluster must
@@ -317,7 +314,6 @@ in
 
           TOKENS_SALT = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique base64 encoded secret for the
               `TOKENS_SALT`. All Firezone components in your cluster must
@@ -332,7 +328,6 @@ in
 
           LIVE_VIEW_SIGNING_SALT = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique base64 encoded secret for the
               `LIVE_VIEW_SIGNING_SALT`. All Firezone components in your cluster must
@@ -347,7 +342,6 @@ in
 
           COOKIE_SIGNING_SALT = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique base64 encoded secret for the
               `COOKIE_SIGNING_SALT`. All Firezone components in your cluster must
@@ -362,7 +356,6 @@ in
 
           COOKIE_ENCRYPTION_SALT = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               A file containing a unique base64 encoded secret for the
               `COOKIE_ENCRYPTION_SALT`. All Firezone components in your cluster must
@@ -613,7 +606,6 @@ in
 
                       adapter_config.clientSecretFile = mkOption {
                         type = types.nullOr types.path;
-                        default = null;
                         description = ''
                           A file containing a the client secret for an openid_connect adapter.
                           You only need to set this if this is an openid_connect provider.

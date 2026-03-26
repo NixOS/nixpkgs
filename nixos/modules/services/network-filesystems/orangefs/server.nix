@@ -98,14 +98,12 @@ in
 
       dataStorageSpace = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "/data/storage";
         description = "Directory for data storage.";
       };
 
       metadataStorageSpace = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "/data/meta";
         description = "Directory for meta data storage.";
       };

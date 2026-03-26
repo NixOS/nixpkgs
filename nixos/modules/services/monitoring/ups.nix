@@ -438,7 +438,6 @@ let
             "primary"
             "secondary"
           ]);
-        default = null;
         description = ''
           Add the necessary actions for a upsmon process to work.
           See `man upsd.users` for details.

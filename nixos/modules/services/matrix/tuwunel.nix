@@ -96,7 +96,6 @@ in
           };
           global.unix_socket_path = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
-            default = null;
             description = ''
               Listen on a UNIX socket at the specified path. If listening on a UNIX socket,
               listening on an address will be disabled. The `address` option must be set to

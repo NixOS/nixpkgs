@@ -90,7 +90,6 @@ in
 
     backupDir = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       description = ''
         The directory under which vaultwarden will backup its persistent data.
       '';

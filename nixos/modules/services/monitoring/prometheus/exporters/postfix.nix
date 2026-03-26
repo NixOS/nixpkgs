@@ -70,7 +70,6 @@ in
       };
       slice = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Name of the postfix systemd slice.
           This overrides the {option}`systemd.unit`.

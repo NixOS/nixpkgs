@@ -112,7 +112,6 @@ in
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         example = "/run/keys/agorakit-dbpassword";
         description = ''
           A file containing the password corresponding to
@@ -157,7 +156,6 @@ in
       };
       user = mkOption {
         type = with types; nullOr str;
-        default = null;
         example = "agorakit";
         description = "Mail username.";
       };
@@ -172,7 +170,6 @@ in
       };
       encryption = mkOption {
         type = with types; nullOr (enum [ "tls" ]);
-        default = null;
         description = "SMTP encryption mechanism to use.";
       };
     };

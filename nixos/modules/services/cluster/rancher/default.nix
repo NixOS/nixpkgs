@@ -362,7 +362,6 @@ let
 
             content = lib.mkOption {
               type = with lib.types; nullOr (either attrs (listOf attrs));
-              default = null;
               description = ''
                 Content of the manifest file. A single attribute set will
                 generate a single document YAML file. A list of attribute sets
@@ -461,7 +460,6 @@ let
             File path containing the ${name} token agents can use to connect to the server.
             This option only makes sense on server nodes (`role = server`).
           '';
-          default = null;
         };
 
         extraFlags = lib.mkOption {
@@ -484,7 +482,6 @@ let
 
         configPath = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           description = "File path containing the ${name} YAML config. This is useful when the config is generated (for example on boot).";
         };
 
@@ -497,7 +494,6 @@ let
         nodeName = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Node name.";
-          default = null;
         };
 
         nodeLabel = lib.mkOption {

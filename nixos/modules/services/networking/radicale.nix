@@ -36,7 +36,6 @@ in
       # Default cannot be pkgs.radicale because non-null values suppress
       # warnings about incompatible configuration and storage formats.
       type = with types; nullOr package // { inherit (package) description; };
-      default = null;
       defaultText = literalExpression "pkgs.radicale";
     };
 

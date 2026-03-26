@@ -222,7 +222,6 @@ let
 
           socket = mkOption {
             type = types.nullOr types.path;
-            default = null;
             defaultText = literalExpression "/run/mysqld/mysqld.sock";
             description = "Path to the unix socket file to use for authentication.";
           };

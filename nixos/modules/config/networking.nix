@@ -78,7 +78,6 @@ in
 
       default = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           This option specifies the default value for httpProxy, httpsProxy, ftpProxy and rsyncProxy.
         '';
@@ -137,7 +136,6 @@ in
 
       noProxy = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           This option specifies the no_proxy environment variable.
           If a default proxy is used and noProxy is null,

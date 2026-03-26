@@ -74,7 +74,6 @@ in
 
             advertised = lib.mkOption {
               type = lib.types.nullOr lib.types.bool;
-              default = null;
               description = ''
                 Whether the service should accept new connections.
                 Defaults to `true` when not specified.

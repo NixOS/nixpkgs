@@ -158,7 +158,6 @@ in
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
-          default = null;
           example = "/run/keys/zabbix-dbpassword";
           description = ''
             A file containing the password corresponding to

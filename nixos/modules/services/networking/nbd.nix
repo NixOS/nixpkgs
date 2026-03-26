@@ -106,7 +106,6 @@ in
 
               allowAddresses = mkOption {
                 type = nullOr (listOf str);
-                default = null;
                 example = [
                   "10.10.0.0/24"
                   "127.0.0.1"

@@ -32,7 +32,6 @@ let
             };
             type = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = "Type to be picked up";
             };
           };
@@ -151,7 +150,6 @@ in
         };
         password = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = ''
             MQTT password.
 
@@ -162,17 +160,14 @@ in
         };
         cafile = lib.mkOption {
           type = with lib.types; nullOr path;
-          default = null;
           description = "Certification Authority file for MQTT";
         };
         certfile = lib.mkOption {
           type = with lib.types; nullOr path;
-          default = null;
           description = "Certificate file for MQTT";
         };
         keyfile = lib.mkOption {
           type = with lib.types; nullOr path;
-          default = null;
           description = "Key file for MQTT";
         };
       };
@@ -193,12 +188,10 @@ in
         };
         username = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = "Username for InfluxDB login.";
         };
         password = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = ''
             Password for InfluxDB login.
 

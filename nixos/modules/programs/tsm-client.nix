@@ -124,7 +124,6 @@ let
       };
       options.passworddir = mkOption {
         type = nullOr path;
-        default = null;
         example = "/home/alice/tsm-password";
         description = ''
           Directory that holds the TSM
@@ -133,7 +132,6 @@ let
       };
       options.inclexcl = mkOption {
         type = coercedTo lines (pkgs.writeText "inclexcl.dsm.sys") (nullOr path);
-        default = null;
         example = ''
           exclude.dir     /nix/store
           include.encrypt /home/.../*
@@ -180,7 +178,6 @@ let
     };
     defaultServername = mkOption {
       type = nullOr servernameType;
-      default = null;
       example = "mainTsmServer";
       description = ''
         If multiple server stanzas are declared with

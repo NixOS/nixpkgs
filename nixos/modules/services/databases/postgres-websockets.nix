@@ -32,7 +32,6 @@ in
 
     pgpassFile = lib.mkOption {
       type = with lib.types; nullOr externalPath;
-      default = null;
       example = "/run/keys/db_password";
       description = ''
         The password to authenticate to PostgreSQL with.
@@ -67,7 +66,6 @@ in
 
               # This should not be used; use pgpassFile instead.
               options.password = lib.mkOption {
-                default = null;
                 readOnly = true;
                 internal = true;
               };

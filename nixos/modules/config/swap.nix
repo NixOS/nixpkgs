@@ -126,7 +126,6 @@ let
         };
 
         priority = mkOption {
-          default = null;
           example = 2048;
           type = types.nullOr types.int;
           description = ''

@@ -48,7 +48,6 @@ in
       };
 
       language = mkOption {
-        default = null;
         type = types.nullOr types.str;
         description = "RFC 4646 Language code for text/gemini documents.";
       };

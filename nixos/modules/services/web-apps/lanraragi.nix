@@ -28,7 +28,6 @@ in
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/run/keys/lanraragi-password";
         description = ''
           A file containing the password for LANraragi's admin interface.
@@ -43,7 +42,6 @@ in
         };
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/run/keys/redis-lanraragi-password";
           description = ''
             A file containing the password for LANraragi's Redis server.

@@ -34,7 +34,6 @@ in
     };
 
     environmentFile = mkOption {
-      default = null;
       description = ''
         Environment file (see {manpage}`systemd.exec(5)` "EnvironmentFile="
         section for the syntax) passed to the service. This option can be

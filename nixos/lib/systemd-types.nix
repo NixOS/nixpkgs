@@ -74,7 +74,6 @@ let
           description = ''
             Path of the symlink.
           '';
-          default = null;
         };
 
         source = mkOption {
@@ -235,7 +234,6 @@ in
         imports = [ initrdStorePathModule ];
         options = {
           text = mkOption {
-            default = null;
             type = nullOr lines;
             description = "Text of the file.";
           };

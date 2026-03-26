@@ -52,7 +52,6 @@ in
               This key should not be world-readable, and must be readably by
               the `systemd-journal` group.
             '';
-            default = null;
           };
 
           ServerCertificateFile = lib.mkOption {
@@ -91,7 +90,6 @@ in
               seconds (or in other time units if suffixed with "ms", "min",
               "h", etc). For details, see {manpage}`systemd.time(5)`.
             '';
-            default = null;
           };
         };
       };

@@ -48,7 +48,6 @@ in
       };
 
       blacklist_threshold = lib.mkOption {
-        default = null;
         example = 120;
         type = lib.types.nullOr lib.types.int;
         description = ''

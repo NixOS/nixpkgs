@@ -36,7 +36,6 @@ in
 
     secretFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/run/secrets/wastebin.env";
       description = ''
         Path to file containing sensitive environment variables.

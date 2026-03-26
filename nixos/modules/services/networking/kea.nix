@@ -70,7 +70,6 @@ in
 
           settings = lib.mkOption {
             type = format.type;
-            default = null;
             description = ''
               Kea Control Agent configuration as an attribute set, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/agent.html>.
             '';
@@ -109,7 +108,6 @@ in
 
           settings = lib.mkOption {
             type = format.type;
-            default = null;
             example = {
               valid-lifetime = 4000;
               renew-timer = 1000;
@@ -174,7 +172,6 @@ in
 
           settings = lib.mkOption {
             type = format.type;
-            default = null;
             example = {
               valid-lifetime = 4000;
               renew-timer = 1000;
@@ -229,7 +226,6 @@ in
 
           configFile = lib.mkOption {
             type = nullOr path;
-            default = null;
             description = ''
               Kea DHCP-DDNS configuration as a path, see <https://kea.readthedocs.io/en/kea-${cfg.package.version}/arm/ddns.html>.
 
@@ -240,7 +236,6 @@ in
 
           settings = lib.mkOption {
             type = format.type;
-            default = null;
             example = {
               ip-address = "127.0.0.1";
               port = 53001;

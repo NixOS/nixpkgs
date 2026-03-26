@@ -50,7 +50,6 @@ in
       enable = lib.mkEnableOption "the babeld network routing daemon";
 
       interfaceDefaults = lib.mkOption {
-        default = null;
         description = ''
           A set describing default parameters for babeld interfaces.
           See {manpage}`babeld(8)` for options.

@@ -90,7 +90,6 @@ let
           "flipped-270"
           null
         ];
-        default = null;
       };
     };
   };

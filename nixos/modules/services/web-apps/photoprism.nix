@@ -34,7 +34,6 @@ in
 
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.externalPath;
-      default = null;
       description = ''
         Admin password file.
       '';

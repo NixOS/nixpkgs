@@ -184,7 +184,6 @@ in
       configDir = mkOption {
         description = "Path to Kubernetes CNI configuration directory.";
         type = nullOr path;
-        default = null;
       };
     };
 
@@ -301,7 +300,6 @@ in
         Optional glog verbosity level for logging statements. See
         <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
-      default = null;
       type = nullOr int;
     };
 

@@ -110,7 +110,6 @@ in
       };
 
       userDataDir = lib.mkOption {
-        default = null;
         description = ''
           Specifies the directory that user data is kept in. Can be used to open multiple distinct instances of Code.
         '';
@@ -159,7 +158,6 @@ in
       };
 
       connectionTokenFile = lib.mkOption {
-        default = null;
         description = ''
           Path to a file that contains the connection token.
         '';

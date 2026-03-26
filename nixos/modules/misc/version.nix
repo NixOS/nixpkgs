@@ -134,14 +134,12 @@ in
 
       variant_id = mkOption {
         type = types.nullOr (types.strMatching "^[a-z0-9._-]+$");
-        default = null;
         description = "A lower-case string identifying a specific variant or edition of the operating system";
         example = "installer";
       };
 
       variantName = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "A string identifying a specific variant or edition of the operating system suitable for presentation to the user";
         example = "NixOS Installer Image";
       };
@@ -256,7 +254,6 @@ in
 
     configurationRevision = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = "The Git revision of the top-level flake from which this configuration was built.";
     };
 

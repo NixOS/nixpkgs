@@ -96,7 +96,6 @@ in
 
       environmentFile = lib.mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/run/keys/opencloud.env";
         description = ''
           An environment file as defined in {manpage}`systemd.exec(5)`.

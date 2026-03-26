@@ -56,7 +56,6 @@ in
     let
       providerOptions = {
         include = lib.mkOption {
-          default = null;
           description = "File to include additional settings for this provider from.";
           type = nullOr path;
         };
@@ -71,7 +70,6 @@ in
           type = nullOr str;
         };
         password = lib.mkOption {
-          default = null;
           description = ''
             Password for this DDNS provider.
 

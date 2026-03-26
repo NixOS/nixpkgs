@@ -32,7 +32,6 @@ in
       };
 
       config = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.path;
         description = ''
           Path to the configuration file which maps the memory, IRQs

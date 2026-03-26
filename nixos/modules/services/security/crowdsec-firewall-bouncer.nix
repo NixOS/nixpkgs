@@ -66,7 +66,6 @@ in
             When authenticating to the locally running `crowdsec` service, you may use the
             [](#opt-services.crowdsec-firewall-bouncer.registerBouncer.enable) option instead.
           '';
-          default = null;
         };
       };
 
@@ -105,7 +104,6 @@ in
                 Instead, you should set the `services.crowdsec-firewall-bouncer.secrets.apiKeyPath`
                 option, which will read the value at runtime.
               '';
-              default = null;
             };
           };
         };

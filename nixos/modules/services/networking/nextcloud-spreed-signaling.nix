@@ -220,7 +220,6 @@ in
             http = {
               listen = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 example = "127.0.0.1:8080";
                 description = ''
                   IP and port to listen on for HTTP requests, in the format of `ip:port`.
@@ -325,7 +324,6 @@ in
                     "proxy"
                   ]
                 );
-                default = null;
                 example = "janus";
                 description = "The type of MCU to use. Leave empty to disable MCU functionality.";
               };
@@ -376,7 +374,6 @@ in
             grpc = {
               listen = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 example = "127.0.0.1:9090";
                 description = "IP and port to listen on for GRPC requests. Leave `null` to disable the listener.";
               };

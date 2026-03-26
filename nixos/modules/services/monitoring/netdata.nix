@@ -94,7 +94,6 @@ in
       configText = lib.mkOption {
         type = lib.types.nullOr lib.types.lines;
         description = "Verbatim netdata.conf, cannot be combined with config.";
-        default = null;
         example = ''
           [global]
           debug log = syslog
@@ -211,7 +210,6 @@ in
 
       claimTokenFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           If set, automatically registers the agent using the given claim token
           file.

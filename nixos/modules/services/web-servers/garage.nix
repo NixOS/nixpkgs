@@ -36,7 +36,6 @@ in
     environmentFile = mkOption {
       type = types.nullOr types.path;
       description = "File containing environment variables to be passed to the Garage server.";
-      default = null;
     };
 
     logLevel = mkOption {

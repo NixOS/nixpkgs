@@ -80,7 +80,6 @@ in
                 check = it: isString it && types.path.check it;
               }
             );
-            default = null;
             example = "/run/secrets/umamiAppSecret";
             description = ''
               A file containing a secure random string. This is used for signing user sessions.
@@ -119,7 +118,6 @@ in
                 check = it: isString it && types.path.check it;
               }
             );
-            default = null;
             example = "/run/secrets/umamiDatabaseUrl";
             description = ''
               A file containing a connection string for the database. The connection string
@@ -130,7 +128,6 @@ in
           };
           COLLECT_API_ENDPOINT = mkOption {
             type = types.nullOr types.str;
-            default = null;
             example = "/api/alternate-send";
             description = ''
               Allows you to send metrics to a location different than the default `/api/send`.

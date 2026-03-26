@@ -136,7 +136,6 @@ in
 
     updateAt = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "hourly";
       description = ''
         Specification of the time at which awstats will get updated.

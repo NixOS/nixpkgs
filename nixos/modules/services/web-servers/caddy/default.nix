@@ -276,7 +276,6 @@ in
     };
 
     acmeCA = mkOption {
-      default = null;
       example = "https://acme-v02.api.letsencrypt.org/directory";
       type = with types; nullOr str;
       description = ''
@@ -297,7 +296,6 @@ in
     };
 
     email = mkOption {
-      default = null;
       type = with types; nullOr str;
       description = ''
         Your email address. Mainly used when creating an ACME account with your
@@ -362,7 +360,6 @@ in
 
     environmentFile = mkOption {
       type = with types; nullOr path;
-      default = null;
       example = "/run/secrets/caddy.env";
       description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.

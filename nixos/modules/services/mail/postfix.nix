@@ -564,7 +564,6 @@ in
 
               myhostname = mkOption {
                 type = with types; nullOr types.str;
-                default = null;
                 example = "mail.example.com";
                 description = ''
                   The internet hostname of this mail system.
@@ -577,7 +576,6 @@ in
 
               mynetworks = mkOption {
                 type = with types; nullOr (listOf str);
-                default = null;
                 example = [
                   "127.0.0.0/8"
                   "::1"

@@ -210,7 +210,6 @@ in
 
               tun.device = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 description = "Name of the tun device. Defaults to nebula.\${networkName}.";
               };
 

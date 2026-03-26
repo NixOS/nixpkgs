@@ -84,7 +84,6 @@ in
 
     networking.nat.externalIP = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "203.0.113.123";
       description = ''
         The public IP address to which packets from the local
@@ -97,7 +96,6 @@ in
 
     networking.nat.externalIPv6 = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "2001:dc0:2001:11::175";
       description = ''
         The public IPv6 address to which packets from the local
@@ -162,7 +160,6 @@ in
 
     networking.nat.dmzHost = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "10.0.0.1";
       description = ''
         The local IP address to which all traffic that does not match any

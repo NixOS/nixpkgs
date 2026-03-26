@@ -126,7 +126,6 @@ in
 
       motd = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           The server's message of the day text.
         '';
@@ -171,7 +170,6 @@ in
       server = {
         bindAddr = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             The address the server will bind to.
           '';

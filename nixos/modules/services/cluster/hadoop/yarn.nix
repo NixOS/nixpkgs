@@ -54,22 +54,18 @@ in
         cpuVCores = lib.mkOption {
           description = "Number of vcores that can be allocated for containers.";
           type = with lib.types; nullOr ints.positive;
-          default = null;
         };
         maximumAllocationVCores = lib.mkOption {
           description = "The maximum virtual CPU cores any container can be allocated.";
           type = with lib.types; nullOr ints.positive;
-          default = null;
         };
         memoryMB = lib.mkOption {
           description = "Amount of physical memory, in MB, that can be allocated for containers.";
           type = with lib.types; nullOr ints.positive;
-          default = null;
         };
         maximumAllocationMB = lib.mkOption {
           description = "The maximum physical memory any container can be allocated.";
           type = with lib.types; nullOr ints.positive;
-          default = null;
         };
       };
 

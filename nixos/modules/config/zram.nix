@@ -102,7 +102,6 @@ in
       };
 
       writebackDevice = lib.mkOption {
-        default = null;
         example = "/dev/zvol/tarta-zoot/swap-writeback";
         type = lib.types.nullOr lib.types.path;
         description = ''

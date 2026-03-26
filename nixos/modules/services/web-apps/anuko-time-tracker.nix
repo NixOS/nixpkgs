@@ -244,7 +244,6 @@ in
 
         smtpPasswordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/var/lib/anuko-time-tracker/secrets/smtp-password";
           description = ''
             Path to file containing the MTA authentication password.

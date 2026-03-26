@@ -158,7 +158,6 @@ in
 
       name = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Custom name of this poller.
         '';
@@ -377,7 +376,6 @@ in
 
       socket = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/run/mysqld/mysqld.sock";
         description = ''
           A unix socket to mysql, accessible by the librenms user.
@@ -388,7 +386,6 @@ in
 
     environmentFile = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         File containing env-vars to be substituted into the final config. Useful for secrets.
         Does not apply to settings defined in `extraConfig`.

@@ -120,7 +120,6 @@ in
       };
       passwordFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         example = "/run/keys/snipe-it/dbpassword";
         description = ''
           A file containing the password corresponding to
@@ -165,7 +164,6 @@ in
       };
       user = mkOption {
         type = with types; nullOr str;
-        default = null;
         example = "snipeit";
         description = "Mail username.";
       };

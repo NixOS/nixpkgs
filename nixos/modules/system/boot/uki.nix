@@ -32,7 +32,6 @@ in
 
       tries = lib.mkOption {
         type = lib.types.nullOr lib.types.ints.unsigned;
-        default = null;
         description = ''
           Number of boot attempts before this UKI is considered bad.
 

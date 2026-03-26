@@ -46,7 +46,6 @@ let
         If given, sets the SO_RCVBUF option on the TCP socket to the given number of bytes.
         Changes the size of the operating system's receive buffer associated with the socket.
       '';
-      default = null;
     };
     sendBufferSize = mkOption {
       type = types.nullOr types.ints.positive;
@@ -61,14 +60,12 @@ let
       description = ''
         An application timeout on receiving data from the TCP socket.
       '';
-      default = null;
     };
     fwmark = mkOption {
       type = types.nullOr types.ints.u32;
       description = ''
         If given, sets the SO_MARK option on the TCP socket.
       '';
-      default = null;
     };
     nodelay = mkOption {
       type = types.bool;
@@ -93,7 +90,6 @@ let
         description = ''
           Which local IP to bind the UDP socket to.
         '';
-        default = null;
       };
     };
   };

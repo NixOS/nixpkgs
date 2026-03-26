@@ -46,7 +46,6 @@ in
 
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = "/run/secrets/microbin.env";
       description = ''
         Path to file containing environment variables.

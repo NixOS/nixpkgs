@@ -36,7 +36,6 @@ let
     type: description:
     mkOption {
       type = if type.check null then type else types.nullOr type;
-      default = null;
       description = description;
     };
 

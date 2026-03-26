@@ -66,7 +66,6 @@ in
 
     passwordFile = mkOption {
       type = nullOr path;
-      default = null;
       description = ''
         The path to a file containing the password of the user used by netbird to connect to the coturn server.
       '';

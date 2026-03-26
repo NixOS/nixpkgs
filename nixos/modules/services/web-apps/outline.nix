@@ -168,7 +168,6 @@ in
           };
           accelerateUrl = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = ''
               URL for AWS S3 [transfer acceleration](https://docs.aws.amazon.com/AmazonS3/latest/userguide/transfer-acceleration.html).
             '';
@@ -249,7 +248,6 @@ in
         When configuring the Client ID, add an Authorized redirect URI to
         `https://[publicUrl]/auth/google.callback`.
       '';
-      default = null;
       type = lib.types.nullOr (
         lib.types.submodule {
           options = {
@@ -302,7 +300,6 @@ in
         See <https://docs.getoutline.com/s/hosting/doc/discord-g4JdWFFub6>
         for details on setting up your Discord app.
       '';
-      default = null;
       type = lib.types.nullOr (
         lib.types.submodule {
           options = {
@@ -397,7 +394,6 @@ in
 
     sslKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         File path that contains the Base64-encoded private key for HTTPS
         termination. This is only required if you do not use an external reverse
@@ -466,7 +462,6 @@ in
 
     debugOutput = lib.mkOption {
       type = lib.types.nullOr (lib.types.enum [ "http" ]);
-      default = null;
       description = "Set this to `http` log HTTP requests.";
     };
 
@@ -509,7 +504,6 @@ in
 
     sentryDsn = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Optionally enable [Sentry](https://sentry.io/) to
         track errors and performance.
@@ -518,7 +512,6 @@ in
 
     sentryTunnel = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Optionally add a
         [Sentry proxy tunnel](https://docs.sentry.io/platforms/javascript/troubleshooting/#using-the-tunnel-option)
@@ -541,7 +534,6 @@ in
         "document updated" or "you've been invited" you'll need to provide
         authentication for an SMTP server.
       '';
-      default = null;
       type = lib.types.nullOr (
         lib.types.submodule {
           options = {

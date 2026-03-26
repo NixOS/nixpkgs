@@ -240,7 +240,6 @@ in
               };
               hashedPassword = mkOption {
                 example = "grub.pbkdf2.sha512.10000.674DFFDEF76E13EA...2CC972B102CF4355";
-                default = null;
                 type = with types; uniq (nullOr str);
                 description = ''
                   Specifies the password hash for the account,
@@ -261,7 +260,6 @@ in
               };
               password = mkOption {
                 example = "Pa$$w0rd!";
-                default = null;
                 type = with types; uniq (nullOr str);
                 description = ''
                   Specifies the clear text password for the account.
@@ -508,7 +506,6 @@ in
       backgroundColor = mkOption {
         type = types.nullOr types.str;
         example = "#7EBAE4";
-        default = null;
         description = ''
           Background color to be used for GRUB to fill the areas the image isn't filling.
         '';
@@ -559,7 +556,6 @@ in
       theme = mkOption {
         type = types.nullOr types.path;
         example = literalExpression ''"''${pkgs.kdePackages.breeze-grub}/grub/themes/breeze"'';
-        default = null;
         description = ''
           Path to the grub theme to be used.
         '';
@@ -588,7 +584,6 @@ in
       fontSize = mkOption {
         type = types.nullOr types.int;
         example = 16;
-        default = null;
         description = ''
           Font size for the grub menu. Ignored unless `font`
           is set to a ttf or otf font.

@@ -70,7 +70,6 @@ in
               };
               desktop = lib.mkOption {
                 type = lib.types.nullOr lib.types.path;
-                default = null;
                 description = ".desktop file to modify. Only necessary if it uses the absolute path to the executable.";
                 example = lib.literalExpression ''"''${pkgs.firefox}/share/applications/firefox.desktop"'';
               };

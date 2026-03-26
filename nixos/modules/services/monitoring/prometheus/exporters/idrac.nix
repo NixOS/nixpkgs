@@ -42,7 +42,6 @@ in
 
         Mutually exclusive with `configurationPath` option.
       '';
-      default = null;
       example = {
         timeout = 10;
         retries = 1;

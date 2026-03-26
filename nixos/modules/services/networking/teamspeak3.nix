@@ -64,7 +64,6 @@ in
 
       fileTransferIP = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "[::]";
         description = ''
           IP on which the server instance will listen for incoming file transfer connections. Defaults to any IP.
@@ -81,7 +80,6 @@ in
 
       queryIP = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "0.0.0.0";
         description = ''
           IP on which the server instance will listen for incoming ServerQuery connections. Defaults to any IP.

@@ -62,7 +62,6 @@ let
 
       address = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "The source IPv${toString v} address of the TAYGA server.";
       };
 

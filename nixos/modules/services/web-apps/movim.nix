@@ -286,7 +286,6 @@ in
                     enable = mkEnableOption "Script minification via esbuild";
                     target = mkOption {
                       type = types.nullOr types.nonEmptyStr;
-                      default = null;
                       description = ''
                         esbuild target environment string. If not set, a sane
                         default will be provided. See:
@@ -531,7 +530,6 @@ in
         type = types.nullOr (
           types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
         );
-        default = null;
         example =
           lib.literalExpression # nix
             ''

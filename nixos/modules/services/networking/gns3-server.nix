@@ -36,7 +36,6 @@ in
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/run/secrets/gns3-server-password";
           description = ''
             A file containing the password to access the GNS3 Server.
@@ -79,7 +78,6 @@ in
 
         certFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/var/lib/gns3/ssl/server.pem";
           description = ''
             Path to the SSL certificate file. This certificate will

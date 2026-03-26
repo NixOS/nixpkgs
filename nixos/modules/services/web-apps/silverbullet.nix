@@ -68,7 +68,6 @@ in
 
       envFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/etc/silverbullet.env";
         description = ''
           File containing extra environment variables. For example:

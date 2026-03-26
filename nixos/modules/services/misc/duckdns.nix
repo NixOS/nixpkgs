@@ -42,7 +42,6 @@ in
     };
 
     domains = lib.mkOption {
-      default = null;
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
       example = [ "examplehost" ];
       description = ''

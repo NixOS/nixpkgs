@@ -146,7 +146,6 @@ in
 
       monHost = lib.mkOption {
         type = with lib.types; nullOr commas;
-        default = null;
         example = ''
           10.10.0.1, 10.10.0.2, 10.10.0.3
         '';
@@ -209,7 +208,6 @@ in
 
       clusterNetwork = lib.mkOption {
         type = with lib.types; nullOr commas;
-        default = null;
         example = ''
           10.10.0.0/24, 192.168.0.0/24
         '';

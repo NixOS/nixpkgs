@@ -102,7 +102,6 @@ in
 
     secretKeyPath = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         Path to the Django secret key.
 

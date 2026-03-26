@@ -64,7 +64,6 @@ in
     };
 
     maxGenerations = lib.mkOption {
-      default = null;
       example = 50;
       type = lib.types.nullOr lib.types.int;
       description = ''
@@ -263,7 +262,6 @@ in
       };
 
       backdrop = lib.mkOption {
-        default = null;
         example = "7EBAE4";
         type = lib.types.nullOr lib.types.str;
         description = ''
@@ -314,7 +312,6 @@ in
           };
 
           spacing = lib.mkOption {
-            default = null;
             type = lib.types.nullOr lib.types.int;
             description = ''
               The horizontal spacing between characters in pixels.
@@ -323,7 +320,6 @@ in
         };
 
         palette = lib.mkOption {
-          default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
             A ; seperated array of 8 colors in the format RRGGBB:
@@ -332,7 +328,6 @@ in
         };
 
         brightPalette = lib.mkOption {
-          default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
             A ; seperated array of 8 colors in the format RRGGBB:
@@ -341,7 +336,6 @@ in
         };
 
         foreground = lib.mkOption {
-          default = null;
           type = lib.types.nullOr lib.types.str;
           description = ''
             Text foreground color (RRGGBB).

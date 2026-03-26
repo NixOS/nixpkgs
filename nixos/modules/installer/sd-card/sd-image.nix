@@ -110,7 +110,6 @@ in
 
     rootPartitionUUID = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
         UUID for the filesystem on the main NixOS partition on the SD card.

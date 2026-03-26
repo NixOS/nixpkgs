@@ -86,7 +86,6 @@ in
           };
           upnp_forward_external_port = mkOption {
             type = types.nullOr types.port;
-            default = null;
             description = ''
               Public port number to try to redirect to this machine's Wireguard
               daemon using UPnP IGD.

@@ -132,7 +132,6 @@ in
 
       xmlrpcURIFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = "Path to file containing XMLRPC URI for use by web UI - this is a secret, since it contains auth credentials. If null, it will be initialized assuming that the auth database is local.";
       };
 
@@ -149,7 +148,6 @@ in
 
       unixSocket = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = "Path to UNIX socket to bind to.";
         example = "/run/nipap/nipap-www.sock";
       };

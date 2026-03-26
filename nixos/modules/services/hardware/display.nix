@@ -136,7 +136,6 @@ in
           options = {
             edid = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 An EDID filename to be used for configured display, as in `edid/<filename>`.
                 See for more information:

@@ -46,7 +46,6 @@ in
 
     ip4Domains = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
-      default = null;
       description = ''
         Explicit list of domains to manage only for IPv4. If set, overrides `domains` for IPv4.
         Corresponds to the `IP4_DOMAINS` environment variable.
@@ -175,21 +174,18 @@ in
 
     healthchecks = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = "URL for Healthchecks.io monitoring endpoint (optional).";
       example = "https://hc-ping.com/your-uuid";
     };
 
     uptimeKuma = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = "URL for Uptime Kuma push monitor endpoint (optional).";
       example = "https://status.example.com/api/push/tag?status=up&msg=OK&ping=";
     };
 
     shoutrrr = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
-      default = null;
       description = "List of Shoutrrr notification service URLs (optional).";
       example = [
         "discord://token@id"

@@ -150,7 +150,6 @@ in
         )
       );
 
-      default = null;
       example = lib.literalExpression ''
         {
           python3 = let

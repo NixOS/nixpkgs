@@ -96,7 +96,6 @@ in
 
       logFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/var/lib/klipper/klipper.log";
         description = ''
           Path of the file Klipper should log to.
@@ -135,7 +134,6 @@ in
 
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = "Path to default Klipper config.";
       };
 

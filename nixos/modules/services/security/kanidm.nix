@@ -302,7 +302,6 @@ in
               Address and port the LDAP server is bound to. Setting this to `null` disables the LDAP interface.
             '';
             example = "[::1]:636";
-            default = null;
             type = types.nullOr types.str;
           };
           origin = mkOption {
@@ -493,7 +492,6 @@ in
           The accepted JSON schema can be found at <https://github.com/oddlama/kanidm-provision#json-schema>.
         '';
         type = types.nullOr types.path;
-        default = null;
       };
 
       groups = mkOption {
@@ -552,7 +550,6 @@ in
                 description = "Full legal name";
                 type = types.nullOr types.str;
                 example = "Jane Doe";
-                default = null;
               };
 
               mailAddresses = mkOption {

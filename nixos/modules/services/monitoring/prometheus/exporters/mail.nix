@@ -90,7 +90,6 @@ let
     };
     login = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "exporteruser@domain.tld";
       description = ''
         Username to use for SMTP authentication.
@@ -167,21 +166,18 @@ in
   extraOpts = {
     environmentFile = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         File containing env-vars to be substituted into the exporter's config.
       '';
     };
     configFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';
     };
     configuration = mkOption {
       type = types.nullOr (types.submodule exporterOptions);
-      default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';

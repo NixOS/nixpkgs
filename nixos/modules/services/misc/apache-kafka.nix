@@ -64,7 +64,6 @@ in
         options = {
           "broker.id" = lib.mkOption {
             description = "Broker ID. -1 or null to auto-allocate in zookeeper mode.";
-            default = null;
             type = with lib.types; nullOr int;
           };
 

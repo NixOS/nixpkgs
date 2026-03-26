@@ -80,7 +80,6 @@ in
 
       socks5Username = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "bob";
         description = ''
           SOCKS5 username. The `TORSOCKS_USERNAME`

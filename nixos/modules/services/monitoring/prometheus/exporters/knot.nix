@@ -20,7 +20,6 @@ in
   extraOpts = {
     knotLibraryPath = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = literalExpression ''"''${pkgs.knot-dns.out}/lib/libknot.so"'';
       description = ''
         Path to the library of `knot-dns`.

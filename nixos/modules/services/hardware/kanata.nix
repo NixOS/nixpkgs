@@ -74,7 +74,6 @@ let
         };
         port = lib.mkOption {
           type = lib.types.nullOr lib.types.port;
-          default = null;
           example = 6666;
           description = ''
             Port to run the TCP server on. `null` will not run the server.

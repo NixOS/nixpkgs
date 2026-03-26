@@ -78,7 +78,6 @@ in
     };
 
     loadDataFile = mkOption {
-      default = null;
       type = with types; nullOr path;
       description = ''
         Path to a json file containing users and folders to load (or update) on startup.

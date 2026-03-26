@@ -22,7 +22,6 @@ let
         config = mkOption {
           type = types.nullOr types.lines;
           description = "viml configuration associated with this plugin.";
-          default = null;
           example = "set title";
         };
 

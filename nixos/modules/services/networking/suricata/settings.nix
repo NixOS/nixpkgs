@@ -246,7 +246,6 @@ in
             })
           )
         );
-      default = null;
       example = literalExpression ''
         [
           {
@@ -317,7 +316,6 @@ in
 
       "default-log-format" = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           The default output format. Optional parameter, should default to
           something reasonable if not provided. Can be overridden in an
@@ -336,7 +334,6 @@ in
 
       "stacktrace-on-signal" = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Requires libunwind to be available when Suricata is configured and built.
           If a signal unexpectedly terminates Suricata, displays a brief diagnostic
@@ -377,7 +374,6 @@ in
 
           format = mkOption {
             type = types.nullOr types.str;
-            default = null;
             description = ''
               Logformat for logs written to the logfile.
             '';
@@ -404,7 +400,6 @@ in
 
           format = mkOption {
             type = types.nullOr types.str;
-            default = null;
             description = ''
               Logformat for logs send to syslog.
             '';
@@ -453,7 +448,6 @@ in
             options = {
               interface = mkOption {
                 type = types.str;
-                default = null;
                 description = ''
                   af-xdp capture interface, see [upstream docs](https://docs.suricata.io/en/latest/capture-hardware/af-xdp.html).
                 '';
@@ -504,7 +498,6 @@ in
             };
           };
         });
-      default = null;
       description = ''
         Data Plane Development Kit is a framework for fast packet processing in data plane applications running on a wide variety of CPU architectures. DPDK's Environment Abstraction Layer (EAL) provides a generic interface to low-level resources. It is a unique way how DPDK libraries access NICs. EAL creates an API for an application to access NIC resources from the userspace level. In DPDK, packets are not retrieved via interrupt handling. Instead, the application polls the NIC for newly received packets.
 
@@ -729,7 +722,6 @@ in
 
     includes = mkOption {
       type = with types; nullOr (listOf path);
-      default = null;
       description = ''
         Files to include in the suricata configuration. See
         [docs/configuration/suricata-yaml](https://docs.suricata.io/en/suricata-7.0.3/configuration/suricata-yaml.html)

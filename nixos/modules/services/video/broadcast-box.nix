@@ -108,12 +108,10 @@ in
 
           UDP_WHEP_PORT = mkOption {
             type = with types; nullOr port;
-            default = null;
           };
 
           UDP_WHIP_PORT = mkOption {
             type = with types; nullOr port;
-            default = null;
           };
 
           ENABLE_HTTP_REDIRECT = mkOption {

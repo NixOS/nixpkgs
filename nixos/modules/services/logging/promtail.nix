@@ -40,7 +40,6 @@ in
 
     configFile = mkOption {
       type = nullOr path;
-      default = null;
       description = ''
         Config file path for Promtail.
         If this option is defined, the value of `services.promtail.configuration` will be ignored.

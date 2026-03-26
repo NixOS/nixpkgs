@@ -102,7 +102,6 @@ in
 
     settingsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = opt.settings.description;
     };
 

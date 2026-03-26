@@ -22,7 +22,6 @@ in
     };
     httpsPort = lib.mkOption {
       type = lib.types.nullOr lib.types.port;
-      default = null;
       description = ''
         The port to listen for HTTPS requests on.
       '';

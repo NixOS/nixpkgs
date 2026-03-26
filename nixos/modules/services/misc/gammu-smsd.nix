@@ -188,7 +188,6 @@ in
 
           sqlDialect = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = "SQL dialect to use (odbc driver only)";
           };
 

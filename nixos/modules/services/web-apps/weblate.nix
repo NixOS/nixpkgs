@@ -204,7 +204,6 @@ in
           description = "SMTP login name.";
           example = "weblate@example.org";
           type = lib.types.nullOr lib.types.str;
-          default = null;
         };
 
         host = lib.mkOption {
@@ -227,7 +226,6 @@ in
             This should be a path pointing to a file with secure permissions (not /nix/store).
           '';
           type = lib.types.nullOr lib.types.path;
-          default = null;
         };
       };
     };

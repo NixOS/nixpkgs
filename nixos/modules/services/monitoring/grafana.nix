@@ -154,7 +154,6 @@ let
       };
       uid = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "Custom UID which can be used to reference this datasource in other parts of the configuration, if not specified will be generated automatically.";
       };
       url = mkOption {
@@ -169,12 +168,10 @@ let
       };
       jsonData = mkOption {
         type = types.nullOr types.attrs;
-        default = null;
         description = "Extra data for datasource plugins.";
       };
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
-        default = null;
         description = ''
           Datasource specific secure configuration. Please note that the contents of this option
           will end up in a world-readable Nix store. Use the file provider
@@ -753,7 +750,6 @@ in
                 Only the MySQL driver supports isolation levels in Grafana.
                 In case the value is empty, the driver's default isolation level is applied.
               '';
-              default = null;
               type = types.nullOr (
                 types.enum [
                   "READ-UNCOMMITTED"
@@ -766,7 +762,6 @@ in
 
             ca_cert_path = mkOption {
               description = "The path to the CA certificate to use.";
-              default = null;
               type = types.nullOr types.str;
             };
 
@@ -787,7 +782,6 @@ in
                 The common name field of the certificate used by the `mysql` or `postgres` server.
                 Not necessary if `ssl_mode` is set to `skip-verify`.
               '';
-              default = null;
               type = types.nullOr types.str;
             };
 
@@ -890,7 +884,6 @@ in
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
               type = types.nullOr types.str;
-              default = null;
             };
 
             disable_gravatar = mkOption {
@@ -1411,7 +1404,6 @@ in
               [](#opt-services.grafana.provision.datasources.settings) simultaneously.
               Can be either a directory or a single YAML file. Will end up in the store.
             '';
-            default = null;
             type = types.nullOr types.path;
           };
         };
@@ -1430,7 +1422,6 @@ in
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#dashboards>
               for supported options.
             '';
-            default = null;
             type = types.nullOr (
               types.submodule {
                 options.apiVersion = mkOption {
@@ -1489,7 +1480,6 @@ in
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#rules>
               for supported options.
             '';
-            default = null;
             type = types.nullOr (
               types.submodule {
                 options = {
@@ -1608,7 +1598,6 @@ in
               [](#opt-services.grafana.provision.alerting.contactPoints.settings) simultaneously.
               Can be either a directory or a single YAML file. Will end up in the store.
             '';
-            default = null;
             type = types.nullOr types.path;
           };
 
@@ -1619,7 +1608,6 @@ in
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#contact-points>
               for supported options.
             '';
-            default = null;
             type = types.nullOr (
               types.submodule {
                 options = {
@@ -1706,7 +1694,6 @@ in
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#notification-policies>
               for supported options.
             '';
-            default = null;
             type = types.nullOr (
               types.submodule {
                 options = {
@@ -1769,7 +1756,6 @@ in
               [](#opt-services.grafana.provision.alerting.templates.settings) simultaneously.
               Can be either a directory or a single YAML file. Will end up in the store.
             '';
-            default = null;
             type = types.nullOr types.path;
           };
 
@@ -1780,7 +1766,6 @@ in
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#templates>
               for supported options.
             '';
-            default = null;
             type = types.nullOr (
               types.submodule {
                 options = {
@@ -1857,7 +1842,6 @@ in
               [](#opt-services.grafana.provision.alerting.muteTimings.settings) simultaneously.
               Can be either a directory or a single YAML file. Will end up in the store.
             '';
-            default = null;
             type = types.nullOr types.path;
           };
 
@@ -1868,7 +1852,6 @@ in
               <https://grafana.com/docs/grafana/latest/administration/provisioning/#mute-timings>
               for supported options.
             '';
-            default = null;
             type = types.nullOr (
               types.submodule {
                 options = {

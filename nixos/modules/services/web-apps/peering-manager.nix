@@ -56,7 +56,6 @@ in
 
     environmentFile = mkOption {
       type = with types; nullOr path;
-      default = null;
       example = "/run/secrets/peering-manager.env";
       description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.

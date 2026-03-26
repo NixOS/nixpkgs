@@ -338,7 +338,6 @@ in
                 description = "Whether this file should be generated. This option allows specific files to be disabled.";
               };
               text = lib.mkOption {
-                default = null;
                 type = nullOr lines;
                 description = "Text of the file.";
               };

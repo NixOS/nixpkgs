@@ -44,21 +44,18 @@ let
     optionName:
     lib.mkOption {
       type = with lib.types; nullOr bool;
-      default = null;
       description = (descriptionGeneric optionName);
     };
   optionInt =
     optionName:
     lib.mkOption {
       type = with lib.types; nullOr int;
-      default = null;
       description = (descriptionGeneric optionName);
     };
   optionString =
     optionName:
     lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       description = (descriptionGeneric optionName);
     };
   optionStrings =
@@ -113,7 +110,6 @@ let
             flags = optionFlags;
             SessionGroup = lib.mkOption {
               type = nullOr int;
-              default = null;
             };
           }
           // lib.genAttrs isolateFlags (
@@ -182,7 +178,6 @@ let
             flags = optionFlags;
             SessionGroup = lib.mkOption {
               type = nullOr int;
-              default = null;
             };
           }
           // lib.genAttrs flags (
@@ -261,7 +256,6 @@ let
     optionName:
     lib.mkOption {
       type = with lib.types; nullOr path;
-      default = null;
       description = (descriptionGeneric optionName);
     };
 
@@ -790,7 +784,6 @@ in
                       2
                       3
                     ]);
-                  default = null;
                 };
                 options.settings = lib.mkOption {
                   description = ''
@@ -817,12 +810,10 @@ in
                     options.HiddenServiceExportCircuitID = lib.mkOption {
                       description = (descriptionGeneric "HiddenServiceExportCircuitID");
                       type = with lib.types; nullOr (enum [ "haproxy" ]);
-                      default = null;
                     };
                     options.HiddenServiceMaxStreams = lib.mkOption {
                       description = (descriptionGeneric "HiddenServiceMaxStreams");
                       type = with lib.types; nullOr ints.u16;
-                      default = null;
                     };
                     options.HiddenServiceMaxStreamsCloseCircuit = optionBool "HiddenServiceMaxStreamsCloseCircuit";
                     options.HiddenServiceNumIntroductionPoints = lib.mkOption {
@@ -1083,7 +1074,6 @@ in
           options.NewCircuitPeriod = optionInt "NewCircuitPeriod";
           options.Nickname = lib.mkOption {
             type = with lib.types; nullOr (strMatching "^[a-zA-Z0-9]{1,19}$");
-            default = null;
             description = (descriptionGeneric "Nickname");
           };
           options.ORPort = optionORPort "ORPort";
@@ -1126,7 +1116,6 @@ in
           options.ServerDNSSearchDomains = optionBool "ServerDNSSearchDomains";
           options.ServerTransportPlugin = lib.mkOption {
             description = (descriptionGeneric "ServerTransportPlugin");
-            default = null;
             type =
               with lib.types;
               nullOr (

@@ -56,7 +56,6 @@ in
 
       influxHost = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "localhost:8086";
         description = ''
           Host and port of the influxdb database.

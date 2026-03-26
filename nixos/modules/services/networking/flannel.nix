@@ -38,7 +38,6 @@ in
         Defaults to the interface for the default route on the machine.
       '';
       type = lib.types.nullOr lib.types.str;
-      default = null;
     };
 
     etcd = {
@@ -57,7 +56,6 @@ in
       caFile = lib.mkOption {
         description = "Etcd certificate authority file";
         type = lib.types.nullOr lib.types.path;
-        default = null;
       };
 
       certFile = lib.mkOption {
@@ -122,7 +120,6 @@ in
         Defaults to the first subnet of Network.
       '';
       type = lib.types.nullOr lib.types.str;
-      default = null;
     };
 
     subnetMax = lib.mkOption {
@@ -131,7 +128,6 @@ in
         Defaults to the last subnet of Network.
       '';
       type = lib.types.nullOr lib.types.str;
-      default = null;
     };
 
     backend = lib.mkOption {

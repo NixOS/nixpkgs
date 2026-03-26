@@ -42,7 +42,6 @@ in
       };
 
       nowlocker = mkOption {
-        default = null;
         example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
         type = types.nullOr types.str;
 
@@ -61,7 +60,6 @@ in
       };
 
       notifier = mkOption {
-        default = null;
         example = literalExpression ''"''${pkgs.libnotify}/bin/notify-send 'Locking in 10 seconds'"'';
         type = types.nullOr types.str;
 

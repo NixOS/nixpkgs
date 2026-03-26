@@ -82,7 +82,6 @@ in
 
       gameId = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Id of the game to use. To list available games run
           `minetestserver --gameid list`.
@@ -93,7 +92,6 @@ in
 
       world = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           Name of the world to use. To list available worlds run
           `minetestserver --world list`.
@@ -104,7 +102,6 @@ in
 
       configPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           Path to the config to use.
 
@@ -125,7 +122,6 @@ in
 
       logPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           Path to logfile for logging.
 
@@ -136,7 +132,6 @@ in
 
       port = lib.mkOption {
         type = lib.types.nullOr lib.types.port;
-        default = null;
         description = ''
           Port number to bind to.
 

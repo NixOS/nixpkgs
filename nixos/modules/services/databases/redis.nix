@@ -320,7 +320,6 @@ in
                         )
                       );
 
-                    default = null;
                     description = "IP and port to which this redis instance acts as a slave.";
                     example = {
                       ip = "192.168.1.100";
@@ -341,14 +340,12 @@ in
 
                   masterAuthFile = lib.mkOption {
                     type = with types; nullOr path;
-                    default = null;
                     description = "File with password for the master user.";
                     example = "/run/keys/redis-master-password";
                   };
 
                   masterUser = lib.mkOption {
                     type = with types; nullOr str;
-                    default = null;
                     description = ''
                       If the master is password protected via ACLs this option can be used to specify
                       the Redis user that is used by replicas.'';
@@ -373,14 +370,12 @@ in
 
                   sentinelAuthPassFile = lib.mkOption {
                     type = with types; nullOr path;
-                    default = null;
                     description = "File with password for connecting to other Sentinel instances.";
                     example = "/run/keys/sentinel-password";
                   };
 
                   sentinelAuthUser = lib.mkOption {
                     type = with types; nullOr str;
-                    default = null;
                     description = "The username to use to monitor a master from Sentinel.";
                   };
 

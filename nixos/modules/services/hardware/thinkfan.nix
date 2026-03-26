@@ -76,7 +76,6 @@ let
         };
         indices = lib.mkOption {
           type = with lib.types; nullOr (listOf ints.unsigned);
-          default = null;
           description = ''
             A list of ${name}s to pick in case multiple ${name}s match the query.
 
@@ -89,7 +88,6 @@ let
       // lib.optionalAttrs (name == "sensor") {
         correction = lib.mkOption {
           type = with lib.types; nullOr (listOf int);
-          default = null;
           description = ''
             A list of values to be added to the temperature of each sensor,
             can be used to equalize small discrepancies in temperature ratings.

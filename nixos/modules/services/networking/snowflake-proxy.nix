@@ -18,7 +18,6 @@ in
       broker = mkOption {
         description = "Broker URL (default \"https://snowflake-broker.torproject.net/\")";
         type = with types; nullOr str;
-        default = null;
       };
 
       capacity = mkOption {

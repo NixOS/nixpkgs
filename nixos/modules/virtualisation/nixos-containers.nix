@@ -346,7 +346,6 @@ let
           description = "Mount point on the container file system.";
         };
         hostPath = mkOption {
-          default = null;
           example = "/home/alice";
           type = types.nullOr types.str;
           description = "Location of the host path to be mounted.";
@@ -399,7 +398,6 @@ let
   networkOptions = {
     hostBridge = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "br0";
       description = ''
         Put the host-side of the veth-pair into the named bridge.
@@ -422,7 +420,6 @@ let
             };
             containerPort = mkOption {
               type = types.nullOr types.port;
-              default = null;
               description = "Target port of container";
             };
           };
@@ -863,7 +860,6 @@ in
 
               flake = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 example = "github:NixOS/nixpkgs/master";
                 description = ''
                   The Flake URI of the NixOS configuration to use for the container.

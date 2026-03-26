@@ -346,7 +346,6 @@ in
 
               latitude = mkOption {
                 type = types.nullOr (types.either types.float types.str);
-                default = null;
                 example = 52.3;
                 description = ''
                   Latitude of your location required to calculate the time the sun rises and sets.
@@ -355,7 +354,6 @@ in
 
               longitude = mkOption {
                 type = types.nullOr (types.either types.float types.str);
-                default = null;
                 example = 4.9;
                 description = ''
                   Longitude of your location required to calculate the time the sun rises and sets.
@@ -492,7 +490,6 @@ in
     };
 
     lovelaceConfig = mkOption {
-      default = null;
       type = types.nullOr format.type;
       # from https://www.home-assistant.io/lovelace/dashboards/
       example = literalExpression ''
@@ -517,7 +514,6 @@ in
     };
 
     lovelaceConfigFile = mkOption {
-      default = null;
       type = types.nullOr types.path;
       example = "/path/to/ui-lovelace.yaml";
       description = ''

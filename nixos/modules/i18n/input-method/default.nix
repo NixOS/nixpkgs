@@ -84,7 +84,6 @@ in
       package = lib.mkOption {
         internal = true;
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           The input method method package.
         '';

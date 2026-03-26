@@ -34,7 +34,6 @@ in
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         Environment file as defined in {manpage}`systemd.exec(5)` passed to the service.
       '';

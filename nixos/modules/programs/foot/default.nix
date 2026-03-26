@@ -54,7 +54,6 @@ in
 
     theme = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       description = ''
         Theme name. Check <https://codeberg.org/dnkl/foot/src/branch/master/themes> for available themes.
       '';

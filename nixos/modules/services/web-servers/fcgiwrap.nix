@@ -52,7 +52,6 @@ in
 
             process.user = mkOption {
               type = types.nullOr types.str;
-              default = null;
               description = ''
                 User as which this instance of fcgiwrap will be run.
                 Set to `null` (the default) to use a dynamically allocated user.
@@ -61,7 +60,6 @@ in
 
             process.group = mkOption {
               type = types.nullOr types.str;
-              default = null;
               description = "Group as which this instance of fcgiwrap will be run.";
             };
 

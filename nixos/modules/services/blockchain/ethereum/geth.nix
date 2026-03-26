@@ -42,7 +42,6 @@ let
 
           apis = lib.mkOption {
             type = lib.types.nullOr (lib.types.listOf lib.types.str);
-            default = null;
             description = "APIs to enable over WebSocket";
             example = [
               "net"
@@ -67,7 +66,6 @@ let
 
           apis = lib.mkOption {
             type = lib.types.nullOr (lib.types.listOf lib.types.str);
-            default = null;
             description = "APIs to enable over WebSocket";
             example = [
               "net"
@@ -130,7 +128,6 @@ let
               "sepolia"
             ]
           );
-          default = null;
           description = "The network to connect to. Mainnet (null) is the default ethereum network.";
         };
 

@@ -70,7 +70,6 @@ in
           };
           urlPath = mkOption {
             type = with types; nullOr str;
-            default = null;
             example = "hedgedoc";
             description = ''
               URL path for the website.

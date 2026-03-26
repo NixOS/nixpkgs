@@ -182,7 +182,6 @@ in
 
     networking.dhcpcd.allowInterfaces = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
-      default = null;
       description = ''
         Enable the DHCP client for any interface whose name matches
         any of the shell glob patterns in this list. Any interface not
@@ -201,7 +200,6 @@ in
 
     networking.dhcpcd.IPv6rs = lib.mkOption {
       type = lib.types.nullOr lib.types.bool;
-      default = null;
       description = ''
         Force enable or disable solicitation and receipt of IPv6 Router Advertisements.
         This is required, for example, when using a static unique local IPv6 address (ULA)

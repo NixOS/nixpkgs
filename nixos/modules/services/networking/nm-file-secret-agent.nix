@@ -88,7 +88,6 @@ in
                   <https://networkmanager.dev/docs/api/latest/ch01.html>
                 '';
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 example = "wireguard";
               };
               matchIface = lib.mkOption {
@@ -99,7 +98,6 @@ in
               matchSetting = lib.mkOption {
                 description = "name of the setting section for which secrets are requested";
                 type = lib.types.nullOr lib.types.str;
-                default = null;
               };
               key = lib.mkOption {
                 description = "key in the setting section for which this entry provides a value";
@@ -112,7 +110,6 @@ in
               trim = lib.mkOption {
                 description = "whether leading and trailing whitespace should be stripped from the files content before being passed to NetworkManager";
                 type = lib.types.nullOr lib.types.bool;
-                default = null;
               };
             };
           }

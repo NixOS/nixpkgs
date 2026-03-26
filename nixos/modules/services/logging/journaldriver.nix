@@ -52,7 +52,6 @@ in
 
     googleCloudProject = mkOption {
       type = with types; nullOr str;
-      default = null;
       description = ''
         Configures the name of the Google Cloud project to which to
         forward journald logs.

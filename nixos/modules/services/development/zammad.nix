@@ -122,7 +122,6 @@ in
 
         port = lib.mkOption {
           type = lib.types.nullOr lib.types.port;
-          default = null;
           description = "Database port. Use `null` for default port.";
         };
 
@@ -185,7 +184,6 @@ in
 
       secretKeyBaseFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/run/keys/secret_key_base";
         description = ''
           The path to a file containing the

@@ -166,7 +166,6 @@ in
 
     WebServerPasswordFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         File containing the password for connecting to the web server,
         set this only if you didn't set `settings.ExternalConnect.ECPassword`

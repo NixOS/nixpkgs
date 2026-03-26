@@ -20,7 +20,6 @@ in
       configFile = mkOption {
         type = with types; nullOr path;
         example = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc"'';
-        default = null;
         description = ''
           Path to the bspwm configuration file.
           If null, $HOME/.config/bspwm/bspwmrc will be used.

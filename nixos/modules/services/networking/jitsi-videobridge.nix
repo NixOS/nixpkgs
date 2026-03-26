@@ -168,7 +168,6 @@ in
     nat = {
       localAddress = lib.mkOption {
         type = nullOr str;
-        default = null;
         example = "192.168.1.42";
         description = ''
           Local address to assume when running behind NAT.
@@ -177,7 +176,6 @@ in
 
       publicAddress = lib.mkOption {
         type = nullOr str;
-        default = null;
         example = "1.2.3.4";
         description = ''
           Public address to assume when running behind NAT.

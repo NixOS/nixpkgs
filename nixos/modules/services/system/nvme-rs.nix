@@ -124,7 +124,6 @@ in
                 };
               }
             );
-            default = null;
             description = "Email notification configuration";
           };
         };

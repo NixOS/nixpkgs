@@ -18,7 +18,6 @@ let
 
       filter = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "*rpi*.dtb";
         description = ''
           Only apply to .dtb files matching glob expression.
@@ -31,7 +30,6 @@ let
           Path to .dts overlay file, overlay is applied to
           each .dtb file matching "compatible" of the overlay.
         '';
-        default = null;
         example = lib.literalExpression "./dts/overlays.dts";
       };
 
@@ -218,7 +216,6 @@ in
       };
 
       package = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.path;
         internal = true;
         description = ''

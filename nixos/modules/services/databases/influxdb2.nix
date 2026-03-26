@@ -176,7 +176,6 @@ let
 
                   description = mkOption {
                     description = "Optional description for the bucket.";
-                    default = null;
                     type = types.nullOr types.str;
                   };
 
@@ -223,7 +222,6 @@ let
                       of whether this is given or not. The name is always added plus a unique suffix
                       to later identify the token to track whether it has already been created.
                     '';
-                    default = null;
                     type = types.nullOr types.str;
                   };
 
@@ -402,7 +400,6 @@ in
 
                   passwordFile = mkOption {
                     description = "Password for the user. If unset, the user will not be able to log in until a password is set by an operator! Don't use a file from the nix store!";
-                    default = null;
                     type = types.nullOr types.path;
                   };
                 };

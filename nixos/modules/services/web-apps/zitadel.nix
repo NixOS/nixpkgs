@@ -92,7 +92,6 @@ in
               };
               Key = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 description = ''
                   The TLS certificate private key, as a base64-encoded string.
 
@@ -109,7 +108,6 @@ in
               };
               Cert = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 description = ''
                   The TLS certificate, as a base64-encoded string.
 

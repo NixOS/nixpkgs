@@ -220,7 +220,6 @@ in
 
                 maxbw = lib.mkOption {
                   type = lib.types.nullOr lib.types.int;
-                  default = null;
                   description = ''
                     Abort archival if upstream bandwidth usage in bytes
                     exceeds this threshold.
@@ -229,7 +228,6 @@ in
 
                 maxbwRateUp = lib.mkOption {
                   type = lib.types.nullOr lib.types.int;
-                  default = null;
                   example = lib.literalExpression "25 * 1000";
                   description = ''
                     Upload bandwidth rate limit in bytes.
@@ -238,7 +236,6 @@ in
 
                 maxbwRateDown = lib.mkOption {
                   type = lib.types.nullOr lib.types.int;
-                  default = null;
                   example = lib.literalExpression "50 * 1000";
                   description = ''
                     Download bandwidth rate limit in bytes.

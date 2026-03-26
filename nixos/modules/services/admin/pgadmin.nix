@@ -110,7 +110,6 @@ in
       username = lib.mkOption {
         description = "SMTP server username for email delivery";
         type = lib.types.nullOr lib.types.str;
-        default = null;
       };
       sender = lib.mkOption {
         description = ''

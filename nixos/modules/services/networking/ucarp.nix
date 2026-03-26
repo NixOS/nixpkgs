@@ -146,7 +146,6 @@ in
     extraParam = mkOption {
       type = types.nullOr types.str;
       description = "Extra parameter to pass to the up/down scripts.";
-      default = null;
     };
 
     package = mkPackageOption pkgs "ucarp" {

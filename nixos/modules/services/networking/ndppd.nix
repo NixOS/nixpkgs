@@ -42,7 +42,6 @@ let
           and respond to them according to a set of rules.
           Defaults to the name of the attrset.
         '';
-        default = null;
       };
       router = mkOption {
         type = types.bool;
@@ -89,7 +88,6 @@ let
           may or may not overlap.
           Defaults to the name of the attrset.
         '';
-        default = null;
       };
       method = mkOption {
         type = types.enum [
@@ -126,7 +124,6 @@ in
         Interface which is on link-level with router.
         (Legacy option, use services.ndppd.proxies.\<interface\>.rules.\<network\> instead)
       '';
-      default = null;
       example = "eth0";
     };
     network = mkOption {
@@ -135,7 +132,6 @@ in
         Network that we proxy.
         (Legacy option, use services.ndppd.proxies.\<interface\>.rules.\<network\> instead)
       '';
-      default = null;
       example = "1111::/64";
     };
     configFile = mkOption {

@@ -254,7 +254,6 @@ let
               "Trash"
             ]
           );
-          default = null;
           example = "Junk";
           description = "Null if no special use flag is set. Other than that every use flag mentioned in the RFC is valid.";
         };
@@ -409,7 +408,6 @@ in
 
     sslCACert = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = "Path to the server's CA certificate key.";
     };
 
@@ -518,7 +516,6 @@ in
               };
 
               from = mkOption {
-                default = null;
                 description = ''
                   Only execute the administrator Sieve scripts for the mailbox configured with services.dovecot2.imapsieve.mailbox.<name>.name when the message originates from the indicated mailbox.
 
@@ -549,7 +546,6 @@ in
               };
 
               before = mkOption {
-                default = null;
                 description = ''
                   When an IMAP event of interest occurs, this sieve script is executed before any user script respectively.
 
@@ -560,7 +556,6 @@ in
               };
 
               after = mkOption {
-                default = null;
                 description = ''
                   When an IMAP event of interest occurs, this sieve script is executed after any user script respectively.
 

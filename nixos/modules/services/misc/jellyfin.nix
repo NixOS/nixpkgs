@@ -208,7 +208,6 @@ in
       transcoding = {
         maxConcurrentStreams = mkOption {
           type = nullOr ints.positive;
-          default = null;
           example = 2;
           description = ''
             Maximum number of concurrent transcoding streams.

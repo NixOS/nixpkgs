@@ -38,7 +38,6 @@ in
 
       http.path = mkOption {
         type = with types; nullOr str;
-        default = null;
         description = "Prefix to all HTTP paths.";
         example = "/mailcatcher";
       };

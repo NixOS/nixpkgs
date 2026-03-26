@@ -70,7 +70,6 @@ in
           };
           db_url = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = "The database to connect to when using postgres, mysql, or mysql2.";
           };
         };

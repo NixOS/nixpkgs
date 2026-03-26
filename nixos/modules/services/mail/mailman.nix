@@ -290,7 +290,6 @@ in
       };
 
       restApiPassFile = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           Path to the file containing the value for `MAILMAN_REST_API_PASS`.

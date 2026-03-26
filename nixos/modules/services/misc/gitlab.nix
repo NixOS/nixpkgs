@@ -566,7 +566,6 @@ in
 
       initialRootPasswordFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         description = ''
           File containing the initial password of the root account if
           this is a new install.
@@ -687,7 +686,6 @@ in
 
         authentication = mkOption {
           type = with types; nullOr str;
-          default = null;
           description = "Authentication type to use, see <http://api.rubyonrails.org/classes/ActionMailer/Base.html>";
         };
 
@@ -800,7 +798,6 @@ in
 
             internal-gitlab-server = mkOption {
               type = with types; nullOr str;
-              default = null;
               defaultText = "http(s)://<services.gitlab.host>";
               example = "https://gitlab.example.internal";
               description = ''
@@ -925,7 +922,6 @@ in
 
       secrets.activeRecordDeterministicKeyFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         description = ''
           A file containing the secret used to encrypt some rails data in a deterministic way
           in the DB. This should not be the same as `services.gitlab.secrets.activeRecordPrimaryKeyFile`!
@@ -940,7 +936,6 @@ in
 
       secrets.activeRecordSaltFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         description = ''
           A file containing the salt for active record encryption in the DB.
 
@@ -1009,7 +1004,6 @@ in
 
       sidekiq.concurrency = mkOption {
         type = with types; nullOr int;
-        default = null;
         description = ''
           How many processor threads to use for processing sidekiq background job queues. When null, the GitLab default is used.
 

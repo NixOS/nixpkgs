@@ -320,7 +320,6 @@ in
 
         powersave = mkOption {
           type = types.nullOr types.bool;
-          default = null;
           description = ''
             Whether to enable Wi-Fi power saving.
           '';

@@ -60,7 +60,6 @@ in
 
       secretKeyBaseFile = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
         example = "/run/keys/secret_key_base";
         description = ''
           The path to a file containing the
@@ -253,7 +252,6 @@ in
 
         host = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = ''
             Discourse database hostname. `null` means
             “prefer local unix socket connection”.
@@ -262,7 +260,6 @@ in
 
         passwordFile = lib.mkOption {
           type = with lib.types; nullOr path;
-          default = null;
           description = ''
             File containing the Discourse database user password.
 
@@ -321,7 +318,6 @@ in
 
         passwordFile = lib.mkOption {
           type = with lib.types; nullOr path;
-          default = null;
           description = ''
             File containing the Redis password.
 
@@ -394,7 +390,6 @@ in
 
           username = lib.mkOption {
             type = with lib.types; nullOr str;
-            default = null;
             description = ''
               The username of the SMTP server.
             '';

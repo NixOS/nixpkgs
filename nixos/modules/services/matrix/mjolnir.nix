@@ -92,7 +92,6 @@ in
 
     accessTokenFile = lib.mkOption {
       type = with lib.types; nullOr path;
-      default = null;
       description = ''
         File containing the matrix access token for the `mjolnir` user.
       '';
@@ -119,7 +118,6 @@ in
 
           passwordFile = lib.mkOption {
             type = with lib.types; nullOr path;
-            default = null;
             description = ''
               File containing the matrix password for the `mjolnir` user.
             '';

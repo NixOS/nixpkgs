@@ -84,7 +84,6 @@ in
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         File containing environment variables to be passed to the jigasi service,
         in which secret tokens can be specified securely by defining values for

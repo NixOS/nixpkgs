@@ -102,7 +102,6 @@ in
 
       secretsFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         example = "/run/secrets/pinchflat";
         description = ''
           Secrets like {env}`SECRET_KEY_BASE` and {env}`BASIC_AUTH_PASSWORD`

@@ -36,7 +36,6 @@ in
                 mount = lib.mkOption {
                   description = "Where to mount this dataset.";
                   type = types.nullOr types.str;
-                  default = null;
                 };
 
                 properties = lib.mkOption {

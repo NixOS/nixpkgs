@@ -88,7 +88,6 @@ in
     };
 
     torrentingPort = mkOption {
-      default = null;
       type = nullOr port;
       description = "the port passed to qbittorrent via `--torrenting-port`";
     };

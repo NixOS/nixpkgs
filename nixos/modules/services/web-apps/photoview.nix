@@ -126,7 +126,6 @@ in
 
       mapboxToken = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = "Mapbox API token for map features.";
       };
 
@@ -145,7 +144,6 @@ in
 
     secretsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         Path to an environment file containing secrets.
         Can be used for MAPBOX_TOKEN or other sensitive settings.

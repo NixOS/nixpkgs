@@ -98,7 +98,6 @@ in
               '';
             };
             client.helper = lib.mkOption {
-              default = null;
               type = lib.types.nullOr lib.types.str;
               description = ''
                 The furl for a Tahoe helper node.
@@ -139,7 +138,6 @@ in
             helper.enable = lib.mkEnableOption "helper service";
             sftpd.enable = lib.mkEnableOption "SFTP service";
             sftpd.port = lib.mkOption {
-              default = null;
               type = lib.types.nullOr lib.types.port;
               description = ''
                 The port on which the SFTP server will listen.
@@ -156,21 +154,18 @@ in
               '';
             };
             sftpd.hostPrivateKeyFile = lib.mkOption {
-              default = null;
               type = lib.types.nullOr lib.types.path;
               description = ''
                 Path to the SSH host private key.
               '';
             };
             sftpd.accounts.file = lib.mkOption {
-              default = null;
               type = lib.types.nullOr lib.types.path;
               description = ''
                 Path to the accounts file.
               '';
             };
             sftpd.accounts.url = lib.mkOption {
-              default = null;
               type = lib.types.nullOr lib.types.str;
               description = ''
                 URL of the accounts server.

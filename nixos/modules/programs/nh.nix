@@ -22,7 +22,6 @@ in
 
     flake = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         The string that will be used for the `NH_FLAKE` environment variable.
 

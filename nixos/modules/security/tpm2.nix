@@ -230,7 +230,6 @@ in
           cert installed.
         '';
         type = lib.types.nullOr lib.types.bool;
-        default = null;
       };
 
       ekFingerprint = lib.mkOption {
@@ -243,7 +242,6 @@ in
           before being used.
         '';
         type = lib.types.nullOr lib.types.str;
-        default = null;
       };
 
       firmwareLogFile = lib.mkOption {

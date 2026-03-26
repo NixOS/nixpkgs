@@ -56,7 +56,6 @@ in
 
       port = lib.mkOption {
         type = with lib.types; nullOr port;
-        default = null;
         description = ''
           Port to bind local redis instance to.
         '';

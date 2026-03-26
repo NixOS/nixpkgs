@@ -326,7 +326,6 @@ let
     options = {
       authorization = mkOption {
         type = types.nullOr types.attrs;
-        default = null;
         description = ''
           Sets the `Authorization` header on every scrape request with the configured credentials.
         '';
@@ -1891,7 +1890,6 @@ in
 
     webExternalUrl = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "https://example.com/";
       description = ''
         The URL under which Prometheus is externally reachable (for example,

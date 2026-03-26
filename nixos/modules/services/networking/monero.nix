@@ -228,7 +228,6 @@ in
 
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/var/lib/monero/monerod.env";
         description = ''
           Path to an EnvironmentFile for the monero service as defined in {manpage}`systemd.exec(5)`.

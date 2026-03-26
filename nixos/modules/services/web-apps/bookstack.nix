@@ -286,7 +286,6 @@ in
               The file containing your mysql/mariadb database password.
             '';
             example = "/var/secrets/bookstack-mysql-pass.txt";
-            default = null;
           };
           APP_KEY_FILE = lib.mkOption {
             type = lib.types.path;

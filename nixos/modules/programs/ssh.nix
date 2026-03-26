@@ -146,7 +146,6 @@ in
 
       agentPKCS11Whitelist = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = lib.literalExpression ''"''${pkgs.opensc}/lib/opensc-pkcs11.so"'';
         description = ''
           A pattern-list of acceptable paths for PKCS#11 shared libraries
@@ -211,7 +210,6 @@ in
                   '';
                 };
                 publicKeyFile = lib.mkOption {
-                  default = null;
                   type = lib.types.nullOr lib.types.path;
                   description = ''
                     The path to the public key file for the host. The public
@@ -274,7 +272,6 @@ in
 
       kexAlgorithms = lib.mkOption {
         type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
         example = [
           "curve25519-sha256@libssh.org"
           "diffie-hellman-group-exchange-sha256"

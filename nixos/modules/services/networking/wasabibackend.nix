@@ -112,7 +112,6 @@ in
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
-          default = null;
           description = "File that contains the password of the RPC user.";
         };
       };

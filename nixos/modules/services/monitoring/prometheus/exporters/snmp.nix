@@ -58,7 +58,6 @@ in
 
     configuration = mkOption {
       type = types.nullOr types.attrs;
-      default = null;
       description = ''
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
       '';

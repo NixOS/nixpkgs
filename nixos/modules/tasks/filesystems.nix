@@ -100,7 +100,6 @@ let
             This is only relevant if you are using [stratis](https://stratis-storage.github.io/).
           '';
           example = "04c68063-90a5-4235-b9dd-6180098a20d9";
-          default = null;
         };
 
         device = mkOption {
@@ -205,7 +204,6 @@ let
         formatOptions = mkOption {
           visible = false;
           type = types.unspecified;
-          default = null;
         };
 
         autoResize = mkOption {

@@ -126,7 +126,6 @@ in
 
             ca_path = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               description = "Path to your SSL CA certificate.";
             };
 

@@ -36,17 +36,14 @@ in
         version = mkOption {
           type = nullOr nonEmptyStr;
           description = "Version of the service.";
-          default = null;
         };
         short = mkOption {
           type = nullOr nonEmptyStr;
           description = "Short description for the service.";
-          default = null;
         };
         description = mkOption {
           type = nullOr nonEmptyStr;
           description = "Description for the service.";
-          default = null;
         };
         ports = mkOption {
           type = listOf (submodule portProtocolOptions);
@@ -69,12 +66,10 @@ in
               ipv4 = mkOption {
                 type = nullOr (strMatching "([0-9]{1,3}\\.){3}[0-9]{1,3}(/[0-9]{1,2})?");
                 description = "IPv4 destination.";
-                default = null;
               };
               ipv6 = mkOption {
                 type = nullOr (strMatching "[0-9A-Fa-f:]{3,39}(/[0-9]{1,3})?");
                 description = "IPv6 destination.";
-                default = null;
               };
             };
           };

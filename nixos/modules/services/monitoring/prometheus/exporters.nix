@@ -226,7 +226,6 @@ let
       };
       firewallFilter = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = literalExpression ''
           "-i eth0 -p tcp -m tcp --dport ${toString port}"
         '';

@@ -86,7 +86,6 @@ let
 
         workdir = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             The path to the workdir.
 

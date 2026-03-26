@@ -30,7 +30,6 @@ in
 
       web.listen-address = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Address to listen on for the web interface, API and telemetry.
 
@@ -69,7 +68,6 @@ in
 
       persistence.interval = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "10m";
         description = ''
           The minimum interval at which to write out the persistence file.
@@ -88,7 +86,6 @@ in
             "fatal"
           ]
         );
-        default = null;
         description = ''
           Only log messages with the given severity or above.
 

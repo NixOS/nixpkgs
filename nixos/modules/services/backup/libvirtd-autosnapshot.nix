@@ -182,7 +182,6 @@ in
                         "external"
                       ]
                     );
-                    default = null;
                     description = ''
                       Type of snapshot to create (internal or external).
                       If not specified, uses global snapshotType (${toString cfg.snapshotType}).
@@ -201,7 +200,6 @@ in
             ]
           )
         );
-        default = null;
         description = ''
           If specified only the list of VMs will be snapshotted else all existing one. Each entry can be either:
           - A string (VM name, uses default settings)

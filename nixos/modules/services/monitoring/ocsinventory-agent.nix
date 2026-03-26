@@ -44,7 +44,6 @@ in
             local = lib.mkOption {
               type = lib.types.nullOr lib.types.path;
               example = "/var/lib/ocsinventory-agent/reports";
-              default = null;
               description = ''
                 If specified, the OCS Inventory Agent will run in offline mode
                 and the resulting inventory file will be stored in the specified path.
@@ -63,7 +62,6 @@ in
 
             tag = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = "01234567890123";
               description = "Tag for the generated inventory.";
             };

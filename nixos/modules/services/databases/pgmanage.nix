@@ -112,7 +112,6 @@ in
 
     loginGroup = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         This tells pgmanage to only allow users in a certain PostgreSQL group to
         login to pgmanage. Note that a connection will be made to PostgreSQL in

@@ -24,7 +24,6 @@ in
       enable = mkEnableOption "collectd binary protocol receiver";
 
       authFile = mkOption {
-        default = null;
         type = types.nullOr types.path;
         description = "File mapping user names to pre-shared keys (passwords).";
       };

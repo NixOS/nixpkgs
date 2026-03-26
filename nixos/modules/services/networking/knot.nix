@@ -302,7 +302,6 @@ in
 
       settingsFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           As alternative to ``settings``, you can provide whole configuration
           directly in the almost-YAML format of Knot DNS.

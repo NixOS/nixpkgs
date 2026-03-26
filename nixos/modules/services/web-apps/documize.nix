@@ -48,7 +48,6 @@ in
 
     cert = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         The {file}`cert.pem` file used for https.
       '';
@@ -119,7 +118,6 @@ in
 
     location = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         reserved
       '';

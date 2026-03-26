@@ -54,7 +54,6 @@ in
 
       credentialsFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         example = "/run/secrets/pyload-credentials.env";
         description = ''
           File containing {env}`PYLOAD_DEFAULT_USERNAME` and

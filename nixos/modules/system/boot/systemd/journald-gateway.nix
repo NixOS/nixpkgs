@@ -34,7 +34,6 @@ in
     };
 
     cert = lib.mkOption {
-      default = null;
       type = with lib.types; nullOr str;
       description = ''
         The path to a file or `AF_UNIX` stream socket to read the server
@@ -47,7 +46,6 @@ in
     };
 
     key = lib.mkOption {
-      default = null;
       type = with lib.types; nullOr str;
       description = ''
         Specify the path to a file or `AF_UNIX` stream socket to read the
@@ -62,7 +60,6 @@ in
     };
 
     trust = lib.mkOption {
-      default = null;
       type = with lib.types; nullOr str;
       description = ''
         Specify the path to a file or `AF_UNIX` stream socket to read a CA

@@ -128,7 +128,6 @@ in
         Symlink a kubeconfig with cluster-admin privileges to environment path
         (/etc/\<path\>).
       '';
-      default = null;
       type = nullOr str;
     };
 

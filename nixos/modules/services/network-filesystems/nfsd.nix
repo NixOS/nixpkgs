@@ -58,7 +58,6 @@ in
 
         hostName = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             Hostname or address on which NFS requests will be accepted.
             Default is all.  See the {option}`-H` option in
@@ -91,7 +90,6 @@ in
 
         lockdPort = lib.mkOption {
           type = lib.types.nullOr lib.types.port;
-          default = null;
           example = 4001;
           description = ''
             Use a fixed port for the NFS lock manager kernel module
@@ -102,7 +100,6 @@ in
 
         statdPort = lib.mkOption {
           type = lib.types.nullOr lib.types.port;
-          default = null;
           example = 4000;
           description = ''
             Use a fixed port for {command}`rpc.statd`. This is

@@ -148,7 +148,6 @@ in
     # can be repeated.
     appendConfig = lib.mkOption {
       type = with lib.types; nullOr lines;
-      default = null;
       description = ''
         Literal text to insert at the end of `server.cfg`.
       '';
@@ -157,7 +156,6 @@ in
     # Certain changes need to happen at the beginning of the file.
     prependConfig = lib.mkOption {
       type = with lib.types; nullOr lines;
-      default = null;
       description = ''
         Literal text to insert at the start of `server.cfg`.
       '';

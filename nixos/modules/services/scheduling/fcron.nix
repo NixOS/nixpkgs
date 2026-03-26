@@ -70,7 +70,6 @@ in
 
       queuelen = mkOption {
         type = types.nullOr types.int;
-        default = null;
         description = "Number of jobs the serial queue and the lavg queue can contain.";
       };
 

@@ -112,7 +112,6 @@ let
             "multicast"
           ]
         );
-        default = null;
         description = ''
           Type of the route.  See the `Route types` section
           in the {manpage}`ip-route(8)` manual page for the details.
@@ -173,14 +172,12 @@ let
 
         metric = mkOption {
           type = types.nullOr types.int;
-          default = null;
           example = 42;
           description = "The default gateway metric/preference.";
         };
 
         source = mkOption {
           type = types.nullOr types.str;
-          default = null;
           description = "The default source address.";
         };
 
@@ -219,7 +216,6 @@ let
 
         useDHCP = mkOption {
           type = types.nullOr types.bool;
-          default = null;
           description = ''
             Whether this interface should be configured with DHCP. Overrides the
             default set by {option}`networking.useDHCP`. If `null` (the default),
@@ -316,7 +312,6 @@ let
         };
 
         macAddress = mkOption {
-          default = null;
           example = "00:11:22:33:44:55";
           type = types.nullOr (types.str);
           description = ''
@@ -325,7 +320,6 @@ let
         };
 
         mtu = mkOption {
-          default = null;
           example = 9000;
           type = types.nullOr types.int;
           description = ''
@@ -498,14 +492,12 @@ let
           description = "Vlan tag to apply to interface";
           example = 10;
           type = types.nullOr types.int;
-          default = null;
         };
 
         type = mkOption {
           description = "Openvswitch type to assign to interface";
           example = "internal";
           type = types.nullOr types.str;
-          default = null;
         };
       };
     };
@@ -628,7 +620,6 @@ in
     };
 
     networking.hostId = mkOption {
-      default = null;
       example = "4e98920d";
       type = types.nullOr types.str;
       description = ''
@@ -657,7 +648,6 @@ in
     };
 
     networking.defaultGateway = mkOption {
-      default = null;
       example = {
         address = "131.211.84.1";
         interface = "enp3s0";
@@ -988,7 +978,6 @@ in
               };
 
               miimon = mkOption {
-                default = null;
                 example = 100;
                 type = types.nullOr types.int;
                 description = ''
@@ -1001,7 +990,6 @@ in
               };
 
               mode = mkOption {
-                default = null;
                 example = "active-backup";
                 type = types.nullOr types.str;
                 description = ''
@@ -1014,7 +1002,6 @@ in
               };
 
               xmit_hash_policy = mkOption {
-                default = null;
                 example = "layer2+3";
                 type = types.nullOr types.str;
                 description = ''
@@ -1055,7 +1042,6 @@ in
             };
 
             mode = mkOption {
-              default = null;
               type = types.nullOr types.str;
               example = "vepa";
               description = "The mode of the macvlan device.";
@@ -1242,7 +1228,6 @@ in
 
             dev = mkOption {
               type = types.nullOr types.str;
-              default = null;
               example = "wan6";
               description = ''
                 The underlying network device on which the tunnel resides.
@@ -1323,7 +1308,6 @@ in
 
             local = mkOption {
               type = types.nullOr types.str;
-              default = null;
               example = "10.0.0.22";
               description = ''
                 The address of the local endpoint which the remote
@@ -1342,7 +1326,6 @@ in
 
             dev = mkOption {
               type = types.nullOr types.str;
-              default = null;
               example = "enp4s0f0";
               description = ''
                 The underlying network device on which the tunnel resides.
@@ -1385,7 +1368,6 @@ in
 
                     sourcePort = mkOption {
                       type = types.nullOr types.port;
-                      default = null;
                       example = 9002;
                       description = ''
                         Source port when using UDP encapsulation.
@@ -1464,7 +1446,6 @@ in
 
             local = mkOption {
               type = types.nullOr types.str;
-              default = null;
               example = "10.0.0.22";
               description = ''
                 The address of the local endpoint which the remote
@@ -1483,7 +1464,6 @@ in
 
             ttl = mkOption {
               type = types.nullOr types.int;
-              default = null;
               example = 255;
               description = ''
                 The time-to-live/hoplimit of the connection to the remote tunnel endpoint.
@@ -1644,7 +1624,6 @@ in
                   "cook"
                   "active"
                 ]);
-              default = null;
               example = "control";
               description = ''
                 Flags for interface of type `monitor`.
@@ -1653,7 +1632,6 @@ in
 
             fourAddr = mkOption {
               type = types.nullOr types.bool;
-              default = null;
               description = "Whether to enable `4-address mode` with type `managed`.";
             };
 

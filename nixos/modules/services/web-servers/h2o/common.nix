@@ -8,7 +8,6 @@
         "old"
       ]
     );
-    default = null;
     example = "intermediate";
     description = ''
       By default, H2O, without prejudice, will use as many TLS versions &

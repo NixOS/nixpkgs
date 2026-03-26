@@ -114,7 +114,6 @@ in
           Optional extra disk/hdd configuration.
           The disk will be an 'ext4' partition on a separate file.
         '';
-        default = null;
         example = {
           label = "storage";
           mountPoint = "/home/demo/storage";

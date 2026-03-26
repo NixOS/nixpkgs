@@ -116,7 +116,6 @@ in
               type = with lib.types; nullOr str;
               # pre-defined uuid of Dns in RFC 4122
               example = "6ba7b810-9dad-11d1-80b4-00c04fd430c8";
-              default = null;
               description = ''
                 Must be set to a unique identifier, preferably a UUID according to
                 RFC 4122. UUIDs can be generated with `uuidgen` command, found in
@@ -141,7 +140,6 @@ in
 
       clientSecretFile = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
         description = ''
           Path to the file contained the client_secret of the dashboard.
         '';

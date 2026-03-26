@@ -30,7 +30,6 @@ in
 
         password = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             Password used for HQPlayer's WebUI.
 
@@ -61,7 +60,6 @@ in
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.lines;
-        default = null;
         description = ''
           HQplayer daemon configuration, written to /etc/hqplayer/hqplayerd.xml.
 

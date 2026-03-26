@@ -26,7 +26,6 @@ in
 
       configPath = lib.mkOption {
         type = with lib.types; nullOr str;
-        default = null;
         example = "/etc/nixos/matterbridge.toml";
         description = ''
           The path to the matterbridge configuration file.

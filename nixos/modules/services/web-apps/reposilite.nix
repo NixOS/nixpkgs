@@ -118,7 +118,6 @@ let
           Database connection string. Please use {option}`services.reposilite.database` instead.
           See <https://reposilite.com/guide/general#local-configuration> for valid values.
         '';
-        default = null;
       };
 
       sslEnabled = lib.mkOption {
@@ -143,7 +142,6 @@ let
           If you are using a Java KeyStore, don't forget to specify the password via the {var}`REPOSILITE_LOCAL_KEYPASSWORD` environment variable.
           See <https://reposilite.com/guide/ssl> for more information on how to set SSL up.
         '';
-        default = null;
         example = "\${WORKING_DIRECTORY}/cert.pem \${WORKING_DIRECTORY}/key.pem";
       };
 
@@ -154,7 +152,6 @@ let
           WARNING: this option is insecure and should not be used to store the password.
           Consider using {option}`services.reposilite.keyPasswordFile` instead.
         '';
-        default = null;
       };
 
       enforceSsl = lib.mkOption {
@@ -287,7 +284,6 @@ in
         Path the the file containing the password used to unlock the Java KeyStore file specified in {option}`services.reposilite.settings.keyPath`.
         This file must be readable my {option}`services.reposilite.user`.
       '';
-      default = null;
     };
 
     useACMEHost = lib.mkOption {

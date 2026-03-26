@@ -50,7 +50,6 @@ in
     };
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         Environment file to be passed to the systemd service.
         Useful for passing secrets to the service to prevent them from being

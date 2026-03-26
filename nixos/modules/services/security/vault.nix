@@ -90,7 +90,6 @@ in
 
       tlsKeyFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "/path/to/your/key.pem";
         description = "TLS private key file. TLS will be disabled unless this option is set";
       };

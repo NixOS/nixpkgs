@@ -202,7 +202,6 @@ in
 
     filters = lib.mkOption {
       type = lib.types.nullOr lib.types.lines;
-      default = null;
       description = ''
         Global display difference filter. See man:snapper(8) for more details.
       '';

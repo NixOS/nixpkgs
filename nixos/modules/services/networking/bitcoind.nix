@@ -54,7 +54,6 @@ let
 
         configFile = mkOption {
           type = types.nullOr types.path;
-          default = null;
           example = "/var/lib/${name}/bitcoin.conf";
           description = "The configuration file path to supply bitcoind.";
         };
@@ -91,7 +90,6 @@ let
         rpc = {
           port = mkOption {
             type = types.nullOr types.port;
-            default = null;
             description = "Override the default port on which to listen for JSON-RPC connections.";
           };
           users = mkOption {

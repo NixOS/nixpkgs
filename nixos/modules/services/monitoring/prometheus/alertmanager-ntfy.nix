@@ -92,7 +92,6 @@ in
                           The condition under which this tag should be added.
                           Tags with no condition are always included.
                         '';
-                        default = null;
                         example = ''status == "firing"'';
                       };
                     };

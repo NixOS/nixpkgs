@@ -42,7 +42,6 @@ in
     };
 
     text = mkOption {
-      default = null;
       type = types.nullOr types.lines;
       description = "Text content of the configuration file.";
     };

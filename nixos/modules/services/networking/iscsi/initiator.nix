@@ -38,7 +38,6 @@ in
         Append an additional file's contents to /etc/iscsid.conf. Use a non-store path
         and store passwords in this file.
       '';
-      default = null;
       type = nullOr str;
     };
   };

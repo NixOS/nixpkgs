@@ -98,7 +98,6 @@ in
 
       clock-format = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "%F";
         description = ''
           Clock format string (as expected by strftime, e.g. "%H:%M")

@@ -132,7 +132,6 @@ in
 
         storagePassFile = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = ''
             Path to file with database password. The content of this will be used to
             create the password for the `StoragePass` option.
@@ -213,7 +212,6 @@ in
 
       controlMachine = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = null;
         description = ''
           The short hostname of the machine where SLURM control functions are

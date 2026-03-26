@@ -770,7 +770,6 @@ in
                 };
 
                 keyFileOffset = mkOption {
-                  default = null;
                   example = 4096;
                   type = types.nullOr types.int;
                   description = ''
@@ -823,7 +822,6 @@ in
                 };
 
                 gpgCard = mkOption {
-                  default = null;
                   description = ''
                     The option to use this LUKS device with a GPG encrypted luks password by the GPG Smartcard.
                     If null (the default), GPG-Smartcard will be disabled for this device.
@@ -854,7 +852,6 @@ in
 
                 fido2 = {
                   credential = mkOption {
-                    default = null;
                     example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
                     type = types.nullOr types.str;
                     description = "The FIDO2 credential ID.";
@@ -891,7 +888,6 @@ in
                 };
 
                 yubikey = mkOption {
-                  default = null;
                   description = ''
                     The options to use for this LUKS device in YubiKey-PBA.
                     If null (the default), YubiKey-PBA will be disabled for this device.

@@ -146,7 +146,6 @@ let
 
         extraConfig = mkOption {
           type = with types; nullOr lines;
-          default = null;
           description = ''
             Extra lines that go into the pool configuration.
             See the documentation on `php-fpm.conf` for

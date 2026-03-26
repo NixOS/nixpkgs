@@ -64,7 +64,6 @@ let
 
       certificate = mkOption {
         description = "Certificate to authenticate with.";
-        default = null;
         example = "/var/lib/secrets/openconnect_certificate.pem";
         type = with types; nullOr (either path pkcs11);
       };

@@ -12,7 +12,6 @@ in
     enable = lib.mkEnableOption "Linux kernel Same-Page Merging";
     sleep = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
-      default = null;
       description = ''
         How many milliseconds ksmd should sleep between scans.
         Setting it to `null` uses the kernel's default time.

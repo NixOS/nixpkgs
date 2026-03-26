@@ -38,7 +38,6 @@ let
 
       geometryFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           The path to the xkb geometry file.
           This (completely optional) file describes the physical layout of
@@ -49,7 +48,6 @@ let
 
       keycodesFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           The path to the xkb keycodes file.
           This file specifies the range and the interpretation of the raw
@@ -60,7 +58,6 @@ let
 
       symbolsFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           The path to the xkb symbols file.
           This is the most important file: it defines which symbol or action
@@ -71,7 +68,6 @@ let
 
       typesFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           The path to the xkb types file.
           This file specifies the key types that can be associated with

@@ -172,7 +172,6 @@ let
 
         uid = mkOption {
           type = with types; nullOr int;
-          default = null;
           description = ''
             The account UID. If the UID is null, a free UID is picked on
             activation.
@@ -355,7 +354,6 @@ let
 
         hashedPassword = mkOption {
           type = with types; nullOr (passwdEntry str);
-          default = null;
           description = ''
             Specifies the hashed password for the user.
 
@@ -366,7 +364,6 @@ let
 
         password = mkOption {
           type = with types; nullOr str;
-          default = null;
           description = ''
             Specifies the (clear text) password for the user.
             Warning: do not set confidential information here
@@ -393,14 +390,12 @@ let
 
         passwordFile = mkOption {
           type = with types; nullOr str;
-          default = null;
           visible = false;
           description = "Deprecated alias of hashedPasswordFile";
         };
 
         initialHashedPassword = mkOption {
           type = with types; nullOr (passwdEntry str);
-          default = null;
           description = ''
             Specifies the initial hashed password for the user, i.e. the
             hashed password assigned if the user does not already
@@ -459,7 +454,6 @@ let
         linger = mkOption {
           type = types.nullOr types.bool;
           example = true;
-          default = null;
           description = ''
             Whether to enable or disable lingering for this user.  Without
             lingering, user units will not be started until the user logs in,
@@ -520,7 +514,6 @@ let
 
         gid = mkOption {
           type = with types; nullOr int;
-          default = null;
           description = ''
             The group GID. If the GID is null, a free GID is picked on
             activation.

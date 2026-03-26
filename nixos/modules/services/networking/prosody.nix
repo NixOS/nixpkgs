@@ -454,7 +454,6 @@ let
         };
         http_host = mkOption {
           type = types.nullOr types.str;
-          default = null;
           description = ''
             To avoid an additional DNS record and certificate, you may set this option to your primary domain (e.g. "example.com")
             or use a reverse proxy to handle the HTTP for that domain.
@@ -873,7 +872,6 @@ in
 
       ssl = mkOption {
         type = types.nullOr (types.submodule sslOpts);
-        default = null;
         description = "Paths to SSL files";
       };
 

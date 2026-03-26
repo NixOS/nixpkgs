@@ -144,7 +144,6 @@ in
           This option only has an effect when {option}`allowReboot` is enabled.
           The default value of `null` means that reboots are allowed at any time.
         '';
-        default = null;
         example = {
           lower = "01:00";
           upper = "05:00";

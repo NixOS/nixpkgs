@@ -48,7 +48,6 @@ in
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = "File containing the password for the SMTP user.";
       };
 

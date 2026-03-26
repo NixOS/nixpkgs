@@ -18,7 +18,6 @@ in
       # See: https://github.com/NixOS/nixpkgs/pull/278522#discussion_r1460292639
       type = lib.types.nullOr (lib.types.either lib.types.str lib.types.path);
 
-      default = null;
       defaultText = "if (using nixpkgsFlake.lib.nixosSystem) then self.outPath else null";
 
       example = ''fetchTarball { name = "source"; sha256 = "${lib.fakeHash}"; url = "https://github.com/nixos/nixpkgs/archive/somecommit.tar.gz"; }'';

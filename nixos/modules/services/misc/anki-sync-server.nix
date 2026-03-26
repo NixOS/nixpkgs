@@ -80,7 +80,6 @@ in
             };
             password = mkOption {
               type = nullOr str;
-              default = null;
               description = ''
                 Password accepted by anki-sync-server for the associated username.
                 **WARNING**: This option is **not secure**. This password will
@@ -91,7 +90,6 @@ in
             };
             passwordFile = mkOption {
               type = nullOr path;
-              default = null;
               description = ''
                 File containing the password accepted by anki-sync-server for
                 the associated username.  Make sure to make readable only by

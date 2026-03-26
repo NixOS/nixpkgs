@@ -62,7 +62,6 @@ in
     };
     quoteProviderLibrary = mkOption {
       type = with types; nullOr path;
-      default = null;
       example = literalExpression "pkgs.sgx-azure-dcap-client";
       description = "Custom quote provider library to use.";
     };

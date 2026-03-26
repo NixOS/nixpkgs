@@ -108,7 +108,6 @@ let
 
           serverVersion = mkOption {
             type = types.nullOr types.str;
-            default = null;
             description = ''
               MySQL *exact* version string. Not used if `createdLocally` is set,
               but must be set otherwise. See

@@ -182,7 +182,6 @@ in
       };
 
       bantime-increment.factor = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = "4";
         description = ''
@@ -299,7 +298,6 @@ in
                     filter = lib.mkOption {
                       type = nullOr (either str configFormat.type);
 
-                      default = null;
                       description = "Content of the filter used for this jail.";
                     };
 

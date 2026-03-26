@@ -104,7 +104,6 @@ in
 
       compressionLevel = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
-        default = null;
         description = ''
           Compression level to use for ${lib.concatStringsSep ", " (lib.init (lib.attrNames compressionAlgs))} or ${lib.last (lib.attrNames compressionAlgs)}.
           ${lib.concatStringsSep "\n" (

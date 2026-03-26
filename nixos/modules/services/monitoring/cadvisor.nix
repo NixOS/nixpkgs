@@ -26,7 +26,6 @@ in
       };
 
       storageDriver = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = "influxdb";
         description = "Cadvisor storage driver.";

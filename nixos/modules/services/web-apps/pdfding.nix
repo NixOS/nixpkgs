@@ -134,7 +134,6 @@ in
 
     secretKeyFile = mkOption {
       type = types.path;
-      default = null;
       description = "File containing the Django SECRET_KEY. ${secretRecommendation}";
       example = "/run/secrets/pdfding-secret-key";
     };
@@ -175,7 +174,6 @@ in
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = "File containing POSTGRES_PASSWORD. ${secretRecommendation}";
         example = "/run/secrets/pdfding-db-password";
       };
@@ -236,7 +234,6 @@ in
       };
       endpoint = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "The s3 endpoint for backups";
         example = "127.0.0.1:9000";
       };

@@ -126,7 +126,6 @@ in
       };
 
       localControlSocketPath = mkOption {
-        default = null;
         # FIXME: What is the proper type here so users can specify strings,
         # paths and null?
         # My guess would be `types.nullOr (types.either types.str types.path)`

@@ -352,7 +352,6 @@ let
 
     replaceStdenv = mkMassRebuild {
       type = types.nullOr (types.functionTo types.package);
-      default = null;
       defaultText = literalExpression "null";
       description = ''
         A function to replace the standard environment (stdenv).

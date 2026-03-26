@@ -76,7 +76,6 @@ in
     extraSettingsFile = lib.mkOption {
       description = "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
       type = lib.types.nullOr lib.types.path;
-      default = null;
     };
     listDefaults = lib.mkOption {
       description = ''

@@ -118,7 +118,6 @@ in
 
       passFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = "Database password file for FreshRSS.";
         example = "/run/secrets/freshrss";
       };
@@ -131,7 +130,6 @@ in
 
       tableprefix = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "Database table prefix for FreshRSS.";
         example = "freshrss";
       };

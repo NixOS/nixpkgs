@@ -58,7 +58,6 @@ in
 
       maxMemory = lib.mkOption {
         type = with lib.types; nullOr ints.unsigned;
-        default = null;
         description = ''
           The maximum amount of memory to use for storage (in bytes).
           `null` means this will be automatically set.
@@ -67,7 +66,6 @@ in
 
       memcachePort = lib.mkOption {
         type = with lib.types; nullOr port;
-        default = null;
         description = ''
           To enable memcached compatible API on this port.
           `null` means disabled.
@@ -86,7 +84,6 @@ in
 
       dbNum = lib.mkOption {
         type = with lib.types; nullOr ints.unsigned;
-        default = null;
         description = "Maximum number of supported databases for `select`";
       };
 

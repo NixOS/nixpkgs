@@ -12,7 +12,6 @@ let
   mkConfigForDevice = deviceType: {
     dev = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "/dev/input/event0";
       description = ''
         Path for ${deviceType} device.  Set to `null` to apply to any
@@ -45,7 +44,6 @@ let
 
     accelSpeed = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "-0.5";
       description = ''
         Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).
@@ -70,7 +68,6 @@ let
 
     accelPointsMotion = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.number);
-      default = null;
       example = [
         0.0
         1.0
@@ -85,7 +82,6 @@ let
 
     accelPointsScroll = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.number);
-      default = null;
       example = [
         0.0
         1.0
@@ -100,7 +96,6 @@ let
 
     accelStepFallback = lib.mkOption {
       type = lib.types.nullOr lib.types.number;
-      default = null;
       example = 0.1;
       description = ''
         Sets the step between the points of the fallback acceleration function. When a step of
@@ -111,7 +106,6 @@ let
 
     accelStepMotion = lib.mkOption {
       type = lib.types.nullOr lib.types.number;
-      default = null;
       example = 0.1;
       description = ''
         Sets the step between the points of the (pointer) motion acceleration function. When a
@@ -122,7 +116,6 @@ let
 
     accelStepScroll = lib.mkOption {
       type = lib.types.nullOr lib.types.number;
-      default = null;
       example = 0.1;
       description = ''
         Sets the step between the points of the scroll acceleration function. When a step of
@@ -133,7 +126,6 @@ let
 
     buttonMapping = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "1 6 3 4 5 0 7";
       description = ''
         Sets the logical button mapping for this device, see {manpage}`XSetPointerMapping(3)`. The string  must
@@ -196,7 +188,6 @@ let
 
     scrollButton = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
-      default = null;
       example = 1;
       description = ''
         Designates a button as scroll button. If the ScrollMethod is button and the button is logically

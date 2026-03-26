@@ -290,7 +290,6 @@ in
 
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = lib.literalExpression ''"''${config.services.murmur.stateDir}/murmurd.env"'';
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.

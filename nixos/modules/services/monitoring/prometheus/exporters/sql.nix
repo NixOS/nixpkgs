@@ -96,7 +96,6 @@ in
     };
     configuration = mkOption {
       type = with types; nullOr (submodule cfgOptions);
-      default = null;
       description = ''
         Exporter configuration as nix attribute set. Mutually exclusive with 'configFile' option.
       '';

@@ -54,7 +54,6 @@ let
     desc:
     lib.mkOption {
       type = lib.types.nullOr lib.types.int;
-      default = null;
       example = 365;
       apply = val: if val == null then -1 else val;
       description = mkAutoDesc ''

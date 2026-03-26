@@ -24,7 +24,6 @@ in
 
       configDir = lib.mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/var/lib/ocis/config";
         description = ''
           Path to directory containing oCIS config file.
@@ -41,7 +40,6 @@ in
 
       environmentFile = lib.mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/run/keys/ocis.env";
         description = ''
           An environment file as defined in {manpage}`systemd.exec(5)`.

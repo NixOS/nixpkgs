@@ -20,7 +20,6 @@ in
     # A simple boolean option that can be enabled or disabled.
     enable = mkOption {
       type = types.nullOr types.bool;
-      default = null;
       example = true;
       description = ''
         Some descriptive text

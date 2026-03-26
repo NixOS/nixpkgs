@@ -94,14 +94,12 @@ in
 
       interface = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "eth0";
         description = "Network interface to bind.";
       };
 
       username = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "Username for basic http authentication.";
       };
 
@@ -184,7 +182,6 @@ in
 
       indexFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = "Custom index.html path";
       };
 
@@ -219,7 +216,6 @@ in
 
       caFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = "SSL CA file path for client certificate verification.";
       };
 

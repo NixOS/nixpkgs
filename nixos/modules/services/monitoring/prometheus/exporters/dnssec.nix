@@ -14,7 +14,6 @@ in
   extraOpts = {
     configuration = lib.mkOption {
       type = lib.types.nullOr lib.types.attrs;
-      default = null;
       description = ''
         dnssec exporter configuration as nix attribute set.
 
@@ -41,7 +40,6 @@ in
 
     listenAddress = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Listen address as host IP and port definition.
       '';

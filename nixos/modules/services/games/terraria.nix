@@ -86,7 +86,6 @@ in
 
       password = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Sets the server password. Leave `null` for no password.
         '';
@@ -125,7 +124,6 @@ in
 
       banListPath = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           The path to the ban list.
         '';

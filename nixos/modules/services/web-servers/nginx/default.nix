@@ -686,7 +686,6 @@ in
               port = mkOption {
                 type = nullOr port;
                 description = "Port number.";
-                default = null;
               };
               ssl = mkOption {
                 type = nullOr bool;
@@ -1013,7 +1012,6 @@ in
 
       mapHashBucketSize = mkOption {
         type = types.nullOr (types.ints.positive);
-        default = null;
         description = ''
           Sets the bucket size for the map variables hash tables. Default
           value depends on the processor’s cache line size.
@@ -1042,7 +1040,6 @@ in
 
       serverNamesHashMaxSize = mkOption {
         type = types.nullOr types.ints.positive;
-        default = null;
         description = ''
           Sets the maximum size of the server names hash tables.
         '';

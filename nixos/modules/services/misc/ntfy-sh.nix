@@ -64,7 +64,6 @@ in
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = "/run/secrets/ntfy";
       description = ''
         Path to a file containing extra ntfy environment variables in the systemd `EnvironmentFile`

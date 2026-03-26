@@ -60,7 +60,6 @@ in
       '';
     };
     basicAuthUsername = lib.mkOption {
-      default = null;
       type = lib.types.nullOr lib.types.str;
       description = ''
         Basic Auth username used to protect VictoriaTraces instance by authorization

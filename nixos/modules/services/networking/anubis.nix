@@ -244,7 +244,6 @@ let
                   type = types.bool;
                 };
                 WEBMASTER_EMAIL = mkDefaultOption "settings.WEBMASTER_EMAIL" {
-                  default = null;
                   description = ''
                     If set, shows a contact email address when rendering error pages.
 

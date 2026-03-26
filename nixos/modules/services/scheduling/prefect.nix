@@ -122,7 +122,6 @@ in
 
     baseUrl = lib.mkOption {
       type = nullOr str;
-      default = null;
       description = "external url when served by a reverse proxy, e.g. `https://example.com/prefect`";
     };
   };

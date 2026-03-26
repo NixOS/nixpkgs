@@ -52,14 +52,12 @@ in
       enable = lib.mkEnableOption "gvpe";
 
       nodename = mkOption {
-        default = null;
         type = types.nullOr types.str;
         description = ''
           GVPE node name
         '';
       };
       configText = mkOption {
-        default = null;
         type = types.nullOr types.lines;
         example = ''
           tcp-port = 655
@@ -80,7 +78,6 @@ in
         '';
       };
       configFile = mkOption {
-        default = null;
         type = types.nullOr types.path;
         example = "/root/my-gvpe-conf";
         description = ''
@@ -95,7 +92,6 @@ in
         '';
       };
       subnet = mkOption {
-        default = null;
         type = types.nullOr types.str;
         example = "10.0.0.0/8";
         description = ''

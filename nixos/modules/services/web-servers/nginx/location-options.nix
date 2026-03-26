@@ -36,7 +36,6 @@ with lib;
 
     proxyPass = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "http://www.example.org/";
       description = ''
         Adds proxy_pass directive and sets recommended proxy headers if
@@ -55,7 +54,6 @@ with lib;
 
     uwsgiPass = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "unix:/run/example/example.sock";
       description = ''
         Adds uwsgi_pass directive and sets recommended proxy headers if
@@ -74,7 +72,6 @@ with lib;
 
     tryFiles = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "$uri =404";
       description = ''
         Adds try_files directive.
@@ -83,7 +80,6 @@ with lib;
 
     root = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/your/root/directory";
       description = ''
         Root directory for requests.
@@ -92,7 +88,6 @@ with lib;
 
     alias = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/your/alias/directory";
       description = ''
         Alias directory for requests.

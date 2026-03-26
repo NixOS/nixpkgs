@@ -62,7 +62,6 @@ in
       domain = lib.mkOption {
         type = with lib.types; nullOr str;
         description = "Domain to host Odoo with nginx";
-        default = null;
       };
     };
   };

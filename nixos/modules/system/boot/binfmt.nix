@@ -98,7 +98,6 @@ in
                 };
 
                 mask = mkOption {
-                  default = null;
                   description = "A mask to be ANDed with the byte sequence of the file before matching";
                   type = types.nullOr types.str;
                 };

@@ -34,7 +34,6 @@ in
           File containing environment variables to be passed to Readeck.
           May be used to provide the Readeck secret key by setting the READECK_SECRET_KEY variable.
         '';
-        default = null;
       };
 
       settings = mkOption {

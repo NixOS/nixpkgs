@@ -96,7 +96,6 @@ in
 
           torrentDir = mkOption {
             type = types.nullOr types.path;
-            default = null;
             description = ''
               Directory containing torrent files, or if you're using a torrent
               client integration and injection - your torrent client's .torrent
@@ -131,7 +130,6 @@ in
     };
 
     settingsFile = lib.mkOption {
-      default = null;
       type = types.nullOr types.path;
       description = ''
         Path to a JSON file containing settings that will be merged with the

@@ -80,7 +80,6 @@ with lib;
 
     unicastSrcIp = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         Default IP for binding vrrpd is the primary IP on interface. If you
         want to hide location of vrrpd, use this IP as src_addr for unicast

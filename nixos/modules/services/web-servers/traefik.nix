@@ -36,7 +36,6 @@ in
     enable = mkEnableOption "Traefik web server";
 
     staticConfigFile = mkOption {
-      default = null;
       example = literalExpression "/path/to/static_config.toml";
       type = types.nullOr types.path;
       description = ''

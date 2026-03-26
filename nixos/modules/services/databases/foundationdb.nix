@@ -144,7 +144,6 @@ in
           "stateless"
         ]
       );
-      default = null;
       description = "Process class";
     };
 
@@ -277,7 +276,6 @@ in
       type = lib.types.submodule {
         options = {
           machineId = lib.mkOption {
-            default = null;
             type = lib.types.nullOr lib.types.str;
             description = ''
               Machine identifier key. All processes on a machine should share a

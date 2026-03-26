@@ -64,21 +64,18 @@ in
       defaultSearchProviderEnabled = lib.mkOption {
         type = lib.types.nullOr lib.types.bool;
         description = "Enable the default search provider.";
-        default = null;
         example = true;
       };
 
       defaultSearchProviderSearchURL = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         description = "Chromium default search provider url.";
-        default = null;
         example = "https://encrypted.google.com/search?q={searchTerms}&{google:RLZ}{google:originalQueryForSuggestion}{google:assistedQueryStats}{google:searchFieldtrialParameter}{google:searchClient}{google:sourceId}{google:instantExtendedEnabledParameter}ie={inputEncoding}";
       };
 
       defaultSearchProviderSuggestURL = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         description = "Chromium default search provider url for suggestions.";
-        default = null;
         example = "https://encrypted.google.com/complete/search?output=chrome&q={searchTerms}";
       };
 

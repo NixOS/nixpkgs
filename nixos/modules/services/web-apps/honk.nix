@@ -66,7 +66,6 @@ in
       };
 
       extraJS = lib.mkOption {
-        default = null;
         description = ''
           An extra JavaScript file to be loaded by the client.
         '';

@@ -48,7 +48,6 @@ in
 
       port = lib.mkOption {
         type = lib.types.nullOr lib.types.port;
-        default = null;
         example = 8045;
         description = ''
           Port on which SillyTavern will listen.
@@ -57,7 +56,6 @@ in
 
       listenAddressIPv4 = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "127.0.0.1";
         description = ''
           Specific IPv4 address to listen to.
@@ -66,7 +64,6 @@ in
 
       listenAddressIPv6 = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "::1";
         description = ''
           Specific IPv6 address to listen to.
@@ -75,7 +72,6 @@ in
 
       listen = lib.mkOption {
         type = lib.types.nullOr lib.types.bool;
-        default = null;
         example = true;
         description = ''
           Whether to listen on all network interfaces.
@@ -84,7 +80,6 @@ in
 
       whitelist = lib.mkOption {
         type = lib.types.nullOr lib.types.bool;
-        default = null;
         example = true;
         description = ''
           Enables whitelist mode.

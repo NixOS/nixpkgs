@@ -236,7 +236,6 @@ in
               };
 
               countryCode = mkOption {
-                default = null;
                 example = "US";
                 type = types.nullOr types.str;
                 description = ''
@@ -605,7 +604,6 @@ in
 
                       bssid = mkOption {
                         type = types.nullOr types.str;
-                        default = null;
                         example = "11:22:33:44:55:66";
                         description = ''
                           Specifies the BSSID for this BSS. Usually determined automatically,
@@ -944,7 +942,6 @@ in
                                 };
 
                                 mac = mkOption {
-                                  default = null;
                                   example = "11:22:33:44:55:66";
                                   type = types.nullOr types.str;
                                   description = ''
@@ -955,14 +952,12 @@ in
                                 };
 
                                 vlanid = mkOption {
-                                  default = null;
                                   example = 1;
                                   type = types.nullOr types.ints.unsigned;
                                   description = "If this attribute is given, all clients using this entry will get tagged with the given VLAN ID.";
                                 };
 
                                 pk = mkOption {
-                                  default = null;
                                   example = "";
                                   type = types.nullOr types.str;
                                   description = ''
@@ -973,7 +968,6 @@ in
                                 };
 
                                 id = mkOption {
-                                  default = null;
                                   example = "";
                                   type = types.nullOr types.str;
                                   description = ''

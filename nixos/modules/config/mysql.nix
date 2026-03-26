@@ -44,7 +44,6 @@ in
             };
             updateTable = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = "users_updates";
               description = ''
                 The name of the table used for password alteration. If not defined, the value
@@ -63,7 +62,6 @@ in
             };
             statusColumn = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = "status";
               description = ''
                 The name of the column or an SQL expression that indicates the status of
@@ -142,7 +140,6 @@ in
                   "blowfish"
                 ]
               );
-              default = null;
               example = "blowfish";
               description = "The default encryption method to use for `passwordCrypt = 1`.";
             };
@@ -299,7 +296,6 @@ in
             };
             getspent = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = lib.literalExpression ''
                 SELECT username,password,'1','0','99999','0','0','-1','0' FROM users
               '';
@@ -310,7 +306,6 @@ in
             };
             getgrnam = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = lib.literalExpression ''
                 SELECT name,password,gid FROM groups WHERE name='%1$s' LIMIT 1
               '';
@@ -321,7 +316,6 @@ in
             };
             getgrgid = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = lib.literalExpression ''
                 SELECT name,password,gid FROM groups WHERE gid='%1$u' LIMIT 1
               '';
@@ -332,7 +326,6 @@ in
             };
             getgrent = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = lib.literalExpression ''
                 SELECT name,password,gid FROM groups
               '';
@@ -343,7 +336,6 @@ in
             };
             memsbygid = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = lib.literalExpression ''
                 SELECT username FROM grouplist WHERE gid='%1$u'
               '';
@@ -354,7 +346,6 @@ in
             };
             gidsbymem = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = lib.literalExpression ''
                 SELECT gid FROM grouplist WHERE username='%1$s'
               '';

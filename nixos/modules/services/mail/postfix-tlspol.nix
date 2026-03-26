@@ -94,7 +94,6 @@ in
           dns = {
             address = mkOption {
               type = with types; nullOr str;
-              default = null;
               example = "127.0.0.1:53";
               description = ''
                 IP and port to your DNS resolver.

@@ -88,7 +88,6 @@ in
 
               basicAuthUsername = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 description = ''
                   The username value that you have to provide when authenticating.
                 '';
@@ -97,7 +96,6 @@ in
               # NOTE: this is not a real upstream option
               basicAuthPasswordFile = mkOption {
                 type = types.nullOr types.path;
-                default = null;
                 example = "/var/secrets/suwayomi-server-password";
                 description = ''
                   The password file containing the value that you have to provide when authenticating.

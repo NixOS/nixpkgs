@@ -72,7 +72,6 @@ in
           to members of the cluster. This address must be reachable by the rest
           of the cluster.
         '';
-        default = null;
         type = nullOr str;
       };
 
@@ -115,7 +114,6 @@ in
           Kubernetes apiserver basic authentication file. See
           <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
         '';
-        default = null;
         type = nullOr path;
       };
 
@@ -184,7 +182,6 @@ in
 
         keyFile = lib.mkOption {
           description = "Etcd key file.";
-          default = null;
           type = nullOr path;
         };
 
@@ -243,12 +240,10 @@ in
       preferredAddressTypes = lib.mkOption {
         description = "List of the preferred NodeAddressTypes to use for kubelet connections.";
         type = nullOr str;
-        default = null;
       };
 
       proxyClientCertFile = lib.mkOption {
         description = "Client certificate to use for connections to proxy.";
-        default = null;
         type = nullOr path;
       };
 
@@ -347,7 +342,6 @@ in
           Kubernetes apiserver token authentication file. See
           <https://kubernetes.io/docs/reference/access-authn-authz/authentication>
         '';
-        default = null;
         type = nullOr path;
       };
 
@@ -356,7 +350,6 @@ in
           Optional glog verbosity level for logging statements. See
           <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
         '';
-        default = null;
         type = nullOr int;
       };
 
@@ -365,7 +358,6 @@ in
           Kubernetes apiserver Webhook config file. It uses the kubeconfig file format.
           See <https://kubernetes.io/docs/reference/access-authn-authz/webhook/>
         '';
-        default = null;
         type = nullOr path;
       };
 

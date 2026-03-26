@@ -48,7 +48,6 @@ in
     hardware.printers = {
       ensureDefaultPrinter = lib.mkOption {
         type = lib.types.nullOr printerName;
-        default = null;
         description = ''
           Ensures the named printer is the default CUPS printer / printer queue.
         '';

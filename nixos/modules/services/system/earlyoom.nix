@@ -70,7 +70,6 @@ in
 
     freeSwapKillThreshold = mkOption {
       type = types.nullOr (types.ints.between 1 100);
-      default = null;
       description = ''
         Minimum free swap space (in percent) before sending SIGKILL.
         If unset, this defaults to half of {option}`freeSwapThreshold`.
@@ -107,7 +106,6 @@ in
 
     killHook = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = literalExpression ''
         pkgs.writeShellScript "earlyoom-kill-hook" '''
           echo "Process $EARLYOOM_NAME ($EARLYOOM_PID) was killed" >> /path/to/log

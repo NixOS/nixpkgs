@@ -48,7 +48,6 @@ in
       type = with types; nullOr str;
       description = "How often to run renovate. See {manpage}`systemd.time(7)` for the format.";
       example = "*:0/10";
-      default = null;
     };
     credentials = mkOption {
       type = with types; attrsOf path;

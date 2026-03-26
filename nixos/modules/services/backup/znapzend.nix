@@ -184,7 +184,6 @@ let
             e.g. for database locking/flushing. See also
             {option}`postsnap`.
           '';
-          default = null;
           example = lib.literalExpression ''
             '''''${pkgs.mariadb}/bin/mysql -e "set autocommit=0;flush tables with read lock;\\! ''${pkgs.coreutils}/bin/sleep 600" &  ''${pkgs.coreutils}/bin/echo $! > /tmp/mariadblock.pid ; sleep 10'''
           '';

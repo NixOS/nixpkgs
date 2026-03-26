@@ -226,21 +226,18 @@ in
 
         secretFile = mkOption {
           type = types.nullOr types.str;
-          default = null;
           example = "/var/lib/secrets/gitea/captcha_secret";
           description = "Path to a file containing the CAPTCHA secret key.";
         };
 
         siteKey = mkOption {
           type = types.nullOr types.str;
-          default = null;
           example = "my_site_key";
           description = "CAPTCHA site key to use for Gitea.";
         };
 
         url = mkOption {
           type = types.nullOr types.str;
-          default = null;
           example = "https://google.com/recaptcha";
           description = "CAPTCHA url to use for Gitea. Only relevant for `recaptcha` and `mcaptcha`.";
         };
@@ -321,7 +318,6 @@ in
 
         file = mkOption {
           type = types.nullOr types.str;
-          default = null;
           description = "Filename to be used for the dump. If `null` a default name is chosen by gitea.";
           example = "gitea-dump";
         };
@@ -364,28 +360,24 @@ in
 
       mailerPasswordFile = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/var/lib/secrets/gitea/mailpw";
         description = "Path to a file containing the SMTP password.";
       };
 
       metricsTokenFile = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/var/lib/secrets/gitea/metrics_token";
         description = "Path to a file containing the metrics authentication token.";
       };
 
       minioAccessKeyId = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/var/lib/secrets/gitea/minio_access_key_id";
         description = "Path to a file containing the Minio access key id.";
       };
 
       minioSecretAccessKey = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/var/lib/secrets/gitea/minio_secret_access_key";
         description = "Path to a file containing the Minio secret access key.";
       };

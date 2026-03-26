@@ -132,14 +132,12 @@ in
 
                 port = mkOption {
                   type = types.nullOr types.port;
-                  default = null;
                   example = 25;
                   description = "Port of the SMTP server.";
                 };
 
                 user = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
                   example = "bot";
                   description = "User to connect to the SMTP server.";
                 };

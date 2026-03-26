@@ -52,7 +52,6 @@ in
 
     configFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = "Specify a path to a configuration file that Pyroscope should use.";
     };
 

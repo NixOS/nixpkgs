@@ -10,7 +10,6 @@ with lib;
   options = {
     serverName = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         Name of this virtual host. Defaults to attribute name in virtualHosts.
       '';
@@ -119,7 +118,6 @@ with lib;
 
     useACMEHost = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         A host of an existing Let's Encrypt certificate to use.
         This is useful if you have many subdomains and want to avoid hitting the
@@ -140,7 +138,6 @@ with lib;
 
     acmeFallbackHost = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         Host which to proxy requests to if ACME challenge is not found. Useful
         if you want multiple hosts to be able to verify the same domain name.
@@ -219,7 +216,6 @@ with lib;
 
     sslTrustedCertificate = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
@@ -310,7 +306,6 @@ with lib;
 
     globalRedirect = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "newserver.example.org";
       description = ''
         If set, all requests for this host are redirected (defaults to 301,

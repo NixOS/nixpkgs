@@ -146,7 +146,6 @@ in
 
       banner = lib.mkOption {
         type = lib.types.nullOr lib.types.lines;
-        default = null;
         example = ''
           foo
           bar

@@ -38,7 +38,6 @@ in
         lib.types.submodule {
           options.config = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = "Optional configuration string for this interface.";
           };
         }

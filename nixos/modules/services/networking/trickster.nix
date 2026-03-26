@@ -80,7 +80,6 @@ in
 
       profiler-port = mkOption {
         type = types.nullOr types.port;
-        default = null;
         description = ''
           Port that the /debug/pprof endpoint will listen on.
         '';

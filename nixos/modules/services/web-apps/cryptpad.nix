@@ -86,7 +86,6 @@ in
           };
           maxWorkers = mkOption {
             type = types.nullOr types.int;
-            default = null;
             description = "Number of child processes, defaults to number of cores available";
           };
           adminKeys = mkOption {

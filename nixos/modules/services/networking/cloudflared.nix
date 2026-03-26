@@ -16,7 +16,6 @@ let
 
       See [Cert.pem](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-useful-terms/#certpem) for information about the file, and [Tunnel permissions](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/do-more-with-tunnels/local-management/tunnel-permissions/) for a comparison between the account certificate and the tunnel credentials file.
     '';
-    default = null;
   };
 
   originRequest = {
@@ -31,7 +30,6 @@ let
 
     tlsTimeout = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       example = "10s";
       description = ''
         Timeout for completing a TLS handshake to your origin server, if you have chosen to connect Tunnel to an HTTPS server.
@@ -40,7 +38,6 @@ let
 
     tcpKeepAlive = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       example = "30s";
       description = ''
         The timeout after which a TCP keepalive packet is sent on a connection between Tunnel and the origin server.
@@ -49,7 +46,6 @@ let
 
     noHappyEyeballs = lib.mkOption {
       type = with lib.types; nullOr bool;
-      default = null;
       example = false;
       description = ''
         Disable the “happy eyeballs” algorithm for IPv4/IPv6 fallback if your local network has misconfigured one of the protocols.
@@ -58,7 +54,6 @@ let
 
     keepAliveConnections = lib.mkOption {
       type = with lib.types; nullOr int;
-      default = null;
       example = 100;
       description = ''
         Maximum number of idle keepalive connections between Tunnel and your origin. This does not restrict the total number of concurrent connections.
@@ -67,7 +62,6 @@ let
 
     keepAliveTimeout = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       example = "1m30s";
       description = ''
         Timeout after which an idle keepalive connection can be discarded.
@@ -76,7 +70,6 @@ let
 
     httpHostHeader = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       example = "";
       description = ''
         Sets the HTTP `Host` header on requests sent to the local service.
@@ -85,7 +78,6 @@ let
 
     originServerName = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       example = "";
       description = ''
         Hostname that `cloudflared` should expect from your origin server certificate.
@@ -94,7 +86,6 @@ let
 
     caPool = lib.mkOption {
       type = with lib.types; nullOr (either str path);
-      default = null;
       example = "";
       description = ''
         Path to the certificate authority (CA) for the certificate of your origin. This option should be used only if your certificate is not signed by Cloudflare.
@@ -103,7 +94,6 @@ let
 
     noTLSVerify = lib.mkOption {
       type = with lib.types; nullOr bool;
-      default = null;
       example = false;
       description = ''
         Disables TLS verification of the certificate presented by your origin. Will allow any certificate from the origin to be accepted.
@@ -112,7 +102,6 @@ let
 
     disableChunkedEncoding = lib.mkOption {
       type = with lib.types; nullOr bool;
-      default = null;
       example = false;
       description = ''
         Disables chunked transfer encoding. Useful if you are running a WSGI server.
@@ -121,7 +110,6 @@ let
 
     proxyAddress = lib.mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       example = "127.0.0.1";
       description = ''
         `cloudflared` starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures the listen address for that proxy.
@@ -130,7 +118,6 @@ let
 
     proxyPort = lib.mkOption {
       type = with lib.types; nullOr int;
-      default = null;
       example = 0;
       description = ''
         `cloudflared` starts a proxy server to translate HTTP traffic into TCP when proxying, for example, SSH or RDP. This configures the listen port for that proxy. If set to zero, an unused port will randomly be chosen.
@@ -263,7 +250,6 @@ in
 
                             service = lib.mkOption {
                               type = with lib.types; nullOr str;
-                              default = null;
                               description = ''
                                 Service to pass the traffic.
 
@@ -274,7 +260,6 @@ in
 
                             path = lib.mkOption {
                               type = with lib.types; nullOr str;
-                              default = null;
                               description = ''
                                 Path filter.
 

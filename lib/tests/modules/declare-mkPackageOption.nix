@@ -32,12 +32,10 @@ in
     };
 
     undefinedPackage = lib.mkPackageOption pkgs "hello" {
-      default = null;
     };
 
     nullablePackage = lib.mkPackageOption pkgs "hello" {
       nullable = true;
-      default = null;
     };
 
     nullablePackageWithDefault = lib.mkPackageOption pkgs "hello" {

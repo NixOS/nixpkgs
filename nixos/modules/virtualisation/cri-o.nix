@@ -62,14 +62,12 @@ in
 
     pauseCommand = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = "Override the default pause command";
       example = "/pause";
     };
 
     runtime = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = "Override the default runtime";
       example = "crun";
     };
@@ -98,7 +96,6 @@ in
 
     networkDir = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = "Override the network_dir option.";
       internal = true;
     };

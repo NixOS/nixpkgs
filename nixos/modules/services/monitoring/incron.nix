@@ -40,7 +40,6 @@ in
 
       deny = lib.mkOption {
         type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
         description = "Users forbidden from using incrontab.";
       };
 

@@ -152,7 +152,6 @@ in
       };
       extraSettingsFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           File, which is dynamically applied to server-settings.json before
           startup.
@@ -237,7 +236,6 @@ in
       };
       username = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Your factorio.com login credentials. Required for games with visibility public.
 
@@ -258,14 +256,12 @@ in
       };
       token = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Authentication token. May be used instead of 'password' above.
         '';
       };
       game-password = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Game password.
 

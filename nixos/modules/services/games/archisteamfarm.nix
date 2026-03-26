@@ -144,7 +144,6 @@ in
             };
             passwordFile = lib.mkOption {
               type = with lib.types; nullOr path;
-              default = null;
               description = ''
                 Path to a file containing the password. The file must be readable by the `archisteamfarm` user/group.
                 Omit or set to null to provide the password a different way, such as through the web-ui.

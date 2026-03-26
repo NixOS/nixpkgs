@@ -106,7 +106,6 @@ in
         Optional glog verbosity level for logging statements. See
         <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
-      default = null;
       type = nullOr int;
     };
 

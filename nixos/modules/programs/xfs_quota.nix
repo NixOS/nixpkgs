@@ -50,14 +50,12 @@ in
 
               sizeSoftLimit = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 example = "30g";
                 description = "Soft limit of the project size";
               };
 
               sizeHardLimit = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 example = "50g";
                 description = "Hard limit of the project size.";
               };

@@ -48,7 +48,6 @@ let
         };
         socket = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/path/to/misskey.sock";
           description = "The UNIX socket your Misskey server should listen on.";
         };
@@ -85,7 +84,6 @@ let
               };
               pass = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 description = "The password used for database authentication.";
               };
               disableCache = lib.mkOption {
@@ -112,17 +110,14 @@ let
         };
         redisForPubsub = lib.mkOption {
           type = lib.types.nullOr redisType;
-          default = null;
           description = "`ioredis` options for pubsub. See [`README`](https://github.com/redis/ioredis?tab=readme-ov-file#connect-to-redis) for reference.";
         };
         redisForJobQueue = lib.mkOption {
           type = lib.types.nullOr redisType;
-          default = null;
           description = "`ioredis` options for the job queue. See [`README`](https://github.com/redis/ioredis?tab=readme-ov-file#connect-to-redis) for reference.";
         };
         redisForTimelines = lib.mkOption {
           type = lib.types.nullOr redisType;
-          default = null;
           description = "`ioredis` options for timelines. See [`README`](https://github.com/redis/ioredis?tab=readme-ov-file#connect-to-redis) for reference.";
         };
         meilisearch = lib.mkOption {
@@ -259,7 +254,6 @@ in
             This is required when using `services.misskey.reverseProxy.enable = true`.
           '';
           example = "misskey.example.com";
-          default = null;
         };
         ssl = lib.mkOption {
           type = lib.types.nullOr lib.types.bool;

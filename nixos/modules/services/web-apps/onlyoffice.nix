@@ -60,7 +60,6 @@ in
 
     examplePort = lib.mkOption {
       type = lib.types.port;
-      default = null;
       description = "Port the OnlyOffice example server should listen on.";
     };
 

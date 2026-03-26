@@ -442,7 +442,6 @@ in
       smtp = {
         host = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = "SMTP host used when sending emails to users.";
         };
 
@@ -461,14 +460,12 @@ in
 
         user = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           example = "dawarich@example.com";
           description = "SMTP login name.";
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/run/keys/dawarich-smtp-password";
           description = ''
             Path to file containing the SMTP password.

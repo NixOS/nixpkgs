@@ -52,7 +52,6 @@ in
       };
       name = lib.mkOption {
         type = with lib.types; nullOr str;
-        default = null;
         description = ''
           Name for the device.
 
@@ -81,22 +80,18 @@ in
         };
         password = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = "MQTT server access password.";
         };
         cafile = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = "Certificate Authority file for MQTT server access.";
         };
         certfile = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = "Certificate file for MQTT server access.";
         };
         keyfile = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = "Key file for MQTT server access.";
         };
       };

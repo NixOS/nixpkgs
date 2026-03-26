@@ -14,7 +14,6 @@ in
 
     audioDevice = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         The audio device to use.
       '';

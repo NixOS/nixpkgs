@@ -38,7 +38,6 @@ with lib;
 
       settings = mkOption {
         type = types.nullOr (types.attrsOf types.unspecified);
-        default = null;
         example = {
           inbounds = [
             {

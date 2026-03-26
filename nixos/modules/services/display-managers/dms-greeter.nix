@@ -188,7 +188,6 @@ in
 
     configHome = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "/home/alice";
       description = ''
         Path to a user's home directory from which to copy DankMaterialShell

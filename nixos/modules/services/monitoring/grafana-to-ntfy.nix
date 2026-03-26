@@ -28,7 +28,6 @@ in
             The ntfy-sh user to use for authenticating with the ntfy-sh instance.
             Setting this option is required when using a ntfy-sh instance with access control enabled.
           '';
-          default = null;
           example = "grafana";
         };
 

@@ -70,14 +70,12 @@ in
 
           options.input.pointer = mkOption {
             type = types.nullOr types.bool;
-            default = null;
             description = ''
               Enable or disable the use of a hardware mouse or other pointing device.
             '';
           };
           options.input.touchscreen = mkOption {
             type = types.nullOr types.bool;
-            default = null;
             description = ''
               Enable or disable the use of the touchscreen.
             '';
@@ -96,14 +94,12 @@ in
                 "pmos-light"
               ]
             );
-            default = null;
             description = ''
               Selects the default theme on boot. Can be changed at runtime to the alternative theme.
             '';
           };
           options.quirks.fbdev_force_refresh = mkOption {
             type = types.nullOr types.bool;
-            default = null;
             description = ''
               If true and using the framebuffer backend, this triggers a display refresh after every draw operation.
               This has a negative performance impact.

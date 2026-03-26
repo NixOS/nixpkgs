@@ -66,7 +66,6 @@ in
       };
 
       limit = mkOption {
-        default = null;
         type = types.nullOr (types.strMatching "[0-9]+[KMGT]?");
         example = "100M";
         description = ''

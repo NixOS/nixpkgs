@@ -66,7 +66,6 @@ in
           "page"
         ]
       );
-      default = null;
       description = "Enable uploads of external files";
     };
 
@@ -77,7 +76,6 @@ in
           "identicon"
         ]
       );
-      default = null;
       description = "Enable specific user icons for history view";
     };
 

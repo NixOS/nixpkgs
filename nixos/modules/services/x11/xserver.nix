@@ -522,7 +522,6 @@ in
 
       dpi = mkOption {
         type = types.nullOr types.int;
-        default = null;
         description = ''
           Force global DPI resolution to use for X server. It's recommended to
           use this only when DPI is detected incorrectly; also consider using
@@ -747,7 +746,6 @@ in
 
       fontPath = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "unix/:7100";
         description = ''
           Set the X server FontPath. Defaults to null, which
@@ -764,7 +762,6 @@ in
 
       virtualScreen = mkOption {
         type = types.nullOr types.attrs;
-        default = null;
         example = {
           x = 2048;
           y = 2048;

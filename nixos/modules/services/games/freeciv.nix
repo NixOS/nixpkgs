@@ -90,7 +90,6 @@ in
           };
           options.quitidle = lib.mkOption {
             type = lib.types.nullOr lib.types.int;
-            default = null;
             description = "Quit if no players for given time in seconds.";
           };
           options.read = lib.mkOption {

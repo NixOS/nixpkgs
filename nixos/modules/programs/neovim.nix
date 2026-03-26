@@ -136,7 +136,6 @@ in
                 };
 
                 text = lib.mkOption {
-                  default = null;
                   type = lib.types.nullOr lib.types.lines;
                   description = "Text of the file.";
                 };

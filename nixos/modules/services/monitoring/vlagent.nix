@@ -46,14 +46,12 @@ in
 
     remoteWrite = {
       url = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           Endpoint for the victorialogs instance
         '';
       };
       maxDiskUsagePerUrl = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           The maximum file-based buffer size in bytes. Supports the following optional suffixes for size values: KB, MB, GB, TB, KiB, MiB, GiB, TiB.
@@ -68,7 +66,6 @@ in
         '';
       };
       basicAuthPasswordFile = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           File that contains the Basic Auth password used to connect to remote_write endpoint

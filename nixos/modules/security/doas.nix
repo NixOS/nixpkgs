@@ -220,7 +220,6 @@ in
 
             args = lib.mkOption {
               type = with types; nullOr (listOf str);
-              default = null;
               description = ''
                 Arguments that must be provided to the command. When set to
                 `[]`, the command must be run without any arguments.

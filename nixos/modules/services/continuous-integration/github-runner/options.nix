@@ -144,7 +144,6 @@
 
                 Changing this option triggers a new runner registration.
               '';
-              default = null;
             };
 
             extraLabels = lib.mkOption {
@@ -263,7 +262,6 @@
                   This configuration is invalid. In this case, the service would use the given group
                   but run as root implicitly. If this is really what you want, set `user = "root"` explicitly.
               '';
-              default = null;
               defaultText = lib.literalExpression "groupname";
             };
 
@@ -278,7 +276,6 @@
 
                 Changing this option triggers a new runner registration.
               '';
-              default = null;
             };
 
             nodeRuntimes = lib.mkOption {

@@ -228,7 +228,6 @@ in
               login.enable = mkEnableOption "automated login for NetBird client";
               login.setupKeyFile = mkOption {
                 type = nullOr str;
-                default = null;
                 example = "/run/secrets/netbird-priv/setup-key";
                 description = ''
                   A Setup Key file path used for automated login of the machine.

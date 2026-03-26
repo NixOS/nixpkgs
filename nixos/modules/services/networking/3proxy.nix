@@ -84,7 +84,6 @@ in
             };
             bindPort = lib.mkOption {
               type = lib.types.nullOr lib.types.port;
-              default = null;
               example = 3128;
               description = ''
                 Override default port used for service.
@@ -227,7 +226,6 @@ in
             };
             extraArguments = lib.mkOption {
               type = lib.types.nullOr lib.types.str;
-              default = null;
               example = "-46";
               description = ''
                 Extra arguments for service.
@@ -236,7 +234,6 @@ in
             };
             extraConfig = lib.mkOption {
               type = lib.types.nullOr lib.types.lines;
-              default = null;
               description = ''
                 Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
                 Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.
@@ -343,7 +340,6 @@ in
     };
     extraConfig = lib.mkOption {
       type = lib.types.nullOr lib.types.lines;
-      default = null;
       description = ''
         Extra configuration, appended to the 3proxy configuration file.
         Consult [documentation](https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg) for available options.

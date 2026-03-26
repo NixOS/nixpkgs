@@ -176,12 +176,10 @@ rec {
                 name = lib.mkOption {
                   type = types.nullOr types.str;
                   description = "Match problems with this problem name";
-                  default = null;
                 };
                 kind = lib.mkOption {
                   type = types.nullOr problemKindType;
                   description = "Match problems of this problem kind";
-                  default = null;
                 };
                 handler = lib.mkOption {
                   type = handlerType;

@@ -20,7 +20,6 @@ in
 
     environmentFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/root/wiki-js.env";
       description = ''
         Environment file to inject e.g. secrets into the configuration.

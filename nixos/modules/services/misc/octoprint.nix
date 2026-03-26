@@ -34,7 +34,6 @@ in
 
       host = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Host to bind OctoPrint to.
         '';

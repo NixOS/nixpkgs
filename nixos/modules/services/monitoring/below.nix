@@ -30,7 +30,6 @@ let
       // {
         description = x.description;
         type = (lib.types.nullOr ty);
-        default = null;
       }
     );
   optionalPath = optionalType lib.types.path;

@@ -40,7 +40,6 @@ in
 
     secretFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         Path to a shared secret file used for synchronization,
         Required for all nodes in a replica/primary setup.

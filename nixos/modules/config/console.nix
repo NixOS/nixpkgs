@@ -52,7 +52,6 @@ in
 
     font = lib.mkOption {
       type = with lib.types; nullOr (either str path);
-      default = null;
       example = "LatArCyrHeb-16";
       description = ''
         The font used for the virtual consoles.

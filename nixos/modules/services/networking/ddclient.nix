@@ -126,7 +126,6 @@ in
       };
 
       passwordFile = lib.mkOption {
-        default = null;
         type = nullOr str;
         description = ''
           A file containing the password or a TSIG key in named format when using the nsupdate protocol.
@@ -153,7 +152,6 @@ in
       };
 
       configFile = lib.mkOption {
-        default = null;
         type = nullOr path;
         description = ''
           Path to configuration file.

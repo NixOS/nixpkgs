@@ -38,7 +38,6 @@ in
     };
     passwordFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/path/to/password-file";
       description = ''
         File containing the password for connecting to Nextcloud.
@@ -47,7 +46,6 @@ in
     };
     tokenFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/path/to/token-file";
       description = ''
         File containing the token for connecting to Nextcloud.

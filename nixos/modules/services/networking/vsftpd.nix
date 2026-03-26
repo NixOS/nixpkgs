@@ -188,7 +188,6 @@ in
       userDbPath = mkOption {
         type = types.nullOr types.str;
         example = "/etc/vsftpd/userDb";
-        default = null;
         description = ''
           Only applies if {option}`enableVirtualUsers` is true.
           Path pointing to the `pam_userdb` user
@@ -221,7 +220,6 @@ in
 
       localRoot = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/var/www/$USER";
         description = ''
           This option represents a directory which vsftpd will try to

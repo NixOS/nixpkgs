@@ -228,7 +228,6 @@ in
 
     rpcInterface = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "eth1";
       description = ''
         Set {option}`rpcAddress` OR {option}`rpcInterface`, not both. Interfaces must
@@ -371,7 +370,6 @@ in
 
     heapNewSize = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "800M";
       description = ''
         Must be left blank or set together with {option}`heapNewSize`.

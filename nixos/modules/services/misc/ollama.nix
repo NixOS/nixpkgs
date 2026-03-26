@@ -62,7 +62,6 @@ in
 
       user = lib.mkOption {
         type = with types; nullOr str;
-        default = null;
         example = "ollama";
         description = ''
           User account under which to run ollama. Defaults to [`DynamicUser`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#DynamicUser=)

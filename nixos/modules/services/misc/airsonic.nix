@@ -32,7 +32,6 @@ in
 
       virtualHost = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';

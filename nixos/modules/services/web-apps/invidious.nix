@@ -322,7 +322,6 @@ in
 
     hmacKeyFile = lib.mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         A path to a file containing the `hmac_key`. If `null`, a key will be generated automatically on first
         start.
@@ -427,7 +426,6 @@ in
       passwordFile = lib.mkOption {
         type = types.nullOr types.str;
         apply = lib.mapNullable toString;
-        default = null;
         description = ''
           Path to file containing the database password.
         '';

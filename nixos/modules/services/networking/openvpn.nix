@@ -198,7 +198,6 @@ in
             };
 
             authUserPass = mkOption {
-              default = null;
               description = ''
                 This option can be used to store the username / password credentials
                 with the "auth-user-pass" authentication method.

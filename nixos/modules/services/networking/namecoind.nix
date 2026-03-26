@@ -130,7 +130,6 @@ in
 
       rpc.key = mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/var/lib/namecoind/server.pem";
         description = ''
           Key file for securing RPC connections.

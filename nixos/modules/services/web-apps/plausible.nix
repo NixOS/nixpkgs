@@ -128,7 +128,6 @@ in
           '';
         };
         passwordFile = mkOption {
-          default = null;
           type = with types; nullOr (either str path);
           description = ''
             The path to the file with the password in case SMTP auth is enabled.

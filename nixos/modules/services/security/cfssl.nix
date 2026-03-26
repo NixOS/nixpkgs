@@ -52,7 +52,6 @@ in
     };
 
     caBundle = lib.mkOption {
-      default = null;
       type = lib.types.nullOr lib.types.path;
       description = "Path to root certificate store.";
     };
@@ -81,7 +80,6 @@ in
     };
 
     remote = lib.mkOption {
-      default = null;
       type = lib.types.nullOr lib.types.str;
       description = "Remote CFSSL server.";
     };

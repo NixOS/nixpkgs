@@ -26,7 +26,6 @@ in
   extraOpts = {
     repository = mkOption {
       type = with lib.types; nullOr str;
-      default = null;
       description = ''
         URI pointing to the repository to monitor.
       '';
@@ -35,7 +34,6 @@ in
 
     repositoryFile = mkOption {
       type = with lib.types; nullOr path;
-      default = null;
       description = ''
         Path to the file containing the URI for the repository to monitor.
       '';

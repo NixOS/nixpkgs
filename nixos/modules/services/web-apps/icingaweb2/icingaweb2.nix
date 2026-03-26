@@ -84,7 +84,6 @@ in
 
     generalConfig = mkOption {
       type = nullOr attrs;
-      default = null;
       example = {
         general = {
           showStacktraces = 1;
@@ -131,7 +130,6 @@ in
 
     authentications = mkOption {
       type = nullOr attrs;
-      default = null;
       example = {
         icingaweb = {
           backend = "db";

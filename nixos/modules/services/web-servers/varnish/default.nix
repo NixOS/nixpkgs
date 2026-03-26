@@ -60,7 +60,6 @@ let
     options = {
       name = mkOption {
         description = "Name is referenced in logs. If name is not specified, 'a0', 'a1', etc. is used.";
-        default = null;
         type = with types; nullOr str;
       };
       address = mkOption {
@@ -79,7 +78,6 @@ let
       };
       port = mkOption {
         description = "The port to use for IP sockets. If port is not specified, port 80 (http) is used.";
-        default = null;
         type = with types; nullOr port;
       };
       proto = mkOption {
@@ -92,17 +90,14 @@ let
       };
       user = mkOption {
         description = "User name who owns the socket file.";
-        default = null;
         type = with lib.types; nullOr str;
       };
       group = mkOption {
         description = "Group name who owns the socket file.";
-        default = null;
         type = with lib.types; nullOr str;
       };
       mode = mkOption {
         description = "Permission of the socket file (3-digit octal value).";
-        default = null;
         type = with types; nullOr str;
       };
     };

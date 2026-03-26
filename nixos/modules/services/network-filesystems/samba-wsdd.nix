@@ -36,7 +36,6 @@ in
       };
       workgroup = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "HOME";
         description = "Set workgroup name (default WORKGROUP).";
       };

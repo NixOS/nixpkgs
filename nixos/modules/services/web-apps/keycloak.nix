@@ -118,7 +118,6 @@ in
 
       sslCertificate = mkOption {
         type = nullOr path;
-        default = null;
         example = "/run/keys/ssl_cert";
         apply = assertStringPath "sslCertificate";
         description = ''
@@ -129,7 +128,6 @@ in
 
       sslCertificateKey = mkOption {
         type = nullOr path;
-        default = null;
         example = "/run/keys/ssl_key";
         apply = assertStringPath "sslCertificateKey";
         description = ''

@@ -20,7 +20,6 @@ let
           "n"
           null
         ];
-        default = null;
         internal = true;
         visible = true;
         description = ''

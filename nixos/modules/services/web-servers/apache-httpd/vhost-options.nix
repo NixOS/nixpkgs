@@ -174,7 +174,6 @@ in
 
     sslServerChain = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/var/ca.pem";
       description = "Path to server SSL chain file.";
     };
@@ -197,7 +196,6 @@ in
 
     documentRoot = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/data/webserver/docs";
       description = ''
         The path of Apache's document root directory.  If left undefined,

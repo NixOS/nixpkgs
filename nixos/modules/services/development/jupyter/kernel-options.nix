@@ -52,7 +52,6 @@
 
     logo32 = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = lib.literalExpression ''"''${env.sitePackages}/ipykernel/resources/logo-32x32.png"'';
       description = ''
         Path to 32x32 logo png.

@@ -68,7 +68,6 @@ in
 
     coreOffset = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
-      default = null;
       description = ''
         The amount of voltage in mV to offset the CPU cores by.
       '';
@@ -145,7 +144,6 @@ in
           float
           int
         ]);
-      default = null;
       description = ''
         The P1 Time Window in seconds.
         Both limit and window must be set.
@@ -154,7 +152,6 @@ in
 
     p2.limit = lib.mkOption {
       type = with lib.types; nullOr int;
-      default = null;
       description = ''
         The P2 Power Limit in Watts.
         Both limit and window must be set.
@@ -167,7 +164,6 @@ in
           float
           int
         ]);
-      default = null;
       description = ''
         The P2 Time Window in seconds.
         Both limit and window must be set.

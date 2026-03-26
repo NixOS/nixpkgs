@@ -58,7 +58,6 @@ in
 
         animeConfig = lib.mkOption {
           type = nullOr configType;
-          default = null;
           description = ''
             The content of /etc/asusd/anime.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#anime-control>.
@@ -67,7 +66,6 @@ in
 
         asusdConfig = lib.mkOption {
           type = nullOr configType;
-          default = null;
           description = ''
             The content of /etc/asusd/asusd.ron.
             See <https://asus-linux.org/manual/asusctl-manual/>.
@@ -94,7 +92,6 @@ in
 
         fanCurvesConfig = lib.mkOption {
           type = nullOr configType;
-          default = null;
           description = ''
             The content of /etc/asusd/fan_curves.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#fan-curves>.
@@ -103,7 +100,6 @@ in
 
         userLedModesConfig = lib.mkOption {
           type = nullOr configType;
-          default = null;
           description = ''
             The content of /etc/asusd/asusd-user-ledmodes.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#led-keyboard-control>.

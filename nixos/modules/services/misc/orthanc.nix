@@ -48,7 +48,6 @@ in
           world-readable in the Nix store.
         '';
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/var/lib/secrets/orthancSecrets";
       };
 

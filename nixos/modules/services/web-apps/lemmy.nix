@@ -48,7 +48,6 @@ in
 
       uri = mkOption {
         type = with types; nullOr str;
-        default = null;
         description = "The connection URI to use. Takes priority over the configuration file if set.";
       };
 
@@ -61,7 +60,6 @@ in
 
     pictrsApiKeyFile = mkOption {
       type = with types; nullOr path;
-      default = null;
       description = "File which contains the value of `pictrs.api_key`.";
     };
 
@@ -86,7 +84,6 @@ in
 
         options.hostname = mkOption {
           type = types.str;
-          default = null;
           description = "The domain name of your instance (eg 'lemmy.ml').";
         };
 

@@ -82,7 +82,6 @@ in
               };
               Filter = lib.mkOption {
                 type = lib.types.nullOr lib.types.path;
-                default = null;
                 description = ''
                   Tinyproxy supports filtering of web sites based on URLs or domains. This option specifies the location of the file containing the filter rules, one rule per line.
                 '';

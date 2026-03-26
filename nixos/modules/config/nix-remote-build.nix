@@ -126,7 +126,6 @@ in
               };
               sshUser = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 example = "builder";
                 description = ''
                   The username to log in as on the remote host. This user must be
@@ -137,7 +136,6 @@ in
               };
               sshKey = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 example = "/root/.ssh/id_buildhost_builduser";
                 description = ''
                   The path to the SSH private key with which to authenticate on
@@ -194,7 +192,6 @@ in
               };
               publicHostKey = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 description = ''
                   The (base64-encoded) public host key of this builder. The field
                   is calculated via {command}`base64 -w0 /etc/ssh/ssh_host_type_key.pub`.

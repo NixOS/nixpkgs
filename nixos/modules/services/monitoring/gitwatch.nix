@@ -84,17 +84,14 @@ in
           remote = mkOption {
             description = "Optional url of remote repository";
             type = nullOr str;
-            default = null;
           };
           message = lib.mkOption {
             description = "Optional text to use in as commit message; all occurrences of `%d` will be replaced by formatted date/time";
             type = nullOr str;
-            default = null;
           };
           branch = mkOption {
             description = "Optional branch in remote repository";
             type = nullOr str;
-            default = null;
           };
         };
       });

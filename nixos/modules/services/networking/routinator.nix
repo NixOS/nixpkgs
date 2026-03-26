@@ -90,21 +90,18 @@ in
             description = ''
               A string value containing the path to a file to which log messages will be appended if the log configuration value is set to file. In this case, the value is mandatory.
             '';
-            default = null;
           };
           http-listen = mkOption {
             type = types.nullOr (types.listOf types.str);
             description = ''
               An array of string values each providing an address and port on which the HTTP server should listen. Address and port should be separated by a colon. IPv6 address should be enclosed in square brackets.
             '';
-            default = null;
           };
           rtr-listen = mkOption {
             type = types.nullOr (types.listOf types.str);
             description = ''
               An array of string values each providing an address and port on which the RTR server should listen in TCP mode. Address and port should be separated by a colon. IPv6 address should be enclosed in square brackets.
             '';
-            default = null;
           };
           refresh = mkOption {
             type = types.nullOr types.int;

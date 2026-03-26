@@ -40,7 +40,6 @@ in
 
     style = mkOption {
       type = with types; nullOr lines;
-      default = null;
       description = ''
         CSS Stylesheet for gtklock.
         See [gtklock's wiki](https://github.com/jovanlanik/gtklock/wiki#Styling) for details.

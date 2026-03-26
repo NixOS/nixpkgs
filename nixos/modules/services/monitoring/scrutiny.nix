@@ -118,7 +118,6 @@ in
 
           options.web.influxdb.token = mkOption {
             type = nullOr str;
-            default = null;
             description = "Authentication token for connecting to InfluxDB.";
           };
 
@@ -169,7 +168,6 @@ in
 
             options.host.id = mkOption {
               type = nullOr str;
-              default = null;
               description = "Host ID for identifying/labelling groups of disks";
             };
 

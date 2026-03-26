@@ -82,17 +82,14 @@ let
           options = {
             enable = mkOption {
               type = types.nullOr types.bool;
-              default = null;
               internal = true;
             };
             package = mkOption {
               type = types.nullOr types.package;
-              default = null;
               internal = true;
             };
             packages = mkOption {
               type = types.nullOr (types.listOf types.package);
-              default = null;
               internal = true;
             };
           };

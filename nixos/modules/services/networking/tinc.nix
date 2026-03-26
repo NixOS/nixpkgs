@@ -210,7 +210,6 @@ in
                   };
 
                   ed25519PrivateKeyFile = mkOption {
-                    default = null;
                     type = types.nullOr types.path;
                     description = ''
                       Path of the private ed25519 keyfile.

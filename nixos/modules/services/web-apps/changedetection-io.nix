@@ -54,7 +54,6 @@ in
 
     baseURL = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "https://changedetection-io.example";
       description = ''
         The base url used in notifications and `{base_url}` token.

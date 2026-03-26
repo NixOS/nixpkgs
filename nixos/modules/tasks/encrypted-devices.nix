@@ -42,14 +42,12 @@ let
       };
 
       label = mkOption {
-        default = null;
         example = "rootfs";
         type = types.nullOr types.str;
         description = "Label of the unlocked encrypted device. Set `fileSystems.<name?>.device` to `/dev/mapper/<label>` to mount the unlocked device.";
       };
 
       keyFile = mkOption {
-        default = null;
         example = "/mnt-root/root/.swapkey";
         type = types.nullOr types.str;
         description = ''

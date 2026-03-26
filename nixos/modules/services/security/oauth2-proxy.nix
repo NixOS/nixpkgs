@@ -168,7 +168,6 @@ in
 
     oidcIssuerUrl = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         The OAuth issuer URL.
       '';
@@ -177,7 +176,6 @@ in
 
     clientSecretFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         The path to a file containing the OAuth Client Secret.
       '';
@@ -206,7 +204,6 @@ in
 
       addresses = lib.mkOption {
         type = lib.types.nullOr lib.types.lines;
-        default = null;
         description = ''
           Line-separated email addresses that are allowed to authenticate.
         '';
@@ -215,7 +212,6 @@ in
 
     loginURL = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Authentication endpoint.
 
@@ -228,7 +224,6 @@ in
 
     redeemURL = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Token redemption endpoint.
 
@@ -241,7 +236,6 @@ in
 
     validateURL = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Access token validation endpoint.
 
@@ -256,7 +250,6 @@ in
       # XXX: jml suspects this is always necessary, but the command-line
       # doesn't require it so making it optional.
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         The OAuth2 redirect URL.
       '';
@@ -313,7 +306,6 @@ in
     github = {
       org = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Restrict logins to members of this organisation.
         '';
@@ -428,7 +420,6 @@ in
 
       secretFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           The path to a file containing the seed string for secure cookies.
         '';
@@ -555,7 +546,6 @@ in
       # XXX: jml suspects this is always necessary, but the command-line
       # doesn't require it so making it optional.
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         OAuth scope specification.
       '';

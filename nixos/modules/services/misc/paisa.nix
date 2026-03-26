@@ -68,7 +68,6 @@ in
     };
 
     settings = lib.mkOption {
-      default = null;
       type = nullOr (submodule {
         freeformType = settingsFormat.type;
         options = {

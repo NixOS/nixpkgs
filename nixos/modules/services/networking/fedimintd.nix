@@ -150,7 +150,6 @@ let
 
             secretFile = mkOption {
               type = types.nullOr types.path;
-              default = null;
               description = ''
                 If set the URL specified in `bitcoin.rpc.url` will get the content of this file added
                 as an URL password, so `http://user@example.com` will turn into `http://user:SOMESECRET@example.com`.

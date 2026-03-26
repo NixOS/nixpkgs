@@ -94,7 +94,6 @@ rec {
     _type = "param";
     option = mkOption {
       type = types.nullOr types.bool;
-      default = null;
       description = documentDefault description strongswanDefault;
     };
     render = single boolToYesNo;
@@ -109,7 +108,6 @@ rec {
     _type = "param";
     option = mkOption {
       type = types.nullOr (types.listOf types.str);
-      default = null;
       description = documentDefault description strongswanDefault;
     };
     render = single (value: concatStringsSep sep value);

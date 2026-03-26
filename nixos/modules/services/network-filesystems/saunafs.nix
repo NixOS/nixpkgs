@@ -92,7 +92,6 @@ in
     services.saunafs = {
       masterHost = lib.mkOption {
         type = lib.types.str;
-        default = null;
         description = "IP or hostname name of master host.";
       };
 
@@ -175,7 +174,6 @@ in
 
         hdds = lib.mkOption {
           type = with lib.types; listOf str;
-          default = null;
 
           example = lib.literalExpression ''
             [ "/mnt/hdd1" ];

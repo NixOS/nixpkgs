@@ -682,7 +682,6 @@ in
           Do not add frontends here. These should be configured through
           [{option}`services.akkoma.frontends`](#opt-services.akkoma.frontends).
         '';
-        default = null;
         example = literalExpression ''
           {
             "emoji/blobs.gg" = pkgs.blobs_gg;
@@ -753,7 +752,6 @@ in
 
         cookie = mkOption {
           type = types.nullOr secret;
-          default = null;
           example = {
             _secret = "/var/lib/secrets/akkoma/releaseCookie";
           };
@@ -1156,7 +1154,6 @@ in
         type =
           with types;
           nullOr (submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
-        default = null;
         description = ''
           Extra configuration for the nginx virtual host of Akkoma.
 

@@ -60,14 +60,12 @@ in
 
     tlsCertificate = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/var/host.cert";
       description = "Path to server TLS certificate.";
     };
 
     tlsCertificateKey = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/var/host.key";
       description = "Path to server TLS certificate key.";
     };

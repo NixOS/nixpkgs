@@ -96,7 +96,6 @@ let
     };
 
     options.class = mkOption {
-      default = null;
       type =
         with types;
         nullOr (enum [

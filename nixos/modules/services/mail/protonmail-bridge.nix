@@ -32,7 +32,6 @@ in
           "debug"
         ]
       );
-      default = null;
       description = "Log level of the Proton Mail Bridge service. If set to null then the service uses it's default log level.";
     };
   };

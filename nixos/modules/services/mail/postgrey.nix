@@ -18,7 +18,6 @@ let
     options = {
       addr = mkOption {
         type = nullOr str;
-        default = null;
         example = "127.0.0.1";
         description = "The address to bind to. Localhost if null";
       };

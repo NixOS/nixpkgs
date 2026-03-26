@@ -28,7 +28,6 @@ in
       };
 
       apiTokenFile = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           The path to a file containing the API Token
@@ -37,7 +36,6 @@ in
       };
 
       apikeyFile = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           The path to a file containing the API Key

@@ -118,7 +118,6 @@ let
       };
 
       timeArgs = lib.mkOption {
-        default = null;
         type = lib.types.nullOr (lib.types.str);
         example = "02 06 * * *";
         description = ''

@@ -182,7 +182,6 @@ in
 
         host = mkOption {
           type = types.nullOr types.str;
-          default = null;
           description = ''
             Host of the database. Leave null to use Unix domain socket.
           '';
@@ -207,7 +206,6 @@ in
 
         password = mkOption {
           type = types.nullOr types.str;
-          default = null;
           description = ''
             The database user's password.
           '';

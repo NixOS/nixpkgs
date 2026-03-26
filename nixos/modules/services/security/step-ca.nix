@@ -56,7 +56,6 @@ in
       };
       intermediatePasswordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.externalPath;
-        default = null;
         example = "/run/keys/smallstep-password";
         description = ''
           Path to the file containing the password for the intermediate

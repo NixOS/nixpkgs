@@ -30,7 +30,6 @@ in
 
             environmentFile = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 file containing the credentials to access the repository, in the
                 format of an EnvironmentFile as described by {manpage}`systemd.exec(5)`
@@ -115,7 +114,6 @@ in
 
             repository = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 repository to backup to.
               '';
@@ -124,7 +122,6 @@ in
 
             repositoryFile = lib.mkOption {
               type = with lib.types; nullOr path;
-              default = null;
               description = ''
                 Path to the file containing the repository location to backup to.
               '';
@@ -273,7 +270,6 @@ in
 
             dynamicFilesFrom = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 A script that produces a list of files to back up.  The
                 results of this command are given to the '--files-from'
@@ -284,7 +280,6 @@ in
 
             backupPrepareCommand = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 A script that must run before starting the backup process.
               '';

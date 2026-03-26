@@ -26,7 +26,6 @@ in
           };
           triggers = lib.mkOption {
             type = lib.types.nullOr (lib.types.ints.between 0 100);
-            default = null;
             description = ''
               Extra attenuation for trigger rumble as a percentage, applied
               on top of {option}`overall`. For example, `overall = 50` and

@@ -112,7 +112,6 @@ in
       # this assumes that all domains are hosted by the same provider
       dnsProvider = lib.mkOption {
         type = nullOrOpt lib.types.str;
-        default = null;
         description = ''
           The DNS provider Traefik will request wildcard certificates from. See the [Traefik Documentation](https://doc.traefik.io/traefik/https/acme/#providers) for more information.
         '';
@@ -121,7 +120,6 @@ in
       # provide path to file to keep secrets out of the nix store
       environmentFile = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
         description = ''
           Path to a file containing sensitive environment variables for Pangolin. See the [Pangolin Documentation](https://docs.fossorial.io/Pangolin/Configuration/config) for more information.
           These will overwrite anything defined in the config.

@@ -286,7 +286,6 @@ in
 
     user = mkOption {
       type = nullOr str;
-      default = null;
       description = "Cyrus IMAP user name. If this is not set, a user named `cyrus` will be created.";
     };
 
@@ -305,7 +304,6 @@ in
 
     cyrusConfigFile = mkOption {
       type = nullOr path;
-      default = null;
       description = "Path to the configuration file used for Cyrus.";
       apply = v: if v != null then v else pkgs.writeText "cyrus.conf" cyrusConfig;
     };

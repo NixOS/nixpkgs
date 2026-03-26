@@ -76,7 +76,6 @@ in
 
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         File containing environment variable overrides for the server,
         in the format accepted by systemd's `EnvironmentFile`.

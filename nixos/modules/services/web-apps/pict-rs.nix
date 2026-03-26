@@ -28,7 +28,6 @@ in
 
     repoPath = mkOption {
       type = types.nullOr (types.path);
-      default = null;
       description = ''
         The directory where to store the database.
         This option takes precedence over dataDir.
@@ -37,7 +36,6 @@ in
 
     storePath = mkOption {
       type = types.nullOr (types.path);
-      default = null;
       description = ''
         The directory where to store the uploaded images.
         This option takes precedence over dataDir.

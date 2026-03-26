@@ -84,7 +84,6 @@ let
     with lib.types;
     lib.mkOption {
       type = nullOr externalPath;
-      default = null;
       internal = true;
     };
 in

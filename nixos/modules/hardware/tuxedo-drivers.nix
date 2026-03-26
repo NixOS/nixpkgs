@@ -70,7 +70,6 @@ in
             "performance"
           ]
         );
-        default = null;
         description = ''
           These options manage the trade-off between battery charging and CPU performance when the USB-C power supply cannot provide sufficient power for both simultaneously:
           - `charge_battery` prioritizes battery charging (driver default)
@@ -79,7 +78,6 @@ in
       };
       fn-lock = lib.mkOption {
         type = lib.types.nullOr lib.types.bool;
-        default = null;
         description = ''
           Enables or disables the laptop keyboard's Function (Fn) lock at boot.
 

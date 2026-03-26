@@ -58,7 +58,6 @@ in
   options.hardware.block = {
     defaultScheduler = mkOption {
       type = types.nullOr udevValue;
-      default = null;
       description = ''
         Default block I/O scheduler.
 

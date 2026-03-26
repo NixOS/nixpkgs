@@ -18,12 +18,10 @@ let
     };
     affinity = mkOption {
       type = types.nullOr types.ints.unsigned;
-      default = null;
       description = "CPU affinity for the process.";
     };
     bind = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = "Bind to the specific interface associated with the given address.";
     };
     openFirewall = mkOption {
@@ -48,12 +46,10 @@ let
     };
     rsaPrivateKey = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
     };
     authorizedUsersFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = "Path to the configuration file containing authorized users credentials to run iperf tests.";
     };
     extraFlags = mkOption {

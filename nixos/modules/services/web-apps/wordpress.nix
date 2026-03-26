@@ -278,7 +278,6 @@ let
 
           passwordFile = mkOption {
             type = types.nullOr types.path;
-            default = null;
             example = "/run/keys/wordpress-dbpassword";
             description = ''
               A file containing the password corresponding to
@@ -301,7 +300,6 @@ let
 
           socket = mkOption {
             type = types.nullOr types.path;
-            default = null;
             defaultText = literalExpression "/run/mysqld/mysqld.sock";
             description = "Path to the unix socket file to use for authentication.";
           };

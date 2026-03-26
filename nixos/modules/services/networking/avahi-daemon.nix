@@ -260,7 +260,6 @@ in
 
     cacheEntriesMax = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
-      default = null;
       description = ''
         Number of resource records to be cached per interface. Use 0 to
         disable caching. Avahi daemon defaults to 4096 if not set.

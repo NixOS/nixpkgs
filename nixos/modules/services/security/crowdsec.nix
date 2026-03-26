@@ -430,7 +430,6 @@ in
                   description = ''
                     The LAPI credential file to use.
                   '';
-                  default = null;
                 };
               };
             };

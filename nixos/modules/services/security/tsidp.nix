@@ -68,7 +68,6 @@ in
 
       localPort = mkOption {
         type = nullOr port;
-        default = null;
         description = "Listen on localhost:<port>.";
       };
 

@@ -108,7 +108,6 @@ in
       };
 
       config = mkOption {
-        default = null;
         type = with lib.types; nullOr (either path str);
         description = ''
           Configuration from which XMonad gets compiled. If no value is

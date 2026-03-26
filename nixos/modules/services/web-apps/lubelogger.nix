@@ -64,7 +64,6 @@ in
 
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/run/secrets/lubelogger";
         description = ''
           Path to a file containing extra LubeLogger config options in the systemd `EnvironmentFile` format.

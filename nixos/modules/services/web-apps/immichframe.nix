@@ -54,7 +54,6 @@ in
                   };
                   ApiKeyFile = mkOption {
                     type = types.nullOr types.externalPath;
-                    default = null;
                     description = ''
                       File containing an API key to talk to the Immich server.
 

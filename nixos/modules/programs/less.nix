@@ -48,7 +48,6 @@ in
 
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = lib.literalExpression ''"''${pkgs.my-configs}/lesskey"'';
         description = ''
           Path to lesskey configuration file.
@@ -101,7 +100,6 @@ in
 
       lessopen = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = lib.literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
         description = ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
@@ -110,7 +108,6 @@ in
 
       lessclose = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           When less closes a file opened in such a way, it will call another program, called the input postprocessor,
           which may perform any desired clean-up action (such as deleting the replacement file created by LESSOPEN).

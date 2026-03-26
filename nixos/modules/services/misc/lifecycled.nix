@@ -102,7 +102,6 @@ in
 
       cloudwatchGroup = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Write logs to a specific Cloudwatch Logs group.
         '';

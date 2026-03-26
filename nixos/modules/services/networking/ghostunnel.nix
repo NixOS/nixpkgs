@@ -52,7 +52,6 @@ let
             Specify this or `cert` and `key`.
           '';
           type = types.nullOr types.str;
-          default = null;
         };
 
         cert = mkOption {

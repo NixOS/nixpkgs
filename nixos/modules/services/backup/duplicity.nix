@@ -46,7 +46,6 @@ in
 
     includeFileList = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = /path/to/fileList.txt;
       description = ''
         File containing newline-separated list of paths to include into the
@@ -57,7 +56,6 @@ in
 
     excludeFileList = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = /path/to/fileList.txt;
       description = ''
         File containing newline-separated list of paths to exclude into the
@@ -130,7 +128,6 @@ in
     cleanup = {
       maxAge = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         example = "6M";
         description = ''
           If non-null, delete all backup sets older than the given time.  Old backup sets
@@ -139,7 +136,6 @@ in
       };
       maxFull = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
-        default = null;
         example = 2;
         description = ''
           If non-null, delete all backups sets that are older than the count:th last full

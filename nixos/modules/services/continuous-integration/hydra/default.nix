@@ -176,7 +176,6 @@ in
 
       logo = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           Path to a file containing the logo of your Hydra instance.
         '';

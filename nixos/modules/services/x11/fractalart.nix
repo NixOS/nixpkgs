@@ -26,7 +26,6 @@ in
 
     height = mkOption {
       type = types.nullOr types.int;
-      default = null;
       example = 1080;
       description = "Screen height";
     };

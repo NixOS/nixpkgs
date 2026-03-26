@@ -286,7 +286,6 @@ rec {
     => { ...; default = pkgs.nushell; defaultText = literalExpression "pkgs.nushell"; description = "The nushell package to use."; type = nullOr package; }
 
     mkPackageOption pkgs "coreutils" {
-      default = null;
     }
     => { ...; description = "The coreutils package to use."; type = package; }
 
@@ -327,7 +326,6 @@ rec {
           }
         else
           optionalAttrs nullable {
-            default = null;
           };
     in
     mkOption (

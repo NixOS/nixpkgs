@@ -2934,7 +2934,6 @@ let
 
     name = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = ''
         The name of the network interface to match against.
       '';

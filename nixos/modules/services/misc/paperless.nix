@@ -174,7 +174,6 @@ in
 
     passwordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = "/run/keys/paperless-password";
       description = ''
         A file containing the superuser password.

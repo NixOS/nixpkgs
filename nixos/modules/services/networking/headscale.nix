@@ -252,28 +252,24 @@ in
 
                 port = lib.mkOption {
                   type = lib.types.nullOr lib.types.port;
-                  default = null;
                   example = 3306;
                   description = "Database host port.";
                 };
 
                 name = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
-                  default = null;
                   example = "headscale";
                   description = "Database name.";
                 };
 
                 user = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
-                  default = null;
                   example = "headscale";
                   description = "Database user.";
                 };
 
                 password_file = lib.mkOption {
                   type = lib.types.nullOr lib.types.path;
-                  default = null;
                   example = "/run/keys/headscale-dbpassword";
                   description = ''
                     A file containing the password corresponding to
@@ -428,7 +424,6 @@ in
 
               client_secret_path = lib.mkOption {
                 type = lib.types.nullOr lib.types.str;
-                default = null;
                 description = ''
                   Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.
                 '';
@@ -563,7 +558,6 @@ in
 
               path = lib.mkOption {
                 type = lib.types.nullOr lib.types.path;
-                default = null;
                 description = ''
                   If the mode is set to "file", the path to a
                   HuJSON file containing ACL policies.

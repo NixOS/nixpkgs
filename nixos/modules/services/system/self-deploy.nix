@@ -104,7 +104,6 @@ in
     sshKeyFile = lib.mkOption {
       type = with lib.types; nullOr path;
 
-      default = null;
 
       description = ''
         Path to SSH private key used to fetch private repositories over

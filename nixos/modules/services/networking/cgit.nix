@@ -160,7 +160,6 @@ in
               scanPath = lib.mkOption {
                 description = "A path which will be scanned for repositories.";
                 type = lib.types.nullOr lib.types.path;
-                default = null;
                 example = "/var/lib/git";
               };
 

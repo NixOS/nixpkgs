@@ -76,7 +76,6 @@ in
 
       maintenanceInterval = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = "If set, maintenance script will be run at specified (in systemd.timer format) interval";
       };
 

@@ -50,7 +50,6 @@ in
 
     delugePasswordFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         File containing the password to connect to deluge server.
       '';

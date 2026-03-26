@@ -126,7 +126,6 @@ in
     sounds = {
       awake = mkOption {
         type = nullOr path;
-        default = null;
         description = ''
           Path to audio file in WAV format to play when wake word is detected.
         '';

@@ -248,7 +248,6 @@ in
                   and https is enabled, a self-signed certificate will
                   be generated.
                 '';
-                default = null;
                 example = literalExpression "\${config.acme.certs.\${domain}.directory}/fullchain.pem";
               };
               https_key = mkOption {
@@ -481,7 +480,6 @@ in
                         does not automatically disable the server.
                         Expected format: yyyy-mm-dd
                       '';
-                      default = null;
                     };
                   };
                 }

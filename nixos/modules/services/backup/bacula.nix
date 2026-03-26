@@ -170,7 +170,6 @@ let
         };
         require = mkOption {
           type = types.nullOr types.bool;
-          default = null;
           description = ''
             Require TLS or TLS-PSK encryption.
             This directive is ignored unless one of ${tlsLink "tls.enable" submodulePath} is true or TLS PSK Enable is set to `yes`.
@@ -183,7 +182,6 @@ let
         };
         certificate = mkOption {
           type = types.nullOr types.path;
-          default = null;
           description = ''
             The full path to the PEM encoded TLS certificate.
             It will be used as either a client or server certificate,
@@ -202,7 +200,6 @@ let
         };
         verifyPeer = mkOption {
           type = types.nullOr types.bool;
-          default = null;
           description = ''
             Verify peer certificate.
             Instructs server to request and verify the client's X.509 certificate.
@@ -229,7 +226,6 @@ let
         };
         caCertificateFile = mkOption {
           type = types.nullOr types.path;
-          default = null;
           description = ''
             The path specifying a PEM encoded TLS CA certificate(s).
             Multiple certificates are permitted in the file.

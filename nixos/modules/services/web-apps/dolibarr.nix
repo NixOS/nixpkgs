@@ -226,7 +226,6 @@ in
       type = types.nullOr (
         types.submodule (import ../web-servers/h2o/vhost-options.nix { inherit config lib; })
       );
-      default = null;
       example =
         lib.literalExpression # nix
           ''

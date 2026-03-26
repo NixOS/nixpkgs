@@ -68,7 +68,6 @@ with lib;
 
               exit-node = mkOption {
                 type = nullOr (listOf str);
-                default = null;
                 example = ''
                   exit-node = [ "example.loki" ];              # maps all exit traffic to example.loki
                   exit-node = [ "example.loki:100.0.0.0/24" ]; # maps 100.0.0.0/24 to example.loki

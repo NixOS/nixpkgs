@@ -54,7 +54,6 @@ in
       };
       panel = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
         example = lib.literalExpression ''"''${pkgs.kdePackages.plasma-desktop}/libexec/kimpanel-ibus-panel"'';
         description = "Replace the IBus panel with another panel.";
       };

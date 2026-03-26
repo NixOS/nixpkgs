@@ -90,7 +90,6 @@ in
         version = mkOption {
           type = nullOr nonEmptyStr;
           description = "Version of the zone.";
-          default = null;
         };
         target = mkOption {
           type = enum [
@@ -107,7 +106,6 @@ in
             Priority for inbound traffic.
             Lower values have higher priority.
           '';
-          default = null;
         };
         egressPriority = mkOption {
           type = nullOr ints.s16;
@@ -164,12 +162,10 @@ in
         short = mkOption {
           type = nullOr nonEmptyStr;
           description = "Short description for the zone.";
-          default = null;
         };
         description = mkOption {
           type = nullOr nonEmptyStr;
           description = "Description for the zone.";
-          default = null;
         };
         services = mkOption {
           type = listOf nonEmptyStr;
@@ -202,12 +198,10 @@ in
               port = mkPortOption { };
               protocol = protocolOption;
               to-port = (mkPortOption { optional = true; }) // {
-                default = null;
               };
               to-addr = mkOption {
                 type = nullOr nonEmptyStr;
                 description = "Destination IP address.";
-                default = null;
               };
             };
           });

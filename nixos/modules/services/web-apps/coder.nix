@@ -66,7 +66,6 @@ in
         description = ''
           Access URL should be a external IP address or domain with DNS records pointing to Coder.
         '';
-        default = null;
         example = "https://coder.example.com";
       };
 
@@ -75,7 +74,6 @@ in
         description = ''
           If you are providing TLS certificates directly to the Coder server, you must use a single certificate for the root and wildcard domains.
         '';
-        default = null;
         example = "*.coder.example.com";
       };
 
@@ -92,7 +90,6 @@ in
         file = mkOption {
           type = types.nullOr types.path;
           description = "Systemd environment file to add to Coder.";
-          default = null;
         };
       };
 
@@ -131,7 +128,6 @@ in
 
         password = mkOption {
           type = types.nullOr types.str;
-          default = null;
           description = ''
             Password for accessing the database.
           '';

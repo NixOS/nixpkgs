@@ -58,7 +58,6 @@ in
 
     configFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = "Path to the periphery configuration file. If null, a configuration file will be generated from the module options.";
       example = lib.literalExpression ''
         pkgs.writeText "periphery.toml" '''

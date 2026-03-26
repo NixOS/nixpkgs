@@ -104,7 +104,6 @@ in
 
               group = mkOption {
                 type = types.nullOr types.str;
-                default = null;
                 description = "group to run vdirsyncer as";
               };
 
@@ -133,14 +132,12 @@ in
 
               configFile = mkOption {
                 type = types.nullOr types.path;
-                default = null;
                 description = "existing configuration file";
               };
 
               config = {
                 statusPath = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
                   defaultText = literalExpression "/var/lib/vdirsyncer/\${attrName}";
                   description = "vdirsyncer's status path";
                 };

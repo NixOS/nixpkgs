@@ -54,7 +54,6 @@ in
 
       config = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Nominatim UI configuration placed to theme/config.theme.js file.
 
@@ -129,7 +128,6 @@ in
 
       extraConnectionParams = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Extra Nominatim database connection parameters.
 

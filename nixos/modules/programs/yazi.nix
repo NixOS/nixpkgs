@@ -48,7 +48,6 @@ in
 
     initLua = lib.mkOption {
       type = with lib.types; nullOr path;
-      default = null;
       description = ''
         The init.lua for Yazi itself.
       '';

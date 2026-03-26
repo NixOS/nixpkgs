@@ -1020,7 +1020,6 @@ in
 
       provisioning = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Script to provision the TPM before control is handed off to the VM.
 

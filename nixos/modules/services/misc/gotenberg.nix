@@ -94,7 +94,6 @@ in
 
       bodyLimit = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = "Sets the max limit for `multipart/form-data` requests. Accepts values like '5M', '20G', etc.";
       };
 
@@ -253,7 +252,6 @@ in
 
       environmentFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = "Environment file to load extra environment variables from.";
       };
 

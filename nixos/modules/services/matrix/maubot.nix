@@ -278,7 +278,6 @@ in
                   };
                   override_resource_path = mkOption {
                     type = types.nullOr types.str;
-                    default = null;
                     description = ''
                       Override path from where to load UI resources.
                     '';

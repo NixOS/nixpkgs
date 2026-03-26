@@ -684,7 +684,6 @@ let
       options = {
         validMinDays = lib.mkOption {
           type = lib.types.nullOr lib.types.int;
-          default = null;
           description = ''
             Minimum remaining validity before renewal in days.
 

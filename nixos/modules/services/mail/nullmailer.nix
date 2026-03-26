@@ -52,7 +52,6 @@
       config = {
         adminaddr = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             If set, all recipients to users at either "localhost" (the literal string)
             or the canonical host name (from the me control attribute) are remapped to this address.
@@ -65,7 +64,6 @@
 
         allmailfrom = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             If set, content will override the envelope sender on all messages.
           '';
@@ -84,7 +82,6 @@
 
         defaulthost = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             The content of this attribute is appended to any address that
             is missing a host name. Defaults to the value of the me control
@@ -137,7 +134,6 @@
 
         me = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             The fully-qualifiled host name of the computer running nullmailer.
             Defaults to the literal name me.
@@ -164,7 +160,6 @@
 
         remotes = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             A list of remote servers to which to send each message. Each line
             contains a remote host name or address followed by an optional

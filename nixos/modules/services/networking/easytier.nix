@@ -50,7 +50,6 @@ let
 
       hostname = mkOption {
         type = with types; nullOr str;
-        default = null;
         description = "Hostname shown in peer list and web console.";
       };
 
@@ -71,7 +70,6 @@ let
 
       ipv4 = mkOption {
         type = with types; nullOr str;
-        default = null;
         description = ''
           IPv4 cidr address of this peer in the virtual network. If
           empty, this peer will only forward packets and no TUN device

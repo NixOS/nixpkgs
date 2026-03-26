@@ -154,7 +154,6 @@ in
       };
       secretFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = "A file containing secrets as environment variables. See <https://listmonk.app/docs/configuration/#environment-variables> for details on supported values.";
       };
     };

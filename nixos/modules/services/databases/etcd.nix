@@ -90,7 +90,6 @@ in
 
     trustedCaFile = lib.mkOption {
       description = "Certificate authority file to use for clients";
-      default = null;
       type = lib.types.nullOr lib.types.path;
     };
 

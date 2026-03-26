@@ -38,7 +38,6 @@ let
 
         ip = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = ''
             The ip address of the device. If undefined, you will have to
             provide a nodename.
@@ -49,7 +48,6 @@ let
 
         nodename = lib.mkOption {
           type = with lib.types; nullOr str;
-          default = null;
           description = ''
             The node name of the device. If undefined, you will have to
             provide an ip.

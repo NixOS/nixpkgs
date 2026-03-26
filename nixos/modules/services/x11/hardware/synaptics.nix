@@ -156,14 +156,12 @@ in
 
       palmMinWidth = mkOption {
         type = types.nullOr types.int;
-        default = null;
         example = 5;
         description = "Minimum finger width at which touch is considered a palm";
       };
 
       palmMinZ = mkOption {
         type = types.nullOr types.int;
-        default = null;
         example = 20;
         description = "Minimum finger pressure at which touch is considered a palm";
       };

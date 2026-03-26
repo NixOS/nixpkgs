@@ -80,7 +80,6 @@ in
 
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = "Environment file, used to set any secret ND_* environment variables.";
       };
     };

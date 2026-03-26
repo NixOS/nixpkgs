@@ -126,7 +126,6 @@ in
 
               # This should not be used; use pgpassFile instead.
               options.password = lib.mkOption {
-                default = null;
                 readOnly = true;
                 internal = true;
               };

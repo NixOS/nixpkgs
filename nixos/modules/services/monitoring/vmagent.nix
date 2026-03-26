@@ -82,14 +82,12 @@ in
         '';
       };
       basicAuthUsername = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           Basic Auth username used to connect to remote_write endpoint
         '';
       };
       basicAuthPasswordFile = lib.mkOption {
-        default = null;
         type = lib.types.nullOr lib.types.str;
         description = ''
           File that contains the Basic Auth password used to connect to remote_write endpoint

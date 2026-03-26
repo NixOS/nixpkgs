@@ -60,7 +60,6 @@ in
 
       schedulerHost = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Explicit scheduler hostname, useful in firewalled environments.
 

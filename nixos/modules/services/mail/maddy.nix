@@ -338,7 +338,6 @@ in
               passwordFile = lib.mkOption {
                 type = lib.types.path;
                 example = "/path/to/file";
-                default = null;
                 description = ''
                   Specifies the path to a file containing the
                   clear text password for the user.

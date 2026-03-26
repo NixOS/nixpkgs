@@ -350,7 +350,6 @@ in
 
       key = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
@@ -359,7 +358,6 @@ in
 
       guiPasswordFile = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Path to file containing the plaintext password for Syncthing's GUI.
         '';
@@ -616,7 +614,6 @@ in
                                   };
                                   encryptionPasswordFile = mkOption {
                                     type = types.nullOr types.externalPath;
-                                    default = null;
                                     description = ''
                                       Path to encryption password. If set, the file will be read during
                                       service activation, without being embedded in derivation.

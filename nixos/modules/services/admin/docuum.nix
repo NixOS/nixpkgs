@@ -32,7 +32,6 @@ in
     minAge = mkOption {
       description = "Sets the minimum age of images to be considered for deletion.";
       type = types.nullOr types.str;
-      default = null;
       example = "1d";
     };
 

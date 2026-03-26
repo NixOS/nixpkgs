@@ -70,7 +70,6 @@ in
 
       configText = lib.mkOption {
         type = lib.types.nullOr lib.types.lines;
-        default = null;
         description = ''
           Alertmanager configuration as YAML text. If non-null, this option
           defines the text that is written to alertmanager.yml. If null, the

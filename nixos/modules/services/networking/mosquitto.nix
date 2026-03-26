@@ -54,7 +54,6 @@ let
       options = {
         password = lib.mkOption {
           type = uniq (nullOr str);
-          default = null;
           description = ''
             Specifies the (clear text) password for the MQTT User.
           '';
@@ -63,7 +62,6 @@ let
         passwordFile = lib.mkOption {
           type = uniq (nullOr path);
           example = "/path/to/file";
-          default = null;
           description = ''
             Specifies the path to a file containing the
             clear text password for the MQTT user.
@@ -88,7 +86,6 @@ let
         hashedPasswordFile = lib.mkOption {
           type = uniq (nullOr path);
           example = "/path/to/file";
-          default = null;
           description = ''
             Specifies the path to a file containing the
             hashed password for the MQTT user.

@@ -54,7 +54,6 @@ in
 
       certFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/path/to/your/cert.pem";
         description = ''
           Path to the server's certificate. The file is copied at runtime to

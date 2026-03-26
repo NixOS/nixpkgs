@@ -144,7 +144,6 @@ in
 
       server = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           ACME Directory Resource URI. Defaults to Let's Encrypt's production endpoint,
           `https://acme-v02.api.letsencrypt.org/directory`, if unset.
@@ -153,7 +152,6 @@ in
 
       serverCa = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           The root certificate (in PEM format) of the ACME server's HTTPS interface.
         '';

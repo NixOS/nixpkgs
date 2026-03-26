@@ -100,7 +100,6 @@ in
       };
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/run/keys/castopod-env";
         description = ''
           Environment file to inject e.g. secrets into the configuration.

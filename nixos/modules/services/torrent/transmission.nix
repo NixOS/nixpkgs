@@ -322,7 +322,6 @@ in
 
       webHome = mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "pkgs.flood-for-transmission";
         description = ''
           If not `null`, sets the value of the `TRANSMISSION_WEB_HOME`

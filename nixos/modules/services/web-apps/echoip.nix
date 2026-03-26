@@ -20,7 +20,6 @@ in
       description = ''
         Name of the nginx virtual host to use and setup. If null, do not setup anything.
       '';
-      default = null;
     };
 
     extraArgs = lib.mkOption {
@@ -43,7 +42,6 @@ in
     remoteIpHeader = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
       description = "Header to trust for remote IP, if present";
-      default = null;
       example = "X-Real-IP";
     };
   };

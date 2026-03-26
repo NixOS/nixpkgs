@@ -72,12 +72,10 @@ in
     };
     outgoingBindIp = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = "Specifies which ip outgoing connections are bound to";
     };
     authUsername = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "alice";
       description = "Optional username to use for authentication.";
     };

@@ -636,14 +636,12 @@ in
 
         user = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           example = "mastodon@example.com";
           description = "SMTP login name.";
         };
 
         passwordFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/var/lib/mastodon/secrets/smtp-password";
           description = ''
             Path to file containing the SMTP password.
@@ -658,7 +656,6 @@ in
             If it is not null, Elasticsearch full text search will be enabled.
           '';
           type = lib.types.nullOr lib.types.str;
-          default = null;
         };
 
         port = lib.mkOption {
@@ -673,7 +670,6 @@ in
             Elasticsearch cluster between different projects or Mastodon servers.
           '';
           type = lib.types.nullOr lib.types.str;
-          default = null;
           example = "mastodon";
         };
 
@@ -702,7 +698,6 @@ in
             Path to file containing password for optionally authenticating with Elasticsearch.
           '';
           type = lib.types.nullOr lib.types.path;
-          default = null;
           example = "/var/lib/mastodon/secrets/elasticsearch-password";
         };
       };

@@ -44,7 +44,6 @@ in
 
     configFile = mkOption {
       type = with types; nullOr path;
-      default = null;
       example = "/etc/prometheus-pve-exporter/pve.yml";
       description = ''
         Path to the service's config file. This path can either be a computed path in /nix/store or a path in the local filesystem.
@@ -69,7 +68,6 @@ in
 
       certFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         example = "/var/lib/prometheus-pve-exporter/full-chain.pem";
         description = ''
           Path to a SSL certificate file for the server

@@ -156,7 +156,6 @@ in
 
     serviceEnvironmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = "/run/keys/peertube/password-init-root";
       description = ''
         Set environment variables for the service. Mainly useful for setting the initial root password.
@@ -311,7 +310,6 @@ in
 
       passwordFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/run/keys/peertube/password-redis-db";
         description = "Password for redis database.";
       };

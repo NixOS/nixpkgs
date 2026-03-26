@@ -36,7 +36,6 @@ let
     };
     cert = mkOption {
       type = with types; nullOr str;
-      default = null;
       example = "/path/to/fullchain.pem";
       description = "Path to TLS certificate to use for connections to {manpage}`public-inbox-${proto}d(1)`.";
     };
@@ -195,7 +194,6 @@ in
             };
             options.watchheader = mkOption {
               type = with types; nullOr str;
-              default = null;
               example = "List-Id:<test@example.com>";
               description = ''
                 If specified, {manpage}`public-inbox-watch(1)` will only process
@@ -352,7 +350,6 @@ in
         };
         options.publicinboxwatch.watchspam = mkOption {
           type = with types; nullOr str;
-          default = null;
           example = "maildir:/path/to/spam";
           description = ''
             If set, mail in this maildir will be trained as spam and

@@ -324,7 +324,6 @@ let
 
       maxRefreshSecs = mkOption {
         type = types.nullOr types.int;
-        default = null;
         description = ''
           Limit refresh time for secondary zones. This is the timer which
           checks to see if the zone has to be refetched when it expires.
@@ -335,7 +334,6 @@ let
 
       minRefreshSecs = mkOption {
         type = types.nullOr types.int;
-        default = null;
         description = ''
           Limit refresh time for secondary zones.
         '';
@@ -400,7 +398,6 @@ let
 
       outgoingInterface = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "2000::1@1234";
         description = ''
           This address will be used for zone-transfer requests if configured
@@ -679,7 +676,6 @@ in
 
     statistics = mkOption {
       type = types.nullOr types.int;
-      default = null;
       description = ''
         Statistics are produced every number of seconds. Prints to log.
         If null no statistics are logged.

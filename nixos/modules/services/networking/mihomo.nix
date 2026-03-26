@@ -50,7 +50,6 @@ in
     };
 
     extraOpts = lib.mkOption {
-      default = null;
       type = lib.types.nullOr lib.types.str;
       description = "Extra command line options to use.";
     };

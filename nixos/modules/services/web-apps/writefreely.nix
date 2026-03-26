@@ -236,7 +236,6 @@ in
 
       passwordFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = "The file to load the database password from.";
       };
 

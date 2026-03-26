@@ -44,7 +44,6 @@ in
 
       configFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           The Apache Tika configuration (XML) file to use.
         '';

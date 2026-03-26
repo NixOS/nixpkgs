@@ -42,7 +42,6 @@ in
 
       hostKey = mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/run/keys/upterm_host_ed25519_key";
         description = ''
           Path to SSH host key. If not defined, an ed25519 keypair is generated automatically.

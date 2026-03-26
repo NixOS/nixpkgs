@@ -272,7 +272,6 @@ in
 
         databaseURLFile = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           description = ''
             File containing the URL of the database.
           '';
@@ -303,7 +302,6 @@ in
         lru = {
           schedule = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             example = "0 2 * * *";
             description = ''
               The cron spec for cleaning the store to keep it under
@@ -410,7 +408,6 @@ in
 
         maxSize = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           example = "100G";
           description = ''
             The maximum size of the store. It can be given with units such as
@@ -443,7 +440,6 @@ in
 
                 username = lib.mkOption {
                   type = lib.types.nullOr lib.types.str;
-                  default = null;
                   description = ''
                     Redis username for authentication (for Redis ACL).
                   '';
@@ -484,7 +480,6 @@ in
             }
           );
 
-          default = null;
 
           description = ''
             Configure Redis.
@@ -493,7 +488,6 @@ in
 
         secretKeyPath = lib.mkOption {
           type = lib.types.nullOr lib.types.path;
-          default = null;
           description = ''
             The path to load the secretKey for signing narinfos. Leave this
             empty to automatically generate a private/public key.
@@ -540,7 +534,6 @@ in
 
                   region = lib.mkOption {
                     type = lib.types.nullOr lib.types.str;
-                    default = null;
                     description = ''
                       The S3 region.
                     '';
@@ -589,7 +582,6 @@ in
         upstream = {
           dialerTimeout = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = ''
               Timeout for establishing TCP connections to upstream caches (e.g., 3s, 5s, 10s).
             '';
@@ -638,7 +630,6 @@ in
 
       netrcFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/etc/nix/netrc";
         description = ''
           The path to netrc file for upstream authentication.

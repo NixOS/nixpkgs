@@ -94,7 +94,6 @@ in
         needs to go through a proxy.
         Don't use this to point to another datadog site (EU) - use site instead.
       '';
-      default = null;
       example = "http://haproxy.example.com:3834";
       type = lib.types.nullOr lib.types.str;
     };
@@ -115,7 +114,6 @@ in
         "test"
         "service"
       ];
-      default = null;
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
     };
 
@@ -128,7 +126,6 @@ in
 
     logLevel = lib.mkOption {
       description = "Logging verbosity.";
-      default = null;
       type = lib.types.nullOr (
         lib.types.enum [
           "DEBUG"

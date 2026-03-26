@@ -62,7 +62,6 @@ in
 
       environmentFile = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
         example = "/etc/secrets/rmfakecloud.env";
         description = ''
           Path to an environment file loaded for the rmfakecloud service.

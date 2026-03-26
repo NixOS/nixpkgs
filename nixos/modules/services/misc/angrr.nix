@@ -112,7 +112,6 @@ let
       };
       period = lib.mkOption {
         type = with lib.types; nullOr str;
-        default = null;
         description = ''
           Retention period for the GC roots matched by this policy.
         '';
@@ -129,14 +128,12 @@ let
       };
       filter = lib.mkOption {
         type = with lib.types; nullOr (submodule filterOptions);
-        default = null;
         description = ''
           External filter program to further filter GC roots matched by this policy.
         '';
       };
       ignore-prefixes = lib.mkOption {
         type = with lib.types; nullOr (listOf str);
-        default = null;
         description = ''
           List of path prefixes to ignore.
 
@@ -145,7 +142,6 @@ let
       };
       ignore-prefixes-in-home = lib.mkOption {
         type = with lib.types; nullOr (listOf str);
-        default = null;
         description = ''
           Path prefixes to ignore under home directory.
 
@@ -172,14 +168,12 @@ let
       };
       keep-since = lib.mkOption {
         type = with lib.types; nullOr str;
-        default = null;
         description = ''
           Retention period for the GC roots in this profile.
         '';
       };
       keep-latest-n = lib.mkOption {
         type = with lib.types; nullOr int;
-        default = null;
         description = ''
           Keep the latest N GC roots in this profile.
         '';

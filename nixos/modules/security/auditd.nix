@@ -52,7 +52,6 @@ let
       };
       args = lib.mkOption {
         type = lib.types.nullOr (lib.types.listOf lib.types.nonEmptyStr);
-        default = null;
         description = ''
           This allows you to pass arguments to the child program.
           Generally plugins do not take arguments and have their own
@@ -77,7 +76,6 @@ let
             freeformType = lib.types.attrsOf settingsType;
           }
         );
-        default = null;
         description = "Plugin-specific config file to link to /etc/audit/<plugin>.conf";
       };
     };

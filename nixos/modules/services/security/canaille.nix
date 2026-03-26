@@ -86,7 +86,6 @@ in
       description = ''
         File containing the SMTP password. Make sure it has appropriate permissions.
       '';
-      default = null;
       type = types.nullOr types.path;
     };
     jwtPrivateKeyFile = mkOption {
@@ -99,14 +98,12 @@ in
         openssl rsa -in private.pem -pubout -outform PEM -out public.pem
         ```
       '';
-      default = null;
       type = types.nullOr types.path;
     };
     ldapBindPasswordFile = mkOption {
       description = ''
         File containing the LDAP bind password.
       '';
-      default = null;
       type = types.nullOr types.path;
     };
     settings = mkOption {
@@ -121,7 +118,6 @@ in
               Flask Secret Key. Can't be set and must be provided through
               `services.canaille.settings.secretKeyFile`.
             '';
-            default = null;
             type = types.nullOr types.str;
           };
           SERVER_NAME = mkOption {
@@ -140,7 +136,6 @@ in
 
           CANAILLE = {
             ACL = mkOption {
-              default = null;
               description = ''
                 Access Control Lists.
 
@@ -221,7 +216,6 @@ in
                       The LDAP bind password. Can't be set and has to be provided using
                       `services.canaille.ldapBindPasswordFile`.
                     '';
-                    default = null;
                     type = types.nullOr types.str;
                   };
                 };

@@ -28,7 +28,6 @@ in
 
       configFile = mkOption {
         type = types.nullOr types.str;
-        default = null;
         example = "/etc/v2ray/config.json";
         description = ''
           The absolute path to the configuration file.
@@ -41,7 +40,6 @@ in
 
       config = mkOption {
         type = types.nullOr json.type;
-        default = null;
         example = {
           inbounds = [
             {

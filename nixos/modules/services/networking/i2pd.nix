@@ -92,7 +92,6 @@ let
       latency.max = mkOption {
         type = with types; nullOr int;
         description = "Max latency for tunnels.";
-        default = null;
       };
     };
 
@@ -421,7 +420,6 @@ in
 
       port = mkOption {
         type = with types; nullOr port;
-        default = null;
         description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
         '';
@@ -516,7 +514,6 @@ in
 
       trust.family = mkOption {
         type = nullOr str;
-        default = null;
         description = ''
           Router Family to trust for first hops.
         '';
@@ -611,7 +608,6 @@ in
 
       yggdrasil.address = mkOption {
         type = nullOr str;
-        default = null;
         description = ''
           Your local yggdrasil address. Specify it if you want to bind your router to a
           particular address.
@@ -640,7 +636,6 @@ in
 
         strictHeaders = mkOption {
           type = nullOr bool;
-          default = null;
           description = ''
             Enable strict host checking on WebUI.
           '';

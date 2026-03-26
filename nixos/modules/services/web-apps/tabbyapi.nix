@@ -120,7 +120,6 @@ in
 
             max_seq_len = lib.mkOption {
               type = lib.types.nullOr lib.types.int;
-              default = null;
               description = "Max sequence length. Set null to use model defaults.";
             };
 

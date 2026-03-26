@@ -358,7 +358,6 @@ in
           memcached = {
             location = mkOption {
               type = with types; nullOr str;
-              default = null;
               example = "127.0.0.1:11211";
               description = ''
                 The `host:port` combination or the path to the UNIX socket of a memcached instance.

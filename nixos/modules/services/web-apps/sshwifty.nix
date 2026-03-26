@@ -28,7 +28,6 @@ in
     };
     socks5PasswordFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = "Path to a file containing the SOCKS5 password.";
     };
   };

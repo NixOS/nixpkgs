@@ -308,7 +308,6 @@ in
 
       secretsFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
         example = "/run/secrets/wireless.conf";
         description = ''
           File consisting of lines of the form `varname=value`
@@ -389,7 +388,6 @@ in
 
                 pskRaw = mkOption {
                   type = types.nullOr (types.strMatching "([[:xdigit:]]{64})|(ext:[^=]+)");
-                  default = null;
                   example = "ext:name_of_the_secret_here";
                   description = ''
                     Either the raw pre-shared key in hexadecimal format

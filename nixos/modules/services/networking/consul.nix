@@ -68,7 +68,6 @@ in
 
         advertise = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
-          default = null;
           description = ''
             The name of the interface to pull the advertise_addr from.
           '';
@@ -97,7 +96,6 @@ in
 
       forceIpv4 = lib.mkOption {
         type = lib.types.nullOr lib.types.bool;
-        default = null;
         description = ''
           Deprecated: Use consul.forceAddrFamily instead.
           Whether we should force the interfaces to only pull ipv4 addresses.

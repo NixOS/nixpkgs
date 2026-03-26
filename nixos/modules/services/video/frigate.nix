@@ -258,7 +258,6 @@ in
 
             host = mkOption {
               type = nullOr str;
-              default = null;
               example = "mqtt.example.com";
               description = ''
                 MQTT server hostname

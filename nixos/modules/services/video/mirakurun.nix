@@ -112,7 +112,6 @@ in
 
       channelSettings = mkOption {
         type = with types; nullOr settingsFmt.type;
-        default = null;
         example = literalExpression ''
           [
             {

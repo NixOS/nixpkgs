@@ -56,7 +56,6 @@ in
         used to create network interface name `tmfifo_net<index>`. This option
         is needed when multiple rshim instances are running.
       '';
-      default = null;
       example = 1;
     };
 

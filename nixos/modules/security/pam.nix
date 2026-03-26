@@ -432,7 +432,6 @@ let
 
           enablePattern = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = ''
               For each user matching one of comma-separated
               glob patterns, enable TTY auditing
@@ -441,7 +440,6 @@ let
 
           disablePattern = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = ''
               For each user matching one of comma-separated
               glob patterns, disable TTY auditing
@@ -1816,7 +1814,6 @@ in
         '';
       };
       authserver = lib.mkOption {
-        default = null;
         type = with lib.types; nullOr str;
         description = ''
           This controls the hostname for the 9front authentication server
@@ -1949,7 +1946,6 @@ in
 
           options = {
             authfile = lib.mkOption {
-              default = null;
               type = with lib.types; nullOr path;
               description = ''
                 By default `pam-u2f` module reads the keys from
@@ -1970,7 +1966,6 @@ in
             };
 
             appid = lib.mkOption {
-              default = null;
               type = with lib.types; nullOr str;
               description = ''
                 By default `pam-u2f` module sets the application
@@ -2107,7 +2102,6 @@ in
       };
 
       group = lib.mkOption {
-        default = null;
         type = with lib.types; nullOr str;
         description = ''
           If set, then the authenticating user must be a member of this group
@@ -2268,7 +2262,6 @@ in
     };
 
     users.motdFile = lib.mkOption {
-      default = null;
       example = "/etc/motd";
       type = lib.types.nullOr lib.types.path;
       description = "A file containing the message of the day shown to users when they log in.";

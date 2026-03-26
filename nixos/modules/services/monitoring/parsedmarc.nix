@@ -318,7 +318,6 @@ in
 
             to = lib.mkOption {
               type = with lib.types; nullOr (listOf str);
-              default = null;
               description = ''
                 The addresses to send outgoing mail to.
               '';
@@ -339,7 +338,6 @@ in
 
             user = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 Username to use when connecting to Elasticsearch, if
                 required.
@@ -348,7 +346,6 @@ in
 
             password = lib.mkOption {
               type = with lib.types; nullOr (either path (attrsOf path));
-              default = null;
               description = ''
                 The password to use when connecting to Elasticsearch,
                 if required.

@@ -72,7 +72,6 @@ in
               "on"
               "off"
             ]);
-            default = null;
             description = "Whether to allow writes to MSRs (`\"on\"`) or not (`\"off\"`).";
           };
         };

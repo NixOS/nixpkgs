@@ -118,7 +118,6 @@ in
       passwordFile = mkOption {
         type = nullOr str;
         description = "MySQL user password file.";
-        default = null;
       };
     };
     poolConfig = mkOption {

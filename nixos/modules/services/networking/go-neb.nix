@@ -22,7 +22,6 @@ in
 
     secretFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = "/run/keys/go-neb.env";
       description = ''
         Environment variables from this file will be interpolated into the

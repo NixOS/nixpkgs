@@ -68,7 +68,6 @@ let
               # required
               jwtSecretFile = mkOption {
                 type = types.nullOr types.path;
-                default = null;
                 description = ''
                   Path to your JWT secret used during identity verificaton.
                 '';
@@ -101,7 +100,6 @@ let
               # required
               storageEncryptionKeyFile = mkOption {
                 type = types.nullOr types.path;
-                default = null;
                 description = ''
                   Path to your storage encryption key.
                 '';

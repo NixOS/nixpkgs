@@ -82,7 +82,6 @@ in
     };
     environmentFile = mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         File containing additional config environment variables for alertmanager-gotify-bridge.
         This is especially for secrets like GOTIFY_TOKEN and AUTH_PASSWORD.

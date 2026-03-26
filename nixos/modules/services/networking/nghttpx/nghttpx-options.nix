@@ -44,7 +44,6 @@
 
     tls = lib.mkOption {
       type = lib.types.nullOr (lib.types.submodule (import ./tls-submodule.nix));
-      default = null;
       description = ''
         TLS certificate and key paths. Note that this does not enable
         TLS for a frontend listener, to do so, a frontend

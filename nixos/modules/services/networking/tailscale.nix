@@ -34,7 +34,6 @@ in
 
     permitCertUid = mkOption {
       type = types.nullOr types.nonEmptyStr;
-      default = null;
       description = "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
@@ -79,7 +78,6 @@ in
 
     authKeyFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       example = "/run/secrets/tailscale_key";
       description = ''
         A file containing the auth key.
@@ -94,17 +92,14 @@ in
         options = {
           ephemeral = mkOption {
             type = types.nullOr types.bool;
-            default = null;
             description = "Whether to register as an ephemeral node.";
           };
           preauthorized = mkOption {
             type = types.nullOr types.bool;
-            default = null;
             description = "Whether to skip manual device approval.";
           };
           baseURL = mkOption {
             type = types.nullOr types.str;
-            default = null;
             description = "Base URL for the Tailscale API.";
           };
         };

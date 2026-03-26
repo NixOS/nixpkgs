@@ -370,7 +370,6 @@ in
           options = {
             authenticationTokenConfigFile = mkOption {
               type = with types; nullOr path;
-              default = null;
               description = ''
                 Absolute path to a file containing environment variables used for
                 gitlab-runner registrations with *runner authentication tokens*.
@@ -463,7 +462,6 @@ in
             };
             buildsDir = mkOption {
               type = types.nullOr types.path;
-              default = null;
               example = "/var/lib/gitlab-runner/builds";
               description = ''
                 Absolute path to a directory where builds will be stored
@@ -472,7 +470,6 @@ in
             };
             cloneUrl = mkOption {
               type = types.nullOr types.str;
-              default = null;
               example = "http://gitlab.example.local";
               description = ''
                 Overwrite the URL for the GitLab instance. Used if the Runner can’t connect to GitLab on the URL GitLab exposes itself.
@@ -493,7 +490,6 @@ in
                   "if-not-present"
                 ]
               );
-              default = null;
               description = ''
                 Default pull-policy for Docker images
               '';
@@ -556,21 +552,18 @@ in
             };
             preGetSourcesScript = mkOption {
               type = types.nullOr (types.either types.str types.path);
-              default = null;
               description = ''
                 Runner-specific command script executed before code is pulled.
               '';
             };
             postGetSourcesScript = mkOption {
               type = types.nullOr (types.either types.str types.path);
-              default = null;
               description = ''
                 Runner-specific command script executed after code is pulled.
               '';
             };
             preBuildScript = mkOption {
               type = types.nullOr (types.either types.str types.path);
-              default = null;
               description = ''
                 Runner-specific command script executed after code is pulled,
                 just before build executes.

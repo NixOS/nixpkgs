@@ -478,7 +478,6 @@ in
 
               path = mkOption {
                 type = types.nullOr types.path;
-                default = null;
                 description = ''
                   Unix domain socket path to bind this listener to.
 
@@ -815,7 +814,6 @@ in
 
                 macaroon_secret_key = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
                   description = ''
                     Secret key for authentication tokens. If none is specified,
                     the registration_shared_secret is used, if one is given; otherwise,
@@ -882,7 +880,6 @@ in
 
                 public_baseurl = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
                   example = "https://example.com:8448/";
                   description = ''
                     The public-facing base URL for the client API (not including _matrix/...)
@@ -891,7 +888,6 @@ in
 
                 tls_certificate_path = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
                   example = "/var/lib/acme/example.com/fullchain.pem";
                   description = ''
                     PEM encoded X509 certificate for TLS.
@@ -904,7 +900,6 @@ in
 
                 tls_private_key_path = mkOption {
                   type = types.nullOr types.str;
-                  default = null;
                   example = "/var/lib/acme/example.com/key.pem";
                   description = ''
                     PEM encoded private key for TLS. Specify null if synapse is not

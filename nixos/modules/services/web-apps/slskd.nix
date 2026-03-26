@@ -100,7 +100,6 @@ in
                 type = nullOr path;
                 description = "Directory where incomplete downloading files are stored.";
                 defaultText = "/var/lib/slskd/incomplete";
-                default = null;
               };
               downloads = mkOption {
                 type = nullOr path;

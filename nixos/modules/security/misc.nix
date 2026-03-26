@@ -88,7 +88,6 @@
           "always"
         ]
       );
-      default = null;
       description = ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.

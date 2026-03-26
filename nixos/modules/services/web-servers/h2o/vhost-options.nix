@@ -40,7 +40,6 @@ in
 
     host = mkOption {
       type = types.nullOr types.nonEmptyStr;
-      default = null;
       example = "127.0.0.1";
       description = ''
         Set the host address for this virtual host. If unset, the default is to
@@ -209,7 +208,6 @@ in
             };
             useHost = mkOption {
               type = types.nullOr types.nonEmptyStr;
-              default = null;
               description = ''
                 An existing Let’s Encrypt certificate to use for this virtual
                 host. This is useful if you have many subdomains and want to

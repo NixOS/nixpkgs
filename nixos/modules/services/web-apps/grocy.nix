@@ -128,7 +128,6 @@ in
           '';
         };
         firstDayOfWeek = mkOption {
-          default = null;
           type = types.nullOr (types.enum (range 0 6));
           description = ''
             Which day of the week (0=Sunday, 1=Monday etc.) should be the

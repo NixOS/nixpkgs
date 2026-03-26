@@ -38,7 +38,6 @@ in
       description = ''
         iSCSI portal to boot from.
       '';
-      default = null;
       example = "192.168.1.1:3260";
       type = nullOr str;
     };
@@ -47,7 +46,6 @@ in
       description = ''
         Name of the iSCSI target to boot from.
       '';
-      default = null;
       example = "iqn.2020-08.org.linux-iscsi.targethost:example";
       type = nullOr str;
     };
@@ -78,7 +76,6 @@ in
 
     extraConfig = mkOption {
       description = "Extra lines to append to /etc/iscsid.conf";
-      default = null;
       type = nullOr lines;
     };
 

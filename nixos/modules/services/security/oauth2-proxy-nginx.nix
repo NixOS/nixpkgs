@@ -36,12 +36,10 @@ in
               allowed_emails = lib.mkOption {
                 type = lib.types.nullOr (lib.types.listOf lib.types.str);
                 description = "List of emails to allow access to this vhost, or null to allow all.";
-                default = null;
               };
               allowed_email_domains = lib.mkOption {
                 type = lib.types.nullOr (lib.types.listOf lib.types.str);
                 description = "List of email domains to allow access to this vhost, or null to allow all.";
-                default = null;
               };
             };
           };

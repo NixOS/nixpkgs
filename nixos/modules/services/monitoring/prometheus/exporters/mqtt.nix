@@ -70,7 +70,6 @@ in
     mqttV5Protocol = mkEnableOption "Force to use MQTT protocol v5 instead of 3.1.1.";
     mqttClientId = mkOption {
       type = types.nullOr types.str;
-      default = null;
       description = "Set client ID manually for MQTT connection";
     };
     mqttExposeClientId = mkEnableOption "Expose the client ID as a label in Prometheus metrics.";

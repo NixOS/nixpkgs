@@ -20,7 +20,6 @@ in
 
     environmentFile = mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "/path/to/hyprwhspr_secret_file";
       description = "File containing API keys (GROQ_API_KEY, GEMINI_API_KEY) for remote transcription.";
     };

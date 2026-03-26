@@ -542,7 +542,6 @@ in
 
       environmentFile = mkOption {
         type = with types; nullOr path;
-        default = null;
         description = ''
           Environment file (see {manpage}`systemd.exec(5)`
           "EnvironmentFile=" section for the syntax) which sets config options

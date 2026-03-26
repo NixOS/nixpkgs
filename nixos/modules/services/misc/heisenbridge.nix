@@ -72,7 +72,6 @@ in
       description = ''
         Set owner MXID otherwise first talking local user will claim the bridge
       '';
-      default = null;
       example = "@admin:example.org";
     };
 

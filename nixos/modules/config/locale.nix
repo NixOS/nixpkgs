@@ -22,7 +22,6 @@ in
     time = {
 
       timeZone = lib.mkOption {
-        default = null;
         type = timezone;
         example = "America/New_York";
         description = ''

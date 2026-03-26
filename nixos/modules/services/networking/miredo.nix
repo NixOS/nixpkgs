@@ -58,7 +58,6 @@ in
       };
 
       bindPort = mkOption {
-        default = null;
         type = types.nullOr types.str;
         description = ''
           Depending on the local firewall/NAT rules, you might need to force

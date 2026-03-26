@@ -100,7 +100,6 @@ in
               The hash algorithm to use for passwords and API keys.
               Set to `null` if you want to provide these secrets as plaintext.
             '';
-            default = null;
           };
 
           site_url = lib.mkOption {
@@ -139,7 +138,6 @@ in
           custom_landing_directory = lib.mkOption {
             type = lib.types.nullOr lib.types.path;
             description = "The path of a directory which contains a custom landing page.";
-            default = null;
           };
         };
       };

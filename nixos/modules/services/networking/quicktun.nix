@@ -118,7 +118,6 @@ in
 
               publicKey = mkOption {
                 type = with types; nullOr str;
-                default = null;
                 description = ''
                   Remote public key in hexadecimal form.
 

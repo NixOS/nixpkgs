@@ -264,7 +264,6 @@ let
         };
 
         text = mkOption {
-          default = null;
           type = types.nullOr types.lines;
           description = "Text of the file.";
         };

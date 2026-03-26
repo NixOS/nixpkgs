@@ -124,7 +124,6 @@ in
 
         exports = lib.mkOption {
           type = with lib.types; listOf str;
-          default = null;
           description = "Export definitions for MooseFS (see mfsexports.cfg).";
           example = [
             "* / rw,alldirs,admin,maproot=0:0"

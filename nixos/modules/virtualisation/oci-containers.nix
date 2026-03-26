@@ -46,7 +46,6 @@ let
 
         imageStream = mkOption {
           type = with types; nullOr package;
-          default = null;
           description = ''
             Path to a script that streams the desired image on standard output.
 
@@ -87,7 +86,6 @@ let
 
           registry = mkOption {
             type = with types; nullOr str;
-            default = null;
             description = "Registry where to login to.";
             example = "https://docker.pkg.github.com";
           };
@@ -192,7 +190,6 @@ let
 
         user = mkOption {
           type = with types; nullOr str;
-          default = null;
           description = ''
             Override the username or UID (and optionally groupname or GID) used
             in the container.
@@ -221,7 +218,6 @@ let
 
         workdir = mkOption {
           type = with types; nullOr str;
-          default = null;
           description = "Override the default working directory for the container.";
           example = "/var/lib/hello_world";
         };
@@ -244,7 +240,6 @@ let
 
         hostname = mkOption {
           type = with types; nullOr str;
-          default = null;
           description = "The hostname of the container.";
           example = "hello-world";
         };
@@ -305,7 +300,6 @@ let
               };
             }
           );
-          default = null;
           description = ''
             Podman-specific settings in OCI containers. These must be null when using
             the `docker` backend.

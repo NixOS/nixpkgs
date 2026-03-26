@@ -130,7 +130,6 @@ in
       };
 
       socketMode = lib.mkOption {
-        default = null;
         description = ''
           File mode of the socket.
         '';

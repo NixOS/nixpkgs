@@ -68,7 +68,6 @@ in
 
           revision = mkOption {
             type = nullOr str;
-            default = null;
             description = "Regular expression to match the product revision";
           };
 
@@ -117,7 +116,6 @@ in
 
           uid_attribute = mkOption {
             type = nullOr str;
-            default = null;
             description = "The udev attribute providing a unique path identifier (WWID)";
           };
 
@@ -180,7 +178,6 @@ in
 
           prio_args = mkOption {
             type = nullOr str;
-            default = null;
             description = "Arguments to pass to to the prio function";
           };
 
@@ -333,7 +330,6 @@ in
 
           san_path_err_threshold = mkOption {
             type = nullOr str;
-            default = null;
             description = ''
               If set to a value greater than 0, multipathd will watch paths and check
               how many times a path has been failed due to errors.If the number of
@@ -346,7 +342,6 @@ in
 
           san_path_err_forget_rate = mkOption {
             type = nullOr str;
-            default = null;
             description = ''
               If set to a value greater than 0, multipathd will check whether the path
               failures has exceeded the san_path_err_threshold within this many checks
@@ -357,7 +352,6 @@ in
 
           san_path_err_recovery_time = mkOption {
             type = nullOr str;
-            default = null;
             description = ''
               If set to a value greater than 0, multipathd will make sure that when
               path failures has exceeded the san_path_err_threshold within
@@ -370,7 +364,6 @@ in
 
           marginal_path_err_sample_time = mkOption {
             type = nullOr int;
-            default = null;
             description = "One of the four parameters of supporting path check based on accounting IO error such as intermittent error";
           };
 
@@ -415,7 +408,6 @@ in
 
           max_sectors_kb = mkOption {
             type = nullOr int;
-            default = null;
             description = "Sets the max_sectors_kb device parameter on all path devices and the multipath device to the specified value";
           };
 
@@ -456,7 +448,6 @@ in
 
     blacklist_exceptions = mkOption {
       type = nullOr str;
-      default = null;
       description = ''
         This section defines which devices should be included in the
         multipath topology discovery, despite being listed in the
@@ -475,7 +466,6 @@ in
 
     extraConfig = mkOption {
       type = nullOr str;
-      default = null;
       description = "Lines to append to default multipath.conf";
     };
 
@@ -518,21 +508,18 @@ in
 
           array = mkOption {
             type = str;
-            default = null;
             example = "bigarray.example.com";
             description = "The DNS name of the storage array";
           };
 
           fsType = mkOption {
             type = nullOr str;
-            default = null;
             example = "zfs";
             description = "Type of the filesystem";
           };
 
           options = mkOption {
             type = nullOr str;
-            default = null;
             example = "ro";
             description = "Options used to mount the file system";
           };

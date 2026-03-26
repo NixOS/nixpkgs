@@ -40,7 +40,6 @@ in
           options = {
             dataDir = lib.mkOption {
               type = lib.types.nullOr lib.types.path;
-              default = null;
               description = "Data directory for errbot instance.";
             };
 

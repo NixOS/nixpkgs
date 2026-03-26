@@ -36,7 +36,6 @@ in
       description = ''
         Optional file containing a self-managed signing key to sign uploaded store paths.
       '';
-      default = null;
     };
 
     compressionLevel = lib.mkOption {
@@ -53,7 +52,6 @@ in
 
     host = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = "Cachix host to connect to";
     };
 

@@ -150,7 +150,6 @@ in
 
       pantalaimon.password = mkOption {
         type = types.nullOr types.path;
-        default = null;
         description = ''
           File containing the password for Draupnir's Matrix account when used in
           conjunction with Pantalaimon to be used in place of

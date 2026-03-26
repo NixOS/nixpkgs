@@ -98,7 +98,6 @@ in
 
     unixSocket = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Enable Unix Socket for the server to listen on.
         `listenAddress` and `port` will be ignored.

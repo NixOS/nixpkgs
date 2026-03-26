@@ -44,7 +44,6 @@ in
 
       logbackXml = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/path/to/logback.xml";
         description = ''
           Configuration file that correspond to `logback.xml`.
@@ -53,7 +52,6 @@ in
 
       userMappingXml = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         example = "/path/to/user-mapping.xml";
         description = ''
           Configuration file that correspond to `user-mapping.xml`.

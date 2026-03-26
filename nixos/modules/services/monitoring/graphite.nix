@@ -142,7 +142,6 @@ in
 
       storageAggregation = lib.mkOption {
         description = "Defines how to aggregate data to lower-precision retentions.";
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = ''
           [all_min]
@@ -165,14 +164,12 @@ in
 
       blacklist = lib.mkOption {
         description = "Any metrics received which match one of the expressions will be dropped.";
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = "^some\\.noisy\\.metric\\.prefix\\..*";
       };
 
       whitelist = lib.mkOption {
         description = "Only metrics received which match one of the expressions will be persisted.";
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = ".*";
       };
@@ -199,7 +196,6 @@ in
 
       relayRules = lib.mkOption {
         description = "Relay rules are used to send certain metrics to a certain backend.";
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = ''
           [example]
@@ -216,7 +212,6 @@ in
 
       aggregationRules = lib.mkOption {
         description = "Defines if and how received metrics will be aggregated.";
-        default = null;
         type = lib.types.nullOr lib.types.str;
         example = ''
           <env>.applications.<app>.all.requests (60) = sum <env>.applications.<app>.*.requests

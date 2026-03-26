@@ -24,7 +24,6 @@ in
 
     config = mkOption {
       type = with lib.types; nullOr lines;
-      default = null;
       description = ''
         System wide configuration file for Speech Dispatcher. This will be used if no user configuration file is found.
       '';

@@ -278,7 +278,6 @@ in
     robotsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       description = "Provides /robots.txt for net crawlers.";
-      default = null;
       example = lib.literalExpression ''pkgs.writeText "robots.txt" "# my custom robots.txt ..."'';
     };
 
@@ -313,7 +312,6 @@ in
     tlsKeyFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
       description = "Path to the TLS key file.";
-      default = null;
       example = "/etc/ssl/certs/athens.key";
     };
 
@@ -332,7 +330,6 @@ in
         Path to the unix socket file.
         If set, Athens will listen on the unix socket instead of TCP socket.
       '';
-      default = null;
       example = "/run/athens.sock";
     };
 
@@ -359,7 +356,6 @@ in
       description = ''
         Password for basic auth. Warning: this is stored in plain text in the config file.
       '';
-      default = null;
       example = "swordfish";
     };
 
@@ -378,7 +374,6 @@ in
 
         Not used if empty.
       '';
-      default = null;
       example = "https://validation.example.com";
     };
 
@@ -387,7 +382,6 @@ in
       description = ''
         Sets basepath for all routes.
       '';
-      default = null;
       example = "/athens";
     };
 
@@ -396,7 +390,6 @@ in
       description = ''
         Path to the .netrc file.
       '';
-      default = null;
       example = "/home/user/.netrc";
     };
 
@@ -415,7 +408,6 @@ in
       description = ''
         Path to the .hgrc file.
       '';
-      default = null;
       example = "/home/user/.hgrc";
     };
 
@@ -444,7 +436,6 @@ in
     statsExporter = lib.mkOption {
       type = lib.types.nullOr (lib.types.enum [ "prometheus" ]);
       description = "Stats exporter to use.";
-      default = null;
     };
 
     sumDBs = lib.mkOption {
@@ -659,7 +650,6 @@ in
           type = lib.types.nullOr lib.types.str;
           description = "hostname of the CDN server.";
           example = "cdn.example.com";
-          default = null;
         };
       };
 
@@ -676,7 +666,6 @@ in
           type = lib.types.nullOr lib.types.str;
           description = "GCP project ID.";
           example = "my-project";
-          default = null;
         };
         bucket = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
@@ -687,7 +676,6 @@ in
         jsonKey = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Base64 encoded GCP service account key. Warning: this is stored in plain text in the config file.";
-          default = null;
         };
       };
 
@@ -696,7 +684,6 @@ in
           type = lib.types.nullOr lib.types.str;
           description = "URL of the mongo database.";
           example = "mongodb://localhost:27017";
-          default = null;
         };
         defaultDBName = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
@@ -727,7 +714,6 @@ in
         key = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Access key id for the S3 storage backend.";
-          default = null;
         };
         secret = lib.mkOption {
           type = lib.types.str;
@@ -768,7 +754,6 @@ in
         endpoint = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Endpoint for the S3 storage backend.";
-          default = null;
         };
       };
 
@@ -781,12 +766,10 @@ in
         accountKey = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Account key for the Azure Blob storage backend. Warning: this is stored in plain text in the config file.";
-          default = null;
         };
         containerName = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           description = "Container name for the Azure Blob storage backend.";
-          default = null;
         };
       };
 
@@ -795,7 +778,6 @@ in
           type = lib.types.nullOr lib.types.str;
           description = "URL of the backend storage layer.";
           example = "https://athens.example.com";
-          default = null;
         };
       };
     };

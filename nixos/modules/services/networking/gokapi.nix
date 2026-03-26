@@ -70,7 +70,6 @@ in
     };
     settingsFile = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Path to config file to parse and append to settings.
         Largely useful for loading secrets from a file not in the nix store. Can use systemd specifiers.

@@ -188,7 +188,6 @@ in
       };
       static-auth-secret = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           'Static' authentication secret value (a string) for TURN REST API only.
           If not set, then the turn server
@@ -199,7 +198,6 @@ in
       };
       static-auth-secret-file = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Path to the file containing the static authentication secret.
         '';

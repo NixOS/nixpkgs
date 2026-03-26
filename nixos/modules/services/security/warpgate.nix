@@ -42,7 +42,6 @@ in
           See [SeaORM documentation](https://www.sea-ql.org/SeaORM/docs/install-and-config/connection/).
         '';
         type = nullOr str;
-        default = null;
       };
 
       settings = mkOption {
@@ -241,7 +240,6 @@ in
               };
               external_port = mkOption {
                 description = "The MySQL listener is reachable via this port externally.";
-                default = null;
                 type = nullOr port;
               };
               certificate = mkOption {
@@ -268,7 +266,6 @@ in
               };
               external_port = mkOption {
                 description = "The PostgreSQL listener is reachable via this port externally.";
-                default = null;
                 type = nullOr str;
               };
               certificate = mkOption {
@@ -293,7 +290,6 @@ in
                   Path of UNIX socket of log forwarder.
                   See [Log forwarding](https://warpgate.null.page/log-forwarding/);
                 '';
-                default = null;
                 type = nullOr str;
               };
             };

@@ -50,7 +50,6 @@ in
 
     environmentFile = lib.mkOption {
       type = with lib.types; nullOr path;
-      default = null;
       example = "/run/secrets/alloy.env";
       description = ''
         EnvironmentFile as defined in {manpage}`systemd.exec(5)`.

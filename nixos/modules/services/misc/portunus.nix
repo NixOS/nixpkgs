@@ -32,7 +32,6 @@ in
 
     seedPath = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         Path to a portunus seed file in json format.
         See <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration> for available options.
@@ -41,7 +40,6 @@ in
 
     seedSettings = lib.mkOption {
       type = with lib.types; nullOr (attrsOf (listOf (attrsOf anything)));
-      default = null;
       description = ''
         Seed settings for users and groups.
         See upstream for format <https://github.com/majewsky/portunus#seeding-users-and-groups-from-static-configuration>

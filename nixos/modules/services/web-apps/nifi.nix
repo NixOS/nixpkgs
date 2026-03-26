@@ -104,7 +104,6 @@ in
 
       initUser = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = "Initial user account for Apache NiFi. Username must be at least 4 characters.";
       };
 
@@ -117,14 +116,12 @@ in
 
       initJavaHeapSize = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
-        default = null;
         example = 1024;
         description = "Set the initial heap size for the JVM in MB.";
       };
 
       maxJavaHeapSize = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
-        default = null;
         example = 2048;
         description = "Set the initial heap size for the JVM in MB.";
       };

@@ -24,7 +24,6 @@ in
         options = {
           ExternalHostname = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             example = "vpn.example.com";
             description = ''
               The hostname that clients should use to connect to this server.
@@ -37,7 +36,6 @@ in
 
           ExternalIP = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             example = "192.0.2.1";
             description = ''
               The external IP address of the server. This is used to generate
@@ -50,7 +48,6 @@ in
 
           ExternalIP6 = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             example = "2001:db8::1";
             description = ''
               The external IPv6 address of the server. This is used to generate
@@ -85,7 +82,6 @@ in
 
           IP = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             example = "172.18.0.1";
             description = ''
               The IPv4 address that the server will use on the network.

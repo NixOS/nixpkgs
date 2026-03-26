@@ -642,7 +642,6 @@ in
     };
 
     boot.initrd.compressorArgs = mkOption {
-      default = null;
       type = types.nullOr (types.listOf types.str);
       description = "Arguments to pass to the compressor for the initrd image, or null to use the compressor's defaults.";
     };

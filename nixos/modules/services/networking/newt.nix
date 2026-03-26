@@ -76,7 +76,6 @@ in
       # provide path to file to keep secrets out of the nix store
       environmentFile = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
         description = ''
           Path to a file containing sensitive environment variables for Newt. See [Client credentials](https://docs.pangolin.net/manage/clients/credentials) for more information.
           These will overwrite anything defined in the config.

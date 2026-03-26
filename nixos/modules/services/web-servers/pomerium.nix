@@ -16,7 +16,6 @@ in
 
     configFile = mkOption {
       type = with types; nullOr path;
-      default = null;
       description = "Path to Pomerium config YAML. If set, overrides services.pomerium.settings.";
     };
 

@@ -128,7 +128,6 @@ in
             };
             output.indent = lib.mkOption {
               type = with lib.types; nullOr int;
-              default = null;
               description = ''
                 Number of blank characters at the left margin for normal text,
                 default of `5` for {manpage}`mdoc(7)` and `7` for
@@ -153,7 +152,6 @@ in
             };
             output.paper = lib.mkOption {
               type = with lib.types; nullOr str;
-              default = null;
               description = ''
                 This option is for generating PostScript and PDF output. The paper
                 size name may be one of `a3`, `a4`, `a5`, `legal`, or `letter`.
@@ -166,7 +164,6 @@ in
             };
             output.style = lib.mkOption {
               type = with lib.types; nullOr path;
-              default = null;
               description = ''
                 Path to the file used for an external style-sheet. This must be a
                 valid absolute or relative URI.
@@ -179,7 +176,6 @@ in
             '';
             output.width = lib.mkOption {
               type = with lib.types; nullOr int;
-              default = null;
               description = ''
                 The ASCII and UTF-8 output width, default is `78`. When output is a
                 pager on a terminal that is less than 79 columns wide, the

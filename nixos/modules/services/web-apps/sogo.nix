@@ -56,7 +56,6 @@ in
     ealarmsCredFile = mkOption {
       description = "Optional path to a credentials file for email alarms";
       type = nullOr str;
-      default = null;
     };
 
     configReplaces = mkOption {

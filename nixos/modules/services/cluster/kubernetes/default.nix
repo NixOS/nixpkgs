@@ -120,7 +120,6 @@ let
     certFile = lib.mkOption {
       description = "${prefix} client certificate file used to connect to kube-apiserver.";
       type = lib.types.nullOr lib.types.path;
-      default = null;
     };
 
     keyFile = lib.mkOption {

@@ -26,12 +26,10 @@ in
       authfile = lib.mkOption {
         description = "Path to auth.json file";
         type = with lib.types; nullOr path;
-        default = null;
       };
       keepalive = lib.mkOption {
         description = "Keepalive interval, falls back to 25s";
         type = with lib.types; nullOr str;
-        default = null;
         example = "5s";
       };
       backend = lib.mkOption {

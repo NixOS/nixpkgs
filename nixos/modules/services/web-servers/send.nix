@@ -58,7 +58,6 @@ in
 
       baseUrl = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Base URL for the Send service.
           Leave it blank to automatically detect the base url.
@@ -113,7 +112,6 @@ in
 
         passwordFile = mkOption {
           type = types.nullOr types.path;
-          default = null;
           example = "/run/agenix/send-redis-password";
           description = ''
             The path to the file containing the Redis password.

@@ -104,7 +104,6 @@ in
     environmentFile = mkOption {
       type = secret;
       example = "/run/secrets/linkwarden";
-      default = null;
       description = ''
         Path of a file with extra environment variables to be loaded from disk.
         This file is not added to the nix store, so it can be used to pass secrets to linkwarden.

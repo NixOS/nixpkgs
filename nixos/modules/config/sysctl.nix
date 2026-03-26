@@ -30,7 +30,6 @@ in
           options = {
             "net.core.rmem_max" = lib.mkOption {
               type = lib.types.nullOr highestValueType;
-              default = null;
               description = "The maximum receive socket buffer size in bytes. In case of conflicting values, the highest will be used.";
             };
 

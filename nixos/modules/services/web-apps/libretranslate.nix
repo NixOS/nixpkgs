@@ -58,7 +58,6 @@ in
 
       threads = lib.mkOption {
         type = lib.types.nullOr lib.types.ints.positive;
-        default = null;
         example = 8;
         description = "Set number of threads.";
       };

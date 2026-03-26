@@ -44,7 +44,6 @@ in
     enable = lib.mkEnableOption "Traccar, an open source GPS tracking system";
     settingsFile = lib.mkOption {
       type = with lib.types; nullOr path;
-      default = null;
       description = ''
         File used as configuration for traccar. When specified, {option}`settings` is ignored.
       '';
@@ -67,7 +66,6 @@ in
     };
     environmentFile = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
-      default = null;
       description = ''
         File containing environment variables to substitute in the configuration before starting Traccar.
 

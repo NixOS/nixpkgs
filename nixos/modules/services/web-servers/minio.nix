@@ -78,7 +78,6 @@ in
 
     rootCredentialsFile = mkOption {
       type = types.nullOr types.path;
-      default = null;
       description = ''
         File containing the MINIO_ROOT_USER, default is "minioadmin", and
         MINIO_ROOT_PASSWORD (length >= 8), default is "minioadmin"; in the format of

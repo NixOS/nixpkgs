@@ -86,7 +86,6 @@ in
       # TODO: deprecate this?
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = "Additional opendkim configuration as a file.";
       };
 

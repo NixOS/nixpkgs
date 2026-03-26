@@ -76,7 +76,6 @@ in
 
     precedence = lib.mkOption {
       type = lib.types.nullOr (lib.types.attrsOf lib.types.int);
-      default = null;
       description = ''
         Similar to {option}`networking.getaddrinfo.label`, but this option
         defines entries for the precedence table instead.

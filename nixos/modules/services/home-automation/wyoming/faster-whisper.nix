@@ -246,7 +246,6 @@ in
 
               initialPrompt = mkOption {
                 type = nullOr str;
-                default = null;
                 # https://github.com/home-assistant/addons/blob/master/whisper/DOCS.md#option-custom_model_type
                 example = ''
                   The following conversation takes place in the universe of

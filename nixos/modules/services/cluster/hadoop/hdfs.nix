@@ -114,7 +114,6 @@ in
 
     datanode = hadoopServiceOption { serviceName = "HDFS DataNode"; } // {
       dataDirs = lib.mkOption {
-        default = null;
         description = "Tier and path definitions for datanode storage.";
         type =
           with lib.types;

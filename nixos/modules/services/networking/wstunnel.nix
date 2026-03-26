@@ -52,7 +52,6 @@ let
         the system at runtime.
       '';
       type = lib.types.nullOr lib.types.path;
-      default = null;
       example = "/var/lib/secrets/wstunnelSecrets";
     };
   };

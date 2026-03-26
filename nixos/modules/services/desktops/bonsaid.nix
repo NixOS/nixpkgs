@@ -20,7 +20,6 @@ let
     };
     options.command = lib.mkOption {
       type = lib.types.nullOr (lib.types.listOf lib.types.str);
-      default = null;
       description = ''
         Command to run when this transition is taken.
         This is executed inline by `bonsaid` and blocks handling of any other events until completion.
@@ -31,7 +30,6 @@ let
     };
     options.delay_duration = lib.mkOption {
       type = lib.types.nullOr lib.types.int;
-      default = null;
       description = ''
         Nanoseconds to wait after the previous state change before performing this transition.
         This can be placed at the same level as a `type = "event"` transition to achieve a
@@ -42,7 +40,6 @@ let
     };
     options.event_name = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       description = ''
         Name of the event which should trigger this transition when received by `bonsaid`.
         Events are sent to `bonsaid` by running `bonsaictl -e <event_name>`.

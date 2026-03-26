@@ -32,7 +32,6 @@ in
   options = {
     virtualisation.digitalOceanImage.configFile = mkOption {
       type = with types; nullOr path;
-      default = null;
       description = ''
         A path to a configuration file which will be placed at
         `/etc/nixos/configuration.nix` and be used when switching

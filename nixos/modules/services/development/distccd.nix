@@ -58,7 +58,6 @@ in
 
       maxJobs = lib.mkOption {
         type = lib.types.nullOr lib.types.int;
-        default = null;
         description = ''
           Maximum number of tasks distccd should execute at lib.any time.
         '';

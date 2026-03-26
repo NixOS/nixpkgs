@@ -442,7 +442,6 @@ in
     };
     appstoreEnable = lib.mkOption {
       type = lib.types.nullOr lib.types.bool;
-      default = null;
       example = true;
       description = ''
         Allow the installation and updating of apps from the Nextcloud appstore.
@@ -619,7 +618,6 @@ in
             "mysql"
           ]
         );
-        default = null;
         description = "Database type.";
       };
       dbname = lib.mkOption {
@@ -634,7 +632,6 @@ in
       };
       dbpassFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           The full path to a file that contains the database password.
         '';
@@ -659,7 +656,6 @@ in
       };
       dbtableprefix = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = null;
         description = ''
           Table prefix in Nextcloud's database.
 
@@ -998,14 +994,12 @@ in
           };
           mail_domain = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = ''
               The return address that you want to appear on emails sent by the Nextcloud server, for example `nc-admin@example.com`, substituting your own domain, of course.
             '';
           };
           mail_from_address = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
-            default = null;
             description = ''
               FROM address that overrides the built-in `sharing-noreply` and `lostpassword-noreply` FROM addresses.
               Defaults to different FROM addresses depending on the feature.
@@ -1178,7 +1172,6 @@ in
 
     cli.memoryLimit = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
-      default = null;
       example = "1G";
       description = ''
         The `memory_limit` of PHP is equal to [](#opt-services.nextcloud.maxUploadSize).

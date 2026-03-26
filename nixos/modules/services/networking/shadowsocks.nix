@@ -86,7 +86,6 @@ in
 
       password = mkOption {
         type = types.nullOr types.str;
-        default = null;
         description = ''
           Password for connecting clients.
         '';

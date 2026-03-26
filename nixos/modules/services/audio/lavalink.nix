@@ -26,7 +26,6 @@ in
 
     password = mkOption {
       type = types.nullOr types.str;
-      default = null;
       example = "s3cRe!p4SsW0rD";
       description = ''
         The password for Lavalink's authentication in plain text.

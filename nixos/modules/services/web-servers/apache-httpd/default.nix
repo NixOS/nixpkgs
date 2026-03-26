@@ -572,7 +572,6 @@ in
       adminAddr = mkOption {
         type = types.nullOr types.str;
         example = "admin@example.org";
-        default = null;
         description = "E-mail address of the server administrator.";
       };
 

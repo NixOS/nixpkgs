@@ -94,7 +94,6 @@ in
 
       config = mkOption {
         type = with types; (nullOr str);
-        default = null;
         description = ''
           WARNING: This option will expose store your config unencrypted world-readable in the nix store.
           Config text for dae.

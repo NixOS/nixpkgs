@@ -20,7 +20,6 @@ in
     enable = mkEnableOption "i3 window manager";
 
     configFile = mkOption {
-      default = null;
       type = with types; nullOr path;
       description = ''
         Path to the i3 configuration file.

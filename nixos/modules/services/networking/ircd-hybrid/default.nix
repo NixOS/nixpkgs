@@ -88,7 +88,6 @@ in
       };
 
       rsaKey = mkOption {
-        default = null;
         example = literalExpression "/root/certificates/irc.key";
         type = types.nullOr types.path;
         description = ''
@@ -97,7 +96,6 @@ in
       };
 
       certificate = mkOption {
-        default = null;
         example = literalExpression "/root/certificates/irc.pem";
         type = types.nullOr types.path;
         description = ''

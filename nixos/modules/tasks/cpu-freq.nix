@@ -46,7 +46,6 @@ in
 
       min = mkOption {
         type = types.nullOr types.ints.unsigned;
-        default = null;
         example = 800000;
         description = ''
           The minimum frequency the CPU will use.

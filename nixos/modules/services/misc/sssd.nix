@@ -104,7 +104,6 @@ in
 
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
-        default = null;
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
