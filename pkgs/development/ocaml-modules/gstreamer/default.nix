@@ -27,7 +27,7 @@ buildDunePackage rec {
     gst_all_1.gst-plugins-base
   ];
 
-  CFLAGS_COMPILE = [
+  env.CFLAGS_COMPILE = toString [
     "-I${glib.dev}/include/glib-2.0"
     "-I${glib.out}/lib/glib-2.0/include"
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
