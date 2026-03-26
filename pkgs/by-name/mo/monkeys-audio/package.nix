@@ -15,11 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Otherwise, >> related build errors are encountered
-    "-std=c++11"
-  ];
-
   nativeBuildInputs = [
     cmake
   ];
