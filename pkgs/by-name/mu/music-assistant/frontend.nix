@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  music-assistant,
   setuptools,
 }:
 
@@ -27,6 +28,6 @@ buildPythonPackage rec {
     description = "Music Assistant frontend";
     homepage = "https://github.com/music-assistant/frontend";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ hexa ];
+    inherit (music-assistant.meta) maintainers;
   };
 }
