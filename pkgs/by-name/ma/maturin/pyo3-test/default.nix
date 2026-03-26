@@ -11,14 +11,14 @@
   preConfigure,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "word-count";
   version = "0.28.2";
 
   src = fetchFromGitHub {
     owner = "PyO3";
     repo = "pyo3";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Jg+eni7I0jVUFViWbgj5F094ksvyuvF4mdgGzh0PMaQ=";
   };
 
@@ -43,4 +43,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
