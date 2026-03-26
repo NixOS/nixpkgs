@@ -9,6 +9,9 @@
   libdrm,
   libGLU,
   libGL,
+  freetype,
+  fontconfig,
+  zlib,
   pango,
   pkg-config,
   docbook_xsl,
@@ -47,6 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libtsm
     libxkbcommon
+    freetype
+    fontconfig
+    zlib
     pango
     systemdLibs
     libgbm
