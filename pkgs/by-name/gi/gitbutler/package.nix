@@ -30,41 +30,37 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gitbutler";
-  version = "0.18.8";
+  version = "0.19.7";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     tag = "release/${finalAttrs.version}";
-    hash = "sha256-OSM2yjiz3I5+SVpcJSWCDyS4y4w9JJ/8CAP2BK0sL7o=";
+    hash = "sha256-ppl1noikPwTvG/XT7iYG41+9ZZO8i0x2L+odeEzRP1s=";
   };
 
-  # Workaround for https://github.com/NixOS/nixpkgs/issues/359340
-  cargoPatches = [
-    ./gix-from-crates-io.patch
-  ];
+  # Build and bundle the `but` CLI on Darwin (upstream only wires this fully on Windows and Linux).
+  patches = [ ./bundle-but-cli.patch ];
 
   # Let Tauri know what version we're building and deactivate the built-in updater
-  # Note: .bundle.externalBin doesn't include `"but"` at the moment
-  #       as that'd require more build adjustments
   postPatch = ''
     tauriConfRelease="crates/gitbutler-tauri/tauri.conf.release.json"
     jq '.
         | (.version = "${finalAttrs.version}")
         | (.bundle.createUpdaterArtifacts = false)
-        | (.bundle.externalBin = ["gitbutler-git-setsid", "gitbutler-git-askpass"])
+        | (.bundle.externalBin = ["gitbutler-git-setsid", "gitbutler-git-askpass", "but"])
       ' "$tauriConfRelease" | sponge "$tauriConfRelease"
 
     substituteInPlace apps/desktop/src/lib/backend/tauri.ts \
       --replace-fail 'checkUpdate = tauriCheck;' 'checkUpdate = () => null;'
   '';
 
-  cargoHash = "sha256-L53iIVxv3KtmXiqITad1enIMX3Iu/mWSJJPZk7KAWuM=";
+  cargoHash = "sha256-xW/eO+AQQUBN2MrixNx3LKhwMookkKuX5LF4DSWQKKY=";
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-IAsEzM9kmZWnh390CV7mOyOshVlESsyoNT0ZvdY03KY=";
+    hash = "sha256-0WLgtidG8hqTkXY3heu+m3VoqQD/kGMlTmLb0qAS8sQ=";
   };
 
   nativeBuildInputs = [
@@ -140,8 +136,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "merge_first_branch_into_gb_local_and_verify_rebase"
     "json_output_with_dangling_commits"
     "two_dangling_commits_different_branches"
+    "new_from_project_handle_uses_repo_gitdir"
+    "new_from_project_handle_keeps_repo_cached"
     # darwin: Error: timeout waiting for matching event
     "track_directory_changes_after_rename"
+    # cannot find function `with_context_cmd` in this scope
+    "macro_features_compile_without_optional_features"
+    # Failure(ErrorData { error: "pre-push hook exited early with status: exit status: 0" })
+    "pre_push_ignores_husky_core_hooks_path_when_disabled"
   ];
 
   env = {

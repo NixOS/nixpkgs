@@ -1,0 +1,25 @@
+diff --git a/crates/gitbutler-tauri/inject-git-binaries.sh b/crates/gitbutler-tauri/inject-git-binaries.sh
+--- a/crates/gitbutler-tauri/inject-git-binaries.sh
++++ b/crates/gitbutler-tauri/inject-git-binaries.sh
+@@ -37,6 +37,7 @@ elif [ -f "$TARGET_ROOT/$ASKPASS" ] && [ -f "$TARGET_ROOT/$SETSID" ]; then
+     log injecting gitbutler-git binaries into crates/gitbutler-tauri "(TRIPLE=${TRIPLE})"
+     cp -v "$TARGET_ROOT/$ASKPASS" "$CRATE_ROOT/$ASKPASS-${TRIPLE}"
+     cp -v "$TARGET_ROOT/$SETSID" "$CRATE_ROOT/$SETSID-${TRIPLE}"
++    cp -v "$TARGET_ROOT/$BUT" "$CRATE_ROOT/$BUT-${TRIPLE}"
+ else
+     log gitbutler-git binaries are not built
+     exit 1
+diff --git a/crates/gitbutler-tauri/tauri-before-build-command.sh b/crates/gitbutler-tauri/tauri-before-build-command.sh
+--- a/crates/gitbutler-tauri/tauri-before-build-command.sh
++++ b/crates/gitbutler-tauri/tauri-before-build-command.sh
+@@ -14,9 +14,5 @@ fi
+ 
+ set -x
+ cargo build --release -p gitbutler-git
+-if [ "${OS:-}" == "windows" ] || [ "${OS:-}" == "linux" ]; then
+-  # NOTE: Should run either if the builtin-but feature is *not* selected in `release.sh` (case for Windows), OR if we
+-  # need the standalone CLI for separate publishing (case for Linux)
+-  cargo build --release -p but
+-fi
++cargo build --release -p but
+ bash ./crates/gitbutler-tauri/inject-git-binaries.sh
