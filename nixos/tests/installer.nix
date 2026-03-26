@@ -1323,7 +1323,7 @@ in
   };
 
   # Create two physical LVM partitions combined into one volume group
-  # that contains the logical swap and root partitions.
+  # that contains the logical swap, boot and root partitions.
   lvm = makeInstallerTest "lvm" {
     createPartitions = ''
       installer.succeed(
@@ -1336,11 +1336,15 @@ in
           "pvcreate /dev/vda1 /dev/vda2",
           "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
           "lvcreate --size 1G --name swap MyVolGroup",
-          "lvcreate --size 6G --name nixos MyVolGroup",
+          "lvcreate --size 1G --name boot MyVolGroup",
+          "lvcreate --size 5G --name nixos MyVolGroup",
           "mkswap -f /dev/MyVolGroup/swap -L swap",
           "swapon -L swap",
+          "mkfs.ext4 -L boot /dev/MyVolGroup/boot",
           "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
           "mount LABEL=nixos /mnt",
+          "mkdir /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
       )
     '';
     extraConfig = optionalString systemdStage1 ''
