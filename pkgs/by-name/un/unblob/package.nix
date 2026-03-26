@@ -3,7 +3,6 @@
   libiconv,
   python3,
   fetchFromGitHub,
-  gitUpdater,
   makeWrapper,
   rustPlatform,
   stdenvNoCC,
@@ -131,7 +130,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    updateScript = gitUpdater { };
     # helpful to easily add these to a nix-shell environment
     inherit runtimeDeps;
   };
