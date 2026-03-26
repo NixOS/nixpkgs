@@ -9,6 +9,7 @@
   pcsclite,
   proot,
   zlib,
+  versionCheckHook,
 }:
 
 let
@@ -31,8 +32,8 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
-    rev = "v${version}";
-    sha256 = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
+    tag = "v${version}";
+    hash = "sha256-H4rq68ECfdUvgTbG4Ho1EgAgD+1qTZu5DYfg+SjrDkw=";
   };
 
   mvnJdk = jdk11;
@@ -68,6 +69,9 @@ maven.buildMavenPackage rec {
       --add-flags "-jar '$out/share/java/gp.jar'" \
       --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = {
     description = "Command-line utility for managing applets and keys on Java Cards";

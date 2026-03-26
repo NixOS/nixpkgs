@@ -367,7 +367,12 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals
       (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95")
       [
-        (lib.mesonOption "build-test-env" "${pkgsStatic.busybox}/bin")
+        (lib.mesonOption "build-test-env" (
+          lib.makeBinPath [
+            pkgsStatic.busybox
+            pkgsStatic.acl
+          ]
+        ))
         (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
       ]
   ++ lib.optionals (lib.versionAtLeast version "2.95") [
