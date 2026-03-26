@@ -13,7 +13,7 @@
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "google-cloud-netapp";
   version = "0.8.0";
   pyproject = true;
@@ -21,11 +21,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "google-cloud-netapp-v${version}";
+    tag = "google-cloud-netapp-v${finalAttrs.version}";
     hash = "sha256-uUBId7RxVfOPtemZYUqJXd4hw2/CU2cogZL39MrKehk=";
   };
 
-  sourceRoot = "${src.name}/packages/google-cloud-netapp";
+  sourceRoot = "${finalAttrs.src.name}/packages/google-cloud-netapp";
 
   build-system = [ setuptools ];
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python Client for NetApp API";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-netapp";
-    changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-netapp-${src.tag}/packages/google-cloud-netapp/CHANGELOG.md";
+    changelog = "https://github.com/googleapis/google-cloud-python/blob/${finalAttrs.src.tag}/packages/google-cloud-netapp/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.sarahec ];
   };
-}
+})
