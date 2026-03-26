@@ -96,8 +96,9 @@ buildNimPackage (finalAttrs: {
     longDescription = ''
       The anime gacha bullet hell rhythm game that was created as a Mindustry (2022) April 1st event.
     '';
+    mainProgram = "animdustry";
     license = with lib.licenses; [
-      unfree
+      gpl3Only
       cc-by-30
       cc-by-nd-30
     ];
