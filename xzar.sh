@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euxo pipefail
+
 upload() {
   ~/.cargo/bin/xzar --server planai upload --pin "$1" --desc $(readlink -f result) --leave-after-abandon 1m result
 }
