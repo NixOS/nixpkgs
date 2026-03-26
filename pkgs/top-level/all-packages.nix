@@ -146,6 +146,14 @@ with pkgs;
 
   inherit (nix-update) nix-update-script;
 
+  nixos-test-driver = pkgs.python3Packages.callPackage ../../nixos/lib/test-driver {
+    qemu_pkg = pkgs.qemu;
+    imagemagick_light = pkgs.imagemagick_light.override { inherit (pkgs) libtiff; };
+    tesseract4 = pkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
+    # We want `pkgs.systemd`, *not* `python3Packages.system`.
+    systemd = pkgs.systemd;
+  };
+
   ### Push NixOS tests inside the fixed point
 
   # See also allTestsForSystem in nixos/release.nix
