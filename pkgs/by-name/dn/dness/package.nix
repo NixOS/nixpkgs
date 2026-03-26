@@ -1,8 +1,6 @@
 {
   fetchFromGitHub,
   lib,
-  openssl,
-  pkg-config,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
@@ -21,10 +19,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-2NT67tVMI511iISDln3p66Ls8XSLze0JSQZ50/s24tM=";
 
   doCheck = false; # Many tests require network access
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
