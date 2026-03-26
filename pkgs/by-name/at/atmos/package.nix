@@ -3,21 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
   terraform,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "atmos";
-  version = "1.194.1";
+  version = "1.212.0";
 
   src = fetchFromGitHub {
     owner = "cloudposse";
     repo = "atmos";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vQVkuvmqVbwvpcfzgNfI0aGKhEIaQC2626nBppoNsuM=";
+    hash = "sha256-WrZ8DkuCTmhkgDfFGZg/jDOY8LasufFI6tkDbRFHkP0=";
   };
 
-  vendorHash = "sha256-5ScxdWUoxs4unQ0IdTpQ0s6Dr0uOmdaRmYRWknVUGOU=";
-
+  vendorHash = "sha256-WHGXjxYWIbcddqtABtImxoXXbWGGt74ngqhFh4RaNlU=";
+  subPackages = [ "." ];
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"
@@ -54,5 +56,12 @@ buildGoModule (finalAttrs: {
     description = "Universal Tool for DevOps and Cloud Automation (works with terraform, helm, helmfile, etc)";
     mainProgram = "atmos";
     license = lib.licenses.asl20;
+  };
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(\\d+\\.\\d+\\.\\d+)$"
+    ];
   };
 })
