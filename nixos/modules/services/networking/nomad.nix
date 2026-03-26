@@ -82,7 +82,6 @@ in
 
       settings = mkOption {
         type = format.type;
-        default = { };
         description = ''
           Configuration for Nomad. See the [documentation](https://www.nomadproject.io/docs/configuration)
           for supported values.

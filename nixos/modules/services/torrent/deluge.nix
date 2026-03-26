@@ -62,7 +62,6 @@ in
 
         config = lib.mkOption {
           type = lib.types.attrs;
-          default = { };
           example = lib.literalExpression ''
             {
               download_location = "/srv/torrents/";

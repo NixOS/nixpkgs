@@ -136,7 +136,6 @@ in
                 internal = true;
               };
             };
-            default = { };
             description = ''
               libpq connection parameters as documented in:
 
@@ -195,7 +194,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         PostgREST configuration as documented in:
         <https://docs.postgrest.org/en/stable/references/configuration.html#list-of-parameters>

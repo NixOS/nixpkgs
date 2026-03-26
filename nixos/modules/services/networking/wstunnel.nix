@@ -180,7 +180,6 @@ let
               };
             };
           };
-          default = { };
           description = ''
             Command line arguments to pass to `wstunnel`.
             Attributes of the form `argName = true;` will be translated to `--argName`,
@@ -249,7 +248,6 @@ let
                 type = lib.types.coercedTo (lib.types.attrsOf lib.types.str) (lib.mapAttrsToList (
                   n: v: "${n}:${v}"
                 )) (lib.types.listOf lib.types.str);
-                default = { };
                 example = {
                   "X-Some-Header" = "some-value";
                 };
@@ -422,7 +420,6 @@ in
     clients = lib.mkOption {
       description = "`wstunnel` clients to set up.";
       type = lib.types.attrsOf (lib.types.submodule clientSubmodule);
-      default = { };
       example = {
         "wg-tunnel" = {
           connectTo = "wss://wstunnel.server.com:8443";

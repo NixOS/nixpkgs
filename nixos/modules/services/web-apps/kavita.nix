@@ -54,7 +54,6 @@ in
     };
 
     settings = lib.mkOption {
-      default = { };
       description = ''
         Kavita configuration options, as configured in {file}`appsettings.json`.
       '';

@@ -20,7 +20,6 @@ in
 
       settings = lib.mkOption {
         type = format.type;
-        default = { };
         description = ''
           The contents of the configuration file for soft-serve.
 

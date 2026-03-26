@@ -286,7 +286,6 @@ in
     };
 
     targets = mkOption {
-      default = { };
       type = systemdUtils.types.targets;
       description = "Definition of systemd target units; see {manpage}`systemd.target(5)`";
     };
@@ -343,7 +342,6 @@ in
 
     generators = mkOption {
       type = types.attrsOf types.path;
-      default = { };
       example = {
         systemd-gpt-auto-generator = "/dev/null";
       };
@@ -378,7 +376,6 @@ in
 
     shutdown = mkOption {
       type = types.attrsOf types.path;
-      default = { };
       description = ''
         Definition of systemd shutdown executables.
         For each `NAME = VALUE` pair of the attrSet, a link is generated from
@@ -433,7 +430,6 @@ in
             package
           ])
         );
-      default = { };
       example = {
         SYSTEMD_LOG_LEVEL = "debug";
       };
@@ -444,7 +440,6 @@ in
     };
 
     settings.Manager = mkOption {
-      default = { };
       defaultText = lib.literalExpression ''
         {
           DefaultIOAccounting = true;
@@ -467,7 +462,6 @@ in
     };
 
     sleep.settings.Sleep = mkOption {
-      default = { };
       type = lib.types.submodule {
         freeformType = types.attrsOf unitOption;
       };

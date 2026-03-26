@@ -150,7 +150,6 @@ in
   options = {
 
     services.nylon = lib.mkOption {
-      default = { };
       description = "Collection of named nylon instances";
       type = with lib.types; attrsOf (submodule nylonOpts);
       internal = true;

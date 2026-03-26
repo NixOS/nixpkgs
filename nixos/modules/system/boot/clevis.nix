@@ -26,7 +26,6 @@ in
 
     boot.initrd.clevis.devices = lib.mkOption {
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
-      default = { };
       type = lib.types.attrsOf (
         lib.types.submodule {
           options.secretFile = lib.mkOption {

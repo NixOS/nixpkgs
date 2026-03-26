@@ -106,7 +106,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         LiveKit configuration file expressed in nix.
 

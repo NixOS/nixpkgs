@@ -2,7 +2,6 @@
 
 {
   options.set = lib.mkOption {
-    default = { };
     example = {
       a = 1;
     };

@@ -178,7 +178,6 @@ in
         };
       };
 
-      default = { };
 
       description = ''
         Configuration attributes for `grafana-image-renderer`.

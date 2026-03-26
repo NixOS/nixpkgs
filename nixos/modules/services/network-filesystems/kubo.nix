@@ -254,7 +254,6 @@ in
           See [https://github.com/ipfs/kubo/blob/master/docs/config.md](https://github.com/ipfs/kubo/blob/master/docs/config.md) for reference.
           You can't set `Identity` or `Pinning`.
         '';
-        default = { };
         example = {
           Datastore.StorageMax = "100GB";
           Discovery.MDNS.Enabled = false;

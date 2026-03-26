@@ -122,7 +122,6 @@ let
 
         hooks = lib.mkOption {
           type = lib.types.attrsOf lib.types.lines;
-          default = { };
           example = lib.literalExpression ''
             {
               environment = '''

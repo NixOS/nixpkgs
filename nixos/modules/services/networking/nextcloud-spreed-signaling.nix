@@ -176,7 +176,6 @@ in
     };
 
     settings = mkOption {
-      default = { };
       type = types.submodule (
         { config, options, ... }:
         {

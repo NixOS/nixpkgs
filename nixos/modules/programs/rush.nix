@@ -34,7 +34,6 @@ in
 
     rules = lib.mkOption {
       type = attrsOf lines;
-      default = { };
 
       description = ''
         The rule statement configures a GNU Rush rule. This is a block statement, which means that all

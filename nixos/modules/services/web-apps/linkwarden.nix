@@ -92,7 +92,6 @@ in
 
     environment = mkOption {
       type = types.attrsOf types.str;
-      default = { };
       example = {
         PAGINATION_TAKE_COUNT = "50";
       };
@@ -123,7 +122,6 @@ in
         POSTGRES_PASSWORD = "/run/secrets/linkwarden_postgres_passwd";
         NEXTAUTH_SECRET = "/run/secrets/linkwarden_secret";
       };
-      default = { };
       description = ''
         Attribute set containing paths to files to add to the environment of linkwarden.
         The files are not added to the nix store, so they can be used to pass secrets to linkwarden.

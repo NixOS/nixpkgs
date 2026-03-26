@@ -106,7 +106,6 @@ in
       example = {
         Statistics = false;
       };
-      default = { };
     };
 
     ipcPasswordFile = lib.mkOption {
@@ -159,7 +158,6 @@ in
               description = ''
                 Additional settings that are documented [here](https://github.com/JustArchiNET/ArchiSteamFarm/wiki/Configuration#bot-config).
               '';
-              default = { };
             };
           };
         }
@@ -176,7 +174,6 @@ in
           };
         };
       };
-      default = { };
     };
   };
 

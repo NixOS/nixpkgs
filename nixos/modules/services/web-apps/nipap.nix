@@ -40,7 +40,6 @@ in
         Configuration options to set in /etc/nipap/nipap.conf.
       '';
 
-      default = { };
 
       type = lib.types.submodule {
         freeformType = iniFmt.type;

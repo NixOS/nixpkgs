@@ -46,7 +46,6 @@ in
           bool
         ]);
 
-      default = { };
 
       description = ''
         Customize the default settings, refer to <https://github.com/kanboard/kanboard/blob/main/config.default.php>
@@ -65,7 +64,6 @@ in
       type = lib.types.nullOr (
         lib.types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
       );
-      default = { };
       description = ''
         With this option, you can customize an NGINX virtual host which already
         has sensible defaults for Kanboard. Set to `{ }` if you do not need any
@@ -90,7 +88,6 @@ in
           bool
         ]);
 
-      default = { };
 
       description = ''
         Options for kanboard's PHPFPM pool.

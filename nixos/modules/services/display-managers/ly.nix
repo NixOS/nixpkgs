@@ -74,7 +74,6 @@ in
 
       settings = mkOption {
         type = with lib.types; attrsOf iniFmt.lib.types.atom;
-        default = { };
         example = {
           load = false;
           save = false;

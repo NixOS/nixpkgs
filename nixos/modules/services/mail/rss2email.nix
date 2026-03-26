@@ -40,7 +40,6 @@ in
             int
             bool
           ]);
-        default = { };
         description = ''
           The configuration to give rss2email.
 

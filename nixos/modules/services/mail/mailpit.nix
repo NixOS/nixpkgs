@@ -26,7 +26,6 @@ let
 in
 {
   options.services.mailpit.instances = mkOption {
-    default = { };
     type = types.attrsOf (
       types.submodule {
         freeformType = types.attrsOf (

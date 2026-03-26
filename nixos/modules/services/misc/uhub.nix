@@ -26,7 +26,6 @@ in
   options = {
 
     services.uhub = lib.mkOption {
-      default = { };
       description = "Uhub ADC hub instances";
       type = lib.types.attrsOf (
         lib.types.submodule {

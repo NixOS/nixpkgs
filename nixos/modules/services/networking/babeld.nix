@@ -62,7 +62,6 @@ in
       };
 
       interfaces = lib.mkOption {
-        default = { };
         description = ''
           A set describing babeld interfaces.
           See {manpage}`babeld(8)` for options.

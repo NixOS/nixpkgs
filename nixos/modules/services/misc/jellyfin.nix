@@ -262,7 +262,6 @@ in
             "hevcRExt10bit"
             "hevcRExt12bit"
           ];
-          default = { };
           example = {
             vp9 = true;
             h264 = true;
@@ -277,7 +276,6 @@ in
             "hevc"
             "av1"
           ];
-          default = { };
           example = {
             av1 = true;
           };

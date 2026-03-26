@@ -60,7 +60,6 @@ in
           or structured JSON with `quote = false;`, pointing to a file that
           contains the value the option should be set to.
         '';
-        default = { };
         type = submodule {
           freeformType = settingsFormat.type;
 

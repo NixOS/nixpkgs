@@ -378,7 +378,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Settings for Kanidm, see
         [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
@@ -533,7 +532,6 @@ in
 
       persons = mkOption {
         description = "Provisioning of kanidm persons";
-        default = { };
         type = types.attrsOf (
           types.submodule {
             options = {
@@ -570,7 +568,6 @@ in
 
       systems.oauth2 = mkOption {
         description = "Provisioning of oauth2 resource servers";
-        default = { };
         type = types.attrsOf (
           types.submodule {
             options = {
@@ -667,7 +664,6 @@ in
                   See [Scope Relations](https://kanidm.github.io/kanidm/stable/integrations/oauth2.html#scope-relationships) for more information.
                 '';
                 type = types.attrsOf (types.listOf types.str);
-                default = { };
               };
 
               removeOrphanedClaimMaps = mkOption {
@@ -700,7 +696,6 @@ in
 
                       valuesByGroup = mkOption {
                         description = "Maps kanidm groups to values for the claim.";
-                        default = { };
                         type = types.attrsOf (types.listOf types.str);
                       };
                     };

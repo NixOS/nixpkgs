@@ -56,7 +56,6 @@ in
     extraEnvironment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       description = "Extra Environment variables to pass to the tuwunel server.";
-      default = { };
       example = {
         RUST_BACKTRACE = "yes";
       };
@@ -153,7 +152,6 @@ in
           };
         };
       };
-      default = { };
       # TOML does not allow null values, so we use null to omit those fields
       apply = lib.filterAttrsRecursive (_: v: v != null);
       description = ''

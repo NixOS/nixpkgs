@@ -444,7 +444,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Pod configuration (values from `php daemon.php config --help`).
           Note that these values will now be disabled in the admin panel.
@@ -461,7 +460,6 @@ in
               bool
             ])
           );
-        default = { };
         description = ".env settings for Movim. Secrets should use `secretFile` option instead. `null`s will be culled.";
       };
 
@@ -558,7 +556,6 @@ in
             str
             bool
           ]);
-        default = { };
         description = "Options for Movim’s PHP-FPM pool.";
       };
     };

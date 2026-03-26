@@ -42,7 +42,6 @@ in
             str
             (listOf str)
           ]);
-        default = { };
         example = {
           SATA_LINKPWR_ON_BAT = "med_power_with_dipm";
           USB_BLACKLIST_PHONE = 1;

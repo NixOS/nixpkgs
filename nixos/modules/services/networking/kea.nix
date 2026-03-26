@@ -44,7 +44,6 @@ in
       description = ''
         Kea Control Agent configuration
       '';
-      default = { };
       type = submodule {
         options = {
           enable = lib.mkEnableOption "Kea Control Agent";
@@ -211,7 +210,6 @@ in
       description = ''
         Kea DHCP-DDNS configuration
       '';
-      default = { };
       type = submodule {
         options = {
           enable = lib.mkEnableOption "Kea DDNS server";

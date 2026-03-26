@@ -112,7 +112,6 @@ in
 
       config = lib.mkOption {
         type = lib.types.attrsOf lib.types.anything;
-        default = { };
         description = ''
           Settings to add to the minetest config file.
 

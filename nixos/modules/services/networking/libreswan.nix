@@ -102,7 +102,6 @@ in
 
       policies = lib.mkOption {
         type = lib.types.attrsOf lib.types.lines;
-        default = { };
         example = lib.literalExpression ''
           { private-or-clear = '''
               # Attempt opportunistic IPsec for the entire Internet

@@ -52,7 +52,6 @@ in
       };
       blueprint = lib.mkOption {
         inherit (format) type;
-        default = { };
         example = {
           proxy-resources = {
             jellyfin = {

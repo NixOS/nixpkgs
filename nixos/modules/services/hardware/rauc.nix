@@ -134,7 +134,6 @@ in
       };
       settings = mkOption {
         type = format.type;
-        default = { };
         description = ''
           Rauc configuration that will be converted to INI. Refer to:
           <https://rauc.readthedocs.io/en/latest/reference.html#sec-ref-slot-config>

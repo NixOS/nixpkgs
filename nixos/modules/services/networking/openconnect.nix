@@ -84,7 +84,6 @@ let
           Non-key-value options like `deflate` can be used by
           declaring them as booleans, i. e. `deflate = true;`.
         '';
-        default = { };
         example = {
           compression = "stateless";
 

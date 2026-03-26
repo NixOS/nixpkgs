@@ -50,7 +50,6 @@ let
 
             <https://www.authelia.com/configuration/methods/secrets/>
           '';
-          default = { };
           type = types.submodule {
             options = {
               manual = mkOption {
@@ -117,7 +116,6 @@ let
             If you provide the raw secret rather than the location of a secret file that secret will be preserved in the nix store.
             For more details: <https://www.authelia.com/configuration/methods/secrets/>
           '';
-          default = { };
         };
 
         settings = mkOption {
@@ -128,7 +126,6 @@ let
 
             <https://github.com/authelia/authelia/blob/master/config.template.yml>
           '';
-          default = { };
           example = ''
             {
               theme = "light";

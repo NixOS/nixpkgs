@@ -218,7 +218,6 @@ in
           int
           str
         ]));
-      default = { };
       description = "Dolibarr settings, see <https://github.com/Dolibarr/dolibarr/blob/develop/htdocs/conf/conf.php.example> for details.";
     };
 

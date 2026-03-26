@@ -252,7 +252,6 @@ in
             options = schedulerProfile { };
           }
         );
-        default = { };
         example = literalExpression ''
           {
             nix-builds = {

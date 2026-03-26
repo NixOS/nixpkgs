@@ -228,7 +228,6 @@ in
 
     extraConfig = lib.mkOption {
       type = with lib.types; attrsOf str;
-      default = { };
       example = {
         "ms bind ipv6" = "true";
       };
@@ -361,7 +360,6 @@ in
       enable = lib.mkEnableOption "Ceph client configuration";
       extraConfig = lib.mkOption {
         type = with lib.types; attrsOf (attrsOf str);
-        default = { };
         example = lib.literalExpression ''
           {
             # This would create a section for a radosgw daemon named node0 and related

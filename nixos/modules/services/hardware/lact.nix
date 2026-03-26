@@ -28,7 +28,6 @@ in
     package = lib.mkPackageOption pkgs "lact" { };
 
     settings = lib.mkOption {
-      default = { };
       type = lib.types.submodule {
         freeformType = configFormat.type;
       };

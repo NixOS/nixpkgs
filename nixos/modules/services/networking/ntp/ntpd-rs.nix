@@ -40,7 +40,6 @@ in
       type = lib.types.submodule {
         freeformType = format.type;
       };
-      default = { };
       description = ''
         Settings to write to {file}`ntp.toml`
 

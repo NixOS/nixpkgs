@@ -82,7 +82,6 @@ let
     toArgs = _opt: attrsToArgs opt;
     option = mkOption {
       type = types.attrsOf types.str;
-      default = { };
       description = description;
     };
   };

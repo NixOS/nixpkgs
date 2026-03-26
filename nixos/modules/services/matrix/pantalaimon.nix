@@ -54,7 +54,6 @@ let
 in
 {
   options.services.pantalaimon-headless.instances = lib.mkOption {
-    default = { };
     type = lib.types.attrsOf (lib.types.submodule (import ./pantalaimon-options.nix));
     description = ''
       Declarative instance config.

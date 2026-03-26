@@ -36,7 +36,6 @@ in
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm`.
       '';
       inherit (vmVariant) type;
-      default = { };
       visible = "shallow";
     };
 
@@ -45,7 +44,6 @@ in
         Machine configuration to be added for the vm script produced by `nixos-rebuild build-vm-with-bootloader`.
       '';
       inherit (vmVariantWithBootLoader) type;
-      default = { };
       visible = "shallow";
     };
 

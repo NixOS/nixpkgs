@@ -16,7 +16,6 @@ in
   options.services.snapraid = with lib.types; {
     enable = lib.mkEnableOption "SnapRAID";
     dataDisks = lib.mkOption {
-      default = { };
       example = {
         d1 = "/mnt/disk1/";
         d2 = "/mnt/disk2/";

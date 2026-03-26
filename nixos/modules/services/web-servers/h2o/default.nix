@@ -318,7 +318,6 @@ in
 
       settings = mkOption {
         type = settingsFormat.type;
-        default = { };
         description = "Configuration for H2O (see <https://h2o.examp1e.net/configure.html>)";
         example =
           literalExpression

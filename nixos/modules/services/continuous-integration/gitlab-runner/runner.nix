@@ -244,7 +244,6 @@ in
       type = types.submodule {
         freeformType = (pkgs.formats.json { }).type;
       };
-      default = { };
       description = ''
         Global gitlab-runner configuration. See
         <https://docs.gitlab.com/runner/configuration/advanced-configuration.html#the-global-section>
@@ -281,7 +280,6 @@ in
     };
     services = mkOption {
       description = "GitLab Runner services.";
-      default = { };
       example = literalExpression ''
         {
           # runner for building in docker via host's nix-daemon
@@ -434,7 +432,6 @@ in
             };
             environmentVariables = mkOption {
               type = types.attrsOf types.str;
-              default = { };
               example = {
                 NAME = "value";
               };

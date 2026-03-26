@@ -360,7 +360,6 @@ in
       to your system path, so that you can perform maintenance easily.
       See also the chapter about BorgBackup in the NixOS manual.
     '';
-    default = { };
     example = lib.literalExpression ''
         { # for a local backup
           rootBackup = {

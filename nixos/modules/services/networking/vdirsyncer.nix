@@ -144,7 +144,6 @@ in
 
                 general = mkOption {
                   type = types.attrs;
-                  default = { };
                   description = "general configuration";
                 };
 
@@ -167,7 +166,6 @@ in
 
                 storages = mkOption {
                   type = types.attrsOf types.attrs;
-                  default = { };
                   description = "vdirsyncer storage configurations";
                   example = literalExpression ''
                     {

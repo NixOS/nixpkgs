@@ -18,7 +18,6 @@ in
 
   options.services.hadoop = {
     coreSite = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -31,7 +30,6 @@ in
       '';
     };
     coreSiteInternal = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
@@ -52,7 +50,6 @@ in
       '';
     };
     hdfsSite = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -65,7 +62,6 @@ in
       '';
     };
     hdfsSiteInternal = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
@@ -94,7 +90,6 @@ in
       '';
     };
     mapredSite = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -131,7 +126,6 @@ in
       '';
     };
     yarnSite = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -144,7 +138,6 @@ in
       '';
     };
     yarnSiteInternal = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
@@ -153,7 +146,6 @@ in
     };
 
     httpfsSite = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {

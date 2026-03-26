@@ -52,7 +52,6 @@ in
     };
 
     settings = mkOption {
-      default = { };
       description = ''
         Server settings, refer to [the documentation](https://actualbudget.org/docs/config/) for available options.
         You can specify secret values in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.

@@ -54,7 +54,6 @@ in
           newType = lib.types.attrsOf vhostSubmodule;
         in
         lib.types.coercedTo oldType convertFunc newType;
-      default = { };
       example = {
         "protected.foo.com" = {
           allowed_groups = [ "admins" ];

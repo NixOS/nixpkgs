@@ -30,7 +30,6 @@ in
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
       description = ''
         ReGreet configuration file. Refer
         <https://github.com/rharish101/ReGreet/blob/main/regreet.sample.toml>

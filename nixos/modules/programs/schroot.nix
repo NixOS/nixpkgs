@@ -86,7 +86,6 @@ in
             };
           }
         );
-        default = { };
         description = "Custom configuration profiles for schroot.";
       };
     };

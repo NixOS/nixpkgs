@@ -150,7 +150,6 @@ in
                   int
                   bool
                 ]);
-                default = { };
                 example = {
                   default_max_list_members = 3;
                 };
@@ -353,7 +352,6 @@ in
           }
         )
       );
-      default = { };
       example = lib.literalExpression ''
         {
           "list_data/lists.example.org/help" = {

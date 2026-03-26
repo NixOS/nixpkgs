@@ -192,7 +192,6 @@
               example = {
                 GIT_CONFIG = "/path/to/git/config";
               };
-              default = { };
             };
 
             serviceOverrides = lib.mkOption {
@@ -205,7 +204,6 @@
                 ProtectHome = false;
                 RestrictAddressFamilies = [ "AF_PACKET" ];
               };
-              default = { };
             };
 
             package = lib.mkPackageOption pkgs "github-runner" { } // {

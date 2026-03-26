@@ -108,7 +108,6 @@ in
           log.level = "debug";
         }
       '';
-      default = { };
       type = lib.types.attrs;
     };
 

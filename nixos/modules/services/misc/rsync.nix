@@ -20,7 +20,6 @@ in
       description = ''
         Synchronization jobs to run.
       '';
-      default = { };
       type = types.attrsOf (
         types.submodule {
           options = {
@@ -61,7 +60,6 @@ in
                     ]
                   )
                 );
-              default = { };
               example = {
                 verbose = true;
                 archive = true;

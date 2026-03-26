@@ -130,7 +130,6 @@ in
 
       settings = lib.mkOption {
         inherit (settingsFormat) type;
-        default = { };
         description = "Content of IfState's initrd configuration file. See <https://ifstate.net/2.2/schema/> for details.";
       };
 

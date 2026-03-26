@@ -70,7 +70,6 @@ in
           default = "keys.openpgp.org";
         };
       };
-      default = { };
     };
     extraSettingsFile = lib.mkOption {
       description = "YAML file to merge into the schleuder config at runtime. This can be used for secrets such as API keys.";
@@ -83,7 +82,6 @@ in
         Check the [example configuration](https://0xacab.org/schleuder/schleuder/-/blob/master/etc/list-defaults.yml) for possible values.
       '';
       type = settingsFormat.type;
-      default = { };
     };
   };
   config = lib.mkIf cfg.enable {

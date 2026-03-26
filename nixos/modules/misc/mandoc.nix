@@ -86,7 +86,6 @@ in
 
       settings = lib.mkOption {
         description = "Configuration for {manpage}`man.conf(5)`";
-        default = { };
         type = lib.types.submodule {
           options = {
             manpath = lib.mkOption {

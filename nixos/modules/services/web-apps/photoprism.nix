@@ -104,7 +104,6 @@ in
 
     settings = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
       description = ''
         See [the getting-started guide](https://docs.photoprism.app/getting-started/config-options/) for available options.
       '';

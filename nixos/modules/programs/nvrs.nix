@@ -22,7 +22,6 @@ in
         freeformType = settingsFormat.type;
       };
 
-      default = { };
       description = ''
         Configuration written to {file}`$XDG_CONFIG_HOME/nvrs/config.toml`
 

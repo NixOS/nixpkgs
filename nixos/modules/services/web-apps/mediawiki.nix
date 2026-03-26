@@ -376,7 +376,6 @@ in
       };
 
       extensions = mkOption {
-        default = { };
         type = types.attrsOf (types.nullOr types.path);
         description = ''
           Attribute set of paths whose content is copied to the {file}`extensions`

@@ -146,7 +146,6 @@ in
       };
 
       environment = lib.mkOption {
-        default = { };
         type = with lib.types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the Go.CD agent process.

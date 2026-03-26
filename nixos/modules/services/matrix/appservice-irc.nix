@@ -84,7 +84,6 @@ in
         options = {
           homeserver = lib.mkOption {
             description = "Homeserver configuration";
-            default = { };
             type = submodule {
               freeformType = jsonType;
 

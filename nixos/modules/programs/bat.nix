@@ -86,7 +86,6 @@ in
     };
 
     settings = mkOption {
-      default = { };
       example = {
         theme = "TwoDark";
         italic-text = "always";

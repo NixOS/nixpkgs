@@ -98,7 +98,6 @@ in
                   env = lib.mkOption {
                     type = lib.types.attrsOf settingsFormat.type;
                     description = "Environment variables to add when running the adapter.";
-                    default = { };
                   };
                 };
               }
@@ -107,7 +106,6 @@ in
               CI adapters.
               See also the options under [services.radicle.ci.adapters](#opt-services.radicle.ci.adapters.native.instances).
             '';
-            default = { };
           };
 
           triggers = lib.mkOption {

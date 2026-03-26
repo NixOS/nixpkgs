@@ -94,7 +94,6 @@ in
           }
         );
 
-        default = { };
         description = ''
           Auto login configuration attrset.
         '';
@@ -125,7 +124,6 @@ in
       sessionData = lib.mkOption {
         description = "Data exported for display managers’ convenience";
         internal = true;
-        default = { };
       };
 
       sessionPackages = lib.mkOption {

@@ -144,7 +144,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Settings for the webserver.conf file, usually not required.
         [See upstream docs](https://github.com/BlueMap-Minecraft/BlueMap/blob/master/BlueMapCommon/src/main/resources/de/bluecolored/bluemap/config/webserver.conf).

@@ -624,7 +624,6 @@ in
             }
           )
         );
-      default = { };
       description = ''
         Defines the SSL policies for use with Neo4j connectors. Each attribute
         of this set defines a policy, with the attribute name defining the name

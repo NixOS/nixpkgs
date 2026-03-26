@@ -312,7 +312,6 @@ in
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
       description = ''
         The settings Invidious should use.
 

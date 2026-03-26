@@ -108,7 +108,6 @@ in
 
     services.ax25.axports = mkOption {
       type = types.attrsOf (types.submodule axportsOpts);
-      default = { };
       description = "Specification of one or more AX.25 ports.";
     };
   };

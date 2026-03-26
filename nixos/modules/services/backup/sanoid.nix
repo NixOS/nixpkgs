@@ -216,7 +216,6 @@ in
           options = commonOptions;
         }
       );
-      default = { };
       description = "Templates for datasets.";
     };
 

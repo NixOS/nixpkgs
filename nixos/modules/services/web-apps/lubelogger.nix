@@ -52,7 +52,6 @@ in
 
       settings = lib.mkOption {
         type = with lib.types; attrsOf str;
-        default = { };
         example = {
           LUBELOGGER_ALLOWED_FILE_EXTENSIONS = "";
           LUBELOGGER_LOGO_URL = "";

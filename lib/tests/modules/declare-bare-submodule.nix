@@ -8,7 +8,6 @@ in
       modules = [ ];
       shorthandOnlyDefinesConfig = config.shorthandOnlyDefinesConfig;
     };
-    default = { };
   };
 
   # config-dependent options: won't recommend, but useful for making this test parameterized

@@ -244,7 +244,6 @@ in
             };
           };
         };
-        default = { };
         example = lib.literalExpression ''
           {
             homeserver = {

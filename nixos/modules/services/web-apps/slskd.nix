@@ -76,7 +76,6 @@ in
           Application configuration for slskd. See
           [documentation](https://github.com/slskd/slskd/blob/master/docs/config.md).
         '';
-        default = { };
         type = submodule {
           freeformType = settingsFormat.type;
           options = {

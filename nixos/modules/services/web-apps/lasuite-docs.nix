@@ -184,7 +184,6 @@ in
             };
           };
         };
-        default = { };
         example = ''
           {
             COLLABORATION_LOGGING = true;

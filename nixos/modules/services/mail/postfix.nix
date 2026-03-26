@@ -856,7 +856,6 @@ in
 
       aliasFiles = lib.mkOption {
         type = lib.types.attrsOf lib.types.path;
-        default = { };
         description = "Aliases' tables to be compiled and placed into /var/lib/postfix/conf.";
       };
 

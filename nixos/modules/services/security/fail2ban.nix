@@ -302,7 +302,6 @@ in
                     settings = lib.mkOption {
                       inherit (settingsFormat) type;
 
-                      default = { };
                       description = "Additional settings for this jail.";
                     };
                   };

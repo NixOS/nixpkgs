@@ -114,7 +114,6 @@ in
               ]))
             ])
           );
-        default = { };
         example = {
           debug = true;
           disable-files-translation = true;

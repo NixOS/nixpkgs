@@ -154,7 +154,6 @@ in
               type = ints.positive;
             };
             provider = lib.mkOption {
-              default = { };
               description = ''
                 Settings for DDNS providers built-in to inadyn.
 

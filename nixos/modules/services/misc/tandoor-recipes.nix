@@ -68,7 +68,6 @@ in
 
     extraConfig = lib.mkOption {
       type = lib.types.attrs;
-      default = { };
       description = ''
         Extra tandoor recipes config options.
 

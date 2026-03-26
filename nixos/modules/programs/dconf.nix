@@ -120,7 +120,6 @@ let
         };
         settings = lib.mkOption {
           type = attrs;
-          default = { };
           description = "An attrset used to generate dconf keyfile.";
           example = literalExpression ''
             with lib.gvariant;

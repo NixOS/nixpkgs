@@ -872,7 +872,6 @@ in
       description = ''
         Extra configuration options for the athens config file.
       '';
-      default = { };
     };
   };
 

@@ -28,7 +28,6 @@ in
 
       virtualHost = lib.mkOption {
         type = lib.types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
-        default = { };
         example = lib.literalExpression ''
           {
             serverAliases = [ "bentopdf.''${config.networking.domain}" ];
@@ -45,7 +44,6 @@ in
         type = lib.types.submodule (
           import ../web-servers/caddy/vhost-options.nix { cfg = config.services.caddy; }
         );
-        default = { };
         example = lib.literalExpression ''
           {
             serverAliases = [ "bentopdf.''${config.networking.domain}" ];

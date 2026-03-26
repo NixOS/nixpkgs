@@ -186,7 +186,6 @@ in
         };
       };
 
-      default = { };
 
       example = {
         APP_SECRET_FILE = "/run/secrets/umamiAppSecret";

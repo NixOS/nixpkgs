@@ -26,7 +26,6 @@ in
 
     environment = lib.mkOption {
       type = with lib.types; attrsOf str;
-      default = { };
       description = ''
         Additional environment variables to provide to karma.
       '';

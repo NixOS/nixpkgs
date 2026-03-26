@@ -36,7 +36,6 @@ in
 
     settings = lib.mkOption {
       type = format.type;
-      default = { };
       example = lib.literalExpression ''
         {
           admin = {

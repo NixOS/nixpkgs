@@ -24,7 +24,6 @@ in
           type = lazyAttrsOf (submodule {
             imports = [ config.default ];
           });
-          default = { };
         };
         options.default = mkOption {
           type = deferredModule;
@@ -43,7 +42,6 @@ in
         {
           options.settingsDict = lib.mkOption {
             type = lazyAttrsOf str;
-            default = { };
           };
           options.bottom = lib.mkOption { type = enum [ ]; };
         };

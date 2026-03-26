@@ -80,7 +80,6 @@ in
             };
           }
         );
-        default = { };
       };
       includes = lib.mkOption {
         type = types.attrsOf types.lines;

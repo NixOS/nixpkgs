@@ -154,7 +154,6 @@ in
       description = ''
         Inboxes to configure, where attribute names are inbox names.
       '';
-      default = { };
       type = types.attrsOf (
         types.submodule (
           { name, ... }:

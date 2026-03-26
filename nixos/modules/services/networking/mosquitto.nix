@@ -238,7 +238,6 @@ let
             Options for the auth plugin. Each key turns into a `auth_opt_*`
              line in the config.
           '';
-          default = { };
         };
       };
     };
@@ -331,7 +330,6 @@ let
           description = ''
             A set of users and their passwords and ACLs.
           '';
-          default = { };
         };
 
         omitPasswordAuth = lib.mkOption {
@@ -464,7 +462,6 @@ let
           description = ''
             Additional settings for this bridge.
           '';
-          default = { };
         };
       };
     };
@@ -607,7 +604,6 @@ let
       description = ''
         Global configuration options for the mosquitto broker.
       '';
-      default = { };
     };
   };
 

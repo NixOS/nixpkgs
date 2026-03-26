@@ -34,7 +34,6 @@ let
 
       environment = lib.mkOption {
         type = with lib.types; attrsOf str;
-        default = { };
         example = lib.literalExpression ''
           {
             HBASE_MASTER_OPTS = "-Dcom.sun.management.jmxremote.ssl=true";
@@ -123,7 +122,6 @@ in
       '';
     };
     hbaseSite = lib.mkOption {
-      default = { };
       type = with lib.types; attrsOf anything;
       example = lib.literalExpression ''
         {

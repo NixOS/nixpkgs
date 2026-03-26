@@ -158,7 +158,6 @@ in
 
       settings = lib.mkOption {
         type = settingsFormat.type;
-        default = { };
         example = {
           debug.enable = true;
         };

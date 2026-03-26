@@ -16,7 +16,6 @@ in
 
     {
       options.sub = mkOption {
-        default = { };
         type = types.submodule (
           {
             config,
@@ -29,7 +28,6 @@ in
             };
 
             options.specialisation = mkOption {
-              default = { };
               inherit
                 (extendModules {
                   modules = [

@@ -128,7 +128,6 @@ in
 
     instances = mkOption {
       type = with types; attrsOf (submodule instanceOpts);
-      default = { };
       example = literalExpression ''
         {
           example = {

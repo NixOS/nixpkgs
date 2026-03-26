@@ -144,7 +144,6 @@ with lib;
           str
           int
         ]);
-      default = { };
       example = literalExpression ''
         {
           cpu = "host";

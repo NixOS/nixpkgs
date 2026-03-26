@@ -52,7 +52,6 @@ in
 
     settings = mkOption {
       type = format.type;
-      default = { };
       description = ''
         Configuration for Radicale. See
         <https://radicale.org/v3.html#configuration>.

@@ -30,7 +30,6 @@ in
       };
 
       extraConfig = lib.mkOption {
-        default = { };
         description = "Extra configuration options for telegraf";
         type = settingsFormat.type;
         example = {

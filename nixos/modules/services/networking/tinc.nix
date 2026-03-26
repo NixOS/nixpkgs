@@ -140,7 +140,6 @@ let
         };
 
         settings = mkOption {
-          default = { };
           type = types.submodule { freeformType = tincConfType; };
           description = ''
             Configuration for this host.
@@ -233,7 +232,6 @@ in
                   };
 
                   hosts = mkOption {
-                    default = { };
                     type = types.attrsOf types.lines;
                     description = ''
                       The name of the host in the network as well as the configuration for that host.
@@ -316,7 +314,6 @@ in
                   };
 
                   settings = mkOption {
-                    default = { };
                     type = types.submodule { freeformType = tincConfType; };
                     example = literalExpression ''
                       {

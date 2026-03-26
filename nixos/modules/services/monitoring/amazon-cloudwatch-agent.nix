@@ -42,7 +42,6 @@ in
     };
     commonConfiguration = lib.mkOption {
       type = tomlFormat.type;
-      default = { };
       description = ''
         See {option}`commonConfigurationFile`.
 

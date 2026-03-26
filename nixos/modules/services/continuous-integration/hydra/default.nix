@@ -212,7 +212,6 @@ in
 
       extraEnv = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = { };
         description = "Extra environment variables for Hydra.";
       };
 

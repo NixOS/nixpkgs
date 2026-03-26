@@ -12,7 +12,6 @@ let
       flavour ? pkgName,
     }:
     lib.mkOption {
-      default = { };
       description = ''
         Attribute set of ${flavour} instances.
         Creates independent `${flavour}-''${name}.service` systemd units for each instance defined here.
@@ -61,7 +60,6 @@ let
                     };
                   };
 
-                  default = { };
 
                   description =
                     let

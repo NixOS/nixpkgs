@@ -102,7 +102,6 @@ in
     };
 
     runtime = lib.mkOption {
-      default = { };
       example = lib.literalExpression ''
         { "ftplugin/c.vim".text = "setlocal omnifunc=v:lua.vim.lsp.omnifunc"; }
       '';

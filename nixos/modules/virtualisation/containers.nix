@@ -34,7 +34,6 @@ in
 
     containersConf.settings = mkOption {
       type = toml.type;
-      default = { };
       description = "containers.conf configuration";
     };
 

@@ -122,7 +122,6 @@ in
 
     extraEnvironment = mkOption {
       type = types.attrsOf types.str;
-      default = { };
       description = "Additional environment variables";
     };
 

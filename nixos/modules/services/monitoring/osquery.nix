@@ -40,7 +40,6 @@ in
     package = lib.mkPackageOption pkgs "osquery" { };
 
     settings = lib.mkOption {
-      default = { };
       description = ''
         Configuration to be written to the osqueryd JSON configuration file.
         To understand the configuration format, refer to <https://osquery.readthedocs.io/en/stable/deployment/configuration/#configuration-components>.

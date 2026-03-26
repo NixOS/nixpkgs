@@ -70,7 +70,6 @@ in
 
         settings = mkOption {
           type = format.type;
-          default = { };
           example = {
             listen_port = 9999;
             whitelist = [ "<IPv6 address of a remote node>" ];

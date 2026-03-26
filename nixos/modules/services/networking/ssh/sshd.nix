@@ -456,7 +456,6 @@ in
 
       settings = lib.mkOption {
         description = "Configuration for `sshd_config(5)`.";
-        default = { };
         example = lib.literalExpression ''
           {
             UseDns = true;

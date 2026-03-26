@@ -448,7 +448,6 @@ in
         Grafana settings. See <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/>
         for available options. INI format is used.
       '';
-      default = { };
       type = types.submodule {
         freeformType = settingsFormatIni.type;
 
@@ -1325,7 +1324,6 @@ in
         description = ''
           Declaratively provision Grafana's datasources.
         '';
-        default = { };
         type = types.submodule {
           options.settings = mkOption {
             description = ''

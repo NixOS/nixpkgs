@@ -98,7 +98,6 @@ in
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
         };
-        default = { };
       };
 
       config = lib.mkOption {

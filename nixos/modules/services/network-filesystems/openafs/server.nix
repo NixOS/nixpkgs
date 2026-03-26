@@ -238,7 +238,6 @@ in
           };
 
           cellServDB = mkOption {
-            default = { };
             type = cellServDBType cfg.cellName;
             description = ''
               Definition of all cell-local backup database server machines.

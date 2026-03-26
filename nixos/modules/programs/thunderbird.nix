@@ -38,7 +38,6 @@ in
           int
           str
         ]);
-      default = { };
       description = ''
         Preferences to set from `about:config`.
 

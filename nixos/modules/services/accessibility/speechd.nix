@@ -34,7 +34,6 @@ in
 
     modules = mkOption {
       type = with lib.types; submodule { freeformType = attrsOf lines; };
-      default = { };
       description = ''
         Configuration files of output modules.
       '';

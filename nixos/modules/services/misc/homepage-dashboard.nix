@@ -214,7 +214,6 @@ in
           See <https://gethomepage.dev/configs/settings/>.
         '';
         # Defaults: https://github.com/gethomepage/homepage/blob/main/src/skeleton/settings.yaml
-        default = { };
       };
     };
   };

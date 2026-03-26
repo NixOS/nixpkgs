@@ -30,7 +30,6 @@ in
 
           for documentation.
         '';
-        default = { };
         type = lib.types.submodule {
           freeformType =
             with lib.types;

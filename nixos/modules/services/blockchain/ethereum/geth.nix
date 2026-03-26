@@ -174,7 +174,6 @@ in
   options = {
     services.geth = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule gethOpts);
-      default = { };
       description = "Specification of one or more geth instances.";
     };
   };

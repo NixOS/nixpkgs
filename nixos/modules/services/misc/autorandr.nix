@@ -306,7 +306,6 @@ in
       hooks = lib.mkOption {
         type = hooksModule;
         description = "Global hook scripts";
-        default = { };
         example = lib.literalExpression ''
           {
             postswitch = {

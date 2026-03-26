@@ -110,7 +110,6 @@ in
       package = mkPackageOption pkgs "snapcast" { };
 
       settings = mkOption {
-        default = { };
         description = ''
           Snapserver configuration.
 

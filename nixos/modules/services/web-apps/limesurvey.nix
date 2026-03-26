@@ -268,7 +268,6 @@ in
 
     config = mkOption {
       type = configType;
-      default = { };
       description = ''
         LimeSurvey configuration. Refer to
         <https://manual.limesurvey.org/Optional_settings>

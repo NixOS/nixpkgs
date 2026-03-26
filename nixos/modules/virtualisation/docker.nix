@@ -70,7 +70,6 @@ in
           };
         };
       };
-      default = { };
       example = {
         ipv6 = true;
         "live-restore" = true;

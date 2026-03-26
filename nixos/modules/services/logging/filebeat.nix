@@ -48,7 +48,6 @@ in
 
           See <https://www.elastic.co/guide/en/beats/filebeat/current/configuration-filebeat-options.html>.
         '';
-        default = { };
         type = types.attrsOf (
           types.submodule (
             { name, ... }:
@@ -103,7 +102,6 @@ in
 
           See <https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-modules.html>.
         '';
-        default = { };
         type = types.attrsOf (
           types.submodule (
             { name, ... }:
@@ -196,7 +194,6 @@ in
             };
           };
         };
-        default = { };
         example = literalExpression ''
           {
             settings = {

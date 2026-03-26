@@ -30,7 +30,6 @@ in
 
     credentials = lib.mkOption {
       type = lib.types.attrsOf lib.types.path;
-      default = { };
       example = {
         CENTRIFUGO_UNI_GRPC_TLS_KEY = "/run/keys/centrifugo-uni-grpc-tls.key";
       };

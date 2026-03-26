@@ -242,7 +242,6 @@ in
 
       settings = mkOption {
         type = iniFmt.type;
-        default = { };
         example = {
           Autologin = {
             User = "john";

@@ -102,7 +102,6 @@ in
         Configuration options to set in `extra_settings.py`.
       '';
 
-      default = { };
 
       type = lib.types.submodule {
         freeformType = pythonFmt.type;

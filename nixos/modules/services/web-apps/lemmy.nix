@@ -76,7 +76,6 @@ in
     };
 
     settings = mkOption {
-      default = { };
       description = "Lemmy configuration";
 
       type = types.submodule {

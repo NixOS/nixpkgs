@@ -72,7 +72,6 @@ in
           str
           bool
         ]);
-      default = { };
       description = ''
         Options to pass to rclone to control its behavior.
         See <https://rclone.org/docs/#options> for

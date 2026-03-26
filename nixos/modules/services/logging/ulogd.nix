@@ -34,7 +34,6 @@ in
           };
         };
         type = settingsFormat.type;
-        default = { };
         description = "Configuration for ulogd. See {file}`/share/doc/ulogd/` in `pkgs.ulogd.doc`.";
       };
 

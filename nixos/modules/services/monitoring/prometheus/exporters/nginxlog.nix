@@ -34,7 +34,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         All settings of nginxlog expressed as an Nix attrset.
 

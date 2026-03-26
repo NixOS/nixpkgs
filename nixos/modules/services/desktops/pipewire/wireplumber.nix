@@ -76,7 +76,6 @@ in
         # config file not being a JSON object, but a concatenation of JSON objects
         # in sections.
         type = attrsOf (attrsOf json.type);
-        default = { };
         example = literalExpression ''
           {
             "log-level-debug" = {

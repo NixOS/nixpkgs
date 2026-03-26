@@ -88,7 +88,6 @@ in
       };
 
       config = lib.mkOption {
-        default = { };
         type = lib.types.attrsOf (lib.types.either lib.types.bool lib.types.int);
         description = "Additional config";
         example = {

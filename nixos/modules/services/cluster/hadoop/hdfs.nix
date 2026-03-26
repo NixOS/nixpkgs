@@ -40,7 +40,6 @@ let
       };
       extraEnv = lib.mkOption {
         type = with lib.types; attrsOf str;
-        default = { };
         description = "Extra environment variables for ${serviceName}";
       };
     }

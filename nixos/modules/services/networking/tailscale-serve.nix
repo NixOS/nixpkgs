@@ -82,7 +82,6 @@ in
           };
         }
       );
-      default = { };
       description = ''
         Services to configure for Tailscale Serve.
 

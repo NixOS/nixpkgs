@@ -38,7 +38,6 @@ in
 
       environment = lib.mkOption {
         type = with lib.types; attrsOf unspecified;
-        default = { };
         description = "Additional environment variables needed by the display manager.";
       };
     };

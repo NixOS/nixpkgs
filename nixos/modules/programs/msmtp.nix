@@ -28,7 +28,6 @@ in
 
       defaults = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
         example = {
           aliases = "/etc/aliases";
           port = 587;

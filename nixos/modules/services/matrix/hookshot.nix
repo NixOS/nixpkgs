@@ -70,7 +70,6 @@ in
             }
           ];
         };
-        default = { };
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
           options = {

@@ -118,7 +118,6 @@ in
     };
 
     settings = mkOption {
-      default = { };
       description = ''
         YAML settings for maubot. See the
         [example configuration](https://github.com/maubot/maubot/blob/master/maubot/example-config.yaml)
@@ -151,14 +150,12 @@ in
 
             database_opts = mkOption {
               type = types.attrs;
-              default = { };
               description = ''
                 Additional arguments for asyncpg.create_pool() or sqlite3.connect()
               '';
             };
 
             plugin_directories = mkOption {
-              default = { };
               description = "Plugin directory paths";
               type = submodule {
                 options = {
@@ -223,7 +220,6 @@ in
 
                   postgres_opts = mkOption {
                     type = types.attrs;
-                    default = { };
                     description = ''
                       Overrides for the default database_opts when using a non-default postgres connection URL.
                     '';

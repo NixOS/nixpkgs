@@ -860,7 +860,6 @@ in
     };
 
     networking.bridges = mkOption {
-      default = { };
       example = {
         br0.interfaces = [
           "eth0"
@@ -951,7 +950,6 @@ in
 
               driverOptions = mkOption {
                 type = types.attrsOf types.str;
-                default = { };
                 example = literalExpression driverOptionsExample;
                 description = ''
                   Options for the bonding driver.
@@ -1012,7 +1010,6 @@ in
       };
 
     networking.macvlans = mkOption {
-      default = { };
       example = literalExpression ''
         {
           wan = {
@@ -1171,7 +1168,6 @@ in
     };
 
     networking.ipips = mkOption {
-      default = { };
       example = literalExpression ''
         {
           wan4in6 = {
@@ -1268,7 +1264,6 @@ in
     };
 
     networking.sits = mkOption {
-      default = { };
       example = literalExpression ''
         {
           hurricane = {
@@ -1387,7 +1382,6 @@ in
                     }
                 else
                   x;
-              default = { };
               example = {
                 type = "fou";
                 port = 9001;
@@ -1494,7 +1488,6 @@ in
     };
 
     networking.vlans = mkOption {
-      default = { };
       example = literalExpression ''
         {
           vlan0 = {
@@ -1539,7 +1532,6 @@ in
     };
 
     networking.wlanInterfaces = mkOption {
-      default = { };
       example = literalExpression ''
         {
           wlan-station0 = {

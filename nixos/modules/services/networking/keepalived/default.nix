@@ -272,7 +272,6 @@ in
             }
           )
         );
-        default = { };
         description = "Declarative vrrp script config";
       };
 

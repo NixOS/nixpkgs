@@ -154,7 +154,6 @@ let
     '';
     servers = mkOption {
       type = attrsOf (submodule serverOptions);
-      default = { };
       example.mainTsmServer = {
         tcpserveraddress = "tsmserver.company.com";
         nodename = "MY-TSM-NODE";

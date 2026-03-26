@@ -160,7 +160,6 @@ in
           lib.types.path
           phocConfigType
         ];
-        default = { };
       };
     };
   };

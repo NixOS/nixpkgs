@@ -82,7 +82,6 @@ in
         freeformType = calendarSettingsFormat.type;
         options = { };
       };
-      default = { };
       description = ''
         Configure the default calendar.
 

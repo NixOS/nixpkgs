@@ -40,7 +40,6 @@ in
             };
           };
         };
-      default = { };
       example = lib.literalExpression ''
         { "net.ipv4.tcp_syncookies" = false; "vm.swappiness" = 60; }
       '';

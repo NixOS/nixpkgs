@@ -10,6 +10,5 @@ in
     type = lib.types.submoduleWith {
       modules = [ sub ];
     };
-    default = { };
   };
 }

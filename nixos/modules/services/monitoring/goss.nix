@@ -26,7 +26,6 @@ in
 
       environment = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = { };
         example = {
           GOSS_FMT = "json";
           GOSS_LOGLEVEL = "FATAL";
@@ -41,7 +40,6 @@ in
 
       settings = lib.mkOption {
         type = lib.types.submodule { freeformType = settingsFormat.type; };
-        default = { };
         example = {
           addr."tcp://localhost:8080" = {
             reachable = true;

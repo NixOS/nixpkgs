@@ -50,7 +50,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Configuration for immich-kiosk. See
         <https://docs.immichkiosk.app/configuration/>

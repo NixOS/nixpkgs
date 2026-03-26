@@ -30,7 +30,6 @@ in
     description = ''
       firewalld service configuration files. See {manpage}`firewalld.service(5)`.
     '';
-    default = { };
     type = attrsOf (submodule {
       options = {
         version = mkOption {
@@ -71,7 +70,6 @@ in
             };
           };
           description = "Destinations for the service.";
-          default = { };
         };
         includes = mkOption {
           type = listOf nonEmptyStr;

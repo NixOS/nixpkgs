@@ -40,7 +40,6 @@ in
         description = ''
           Additional environment variables to pass to code-server.
         '';
-        default = { };
         example = {
           PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig";
         };

@@ -162,7 +162,6 @@ in
             verifyChain = false;
           };
         };
-        default = { };
       };
     };
   };

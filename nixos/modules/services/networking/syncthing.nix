@@ -396,7 +396,6 @@ in
           options = {
             # global options
             options = mkOption {
-              default = { };
               description = ''
                 The options element contains all other global configuration options
               '';
@@ -515,7 +514,6 @@ in
 
             # folder settings
             folders = mkOption {
-              default = { };
               description = ''
                 Folders which should be shared by Syncthing.
 

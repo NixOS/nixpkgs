@@ -86,7 +86,6 @@ in
               description = ''
                 LiteLLM Router settings
               '';
-              default = { };
             };
 
             litellm_settings = lib.mkOption {

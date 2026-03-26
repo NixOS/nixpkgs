@@ -260,7 +260,6 @@ in
       description = ''
         Mapping of UDP listening ports to TCP forwarding ports or configurations.
       '';
-      default = { };
     };
   };
 

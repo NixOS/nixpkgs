@@ -100,7 +100,6 @@ in
             options = {
               valkey = lib.mkOption {
                 internal = true;
-                default = { };
               };
             };
             config.valkey = lib.mkIf (config ? redis) (
@@ -155,7 +154,6 @@ in
 
       faviconsSettings = mkOption {
         type = types.attrsOf settingType;
-        default = { };
         example = literalExpression ''
           {
             favicons = {

@@ -180,7 +180,6 @@ in
     };
 
     settings = mkOption {
-      default = { };
       description = ''
         Writefreely configuration ({file}`config.ini`). Refer to
         <https://writefreely.org/docs/latest/admin/config>

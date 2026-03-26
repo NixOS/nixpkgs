@@ -58,7 +58,6 @@ in
 
     extraConfig = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
       description = "Attribute set with additional configuration values";
       example = lib.literalExpression ''
         {

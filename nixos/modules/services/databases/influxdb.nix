@@ -40,7 +40,6 @@ in
       };
 
       settings = lib.mkOption {
-        default = { };
         description = "Extra configuration options for influxdb";
         type = lib.types.submodule {
           freeformType = settingsFormat.type;

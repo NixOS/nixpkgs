@@ -90,7 +90,6 @@ in
 
     prometheusConfig = lib.mkOption {
       type = lib.types.submodule { freeformType = settingsFormat.type; };
-      default = { };
       example = literalExpression ''
         {
           scrape_configs = [

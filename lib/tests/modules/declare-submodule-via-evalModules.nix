@@ -14,7 +14,6 @@
       })
       type
       ;
-    default = { };
   };
 
   config.submodule = lib.mkMerge [

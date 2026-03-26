@@ -112,7 +112,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Flags from {manpage}`tlsrpt-collectd(1)` as key-value pairs.
         '';
@@ -159,7 +158,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Flags from {manpage}`tlsrpt-fetcher(1)` as key-value pairs.
         '';
@@ -258,7 +256,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Flags from {manpage}`tlsrpt-reportd(1)` as key-value pairs.
         '';

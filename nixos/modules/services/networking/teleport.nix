@@ -22,7 +22,6 @@ in
 
       settings = mkOption {
         type = settingsYaml.type;
-        default = { };
         example = literalExpression ''
           {
             teleport = {

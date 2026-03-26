@@ -78,7 +78,6 @@ in
       settings = lib.mkOption {
         type = settingsFormat.type;
 
-        default = { };
 
         description = ''
           Settings for cockpit that will be saved in /etc/cockpit/cockpit.conf.

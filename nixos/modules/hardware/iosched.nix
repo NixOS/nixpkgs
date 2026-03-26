@@ -100,7 +100,6 @@ in
 
     scheduler = mkOption {
       type = types.attrsOf udevValue;
-      default = { };
       description = ''
         Assign block I/O scheduler by device name pattern.
 

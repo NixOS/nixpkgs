@@ -42,7 +42,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Specify the configuration for Pyroscope in Nix.
 

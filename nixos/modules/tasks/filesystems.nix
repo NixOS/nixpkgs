@@ -374,7 +374,6 @@ in
     };
 
     boot.supportedFilesystems = mkOption {
-      default = { };
       example = literalExpression ''
         {
           btrfs = true;
@@ -391,7 +390,6 @@ in
     };
 
     boot.specialFileSystems = mkOption {
-      default = { };
       type = types.attrsOf (types.submodule coreFileSystemOpts);
       apply = lib.filterAttrs (_: fs: fs.enable);
       internal = true;

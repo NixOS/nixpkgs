@@ -168,7 +168,6 @@ in
     };
 
     settings = lib.mkOption {
-      default = { };
       type = (pkgs.formats.yaml { }).type;
       example = lib.literalExpression ''
         {

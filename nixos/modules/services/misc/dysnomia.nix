@@ -114,7 +114,6 @@ in
 
       properties = lib.mkOption {
         description = "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
-        default = { };
         type = lib.types.attrs;
       };
 

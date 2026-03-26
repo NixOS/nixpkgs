@@ -90,7 +90,6 @@ in
       };
       settings = lib.mkOption {
         type = format.type;
-        default = { };
         description = ''
           General configuration for NFS daemons and tools.
           See {manpage}`nfs.conf(5)` and related man pages for details.

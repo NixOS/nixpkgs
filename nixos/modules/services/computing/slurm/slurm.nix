@@ -94,7 +94,6 @@ in
               lib.types.int
             ]
           );
-          default = { };
           example = {
             "i" = true;
             "systemd" = true;

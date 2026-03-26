@@ -426,7 +426,6 @@ in
             };
           }
         );
-        default = { };
         description = ''
           Configuration for individual pools to override global defaults.
         '';

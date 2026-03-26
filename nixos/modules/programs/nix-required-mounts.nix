@@ -82,7 +82,6 @@ in
       lib.mkOption {
         type = attrsOf Pattern;
         description = "The hook config, describing which paths to mount for which system features";
-        default = { };
         defaultText = lib.literalExpression ''
           {
             opengl.paths = config.hardware.graphics.extraPackages ++ [

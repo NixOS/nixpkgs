@@ -458,7 +458,6 @@ in
 
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
-        default = { };
         description = "Specification of one or more DokuWiki sites to serve";
       };
 

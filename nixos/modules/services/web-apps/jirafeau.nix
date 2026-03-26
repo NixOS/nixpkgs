@@ -88,7 +88,6 @@ in
 
     nginxConfig = mkOption {
       type = types.submodule (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
-      default = { };
       example = literalExpression ''
         {
           serverAliases = [ "wiki.''${config.networking.domain}" ];

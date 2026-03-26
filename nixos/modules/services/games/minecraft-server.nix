@@ -124,7 +124,6 @@ in
               };
           in
           lib.types.attrsOf minecraftUUID;
-        default = { };
         description = ''
           Whitelisted players, only has an effect when
           {option}`services.minecraft-server.declarative` is
@@ -151,7 +150,6 @@ in
             int
             str
           ]);
-        default = { };
         example = lib.literalExpression ''
           {
             server-port = 43000;

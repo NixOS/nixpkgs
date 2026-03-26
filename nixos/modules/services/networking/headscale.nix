@@ -344,7 +344,6 @@ in
 
               split = lib.mkOption {
                 type = lib.types.attrsOf (lib.types.listOf lib.types.str);
-                default = { };
                 description = ''
                   Split DNS configuration (map of domains and which DNS server to use for each).
                   See <https://tailscale.com/kb/1054/dns/>.

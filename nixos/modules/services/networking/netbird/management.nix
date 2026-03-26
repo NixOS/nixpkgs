@@ -312,7 +312,6 @@ in
         };
       '';
 
-      default = { };
 
       description = ''
         Configuration of the netbird management server.

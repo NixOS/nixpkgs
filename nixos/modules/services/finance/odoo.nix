@@ -46,7 +46,6 @@ in
 
       settings = lib.mkOption {
         type = format.type;
-        default = { };
         description = ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
         '';

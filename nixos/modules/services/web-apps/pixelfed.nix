@@ -200,7 +200,6 @@ in
             str
             bool
           ]);
-        default = { };
 
         description = ''
           Options for Pixelfed's PHP-FPM pool.

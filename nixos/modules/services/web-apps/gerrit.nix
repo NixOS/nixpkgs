@@ -106,7 +106,6 @@ in
 
       replicationSettings = lib.mkOption {
         type = gitIniType;
-        default = { };
         description = ''
           Replication configuration. This will be generated to the
           `etc/replication.config` file.

@@ -24,7 +24,6 @@ in
             str
           ]);
       };
-      default = { };
       example = {
         MICROBIN_PORT = 8080;
         MICROBIN_HIDE_LOGO = false;

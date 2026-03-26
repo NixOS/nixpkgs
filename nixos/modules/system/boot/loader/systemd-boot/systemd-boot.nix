@@ -390,7 +390,6 @@ in
 
     extraFiles = mkOption {
       type = types.attrsOf types.path;
-      default = { };
       example = literalExpression ''
         { "efi/memtest86/memtest.efi" = pkgs.memtest86plus.efi; }
       '';
@@ -435,7 +434,6 @@ in
     };
 
     windows = mkOption {
-      default = { };
       description = ''
         Make Windows bootable from systemd-boot. This option is not necessary when Windows and
         NixOS use the same EFI System Partition (ESP). In that case, Windows will automatically be

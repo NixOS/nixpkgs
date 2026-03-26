@@ -236,7 +236,6 @@ in
 
     settings = mkOption {
       type = types.attrs;
-      default = { };
       description = ''
         Attrset to be transformed into YAML for host config. Note that the HTTP
         / TLS configurations will override these config values. See

@@ -202,7 +202,6 @@ in
           NNTP-Proxy user configuration
         '';
 
-        default = { };
         example = literalExpression ''
           {
             "user1" = {

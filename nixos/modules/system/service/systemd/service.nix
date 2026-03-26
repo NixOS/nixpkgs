@@ -130,7 +130,6 @@ in
           ];
         }
       );
-      default = { };
     };
     systemd.sockets = mkOption {
       description = ''
@@ -139,7 +138,6 @@ in
         See {option}`systemd.services`.
       '';
       type = types.lazyAttrsOf types.deferredModule;
-      default = { };
     };
 
     # Also import systemd logic into sub-services

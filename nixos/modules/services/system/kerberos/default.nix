@@ -40,7 +40,6 @@ in
           - Heimdal: {manpage}`kdc.conf(5)`
           - MIT Kerberos: <https://web.mit.edu/kerberos/krb5-1.21/doc/admin/conf_files/kdc_conf.html>
         '';
-        default = { };
       };
 
       extraKDCArgs = mkOption {

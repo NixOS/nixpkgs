@@ -130,7 +130,6 @@ in
       };
       hooksTemplated = mkOption {
         type = types.attrsOf types.str;
-        default = { };
         example = {
           echo-template = ''
             {

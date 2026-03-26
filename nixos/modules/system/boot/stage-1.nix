@@ -646,7 +646,6 @@ in
     };
 
     boot.initrd.secrets = mkOption {
-      default = { };
       type = types.attrsOf (types.nullOr types.path);
       description = ''
         Secrets to append to the initrd. The attribute name is the
@@ -667,7 +666,6 @@ in
     };
 
     boot.initrd.supportedFilesystems = mkOption {
-      default = { };
       inherit (options.boot.supportedFilesystems) example type description;
     };
 

@@ -58,7 +58,6 @@ in
       example = {
         RENOVATE_TOKEN = "/etc/renovate/token";
       };
-      default = { };
     };
     environment = mkOption {
       type =
@@ -79,7 +78,6 @@ in
       example = {
         LOG_LEVEL = "debug";
       };
-      default = { };
     };
     runtimePackages = mkOption {
       type = with types; listOf package;
@@ -92,7 +90,6 @@ in
     };
     settings = mkOption {
       type = json.type;
-      default = { };
       example = {
         platform = "gitea";
         endpoint = "https://git.example.com";

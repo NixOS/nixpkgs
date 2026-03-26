@@ -70,7 +70,6 @@ let
       };
       profile-policies = lib.mkOption {
         type = with lib.types; attrsOf (submodule profilePolicyOptions);
-        default = { };
         description = ''
           Profile GC root policies.
         '';

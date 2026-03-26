@@ -208,7 +208,6 @@ in
       };
 
       users = mkOption {
-        default = { };
         example = {
           root = {
             hashedPasswordFile = "/path/to/file";
@@ -467,7 +466,6 @@ in
 
       extraFiles = mkOption {
         type = types.attrsOf types.path;
-        default = { };
         example = literalExpression ''
           { "memtest.bin" = pkgs.memtest86plus.efi; }
         '';

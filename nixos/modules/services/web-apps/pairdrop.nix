@@ -74,7 +74,6 @@ in
         options = { };
       };
 
-      default = { };
 
       example = {
         DEBUG_MODE = true;

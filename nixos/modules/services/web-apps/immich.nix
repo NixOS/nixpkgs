@@ -106,7 +106,6 @@ in
     };
     environment = mkOption {
       type = types.submodule { freeformType = types.attrsOf types.str; };
-      default = { };
       example = {
         IMMICH_LOG_LEVEL = "verbose";
       };

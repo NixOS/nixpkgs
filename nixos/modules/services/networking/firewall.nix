@@ -292,7 +292,6 @@ in
       };
 
       interfaces = lib.mkOption {
-        default = { };
         type = with lib.types; attrsOf (submodule [ { options = commonOptions; } ]);
         description = ''
           Interface-specific open ports.

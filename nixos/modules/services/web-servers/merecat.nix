@@ -28,7 +28,6 @@ in
 
     settings = mkOption {
       inherit (format) type;
-      default = { };
       description = ''
         Merecat configuration. Refer to {manpage}`merecat(8)` for details on supported values.
       '';

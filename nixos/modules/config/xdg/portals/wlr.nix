@@ -36,7 +36,6 @@ in
         freeformType = settingsFormat.type;
       };
 
-      default = { };
 
       # Example taken from the manpage
       example = lib.literalExpression ''

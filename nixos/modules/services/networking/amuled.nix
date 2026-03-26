@@ -190,7 +190,6 @@ in
           WebServer.Enabled = 1;
         }
       '';
-      default = { };
     };
   };
 

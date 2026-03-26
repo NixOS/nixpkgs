@@ -106,7 +106,6 @@ in
           See <https://github.com/zhaofengli/attic/blob/main/server/src/config-template.toml>
         '';
         type = format.type;
-        default = { };
       };
 
       mode = lib.mkOption {

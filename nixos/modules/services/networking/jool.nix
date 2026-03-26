@@ -230,7 +230,6 @@ in
 
     networking.jool.siit = lib.mkOption {
       type = lib.types.attrsOf siitOptions;
-      default = { };
       example = lib.literalExpression ''
         {
           default = {

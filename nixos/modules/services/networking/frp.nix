@@ -56,7 +56,6 @@ in
 
               settings = lib.mkOption {
                 type = settingsFormat.type;
-                default = { };
                 description = ''
                   Frp configuration, for configuration options
                   see the example of [client](https://github.com/fatedier/frp/blob/dev/conf/frpc_full_example.toml)
@@ -79,7 +78,6 @@ in
             };
           }
         );
-        default = { };
         description = ''
           Frp instances.
         '';

@@ -26,7 +26,6 @@ in
   options.services.scion.scion-dispatcher = {
     enable = mkEnableOption "the scion-dispatcher service";
     settings = mkOption {
-      default = { };
       type = toml.type;
       example = literalExpression ''
         {

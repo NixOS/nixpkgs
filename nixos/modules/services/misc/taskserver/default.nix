@@ -220,7 +220,6 @@ in
 
       organisations = lib.mkOption {
         type = lib.types.attrsOf (lib.types.submodule orgOptions);
-        default = { };
         example.myShinyOrganisation.users = [
           "alice"
           "bob"

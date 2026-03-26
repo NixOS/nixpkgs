@@ -240,7 +240,6 @@ let
         destinations = lib.mkOption {
           type = lib.types.attrsOf (destType config);
           description = "Additional destinations.";
-          default = { };
           example = lib.literalExpression ''
             {
               local = {

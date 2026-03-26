@@ -50,7 +50,6 @@ in
 
       settings = lib.mkOption {
         type = lib.types.submodule { freeformType = settingsFormat.type; };
-        default = { };
         example = {
           host = "127.0.0.1";
           port = 3080;

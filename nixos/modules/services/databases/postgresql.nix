@@ -470,7 +470,6 @@ in
                     password = "SCRAM-SHA-256$4096:SZEJF5Si4QZ6l4fedrZZWQ==$6u3PWVcz+dts+NdpByPIjKa4CaSnoXGG3M2vpo76bVU=:WSZ0iGUCmVtKYVvNX0pFOp/60IgsdJ+90Y67Eun+QE0=";
                   }
                 '';
-                default = { };
                 type = types.submodule {
                   freeformType = types.attrsOf (
                     types.oneOf [

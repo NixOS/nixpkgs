@@ -64,7 +64,6 @@ in
     };
     extraEnvironmentVariables = lib.mkOption {
       description = "Extra environment variables to be set in the runtime context of jupyter notebook";
-      default = { };
       example = lib.literalExpression ''
         {
           PLAYWRIGHT_BROWSERS_PATH = "''${pkgs.playwright-driver.browsers}";

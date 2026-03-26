@@ -80,7 +80,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Configuration settings for the generated config file.
 

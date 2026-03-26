@@ -202,7 +202,6 @@ in
 
     boot.kernelModules = mkOption {
       type = attrNamesToTrue;
-      default = { };
       description = ''
         The set of kernel modules to be loaded in the second stage of
         the boot process.  Note that modules that are needed to
@@ -217,7 +216,6 @@ in
 
     boot.initrd.availableKernelModules = mkOption {
       type = attrNamesToTrue;
-      default = { };
       example = [
         "sata_nv"
         "ext3"
@@ -244,7 +242,6 @@ in
 
     boot.initrd.kernelModules = mkOption {
       type = attrNamesToTrue;
-      default = { };
       description = ''
         Set of modules that are always loaded by the initrd.
 

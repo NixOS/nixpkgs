@@ -146,7 +146,6 @@ in
           lib.types.bool
         ]
       );
-      default = { };
       defaultText = lib.literalExpression ''
         {
           "pm" = "dynamic";

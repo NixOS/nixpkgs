@@ -194,7 +194,6 @@ in
         See <https://lavalink.dev/configuration/#example-environment-variables> for more information.
       '';
 
-      default = { };
 
       example = lib.literalExpression ''
         {

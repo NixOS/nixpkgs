@@ -118,7 +118,6 @@ in
         See the [upstream documentation](https://github.com/wez/evremap/blob/master/README.md#configuration)
         for how to configure evremap.
       '';
-      default = { };
     };
   };
 

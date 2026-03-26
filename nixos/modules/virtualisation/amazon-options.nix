@@ -28,7 +28,6 @@ in
             on an existing system.
           '';
 
-          default = { };
 
           type = types.attrsOf (
             types.submodule {
@@ -41,7 +40,6 @@ in
                 properties = lib.mkOption {
                   description = "Properties to set on this dataset.";
                   type = types.attrsOf types.str;
-                  default = { };
                 };
               };
             }

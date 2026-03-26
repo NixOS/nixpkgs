@@ -120,7 +120,6 @@ in
         };
       };
 
-      default = { };
 
       description = ''
         Environment variables that will be passed to Tinyauth.

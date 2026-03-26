@@ -246,7 +246,6 @@ in
                     }
                   )
                 );
-              default = { };
               description = ''
                 An attribute set of database instances as described in:
                 <https://pgbackrest.org/configuration.html#section-stanza>
@@ -293,7 +292,6 @@ in
             };
           };
         });
-      default = { };
       description = ''
         An attribute set of stanzas as described in:
         <https://pgbackrest.org/user-guide.html#quickstart/configure-stanza>
@@ -360,7 +358,6 @@ in
               options.tls-server-cert-file = secretPathOption;
               options.tls-server-key-file = secretPathOption;
             };
-            default = { };
             description = ''
               Options for the '${command}' command.
 

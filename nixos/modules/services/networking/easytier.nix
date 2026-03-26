@@ -162,7 +162,6 @@ let
 
         settings = mkOption {
           type = types.submodule (settingsModule name);
-          default = { };
           description = ''
             Settings to generate {file}`easytier-${name}.toml`
           '';

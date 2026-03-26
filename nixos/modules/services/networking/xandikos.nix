@@ -58,7 +58,6 @@ in
       };
 
       nginx = mkOption {
-        default = { };
         description = ''
           Configuration for nginx reverse proxy.
         '';

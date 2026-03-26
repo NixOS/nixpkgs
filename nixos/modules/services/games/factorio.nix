@@ -210,7 +210,6 @@ in
       };
       extraSettings = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
         example = {
           max_players = 64;
         };

@@ -70,7 +70,6 @@ in
         Attribute set of filesystem paths.
         The contents of the specified paths will be read at service start time and merged with the attributes provided in `settings`.
       '';
-      default = { };
       type = with lib.types; nullOr (attrsOf externalPath);
     };
 

@@ -180,7 +180,6 @@ in
 
       firmwares = lib.mkOption {
         description = "Firmwares Klipper should manage";
-        default = { };
         type = lib.types.attrsOf firmwareSubmodule;
         example = {
           mcu = {

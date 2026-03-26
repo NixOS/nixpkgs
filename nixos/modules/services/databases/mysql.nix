@@ -244,7 +244,6 @@ in
               };
               ensurePermissions = lib.mkOption {
                 type = lib.types.attrsOf lib.types.str;
-                default = { };
                 description = ''
                   Permissions to ensure for the user, specified as attribute set.
                   The attribute names specify the database and tables to grant the permissions for,

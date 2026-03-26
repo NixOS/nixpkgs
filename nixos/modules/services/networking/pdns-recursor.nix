@@ -146,7 +146,6 @@ in
       example = {
         eth = "[::1]:5353";
       };
-      default = { };
       description = ''
         DNS zones to be forwarded to other recursive servers.
       '';
@@ -181,7 +180,6 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = { };
       example = literalExpression ''
         {
           loglevel = 8;

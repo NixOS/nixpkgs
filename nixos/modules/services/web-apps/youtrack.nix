@@ -124,7 +124,6 @@ in
           secure-mode = "tls";
         }
       '';
-      default = { };
     };
   };
 

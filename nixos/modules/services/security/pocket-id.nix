@@ -112,7 +112,6 @@ in
         };
       };
 
-      default = { };
 
       description = ''
         Environment variables to be passed.

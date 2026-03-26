@@ -38,7 +38,6 @@ in
 
       environment = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = { };
         example = {
           PORT = "31213";
           BASE_URL = "https://fider.example.com";

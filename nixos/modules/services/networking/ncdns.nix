@@ -150,7 +150,6 @@ in
 
       settings = lib.mkOption {
         type = format.type;
-        default = { };
         example = lib.literalExpression ''
           { # enable webserver
             ncdns.httplistenaddr = ":8202";

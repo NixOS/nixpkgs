@@ -48,7 +48,6 @@ in
     };
 
     args = lib.mkOption {
-      default = { };
       description = "extra args to append to the containerd cmdline";
       type = attrsOf str;
     };

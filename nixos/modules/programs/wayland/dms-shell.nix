@@ -172,7 +172,6 @@ in
           };
         }
       );
-      default = { };
       description = "DMS Plugins to install and enable";
       example = lib.literalExpression ''
         {

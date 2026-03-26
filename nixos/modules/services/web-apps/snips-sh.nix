@@ -64,7 +64,6 @@ in
         };
       };
 
-      default = { };
       example = {
         SNIPS_HTTP_INTERNAL = "http://0.0.0.0:8080";
         SNIPS_SSH_INTERNAL = "ssh://0.0.0.0:2222";

@@ -182,7 +182,6 @@ in
         in
         lib.types.attrsOf (lib.types.submodule endpoint)
       );
-      default = { };
       example = {
         "last.fm" = {
           username = "foo";

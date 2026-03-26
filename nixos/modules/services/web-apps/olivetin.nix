@@ -60,7 +60,6 @@ in
       description = ''
         Configuration of OliveTin. See <https://docs.olivetin.app/config.html> for more information.
       '';
-      default = { };
 
       type = lib.types.submodule {
         freeformType = settingsFormat.type;

@@ -266,7 +266,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Frigate configuration as a nix attribute set.
 

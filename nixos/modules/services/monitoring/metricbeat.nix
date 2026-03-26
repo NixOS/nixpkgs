@@ -44,7 +44,6 @@ in
 
           See <https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html>.
         '';
-        default = { };
         type = types.attrsOf (
           types.submodule (
             { name, ... }:
@@ -123,7 +122,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Configuration for metricbeat. See <https://www.elastic.co/guide/en/beats/metricbeat/current/configuring-howto-metricbeat.html> for supported values.
         '';

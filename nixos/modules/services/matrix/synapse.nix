@@ -762,7 +762,6 @@ in
         };
 
         settings = mkOption {
-          default = { };
           description = ''
             The primary synapse configuration. See the
             [sample configuration](https://github.com/element-hq/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
@@ -1271,7 +1270,6 @@ in
               }
             )
           );
-          default = { };
           example = lib.literalExpression ''
             {
               "federation_sender" = { };

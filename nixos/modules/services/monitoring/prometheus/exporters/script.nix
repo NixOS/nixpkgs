@@ -22,7 +22,6 @@ in
   extraOpts = {
     settings = mkOption {
       type = (pkgs.formats.yaml { }).type;
-      default = { };
       example = literalExpression ''
         {
           scripts = [

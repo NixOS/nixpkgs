@@ -84,7 +84,6 @@ in
 
     agent.settings = mkOption {
       type = agentSettingsFormat.type;
-      default = { };
       example = {
         default-cache-ttl = 600;
       };

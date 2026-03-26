@@ -22,7 +22,6 @@ in
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
       };
-      default = { };
       description = ''
         Configuration for zram-generator,
         see <https://github.com/systemd/zram-generator> for documentation.

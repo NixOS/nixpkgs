@@ -30,7 +30,6 @@ in
         description = ''
           Additional environment variables to pass to openvscode-server.
         '';
-        default = { };
         example = {
           PKG_CONFIG_PATH = "/run/current-system/sw/lib/pkgconfig";
         };

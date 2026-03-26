@@ -30,7 +30,6 @@ in
             freeformType = settingsFormat.type;
           }
         );
-        default = { };
         example = lib.literalExpression ''
           {
             plat-prefix = "64:ff9b::/96";

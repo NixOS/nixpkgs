@@ -230,7 +230,6 @@ in
         Server mode ghostunnels (TLS listener -> plain TCP/UNIX target)
       '';
       type = types.attrsOf (types.submodule module);
-      default = { };
     };
   };
 

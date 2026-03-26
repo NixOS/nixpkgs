@@ -70,7 +70,6 @@ in
         };
       };
 
-      default = { };
 
       description = ''
         Quickwit configuration.

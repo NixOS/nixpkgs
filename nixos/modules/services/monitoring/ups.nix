@@ -518,7 +518,6 @@ in
       };
 
       upsmon = lib.mkOption {
-        default = { };
         description = ''
           Options for the `upsmon.conf` configuration file.
         '';
@@ -545,7 +544,6 @@ in
       };
 
       users = lib.mkOption {
-        default = { };
         description = ''
           Users that can access upsd. See `man upsd.users`.
         '';

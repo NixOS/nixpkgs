@@ -96,7 +96,6 @@ in
 
       environment = lib.mkOption {
         type = types.attrsOf types.str;
-        default = { };
         description = ''
           Extra config options.
 

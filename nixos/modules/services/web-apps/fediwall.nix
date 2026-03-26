@@ -22,7 +22,6 @@ in
       description = "The hostname to serve fediwall on.";
     };
     settings = lib.mkOption {
-      default = { };
       description = ''
         Fediwall configuration. See
         https://github.com/defnull/fediwall/blob/main/public/wall-config.json.example
@@ -93,7 +92,6 @@ in
       type = lib.types.submodule (
         lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
-      default = { };
       example = lib.literalExpression ''
         {
           serverAliases = [

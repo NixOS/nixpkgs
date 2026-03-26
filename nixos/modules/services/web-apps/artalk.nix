@@ -66,7 +66,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           The artalk configuration.
 

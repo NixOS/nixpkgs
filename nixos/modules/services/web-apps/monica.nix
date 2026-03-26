@@ -254,7 +254,6 @@ in
               })
           )
         );
-      default = { };
       example = ''
         {
           ALLOWED_IFRAME_HOSTS = "https://example.com";

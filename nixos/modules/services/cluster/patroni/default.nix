@@ -178,7 +178,6 @@ in
             package
           ])
         );
-      default = { };
       example = {
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
         PATRONI_SUPERUSER_PASSWORD = "/secret/file";

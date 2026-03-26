@@ -70,7 +70,6 @@ in
                 };
               };
             };
-            default = { };
             description = "Threshold configuration for NVMe monitoring";
           };
 

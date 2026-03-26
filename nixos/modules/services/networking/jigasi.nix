@@ -96,7 +96,6 @@ in
 
     config = lib.mkOption {
       type = attrsOf str;
-      default = { };
       example = lib.literalExpression ''
         {
           "org.jitsi.jigasi.auth.URL" = "XMPP:jitsi-meet.example.com";

@@ -118,7 +118,6 @@ in
 
               staticHostMap = lib.mkOption {
                 type = lib.types.attrsOf (lib.types.listOf (lib.types.str));
-                default = { };
                 description = ''
                   The static host map defines a set of hosts with fixed IP addresses on the internet (or any network).
                   A host can have multiple fixed IP addresses defined here, and nebula will try each when establishing a tunnel.

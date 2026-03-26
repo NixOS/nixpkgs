@@ -750,7 +750,6 @@ in
                     };
                   }
                 );
-                default = { };
                 example = {
                   access_vaultwarden = {
                     name = "Allow anyone to access vaultwarden";
@@ -787,7 +786,6 @@ in
                     };
                   }
                 );
-                default = { };
                 example = {
                   users = {
                     name = "Users";
@@ -852,7 +850,6 @@ in
             };
           }
         );
-        default = { };
         example = {
           main = {
             name = "My Account / Organization";

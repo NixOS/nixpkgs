@@ -50,7 +50,6 @@ in
 
     credentials = lib.mkOption {
       type = lib.types.attrsOf lib.types.path;
-      default = { };
       example = {
         CREDS_KEY = "/run/secrets/creds_key";
       };

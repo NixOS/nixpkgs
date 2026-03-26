@@ -88,7 +88,6 @@ in
           Settings option for systemd-resolved.
           See {manpage}`resolved.conf(5)` for all available options.
         '';
-        default = { };
         type = types.submodule {
           freeformType = types.attrsOf unitOption;
           options = {
@@ -139,7 +138,6 @@ in
           dns-delegate files to be created.
           See {manpage}`systemd.dns-delegate(5)` for more info.
         '';
-        default = { };
         type = types.attrsOf (
           types.submodule {
             options.Delegate = mkOption {

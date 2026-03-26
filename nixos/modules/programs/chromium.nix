@@ -110,7 +110,6 @@ in
           More information can be found in the Chromium documentation:
           <https://www.chromium.org/administrators/configuring-other-preferences/>
         '';
-        default = { };
         example = lib.literalExpression ''
           {
             "first_run_tabs" = [

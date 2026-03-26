@@ -98,7 +98,6 @@ in
 
       network = mkOption {
         type = cfgFmt.type;
-        default = { };
         example = {
           General = {
             DisableSecurity = true;

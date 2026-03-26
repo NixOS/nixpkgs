@@ -52,7 +52,6 @@ in
         description = ''
           Parameters of freeciv-server.
         '';
-        default = { };
         type = lib.types.submodule {
           freeformType = argsFormat.type;
           options.Announce = lib.mkOption {

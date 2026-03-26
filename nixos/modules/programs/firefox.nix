@@ -68,7 +68,6 @@ in
 
     wrapperConfig = lib.mkOption {
       type = lib.types.attrs;
-      default = { };
       description = "Arguments to pass to Firefox wrapper";
     };
 

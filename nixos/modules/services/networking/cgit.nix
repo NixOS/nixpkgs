@@ -148,7 +148,6 @@ in
               repos = lib.mkOption {
                 description = "cgit repository settings, see {manpage}`cgitrc(5)`";
                 type = with lib.types; attrsOf (attrsOf settingType);
-                default = { };
                 example = {
                   blah = {
                     path = "/var/lib/git/example";

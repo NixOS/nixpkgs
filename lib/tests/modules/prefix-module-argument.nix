@@ -2,7 +2,6 @@
 {
   options.foo = lib.mkOption {
     type = lib.types.submodule { };
-    default = { };
   };
 
   config = {

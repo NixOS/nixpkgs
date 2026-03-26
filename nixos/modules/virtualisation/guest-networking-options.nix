@@ -86,7 +86,6 @@ in
     };
 
     virtualisation.interfaces = lib.mkOption {
-      default = { };
       example = {
         enp1s0.vlan = 1;
       };

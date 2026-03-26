@@ -136,7 +136,6 @@ in
         };
       };
 
-      default = { };
       description = "auditd configuration file contents. See {auditd.conf} for supported values.";
     };
 

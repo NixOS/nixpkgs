@@ -36,7 +36,6 @@ in
     };
 
     timerConfig = utils.systemdUtils.unitOptions.timerOptions.options.timerConfig // {
-      default = { };
       description = ''
         The timer configuration for performing the update.
 
@@ -65,7 +64,6 @@ in
       };
 
       timerConfig = utils.systemdUtils.unitOptions.timerOptions.options.timerConfig // {
-        default = { };
         description = ''
           The timer configuration for rebooting after an update.
 

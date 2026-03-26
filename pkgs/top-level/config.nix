@@ -124,7 +124,6 @@ let
 
         To set the configuration file for individual calls, use `fetchgit { gitConfigFile = "..."; }`.
       '';
-      default = { };
       example = {
         url."https://my-github-mirror.local".insteadOf = [ "https://github.com" ];
       };

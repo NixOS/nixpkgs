@@ -18,7 +18,6 @@ in
 
     settings = lib.mkOption {
       inherit (settingsFormat) type;
-      default = { };
       description = ''
         Lazygit configuration.
 

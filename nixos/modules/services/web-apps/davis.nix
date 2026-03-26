@@ -132,7 +132,6 @@ in
             )
         )
       );
-      default = { };
 
       example = "";
       description = "";

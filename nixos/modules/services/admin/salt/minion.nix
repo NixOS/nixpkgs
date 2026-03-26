@@ -26,7 +26,6 @@ in
       enable = lib.mkEnableOption "Salt configuration management system minion service";
       configuration = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
         description = ''
           Salt minion configuration as Nix attribute set.
           See <https://docs.saltstack.com/en/latest/ref/configuration/minion.html>

@@ -40,7 +40,6 @@ let
       };
       tags = lib.mkOption {
         type = with lib.types; attrsOf str;
-        default = { };
         description = "Tags applied";
       };
     };

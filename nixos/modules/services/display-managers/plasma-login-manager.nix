@@ -44,7 +44,6 @@ in
 
     settings = mkOption {
       type = iniFmt.type;
-      default = { };
       example = {
         Users.ReuseSession = false;
       };

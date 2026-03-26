@@ -54,7 +54,6 @@ let
                 };
               };
             });
-          default = { };
           example = lib.literalExpression ''
             {
               "/EFI/BOOT/BOOTX64.EFI".source =
@@ -221,7 +220,6 @@ in
 
     partitions = lib.mkOption {
       type = with lib.types; attrsOf (submodule partitionOptions);
-      default = { };
       example = lib.literalExpression ''
         {
           "10-esp" = {
@@ -252,7 +250,6 @@ in
 
     mkfsOptions = lib.mkOption {
       type = with lib.types; attrsOf (listOf str);
-      default = { };
       example = lib.literalExpression ''
         {
           vfat = [ "-S 512" "-c" ];

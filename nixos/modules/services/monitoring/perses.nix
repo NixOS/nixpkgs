@@ -56,7 +56,6 @@ in
         Perses settings. See <https://perses.dev/perses/docs/configuration/configuration/> for available options.
         You can specify secret values in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.
       '';
-      default = { };
     };
 
     extraOptions = mkOption {

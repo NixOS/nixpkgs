@@ -22,7 +22,6 @@ in
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
 
       description = ''
         Configuration for prometheus xmpp-alerts, see

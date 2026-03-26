@@ -232,7 +232,6 @@ in
 
       appConfig = lib.mkOption {
         type = lib.types.attrsOf appConfigModule;
-        default = { };
         example = lib.literalExpression ''
           "com.github.app" = {
             isAllowed = true;

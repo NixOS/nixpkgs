@@ -80,12 +80,10 @@ in
 
     systemd.user.units = mkOption {
       description = "Definition of systemd per-user units.";
-      default = { };
       type = systemdUtils.types.units;
     };
 
     systemd.user.paths = mkOption {
-      default = { };
       type = systemdUtils.types.paths;
       description = "Definition of systemd per-user path units.";
     };
@@ -144,7 +142,6 @@ in
           Per-user rules for creation, deletion and cleaning of volatile and
           temporary files automatically.
         '';
-        default = { };
         type = types.attrsOf (
           types.submodule {
             options = {

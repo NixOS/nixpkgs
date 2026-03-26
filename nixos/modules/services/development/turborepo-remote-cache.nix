@@ -40,7 +40,6 @@ in
           ]
         )
       );
-      default = { };
       description = ''
         Environment variables to set.
 

@@ -142,7 +142,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Configuration for `etebase-server`. Refer to
           <https://github.com/etesync/server/blob/master/etebase-server.ini.example>

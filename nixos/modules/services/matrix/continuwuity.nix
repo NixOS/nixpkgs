@@ -162,7 +162,6 @@ in
           };
         };
       };
-      default = { };
       # TOML does not allow null values, so we use null to omit those fields
       apply = lib.filterAttrsRecursive (_: v: v != null);
       description = ''

@@ -60,7 +60,6 @@ in
 
       commands = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = { };
         example = {
           h = "noaction 5\\e(";
           l = "noaction 5\\e)";

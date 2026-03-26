@@ -94,7 +94,6 @@ in
     enable = mkEnableOption "Jitsi BRoadcasting Infrastructure. Currently Jibri must be run on a host that is also running {option}`services.jitsi-meet.enable`, so for most use cases it will be simpler to run {option}`services.jitsi-meet.jibri.enable`";
     config = mkOption {
       type = format.type;
-      default = { };
       description = ''
         Jibri configuration.
         See <https://github.com/jitsi/jibri/blob/master/src/main/resources/reference.conf>
@@ -185,7 +184,6 @@ in
           stripFromRoomDomain = "conference.";
         };
       '';
-      default = { };
       type = attrsOf (
         submodule (
           { name, ... }:

@@ -112,7 +112,6 @@ in
 
     ppdSettings = lib.mkOption {
       type = lib.types.submodule ppdSettingsSubmodule;
-      default = { };
       description = ''
         Settings for TuneD's power-profiles-daemon compatibility service.
       '';
@@ -147,7 +146,6 @@ in
     };
     recommend = lib.mkOption {
       type = recommendFormat.type;
-      default = { };
       description = ''
         TuneD rules for `recommend_profile`, written to
         `/etc/tuned/recommend.conf`.

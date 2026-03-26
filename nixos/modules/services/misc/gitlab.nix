@@ -404,7 +404,6 @@ in
 
       backup.uploadOptions = mkOption {
         type = types.attrs;
-        default = { };
         example = literalExpression ''
           {
             # Fog storage connection settings, see http://fog.io/storage/
@@ -491,7 +490,6 @@ in
 
       extraDatabaseConfig = mkOption {
         type = types.attrs;
-        default = { };
         description = "Extra configuration in config/database.yml.";
       };
 
@@ -1076,7 +1074,6 @@ in
 
       workhorse.config = mkOption {
         type = toml.type;
-        default = { };
         example = literalExpression ''
           {
             object_storage.provider = "AWS";
@@ -1109,7 +1106,6 @@ in
 
       extraConfig = mkOption {
         type = yaml.type;
-        default = { };
         example = literalExpression ''
           {
             gitlab = {

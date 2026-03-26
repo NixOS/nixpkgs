@@ -52,7 +52,6 @@ in
       };
 
       cronIntervals = lib.mkOption {
-        default = { };
         example = {
           hourly = "0 * * * *";
           daily = "50 21 * * *";

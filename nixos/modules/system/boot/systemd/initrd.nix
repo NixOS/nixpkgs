@@ -172,7 +172,6 @@ in
     };
 
     settings.Manager = mkOption {
-      default = { };
       defaultText = lib.literalExpression ''
         {
           DefaultEnvironment = "PATH=/bin:/sbin";
@@ -203,7 +202,6 @@ in
             package
           ])
         );
-      default = { };
       defaultText = ''
         {
           PATH = "/bin:/sbin";
@@ -246,7 +244,6 @@ in
         }
       '';
       type = types.attrsOf types.path;
-      default = { };
     };
 
     suppressedStorePaths = mkOption {
@@ -343,7 +340,6 @@ in
 
     units = mkOption {
       description = "Definition of systemd units.";
-      default = { };
       visible = "shallow";
       type = systemdUtils.types.units;
     };
@@ -356,35 +352,30 @@ in
     };
 
     targets = mkOption {
-      default = { };
       visible = "shallow";
       type = systemdUtils.types.initrdTargets;
       description = "Definition of systemd target units.";
     };
 
     services = mkOption {
-      default = { };
       type = systemdUtils.types.initrdServices;
       visible = "shallow";
       description = "Definition of systemd service units.";
     };
 
     sockets = mkOption {
-      default = { };
       type = systemdUtils.types.initrdSockets;
       visible = "shallow";
       description = "Definition of systemd socket units.";
     };
 
     timers = mkOption {
-      default = { };
       type = systemdUtils.types.initrdTimers;
       visible = "shallow";
       description = "Definition of systemd timer units.";
     };
 
     paths = mkOption {
-      default = { };
       type = systemdUtils.types.initrdPaths;
       visible = "shallow";
       description = "Definition of systemd path units.";

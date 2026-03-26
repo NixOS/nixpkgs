@@ -108,7 +108,6 @@ in
           "pm.max_requests" = 500;
         }
       '';
-      default = { };
       description = ''
         Options for the PrivateBin PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.

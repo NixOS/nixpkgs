@@ -324,7 +324,6 @@ in
 
       overrides = mkOption {
         type = with types; attrsOf (submodule (configFileModule "overrides"));
-        default = { };
         description = ''
           Overridden configuration files, written into {file}`/etc/rspamd/override.d/{name}`.
         '';

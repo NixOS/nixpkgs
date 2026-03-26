@@ -118,7 +118,6 @@ let
       };
 
       filesConfig = mkOption {
-        default = { };
         example = {
           Bind = [ "/home/alice" ];
         };
@@ -131,7 +130,6 @@ let
       };
 
       networkConfig = mkOption {
-        default = { };
         example = {
           Private = false;
         };

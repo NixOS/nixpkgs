@@ -40,7 +40,6 @@ in
 
     settings = lib.mkOption {
       type = (pkgs.formats.json { }).type;
-      default = { };
       description = ''
         Specify the configuration for Vector in Nix.
       '';

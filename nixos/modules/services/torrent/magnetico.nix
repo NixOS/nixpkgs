@@ -126,7 +126,6 @@ in
 
     web.credentials = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
       example = lib.literalExpression ''
         {
           myuser = "$2y$12$YE01LZ8jrbQbx6c0s2hdZO71dSjn2p/O9XsYJpz.5968yCysUgiaG";

@@ -222,7 +222,6 @@ in
             str
             (listOf str)
           ]);
-        default = { };
         description = ''
           Zabbix Proxy configuration. Refer to
           <https://www.zabbix.com/documentation/current/manual/appendix/config/zabbix_proxy>

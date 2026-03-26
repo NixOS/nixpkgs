@@ -18,7 +18,6 @@ let
     options = with types; {
       jobs = mkOption {
         type = attrsOf (submodule jobOptions);
-        default = { };
         description = "An attrset of metrics scraping jobs to run.";
       };
     };

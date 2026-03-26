@@ -132,7 +132,6 @@ in
 
       servers = lib.mkOption {
         type = with lib.types; attrsOf lib.types.str;
-        default = { };
         example = {
           node1 = "tcp://node1:3334";
           node2 = "tcp://node2:3334";

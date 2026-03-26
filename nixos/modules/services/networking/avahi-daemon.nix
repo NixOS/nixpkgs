@@ -166,7 +166,6 @@ in
 
     extraServiceFiles = lib.mkOption {
       type = with lib.types; attrsOf (either str path);
-      default = { };
       example = lib.literalExpression ''
         {
           ssh = "''${pkgs.avahi}/etc/avahi/services/ssh.service";

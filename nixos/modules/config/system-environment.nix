@@ -18,7 +18,6 @@ in
   options = {
 
     environment.sessionVariables = lib.mkOption {
-      default = { };
       description = ''
         A set of environment variables used in the global environment.
         These variables will be set by PAM early in the login process.

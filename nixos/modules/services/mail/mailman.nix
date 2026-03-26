@@ -300,7 +300,6 @@ in
         enable = lib.mkEnableOption "automatic nginx and uwsgi setup for mailman-web";
 
         uwsgiSettings = lib.mkOption {
-          default = { };
           example = {
             uwsgi.buffer-size = 8192;
           };
@@ -323,7 +322,6 @@ in
       settings = lib.mkOption {
         description = "Settings for mailman.cfg";
         type = lib.types.attrsOf (lib.types.attrsOf lib.types.str);
-        default = { };
       };
 
       hyperkitty = {

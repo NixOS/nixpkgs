@@ -258,7 +258,6 @@ in
 
     virtualHosts = mkOption {
       type = with types; attrsOf (submodule (import ./vhost-options.nix { inherit cfg; }));
-      default = { };
       example = literalExpression ''
         {
           "hydra.example.com" = {
@@ -339,7 +338,6 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = { };
       description = ''
         Structured configuration for Caddy to generate a Caddy JSON configuration file.
         See <https://caddyserver.com/docs/json/> for available options.

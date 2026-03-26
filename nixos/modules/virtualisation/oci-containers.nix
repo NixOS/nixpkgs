@@ -100,7 +100,6 @@ let
 
         labels = mkOption {
           type = with types; attrsOf str;
-          default = { };
           description = "Labels to attach to the container at runtime.";
           example = {
             "traefik.https.routers.example.rule" = "Host(`example.container`)";
@@ -567,7 +566,6 @@ in
     };
 
     containers = mkOption {
-      default = { };
       type = types.attrsOf (types.submodule containerOptions);
       description = "OCI (Docker) containers to run as systemd services.";
     };

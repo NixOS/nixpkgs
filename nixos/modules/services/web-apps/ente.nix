@@ -112,7 +112,6 @@ in
           Museum yaml configuration. Refer to upstream [local.yaml](https://github.com/ente-io/ente/blob/main/server/configurations/local.yaml) for more information.
           You can specify secret values in this configuration by setting `somevalue._secret = "/path/to/file"` instead of setting `somevalue` directly.
         '';
-        default = { };
         type = types.submodule {
           freeformType = yamlFormat.type;
           options = {

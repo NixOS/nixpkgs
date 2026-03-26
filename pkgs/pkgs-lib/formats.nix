@@ -314,12 +314,10 @@ optionalAttrs allowAliases aliases
               options = {
                 sections = mkOption rec {
                   type = attrsOf (iniSection atom);
-                  default = { };
                   description = type.description;
                 };
                 globalSection = mkOption rec {
                   type = iniSection atom;
-                  default = { };
                   description = "global " + type.description;
                 };
               };

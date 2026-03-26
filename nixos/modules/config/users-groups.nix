@@ -248,7 +248,6 @@ let
 
         pamMount = mkOption {
           type = with types; attrsOf str;
-          default = { };
           description = ''
             Attributes for user's entry in
             {file}`pam_mount.conf.xml`.
@@ -715,7 +714,6 @@ in
     };
 
     users.users = mkOption {
-      default = { };
       type = with types; attrsOf (submodule userOpts);
       example = {
         alice = {
@@ -770,7 +768,6 @@ in
       description = ''
         Users to include in initrd.
       '';
-      default = { };
       type = types.attrsOf (
         types.submodule (
           { name, ... }:

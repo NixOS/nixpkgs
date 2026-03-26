@@ -170,7 +170,6 @@ in
         };
         connectTo = lib.mkOption {
           type = lib.types.attrsOf (lib.types.submodule connectToSubmodule);
-          default = { };
           example = lib.literalExpression ''
             {
               "192.168.1.1:27313" = {

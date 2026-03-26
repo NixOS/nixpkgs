@@ -152,7 +152,6 @@ in
 
     gamescopeSession = lib.mkOption {
       description = "Run a GameScope driven OpenGamepadUI session from your display-manager";
-      default = { };
       type = lib.types.submodule {
         options = {
           enable = lib.mkEnableOption "GameScope Session";

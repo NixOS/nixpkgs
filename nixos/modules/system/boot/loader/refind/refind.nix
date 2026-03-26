@@ -62,7 +62,6 @@ in
         '';
       };
       additionalFiles = mkOption {
-        default = { };
         type = types.attrsOf types.path;
         example = literalExpression ''
           { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }

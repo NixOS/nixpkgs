@@ -58,7 +58,6 @@ in
     };
 
     settings = lib.mkOption {
-      default = { };
 
       description = ''
         Configuration in the journal-remote configuration file. See

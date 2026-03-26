@@ -48,7 +48,6 @@ in
             };
           };
         };
-      default = { };
       description = ''
         Your {file}`configuration.ini` as a Nix attribute set. Look up
         possible options in the [configuration.example.ini](https://github.com/azlux/botamusique/blob/master/configuration.example.ini).

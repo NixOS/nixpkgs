@@ -28,7 +28,6 @@ in
 
     programs.xfs_quota = {
       projects = lib.mkOption {
-        default = { };
         type = lib.types.attrsOf (
           lib.types.submodule {
             options = {

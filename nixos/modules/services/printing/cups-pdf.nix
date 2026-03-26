@@ -120,7 +120,6 @@ let
         };
         settings = lib.mkOption {
           type = lib.types.submodule (instanceSettings name);
-          default = { };
           example = {
             Out = "\${HOME}/cups-pdf";
             UserUMask = "0033";

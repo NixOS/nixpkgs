@@ -412,7 +412,6 @@ in
 
       sites = mkOption {
         type = types.attrsOf (types.submodule siteOpts);
-        default = { };
         description = "Specification of one or more WordPress sites to serve";
       };
 

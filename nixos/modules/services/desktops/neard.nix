@@ -52,7 +52,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Neard INI-style configuration file as a Nix attribute set.
 

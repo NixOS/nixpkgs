@@ -44,7 +44,6 @@ in
       settings = lib.mkOption {
         type = types.attrsOf types.str;
 
-        default = { };
         description = ''
           Extra config options.
         '';

@@ -380,7 +380,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         pretix configuration as a Nix attribute set. All settings can also be passed
         from the environment.

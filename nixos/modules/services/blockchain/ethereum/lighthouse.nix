@@ -12,7 +12,6 @@ in
     services.lighthouse = {
       beacon = lib.mkOption {
         description = "Beacon node";
-        default = { };
         type = lib.types.submodule {
           options = {
             enable = lib.mkEnableOption "Lightouse Beacon node";
@@ -137,7 +136,6 @@ in
 
       validator = lib.mkOption {
         description = "Validator node";
-        default = { };
         type = lib.types.submodule {
           options = {
             enable = lib.mkOption {

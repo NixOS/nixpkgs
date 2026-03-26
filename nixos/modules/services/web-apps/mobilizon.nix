@@ -210,7 +210,6 @@ in
               };
             };
           };
-        default = { };
 
         description = ''
           Mobilizon Elixir documentation, see

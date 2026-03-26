@@ -136,7 +136,6 @@ rec {
     _type = "param";
     option = mkOption {
       type = types.attrsOf option;
-      default = { };
       description = description;
     };
     render =

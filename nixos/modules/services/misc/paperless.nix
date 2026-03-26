@@ -228,7 +228,6 @@ in
             )
           );
       };
-      default = { };
       description = ''
         Extra paperless config options.
 

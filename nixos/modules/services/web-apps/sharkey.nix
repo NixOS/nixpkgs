@@ -168,7 +168,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Configuration options for Sharkey.
 

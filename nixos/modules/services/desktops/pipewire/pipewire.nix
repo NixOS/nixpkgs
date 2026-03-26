@@ -152,7 +152,6 @@ in
       extraConfig = {
         pipewire = mkOption {
           type = attrsOf json.type;
-          default = { };
           example = {
             "10-clock-rate" = {
               "context.properties" = {
@@ -185,7 +184,6 @@ in
         };
         client = mkOption {
           type = attrsOf json.type;
-          default = { };
           example = {
             "10-no-resample" = {
               "stream.properties" = {

@@ -1026,7 +1026,6 @@ in
       };
 
       certs = lib.mkOption {
-        default = { };
         type =
           with lib.types;
           attrsOf (submodule [

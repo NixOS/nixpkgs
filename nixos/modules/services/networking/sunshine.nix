@@ -56,7 +56,6 @@ in
       '';
     };
     settings = mkOption {
-      default = { };
       description = ''
         Settings to be rendered into the configuration file. If this is set, no configuration is possible from the web UI.
 
@@ -79,7 +78,6 @@ in
       });
     };
     applications = mkOption {
-      default = { };
       description = ''
         Configuration for applications to be exposed to Moonlight. If this is set, no configuration is possible from the web UI, and must be by the `settings` option.
       '';
@@ -106,7 +104,6 @@ in
       type = submodule {
         options = {
           env = mkOption {
-            default = { };
             description = ''
               Environment variables to be set for the applications.
             '';

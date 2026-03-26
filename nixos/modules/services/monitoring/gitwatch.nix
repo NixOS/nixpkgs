@@ -50,7 +50,6 @@ in
       A set of git repositories to watch for. See
       [gitwatch](https://github.com/gitwatch/gitwatch) for more.
     '';
-    default = { };
     example = {
       my-repo = {
         enable = true;

@@ -206,7 +206,6 @@ in
           };
         };
       };
-      default = { };
     };
 
     taskRunners = {
@@ -293,14 +292,12 @@ in
 
                 environment = lib.mkOption {
                   type = with lib.types; attrsOf str;
-                  default = { };
                   description = "Environment variables specific to this task runner.";
                 };
               };
             }
           )
         );
-        default = { };
         defaultText = lib.literalExpression ''
           {
             javascript = {

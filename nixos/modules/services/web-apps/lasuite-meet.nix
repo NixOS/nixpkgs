@@ -146,7 +146,6 @@ in
 
       settings = mkOption {
         type = types.attrs;
-        default = { };
         description = ''
           Settings to pass to the livekit server.
 
@@ -287,7 +286,6 @@ in
         };
       };
 
-      default = { };
       example = ''
         {
           DJANGO_ALLOWED_HOSTS = "*";

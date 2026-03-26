@@ -294,7 +294,6 @@ in
 
       settings = mkOption {
         type = (pkgs.formats.yaml { }).type;
-        default = { };
         description = ''
           Extra configuration as nix values.
         '';

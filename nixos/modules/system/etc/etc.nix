@@ -104,7 +104,6 @@ in
     };
 
     environment.etc = lib.mkOption {
-      default = { };
       example = lib.literalExpression ''
         { example-configuration-file =
             { source = "/nix/store/.../etc/dir/file.conf.example";

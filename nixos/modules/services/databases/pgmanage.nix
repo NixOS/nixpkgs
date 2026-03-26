@@ -54,7 +54,6 @@ in
 
     connections = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
       example = {
         nuc-server = "hostaddr=192.168.0.100 port=5432 dbname=postgres";
         mini-server = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";

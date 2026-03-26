@@ -36,7 +36,6 @@ in
 
     boot.blacklistedKernelModules = mkOption {
       type = attrNamesToTrue;
-      default = { };
       example = [
         "cirrusfb"
         "i2c_piix4"

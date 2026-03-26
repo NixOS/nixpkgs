@@ -36,7 +36,6 @@ in
 
     libraryPaths = mkOption {
       type = attrsOf package;
-      default = { };
       description = ''
         Libraries to add to the Icingaweb2 library path.
         The name of the attribute is the name of the library, the value
@@ -69,7 +68,6 @@ in
 
     modulePackages = mkOption {
       type = attrsOf package;
-      default = { };
       example = literalExpression ''
         {
           "snow" = icingaweb2Modules.theme-snow;

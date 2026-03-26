@@ -16,7 +16,6 @@
         };
       }
     );
-    default = { };
   };
 
   config = {

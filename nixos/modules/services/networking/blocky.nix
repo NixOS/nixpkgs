@@ -22,7 +22,6 @@ in
 
     settings = lib.mkOption {
       type = format.type;
-      default = { };
       description = ''
         Blocky configuration. Refer to
         <https://0xerr0r.github.io/blocky/configuration/>

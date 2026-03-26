@@ -160,7 +160,6 @@ in
     };
 
     extraConfig = lib.mkOption {
-      default = { };
       type = lib.types.attrs;
       description = ''
         Extra configuration options that will be merged into the

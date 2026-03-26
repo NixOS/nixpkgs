@@ -1034,7 +1034,6 @@ in
             };
 
             ":web_push_encryption" = mkOption {
-              default = { };
               description = ''
                 Web Push Notifications configuration.
 

@@ -210,7 +210,6 @@ let
                 inherit config lib;
               }) { }
             );
-            default = { };
             description = "Overrides to the nginx vhost section for api";
           };
         };
@@ -221,7 +220,6 @@ in
   options = {
     services.fedimintd = mkOption {
       type = types.attrsOf (types.submodule fedimintdOpts);
-      default = { };
       description = "Specification of one or more fedimintd instances.";
     };
   };

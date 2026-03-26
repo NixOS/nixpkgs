@@ -286,7 +286,6 @@ in
       type = types.submodule (
         recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
-      default = { };
       example = literalExpression ''
         {
           serverAliases = [
@@ -403,7 +402,6 @@ in
         All possible options are listed [here](https://github.com/librenms/librenms/blob/master/resources/definitions/config_definitions.json).
         See <https://docs.librenms.org/Extensions/Authentication/> for setting other authentication methods.
       '';
-      default = { };
       example = {
         base_url = "/librenms/";
         top_devices = true;

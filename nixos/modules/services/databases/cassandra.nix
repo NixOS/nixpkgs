@@ -282,7 +282,6 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = { };
       example = {
         commitlog_sync_batch_window_in_ms = 3;
       };

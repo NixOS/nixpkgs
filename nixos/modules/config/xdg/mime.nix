@@ -46,7 +46,6 @@ in
 
     xdg.mime.defaultApplications = lib.mkOption {
       type = associationOptions;
-      default = { };
       example = {
         "application/pdf" = "firefox.desktop";
         "image/*" = [
@@ -63,7 +62,6 @@ in
 
     xdg.mime.removedAssociations = lib.mkOption {
       type = associationOptions;
-      default = { };
       example = {
         "audio/*" = [
           "mpv.desktop"

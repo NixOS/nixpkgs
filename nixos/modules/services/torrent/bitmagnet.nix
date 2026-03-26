@@ -34,12 +34,10 @@ in
     };
     settings = mkOption {
       description = "Bitmagnet configuration (https://bitmagnet.io/setup/configuration.html).";
-      default = { };
       type = submodule {
         inherit freeformType;
         options = {
           http_server = mkOption {
-            default = { };
             description = "HTTP server settings";
             type = submodule {
               inherit freeformType;

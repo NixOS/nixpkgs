@@ -192,7 +192,6 @@ let
 
         auths = mkOption {
           description = "API tokens to provision for the user in this organization.";
-          default = { };
           type = types.attrsOf (
             types.submodule (
               authSubmod:
@@ -307,7 +306,6 @@ in
       package = mkPackageOption pkgs "influxdb2" { };
 
       settings = mkOption {
-        default = { };
         description = "configuration options for influxdb2, see <https://docs.influxdata.com/influxdb/v2.0/reference/config-options> for details.";
         type = format.type;
       };
@@ -368,7 +366,6 @@ in
               };
             }
           '';
-          default = { };
           type = types.attrsOf organizationSubmodule;
         };
 

@@ -68,7 +68,6 @@ in
         description = ''
           Configuration of GlitchTip. See <https://glitchtip.com/documentation/install#configuration> for more information.
         '';
-        default = { };
         defaultText = lib.literalExpression ''
           {
             DEBUG = 0;

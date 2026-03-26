@@ -120,7 +120,6 @@ in
             };
           };
         };
-        default = { };
         example = lib.literalExpression ''
           {
             Port = 8123;
@@ -151,7 +150,6 @@ in
 
       steps = mkOption {
         type = settingsFormat.type;
-        default = { };
         example = lib.literalExpression ''
           {
             FirstInstance = {

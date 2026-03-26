@@ -38,7 +38,6 @@ in
   options.services.zerotierone.package = mkPackageOption pkgs "zerotierone" { };
 
   options.services.zerotierone.localConf = mkOption {
-    default = { };
     description = ''
       Optional configuration to be written to the Zerotier JSON-based local.conf.
       If set, the configuration will be symlinked to `/var/lib/zerotier-one/local.conf` at build time.

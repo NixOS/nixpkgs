@@ -218,7 +218,6 @@ in
 
     keyboards = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule keyboard);
-      default = { };
       description = "Keyboard configuration.";
     };
 

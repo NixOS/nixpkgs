@@ -28,7 +28,6 @@ in
 
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
-      default = { };
       description = ''
         Configuration of the Mealie service.
 

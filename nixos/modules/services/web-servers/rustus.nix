@@ -122,7 +122,6 @@ in
       description = ''
         Storages are used to actually store your files. You can configure where you want to store files.
       '';
-      default = { };
       example = lib.literalExpression ''
         {
           type = "hybrid-s3"

@@ -184,7 +184,6 @@ in
             int
             bool
           ]);
-        default = { };
         description = ''
           PHP-FPM global directives. Refer to the "List of global php-fpm.conf directives" section of
           <https://www.php.net/manual/en/install.fpm.configuration.php>

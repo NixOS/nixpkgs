@@ -44,7 +44,6 @@ in
 
     settings = lib.mkOption {
       inherit (configFormat) type;
-      default = { };
       description = ''
         Configuration options for the Stalwart server.
         See <https://stalw.art/docs/category/configuration> for available options.
@@ -85,7 +84,6 @@ in
         `%{file:/run/credentials/stalwart.service/VAR_NAME}%`.
       '';
       type = lib.types.attrsOf lib.types.str;
-      default = { };
       example = {
         user_admin_password = "/run/keys/stalwart_admin_password";
       };

@@ -290,7 +290,6 @@ let
           )
         ];
         internal = true;
-        default = { };
       };
     };
 

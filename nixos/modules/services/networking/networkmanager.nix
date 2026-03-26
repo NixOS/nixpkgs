@@ -176,7 +176,6 @@ in
               str
             ])
           );
-        default = { };
         description = ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
@@ -191,7 +190,6 @@ in
 
       settings = mkOption {
         type = ini.type;
-        default = { };
         description = ''
           Configuration added to the generated NetworkManager.conf, note that you can overwrite settings with this.
           Refer to

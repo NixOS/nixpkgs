@@ -474,7 +474,6 @@ in
 
       tls = mkOption {
         type = types.submodule (tlsOptions "services.bacula-fd");
-        default = { };
         description = ''
           TLS Options for the File Daemon.
           Important notice: The backup won't be encrypted.
@@ -533,7 +532,6 @@ in
       };
 
       director = mkOption {
-        default = { };
         description = ''
           This option defines Director resources in Bacula Storage Daemon.
         '';
@@ -580,7 +578,6 @@ in
       };
       tls = mkOption {
         type = types.submodule (tlsOptions "services.bacula-sd");
-        default = { };
         description = ''
           TLS Options for the Storage Daemon.
           Important notice: The backup won't be encrypted.
@@ -665,7 +662,6 @@ in
 
       tls = mkOption {
         type = types.submodule (tlsOptions "services.bacula-dir");
-        default = { };
         description = ''
           TLS Options for the Director.
           Important notice: The backup won't be encrypted.

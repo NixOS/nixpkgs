@@ -38,7 +38,6 @@ in
 
       settings = mkOption {
         type = settingsFormat.type;
-        default = { };
         example = {
           main.log_level = "debug";
           server.port = 9000;

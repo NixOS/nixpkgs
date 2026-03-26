@@ -202,7 +202,6 @@ in
           };
         });
 
-      default = { };
 
       example = literalExpression ''
         { "wlan0 wlan1" = {

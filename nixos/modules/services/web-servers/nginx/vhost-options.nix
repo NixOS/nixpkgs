@@ -326,7 +326,6 @@ with lib;
 
     basicAuth = mkOption {
       type = types.attrsOf types.str;
-      default = { };
       example = literalExpression ''
         {
           user = "password";
@@ -357,7 +356,6 @@ with lib;
           }
         )
       );
-      default = { };
       example = literalExpression ''
         {
           "/" = {

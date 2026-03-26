@@ -88,7 +88,6 @@ in
         };
       };
 
-      default = { };
 
       description = ''
         OpenSearch configuration.

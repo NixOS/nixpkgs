@@ -86,7 +86,6 @@ in
       };
 
       cellServDB = mkOption {
-        default = { };
         type = cellServDBType cfg.cellName;
         description = ''
           This cell's database server records, added to the global

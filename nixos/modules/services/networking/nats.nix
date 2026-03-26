@@ -86,7 +86,6 @@ in
       };
 
       settings = mkOption {
-        default = { };
         type = format.type;
         example = literalExpression ''
           {

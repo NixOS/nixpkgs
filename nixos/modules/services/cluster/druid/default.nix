@@ -62,7 +62,6 @@ let
     };
 
     internalConfig = mkOption {
-      default = { };
       type = types.attrsOf types.anything;
       internal = true;
       description = "Internal Option to add to runtime.properties for ${serviceName}.";
@@ -149,7 +148,6 @@ in
     package = mkPackageOption pkgs "apache-druid" { default = [ "druid" ]; };
 
     commonConfig = mkOption {
-      default = { };
 
       type = types.attrsOf types.anything;
 

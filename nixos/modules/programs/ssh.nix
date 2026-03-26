@@ -156,7 +156,6 @@ in
       package = lib.mkPackageOption pkgs "openssh" { };
 
       knownHosts = lib.mkOption {
-        default = { };
         type = lib.types.attrsOf (
           lib.types.submodule (
             {

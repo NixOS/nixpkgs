@@ -86,7 +86,6 @@ in
         description = ''
           Settings for device battery notifications.
         '';
-        default = { };
         type = lib.types.submodule {
           options = {
             enable = lib.mkOption {

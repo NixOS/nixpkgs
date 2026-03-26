@@ -260,7 +260,6 @@ let
         # type here with `zoneConfigs`, since that would set all the attributes
         # to default values, breaking the parent inheriting function.
         type = types.attrsOf types.anything;
-        default = { };
         description = ''
           Children zones inherit all options of their parents. Attributes
           defined in a child will overwrite the ones of its parent. Only

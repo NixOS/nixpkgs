@@ -34,7 +34,6 @@ in
     };
     settings = lib.mkOption {
       type = yamlFormat.type;
-      default = { };
       description = ''
         See {option}`configurationFile`.
 

@@ -16,7 +16,6 @@ in
     enable = lib.mkEnableOption "Spam/ham trainer for rspamd";
 
     settings = lib.mkOption {
-      default = { };
       description = ''
         IMAP authentication configuration for rspamd-trainer. For supplying
         the IMAP password, use the `secrets` option.

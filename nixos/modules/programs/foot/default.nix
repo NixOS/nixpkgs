@@ -36,7 +36,6 @@ in
 
     settings = lib.mkOption {
       inherit (settingsFormat) type;
-      default = { };
       description = ''
         Configuration for foot terminal emulator. Further information can be found in {command}`man 5 foot.ini`.
 

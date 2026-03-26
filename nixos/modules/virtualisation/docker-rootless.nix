@@ -38,7 +38,6 @@ in
 
     daemon.settings = lib.mkOption {
       type = settingsFormat.type;
-      default = { };
       example = {
         ipv6 = true;
         "fixed-cidr-v6" = "fd00::/80";

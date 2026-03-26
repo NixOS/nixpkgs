@@ -144,7 +144,6 @@ in
           Configuration to write to {file}`server.conf`.
           See <https://github.com/Suwayomi/Suwayomi-Server/wiki/Configuring-Suwayomi-Server> for more information.
         '';
-        default = { };
         example = {
           server.socksProxyEnabled = true;
           server.socksProxyHost = "yourproxyhost.com";

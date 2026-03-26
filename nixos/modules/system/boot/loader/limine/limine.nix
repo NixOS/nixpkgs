@@ -120,7 +120,6 @@ in
     };
 
     additionalFiles = lib.mkOption {
-      default = { };
       type = lib.types.attrsOf lib.types.path;
       example = lib.literalExpression ''
         { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }

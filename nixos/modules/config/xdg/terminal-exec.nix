@@ -26,7 +26,6 @@ in
       package = mkPackageOption pkgs "xdg-terminal-exec" { };
       settings = mkOption {
         type = with types; attrsOf (listOf str);
-        default = { };
         description = ''
           Configuration options for the Default Terminal Execution Specification.
 

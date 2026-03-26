@@ -70,7 +70,6 @@ in
 
           streams = mkOption {
             type = attrsOf (either str (listOf str));
-            default = { };
             example = literalExpression ''
               {
                 cam1 = "onvif://admin:password@192.168.1.123:2020";

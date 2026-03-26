@@ -24,7 +24,6 @@ in
 
     settings = mkOption {
       type = types.attrsOf types.str;
-      default = { };
       description = ''
         Settings to configure backend server. Especially the Nextcloud host
         url has to be set. The required environment variable `JWT_SECRET_KEY`

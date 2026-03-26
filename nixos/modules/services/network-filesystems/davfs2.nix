@@ -90,7 +90,6 @@ in
           in
           attrsOf (attrsOf (oneOf (valueTypes ++ [ (attrsOf (oneOf valueTypes)) ])));
       };
-      default = { };
       example = literalExpression ''
         {
           globalSection = {

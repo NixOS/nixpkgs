@@ -36,7 +36,6 @@ in
 
     settings = mkOption {
       type = yaml.type;
-      default = { };
       example = literalExpression ''
         {
           bootstrap = [

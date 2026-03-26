@@ -56,7 +56,6 @@ in
     services.armagetronad = {
       servers = mkOption {
         description = "Armagetron server definitions.";
-        default = { };
         type = types.attrsOf (
           types.submodule {
             options = {

@@ -282,7 +282,6 @@ in
               };
 
               settings = mkOption {
-                default = { };
                 example = {
                   acs_exclude_dfs = true;
                 };
@@ -547,7 +546,6 @@ in
               #### BSS definitions
 
               networks = mkOption {
-                default = { };
                 example = literalExpression ''
                   {
                     wlp2s0 = {
@@ -742,7 +740,6 @@ in
                       };
 
                       dynamicConfigScripts = mkOption {
-                        default = { };
                         type = types.attrsOf types.path;
                         example = literalExpression ''
                           {

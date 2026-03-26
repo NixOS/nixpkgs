@@ -66,7 +66,6 @@ in
 
     config = mkOption {
       type = attrs;
-      default = { };
       example = literalExpression ''
         {
           enableWelcomePage = false;
@@ -93,7 +92,6 @@ in
 
     interfaceConfig = mkOption {
       type = attrs;
-      default = { };
       example = literalExpression ''
         {
           SHOW_JITSI_WATERMARK = false;

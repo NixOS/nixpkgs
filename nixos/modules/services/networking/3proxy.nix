@@ -332,7 +332,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Use this option to configure name resolution and DNS caching.
       '';

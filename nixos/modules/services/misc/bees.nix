@@ -84,7 +84,6 @@ in
     filesystems = lib.mkOption {
       type = with lib.types; attrsOf (submodule fsOptions);
       description = "BTRFS filesystems to run block-level deduplication on.";
-      default = { };
       example = lib.literalExpression ''
         {
           "-" = {

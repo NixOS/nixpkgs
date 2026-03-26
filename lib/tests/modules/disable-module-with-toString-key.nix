@@ -18,7 +18,6 @@ in
           moduleWithKey
         ];
       };
-      default = { };
     };
     negative = mkOption {
       type = types.submodule {

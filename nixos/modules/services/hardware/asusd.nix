@@ -74,7 +74,6 @@ in
 
         auraConfigs = lib.mkOption {
           type = attrsOf configType;
-          default = { };
           description = ''
             The content of /etc/asusd/aura_<name>.ron.
             See <https://asus-linux.org/manual/asusctl-manual/#led-keyboard-control>.

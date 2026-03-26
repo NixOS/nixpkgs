@@ -28,7 +28,6 @@ in
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
         };
-        default = { };
         description = ''
           The sing-box configuration, see <https://sing-box.sagernet.org/configuration/> for documentation.
 

@@ -32,7 +32,6 @@
           '';
         };
       };
-      default = { };
       example = {
         KillUserProcesses = false;
         HandleLidSwitch = "ignore";

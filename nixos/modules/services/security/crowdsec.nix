@@ -172,7 +172,6 @@ in
 
               See <https://docs.crowdsec.net/docs/parsers/intro> for details.
             '';
-            default = { };
           };
           postOverflows = lib.mkOption {
             type = lib.types.submodule {
@@ -205,7 +204,6 @@ in
 
               See <https://docs.crowdsec.net/docs/next/log_processor/parsers/intro#postoverflows> for details.
             '';
-            default = { };
           };
           contexts = lib.mkOption {
             type = lib.types.listOf format.type;
@@ -382,7 +380,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         Hub collections, parsers, AppSec rules, etc.
       '';
@@ -425,7 +422,6 @@ in
             description = ''
               LAPI Configuration attributes
             '';
-            default = { };
           };
           capi = lib.mkOption {
             type = lib.types.submodule {

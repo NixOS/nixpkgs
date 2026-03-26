@@ -42,7 +42,6 @@ in
       };
       quickPhraseFiles = lib.mkOption {
         type = with lib.types; attrsOf path;
-        default = { };
         example = lib.literalExpression ''
           {
             words = ./words.mb;
@@ -65,14 +64,12 @@ in
           type = lib.types.submodule {
             freeformType = settingsFormat.type;
           };
-          default = { };
           description = ''
             The input method configure in `profile` file in ini format.
           '';
         };
         addons = lib.mkOption {
           type = with lib.types; (attrsOf anything);
-          default = { };
           description = ''
             The addon configures in `conf` folder in ini format with global sections.
             Each item is written to the corresponding file.

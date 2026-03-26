@@ -200,7 +200,6 @@ in
       };
 
       ignore = lib.mkOption {
-        default = { };
         description = ''
           This option defines extra ignore rules.
         '';

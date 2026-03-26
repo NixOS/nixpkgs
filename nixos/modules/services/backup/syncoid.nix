@@ -304,7 +304,6 @@ in
 
               service = lib.mkOption {
                 type = lib.types.attrs;
-                default = { };
                 description = ''
                   Systemd configuration specific to this syncoid service.
                 '';
@@ -325,7 +324,6 @@ in
           }
         )
       );
-      default = { };
       example = lib.literalExpression ''
         {
           "pool/test".target = "root@target:pool/test";

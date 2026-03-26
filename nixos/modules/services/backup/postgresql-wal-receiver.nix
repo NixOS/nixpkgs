@@ -98,7 +98,6 @@ let
 
       environment = lib.mkOption {
         type = with lib.types; attrsOf str;
-        default = { };
         example = lib.literalExpression ''
           {
             PGPASSFILE = "/private/passfile";
@@ -119,7 +118,6 @@ in
     services.postgresqlWalReceiver = {
       receivers = lib.mkOption {
         type = with lib.types; attrsOf (submodule receiverSubmodule);
-        default = { };
         example = lib.literalExpression ''
           {
             main = {

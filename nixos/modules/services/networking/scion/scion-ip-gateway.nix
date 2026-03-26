@@ -32,7 +32,6 @@ in
   options.services.scion.scion-ip-gateway = {
     enable = mkEnableOption "the scion-ip-gateway service";
     config = mkOption {
-      default = { };
       type = toml.type;
       example = literalExpression ''
         {

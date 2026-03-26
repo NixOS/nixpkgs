@@ -74,7 +74,6 @@ in
         '';
       };
       styles = lib.mkOption {
-        default = { };
         type = lib.types.attrsOf lib.types.str;
 
         example = lib.literalExpression ''

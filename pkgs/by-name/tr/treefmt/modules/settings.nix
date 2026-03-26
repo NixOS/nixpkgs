@@ -16,7 +16,6 @@ in
         { freeformType = settingsFormat.type; }
       ];
     };
-    default = { };
     description = ''
       Settings used to build a treefmt config file.
     '';

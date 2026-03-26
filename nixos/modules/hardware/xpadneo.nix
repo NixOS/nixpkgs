@@ -36,7 +36,6 @@ in
           };
         };
       };
-      default = { };
       example = lib.literalExpression ''
         {
           overall = 50;   # 50% overall rumble
@@ -53,7 +52,6 @@ in
 
     quirks = lib.mkOption {
       type = lib.types.attrsOf (lib.types.ints.u16);
-      default = { };
       example = lib.literalExpression ''
         {
           "11:22:33:44:55:66" = 7; # Applies flags 1 + 2 + 4
@@ -80,7 +78,6 @@ in
           lib.types.str
         ]
       );
-      default = { };
       example = lib.literalExpression ''
         {
           disable_deadzones = 1;

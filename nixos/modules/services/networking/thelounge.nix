@@ -66,7 +66,6 @@ in
     };
 
     extraConfig = mkOption {
-      default = { };
       type = types.attrs;
       example = literalExpression ''
         {

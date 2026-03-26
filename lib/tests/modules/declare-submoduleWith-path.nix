@@ -6,7 +6,6 @@
         ./declare-enable.nix
       ];
     };
-    default = { };
   };
 
   config.submodule = ./define-enable.nix;

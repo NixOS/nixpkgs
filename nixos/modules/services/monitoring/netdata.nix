@@ -176,7 +176,6 @@ in
 
       config = lib.mkOption {
         type = lib.types.attrsOf lib.types.attrs;
-        default = { };
         description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
         example = lib.literalExpression ''
           global = {
@@ -189,7 +188,6 @@ in
 
       configDir = lib.mkOption {
         type = lib.types.attrsOf lib.types.path;
-        default = { };
         description = ''
           Complete netdata config directory except netdata.conf.
           The default configuration is merged with changes

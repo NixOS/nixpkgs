@@ -24,7 +24,6 @@ in
           <https://github.com/bluenviron/mediamtx/blob/main/mediamtx.yml>.
         '';
         type = format.type;
-        default = { };
         example = {
           paths = {
             cam = {

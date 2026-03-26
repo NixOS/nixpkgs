@@ -44,7 +44,6 @@ in
         one systemd service per stream.
       '';
 
-      default = { };
 
       example = lib.literalExpression ''
         {

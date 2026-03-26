@@ -76,7 +76,6 @@ in
                 internal = true;
               };
             };
-            default = { };
             description = ''
               libpq connection parameters as documented in:
 
@@ -111,7 +110,6 @@ in
           };
         };
       };
-      default = { };
       description = ''
         postgres-websockets configuration as defined in:
         <https://github.com/diogob/postgres-websockets/blob/master/src/PostgresWebsockets/Config.hs#L71-L87>

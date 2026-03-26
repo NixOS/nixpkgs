@@ -650,7 +650,6 @@ in
 
               specialArgs = mkOption {
                 type = types.attrsOf types.unspecified;
-                default = { };
                 description = ''
                   A set of special arguments to be passed to NixOS modules.
                   This will be merged into the `specialArgs` used to evaluate
@@ -773,7 +772,6 @@ in
                   attrsOf (submodule {
                     options = networkOptions;
                   });
-                default = { };
                 description = ''
                   Extra veth-pairs to be created for the container.
                 '';

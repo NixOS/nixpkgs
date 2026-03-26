@@ -36,7 +36,6 @@ assert
   };
 
   options.submoduleLine38 = lib.mkOption {
-    default = { };
     type = lib.types.submoduleWith {
       modules = [
         (

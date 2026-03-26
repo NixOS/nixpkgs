@@ -10,7 +10,6 @@ in
 {
   options.services.tahoe = {
     introducers = lib.mkOption {
-      default = { };
       type =
         with lib.types;
         attrsOf (submodule {
@@ -45,7 +44,6 @@ in
       '';
     };
     nodes = lib.mkOption {
-      default = { };
       type =
         with lib.types;
         attrsOf (submodule {

@@ -66,7 +66,6 @@ in
       };
       javaProperties = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
         example = lib.literalExpression ''
           {
             "java.net.preferIPv4Stack" = "true";

@@ -206,7 +206,6 @@ in
           };
         }
       );
-      default = { };
       example = lib.literalExpression ''
         {
           firefox = { device = "front"; maxVolume = -25.0; };
@@ -239,7 +238,6 @@ in
           };
         }
       );
-      default = { };
       example = lib.literalExpression ''
         {
           soundchip = { driver = "snd_intel_hda"; id = 0; };
@@ -258,7 +256,6 @@ in
 
     deviceAliases = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
-      default = { };
       example = lib.literalExpression ''
         {
           hdmi1 = "hw:CARD=videocard,DEV=5";

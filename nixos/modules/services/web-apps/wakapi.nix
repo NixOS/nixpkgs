@@ -60,7 +60,6 @@ in
 
     settings = mkOption {
       inherit (settingsFormat) type;
-      default = { };
       description = ''
         Settings for Wakapi.
 

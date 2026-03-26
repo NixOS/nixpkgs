@@ -94,7 +94,6 @@ in
     bgpPeers = mkOption {
       description = "BGP Peers to declaratively load into FastNetMon Advanced";
       type = types.attrsOf settingsFormat.type;
-      default = { };
     };
 
     enableAdvancedTrafficPersistence = mkOption {

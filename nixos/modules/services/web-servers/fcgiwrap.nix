@@ -38,7 +38,6 @@ in
 
   options.services.fcgiwrap.instances = mkOption {
     description = "Configuration for fcgiwrap instances.";
-    default = { };
     type = types.attrsOf (
       types.submodule (
         { config, ... }:

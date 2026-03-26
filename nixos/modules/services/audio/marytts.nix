@@ -16,7 +16,6 @@ in
       type = lib.types.submodule {
         freeformType = format.type;
       };
-      default = { };
       description = ''
         Settings for MaryTTS.
 

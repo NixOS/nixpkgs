@@ -88,7 +88,6 @@ in
               str
             ])
           );
-        default = { };
         example = literalExpression ''
           {
             YT_DLP_WORKER_CONCURRENCY = 1;

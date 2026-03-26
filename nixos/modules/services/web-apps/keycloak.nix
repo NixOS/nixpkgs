@@ -284,7 +284,6 @@ in
 
       themes = mkOption {
         type = attrsOf package;
-        default = { };
         description = ''
           Additional theme packages for Keycloak. Each theme is linked into
           subdirectory with a corresponding attribute name.

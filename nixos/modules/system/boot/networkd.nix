@@ -1928,7 +1928,6 @@ let
     };
 
     dhcpV4Config = mkOption {
-      default = { };
       example = {
         DUIDType = "vendor";
       };
@@ -1941,7 +1940,6 @@ let
     };
 
     dhcpV6Config = mkOption {
-      default = { };
       example = {
         DUIDType = "vendor";
       };
@@ -2014,7 +2012,6 @@ let
     };
 
     bridgeConfig = mkOption {
-      default = { };
       example = {
         STP = true;
       };
@@ -2027,7 +2024,6 @@ let
     };
 
     vlanConfig = mkOption {
-      default = { };
       example = {
         Id = 4;
       };
@@ -2040,7 +2036,6 @@ let
     };
 
     ipvlanConfig = mkOption {
-      default = { };
       example = {
         Mode = "L2";
         Flags = "private";
@@ -2053,7 +2048,6 @@ let
     };
 
     ipvtapConfig = mkOption {
-      default = { };
       example = {
         Mode = "L3";
         Flags = "vepa";
@@ -2066,7 +2060,6 @@ let
     };
 
     macvlanConfig = mkOption {
-      default = { };
       example = {
         Mode = "private";
       };
@@ -2079,7 +2072,6 @@ let
     };
 
     vxlanConfig = mkOption {
-      default = { };
       type = types.addCheck (types.attrsOf unitOption) check.netdev.sectionVXLAN;
       description = ''
         Each attribute in this set specifies an option in the
@@ -2102,7 +2094,6 @@ let
     };
 
     fooOverUDPConfig = mkOption {
-      default = { };
       example = {
         Port = 9001;
       };
@@ -2115,7 +2106,6 @@ let
     };
 
     peerConfig = mkOption {
-      default = { };
       example = {
         Name = "veth2";
       };
@@ -2128,7 +2118,6 @@ let
     };
 
     tunConfig = mkOption {
-      default = { };
       example = {
         User = "openvpn";
       };
@@ -2141,7 +2130,6 @@ let
     };
 
     tapConfig = mkOption {
-      default = { };
       example = {
         User = "openvpn";
       };
@@ -2154,7 +2142,6 @@ let
     };
 
     l2tpConfig = mkOption {
-      default = { };
       example = {
         TunnelId = 10;
         PeerTunnelId = 12;
@@ -2227,7 +2214,6 @@ let
     };
 
     bondConfig = mkOption {
-      default = { };
       example = {
         Mode = "802.3ad";
       };
@@ -2240,7 +2226,6 @@ let
     };
 
     xfrmConfig = mkOption {
-      default = { };
       example = {
         InterfaceId = 1;
       };
@@ -2253,7 +2238,6 @@ let
     };
 
     vrfConfig = mkOption {
-      default = { };
       example = {
         Table = 2342;
       };
@@ -2268,7 +2252,6 @@ let
     };
 
     wlanConfig = mkOption {
-      default = { };
       example = {
         PhysicalDevice = 0;
         Type = "station";
@@ -2281,7 +2264,6 @@ let
     };
 
     batmanAdvancedConfig = mkOption {
-      default = { };
       example = {
         GatewayMode = "server";
         RoutingAlgorithm = "batman-v";
@@ -2312,7 +2294,6 @@ let
     };
 
     networkConfig = mkOption {
-      default = { };
       example = {
         Description = "My Network";
       };
@@ -2419,7 +2400,6 @@ let
     };
 
     ipv6SendRAConfig = mkOption {
-      default = { };
       example = {
         EmitDNS = true;
         Managed = true;
@@ -2490,7 +2470,6 @@ let
     };
 
     bridgeConfig = mkOption {
-      default = { };
       example = {
         MulticastFlood = false;
         Cost = 20;
@@ -2547,7 +2526,6 @@ let
     };
 
     canConfig = mkOption {
-      default = { };
       example = { };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionCAN;
       description = ''
@@ -2558,7 +2536,6 @@ let
     };
 
     ipoIBConfig = mkOption {
-      default = { };
       example = { };
       type = types.addCheck (types.attrsOf unitOption) check.network.sectionIPoIB;
       description = ''
@@ -2569,7 +2546,6 @@ let
     };
 
     qdiscConfig = mkOption {
-      default = { };
       example = {
         Parent = "ingress";
       };
@@ -2582,7 +2558,6 @@ let
     };
 
     networkEmulatorConfig = mkOption {
-      default = { };
       example = {
         Parent = "ingress";
         DelaySec = "20msec";
@@ -2721,7 +2696,6 @@ let
     };
 
     cakeConfig = mkOption {
-      default = { };
       example = {
         Bandwidth = "40M";
         OverheadBytes = 8;
@@ -2736,7 +2710,6 @@ let
     };
 
     controlledDelayConfig = mkOption {
-      default = { };
       example = {
         Parent = "ingress";
         TargetSec = "20msec";
@@ -2763,7 +2736,6 @@ let
     };
 
     deficitRoundRobinSchedulerClassConfig = mkOption {
-      default = { };
       example = {
         Parent = "root";
         QuantumBytes = "300k";
@@ -2808,7 +2780,6 @@ let
     };
 
     fairQueueingControlledDelayConfig = mkOption {
-      default = { };
       example = {
         Parent = "root";
         Flows = 5;
@@ -2863,7 +2834,6 @@ let
     };
 
     hierarchyTokenBucketClassConfig = mkOption {
-      default = { };
       example = {
         Parent = "root";
         Rate = "10M";
@@ -2904,7 +2874,6 @@ let
     };
 
     quickFairQueueingConfigClass = mkOption {
-      default = { };
       example = {
         Parent = "root";
         Weight = 133;
@@ -3189,21 +3158,18 @@ let
     };
 
     links = mkOption {
-      default = { };
       inherit visible;
       type = with types; attrsOf (submodule [ { options = linkOptions; } ]);
       description = "Definition of systemd network links.";
     };
 
     netdevs = mkOption {
-      default = { };
       inherit visible;
       type = with types; attrsOf (submodule [ { options = netdevOptions; } ]);
       description = "Definition of systemd network devices.";
     };
 
     networks = mkOption {
-      default = { };
       inherit visible;
       type =
         with types;
@@ -3228,7 +3194,6 @@ let
 
     units = mkOption {
       description = "Definition of networkd units.";
-      default = { };
       internal = true;
       type =
         with types;

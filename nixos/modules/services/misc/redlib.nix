@@ -80,7 +80,6 @@ in
             );
           options = { };
         };
-        default = { };
         description = ''
           See [GitHub](https://github.com/redlib-org/redlib/tree/main?tab=readme-ov-file#configuration) for available settings.
         '';

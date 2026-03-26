@@ -408,7 +408,6 @@ in
     networking.wg-quick = {
       interfaces = mkOption {
         description = "Wireguard interfaces.";
-        default = { };
         example = {
           wg0 = {
             address = [ "192.168.20.4/24" ];

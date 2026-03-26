@@ -68,7 +68,6 @@ in
             }
           )
         );
-        default = { };
         example = literalExpression ''
           {
             english = {

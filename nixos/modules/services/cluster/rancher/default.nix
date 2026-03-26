@@ -256,7 +256,6 @@ let
 
             values = lib.mkOption {
               type = with lib.types; either path attrs;
-              default = { };
               example = {
                 replicaCount = 3;
                 hostName = "my-host";
@@ -717,7 +716,6 @@ let
         autoDeployCharts = lib.mkOption {
           type = lib.types.attrsOf autoDeployChartsModule;
           apply = lib.mapAttrs mkAutoDeployChartManifest;
-          default = { };
           example = lib.literalExpression ''
             {
               harbor = {

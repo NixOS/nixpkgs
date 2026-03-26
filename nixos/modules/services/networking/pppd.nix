@@ -22,7 +22,6 @@ in
       package = mkPackageOption pkgs "ppp" { };
 
       peers = mkOption {
-        default = { };
         description = "pppd peers.";
         type = types.attrsOf (
           types.submodule (

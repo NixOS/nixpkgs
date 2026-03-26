@@ -372,7 +372,6 @@ in
         description = "Helper internal option that determines the type of the Xen Store Daemon based on cfg.store.path.";
       };
       settings = mkOption {
-        default = { };
         example = {
           enableMerge = false;
           quota.maxWatchEvents = 2048;

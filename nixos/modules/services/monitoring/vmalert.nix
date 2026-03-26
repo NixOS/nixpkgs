@@ -114,7 +114,6 @@ in
 
                 };
               };
-              default = { };
               example = {
                 "datasource.url" = "http://localhost:8428";
                 "datasource.disableKeepAlive" = true;
@@ -133,7 +132,6 @@ in
 
             rules = mkOption {
               type = format.type;
-              default = { };
               example = {
                 group = [
                   {

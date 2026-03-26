@@ -706,7 +706,6 @@ in
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
         description = ''
           Extra environment variables to pass to all mastodon services.
         '';

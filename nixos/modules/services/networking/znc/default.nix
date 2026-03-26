@@ -156,7 +156,6 @@ in
 
       config = mkOption {
         type = semanticTypes.zncConf;
-        default = { };
         example = literalExpression ''
           {
             LoadModule = [ "webadmin" "adminlog" ];

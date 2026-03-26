@@ -248,7 +248,6 @@ rec {
       };
 
       unitConfig = mkOption {
-        default = { };
         example = {
           RequiresMountsFor = "/data";
         };
@@ -375,7 +374,6 @@ rec {
         };
 
         serviceConfig = mkOption {
-          default = { };
           example = {
             RestartSec = 5;
           };
@@ -638,7 +636,6 @@ rec {
       };
 
       socketConfig = mkOption {
-        default = { };
         example = {
           ListenStream = "/run/my-socket";
         };
@@ -671,7 +668,6 @@ rec {
     options = {
 
       timerConfig = mkOption {
-        default = { };
         example = {
           OnCalendar = "Sun 14:00:00";
           Unit = "foo.service";
@@ -706,7 +702,6 @@ rec {
     options = {
 
       pathConfig = mkOption {
-        default = { };
         example = {
           PathChanged = "/some/path";
           Unit = "changedpath.service";
@@ -769,7 +764,6 @@ rec {
       };
 
       mountConfig = mkOption {
-        default = { };
         example = {
           DirectoryMode = "0775";
         };
@@ -844,7 +838,6 @@ rec {
     options = {
 
       sliceConfig = mkOption {
-        default = { };
         example = {
           MemoryMax = "2G";
         };

@@ -42,7 +42,6 @@ in
 
       settings = lib.mkOption {
         type = settingsType;
-        default = { };
         description = ''
           GLPI Agent configuration options.
           See <https://glpi-agent.readthedocs.io/en/latest/configuration.html> for all available options.

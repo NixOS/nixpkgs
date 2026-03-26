@@ -1518,7 +1518,6 @@ let
       };
       labels = mkOption {
         type = types.attrsOf types.str;
-        default = { };
         description = ''
           Labels assigned to all metrics scraped from the targets.
         '';

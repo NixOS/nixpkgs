@@ -46,7 +46,6 @@ let
               hiddenOptions = lib.mapAttrs (name: attr: attr // { visible = false; }) options;
             in
             lib.types.attrsOf (lib.types.submodule { options = hiddenOptions; });
-          default = { };
           description = "Child entries of the current entry, with recursively the same structure.";
           example = lib.literalExpression ''
             {

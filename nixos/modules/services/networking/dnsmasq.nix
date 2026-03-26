@@ -94,7 +94,6 @@ in
           };
 
         };
-        default = { };
         description = ''
           Configuration of dnsmasq. Lists get added one value per line (empty
           lists and false values don't get added, though false values get

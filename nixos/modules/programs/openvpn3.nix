@@ -36,7 +36,6 @@ in
         options = {
           settings = mkOption {
             description = "Options stored in {file}`/etc/openvpn3/netcfg.json` configuration file";
-            default = { };
             type = submodule {
               freeformType = attrsOf json.type;
               options = {
@@ -55,12 +54,10 @@ in
     };
     log-service = mkOption {
       description = "Log service configuration";
-      default = { };
       type = submodule {
         options = {
           settings = mkOption {
             description = "Options stored in {file}`/etc/openvpn3/log-service.json` configuration file";
-            default = { };
             type = submodule {
               freeformType = attrsOf json.type;
               options = {

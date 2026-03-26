@@ -166,7 +166,6 @@ in
       };
 
       environment = mkOption {
-        default = { };
         type = with types; attrsOf str;
         description = ''
           Additional environment variables to be passed to the gocd-server process.

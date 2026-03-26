@@ -312,7 +312,6 @@ in
           };
           databases = lib.mkOption {
             type = lib.types.attrsOf lib.types.str;
-            default = { };
             example = {
               exampledb = "host=/run/postgresql/ port=5432 auth_user=exampleuser dbname=exampledb sslmode=require";
               bardb = "host=localhost dbname=bazdb";
@@ -325,7 +324,6 @@ in
           };
           users = lib.mkOption {
             type = lib.types.attrsOf lib.types.str;
-            default = { };
             example = {
               user1 = "pool_mode=session";
             };

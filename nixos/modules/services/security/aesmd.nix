@@ -52,7 +52,6 @@ in
     package = mkPackageOption pkgs "sgx-psw" { };
     environment = mkOption {
       type = with types; attrsOf str;
-      default = { };
       description = "Additional environment variables to pass to the AESM service.";
       # Example environment variable for `sgx-azure-dcap-client` provider library
       example = {
@@ -67,7 +66,6 @@ in
     };
     settings = mkOption {
       description = "AESM configuration";
-      default = { };
       type = types.submodule {
         options.whitelistUrl = mkOption {
           type = with types; nullOr str;

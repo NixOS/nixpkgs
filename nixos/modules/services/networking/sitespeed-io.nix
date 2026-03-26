@@ -56,7 +56,6 @@ in
                 freeformType = format.type;
                 options = { };
               };
-              default = { };
               description = ''
                 Configuration for sitespeed-io, see
                 <https://www.sitespeed.io/documentation/sitespeed.io/configuration/>

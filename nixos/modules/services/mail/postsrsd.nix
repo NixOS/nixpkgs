@@ -202,7 +202,6 @@ in
             };
           };
         };
-        default = { };
         description = ''
           Configuration options for the postsrsd.conf file.
 

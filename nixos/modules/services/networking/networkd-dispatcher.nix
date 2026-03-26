@@ -24,7 +24,6 @@ in
       '';
 
       rules = mkOption {
-        default = { };
         example = lib.literalExpression ''
           { "restart-tor" = {
               onState = ["routable" "off"];

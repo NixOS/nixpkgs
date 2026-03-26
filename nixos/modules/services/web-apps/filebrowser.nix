@@ -32,7 +32,6 @@ in
       openFirewall = lib.mkEnableOption "opening firewall ports for FileBrowser";
 
       settings = lib.mkOption {
-        default = { };
         description = ''
           Settings for FileBrowser.
           Refer to <https://filebrowser.org/cli/filebrowser#options> for all supported values.

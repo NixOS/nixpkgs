@@ -42,7 +42,6 @@ in
   # Test 1: Ad-hoc check override in nested type should be detected
   options.adhocFail = mkOption {
     type = types.lazyAttrsOf adhocOverrideType;
-    default = { };
   };
   config.adhocFail = {
     foo = { };
@@ -51,7 +50,6 @@ in
   # Test 1b: Ad-hoc check override in outer type should be detected
   options.adhocOuterFail = mkOption {
     type = adhocOuterType;
-    default = { };
   };
   config.adhocOuterFail.bar = 42;
 
@@ -90,21 +88,18 @@ in
   # Test 2: Using addCheck should work correctly
   options.addCheckPass = mkOption {
     type = types.lazyAttrsOf properlyCheckedType;
-    default = { };
   };
   config.addCheckPass.bar.foo = "value";
 
   # Test 3: addCheck should validate values properly
   options.addCheckFail = mkOption {
     type = types.lazyAttrsOf failingCheckedType;
-    default = { };
   };
   config.addCheckFail.bar.baz = "value"; # Missing required 'foo' attribute
 
   # Test 4: Normal v2 types should work without coherence errors
   options.normalPass = mkOption {
     type = types.lazyAttrsOf (types.attrsOf types.int);
-    default = { };
   };
   config.normalPass.foo.bar = 42;
 

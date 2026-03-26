@@ -58,7 +58,6 @@ in
               str
               (listOf str)
             ]);
-          default = { };
           description = ''
             ClamAV configuration. Refer to <https://linux.die.net/man/5/clamd.conf>,
             for details on supported values.
@@ -153,7 +152,6 @@ in
                 ])
               );
           };
-          default = { };
           example = {
             securiteinfo = {
               enabled = "yes";

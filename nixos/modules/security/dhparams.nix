@@ -68,7 +68,6 @@ in
             coerce = bits: { inherit bits; };
           in
           attrsOf (coercedTo int coerce (submodule paramsSubmodule));
-        default = { };
         example = lib.literalExpression "{ nginx.bits = 3072; }";
         description = ''
           Diffie-Hellman parameters to generate.

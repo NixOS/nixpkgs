@@ -562,7 +562,6 @@ in
           };
         }
       );
-      default = { };
       example = {
         my-share = {
           source = "/path/to/be/shared";

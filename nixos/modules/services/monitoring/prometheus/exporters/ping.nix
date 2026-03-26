@@ -26,7 +26,6 @@ in
 
     settings = mkOption {
       type = settingsFormat.type;
-      default = { };
 
       description = ''
         Configuration for ping_exporter, see

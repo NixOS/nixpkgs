@@ -714,7 +714,6 @@ in
       };
 
       inTunnels = mkOption {
-        default = { };
         type = attrsOf (
           submodule (
             { name, ... }:

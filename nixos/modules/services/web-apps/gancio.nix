@@ -136,7 +136,6 @@ in
 
     userLocale = mkOption {
       type = with types; attrsOf (attrsOf (attrsOf str));
-      default = { };
       example = {
         en.register.description = "My new registration page description";
       };
@@ -155,7 +154,6 @@ in
           options.enableACME.default = true;
         }
       );
-      default = { };
       example = {
         enableACME = false;
         forceSSL = false;

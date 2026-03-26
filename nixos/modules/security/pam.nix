@@ -94,7 +94,6 @@ let
               };
               settings = lib.mkOption {
                 type = moduleSettingsType;
-                default = { };
                 description = ''
                   Settings to add as `module-arguments`.
 
@@ -1687,7 +1686,6 @@ in
     };
 
     security.pam.services = lib.mkOption {
-      default = { };
       type = with lib.types; attrsOf (submodule pamOpts);
       description = ''
         This option defines the PAM services.  A service typically
@@ -1784,7 +1782,6 @@ in
           };
         };
 
-        default = { };
         description = ''
           Options to pass to the pam_rssh module. Refer to
           <https://github.com/z4yx/pam_rssh/blob/main/README.md#optional-arguments>
@@ -2023,7 +2020,6 @@ in
             };
           };
         };
-        default = { };
         example = {
           authfile = "/etc/u2f_keys";
           authpending_file = "";

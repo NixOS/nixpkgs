@@ -52,7 +52,6 @@ in
 
     settings = lib.mkOption {
       type = ini.type;
-      default = { };
       description = ''
         Zeyple configuration. refer to
         <https://github.com/infertux/zeyple/blob/master/zeyple/zeyple.conf.example>

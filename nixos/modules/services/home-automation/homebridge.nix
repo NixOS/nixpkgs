@@ -140,7 +140,6 @@ in
     };
 
     settings = lib.mkOption {
-      default = { };
       description = ''
         Configuration options for homebridge.
 
@@ -211,7 +210,6 @@ in
     # inside settings.
     uiSettings = lib.mkOption {
       # Full list of UI settings can be found here: https://github.com/homebridge/homebridge-config-ui-x/wiki/Config-Options
-      default = { };
       description = ''
         Configuration options for homebridge config UI plugin.
 

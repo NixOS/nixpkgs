@@ -1124,7 +1124,6 @@ in
             }
           )
         );
-        default = { };
         description = ''
           Configure a proxy cache path entry.
           See <https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.

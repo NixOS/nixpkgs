@@ -36,7 +36,6 @@ in
 
     settings = mkOption {
       type = ini.type;
-      default = { };
 
       example = {
         Settings.AutoConnect = true;

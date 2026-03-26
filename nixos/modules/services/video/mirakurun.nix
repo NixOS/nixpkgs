@@ -74,7 +74,6 @@ in
 
       serverSettings = mkOption {
         type = settingsFmt.type;
-        default = { };
         example = literalExpression ''
           {
             highWaterMark = 25165824;

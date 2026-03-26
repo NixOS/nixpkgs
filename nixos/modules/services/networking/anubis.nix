@@ -96,7 +96,6 @@ let
         };
 
         policy = lib.mkOption {
-          default = { };
           description = ''
             Anubis policy configuration.
 
@@ -137,7 +136,6 @@ let
 
               settings = mkDefaultOption "policy.settings" {
                 type = jsonFormat.type;
-                default = { };
                 example = lib.literalExpression ''
                   {
                     dnsbl = false;
@@ -168,7 +166,6 @@ let
         };
 
         settings = lib.mkOption {
-          default = { };
           description = ''
             Freeform configuration via environment variables for Anubis.
 

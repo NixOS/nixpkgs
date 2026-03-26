@@ -150,7 +150,6 @@ in
 
       themes = lib.mkOption {
         type = lib.types.attrsOf lib.types.path;
-        default = { };
         description = "Set of themes.";
         example = lib.literalExpression ''
           {

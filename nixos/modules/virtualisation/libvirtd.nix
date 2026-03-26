@@ -94,14 +94,12 @@ let
             };
           };
         };
-        default = { };
         internal = true;
         description = "This submodule is deprecated and has been removed";
       };
 
       swtpm = mkOption {
         type = swtpmModule;
-        default = { };
         description = ''
           QEMU's swtpm options.
         '';
@@ -122,7 +120,6 @@ let
     options = {
       daemon = mkOption {
         type = types.attrsOf types.path;
-        default = { };
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
           and called for daemon start/shutdown/SIGHUP events.
@@ -349,7 +346,6 @@ in
 
     qemu = mkOption {
       type = qemuModule;
-      default = { };
       description = ''
         QEMU related options.
       '';

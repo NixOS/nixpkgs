@@ -76,7 +76,6 @@ in
     };
 
     hardware.sane.brscan4.netDevices = lib.mkOption {
-      default = { };
       example = {
         office1 = {
           model = "MFC-7860DW";

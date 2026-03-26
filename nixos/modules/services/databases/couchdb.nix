@@ -148,7 +148,6 @@ in
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
-        default = { };
         description = "Extra configuration options for CouchDB";
       };
       extraConfigFiles = lib.mkOption {

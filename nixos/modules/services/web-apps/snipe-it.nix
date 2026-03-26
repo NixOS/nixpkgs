@@ -240,7 +240,6 @@ in
       type = types.submodule (
         recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) { }
       );
-      default = { };
       example = literalExpression ''
         {
           serverAliases = [

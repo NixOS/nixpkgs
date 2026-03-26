@@ -62,7 +62,6 @@ in
         freeformType = settingsFormat.type;
         options = { };
       };
-      default = { };
       description = ''
         Configuration settings for the generated config json file.
         See <https://gokapi.readthedocs.io/en/latest/advanced.html#config-json> for more information

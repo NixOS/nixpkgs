@@ -70,7 +70,6 @@ in
         Free-form settings written to Draupnir's configuration file.
         See [Draupnir's default configuration](https://github.com/the-draupnir-project/Draupnir/blob/main/config/default.yaml) for available settings.
       '';
-      default = { };
       type = types.submodule {
         freeformType = format.type;
         options = {

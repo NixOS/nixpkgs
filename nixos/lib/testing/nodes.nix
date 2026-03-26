@@ -184,7 +184,6 @@ in
 
     containers = mkOption {
       type = types.lazyAttrsOf config.container.type;
-      default = { };
       visible = "shallow";
       description = ''
         An attribute set of NixOS configuration modules representing systemd-nspawn containers that can be started during a test.
@@ -221,7 +220,6 @@ in
         NixOS configuration that is applied to all [{option}`nodes`](#test-opt-nodes) and [{option}`containers`](#test-opt-containers).
       '';
       type = types.deferredModule;
-      default = { };
     };
 
     nodeDefaults = mkOption {
@@ -282,7 +280,6 @@ in
 
     node.specialArgs = mkOption {
       type = types.lazyAttrsOf types.raw;
-      default = { };
       description = ''
         An attribute set of arbitrary values that will be made available as module arguments during the resolution of module `imports`.
 

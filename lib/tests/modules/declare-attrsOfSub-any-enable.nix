@@ -20,7 +20,6 @@ in
 {
   options = {
     attrsOfSub = lib.mkOption {
-      default = { };
       example = { };
       type = lib.types.attrsOf (lib.types.submodule [ submod ]);
       description = ''

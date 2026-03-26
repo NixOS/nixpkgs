@@ -40,7 +40,6 @@ in
             }
           );
         };
-      default = { };
       description = ''
         Configuration included in `$YAZI_CONFIG_HOME`.
       '';
@@ -61,7 +60,6 @@ in
           path
           package
         ]);
-      default = { };
       description = ''
         Lua plugins.
 
@@ -82,7 +80,6 @@ in
           path
           package
         ]);
-      default = { };
       description = ''
         Pre-made themes.
 

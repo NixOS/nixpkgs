@@ -102,7 +102,6 @@ in
       modules = mkOption {
         type = types.attrsOf types.package;
         description = "A set of modules to load.";
-        default = { };
         example = literalExpression ''
           {
             "dummy.so" = pkgs.stdenv.mkDerivation {

@@ -62,7 +62,6 @@ in
         };
       };
 
-      default = { };
 
       description = ''
         Configuration for Hatsu, see

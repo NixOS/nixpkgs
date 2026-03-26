@@ -70,7 +70,6 @@ in
 
       collectors = lib.mkOption {
         type = with lib.types; attrsOf (listOf path);
-        default = { };
         example = lib.literalExpression ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
         description = ''
           An attribute set mapping the frequency of collection to a list of

@@ -52,7 +52,6 @@ in
       };
 
       settings = mkOption {
-        default = { };
         type = format.type;
         description = ''
           Structured contents of the {file}`krb5.conf` file. See

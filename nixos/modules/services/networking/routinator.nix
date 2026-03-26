@@ -128,7 +128,6 @@ in
       description = ''
         Configuration for Routinator 3000, see <https://routinator.docs.nlnetlabs.nl/en/stable/manual-page.html#configuration-file> for options.
       '';
-      default = { };
     };
   };
 

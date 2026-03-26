@@ -116,7 +116,6 @@ in
                   PageSize = "A4";
                   Duplex = "DuplexNoTumble";
                 };
-                default = { };
                 description = ''
                   Sets PPD options for the printer.
                   {command}`lpoptions [-p printername] -l` shows supported PPD options for the given printer.

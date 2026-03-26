@@ -28,7 +28,6 @@ in
     package = mkPackageOption pkgs "wyoming-faster-whisper" { };
 
     servers = mkOption {
-      default = { };
       description = ''
         Attribute set of wyoming-faster-whisper instances to spawn.
       '';

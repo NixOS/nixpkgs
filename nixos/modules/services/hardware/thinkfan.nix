@@ -250,7 +250,6 @@ in
 
       settings = lib.mkOption {
         type = lib.types.attrsOf settingsFormat.type;
-        default = { };
         description = ''
           Thinkfan settings. Use this option to configure thinkfan
           settings not exposed in a NixOS option or to bypass one.

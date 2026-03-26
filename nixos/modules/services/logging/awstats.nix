@@ -66,7 +66,6 @@ let
 
         extraConfig = lib.mkOption {
           type = lib.types.attrsOf lib.types.str;
-          default = { };
           example = lib.literalExpression ''
             {
               "ValidHTTPCodes" = "404";

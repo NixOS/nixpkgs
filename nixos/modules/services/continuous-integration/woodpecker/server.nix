@@ -16,7 +16,6 @@ in
       enable = lib.mkEnableOption "the Woodpecker-Server, a CI/CD application for automatic builds, deployments and tests";
       package = lib.mkPackageOption pkgs "woodpecker-server" { };
       environment = lib.mkOption {
-        default = { };
         type = lib.types.attrsOf lib.types.str;
         example = lib.literalExpression ''
           {

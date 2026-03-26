@@ -36,7 +36,6 @@ in
 
     settings = mkOption {
       type = types.attrsOf types.str;
-      default = { };
       description = ''
         Settings to configure web service. See
         <https://codeberg.org/Klasse-Methode/lauti/src/branch/main/DEPLOYMENT.md>

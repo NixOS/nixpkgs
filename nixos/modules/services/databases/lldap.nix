@@ -64,7 +64,6 @@ in
         Refer to <https://github.com/lldap/lldap/blob/main/lldap_config.docker_template.toml> for supported values.
       '';
 
-      default = { };
 
       type = types.submodule {
         freeformType = format.type;

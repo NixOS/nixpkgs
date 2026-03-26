@@ -32,7 +32,6 @@ in
           See <https://github.com/eclipse-zenoh/zenoh/blob/main/DEFAULT_CONFIG.json5>
           for more information.
         '';
-        default = { };
         type = types.submodule {
           freeformType = json.type;
         };

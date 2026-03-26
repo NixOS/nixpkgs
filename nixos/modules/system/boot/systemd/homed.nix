@@ -22,7 +22,6 @@ in
       };
 
     settings.Home = lib.mkOption {
-      default = { };
       type = lib.types.submodule {
         freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
       };

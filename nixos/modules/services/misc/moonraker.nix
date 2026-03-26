@@ -82,7 +82,6 @@ in
 
       settings = lib.mkOption {
         type = format.type;
-        default = { };
         example = {
           authorization = {
             trusted_clients = [ "10.0.0.0/24" ];

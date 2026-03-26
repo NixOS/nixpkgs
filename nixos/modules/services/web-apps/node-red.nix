@@ -90,7 +90,6 @@ in
 
     define = mkOption {
       type = types.attrs;
-      default = { };
       description = "List of settings.js overrides to pass via -D to Node-RED.";
       example = literalExpression ''
         {

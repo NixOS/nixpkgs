@@ -338,7 +338,6 @@ in
             };
           };
         };
-        default = { };
         example = literalExpression ''
           {
             use-sandbox = true;

@@ -26,7 +26,6 @@ in
 
       settings = lib.mkOption {
         type = lib.types.lines;
-        default = { };
         description = ''
           birdwatcher configuration, for configuration options see the example on [github](https://github.com/alice-lg/birdwatcher/blob/master/etc/birdwatcher/birdwatcher.conf)
         '';

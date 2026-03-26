@@ -50,7 +50,6 @@
           };
         }
       '';
-      default = { };
       description = ''
         Attribute set of arbitrary config options.
         Please consult the documentation at the [wiki](https://wiki.servarr.com/useful-tools#using-environment-variables-for-config).

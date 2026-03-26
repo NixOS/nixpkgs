@@ -208,7 +208,6 @@ in
     };
 
     configs = lib.mkOption {
-      default = { };
       example = lib.literalExpression ''
         {
           home = {

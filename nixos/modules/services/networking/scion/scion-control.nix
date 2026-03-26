@@ -36,7 +36,6 @@ in
   options.services.scion.scion-control = {
     enable = mkEnableOption "the scion-control service";
     settings = mkOption {
-      default = { };
       type = toml.type;
       example = literalExpression ''
         {

@@ -256,7 +256,6 @@ in
         aliases = lib.mkOption {
           type = lib.types.attrsOf lib.types.str;
           description = "Alias and RID pairs to shorten git clone commands for repositories.";
-          default = { };
           example = lib.literalExpression ''
             {
               heartwood = "rad:z3gqcJUoA1n9HaHKufZs5FCSGazv5";
