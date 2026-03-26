@@ -121,7 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
           isClang = unwrappedCC.isClang or false;
           isGNU = unwrappedCC.isGNU or false;
           isCcache = true;
-        };
+        }
+        // builtins.intersectAttrs {
+          hardeningUnsupportedFlagsByTargetPlatform = null;
+          hardeningUnsupportedFlags = null;
+        } unwrappedCC;
         lib = lib.getLib unwrappedCC;
         nativeBuildInputs = [ makeWrapper ];
         # Unwrapped clang does not have a targetPrefix because it is multi-target

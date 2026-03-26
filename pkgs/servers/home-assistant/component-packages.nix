@@ -2351,7 +2351,8 @@
       ];
     "hegel" =
       ps: with ps; [
-      ]; # missing inputs: hegel-ip-client
+        hegel-ip-client
+      ];
     "heicko" =
       ps: with ps; [
       ];
@@ -4027,7 +4028,8 @@
       ];
     "mta" =
       ps: with ps; [
-      ]; # missing inputs: py-nymta
+        py-nymta
+      ];
     "mullvad" =
       ps: with ps; [
         mullvad-api
@@ -4050,7 +4052,8 @@
       ];
     "myneomitis" =
       ps: with ps; [
-      ]; # missing inputs: pyaxencoapi
+        pyaxencoapi
+      ];
     "myq" =
       ps: with ps; [
       ];
@@ -5156,7 +5159,8 @@
       ];
     "redgtech" =
       ps: with ps; [
-      ]; # missing inputs: redgtech-api
+        redgtech-api
+      ];
     "refoss" =
       ps: with ps; [
         refoss-ha
@@ -6104,7 +6108,8 @@
       ];
     "systemnexa2" =
       ps: with ps; [
-      ]; # missing inputs: python-sn2
+        python-sn2
+      ];
     "tado" =
       ps: with ps; [
         python-tado
@@ -6491,7 +6496,8 @@
       ];
     "trane" =
       ps: with ps; [
-      ]; # missing inputs: steamloop
+        steamloop
+      ];
     "transmission" =
       ps: with ps; [
         transmission-rpc
@@ -7210,7 +7216,8 @@
       ];
     "zinvolt" =
       ps: with ps; [
-      ]; # missing inputs: zinvolt
+        zinvolt
+      ];
     "zodiac" =
       ps: with ps; [
       ];
@@ -7586,6 +7593,7 @@
     "hddtemp"
     "hdfury"
     "hdmi_cec"
+    "hegel"
     "heos"
     "here_travel_time"
     "hikvision"
@@ -7809,10 +7817,12 @@
     "mqtt_json"
     "mqtt_room"
     "mqtt_statestream"
+    "mta"
     "mullvad"
     "music_assistant"
     "mutesync"
     "my"
+    "myneomitis"
     "myq"
     "mysensors"
     "mystrom"
@@ -7977,6 +7987,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "redgtech"
     "refoss"
     "rehlko"
     "remember_the_milk"
@@ -8121,6 +8132,7 @@
     "system_health"
     "system_log"
     "systemmonitor"
+    "systemnexa2"
     "tado"
     "tag"
     "tailscale"
@@ -8176,6 +8188,7 @@
     "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
+    "trane"
     "transmission"
     "transport_nsw"
     "trend"
@@ -8287,6 +8300,7 @@
     "zeversolar"
     "zha"
     "zimi"
+    "zinvolt"
     "zodiac"
     "zone"
     "zoneminder"

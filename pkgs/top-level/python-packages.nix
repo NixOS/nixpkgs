@@ -6968,6 +6968,8 @@ self: super: with self; {
 
   hebg = callPackage ../development/python-modules/hebg { };
 
+  hegel-ip-client = callPackage ../development/python-modules/hegel-ip-client { };
+
   helion = callPackage ../development/python-modules/helion { };
 
   helium = callPackage ../development/python-modules/helium { };
@@ -13147,6 +13149,8 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+  py-nymta = callPackage ../development/python-modules/py-nymta { };
+
   py-ocsf-models = callPackage ../development/python-modules/py-ocsf-models { };
 
   py-opensonic = callPackage ../development/python-modules/py-opensonic { };
@@ -13319,6 +13323,8 @@ self: super: with self; {
   pyautogui = callPackage ../development/python-modules/pyautogui { };
 
   pyavm = callPackage ../development/python-modules/pyavm { };
+
+  pyaxencoapi = callPackage ../development/python-modules/pyaxencoapi { };
 
   pyaxmlparser = callPackage ../development/python-modules/pyaxmlparser { };
 
@@ -15894,6 +15900,8 @@ self: super: with self; {
 
   python-smarttub = callPackage ../development/python-modules/python-smarttub { };
 
+  python-sn2 = callPackage ../development/python-modules/python-sn2 { };
+
   python-snap7 = callPackage ../development/python-modules/python-snap7 { inherit (pkgs) snap7; };
 
   python-snappy = callPackage ../development/python-modules/python-snappy {
@@ -16603,6 +16611,8 @@ self: super: with self; {
   red-black-tree-mod = callPackage ../development/python-modules/red-black-tree-mod { };
 
   redbaron = callPackage ../development/python-modules/redbaron { };
+
+  redgtech-api = callPackage ../development/python-modules/redgtech-api { };
 
   redis = callPackage ../development/python-modules/redis { };
 
@@ -18542,6 +18552,8 @@ self: super: with self; {
   stdlibs = callPackage ../development/python-modules/stdlibs { };
 
   steam = callPackage ../development/python-modules/steam { };
+
+  steamloop = callPackage ../development/python-modules/steamloop { };
 
   steamodd = callPackage ../development/python-modules/steamodd { };
 
@@ -21532,6 +21544,8 @@ self: super: with self; {
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
   zimports = callPackage ../development/python-modules/zimports { };
+
+  zinvolt = callPackage ../development/python-modules/zinvolt { };
 
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 

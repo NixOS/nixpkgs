@@ -7621,12 +7621,6 @@
     githubId = 25820532;
     name = "Luca Schwan";
   };
-  eigengrau = {
-    email = "seb@schattenkopie.de";
-    name = "Sebastian Reuße";
-    github = "eigengrau";
-    githubId = 4939947;
-  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
@@ -28257,10 +28251,10 @@
     name = "Vaibhav Sagar";
   };
   vaisriv = {
-    email = "vai.sriv@icloud.com";
+    email = "vaisriv@icloud.com";
     github = "vaisriv";
     githubId = 46390109;
-    name = "Vai";
+    name = "Vai Srivastava";
   };
   valebes = {
     email = "valebes@gmail.com";

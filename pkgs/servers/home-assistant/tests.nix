@@ -199,6 +199,10 @@ let
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
     ];
+    trane = [
+      # TraneConfigFlow doesn't support step reauth
+      "tests/components/trane/test_init.py::test_setup_auth_error"
+    ];
     youtube = [
       # outdated snapshot
       "tests/components/youtube/test_sensor.py::test_sensor"

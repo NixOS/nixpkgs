@@ -140,7 +140,6 @@ maven.buildMavenPackage {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       dyegoaurelio
-      eigengrau
     ];
   };
 }
