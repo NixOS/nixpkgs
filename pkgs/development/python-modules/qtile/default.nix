@@ -123,7 +123,6 @@ buildPythonPackage (finalAttrs: {
   propagatedBuildInputs = [
     wayland-protocols
     cffi
-    xcffib
     aiohttp
   ];
 
