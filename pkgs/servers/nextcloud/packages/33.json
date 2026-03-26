@@ -30,9 +30,9 @@
     ]
   },
   "collectives": {
-    "hash": "sha256-BYgY9kC91ftpw/eXlFT5ryNhjz138pzPoIh89k46GZ8=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v4.1.0/collectives-4.1.0.tar.gz",
-    "version": "4.1.0",
+    "hash": "sha256-h6Krtrm9YLZ0TEfsInN2bmY+/2v4Gyef5x0TIo9n/Ns=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v4.2.0/collectives-4.2.0.tar.gz",
+    "version": "4.2.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -414,6 +414,16 @@
     "url": "https://github.com/nextcloud/theming_customcss/releases/download/v1.20.0/theming_customcss.tar.gz",
     "version": "1.20.0",
     "description": "This app allows admins to customize the appearance of their Nextcloud instance by adding their own CSS rules.\n\nThe rules can be added in the admin settings in the \"Theming\" section. This allows you to easily adjust the look and feel of your Nextcloud instance without having to modify any files on the server.",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "twofactor_admin": {
+    "hash": "sha256-dx8bEsC/rSAKN9rwP2hf3d8G3f3J1RzCrSqU6BbcvRY=",
+    "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.11.1/twofactor_admin-v4.11.1.tar.gz",
+    "version": "4.11.1",
+    "description": "This two-factor auth (2FA) provider for Nextcloud allows admins to generate a one-time\n\t\tcode for users to log into a 2FA protected account. This is helpful in situations where\n\t\tusers have lost access to their other 2FA methods or mandatory 2FA without any previously\n\t\tenabled 2FA provider.",
     "homepage": "",
     "licenses": [
       "agpl"
