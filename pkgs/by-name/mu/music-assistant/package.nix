@@ -86,7 +86,8 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${version}" \
+      --replace-fail "==" ">="
 
     # get-mac is a deprecated alias of getmac since 2018
     substituteInPlace pyproject.toml \
@@ -106,24 +107,6 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [
     setuptools
-  ];
-
-  pythonRelaxDeps = [
-    "aiofiles"
-    "aiohttp"
-    "aiosqlite"
-    "certifi"
-    "colorlog"
-    "cryptography"
-    "getmac"
-    "mashumaro"
-    "numpy"
-    "orjson"
-    "pillow"
-    "podcastparser"
-    "pycares"
-    "xmltodict"
-    "zeroconf"
   ];
 
   pythonRemoveDeps = [
