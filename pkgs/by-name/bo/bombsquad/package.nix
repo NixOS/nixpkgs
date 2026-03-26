@@ -2,9 +2,11 @@
   lib,
   stdenv,
   fetchurl,
-  python312,
+  python313,
   SDL2,
   libvorbis,
+  pango,
+  cairo,
   openal,
   curl,
   gnugrep,
@@ -22,7 +24,7 @@ let
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-ICjaNZSCUbslB5pELbI4e+1zXWrZzkCkv69jLRx4dr0=";
+        hash = "sha256-r7A89FR2QFOaGT7dcJJOrkSpiw/7kC1VrZt7BjKXqqk=";
       };
       aarch-64-linux = {
         name = "BombSquad_Linux_Arm64";
@@ -35,14 +37,13 @@ let
     url = "https://files.ballistica.net/bombsquad/promo/BombSquadIcon.png";
     hash = "sha256-MfOvjVmjhLejrJmdLo/goAM9DTGubnYGhlN6uF2GugA=";
   };
-
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bombsquad";
-  version = "1.7.37";
+  version = "1.7.62";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240825230506if_/https://files.ballistica.net/bombsquad/builds/${archive.name}_${finalAttrs.version}.tar.gz";
+    url = "https://web.archive.org/web/20260326183600/https://files.ballistica.net/bombsquad/builds/${archive.name}_${finalAttrs.version}.tar.gz";
     inherit (archive) hash;
   };
 
@@ -53,7 +54,9 @@ stdenv.mkDerivation (finalAttrs: {
     libgcc
     libvorbis
     openal
-    python312
+    python313
+    pango
+    cairo
   ];
 
   nativeBuildInputs = [
