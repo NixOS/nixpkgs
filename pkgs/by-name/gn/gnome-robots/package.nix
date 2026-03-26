@@ -11,8 +11,6 @@
   libadwaita,
   libglycin,
   libglycin-gtk4,
-  librsvg,
-  libxml2,
   gst_all_1,
   meson,
   ninja,
@@ -58,8 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     libglycin
     libglycin-gtk4
-    librsvg
-    libxml2
     # Sound playback, not checked at build time.
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
