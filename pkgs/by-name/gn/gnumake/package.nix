@@ -39,18 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
   # directory until derivation realization to avoid unnecessary Nix evaluations.
   patches = lib.filesystem.listFilesRecursive ./patches;
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ]
-  ++ lib.optionals (!inBootstrap) [ texinfo ];
+  ++ lib.optionals (!inBootstrap) [ texinfo ]
+  ++ lib.optional stdenv.isCygwin gettext;
 
-  buildInputs =
-    lib.optionals guileEnabled [ guile ]
-    # gettext gets pulled in via autoreconfHook because strictDeps is not set,
-    # and is linked against. Without this, it doesn't end up in HOST_PATH.
-    # TODO: enable strictDeps, and either make this dependency explicit, or remove it
-    ++ lib.optional stdenv.isCygwin gettext;
+  buildInputs = lib.optionals guileEnabled [ guile ];
 
   configureFlags =
     lib.optional guileEnabled "--with-guile"
