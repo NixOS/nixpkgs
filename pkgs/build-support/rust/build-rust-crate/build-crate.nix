@@ -238,12 +238,21 @@ in
     export -f build_bin build_bin_test echo_build_heading noisily echo_colored echo_error
     # Generate a Makefile and pipe it to make, which handles parallel execution
     # and the jobserver protocol natively so rustc invocations share a token pool.
+    # Targets use synthetic names (b0, b1, …) and are declared .PHONY so that a
+    # file/dir in the source tree matching a binary name cannot cause make to
+    # skip the build, and so that binary names never collide with make syntax
+    # or the `all` target.
     {
-      printf 'SHELL = %s\nall:' "$BASH"
-      for _n in "''${!BINS[@]}"; do printf ' %s' "$_n"; done
-      printf '\n'
+      printf 'SHELL = %s\n' "$BASH"
+      _i=0
       for _n in "''${!BINS[@]}"; do
-        printf '%s:\n\t${build_bin} "%s" "%s"\n' "$_n" "$_n" "''${BINS[$_n]}"
+        # Escape `$` for make; other metachars are confined to the quoted
+        # recipe string where only `$` is special to make.
+        _en=''${_n//\$/\$\$}
+        _ep=''${BINS[$_n]//\$/\$\$}
+        printf '.PHONY: b%d\nall: b%d\nb%d:\n\t${build_bin} "%s" "%s"\n' \
+          "$_i" "$_i" "$_i" "$_en" "$_ep"
+        _i=$((_i + 1))
       done
     } | make --no-print-directory -j"''${NIX_BUILD_CORES:-1}" -f -
   fi
