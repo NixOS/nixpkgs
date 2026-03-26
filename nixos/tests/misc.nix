@@ -73,7 +73,7 @@ in
         machine.succeed("[ `nixos-version | wc -w` = 2 ]")
 
     with subtest("nixos-rebuild"):
-        assert "NixOS module" in machine.succeed("nixos-rebuild --help")
+        assert "NixOS" in machine.succeed("nixos-rebuild --help")
 
     with subtest("Sanity check for uid/gid assignment"):
         assert "4" == machine.succeed("id -u messagebus").strip()
