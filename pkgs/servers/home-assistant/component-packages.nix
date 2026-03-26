@@ -6104,7 +6104,8 @@
       ];
     "systemnexa2" =
       ps: with ps; [
-      ]; # missing inputs: python-sn2
+        python-sn2
+      ];
     "tado" =
       ps: with ps; [
         python-tado
@@ -8123,6 +8124,7 @@
     "system_health"
     "system_log"
     "systemmonitor"
+    "systemnexa2"
     "tado"
     "tag"
     "tailscale"
