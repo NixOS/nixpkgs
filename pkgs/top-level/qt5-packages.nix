@@ -169,6 +169,10 @@ makeScopeWithSplicing' {
 
         qjson = callPackage ../development/libraries/qjson { };
 
+        qmenumodel = callPackage ../development/libraries/qmenumodel {
+          inherit (pkgs.lomiri) cmake-extras;
+        };
+
         qmltermwidget = callPackage ../development/libraries/qmltermwidget { };
 
         qoauth = callPackage ../development/libraries/qoauth { };
