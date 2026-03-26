@@ -113,6 +113,8 @@ rec {
 
   image-nvim = callPackage ../development/lua-modules/image-nvim { };
 
+  lua-https = callPackage ../development/lua-modules/lua-https { };
+
   lua-pam = callPackage (
     {
       fetchFromGitHub,
