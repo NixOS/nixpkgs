@@ -17,13 +17,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "sointu";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "vsariola";
     repo = "sointu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xHKD+zArsdQVffwbbSOOdzC6o5sxpez8VLAwIzV5X4E=";
+    hash = "sha256-r/yNjod1yOT+CaOcyxhL0GuHK108CV2arVoqWE0kzco=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildGoModule (finalAttrs: {
   ];
 
   proxyVendor = true;
-  vendorHash = "sha256-gLDLKqu6k7/nwv6xHUE6MIYrbQFfVFAuUiMbLptcE5k=";
+  vendorHash = "sha256-GFLfUd8Y4TFfdej/zy3VkCUwme2S2uAP39TcfZEv1Bg=";
 
   subPackages = [
     "cmd/sointu-track"

@@ -300,7 +300,7 @@ in
     services.orca.enable = mkDefault true;
 
     services.displayManager = {
-      sessionPackages = [ kdePackages.plasma-workspace ];
+      sessionPackages = [ kdePackages.plasma-workspace.sessions ];
       defaultSession = mkDefault "plasma";
     };
     services.displayManager.sddm = {
