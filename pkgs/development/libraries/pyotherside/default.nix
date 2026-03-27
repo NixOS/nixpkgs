@@ -75,5 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://thp.io/2011/pyotherside/";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.mic92 ];
+    platforms = lib.platforms.unix ++ lib.platforms.windows;
   };
 }
