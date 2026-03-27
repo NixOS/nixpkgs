@@ -2,6 +2,8 @@
 {
   name = "containers";
   meta.maintainers = with pkgs.lib.maintainers; [ jfly ];
+  # https://github.com/NixOS/infra/issues/987
+  meta.hydraPlatforms = [ ];
 
   nodes = {
     n1 = {
