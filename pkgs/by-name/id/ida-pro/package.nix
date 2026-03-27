@@ -35,7 +35,6 @@ pkgs.stdenv.mkDerivation rec {
   desktopItem = pkgs.makeDesktopItem {
     name = "ida-pro";
     exec = "ida";
-    icon = ../share/appico.png;
     comment = meta.description;
     desktopName = "IDA Pro";
     genericName = "Interactive Disassembler";
@@ -159,7 +158,7 @@ pkgs.stdenv.mkDerivation rec {
     homepage = "https://hex-rays.com/ida-pro/";
     license = licenses.unfree;
     mainProgram = "ida";
-    maintainers = with maintainers; [ msanft ];
+    maintainers = with maintainers; [ msanft yanmaani ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
