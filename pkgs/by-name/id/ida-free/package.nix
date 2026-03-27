@@ -32,7 +32,7 @@
   libice,
   libxcb,
   zlib,
-  hexPatches ? [],
+  hexPatches ? [ ],
   # hexPatches: hex patterns to substitute in specified files immediately after
   # install. Can be used, for example, to replace the embedded SSL certificates
   # for compatibility with a self-hosted Lumina server.
@@ -40,12 +40,12 @@
   # available to us for interoperability purposes.
 }:
 let
-  patchScript = lib.concatMapStringsSep "\n" (p:
+  patchScript = lib.concatMapStringsSep "\n" (
+    p:
     let
-      forcecntDecl =
-        lib.optionalString (p ? assertCount)
-          "my $forcecnt = ${toString p.assertCount};";
-          in ''
+      forcecntDecl = lib.optionalString (p ? assertCount) "my $forcecnt = ${toString p.assertCount};";
+    in
+    ''
       perl -0777 -pi -e '${forcecntDecl} my $cnt = (s/\Q''${\pack("H*","${p.from}")}\E/''${\pack("H*","${p.to}")}/g) || 0; die "Expected $forcecnt substitutions, did $cnt\n" if defined $forcecnt && $cnt != $forcecnt' "$IDADIR/${p.filename}"
     ''
   ) hexPatches;
