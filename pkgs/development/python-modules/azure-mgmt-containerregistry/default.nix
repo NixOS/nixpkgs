@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-containerregistry";
-  version = "14.0.0";
+  version = "15.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_containerregistry";
     inherit version;
-    hash = "sha256-c4PxxVR7z/525BHt2CUNVcNM3fXvaATVh1wWPMpmxLU=";
+    hash = "sha256-oxpwt7aBHTQ8JoBKFG8eTBsS9mYMbjgdLVAXsnvKtXM=";
   };
 
   build-system = [ setuptools ];
