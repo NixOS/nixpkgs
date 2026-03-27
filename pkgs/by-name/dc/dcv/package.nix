@@ -6,16 +6,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "dcv";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "tokuhirom";
     repo = "dcv";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OwfGZq+ce6RNb5dhNHsQ15iMPoEp7QlaYIUVYIiVqmI=";
+    hash = "sha256-j2cr0GaOEHc1qlvlfYkP2ggcrbalKLdMnN54MFfrb5s=";
   };
 
-  vendorHash = "sha256-xwTPb+eGsisYB9Jy7rG9tQlIbnKWTbAdXqJBsjB0YK0=";
+  vendorHash = "sha256-IHDrGT14wV5/36V/NhyeBEL3h9CGVpvlHqunF/Urw0E=";
 
   # Don't use the vendored dependencies as they are out of sync with go.mod
   # Instead, let Go download dependencies through the module proxy
