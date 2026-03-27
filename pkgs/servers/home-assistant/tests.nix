@@ -75,6 +75,7 @@ let
     hyperion = getComponentDeps "camera";
     ifttt = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     image_processing = getComponentDeps "conversation";
+    intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";

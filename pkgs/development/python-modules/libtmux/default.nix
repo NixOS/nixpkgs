@@ -13,14 +13,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "libtmux";
-  version = "0.53.1";
+  version = "0.55.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-mI6oqZ4FiWG8Xe70XV3JAm4Ula1r8JnNKLSVbs2QrGw=";
+    hash = "sha256-34YwI0QjewDeigHYLiTdEi8PgleW1VCiaQSQvrSpf/s=";
   };
 
   postPatch = ''

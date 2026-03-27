@@ -13960,6 +13960,8 @@ self: super: with self; {
 
   pyinstrument = callPackage ../development/python-modules/pyinstrument { };
 
+  pyintelliclima = callPackage ../development/python-modules/pyintelliclima { };
+
   pyinterp = callPackage ../development/python-modules/pyinterp { };
 
   pyintesishome = callPackage ../development/python-modules/pyintesishome { };

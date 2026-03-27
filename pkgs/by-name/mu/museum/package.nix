@@ -10,7 +10,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "museum";
-  version = "1.3.22";
+  version = "1.3.24";
 
   src = fetchFromGitHub {
     owner = "ente-io";

@@ -94,6 +94,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
   pythonRelaxDeps = [
     "certifi"
     "crispy-bootstrap5"
+    "dateparser"
   ];
 
   dependencies =

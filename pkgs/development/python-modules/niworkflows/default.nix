@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -27,6 +28,7 @@
   scipy,
   seaborn,
   svgutils,
+  sysctl,
   templateflow,
   traits,
   transforms3d,
@@ -89,6 +91,10 @@ buildPythonPackage (finalAttrs: {
     pytest-env
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Needed for tests that read the system memory usage on Darwin
+    sysctl
   ];
 
   enabledTestPaths = [ "niworkflows" ];
