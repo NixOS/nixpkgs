@@ -19,6 +19,7 @@
   pexpect,
   platformdirs,
   pyproject-hooks,
+  python-discovery,
   rich,
   shellingham,
   tomli-w,
@@ -47,18 +48,18 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "hatch";
-  version = "1.16.2";
+  version = "1.16.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${finalAttrs.version}";
-    hash = "sha256-A91tpoNBTerB2e09dmvgwealId8mnjxcyiVyCkMxQlY=";
+    hash = "sha256-pUlRy8ar0zXsGGSA1VTZyPiU4LruYp/maU2C5T4E5WI=";
   };
 
   patches = [
-    (replaceVars ./paths.patch {
+    (replaceVars ./inject-uv-path.patch {
       uv = lib.getExe uv;
     })
   ];
@@ -68,8 +69,12 @@ buildPythonPackage (finalAttrs: {
     hatch-vcs
   ];
 
-  pythonRemoveDeps = [ "uv" ];
-
+  pythonRemoveDeps = [
+    "uv"
+  ];
+  pythonRelaxDeps = [
+    "virtualenv"
+  ];
   dependencies = [
     click
     hatchling
@@ -80,6 +85,7 @@ buildPythonPackage (finalAttrs: {
     pexpect
     platformdirs
     pyproject-hooks
+    python-discovery
     rich
     shellingham
     tomli-w
@@ -108,6 +114,13 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AssertionError: assert ['dep2', 'pro...u7kv', 'dep1'] == ['dep2', 'pro...u7kv', 'dep1']
+    # At index 1 diff: 'proj@ file:///build/tmp5snbu7kv' != 'proj @ file:///build/tmp5snbu7kv'
+    "test_all"
+    "test_context_formatting"
+    "test_dependencies"
+    "test_project_dependencies_context_formatting"
+
     # AssertionError: assert (1980, 1, 2, 0, 0, 0) == (2020, 2, 2, 0, 0, 0)
     "test_default"
     "test_editable_default"
@@ -234,7 +247,7 @@ buildPythonPackage (finalAttrs: {
   meta = {
     description = "Modern, extensible Python project manager";
     homepage = "https://hatch.pypa.io/latest/";
-    changelog = "https://github.com/pypa/hatch/blob/hatch-v${finalAttrs.version}/docs/history/hatch.md";
+    changelog = "https://github.com/pypa/hatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
     mainProgram = "hatch";
