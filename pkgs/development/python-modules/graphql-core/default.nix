@@ -4,6 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytest-benchmark,
+  pytest-describe,
   pytest-asyncio,
   pytestCheckHook,
 }:
@@ -32,6 +33,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-benchmark
+    pytest-describe
     pytestCheckHook
   ];
 
