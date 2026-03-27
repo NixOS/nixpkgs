@@ -53,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DVCPKG_DEPENDENCY_CMAKERC=ON"
   ];
 
-  passAsFile = [ "vcpkgWrapper" ];
   vcpkgWrapper =
     let
       # These are the most common binaries used by vcpkg
@@ -173,7 +172,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = lib.optionalString doWrap ''
     mv "$out/bin/vcpkg" "$out/bin/.vcpkg-wrapped"
-    install -Dm555 "$vcpkgWrapperPath" "$out/bin/vcpkg"
+    printf "%s" "$vcpkgWrapper" | install -Dm555 /dev/stdin "$out/bin/vcpkg"
   '';
 
   passthru.tests = lib.optionalAttrs doWrap {
@@ -190,6 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
       ''}
     '';
   };
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Components of microsoft/vcpkg's binary";
