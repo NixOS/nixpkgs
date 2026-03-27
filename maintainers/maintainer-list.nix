@@ -69,16 +69,16 @@
     github = "0b11stan";
     githubId = 27831931;
   };
-  _0don = {
-    name = "Don";
-    github = "0-don";
-    githubId = 70039285;
-  };
   _0david0mp = {
     email = "davidmrpr@proton.me";
     github = "0david0mp";
     githubId = 54892055;
     name = "David mp";
+  };
+  _0don = {
+    name = "Don";
+    github = "0-don";
+    githubId = 70039285;
   };
   _0nyr = {
     email = "onyr.maintainer@gmail.com";
