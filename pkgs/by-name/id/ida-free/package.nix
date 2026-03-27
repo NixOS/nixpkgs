@@ -16,6 +16,7 @@
   libxkbcommon,
   makeWrapper,
   openssl,
+  perl,
   stdenv,
   libxcb-wm,
   libxcb-render-util,
@@ -31,7 +32,24 @@
   libice,
   libxcb,
   zlib,
+  hexPatches ? [ ],
+  # hexPatches: hex patterns to substitute in specified files immediately after
+  # install. Can be used, for example, to replace the embedded SSL certificates
+  # for compatibility with a self-hosted Lumina server.
+  # Since IDA is distributed as a binary, such patching is the only recourse
+  # available to us for interoperability purposes.
 }:
+let
+  patchScript = lib.concatMapStringsSep "\n" (
+    p:
+    let
+      forcecntDecl = lib.optionalString (p ? assertCount) "my $forcecnt = ${toString p.assertCount};";
+    in
+    ''
+      perl -0777 -pi -e '${forcecntDecl} my $cnt = (s/\Q''${\pack("H*","${p.from}")}\E/''${\pack("H*","${p.to}")}/g) || 0; die "Expected $forcecnt substitutions, did $cnt\n" if defined $forcecnt && $cnt != $forcecnt' "$IDADIR/${p.filename}"
+    ''
+  ) hexPatches;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ida-free";
   version = "9.3";
@@ -45,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
+    perl
   ];
 
   # We just get a runfile in $src, so no need to unpack it.
@@ -110,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     # to copy it to fix permissions and patch the executable.
     $(cat $NIX_CC/nix-support/dynamic-linker) $src \
       --mode unattended --prefix $IDADIR
+
+    ${patchScript}
 
     # Copy the exported libraries to the output.
     cp $IDADIR/libida.so $out/lib
