@@ -20,18 +20,6 @@ index 231aea8d0f3c..214a23c82562 100644
      LibLibreOffice_Impl aOffice;
      LibLODocument_Impl* pDocument = loadDoc("search.ods");
      pDocument->pClass->initializeForRendering(pDocument, nullptr);
-diff --git a/svgio/qa/cppunit/data/tdf160386.svg b/svgio/qa/cppunit/data/tdf160386.svg
-index 1644b0d15514..cf429508bcd4 100644
---- a/svgio/qa/cppunit/data/tdf160386.svg
-+++ b/svgio/qa/cppunit/data/tdf160386.svg
-@@ -8,7 +8,6 @@
-     <text systemLanguage="en">Hello!</text>
-     <text systemLanguage="es">Hola!</text>
-     <text systemLanguage="fr">Bonjour!</text>
--    <text systemLanguage="ja">こんにちは</text>
-     <text systemLanguage="ru">Привет!</text>
-     <text>☺</text>
-   </switch>
 diff --git a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx b/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
 index d8093e57a4e8..c95a742a68d3 100644
 --- a/sw/qa/core/accessibilitycheck/AccessibilityCheckTest.cxx
@@ -243,35 +231,3 @@ index ef0da39f5..43caa9002 100644
      //TODO: sc/qa/unit/data/functions/array/dubious/fods/linest.fods produces widely different
      // values when built with -ffp-contract enabled (-ffp-contract=on default on Clang 14,
      // -ffp-contract=fast default when building with optimizations on GCC) on at least aarch64
-diff --git i/sc/qa/unit/subsequent_export_test2.cxx w/sc/qa/unit/subsequent_export_test2.cxx
-index 956838656b28..70b38e4d59ba 100644
---- i/sc/qa/unit/subsequent_export_test2.cxx
-+++ w/sc/qa/unit/subsequent_export_test2.cxx
-@@ -100,6 +100,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringXLSX)
- 
- CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
- {
-+    return;
-     // this doc is configured with CalcA1 ref syntax
-     createScDoc("xlsx/empty.xlsx");
- 
-@@ -137,6 +138,7 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringConfigXLSX)
- 
- CPPUNIT_TEST_FIXTURE(ScExportTest2, testRefStringUnspecified)
- {
-+    return;
-     createScDoc();
- 
-     ScDocument* pDoc = getScDoc();
-diff --git i/vcl/qa/cppunit/pdfexport/pdfexport2.cxx w/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-index b9c560f422b5..e415b1fcc807 100644
---- i/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-+++ w/vcl/qa/cppunit/pdfexport/pdfexport2.cxx
-@@ -6320,6 +6320,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTextBoxRuby)
-
- CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf166044ContFootnoteOnlyOnePgNum)
- {
-+    return; // fails due to missing font: Noto Sans Lao
-     saveAsPDF(u"tdf166044-cont-footnote-one-pgnum.fodt");
-
-     auto pPdfDocument = parsePDFExport();

@@ -222,6 +222,70 @@ let
     ];
   };
 
+  mdds_2_1 = mdds.overrideAttrs {
+    version = "2.1.1";
+    src = fetchFromGitLab {
+      owner = "mdds";
+      repo = "mdds";
+      rev = "2.1.1";
+      hash = "sha256-a412LpgDiYM8TMToaUrTlHtblYS1HehzrDOwvIAAxiA=";
+    };
+  };
+
+  # required for libreoffice-collabora version 25.04.9-4
+  libixion_0_19 = libixion.overrideAttrs {
+    version = "0.19.0";
+
+    src = fetchFromGitLab {
+      owner = "ixion";
+      repo = "ixion";
+      rev = "0.19.0";
+      hash = "sha256-BrexWRaxrLTWuoU62kqws3tlSqVOHecSV5MXc4ZezFs=";
+    };
+
+    buildInputs = [
+      boost188
+      mdds_2_1
+      python3
+    ];
+
+    patches = [
+      # fix build with gcc 15, Add a missing <cstdint> include
+      (fetchpatch2 {
+        url = "https://gitlab.com/ixion/ixion/-/merge_requests/70.patch";
+        hash = "sha256-FzU/aejcMktrDQql5pzobiq6BJXryIXQXZTBWCkyqtU=";
+      })
+    ];
+  };
+
+  # required for libreoffice-collabora version 25.04.9-4
+  liborcus_0_19 = liborcus.overrideAttrs {
+    version = "0.19.2";
+
+    src = fetchFromGitLab {
+      owner = "orcus";
+      repo = "orcus";
+      rev = "0.19.2";
+      hash = "sha256-+9C52H99c/kL5DEIoXV+WcLnTftRbicRLQN/FdIXBw8=";
+    };
+
+    buildInputs = [
+      boost188
+      libixion_0_19
+      mdds_2_1
+      python3
+      zlib
+    ];
+
+    patches = [
+      # fix build with gcc 15, Add missing <cstdint> includes
+      (fetchpatch2 {
+        url = "https://gitlab.com/orcus/orcus/-/merge_requests/200.patch";
+        hash = "sha256-CZVw1+ri6UO56Bg/Y27W6G8JkGU6xDInd7fABr6i+7g=";
+      })
+    ];
+  };
+
   # required for libreoffice-still version 25.8.5.2
   liborcus_0_20 = liborcus.overrideAttrs {
     version = "0.20.1";
@@ -333,27 +397,25 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Don't detect Qt paths from qmake, so our patched-in onese are used
     ./dont-detect-qt-paths-from-qmake.patch
-
+  ]
+  ++ lib.optionals (variant != "collabora") [
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
   ]
   ++ lib.optionals (variant == "collabora") [
-    # Backport patch to fix build with Poppler 25.05
+    # Backport patch to fix build with Poppler 25.09
     (fetchpatch2 {
-      url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+      url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
       includes = [ "sdext/*" ];
-      hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+      hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
     })
-    # Currently included in the condition above
-    # Uncomment if Collabora is again the only version needing it
-    # Remove if Collabora is updated far enough not to need it anymore
-    ## Fix build with Poppler 25.10
-    #(fetchpatch2 {
-    #  url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
-    #  hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
-    #})
-  ]
-  ++ lib.optionals (variant == "collabora") [
+
+    # Fix build with Poppler 25.10
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
+    })
+
     ./fix-unpack-collabora.patch
   ];
 
@@ -510,10 +572,16 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals withJava [
       jre'
     ]
-    ++ optionals (lib.versionOlder version "26.2.1.2") [
+    ++ optionals (variant == "collabora") [
+      fast-float
+      liborcus_0_19
+      mdds_2_1
+      md4c
+    ]
+    ++ optionals (variant == "still") [
       liborcus_0_20
     ]
-    ++ optionals (lib.versionAtLeast version "26.2.1.2") [
+    ++ optionals (variant == "fresh") [
       fast-float
       liborcus
       md4c
