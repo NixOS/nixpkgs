@@ -922,6 +922,20 @@
     };
   };
 
+  go-template-helm = {
+    version = "0-unstable-2026-03-21";
+    url = "github:ngalaiko/tree-sitter-go-template";
+    rev = "aa71f63de226c5592dfbfc1f29949522d7c95fac";
+    hash = "sha256-QSzUyRDGdBH9TaG3YCHnJp12WcR8kdbsZFIk8I+JW1Y=";
+    location = "dialects/helm";
+    meta = {
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        azahi
+      ];
+    };
+  };
+
   godot-resource = {
     language = "godot_resource";
     version = "0.7.0";
