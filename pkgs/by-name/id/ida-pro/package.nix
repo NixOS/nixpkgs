@@ -163,7 +163,10 @@ pkgs.stdenv.mkDerivation rec {
     homepage = "https://hex-rays.com/ida-pro/";
     license = licenses.unfree;
     mainProgram = "ida";
-    maintainers = with maintainers; [ msanft ];
+    maintainers = with maintainers; [
+      msanft
+      yanmaani
+    ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
