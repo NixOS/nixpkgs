@@ -16,16 +16,16 @@ let
 in
 stdenv.mkDerivation {
   pname = "libraop";
-  version = "0-unstable-2026-02-09";
+  version = "0-unstable-2026-02-20";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "libraop";
     # we try to closely match the commit used in the last music-assistant release from
     # https://github.com/music-assistant/server/tree/stable/music_assistant/providers/airplay/bin
-    rev = "f49284282ea4ea740d07fabc230b4182f8c69a74";
+    rev = "df3c055674c147eeaa9307b7d554b9d46ed6418a";
     fetchSubmodules = true;
-    hash = "sha256-m1ll5vRZx4d/5IWCG24yY/SWEIIz2k/iU84vQKHlCdo=";
+    hash = "sha256-zD1DggBQjbiD7B/u0hmogXj8NhrzYgVXMyzvHkaM4Hg=";
   };
 
   patches = [
