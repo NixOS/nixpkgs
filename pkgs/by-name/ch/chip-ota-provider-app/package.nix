@@ -1,23 +1,36 @@
-{ stdenv, fetchurl, libnl, autoPatchelfHook, lib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  libnl,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chip-ota-provider-app";
   version = "2024.7.2";
 
   src = fetchurl {
-    url = "https://github.com/home-assistant-libs/matter-linux-ota-provider/releases/download/${version}/chip-ota-provider-app-x86-64";
-    sha256 = "sha256-Ao4szcdhur79+ANIjQ9dPi7NLDnbAEUw/ISO2qc7mhc=";
+    url = "https://github.com/home-assistant-libs/matter-linux-ota-provider/releases/download/${finalAttrs.version}/chip-ota-provider-app-x86-64";
+    hash = "sha256-Ao4szcdhur79+ANIjQ9dPi7NLDnbAEUw/ISO2qc7mhc=";
   };
 
   dontUnpack = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ libnl autoPatchelfHook stdenv.cc.cc.lib ];
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [
+    libnl
+    stdenv.cc.cc.lib
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp $src $out/bin/chip-ota-provider-app
-    chmod u+wx $out/bin/chip-ota-provider-app
+    runHook preInstall
+
+    install -Dm755 $src $out/bin/chip-ota-provider-app
+
+    runHook postInstall
   '';
 
   meta = {
@@ -27,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.imalison ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
