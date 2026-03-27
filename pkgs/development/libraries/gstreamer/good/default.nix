@@ -95,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./souploader.diff {
       nixLibSoup3Path = "${lib.getLib libsoup_3}/lib";
     })
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/10903.patch";
+      hash = "sha256-cXRaK2OjVun5MMlw+MFd6fdUDjxH4NNlYQxu+Hkjgec=";
+      stripLen = 2;
+    })
   ];
 
   strictDeps = true;
