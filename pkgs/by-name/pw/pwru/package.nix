@@ -25,6 +25,10 @@ buildGoModule (finalAttrs: {
 
   buildInputs = [ libpcap ];
 
+  ldflags = [
+    "-X github.com/cilium/pwru/internal/pwru.Version=v${finalAttrs.version}"
+  ];
+
   postPatch = ''
     substituteInPlace internal/libpcap/compile.go \
       --replace "-static" ""
