@@ -178,8 +178,8 @@ let
   triton-kernels = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    tag = "v3.5.0";
-    hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
+    tag = "v3.6.0";
+    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
   };
 
   # grep for GIT_TAG in the following file
@@ -354,6 +354,9 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
     ./0006-drop-rocm-extra-reqs.patch
+    # QuACK and Cutlass DSL seem to be added only for FA4
+    # which in our case handles its own deps
+    ./0007-drop-quack-reqs.patch
   ];
 
   postPatch = ''
@@ -581,6 +584,11 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
   pythonRelaxDeps = true;
 
   pythonImportsCheck = [ "vllm" ];
+  makeWrapperArgs = lib.optionals cudaSupport [
+    "--set"
+    "VLLM_NCCL_SO_PATH"
+    "${cudaPackages.nccl}/lib/libnccl.so"
+  ];
 
   passthru = {
     # make internal dependency available to overlays
