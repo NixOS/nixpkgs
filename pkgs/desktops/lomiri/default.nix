@@ -53,6 +53,7 @@ let
         # Check for working qdoc: not found
         withDocumentation = !useQt6;
       };
+      lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
     }
     // lib.optionalAttrs (!useQt6) {
       #### Core Apps
@@ -96,7 +97,6 @@ let
       lomiri-polkit-agent = callPackage ./services/lomiri-polkit-agent { };
       lomiri-telephony-service = callPackage ./services/lomiri-telephony-service { };
       lomiri-thumbnailer = callPackage ./services/lomiri-thumbnailer { };
-      lomiri-url-dispatcher = callPackage ./services/lomiri-url-dispatcher { };
       mediascanner2 = callPackage ./services/mediascanner2 { };
     };
 in

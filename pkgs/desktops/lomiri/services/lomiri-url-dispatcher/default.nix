@@ -28,6 +28,9 @@
   wrapQtAppsHook,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-url-dispatcher";
   version = "0.1.4";
@@ -93,7 +96,6 @@ stdenv.mkDerivation (finalAttrs: {
     libapparmor
     lomiri-app-launch
     lomiri-ui-toolkit
-    qtdeclarative
     sqlite
     systemd
     libxkbcommon
@@ -128,13 +130,19 @@ stdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/lomiri-url-dispatcher-dump \
       --prefix PATH : ${lib.makeBinPath [ sqlite ]}
-
+  ''
+  # https://gitlab.com/ubports/development/core/lomiri-url-dispatcher/-/work_items/13
+  + lib.optionalString withQt6 ''
+    rm $out/bin/lomiri-url-dispatcher-gui
+    rm -r $out/share/lomiri-url-dispatcher/gui
+  ''
+  + lib.optionalString (!withQt6) ''
     mkdir -p $out/share/icons/hicolor/scalable/apps
     ln -s $out/share/lomiri-url-dispatcher/gui/lomiri-url-dispatcher-gui.svg $out/share/icons/hicolor/scalable/apps/
 
     # Calls qmlscene from PATH, needs Qt plugins & QML components
     qtWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ qtdeclarative.dev ]}
+      --prefix PATH : ${lib.makeBinPath [ (if withQt6 then qtdeclarative.out else qtdeclarative.dev) ]}
     )
     wrapQtApp $out/bin/lomiri-url-dispatcher-gui
   '';
