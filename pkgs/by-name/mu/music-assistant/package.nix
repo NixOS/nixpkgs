@@ -14,20 +14,12 @@ let
     packageOverrides = self: super: {
       music-assistant-frontend = self.callPackage ./frontend.nix { };
 
-      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: rec {
+      music-assistant-models = super.music-assistant-models.overridePythonAttrs (oldAttrs: {
         version = "1.1.86";
 
-        src = fetchFromGitHub {
-          owner = "music-assistant";
-          repo = "models";
-          tag = version;
+        src = oldAttrs.src.override {
           hash = "sha256-dQwFsuelp/3s2CO/5jxNrZcmWxE9xYhrpx0O37Tq/TQ=";
         };
-
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail "0.0.0" "${version}"
-        '';
       });
     };
   };

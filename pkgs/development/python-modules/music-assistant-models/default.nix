@@ -15,10 +15,11 @@
   pytest-cov-stub,
 
   # reverse dependencies
+  music-assistant,
   music-assistant-client,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "music-assistant-models";
   # Must be compatible with music-assistant-client package
   # nixpkgs-update: no auto update
@@ -28,13 +29,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "models";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-/eNCgAB5G8g1r2fcW27lySEqg+q/1bJvwwyntigGWjo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "0.0.0" "${version}"
+      --replace-fail "0.0.0" "${finalAttrs.version}"
   '';
 
   build-system = [ setuptools ];
@@ -54,14 +55,14 @@ buildPythonPackage rec {
   ];
 
   passthru.tests = {
-    inherit music-assistant-client;
+    inherit music-assistant music-assistant-client;
   };
 
   meta = {
-    description = "Models used by Music Assistant (shared by client and server";
+    description = "Models used by Music Assistant (shared by client and server)";
     homepage = "https://github.com/music-assistant/models";
-    changelog = "https://github.com/music-assistant/models/releases/tag/${src.tag}";
+    changelog = "https://github.com/music-assistant/models/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})
