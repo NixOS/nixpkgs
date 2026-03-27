@@ -23331,6 +23331,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  yank-path-nvim = buildVimPlugin {
+    pname = "yank-path.nvim";
+    version = "0-unstable-2025-12-11";
+    src = fetchFromGitHub {
+      owner = "ywpkwon";
+      repo = "yank-path.nvim";
+      rev = "e660248de1e4c91a760f510fc165c172a19cc1d5";
+      hash = "sha256-z6USTspCiWU6UEP9TyACvzlb4MGEadBKUfxN2vJyeV0=";
+    };
+    meta.homepage = "https://github.com/ywpkwon/yank-path.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   yats-vim = buildVimPlugin {
     pname = "yats.vim";
     version = "0-unstable-2025-12-09";
