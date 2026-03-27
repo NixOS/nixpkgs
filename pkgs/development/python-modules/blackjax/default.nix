@@ -4,14 +4,17 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   setuptools-scm,
 
   # dependencies
   fastprogress,
+  ipython,
   jax,
   jaxlib,
-  jaxopt,
+  numpy,
   optax,
+  scipy,
   typing-extensions,
 
   # checks
@@ -22,27 +25,29 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.3";
+  version = "1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
     tag = finalAttrs.version;
-    hash = "sha256-ystvPfIsnMFYkC+LNtcRQsI19i/y/905SnPSApM8v4E=";
+    hash = "sha256-x/K/M7C+XNhqMdRZdDPpKmGgmnrjGsruDL3lFia2ioQ=";
   };
 
-  build-system = [ setuptools-scm ];
-
-  pythonRelaxDeps = [
-    "jaxopt"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
+
   dependencies = [
     fastprogress
+    ipython
     jax
     jaxlib
-    jaxopt
+    numpy
     optax
+    scipy
     typing-extensions
   ];
 
@@ -50,11 +55,6 @@ buildPythonPackage (finalAttrs: {
     chex
     pytestCheckHook
     pytest-xdist
-  ];
-
-  pytestFlags = [
-    # DeprecationWarning: JAXopt is no longer maintained
-    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [

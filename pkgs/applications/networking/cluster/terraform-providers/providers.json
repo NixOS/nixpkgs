@@ -110,13 +110,13 @@
     "vendorHash": null
   },
   "bpg_proxmox": {
-    "hash": "sha256-1+Wix9BtKXgl4ZRlpdxgn+N+jhlHKKazBg04YN0PBJU=",
+    "hash": "sha256-vPxAIFCOvVveDJQQR/2lQFced/CPyM5f/vujhMV+myQ=",
     "homepage": "https://registry.terraform.io/providers/bpg/proxmox",
     "owner": "bpg",
     "repo": "terraform-provider-proxmox",
-    "rev": "v0.98.1",
+    "rev": "v0.99.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-bVBfkSGsoffu7auvMuhBLlVXMSR23sWu9P93zmFiASM="
+    "vendorHash": "sha256-bTFGdrWN2P7z9+IQhftJYlne9NCrVMPDyx0eysZ8y44="
   },
   "brightbox_brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
@@ -824,13 +824,13 @@
     "vendorHash": "sha256-7mJ+BX7laBKsr4DX1keMXnGi79CZp8M1jD0COQ1lcmU="
   },
   "kreuzwerker_docker": {
-    "hash": "sha256-THMGfpRrPFReRdYusdrJGnUKEUtxy4Pu+HdcceK2FNc=",
+    "hash": "sha256-ywVrqqwgYCOZO7Cey3gM9w+EdSQY+vJ/djfJF0X5xyc=",
     "homepage": "https://registry.terraform.io/providers/kreuzwerker/docker",
     "owner": "kreuzwerker",
     "repo": "terraform-provider-docker",
-    "rev": "v3.6.2",
+    "rev": "v3.9.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-duHOqjy8AthXuDX63GO3myJ9TJmV0Ts1a8OsbSOGZWI="
+    "vendorHash": "sha256-Cxz0mDLOgUAnfP1kCP3DE28T1LwLsABAipyVXCngpYE="
   },
   "launchdarkly_launchdarkly": {
     "hash": "sha256-lcemT7kpBlZX35Sb+ujHzSdakBQkUSmYAxTVsJkRW6A=",

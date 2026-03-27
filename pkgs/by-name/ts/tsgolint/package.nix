@@ -3,19 +3,18 @@
   buildGo126Module,
   fetchFromGitHub,
   findutils,
-  go_1_26,
   nix-update-script,
 }:
 
 buildGo126Module (finalAttrs: {
   pname = "tsgolint";
-  version = "0.17.0";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bY5oDaaKMu4KmGQFT3MyzNNKZWC8PVSRjAgWYhPVE2s=";
+    hash = "sha256-C0n1L1oIQXPWFX27DDoSSHJm7KrZkWObsq50jFAETGM=";
     fetchSubmodules = true;
   };
 
@@ -25,7 +24,7 @@ buildGo126Module (finalAttrs: {
     pushd typescript-go
   '';
 
-  # These patches are applied to the typescript-go submodule in justfile's "init" target upstream.
+  # These patches are applied to the typescript-go submodule in upstream justfile's "init" target.
   patches = [
     (finalAttrs.src + "/patches/0001-Parallel-readDirectory-visitor.patch")
     (finalAttrs.src + "/patches/0002-Adapt-project-service-for-single-run-mode.patch")
@@ -36,25 +35,16 @@ buildGo126Module (finalAttrs: {
   ];
 
   postPatch =
-    # We don't want to build with go.work, so we add the replacement to
-    # the local module to the go.mod instead.
+    # From upstream justfile's "init" target.
     ''
       popd
-      ${lib.getExe go_1_26} mod edit --replace=github.com/microsoft/typescript-go=./typescript-go
-    ''
-    +
-    # From justfile's "init" target upstream.
-    ''
-      rm go.work{,.sum}
       mkdir -p internal/collections && find ./typescript-go/internal/collections -type f ! -name '*_test.go' -exec cp {} internal/collections/ \;
     '';
 
   proxyVendor = true;
-  vendorHash = "sha256-Mb78gEN582QFTRTBefdAz8Yly2vB3zbPyViRnA1V3wI=";
+  vendorHash = "sha256-xSdL+XcnZnKScOnYdmhMaVp4okK7uyLEzcKtANgRXjo=";
 
   subPackages = [ "cmd/tsgolint" ];
-
-  env.GOEXPERIMENT = "greenteagc";
 
   passthru = {
     updateScript = nix-update-script { };

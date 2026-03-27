@@ -43,14 +43,14 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "7.4.1";
+  version = "7.5";
   pname = "quantum-espresso";
 
   src = fetchFromGitLab {
     owner = "QEF";
     repo = "q-e";
     rev = "qe-${version}";
-    hash = "sha256-o1CjIuJCTtIud4zeHROksK1Ub9RL/OB8GecAQOIGf1s=";
+    hash = "sha256-8/7++v53VDfn2P/QcrFRjUSygik3gintVMQwLU4nE24=";
   };
 
   # add git submodules manually and fix pkg-config file
@@ -74,7 +74,9 @@ stdenv.mkDerivation rec {
     )}
 
     substituteInPlace cmake/quantum_espresso.pc.in \
-      --replace 'libdir="''${prefix}/@CMAKE_INSTALL_LIBDIR@"' 'libdir="@CMAKE_INSTALL_FULL_LIBDIR@"'
+      --replace 'libdir="''${prefix}/@CMAKE_INSTALL_LIBDIR@"' 'libdir="@CMAKE_INSTALL_FULL_LIBDIR@"' \
+      --replace 'includedir="''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@/qe"' 'includedir="@CMAKE_INSTALL_FULL_INCLUDEDIR@/qe"' \
+      --replace 'moduledir="''${prefix}/@QE_INSTALL_Fortran_MODULES@/qe"' 'moduledir="@CMAKE_INSTALL_FULL_INCLUDEDIR@/qe"'
   '';
 
   patches = [
