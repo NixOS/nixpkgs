@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  hatch,
+  hatchling,
   hatch-build-scripts,
   hatch-nodejs-version,
   ipywidgets,
@@ -26,11 +26,12 @@ buildPythonPackage rec {
   #
   postPatch = ''
     substituteInPlace pyproject.toml \
+      --replace-fail '"hatch",' "" \
       --replace-fail '"jupyterlab>=3,<5",' "" \
   '';
 
   build-system = [
-    hatch
+    hatchling
     hatch-build-scripts
     hatch-nodejs-version
   ];
