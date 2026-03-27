@@ -1,0 +1,11 @@
+--- a/src/lib-sieve/plugins/extlists/ext-extlists-settings.h
++++ b/src/lib-sieve/plugins/extlists/ext-extlists-settings.h
+@@ -12,7 +12,7 @@
+ 
+ 	const char *name;
+ 	/* Maximum size of lookup value */
+-	size_t max_lookup_size;
++	uoff_t max_lookup_size;
+ 
+ 	struct {
+ 		const char *name;
