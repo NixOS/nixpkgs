@@ -3,7 +3,7 @@
 set -euxo pipefail
 
 upload() {
-  ~/.cargo/bin/xzar --server planai upload --pin "$1" --desc $(readlink -f result) --leave-after-abandon 1m result
+  ~/.cargo/bin/xzar --server planai upload --pin "$1/$(nix-instantiate --eval -E 'builtins.currentSystem' | tr -d '"')" --desc $(readlink -f result) --leave-after-abandon 1m result
 }
 
 build() {
