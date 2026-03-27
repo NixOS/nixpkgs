@@ -108,6 +108,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     # https://github.com/pypa/hatch/issues/2006
     "test_project_location_basic_set_first_project"
     "test_project_location_complex_set_first_project"
+
+    # TypeError: 'int' object is not subscriptable with newer packaging
+    "test_begin"
+    "test_continue"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # This test assumes it is running on macOS with a system shell on the PATH.
@@ -155,6 +159,15 @@ python3Packages.buildPythonApplication (finalAttrs: {
     "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_expression"
     "tests/backend/metadata/test_spec.py::TestCoreMetadataV23::test_license_files"
     "tests/backend/metadata/test_spec.py::TestProjectMetadataFromCoreMetadata::test_license_files"
+
+    # Table title centering changed in newer Rich
+    "tests/cli/dep/show/test_table.py"
+    "tests/cli/env/test_show.py"
+    "tests/cli/python/test_show.py"
+
+    # Version scheme failures with newer packaging
+    "tests/backend/version/scheme/test_standard.py::TestWithEpoch::test_correct[minor,dev-1!0.1.0.dev0]"
+    "tests/backend/version/scheme/test_standard.py::TestMultiple::test_correct[minor,dev-0.1.0.dev0]"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
