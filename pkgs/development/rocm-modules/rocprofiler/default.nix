@@ -128,10 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-needed libhsa-amd-aqlprofile64.so
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
   passthru.rocmtoolkit-merged = rocmtoolkit-merged;
 
   meta = {

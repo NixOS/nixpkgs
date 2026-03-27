@@ -120,10 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = "rocsolver";
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   requiredSystemFeatures = [ "big-parallel" ];
 

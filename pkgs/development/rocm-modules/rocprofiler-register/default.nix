@@ -69,10 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = "rocprofiler-register";
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Profiling with perf-counters and derived metrics";

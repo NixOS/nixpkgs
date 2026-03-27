@@ -192,10 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     amdgpu_targets = gpuTargets';
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
   };
 
   enableParallelBuilding = true;

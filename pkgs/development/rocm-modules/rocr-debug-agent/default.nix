@@ -43,10 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf $out/src
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Library that provides some debugging functionality for ROCr";

@@ -97,10 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/html
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Debugger support for control of execution and inspection state of AMD's GPU architectures";

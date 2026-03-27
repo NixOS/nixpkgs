@@ -101,10 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.CFLAGS = "-Wno-switch -Wno-format-nonliteral -I${zstd.dev}/include -I${zlib.dev}/include -I${expat.dev}/include -I${ncurses.dev}/include";
   env.CXXFLAGS = finalAttrs.env.CFLAGS;
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm source-level debugger for Linux, based on GDB";

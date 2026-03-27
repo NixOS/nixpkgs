@@ -146,10 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
       mirror2 = "https://www.cise.ufl.edu/research/sparse/MM";
     };
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
   };
 
   meta = {

@@ -138,10 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/rdctst_tests $test/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";

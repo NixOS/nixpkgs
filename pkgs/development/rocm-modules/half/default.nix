@@ -23,10 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "C++ library for half precision floating point arithmetics";

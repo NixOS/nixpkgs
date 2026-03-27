@@ -175,10 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit gpuTargets miOpenReqLibsOnly;
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
     anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
     anyMfmaTarget =
       (lib.lists.intersectLists gpuTargets [

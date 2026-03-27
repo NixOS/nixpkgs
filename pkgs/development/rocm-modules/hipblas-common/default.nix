@@ -32,10 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
   meta = {
     description = "Common files shared by hipBLAS and hipBLASLt";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas-common";

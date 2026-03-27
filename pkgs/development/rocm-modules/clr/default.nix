@@ -259,10 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     inherit hipClangPath;
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner repo;
-    };
+    updateScript = rocmUpdateScript { inherit finalAttrs; };
 
     impureTests = {
       # bash $(nix-build -A rocmPackages.clr.impureTests.rocm-smi)

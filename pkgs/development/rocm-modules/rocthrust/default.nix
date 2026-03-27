@@ -81,10 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm parallel algorithm library";

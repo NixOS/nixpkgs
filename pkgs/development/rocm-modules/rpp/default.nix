@@ -65,10 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3 -m sphinx -T -E -b html -d _build/doctrees -D language=en ../docs _build/html
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "Comprehensive high-performance computer vision library for AMD processors";

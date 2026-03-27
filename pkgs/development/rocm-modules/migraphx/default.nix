@@ -190,10 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
       migraphx = finalAttrs.finalPackage;
     };
   };
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "AMD's graph optimization engine";

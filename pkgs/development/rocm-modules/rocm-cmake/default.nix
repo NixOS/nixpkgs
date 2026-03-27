@@ -22,10 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ rocm-core ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "CMake modules for common build tasks for the ROCm stack";

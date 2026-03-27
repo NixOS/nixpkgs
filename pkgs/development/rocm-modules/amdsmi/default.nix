@@ -82,10 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -sf $out/libexec/amdsmi_cli/amdsmi_cli.py $out/bin/amd-smi
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";

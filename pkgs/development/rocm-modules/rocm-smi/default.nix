@@ -60,10 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${libdrm.dev}/include/libdrm/ $out/include/
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "System management interface for AMD GPUs supported by ROCm";

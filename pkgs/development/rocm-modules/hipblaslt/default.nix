@@ -245,10 +245,7 @@ stdenv.mkDerivation (finalAttrs: {
   # and are fine ignoring it at runtime if it's not supported
   # so we have to support building an empty hipblaslt
   passthru.supportsTargetArches = supportsTargetArches;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
   meta = {
     description = "Library that provides general matrix-matrix operations with a flexible API";
     homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblaslt";
