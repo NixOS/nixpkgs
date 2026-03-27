@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       mit
       asl20
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ landreussi ];
     mainProgram = "fs_watcher_lsp";
   };
 })
