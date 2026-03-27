@@ -4426,6 +4426,10 @@ self: super: with self; {
 
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
 
+  django-xforwardedfor-middleware =
+    callPackage ../development/python-modules/django-xforwardedfor-middleware
+      { };
+
   # LTS in extended support phase
   django_4 = callPackage ../development/python-modules/django/4.nix { };
 
