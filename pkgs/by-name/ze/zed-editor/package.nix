@@ -76,6 +76,9 @@ let
           glibc
           # required by at least https://github.com/zed-industries/package-version-server
           openssl
+          # required by at least the Codex CLI agent
+          libcap
+          zlib
         ])
         ++ additionalPkgs pkgs;
 

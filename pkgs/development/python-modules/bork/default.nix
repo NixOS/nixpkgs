@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "bork";
-  version = "10.0.3";
+  version = "11.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "duckinator";
     repo = "bork";
     tag = "v${version}";
-    hash = "sha256-/euPRR6TRCAAl42CHePfUr+9Kh271iLjTayUR1S/FBg=";
+    hash = "sha256-VashMByAdoRa/uWBGgtsJtd4LcG8hwq/naDXxW+nSg8=";
   };
 
   build-system = [

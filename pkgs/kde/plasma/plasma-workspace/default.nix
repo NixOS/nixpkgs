@@ -39,6 +39,13 @@ mkKdeDerivation {
     })
   ];
 
+  outputs = [
+    "out"
+    "dev"
+    "devtools"
+    "sessions"
+  ];
+
   postInstall = ''
     # Prevent patching this shell file, it only is used by sourcing it from /bin/sh.
     chmod -x $out/libexec/plasma-sourceenv.sh
@@ -83,6 +90,9 @@ mkKdeDerivation {
   postFixup = ''
     mkdir -p $out/nix-support
     echo "${lsof} ${xmessage} ${xrdb}" > $out/nix-support/depends
+
+    moveToOutput share/xsessions $sessions
+    moveToOutput share/wayland-sessions $sessions
   '';
 
   passthru.providedSessions = [
