@@ -2904,7 +2904,8 @@
       ];
     "intelliclima" =
       ps: with ps; [
-      ]; # missing inputs: pyintelliclima
+        pyintelliclima
+      ];
     "intellifire" =
       ps: with ps; [
         intellifire4py
@@ -7665,6 +7666,7 @@
     "input_text"
     "insteon"
     "integration"
+    "intelliclima"
     "intellifire"
     "intent"
     "intent_script"
