@@ -4,14 +4,14 @@
   fetchPypi,
   defcon,
   fontmath,
+  setuptools,
   unicodedata2,
-  fs,
 }:
 
 buildPythonPackage rec {
   pname = "mutatormath";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "MutatorMath";
@@ -20,15 +20,21 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     fontmath
     unicodedata2
     defcon
   ];
-  nativeCheckInputs = [
-    unicodedata2
-    fs
-  ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    python Lib/mutatorMath/test/run.py
+
+    runHook postCheck
+  '';
 
   meta = {
     description = "Piecewise linear interpolation in multiple dimensions with multiple, arbitrarily placed, masters";
