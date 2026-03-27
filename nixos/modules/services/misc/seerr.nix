@@ -5,37 +5,47 @@
   ...
 }:
 let
-  cfg = config.services.jellyseerr;
+  cfg = config.services.seerr;
+  # 26.05 introduced a breaking change which is guarded behind stateVersion to avoid
+  # breaking users.
+  useNewConfigLocation = lib.versionAtLeast config.system.stateVersion "26.05";
 in
 {
-  meta.maintainers = [ lib.maintainers.camillemndn ];
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "jellyseerr" ] [ "services" "seerr" ])
+  ];
 
-  options.services.jellyseerr = {
-    enable = lib.mkEnableOption "Jellyseerr, a requests manager for Jellyfin";
-    package = lib.mkPackageOption pkgs "jellyseerr" { };
+  meta.maintainers = with lib.maintainers; [
+    camillemndn
+    fallenbagel
+  ];
+
+  options.services.seerr = {
+    enable = lib.mkEnableOption "Seerr, a requests manager for Jellyfin";
+    package = lib.mkPackageOption pkgs "seerr" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Open port in the firewall for the Jellyseerr web interface.";
+      description = "Open port in the firewall for the Seerr web interface.";
     };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 5055;
-      description = "The port which the Jellyseerr web UI should listen to.";
+      description = "The port which the Seerr web UI should listen to.";
     };
 
     configDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/jellyseerr/config";
+      default = if useNewConfigLocation then "/var/lib/seerr/" else "/var/lib/jellyseerr/config";
       description = "Config data directory";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.jellyseerr = {
-      description = "Jellyseerr, a requests manager for Jellyfin";
+    systemd.services.seerr = {
+      description = "Seerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
@@ -44,7 +54,8 @@ in
       };
       serviceConfig = {
         Type = "exec";
-        StateDirectory = "jellyseerr";
+        # Note: this should be a parent of configDir.
+        StateDirectory = if useNewConfigLocation then "seerr" else "jellyseerr";
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";
