@@ -4,6 +4,7 @@
   _7zz,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
   runCommand,
 }:
 
@@ -40,7 +41,11 @@ python3Packages.buildPythonApplication rec {
     tqdm
   ];
 
-  nativeCheckInputs = [ versionCheckHook ];
+  nativeCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
   doInstallCheck = true;
 
   postFixup = ''
