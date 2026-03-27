@@ -6,6 +6,8 @@
   fetchurl,
   autoPatchelfHook,
   rpmextract,
+  brotli,
+  libnghttp2,
   libxcrypt-legacy,
   zlib,
   lvm2, # LVM image backup and restore functions (optional)
@@ -44,7 +46,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/storage-protect/8.1.27?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/storage-protect/8.2.1?topic=solaris-set-api-environment-variables
 
 let
 
@@ -91,10 +93,10 @@ let
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     pname = "tsm-client-unwrapped";
-    version = "8.1.27.1";
+    version = "8.2.1.0";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
-      hash = "sha512-s7arnrbZoNvU3NX53coD8ugw7+cJQswWX0qctVZqWcSHN0FgexXYmRq3kt90KfjShMjcOGAHJhqCKKmukbIYjg==";
+      hash = "sha512-Hlm4sk78I/+hVKwGsSDpwIihMqMeAlLtu4H/DLo2NVNMQnixZTYRch69hAR1PNaSS7qz8/oiI51AYTc6+JYdtA==";
     };
     inherit meta passthru;
 
@@ -103,6 +105,8 @@ let
       rpmextract
     ];
     buildInputs = [
+      brotli
+      libnghttp2
       libxcrypt-legacy
       stdenv.cc.cc
       zlib
