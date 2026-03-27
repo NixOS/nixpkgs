@@ -1,0 +1,30 @@
+diff --git a/app/(main)/layout.tsx b/app/(main)/layout.tsx
+index ac5c3b4..0fad5b5 100644
+--- a/app/(main)/layout.tsx
++++ b/app/(main)/layout.tsx
+@@ -1,5 +1,5 @@
+ import type { Metadata, Viewport } from "next";
+-import { Geist, Geist_Mono } from "next/font/google";
++import localFont from "next/font/local";
+ import { headers } from "next/headers";
+ import { getLocale } from "next-intl/server";
+ import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
+@@ -8,14 +8,14 @@ import { configManager } from "@/lib/admin/config-manager";
+ import { withBasePath } from "@/lib/browser-navigation";
+ import "../globals.css";
+ 
+-const geistSans = Geist({
++const geistSans = localFont({
++  src: '../fonts/Geist.ttf',
+   variable: "--font-geist-sans",
+-  subsets: ["latin"],
+ });
+ 
+-const geistMono = Geist_Mono({
++const geistMono = localFont({
++  src: '../fonts/Geist.ttf',
+   variable: "--font-geist-mono",
+-  subsets: ["latin"],
+ });
+ 
+ export const viewport: Viewport = {
