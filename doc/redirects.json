@@ -122,6 +122,9 @@
   "ex-writeShellApplication": [
     "index.html#ex-writeShellApplication"
   ],
+  "fetchmavenartifact": [
+    "index.html#fetchmavenartifact"
+  ],
   "friction-graphics": [
     "index.html#friction-graphics"
   ],
