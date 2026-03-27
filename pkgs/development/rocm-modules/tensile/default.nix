@@ -18,15 +18,20 @@
 
 buildPythonPackage rec {
   pname = "tensile";
-  version = "7.2.0";
+  version = "7.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "Tensile";
+    repo = "rocm-libraries";
     rev = "rocm-${version}";
-    hash = "sha256-pTuEeu+0E+RlpdeFho0mJmx/V/tou/ZRLYX9KoWEPpA=";
+    sparseCheckout = [
+      "shared/tensile"
+      "shared"
+    ];
+    hash = "sha256-sYudPiEPGeZLmf6+3XfQDZqRXiKgRsGPucApzYwlGV8=";
   };
+  sourceRoot = "${src.name}/shared/tensile";
 
   # TODO: It should be possible to run asm caps test ONCE for all supported arches
   # We currently disable the test because it's slow and runs each time tensile launches
@@ -83,7 +88,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "GEMMs and tensor contractions";
-    homepage = "https://github.com/ROCm/Tensile";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/shared/tensile";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

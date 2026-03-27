@@ -70,13 +70,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblaslt${clr.gpuArchSuffix}";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-+yaOUA8hzRPnz14Cmp2BbfIS5811PgMcHQLY2+FatMU=";
+    hash = "sha256-+xMmPKb32NP9U35dHCXfXWwa6exfiL5TezfXERVDfe4=";
     sparseCheckout = [
       "projects/hipblaslt"
       "shared"
@@ -251,7 +251,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
   meta = {
     description = "Library that provides general matrix-matrix operations with a flexible API";
-    homepage = "https://github.com/ROCm/hipBLASlt";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblaslt";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

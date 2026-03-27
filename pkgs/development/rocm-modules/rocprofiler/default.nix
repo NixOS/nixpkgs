@@ -44,15 +44,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "7.2.0";
+  version = "7.2.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocprofiler";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-W32VAdtZdFmkHeUwyHIIHk8yRnABq6gUaHLZ9Bj8kYI=";
+    sparseCheckout = [
+      "projects/rocprofiler"
+      "shared"
+    ];
     fetchSubmodules = true;
+    hash = "sha256-Wo0pymD8LsrdczdIUEEVe5x2Id//KIFkh40kliAQgWo=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocprofiler";
 
   nativeBuildInputs = [
     cmake
@@ -125,14 +130,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    inherit (finalAttrs.src) owner repo;
   };
   passthru.rocmtoolkit-merged = rocmtoolkit-merged;
 
   meta = {
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm/rocprofiler";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocprofiler";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

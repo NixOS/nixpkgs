@@ -148,8 +148,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    inherit (finalAttrs.src) owner repo;
     page = "tags?per_page=4";
   };
 

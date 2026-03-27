@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
-  version = "7.2.0";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocALUTION";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-7ZlY0GVIsUJE8OOAkQwQ4pXNHKzgCQomQOET9+TKQN4=";
+    hash = "sha256-yPM26e8tGNpPScIriAPRb+6OZfdpX4PgE0E9bmc3FkU=";
   };
 
   nativeBuildInputs = [
@@ -112,8 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+    inherit (finalAttrs.src) owner repo;
   };
 
   meta = {
