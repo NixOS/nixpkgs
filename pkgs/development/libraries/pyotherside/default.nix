@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2OYVULNW9EzssqodiVtL2EmhTSbefXpLkub3zFvNwNo=";
   };
 
+  postPatch = ''
+    substituteInPlace qtquicktests/run \
+      --replace-fail \
+        '-plugins ../src' \
+        '-plugins ../src -import $out/${qtbase.qtQmlPrefix} -import ${lib.getBin qtdeclarative}/${qtbase.qtQmlPrefix}'
+  '';
+
   nativeBuildInputs = [ qmake ];
   buildInputs = [
     python3
@@ -38,6 +45,30 @@ stdenv.mkDerivation rec {
 
   patches = [ ./qml-path.patch ];
   installTargets = [ "sub-src-install_subtargets" ];
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  checkPhase = ''
+    runHook preCheck
+
+    export QT_QPA_PLATFORM=minimal
+    export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
+    ./tests/tests
+
+    runHook postCheck
+  '';
+
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    pushd qtquicktests
+    ./run
+    popd
+
+    runHook postInstallCheck
+  '';
 
   meta = {
     description = "Asynchronous Python 3 Bindings for Qt ${lib.versions.major qtbase.version}";
