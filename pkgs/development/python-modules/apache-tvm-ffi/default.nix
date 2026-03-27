@@ -9,9 +9,12 @@
   ninja,
   scikit-build-core,
   setuptools-scm,
+  python,
+  build,
 
   # dependencies
   typing-extensions,
+  torch,
 
   # tests
   numpy,
@@ -43,6 +46,8 @@ buildPythonPackage (finalAttrs: {
 
   dependencies = [
     typing-extensions
+    # runtime dependency for torch_c_dlpack_ext
+    torch
   ];
 
   optional-dependencies = {
@@ -58,6 +63,19 @@ buildPythonPackage (finalAttrs: {
     pytestCheckHook
     writableTmpDirAsHomeHook
   ];
+
+  nativeBuildInputs = [
+    build
+  ];
+
+  # The torch_c_dlpack_ext extension requires tvm-ffi to be installed
+  # before it can be built
+  postInstall = ''
+    pushd addons/torch_c_dlpack_ext
+    pyproject-build --no-isolation --outdir dist/ --wheel
+    ${python.interpreter} -m installer --prefix $out dist/*.whl
+    popd
+  '';
 
   meta = {
     description = "Open ABI and FFI for Machine Learning Systems";
