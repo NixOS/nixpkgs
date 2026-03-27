@@ -1,51 +1,58 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  stdenv,
-  Security,
-  SystemConfiguration,
   installShellFiles,
   nix-update-script,
+  tzdata,
+  fuse,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rustic";
-  version = "0.9.5";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
-    tag = "v${version}";
-    hash = "sha256-HYPzgynCeWDRRNyACHqnzkjn6uZWS0TDHuJE9STJxbQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Iih6qZglnsD6aSQQUoCfYtGvz2CcmWeCVmwbWkgW5Hg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-+BlLVnvI2qBfwEtyxmZFNhR9MEzs0/a1Ce6ALOKtoPU=";
+  cargoHash = "sha256-osVyOFO+vHbcXEp44VH7XI8y4Ir8/IkCr/cF0FMPQvQ=";
+
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "mount" ];
+  checkFeatures = lib.subtractLists [ "mount" ] finalAttrs.buildFeatures; # we do not want `mount` during unit tests because it breaks rustic's test snapshots
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    SystemConfiguration
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
 
-  postInstall = ''
-    for shell in {ba,fi,z}sh; do
-      $out/bin/rustic completions $shell > rustic.$shell
-    done
+  nativeCheckInputs = [ tzdata ];
 
-    installShellCompletion rustic.{ba,fi,z}sh
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd rustic \
+      --bash <($out/bin/rustic completions bash) \
+      --fish <($out/bin/rustic completions fish) \
+      --zsh <($out/bin/rustic completions zsh)
+  '';
+
+  # We set TZDIR to avoid this warning during unit tests:
+  # > [WARN] could not find zoneinfo, concatenated tzdata or bundled time zone database
+  # This warning causes the check phase to fail.
+  preCheck = ''
+    export TZDIR=${tzdata}/share/zoneinfo
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/rustic-rs/rustic";
-    changelog = "https://github.com/rustic-rs/rustic/blob/${src.rev}/CHANGELOG.md";
-    description = "fast, encrypted, deduplicated backups powered by pure Rust";
+    changelog = "https://github.com/rustic-rs/rustic/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    description = "Fast, encrypted, deduplicated backups powered by pure Rust";
     mainProgram = "rustic";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.all;
     license = [
       lib.licenses.mit
       lib.licenses.asl20
@@ -55,4 +62,4 @@ rustPlatform.buildRustPackage rec {
       lib.maintainers.pmw
     ];
   };
-}
+})

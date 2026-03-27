@@ -6,7 +6,7 @@
   fetchpatch,
   fetchpatch2,
   scons,
-  boost,
+  boost183,
   dvdauthor,
   dvdplusrwtools,
   enca,
@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    boost
+    boost183
     dvdauthor
     dvdplusrwtools
     enca
@@ -89,11 +89,11 @@ stdenv.mkDerivation {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "DVD authoring program for personal computers";
     homepage = "https://www.bombono.org/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ symphorien ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ symphorien ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
   buildDunePackage,
+  ocaml,
   cmdliner,
   dap,
   fmt,
@@ -18,17 +19,17 @@
   gitUpdater,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "earlybird";
-  version = "1.3.3";
+  version = "1.3.5";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchFromGitHub {
     owner = "hackwaly";
     repo = "ocamlearlybird";
-    rev = version;
-    hash = "sha256-TzRJ+0I3VEx4Lvj3lhN9POzlXRgmTTdD5Bg1AX0pf3c=";
+    tag = finalAttrs.version;
+    hash = "sha256-QDRtuphOb02L75JyCF9K1NqvIdtWlfefeLG3HmJVHW4=";
   };
 
   nativeBuildInputs = [ menhir ];
@@ -56,4 +57,4 @@ buildDunePackage rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.romildo ];
   };
-}
+})

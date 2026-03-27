@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   requests,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyedimax";
   version = "0.2.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,10 +25,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyedimax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interfacing with the Edimax smart plugs";
     homepage = "https://github.com/andreipop2005/pyedimax";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

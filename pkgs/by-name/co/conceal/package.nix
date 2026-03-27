@@ -8,19 +8,20 @@
   conceal,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "conceal";
-  version = "0.5.5";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "TD-Sky";
     repo = "conceal";
-    rev = "v${version}";
-    sha256 = "sha256-BYLDSRgBba6SoGsL/NTV/OTG1/V9RSr8lisj42JqBRM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kPK00DjBHhyZVwCTuL3VSazS5pYY8lgLBn9bHTkaQ5s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-yCHN7N+hRrWfuCEBA6gh2S/rRP+ZkHCjFBGGY9/LTb4=";
+  cargoHash = "sha256-6MPYgReVYkEQhmifzT7sAMRuMIink8k9nWOnSUCOGG0=";
+
+  env.CONCEAL_GEN_COMPLETIONS = "true";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -36,17 +37,17 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = testers.testVersion {
     package = conceal;
     command = "conceal --version";
-    version = "conceal ${version}";
+    version = "conceal ${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Trash collector written in Rust";
     homepage = "https://github.com/TD-Sky/conceal";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jedsek
       kashw2
     ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

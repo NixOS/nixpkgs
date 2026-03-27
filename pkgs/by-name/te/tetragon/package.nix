@@ -4,8 +4,8 @@
   fetchFromGitHub,
   pkg-config,
   go,
-  llvm_16,
-  clang_16,
+  llvm,
+  clang,
   bash,
   writableTmpDirAsHomeHook,
   gitMinimal,
@@ -13,31 +13,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tetragon";
-  version = "1.4.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "tetragon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-HOVQdKUIBLq9/2hTokZKvLZOgRQu5/lAwYy1yQa1bus=";
+    hash = "sha256-A6a7yjxenB/7sfdfoIaJAxdkw0ouNinZtahNMRAytwA=";
   };
 
   nativeBuildInputs = [
+    pkg-config
     writableTmpDirAsHomeHook
     gitMinimal
   ];
 
   buildInputs = [
-    clang_16
+    clang
     go
-    llvm_16
-    pkg-config
+    llvm
   ];
 
   env = {
     LOCAL_CLANG = 1;
     LOCAL_CLANG_FORMAT = 1;
-    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments";
+    NIX_CFLAGS_COMPILE = "-fno-stack-protector -Qunused-arguments -Wno-default-const-init-var-unsafe";
   };
 
   buildPhase = ''

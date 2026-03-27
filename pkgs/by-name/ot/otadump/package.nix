@@ -7,14 +7,14 @@
   xz,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "otadump";
   version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "crazystylus";
     repo = "otadump";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-4zPVcTU+0otV4EPQi80uSRkpRo9XzI0V3Kr17ugXX2U=";
   };
 
@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false; # There are no tests
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6L1FJWEaDBqpJvj9uGjYuAqqDoQlkVwOWfbG46Amkkw=";
 
   meta = {
@@ -39,4 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.axka ];
     mainProgram = "otadump";
   };
-}
+})

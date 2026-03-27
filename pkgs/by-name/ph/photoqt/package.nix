@@ -15,13 +15,13 @@
   zxing-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "photoqt";
-  version = "4.8.1";
+  version = "5.2";
 
   src = fetchurl {
-    url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-Iq5Fc0v+EYFe1YG3ZhZKl8leXD+TpGGhaQjr800vz7Y=";
+    url = "https://photoqt.org/downloads/source/photoqt-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ufgDXKN7LY8Uy0uwL+QKvjH3O/F1EIAx2MPYYS1/els=";
   };
 
   nativeBuildInputs = [
@@ -31,28 +31,27 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      exiv2
-      graphicsmagick
-      libarchive
-      libraw
-      pugixml
-      qt6.qtbase
-      qt6.qtcharts
-      qt6.qtdeclarative
-      qt6.qtimageformats
-      qt6.qtlocation
-      qt6.qtmultimedia
-      qt6.qtpositioning
-      qt6.qtsvg
-      qt6Packages.poppler
-      zxing-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mpv
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    exiv2
+    graphicsmagick
+    libarchive
+    libraw
+    pugixml
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtdeclarative
+    qt6.qtimageformats
+    qt6.qtlocation
+    qt6.qtmultimedia
+    qt6.qtpositioning
+    qt6.qtsvg
+    qt6Packages.poppler
+    zxing-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    mpv
+    qt6.qtwayland
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "DEVIL" false)
@@ -78,4 +77,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
   };
-}
+})

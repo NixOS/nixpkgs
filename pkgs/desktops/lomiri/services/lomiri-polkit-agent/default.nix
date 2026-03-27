@@ -18,14 +18,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-polkit-agent";
-  version = "0.3";
+  version = "0.3.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-polkit-agent";
     tag = finalAttrs.version;
-    hash = "sha256-3x2gwKhRDXE6tuwM7pXIwsWg/8pQrKLJ1zds8Ljtk+I=";
+    hash = "sha256-JKU2lm5wco9aC2cu3lgJ9OfGAzKQO/wQXFPEdb9Uz3Y=";
   };
+
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/merge_requests/17 merged & in release
+    ./1001-Fix-compat-with-libnotify-0.8.8.patch
+  ];
 
   strictDeps = true;
 
@@ -68,10 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Policy kit agent for the Lomiri desktop";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
   };
 })

@@ -10,12 +10,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smokeping";
   version = "2.9.0";
 
   src = fetchurl {
-    url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${version}.tar.gz";
+    url = "https://oss.oetiker.ch/smokeping/pub/smokeping-${finalAttrs.version}.tar.gz";
     hash = "sha256-8b41v8zCuhyfdfdtIisptXAk7+icW1ZLhsGjfOLR3bE=";
   };
 
@@ -26,24 +26,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  propagatedBuildInputs =
-    [ rrdtool ]
-    ++ (with perlPackages; [
-      perl
-      FCGI
-      CGI
-      CGIFast
-      ConfigGrammar
-      DigestHMAC
-      NetTelnet
-      NetOpenSSH
-      NetSNMP
-      LWP
-      IOTty
-      fping
-      NetDNS
-      perlldap
-    ]);
+  propagatedBuildInputs = [
+    rrdtool
+  ]
+  ++ (with perlPackages; [
+    perl
+    FCGI
+    CGI
+    CGIFast
+    ConfigGrammar
+    DigestHMAC
+    NetTelnet
+    NetOpenSSH
+    NetSNMP
+    LWP
+    LWPProtocolHttps
+    IOTty
+    fping
+    NetDNS
+    perlldap
+  ]);
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -60,4 +62,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

@@ -9,18 +9,18 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "amazon-cloudwatch-agent";
-  version = "1.300054.0";
+  version = "1.300065.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-cloudwatch-agent";
-    tag = "v${version}";
-    hash = "sha256-DakLgM3vNHHzOlQTVMGwIioPhB3YryEcm7T0xepAJu4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iAM8x3NXLQ20QJFB6Og4YKimUB7r+doTVnq/b9Q7alc=";
   };
 
-  vendorHash = "sha256-rw+doSJGeFl72hHA8FSL3H61KiYwatabQ7jEMOfJZ60=";
+  vendorHash = "sha256-i5Lhz36ZAfZW2Y3s31TcBx1uWuMKmtROBhmHf2GiGyo=";
 
   # See the list in https://github.com/aws/amazon-cloudwatch-agent/blob/v1.300049.1/Makefile#L68-L77.
   subPackages = [
@@ -36,14 +36,14 @@ buildGoModule rec {
   #
   # Needed for "amazon-cloudwatch-agent -version" to not show "Unknown".
   postInstall = ''
-    echo v${version} > $out/bin/CWAGENT_VERSION
+    echo v${finalAttrs.version} > $out/bin/CWAGENT_VERSION
   '';
 
   doInstallCheck = true;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/amazon-cloudwatch-agent";
+  versionCheckProgram = "${placeholder "out"}/bin/amazon-cloudwatch-agent";
 
   versionCheckProgramArg = "-version";
 
@@ -62,4 +62,4 @@ buildGoModule rec {
     mainProgram = "amazon-cloudwatch-agent";
     maintainers = with lib.maintainers; [ pmw ];
   };
-}
+})

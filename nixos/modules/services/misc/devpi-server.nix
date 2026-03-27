@@ -1,21 +1,25 @@
 {
-  pkgs,
-  lib,
   config,
+  lib,
+  pkgs,
   ...
 }:
+
 let
+
   cfg = config.services.devpi-server;
-
+  package = cfg.package.override { inherit (cfg) extraPackages; };
   secretsFileName = "devpi-secret-file";
-
   stateDirName = "devpi";
-
   runtimeDir = "/run/${stateDirName}";
   serverDir = "/var/lib/${stateDirName}";
+
 in
+
 {
+
   options.services.devpi-server = {
+
     enable = lib.mkEnableOption "Devpi Server";
 
     package = lib.mkPackageOption pkgs "devpi-server" { };
@@ -57,6 +61,20 @@ in
       description = "The port on which Devpi Server will listen.";
     };
 
+    extraPackages = lib.mkOption {
+      default = (ps: [ ]);
+      defaultText = lib.literalExpression "ps: [ ]";
+      example = lib.literalExpression ''
+        ps: with ps; [ devpi-web devpi-ldap ]
+      '';
+      type =
+        with lib.types;
+        coercedTo (listOf lib.types.package) (v: (_: v)) (functionTo (listOf lib.types.package));
+      description = ''
+        Plugins and extra Python packages to be available to devpi-server.
+      '';
+    };
+
     openFirewall = lib.mkEnableOption "opening the default ports in the firewall for Devpi Server";
   };
 
@@ -71,18 +89,17 @@ in
       after = [ "network-online.target" ];
       # Since at least devpi-server 6.10.0, devpi requires the secrets file to
       # have 0600 permissions.
-      preStart =
-        ''
-          ${lib.optionalString (
-            !isNull cfg.secretFile
-          ) "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"}
+      preStart = ''
+        ${lib.optionalString (
+          !isNull cfg.secretFile
+        ) "install -Dm 0600 \${CREDENTIALS_DIRECTORY}/devpi-secret ${runtimeDir}/${secretsFileName}"}
 
-          if [ -f ${serverDir}/.nodeinfo ]; then
-            # already initialized the package index, exit gracefully
-            exit 0
-          fi
-          ${cfg.package}/bin/devpi-init --serverdir ${serverDir} ''
-        + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
+        if [ -f ${serverDir}/.nodeinfo ]; then
+          # already initialized the package index, exit gracefully
+          exit 0
+        fi
+        ${package}/bin/devpi-init --serverdir ${serverDir} ''
+      + lib.optionalString cfg.replica "--role=replica --master-url=${cfg.primaryUrl}";
 
       serviceConfig = {
         LoadCredential = lib.mkIf (!isNull cfg.secretFile) [
@@ -91,27 +108,26 @@ in
         Restart = "always";
         ExecStart =
           let
-            args =
-              [
-                "--request-timeout=5"
-                "--serverdir=${serverDir}"
-                "--host=${cfg.host}"
-                "--port=${builtins.toString cfg.port}"
-              ]
-              ++ lib.optionals (!isNull cfg.secretFile) [
-                "--secretfile=${runtimeDir}/${secretsFileName}"
-              ]
-              ++ (
-                if cfg.replica then
-                  [
-                    "--role=replica"
-                    "--master-url=${cfg.primaryUrl}"
-                  ]
-                else
-                  [ "--role=master" ]
-              );
+            args = [
+              "--request-timeout=5"
+              "--serverdir=${serverDir}"
+              "--host=${cfg.host}"
+              "--port=${toString cfg.port}"
+            ]
+            ++ lib.optionals (!isNull cfg.secretFile) [
+              "--secretfile=${runtimeDir}/${secretsFileName}"
+            ]
+            ++ (
+              if cfg.replica then
+                [
+                  "--role=replica"
+                  "--master-url=${cfg.primaryUrl}"
+                ]
+              else
+                [ "--role=master" ]
+            );
           in
-          "${cfg.package}/bin/devpi-server ${lib.concatStringsSep " " args}";
+          "${package}/bin/devpi-server ${lib.concatStringsSep " " args}";
         DynamicUser = true;
         StateDirectory = stateDirName;
         RuntimeDirectory = stateDirName;
@@ -125,7 +141,10 @@ in
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
-
-    meta.maintainers = [ lib.maintainers.cafkafk ];
   };
+
+  meta.maintainers = with lib.maintainers; [
+    cafkafk
+    confus
+  ];
 }

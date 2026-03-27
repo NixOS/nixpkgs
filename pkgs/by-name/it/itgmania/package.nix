@@ -15,7 +15,7 @@
   libpulseaudio,
   libusb-compat-0_1,
   libvorbis,
-  libXtst,
+  libxtst,
   udev,
   makeWrapper,
   makeDesktopItem,
@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "itgmania";
-  version = "1.0.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "itgmania";
     repo = "itgmania";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OGOvC7/NmEsWXVw4bFjqdT/Hg3Ypbwct//uWuW3/f1o=";
+    hash = "sha256-RkV/OIDudt2XemhaFRY7IA5o7Q2w+j01tauD7KpzYpA=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libusb-compat-0_1
     libvorbis
-    libXtst
+    libxtst
     udev
   ];
 

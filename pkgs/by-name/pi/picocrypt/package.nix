@@ -1,32 +1,32 @@
 {
   lib,
-  buildGo124Module,
+  buildGoModule,
   fetchFromGitHub,
   stdenv,
   copyDesktopItems,
   makeDesktopItem,
 
-  xorg,
+  libxxf86vm,
   glfw,
   gtk3,
   pkg-config,
   wrapGAppsHook3,
 }:
 
-buildGo124Module rec {
+buildGoModule (finalAttrs: {
   pname = "picocrypt";
-  version = "1.47";
+  version = "1.49";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
-    tag = version;
-    hash = "sha256-O/n9dJz8cdJwldOXnsG8W8OZU5WeSmNys746HxRHvdc=";
+    tag = finalAttrs.version;
+    hash = "sha256-B10PP/V8xvYbA6rQHWdav/KtQKecNUmwvj9qMYqml8E=";
   };
 
-  sourceRoot = "${src.name}/src";
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  vendorHash = "sha256-9xB0D5Og/eiWUZGMog6lBoze4GrdvBOtNAKcMc3AdIE=";
+  vendorHash = "sha256-0fEy/YuZa7dENfL3y+NN4SLWYwOLmXqHHJEiU37AkX4=";
 
   ldflags = [
     "-s"
@@ -39,7 +39,7 @@ buildGo124Module rec {
     ++ glfw.propagatedBuildInputs or [ ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       gtk3
-      xorg.libXxf86vm
+      libxxf86vm
     ];
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ buildGo124Module rec {
       name = "Picocrypt";
       exec = "picocrypt-gui";
       icon = "picocrypt";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       desktopName = "Picocrypt";
       categories = [ "Utility" ];
     })
@@ -69,9 +69,9 @@ buildGo124Module rec {
   meta = {
     description = "Very small, very simple, yet very secure encryption tool, written in Go";
     homepage = "https://github.com/Picocrypt/Picocrypt";
-    changelog = "https://github.com/Picocrypt/Picocrypt/blob/${version}/Changelog.md";
+    changelog = "https://github.com/Picocrypt/Picocrypt/blob/${finalAttrs.version}/Changelog.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ ryand56 ];
     mainProgram = "picocrypt-gui";
   };
-}
+})

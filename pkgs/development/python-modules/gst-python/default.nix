@@ -1,10 +1,14 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchurl,
   fetchpatch,
   meson,
   ninja,
+  # TODO: We can get rid of this once `buildPythonPackage` accepts `finalAttrs`.
+  # See: https://github.com/NixOS/nixpkgs/pull/271387
+  gst-python,
 
   pkg-config,
   python,
@@ -19,7 +23,7 @@ buildPythonPackage rec {
   pname = "gst-python";
   version = "1.26.0";
 
-  format = "other";
+  pyproject = false;
 
   outputs = [
     "out"
@@ -39,6 +43,9 @@ buildPythonPackage rec {
       stripLen = 2;
       hash = "sha256-BfWPc8dsB09KiEm9bNT8e+jH76jiDefQlEhhLJoq7tI=";
     })
+
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
+    ./skip-failing-test-not-initialized.patch
   ];
 
   # Python 2.x is not supported.
@@ -72,20 +79,37 @@ buildPythonPackage rec {
     "-Dpygi-overrides-dir=${placeholder "out"}/${python.sitePackages}/gi/overrides"
     # Exec format error during configure
     "-Dpython-exe=${python.pythonOnBuildForHost.interpreter}"
+    # This is needed to prevent the project from looking for `gst-rtsp-server`
+    # from `checkInputs`.
+    #
+    # TODO: This should probably be moved at least partially into the Meson hook.
+    #
+    # NB: We need to use `doInstallCheck` here because `buildPythonPackage`
+    # renames `doCheck` to `doInstallCheck`.
+    (lib.mesonEnable "tests" gst-python.doInstallCheck)
   ];
 
-  # TODO: Meson setup hook does not like buildPythonPackage
-  # https://github.com/NixOS/nixpkgs/issues/47390
-  installCheckPhase = "meson test --print-errorlogs";
+  # `buildPythonPackage` uses `installCheckPhase` and leaves `checkPhase`
+  # empty. It renames `doCheck` from its arguments, but not `checkPhase`.
+  # See: https://github.com/NixOS/nixpkgs/issues/47390
+  installCheckPhase = ''
+    runHook preCheck
+    mesonCheckPhase
+    runHook postCheck
+  '';
+
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"
+  '';
 
   passthru = {
     updateScript = directoryListingUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     maintainers = [ ];
   };
 }

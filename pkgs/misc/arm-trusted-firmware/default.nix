@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchFromGitLab,
   openssl,
   pkgsCross,
   buildPackages,
@@ -18,7 +17,7 @@
 }:
 
 let
-  buildArmTrustedFirmware =
+  buildArmTrustedFirmware = lib.makeOverridable (
     {
       filesToInstall,
       installDir ? "$out",
@@ -39,13 +38,13 @@ let
       rec {
 
         pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-        version = "2.12.1";
+        version = "2.14.0";
 
         src = fetchFromGitHub {
           owner = "ARM-software";
           repo = "arm-trusted-firmware";
-          tag = "lts-v${version}";
-          hash = "sha256-yPWygW1swSwL3DrHPNIlTeTeV7XG4C9ALFA/+OTiz+4=";
+          tag = "v${version}";
+          hash = "sha256-7imeQocGMSyGXTEhNs4s0bcDxZpbLSSkOyI7c5UxqVs=";
         };
 
         patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -59,30 +58,33 @@ let
 
         depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-        # For Cortex-M0 firmware in RK3399
-        nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
-        # Make the new toolchain guessing (from 2.11+) happy
-        # https://github.com/ARM-software/arm-trusted-firmware/blob/4ec2948fe3f65dba2f19e691e702f7de2949179c/make_helpers/toolchains/rk3399-m0.mk#L21-L22
-        rk3399-m0-oc = "${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}objcopy";
+        nativeBuildInputs = [
+          pkgsCross.arm-embedded.stdenv.cc # For Cortex-M0 firmware in RK3399
+          openssl # For fiptool
+        ];
+
+        # Make the new toolchain guessing (from 2.14+) happy
+        # https://github.com/ARM-software/arm-trusted-firmware/blob/1d5aa939bc8d3d892e2ed9945fa50e36a1a924cc/make_helpers/toolchain.mk#L370
+        # https://github.com/ARM-software/arm-trusted-firmware/blob/1d5aa939bc8d3d892e2ed9945fa50e36a1a924cc/make_helpers/toolchains/rk3399-m0.mk#L22
+        rk3399-m0-oc-parameter = "rk3399-m0-oc-default";
 
         buildInputs = [ openssl ];
 
-        makeFlags =
-          [
-            "HOSTCC=$(CC_FOR_BUILD)"
-            "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
-            "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-            # Make the new toolchain guessing (from 2.11+) happy
-            "CC=${stdenv.cc.targetPrefix}cc"
-            "LD=${stdenv.cc.targetPrefix}cc"
-            "AS=${stdenv.cc.targetPrefix}cc"
-            "OC=${stdenv.cc.targetPrefix}objcopy"
-            "OD=${stdenv.cc.targetPrefix}objdump"
-            # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
-            "OPENSSL_DIR=${openssl}"
-          ]
-          ++ (lib.optional (platform != null) "PLAT=${platform}")
-          ++ extraMakeFlags;
+        makeFlags = [
+          "HOSTCC=$(CC_FOR_BUILD)"
+          "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
+          "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+          # Make the new toolchain guessing (from 2.11+) happy
+          "CC=${stdenv.cc.targetPrefix}cc"
+          "LD=${stdenv.cc.targetPrefix}cc"
+          "AS=${stdenv.cc.targetPrefix}cc"
+          "OC=${stdenv.cc.targetPrefix}objcopy"
+          "OD=${stdenv.cc.targetPrefix}objdump"
+          # Passing OpenSSL path according to docs/design/trusted-board-boot-build.rst
+          "OPENSSL_DIR=${openssl}"
+        ]
+        ++ (lib.optional (platform != null) "PLAT=${platform}")
+        ++ extraMakeFlags;
 
         installPhase = ''
           runHook preInstall
@@ -96,20 +98,36 @@ let
         hardeningDisable = [ "all" ];
         dontStrip = true;
 
+        env.NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
+          # breaks secondary CPU bringup on at least RK3588, maybe others
+          "-fomit-frame-pointer"
+
+          # Breaks compilation of armTrustedFirmwareRK3399:
+          # /nix/store/hash-arm-none-eabi-binutils-2.44/bin/arm-none-eabi-ld: /build/source/build/rk3399/release/m0/rk3399m0.elf: error: PHDR segment not covered by LOAD segment
+          #
+          # This was caused by ccc56d1a79ff2a0f528cecf5e36eb76beaacc8c0 adding the flag `--enable-default-pie`.
+          # According to https://trustedfirmware-a.readthedocs.io/en/v2.2/getting_started/user-guide.html,
+          # Trusted Firmware-A has an option called ENABLE_PIE, which is turned off by default.
+          # Someone with more knowledge of the implications can try using that option instead.
+          "-no-pie"
+        ];
+
         meta =
-          with lib;
+
           {
             homepage = "https://github.com/ARM-software/arm-trusted-firmware";
             description = "Reference implementation of secure world software for ARMv8-A";
             license = [
-              licenses.bsd3
-            ] ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ licenses.unfreeRedistributable ];
-            maintainers = with maintainers; [ lopsided98 ];
+              lib.licenses.bsd3
+            ]
+            ++ lib.optionals (!deleteHDCPBlobBeforeBuild) [ lib.licenses.unfreeRedistributable ];
+            maintainers = with lib.maintainers; [ lopsided98 ];
           }
           // extraMeta;
       }
-      // builtins.removeAttrs args [ "extraMeta" ]
-    );
+      // removeAttrs args [ "extraMeta" ]
+    )
+  );
 
 in
 {
@@ -177,6 +195,13 @@ in
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
     platformCanUseHDCPBlob = true;
+  };
+
+  armTrustedFirmwareRK3568 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "rk3568";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    filesToInstall = [ "build/${platform}/release/bl31/bl31.elf" ];
   };
 
   armTrustedFirmwareRK3588 = buildArmTrustedFirmware rec {

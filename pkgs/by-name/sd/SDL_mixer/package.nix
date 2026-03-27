@@ -11,7 +11,7 @@
   smpeg,
   stdenv,
   # passthru.tests
-  onscripter-en,
+  onscripter,
   # Boolean flags
   enableNativeMidi ? false,
   enableSdltest ? (!stdenv.hostPlatform.isDarwin),
@@ -108,13 +108,13 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   passthru.tests = {
-    inherit onscripter-en;
+    inherit onscripter;
   };
 
   meta = {
     description = "SDL multi-channel audio mixer library";
     homepage = "http://www.libsdl.org/projects/SDL_mixer/";
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     license = lib.licenses.zlib;
     inherit (SDL.meta) platforms;
   };

@@ -4,19 +4,24 @@
   fetchFromGitHub,
   makeDesktopItem,
   copyDesktopItems,
+
+  ncurses,
   SDL2,
   SDL2_image,
+
+  terminal ? false,
+  graphics ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brogue-ce";
-  version = "1.14.1";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "tmewett";
     repo = "BrogueCE";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-habmfq1jZa70eggLOgsPT6j1OGmmQ6qmWcCwRN2G4Fo=";
+    hash = "sha256-a+gzaBhQq9xgEVM20X+pbu7xzUcKzylxYk9qu9GQOAw=";
   };
 
   postPatch = ''
@@ -28,12 +33,25 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_image
+  buildInputs =
+    (lib.optionals graphics [
+      SDL2
+      SDL2_image
+    ])
+    ++ (lib.optionals terminal [
+      ncurses
+    ]);
+
+  makeFlags = [
+    "DATADIR=$(out)/opt/brogue-ce"
+    "TERMINAL=${if terminal then "YES" else "NO"}"
+    "GRAPHICS=${if graphics then "YES" else "NO"}"
+    "MAC_APP=${if stdenv.isDarwin then "YES" else "NO"}"
   ];
 
-  makeFlags = [ "DATADIR=$(out)/opt/brogue-ce" ];
+  postBuild = lib.optionalString (stdenv.isDarwin && graphics) ''
+    make Brogue.app $makeFlags
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -59,14 +77,19 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  postInstall = lib.optionalString (stdenv.isDarwin && graphics) ''
+    mkdir -p $out/Applications
+    mv Brogue.app "$out/Applications/Brogue CE.app"
+  '';
+
+  meta = {
     description = "Community-lead fork of the minimalist roguelike game Brogue";
     mainProgram = "brogue-ce";
     homepage = "https://github.com/tmewett/BrogueCE";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [
       fgaz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

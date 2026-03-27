@@ -5,15 +5,15 @@
   mlton,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smlfmt";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "shwestrick";
     repo = "smlfmt";
-    rev = "v${version}";
-    hash = "sha256-qwhYOZrck028NliPDnqFZel3IxopQzouhHq6R7DkfPE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-k3sAz1auKJpta1RdLX3ugSrc9ibVQJOCOPVmTYS/AZY=";
   };
 
   nativeBuildInputs = [ mlton ];
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = mlton.meta.platforms;
     homepage = "https://github.com/shwestrick/smlfmt";
   };
-}
+})

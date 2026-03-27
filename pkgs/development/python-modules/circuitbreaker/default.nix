@@ -5,7 +5,6 @@
   pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "2.1.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "fabfuel";
-    repo = pname;
+    repo = "circuitbreaker";
     tag = version;
     hash = "sha256-7BpYGhha0PTYzsE9CsN4KxfJW/wm2i6V+uAeamBREBQ=";
   };
@@ -30,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "circuitbreaker" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Circuit Breaker implementation";
     homepage = "https://github.com/fabfuel/circuitbreaker";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

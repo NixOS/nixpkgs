@@ -17,12 +17,12 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gsoap";
   version = "${majorVersion}.108";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${version}.zip";
+    url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${finalAttrs.version}.zip";
     sha256 = "0x58bwlclk7frv03kg8bp0pm7zl784samvbzskrnr7dl5v866nvl";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C/C++ toolkit for SOAP web services and XML-based applications";
     homepage = "https://www.genivia.com/products.html";
     # gsoap is dual/triple licensed (see homepage for details):
@@ -65,8 +65,11 @@ stdenv.mkDerivation rec {
     # 2. GPLv2 covers all of the software
     # 3. Proprietary commercial software development license (removes GPL
     #    restrictions)
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      bjornfor
+      veprbl
+    ];
   };
-}
+})

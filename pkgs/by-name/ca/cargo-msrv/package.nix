@@ -7,28 +7,24 @@
   openssl,
   stdenv,
   makeWrapper,
-  gitUpdater,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-msrv";
-  version = "0.17.1";
+  version = "0.19.3";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = "cargo-msrv";
-    tag = "v${version}";
-    sha256 = "sha256-cRdnx9K+EkVEKtPxQk+gXK6nkgkpWhpYij/5e7pFzMU=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-qt1Mlj4/DSh8V/SkgorLJFRdLwbtXyOvrISU1vmXzyg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-D35koQEqHsmXIBgXRCyI8Wyo2OVSuTFCjgm/JjO4VDo=";
+  cargoHash = "sha256-cqTSLpmS/9BgtuVXlqBrxpFCPPs+wFhqOalOVhPD5r8=";
 
-  passthru = {
-    updateScript = gitUpdater {
-      rev-prefix = "v";
-      ignoredVersions = ".(rc|beta).*";
-    };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
   };
 
   # Integration tests fail
@@ -46,17 +42,18 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-msrv --prefix PATH : ${lib.makeBinPath [ rustup ]};
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";
     mainProgram = "cargo-msrv";
     homepage = "https://github.com/foresterre/cargo-msrv";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       otavio
       matthiasbeyer
+      chrjabs
     ];
   };
-}
+})

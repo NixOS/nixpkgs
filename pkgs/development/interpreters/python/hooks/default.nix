@@ -138,6 +138,7 @@ in
           propagatedBuildInputs = [ installer ];
           substitutions = {
             inherit pythonInterpreter pythonSitePackages;
+            python = python.interpreter;
           };
         } ./pypa-install-hook.sh
       )
@@ -168,7 +169,8 @@ in
             pname = "test-pytestCheckHook-disabledTests-${previousPythonAttrs.pname}";
             disabledTests = [
               "test_print"
-            ] ++ previousPythonAttrs.disabledTests or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
           });
           disabledTests-expression = objprint.overridePythonAttrs (previousPythonAttrs: {
             __structuredAttrs = true;
@@ -176,47 +178,54 @@ in
             disabledTests = [
               "TestBasic and test_print"
               "test_str"
-            ] ++ previousPythonAttrs.disabledTests or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
           });
           disabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTestPaths-${previousPythonAttrs.pname}";
             disabledTestPaths = [
               "tests/test_basic.py"
-            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
           });
           disabledTestPaths-nonexistent = testers.testBuildFailure (
             objprint.overridePythonAttrs (previousPythonAttrs: {
               pname = "test-pytestCheckHook-disabledTestPaths-nonexistent-${previousPythonAttrs.pname}";
               disabledTestPaths = [
                 "tests/test_foo.py"
-              ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+              ]
+              ++ previousPythonAttrs.disabledTestPaths or [ ];
             })
           );
           disabledTestPaths-item = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTestPaths-item-${previousPythonAttrs.pname}";
             disabledTestPaths = [
               "tests/test_basic.py::TestBasic"
-            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
           });
           disabledTestPaths-glob = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-disabledTestPaths-glob-${previousPythonAttrs.pname}";
             disabledTestPaths = [
               "tests/test_obj*.py"
-            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
           });
           disabledTestPaths-glob-nonexistent = testers.testBuildFailure (
             objprint.overridePythonAttrs (previousPythonAttrs: {
               pname = "test-pytestCheckHook-disabledTestPaths-glob-nonexistent-${previousPythonAttrs.pname}";
               disabledTestPaths = [
                 "tests/test_foo*.py"
-              ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+              ]
+              ++ previousPythonAttrs.disabledTestPaths or [ ];
             })
           );
           enabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTests-${previousPythonAttrs.pname}";
             enabledTests = [
               "TestBasic"
-            ] ++ previousPythonAttrs.disabledTests or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
           });
           enabledTests-expression = objprint.overridePythonAttrs (previousPythonAttrs: {
             __structuredAttrs = true;
@@ -224,65 +233,76 @@ in
             enabledTests = [
               "TestBasic and test_print"
               "test_str"
-            ] ++ previousPythonAttrs.disabledTests or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
           });
           enabledTests-disabledTests = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTests-disabledTests-${previousPythonAttrs.pname}";
             enabledTests = [
               "TestBasic"
-            ] ++ previousPythonAttrs.disabledTests or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
             disabledTests = [
               "test_print"
-            ] ++ previousPythonAttrs.disabledTests or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTests or [ ];
           });
           enabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTestPaths-${previousPythonAttrs.pname}";
             enabledTestPaths = [
               "tests/test_basic.py"
-            ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
           });
           enabledTestPaths-nonexistent = testers.testBuildFailure (
             objprint.overridePythonAttrs (previousPythonAttrs: {
               pname = "test-pytestCheckHook-enabledTestPaths-nonexistent-${previousPythonAttrs.pname}";
               enabledTestPaths = [
                 "tests/test_foo.py"
-              ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+              ]
+              ++ previousPythonAttrs.enabledTestPaths or [ ];
             })
           );
           enabledTestPaths-dir = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTestPaths-dir-${previousPythonAttrs.pname}";
             enabledTestPaths = [
               "tests"
-            ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
           });
           enabledTestPaths-dir-disabledTestPaths = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTestPaths-dir-disabledTestPaths-${previousPythonAttrs.pname}";
             enabledTestPaths = [
               "tests"
-            ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
             disabledTestPaths = [
               "tests/test_basic.py"
-            ] ++ previousPythonAttrs.disabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.disabledTestPaths or [ ];
           });
           enabledTestPaths-glob = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTestPaths-glob-${previousPythonAttrs.pname}";
             enabledTestPaths = [
               "tests/test_obj*.py"
-            ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
           });
           enabledTestPaths-glob-nonexistent = testers.testBuildFailure (
             objprint.overridePythonAttrs (previousPythonAttrs: {
               pname = "test-pytestCheckHook-enabledTestPaths-glob-nonexistent-${previousPythonAttrs.pname}";
               enabledTestPaths = [
                 "tests/test_foo*.py"
-              ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+              ]
+              ++ previousPythonAttrs.enabledTestPaths or [ ];
             })
           );
           enabledTestPaths-item = objprint.overridePythonAttrs (previousPythonAttrs: {
             pname = "test-pytestCheckHook-enabledTestPaths-item-${previousPythonAttrs.pname}";
             enabledTestPaths = [
               "tests/test_basic.py::TestBasic"
-            ] ++ previousPythonAttrs.enabledTestPaths or [ ];
+            ]
+            ++ previousPythonAttrs.enabledTestPaths or [ ];
           });
         };
       };
@@ -422,20 +442,15 @@ in
     } ./setuptools-build-hook.sh
   ) { };
 
-  setuptoolsCheckHook = throw "The setuptoolsCheckHook has been removed, since the test command has been removed in setuptools 72.0";
-
-  setuptoolsRustBuildHook = callPackage (
-    { makePythonHook, setuptools-rust }:
+  stestrCheckHook = callPackage (
+    { makePythonHook }:
     makePythonHook {
-      name = "setuptools-rust-setup-hook";
-      propagatedBuildInputs = [ setuptools-rust ];
+      name = "stestr-check-hook";
+      propagatedBuildInputs = [ stestr ];
       substitutions = {
-        pyLibDir = "${python}/lib/${python.libPrefix}";
-        cargoBuildTarget = stdenv.hostPlatform.rust.rustcTargetSpec;
-        cargoLinkerVar = stdenv.hostPlatform.rust.cargoEnvVarTarget;
-        targetLinker = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+        inherit pythonCheckInterpreter;
       };
-    } ./setuptools-rust-hook.sh
+    } ./stestr-check-hook.sh
   ) { };
 
   unittestCheckHook = callPackage (

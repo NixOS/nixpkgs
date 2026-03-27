@@ -12,19 +12,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-lambda";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "cargo-lambda";
     repo = "cargo-lambda";
-    tag = "v${version}";
-    hash = "sha256-1i/nBuO7B6GHWmaibO8+w9LNCWGV5HdCP2B3WQPT/7c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Fbrt5zUC5dIfQO6UI0GnZxxLlI4q6tYoDw6ucKR+ouM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-i11bDmzCvsv4jTBsjCdryM8rx6FBefUXh4mbiGhyLt4=";
+  cargoHash = "sha256-AlKty5tpb9plk/rmFso6kWKKbhuxcsH5zDX/xvK5oao=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -33,11 +32,12 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      curl
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    curl
+  ];
 
   # Remove files that don't make builds reproducible:
   # - Remove build.rs file that adds the build date to the version.
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/cargo-lambda --prefix PATH : ${lib.makeBinPath [ zig_0_13 ]}
   '';
 
-  CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
+  env.CARGO_LAMBDA_BUILD_INFO = "(nixpkgs)";
 
   cargoBuildFlags = [ "--features=skip-build-banner" ];
   cargoCheckFlags = [ "--features=skip-build-banner" ];
@@ -77,4 +77,4 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
     ];
   };
-}
+})

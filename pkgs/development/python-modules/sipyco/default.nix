@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "sipyco";
-  version = "1.8";
+  version = "1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "sipyco";
     tag = "v${version}";
-    hash = "sha256-PPnAyDedUQ7Og/Cby9x5OT9wMkNGTP8GS53V6N/dk4w=";
+    hash = "sha256-DkcgZ0K6lsxzBWc31GTyufuSOpcorVv5OsZLHphHBtg=";
   };
 
   build-system = [ setuptools ];
@@ -29,12 +29,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python Communications - used by the ARTIQ experimental control package";
     mainProgram = "sipyco_rpctool";
     homepage = "https://github.com/m-labs/sipyco";
-    changelog = "https://github.com/m-labs/sipyco/releases/tag/v${version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ charlesbaynham ];
+    changelog = "https://github.com/m-labs/sipyco/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ charlesbaynham ];
   };
 }

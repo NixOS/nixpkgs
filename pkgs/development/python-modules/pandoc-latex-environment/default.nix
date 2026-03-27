@@ -9,16 +9,16 @@
   hatch-vcs,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pandoc-latex-environment";
-  version = "1.2.0.0";
+  version = "1.2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chdemko";
     repo = "pandoc-latex-environment";
-    tag = version;
-    hash = "sha256-DdDCwysTCiDg1rXO3pvI5m6lIcdAXhsnwEEgvG/ErBM=";
+    tag = finalAttrs.version;
+    hash = "sha256-uyOqw8YnTljgXkwZOXTXAsnobVSV65EVicohREBNMCY=";
   };
 
   build-system = [
@@ -40,4 +40,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

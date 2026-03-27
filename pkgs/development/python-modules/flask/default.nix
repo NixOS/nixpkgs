@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   flit-core,
@@ -10,7 +9,6 @@
   # dependencies
   blinker,
   click,
-  importlib-metadata,
   itsdangerous,
   jinja2,
   werkzeug,
@@ -20,7 +18,6 @@
   python-dotenv,
 
   # tests
-  greenlet,
   pytestCheckHook,
 
   # reverse dependencies
@@ -32,12 +29,12 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "3.1.0";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X4c8UYTIl8jZ0bBd8ePQGxSRDOaWB6EXvTJ3CYpYNqw=";
+    hash = "sha256-v2VsFcgBkO1iitCM39Oqo1vrCHhV4vSUkQqjd0zE/Yc=";
   };
 
   build-system = [ flit-core ];
@@ -48,14 +45,14 @@ buildPythonPackage rec {
     itsdangerous
     jinja2
     werkzeug
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ];
 
   optional-dependencies = {
     async = [ asgiref ];
     dotenv = [ python-dotenv ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ] ++ lib.concatAttrValues optional-dependencies;
 
   passthru.tests = {
     inherit
@@ -66,9 +63,9 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
-    changelog = "https://flask.palletsprojects.com/en/${versions.majorMinor version}.x/changes/#version-${
-      replaceStrings [ "." ] [ "-" ] version
+  meta = {
+    changelog = "https://flask.palletsprojects.com/en/stable/changes/#version-${
+      lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
     description = "Python micro framework for building web applications";
@@ -80,7 +77,7 @@ buildPythonPackage rec {
       around Werkzeug and Jinja and has become one of the most popular
       Python web application frameworks.
     '';
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nickcao ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ nickcao ];
   };
 }

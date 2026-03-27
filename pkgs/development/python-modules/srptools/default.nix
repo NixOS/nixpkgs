@@ -4,15 +4,12 @@
   fetchPypi,
   six,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "srptools";
   version = "1.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -25,12 +22,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srptools" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to implement Secure Remote Password (SRP) authentication";
     mainProgram = "srptools";
     homepage = "https://github.com/idlesign/srptools";
     changelog = "https://github.com/idlesign/srptools/blob/v${version}/CHANGELOG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

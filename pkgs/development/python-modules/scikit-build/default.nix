@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   fetchpatch2,
   hatch-fancy-pypi-readme,
@@ -11,7 +10,6 @@
   packaging,
   setuptools,
   wheel,
-  tomli,
   # Test Inputs
   cmake,
   cython,
@@ -27,8 +25,6 @@ buildPythonPackage rec {
   version = "0.18.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     pname = "scikit_build";
     inherit version;
@@ -41,6 +37,9 @@ buildPythonPackage rec {
       url = "https://github.com/scikit-build/scikit-build/commit/3992485c67331097553ec8f54233c4c295943f70.patch";
       hash = "sha256-U34UY+m6RE3c3UN/jGHuR+sRUqTGmG7dT52NWCY7nIE=";
     })
+
+    # <https://github.com/scikit-build/scikit-build/pull/1160>
+    ./fix-cmake-4.patch
   ];
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:
@@ -60,7 +59,7 @@ buildPythonPackage rec {
     packaging
     setuptools
     wheel
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   nativeCheckInputs = [
     cmake
@@ -94,14 +93,14 @@ buildPythonPackage rec {
     "test_sdist_with_symlinks"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       bsd2
     ]; # BSD due to reuses of PyNE code
-    maintainers = with maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [ FlorianFranzen ];
   };
 }

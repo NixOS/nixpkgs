@@ -6,8 +6,8 @@
   };
   ameba = {
     url = "https://github.com/crystal-ameba/ameba.git";
-    rev = "v1.6.4";
-    sha256 = "1kzr4ynd4r5w87y2czzrlir1dvqmv43ijm07804kgsy1g20k00fs";
+    rev = "37fe65d0d86477ecd6cf0bab2d519f2235fea6b5";
+    sha256 = "135jlnxqgg5haxfp5wprw3s0hqhhay2k22vgy2fy6vilk8rlcy7w";
   };
   ansi-escapes = {
     url = "https://github.com/gtramontina/ansi-escapes.cr.git";
@@ -16,8 +16,8 @@
   };
   baked_file_system = {
     url = "https://github.com/schovi/baked_file_system.git";
-    rev = "v0.10.0";
-    sha256 = "10f25sby8ipps5c2jj4j2q30kscgv4g1s5nhdddmldhg9isj0jli";
+    rev = "ea0b659f43d7ce00bde66e8a87eeb4d5a112621b";
+    sha256 = "0zxwmznmh8aazjhlf9j5nxqnij74hb2j4kad48p706bzv3m5bymg";
   };
   dotenv = {
     url = "https://github.com/gdotdesign/cr-dotenv.git";

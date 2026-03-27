@@ -8,22 +8,19 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "leaone-ble";
-  version = "0.1.0";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "leaone-ble";
     tag = "v${version}";
-    hash = "sha256-usFjI0zU89dEAbmx9mVemoxlYS8mmLTKIMhH26Rvkeg=";
+    hash = "sha256-WdsAqXv3U2E5x6Io4t3NNcioV6kwREDATe4hpojzUBo=";
   };
 
   build-system = [ poetry-core ];

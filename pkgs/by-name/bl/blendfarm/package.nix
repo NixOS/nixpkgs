@@ -12,7 +12,7 @@
   darwin,
   fontconfig,
   libgdiplus,
-  libXrandr,
+  libxrandr,
   glib,
   writeShellScriptBin,
   blender,
@@ -89,8 +89,9 @@ buildDotnetModule rec {
     pcre
     libgdiplus
     glib
-    libXrandr
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
+    libxrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
   # there is no "*.so.3" or "*.so.5" in nixpkgs. So ignore the warning
   # and add it later
@@ -130,12 +131,12 @@ buildDotnetModule rec {
       ln -s ${libgdiplus}/lib/libgdiplus.dylib $out/lib/blendfarm/
     '';
 
-  meta = with lib; {
-    description = "A open-source, cross-platform, stand-alone, Network Renderer for Blender";
+  meta = {
+    description = "Open-source, cross-platform, stand-alone, Network Renderer for Blender";
     homepage = "https://github.com/LogicReinc/LogicReinc.BlendFarm";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ gador ];
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ gador ];
     mainProgram = "blendfarm-nix";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

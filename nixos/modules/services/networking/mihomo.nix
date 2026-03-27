@@ -10,6 +10,14 @@
 }:
 let
   cfg = config.services.mihomo;
+
+  AmbientCapabilities =
+    lib.optional cfg.tunMode "CAP_NET_ADMIN"
+    ++ lib.optionals cfg.processesInfo [
+      "CAP_DAC_READ_SEARCH"
+      "CAP_SYS_PTRACE"
+    ];
+  CapabilityBoundingSet = AmbientCapabilities;
 in
 {
   options.services.mihomo = {
@@ -31,13 +39,13 @@ in
 
         You can also use the following website:
         - metacubexd:
-          - https://d.metacubex.one
-          - https://metacubex.github.io/metacubexd
-          - https://metacubexd.pages.dev
+          - <https://d.metacubex.one>
+          - <https://metacubex.github.io/metacubexd>
+          - <https://metacubexd.pages.dev>
         - yacd:
-          - https://yacd.haishan.me
+          - <https://yacd.haishan.me>
         - clash-dashboard:
-          - https://clash.razord.top
+          - <https://clash.razord.top>
       '';
     };
 
@@ -48,9 +56,13 @@ in
     };
 
     tunMode = lib.mkEnableOption ''
-      necessary permission for Mihomo's systemd service for TUN mode to function properly.
+      necessary capabilities for Mihomo's systemd service for TUN mode to function properly.
 
       Keep in mind, that you still need to enable TUN mode manually in Mihomo's configuration
+    '';
+
+    processesInfo = lib.mkEnableOption ''
+      necessary capabilities for rules about process information such as `process-name`
     '';
   };
 
@@ -62,56 +74,52 @@ in
       requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig =
-        {
-          ExecStart = lib.concatStringsSep " " [
-            (lib.getExe cfg.package)
-            "-d /var/lib/private/mihomo"
-            "-f \${CREDENTIALS_DIRECTORY}/config.yaml"
-            (lib.optionalString (cfg.webui != null) "-ext-ui ${cfg.webui}")
-            (lib.optionalString (cfg.extraOpts != null) cfg.extraOpts)
-          ];
+      serviceConfig = {
+        ExecStart = lib.concatStringsSep " " [
+          (lib.getExe cfg.package)
+          "-d /var/lib/private/mihomo"
+          "-f \${CREDENTIALS_DIRECTORY}/config.yaml"
+          (lib.optionalString (cfg.webui != null) "-ext-ui ${cfg.webui}")
+          (lib.optionalString (cfg.extraOpts != null) cfg.extraOpts)
+        ];
 
-          DynamicUser = true;
-          StateDirectory = "mihomo";
-          LoadCredential = "config.yaml:${cfg.configFile}";
+        DynamicUser = true;
+        StateDirectory = "mihomo";
+        LoadCredential = "config.yaml:${cfg.configFile}";
 
-          ### Hardening
-          AmbientCapabilities = "";
-          CapabilityBoundingSet = "";
-          DeviceAllow = "";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          PrivateMounts = true;
-          PrivateTmp = true;
-          PrivateUsers = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectControlGroups = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          RestrictNamespaces = true;
-          RestrictAddressFamilies = "AF_INET AF_INET6";
-          SystemCallArchitectures = "native";
-          SystemCallFilter = "@system-service bpf";
-          UMask = "0077";
-        }
-        // lib.optionalAttrs cfg.tunMode {
-          AmbientCapabilities = "CAP_NET_ADMIN";
-          CapabilityBoundingSet = "CAP_NET_ADMIN";
-          PrivateDevices = false;
-          PrivateUsers = false;
-          RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";
-        };
+        ### Hardening
+        inherit AmbientCapabilities CapabilityBoundingSet;
+        DeviceAllow = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RestrictNamespaces = true;
+        RestrictAddressFamilies = "AF_INET AF_INET6";
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "@system-service bpf";
+        UMask = "0077";
+      }
+      // lib.optionalAttrs cfg.tunMode {
+        PrivateDevices = false;
+        PrivateUsers = false;
+        RestrictAddressFamilies = "AF_INET AF_INET6 AF_NETLINK";
+      };
     };
   };
 

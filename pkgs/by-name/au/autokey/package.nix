@@ -11,14 +11,15 @@
   wmctrl,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "autokey";
   version = "0.96.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "autokey";
     repo = "autokey";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-d1WJLqkdC7QgzuYdnxYhajD3DtCpgceWCAxGrk0KKew=";
   };
 
@@ -36,12 +37,17 @@ python3Packages.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     dbus-python
     pyinotify
     xlib
     pygobject3
     packaging
+    standard-imghdr
   ];
 
   runtimeDeps = [
@@ -52,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
 
   preFixup = ''
-    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath runtimeDeps})
+    makeWrapperArgs+=(''${gappsWrapperArgs[@]} --prefix PATH : ${lib.makeBinPath finalAttrs.runtimeDeps})
   '';
 
   postInstall = ''
@@ -67,4 +73,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ pneumaticat ];
     platforms = lib.platforms.linux;
   };
-}
+})

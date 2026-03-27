@@ -49,11 +49,13 @@ lib.runTests (
       ++ illumos
       ++ wasi
       ++ windows
+      ++ cygwin
       ++ embedded
       ++ mmix
       ++ js
       ++ genode
       ++ redox
+      ++ uefi
     );
 
     testarm = mseteq arm [
@@ -94,6 +96,7 @@ lib.runTests (
     ];
     testmmix = mseteq mmix [ "mmix-mmixware" ];
     testpower = mseteq power [
+      "powerpc-linux"
       "powerpc-netbsd"
       "powerpc-none"
       "powerpc64-linux"
@@ -134,6 +137,7 @@ lib.runTests (
       "x86_64-solaris"
       "x86_64-windows"
       "x86_64-none"
+      "x86_64-uefi"
     ];
 
     testcygwin = mseteq cygwin [
@@ -155,9 +159,7 @@ lib.runTests (
       "x86_64-genode"
     ];
     testredox = mseteq redox [ "x86_64-redox" ];
-    testgnu = mseteq gnu (
-      linux # ++ kfreebsd ++ ...
-    );
+    testgnu = mseteq gnu linux; # ++ kfreebsd ++ ...
     testillumos = mseteq illumos [ "x86_64-solaris" ];
     testlinux = mseteq linux [
       "aarch64-linux"
@@ -174,6 +176,7 @@ lib.runTests (
       "mips64-linux"
       "mips64el-linux"
       "mipsel-linux"
+      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv32-linux"
@@ -200,8 +203,6 @@ lib.runTests (
       "x86_64-openbsd"
     ];
     testwindows = mseteq windows [
-      "i686-cygwin"
-      "x86_64-cygwin"
       "aarch64-windows"
       "i686-windows"
       "x86_64-windows"

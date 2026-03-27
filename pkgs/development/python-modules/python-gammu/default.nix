@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   #, pytestCheckHook
-  pythonOlder,
   pkg-config,
   gammu,
 }:
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "3.2.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.5";
-
   src = fetchFromGitHub {
     owner = "gammu";
-    repo = pname;
+    repo = "python-gammu";
     rev = version;
     hash = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
   };
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gammu" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for Gammu";
     homepage = "https://github.com/gammu/python-gammu/";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

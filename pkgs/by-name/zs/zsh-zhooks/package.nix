@@ -23,7 +23,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = {
-    description = "A tool for displaying the code for all Zsh hook functions";
+    description = "Tool for displaying the code for all Zsh hook functions";
     homepage = "https://github.com/agkozak/zhooks";
     license = lib.licenses.mit;
     longDescription = ''

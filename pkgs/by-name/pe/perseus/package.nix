@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   hardeningDisable = [ "stackprotector" ];
 
   src = fetchurl {
-    url = "http://people.maths.ox.ac.uk/nanda/source/perseus_4_beta.zip";
+    url = "https://people.maths.ox.ac.uk/nanda/source/perseus_4_beta.zip";
     sha256 = "sha256-cnkJEIC4tu+Ni7z0cKdjmLdS8QLe8iKpdA8uha2MeSU=";
   };
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
       around datasets arising from point samples, images, distance
       matrices and so forth.
     '';
-    homepage = "http://people.maths.ox.ac.uk/nanda/perseus/index.html";
+    homepage = "https://people.maths.ox.ac.uk/nanda/perseus/index.html";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ erikryb ];
     platforms = lib.platforms.linux;

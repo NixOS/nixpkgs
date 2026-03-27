@@ -27,11 +27,11 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "lektor";
   version = "3.4.0b12";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lektor";
-    repo = pname;
+    repo = "lektor";
     tag = "v${version}";
     # fix for case-insensitive filesystems
     postFetch = ''

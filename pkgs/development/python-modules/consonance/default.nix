@@ -9,15 +9,12 @@
   transitions,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "consonance";
   version = "0.1.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "tgalal";
@@ -52,7 +49,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/test_handshakes_offline.py" ];
+  enabledTestPaths = [ "tests/test_handshakes_offline.py" ];
 
   pythonImportsCheck = [ "consonance" ];
 

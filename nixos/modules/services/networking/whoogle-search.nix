@@ -45,14 +45,15 @@ in
 
       environment = {
         CONFIG_VOLUME = "/var/lib/whoogle-search";
-      } // cfg.extraEnv;
+      }
+      // cfg.extraEnv;
 
       serviceConfig = {
         Type = "simple";
         ExecStart =
           "${lib.getExe pkgs.whoogle-search}"
           + " --host '${cfg.listenAddress}'"
-          + " --port '${builtins.toString cfg.port}'";
+          + " --port '${toString cfg.port}'";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         StateDirectory = "whoogle-search";
         StateDirectoryMode = "0750";
@@ -64,7 +65,7 @@ in
         RestartSec = "5s";
       };
     };
-
-    meta.maintainers = with lib.maintainers; [ malte-v ];
   };
+
+  meta.maintainers = with lib.maintainers; [ malte-v ];
 }

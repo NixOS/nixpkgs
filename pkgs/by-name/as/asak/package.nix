@@ -8,18 +8,17 @@
   libjack2,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "asak";
   version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "chaosprint";
     repo = "asak";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-7r05sVIHqBBOKwye2fr0pspo/uDqaYGjt5CpxqgqKzI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-XoTfymCXrvoToSY7jw+Pn8Wm6fskFzl4f55uiKnSsJ8=";
 
   nativeBuildInputs = [
@@ -44,10 +43,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Cross-platform audio recording/playback CLI tool with TUI, written in Rust";
     homepage = "https://github.com/chaosprint/asak";
-    changelog = "https://github.com/chaosprint/asak/releases/tag/v${version}";
+    changelog = "https://github.com/chaosprint/asak/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "asak";
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
   };
-}
+})

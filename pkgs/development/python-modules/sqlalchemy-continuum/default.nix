@@ -9,7 +9,6 @@
   psycopg2,
   pymysql,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   sqlalchemy-i18n,
   sqlalchemy-utils,
@@ -17,15 +16,13 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
-  version = "1.4.2";
+  version = "1.5.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "sqlalchemy_continuum";
     inherit version;
-    hash = "sha256-D9K+efcY7aR8IgaHnZLsTr8YiTZGN7PK8+5dNL0ZyOM=";
+    hash = "sha256-JXHW62FWvIVir7OS/d3rS7MeRKH9HzeIy2Je/i9pbGM=";
   };
 
   build-system = [ setuptools ];
@@ -42,15 +39,14 @@ buildPythonPackage rec {
     i18n = [ sqlalchemy-i18n ];
   };
 
-  nativeCheckInputs =
-    [
-      psycopg2
-      pymysql
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.flask
-    ++ optional-dependencies.flask-login
-    ++ optional-dependencies.flask-sqlalchemy;
+  nativeCheckInputs = [
+    psycopg2
+    pymysql
+    pytestCheckHook
+  ]
+  ++ optional-dependencies.flask
+  ++ optional-dependencies.flask-login
+  ++ optional-dependencies.flask-sqlalchemy;
 
   disabledTestPaths = [
     # requires sqlalchemy-i18n, which is incompatible with sqlalchemy>=2
@@ -64,11 +60,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sqlalchemy_continuum" ];
 
-  meta = with lib; {
+  meta = {
     description = "Versioning and auditing extension for SQLAlchemy";
     homepage = "https://github.com/kvesteri/sqlalchemy-continuum/";
     changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

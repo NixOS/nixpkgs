@@ -6,14 +6,14 @@
   lv2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "midi-trigger";
   version = "0.0.4";
 
   src = fetchFromGitHub {
     owner = "unclechu";
     repo = "MIDI-Trigger";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-tMnN8mTd6Bm46ZIDy0JPSVe77xCZws2XwQLQexDWPgU=";
   };
 
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     mv midi-trigger.lv2 "$out/lib/lv2"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/unclechu/MIDI-Trigger";
     description = "LV2 plugin which generates MIDI notes by detected audio signal peaks";
-    maintainers = with maintainers; [ unclechu ];
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ unclechu ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -4,6 +4,9 @@
   fetchFromGitHub,
   cmake,
   ninja,
+  withAbseil ? false,
+  abseil-cpp,
+  re2,
   # Enable C++17 support
   #     https://github.com/google/googletest/issues/3081
   # Projects that require a higher standard can override this package.
@@ -24,9 +27,9 @@
   static ? stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtest";
-  version = "1.16.0";
+  version = "1.17.0";
 
   outputs = [
     "out"
@@ -36,8 +39,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
-    rev = "v${version}";
-    hash = "sha256-01PK9LxqHno89gypd7ze5gDP4V3en2J5g6JZRqohDB0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-HIHMxAUR4bjmFLoltJeIAVSulVQ6kVuIT2Ku+lwAx/4=";
   };
 
   patches = [
@@ -47,21 +50,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
+  ]
+  ++ lib.optionals withAbseil [
+    abseil-cpp
+    re2
   ];
 
-  cmakeFlags =
-    [
-      "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-    ]
-    ++ lib.optionals (cxx_standard != null) [
-      "-DCMAKE_CXX_STANDARD=${cxx_standard}"
-    ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals (cxx_standard != null) [
+    "-DCMAKE_CXX_STANDARD=${cxx_standard}"
+  ]
+  ++ lib.optional withAbseil "-DGTEST_HAS_ABSL=ON";
 
-  meta = with lib; {
+  meta = {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ivan-tkatchev ];
   };
-}
+})

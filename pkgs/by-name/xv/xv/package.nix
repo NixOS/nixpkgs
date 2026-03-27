@@ -3,32 +3,39 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  xorg,
+  libxt,
+  libx11,
   libpng,
   libwebp,
   libtiff,
+  libjpeg,
   jasper,
+  libxrandr,
+  libexif,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xv";
-  version = "6.0.2";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "xv";
     rev = "v${version}";
-    sha256 = "sha256-abmMrAxgccECsOi0eIy9/y0haPkUgbOl9wCgISLy5Rs=";
+    sha256 = "sha256-LylTpHTifH/n2vAPlLQooVM3Oox2BJ9eoQYx3USQ/No=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    xorg.libX11
-    xorg.libXt
+    libx11
+    libxt
     libpng
     libwebp
     libtiff
+    libjpeg
     jasper
+    libxrandr
+    libexif
   ];
 
   meta = {

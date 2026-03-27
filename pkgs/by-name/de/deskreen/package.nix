@@ -41,7 +41,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "deskreen";
     maintainers = with lib.maintainers; [
       leo248
-      drupol
     ];
     platforms = lib.platforms.linux;
   };

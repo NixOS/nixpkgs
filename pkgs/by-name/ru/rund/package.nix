@@ -8,20 +8,20 @@
 
 assert dcompiler != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rund";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "dragon-lang";
     repo = "rund";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "10x6f1nn294r5qnpacrpcbp348dndz5fv4nz6ih55c61ckpkvgcf";
   };
 
   buildInputs = [ dcompiler ];
   buildPhase = ''
-    for candidate in dmd ldmd2 gdmd; do
+    for candidate in dmd ldmd2; do
       echo Checking for DCompiler $candidate ...
       dc=$(type -P $candidate || echo "")
       if [ ! "$dc" == "" ]; then
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     mv $NIX_BUILD_TOP/rund $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compiler-wrapper that runs and caches D programs";
     mainProgram = "rund";
     homepage = "https://github.com/dragon-lang/rund";
     license = lib.licenses.boost;
-    maintainers = with maintainers; [ jonathanmarler ];
+    maintainers = with lib.maintainers; [ jonathanmarler ];
     platforms = lib.platforms.unix;
   };
-}
+})

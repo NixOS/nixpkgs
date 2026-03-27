@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-source-record";
-  version = "0.4.5";
+  version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-record";
     rev = version;
-    sha256 = "sha256-wh5BVWKHelw/ry6algST4EFGmmqsKs+phmVacS77dqM=";
+    sha256 = "sha256-rVlySyk59u9MKdfrdJdxbJ9DNfKNjjdy86Is2SxCXXU=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
     rm -rf $out/{data,obs-plugins}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "OBS Studio plugin to make sources available to record via a filter";
     homepage = "https://github.com/exeldro/obs-source-record";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       robbins
       shackra
     ];
-    license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.gpl2Only;
+    inherit (obs-studio.meta) platforms;
   };
 }

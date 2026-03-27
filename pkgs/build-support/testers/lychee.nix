@@ -1,4 +1,5 @@
 deps@{
+  cacert,
   formats,
   lib,
   lychee,
@@ -40,22 +41,24 @@ let
     stdenv.mkDerivation (finalAttrs: {
       name = "lychee-link-check";
       inherit site;
-      nativeBuildInputs = [ finalAttrs.passthru.lychee ];
+      nativeBuildInputs = [
+        finalAttrs.passthru.lychee
+        cacert
+      ];
       configFile = (formats.toml { }).generate "lychee.toml" finalAttrs.passthru.config;
 
       # These can be overridden with overrideAttrs if needed.
       passthru = {
         inherit lychee remap;
-        config =
-          {
-            include_fragments = true;
-          }
-          // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
-            remap = mapAttrsToList (
-              name: value: withCheckedName name "${name} ${toURL value}"
-            ) finalAttrs.passthru.remap;
-          }
-          // extraConfig;
+        config = {
+          include_fragments = true;
+        }
+        // lib.optionalAttrs (finalAttrs.passthru.remap != { }) {
+          remap = mapAttrsToList (
+            name: value: withCheckedName name "${name} ${toURL value}"
+          ) finalAttrs.passthru.remap;
+        }
+        // extraConfig;
         online = writeShellApplication {
           name = "run-lychee-online";
           runtimeInputs = [ finalAttrs.passthru.lychee ];

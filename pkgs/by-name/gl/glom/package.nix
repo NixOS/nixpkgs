@@ -69,12 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
   python_boost = python311.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 
   sphinx-build = python311.pkgs.sphinx.overrideAttrs (super: {
-    postFixup =
-      super.postFixup or ""
-      + ''
-        # Do not propagate Python
-        rm $out/nix-support/propagated-build-inputs
-      '';
+    postFixup = super.postFixup or "" + ''
+      # Do not propagate Python
+      rm $out/nix-support/propagated-build-inputs
+    '';
   });
 
   boost_python = boost.override {
@@ -137,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fontconfig error: Cannot load default config file
-  FONTCONFIG_FILE = makeFontsConf {
+  env.FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
 

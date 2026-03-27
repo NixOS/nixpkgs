@@ -4,7 +4,7 @@
 }:
 
 lib.makeScope newScope (self: {
-  mkLibretroCore = self.callPackage ./mkLibretroCore.nix;
+  mkLibretroCore = self.callPackage ./mkLibretroCore.nix { };
 
   atari800 = self.callPackage ./cores/atari800.nix { };
 
@@ -148,6 +148,8 @@ lib.makeScope newScope (self: {
   prosystem = self.callPackage ./cores/prosystem.nix { };
 
   puae = self.callPackage ./cores/puae.nix { };
+
+  puae2021 = self.callPackage ./cores/puae2021.nix { };
 
   quicknes = self.callPackage ./cores/quicknes.nix { };
 

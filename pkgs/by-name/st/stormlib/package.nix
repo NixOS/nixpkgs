@@ -3,7 +3,6 @@
   stdenv,
   bzip2,
   cmake,
-  darwin,
   fetchFromGitHub,
   libtomcrypt,
   zlib,
@@ -26,19 +25,16 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      bzip2
-      libtomcrypt
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Carbon
-    ];
+  buildInputs = [
+    bzip2
+    libtomcrypt
+    zlib
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "WITH_LIBTOMCRYPT" true)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   strictDeps = true;
@@ -61,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       aanderse
-      karolchmist
     ];
     platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch

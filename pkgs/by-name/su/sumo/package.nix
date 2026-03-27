@@ -14,7 +14,7 @@
   jdk,
   libGL,
   libGLU,
-  libX11,
+  libx11,
   libjpeg,
   libpng,
   libtiff,
@@ -26,19 +26,24 @@
   stdenv,
   swig,
   xercesc,
-  xorg,
+  libxrender,
+  libxrandr,
+  libxft,
+  libxfixes,
+  libxext,
+  libxcursor,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sumo";
-  version = "1.22.0";
+  version = "1.26.0";
 
   src = fetchFromGitHub {
-    owner = "eclipse";
+    owner = "eclipse-sumo";
     repo = "sumo";
-    rev = "v${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-4HL5wi6LfUe4/v7ObeiDCTyWV8ChRlRXDFb5OBRmjuI=";
+    tag = "v${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-HMuUQeme/cmJFR71bxsgr1tqtewl3vmsclGhc6ygiyk=";
     fetchSubmodules = true;
   };
 
@@ -48,41 +53,38 @@ stdenv.mkDerivation rec {
     swig
   ];
 
-  buildInputs =
-    [
-      bzip2
-      eigen
-      ffmpeg
-      fox_1_6
-      gdal
-      gl2ps
-      gpp
-      gtest
-      jdk
-      libGL
-      libGLU
-      libjpeg
-      libpng
-      libtiff
-      libxcrypt
-      openscenegraph
-      proj
-      python3Packages.setuptools
-      xercesc
-      zlib
-      python3
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcursor
-      libXext
-      libXfixes
-      libXft
-      libXrandr
-      libXrender
-    ]);
+  buildInputs = [
+    bzip2
+    eigen
+    ffmpeg
+    fox_1_6
+    gdal
+    gl2ps
+    gpp
+    gtest
+    jdk
+    libGL
+    libGLU
+    libjpeg
+    libpng
+    libtiff
+    libxcrypt
+    openscenegraph
+    proj
+    python3Packages.setuptools
+    xercesc
+    zlib
+    python3
+    libx11
+    libxcursor
+    libxext
+    libxfixes
+    libxft
+    libxrandr
+    libxrender
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "SUMO traffic simulator";
     longDescription = ''
       Eclipse SUMO is an open source, highly
@@ -92,7 +94,8 @@ stdenv.mkDerivation rec {
       tools for scenario creation.
     '';
     homepage = "https://github.com/eclipse/sumo";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ mtreca ];
+    license = lib.licenses.epl20;
+    maintainers = [ ];
+    teams = [ lib.teams.geospatial ];
   };
-}
+})

@@ -46,10 +46,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evolutionary_search" ];
 
-  meta = with lib; {
+  meta = {
     description = "Use evolutionary algorithms instead of gridsearch in scikit-learn";
     homepage = "https://github.com/rsteca/sklearn-deap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psyanticy ];
+    broken = true; # incompatible with scikit-learn >= 1.6
   };
 }

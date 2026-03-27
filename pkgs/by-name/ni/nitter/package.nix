@@ -10,13 +10,13 @@
 buildNimPackage (
   finalAttrs: prevAttrs: {
     pname = "nitter";
-    version = "0-unstable-2025-04-05";
+    version = "0-unstable-2026-01-29";
 
     src = fetchFromGitHub {
       owner = "zedeus";
       repo = "nitter";
-      rev = "83b0f8b55ae7bfb8a19a0bf14de52f30d06b8db6";
-      hash = "sha256-2QIcAhzYrIo1q80959980H+hzLYtPHAOy0+CItDZ1d4=";
+      rev = "a45227b8835719dfb443600052d69374db8b515c";
+      hash = "sha256-e6u+CBdOoxLnxC4L1vE7XFr7YlXQ379Ow+khohSXNpg=";
     };
 
     lockFile = ./lock.json;
@@ -44,11 +44,11 @@ buildNimPackage (
       updateScript = unstableGitUpdater { };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/zedeus/nitter";
       description = "Alternative Twitter front-end";
-      license = licenses.agpl3Only;
-      maintainers = with maintainers; [
+      license = lib.licenses.agpl3Only;
+      maintainers = with lib.maintainers; [
         erdnaxe
         infinidoge
       ];

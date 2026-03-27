@@ -6,13 +6,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "workcraft";
-  version = "3.5.2";
+  version = "3.5.4";
 
   src = fetchurl {
-    url = "https://github.com/workcraft/workcraft/releases/download/v${version}/workcraft-v${version}-linux.tar.gz";
-    sha256 = "sha256-/Qax8cSO9j77OXNTYoZoAk5H5teWuNuR+9ubQuFq6qc=";
+    url = "https://github.com/workcraft/workcraft/releases/download/v${finalAttrs.version}/workcraft-v${finalAttrs.version}-linux.tar.gz";
+    hash = "sha256-+G4Z9GfyfdBL3qb8RqtmRPq6wC6et4P3S6Owy/L5sSU=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     makeWrapper $out/share/workcraft $out/bin/workcraft \
       --set JAVA_HOME "${jre}" \
-      --set _JAVA_OPTIONS '-Dawt.useSystemAAFontSettings=gasp';
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp";
   '';
 
   meta = {
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ timor ];
   };
-}
+})

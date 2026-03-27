@@ -2,21 +2,18 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   hatchling,
   terminaltexteffects,
 }:
 
 buildPythonPackage rec {
   pname = "textualeffects";
-  version = "0.1.3";
+  version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s6LrsCJu/ubDIXQqxQlY2HVbzDc9+FtUE9oBSulUsm8=";
+    hash = "sha256-5C84ZdvcgVgxroFZycOdHdB4my3qK8b4wVxD4kd+XfE=";
   };
 
   build-system = [ hatchling ];

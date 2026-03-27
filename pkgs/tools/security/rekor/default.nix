@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -14,13 +15,13 @@ let
     }:
     buildGoModule rec {
       inherit pname;
-      version = "1.3.9";
+      version = "1.5.1";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        hash = "sha256-JJzLOu8UJbkLT+JywddKtgmDNxAiSV6n9eaQu1ihqSg=";
+        hash = "sha256-ZaeacpzdBG3QBGPQ0rTW8cJyTe5S8ff6OIVv1/VcbL4=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -33,7 +34,7 @@ let
         '';
       };
 
-      vendorHash = "sha256-/tB2Fvs+EJGaReluhYG/PgGSxmGGAv+MOZ2J4ln0mRw=";
+      vendorHash = "sha256-xrsiFrC8o4l1nPvxNzsXPY9nshKsy5sVei8yHAee46s=";
 
       nativeBuildInputs = [ installShellFiles ];
 
@@ -52,19 +53,19 @@ let
         ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
       '';
 
-      postInstall = ''
+      postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd ${pname} \
           --bash <($out/bin/${pname} completion bash) \
           --fish <($out/bin/${pname} completion fish) \
           --zsh <($out/bin/${pname} completion zsh)
       '';
 
-      meta = with lib; {
+      meta = {
         inherit description;
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
-        license = licenses.asl20;
-        maintainers = with maintainers; [
+        license = lib.licenses.asl20;
+        maintainers = with lib.maintainers; [
           lesuisse
           jk
           developer-guy

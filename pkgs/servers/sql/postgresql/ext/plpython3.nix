@@ -11,7 +11,8 @@ let
     let
       python = python3.withPackages f;
       finalPackage = buildEnv {
-        name = "${postgresql.pname}-plpython3-${postgresql.version}";
+        pname = "${postgresql.pname}-plpython3";
+        inherit (postgresql) version;
         paths = [ postgresql.plpython3 ];
         passthru = {
           inherit withPackages;
@@ -33,7 +34,7 @@ let
             homepage
             license
             changelog
-            maintainers
+            teams
             platforms
             ;
           description = "PL/Python - Python Procedural Language";

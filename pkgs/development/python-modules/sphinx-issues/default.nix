@@ -1,46 +1,40 @@
 {
   lib,
   buildPythonPackage,
-  sphinx,
   fetchFromGitHub,
-  pandoc,
+  flit-core,
+  pytestCheckHook,
+  sphinx,
 }:
-
 buildPythonPackage rec {
   pname = "sphinx-issues";
-  version = "3.0.1";
-  format = "setuptools";
-  outputs = [
-    "out"
-    "doc"
-  ];
+  version = "5.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sloria";
     repo = "sphinx-issues";
-    rev = version;
-    sha256 = "1lns6isq9kwcw8z4jwgy927f7idx9srvri5adaa5zmypw5x47hha";
+    tag = version;
+    hash = "sha256-/nc5gtZbE1ziMPWIkZTkevMfVkNtJYL/b5QLDeMhzUs=";
   };
+
+  postPatch = ''
+    substituteInPlace tests/test_sphinx_issues.py \
+      --replace-fail 'Path(sys.executable).parent.joinpath("sphinx-build")' '"${lib.getExe' sphinx "sphinx-build"}"'
+  '';
+
+  build-system = [ flit-core ];
+
+  dependencies = [ sphinx ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "sphinx_issues" ];
 
-  propagatedBuildInputs = [ sphinx ];
-
-  nativeBuildInputs = [ pandoc ];
-
-  postBuild = ''
-    pandoc -f rst -t html --standalone < README.rst > README.html
-  '';
-
-  postInstall = ''
-    mkdir -p $doc/share/doc/$name/html
-    cp README.html $doc/share/doc/$name/html
-  '';
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/sloria/sphinx-issues";
     description = "Sphinx extension for linking to your project's issue tracker";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kaction ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

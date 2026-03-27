@@ -1,53 +1,55 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  yarr,
+  versionCheckHook,
+  nix-update-script,
+  nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "yarr";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "nkanaev";
     repo = "yarr";
-    rev = "v${version}";
-    hash = "sha256-ZMQ+IX8dZuxyxQhD/eWAe4bGGCVcaCeVgF+Wqs79G+k=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-D/049qH6CFNL7MY5e54guA9i84pbAwGf2UPHnVQWCkU=";
   };
 
   vendorHash = null;
 
-  subPackages = [ "src" ];
-
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=${version}"
+    "-X main.Version=${finalAttrs.version}"
     "-X main.GitHash=none"
   ];
 
   tags = [
     "sqlite_foreign_keys"
-    "release"
+    "sqlite_json"
   ];
 
-  postInstall = ''
-    mv $out/bin/{src,yarr}
-  '';
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  passthru.tests.version = testers.testVersion {
-    package = yarr;
-    version = "v${version}";
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.yarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Yet another rss reader";
     mainProgram = "yarr";
     homepage = "https://github.com/nkanaev/yarr";
-    changelog = "https://github.com/nkanaev/yarr/blob/v${version}/doc/changelog.txt";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sikmir ];
+    changelog = "https://github.com/nkanaev/yarr/blob/v${finalAttrs.version}/doc/changelog.txt";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      sikmir
+      christoph-heiss
+    ];
   };
-}
+})

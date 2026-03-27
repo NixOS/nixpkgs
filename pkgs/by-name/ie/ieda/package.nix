@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchgit,
-  fetchFromGitHub,
   fetchpatch,
   callPackages,
   cmake,
@@ -22,35 +21,35 @@
   gmp,
   python3,
   onnxruntime,
+  pkg-config,
+  curl,
+  onetbb,
 }:
 let
-  glog-lock = glog.overrideAttrs (oldAttrs: rec {
-    version = "0.6.0";
-    src = fetchFromGitHub {
-      owner = "google";
-      repo = "glog";
-      rev = "v${version}";
-      sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
-    };
-  });
   rootSrc = stdenv.mkDerivation {
     pname = "iEDA-src";
-    version = "2025-03-12";
+    version = "0.1.0-unstable-2025-12-23";
     src = fetchgit {
       url = "https://gitee.com/oscc-project/iEDA";
-      rev = "3a066726aa9521991a46d603f041831361d3ba51";
-      sha256 = "sha256-iPdp1xEje8bBumI/eqhvw0llg3NAzRb8pzc3fmWMwtU=";
+      rev = "59662dcd768165f3957003522cb929d42b252023";
+      sha256 = "sha256-LaFGp9U7K+HmvHW1XK6HyUB/WM5O3y/tngul+cdbCP4=";
     };
 
     patches = [
-      # This patch is to fix the build error caused by the missing of the header file,
-      # and remove some libs or path that they hard-coded in the source code.
-      # Should be removed after we upstream these changes.
+      # This patch is to fix the build system to properly find and link against rust libraries.
+      # Due to the way they organized the source code, it's hard to upstream this patch.
+      # So we have to maintain this patch locally.
       (fetchpatch {
-        url = "https://github.com/Emin017/iEDA/commit/0eb86754063df6e21b35fd1396363ebc75b760c5.patch";
-        hash = "sha256-hdH6+g3eZUxDudWqTwbaWNKS0fwfUWJPp//dqGNJQfM=";
+        url = "https://github.com/Emin017/iEDA/commit/e5f3ce024965df5e1d400b6a1d7f8b5b307a4bf3.patch";
+        hash = "sha256-YJnY+r9A887WT0a/H/Zf++r1PpD7t567NpkesDmIsD0=";
       })
     ];
+
+    postPatch = ''
+      # Patch for boost1.89, should be removed after upstream update: https://gitee.com/oscc-project/iEDA/pulls/92
+      sed -i '1i find_package(Boost REQUIRED)' src/operation/iPA/test/CMakeLists.txt
+      sed -i 's/boost_system/Boost::headers/g' src/operation/iPA/test/CMakeLists.txt
+    '';
 
     dontBuild = true;
     dontFixup = true;
@@ -64,7 +63,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "iEDA";
-  version = "0-unstable-2025-03-12";
+  version = rootSrc.version;
 
   src = rootSrc;
 
@@ -75,6 +74,7 @@ stdenv.mkDerivation {
     bison
     python3
     tcl
+    pkg-config
   ];
 
   cmakeFlags = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
     rustpkgs.verilog-parser
     rustpkgs.liberty-parser
     gtest
-    glog-lock
+    glog
     gflags
     boost
     onnxruntime
@@ -106,14 +106,33 @@ stdenv.mkDerivation {
     gmp
     tcl
     zlib
+    curl
+    onetbb
   ];
 
   postInstall = ''
     # Tests rely on hardcoded path, so they should not be included
     rm $out/bin/*test $out/bin/*Test $out/bin/test_* $out/bin/*_app
+
+    # Copy scripts to the share directory for the test
+    mkdir -p $out/share/scripts
+    cp -r $src/scripts/hello.tcl $out/share/scripts/
   '';
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # Run the tests
+    $out/bin/iEDA -script $out/share/scripts/hello.tcl
+
+    runHook postInstallCheck
+  '';
+
+  doInstallCheck = !stdenv.hostPlatform.isAarch64; # Tests will fail on aarch64-linux, wait for upstream fix: https://github.com/microsoft/onnxruntime/issues/10038
+
   enableParallelBuild = true;
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Open-source EDA infracstructure and tools from Netlist to GDS for ASIC design";

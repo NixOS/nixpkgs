@@ -10,7 +10,7 @@
   libGLU,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qxmledit";
   version = "0.9.17";
 
@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lbellonda";
-    repo = pname;
-    rev = version;
+    repo = "qxmledit";
+    rev = finalAttrs.version;
     hash = "sha256-UzN5U+aC/uKokSdeUG2zv8+mkaH4ndYZ0sfzkpQ3l1M=";
   };
 
@@ -49,13 +49,13 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Simple XML editor based on qt libraries";
     homepage = "https://sourceforge.net/projects/qxmledit";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/lbellonda/qxmledit/blob/${finalAttrs.version}/NEWS";
     mainProgram = "qxmledit";
   };
-}
+})

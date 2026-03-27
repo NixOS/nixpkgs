@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "osc-sdk-python";
-  version = "0.31.0";
+  version = "0.38.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "outscale";
     repo = "osc-sdk-python";
     tag = "v${version}";
-    hash = "sha256-5Ws/yPIw0H+FV9oRZLsywap1eqIkCOEK1yGhk0Ft6Ic=";
+    hash = "sha256-dS4vwBSvsjPu8JToXPww2tfN+zzCK/qzbxyZwA/n6js=";
     fetchSubmodules = true;
   };
 
@@ -30,20 +30,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "ruamel.yaml==0.17.32" "ruamel.yaml"
-  '';
+  pythonRelaxDeps = [
+    "ruamel.yaml"
+  ];
 
   # Only keep test not requiring access and secret keys
-  pytestFlagsArray = [ "tests/test_net.py" ];
+  enabledTestPaths = [ "tests/test_net.py" ];
 
   pythonImportsCheck = [ "osc_sdk_python" ];
 
-  meta = with lib; {
+  meta = {
     description = "SDK to perform actions on Outscale API";
     homepage = "https://github.com/outscale/osc-sdk-python";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ nicolas-goudry ];
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

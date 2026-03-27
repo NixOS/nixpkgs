@@ -2,31 +2,40 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  qt5,
+  qt6,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "meteo-qt";
-  version = "3.4";
-  format = "setuptools";
+  version = "4.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dglent";
     repo = "meteo-qt";
-    tag = "v${version}";
-    hash = "sha256-J9R6UGfj3vaPfn0vmjeRMsHryc/1pxoKyIE9wteVYbY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ksG5cnVV/4QOCzK+UWwe7LjPncIeFElAuTK60KaHgrY=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "lrelease-pro-qt6" "${qt6.qttools}/libexec/lrelease-pro"
+  '';
+
   nativeBuildInputs = [
-    qt5.qttools
-    qt5.wrapQtAppsHook
+    qt6.qttools
+    qt6.wrapQtAppsHook
+    python3Packages.pyqt6
   ];
 
-  build-system = with python3Packages; [ sip ];
+  build-system = with python3Packages; [
+    setuptools
+    sip
+  ];
 
   dependencies = with python3Packages; [
     lxml
-    pyqt5
+    pyqt6
   ];
 
   postFixup = ''
@@ -40,10 +49,10 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "System tray application for weather status information";
     homepage = "https://github.com/dglent/meteo-qt";
-    changelog = "https://github.com/dglent/meteo-qt/blob/${src.rev}/CHANGELOG";
+    changelog = "https://github.com/dglent/meteo-qt/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ linuxissuper ];
     mainProgram = "meteo-qt";
     platforms = lib.platforms.linux;
   };
-}
+})

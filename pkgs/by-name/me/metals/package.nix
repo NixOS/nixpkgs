@@ -7,15 +7,15 @@
   setJavaClassPath,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "metals";
-  version = "1.5.2";
+  version = "1.6.6";
 
   deps = stdenv.mkDerivation {
-    name = "${pname}-deps-${version}";
+    name = "metals-deps-${finalAttrs.version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/cs fetch org.scalameta:metals_2.13:${version} \
+      ${coursier}/bin/cs fetch org.scalameta:metals_2.13:${finalAttrs.version} org.scalameta:metals-mcp_2.13:${finalAttrs.version} \
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
@@ -23,14 +23,14 @@ stdenv.mkDerivation rec {
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-Qh8T0/nLVpfdJiWqdi1mpvUom5B9Xr8jsNGqzEx8OLs=";
+    outputHash = "sha256-Gc5fQCXLWvDLzxfj+NfOcelVV51UoydNfGdDx1T4cbk=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     setJavaClassPath
   ];
-  buildInputs = [ deps ];
+  buildInputs = [ finalAttrs.deps ];
 
   dontUnpack = true;
 
@@ -40,18 +40,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     makeWrapper ${jre}/bin/java $out/bin/metals \
-      --add-flags "${extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+      --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.Main"
+
+    makeWrapper ${jre}/bin/java $out/bin/metals-mcp \
+      --add-flags "${finalAttrs.extraJavaOpts} -cp $CLASSPATH scala.meta.metals.McpMain"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scalameta.org/metals/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "Language server for Scala";
     mainProgram = "metals";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       fabianhjr
       jpaju
       tomahna
     ];
   };
-}
+})

@@ -2,22 +2,31 @@
   lib,
   python3Packages,
   fetchPypi,
+  fetchpatch,
   netcat-openbsd,
   procps,
   bash,
   nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "flashfocus";
   version = "2.4.1";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-O6jRQ6e96b8CuumTD6TGELaz26No7WFZgGSnNSlqzuE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bump-marshmallow.patch";
+      url = "https://github.com/fennerm/flashfocus/commit/0ed8616ad31c5e281be1a890ad9510323fa1b6c7.patch";
+      hash = "sha256-A7PwvqPpi4koKD3d6SRHVV753hGd9wIf3/nT49f6qoY=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace bin/nc_flash_window \
@@ -38,6 +47,7 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "pyyaml"
     "xcffib"
+    "cffi"
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -57,11 +67,11 @@ python3Packages.buildPythonApplication rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/fennerm/flashfocus";
     description = "Simple focus animations for tiling window managers";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ artturin ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ artturin ];
   };
-}
+})

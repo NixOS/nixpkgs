@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "prov";
-  version = "2.0.1";
+  version = "2.1.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DiOMFAXRpVxyvTmzttc9b3q/2dCn+rLsBpOhmimlYX8=";
+    hash = "sha256-fQErFk9bu0LhGO2dJXiKsBLQkIK3Iryd1OgRownqV/U=";
   };
 
   propagatedBuildInputs = [
@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "prov" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for W3C Provenance Data Model (PROV)";
     homepage = "https://github.com/trungdong/prov";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ashgillman ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ashgillman ];
   };
 }

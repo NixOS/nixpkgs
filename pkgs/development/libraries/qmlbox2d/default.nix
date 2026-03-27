@@ -6,39 +6,18 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  box2d,
+  unstableGitUpdater,
 }:
 
-let
-  inherit (lib) cmakeBool;
-
-  # 2.3.1 is the only supported version
-  box2d' = (box2d.override { settingsFile = "Box2D/Common/b2Settings.h"; }).overrideAttrs (old: rec {
-    version = "2.3.1";
-    src = fetchFromGitHub {
-      owner = "erincatto";
-      repo = "box2d";
-      rev = "v${version}";
-      hash = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
-    };
-    sourceRoot = "${src.name}/Box2D";
-    cmakeFlags = old.cmakeFlags or [ ] ++ [
-      (cmakeBool "BOX2D_INSTALL" true)
-      (cmakeBool "BOX2D_BUILD_SHARED" true)
-      (cmakeBool "BOX2D_BUILD_EXAMPLES" false)
-    ];
-  });
-
-in
 stdenv.mkDerivation {
   pname = "qml-box2d";
-  version = "unstable-2022-08-25";
+  version = "0-unstable-2025-09-30";
 
   src = fetchFromGitHub {
     owner = "qml-box2d";
     repo = "qml-box2d";
-    rev = "0bb88a6f871eef72b3b9ded9329c15f1da1f4fd7";
-    hash = "sha256-sfSVetpHIAIujpgjvRScAkJRlQQYjQ/yQrkWvp7Yu0s=";
+    rev = "e3674e0fe030c406a1d915e47eab760624fffa55";
+    hash = "sha256-kxDSPO2ifffJng9rKgEwdKRoP6alnYWwItbvE1t4Hbo=";
   };
 
   dontWrapQtApps = true;
@@ -49,20 +28,21 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    box2d'
     qtbase
     qtdeclarative
   ];
 
-  cmakeFlags = [
-    (cmakeBool "USE_SYSTEM_BOX2D" true)
-  ];
+  passthru = {
+    updateScript = unstableGitUpdater {
+      hardcodeZeroVersion = true;
+    };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "QML plugin for Box2D engine";
     homepage = "https://github.com/qml-box2d/qml-box2d";
-    maintainers = with maintainers; [ guibou ];
-    platforms = platforms.linux;
-    license = licenses.zlib;
+    maintainers = with lib.maintainers; [ guibou ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.zlib;
   };
 }

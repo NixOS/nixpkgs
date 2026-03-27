@@ -6,14 +6,14 @@
   yascreen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpfmon";
   version = "2.53";
 
   src = fetchFromGitHub {
     owner = "bbonev";
     repo = "bpfmon";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-+W+3RLvgXXtUImzLkJr9mSWExvAUgjMp+lR9sg14VaY=";
   };
 
@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "BPF based visual packet rate monitor";
     mainProgram = "bpfmon";
     homepage = "https://github.com/bbonev/bpfmon";
-    changelog = "https://github.com/bbonev/bpfmon/releases/tag/v${version}";
-    maintainers = with maintainers; [ arezvov ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    changelog = "https://github.com/bbonev/bpfmon/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ arezvov ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

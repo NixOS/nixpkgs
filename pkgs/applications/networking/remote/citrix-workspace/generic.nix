@@ -5,65 +5,96 @@
   makeWrapper,
   autoPatchelfHook,
   wrapGAppsHook3,
-  which,
-  more,
-  file,
-  atk,
   alsa-lib,
+  atk,
+  cacert,
   cairo,
+  dconf,
+  enchant,
+  file,
   fontconfig,
+  freetype,
+  fuse3,
   gdk-pixbuf,
   glib,
-  webkitgtk_4_0,
+  glib-networking,
+  gnome2,
+  gtk2,
   gtk2-x11,
   gtk3,
+  gtk_engines,
+  harfbuzzFull,
   heimdal,
+  hyphen,
   krb5,
+  lcms2,
+  libGL,
+  libappindicator-gtk3,
+  libcanberra-gtk3,
+  libcap,
+  libcxx,
+  libfaketime,
+  libgbm,
+  libinput,
+  libjpeg8,
+  libjson,
+  libmanette,
+  libnotify,
+  libpng12,
+  libpulseaudio,
+  libredirect,
+  libseccomp,
+  libsecret,
   libsoup_2_4,
   libvorbis,
-  speex,
-  openssl,
-  zlib,
-  xorg,
-  pango,
-  gtk2,
-  gnome2,
-  libgbm,
-  nss,
-  nspr,
-  gtk_engines,
-  freetype,
-  dconf,
-  libpng12,
-  libxml2,
-  libjpeg,
-  libredirect,
-  tzdata,
-  cacert,
-  systemd,
-  libcxx,
-  symlinkJoin,
-  libpulseaudio,
-  pcsclite,
-  glib-networking,
+  libxml2_13,
+  libxslt,
   llvmPackages,
+  more,
+  nspr,
+  nss,
   opencv4,
-  libfaketime,
-  libinput,
-  libcap,
-  libjson,
-  libsecret,
-  libcanberra-gtk3,
+  openssl,
+  pango,
+  pcsclite,
+  perl,
+  sane-backends,
+  speex,
+  symlinkJoin,
+  systemd,
+  tzdata,
+  which,
+  woff2,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxmu,
+  libxinerama,
+  libxfixes,
+  libxext,
+  libxaw,
+  libx11,
+  xprop,
+  xdpyinfo,
+  libxcb,
+  zlib,
 
   homepage,
   version,
-  prefix,
   hash,
 
   extraCerts ? [ ],
 }:
 
 let
+  fuse3' = symlinkJoin {
+    name = "fuse3-backwards-compat";
+    paths = [ (lib.getLib fuse3) ];
+    postBuild = ''
+      ln -sf $out/lib/libfuse3.so.3.17.4 $out/lib/libfuse3.so.3
+    '';
+  };
+
   openssl' = symlinkJoin {
     name = "openssl-backwards-compat";
     nativeBuildInputs = [ makeWrapper ];
@@ -93,12 +124,12 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = requireFile rec {
-    name = "${prefix}-${version}.tar.gz";
+    name = "linuxx64-${version}.tar.gz";
     sha256 = hash;
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the ${if stdenv.hostPlatform.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
+      the 64-bit binaries, .tar.gz from:
 
       ${homepage}
 
@@ -121,11 +152,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     file
+    libfaketime
     makeWrapper
     more
     which
     wrapGAppsHook3
-    libfaketime
   ];
 
   buildInputs = [
@@ -133,64 +164,77 @@ stdenv.mkDerivation rec {
     atk
     cairo
     dconf
+    enchant
     fontconfig
     freetype
+    fuse3'
     gdk-pixbuf
-    gnome2.gtkglext
     glib-networking
-    webkitgtk_4_0
+    gnome2.gtkglext
     gtk2
     gtk2-x11
     gtk3
     gtk_engines
+    harfbuzzFull
     heimdal
+    hyphen
     krb5
-    libcap
+    lcms2
+    libGL
     libcanberra-gtk3
+    libcap
     libcxx
+    libgbm
     libinput
-    libjpeg
+    libjpeg8
     libjson
+    libmanette
+    libnotify
     libpng12
     libpulseaudio
+    libseccomp
     libsecret
     libsoup_2_4
     libvorbis
-    libxml2
+    libxml2_13
+    libxslt
     llvmPackages.libunwind
-    libgbm
     nspr
     nss
     opencv4'
     openssl'
     pango
     pcsclite
+    sane-backends
     speex
-    (lib.getLib systemd)
     stdenv.cc.cc
-    xorg.libXaw
-    xorg.libXmu
-    xorg.libXScrnSaver
-    xorg.libXtst
+    (lib.getLib systemd)
+    woff2
+    libxscrnsaver
+    libxaw
+    libxmu
+    libxtst
     zlib
   ];
 
   runtimeDependencies = [
     glib
     glib-networking
+    libappindicator-gtk3
+    libGL
     pcsclite
 
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXinerama
-    xorg.libXmu
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-    xorg.xprop
-    xorg.xdpyinfo
+    libx11
+    libxscrnsaver
+    libxext
+    libxfixes
+    libxinerama
+    libxmu
+    libxrender
+    libxtst
+    libxcb
+    xdpyinfo
+    xprop
   ];
 
   installPhase =
@@ -207,9 +251,10 @@ stdenv.mkDerivation rec {
         wrapProgram $out/opt/citrix-icaclient/${program} \
           ${lib.optionalString (icaFlag program != null) ''--add-flags "${icaFlag program} $ICAInstDir"''} \
           --set ICAROOT "$ICAInstDir" \
-          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib" \
+          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
+          --prefix LD_LIBRARY_PATH : "$ICAInstDir:$ICAInstDir/lib:$ICAInstDir/usr/lib/x86_64-linux-gnu:$ICAInstDir/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle" \
           --set LD_PRELOAD "${libredirect}/lib/libredirect.so ${lib.getLib pcsclite}/lib/libpcsclite.so" \
-          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone"
+          --set NIX_REDIRECTS "/usr/share/zoneinfo=${tzdata}/share/zoneinfo:/etc/zoneinfo=${tzdata}/share/zoneinfo:/etc/timezone=$ICAInstDir/timezone:/usr/lib/x86_64-linux-gnu=$ICAInstDir/usr/lib/x86_64-linux-gnu"
       '';
       wrapLink = program: ''
         ${wrap program}
@@ -238,9 +283,9 @@ stdenv.mkDerivation rec {
       export HOME=$(mktemp -d)
 
       # Run upstream installer in the store-path.
-      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' ./${prefix}/hinst
+      sed -i -e 's,^ANSWER="",ANSWER="$INSTALLER_YES",g' -e 's,/bin/true,true,g' -e 's, -C / , -C . ,g' ./linuxx64/hinst
       source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
-      faketime -f "$source_date" ${stdenv.shell} ${prefix}/hinst CDROM "$(pwd)"
+      faketime -f "$source_date" ${stdenv.shell} linuxx64/hinst CDROM "$(pwd)"
 
       if [ -f "$ICAInstDir/util/setlog" ]; then
         chmod +x "$ICAInstDir/util/setlog"
@@ -265,11 +310,6 @@ stdenv.mkDerivation rec {
 
       ${mkWrappers copyCert extraCerts}
 
-      # See https://developer-docs.citrix.com/en-us/citrix-workspace-app-for-linux/citrix-workspace-app-for-linux-oem-reference-guide/reference-information/#library-files
-      # Those files are fallbacks to support older libwekit.so and libjpeg.so
-      rm $out/opt/citrix-icaclient/lib/ctxjpeg_fb_8.so || true
-      rm $out/opt/citrix-icaclient/lib/UIDialogLibWebKit.so || true
-
       # We support only Gstreamer 1.0
       rm $ICAInstDir/util/{gst_aud_{play,read},gst_*0.10,libgstflatstm0.10.so} || true
       ln -sf $ICAInstDir/util/gst_play1.0 $ICAInstDir/util/gst_play
@@ -290,25 +330,25 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
-  preFixup = ''
-    find $out/opt/citrix-icaclient/lib -name "libopencv_imgcodecs.so.*" | while read -r fname; do
-      # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
-      patchelf --replace-needed libtiff.so.5 libtiff.so $fname
-      # lib needs libjpeg.so.8, but nixpkgs provides libjpeg.so.9
-      patchelf --replace-needed libjpeg.so.8 libjpeg.so $fname
-    done
-  '';
+  # Null out hardcoded webkit bundle path so it falls back to LD_LIBRARY_PATH
   postFixup = ''
+    ${lib.getExe perl} -0777 -pi -e 's{/usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/injected-bundle/}{"\0" x length($&)}e' \
+      $out/opt/citrix-icaclient/usr/lib/x86_64-linux-gnu/libwebkit2gtk-4.0.so.37.56.4
+
     autoPatchelf -- "$out"
+
     $out/opt/citrix-icaclient/util/ctx_rehash
   '';
 
-  meta = with lib; {
-    license = licenses.unfree;
+  meta = {
+    # Older versions need webkitgtk_4_0 which was removed.
+    # 25.08 bundles the same.
+    broken = lib.versionOlder version "25.08";
+    license = lib.licenses.unfree;
     description = "Citrix Workspace";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
-    maintainers = with maintainers; [ flacks ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ flacks ];
     inherit homepage;
   };
 }

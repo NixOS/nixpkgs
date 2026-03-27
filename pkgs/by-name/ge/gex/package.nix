@@ -1,22 +1,22 @@
 {
   lib,
-  stdenv,
   rustPlatform,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   pkg-config,
   libgit2,
-  darwin,
   nix-update-script,
+  zlib,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gex";
   version = "0.6.4";
 
-  src = fetchFromGitHub {
+  src = fetchFromCodeberg {
     owner = "Piturnah";
     repo = "gex";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Xer7a3UtFIv3idchI7DfZ5u6qgDW/XFWi5ihtcREXqo=";
   };
 
@@ -24,13 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  buildInputs =
-    [
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
@@ -40,18 +37,17 @@ rustPlatform.buildRustPackage rec {
     ./patch-libgit2.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-4ejtMCuJOwT5bJQZaPQ1OjrB5O70we77yEXk9RmhywE=";
 
-  meta = with lib; {
+  meta = {
     description = "Git Explorer: cross-platform git workflow improvement tool inspired by Magit";
-    homepage = "https://github.com/Piturnah/gex";
-    changelog = "https://github.com/Piturnah/gex/releases/tag/${src.rev}";
-    license = with licenses; [
+    homepage = "https://codeberg.org/Piturnah/gex";
+    changelog = "https://codeberg.org/Piturnah/gex/releases/tag/${finalAttrs.src.tag}";
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       azd325
       bot-wxt1221
       evanrichter
@@ -59,4 +55,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "gex";
   };
-}
+})

@@ -34,7 +34,7 @@ rec {
           nativeBuildInputs = [ texLive ] ++ attrs.nativeBuildInputs or [ ];
           text = builtins.toFile "${name}.tex" text;
         }
-        // builtins.removeAttrs attrs [
+        // removeAttrs attrs [
           "nativeBuildInputs"
           "text"
           "texLive"
@@ -441,12 +441,10 @@ rec {
         # do not know how to test without a valid build.lua
         "ppmcheckpdf"
 
-        # *.inc files in source container rather than run
-        "texaccents"
-
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
 
       # (1) binaries requiring -v
       shortVersion = [
@@ -463,6 +461,7 @@ rec {
         "bundledoc"
         "cachepic"
         "checklistings"
+        "dtxgen"
         "dvipos"
         "extractres"
         "fig4latex"
@@ -625,7 +624,7 @@ rec {
         "outocp"
         "pmxab"
 
-        # GUI scripts that accept no argument or crash without a graphics server; please test manualy
+        # GUI scripts that accept no argument or crash without a graphics server; please test manually
         "epspdftk"
         "texdoctk"
         "tlshell"
@@ -638,6 +637,9 @@ rec {
       needScheme = [
         # pfarrei: require working kpse to find lua module
         "a5toa4"
+
+        # show-pdf-tags: require working kpse to find lualatex and lua modules
+        "show-pdf-tags"
 
         # bibexport: requires kpsewhich
         "bibexport"
@@ -658,11 +660,13 @@ rec {
         # requires kpsewhich
         "memoize-extract.pl"
         "memoize-extract.py"
+        "git-latexdiff"
 
         # require other texlive binaries in PATH
         "allcm"
         "allec"
         "chkweb"
+        "dtxgen"
         "explcheck"
         "extractbb"
         "fontinst"
@@ -678,6 +682,7 @@ rec {
         "pdftex-quiet"
         "pslatex"
         "rumakeindex"
+        "runtexfile"
         "texconfig"
         "texconfig-sys"
         "texexec"

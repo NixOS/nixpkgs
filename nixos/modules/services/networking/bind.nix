@@ -21,6 +21,14 @@ let
       })
     );
 
+  bindRndcMacType = "hmac-sha256";
+
+  bindRndcKeyFile = "/etc/bind/rndc.key";
+
+  bindNamedExe = lib.getExe' bindPkg "named";
+
+  bindRndcExe = lib.getExe' bindPkg "rndc";
+
   bindZoneOptions =
     { name, config, ... }:
     {
@@ -63,64 +71,95 @@ let
       };
     };
 
-  confFile = pkgs.writeText "named.conf" ''
-    include "/etc/bind/rndc.key";
-    controls {
-      inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
-    };
+  testRndcKey = pkgs.writeTextFile {
+    name = "testrndc.key";
+    text = ''
+      key "rndc-key" {
+        algorithm ${bindRndcMacType};
+        secret "Ini0XSebb9LrYz7zprobBLZ2iwBEK5S9vh9zj/DozR8=";
+      };
+    '';
+  };
 
-    acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
-    acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
+  testFakeDir = "/tmp/test-fake-directory-for-named-checkconf";
 
-    options {
-      listen-on { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn} };
-      listen-on-v6 { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6} };
-      allow-query-cache { cachenetworks; };
-      blackhole { badnetworks; };
-      forward ${cfg.forward};
-      forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
-      directory "${cfg.directory}";
-      pid-file "/run/named/named.pid";
-      ${cfg.extraOptions}
-    };
+  confFile = pkgs.writeTextFile {
+    name = "named.conf";
+    checkPhase = ''
+      ${lib.optionalString cfg.checkConfig ''
+        echo "Checking named configuration file...";
+        mkdir -p ${testFakeDir}
+        ${lib.getExe' bindPkg "named-checkconf"} -z $target
+      ''}
 
-    ${cfg.extraConfig}
+      substituteInPlace $target \
+        --replace-fail ${testRndcKey} ${bindRndcKeyFile} \
+        --replace-fail ${testFakeDir} ${cfg.directory}
+    '';
 
-    ${lib.concatMapStrings (
-      {
-        name,
-        file,
-        master ? true,
-        slaves ? [ ],
-        masters ? [ ],
-        allowQuery ? [ ],
-        extraConfig ? "",
-      }:
-      ''
-        zone "${name}" {
-          type ${if master then "master" else "slave"};
-          file "${file}";
-          ${
-            if master then
-              ''
-                allow-transfer {
-                  ${lib.concatMapStrings (ip: "${ip};\n") slaves}
-                };
-              ''
-            else
-              ''
-                masters {
-                  ${lib.concatMapStrings (ip: "${ip};\n") masters}
-                };
-              ''
-          }
-          allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
-          ${extraConfig}
-        };
-      ''
-    ) (lib.attrValues cfg.zones)}
-  '';
+    # The include path in the first line will be replaced in the postCheck hook.
+    text = ''
+      include "${testRndcKey}";
+      controls {
+        inet 127.0.0.1 allow {localhost;} keys {"rndc-key";};
+      };
 
+      acl cachenetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
+      acl badnetworks { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.blockedNetworks} };
+
+      options {
+        listen-on port ${toString cfg.listenOnPort} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOn
+        } };
+        listen-on-v6 port ${toString cfg.listenOnIpv6Port} { ${
+          lib.concatMapStrings (entry: " ${entry}; ") cfg.listenOnIpv6
+        } };
+        allow-query-cache { cachenetworks; };
+        blackhole { badnetworks; };
+        forward ${cfg.forward};
+        forwarders { ${lib.concatMapStrings (entry: " ${entry}; ") cfg.forwarders} };
+        directory "${testFakeDir}";
+        pid-file "/run/named/named.pid";
+        ${cfg.extraOptions}
+      };
+
+      ${cfg.extraConfig}
+
+      ${lib.concatMapStrings (
+        {
+          name,
+          file,
+          master ? true,
+          slaves ? [ ],
+          masters ? [ ],
+          allowQuery ? [ ],
+          extraConfig ? "",
+        }:
+        ''
+          zone "${name}" {
+            type ${if master then "master" else "slave"};
+            file "${file}";
+            ${
+              if master then
+                ''
+                  allow-transfer {
+                    ${lib.concatMapStrings (ip: "${ip};\n") slaves}
+                  };
+                ''
+              else
+                ''
+                  masters {
+                    ${lib.concatMapStrings (ip: "${ip};\n") masters}
+                  };
+                ''
+            }
+            allow-query { ${lib.concatMapStrings (ip: "${ip}; ") allowQuery}};
+            ${extraConfig}
+          };
+        ''
+      ) (lib.attrValues cfg.zones)}
+    '';
+  };
 in
 
 {
@@ -196,11 +235,27 @@ in
         '';
       };
 
+      listenOnPort = lib.mkOption {
+        default = 53;
+        type = lib.types.port;
+        description = ''
+          Port to listen on.
+        '';
+      };
+
       listenOnIpv6 = lib.mkOption {
         default = [ "any" ];
         type = lib.types.listOf lib.types.str;
         description = ''
           Ipv6 interfaces to listen on.
+        '';
+      };
+
+      listenOnIpv6Port = lib.mkOption {
+        default = 53;
+        type = lib.types.port;
+        description = ''
+          Ipv6 port to listen on.
         '';
       };
 
@@ -246,16 +301,39 @@ in
         '';
       };
 
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Additional command-line arguments to pass to named.
+        '';
+        example = [
+          "-n"
+          "4"
+        ];
+      };
+
       configFile = lib.mkOption {
         type = lib.types.path;
         default = confFile;
         defaultText = lib.literalExpression "confFile";
         description = ''
           Overridable config file to use for named. By default, that
-          generated by nixos.
+          generated by nixos. If overriden, it will not be checked by
+          named-checkconf.
         '';
       };
 
+      checkConfig = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Check configuration.
+
+          The configuration will not be checked if you override the config file
+          with `configFile`.
+        '';
+      };
     };
 
   };
@@ -288,23 +366,23 @@ in
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
-        if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
+        if ! [ -f ${bindRndcKeyFile} ]; then
+          ${lib.getExe' bindPkg "rndc-confgen"} -c ${bindRndcKeyFile} -a -A ${bindRndcMacType} 2>/dev/null
         fi
       '';
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
-        ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
-        ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
+        ExecStart = "${bindNamedExe} ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraArgs}";
+        ExecReload = "${bindRndcExe} -k '${bindRndcKeyFile}' reload";
+        ExecStop = "${bindRndcExe} -k '${bindRndcKeyFile}' stop";
         User = bindUser;
         RuntimeDirectory = "named";
         RuntimeDirectoryPreserve = "yes";
         ConfigurationDirectory = "bind";
         ReadWritePaths = [
           (lib.mapAttrsToList (
-            name: config: if (lib.hasPrefix "/" config.file) then ("-${dirOf config.file}") else ""
+            name: config: if (lib.hasPrefix "/" config.file) then "-${dirOf config.file}" else ""
           ) cfg.zones)
           cfg.directory
         ];

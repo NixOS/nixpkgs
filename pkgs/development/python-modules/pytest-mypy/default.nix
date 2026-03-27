@@ -10,15 +10,15 @@
   setuptools-scm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pytest-mypy";
-  version = "1.0.0";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "pytest_mypy";
-    inherit version;
-    hash = "sha256-4oSi6NJ7wWowacNKtgGy9I/OupvUNdZfabfY9Bw3PW4=";
+    inherit (finalAttrs) version;
+    hash = "sha256-P1/K/3XIDczGtoz17MKOG75x6VMJRp63oov0CM5VwHQ=";
   };
 
   nativeBuildInputs = [
@@ -44,4 +44,4 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
-}
+})

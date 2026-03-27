@@ -12,15 +12,15 @@
   snappy,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mongoc";
-  version = "1.30.2";
+  version = "1.30.3";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
-    tag = version;
-    hash = "sha256-RDUrD8MPZd1VBePyR+L5GiT/j5EZIY1KHLQKG5MsuSM=";
+    tag = finalAttrs.version;
+    hash = "sha256-3mzqsrbXfrtAAC5igIna5dAgU8FH23lkMS2IacVlCmI=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_VERSION=${version}"
+    "-DBUILD_VERSION=${finalAttrs.version}"
     "-DENABLE_UNINSTALL=OFF"
     "-DENABLE_AUTOMATIC_INIT_AND_CLEANUP=OFF"
     "-DCMAKE_INSTALL_LIBDIR=lib"
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
     rm -rf src/{libmongoc,libbson}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Official C client library for MongoDB";
     homepage = "http://mongoc.org";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "mongoc-stat";
-    maintainers = with maintainers; [ archer-65 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ archer-65 ];
+    platforms = lib.platforms.all;
   };
-}
+})

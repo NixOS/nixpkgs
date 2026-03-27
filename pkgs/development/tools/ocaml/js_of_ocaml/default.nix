@@ -13,5 +13,5 @@ buildDunePackage {
 
   propagatedBuildInputs = [ js_of_ocaml-compiler ];
 
-  meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
+  meta = removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }

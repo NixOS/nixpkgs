@@ -5,16 +5,16 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "toot";
-  version = "0.47.1";
+  version = "0.51.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "toot";
-    tag = version;
-    hash = "sha256-cdlLZL3XZDgEXbac3Kgm9o61SOpoZzWD6C1DDwj6eNo=";
+    tag = finalAttrs.version;
+    hash = "sha256-PZMh11MeJaKipt3E1reZQdL8+qz7gY/8bKleRPjshzI=";
   };
 
   nativeCheckInputs = with python3Packages; [ pytest ];
@@ -25,11 +25,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   dependencies = with python3Packages; [
+    python-dateutil
     requests
     beautifulsoup4
     wcwidth
     urwid
-    urwidgets
     tomlkit
     click
     pillow
@@ -48,11 +48,11 @@ python3Packages.buildPythonApplication rec {
     description = "Mastodon CLI interface";
     mainProgram = "toot";
     homepage = "https://github.com/ihabunek/toot";
-    changelog = "https://github.com/ihabunek/toot/blob/refs/tags/${version}/CHANGELOG.md";
+    changelog = "https://github.com/ihabunek/toot/blob/refs/tags/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       matthiasbeyer
       aleksana
     ];
   };
-}
+})

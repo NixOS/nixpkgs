@@ -36,17 +36,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    "-m"
-    "'not network'"
+  disabledTestMarks = [
+    "network"
   ];
 
   pythonImportsCheck = [ "pyopenweathermap" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for OpenWeatherMap API for Home Assistant";
     homepage = "https://github.com/freekode/pyopenweathermap";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

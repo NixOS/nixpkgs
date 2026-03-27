@@ -38,44 +38,43 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [ "devdoc" ];
+  ]
+  ++ lib.optionals withDocumentation [ "devdoc" ];
 
-  postPatch =
-    ''
-      # Uses pkg_get_variable, cannot substitute prefix with that
-      substituteInPlace data/CMakeLists.txt \
-        --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+  postPatch = ''
+    # Uses pkg_get_variable, cannot substitute prefix with that
+    substituteInPlace data/CMakeLists.txt \
+      --replace-fail 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USER_DIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
-      # Bad concatenation
-      substituteInPlace libmessaging-menu/messaging-menu.pc.in \
-        --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
-        --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+    # Bad concatenation
+    substituteInPlace libmessaging-menu/messaging-menu.pc.in \
+      --replace-fail "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
+      --replace-fail "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
 
-      # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
-      substituteInPlace tests/CMakeLists.txt \
-        --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
-    ''
-    + lib.optionalString (!withDocumentation) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(doc)' '# add_subdirectory(doc)'
-    '';
+    # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
+    substituteInPlace tests/CMakeLists.txt \
+      --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
+  ''
+  + lib.optionalString (!withDocumentation) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(doc)' '# add_subdirectory(doc)'
+  '';
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      glib # For glib-compile-schemas
-      intltool
-      pkg-config
-      vala
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals withDocumentation [
-      docbook_xsl
-      docbook_xml_dtd_45
-      gtk-doc
-    ];
+  nativeBuildInputs = [
+    cmake
+    glib # For glib-compile-schemas
+    intltool
+    pkg-config
+    vala
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals withDocumentation [
+    docbook_xsl
+    docbook_xml_dtd_45
+    gtk-doc
+  ];
 
   buildInputs = [
     accountsservice
@@ -159,7 +158,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-messages";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-messages/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;

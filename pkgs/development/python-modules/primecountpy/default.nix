@@ -2,8 +2,10 @@
   lib,
   fetchPypi,
   buildPythonPackage,
-  primecount,
+  meson-python,
   cython,
+  pkg-config,
+  primecount,
   cysignals,
 
   # Reverse dependency
@@ -12,18 +14,24 @@
 
 buildPythonPackage rec {
   pname = "primecountpy";
-  version = "0.1.0";
-  format = "setuptools";
+  version = "0.2.1";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "78fe7cc32115f0669a45d7c90faaf39f7ce3939e39e2e7e5f14c17fe4bff0676";
+    sha256 = "sha256-iIcGq2XMCJ+5g95GOTYN3ccouqTZh3p62LEW9kVlCzk=";
   };
+
+  build-system = [
+    meson-python
+    cython
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ primecount ];
 
   propagatedBuildInputs = [
-    cython
     cysignals
   ];
 
@@ -36,10 +44,10 @@ buildPythonPackage rec {
     inherit sage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cython interface for C++ primecount library";
     homepage = "https://github.com/dimpase/primecountpy/";
-    maintainers = teams.sage.members;
-    license = licenses.gpl3Only;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl3Only;
   };
 }

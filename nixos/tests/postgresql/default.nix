@@ -1,10 +1,7 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
+  runTest,
+  pkgs,
 }:
-
-with import ../../lib/testing-python.nix { inherit system pkgs; };
 
 let
   inherit (pkgs.lib)
@@ -25,21 +22,23 @@ let
       }
     );
 
-  importWithArgs = path: import path { inherit pkgs makeTest genTests; };
+  importWithArgs =
+    path:
+    import path {
+      inherit runTest genTests;
+      inherit (pkgs) lib;
+    };
 in
 {
   # postgresql
   postgresql = importWithArgs ./postgresql.nix;
   postgresql-jit = importWithArgs ./postgresql-jit.nix;
+  postgresql-replication = importWithArgs ./postgresql-replication.nix;
   postgresql-wal-receiver = importWithArgs ./postgresql-wal-receiver.nix;
   postgresql-tls-client-cert = importWithArgs ./postgresql-tls-client-cert.nix;
 
   # extensions
   anonymizer = importWithArgs ./anonymizer.nix;
-  citus = importWithArgs ./citus.nix;
   pgjwt = importWithArgs ./pgjwt.nix;
-  pgvecto-rs = importWithArgs ./pgvecto-rs.nix;
-  timescaledb = importWithArgs ./timescaledb.nix;
-  tsja = importWithArgs ./tsja.nix;
   wal2json = importWithArgs ./wal2json.nix;
 }

@@ -11,15 +11,15 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rt";
-  version = "5.0.5";
+  version = "5.0.8";
 
   src = fetchFromGitHub {
     repo = "rt";
-    rev = "rt-${version}";
+    rev = "rt-${finalAttrs.version}";
     owner = "bestpractical";
-    hash = "sha256-4E6xEk1sIiNBKJT4jD+SNK8Fs+hX8EuTv+jD1U1g6qY=";
+    hash = "sha256-4/iC1PjLgLAp7XWTafe8HW3bTkDWWQxtSEIOs8wluzE=";
   };
 
   patches = [
@@ -133,7 +133,7 @@ stdenv.mkDerivation rec {
   ];
 
   preAutoreconf = ''
-    echo rt-${version} > .tag
+    echo rt-${finalAttrs.version} > .tag
   '';
   preConfigure = ''
     appendToVar configureFlags "--with-web-user=$UID"
@@ -178,4 +178,4 @@ stdenv.mkDerivation rec {
   meta = {
     platforms = lib.platforms.unix;
   };
-}
+})

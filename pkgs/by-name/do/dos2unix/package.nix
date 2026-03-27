@@ -6,13 +6,13 @@
   gettext,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dos2unix";
-  version = "7.5.2";
+  version = "7.5.4";
 
   src = fetchurl {
-    url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
-    sha256 = "sha256-JkdCRGYIRC60j5bCCvbaMDyzqSs2TnLLfiT4gjnEvzo=";
+    url = "https://waterlan.home.xs4all.nl/dos2unix/dos2unix-${finalAttrs.version}.tar.gz";
+    hash = "sha256-+BGiueSgyTbGHvfBcymT0YIOXPAR9Nk4YYhcy4EByiE=";
   };
 
   nativeBuildInputs = [
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   ];
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Convert text files with DOS or Mac line breaks to Unix line breaks and vice versa";
     homepage = "https://waterlan.home.xs4all.nl/dos2unix.html";
-    changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${version}/tree/dos2unix/NEWS.txt?format=raw";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.all;
+    changelog = "https://sourceforge.net/p/dos2unix/dos2unix/ci/dos2unix-${finalAttrs.version}/tree/dos2unix/NEWS.txt?format=raw";
+    license = lib.licenses.bsd2;
+    maintainers = [ ];
+    platforms = lib.platforms.all;
   };
-}
+})

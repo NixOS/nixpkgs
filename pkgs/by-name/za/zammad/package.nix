@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
+  fetchpatch,
   applyPatches,
   bundlerEnv,
   callPackage,
@@ -12,7 +13,9 @@
   jq,
   moreutils,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   cacert,
   valkey,
   dataDir ? "/var/lib/zammad",
@@ -20,7 +23,7 @@
 
 let
   pname = "zammad";
-  version = "6.4.1";
+  version = "7.0.0";
 
   src = applyPatches {
     src = fetchFromGitHub (lib.importJSON ./source.json);
@@ -37,7 +40,7 @@ let
   };
 
   rubyEnv = bundlerEnv {
-    name = "${pname}-gems-${version}";
+    name = "zammad-gems-${version}";
     inherit version;
 
     # Which ruby version to select:
@@ -70,7 +73,8 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [
     valkey
     postgresql
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
     nodejs
     procps
     cacert
@@ -78,10 +82,12 @@ stdenvNoCC.mkDerivation {
 
   env.RAILS_ENV = "production";
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit pname src;
+    pnpm = pnpm_10;
 
-    hash = "sha256-bdm1nkJnXE7oZZhG2uBnk3fYhITaMROHGKPbf0G3bFs=";
+    fetcherVersion = 3;
+    hash = "sha256-oqVlhOzkqv+2mj/nDUR/PBXkRy5O7gtx2msEchGywfo=";
   };
 
   buildPhase = ''
@@ -107,11 +113,12 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     cp -R . $out
     rm -rf $out/config/database.yml $out/config/secrets.yml $out/tmp $out/log
-    # dataDir will be set in the module, and the package gets overriden there
+    # dataDir will be set in the module, and the package gets overridden there
     ln -s ${dataDir}/config/database.yml $out/config/database.yml
     ln -s ${dataDir}/config/secrets.yml $out/config/secrets.yml
-    ln -s ${dataDir}/tmp $out/tmp
     ln -s ${dataDir}/log $out/log
+    ln -s ${dataDir}/storage $out/storage
+    ln -s ${dataDir}/tmp $out/tmp
   '';
 
   passthru = {
@@ -126,17 +133,18 @@ stdenvNoCC.mkDerivation {
     };
   };
 
-  meta = with lib; {
-    description = "Zammad, a web-based, open source user support/ticketing solution";
+  meta = {
+    description = "Web-based, open source user support/ticketing solution";
     homepage = "https://zammad.org";
-    license = licenses.agpl3Plus;
+    license = lib.licenses.agpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       taeer
       netali
+      meenzen
     ];
   };
 }

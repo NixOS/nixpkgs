@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "scilla";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "scilla";
-    tag = "v${version}";
-    hash = "sha256-V6QJqjuVLE6jpwv4XbsdPx8kpfTRjV4QH5O6lng9+h4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-zeEsxmj1APc/vsKRTrdkVLJoILr6Gx9i0VSQ+dTLlGM=";
   };
 
-  vendorHash = "sha256-yTsiEA6NI2atN1VrclwVe1xz7CEFfcuRt4yMuz2CFog=";
+  vendorHash = "sha256-nI79Gx6Vs7wyqK9pCSbsFGmKBsqcmCNk2LpQ5fi79h4=";
 
   ldflags = [
     "-w"
@@ -27,12 +27,12 @@ buildGoModule rec {
     "-skip=TestIPToHostname"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Information gathering tool for DNS, ports and more";
     mainProgram = "scilla";
     homepage = "https://github.com/edoardottt/scilla";
-    changelog = "https://github.com/edoardottt/scilla/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/edoardottt/scilla/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

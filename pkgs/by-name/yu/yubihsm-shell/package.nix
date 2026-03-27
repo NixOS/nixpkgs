@@ -6,75 +6,117 @@
   openssl,
   libusb1,
   libedit,
+  makeWrapper,
   curl,
   gengetopt,
+  patchelf,
   pkg-config,
   pcsclite,
   help2man,
-  darwin,
   libiconv,
+
+  # for installCheckPhase
+  versionCheckHook,
+  jq,
+  yubihsm-connector,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yubihsm-shell";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubihsm-shell";
-    rev = version;
-    hash = "sha256-0IsdIhuKpzfArVB4xBaxCPqtk0fKWb6RuGImUj1E4Zs=";
+    rev = finalAttrs.version;
+    hash = "sha256-/hmG7yVxCVTrpmm/S7oDKQQyXIEO+S5D9wMTc7oW9Io=";
   };
 
   postPatch = ''
-    # Can't find libyubihsm at runtime because of dlopen() in C code
-    substituteInPlace lib/yubihsm.c \
-      --replace "libyubihsm_usb.so" "$out/lib/libyubihsm_usb.so" \
-      --replace "libyubihsm_http.so" "$out/lib/libyubihsm_http.so"
     # ld: unknown option: -z
     substituteInPlace CMakeLists.txt cmake/SecurityFlags.cmake \
-      --replace "AppleClang" "Clang"
+      --replace-fail "AppleClang" "Clang"
   '';
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    help2man
-    gengetopt
-  ];
-
-  buildInputs =
-    [
-      libusb1
-      libedit
-      curl
-      openssl
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      patchelf
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pcsclite.dev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.PCSC
-      libiconv
+    ++ [
+      pkg-config
+      cmake
+      help2man
+      gengetopt
+      makeWrapper
     ];
 
-  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
-    NIX_CFLAGS_COMPILE="$(pkg-config --cflags libpcsclite) $NIX_CFLAGS_COMPILE"
-  '';
-
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DDISABLE_LTO=ON"
+  buildInputs = [
+    libusb1
+    libedit
+    curl
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pcsclite.dev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
-  meta = with lib; {
-    description = "yubihsm-shell and libyubihsm";
+  # libyubihsm.so performs a dlopen() to connectors in $out/lib,
+  # this will solve search path issues for both the command line tools
+  # and the PKCS#11 library without patching
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --force-rpath --add-rpath "$out/lib" "$out/lib/libyubihsm.so"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -add_rpath "$out/lib" "$out/lib/libyubihsm.dylib"
+    '';
+
+  doInstallCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    yubihsm-connector
+  ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # yubihsm-shell should be able to connect to yubihsm-connector over http if postFixup worked
+    # note that checkPhase is more extensive and seems to require a YubiHSM plugged in,
+    # so we expect a failure here, but it should at least try to connect
+    yubihsm-connector -d </dev/null 1>&2 2>connector.log &
+    yubihsm_pid=$!
+    idx=0
+    while ! grep takeoff connector.log >/dev/null && [ $idx -lt 10 ]; do
+      idx=$((idx+1))
+      echo "Waiting for yubihsm-connector startup (try: $idx)" >&2
+      sleep 1
+    done
+    $out/bin/yubihsm-shell -Pv1 </dev/null || true
+    kill -INT "$yubihsm_pid" && { wait "$yubihsm_pid" || true; }
+    cat connector.log >&2
+    grep -E 'GET.+/connector/status' connector.log >/dev/null
+
+    runHook postInstallCheck
+  '';
+
+  meta = {
+    mainProgram = "yubihsm-shell";
+    description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
     homepage = "https://github.com/Yubico/yubihsm-shell";
-    maintainers = with maintainers; [ matthewcroughan ];
-    license = licenses.asl20;
-    platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      numinit
+    ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
-}
+})

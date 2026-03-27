@@ -8,6 +8,7 @@
 
 qtModule {
   pname = "qtgrpc";
+
   propagatedBuildInputs = [
     qtbase
     qtdeclarative

@@ -11,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy-rs";
-  version = "0.11.5";
+  version = "0.12.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy_rs";
-    rev = "v${version}";
-    hash = "sha256-vC+Vsv7UWjkO+6lm7gAb91Ig04Y7r9gYQoz6R9xpxsA=";
+    tag = "v${version}";
+    hash = "sha256-UKvag65KP58/4lZzbwR1sM90z8TOw/0BY3NTLZ4LKxM=";
   };
 
   buildAndTestSubdir = "mitmproxy-rs";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-CFsefq1zQLIYjZcfoy3afYfP/0MlBoi9kVx7FVGEKr0=";
+    hash = "sha256-P6tVyv38hgf5mdUHdHwGwgrM1/7qf15YnhulBqsN5eg=";
   };
 
   nativeBuildInputs = [
@@ -44,13 +44,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy_rs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rust bits in mitmproxy";
     homepage = "https://github.com/mitmproxy/mitmproxy_rs";
     changelog = "https://github.com/mitmproxy/mitmproxy_rs/blob/${src.rev}/CHANGELOG.md#${
       lib.replaceStrings [ "." ] [ "" ] version
     }";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     inherit (mitmproxy.meta) maintainers;
   };
 }

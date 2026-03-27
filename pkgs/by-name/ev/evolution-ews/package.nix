@@ -21,13 +21,13 @@
   makeHardcodeGsettingsPatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "evolution-ews";
-  version = "3.54.3.0";
+  version = "3.58.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-GscHzyWRqERRJXViGkkwx2GyF028XsscihhSYpRqFPY=";
+    url = "mirror://gnome/sources/evolution-ews/${lib.versions.majorMinor finalAttrs.version}/evolution-ews-${finalAttrs.version}.tar.xz";
+    hash = "sha256-+m/A39F+9hpjCtM8ZFuDWMQmZ2YSbxcWs8ef79KQyPs=";
   };
 
   patches = [
@@ -66,11 +66,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     hardcodeGsettingsPatch = makeHardcodeGsettingsPatch {
-      inherit src;
+      inherit (finalAttrs) src;
       schemaIdToVariableMapping = {
         "org.gnome.evolution.mail" = "evo";
         "org.gnome.evolution.calendar" = "evo";
       };
+      schemaExistsFunction = "e_ews_common_utils_gsettings_schema_exists";
     };
 
     updateScript =
@@ -87,11 +88,11 @@ stdenv.mkDerivation rec {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Evolution connector for Microsoft Exchange Server protocols";
     homepage = "https://gitlab.gnome.org/GNOME/evolution-ews";
-    license = licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
-    maintainers = [ maintainers.dasj19 ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus; # https://gitlab.gnome.org/GNOME/evolution-ews/issues/111
+    maintainers = [ lib.maintainers.dasj19 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

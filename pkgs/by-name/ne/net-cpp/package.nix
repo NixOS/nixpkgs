@@ -4,9 +4,9 @@
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
+  makeFontsConf,
   testers,
-  # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/5
-  boost186,
+  boost,
   cmake,
   curl,
   doxygen,
@@ -19,6 +19,7 @@
   properties-cpp,
   python3,
   validatePkgConfig,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -30,13 +31,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "net-cpp";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/net-cpp";
-    rev = finalAttrs.version;
-    hash = "sha256-MSqdP3kGI9hDdxFv2a0yd5ZkFkf1lMurB+KDIZLR9jg=";
+    tag = finalAttrs.version;
+    hash = "sha256-1rUPdN62u4eYtrXgoVaeSHro4gnAfFAl1brt+tE45oE=";
   };
 
   outputs = [
@@ -46,30 +47,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Be more lenient with how quickly HTTP test server must be up, for slower hardware / archs
+    # Remove when version > 3.2.1
     (fetchpatch {
-      url = "https://salsa.debian.org/ubports-team/net-cpp/-/raw/941d9eceaa66a06eabb1eb79554548b47d4a60ab/debian/patches/1007_wait-for-flask.patch";
-      hash = "sha256-nsGkZBuqahsg70PLUxn5EluDjmfZ0/wSnOYimfAI4ag=";
-    })
-
-    # Bump std version to 14 for gtest 1.13+
-    (fetchpatch {
-      url = "https://salsa.debian.org/ubports-team/net-cpp/-/raw/f3a031eb7e4ce7df00781100f16de58a4709afcb/debian/patches/0001-Bump-std-version-to-14-needed-for-googletest-1.13.0.patch";
-      hash = "sha256-3ykqCfZjtTx7zWQ5rkMhVp7D5fkpoCjl0CVFwwEd4U4=";
-    })
-
-    # Fix newer flask rejecting large chunks by default
-    (fetchpatch {
-      url = "https://salsa.debian.org/ubports-team/net-cpp/-/raw/f2050b5318cba3860fa1042e9b81e1b792b972c4/debian/patches/1008_set-MAX-CONTENT-LENGTH-for-flask-server-to-let-it-accept-big-chunks-of-data.patch";
-      hash = "sha256-lfMRjpmysrhzdG6OOSpBGvYJCi1hrERI/SRf+rAakbA=";
+      name = "0001-net-cpp-Look-for-python3-executable-at-configure-time-instead-of-hardcoding-a-path.patch";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/commit/811da28f36f34cc2ea32dc96b2c65932d4f954b0.patch";
+      hash = "sha256-CC7fEuRNuf5TNEfhFJr9VLWFWfTnFtIvSTUoCcwGe68=";
     })
   ];
-
-  postPatch = lib.optionalString finalAttrs.finalPackage.doCheck ''
-    # Use wrapped python. Removing just the /usr/bin doesn't seem to work?
-    substituteInPlace tests/httpbin.h.in \
-      --replace '/usr/bin/python3' '${lib.getExe pythonEnv}'
-  '';
 
   strictDeps = true;
 
@@ -78,10 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
     doxygen
     graphviz
     validatePkgConfig
+    writableTmpDirAsHomeHook # makes doc generation quieter
   ];
 
   buildInputs = [
-    boost186
+    boost
     curl
   ];
 
@@ -99,9 +84,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    # https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/issues/4
-    (lib.cmakeBool "ENABLE_WERROR" false)
+    (lib.cmakeBool "ENABLE_WERROR" true)
   ];
+
+  env.FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -109,17 +95,20 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      versionCheck = true;
+    };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple yet beautiful networking API for C++11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp";
     changelog = "https://gitlab.com/ubports/development/core/lib-cpp/net-cpp/-/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.lgpl3Only;
-    maintainers = teams.lomiri.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Only;
+    teams = [ lib.teams.lomiri ];
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "net-cpp"
     ];

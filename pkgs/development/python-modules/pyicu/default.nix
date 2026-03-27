@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitLab,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyicu";
-  version = "2.15";
+  version = "2.15.3";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -19,8 +20,12 @@ buildPythonPackage rec {
     owner = "main";
     repo = "pyicu";
     tag = "v${version}";
-    hash = "sha256-F3qW0yZBjJ8pmLEW4dWKBFvnyiw5F732DKAI+eLcL+g=";
+    hash = "sha256-vbrl6n7X85sQIdgj+Z0Xr6x/L8roK5Z/mNj53zyWQGs=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py --replace-fail "'pkg-config'" "'${stdenv.cc.targetPrefix}pkg-config'"
+  '';
 
   build-system = [ setuptools ];
 
@@ -33,19 +38,19 @@ buildPythonPackage rec {
     six
   ];
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # AssertionError: '$' != 'US Dollar'
-    "--deselect=test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
+    "test/test_NumberFormatter.py::TestCurrencyUnit::testGetName"
     # AssertionError: Lists differ: ['a', 'b', 'c', 'd'] != ['a', 'b', 'c', 'd', ...
-    "--deselect=test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
+    "test/test_UnicodeSet.py::TestUnicodeSet::testIterators"
   ];
 
   pythonImportsCheck = [ "icu" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.pyicu.org/main/pyicu";
     description = "Python extension wrapping the ICU C++ API";
     changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

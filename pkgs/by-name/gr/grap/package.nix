@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  boost,
+  boost183,
   libseccomp,
   flex,
   swig,
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    boost.all
+    boost183.all
     libseccomp
   ];
 
@@ -50,6 +50,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+     --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+
     substituteInPlace src/tools/grap-match/CMakeLists.txt --replace-fail "/usr/local/bin" "$out/bin"
 
     substituteInPlace src/tools/grap/CMakeLists.txt --replace-fail "/usr/local/bin" "$out/bin"
@@ -61,7 +64,7 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     cd $out/${python3Packages.python.sitePackages}
-    mv pygrap.so _pygrap.so
+
     substituteInPlace pygrap.py \
       --replace-fail "import imp" "import importlib" \
       --replace-fail "imp." "importlib."

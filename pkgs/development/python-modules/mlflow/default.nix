@@ -1,5 +1,6 @@
 {
   lib,
+  buildPythonPackage,
   fetchFromGitHub,
 
   # build-system
@@ -7,33 +8,39 @@
 
   # dependencies
   alembic,
-  buildPythonPackage,
   cachetools,
   click,
   cloudpickle,
+  cryptography,
   databricks-sdk,
   docker,
+  fastapi,
   flask,
+  flask-cors,
   gitpython,
   graphene,
   gunicorn,
+  huey,
   importlib-metadata,
   jinja2,
   markdown,
   matplotlib,
   numpy,
   opentelemetry-api,
+  opentelemetry-proto,
   opentelemetry-sdk,
   packaging,
   pandas,
   protobuf,
   pyarrow,
+  python-dotenv,
   pyyaml,
   requests,
   scikit-learn,
   scipy,
   sqlalchemy,
   sqlparse,
+  uvicorn,
 
   # tests
   aiohttp,
@@ -44,7 +51,6 @@
   botocore,
   catboost,
   datasets,
-  fastapi,
   google-cloud-storage,
   httpx,
   jwt,
@@ -65,23 +71,23 @@
   tensorflow,
   torch,
   transformers,
-  uvicorn,
   xgboost,
 }:
 
 buildPythonPackage rec {
   pname = "mlflow";
-  version = "2.20.3";
+  version = "3.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mlflow";
     repo = "mlflow";
     tag = "v${version}";
-    hash = "sha256-kgohENAx5PpLQ9pBfl/zSq65l/DqJfufBf0gWR1WJHY=";
+    hash = "sha256-QjRFQRShVjTnCN7/+LJ0iiB/h0+P4GJJV4RaviQdS2U=";
   };
 
   pythonRelaxDeps = [
+    "cryptography"
     "gunicorn"
     "importlib-metadata"
     "packaging"
@@ -97,24 +103,30 @@ buildPythonPackage rec {
     cachetools
     click
     cloudpickle
+    cryptography
     databricks-sdk
     docker
+    fastapi
     flask
+    flask-cors
     gitpython
     graphene
     gunicorn
+    huey
     importlib-metadata
     jinja2
     markdown
     matplotlib
     numpy
     opentelemetry-api
+    opentelemetry-proto
     opentelemetry-sdk
     packaging
     pandas
     protobuf
     pyarrow
     pydantic
+    python-dotenv
     pyyaml
     requests
     scikit-learn
@@ -122,6 +134,7 @@ buildPythonPackage rec {
     shap
     sqlalchemy
     sqlparse
+    uvicorn
   ];
 
   pythonImportsCheck = [ "mlflow" ];
@@ -135,7 +148,6 @@ buildPythonPackage rec {
     botocore
     catboost
     datasets
-    fastapi
     google-cloud-storage
     httpx
     jwt
@@ -195,6 +207,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mlflow/mlflow";
     changelog = "https://github.com/mlflow/mlflow/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

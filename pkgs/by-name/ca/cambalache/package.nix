@@ -15,24 +15,25 @@
   gtksourceview5,
   libadwaita,
   libhandy,
+  libxml2,
   webkitgtk_4_1,
   webkitgtk_6_0,
   nix-update-script,
+  casilda,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cambalache";
-  version = "0.90.4";
-
-  format = "other";
+  version = "0.99.3";
+  pyproject = false;
 
   # Did not fetch submodule since it is only for tests we don't run.
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jpu";
     repo = "cambalache";
-    rev = version;
-    hash = "sha256-XS6JBJuifmN2ElCGk5hITbotZ+fqEdjopL6VqmMP2y4=";
+    tag = finalAttrs.version;
+    hash = "sha256-1X7fXYSIXoj8qhQLIfz2gMrCnNBZ7OJCeMykBSpnYD4=";
   };
 
   nativeBuildInputs = [
@@ -60,6 +61,8 @@ python3.pkgs.buildPythonApplication rec {
     # For extra widgets support.
     libadwaita
     libhandy
+    libxml2
+    casilda
   ];
 
   # Prevent double wrapping.
@@ -67,45 +70,32 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     patchShebangs postinstall.py
-    # those programs are used at runtime not build time
-    # https://gitlab.gnome.org/jpu/cambalache/-/blob/0.12.1/meson.build#L79-80
-    substituteInPlace ./meson.build \
-      --replace-fail "find_program('broadwayd', required: true)" "" \
-      --replace-fail "find_program('gtk4-broadwayd', required: true)" ""
   '';
 
   preFixup = ''
     # Let python wrapper use GNOME flags.
-    makeWrapperArgs+=(
-      # For broadway daemons
-      --prefix PATH : "${
-        lib.makeBinPath [
-          gtk3
-          gtk4
-        ]
-      }"
-      "''${gappsWrapperArgs[@]}"
-    )
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
   postFixup = ''
     # Wrap a helper script in an unusual location.
-    wrapPythonProgramsIn "$out/${python3.sitePackages}/cambalache/priv/merengue" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/${python3.sitePackages}/cambalache/priv/merengue" "$out ''${pythonPath[*]}"
   '';
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/jpu/cambalache";
     description = "RAD tool for GTK 4 and 3 with data model first philosophy";
     mainProgram = "cambalache";
-    maintainers = teams.gnome.members;
-    license = with licenses; [
+    maintainers = with lib.maintainers; [ clerie ];
+    teams = [ lib.teams.gnome ];
+    license = with lib.licenses; [
       lgpl21Only # Cambalache
       gpl2Only # tools
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})

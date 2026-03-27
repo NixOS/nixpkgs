@@ -5,22 +5,19 @@
   setuptools,
   click,
   cython,
-  pythonOlder,
   tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "youtokentome";
-  version = "1.0.6";
+  version = "1.0.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "VKCOM";
     repo = "YouTokenToMe";
     tag = "v${version}";
-    hash = "sha256-IFZS4jSi4yMzI7VbOPHI3KFZu5tjPjfQDPY7e1qbKAM=";
+    hash = "sha256-+GI752Ih7Ou1wyChR2y80BJmeTYdHWLPX6A1lvMyLGU=";
   };
 
   nativeBuildInputs = [
@@ -35,12 +32,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "youtokentome" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unsupervised text tokenizer";
     mainProgram = "yttm";
     homepage = "https://github.com/VKCOM/YouTokenToMe";
     changelog = "https://github.com/VKCOM/YouTokenToMe/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

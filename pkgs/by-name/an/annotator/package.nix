@@ -6,23 +6,26 @@
   meson,
   ninja,
   vala,
-  wrapGAppsHook3,
+  wrapGAppsHook4,
   desktop-file-utils,
+  shared-mime-info,
+  libarchive,
   libgee,
   pantheon,
   libxml2,
-  libhandy,
+  libportal-gtk4,
+  libwebp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "annotator";
-  version = "1.2.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = "annotator";
-    rev = version;
-    hash = "sha256-VHvznkGvrE8o9qq+ijrIStSavq46dS8BqclWEWZ8mG8=";
+    tag = finalAttrs.version;
+    hash = "sha256-nJxms/df5OnASbdj4a2IjHyRT5PA2EaKHkBoQsyv8T8=";
   };
 
   nativeBuildInputs = [
@@ -30,23 +33,26 @@ stdenv.mkDerivation rec {
     meson
     ninja
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
     desktop-file-utils
+    shared-mime-info
   ];
 
   buildInputs = [
+    libarchive
     libgee
-    pantheon.granite
+    pantheon.granite7
+    libportal-gtk4
     libxml2
-    libhandy
+    libwebp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Image annotation for Elementary OS";
     homepage = "https://github.com/phase1geo/Annotator";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.phase1geo.annotator";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
-}
+})

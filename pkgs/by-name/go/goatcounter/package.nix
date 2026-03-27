@@ -7,18 +7,18 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "goatcounter";
-  version = "2.5.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "arp242";
     repo = "goatcounter";
-    rev = "v${version}";
-    hash = "sha256-lwiLk/YYxX4QwSDjpU/mAikumGXYMzleRzmPjZGruZU=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-BVKz1vPYDOpaBdurR1wjg1Jo+qncqrIbZuDVmlFAO9I=";
   };
 
-  vendorHash = "sha256-YAb3uBWQc6hWzF1Z5cAg8RzJQSJV+6dkppfczKS832s=";
+  vendorHash = "sha256-ICbtL6O1Kbig2WgbLCVSSe9MbIrYWmxYn4M2R5mwv/c=";
   subPackages = [ "cmd/goatcounter" ];
   modRoot = ".";
 
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X zgo.at/goatcounter/v2.Version=${src.rev}"
+    "-X zgo.at/goatcounter/v2.Version=${finalAttrs.src.rev}"
   ];
 
   passthru.tests = {
@@ -38,13 +38,13 @@ buildGoModule rec {
     version = testers.testVersion {
       package = goatcounter;
       command = "goatcounter version";
-      version = "v${version}";
+      version = "v${finalAttrs.version}";
     };
   };
 
   meta = {
     description = "Easy web analytics. No tracking of personal data";
-    changelog = "https://github.com/arp242/goatcounter/releases/tag/${src.rev}";
+    changelog = "https://github.com/arp242/goatcounter/releases/tag/${finalAttrs.src.rev}";
     longDescription = ''
       GoatCounter is an open source web analytics platform available as a hosted
       service (free for non-commercial use) or self-hosted app. It aims to offer easy
@@ -56,4 +56,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ tylerjl ];
     mainProgram = "goatcounter";
   };
-}
+})

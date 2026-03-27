@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "zdaemon";
-  version = "5.1";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Iun+UFDq67ngPZrWTk9jzNheBMOP2zUc8RO+9vaNt6Q=";
+    hash = "sha256-8GwsfK9RnHYINPj+JuVzWVDVAX9y1cII3IsZABQFlM0=";
   };
 
   build-system = [ setuptools ];
@@ -44,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
     license = lib.licenses.zpl21;
     maintainers = [ ];
+    broken = true;
   };
 }

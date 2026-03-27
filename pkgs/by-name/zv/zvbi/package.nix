@@ -7,6 +7,7 @@
   libintl,
   stdenv,
   testers,
+  tzdata,
   validatePkgConfig,
 }:
 
@@ -21,6 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-knc9PejugU6K4EQflfz91keZr3ZJqZu2TKFQFFJrxiI=";
   };
 
+  configureFlags = lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     validatePkgConfig
@@ -31,6 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     libintl
   ];
 
+  nativeCheckInputs = [
+    tzdata
+  ];
+
   outputs = [
     "out"
     "dev"
@@ -38,6 +48,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   enableParallelBuilding = true;
+
+  doCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform
+    && !stdenv.hostPlatform.isDarwin
+    &&
+      # musl does not support TZDIR, used by the tzdata setup hook.
+      !stdenv.hostPlatform.isMusl;
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;

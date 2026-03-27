@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -14,7 +15,11 @@
   pixman,
   libcap,
   libgbm,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-image,
+  libxcb-errors,
+  libx11,
   hwdata,
   seatd,
   vulkan-loader,
@@ -22,6 +27,7 @@
   libliftoff,
   libdisplay-info,
   lcms2,
+  evdev-proto,
   nixosTests,
   testers,
 
@@ -71,32 +77,44 @@ let
         wayland-scanner
         glslang
         hwdata
-      ] ++ extraNativeBuildInputs;
+      ]
+      ++ extraNativeBuildInputs;
 
-      buildInputs =
-        [
-          libliftoff
-          libdisplay-info
-          libGL
-          libcap
-          libinput
-          libxkbcommon
-          libgbm
-          pixman
-          seatd
-          vulkan-loader
-          wayland
-          wayland-protocols
-          xorg.libX11
-          xorg.xcbutilerrors
-          xorg.xcbutilimage
-          xorg.xcbutilrenderutil
-          xorg.xcbutilwm
-        ]
-        ++ lib.optional finalAttrs.enableXWayland xwayland
-        ++ extraBuildInputs;
+      propagatedBuildInputs = [
+        # The headers of wlroots #include <libinput.h>, and consumers of `wlroots` need not add it explicitly, hence we propagate it.
+        libinput
+      ];
 
-      mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
+      buildInputs = [
+        libliftoff
+        libdisplay-info
+        libGL
+        libxkbcommon
+        libgbm
+        pixman
+        seatd
+        vulkan-loader
+        wayland
+        wayland-protocols
+        libx11
+        libxcb-errors
+        libxcb-image
+        libxcb-render-util
+        libxcb-wm
+        lcms2
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux libcap
+      ++ lib.optional stdenv.hostPlatform.isFreeBSD evdev-proto
+      ++ lib.optional finalAttrs.enableXWayland xwayland
+      ++ extraBuildInputs;
+
+      mesonFlags = [
+        (lib.mesonEnable "xwayland" finalAttrs.enableXWayland)
+      ]
+      # The other allocator, udmabuf, is a linux-specific API
+      ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+        (lib.mesonOption "allocators" "gbm")
+      ];
 
       postFixup = ''
         # Install ALL example programs to $examples:
@@ -127,11 +145,10 @@ let
         inherit (finalAttrs.src.meta) homepage;
         changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
         license = lib.licenses.mit;
-        platforms = lib.platforms.linux;
+        platforms = lib.platforms.linux ++ lib.platforms.freebsd;
         maintainers = with lib.maintainers; [
-          primeos
-          synthetica
-          rewine
+          wineee
+          doronbehar
         ];
         pkgConfigModules = [
           (
@@ -145,19 +162,14 @@ let
     });
 
 in
-rec {
-  wlroots_0_17 = generic {
-    version = "0.17.4";
-    hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
-  };
-
+{
   wlroots_0_18 = generic {
-    version = "0.18.2";
-    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
-    extraBuildInputs = [
-      lcms2
-    ];
+    version = "0.18.3";
+    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
   };
 
-  wlroots = wlroots_0_18;
+  wlroots_0_19 = generic {
+    version = "0.19.3";
+    hash = "sha256-J+wSVUtuizaCyCn523chFbE8VtbPjyu5XYv5eLT+GM0=";
+  };
 }

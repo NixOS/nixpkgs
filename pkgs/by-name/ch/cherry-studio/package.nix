@@ -1,10 +1,12 @@
 {
   lib,
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
-  cacert,
-  yarn-berry,
-  electron,
+  yarn-berry_4,
+  nodejs,
+  electron_38,
+  cctools,
+  autoPatchelfHook,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
@@ -12,73 +14,71 @@
   commandLineArgs ? "",
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+let
+  electron = electron_38;
+  yarn-berry = yarn-berry_4;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.1.10";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rTIUBlQemYOAT0NRS80FcZfEc1Q9jUmlMU5YW99z0QE=";
+    hash = "sha256-q/heW5o2IWFjsDed/SaMv5Xfm5kAP14RD1hALkipu+Q=";
   };
 
-  yarnOfflineCache = stdenvNoCC.mkDerivation {
-    name = "${finalAttrs.pname}-${finalAttrs.version}-offline-cache";
-    inherit (finalAttrs) src;
+  postPatch = ''
+    substituteInPlace src/main/services/ConfigManager.ts \
+      --replace-fail "ConfigKeys.AutoUpdate, true" "ConfigKeys.AutoUpdate, false" \
+      --replace-fail "ConfigKeys.AutoUpdate, value" "ConfigKeys.AutoUpdate, false"
+    substituteInPlace src/main/services/AppUpdater.ts \
+      --replace-fail " = isActive" " = false"
+    substituteInPlace src/renderer/src/hooks/useSettings.ts \
+      --replace-fail "isAutoUpdate)" "false)"
+  '';
 
-    nativeBuildInputs = [
-      cacert
-      yarn-berry
-      writableTmpDirAsHomeHook
-    ];
+  missingHashes = ./missing-hashes.json;
 
-    postConfigure = ''
-      yarn config set enableTelemetry false
-      yarn config set enableGlobalCache false
-      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn config set cacheFolder $out
-    '';
-
-    buildPhase = ''
-      runHook preBuild
-
-      yarn install --mode=skip-build
-
-      runHook postBuild
-    '';
-
-    outputHashMode = "recursive";
-    outputHash = "sha256-GVIa8/rNdYTcPYqaRZp8VGKeh0IiNttXzJEVvCpCAQo=";
+  offlineCache = yarn-berry.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-AYKgGe9iTcXJqS019D064TRb5aY/XTS8u847LcYisa4=";
   };
 
   nativeBuildInputs = [
+    yarn-berry.yarnBerryConfigHook
     yarn-berry
     makeWrapper
     writableTmpDirAsHomeHook
     copyDesktopItems
-  ];
+    nodejs
+    (nodejs.python.withPackages (ps: with ps; [ setuptools ]))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ]
+  ++ lib.optionals stdenv.hostPlatform.isElf [ autoPatchelfHook ];
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  buildInputs = lib.optionals stdenv.hostPlatform.isElf [ stdenv.cc.cc.lib ];
 
-  postConfigure = ''
-    yarn config set enableTelemetry false
-    yarn config set enableGlobalCache false
-    export cachePath=$(mktemp -d)
-    cp -r $yarnOfflineCache/* $cachePath
-    yarn config set cacheFolder $cachePath
-    yarn install --mode=skip-build
-  '';
+  strictDeps = true;
+
+  env = {
+    YARN_ENABLE_SCRIPTS = "false";
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  };
 
   buildPhase = ''
     runHook preBuild
 
+    cp -r "${electron.dist}" $HOME/.electron-dist
+    chmod -R u+w $HOME/.electron-dist
+
     yarn run electron-vite build
-    yarn run electron-builder --linux --dir \
-      --config electron-builder.yml \
-      -c.electronDist="${electron}/libexec/electron" \
-      -c.electronVersion=${electron.version}
+    yarn run electron-builder --dir \
+      --config=electron-builder.yml \
+      --config.mac.identity=null \
+      --config.electronDist="$HOME/.electron-dist" \
+      --config.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -91,23 +91,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       exec = "cherry-studio --no-sandbox %U";
       terminal = false;
       icon = "cherry-studio";
-      startupWMClass = "Cherry Studio";
+      startupWMClass = "CherryStudio";
       categories = [ "Utility" ];
+      mimeTypes = [ "x-scheme-handler/cherrystudio" ];
     })
   ];
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/lib/cherry-studio
-    cp -r dist/linux-unpacked/{resources,LICENSE*} $out/lib/cherry-studio
-    install -Dm644 build/icon.png $out/share/pixmaps/cherry-studio.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv "dist/mac-${stdenv.hostPlatform.darwinArch}/Cherry Studio.app" "$out/Applications/Cherry Studio.app"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/opt/cherry-studio
+    ${
+      if stdenv.hostPlatform.isAarch64 then
+        "cp -r dist/linux-arm64-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+      else
+        "cp -r dist/linux-unpacked/{resources,LICENSE*} $out/opt/cherry-studio"
+    }
+    install -Dm644 build/icon.png $out/share/icons/hicolor/1024x1024/apps/cherry-studio.png
     makeWrapper ${lib.getExe electron} $out/bin/cherry-studio \
       --inherit-argv0 \
-      --add-flags $out/lib/cherry-studio/resources/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags $out/opt/cherry-studio/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
-
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -118,11 +130,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CherryHQ/cherry-studio";
     changelog = "https://github.com/CherryHQ/cherry-studio/releases/tag/v${finalAttrs.version}";
     mainProgram = "cherry-studio";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
-    license = with lib.licenses; [
-      asl20
-      unfree
-    ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
+    license = with lib.licenses; [ agpl3Only ];
   };
 })

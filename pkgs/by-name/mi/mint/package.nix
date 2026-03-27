@@ -8,13 +8,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "mint";
-  version = "0.23.2";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "mint-lang";
     repo = "mint";
-    rev = version;
-    hash = "sha256-cPx0/BrD2w7LlH5xO9hKlHndNmVm8jpN7cti5/eZ1m4=";
+    tag = version;
+    hash = "sha256-CC3+ygs2JnqtKRGOlP5hZqnVARrgLjV5EewAP+jDM0M=";
   };
 
   format = "shards";
@@ -40,6 +40,5 @@ crystal.buildCrystalPackage rec {
     mainProgram = "mint";
     homepage = "https://www.mint-lang.com/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ manveru ];
   };
 }

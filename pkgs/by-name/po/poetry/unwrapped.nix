@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   findpython,
   installShellFiles,
@@ -26,27 +25,24 @@
   trove-classifiers,
   virtualenv,
   xattr,
-  tomli,
-  importlib-metadata,
   deepdiff,
   pytestCheckHook,
   httpretty,
   pytest-mock,
   pytest-xdist,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "2.1.2";
+  version = "2.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = "poetry";
     tag = version;
-    hash = "sha256-51pO/PP5OwTmi+1uy26CK/1oQ/P21wPBoRVE9Jv0TjA=";
+    hash = "sha256-zJ7HA/NNBh9gy0WUXTxKBUsC74Yt+ANZuBxMrQrS6XU=";
   };
 
   build-system = [
@@ -57,49 +53,36 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  pythonRelaxDeps = [
-    "dulwich"
-    "keyring"
-    "virtualenv"
-  ];
+  dependencies = [
+    build
+    cachecontrol
+    cleo
+    dulwich
+    fastjsonschema
+    findpython
+    installer
+    keyring
+    packaging
+    pbs-installer
+    pkginfo
+    platformdirs
+    poetry-core
+    pyproject-hooks
+    requests
+    requests-toolbelt
+    shellingham
+    tomlkit
+    trove-classifiers
+    virtualenv
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    xattr
+  ]
+  ++ cachecontrol.optional-dependencies.filecache
+  ++ pbs-installer.optional-dependencies.download
+  ++ pbs-installer.optional-dependencies.install;
 
-  dependencies =
-    [
-      build
-      cachecontrol
-      cleo
-      dulwich
-      fastjsonschema
-      findpython
-      installer
-      keyring
-      packaging
-      pbs-installer
-      pkginfo
-      platformdirs
-      poetry-core
-      pyproject-hooks
-      requests
-      requests-toolbelt
-      shellingham
-      tomlkit
-      trove-classifiers
-      virtualenv
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      xattr
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      tomli
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ]
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ pbs-installer.optional-dependencies.download
-    ++ pbs-installer.optional-dependencies.install;
-
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd poetry \
       --bash <($out/bin/poetry completions bash) \
       --fish <($out/bin/poetry completions fish) \
@@ -112,6 +95,7 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
+    responses
   ];
 
   preCheck = (
@@ -132,6 +116,7 @@ buildPythonPackage rec {
     "test_builder_should_execute_build_scripts"
     "test_env_system_packages_are_relative_to_lib"
     "test_install_warning_corrupt_root"
+    "test_no_additional_output_in_verbose_mode"
     "test_project_plugins_are_installed_in_project_folder"
     "test_application_command_not_found_messages"
     # PermissionError: [Errno 13] Permission denied: '/build/pytest-of-nixbld/pytest-0/popen-gw3/test_find_poetry_managed_pytho1/.local/share/pypoetry/python/pypy@3.10.8/bin/python'
@@ -139,10 +124,20 @@ buildPythonPackage rec {
     "test_list_poetry_managed"
     "test_find_all_with_poetry_managed"
     "test_find_poetry_managed_pythons"
+    # Flaky
+    "test_threading_property_types"
+    "test_threading_single_thread_safe"
+    "test_threading_property_caching"
+    "test_threading_atomic_cached_property_different_instances"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Sandbox violation:
+    # PermissionError: [Errno 1] Operation not permitted: '/Library/Frameworks/Python.framework/Versions'
+    "test_find_all"
   ];
 
-  pytestFlagsArray = [
-    "-m 'not network'"
+  disabledTestMarks = [
+    "network"
   ];
 
   # Allow for package to use pep420's native namespaces
@@ -155,12 +150,12 @@ buildPythonPackage rec {
   # in the Python script, which runs after the wrapper.
   makeWrapperArgs = [ "--unset PYTHONPATH" ];
 
-  meta = with lib; {
-    changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";
+  meta = {
+    changelog = "https://github.com/python-poetry/poetry/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       jakewaksbaum
       dotlambda
     ];

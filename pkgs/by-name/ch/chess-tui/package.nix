@@ -1,28 +1,51 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
   rustPlatform,
+  openssl,
+  pkg-config,
+  alsa-lib,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "chess-tui";
-  version = "1.2.1";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "thomas-mauran";
     repo = "chess-tui";
-    rev = "${version}";
-    hash = "sha256-LtxaZ/7p/lqStoUmckVVaegQp02Ci3L46fMFEgledj4=";
+    tag = finalAttrs.version;
+    hash = "sha256-jO3pa4N7XNyKQCbPjFByYmLlOtrrdpzS5lkxU9giE+w=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ydn/y7HF8VppEjkRy3ayibgxpcLc1NiHlR5oLi3D11A=";
+  cargoHash = "sha256-9LXg4zX/irLt2MCq7V0dQA3o1QRqGgfRcX4HneNGAns=";
 
-  meta = with lib; {
+  checkFlags = [
+    # assertion failed: result.is_ok()
+    "--skip=tests::test_config_create"
+  ];
+
+  buildInputs = [
+    openssl
+  ]
+  # alsa-lib is required for the alsa-sys. alsa-lib does not compile on darwin
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+  # bindgenHook is required for coreaudio-sys on darwin
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  env.PKG_CONFIG_PATH = "${openssl.dev}/lib/pkgconfig";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Chess TUI implementation in rust";
     homepage = "https://github.com/thomas-mauran/chess-tui";
-    maintainers = with maintainers; [ ByteSudoer ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ ByteSudoer ];
+    license = lib.licenses.mit;
     mainProgram = "chess-tui";
   };
-}
+})

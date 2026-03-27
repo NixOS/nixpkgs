@@ -1,17 +1,20 @@
 import platform
 import re
 import subprocess
+from argparse import Namespace
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, ClassVar, Self, TypedDict, override
+from typing import Any, ClassVar, Self, TypedDict, override
 
+from . import nix
 from .process import Remote, run_wrapper
+from .utils import Args
 
-type ImageVariants = list[str]
+type ImageVariants = dict[str, str]
 
 
-class NRError(Exception):
+class NixOSRebuildError(Exception):
     "nixos-rebuild general error."
 
     def __init__(self, message: str) -> None:
@@ -56,33 +59,36 @@ class BuildAttr:
 
     @classmethod
     def from_arg(cls, attr: str | None, file: str | None) -> Self:
-        if not (attr or file):
-            return cls("<nixpkgs/nixos>", None)
-        return cls(Path(file or "default.nix"), attr)
+        # We use, in this order:
+        #   1. the --file argument (can be a directory, implying /system.nix)
+        #   2. system.nix in the cwd, but only if --attr is used
+        #   3. the <nixos-system> Nix path entry
+        #   4. /etc/nixos/system.nix
+        #   5. the <nixpkgs/nixos> Nix path entry (uses configuration.nix)
 
-
-def discover_git(location: Path) -> str | None:
-    current = location.resolve()
-    previous = None
-
-    while current.is_dir() and current != previous:
-        dotgit = current / ".git"
-        if dotgit.is_dir():
-            return str(current)
-        elif dotgit.is_file():  # this is a worktree
-            with dotgit.open() as f:
-                dotgit_content = f.read().strip()
-                if dotgit_content.startswith("gitdir: "):
-                    return dotgit_content.split("gitdir: ")[1]
-        previous = current
-        current = current.parent
-
-    return None
+        if file:
+            fpath = Path(file)
+            if fpath.is_dir() and (fpath / "system.nix").exists():
+                return cls(fpath / "system.nix", attr)
+            # Backward compatibility
+            elif fpath.is_dir() and (fpath / "default.nix").exists():
+                return cls(fpath / "default.nix", attr)
+            return cls(fpath, attr)
+        elif attr and Path("system.nix").exists():
+            return cls(Path("system.nix"), attr)
+        elif attr and Path("default.nix").exists():
+            # Backward compatibility
+            return cls(Path("default.nix"), attr)
+        elif nix.find_file("nixos-system"):
+            return cls("<nixos-system>", attr)
+        elif Path("/etc/nixos/system.nix").exists():
+            return cls(Path("/etc/nixos/system.nix"), attr)
+        return cls("<nixpkgs/nixos>", attr)
 
 
 @dataclass(frozen=True)
 class Flake:
-    path: Path | str
+    path: str
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
@@ -94,45 +100,21 @@ class Flake:
         return f"{self.path}#{self.attr}"
 
     @classmethod
-    def parse(
-        cls,
-        flake_str: str,
-        hostname_fn: Callable[[], str | None] = lambda: None,
-    ) -> Self:
+    def parse(cls, flake_str: str, target_host: Remote | None = None) -> Self:
         m = cls._re.match(flake_str)
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
-        nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or 'default'}"
-        path_str = m.group("path")
-        if ":" in path_str:
-            return cls(path_str, nixos_attr)
-        else:
-            path = Path(path_str)
-            git_repo = discover_git(path)
-            if git_repo is not None:
-                return cls(f"git+file://{git_repo}", nixos_attr)
-            return cls(path, nixos_attr)
+        nixos_attr = f'nixosConfigurations."{attr or cls._get_hostname(target_host) or "default"}"'
+        path = m.group("path")
+        return cls(path, nixos_attr)
 
     @classmethod
-    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
-        def get_hostname() -> str | None:
-            if target_host:
-                try:
-                    return run_wrapper(
-                        ["uname", "-n"],
-                        stdout=subprocess.PIPE,
-                        remote=target_host,
-                    ).stdout.strip()
-                except (AttributeError, subprocess.CalledProcessError):
-                    return None
-            else:
-                return platform.node()
-
+    def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
         match flake_arg:
             case str(s):
-                return cls.parse(s, get_hostname)
+                return cls.parse(s, target_host)
             case True:
-                return cls.parse(".", get_hostname)
+                return cls.parse(".", target_host)
             case False:
                 return None
             case _:
@@ -141,9 +123,29 @@ class Flake:
                 if default_path.exists():
                     # It can be a symlink to the actual flake.
                     default_path = default_path.resolve()
-                    return cls.parse(str(default_path.parent), get_hostname)
+                    return cls.parse(str(default_path.parent), target_host)
                 else:
                     return None
+
+    def resolve_path_if_exists(self) -> str:
+        try:
+            return str(Path(self.path).resolve(strict=True))
+        except FileNotFoundError:
+            return self.path
+
+    @staticmethod
+    def _get_hostname(target_host: Remote | None) -> str | None:
+        if target_host:
+            try:
+                return run_wrapper(
+                    ["uname", "-n"],
+                    capture_output=True,
+                    remote=target_host,
+                ).stdout.strip()
+            except (AttributeError, subprocess.CalledProcessError):
+                return None
+        else:
+            return platform.node()
 
 
 @dataclass(frozen=True)
@@ -162,6 +164,36 @@ class GenerationJson(TypedDict):
     configurationRevision: str
     specialisations: list[str]
     current: bool
+
+
+@dataclass(frozen=True)
+class GroupedNixArgs:
+    build_flags: Args
+    common_flags: Args
+    copy_flags: Args
+    flake_eval_flags: Args
+    flake_build_flags: Args
+
+    @classmethod
+    def from_parsed_args_groups(cls, args_groups: dict[str, Namespace]) -> Self:
+        common_flags = vars(args_groups["common_flags"])
+        common_build_flags = common_flags | vars(args_groups["common_build_flags"])
+        build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
+        flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+        flake_eval_flags = vars(args_groups["flake_eval_flags"])
+        flake_build_flags = common_build_flags | flake_common_flags
+        copy_flags = common_flags | vars(args_groups["copy_flags"])
+        # --no-build-output -> --no-link
+        if build_flags.get("no_build_output"):
+            flake_build_flags["no_link"] = True
+
+        return cls(
+            build_flags=build_flags,
+            common_flags=common_flags,
+            copy_flags=copy_flags,
+            flake_eval_flags=flake_eval_flags,
+            flake_build_flags=flake_build_flags,
+        )
 
 
 @dataclass(frozen=True)

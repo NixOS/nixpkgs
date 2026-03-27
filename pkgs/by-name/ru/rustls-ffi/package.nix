@@ -6,9 +6,8 @@
   rustPlatform,
   cargo-c,
   validatePkgConfig,
-  rust,
+  buildPackages,
   libiconv,
-  darwin,
   curl,
   apacheHttpd,
   testers,
@@ -16,24 +15,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rustls-ffi";
-  version = "0.14.1";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "rustls";
     repo = "rustls-ffi";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-ZKAyKcKwhnPE6PrfBFjLJKkTlGbdLcmW1EP/xSv2cpM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mqC5uKkFIVVZW+7Z+8PF2lhx/6TVsKX4DW6oQuMMtDw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    src = finalAttrs.src;
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-cZ92wSKoygt9x6O/ginOEiCiarlR5qGVFOHrIFdWOWE=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-ugU2tfG9VUvOhMeOQ4A+MBQIEw+bYb2dZllXrztQtrg=";
   };
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   nativeBuildInputs = [
@@ -45,19 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = ''
     runHook preBuild
-    ${rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cbuild -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    ${rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo cinstall -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postInstall
   '';
 
   checkPhase = ''
     runHook preCheck
-    ${rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
+    ${buildPackages.rust.envVars.setEnv} cargo ctest -j $NIX_BUILD_CORES --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
     runHook postCheck
   '';
 
@@ -65,12 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     curl = curl.override {
       opensslSupport = false;
       rustlsSupport = true;
+      http3Support = false; # rustls-ffi doesn't yet support QUIC
       rustls-ffi = finalAttrs.finalPackage;
     };
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C-to-rustls bindings";
     homepage = "https://github.com/rustls/rustls-ffi/";
     pkgConfigModules = [ "rustls" ];
@@ -79,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       isc
     ];
-    maintainers = [ maintainers.lesuisse ];
+    maintainers = [
+      lib.maintainers.lesuisse
+      lib.maintainers.cpu
+    ];
   };
 })

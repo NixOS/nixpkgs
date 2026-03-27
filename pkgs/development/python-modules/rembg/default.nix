@@ -1,17 +1,17 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
-  wheel,
-  versionCheckHook,
-  withCli ? false,
+
+  # build-system
+  poetry-core,
+  poetry-dynamic-versioning,
 
   # dependencies
   jsonschema,
   numpy,
   onnxruntime,
-  opencv-python-headless,
   pillow,
   pooch,
   pymatting,
@@ -27,31 +27,51 @@
   filetype,
   gradio,
   python-multipart,
+  sniffio,
   uvicorn,
   watchdog,
+
+  # tests
+  versionCheckHook,
+  pocl,
+
+  withCli ? false,
+  config,
+  cudaSupport ? config.cudaSupport,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+let
+  isNotAarch64Linux = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+in
+buildPythonPackage (finalAttrs: {
   pname = "rembg";
-  version = "2.0.65";
+  version = "2.0.74";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielgatis";
     repo = "rembg";
-    tag = "v${version}";
-    hash = "sha256-o6M3DSW1GL3xvEx4lsE325J3XcmRrhhPszS5MkaynsE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bCwteS0OJThIAIXxWjzol33p+EH1Gy+CBjKNDwcH7p8=";
   };
 
+  env.POETRY_DYNAMIC_VERSIONING_BYPASS = finalAttrs.version;
+
   build-system = [
-    setuptools
-    wheel
+    poetry-core
+    poetry-dynamic-versioning
   ];
 
+  pythonRelaxDeps = [
+    "jsonschema"
+    "pillow"
+    "pymatting"
+    "scikit-image"
+  ];
   dependencies = [
     jsonschema
     numpy
-    opencv-python-headless
     onnxruntime
     pillow
     pooch
@@ -59,7 +79,8 @@ buildPythonPackage rec {
     scikit-image
     scipy
     tqdm
-  ] ++ lib.optionals withCli optional-dependencies.cli;
+  ]
+  ++ lib.optionals withCli finalAttrs.passthru.optional-dependencies.cli;
 
   optional-dependencies = {
     cli = [
@@ -70,6 +91,7 @@ buildPythonPackage rec {
       filetype
       gradio
       python-multipart
+      sniffio
       uvicorn
       watchdog
     ];
@@ -82,18 +104,44 @@ buildPythonPackage rec {
   postInstall = lib.optionalString (!withCli) "rm -r $out/bin";
 
   # not running python tests, as they require network access
-  nativeCheckInputs = lib.optionals withCli [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
+  nativeCheckInputs =
+    lib.optionals
+      (
+        withCli
+        # Crashes in the sandbox as no drivers are available
+        # opencl._cl.RuntimeError: no CL platforms available to ICD loader
+        && (!cudaSupport)
+      )
+      [
+        versionCheckHook
+      ]
+    ++ lib.optionals cudaSupport [
+      # Provides a CPU-based OpenCL ICD so that pyopencl's module-level
+      # cl.create_some_context() succeeds without GPU hardware.
+      pocl
+      # pocl needs a writable $HOME for its kernel cache directory.
+      writableTmpDirAsHomeHook
+    ];
+  versionCheckKeepEnvironment = [
+    # Otherwise, fail with:
+    # RuntimeError: cannot cache function '_make_tree': no locator available for file
+    # '{{storeDir}}/lib/python3.13/site-packages/pymatting/util/kdtree.py'
+    "NUMBA_CACHE_DIR"
+  ];
 
-  pythonImportsCheck = [ "rembg" ];
+  # aarch64-linux fails cpuinfo test, because /sys/devices/system/cpu/ does not exist in the sandbox:
+  # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+  #
+  # -> Skip all tests that require importing rembg
+  pythonImportsCheck = lib.optionals isNotAarch64Linux [ "rembg" ];
+  doCheck = isNotAarch64Linux;
 
   meta = {
     description = "Tool to remove background from images";
     homepage = "https://github.com/danielgatis/rembg";
-    changelog = "https://github.com/danielgatis/rembg/releases/tag/v${version}";
+    changelog = "https://github.com/danielgatis/rembg/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "rembg";
-    platforms = [ "x86_64-linux" ];
   };
-}
+})

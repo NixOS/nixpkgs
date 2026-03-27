@@ -7,15 +7,15 @@
   makeWrapper,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "openapi-changes";
-  version = "0.0.76";
+  version = "0.0.78";
 
   src = fetchFromGitHub {
     owner = "pb33f";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-Z+jFfsreJYLdvxfFjmTr8SKHOV22iNDFKYUdi9/8QRI=";
+    repo = "openapi-changes";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-Ct4VyYFqdMmROg9SE/pFNOJozSkQtKpgktJVgvtW/HA=";
   };
 
   # this test requires the `.git` of the project to be present
@@ -35,11 +35,11 @@ buildGoModule rec {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "World's sexiest OpenAPI breaking changes detector";
     homepage = "https://pb33f.io/openapi-changes/";
-    changelog = "https://github.com/pb33f/openapi-changes/releases/tag/v${version}";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ mguentner ];
+    changelog = "https://github.com/pb33f/openapi-changes/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ mguentner ];
   };
-}
+})

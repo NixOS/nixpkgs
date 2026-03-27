@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   google-auth,
   google-cloud-core,
   google-cloud-iam,
@@ -11,22 +11,21 @@
   mock,
   protobuf,
   pytestCheckHook,
-  pythonOlder,
+  pytest-asyncio,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "3.1.0";
+  version = "3.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_storage";
-    inherit version;
-    hash = "sha256-lEJzF5iXx8igfuFfLmRmoC2gx8S57M6sKiYBfLKXIEk=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-storage";
+    tag = "v${version}";
+    hash = "sha256-CHku6tiELE3deP6ZCRx/ekn60FmF3gO51cOAF1DkQrI=";
   };
 
   pythonRelaxDeps = [ "google-auth" ];
@@ -50,6 +49,12 @@ buildPythonPackage rec {
     google-cloud-testutils
     mock
     pytestCheckHook
+    pytest-asyncio
+  ];
+
+  enabledTestPaths = [
+    "tests/unit/"
+    "tests/system/"
   ];
 
   disabledTests = [
@@ -69,6 +74,9 @@ buildPythonPackage rec {
     "test_restore_bucket"
     "test_set_api_request_attr"
     "upload"
+    "test_update_user_agent_when_default_clientinfo_provided"
+    "test_update_user_agent_when_none_clientinfo_provided"
+    "test_update_user_agent_with_existing_user_agent"
   ];
 
   disabledTestPaths = [
@@ -90,11 +98,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "google.cloud.storage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Storage API client library";
     homepage = "https://github.com/googleapis/python-storage";
-    changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/python-storage/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sarahec ];
   };
 }

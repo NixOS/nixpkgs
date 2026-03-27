@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "smp";
-  version = "3.3.1";
+  version = "4.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JPHutchins";
     repo = "smp";
     tag = version;
-    hash = "sha256-TjucQm07nbfuFrVOHGOVA/f1rQRQfU8ws8VVC+U/kp8=";
+    hash = "sha256-dATsVGG0b5SBZh7R7NT1deJFDRYi7BwtWzT7/QPjkJw=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Management Protocol (SMP) for remotely managing MCU firmware";
     homepage = "https://github.com/JPHutchins/smp";
-    changelog = "https://github.com/JPHutchins/smp/releases/tag/${version}";
+    changelog = "https://github.com/JPHutchins/smp/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ otavio ];
   };

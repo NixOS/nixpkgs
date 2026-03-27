@@ -1,21 +1,20 @@
 {
   lib,
-  stdenv,
   perlPackages,
   fetchFromGitHub,
-  fetchpatch,
-  shortenPerlShebang,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 perlPackages.buildPerlPackage rec {
   pname = "pgformatter";
-  version = "5.5";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "darold";
     repo = "pgFormatter";
-    rev = "v${version}";
-    hash = "sha256-4KtrsckO9Q9H0yIM0877YvWaDW02CQVAQiOKD919e9w=";
+    tag = "v${version}";
+    hash = "sha256-G4Bbg8tNlwV8VCVKCamhlQ/pGf8hWCkABm6f8i5doos=";
   };
 
   outputs = [ "out" ];
@@ -25,38 +24,39 @@ perlPackages.buildPerlPackage rec {
   # Avoid creating perllocal.pod, which contains a timestamp
   installTargets = [ "pure_install" ];
 
-  patches = [
-    # Fix an uninitialized variable error. Remove with the next release.
-    (fetchpatch {
-      url = "https://github.com/darold/pgFormatter/commit/c2622c47d48cee47effecbf58a588c3cd3a7bf1a.patch";
-      sha256 = "sha256-WnQIOvfuzL2HrwtL0HaaYObrBxhXDu82jxGcqggQVhc=";
-    })
-  ];
-
   # Makefile.PL only accepts DESTDIR and INSTALLDIRS, but we need to set more to make this work for NixOS.
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace pg_format \
-      --replace "#!/usr/bin/env perl" "#!/usr/bin/perl"
+      --replace-fail "#!/usr/bin/env perl" "#!/usr/bin/perl"
+
     substituteInPlace Makefile.PL \
-      --replace "'DESTDIR'      => \$DESTDIR," "'DESTDIR'      => '$out/'," \
-      --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
+      --replace-fail \
+        "'DESTDIR'      => \$DESTDIR," \
+        "'DESTDIR'      => '$out/'," \
+      --replace-fail \
+        "'INSTALLDIRS'  => \$INSTALLDIRS," \
+        "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
+
+    patchShebangs .
   '';
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    shortenPerlShebang $out/bin/pg_format
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
-  doCheck = false;
+  passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
-    changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
-    maintainers = [ ];
+    changelog = "https://github.com/darold/pgFormatter/releases/tag/${src.tag}";
+    maintainers = with lib.maintainers; [
+      thunze
+      mfairley
+    ];
     license = [
-      licenses.postgresql
-      licenses.artistic2
+      lib.licenses.postgresql
+      lib.licenses.artistic2
     ];
     mainProgram = "pg_format";
   };

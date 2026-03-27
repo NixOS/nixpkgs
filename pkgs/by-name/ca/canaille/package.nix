@@ -4,6 +4,7 @@
   fetchFromGitLab,
   openldap,
   nixosTests,
+  postgresql,
 }:
 
 let
@@ -11,16 +12,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.57";
+  version = "0.2.2";
   pyproject = true;
-
-  disabled = python.pythonOlder "3.10";
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
-    rev = "refs/tags/${version}";
-    hash = "sha256-pesN7k5kGHi3dqTMaXWdCsNsnaJxXv/Ku1wVC9N9a3k=";
+    tag = version;
+    hash = "sha256-hJt2BU8Z0XF94skgK5x1TJUZ9bwEt+VJvaeLLyykpsE=";
   };
 
   build-system = with python.pkgs; [
@@ -29,42 +28,43 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies =
-    with python.pkgs;
-    [
-      flask
-      flask-wtf
-      pydantic-settings
-      requests
-      wtforms
-    ]
-    ++ sentry-sdk.optional-dependencies.flask;
+  dependencies = with python.pkgs; [
+    blinker
+    click
+    dramatiq
+    dramatiq-eager-broker
+    flask
+    flask-caching
+    flask-dramatiq
+    flask-session
+    flask-wtf
+    httpx
+    pydantic-settings
+    wtforms
+  ];
 
   nativeCheckInputs =
     with python.pkgs;
     [
       pytestCheckHook
-      coverage
+      postgresql
       flask-webtest
       pyquery
-      pytest-cov
+      pytest-cov-stub
       pytest-httpserver
       pytest-lazy-fixtures
+      pytest-postgresql
       pytest-smtpd
       pytest-xdist
+      python-avatars
       scim2-tester
       slapd
       toml
       faker
       time-machine
+      pytest-scim2-server
     ]
-    ++ optional-dependencies.front
-    ++ optional-dependencies.oidc
-    ++ optional-dependencies.scim
-    ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql
-    ++ optional-dependencies.otp
-    ++ optional-dependencies.sms;
+    ++ (lib.concatLists (builtins.attrValues optional-dependencies));
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -77,40 +77,63 @@ python.pkgs.buildPythonApplication rec {
     export SBIN="${openldap}/bin"
     export SLAPD="${openldap}/libexec/slapd"
     export SCHEMA="${openldap}/etc/schema"
-
-    # Just use their example config for testing
-    export CONFIG=canaille/config.sample.toml
   '';
+
+  disabledTests = [
+    # Tries to use DNS resolution
+    "test_send_new_email_error"
+    "test_send_test_email_ssl"
+  ];
 
   optional-dependencies = with python.pkgs; {
     front = [
       email-validator
       flask-babel
+      flask-talisman
       flask-themer
+      isodate
       pycountry
       pytz
-      toml
+      tomlkit
       zxcvbn-rs-py
     ];
-    oidc = [ authlib ];
-    scim = [
-      scim2-models
+    oidc = [
       authlib
+      joserfc
+    ];
+    scim = [
+      authlib
+      httpx
+      scim2-client
+      scim2-models
     ];
     ldap = [ python-ldap ];
     sentry = [ sentry-sdk ];
     postgresql = [
+      flask-alembic
       passlib
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    ]
+    ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
     otp = [
       otpauth
       pillow
       qrcode
     ];
+    fido = [ webauthn ];
     sms = [ smpplib ];
+    captcha = [ captcha ];
+    server = [
+      asgiref
+      hypercorn
+      isodate
+      pydanclick
+      tomlkit
+    ];
+    redis = [ dramatiq ] ++ dramatiq.optional-dependencies.redis;
+    rabbitmq = [ dramatiq ] ++ dramatiq.optional-dependencies.rabbitmq;
   };
 
   passthru = {
@@ -120,23 +143,13 @@ python.pkgs.buildPythonApplication rec {
     };
   };
 
-  disabledTests = [
-    # cause by authlib being too up-to-date for this version of canaille
-    # see: https://github.com/NixOS/nixpkgs/issues/389861#issuecomment-2726361949
-    # FIX: update and see if this is fixed
-    "test_invalid_client[ldap_backend]"
-    "test_invalid_client[memory_backend]"
-    "test_invalid_client[sql_backend]"
-    "test_password_reset[sql_backend]"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Lightweight Identity and Authorization Management";
     homepage = "https://canaille.readthedocs.io/en/latest/index.html";
-    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.rev}/CHANGES.rst";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ erictapen ];
+    changelog = "https://gitlab.com/yaal/canaille/-/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ erictapen ];
     mainProgram = "canaille";
   };
 

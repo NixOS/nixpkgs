@@ -121,7 +121,7 @@ let
           acmeChallengePath = "/.well-known/acme-challenge";
         in
         {
-          "${names.server}:${builtins.toString acmePort}" = {
+          "${names.server}:${toString acmePort}" = {
             listen.port = acmePort;
             paths."${acmeChallengePath}/" = {
               "file.dir" = value.acme.root + acmeChallengePath;
@@ -132,17 +132,17 @@ let
 
       httpSettings =
         lib.optionalAttrs (value.tls == null || value.tls.policy == "add") {
-          "${names.server}:${builtins.toString port.HTTP}" = value.settings // {
+          "${names.server}:${toString port.HTTP}" = value.settings // {
             listen.port = port.HTTP;
           };
         }
         // lib.optionalAttrs (value.tls != null && value.tls.policy == "force") {
-          "${names.server}:${builtins.toString port.HTTP}" = {
+          "${names.server}:${toString port.HTTP}" = {
             listen.port = port.HTTP;
             paths."/" = {
               redirect = {
                 status = value.tls.redirectCode;
-                url = "https://${names.server}:${builtins.toString port.TLS}";
+                url = "https://${names.server}:${toString port.TLS}";
               };
             };
           };
@@ -159,7 +159,7 @@ let
             ]
           )
           {
-            "${names.server}:${builtins.toString port.TLS}" =
+            "${names.server}:${toString port.TLS}" =
               let
                 tlsRecommendations = lib.attrByPath [ "tls" "recommendations" ] cfg.defaultTLSRecommendations value;
 
@@ -208,7 +208,7 @@ let
                       let
                         headerSet = value.settings."header.set" or [ ];
                         recs = mozTLSRecs.${tlsRecommendations};
-                        hsts = "Strict-Transport-Security: max-age=${builtins.toString recs.hsts_min_age}; includeSubDomains; preload";
+                        hsts = "Strict-Transport-Security: max-age=${toString recs.hsts_min_age}; includeSubDomains; preload";
                       in
                       {
                         "header.set" =
@@ -231,16 +231,15 @@ let
                         certificate-file = "${certs.${names.cert}.directory}/fullchain.pem";
                       };
 
-                    baseListen =
-                      {
-                        port = port.TLS;
-                        ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
-                          inherit identity;
-                        };
-                      }
-                      // lib.optionalAttrs (value.host != null) {
-                        host = value.host;
+                    baseListen = {
+                      port = port.TLS;
+                      ssl = (lib.recursiveUpdate tlsRecAttrs value.tls.extraSettings) // {
+                        inherit identity;
                       };
+                    }
+                    // lib.optionalAttrs (value.host != null) {
+                      host = value.host;
+                    };
 
                     # QUIC, if used, will duplicate the TLS over TCP directive, but
                     # append some extra QUIC-related settings
@@ -263,12 +262,12 @@ let
   );
 
   # Executing H2O with our generated configuration; `mode` added as needed
-  h2oExe = ''${lib.getExe cfg.package} ${
+  h2oExe = "${lib.getExe cfg.package} ${
     lib.strings.escapeShellArgs [
       "--conf"
       "${h2oConfig}"
     ]
-  }'';
+  }";
 in
 {
   options = {
@@ -381,68 +380,67 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion =
-            !(builtins.hasAttr "hosts" h2oConfig)
-            || builtins.all (
-              host:
-              let
-                hasKeyPlusCert = attrs: (attrs.key-file or "") != "" && (attrs.certificate-file or "") != "";
-              in
-              # TLS not used
-              (lib.attrByPath [ "listen" "ssl" ] null host == null)
-              # TLS identity property
-              || (
-                builtins.hasAttr "identity" host
-                && builtins.length host.identity > 0
-                && builtins.all hasKeyPlusCert host.listen.ssl.identity
-              )
-              # TLS short-hand (was manually specified)
-              || (hasKeyPlusCert host.listen.ssl)
-            ) (lib.attrValues h2oConfig.hosts);
-          message = ''
-            TLS support will require at least one non-empty certificate & key
-            file. Use services.h2o.hosts.<name>.acme.enable,
-            services.h2o.hosts.<name>.acme.useHost,
-            services.h2o.hosts.<name>.tls.identity, or
-            services.h2o.hosts.<name>.tls.extraSettings.
-          '';
-        }
-      ]
-      ++ builtins.map (
-        name:
-        mkCertOwnershipAssertion {
-          cert = certs.${name};
-          groups = config.users.groups;
-          services = [
-            config.systemd.services.h2o
-          ] ++ lib.optional (acmeCertNames.all != [ ]) config.systemd.services.h2o-config-reload;
-        }
-      ) acmeCertNames.all;
+    assertions = [
+      {
+        assertion =
+          !(builtins.hasAttr "hosts" h2oConfig)
+          || builtins.all (
+            host:
+            let
+              hasKeyPlusCert = attrs: (attrs.key-file or "") != "" && (attrs.certificate-file or "") != "";
+            in
+            # TLS not used
+            (lib.attrByPath [ "listen" "ssl" ] null host == null)
+            # TLS identity property
+            || (
+              builtins.hasAttr "identity" host
+              && builtins.length host.identity > 0
+              && builtins.all hasKeyPlusCert host.listen.ssl.identity
+            )
+            # TLS short-hand (was manually specified)
+            || (hasKeyPlusCert host.listen.ssl)
+          ) (lib.attrValues h2oConfig.hosts);
+        message = ''
+          TLS support will require at least one non-empty certificate & key
+          file. Use services.h2o.hosts.<name>.acme.enable,
+          services.h2o.hosts.<name>.acme.useHost,
+          services.h2o.hosts.<name>.tls.identity, or
+          services.h2o.hosts.<name>.tls.extraSettings.
+        '';
+      }
+    ]
+    ++ map (
+      name:
+      mkCertOwnershipAssertion {
+        cert = certs.${name};
+        groups = config.users.groups;
+        services = [
+          config.systemd.services.h2o
+        ]
+        ++ lib.optional (acmeCertNames.all != [ ]) config.systemd.services.h2o-config-reload;
+      }
+    ) acmeCertNames.all;
 
     users = {
-      users.${cfg.user} =
-        {
-          group = cfg.group;
-        }
-        // lib.optionalAttrs (cfg.user == "h2o") {
-          isSystemUser = true;
-        };
+      users.${cfg.user} = {
+        group = cfg.group;
+      }
+      // lib.optionalAttrs (cfg.user == "h2o") {
+        isSystemUser = true;
+      };
       groups.${cfg.group} = { };
     };
 
     systemd.services.h2o = {
       description = "H2O HTTP server";
       wantedBy = [ "multi-user.target" ];
-      wants = lib.concatLists (map (certName: [ "acme-finished-${certName}.target" ]) acmeCertNames.all);
+      wants = lib.concatLists (map (certName: [ "acme-${certName}.service" ]) acmeCertNames.all);
       # Since H2O will be hosting the challenges, H2O must be started
-      before = builtins.map (certName: "acme-${certName}.service") acmeCertNames.dependent;
-      after =
-        [ "network.target" ]
-        ++ builtins.map (certName: "acme-selfsigned-${certName}.service") acmeCertNames.all
-        ++ builtins.map (certName: "acme-${certName}.service") acmeCertNames.independent; # avoid loading self-signed key w/ real cert, or vice-versa
+      before = map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
+      after = [
+        "network.target"
+      ]
+      ++ map (certName: "acme-${certName}.service") acmeCertNames.all;
 
       serviceConfig = {
         ExecStart = "${h2oExe} --mode 'master'";
@@ -491,16 +489,14 @@ in
 
     # This service waits for all certificates to be available before reloading
     # H2O configuration. `tlsTargets` are added to `wantedBy` + `before` which
-    # allows the `acme-finished-$cert.target` to signify the successful updating
+    # allows the `acme-order-renew-$cert.service` to signify the successful updating
     # of certs end-to-end.
     systemd.services.h2o-config-reload =
       let
-        tlsTargets = map (certName: "acme-${certName}.target") acmeCertNames.all;
-        tlsServices = map (certName: "acme-${certName}.service") acmeCertNames.all;
+        tlsServices = map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
       in
       mkIf (acmeCertNames.all != [ ]) {
         wantedBy = tlsServices ++ [ "multi-user.target" ];
-        before = tlsTargets;
         after = tlsServices;
         unitConfig = {
           ConditionPathExists = map (

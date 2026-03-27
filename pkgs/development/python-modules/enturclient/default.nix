@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
-  pythonOlder,
   unittestCheckHook,
 }:
 
@@ -14,11 +13,9 @@ buildPythonPackage rec {
   version = "0.2.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "hfurubotten";
-    repo = pname;
+    repo = "enturclient";
     rev = "v${version}";
     hash = "sha256-Y2sBPikCAxumylP1LUy8XgjBRCWaNryn5XHSrRjJIIo=";
   };
@@ -44,10 +41,10 @@ buildPythonPackage rec {
     "tests/dto/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for interacting with the Entur.org API";
     homepage = "https://github.com/hfurubotten/enturclient";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

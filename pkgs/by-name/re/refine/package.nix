@@ -19,31 +19,17 @@
   glib,
 }:
 
-let
-  libadwaita' = libadwaita.overrideAttrs (oldAttrs: {
-    version = "1.6.2-unstable-2025-01-02";
-    src = oldAttrs.src.override {
-      tag = null;
-      rev = "f5f0e7ce69405846a8f8bdad11cef2e2a7e99010";
-      hash = "sha256-n5RbGHtt2g627T/Tg8m3PjYIl9wfYTIcrplq1pdKAXk=";
-    };
-
-    # `test-application-window` is flaky on aarch64-linux
-    doCheck = false;
-  });
-in
-
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "refine";
-  version = "0.5.6";
+  version = "0.7.0";
   pyproject = false; # uses meson
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "TheEvilSkeleton";
     repo = "Refine";
-    tag = version;
-    hash = "sha256-cIJWTzeLm2YP8Pm/nzcYHIGzBOmQlPe0lQ+b6BufIMg=";
+    tag = finalAttrs.version;
+    hash = "sha256-5rHct0GXsdjeG+wXxtDKXWBTCphhOCojuR2ExXrZyWA=";
   };
 
   nativeBuildInputs = [
@@ -61,17 +47,16 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [
     libxml2
-    libadwaita'
+    libadwaita
   ];
 
-  dependencies =
-    [
-      libportal
-      libportal-gtk4
-    ]
-    ++ (with python3Packages; [
-      pygobject3
-    ]);
+  dependencies = [
+    libportal
+    libportal-gtk4
+  ]
+  ++ (with python3Packages; [
+    pygobject3
+  ]);
 
   strictDeps = true;
 
@@ -98,4 +83,4 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = with lib.maintainers; [ getchoo ];
   };
-}
+})

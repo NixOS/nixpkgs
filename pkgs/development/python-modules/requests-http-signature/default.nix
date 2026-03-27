@@ -6,7 +6,6 @@
   http-sfv,
   requests,
   pytestCheckHook,
-  pythonOlder,
   setuptools-scm,
 }:
 
@@ -15,11 +14,9 @@ buildPythonPackage rec {
   version = "0.7.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "pyauth";
-    repo = pname;
+    repo = "requests-http-signature";
     rev = "v${version}";
     hash = "sha256-sW2vYqT/nY27DvEKHdptc3dUpuqKmD7PLMs+Xp+cpeU=";
   };
@@ -34,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test/test.py" ];
+  enabledTestPaths = [ "test/test.py" ];
 
   disabledTests = [
     # Test require network access
@@ -43,10 +40,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "requests_http_signature" ];
 
-  meta = with lib; {
+  meta = {
     description = "Requests authentication module for HTTP Signature";
     homepage = "https://github.com/kislyuk/requests-http-signature";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mmai ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ mmai ];
   };
 }

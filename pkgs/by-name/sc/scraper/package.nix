@@ -1,34 +1,48 @@
 {
   lib,
   rustPlatform,
-  fetchCrate,
+  fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scraper";
-  version = "0.23.1";
+  version = "0.26.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-s38EnVooSCL6TNjU90x2Q7lXDyOf9sWjOpxAxangyAU=";
+  src = fetchFromGitHub {
+    owner = "rust-scraper";
+    repo = "scraper";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gdxE9vkN9y5KCmPF0IzSodgxKyWTzYHuLrIMFu4To1E=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cijkLybvjwdz3k2CG0hYwSTisbJUpyI7QUG0l8xLfKQ=";
+  cargoHash = "sha256-xpg5/ZZEUVNLHGJsbpb/m9TRUJS6wb2HOIoPt407+q0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    installManPage scraper.1
+    installManPage scraper/scraper.1
   '';
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Tool to query HTML files with CSS selectors";
     mainProgram = "scraper";
-    homepage = "https://github.com/causal-agent/scraper";
-    changelog = "https://github.com/causal-agent/scraper/releases/tag/v${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ figsoda ];
+    homepage = "https://github.com/rust-scraper/scraper";
+    changelog = "https://github.com/rust-scraper/scraper/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [
+      kachick
+    ];
   };
-}
+})

@@ -83,13 +83,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.36.35";
+  version = "1.36.38";
 
   src = fetchFromGitHub {
     owner = "ZoneMinder";
     repo = "zoneminder";
-    rev = version;
-    hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
+    tag = version;
+    hash = "sha256-c/Q+h0ntJ4XUuvgrLSlWfue4GL4nGARgmXt0En334Y4=";
     fetchSubmodules = true;
   };
 
@@ -161,44 +161,43 @@ stdenv.mkDerivation rec {
       --subst-var-by srcHash "`basename $out`"
   '';
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      glib
-      libjpeg
-      libselinux
-      libsepol
-      mp4v2
-      libmysqlclient
-      mariadb
-      pcre
-      perl
-      polkit
-      x264
-      zlib
-      util-linuxMinimal # for libmount
-    ]
-    ++ (with perlPackages; [
-      # build-time dependencies
-      DateManip
-      DBI
-      DBDmysql
-      LWP
-      SysMmap
-      # run-time dependencies not checked at build-time
-      ClassStdFast
-      DataDump
-      DeviceSerialPort
-      JSONMaybeXS
-      LWPProtocolHttps
-      NumberBytesHuman
-      SysCPU
-      SysMemInfo
-      TimeDate
-      CryptEksblowfish
-      DataEntropy # zmupdate.pl
-    ]);
+  buildInputs = [
+    curl
+    ffmpeg
+    glib
+    libjpeg
+    libselinux
+    libsepol
+    mp4v2
+    libmysqlclient
+    mariadb
+    pcre
+    perl
+    polkit
+    x264
+    zlib
+    util-linuxMinimal # for libmount
+  ]
+  ++ (with perlPackages; [
+    # build-time dependencies
+    DateManip
+    DBI
+    DBDmysql
+    LWP
+    SysMmap
+    # run-time dependencies not checked at build-time
+    ClassStdFast
+    DataDump
+    DeviceSerialPort
+    JSONMaybeXS
+    LWPProtocolHttps
+    NumberBytesHuman
+    SysCPU
+    SysMemInfo
+    TimeDate
+    CryptEksblowfish
+    DataEntropy # zmupdate.pl
+  ]);
 
   nativeBuildInputs = [
     cmake
@@ -241,11 +240,11 @@ stdenv.mkDerivation rec {
     ln -s $out/share/zoneminder/www $out/share/zoneminder/www/zm
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Video surveillance software system";
     homepage = "https://zoneminder.com";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.linux;
   };
 }

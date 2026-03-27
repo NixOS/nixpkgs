@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -10,11 +9,9 @@ buildPythonPackage rec {
   version = "1.2.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "jlhutch";
-    repo = pname;
+    repo = "pylru";
     rev = "v${version}";
     hash = "sha256-dTYiD+/zt0ZSP+sefYyeD87To1nRXyoFodlBg8pm1YE=";
   };
@@ -24,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pylru" ];
 
-  meta = with lib; {
+  meta = {
     description = "Least recently used (LRU) cache implementation";
     homepage = "https://github.com/jlhutch/pylru";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
   };
 }

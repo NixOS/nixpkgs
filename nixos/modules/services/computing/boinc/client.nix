@@ -99,10 +99,8 @@ in
       description = "BOINC Client";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = ''
-        exec ${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}
-      '';
       serviceConfig = {
+        ExecStart = "${fhsEnvExecutable} --dir ${cfg.dataDir} ${allowRemoteGuiRpcFlag}";
         User = "boinc";
         Nice = 10;
       };
@@ -110,6 +108,6 @@ in
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

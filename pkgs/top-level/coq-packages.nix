@@ -5,12 +5,15 @@
   fetchzip,
   callPackage,
   newScope,
-  recurseIntoAttrs,
-  ocamlPackages_4_05,
   ocamlPackages_4_09,
   ocamlPackages_4_10,
   ocamlPackages_4_12,
   ocamlPackages_4_14,
+  ocamlPackages_5_4,
+  rocqPackages_9_0,
+  rocqPackages_9_1,
+  rocqPackages_9_2,
+  rocqPackages,
   fetchpatch,
   makeWrapper,
   coq2html,
@@ -23,13 +26,12 @@ let
     self: coq:
     let
       callPackage = self.callPackage;
-    in
-    {
-      inherit coq lib;
       coqPackages = self // {
-        __attrsFailEvaluation = true;
         recurseForDerivations = false;
       };
+    in
+    {
+      inherit coqPackages lib;
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix {
         inherit
@@ -41,7 +43,18 @@ let
       };
       mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq { });
 
-      contribs = recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
+      coq = coq.overrideAttrs (oldAttrs: {
+        passthru = (oldAttrs.passthru or { }) // {
+          withPackages =
+            f:
+            (callPackage ../applications/science/logic/coq/with-packages.nix {
+              inherit coq;
+            })
+              (f self);
+        };
+      });
+
+      contribs = lib.recurseIntoAttrs (callPackage ../development/coq-modules/contribs { });
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics { };
       addition-chains = callPackage ../development/coq-modules/addition-chains { };
@@ -55,14 +68,17 @@ let
           callPackage ../development/coq-modules/bignums { }
         else
           null;
+      CakeMLExtraction = callPackage ../development/coq-modules/CakeMLExtraction { };
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres { };
+      ceres-bs = callPackage ../development/coq-modules/ceres-bs { };
+      CertiRocq = callPackage ../development/coq-modules/CertiRocq { };
       Cheerios = callPackage ../development/coq-modules/Cheerios { };
       coinduction = callPackage ../development/coq-modules/coinduction { };
       CoLoR = callPackage ../development/coq-modules/CoLoR (
-        (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
+        lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           bignums = self.bignums.override { version = "8.13.0"; };
-        })
+        }
       );
       compcert = callPackage ../development/coq-modules/compcert {
         inherit
@@ -74,6 +90,7 @@ let
           ;
         ocamlPackages = ocamlPackages_4_14;
       };
+      ConCert = callPackage ../development/coq-modules/ConCert { };
       coq-bits = callPackage ../development/coq-modules/coq-bits { };
       coq-elpi = callPackage ../development/coq-modules/coq-elpi { };
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
@@ -84,9 +101,9 @@ let
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
       coq-tactical = callPackage ../development/coq-modules/coq-tactical { };
       coqeal = callPackage ../development/coq-modules/coqeal (
-        (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
+        lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
-        })
+        }
       );
       coqhammer = callPackage ../development/coq-modules/coqhammer { };
       coqide = callPackage ../development/coq-modules/coqide { };
@@ -94,6 +111,7 @@ let
       coqtail-math = callPackage ../development/coq-modules/coqtail-math { };
       coquelicot = callPackage ../development/coq-modules/coquelicot { };
       coqutil = callPackage ../development/coq-modules/coqutil { };
+      coqfmt = callPackage ../development/coq-modules/coqfmt { };
       corn = callPackage ../development/coq-modules/corn { };
       deriving = callPackage ../development/coq-modules/deriving { };
       dpdgraph = callPackage ../development/coq-modules/dpdgraph { };
@@ -101,6 +119,7 @@ let
       equations = callPackage ../development/coq-modules/equations { };
       ExtLib = callPackage ../development/coq-modules/ExtLib { };
       extructures = callPackage ../development/coq-modules/extructures { };
+      fcsl-pcm = callPackage ../development/coq-modules/fcsl-pcm { };
       flocq = callPackage ../development/coq-modules/flocq { };
       fourcolor = callPackage ../development/coq-modules/fourcolor { };
       gaia = callPackage ../development/coq-modules/gaia { };
@@ -125,10 +144,13 @@ let
       json = callPackage ../development/coq-modules/json { };
       lemma-overloading = callPackage ../development/coq-modules/lemma-overloading { };
       LibHyps = callPackage ../development/coq-modules/LibHyps { };
+      libvalidsdp = self.validsdp.libvalidsdp;
       ltac2 = callPackage ../development/coq-modules/ltac2 { };
       math-classes = callPackage ../development/coq-modules/math-classes { };
       mathcomp = callPackage ../development/coq-modules/mathcomp { };
       ssreflect = self.mathcomp.ssreflect;
+      mathcomp-boot = self.mathcomp.boot;
+      mathcomp-order = self.mathcomp.order;
       mathcomp-ssreflect = self.mathcomp.ssreflect;
       mathcomp-fingroup = self.mathcomp.fingroup;
       mathcomp-algebra = self.mathcomp.algebra;
@@ -165,6 +187,18 @@ let
       metacoq-erasure-plugin = self.metacoq.erasure-plugin;
       metacoq-translations = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
+      metarocq = callPackage ../development/coq-modules/metarocq { };
+      metarocq-utils = self.metarocq.utils;
+      metarocq-common = self.metarocq.common;
+      metarocq-template-rocq = self.metarocq.template-rocq;
+      metarocq-pcuic = self.metarocq.pcuic;
+      metarocq-safechecker = self.metarocq.safechecker;
+      metarocq-template-pcuic = self.metarocq.template-pcuic;
+      metarocq-erasure = self.metarocq.erasure;
+      metarocq-quotation = self.metarocq.quotation;
+      metarocq-safechecker-plugin = self.metarocq.safechecker-plugin;
+      metarocq-erasure-plugin = self.metarocq.erasure-plugin;
+      metarocq-translations = self.metarocq.translations;
       mtac2 = callPackage ../development/coq-modules/mtac2 { };
       multinomials = callPackage ../development/coq-modules/multinomials { };
       odd-order = callPackage ../development/coq-modules/odd-order { };
@@ -172,6 +206,7 @@ let
       paco = callPackage ../development/coq-modules/paco { };
       paramcoq = callPackage ../development/coq-modules/paramcoq { };
       parsec = callPackage ../development/coq-modules/parsec { };
+      parseque = callPackage ../development/coq-modules/parseque { };
       pocklington = callPackage ../development/coq-modules/pocklington { };
       QuickChick = callPackage ../development/coq-modules/QuickChick { };
       reglang = callPackage ../development/coq-modules/reglang { };
@@ -192,7 +227,13 @@ let
       tlc = callPackage ../development/coq-modules/tlc { };
       topology = callPackage ../development/coq-modules/topology { };
       trakt = callPackage ../development/coq-modules/trakt { };
+      TypedExtraction = callPackage ../development/coq-modules/TypedExtraction { };
+      TypedExtraction-common = self.TypedExtraction.common;
+      TypedExtraction-elm = self.TypedExtraction.elm;
+      TypedExtraction-rust = self.TypedExtraction.rust;
+      TypedExtraction-plugin = self.TypedExtraction.plugin;
       unicoq = callPackage ../development/coq-modules/unicoq { };
+      validsdp = callPackage ../development/coq-modules/validsdp { };
       vcfloat = callPackage ../development/coq-modules/vcfloat (
         lib.optionalAttrs (lib.versions.range "8.16" "8.18" self.coq.version) {
           interval = self.interval.override { version = "4.9.0"; };
@@ -200,15 +241,21 @@ let
       );
       Velisarios = callPackage ../development/coq-modules/Velisarios { };
       Verdi = callPackage ../development/coq-modules/Verdi { };
+      verified-extraction = callPackage ../development/coq-modules/verified-extraction { };
       Vpl = callPackage ../development/coq-modules/Vpl { };
       VplTactic = callPackage ../development/coq-modules/VplTactic { };
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server { };
+      vsrocq-language-server = callPackage ../development/rocq-modules/vsrocq-language-server { };
       VST = callPackage ../development/coq-modules/VST (
         (lib.optionalAttrs (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override {
             version =
               with lib.versions;
               lib.switch self.coq.version [
+                {
+                  case = range "8.19" "8.20";
+                  out = "3.15";
+                }
                 {
                   case = range "8.15" "8.18";
                   out = "3.13.1";
@@ -227,6 +274,7 @@ let
           };
         })
       );
+      wasmcert = callPackage ../development/coq-modules/wasmcert { };
       waterproof = callPackage ../development/coq-modules/waterproof { };
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma { };
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
@@ -248,16 +296,17 @@ let
       ) (lib.attrNames set)
     );
   mkCoq =
-    version:
+    version: rp:
     callPackage ../applications/science/logic/coq {
       inherit
         version
-        ocamlPackages_4_05
         ocamlPackages_4_09
         ocamlPackages_4_10
         ocamlPackages_4_12
         ocamlPackages_4_14
+        ocamlPackages_5_4
         ;
+      rocqPackages = rp;
     };
 in
 rec {
@@ -278,42 +327,42 @@ rec {
     in
     self.filterPackages (!coq.dontFilter or false);
 
-  coq_8_5 = mkCoq "8.5";
-  coq_8_6 = mkCoq "8.6";
-  coq_8_7 = mkCoq "8.7";
-  coq_8_8 = mkCoq "8.8";
-  coq_8_9 = mkCoq "8.9";
-  coq_8_10 = mkCoq "8.10";
-  coq_8_11 = mkCoq "8.11";
-  coq_8_12 = mkCoq "8.12";
-  coq_8_13 = mkCoq "8.13";
-  coq_8_14 = mkCoq "8.14";
-  coq_8_15 = mkCoq "8.15";
-  coq_8_16 = mkCoq "8.16";
-  coq_8_17 = mkCoq "8.17";
-  coq_8_18 = mkCoq "8.18";
-  coq_8_19 = mkCoq "8.19";
-  coq_8_20 = mkCoq "8.20";
-  coq_9_0 = mkCoq "9.0";
+  coqPackages_8_7 = mkCoqPackages (mkCoq "8.7" { });
+  coqPackages_8_8 = mkCoqPackages (mkCoq "8.8" { });
+  coqPackages_8_9 = mkCoqPackages (mkCoq "8.9" { });
+  coqPackages_8_10 = mkCoqPackages (mkCoq "8.10" { });
+  coqPackages_8_11 = mkCoqPackages (mkCoq "8.11" { });
+  coqPackages_8_12 = mkCoqPackages (mkCoq "8.12" { });
+  coqPackages_8_13 = mkCoqPackages (mkCoq "8.13" { });
+  coqPackages_8_14 = mkCoqPackages (mkCoq "8.14" { });
+  coqPackages_8_15 = mkCoqPackages (mkCoq "8.15" { });
+  coqPackages_8_16 = mkCoqPackages (mkCoq "8.16" { });
+  coqPackages_8_17 = mkCoqPackages (mkCoq "8.17" { });
+  coqPackages_8_18 = mkCoqPackages (mkCoq "8.18" { });
+  coqPackages_8_19 = mkCoqPackages (mkCoq "8.19" { });
+  coqPackages_8_20 = mkCoqPackages (mkCoq "8.20" { });
+  coqPackages_9_0 = mkCoqPackages (mkCoq "9.0" rocqPackages_9_0);
+  coqPackages_9_1 = mkCoqPackages (mkCoq "9.1" rocqPackages_9_1);
+  coqPackages_9_2 = mkCoqPackages (mkCoq "9.2" rocqPackages_9_2);
 
-  coqPackages_8_5 = mkCoqPackages coq_8_5;
-  coqPackages_8_6 = mkCoqPackages coq_8_6;
-  coqPackages_8_7 = mkCoqPackages coq_8_7;
-  coqPackages_8_8 = mkCoqPackages coq_8_8;
-  coqPackages_8_9 = mkCoqPackages coq_8_9;
-  coqPackages_8_10 = mkCoqPackages coq_8_10;
-  coqPackages_8_11 = mkCoqPackages coq_8_11;
-  coqPackages_8_12 = mkCoqPackages coq_8_12;
-  coqPackages_8_13 = mkCoqPackages coq_8_13;
-  coqPackages_8_14 = mkCoqPackages coq_8_14;
-  coqPackages_8_15 = mkCoqPackages coq_8_15;
-  coqPackages_8_16 = mkCoqPackages coq_8_16;
-  coqPackages_8_17 = mkCoqPackages coq_8_17;
-  coqPackages_8_18 = mkCoqPackages coq_8_18;
-  coqPackages_8_19 = mkCoqPackages coq_8_19;
-  coqPackages_8_20 = mkCoqPackages coq_8_20;
-  coqPackages_9_0 = mkCoqPackages coq_9_0;
+  coq_8_7 = coqPackages_8_7.coq;
+  coq_8_8 = coqPackages_8_8.coq;
+  coq_8_9 = coqPackages_8_9.coq;
+  coq_8_10 = coqPackages_8_10.coq;
+  coq_8_11 = coqPackages_8_11.coq;
+  coq_8_12 = coqPackages_8_12.coq;
+  coq_8_13 = coqPackages_8_13.coq;
+  coq_8_14 = coqPackages_8_14.coq;
+  coq_8_15 = coqPackages_8_15.coq;
+  coq_8_16 = coqPackages_8_16.coq;
+  coq_8_17 = coqPackages_8_17.coq;
+  coq_8_18 = coqPackages_8_18.coq;
+  coq_8_19 = coqPackages_8_19.coq;
+  coq_8_20 = coqPackages_8_20.coq;
+  coq_9_0 = coqPackages_9_0.coq;
+  coq_9_1 = coqPackages_9_1.coq;
+  coq_9_2 = coqPackages_9_2.coq;
 
-  coqPackages = recurseIntoAttrs coqPackages_9_0;
+  coqPackages = lib.recurseIntoAttrs coqPackages_9_0;
   coq = coqPackages.coq;
 }

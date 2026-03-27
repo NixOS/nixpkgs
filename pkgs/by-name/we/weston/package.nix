@@ -1,16 +1,17 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchpatch2,
+  fetchFromGitLab,
+  fetchpatch, # Added for applying patch
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   python3,
   wayland-scanner,
   cairo,
   libGL,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libdrm,
   libevdev,
   libinput,
@@ -19,13 +20,16 @@
   seatd,
   wayland,
   wayland-protocols,
-  xcbutilcursor,
+  libxcb-cursor,
+  glslang,
 
   demoSupport ? true,
   jpegSupport ? true,
   libjpeg,
   lcmsSupport ? true,
   lcms2,
+  luaSupport ? true,
+  lua5_4_compat,
   pangoSupport ? true,
   pango,
   pipewireSupport ? true,
@@ -34,34 +38,40 @@
   freerdp,
   remotingSupport ? true,
   gst_all_1,
-  vaapiSupport ? true,
+  vaapiSupport ? false,
   libva,
   vncSupport ? true,
   aml,
   neatvnc,
   pam,
+  vulkanSupport ? true,
+  vulkan-headers,
+  vulkan-loader,
   webpSupport ? true,
   libwebp,
   xwaylandSupport ? true,
-  libXcursor,
+  libxcursor,
   xwayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "weston";
-  version = "14.0.1";
+  version = "15.0.0";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
-    hash = "sha256-qBUFBbEmpZ33gf6MMMjm+H2nAT4XkDnrhEpbu8x8ebM=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "wayland";
+    repo = "weston";
+    rev = finalAttrs.version;
+    hash = "sha256-7FbQkXazsf6FkkNbE+Q6ilKACFa/CoOL2Q1oXHuaVX8=";
   };
 
+  # Backport for https://gitlab.freedesktop.org/wayland/weston/-/issues/1100
   patches = [
-    (fetchpatch2 {
-      # vnc: Allow neatvnc in version 0.9.0
-      # https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1649
-      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/b4386289d614f26e89e1c6eb17e048826e925ed1.patch";
-      hash = "sha256-mkIOup44C9Kp42tFMXz8Sis4URmPi4t605MQG672nJU=";
+    (fetchpatch {
+      name = "weston-upstream-assertion-fix.patch";
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1993.patch";
+      hash = "sha256-705GIM7drTzv0N5Hk5dO18LWBnhhi1VoX8sfITHRYc4=";
     })
   ];
 
@@ -72,66 +82,76 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     wayland-scanner
+  ]
+  ++ lib.optional vulkanSupport glslang;
+
+  buildInputs = [
+    cairo
+    libGL
+    libdisplay-info_0_2
+    libdrm
+    libevdev
+    libinput
+    libxkbcommon
+    libgbm
+    seatd
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optional jpegSupport libjpeg
+  ++ lib.optional lcmsSupport lcms2
+  ++ lib.optional luaSupport lua5_4_compat
+  ++ lib.optional pangoSupport pango
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional rdpSupport freerdp
+  ++ lib.optionals remotingSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+  ]
+  ++ lib.optional vaapiSupport libva
+  ++ lib.optionals vncSupport [
+    aml
+    neatvnc
+    pam
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optional webpSupport libwebp
+  ++ lib.optionals xwaylandSupport [
+    libxcursor
+    libxcb-cursor
+    xwayland
   ];
-  buildInputs =
-    [
-      cairo
-      libGL
-      libdisplay-info
-      libdrm
-      libevdev
-      libinput
-      libxkbcommon
-      libgbm
-      seatd
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional lcmsSupport lcms2
-    ++ lib.optional pangoSupport pango
-    ++ lib.optional pipewireSupport pipewire
-    ++ lib.optional rdpSupport freerdp
-    ++ lib.optionals remotingSupport [
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-    ]
-    ++ lib.optional vaapiSupport libva
-    ++ lib.optionals vncSupport [
-      aml
-      neatvnc
-      pam
-    ]
-    ++ lib.optional webpSupport libwebp
-    ++ lib.optionals xwaylandSupport [
-      libXcursor
-      xcbutilcursor
-      xwayland
-    ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "backend-drm-screencast-vaapi" vaapiSupport)
-      (lib.mesonBool "backend-pipewire" pipewireSupport)
-      (lib.mesonBool "backend-rdp" rdpSupport)
-      (lib.mesonBool "backend-vnc" vncSupport)
-      (lib.mesonBool "color-management-lcms" lcmsSupport)
-      (lib.mesonBool "demo-clients" demoSupport)
-      (lib.mesonBool "image-jpeg" jpegSupport)
-      (lib.mesonBool "image-webp" webpSupport)
-      (lib.mesonBool "pipewire" pipewireSupport)
-      (lib.mesonBool "remoting" remotingSupport)
-      (lib.mesonOption "simple-clients" "")
-      (lib.mesonBool "test-junit-xml" false)
-      (lib.mesonBool "xwayland" xwaylandSupport)
-    ]
-    ++ lib.optionals xwaylandSupport [
-      (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
-    ];
+  mesonFlags = [
+    (lib.mesonBool "deprecated-backend-drm-screencast-vaapi" vaapiSupport)
+    (lib.mesonBool "backend-pipewire" pipewireSupport)
+    (lib.mesonBool "backend-rdp" rdpSupport)
+    (lib.mesonBool "backend-vnc" vncSupport)
+    (lib.mesonBool "color-management-lcms" lcmsSupport)
+    (lib.mesonBool "demo-clients" demoSupport)
+    (lib.mesonBool "image-jpeg" jpegSupport)
+    (lib.mesonBool "image-webp" webpSupport)
+    (lib.mesonBool "pipewire" pipewireSupport)
+    (lib.mesonBool "remoting" remotingSupport)
+    (lib.mesonBool "renderer-vulkan" vulkanSupport)
+    (lib.mesonOption "simple-clients" "")
+    (lib.mesonBool "shell-lua" luaSupport)
+    (lib.mesonBool "test-junit-xml" false)
+    (lib.mesonBool "xwayland" xwaylandSupport)
+  ]
+  ++ lib.optionals xwaylandSupport [
+    (lib.mesonOption "xwayland-path" (lib.getExe xwayland))
+  ];
 
-  passthru.providedSessions = [ "weston" ];
+  passthru = {
+    providedSessions = [ "weston" ];
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and functional Wayland compositor";
     longDescription = ''
       Weston is the reference implementation of a Wayland compositor, as well
@@ -144,12 +164,11 @@ stdenv.mkDerivation rec {
       provided.
     '';
     homepage = "https://gitlab.freedesktop.org/wayland/weston";
-    license = licenses.mit; # Expat version
-    platforms = platforms.linux;
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
     mainProgram = "weston";
-    maintainers = with maintainers; [
-      primeos
+    maintainers = with lib.maintainers; [
       qyliss
     ];
   };
-}
+})

@@ -2,7 +2,7 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gitUpdater,
+  unstableGitUpdater,
   gtk3,
   hicolor-icon-theme,
   jdupes,
@@ -21,15 +21,15 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname;
-    version = "2025-02-15";
+    version = "0-unstable-2025-11-04";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
-      rev = version;
-      hash = "sha256-Eh4TWoFfArFmpM/9tkrf2sChQ0zzOZJE9pElchu8DCM=";
+      repo = "qogir-icon-theme";
+      rev = "c633057ba0d27a504b3255144071c9691ed0264a";
+      hash = "sha256-VJHhyKk1f/25CNkqNM7+WQqQRdqBNgWD3XrJ+whOcd0=";
     };
 
     nativeBuildInputs = [
@@ -45,6 +45,10 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
     dontPatchELF = true;
     dontRewriteSymlinks = true;
 
+    patches = [
+      ./2026-03-20-missing-icons.patch
+    ];
+
     postPatch = ''
       patchShebangs install.sh
     '';
@@ -55,8 +59,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
       mkdir -p $out/share/icons
 
       name= ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) ("--theme " + builtins.toString themeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--color " + builtins.toString colorVariants)} \
+        ${lib.optionalString (themeVariants != [ ]) ("--theme " + toString themeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--color " + toString colorVariants)} \
         --dest $out/share/icons
 
       jdupes --quiet --link-soft --recurse $out/share
@@ -64,13 +68,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
       runHook postInstall
     '';
 
-    passthru.updateScript = gitUpdater { };
+    passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
-    meta = with lib; {
+    meta = {
       description = "Flat colorful design icon theme";
       homepage = "https://github.com/vinceliuice/Qogir-icon-theme";
-      license = with licenses; [ gpl3Only ];
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ romildo ];
+      license = with lib.licenses; [ gpl3Only ];
+      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [ romildo ];
     };
   }

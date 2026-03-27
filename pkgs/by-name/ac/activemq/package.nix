@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "6.1.6";
+  version = "6.2.1";
 in
 stdenvNoCC.mkDerivation {
   pname = "activemq";
@@ -13,7 +13,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "mirror://apache/activemq/${version}/apache-activemq-${version}-bin.tar.gz";
-    hash = "sha256-MqxpLaSG1+goGVht08VmG7u11tQlmYMqSUeXBYYI8KQ=";
+    hash = "sha256-vBbQMLxTykJAZRxl7BPfonLHN8kPx+NFSa3gwLZwdw0=";
   };
 
   installPhase = ''

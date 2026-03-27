@@ -6,12 +6,12 @@
   nodejs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "napi-rs-cli";
   version = "2.17.0";
 
   src = fetchurl {
-    url = "https://registry.npmjs.org/@napi-rs/cli/-/cli-${version}.tgz";
+    url = "https://registry.npmjs.org/@napi-rs/cli/-/cli-${finalAttrs.version}.tgz";
     hash = "sha256-DeqH3pEtGZoKEBz5G0RfDO9LWHGMKL2OiWS1uWk4v44=";
   };
 
@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tools for napi-rs";
     mainProgram = "napi";
     homepage = "https://napi.rs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ winter ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ winter ];
     inherit (nodejs.meta) platforms;
   };
-}
+})

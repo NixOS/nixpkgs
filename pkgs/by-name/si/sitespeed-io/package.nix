@@ -3,13 +3,14 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
-  nodejs_18,
+  systemdLibs,
   coreutils,
   ffmpeg-headless,
   imagemagick_light,
   procps,
   python3,
-  xorg,
+  versionCheckHook,
+  xorg-server,
   nix-update-script,
 
   # chromedriver is more efficient than geckodriver, but is available on less platforms.
@@ -24,36 +25,41 @@
 }:
 assert
   (!withFirefox && !withChromium) -> throw "Either `withFirefox` or `withChromium` must be enabled.";
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "sitespeed-io";
-  version = "34.0.1";
+  version = "39.4.2";
 
   src = fetchFromGitHub {
     owner = "sitespeedio";
     repo = "sitespeed.io";
-    rev = "v${version}";
-    hash = "sha256-yC/TlAJa71hbPYYuqPV+k3syGuo/VhnNjXmmxh47ySQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-klPdbYVeV4hrwMfwmOiocB4YkJzZsRKUelBZSO+fB/w=";
   };
 
-  nodejs = nodejs_18;
+  env = {
+    # Don't try to download the browser drivers
+    CHROMEDRIVER_SKIP_DOWNLOAD = true;
+    GECKODRIVER_SKIP_DOWNLOAD = true;
+    EDGEDRIVER_SKIP_DOWNLOAD = true;
+  };
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
-
-  # Don't try to download the browser drivers
-  CHROMEDRIVER_SKIP_DOWNLOAD = true;
-  GECKODRIVER_SKIP_DOWNLOAD = true;
-  EDGEDRIVER_SKIP_DOWNLOAD = true;
+  buildInputs = [
+    systemdLibs
+  ];
 
   dontNpmBuild = true;
   npmInstallFlags = [ "--omit=dev" ];
-  npmDepsHash = "sha256-Q0cWxV5OOaG8Z3aM2j0HtD1e9yPFVDSRcMKBf/yscv4=";
+  npmDepsHash = "sha256-4BvB49+ujSB5XM/BvOqoqRjC7X9Ih3dzt5AQdL3f2z4=";
 
   postInstall = ''
     mv $out/bin/sitespeed{.,-}io
     mv $out/bin/sitespeed{.,-}io-wpr
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   postFixup =
     let
@@ -71,7 +77,7 @@ buildNpmPackage rec {
     ''
       wrapProgram $out/bin/sitespeed-io \
         --set PATH ${
-          lib.makeBinPath ([
+          lib.makeBinPath [
             (python3.withPackages (p: [
               p.numpy
               p.opencv4
@@ -79,10 +85,10 @@ buildNpmPackage rec {
             ]))
             ffmpeg-headless
             imagemagick_light
-            xorg.xorgserver
+            xorg-server
             procps
             coreutils
-          ])
+          ]
         } \
         ${lib.optionalString withChromium "--add-flags '${chromiumArgs}'"} \
         ${lib.optionalString withFirefox "--add-flags '${firefoxArgs}'"} \
@@ -94,12 +100,14 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source tool that helps you monitor, analyze and optimize your website speed and performance";
     homepage = "https://sitespeed.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ misterio77 ];
+    downloadPage = "https://github.com/sitespeedio/sitespeed.io";
+    changelog = "https://github.com/sitespeedio/sitespeed.io/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ misterio77 ];
     platforms = lib.unique (geckodriver.meta.platforms ++ chromedriver.meta.platforms);
     mainProgram = "sitespeed-io";
   };
-}
+})

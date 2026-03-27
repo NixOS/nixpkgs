@@ -12,6 +12,7 @@
   fcgi,
   gdal,
   geos,
+  gfortran,
   libgeotiff,
   libjpeg,
   libpng,
@@ -23,20 +24,24 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mapcache";
   version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "mapcache";
-    rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "rel-${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-AwdZdOEq9SZ5VzuBllg4U1gdVxZ9IVdqiDrn3QuRdCk=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # work around for `ld: file not found: @rpath/libquadmath.0.dylib`
+    gfortran.cc
   ];
 
   buildInputs = [
@@ -70,12 +75,18 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-std=c99";
 
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "include_directories(\''${TIFF_INCLUDE_DIR})" "" \
+      --replace-fail "target_link_libraries(mapcache \''${TIFF_LIBRARY})" "target_link_libraries(mapcache TIFF::TIFF)"
+  '';
+
   meta = {
     description = "Server that implements tile caching to speed up access to WMS layers";
     homepage = "https://mapserver.org/mapcache/";
     changelog = "https://www.mapserver.org/development/changelog/mapcache/";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
-}
+})

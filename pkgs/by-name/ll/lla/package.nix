@@ -3,29 +3,45 @@
   rustPlatform,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
   versionCheckHook,
   nix-update-script,
 }:
-let
-  version = "0.3.10";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lla";
-  inherit version;
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "chaqchase";
     repo = "lla";
-    tag = "v${version}";
-    hash = "sha256-/6p23JW3ZaSuDf34IWcTggR92/zUTMRerQ32bTsRujo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pNm3IBt5Wlk3TMqIehJKhEdEw6i+PY+w4IPYh4pS9Qo=";
   };
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    installShellFiles
+    pkg-config
+  ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-aX8nm/V0ug2g40QeFU9AWxjuFAnW+gYTR8RC5CV7wRQ=";
+  buildInputs = [
+    oniguruma
+  ];
+
+  # Do not vendor Oniguruma
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
+
+  cargoHash = "sha256-gGa0NNcnUwnrBXHp609ShdmcyjjK7/dZ5T0MNYXz6z8=";
 
   cargoBuildFlags = [ "--workspace" ];
+
+  # TODO: Upstream also provides Elvish and PowerShell completions,
+  # but `installShellCompletion` only has support for Bash, Zsh and Fish at the moment.
+  postInstall = ''
+    installShellCompletion completions/{_lla,lla{.bash,.fish}}
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/lla \
@@ -46,10 +62,10 @@ rustPlatform.buildRustPackage {
       Git integration, and a robust plugin system with an extensible list of plugins to add more functionality.
     '';
     homepage = "https://lla.chaqchase.com";
-    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/chaqchase/lla/blob/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ pluiedev ];
     platforms = lib.platforms.unix;
     mainProgram = "lla";
   };
-}
+})

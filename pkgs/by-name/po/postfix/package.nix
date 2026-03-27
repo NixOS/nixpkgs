@@ -26,16 +26,22 @@
   libmysqlclient,
   withSQLite ? false,
   sqlite,
+  withTLSRPT ? true,
+  libtlsrpt,
 }:
 
 let
+  cyrus_sasl' = cyrus_sasl.override { enableMySQL = true; };
   ccargs = lib.concatStringsSep " " (
     [
       "-DUSE_TLS"
       "-DUSE_SASL_AUTH"
       "-DUSE_CYRUS_SASL"
-      "-I${cyrus_sasl.dev}/include/sasl"
+      "-I${cyrus_sasl'.dev}/include/sasl"
       "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
+      # Fix build with gcc15, no upstream fix for stable releases:
+      # https://www.mail-archive.com/postfix-devel@postfix.org/msg01270.html
+      "-std=gnu17"
     ]
     ++ lib.optional withPgSQL "-DHAS_PGSQL"
     ++ lib.optionals withMySQL [
@@ -48,6 +54,7 @@ let
       "-DHAS_LDAP"
       "-DUSE_LDAP_SASL"
     ]
+    ++ lib.optional withTLSRPT "-DUSE_TLSRPT"
   );
   auxlibs = lib.concatStringsSep " " (
     [
@@ -62,38 +69,38 @@ let
     ++ lib.optional withMySQL "-lmysqlclient"
     ++ lib.optional withSQLite "-lsqlite3"
     ++ lib.optional withLDAP "-lldap"
+    ++ lib.optional withTLSRPT "-ltlsrpt"
   );
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "postfix";
-  version = "3.10.1";
+  version = "3.11.1";
 
   src = fetchurl {
-    url = "https://de.postfix.org/ftpmirror/official/postfix-${version}.tar.gz";
-    hash = "sha256-dYaNt6jtJSzToUwTo844Pd1CVjFgwCAn0GEgLuNnmb8=";
+    url = "http://ftp.porcupine.org/mirrors/postfix-release/official/postfix-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ZZJlYG7ZtiQpZLbUSiqvXmB9j7mtJUECekoyDd+4ncE=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     m4
   ];
-  buildInputs =
-    [
-      db
-      openssl
-      cyrus_sasl
-      icu
-      libnsl
-      pcre2
-    ]
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optional withMySQL libmysqlclient
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withLDAP openldap;
+  buildInputs = [
+    db
+    openssl
+    cyrus_sasl'
+    icu
+    libnsl
+    pcre2
+  ]
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optional withMySQL libmysqlclient
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withLDAP openldap
+  ++ lib.optional withTLSRPT libtlsrpt;
 
   hardeningDisable = [ "format" ];
-  hardeningEnable = [ "pie" ];
 
   patches = [
     ./postfix-script-shell.patch
@@ -141,7 +148,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = lib.optionalString withLDAP "-llber";
+  env = lib.optionalAttrs withLDAP {
+    NIX_LDFLAGS = "-llber";
+  };
 
   installTargets = [ "non-interactive-package" ];
 
@@ -183,19 +192,18 @@ stdenv.mkDerivation rec {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.postfix.org/";
-    changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
+    changelog = "https://www.postfix.org/announcements/postfix-${finalAttrs.version}.html";
     description = "Fast, easy to administer, and secure mail server";
-    license = with licenses; [
+    license = with lib.licenses; [
       ipl10
       epl20
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      globin
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       dotlambda
       lewo
     ];
   };
-}
+})

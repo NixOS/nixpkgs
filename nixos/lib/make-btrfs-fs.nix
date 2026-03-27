@@ -31,7 +31,8 @@ pkgs.stdenv.mkDerivation {
     btrfs-progs
     libfaketime
     fakeroot
-  ] ++ lib.optional compressImage zstd;
+  ]
+  ++ lib.optional compressImage zstd;
 
   buildCommand = ''
     ${if compressImage then "img=temp.img" else "img=$out"}
@@ -64,7 +65,7 @@ pkgs.stdenv.mkDerivation {
       return 1
     fi
 
-    if [ ${builtins.toString compressImage} ]; then
+    if [ ${toString compressImage} ]; then
       echo "Compressing image"
       zstd -v --no-progress ./$img -o $out
     fi

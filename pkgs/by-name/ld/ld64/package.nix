@@ -6,6 +6,7 @@
   fetchFromGitHub,
   libtapi,
   llvm,
+  libxml2,
   meson,
   ninja,
   openssl,
@@ -72,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0016-Add-dyldinfo-to-the-ld64-build.patch
     ./patches/0017-Fix-dyldinfo-build.patch
     ./patches/0018-Use-STL-containers-instead-of-LLVM-containers.patch
+
+    # Fix zippered versions on macOS 26+. Part of upstream ld64-956.6. Remove on next version bump.
+    # https://github.com/apple-oss-distributions/ld64/commit/1a4389663d65d6630e4b3e31ace2a86b6183b452
+    ./patches/0019-Fix-zippered-versions-macos-26.patch
   ];
 
   prePatch = ''
@@ -113,9 +118,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     llvm
+    libxml2
     openssl
     xar
   ];
+
+  # ld built with this fails to link glib's gio on x86_64 darwin
+  hardeningDisable = [ "libcxxhardeningfast" ];
 
   dontUseCmakeConfigure = true; # CMake is only needed because it’s used by Meson to find LLVM.
 
@@ -170,11 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
-    description = "The classic linker for Darwin";
+    description = "Classic linker for Darwin";
     homepage = "https://opensource.apple.com/releases/";
     license = lib.licenses.apple-psl20;
     mainProgram = "ld";
-    maintainers = lib.teams.darwin.members;
+    teams = [ lib.teams.darwin ];
     platforms = lib.platforms.darwin; # Porting to other platforms is incomplete. Support only Darwin for now.
   };
 })

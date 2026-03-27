@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  libX11,
+  libx11,
 }:
 stdenv.mkDerivation {
   pname = "wayv";
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   postInstall = ''
     make -C doc install

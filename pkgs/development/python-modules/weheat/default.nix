@@ -11,21 +11,17 @@
   urllib3,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weheat";
-  version = "2025.3.7";
+  version = "2026.2.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wefabricate";
     repo = "wh-python";
-    tag = version;
-    hash = "sha256-PGGlgzcx/pUyTcsFj73x5LqfcPRCh2VMXNsIJjcpEZE=";
+    tag = finalAttrs.version;
+    hash = "sha256-V29B30LztIHFbTRTqppR3kvVNwDoK4BPq5fK1blJUrU=";
   };
-
-  pythonRelaxDeps = [
-    "urllib3"
-  ];
 
   build-system = [ setuptools ];
 
@@ -46,7 +42,8 @@ buildPythonPackage rec {
   meta = {
     description = "Library to interact with the weheat API";
     homepage = "https://github.com/wefabricate/wh-python";
+    changelog = "https://github.com/wefabricate/wh-python/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

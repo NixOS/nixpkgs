@@ -43,13 +43,13 @@ let
   '';
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "verifast";
-  version = "25.02";
+  version = "25.08";
 
   src = fetchurl {
-    url = "https://github.com/verifast/verifast/releases/download/${version}/${pname}-${version}-linux.tar.gz";
-    sha256 = "sha256-XVyH0Rs9c19Ew/DKUq68iePE0RGdmO8lGI0Hy1etZeg=";
+    url = "https://github.com/verifast/verifast/releases/download/${finalAttrs.version}/verifast-${finalAttrs.version}-linux.tar.gz";
+    sha256 = "sha256-HkABnWrdkb9yFByG9AB/L+Hu9n9FPLf7jx9at9MdUJ8=";
   };
 
   dontConfigure = true;
@@ -73,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

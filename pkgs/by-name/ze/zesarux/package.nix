@@ -5,8 +5,8 @@
   SDL2,
   aalib,
   alsa-lib,
-  libXext,
-  libXxf86vm,
+  libxext,
+  libxxf86vm,
   libcaca,
   libpulseaudio,
   libsndfile,
@@ -34,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     aalib
     alsa-lib
-    libXxf86vm
-    libXext
+    libxxf86vm
+    libxext
     libcaca
     libpulseaudio
     libsndfile
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "ZX Second-Emulator And Released for UniX";
     mainProgram = "zesarux";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

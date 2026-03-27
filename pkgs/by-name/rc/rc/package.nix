@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   pkgsStatic,
   byacc,
   ed,
@@ -44,6 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/rakitzis/rc/commit/2bab312ea11cb77d2654a731357842971c0b5d18.patch";
+      hash = "sha256-LpnrsvJH/0CRS0bCgoZT2Dkac6AZH8DZIPU4MQ5MP0I=";
+    })
+  ];
+
   # TODO: think on a less ugly fixup
   postPatch = ''
     ed -v -s Makefile << EOS
@@ -65,13 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  buildInputs =
-    [
-      ncurses
-    ]
-    ++ lib.optionals readlineSupport [
-      readline
-    ];
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals readlineSupport [
+    readline
+  ];
 
   strictDeps = true;
 
@@ -83,13 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     "EDIT=${lineEditingLibrary}"
   ];
 
-  buildFlags =
-    [
-      "all"
-    ]
-    ++ lib.optionals historySupport [
-      "history"
-    ];
+  buildFlags = [
+    "all"
+  ]
+  ++ lib.optionals historySupport [
+    "history"
+  ];
 
   postInstall = lib.optionalString historySupport ''
     installManPage history.1

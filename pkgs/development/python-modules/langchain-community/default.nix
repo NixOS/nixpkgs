@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
+  pythonAtLeast,
 
   # build-system
   pdm-backend,
@@ -11,7 +11,7 @@
   aiohttp,
   dataclasses-json,
   httpx-sse,
-  langchain,
+  langchain-classic,
   langchain-core,
   langsmith,
   numpy,
@@ -22,6 +22,9 @@
   tenacity,
 
   # tests
+  blockbuster,
+  duckdb,
+  duckdb-engine,
   httpx,
   langchain-tests,
   lark,
@@ -33,48 +36,37 @@
   responses,
   syrupy,
   toml,
+
+  # passthru
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.20";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
-    repo = "langchain";
-    tag = "langchain-community==${version}";
-    hash = "sha256-6YLy7G1kZIqHAGMUIQoGCfDO2ZuVgNEtpkOI1o8eFvc=";
+    repo = "langchain-community";
+    tag = "libs/community/v${version}";
+    hash = "sha256-N92YDmej2shQQlktr0veFOKyGFWemFj0hdJIYu1rYSc=";
   };
 
   sourceRoot = "${src.name}/libs/community";
 
   build-system = [ pdm-backend ];
 
-  patches = [
-    # Remove dependency on blockbuster (not available in nixpkgs due to dependency on forbiddenfruit)
-    ./rm-blockbuster.patch
-  ];
-
+  # Only needed for mixed python 3.12/3.13 builds
   pythonRelaxDeps = [
-    # Each component release requests the exact latest langchain and -core.
-    # That prevents us from updating individul components.
-    "langchain"
-    "langchain-core"
     "numpy"
-    "pydantic-settings"
-    "tenacity"
-  ];
-
-  pythonRemoveDeps = [
-    "blockbuster"
   ];
 
   dependencies = [
     aiohttp
     dataclasses-json
     httpx-sse
-    langchain
+    langchain-classic
     langchain-core
     langsmith
     numpy
@@ -84,9 +76,13 @@ buildPythonPackage rec {
     sqlalchemy
     tenacity
   ];
+
   pythonImportsCheck = [ "langchain_community" ];
 
   nativeCheckInputs = [
+    blockbuster
+    duckdb
+    duckdb-engine
     httpx
     langchain-tests
     lark
@@ -100,44 +96,45 @@ buildPythonPackage rec {
     toml
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [
+    "tests/unit_tests"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   disabledTests = [
-    # Test require network access
-    "test_ovhcloud_embed_documents"
-    "test_yandex"
-    # duckdb-engine needs python-wasmer which is not yet available in Python 3.12
-    # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
+    # requires bs4, aka BeautifulSoup
+    "test_importable_all"
+    # flaky
+    "test_llm_caching"
+    "test_llm_caching_async"
+    # Triggered by https://github.com/Mause/duckdb_engine/issues/1379
     "test_table_info"
     "test_sql_database_run"
-    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
-    "test_create_sql_agent"
-    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
-    "test_proper_inputs"
-    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
-    "test_variable_key_naming"
-    # Fails due to the lack of blockbuster
-    "test_group_dependencies"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: module 'ast' has no attribute 'Str'
+    # https://github.com/langchain-ai/langchain-community/issues/492
+    "test_no_dynamic__all__"
   ];
 
   disabledTestPaths = [
-    # ValueError: Received unsupported arguments {'strict': None}
-    "tests/unit_tests/chat_models/test_cloudflare_workersai.py"
+    # depends on Pydantic v1 notations, will not load
+    "tests/unit_tests/document_loaders/test_gitbook.py"
+    # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
+    # https://docs.pytest.org/en/stable/deprecations.html#applying-a-mark-to-a-fixture-function
+    "tests/unit_tests/document_loaders/test_hugging_face.py"
+    "tests/unit_tests/indexes/test_sql_record_manager.py"
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-community==(.*)"
-    ];
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "libs/community/v";
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-community==${version}";
     description = "Community contributed LangChain integrations";
-    homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/community";
+    homepage = "https://github.com/langchain-ai/langchain-community";
+    changelog = "https://github.com/langchain-ai/langchain-community/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       natsukium

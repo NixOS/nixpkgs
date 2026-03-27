@@ -5,23 +5,23 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "monsoon";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
-    tag = "v${version}";
-    hash = "sha256-efVwOon499DUJ17g6aQveMd2g544Ck+/P7VttYnR+No=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vgwoW7jrcLVHDm1cYrIpFcfrgKImCAVOtHg8lMQ6aic=";
   };
 
-  vendorHash = "sha256-i96VDKNRNrkrkg2yBd+muXIQK0vZCGIoQrZsq+kBMsk=";
+  vendorHash = "sha256-hGEUO1sl8IKXo4rkS81Wlf7187lu2PrSujNlGNTLwmE=";
 
   # Tests fails on darwin
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "Fast HTTP enumerator";
     mainProgram = "monsoon";
     longDescription = ''
@@ -29,8 +29,8 @@ buildGoModule rec {
       requests, filter the responses and display them in real-time.
     '';
     homepage = "https://github.com/RedTeamPentesting/monsoon";
-    changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/RedTeamPentesting/monsoon/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

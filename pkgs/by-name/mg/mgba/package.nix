@@ -24,6 +24,7 @@ let
     qtmultimedia
     qttools
     wrapQtAppsHook
+    qtwayland
     ;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -65,9 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtmultimedia
     qttools
-  ] ++ lib.optionals enableDiscordRpc [ discord-rpc ];
+  ]
+  ++ lib.optionals enableDiscordRpc [ discord-rpc ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   cmakeFlags = [
+    # TODO: drop in the next version bump
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
     (lib.cmakeBool "USE_DISCORD_RPC" enableDiscordRpc)
   ];
 

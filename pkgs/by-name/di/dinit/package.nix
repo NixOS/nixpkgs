@@ -4,28 +4,28 @@
   fetchFromGitHub,
   m4,
   installShellFiles,
-  util-linux,
+  util-linuxMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dinit";
-  version = "0.19.3";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "davmac314";
     repo = "dinit";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     # fix for case-insensitive filesystems
     postFetch = ''
       [ -f "$out/BUILD" ] && rm "$out/BUILD"
     '';
-    hash = "sha256-mhb/0EeJpUReGE2xxVXs0iUGctDOVnpR1Q+IVUtFT0Y=";
+    hash = "sha256-PkriMQrvmBCZsReATcHBkHu9AJQDSvjctPAifseuJGI=";
   };
 
   postPatch = ''
     substituteInPlace src/shutdown.cc \
-      --replace-fail '"/bin/umount"' '"${util-linux}/bin/umount"' \
-      --replace-fail '"/sbin/swapoff"' '"${util-linux}/bin/swapoff"'
+      --replace-fail '"/bin/umount"' '"${util-linuxMinimal}/bin/umount"' \
+      --replace-fail '"/sbin/swapoff"' '"${util-linuxMinimal}/bin/swapoff"'
   '';
 
   nativeBuildInputs = [
@@ -46,10 +46,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A service manager / supervision system, which can (on Linux) also function as a system manager and init";
+    description = "Service manager / supervision system, which can (on Linux) also function as a system manager and init";
     homepage = "https://davmac.org/projects/dinit";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aanderse ];
+    maintainers = with lib.maintainers; [
+      aanderse
+      lillecarl
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

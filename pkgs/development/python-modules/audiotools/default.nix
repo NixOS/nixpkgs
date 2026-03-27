@@ -3,10 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  stdenv,
-  AudioToolbox,
-  AudioUnit,
-  CoreServices,
   pkg-config,
   libmpg123,
   lame,
@@ -31,22 +27,16 @@ buildPythonPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libmpg123 # MP2/MP3 decoding
-      lame # MP3 encoding
-      twolame # MP2 encoding
-      opusfile # opus decoding
-      libopus # opus encoding
-      libvorbis # ogg encoding/decoding
-      libcdio # CD reading
-      libcdio-paranoia # CD reading
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AudioToolbox
-      AudioUnit
-      CoreServices
-    ];
+  buildInputs = [
+    libmpg123 # MP2/MP3 decoding
+    lame # MP3 encoding
+    twolame # MP2 encoding
+    opusfile # opus decoding
+    libopus # opus encoding
+    libvorbis # ogg encoding/decoding
+    libcdio # CD reading
+    libcdio-paranoia # CD reading
+  ];
 
   preConfigure = ''
     # need to change probe to yes because mp3lame is not reported in pkg-config
@@ -64,10 +54,10 @@ buildPythonPackage {
     hash = "sha256-iRakeV4Sg4oU0JtiA0O3jnmLJt99d89Hg6v9onUaSnw=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utilities and Python modules for handling audio";
     homepage = "https://audiotools.sourceforge.net/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
 }

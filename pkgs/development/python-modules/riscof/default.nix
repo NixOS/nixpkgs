@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   jinja2,
-  pythonOlder,
   riscv-config,
   riscv-isac,
 }:
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "1.25.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "riscv-software-src";
-    repo = pname;
+    repo = "riscof";
     tag = version;
     hash = "sha256-ToI2xI0fvnDR+hJ++T4ss5X3gc4G6Cj1uJHx0m2X7GY=";
   };
@@ -46,12 +43,12 @@ buildPythonPackage rec {
   # No unitests available
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "RISC-V Architectural Test Framework";
     mainProgram = "riscof";
     homepage = "https://github.com/riscv-software-src/riscof";
     changelog = "https://github.com/riscv-software-src/riscof/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ genericnerdyusername ];
-    license = licenses.bsd3;
+    maintainers = [ ];
+    license = lib.licenses.bsd3;
   };
 }

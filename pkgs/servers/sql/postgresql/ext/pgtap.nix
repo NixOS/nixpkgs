@@ -12,13 +12,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgtap";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pgtap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YgvfLGF7pLVcCKD66NnWAydDxtoYHH1DpLiYTEKHJ0E=";
+    hash = "sha256-SKac6JJmH/z7G1GmQYATMNfywsDIHjNdskzn2MT3kBg=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,6 @@ postgresqlBuildExtension (finalAttrs: {
       SELECT * FROM finish();
       ROLLBACK;
     '';
-    failureHook = "postgresqlStop";
     checkPhase = ''
       runHook preCheck
       psql -a -v ON_ERROR_STOP=1 -f $sqlPath
@@ -62,7 +61,7 @@ postgresqlBuildExtension (finalAttrs: {
       as well as the ability to integrate with other TAP-emitting test frameworks.
       It can also be used in the xUnit testing style.
     '';
-    maintainers = with lib.maintainers; [ willibutz ];
+    maintainers = [ ];
     homepage = "https://pgtap.org";
     inherit (postgresql.meta) platforms;
     license = lib.licenses.mit;

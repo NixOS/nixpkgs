@@ -6,23 +6,20 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "golangci-lint-langserver";
-  version = "0.0.10";
+  version = "0.0.12";
 
   src = fetchFromGitHub {
     owner = "nametake";
     repo = "golangci-lint-langserver";
-    tag = "v${version}";
-    hash = "sha256-wNofr/s8K+vbvNZWrQ97g2V0fNAS2P/Zf7tsOmly+gc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Sm+y9ccM5zhatzDZ/qDYH4HT2foteCniItdojqnFSxI=";
   };
 
-  vendorHash = "sha256-SsGw26y/ZIBFp9dBk55ebQgJiLWOFRNe21h6huYE84I=";
+  vendorHash = "sha256-kbGTORTTxfftdU8ffsfh53nT7wZldOnBZ/1WWzN89Uc=";
 
   subPackages = [ "." ];
-
-  # renable after https://github.com/nametake/golangci-lint-langserver/pull/52
-  doCheck = false;
 
   nativeCheckInputs = [
     golangci-lint
@@ -36,4 +33,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ kirillrdy ];
     mainProgram = "golangci-lint-langserver";
   };
-}
+})

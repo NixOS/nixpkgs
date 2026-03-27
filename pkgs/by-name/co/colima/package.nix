@@ -5,26 +5,24 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  lima,
-  lima-bin,
+  krunkit,
+  lima-full,
   makeWrapper,
+  procps,
   qemu,
   testers,
   colima,
-  # use lima-bin on darwin to support native macOS virtualization
-  # https://github.com/NixOS/nixpkgs/pull/209171
-  lima-drv ? if stdenv.hostPlatform.isDarwin then lima-bin else lima,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "colima";
-  version = "0.8.1";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-RQnHqEabxyoAKr8BfmVhk8z+l5oy8pa5JPTWk/0FV5g=";
+    repo = "colima";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WYwHqMPHRF17j7EfZzxHAMV0JPGZKLfJCn0axpuh5sc=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -36,9 +34,10 @@ buildGoModule rec {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
 
-  vendorHash = "sha256-rqCPpO/Va31U++sfELcN1X6oDtDiCXoGj0RHKZUM6rY=";
+  vendorHash = "sha256-UAnQZyZ4EcIZz55jXUjkJDjq3s0uLPBnwUPyNcBV6aE=";
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log
@@ -46,18 +45,30 @@ buildGoModule rec {
 
   env.CGO_ENABLED = 1;
 
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace cmd/daemon/daemon.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+
+    substituteInPlace daemon/process/vmnet/vmnet.go \
+      --replace-fail '/usr/bin/pkill' '${lib.getExe' procps "pkill"}'
+  '';
+
   preConfigure = ''
-    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \
+    ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${finalAttrs.version} \
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
   postInstall = ''
     wrapProgram $out/bin/colima \
       --prefix PATH : ${
-        lib.makeBinPath [
-          lima-drv
-          qemu
-        ]
+        lib.makeBinPath (
+          [
+            # Suppress warning on `colima start`: https://github.com/abiosoft/colima/issues/1333
+            lima-full
+            qemu
+          ]
+          ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform krunkit) krunkit
+        )
       }
 
     installShellCompletion --cmd colima \
@@ -71,14 +82,14 @@ buildGoModule rec {
     command = "HOME=$(mktemp -d) colima version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Container runtimes with minimal setup";
     homepage = "https://github.com/abiosoft/colima";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       aaschmid
       tricktron
     ];
     mainProgram = "colima";
   };
-}
+})

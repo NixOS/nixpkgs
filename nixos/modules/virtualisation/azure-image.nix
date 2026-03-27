@@ -67,6 +67,16 @@ in
         For v2, secure boot needs to be turned off during creation.
       '';
     };
+
+    additionalSpace = mkOption {
+      type = types.str;
+      default = "512M";
+      example = "2048M";
+      description = ''
+        additional disk space to be added to the image if diskSize "auto"
+        is used.
+      '';
+    };
   };
 
   config = {
@@ -81,8 +91,12 @@ in
       # generating raw format and convert with subformat args afterwards
       format = "raw";
       postVM = ''
-        ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/${config.image.fileName}
+        ${lib.getExe' pkgs.vmTools.qemu "qemu-img"} convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/${config.image.fileName}
         rm $diskImage
+      ''
+      + lib.optionalString (cfg.diskSize == "auto") ''
+        truncate -s +${cfg.additionalSpace} "$out/${config.image.fileName}"
+        ${lib.getExe' pkgs.cloud-utils "growpart"} "$out/${config.image.fileName}" 1
       '';
       configFile = ./azure-config-user.nix;
 
@@ -105,7 +119,7 @@ in
       splashImage = null;
       # For Gen 1 VM, configurate grub output to serial_com0.
       # Not needed for Gen 2 VM wbere serial_com0 does not exist,
-      # and outputing to console is enough to make Azure Serial Console working
+      # and outputting to console is enough to make Azure Serial Console working
       extraConfig = lib.mkIf (!efiSupport) ''
         serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
         terminal_input --append serial

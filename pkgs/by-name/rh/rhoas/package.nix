@@ -8,14 +8,14 @@
   rhoas,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "rhoas";
   version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "app-services-cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-9fydRgp2u1LWf0lEDMi1OxxFURd14oKCBDKACqrgWII=";
   };
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/redhat-developer/app-services-cli/internal/build.Version=${version}"
+    "-X github.com/redhat-developer/app-services-cli/internal/build.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -44,12 +44,12 @@ buildGoModule rec {
     command = "HOME=$TMP rhoas version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command Line Interface for Red Hat OpenShift Application Services";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/redhat-developer/app-services-cli";
-    changelog = "https://github.com/redhat-developer/app-services-cli/releases/v${version}";
-    maintainers = with maintainers; [ stehessel ];
+    changelog = "https://github.com/redhat-developer/app-services-cli/releases/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ stehessel ];
     mainProgram = "rhoas";
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   hatchling,
@@ -90,30 +91,26 @@ let
   ibisTestingData = fetchFromGitHub {
     owner = "ibis-project";
     repo = "testing-data";
-    # https://github.com/ibis-project/ibis/blob/10.4.0/nix/overlay.nix#L94-L100
+    # https://github.com/ibis-project/ibis/blob/10.5.0/nix/overlay.nix#L94-L100
     rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
     hash = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
 in
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ibis-framework";
-  version = "10.4.0";
+  version = "12.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
-    tag = version;
-    hash = "sha256-N6T3Hx4UIb08P+Xqg6RFb9q/pmAHvldW0yaFoRxmMv0=";
+    tag = finalAttrs.version;
+    hash = "sha256-GqSbjjUr4EaWueMl4TrhaDvqn1iDd4CO3QcDnOXfSAk=";
   };
 
   build-system = [
     hatchling
-  ];
-
-  pythonRelaxDeps = [
-    # "toolz"
   ];
 
   dependencies = [
@@ -141,12 +138,21 @@ buildPythonPackage rec {
     # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
     writableTmpDirAsHomeHook
-  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+  ]
+  ++ lib.concatMap (name: finalAttrs.passthru.optional-dependencies.${name}) testBackends;
 
-  pytestFlagsArray = [
-    "-m"
-    "'${lib.concatStringsSep " or " testBackends} or core'"
+  pytestFlags = [
+    "--benchmark-disable"
+    "-Wignore::FutureWarning"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # DeprecationWarning: '_UnionGenericAlias' is deprecated and slated for removal in Python 3.17
+    "-Wignore::DeprecationWarning"
+    # Multiple tests with warnings fail without it
+    "-Wignore::pytest.PytestUnraisableExceptionWarning"
   ];
+
+  enabledTestMarks = testBackends ++ [ "core" ];
 
   disabledTests = [
     # tries to download duckdb extensions
@@ -157,13 +163,102 @@ buildPythonPackage rec {
     "test_read_sqlite"
     "test_register_sqlite"
     "test_roundtrip_xlsx"
+
     # AssertionError: value does not match the expected value in snapshot
     "test_union_aliasing"
+
     # requires network connection
     "test_s3_403_fallback"
     "test_hugging_face"
+
     # requires pytest 8.2+
     "test_roundtrip_delta"
+
+    # AssertionError: value does not match the expected value in snapshot ibis/backends/tests/snapshots/test_sql/test_rewrite_context/sqlite/out.sql
+    "test_rewrite_context"
+
+    # Assertion error comparing a calculated version string with the actual (during nixpkgs-review)
+    "test_builtin_scalar_noargs"
+
+    # duckdb ParserError: syntax error at or near "AT"
+    "test_90"
+
+    # assert 0 == 3 (tests edge case behavior of databases)
+    "test_self_join_with_generated_keys"
+
+    # https://github.com/ibis-project/ibis/issues/11929
+    # AssertionError: value does not match the expected value
+    "ibasic_aggregation_with_join"
+    "itest_endswith"
+    "itest_multiple_limits"
+    "itest_simple_joins"
+    "test_aggregate_count_joined"
+    "test_anti_join"
+    "test_binop_parens"
+    "test_bool_bool"
+    "test_case_in_projection"
+    "test_column_distinct"
+    "test_column_expr_default_name"
+    "test_column_expr_retains_name"
+    "test_count_distinct"
+    "test_difference_project_column"
+    "test_fuse_projections"
+    "test_having_from_filter"
+    "test_intersect_project_column"
+    "test_join_between_joins"
+    "test_join_just_materialized"
+    "test_limit_with_self_join"
+    "test_lower_projection_sort_key"
+    "test_multiple_count_distinct"
+    "test_multiple_joins"
+    "test_no_cart_join"
+    "test_order_by_on_limit_yield_subquery"
+    "test_parse_sql_aggregation_with_multiple_joins"
+    "test_parse_sql_basic_aggregation"
+    "test_parse_sql_basic_join[inner]"
+    "test_parse_sql_basic_join[left]"
+    "test_parse_sql_basic_join[right]"
+    "test_parse_sql_basic_projection"
+    "test_parse_sql_in_clause"
+    "test_parse_sql_join_subquery"
+    "test_parse_sql_join_with_filter"
+    "test_parse_sql_limited_join"
+    "test_parse_sql_multiple_joins"
+    "test_parse_sql_scalar_subquery"
+    "test_parse_sql_simple_reduction"
+    "test_parse_sql_simple_select_count"
+    "test_parse_sql_table_alias"
+    "test_parse_sql_tpch"
+    "test_sample"
+    "test_select_sql"
+    "test_selects_with_impure_operations_not_merged"
+    "test_semi_join"
+    "test_startswith"
+    "test_subquery_in_union"
+    "test_subquery_where_location"
+    "test_table_difference"
+    "test_table_distinct"
+    "test_table_drop_with_filter"
+    "test_table_intersect"
+    "test_union_order_by"
+    "test_union_project_column"
+    "test_union"
+    "test_where_analyze_scalar_op"
+    "test_where_no_pushdown_possible"
+    "test_where_simple_comparisons"
+    "test_where_with_between"
+    "test_where_with_join"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # ExceptionGroup: multiple unraisable exception warnings (4 sub-exceptions)
+    "test_non_roundtripable_str_type"
+    "test_parse_dtype_roundtrip"
+
+    # AssertionError: value does not match the expected value in snapshot ...
+    "test_annotated_function_without_decoration"
+    "test_error_message"
+    "test_error_message_when_constructing_literal"
+    "test_signature_from_callable_with_keyword_only_arguments"
   ];
 
   # patch out tests that check formatting with black
@@ -343,8 +438,11 @@ buildPythonPackage rec {
   meta = {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
-    changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
+    changelog = "https://github.com/ibis-project/ibis/blob/${finalAttrs.src.tag}/docs/release_notes.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ cpcloud ];
+    maintainers = with lib.maintainers; [
+      cpcloud
+      sarahec
+    ];
   };
-}
+})

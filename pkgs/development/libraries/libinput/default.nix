@@ -9,6 +9,7 @@
   libevdev,
   mtdev,
   udev,
+  wacomSupport ? stdenv.hostPlatform.isLinux,
   libwacom,
   documentationSupport ? false,
   doxygen,
@@ -24,6 +25,9 @@
   python3,
   nixosTests,
   wayland-scanner,
+  udevCheckHook,
+  epoll-shim,
+  libudev-devd,
 }:
 
 let
@@ -49,7 +53,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.27.1";
+  version = "1.29.2";
 
   outputs = [
     "bin"
@@ -62,50 +66,54 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-3U+2a/uSoSj1t34uz7xO2QQtJExygKOhBL7BUGP0Fbo=";
+    hash = "sha256-oxDGUbZebxAmBd2j51qV9Jn8SXBjUX2NPRgkxbDz7Dk=";
   };
 
   patches = [
     ./udev-absolute-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-    ]
-    ++ lib.optionals documentationSupport [
-      doxygen
-      graphviz
-      sphinx-build
-    ];
-
-  buildInputs =
-    [
-      libevdev
-      mtdev
-      libwacom
-      (python3.withPackages (
-        pp: with pp; [
-          pp.libevdev # already in scope
-          pyudev
-          pyyaml
-          setuptools
-        ]
-      ))
-    ]
-    ++ lib.optionals eventGUISupport [
-      # GUI event viewer
-      cairo
-      glib
-      gtk3
-      wayland-scanner
-    ];
-
-  propagatedBuildInputs = [
-    udev
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    udevCheckHook
+  ]
+  ++ lib.optionals documentationSupport [
+    doxygen
+    graphviz
+    sphinx-build
   ];
+
+  buildInputs = [
+    libevdev
+    mtdev
+    (python3.withPackages (
+      pp: with pp; [
+        pp.libevdev # already in scope
+        pyudev
+        pyyaml
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    epoll-shim
+  ]
+  ++ lib.optionals wacomSupport [
+    libwacom
+  ]
+  ++ lib.optionals eventGUISupport [
+    # GUI event viewer
+    cairo
+    glib
+    gtk3
+    wayland-scanner
+  ];
+
+  propagatedBuildInputs =
+    lib.optional stdenv.hostPlatform.isLinux udev
+    ++ lib.optional stdenv.hostPlatform.isFreeBSD libudev-devd;
 
   nativeCheckInputs = [
     check
@@ -116,11 +124,17 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    (mkFlag wacomSupport "libwacom")
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isBSD [
+    "-Depoll-dir=${epoll-shim}"
   ];
 
   doCheck = testsSupport && stdenv.hostPlatform == stdenv.buildPlatform;
+
+  doInstallCheck = true;
 
   postPatch = ''
     patchShebangs \
@@ -141,13 +155,18 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Handles input devices in Wayland compositors and provides a generic X.Org input driver";
     mainProgram = "libinput";
     homepage = "https://www.freedesktop.org/wiki/Software/libinput/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ codyopel ] ++ teams.freedesktop.members;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+    maintainers = [ ];
+    teams = [ lib.teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

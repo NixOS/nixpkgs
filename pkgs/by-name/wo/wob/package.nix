@@ -14,15 +14,15 @@
   libseccomp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wob";
-  version = "0.15.1";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = "wob";
-    rev = version;
-    sha256 = "sha256-9LFAEo17w861ldMJU+t1oLAKoM6gJc4Em4tSwQDXbKU=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-Bn/WN9Ix4vm9FDFVKc/vRLP4WeVNaJFz1WBuS9tqJhY=";
   };
 
   strictDeps = true;
@@ -41,21 +41,22 @@ stdenv.mkDerivation rec {
     inih
     wayland
     wayland-protocols
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.hostPlatform.isLinux "-Dseccomp=enabled";
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
     description = "Lightweight overlay bar for Wayland";
     longDescription = ''
       A lightweight overlay volume/backlight/progress/anything bar for Wayland,
       inspired by xob.
     '';
-    changelog = "https://github.com/francma/wob/releases/tag/${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ primeos ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/francma/wob/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.isc;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
     mainProgram = "wob";
   };
-}
+})

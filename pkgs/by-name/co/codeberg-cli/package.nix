@@ -1,6 +1,5 @@
 {
-  darwin,
-  fetchFromGitea,
+  fetchFromCodeberg,
   installShellFiles,
   lib,
   openssl,
@@ -8,37 +7,24 @@
   rustPlatform,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "codeberg-cli";
-  version = "0.4.9";
+  version = "0.5.5";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "Aviac";
     repo = "codeberg-cli";
-    rev = "v${version}";
-    hash = "sha256-uifLgXwKcdZ8Q2GjVIa/EA5iq+T9pm821aKsXPbPL34=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-yjWAL4Tu9nuQsy8fDhga5lsxYwooE0fW70zfp7Dqq3Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nKI0bIKocTjodZ6O1VTTTrlzeeueaH6crF9jdTnx5lI=";
+  cargoHash = "sha256-AD4VLGsxkfl1UwJmZhR183Gk7ltjEyH9tlt+iKNs5J0=";
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      let
-        d = darwin.apple_sdk.frameworks;
-      in
-      [
-        d.CoreServices
-        d.Security
-        d.SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd berg \
@@ -47,11 +33,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/berg completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI Tool for Codeberg similar to gh and glab";
     homepage = "https://codeberg.org/Aviac/codeberg-cli";
-    license = with licenses; [ agpl3Plus ];
-    maintainers = with maintainers; [ robwalt ];
+    license = with lib.licenses; [ agpl3Plus ];
+    maintainers = with lib.maintainers; [ robwalt ];
     mainProgram = "berg";
   };
-}
+})

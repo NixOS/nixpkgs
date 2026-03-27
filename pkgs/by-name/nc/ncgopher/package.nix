@@ -6,35 +6,39 @@
   ncurses6,
   openssl,
   sqlite,
+  perl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ncgopher";
-  version = "0.5.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "jansc";
     repo = "ncgopher";
-    rev = "v${version}";
-    sha256 = "sha256-KrvTwcIeINIBkia6PTnKXp4jFd6GEMBh/xbn0Ot/wmE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O5lC1eeiwXeX3aF8kLl65jl0Jq0dIswQiFuROWVFeYc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-QhkYyvoWMGtLH5HhpOJ3JsBIWeZN/CllcXwNW+iM3WI=";
+  cargoHash = "sha256-qCYx3RPp22YBFRwEoTttppDmyeg9J0I1QD5aK/OY7l8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ];
+
   buildInputs = [
     ncurses6
     openssl
     sqlite
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Gopher and gemini client for the modern internet";
     homepage = "https://github.com/jansc/ncgopher";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.linux;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ jrrom ];
+    platforms = lib.platforms.linux;
     mainProgram = "ncgopher";
   };
-}
+})

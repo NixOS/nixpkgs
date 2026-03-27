@@ -13,29 +13,18 @@
   clang,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tracexec";
-  version = "0.10.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    tag = "v${version}";
-    hash = "sha256-cqDGntubHbv6TJ0CSouTyCcDGpheLazbavYglHQRd10=";
+    rev = "ecbda651a4006789debf565376cd6f37241dec3e";
+    hash = "sha256-wP7jAGoWgvm3/4XBHr27MD8M9qwyVpuDVR96S8+I3eo=";
   };
 
-  # remove if updating to rust 1.85
-  postPatch = ''
-    substituteInPlace Cargo.toml \
-      --replace-fail "[package]" ''$'cargo-features = ["edition2024"]\n[package]' \
-      --replace-fail 'rust-version = "1.85"' ""
-  '';
-
-  # remove if updating to rust 1.85
-  env.RUSTC_BOOTSTRAP = 1;
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EY44uwf1b61UlulNwtN8JIG2CaEjxSnfuqE29/zdxBM=";
+  cargoHash = "sha256-kJrWAyRcU5eEfTwaAxcN6oE5KHgBdjznWeI21/3c/UE=";
 
   hardeningDisable = [ "zerocallusedregs" ];
 
@@ -52,24 +41,21 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  cargoBuildFlags =
-    [
-      "--no-default-features"
-      "--features=recommended"
-    ]
-    # Remove RiscV64 specialisation when this is fixed:
-    # * https://github.com/NixOS/nixpkgs/pull/310158#pullrequestreview-2046944158
-    # * https://github.com/rust-vmm/seccompiler/pull/72
-    ++ lib.optional stdenv.hostPlatform.isRiscV64 "--no-default-features";
+  cargoBuildFlags = [
+    "--no-default-features"
+    "--features=recommended"
+  ];
 
   preBuild = ''
     sed -i '1ino-clearly-defined = true' about.toml  # disable network requests
     cargo about generate --config about.toml -o THIRD_PARTY_LICENSES.HTML about.hbs
   '';
 
-  checkFlags = [
-    "--skip=cli::test::log_mode_without_args_works" # `Permission denied` (needs `CAP_SYS_PTRACE`)
-  ];
+  # tracexec uses $XDG_DATA_HOME/tracexec for storing temporary files and logs.
+  # Set this directory to $TMPDIR because integration tests needs to access it.
+  preCheck = ''
+    export TRACEXEC_DATA="$TMPDIR"
+  '';
 
   postInstall = ''
     # Remove test binaries (e.g. `empty-argv`, `corrupted-envp`) and only retain `tracexec`
@@ -82,15 +68,16 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/kxxt/tracexec/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/kxxt/tracexec/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "Small utility for tracing execve{,at} and pre-exec behavior";
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
     maintainers = with lib.maintainers; [
       fpletz
+      kxxt
       nh2
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

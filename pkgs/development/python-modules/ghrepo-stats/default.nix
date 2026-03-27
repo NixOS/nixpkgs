@@ -5,7 +5,6 @@
   fetchFromGitHub,
   matplotlib,
   pygithub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "0.5.5";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "mrbean-bremen";
-    repo = pname;
+    repo = "ghrepo-stats";
     tag = "v${version}";
     hash = "sha256-zdBIX/uetkOAalg4uJPWXRL9WUgNN+hmqUwQDTdzrzA=";
   };
@@ -39,12 +36,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ghrepo_stats" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module and CLI tool for GitHub repo statistics";
     mainProgram = "show-ghstats";
     homepage = "https://github.com/mrbean-bremen/ghrepo-stats";
     changelog = "https://github.com/mrbean-bremen/ghrepo-stats/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

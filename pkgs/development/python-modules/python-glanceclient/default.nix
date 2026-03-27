@@ -9,11 +9,11 @@
   keystoneauth1,
   requests,
   warlock,
-  oslo-utils,
+  openstacksdk,
   oslo-i18n,
+  oslo-utils,
   wrapt,
   pyopenssl,
-  pythonOlder,
   stestr,
   testscenarios,
   ddt,
@@ -22,10 +22,10 @@
 }:
 let
   pname = "python-glanceclient";
-  version = "4.8.0";
+  version = "4.11.0";
 
-  # Skip tests which require networking.
   disabledTests = [
+    # Skip tests which require networking.
     "test_http_chunked_response"
     "test_v1_download_has_no_stray_output_to_stdout"
     "test_v2_requests_valid_cert_verification"
@@ -40,18 +40,19 @@ let
     "test_v2_requests_valid_cert_no_key"
     "test_v2_requests_valid_cert_verification_no_compression"
     "test_log_request_id_once"
+    # asserts exact amount of mock calls
+    "test_cache_schemas_gets_when_forced"
+    "test_cache_schemas_gets_when_not_exists"
   ];
 in
 buildPythonPackage {
   inherit pname version;
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "python_glanceclient";
     inherit version;
-    hash = "sha256-+FtvyB8ns02hyHSEswl2WdsFKavRxnWV0vD+fLFZA2w=";
+    hash = "sha256-XOIRi/50YpNIBZFmF+U3vFsA/UyrP7e7iKT5JTlwVi0=";
   };
 
   postPatch = ''
@@ -74,10 +75,11 @@ buildPythonPackage {
   ];
 
   nativeCheckInputs = [
+    ddt
+    openstacksdk
+    requests-mock
     stestr
     testscenarios
-    ddt
-    requests-mock
   ];
 
   checkPhase = ''
@@ -88,10 +90,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "glanceclient" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the OpenStack Images API";
     homepage = "https://github.com/openstack/python-glanceclient/";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

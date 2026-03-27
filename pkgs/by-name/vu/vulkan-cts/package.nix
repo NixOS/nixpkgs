@@ -11,9 +11,9 @@
   libglvnd,
   libffi,
   libpng,
-  libX11,
-  libXau,
-  libXdmcp,
+  libx11,
+  libxau,
+  libxdmcp,
   libxcb,
   makeWrapper,
   mesa,
@@ -42,16 +42,24 @@ let
   # The revisions are extracted from https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/fetch_sources.py#L290
   # with the vk-cts-sources.py script.
   sources = import ./sources.nix { inherit fetchurl fetchFromGitHub; };
+
+  # Use pinned version from vulkan-video-samples
+  shaderc-src = fetchFromGitHub {
+    owner = "google";
+    repo = "shaderc";
+    tag = "v2024.4";
+    hash = "sha256-DIpgHiYAZlCIQ/uCZ3qSucPUZ1j3tKg0VgZVun+1UnI=";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.10.0";
+  version = "1.4.5.2";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-owa4Z/gu9+plPxeSfduS3gUk9WTOHSDoXLTBju6tTGc=";
+    hash = "sha256-VlnKeZlf6oMROHfJ5cnvUXSQequosul6BhrjBP/IoUU=";
   };
 
   prePatch = ''
@@ -60,9 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r ${renderdoc} external/renderdoc/src/renderdoc_app.h
 
     ${sources.prePatch}
-
-    substituteInPlace external/vulkan-validationlayers/CMakeLists.txt \
-      --replace-fail 'UPDATE_DEPS ON' 'UPDATE_DEPS OFF'
 
     chmod u+w -R external
   '';
@@ -73,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libglvnd
     libpng
-    libX11
-    libXau
-    libXdmcp
+    libx11
+    libxau
+    libxdmcp
     libxcb
     vulkan-headers
     vulkan-utility-libraries
@@ -107,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     # For vulkan-validation-layers
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     "-DSPIRV_HEADERS_INSTALL_DIR=${spirv-headers}"
+    "-DSELECTED_BUILD_TARGETS=deqp-vk"
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SHADERC" "${shaderc-src}")
   ];
 
   postInstall = ''
@@ -114,12 +121,14 @@ stdenv.mkDerivation (finalAttrs: {
     ! test -e $out
 
     mkdir -p $out/bin $out/archive-dir
-    cp -a external/vulkancts/modules/vulkan/deqp-vk external/vulkancts/modules/vulkan/deqp-vksc $out/bin/
+    cp -a external/vulkancts/modules/vulkan/deqp-vk $out/bin/
     cp -a external/vulkancts/modules/vulkan/vulkan $out/archive-dir/
     cp -a external/vulkancts/modules/vulkan/vk-default $out/
+  '';
 
+  postFixup = ''
+    patchelf --add-rpath "${vulkan-loader}/lib" --add-needed "libvulkan.so" $out/bin/deqp-vk
     wrapProgram $out/bin/deqp-vk \
-      --add-flags '--deqp-vk-library-path=${vulkan-loader}/lib/libvulkan.so' \
       --add-flags "--deqp-archive-dir=$out/archive-dir"
   '';
 
@@ -137,11 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Khronos Vulkan Conformance Tests";
     homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
     changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/vulkan-cts-${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 })

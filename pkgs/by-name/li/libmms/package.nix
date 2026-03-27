@@ -6,12 +6,12 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libmms";
   version = "0.6.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libmms/libmms-${version}.tar.gz";
+    url = "mirror://sourceforge/libmms/libmms-${finalAttrs.version}.tar.gz";
     sha256 = "0kvhxr5hkabj9v7ah2rzkbirndfqdijd9hp8v52c1z6bxddf019w";
   };
 
@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for downloading (streaming) media files using the mmst and mmsh protocols";
     homepage = "http://libmms.sourceforge.net";
-    platforms = platforms.all;
-    license = licenses.lgpl21;
+    platforms = lib.platforms.all;
+    license = lib.licenses.lgpl21;
   };
-}
+})

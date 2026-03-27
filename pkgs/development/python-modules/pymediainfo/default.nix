@@ -4,17 +4,14 @@
   fetchPypi,
   buildPythonPackage,
   libmediainfo,
-  setuptools-scm,
+  pdm-backend,
   pytest,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pymediainfo";
   version = "7.0.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +19,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pymediainfo/__init__.py \
+    substituteInPlace src/pymediainfo/__init__.py \
       --replace "libmediainfo.0.dylib" \
                 "${libmediainfo}/lib/libmediainfo.0${stdenv.hostPlatform.extensions.sharedLibrary}" \
       --replace "libmediainfo.dylib" \
@@ -31,7 +28,7 @@ buildPythonPackage rec {
                 "${libmediainfo}/lib/libmediainfo${stdenv.hostPlatform.extensions.sharedLibrary}.0"
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ pdm-backend ];
 
   nativeCheckInputs = [
     pytest
@@ -43,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pymediainfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for the mediainfo library";
     homepage = "https://github.com/sbraz/pymediainfo";
     changelog = "https://github.com/sbraz/pymediainfo/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ philipdb ];
   };
 }

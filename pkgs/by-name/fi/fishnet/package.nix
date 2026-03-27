@@ -3,32 +3,38 @@
   rustPlatform,
   fetchFromGitHub,
   fetchurl,
-  testers,
-  fishnet,
+  versionCheckHook,
+  writeShellApplication,
+  curl,
+  jq,
+  nix-update,
+  common-updater-scripts,
 }:
 
 let
   # These files can be found in Stockfish/src/evaluate.h
-  nnueBigFile = "nn-1111cefa1111.nnue";
+  nnueBigFile = "nn-9a0cc2a62c52.nnue";
+  nnueBigHash = "sha256-mgzCpixSClN6rTrG6QiowJiqkAidyny8h0zCGXYYvyM=";
   nnueBig = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueBigFile}";
-    sha256 = "sha256-ERHO+hERa3cWG9SxTatMUPJuWSDHVvSGFZK+Pc1t4XQ=";
+    hash = nnueBigHash;
   };
-  nnueSmallFile = "nn-37f18f62d772.nnue";
+  nnueSmallFile = "nn-47fc8b7fff06.nnue";
+  nnueSmallHash = "sha256-R/yLf/8GfSQEdJO4TkKrhVwPzrUFjAFsafjuXE7kvWk=";
   nnueSmall = fetchurl {
     url = "https://tests.stockfishchess.org/api/nn/${nnueSmallFile}";
-    sha256 = "sha256-N/GPYtdy8xB+HWqso4mMEww8hvKrY+ZVX7vKIGNaiZ0=";
+    hash = nnueSmallHash;
   };
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.9.4";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
-    rev = "v${version}";
-    hash = "sha256-JhllThFiHeC/5AAFwwZQ0mgbENIWP1cA7aD01DeDVL8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0ArTovfr9znjudo53W5hnnSZlzfEnAd7E+7DXTqtN6w=";
     fetchSubmodules = true;
   };
 
@@ -39,18 +45,44 @@ rustPlatform.buildRustPackage rec {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-aUSppXw0UDqCDX7YX+sYNEcmiABXDn0nrow0H9UjpaA=";
+  cargoHash = "sha256-mkioBmawYR5GvR0WSlaicGyXV4EVVVQuai5UF5+Thk8=";
 
-  passthru.tests.version = testers.testVersion {
-    package = fishnet;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+
+  passthru = {
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-${finalAttrs.pname}";
+
+      runtimeInputs = [
+        curl
+        jq
+        nix-update
+        common-updater-scripts
+      ];
+
+      runtimeEnv = {
+        PNAME = finalAttrs.pname;
+        PKG_FILE = toString ./package.nix;
+        GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
+        NNUE_BIG_FILE = nnueBigFile;
+        NNUE_BIG_HASH = nnueBigHash;
+        NNUE_SMALL_FILE = nnueSmallFile;
+        NNUE_SMALL_HASH = nnueSmallHash;
+      };
+
+      text = builtins.readFile ./update.bash;
+    });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tu-maurice
       thibaultd
     ];
@@ -60,4 +92,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "fishnet";
   };
-}
+})

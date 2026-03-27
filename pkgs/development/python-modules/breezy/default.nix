@@ -19,7 +19,6 @@
   breezy,
   launchpadlib,
   testtools,
-  pythonOlder,
   installShellFiles,
   rustPlatform,
   rustc,
@@ -30,16 +29,14 @@
 
 buildPythonPackage rec {
   pname = "breezy";
-  version = "3.3.7";
+  version = "3.3.21";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "breezy-team";
     repo = "breezy";
-    rev = "brz-${version}";
-    hash = "sha256-NSfMUyx6a/vb1vTNn/fFfNktrFdB2N940m0TR6EhB9k=";
+    tag = "brz-${version}";
+    hash = "sha256-S8YHFEWiSnkBFO75jMuEcvVZSnoV9SGCH/Ueodq2zow=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
@@ -49,31 +46,33 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    cython
     installShellFiles
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    setuptools-gettext
-    setuptools-rust
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  propagatedBuildInputs =
-    [
-      configobj
-      dulwich
-      fastbencode
-      merge3
-      patiencediff
-      pyyaml
-      tzlocal
-      urllib3
-    ]
-    ++ optional-dependencies.launchpad
-    ++ optional-dependencies.fastimport
-    ++ optional-dependencies.github;
+  build-system = [
+    cython
+    setuptools-gettext
+    setuptools-rust
+  ];
+
+  dependencies = [
+    configobj
+    dulwich
+    fastbencode
+    merge3
+    patiencediff
+    pyyaml
+    tzlocal
+    urllib3
+  ]
+  ++ optional-dependencies.launchpad
+  ++ optional-dependencies.fastimport
+  ++ optional-dependencies.github;
 
   optional-dependencies = {
     launchpad = [ launchpadlib ];
@@ -115,11 +114,11 @@ buildPythonPackage rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
-    changelog = "https://github.com/breezy-team/breezy/blob/${src.rev}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
-    license = licenses.gpl2Only;
+    changelog = "https://github.com/breezy-team/breezy/blob/${src.tag}/doc/en/release-notes/brz-${lib.versions.majorMinor version}.txt";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "brz";
   };

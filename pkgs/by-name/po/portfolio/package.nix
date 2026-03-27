@@ -9,8 +9,9 @@
   makeDesktopItem,
   openjdk21,
   stdenvNoCC,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
+  imagemagick,
   gitUpdater,
 }:
 let
@@ -21,6 +22,7 @@ let
     comment = "Calculate Investment Portfolio Performance";
     desktopName = "Portfolio Performance";
     categories = [ "Office" ];
+    startupWMClass = "Portfolio Performance";
   };
 
   runtimeLibs = lib.makeLibraryPath [
@@ -28,21 +30,22 @@ let
     glib-networking
     gtk3
     libsecret
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.74.2";
+  version = "0.82.1";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-RPoEby12DiJwdM2ejVfOQyrJjy/qgQ9BbqYyaV9KMD0=";
+    hash = "sha256-3uzVNQ4Es08teM45U4QBXLChDaBvcnG9vR4qI22TemU=";
   };
 
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook3
+    imagemagick
   ];
 
   dontConfigure = true;
@@ -93,8 +96,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # Create desktop item
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
-    mkdir -p $out/share/pixmaps
-    ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    magick $out/portfolio/icon.xpm $out/share/icons/hicolor/256x256/apps/portfolio.png
 
     runHook postInstall
   '';

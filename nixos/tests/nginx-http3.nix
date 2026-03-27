@@ -6,7 +6,7 @@ let
 
 in
 builtins.listToAttrs (
-  builtins.map
+  map
     (nginxPackage: {
       name = pkgs.lib.getName nginxPackage;
       value = runTest {
@@ -66,7 +66,7 @@ builtins.listToAttrs (
           client =
             { pkgs, ... }:
             {
-              environment.systemPackages = [ pkgs.curlHTTP3 ];
+              environment.systemPackages = [ pkgs.curl ];
               networking = {
                 interfaces.eth1 = {
                   ipv4.addresses = [
@@ -113,7 +113,7 @@ builtins.listToAttrs (
       };
     })
     [
-      pkgs.angieQuic
-      pkgs.nginxQuic
+      pkgs.angie
+      pkgs.nginx
     ]
 )

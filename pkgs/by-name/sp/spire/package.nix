@@ -2,47 +2,105 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
+  openssl,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "spire";
-  version = "1.12.0";
+  version = "1.14.2";
 
   outputs = [
     "out"
     "agent"
     "server"
+    "oidc"
   ];
 
   src = fetchFromGitHub {
     owner = "spiffe";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-hNa1e6h4IhD2SfhZZ5xkwQ7e7X5x3Gk4v33nw2t+cvk=";
+    repo = "spire";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-EQ9QMAhF/HR8Za5K08c52FsktIeBzKOIIueN5XamhL8=";
   };
 
-  vendorHash = "sha256-6qtR9SF6QQKqsVpKpp6YBkB9wOLFwm8C3PF0DlN0Ud0=";
+  # Needed for github.co/google/go-tpm-tools/simulator  which contains non-go files that `go mod vendor` strips
+  proxyVendor = true;
+  vendorHash = "sha256-YtSaibsoSxuEY9UO1EmFHZoVpwHs/gjx28gpxCiOzYE=";
+
+  buildInputs = [ openssl ];
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/spiffe/spire/pkg/common/version.gittag=${finalAttrs.version}"
+  ];
 
   subPackages = [
     "cmd/spire-agent"
     "cmd/spire-server"
+    "support/oidc-discovery-provider"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        # wants to reach remote TUF mirror
+        "TestDockerConfig"
+        "TestPlugin"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  preCheck = ''
+    # unset to run all tests
+    unset subPackages
+  '';
 
   # Usually either the agent or server is needed for a given use case, but not both
   postInstall = ''
-    mkdir -vp $agent/bin $server/bin
+    mkdir -vp $agent/bin $server/bin $oidc/bin
     mv -v $out/bin/spire-agent $agent/bin/
     mv -v $out/bin/spire-server $server/bin/
+    mv -v $out/bin/oidc-discovery-provider $oidc/bin/
 
     ln -vs $agent/bin/spire-agent $out/bin/spire-agent
     ln -vs $server/bin/spire-server $out/bin/spire-server
+    ln -vs $oidc/bin/oidc-discovery-provider $out/bin/oidc-discovery-provider
   '';
 
-  meta = with lib; {
-    description = "SPIFFE Runtime Environment";
-    homepage = "https://github.com/spiffe/spire";
-    changelog = "https://github.com/spiffe/spire/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fkautz ];
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    for bin in $out/bin/*; do
+      $bin -h
+      if [ "$($bin --version 2>&1)" != "${finalAttrs.version}" ]; then
+        echo "$bin version does not match"
+        exit 1
+      fi
+    done
+
+    runHook postInstallCheck
+  '';
+
+  passthru.tests = {
+    inherit (nixosTests) spire;
   };
-}
+
+  meta = {
+    description = "SPIFFE Runtime Environment";
+    homepage = "https://spiffe.io/";
+    downloadPage = "https://github.com/spiffe/spire";
+    changelog = "https://github.com/spiffe/spire/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      fkautz
+      jk
+      mjm
+      arianvp
+    ];
+  };
+})

@@ -1,32 +1,34 @@
 {
   lib,
+  stdenv,
   rustPlatform,
-  fetchFromGitea,
+  fetchFromCodeberg,
   pkg-config,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   libgit2,
   oniguruma,
   openssl,
   zlib,
 }:
-let
-  version = "0.2.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "forgejo-cli";
-  inherit version;
+  version = "0.4.1";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "Cyborus";
+  src = fetchFromCodeberg {
+    owner = "forgejo-contrib";
     repo = "forgejo-cli";
-    rev = "v${version}";
-    hash = "sha256-rHyPncAARIPakkv2/CD1/aF2G5AS9bb3T2x8QCQWl5o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tWb5h0i3Z8qSHqFL7FofwljMdXgV1Z6x8ojut9pm6Yg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PkKinAZrZ+v1/eygiPis4F7EJnmjYfeQFPKfGpza0yA=";
+  cargoHash = "sha256-7gCzU7U8kIxWnwLksXIUkgfFWWjZ/0QiaHnCD+H8sGQ=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    writableTmpDirAsHomeHook # Needed for shell completions
+  ];
 
   buildInputs = [
     libgit2
@@ -40,15 +42,25 @@ rustPlatform.buildRustPackage {
     BUILD_TYPE = "nixpkgs";
   };
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd fj \
+      --bash <($out/bin/fj completion bash) \
+      --fish <($out/bin/fj completion fish) \
+      --zsh <($out/bin/fj completion zsh)
+  '';
+
   meta = {
     description = "CLI application for interacting with Forgejo";
-    homepage = "https://codeberg.org/Cyborus/forgejo-cli";
-    changelog = "https://codeberg.org/Cyborus/forgejo-cli/releases/tag/v${version}";
+    homepage = "https://codeberg.org/forgejo-contrib/forgejo-cli";
+    changelog = "https://codeberg.org/forgejo-contrib/forgejo-cli/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with lib.maintainers; [ isabelroses ];
+    maintainers = with lib.maintainers; [
+      da157
+      isabelroses
+    ];
     mainProgram = "fj";
   };
-}
+})

@@ -11,8 +11,11 @@ stdenv.mkDerivation {
   pname = "ax25-apps";
   version = "0.0.8-rc5-unstable-2021-05-13";
 
+  strictDeps = true;
+
+  nativeBuildInputs = [ autoreconfHook ];
+
   buildInputs = [
-    autoreconfHook
     libax25
     ncurses
   ];
@@ -25,6 +28,11 @@ stdenv.mkDerivation {
     rev = "afc4a5faa01a24c4da1d152b901066405f36adb6";
     hash = "sha256-RLeFndis2OhIkJPLD+YfEUrJdZL33huVzlHq+kGq7dA=";
   };
+
+  patches = [
+    # Fix build against glibc-2.42
+    ./glibc-2.42.patch
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc"

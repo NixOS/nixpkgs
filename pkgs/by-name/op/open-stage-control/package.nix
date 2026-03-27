@@ -5,7 +5,7 @@
   makeBinaryWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  nodejs_18,
+  nodejs_20,
   electron,
   python3,
   nix-update-script,
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-UqjYNXdNoQmirIgU9DRgkp14SIrawfrfi9mD2h6ACyU=";
 
-  nodejs = nodejs_18;
+  nodejs = nodejs_20;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -90,12 +90,14 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Libre and modular OSC / MIDI controller";
     homepage = "https://openstagecontrol.ammd.net/";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "open-stage-control";
+    # Depends on nodejs_18 that has been removed.
+    broken = true;
   };
 }

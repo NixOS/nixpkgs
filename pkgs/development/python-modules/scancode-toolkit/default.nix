@@ -30,6 +30,7 @@
   license-expression,
   lxml,
   markupsafe,
+  multiregex,
   packageurl-python,
   packaging,
   parameter-expansion-patched,
@@ -45,7 +46,6 @@
   pygments,
   pymaven-patch,
   pytestCheckHook,
-  pythonOlder,
   requests,
   saneyaml,
   setuptools,
@@ -55,20 +55,19 @@
   typecode,
   typecode-libmagic,
   urlpy,
+  writableTmpDirAsHomeHook,
   xmltodict,
-  zipp,
 }:
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "32.3.3";
+  version = "32.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-rOQR9Rhssibo6M8kovlEJVUhfLi6SbdP4RyNOWsTnCU=";
+    pname = "scancode_toolkit";
+    inherit version;
+    hash = "sha256-WXAZCk0aRmKb1UU1ud95mZFHAMC9U+gDRd9w7TZTVSA=";
   };
 
   dontConfigure = true;
@@ -104,6 +103,7 @@ buildPythonPackage rec {
     license-expression
     lxml
     markupsafe
+    multiregex
     packageurl-python
     packaging
     parameter-expansion-patched
@@ -127,32 +127,27 @@ buildPythonPackage rec {
     typecode-libmagic
     urlpy
     xmltodict
-  ] ++ lib.optionals (pythonOlder "3.9") [ zipp ];
+  ];
+
+  nativeBuildInputs = [ writableTmpDirAsHomeHook ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
+  # Pre-genrating license index
   postInstall = ''
-    export HOME=$(mktemp -d)
+    $out/bin/scancode-reindex-licenses
   '';
 
   pythonImportsCheck = [ "scancode" ];
 
-  disabledTestPaths = [
-    # Tests are outdated
-    "src/formattedcode/output_spdx.py"
-    "src/scancode/cli.py"
-  ];
-
   # Takes a long time and doesn't appear to do anything
   dontStrip = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
     changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       cc-by-40
     ];

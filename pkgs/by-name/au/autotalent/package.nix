@@ -4,12 +4,12 @@
   fetchzip,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "autotalent";
   version = "0.2";
 
   src = fetchzip {
-    url = "http://tombaran.info/${pname}-${version}.tar.gz";
+    url = "http://tombaran.info/autotalent-${finalAttrs.version}.tar.gz";
     sha256 = "19srnkghsdrxxlv2c7qimvyslxz63r97mkxfq78vbg654l3qz1a6";
   };
 
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
     sed -r 's/^const LADSPA_Descriptor \*/__attribute__ ((visibility ("default"))) \0/' -i autotalent.c
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://tombaran.info/autotalent.html";
     description = "Real-time pitch correction LADSPA plugin (no MIDI control)";
-    license = licenses.gpl2;
-    maintainers = [ maintainers.michalrus ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.michalrus ];
+    platforms = lib.platforms.linux;
   };
-}
+})

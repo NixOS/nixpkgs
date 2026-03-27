@@ -1,100 +1,55 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromCodeberg,
   makeWrapper,
   cmake,
   ninja,
   libarchive,
   libz,
-  libcef,
+  cef-binary,
   luajit,
-  xorg,
+  libxxf86vm,
+  libxi,
+  libxext,
+  libx11,
+  libsm,
+  libxcb,
   libgbm,
   glib,
-  nss,
-  nspr,
-  atk,
-  at-spi2-atk,
-  libdrm,
-  expat,
-  libxkbcommon,
-  gtk3,
   jdk17,
   pango,
   cairo,
-  alsa-lib,
-  dbus,
-  at-spi2-core,
-  cups,
-  systemd,
+  pkg-config,
+  libnotify,
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
   enableRS3 ? false,
 }:
 let
-  cef = libcef.overrideAttrs (oldAttrs: {
-    installPhase =
-      let
-        gl_rpath = lib.makeLibraryPath [
-          stdenv.cc.cc.lib
-        ];
-        rpath = lib.makeLibraryPath [
-          glib
-          nss
-          nspr
-          atk
-          at-spi2-atk
-          libdrm
-          expat
-          xorg.libxcb
-          libxkbcommon
-          xorg.libX11
-          xorg.libXcomposite
-          xorg.libXdamage
-          xorg.libXext
-          xorg.libXfixes
-          xorg.libXrandr
-          libgbm
-          gtk3
-          pango
-          cairo
-          alsa-lib
-          dbus
-          at-spi2-core
-          cups
-          xorg.libxshmfence
-          systemd
-        ];
-      in
-      ''
-        mkdir -p $out/lib/ $out/share/cef/
-        cp libcef_dll_wrapper/libcef_dll_wrapper.a $out/lib/
-        cp -r ../Resources/* $out/lib/
-        cp -r ../Release/* $out/lib/
-        patchelf --set-rpath "${rpath}" $out/lib/libcef.so
-        patchelf --set-rpath "${gl_rpath}" $out/lib/libEGL.so
-        patchelf --set-rpath "${gl_rpath}" $out/lib/libGLESv2.so
-        cp ../Release/*.bin $out/share/cef/
-        cp -r ../Resources/* $out/share/cef/
-        cp -r ../include $out
-        cp -r ../libcef_dll $out
-        cp -r ../cmake $out
-      '';
-  });
+  cef = cef-binary.override {
+    version = "141.0.7";
+    gitRevision = "a5714cc";
+    chromiumVersion = "141.0.7390.108";
+
+    srcHashes = {
+      aarch64-linux = "sha256-2A0hVzUVMBemhjnFE/CrKs4CU96Qkxy8S/SieaEJjwE=";
+      x86_64-linux = "sha256-tZzUxeXxbYP8YfIQLbiSyihPcjZM9cd2Ad8gGCSvdGk=";
+    };
+  };
 in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.14.0";
+    version = "0.21.1";
 
-    src = fetchFromGitHub {
+    src = fetchFromCodeberg {
       owner = "AdamCake";
-      repo = "bolt";
+      repo = "Bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-fNCi2Wu+oOL6p8IBm6bHZ/rcaFmqoKs2DnXQ+ZA9McE=";
+      hash = "sha256-yrfTKrzwglCkPveKEiT1WRBLAVxiFsHaj6984QY2ZJ8=";
     };
 
     nativeBuildInputs = [
@@ -103,12 +58,13 @@ let
       luajit
       makeWrapper
       copyDesktopItems
+      pkg-config
     ];
 
     buildInputs = [
       libgbm
-      xorg.libX11
-      xorg.libxcb
+      libx11
+      libxcb
       libarchive
       libz
       cef
@@ -116,25 +72,15 @@ let
     ];
 
     cmakeFlags = [
-      "-D CMAKE_BUILD_TYPE=Release"
-      "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
       "-G Ninja"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+      (lib.cmakeFeature "PROJECT_ARCH" "arm64")
     ];
 
     preConfigure = ''
-      mkdir -p cef/dist/Release cef/dist/Resources cef/dist/include
-
-      ln -s ${cef}/lib/* cef/dist/Release
-
-      ln -s ${cef}/share/cef/*.pak cef/dist/Resources
-      ln -s ${cef}/share/cef/icudtl.dat cef/dist/Resources
-      ln -s ${cef}/share/cef/locales cef/dist/Resources
-
-      ln -s ${cef}/include/* cef/dist/include
-      ln -s ${cef}/libcef_dll cef/dist/libcef_dll
-
-      ln -s ${cef}/cmake cef/dist/cmake
-      ln -s ${cef}/CMakeLists.txt cef/dist
+      mkdir -p cef
+      ln -s ${cef} cef/dist
     '';
 
     postFixup = ''
@@ -157,6 +103,7 @@ let
         exec = "bolt-launcher";
         icon = "bolt-launcher";
         categories = [ "Game" ];
+        startupWMClass = "BoltLauncher";
       })
     ];
   });
@@ -168,9 +115,11 @@ buildFHSEnv {
     pkgs:
     [ bolt ]
     ++ (with pkgs; [
-      xorg.libSM
-      xorg.libXxf86vm
-      xorg.libX11
+      libsm
+      libxxf86vm
+      libx11
+      libxi
+      libxext
       glib
       pango
       cairo
@@ -179,7 +128,9 @@ buildFHSEnv {
       libcap
       libsecret
       SDL2
+      sdl3
       libGL
+      libnotify
     ])
     ++ lib.optionals enableRS3 (
       with pkgs;
@@ -201,14 +152,19 @@ buildFHSEnv {
   runScript = "${bolt.name}";
 
   meta = {
-    homepage = "https://github.com/Adamcake/Bolt";
-    description = "An alternative launcher for RuneScape.";
+    homepage = "https://codeberg.org/Adamcake/Bolt";
+    changelog = "https://codeberg.org/Adamcake/Bolt/releases/tag/${bolt.version}";
+    description = "Alternative launcher for RuneScape";
     longDescription = ''
       Bolt Launcher supports HDOS/RuneLite by default with an optional feature flag for RS3 (enableRS3).
     '';
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ nezia ];
+    maintainers = with lib.maintainers; [
+      nezia
+      jaspersurmont
+      iedame
+    ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "bolt-launcher";
   };
 }

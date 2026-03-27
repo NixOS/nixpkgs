@@ -1,38 +1,38 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  libunwind,
+  nix-update-script,
+  rustPlatform,
+  versionCheckHook,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bugstalker";
-  version = "0.2.2";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "godzie44";
     repo = "BugStalker";
-    rev = "v${version}";
-    hash = "sha256-JacRt+zNwL7hdpdh5h9Mxztqi47f5eUbcZyx6ct/5Bc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-9l6IVQBjZkpSS28ai/d27JUPBWj2Q17RVhsFrrI45TM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-w599KFLbyxFQzxIk6s9obPv804TLreOCMj/eApeSk7A=";
-
-  buildInputs = [ libunwind ];
-
-  nativeBuildInputs = [ pkg-config ];
+  cargoHash = "sha256-+VvKWY9CqUUkDKzG2nLG9ibkE6xwP3StTzlovBZH8O8=";
 
   # Tests require rustup.
   doCheck = false;
 
+  nativeInstallCheckHook = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Rust debugger for Linux x86-64";
     homepage = "https://github.com/godzie44/BugStalker";
+    changelog = "https://github.com/godzie44/BugStalker/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jacg ];
     mainProgram = "bs";
     platforms = [ "x86_64-linux" ];
   };
-}
+})

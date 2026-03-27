@@ -9,18 +9,17 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "volta";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "volta-cli";
     repo = "volta";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZI+3/Xbkg/JaZMLhrJEjaSwjs44fOaiRReM2DUTnkkc=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-xlqsubkaX2A6d5MIcGf9E0b11Gzneksgku0jvW+UdbE=";
 
   buildInputs = [ installShellFiles ];
@@ -43,7 +42,6 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   # Tries to create /var/empty/.volta as $HOME is not writable
   doInstallCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -69,4 +67,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ fbrs ];
     mainProgram = "volta";
   };
-}
+})

@@ -1,69 +1,87 @@
 {
+  lib,
   argcomplete,
   black,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
   genson,
   graphql-core,
+  hatch-vcs,
+  hatchling,
   httpx,
   inflect,
+  inline-snapshot,
   isort,
   jinja2,
-  lib,
   openapi-spec-validator,
   packaging,
-  poetry-core,
-  poetry-dynamic-versioning,
   prance,
+  ruff,
+  pydantic,
+  pysnooper,
   pytest-mock,
   pytestCheckHook,
-  pydantic,
   pyyaml,
-  toml,
+  time-machine,
+  watchfiles,
 }:
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.26.5";
+  version = "0.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-CYNEpQFIWR7i7I7YJ5q/34KNhtQ7cjya97Z0fyeO5g8=";
+    hash = "sha256-9UXlqVikxaO3IaGwcaJYV3HY2YqlgY0zVfb0EI1bFvY=";
   };
 
-  pythonRelaxDeps = [ "inflect" ];
+  pythonRelaxDeps = [
+    "inflect"
+    "isort"
+  ];
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     argcomplete
     black
     genson
-    graphql-core
-    httpx
     inflect
     isort
     jinja2
-    openapi-spec-validator
     packaging
     pydantic
     pyyaml
-    toml
   ];
 
+  optional-dependencies = {
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
+    debug = [ pysnooper ];
+    graphql = [ graphql-core ];
+    http = [ httpx ];
+    ruff = [ ruff ];
+    validation = [
+      openapi-spec-validator
+      prance
+    ];
+    watch = [
+      watchfiles
+    ];
+  };
+
   nativeCheckInputs = [
-    freezegun
-    prance
+    inline-snapshot
     pytest-mock
     pytestCheckHook
-  ];
+    time-machine
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "datamodel_code_generator" ];
 
@@ -75,6 +93,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
     homepage = "https://github.com/koxudaxi/datamodel-code-generator";
+    changelog = "https://github.com/koxudaxi/datamodel-code-generator/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "datamodel-code-generator";

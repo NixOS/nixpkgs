@@ -11,7 +11,7 @@
 buildPythonPackage rec {
   pname = "namespaced-openvpn";
   version = "0.6.0";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "slingamn";
@@ -46,12 +46,12 @@ buildPythonPackage rec {
     cp namespaced-openvpn seal-unseal-gateway $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/slingamn/namespaced-openvpn";
     description = "Network namespace isolation for OpenVPN tunnels";
-    license = licenses.mit;
-    maintainers = [ maintainers.lodi ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.lodi ];
+    platforms = lib.platforms.linux;
     mainProgram = "namespaced-openvpn";
   };
 }

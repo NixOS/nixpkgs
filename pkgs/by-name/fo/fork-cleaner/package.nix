@@ -7,7 +7,7 @@ let
   version = "2.3.1";
 in
 buildGoModule {
-  name = "fork-cleaner";
+  pname = "fork-cleaner";
   inherit version;
 
   src = fetchFromGitHub {

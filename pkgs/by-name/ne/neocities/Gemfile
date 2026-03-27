@@ -1,2 +1,4 @@
 source 'https://rubygems.org'
 gem 'neocities'
+
+gem "mutex_m", "~> 0.3.0"

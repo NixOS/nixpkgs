@@ -4,32 +4,34 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scooter";
-  version = "0.4.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "thomasschafer";
     repo = "scooter";
-    rev = "v${version}";
-    hash = "sha256-wu9SNcd1+JqTkhUghOiRlGP/za/9Md/lgGrwNA2lCJE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-AcHPJu8aDvrQVEXvvwj7f4v1vQ0dinA6da940zTOsYg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-DQU3djlSjG1VG2bs+JuegwF3ii+asJXpEEPb95xeXqk=";
+  cargoHash = "sha256-DNsQGbZSlNK7O4KcCtHAabe/XotlHykvSP6FI2+KFqQ=";
 
-  checkFlags = [
-    # failed only for buildRustPackage
-    # might be related to https://ryantm.github.io/nixpkgs/languages-frameworks/rust/#tests-relying-on-the-structure-of-the-target-directory
-    "--skip=test_search_current_dir"
+  # Ensure that only the `scooter` package is built (excluding `xtask`)
+  cargoBuildFlags = [
+    "--package"
+    "scooter"
   ];
+
+  # Many tests require filesystem writes which fail in Nix sandbox
+  doCheck = false;
 
   meta = {
     description = "Interactive find and replace in the terminal";
     homepage = "https://github.com/thomasschafer/scooter";
-    changelog = "https://github.com/thomasschafer/scooter/commits/v${version}";
+    changelog = "https://github.com/thomasschafer/scooter/commits/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ felixzieger ];
     mainProgram = "scooter";
   };
-}
+})

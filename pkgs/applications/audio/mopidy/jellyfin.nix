@@ -1,34 +1,37 @@
 {
   lib,
-  python3Packages,
+  pythonPackages,
   fetchPypi,
   mopidy,
 }:
 
-python3Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication (finalAttrs: {
   pname = "mopidy-jellyfin";
   version = "1.0.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "mopidy_jellyfin";
     hash = "sha256-IKCPypMuluR0+mMALp8lB1oB1pSw4rN4rOl/eKn+Qvo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ pythonPackages.setuptools ];
+
+  dependencies = [
     mopidy
-    python3Packages.unidecode
-    python3Packages.websocket-client
+    pythonPackages.unidecode
+    pythonPackages.websocket-client
   ];
 
   # no tests implemented
   doCheck = false;
   pythonImportsCheck = [ "mopidy_jellyfin" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jellyfin/mopidy-jellyfin";
     description = "Mopidy extension for playing audio files from Jellyfin";
-    license = licenses.asl20;
-    maintainers = [ maintainers.pstn ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.pstn ];
   };
-}
+})

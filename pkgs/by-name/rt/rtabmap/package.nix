@@ -5,7 +5,7 @@
 
   # nativeBuildInputs
   cmake,
-  libsForQt5,
+  qt6,
   pkg-config,
   wrapGAppsHook3,
 
@@ -13,8 +13,13 @@
   opencv,
   pcl,
   liblapack,
-  xorg,
+  libxt,
+  libsm,
+  libice,
   libusb1,
+  yaml-cpp,
+  libnabo,
+  libpointmatcher,
   eigen,
   g2o,
   ceres-solver,
@@ -23,61 +28,77 @@
   libdc1394,
   libGL,
   libGLU,
-  vtkWithQt5,
+  librealsense,
+  vtkWithQt6,
   zed-open-capture,
   hidapi,
 
   # passthru
   gitUpdater,
 }:
-
+let
+  pcl' = pcl.override { vtk = vtkWithQt6; };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rtabmap";
-  version = "0.21.4.1";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
     tag = finalAttrs.version;
-    hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
+    hash = "sha256-u9wswlFkGpPgJaBwSddnpv49wBAmkKRwWFO5jQ9/twA=";
   };
+
+  # Fix boost 1.89 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "find_package(Boost COMPONENTS thread filesystem system program_options date_time chrono timer serialization REQUIRED)" \
+        "find_package(Boost COMPONENTS thread filesystem program_options date_time chrono timer serialization REQUIRED)"
+  '';
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
     wrapGAppsHook3
   ];
-
   buildInputs = [
     ## Required
     opencv
     opencv.cxxdev
-    pcl
+    pcl'
     liblapack
-    xorg.libSM
-    xorg.libICE
-    xorg.libXt
+    libsm
+    libice
+    libxt
+
     ## Optional
     libusb1
     eigen
     g2o
     ceres-solver
-    # libpointmatcher - ABI mismatch
+    yaml-cpp
+    libnabo
+    libpointmatcher
     octomap
     freenect
     libdc1394
-    # librealsense - missing includedir
-    libsForQt5.qtbase
+    librealsense
+    qt6.qtbase
     libGL
     libGLU
-    vtkWithQt5
     zed-open-capture
     hidapi
   ];
 
-  # Disable warnings that are irrelevant to us as packagers
-  cmakeFlags = [ "-Wno-dev" ];
+  # Configure environment variables
+  env.NIX_CFLAGS_COMPILE = "-Wno-c++20-extensions";
+
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_INCLUDE_PATH" "${pcl'}/include/pcl-${lib.versions.majorMinor pcl'.version}")
+  ];
 
   passthru = {
     updateScript = gitUpdater { };
@@ -90,7 +111,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ marius851000 ];
     platforms = with lib.platforms; linux;
-    # pcl/io/io.h: No such file or directory
-    broken = true;
   };
 })

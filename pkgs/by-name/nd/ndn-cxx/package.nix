@@ -12,14 +12,14 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ndn-cxx";
   version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
-    rev = "ndn-cxx-${version}";
+    rev = "ndn-cxx-${finalAttrs.version}";
     sha256 = "sha256-u9+QxqdCET1f5B54HF+Jk/YuQvhcYWsPNIVHi5l0XTM=";
   };
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://named-data.net/";
     description = "Named Data Networking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
@@ -67,11 +67,11 @@ stdenv.mkDerivation rec {
       traversing fewer network hops, eliminating redundant requests,
       and consuming less resources overall.
     '';
-    license = licenses.lgpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       sjmackenzie
       bertof
     ];
   };
-}
+})

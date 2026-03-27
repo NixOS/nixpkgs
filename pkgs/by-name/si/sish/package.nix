@@ -6,25 +6,25 @@
   sish,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sish";
-  version = "2.18.0";
+  version = "2.22.1";
 
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = "sish";
-    tag = "v${version}";
-    hash = "sha256-SSBGyfaG59/7SqUFnvFdkhno4pTTLHHxVWBEPTz0m1Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sLryMoGnxTinMsf4DXyM37MjZ5TaJI+ldYxKiCB6ny0=";
   };
 
-  vendorHash = "sha256-0dtfZp8hzoPc3oQN6E7T8ZOhDmU2JeZ3YcB3QMUoPKI=";
+  vendorHash = "sha256-3Imp9g0/Ory7ECw4pkrIltau9G1Aw3uRP5A+zWCz0mE=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/antoniomika/sish/cmd.Commit=${src.rev}"
+    "-X=github.com/antoniomika/sish/cmd.Commit=${finalAttrs.src.rev}"
     "-X=github.com/antoniomika/sish/cmd.Date=1970-01-01"
-    "-X=github.com/antoniomika/sish/cmd.Version=${version}"
+    "-X=github.com/antoniomika/sish/cmd.Version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -33,12 +33,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
     homepage = "https://github.com/antoniomika/sish";
-    changelog = "https://github.com/antoniomika/sish/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/antoniomika/sish/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sish";
   };
-}
+})

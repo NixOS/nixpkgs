@@ -62,18 +62,19 @@
   pytest-xdist,
   pytest-watch,
   responses,
+  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sentry-sdk";
-  version = "2.25.0";
+  version = "2.53.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    tag = version;
-    hash = "sha256-HQxZczpfTURbkLaWjOqnYB86UuFHD71kE7HPPjlkUqc=";
+    tag = finalAttrs.version;
+    hash = "sha256-QPbfgzXPf1pp9BRaehS6e1yaeOegFsdjcAeqvrfx0zA=";
   };
 
   postPatch = ''
@@ -163,9 +164,15 @@ buildPythonPackage rec {
     pytest-xdist
     pytest-watch
     pytestCheckHook
-  ] ++ optional-dependencies.http2;
+  ]
+  ++ finalAttrs.finalPackage.optional-dependencies.http2;
 
   __darwinAllowLocalNetworking = true;
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # darwin: 'profiler should not be running'
+    "tests/profiler/test_continuous_profiler.py"
+  ];
 
   disabledTests = [
     # depends on git revision
@@ -198,22 +205,25 @@ buildPythonPackage rec {
     "test_auto_session_tracking_with_aggregates"
     # timing sensitive
     "test_profile_captured"
-    "test_continuous_profiler_manual_start_and_stop"
+    "test_continuous_profiler_auto"
+    "test_continuous_profiler_manual"
+    "test_stacktrace_big_recursion"
     # assert ('socks' in "<class 'httpcore.connectionpool'>") == True
     "test_socks_proxy"
     # requires socksio to mock, but that crashes pytest-forked
     "test_http_timeout"
     # KeyError: 'sentry.release'
     "test_logs_attributes"
+    "test_logger_with_all_attributes"
   ];
 
   pythonImportsCheck = [ "sentry_sdk" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official Python SDK for Sentry.io";
     homepage = "https://github.com/getsentry/sentry-python";
-    changelog = "https://github.com/getsentry/sentry-python/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/getsentry/sentry-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

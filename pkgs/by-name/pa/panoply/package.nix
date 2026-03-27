@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
-  version = "5.6.0";
+  version = "5.9.1";
 
   src = fetchurl {
     url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
-    hash = "sha256-DEcD8ol1DaGMej5/TGHz7Otj/V2bXkP8uqK992FeqqY=";
+    hash = "sha256-PwGbN/J4zXelzV1nSUqOtOyb7anh+aht46Ihza5aLCc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,12 +33,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "netCDF, HDF and GRIB Data Viewer";
     homepage = "https://www.giss.nasa.gov/tools/panoply";
-    platforms = platforms.linux;
-    maintainers = [ maintainers.markuskowa ];
-    license = licenses.unfree; # Package does not state a license
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.markuskowa ];
+    license = lib.licenses.unfree; # Package does not state a license
     mainProgram = "panoply";
   };
 }

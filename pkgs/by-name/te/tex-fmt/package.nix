@@ -5,19 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tex-fmt";
-  version = "0.5.2";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "WGUNDERWOOD";
     repo = "tex-fmt";
-    tag = "v${version}";
-    hash = "sha256-3kRtBfIT6QcdZ1+h2WwvxsAv/UJLtwSodF5zvCUDbHQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xVB4y80BFa9MRBsMYMSQmaRSNJVoeCiYW2UTJ+UpBYQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4kx3co9doFYD9SjJhL17hgf6ll4niKnF57evv/eNeM0=";
+  cargoHash = "sha256-glaD8/CoHrtqRnZh0iMR55EQF9xbBbv+x+xt/xa1xTM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -32,9 +31,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "LaTeX formatter written in Rust";
     homepage = "https://github.com/WGUNDERWOOD/tex-fmt";
-    changelog = "https://github.com/WGUNDERWOOD/tex-fmt/releases/tag/v${version}";
+    changelog = "https://github.com/WGUNDERWOOD/tex-fmt/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "tex-fmt";
     maintainers = with lib.maintainers; [ wgunderwood ];
   };
-}
+})

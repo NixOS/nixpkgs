@@ -9,15 +9,15 @@
   which,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "git-absorb";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";
-    tag = version;
-    hash = "sha256-fn4xeXlYl8xB/wjpt7By9tATzb5t58jcuwfqw0tNH7M=";
+    tag = finalAttrs.version;
+    hash = "sha256-jAR+Vq6SZZXkseOxZVJSjsQOStIip8ThiaLroaJcIfc=";
   };
 
   nativeBuildInputs = [
@@ -26,35 +26,32 @@ rustPlatform.buildRustPackage rec {
     which # used by Documentation/Makefile
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PC040PtMK0OUS4zlLoHPcSzgEw5H3kndnVuyME/jEz4=";
+  cargoHash = "sha256-8uCXk5bXn/x4QXbGOROGlWYMSqIv+/7dBGZKbYkLfF4=";
 
   nativeCheckInputs = [
     gitMinimal
   ];
 
-  postInstall =
-    ''
-      cd Documentation/
-      make
-      installManPage git-absorb.1
-      cd -
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd git-absorb \
-        --bash <($out/bin/git-absorb --gen-completions bash) \
-        --fish <($out/bin/git-absorb --gen-completions fish) \
-        --zsh <($out/bin/git-absorb --gen-completions zsh)
-    '';
+  postInstall = ''
+    cd Documentation/
+    make
+    installManPage git-absorb.1
+    cd -
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd git-absorb \
+      --bash <($out/bin/git-absorb --gen-completions bash) \
+      --fish <($out/bin/git-absorb --gen-completions fish) \
+      --zsh <($out/bin/git-absorb --gen-completions zsh)
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
-    license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [
-      tomfitzhenry
+    license = [ lib.licenses.bsd3 ];
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "git-absorb";
   };
-}
+})

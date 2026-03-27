@@ -5,23 +5,23 @@
   nix-update-script,
   versionCheckHook,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chirpstack-gateway-bridge";
-  version = "4.0.11";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "chirpstack";
     repo = "chirpstack-gateway-bridge";
-    rev = "v${version}";
-    hash = "sha256-nVrYyvoN6jayXAwivwxhijNeLEcGICTWJ4T9EBs5uaI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-zMD5vbdnfkGHhnw7fG88n6JY1RSrj2mMgMICR7n0cUo=";
   };
 
-  vendorHash = "sha256-PX5Jd8fUFEOOd38NNqbV15jbEIcDQRYGk0l1MhtLiTk=";
+  vendorHash = "sha256-y1NYYyRS5L7QzV/bcm43EJ2OCHg+vPSTSwhHO0AwqD8=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X main.version=v${finalAttrs.version}"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -41,4 +41,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.stv0g ];
     mainProgram = "chirpstack-gateway-bridge";
   };
-}
+})

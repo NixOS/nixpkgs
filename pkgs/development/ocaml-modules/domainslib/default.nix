@@ -9,15 +9,15 @@
   qcheck-stm,
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "domainslib";
-  version = "0.5.1";
+  version = "0.5.2";
 
   minimalOCamlVersion = "5.0";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-multicore/domainslib/releases/download/${version}/domainslib-${version}.tbz";
-    hash = "sha256-KMJd+6XZmUSXNsXW/KXgvnFtgY9vODeW3vhL77mDXQE=";
+    url = "https://github.com/ocaml-multicore/domainslib/releases/download/${finalAttrs.version}/domainslib-${finalAttrs.version}.tbz";
+    hash = "sha256-pyDs4stBsqWRrRpEotuezVVz6Le1ES6NRtDydfmvHK8=";
   };
 
   propagatedBuildInputs = [
@@ -37,6 +37,5 @@ buildDunePackage rec {
     description = "Nested-parallel programming";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
-    broken = true; # Not compatible with saturn > 0.4.0
   };
-}
+})

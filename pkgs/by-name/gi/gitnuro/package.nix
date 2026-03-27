@@ -9,20 +9,20 @@
   libGL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitnuro";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchurl (
     if stdenv.hostPlatform.system == "x86_64-linux" then
       {
-        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-x86_64-${version}.jar";
-        hash = "sha256-1lwuLPR6b1+I2SWaYaVrZkMcYVRAf1R7j/AwjQf03UM=";
+        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${finalAttrs.version}/Gitnuro-linux-x86_64-${finalAttrs.version}.jar";
+        hash = "sha256-EoBjw98O5gO2wTO34KMiFeteryYapZC83MUfIqxtbmQ=";
       }
     else if stdenv.hostPlatform.system == "aarch64-linux" then
       {
-        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${version}/Gitnuro-linux-arm_aarch64-${version}.jar";
-        hash = "sha256-wnHW1YK4FKi5EDF/E0S+yr0tugtv3qVlCbT3+x9bM8s=";
+        url = "https://github.com/JetpackDuba/Gitnuro/releases/download/v${finalAttrs.version}/Gitnuro-linux-arm_aarch64-${finalAttrs.version}.jar";
+        hash = "sha256-oAmCapu9xFS1LMasj21q39Q/4yjLh6MZx79tC8Yjlec=";
       }
     else
       throw "Unsupported architecture: ${stdenv.hostPlatform.system}"
@@ -59,20 +59,20 @@ stdenv.mkDerivation rec {
       icon = "com.jetpackduba.Gitnuro";
       desktopName = "Gitnuro";
       categories = [ "Development" ];
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
     })
   ];
 
-  meta = with lib; {
-    description = "A FOSS Git multiplatform client based on Compose and JGit";
+  meta = {
+    description = "FOSS Git multiplatform client based on Compose and JGit";
     homepage = "https://gitnuro.com/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ zendo ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ zendo ];
     mainProgram = "gitnuro";
   };
-}
+})

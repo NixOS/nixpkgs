@@ -24,7 +24,7 @@ buildPerlModule rec {
   # - official documentation: https://www.ensembl.org/info/docs/tools/vep/script/vep_download.html#bigfile
   # - one of the developer's answer: https://github.com/Ensembl/ensembl-vep/issues/1412
   # BioBigfile needs the environment variable KENT_SRC to find kent
-  KENT_SRC = kent.overrideAttrs (old: rec {
+  env.KENT_SRC = kent.overrideAttrs (old: rec {
     pname = "kent";
     version = "335";
 
@@ -54,10 +54,10 @@ buildPerlModule rec {
   # Ensure compatibility with GCC-11 (compilation fails if -Wno-format-security)
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://metacpan.org/dist/Bio-BigFile";
     description = "Manipulate Jim Kent's BigWig and BigBed index files for genomic features";
-    license = licenses.artistic2;
-    maintainers = with maintainers; [ apraga ];
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ apraga ];
   };
 }

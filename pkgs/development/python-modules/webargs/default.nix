@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  pythonAtLeast,
   flit-core,
   marshmallow,
   pytestCheckHook,
@@ -20,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.6.0";
+  version = "8.7.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uNCYq5K9dMZZ7KcFr6MdaBR18hjLFcHlcnH6IQPAVHo=";
+    hash = "sha256-eZv5A5x2wj/Y3BlREHp1qeVhIDwV1q6PicHkbiNGNsE=";
   };
 
   build-system = [ flit-core ];
@@ -48,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "webargs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";
     homepage = "https://github.com/marshmallow-code/webargs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cript0nauta ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cript0nauta ];
   };
 }

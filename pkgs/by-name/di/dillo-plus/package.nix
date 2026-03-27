@@ -6,7 +6,7 @@
   giflib,
   libjpeg,
   libpng,
-  libXdmcp,
+  libxdmcp,
   openssl,
   pkg-config,
   wget,
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo-plus";
-  version = "3.3.0";
+  version = "3.3.0-unstable-2025-01-18";
 
   src = fetchFromGitHub {
     owner = "crossbowerbt";
     repo = "dillo-plus";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NLerc1GXTdzuGVshXn7faK4vOu7wDVMiQNTljOF7OhA=";
+    rev = "7d093e6bddcb3338938ea5959844e62ff1f9b76f";
+    hash = "sha256-7DZ+Ruu1sb+yKHSigdFEVe0xkrsQXSQ2esPhujD3Qrc=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     giflib
     libjpeg
     libpng
-    libXdmcp
+    libxdmcp
     openssl
   ];
 

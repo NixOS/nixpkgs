@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "concurrent-log-handler";
-  version = "0.9.25";
+  version = "0.9.29";
   pyproject = true;
 
   src = fetchPypi {
     pname = "concurrent_log_handler";
     inherit version;
-    hash = "sha256-HixvAhQU4hTT2sZhB4lIJ6PnjbYwGDBKTynlW6VJrCI=";
+    hash = "sha256-vDenbT84TL9KmPaT69dwVD7cD0zVxqtrxw6eHX1YImU=";
   };
 
   build-system = [ hatchling ];
@@ -25,10 +25,10 @@ buildPythonPackage rec {
 
   doCheck = false; # upstream has no tests
 
-  meta = with lib; {
+  meta = {
     description = "Python logging handler that allows multiple processes to safely write to the same log file concurrently";
     homepage = "https://github.com/Preston-Landers/concurrent-log-handler";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bbjubjub ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bbjubjub ];
   };
 }

@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage {
@@ -16,12 +15,7 @@ rustPlatform.buildRustPackage {
     hash = "sha256-YnXqvZlItCoAUEYUpRVQLM4fuLaf9Wd+OFY9ItSg25U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-NxO+7Wh8Ff6RPFtmbEa3EJszfDaZDXGWZDAoXPEAnpI=";
-
-  nativeInstallCheck = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
-  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -29,7 +23,7 @@ rustPlatform.buildRustPackage {
     description = "Generate impressive-looking terminal output to look busy when stakeholders walk by";
     homepage = "https://github.com/giacomo-b/rust-stakeholder";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.awwpotato ];
+    maintainers = [ lib.maintainers.da157 ];
     mainProgram = "rust-stakeholder";
   };
 }

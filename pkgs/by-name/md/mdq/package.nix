@@ -8,23 +8,21 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdq";
-  version = "0.5.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "yshavit";
     repo = "mdq";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-X+ROsNngMYiAcRaxdb+eZ3qpTqqPPWvlVfcy73gOh+o=";
+    hash = "sha256-3WIw0n7fRJqOYpkdLh949JpbKKGUVcnnc+On2aWBXTE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WO3INFfUuH4QMdxE9W7WQ2tvguf3y/kOTHG6KRB1/28=";
+  cargoHash = "sha256-3HXPN0E4HRMVtHZbmmUO+2bPd2C8rTjTVHGcFPM2OFY=";
 
   passthru.updateScript = nix-update-script { };
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Like jq but for Markdown: find specific elements in a md doc";

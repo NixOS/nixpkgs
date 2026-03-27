@@ -8,7 +8,6 @@
 let
   cfg = config.services.mpdscribble;
   mpdCfg = config.services.mpd;
-  mpdOpt = options.services.mpd;
 
   endpointUrls = {
     "last.fm" = "http://post.audioscrobbler.com";
@@ -65,7 +64,7 @@ let
     secretFile: placeholder: targetFile:
     lib.optionalString (
       secretFile != null
-    ) ''${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' '';
+    ) "${pkgs.replace-secret}/bin/replace-secret '${placeholder}' '${secretFile}' '${targetFile}' ";
 
   preStart = pkgs.writeShellScript "mpdscribble-pre-start" ''
     cp -f "${cfgTemplate}" "${cfgFile}"
@@ -114,11 +113,11 @@ in
 
     host = lib.mkOption {
       default = (
-        if mpdCfg.network.listenAddress != "any" then mpdCfg.network.listenAddress else "localhost"
+        if mpdCfg.settings.bind_to_address != "any" then mpdCfg.settings.bind_to_address else "localhost"
       );
       defaultText = lib.literalExpression ''
-        if config.${mpdOpt.network.listenAddress} != "any"
-        then config.${mpdOpt.network.listenAddress}
+        if config.services.mpd.settings.bind_to_address != "any"
+        then config.services.mpd.settings.bind_to_address
         else "localhost"
       '';
       type = lib.types.str;
@@ -130,7 +129,7 @@ in
     passwordFile = lib.mkOption {
       default =
         if localMpd then
-          (lib.findFirst (c: lib.any (x: x == "read") c.permissions) {
+          (lib.findFirst (c: lib.elem "read" c.permissions) {
             passwordFile = null;
           } mpdCfg.credentials).passwordFile
         else
@@ -148,8 +147,8 @@ in
     };
 
     port = lib.mkOption {
-      default = mpdCfg.network.port;
-      defaultText = lib.literalExpression "config.${mpdOpt.network.port}";
+      default = mpdCfg.settings.port;
+      defaultText = lib.literalExpression "config.services.mpd.settings.port";
       type = lib.types.port;
       description = ''
         Port for the mpdscribble daemon to search for a mpd daemon on.

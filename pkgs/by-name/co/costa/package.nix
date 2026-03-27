@@ -8,15 +8,15 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "COSTA";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "eth-cscs";
     repo = "COSTA";
-    rev = "v${version}";
-    hash = "sha256-jiAyZXC7wiuEnOLsQFFLxhN3AsGXN09q/gHC2Hrb2gg=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-rkieWcUkAMI/fJjsPL20jI1jII5o5TwBx27nMQqNIXg=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation rec {
     "-DSCALAPACK_ROOT=${scalapack}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Communication-Optimal Shuffle and Transpose Algorithm";
     homepage = "https://github.com/eth-cscs/COSTA";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
-}
+})

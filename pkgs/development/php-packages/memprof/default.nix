@@ -19,7 +19,12 @@ buildPecl {
     hash = "sha256-gq+txAU2Fw+Zm1aIu0lwPUHRqtccNcHFpp0fm3f7BnQ=";
   };
 
-  configureFlags = [ "--with-judy-dir=${judy}" ];
+  buildInputs = [
+    judy
+  ];
+  configureFlags = [
+    "--with-judy-dir=${lib.getDev judy}"
+  ];
 
   doCheck = true;
 
@@ -28,6 +33,6 @@ buildPecl {
     description = "Memory profiler for PHP. Helps finding memory leaks in PHP scripts";
     homepage = "https://github.com/arnaud-lb/php-memory-profiler";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    maintainers = [ ];
   };
 }

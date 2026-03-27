@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "sphinx-inline-tabs";
-  version = "2023.04.21";
-  format = "pyproject";
+  version = "2025.12.21.14";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pradyunsg";
     repo = "sphinx-inline-tabs";
-    rev = version;
-    hash = "sha256-1oZheHDNOQU0vWL3YClQrJe94WyUJ72bCAF1UKtjJ0w=";
+    tag = version;
+    hash = "sha256-aHsTdCVu/e9uaM4ayOfY3IBjjivZwDiHoWA0W2vyvNA=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sphinx_inline_tabs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Add inline tabbed content to your Sphinx documentation";
     homepage = "https://github.com/pradyunsg/sphinx-inline-tabs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Luflosi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

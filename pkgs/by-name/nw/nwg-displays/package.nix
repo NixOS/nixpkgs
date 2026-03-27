@@ -13,15 +13,16 @@
   wlr-randr,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-displays";
-  version = "0.3.25";
+  version = "0.3.28";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-displays";
-    tag = "v${version}";
-    hash = "sha256-Om5kz3mtrQPd5aHZwf/9BBDnPfSzMhyRp05MqX+7XzQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PiE3d/o3ym2WmOzRsq7VRKt8TDQ4KCnePVObeI7+oKo=";
   };
 
   nativeBuildInputs = [
@@ -33,19 +34,18 @@ python3Packages.buildPythonApplication rec {
     gtk3
   ];
 
-  propagatedBuildInputs =
-    [
-      atk
-      gdk-pixbuf
-      gtk-layer-shell
-      pango
-      python3Packages.gst-python
-      python3Packages.i3ipc
-      python3Packages.pygobject3
-    ]
-    ++ lib.optionals hyprlandSupport [
-      wlr-randr
-    ];
+  propagatedBuildInputs = [
+    atk
+    gdk-pixbuf
+    gtk-layer-shell
+    pango
+    python3Packages.gst-python
+    python3Packages.i3ipc
+    python3Packages.pygobject3
+  ]
+  ++ lib.optionals hyprlandSupport [
+    wlr-randr
+  ];
 
   dontWrapGApps = true;
 
@@ -69,4 +69,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ qf0xb ];
     mainProgram = "nwg-displays";
   };
-}
+})

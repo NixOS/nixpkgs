@@ -1,0 +1,52 @@
+From c8e620c6bcd044786c59f822810fc973090dbfa2 Mon Sep 17 00:00:00 2001
+From: Morgan Jones <me@numin.it>
+Date: Mon, 2 Mar 2026 11:03:39 -0800
+Subject: [PATCH] pam_lastlog2: add -lpam to Makemodule.am
+
+If we don't add this, we don't actually link with PAM; compare the
+before and after of `lib/security/pam_lastlog2.so`.
+
+```
+Dynamic section at offset 0x2ce8 contains 31 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [liblastlog2.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsqlite3.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [pam_lastlog2.so]
+```
+
+```
+Dynamic section at offset 0x2cd8 contains 32 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libpam.so.0]
+ 0x0000000000000001 (NEEDED)             Shared library: [liblastlog2.so.2]
+ 0x0000000000000001 (NEEDED)             Shared library: [libsqlite3.so]
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000e (SONAME)             Library soname: [pam_lastlog2.so]
+```
+
+This causes issues like https://github.com/NixOS/nixpkgs/issues/493934
+where the library has trouble linking with PAM symbols because it is not
+linked.
+
+Signed-off-by: Morgan Jones <me@numin.it>
+---
+ pam_lastlog2/src/Makemodule.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pam_lastlog2/src/Makemodule.am b/pam_lastlog2/src/Makemodule.am
+index 40d597c58..629930853 100644
+--- a/pam_lastlog2/src/Makemodule.am
++++ b/pam_lastlog2/src/Makemodule.am
+@@ -13,7 +13,7 @@ pam_lastlog2_la_CFLAGS = \
+ 
+ pam_lastlog2_la_LIBADD = liblastlog2.la
+ 
+-pam_lastlog2_la_LDFLAGS = $(SOLIB_LDFLAGS) -module -avoid-version -shared
++pam_lastlog2_la_LDFLAGS = $(SOLIB_LDFLAGS) -lpam -module -avoid-version -shared
+ if HAVE_VSCRIPT
+ pam_lastlog2_la_LDFLAGS += $(VSCRIPT_LDFLAGS),$(top_srcdir)/pam_lastlog2/src/pam_lastlog2.sym
+ endif
+-- 
+2.50.1
+

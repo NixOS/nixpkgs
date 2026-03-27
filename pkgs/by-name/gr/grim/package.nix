@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromSourcehut,
+  fetchFromGitLab,
   libjpeg,
   libpng,
   meson,
@@ -16,14 +16,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "grim";
-  version = "1.4.1";
+  version = "1.5.0";
 
-  src = fetchFromSourcehut {
-    owner = "~emersion";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "emersion";
     repo = "grim";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5csJqRLNqhyeXR4dEQtnPUSwuZ8oY+BIt6AVICkm1+o=";
+    hash = "sha256-oPo6zrS3gCnviIK0+gPvtal+6c7fNFWtXnAA0YfaS+U=";
   };
+
+  depsBuildBuild = [
+    # To find wayland-scanner
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     meson
@@ -46,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    homepage = "https://sr.ht/~emersion/grim";
+    homepage = "https://gitlab.freedesktop.org/emersion/grim";
     description = "Grab images from a Wayland compositor";
     license = lib.licenses.mit;
     mainProgram = "grim";

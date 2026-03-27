@@ -1,12 +1,13 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchurl,
   qtbase,
   qmake,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "confclerk";
   version = "0.7.2";
 
@@ -16,7 +17,11 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ qmake ];
+
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   postInstall = ''
     mkdir -p $out/bin
@@ -28,7 +33,6 @@ mkDerivation rec {
     mainProgram = "confclerk";
     homepage = "http://www.toastfreeware.priv.at/confclerk";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 }

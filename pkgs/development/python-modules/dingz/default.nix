@@ -5,15 +5,12 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dingz";
   version = "0.5.0";
   format = "setuptools";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dingz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for interacting with Dingz devices";
     mainProgram = "dingz";
     homepage = "https://github.com/home-assistant-ecosystem/python-dingz";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

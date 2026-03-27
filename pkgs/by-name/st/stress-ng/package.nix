@@ -16,15 +16,15 @@
   libgbm,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stress-ng";
-  version = "0.18.12";
+  version = "0.20.01";
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = "stress-ng";
-    rev = "V${version}";
-    hash = "sha256-utMX7bKtE2zdbOjzkwF+0Ry8Og4nSc7s4WIPYfUmQ/I=";
+    tag = "V${finalAttrs.version}";
+    hash = "sha256-C9TpUM18W+ARFAFLSqTl6RjRrI60pxhdP/veBHu2cco=";
   };
 
   postPatch = ''
@@ -32,23 +32,22 @@ stdenv.mkDerivation rec {
   ''; # needed because of Darwin patch on libbsd
 
   # All platforms inputs then Linux-only ones
-  buildInputs =
-    [
-      judy
-      libbsd
-      libgcrypt
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      attr
-      keyutils
-      libaio
-      libapparmor
-      libcap
-      lksctp-tools
-      libglvnd
-      libgbm
-    ];
+  buildInputs = [
+    judy
+    libbsd
+    libgcrypt
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    attr
+    keyutils
+    libaio
+    libapparmor
+    libcap
+    lksctp-tools
+    libglvnd
+    libgbm
+  ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
@@ -65,7 +64,7 @@ stdenv.mkDerivation rec {
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.hostPlatform.isi686);
 
-  meta = with lib; {
+  meta = {
     description = "Stress test a computer system";
     longDescription = ''
       stress-ng will stress test a computer system in various selectable ways. It
@@ -93,10 +92,12 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/ColinIanKing/stress-ng";
     downloadPage = "https://github.com/ColinIanKing/stress-ng/tags";
-    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${version}/debian/changelog";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0bw3b ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/ColinIanKing/stress-ng/raw/V${finalAttrs.version}/debian/changelog";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      dbeley
+    ];
+    platforms = lib.platforms.unix;
     mainProgram = "stress-ng";
   };
-}
+})

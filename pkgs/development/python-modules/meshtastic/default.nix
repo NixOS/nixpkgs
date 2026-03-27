@@ -23,7 +23,6 @@
   pyserial,
   pytap2,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   riden,
@@ -32,23 +31,23 @@
   wcwidth,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "meshtastic";
-  version = "2.6.1";
+  version = "2.7.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "meshtastic";
     repo = "python";
-    tag = version;
-    hash = "sha256-FcvshADZVXIqq9dfNIozzhWT9h+3/b9BIOsveETVO74=";
+    tag = finalAttrs.version;
+    hash = "sha256-LAcBD7BUNzexq3kTY/fw2yPMq66T5+cPj9p3GeGH/Vw=";
   };
 
   pythonRelaxDeps = [
     "bleak"
+    "packaging"
     "protobuf"
+    "tabulate"
   ];
 
   build-system = [ poetry-core ];
@@ -92,7 +91,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
 
   preCheck = ''
     export PATH="$PATH:$out/bin";
@@ -121,11 +121,11 @@ buildPythonPackage rec {
     "test_TCPInterface"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python API for talking to Meshtastic devices";
     homepage = "https://github.com/meshtastic/python";
-    changelog = "https://github.com/meshtastic/python/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/meshtastic/python/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

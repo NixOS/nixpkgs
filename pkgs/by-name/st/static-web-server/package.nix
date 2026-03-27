@@ -2,30 +2,30 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
   nixosTests,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "static-web-server";
-  version = "2.36.1";
+  version = "2.39.0";
 
   src = fetchFromGitHub {
     owner = "static-web-server";
     repo = "static-web-server";
-    rev = "v${version}";
-    hash = "sha256-labHPDsPRyF/cxHFoOJ5n+tBFn1KF2QdB/hZnDGWf1Q=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-iprQlSHO+ac7v1odVoS/9IU+Zov8/xh1l9pm1PJE8fs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Sri2NTCN5vIf/5KVI+BtyOBAjkXoGpOJjP2iOh/M5NU=";
+  cargoHash = "sha256-rNrGlgUvPezX7RnKhprRjl9DiJ/Crt4phmxnfY9tNXA=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  # static-web-server already has special handling for files with modification
+  # time = unix epoch, but the nix store is unix epoch + 1 second.
+  patches = [ ./include-unix-time-plus-one.diff ];
 
-  # Some tests rely on timestamps newer than 18 Nov 1974 00:00:00
-  preCheck = ''
-    find docker/public -exec touch -m {} \;
+  # Some tests which implicitly relied on the above behavior now break.  Force
+  # an mtime update to fix.
+  postUnpack = ''
+    find . -exec touch -m {} +
   '';
 
   # Need to copy in the systemd units for systemd.packages to discover them
@@ -37,18 +37,17 @@ rustPlatform.buildRustPackage rec {
     inherit (nixosTests) static-web-server;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous web server for static files-serving";
     homepage = "https://static-web-server.net/";
-    changelog = "https://github.com/static-web-server/static-web-server/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [
+    changelog = "https://github.com/static-web-server/static-web-server/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
-      figsoda
+    maintainers = with lib.maintainers; [
       misilelab
     ];
     mainProgram = "static-web-server";
   };
-}
+})

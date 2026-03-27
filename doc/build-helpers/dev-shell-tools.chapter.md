@@ -4,7 +4,7 @@ The `nix-shell` command has popularized the concept of transient shell environme
 <!--
   We should try to document the product, not its development process in the Nixpkgs reference manual,
   but *something* needs to be said to provide context for this library.
-  This is the most future proof sentence I could come up with while Nix itself does yet make use of this.
+  This is the most future proof sentence I could come up with while Nix itself does not yet make use of this.
   Relevant is the current status of the devShell attribute "project": https://github.com/NixOS/nix/issues/7501
   -->
 However, `nix-shell` is not the only way to create such environments, and even `nix-shell` itself can indirectly benefit from this library.
@@ -20,12 +20,12 @@ Converts Nix values to strings in the way the [`derivation` built-in function](h
 
 ```nix
 devShellTools.valueToString (builtins.toFile "foo" "bar")
-=> "/nix/store/...-foo"
+# => "/nix/store/...-foo"
 ```
 
 ```nix
 devShellTools.valueToString false
-=> ""
+# => ""
 ```
 
 :::
@@ -42,19 +42,25 @@ This function does not support `__structuredAttrs`, but does support `passAsFile
 devShellTools.unstructuredDerivationInputEnv {
   drvAttrs = {
     name = "foo";
-    buildInputs = [ hello figlet ];
+    buildInputs = [
+      hello
+      figlet
+    ];
     builder = bash;
-    args = [ "-c" "${./builder.sh}" ];
+    args = [
+      "-c"
+      "${./builder.sh}"
+    ];
   };
 }
-=> {
-  name = "foo";
-  buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
-  builder = "/nix/store/...-bash";
-}
+# => {
+#  name = "foo";
+#  buildInputs = "/nix/store/...-hello /nix/store/...-figlet";
+#  builder = "/nix/store/...-bash";
+#}
 ```
 
-Note that `args` is not included, because Nix does not added it to the builder process environment.
+Note that `args` is not included, because Nix does not add it to the builder process environment.
 
 :::
 
@@ -69,7 +75,10 @@ Takes the relevant parts of a derivation and returns a set of environment variab
 let
   pkg = hello;
 in
-devShellTools.derivationOutputEnv { outputList = pkg.outputs; outputMap = pkg; }
+devShellTools.derivationOutputEnv {
+  outputList = pkg.outputs;
+  outputMap = pkg;
+}
 ```
 
 :::

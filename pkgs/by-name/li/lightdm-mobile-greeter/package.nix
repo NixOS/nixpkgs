@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-SrAR2+An3BN/doFl/s8PcYZMUHLfVPXKZOo6ndO60nY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9beOnuyzr1vC511il3Yjy9OVcQ0ZP9RQ88eCzx3xLsA=";
 
   buildInputs = [
@@ -48,12 +47,12 @@ rustPlatform.buildRustPackage {
     }
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple log in screen for use on touch screens";
     homepage = "https://git.raatty.club/raatty/lightdm-mobile-greeter";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     mainProgram = "lightdm-mobile-greeter";
   };
 }

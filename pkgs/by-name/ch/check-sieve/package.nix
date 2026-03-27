@@ -8,15 +8,15 @@
   python3,
   nix-update-script,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "check-sieve";
-  version = "0.10";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "dburkart";
     repo = "check-sieve";
-    tag = "check-sieve-${version}";
-    hash = "sha256-UMtkiyRGX+/lL7a+c+iZHUJhg0nb4+puSPzM5W71F9o=";
+    tag = "check-sieve-${finalAttrs.version}";
+    hash = "sha256-vmfHXjcZ5J/+kO3/a0p8krLOuC67+q8SxcPJgW+UaTw=";
   };
 
   nativeBuildInputs = [
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
     description = "Syntax checker for mail sieves";
     mainProgram = "check-sieve";
     homepage = "https://github.com/dburkart/check-sieve";
-    changelog = "https://github.com/dburkart/check-sieve/blob/master/ChangeLog";
+    changelog = "https://github.com/dburkart/check-sieve/blob/${finalAttrs.src.tag}/ChangeLog";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ eilvelia ];
   };
-}
+})

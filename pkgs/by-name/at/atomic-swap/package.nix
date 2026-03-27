@@ -7,17 +7,14 @@
   monero-cli,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "atomic-swap";
   version = "0.4.3";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "AthanorLabs";
     repo = "atomic-swap";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-MOylUZ6BrvlxUrsZ5gg3JzW9ROG5UXeGhq3YoPZKdHs=";
   };
 
@@ -40,14 +37,14 @@ buildGoModule {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AthanorLabs/atomic-swap";
-    changelog = "https://github.com/AthanorLabs/atomic-swap/releases/tag/v${version}";
+    changelog = "https://github.com/AthanorLabs/atomic-swap/releases/tag/v${finalAttrs.version}";
     description = "ETH-XMR atomic swap implementation";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ lgpl3Only ];
+    maintainers = with lib.maintainers; [
       happysalada
       lord-valen
     ];
   };
-}
+})

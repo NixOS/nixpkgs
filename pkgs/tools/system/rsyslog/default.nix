@@ -8,7 +8,7 @@
   json_c,
   zlib,
   docutils,
-  fastJson,
+  libfastjson,
   withKrb5 ? true,
   libkrb5,
   withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -60,13 +60,13 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rsyslog";
-  version = "8.2502.0";
+  version = "8.2512.0";
 
   src = fetchurl {
-    url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    hash = "sha256-AvoZfSHVGfWiWpKN65OXzTh7pzgrm0SXgrox2PMRggY=";
+    url = "https://www.rsyslog.com/files/download/rsyslog/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-k8UAJdkLbHlfo1DVaj2DK/zkUEPqm9aCQNnCqTlLxik=";
   };
 
   nativeBuildInputs = [
@@ -75,37 +75,36 @@ stdenv.mkDerivation rec {
     docutils
   ];
 
-  buildInputs =
-    [
-      fastJson
-      libestr
-      json_c
-      zlib
-    ]
-    ++ lib.optional withKrb5 libkrb5
-    ++ lib.optional withJemalloc jemalloc
-    ++ lib.optional withPostgres libpq
-    ++ lib.optional withDbi libdbi
-    ++ lib.optional withNetSnmp net-snmp
-    ++ lib.optional withUuid libuuid
-    ++ lib.optional withCurl curl
-    ++ lib.optional withGnutls gnutls
-    ++ lib.optional withGcrypt libgcrypt
-    ++ lib.optional withLognorm liblognorm
-    ++ lib.optional withOpenssl openssl
-    ++ lib.optional withRelp librelp
-    ++ lib.optional withKsi libksi
-    ++ lib.optional withLogging liblogging
-    ++ lib.optional withNet libnet
-    ++ lib.optional withHadoop hadoop
-    ++ lib.optional withRdkafka rdkafka
-    ++ lib.optionals withMongo [ mongoc ]
-    ++ lib.optional withCzmq czmq
-    ++ lib.optional withRabbitmq rabbitmq-c
-    ++ lib.optional withHiredis hiredis
-    ++ lib.optional withMaxminddb libmaxminddb
-    ++ lib.optional withMysql libmysqlclient
-    ++ lib.optional withSystemd systemd;
+  buildInputs = [
+    libfastjson
+    libestr
+    json_c
+    zlib
+  ]
+  ++ lib.optional withKrb5 libkrb5
+  ++ lib.optional withJemalloc jemalloc
+  ++ lib.optional withPostgres libpq
+  ++ lib.optional withDbi libdbi
+  ++ lib.optional withNetSnmp net-snmp
+  ++ lib.optional withUuid libuuid
+  ++ lib.optional withCurl curl
+  ++ lib.optional withGnutls gnutls
+  ++ lib.optional withGcrypt libgcrypt
+  ++ lib.optional withLognorm liblognorm
+  ++ lib.optional withOpenssl openssl
+  ++ lib.optional withRelp librelp
+  ++ lib.optional withKsi libksi
+  ++ lib.optional withLogging liblogging
+  ++ lib.optional withNet libnet
+  ++ lib.optional withHadoop hadoop
+  ++ lib.optional withRdkafka rdkafka
+  ++ lib.optionals withMongo [ mongoc ]
+  ++ lib.optional withCzmq czmq
+  ++ lib.optional withRabbitmq rabbitmq-c
+  ++ lib.optional withHiredis hiredis
+  ++ lib.optional withMaxminddb libmaxminddb
+  ++ lib.optional withMysql libmysqlclient
+  ++ lib.optional withSystemd systemd;
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -181,6 +180,8 @@ stdenv.mkDerivation rec {
     (lib.enableFeature true "generate-man-pages")
   ];
 
+  env.NIX_CFLAGS_LINK = "-lz";
+
   passthru.tests = {
     nixos-rsyslogd = nixosTests.rsyslogd;
   };
@@ -189,9 +190,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.rsyslog.com/";
     description = "Enhanced syslog implementation";
     mainProgram = "rsyslogd";
-    changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
+    changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${finalAttrs.version}/ChangeLog";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

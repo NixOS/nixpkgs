@@ -2,40 +2,52 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+
+  # build-system
   cython,
-  click,
   numpy,
-  scipy,
-  pandas,
+  setuptools,
+
+  # dependencies
+  click,
   h5py,
+  pandas,
+  scipy,
+
+  # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "biom-format";
-  version = "2.1.16";
+  version = "2.1.17";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "biocore";
     repo = "biom-format";
-    tag = version;
-    hash = "sha256-E/6dIN8tdsu6cBVBW/BOeAQwJB9XRRL3flQZSKqIZlc=";
+    tag = finalAttrs.version;
+    hash = "sha256-FjIC21LoqltixBstbbANByjTNxVm/3YCxdWaD9KbOQ0=";
   };
 
+  # https://numpy.org/doc/stable//release/2.4.0-notes.html#removed-numpy-in1d
+  postPatch = ''
+    substituteInPlace biom/table.py \
+      --replace-fail "np.in1d" "np.isin"
+  '';
+
   build-system = [
-    setuptools
     cython
     numpy
+    setuptools
   ];
 
   dependencies = [
     click
-    numpy
-    scipy
-    pandas
     h5py
+    numpy
+    pandas
+    scipy
   ];
 
   # make pytest resolve the package from $out
@@ -48,14 +60,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "biom_tests/tests" ];
+  enabledTestPaths = [ "biom_tests/tests" ];
 
   pythonImportsCheck = [ "biom" ];
 
   meta = {
-    homepage = "http://biom-format.org/";
     description = "Biological Observation Matrix (BIOM) format";
+    homepage = "http://biom-format.org/";
+    downloadPage = "https://github.com/biocore/biom-format";
+    changelog = "https://github.com/biocore/biom-format/blob/${finalAttrs.src.tag}/ChangeLog.md";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tomasajt ];
   };
-}
+})

@@ -4,19 +4,21 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "wad";
   version = "0.4.6";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CERN-CERT";
     repo = "WAD";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-/mlmOzFkyKpmK/uk4813Wk0cf/+ynX3Qxafnd1mGR5k=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     six
   ];
 
@@ -29,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     "wad"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for detecting technologies used by web applications";
     mainProgram = "wad";
     longDescription = ''
@@ -40,10 +42,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/CERN-CERT/WAD";
     # wad is GPLv3+, wappalyzer source is MIT
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

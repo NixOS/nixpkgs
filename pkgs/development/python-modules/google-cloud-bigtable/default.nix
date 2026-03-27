@@ -1,42 +1,56 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   google-api-core,
   google-cloud-core,
-  grpcio,
+  google-crc32c,
   grpc-google-iam-v1,
-  libcst,
-  mock,
   proto-plus,
   protobuf,
+
+  # optional dependencies
+  libcst,
+
+  # testing
+  grpcio,
+  mock,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.30.0";
-  pyproject = true;
+  version = "2.35.0";
 
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    pname = "google_cloud_bigtable";
-    inherit version;
-    hash = "sha256-3bnfW9OVhUWf5hfzheSCeAY+w3VIalER0i3QtsGNSDM=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-bigtable";
+    tag = "v${version}";
+    hash = "sha256-rvw7mHWifJ6+g89DXtV0pOFwbbGQNlK1J+IRhy/7W5o=";
   };
 
+  pyproject = true;
+
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+  ];
 
   dependencies = [
     google-api-core
     google-cloud-core
+    google-crc32c
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];
@@ -61,11 +75,11 @@ buildPythonPackage rec {
     "google.cloud.bigtable"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Bigtable API client library";
     homepage = "https://github.com/googleapis/python-bigtable";
-    changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = [ ];
+    changelog = "https://github.com/googleapis/python-bigtable/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

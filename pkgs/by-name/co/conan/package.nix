@@ -1,31 +1,37 @@
 {
   lib,
   stdenv,
+  cmake,
   fetchFromGitHub,
   git,
   pkg-config,
+  python3Packages,
   xcbuild,
-  python3,
   zlib,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "conan";
-  version = "2.9.1";
-  format = "setuptools";
+  version = "2.26.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
-    tag = version;
-    hash = "sha256-1KKXOvoSAemzafWvBoYFtxqgSObHcXe3GVPgG25VNm0=";
+    tag = finalAttrs.version;
+    hash = "sha256-8XurC7H2JSMOYRfGCilUzuTDr7y1W8N+a2Hc3dtAdzQ=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  pythonRelaxDeps = [
+    "distro"
+    "patch-ng"
+    "urllib3"
   ];
 
-  propagatedBuildInputs =
-    with python3.pkgs;
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies =
+    with python3Packages;
     [
       bottle
       colorama
@@ -49,53 +55,58 @@ python3.pkgs.buildPythonApplication rec {
       pyopenssl
     ];
 
-  nativeCheckInputs =
-    [
-      git
-      pkg-config
-      zlib
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      xcbuild.xcrun
-    ]
-    ++ (with python3.pkgs; [
-      mock
-      parameterized
-      pytest-xdist
-      pytestCheckHook
-      webtest
-    ]);
+  nativeCheckInputs = [
+    git
+    pkg-config
+    zlib
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
+  ++ (with python3Packages; [
+    cmake
+    mock
+    parameterized
+    pytest-xdist
+    pytestCheckHook
+    webtest
+  ]);
+
+  dontUseCmakeConfigure = true;
 
   __darwinAllowLocalNetworking = true;
 
-  pythonImportsCheck = [
-    "conan"
-  ];
+  pythonImportsCheck = [ "conan" ];
 
-  disabledTests =
-    [
-      # Tests require network access
-      "TestFTP"
-      # Unstable test
-      "test_shared_windows_find_libraries"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Rejects paths containing nix
-      "test_conditional_os"
-      # Requires Apple Clang
-      "test_detect_default_compilers"
-      "test_detect_default_in_mac_os_using_gcc_as_default"
-      # Incompatible with darwin.xattr and xcbuild from nixpkgs
-      "test_dot_files"
-      "test_xcrun"
-      "test_xcrun_in_required_by_tool_requires"
-      "test_xcrun_in_tool_requires"
-    ];
+  disabledTests = [
+    # Tests require network access
+    "TestFTP"
+    # Unstable test
+    "test_shared_windows_find_libraries"
+    # 'cmake' tool version 'Any' is not available
+    "test_build"
+    "test_conan_new"
+    "test_conan_new_compiles"
+    # 'cmake' tool version '3.27' is not available
+    "test_metabuild"
+    "test_new_template_and_different_folder"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Rejects paths containing nix
+    "test_conditional_os"
+    # Requires Apple Clang
+    "test_detect_default_compilers"
+    "test_detect_default_in_mac_os_using_gcc_as_default"
+    # Incompatible with darwin.xattr and xcbuild from nixpkgs
+    "test_dot_files"
+    "test_xcrun"
+    "test_xcrun_in_required_by_tool_requires"
+    "test_xcrun_in_tool_requires"
+  ];
 
   disabledTestPaths = [
     # Requires cmake, meson, autotools, apt-get, etc.
     "test/functional/command/runner_test.py"
     "test/functional/command/test_install_deploy.py"
+    "test/functional/command/test_new.py"
     "test/functional/layout/test_editable_cmake.py"
     "test/functional/layout/test_editable_cmake_components.py"
     "test/functional/layout/test_in_subfolder.py"
@@ -105,20 +116,24 @@ python3.pkgs.buildPythonApplication rec {
     "test/functional/toolchains/"
     "test/functional/tools/scm/test_git.py"
     "test/functional/tools/system/package_manager_test.py"
+    "test/functional/sbom/test_cyclonedx.py"
+    "test/functional/workspace/test_workspace.py"
     "test/functional/tools_versions_test.py"
     "test/functional/util/test_cmd_args_to_string.py"
-    "test/integration/command/user_test.py"
-    "test/integration/command_v2/list_test.py"
-    "test/performance/test_large_graph.py"
+
+    # Requires network access to PyPI
+    "test/functional/tools/system/python_manager_test.py"
+
+    # Test failure
     "test/unittests/tools/env/test_env_files.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Decentralized and portable C/C++ package manager";
-    mainProgram = "conan";
     homepage = "https://conan.io";
-    changelog = "https://github.com/conan-io/conan/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ HaoZeke ];
+    changelog = "https://github.com/conan-io/conan/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ HaoZeke ];
+    mainProgram = "conan";
   };
-}
+})

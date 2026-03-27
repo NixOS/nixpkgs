@@ -6,21 +6,18 @@
   multiprocess,
   pox,
   ppft,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pathos";
-  version = "0.3.3";
+  version = "0.3.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "uqfoundation";
-    repo = pname;
+    repo = "pathos";
     tag = version;
-    hash = "sha256-J3rwnsn/3DXmChydwNC5yvsdSk1mzvPSnSo21BwkhSE=";
+    hash = "sha256-9ejrHHgSbDrbuq1bktyiKPJnQ1l52ug/lnJJbac7x4s=";
   };
 
   propagatedBuildInputs = [
@@ -35,11 +32,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pathos" ];
 
-  meta = with lib; {
+  meta = {
     description = "Parallel graph management and execution in heterogeneous computing";
     homepage = "https://pathos.readthedocs.io/";
-    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${version}";
-    license = licenses.bsd3;
+    changelog = "https://github.com/uqfoundation/pathos/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

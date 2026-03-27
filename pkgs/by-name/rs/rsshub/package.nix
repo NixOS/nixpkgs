@@ -2,65 +2,72 @@
   lib,
   fetchFromGitHub,
   makeBinaryWrapper,
+  nix-update-script,
   nodejs,
-  pnpm_9,
+  pnpm_10,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   replaceVars,
   stdenv,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "rsshub";
-  version = "0-unstable-2025-02-03";
+  version = "0-unstable-2026-03-24";
 
   src = fetchFromGitHub {
     owner = "DIYgod";
     repo = "RSSHub";
-    rev = "72f78e2bfbcf000a6f374a92894430cf845fd1fd";
-    hash = "sha256-okavLIYJZ+0iCsYtBc2r3FS18MVE/ap2OwRae7rWTrw=";
+    rev = "df6b73d8663c0ba4c11bae89a61cf0b87c8c52a5";
+    hash = "sha256-6YasIbThh5S7UH7WFVEdl++96hL3BEmxdp/QAAzIm18=";
   };
 
   patches = [
     (replaceVars ./0001-fix-git-hash.patch {
-      "GIT_HASH" = finalAttrs.src.rev;
+      GIT_HASH = finalAttrs.src.rev;
     })
+    ./0002-fix-network-call.patch
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-c16Ue5YiRWlF7ldt/8WLi1/xYhGqqr6XqvUieQbvbWg=";
+    fetcherVersion = 3;
+    hash = "sha256-uzPDx48dWAguQ3PolTWz0HDtnO6qBVlKpJRn+ub7mM0=";
+    pnpm = pnpm_10;
   };
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_10
   ];
 
   buildPhase = ''
     runHook preBuild
-
-    pnpm build
-
+    # First build route metadata using directoryImport (avoids executing
+    # module-level code that would trigger network requests)
+    BUILD_ROUTES_MODE=1 pnpm run build:routes
+    # Then build the application
+    pnpm run build
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-
-    mkdir -p $out/bin $out/lib/rsshub
-    cp -r lib node_modules assets api package.json tsconfig.json $out/lib/rsshub
-
+    mkdir -p $out/bin $out/lib/rsshub/lib
+    cp -r dist node_modules $out/lib/rsshub
+    cp -r lib/assets $out/lib/rsshub/lib
     runHook postInstall
   '';
 
   preFixup = ''
     makeWrapper ${lib.getExe nodejs} $out/bin/rsshub \
-      --chdir "$out/lib/rsshub" \
       --set "NODE_ENV" "production" \
       --set "NO_LOGFILES" "true" \
-      --set "TSX_TSCONFIG_PATH" "$out/lib/rsshub/tsconfig.json" \
-      --append-flags "$out/lib/rsshub/node_modules/tsx/dist/cli.mjs" \
-      --append-flags "$out/lib/rsshub/lib/index.ts"
+      --add-flags "$out/lib/rsshub/dist/index.mjs"
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
 
   meta = {
     description = "RSS feed generator";
@@ -73,8 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
       new features and bug fixes.
     '';
     homepage = "https://docs.rsshub.app";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Guanran928 ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ xinyangli ];
     mainProgram = "rsshub";
     platforms = lib.platforms.all;
   };

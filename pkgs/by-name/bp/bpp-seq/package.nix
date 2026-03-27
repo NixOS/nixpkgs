@@ -5,15 +5,15 @@
   bpp-core,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpp-seq";
 
-  inherit (bpp-core) version;
+  inherit (bpp-core) version postPatch;
 
   src = fetchFromGitHub {
     owner = "BioPP";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bpp-seq";
+    rev = "v${finalAttrs.version}";
     sha256 = "1mc09g8jswzsa4wgrfv59jxn15ys3q8s0227p1j838wkphlwn2qk";
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bpp-core ];
 
   postFixup = ''
-    substituteInPlace $out/lib/cmake/${pname}/${pname}-targets.cmake  \
+    substituteInPlace $out/lib/cmake/bpp-seq/bpp-seq-targets.cmake  \
       --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
   # prevents cmake from exporting incorrect INTERFACE_INCLUDE_DIRECTORIES
@@ -34,4 +34,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BioPP/bpp-seq";
     changelog = "https://github.com/BioPP/bpp-seq/blob/master/ChangeLog";
   };
-}
+})

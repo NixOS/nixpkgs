@@ -59,30 +59,29 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      glib
-      gssdp
-      gupnp
-      gupnp-av
-      gupnp-dlna
-      libgee
-      libsoup_2_4
-      gtk3
-      libmediaart
-      sqlite
-      systemd
-      tinysparql
-      shared-mime-info
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-editing-services
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+    glib
+    gssdp
+    gupnp
+    gupnp-av
+    gupnp-dlna
+    libgee
+    libsoup_2_4
+    gtk3
+    libmediaart
+    sqlite
+    systemd
+    tinysparql
+    shared-mime-info
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-editing-services
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+  ]);
 
   mesonFlags = [
     "-Dsystemd-user-units-dir=${placeholder "out"}/lib/systemd/user"
@@ -105,11 +104,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
-    license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

@@ -7,14 +7,14 @@
   mynewt-newtmgr,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mynewt-newtmgr";
   version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "mynewt-newtmgr";
-    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] version}_tag";
+    rev = "mynewt_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}_tag";
     sha256 = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
   };
 
@@ -25,16 +25,16 @@ buildGoModule rec {
     command = "newtmgr version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mynewt.apache.org/";
     description = "Tool to communicate with devices running Mynewt OS";
     longDescription = ''
       Newt Manager (newtmgr) an application that enables a user to communicate
       with and manage remote devices running the Mynewt OS
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bezmuth ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bezmuth ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

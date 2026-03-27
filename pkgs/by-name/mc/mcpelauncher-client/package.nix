@@ -9,7 +9,9 @@
   zlib,
   libpng,
   libglvnd,
-  xorg,
+  libxtst,
+  libxi,
+  libx11,
   libevdev,
   curl,
   pulseaudio,
@@ -20,12 +22,13 @@
   fetchzip,
   zenity,
   xdg-utils,
+  sdl3,
 }:
 
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.2.0-qt6";
+  version = "1.6.4-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -33,12 +36,15 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-SyIiBUZCGcV4NFD7IcQv8YdRkDGhkBeqE0qVsKp+44Y=";
+    hash = "sha256-L9QWA50T4bhpFmKodGpu2Y5Vea5HckeKs0OkH3O7lTY=";
   };
 
-  patches = [ ./dont_download_glfw_client.patch ];
+  patches = [
+    ./dont_download_glfw_client.patch
+    ./fix-cmake4-build.patch
+  ];
 
-  # Path hard-coded paths.
+  # Patch hard-coded paths.
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace mcpelauncher-client/src/jni/main_activity.cpp \
       --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open \
@@ -51,37 +57,36 @@ clangStdenv.mkDerivation (finalAttrs: {
   # FORTIFY_SOURCE breaks libc_shim and the project will fail to compile
   hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zlib
-      libpng
-      libglvnd
-      xorg.libX11
-      xorg.libXi
-      xorg.libXtst
-      libevdev
-      curl
-      pulseaudio
-      glfw
-    ]
-    ++ lib.optionals (withQtWebview || withQtErrorWindow) [
-      qt6.qtbase
-      qt6.qttools
-      qt6.qtwayland
-    ]
-    ++ lib.optionals withQtWebview [
-      qt6.qtwebengine
-    ];
+  buildInputs = [
+    openssl
+    zlib
+    libpng
+    libglvnd
+    libx11
+    libxi
+    libxtst
+    libevdev
+    curl
+    pulseaudio
+    glfw
+    sdl3
+  ]
+  ++ lib.optionals (withQtWebview || withQtErrorWindow) [
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtwayland
+  ]
+  ++ lib.optionals withQtWebview [
+    qt6.qtwebengine
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
@@ -95,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_OWN_CURL" false)
     (lib.cmakeBool "ENABLE_DEV_PATHS" false)
     (lib.cmakeFeature "GAMEWINDOW_SYSTEM" "GLFW")
-    (lib.cmakeBool "USE_SDL3_AUDIO" false)
+    (lib.cmakeBool "SDL3_VENDORED" false)
     (lib.cmakeBool "BUILD_WEBVIEW" withQtWebview)
     (lib.cmakeBool "XAL_WEBVIEW_USE_CLI" (!withQtWebview))
     (lib.cmakeBool "XAL_WEBVIEW_USE_QT" withQtWebview)

@@ -1,86 +1,133 @@
 {
-  apache-beam,
-  array-record,
-  attrs,
-  beautifulsoup4,
+  lib,
   buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+
+  # build system
+  setuptools,
+
+  # dependencies
+  absl-py,
+  array-record,
+  dm-tree,
+  etils,
+  immutabledict,
+  importlib-resources,
+  numpy,
+  promise,
+  protobuf,
+  psutil,
+  pyarrow,
+  requests,
+  simple-parsing,
+  tensorflow-metadata,
+  termcolor,
+  toml,
+  tqdm,
+  wrapt,
+
+  # tests
+  apache-beam,
+  beautifulsoup4,
   click,
+  cloudpickle,
   datasets,
   dill,
-  dm-tree,
-  fetchFromGitHub,
   ffmpeg,
-  future,
   imagemagick,
-  importlib-resources,
   jax,
   jaxlib,
   jinja2,
   langdetect,
-  lib,
   lxml,
   matplotlib,
+  mlcroissant,
   mwparserfromhell,
   mwxml,
   networkx,
   nltk,
-  numpy,
   opencv4,
   pandas,
   pillow,
-  promise,
-  protobuf,
-  psutil,
   pycocotools,
   pydub,
   pytest-xdist,
   pytestCheckHook,
-  requests,
   scikit-image,
   scipy,
-  six,
+  sortedcontainers,
   tensorflow,
-  tensorflow-metadata,
-  termcolor,
   tifffile,
-  tqdm,
   zarr,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tensorflow-datasets";
-  version = "4.9.7";
-  format = "setuptools";
+  version = "4.9.9";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "datasets";
-    tag = "v${version}";
-    hash = "sha256-pnut5z3rEYIOOhsQT6uVjPdy+SqftKptSQMwxbMXoKA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ZXaPYmj8aozfe6ygzKybId8RZ1TqPuIOSpd8XxnRHus=";
   };
 
   patches = [
-    # addresses https://github.com/tensorflow/datasets/issues/3673
-    ./corruptions.patch
+    # TypeError: Cannot handle this data type: (1, 1, 4), <u2
+    # Issue: https://github.com/tensorflow/datasets/issues/11148
+    # PR: https://github.com/tensorflow/datasets/pull/11149
+    (fetchpatch2 {
+      name = "fix-pillow-12-compat";
+      url = "https://github.com/tensorflow/datasets/pull/11149/commits/21062d65b33978f2263443280c03413add5c0224.patch";
+      hash = "sha256-GWb+1E5lQNhFVp57sqjp+WqzZSva1AGpXe9fbvXXeIA=";
+    })
   ];
 
-  propagatedBuildInputs = [
+  postPatch =
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    ''
+      substituteInPlace tensorflow_datasets/core/dataset_info.py \
+        --replace-fail \
+          "elif field.label == field.LABEL_REPEATED:" \
+          "elif hasattr(field_value, 'extend'):"
+    ''
+    # TypeError: only 0-dimensional arrays can be converted to Python scalars
+    + ''
+      substituteInPlace tensorflow_datasets/datasets/smallnorb/smallnorb_dataset_builder.py \
+        --replace-fail \
+          "magic = int(np.frombuffer(s, dtype=int32_dtype, count=1))" \
+          "magic = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1)))" \
+        --replace-fail \
+          "ndim = int(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4))" \
+          "ndim = int(np.squeeze(np.frombuffer(s, dtype=int32_dtype, count=1, offset=4)))"
+    '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    absl-py
     array-record
-    attrs
-    dill
     dm-tree
-    future
+    etils
+    immutabledict
     importlib-resources
     numpy
     promise
     protobuf
     psutil
+    pyarrow
     requests
-    six
+    simple-parsing
     tensorflow-metadata
     termcolor
+    toml
     tqdm
-  ];
+    wrapt
+  ]
+  ++ etils.optional-dependencies.epath
+  ++ etils.optional-dependencies.etree;
 
   pythonImportsCheck = [ "tensorflow_datasets" ];
 
@@ -88,7 +135,9 @@ buildPythonPackage rec {
     apache-beam
     beautifulsoup4
     click
+    cloudpickle
     datasets
+    dill
     ffmpeg
     imagemagick
     jax
@@ -97,6 +146,7 @@ buildPythonPackage rec {
     langdetect
     lxml
     matplotlib
+    mlcroissant
     mwparserfromhell
     mwxml
     networkx
@@ -110,9 +160,17 @@ buildPythonPackage rec {
     pytestCheckHook
     scikit-image
     scipy
+    sortedcontainers
     tensorflow
     tifffile
     zarr
+  ];
+
+  disabledTests = [
+    # Since updating apache-beam to 2.65.0
+    # RuntimeError: Unable to pickle fn CallableWrapperDoFn...: maximum recursion depth exceeded
+    # https://github.com/tensorflow/datasets/issues/11055
+    "test_download_and_prepare_as_dataset"
   ];
 
   disabledTestPaths = [
@@ -126,6 +184,7 @@ buildPythonPackage rec {
     "tensorflow_datasets/import_without_tf_test.py"
     "tensorflow_datasets/proto/build_tf_proto_test.py"
     "tensorflow_datasets/scripts/cli/build_test.py"
+    "tensorflow_datasets/datasets/imagenet2012_corrupted/imagenet2012_corrupted_dataset_builder_test.py"
 
     # Requires `pretty_midi` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/audio/groove.py"
@@ -143,13 +202,15 @@ buildPythonPackage rec {
     # Requires `gcld3` and `pretty_midi` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/core/lazy_imports_lib_test.py"
 
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/dataset_builder_beam_test.py"
+    "tensorflow_datasets/core/dataset_builders/adhoc_builder_test.py"
+    "tensorflow_datasets/core/split_builder_test.py"
+    "tensorflow_datasets/core/writer_test.py"
+
     # Requires `tensorflow_io` which is not packaged in `nixpkgs`.
     "tensorflow_datasets/core/features/audio_feature_test.py"
     "tensorflow_datasets/image/lsun_test.py"
-
-    # Requires `envlogger` which is not packaged in `nixpkgs`.
-    "tensorflow_datasets/rlds/locomotion/locomotion_test.py"
-    "tensorflow_datasets/rlds/robosuite_panda_pick_place_can/robosuite_panda_pick_place_can_test.py"
 
     # Fails with `TypeError: Constant constructor takes either 0 or 2 positional arguments`
     # deep in TF AutoGraph. Doesn't reproduce in Docker with Ubuntu 22.04 => might be related
@@ -169,12 +230,17 @@ buildPythonPackage rec {
     # Require `gcld3` and `nltk.punkt` which are not packaged in `nixpkgs`.
     "tensorflow_datasets/text/c4_test.py"
     "tensorflow_datasets/text/c4_utils_test.py"
+
+    # AttributeError: 'NoneType' object has no attribute 'Table'
+    "tensorflow_datasets/core/file_adapters_test.py::test_read_write"
+    "tensorflow_datasets/text/c4_wsrs/c4_wsrs_test.py::C4WSRSTest"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of datasets ready to use with TensorFlow";
     homepage = "https://www.tensorflow.org/datasets/overview";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ndl ];
+    changelog = "https://github.com/tensorflow/datasets/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

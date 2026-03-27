@@ -5,29 +5,32 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rs-tftpd";
-  version = "0.3.3";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "altugbakan";
     repo = "rs-tftpd";
-    rev = version;
-    hash = "sha256-qazPEzLMIlnqKTayurZgNJ8TLLdB4qNO88tKMoh6VVI=";
+    tag = finalAttrs.version;
+    hash = "sha256-ozp/PAc5rFexr81Sx0MPaBLIyggttjImdt+Vs7BDnfc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-xnvruSfrd2RWgWjV+mqMciGY/L2ynJrYW/j+P6rphEs=";
+  cargoHash = "sha256-mu7o0vqI12bR0z9YaBa36JNgVbLVGZfpQpnsCqhckeU=";
 
   buildFeatures = [ "client" ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "TFTP Server Daemon implemented in Rust";
     homepage = "https://github.com/altugbakan/rs-tftpd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ matthewcroughan ];
+    changelog = "https://github.com/altugbakan/rs-tftpd/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      adamcstephens
+      matthewcroughan
+    ];
     mainProgram = "tftpd";
   };
-}
+})

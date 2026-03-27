@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "iaqualink";
-  version = "0.5.3";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "flz";
     repo = "iaqualink-py";
     tag = "v${version}";
-    hash = "sha256-2DqZJlsbDWo9fxIDg5P0CvZs8AuAh8XrhNiwIvuRm80=";
+    hash = "sha256-s/ZhcbTaCvn7ei1O4+P4fKPojitl+4gsatc9PZx+W2g=";
   };
 
   build-system = [
@@ -40,11 +40,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "iaqualink" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for Jandy iAqualink";
     homepage = "https://github.com/flz/iaqualink-py";
     changelog = "https://github.com/flz/iaqualink-py/releases/tag/v${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

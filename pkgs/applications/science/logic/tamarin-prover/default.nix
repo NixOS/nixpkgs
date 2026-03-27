@@ -1,24 +1,26 @@
 {
   haskellPackages,
-  mkDerivation,
   fetchFromGitHub,
   lib,
   stdenv,
   # the following are non-haskell dependencies
   makeWrapper,
   which,
+  buildNpmPackage,
   maude,
   graphviz,
   glibcLocales,
 }:
 
 let
-  version = "1.10.0";
+  inherit (haskellPackages) mkDerivation;
+
+  version = "1.12.0";
   src = fetchFromGitHub {
     owner = "tamarin-prover";
     repo = "tamarin-prover";
-    rev = version;
-    hash = "sha256-v1BruU2p/Sg/g7b9a+QRza46bD7PkMtsGq82qFaNhpI=";
+    tag = version;
+    hash = "sha256-yXJIJENygr/lmkrVap4ohb8Pua4kri+yaD/Dy0Hpwn4=";
   };
 
   # tamarin has its own dependencies, but they're kept inside the repo,
@@ -139,6 +141,20 @@ let
     }
   );
 
+  tamarin-frontend = buildNpmPackage {
+    pname = "tamarin-frontend";
+    inherit version src;
+
+    sourceRoot = "source/frontend";
+
+    npmDepsHash = "sha256-GJiOCyTUfseZXd5WU018MKjxvrc+UOr7l7ZZSpzCS54=";
+
+    installPhase = ''
+      mkdir -p $out
+      cp dist/* $out/
+    '';
+  };
+
 in
 mkDerivation (
   common "tamarin-prover" src
@@ -151,6 +167,11 @@ mkDerivation (
     enableSharedExecutables = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
 
+    preBuild = ''
+      cp ${tamarin-frontend}/*.js data/js/
+      cp ${tamarin-frontend}/*.css data/css/
+    '';
+
     # wrap the prover to be sure it can find maude, sapic, etc
     executableToolDepends = [
       makeWrapper
@@ -158,29 +179,28 @@ mkDerivation (
       maude
       graphviz
     ];
-    postInstall =
-      ''
-        wrapProgram $out/bin/tamarin-prover \
-      ''
-      + lib.optionalString stdenv.hostPlatform.isLinux ''
-        --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
-      ''
-      + ''
-          --prefix PATH : ${
-            lib.makeBinPath [
-              which
-              maude
-              graphviz
-            ]
-          }
-        # so that the package can be used as a vim plugin to install syntax coloration
-        install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
-        install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
-        mkdir -p $out/share/nvim
-        ln -s $out/share/vim-plugins/tamarin-prover $out/share/nvim/site
-        # Emacs SPTHY major mode
-        install -Dt $out/share/emacs/site-lisp etc/spthy-mode.el
-      '';
+    postInstall = ''
+      wrapProgram $out/bin/tamarin-prover \
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive" \
+    ''
+    + ''
+        --prefix PATH : ${
+          lib.makeBinPath [
+            which
+            maude
+            graphviz
+          ]
+        }
+      # so that the package can be used as a vim plugin to install syntax coloration
+      install -Dt $out/share/vim-plugins/tamarin-prover/syntax/ etc/syntax/spthy.vim
+      install etc/filetype.vim -D $out/share/vim-plugins/tamarin-prover/ftdetect/tamarin.vim
+      mkdir -p $out/share/nvim
+      ln -s $out/share/vim-plugins/tamarin-prover $out/share/nvim/site
+      # Emacs SPTHY major mode
+      install -Dt $out/share/emacs/site-lisp etc/spthy-mode.el
+    '';
 
     checkPhase = "./dist/build/tamarin-prover/tamarin-prover test";
 

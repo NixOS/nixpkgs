@@ -2,67 +2,67 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  replaceVars,
   voicevox-core,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "voicevox-engine";
-  version = "0.23.0";
+  version = "0.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "VOICEVOX";
     repo = "voicevox_engine";
-    tag = version;
-    hash = "sha256-kuWpLnDKRYcfV9FxYLeR6FmQFO2K12KxJx/Y/4MwhbM=";
+    tag = finalAttrs.version;
+    hash = "sha256-4pZs5f6Fe4kHIKcyww1eq9uRTf7rk5KAr/00H8aH9qA=";
   };
 
   patches = [
-    # the upstream package only uses poetry for dependency management, not for package definition
-    # this patch makes the package installable via poetry-core
-    (replaceVars ./make-installable.patch {
-      inherit version;
-    })
+    # this patch makes the package installable via hatchling
+    ./make-installable.patch
   ];
 
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
-  dependencies =
-    [
-      passthru.pyopenjtalk
-    ]
-    ++ (with python3Packages; [
-      numpy
-      fastapi
-      jinja2
-      python-multipart
-      uvicorn
-      soundfile
-      pyyaml
-      pyworld
-      semver
-      platformdirs
-      soxr
-      pydantic
-      starlette
-    ]);
+  dependencies = [
+    finalAttrs.passthru.pyopenjtalk
+  ]
+  ++ (with python3Packages; [
+    fastapi
+    jinja2
+    kanalizer
+    numpy
+    platformdirs
+    psutil
+    pydantic
+    python-multipart
+    pyworld
+    pyyaml
+    semver
+    setuptools
+    soundfile
+    soxr
+    starlette
+    uvicorn
+  ]);
 
   pythonRemoveDeps = [
     # upstream wants fastapi-slim, but we provide fastapi instead
     "fastapi-slim"
   ];
 
-  pythonRelaxDeps = true;
+  pythonRelaxDeps = [
+    "psutil" # at the time of writing, psutil has not reached version 7.1.1
+  ];
 
   preConfigure = ''
     # copy demo metadata to temporary directory
     mv resources/character_info test_character_info
 
     # populate the `character_info` directory with the actual model metadata instead of the demo metadata
-    cp -r --no-preserve=all ${passthru.resources}/character_info resources/character_info
+    cp -r --no-preserve=all ${finalAttrs.passthru.resources}/character_info resources/character_info
 
     # the `character_info` directory copied from `resources` doesn't exactly have the expected format,
     # so we transform them to be acceptable by `voicevox-engine`
@@ -78,7 +78,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    ''--add-flags "--voicelib_dir=${voicevox-core}/lib"''
+    ''--add-flags "--voicelib_dir=${voicevox-core.wrapped}/lib"''
   ];
 
   preCheck = ''
@@ -99,18 +99,18 @@ python3Packages.buildPythonApplication rec {
 
   passthru = {
     resources = fetchFromGitHub {
-      name = "voicevox-resource-${version}"; # this contains ${version} to invalidate the hash upon updating the package
+      name = "voicevox-resource-${finalAttrs.version}"; # this contains ${version} to invalidate the hash upon updating the package
       owner = "VOICEVOX";
       repo = "voicevox_resource";
-      tag = version;
-      hash = "sha256-6pxx+ebNzXd3qbrFa4gfMDM2e5XANo3ZPzSAegKoJBE=";
+      tag = finalAttrs.version;
+      hash = "sha256-YaUVlZnpxu/IhLrp1XdcxDyus7DRhyzu4VKfabTsPUY=";
     };
 
     pyopenjtalk = python3Packages.callPackage ./pyopenjtalk.nix { };
   };
 
   meta = {
-    changelog = "https://github.com/VOICEVOX/voicevox_engine/releases/tag/${src.tag}";
+    changelog = "https://github.com/VOICEVOX/voicevox_engine/releases/tag/${finalAttrs.src.tag}";
     description = "Engine for the VOICEVOX speech synthesis software";
     homepage = "https://github.com/VOICEVOX/voicevox_engine";
     license = lib.licenses.lgpl3Only;
@@ -121,4 +121,4 @@ python3Packages.buildPythonApplication rec {
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

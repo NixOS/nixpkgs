@@ -5,10 +5,9 @@
   smlnj,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "celf";
-  pversion = "2013-07-25";
-  name = "celf-${pversion}";
+  version = "2.9.3-unstable-2013-07-25";
 
   src = fetchFromGitHub {
     owner = "clf";
@@ -31,12 +30,12 @@ stdenv.mkDerivation rec {
     ./.mkexec ${smlnj}/bin/sml $out/bin celf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linear logic programming system";
     mainProgram = "celf";
     homepage = "https://github.com/clf/celf";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ bcdarwin ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+    platforms = lib.platforms.unix;
   };
 }

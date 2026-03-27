@@ -6,19 +6,18 @@
   udev,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "framework-tool";
-  version = "0.2.1";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "framework-system";
-    tag = "v${version}";
-    hash = "sha256-wWattGkBn8WD3vfThlQnotQB4Q/C00AZT1BesoHcCyg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-lpd6686qN06WgJbs1PuCIFMRGEqBFtQqyVauKGG9jH4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kmrgtYXo2Xh4mBk64VE83UJdITHgA/y3VeBRE8gDUTY=";
+  cargoHash = "sha256-y17Qlw8D7XWcStJ/54h1ARgODg1htzf9FVKjFZGERss=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ udev ];
@@ -32,7 +31,8 @@ rustPlatform.buildRustPackage rec {
       nickcao
       leona
       kloenk
+      johnazoidberg
     ];
     mainProgram = "framework_tool";
   };
-}
+})

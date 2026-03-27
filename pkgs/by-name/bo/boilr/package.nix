@@ -5,8 +5,13 @@
   rustPlatform,
   clangStdenv,
   gtk3,
-  xorg,
+  libxrandr,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   perl,
+  pkg-config,
   openssl,
   speechd-minimal,
   libxkbcommon,
@@ -25,39 +30,37 @@ let
     wayland
 
     # WINIT_UNIX_BACKEND=x11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXi
-    xorg.libX11
-    xorg.libxcb
+    libxcursor
+    libxrandr
+    libxi
+    libx11
+    libxcb
   ];
 in
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "BoilR";
-  version = "1.9.4";
+  version = "1.9.6";
 
   src = fetchFromGitHub {
     owner = "PhilipK";
     repo = "BoilR";
     tag = "v.${version}";
-    hash = "sha256-bwCTsoZ/9TeO3wyEcOqxKePnj9glsDXWUBCLd3nVT80=";
+    hash = "sha256-qCY/I3ACrs5mWpgN+xmWi42rF9Mzqxxce2DIA+R1RNs=";
   };
 
-  cargoPatches = [
-    ./0001-update-time.patch
+  cargoHash = "sha256-9B2NcFO/Bj553yaOMi7oBZJTFtCQmBnJkU9nK+vjThU=";
+
+  nativeBuildInputs = [
+    perl
+    pkg-config
   ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5FvlyJgYtqgJyxlfXWe9oBBkwIY+c8Fp/rHuNLJ1j7s=";
-
-  nativeBuildInputs = [ perl ];
 
   buildInputs = rpathLibs;
 
   postInstall = ''
     patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/boilr
     install -Dpm 0644 flatpak/io.github.philipk.boilr.desktop $out/share/applications/boilr.desktop
-    install -Dpm 0644 resources/io.github.philipk.boilr.png $out/share/pixmaps/io.github.philipk.boilr.png
+    install -Dpm 0644 resources/io.github.philipk.boilr.png -t $out/share/icons/hicolor/32x32/apps
   '';
 
   dontPatchELF = true;

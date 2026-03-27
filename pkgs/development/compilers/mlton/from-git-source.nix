@@ -1,21 +1,23 @@
 {
+  lib,
   fetchgit,
   gmp,
   mltonBootstrap,
   url ? "https://github.com/mlton/mlton",
   rev,
-  sha256,
+  hash,
   stdenv,
   version,
   which,
+  doCheck ? true,
 }:
 
 stdenv.mkDerivation {
   pname = "mlton";
-  inherit version;
+  inherit version doCheck;
 
   src = fetchgit {
-    inherit url rev sha256;
+    inherit url rev hash;
   };
 
   nativeBuildInputs = [
@@ -43,7 +45,5 @@ stdenv.mkDerivation {
       )
   '';
 
-  doCheck = true;
-
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

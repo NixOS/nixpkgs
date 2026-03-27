@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pyaudio";
   version = "0.2.14";
+  format = "setuptools";
   disabled = isPyPy;
 
   src = fetchPypi {
@@ -19,9 +20,9 @@ buildPythonPackage rec {
 
   buildInputs = [ pkgs.portaudio ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for PortAudio";
     homepage = "https://people.csail.mit.edu/hubert/pyaudio/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

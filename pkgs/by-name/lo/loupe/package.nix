@@ -8,8 +8,6 @@
   meson,
   ninja,
   pkg-config,
-  jq,
-  moreutils,
   rustc,
   wrapGAppsHook4,
   gtk4,
@@ -17,38 +15,51 @@
   libadwaita,
   libgweather,
   libseccomp,
+  libglycin,
   glycin-loaders,
   gnome,
+  common-updater-scripts,
+  _experimental-update-script-combinators,
+  rustPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "loupe";
-  version = "47.4";
+  version = "49.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/loupe/${lib.versions.major finalAttrs.version}/loupe-${finalAttrs.version}.tar.xz";
-    hash = "sha256-jckmgpqcM4gAyPQytaNHJG5ty9mtLdGiTEmOr90+ias=";
+    hash = "sha256-WFPnXM66f6K+oBvic80vCjBhlB573+OgCLIzFxBnFCw=";
   };
 
-  patches = [
-    # Fix paths in glycin library
-    glycin-loaders.passthru.glycinPathsPatch
-  ];
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    name = "loupe-deps-${finalAttrs.version}";
+    hash = "sha256-9jEz6hcdFUv5Daeh/0co1hHt49bE9kFAbFvnyiEaGJg=";
+  };
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()," \
+  '';
 
   nativeBuildInputs = [
     cargo
     desktop-file-utils
     itstool
+    libglycin.patchVendorHook
     meson
     ninja
     pkg-config
-    jq
-    moreutils
     rustc
+    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
 
   buildInputs = [
+    libglycin.setupHook
+    glycin-loaders
     gtk4
     lcms2
     libadwaita
@@ -56,34 +67,47 @@ stdenv.mkDerivation (finalAttrs: {
     libseccomp
   ];
 
-  postPatch = ''
-    # Replace hash of file we patch in vendored glycin.
-    jq \
-      --arg hash "$(sha256sum vendor/glycin/src/sandbox.rs | cut -d' ' -f 1)" \
-      '.files."src/sandbox.rs" = $hash' \
-      vendor/glycin/.cargo-checksum.json \
-      | sponge vendor/glycin/.cargo-checksum.json
-  '';
+  # For https://gitlab.gnome.org/GNOME/loupe/-/blob/0e6ddb0227ac4f1c55907f8b43eaef4bb1d3ce70/src/meson.build#L34-35
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
-  preFixup = ''
-    # Needed for the glycin crate to find loaders.
-    # https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
+  passthru = {
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          packageName = "loupe";
+        };
 
-  passthru.updateScript = gnome.updateScript {
-    packageName = "loupe";
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version loupe --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/loupe";
     changelog = "https://gitlab.gnome.org/GNOME/loupe/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Simple image viewer application written with GTK4 and Rust";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jk ] ++ teams.gnome.members;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ jk ];
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
     mainProgram = "loupe";
   };
 })

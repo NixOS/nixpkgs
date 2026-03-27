@@ -3,7 +3,6 @@
   pycryptodome,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
 }:
 
@@ -12,11 +11,9 @@ buildPythonPackage rec {
   version = "1.2.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "CybercentreCanada";
-    repo = pname;
+    repo = "cart";
     tag = "v${version}";
     hash = "sha256-oeWeay1Pr9T4oR3XSrwv9hRr/sLTel1Bt6BG6jHXxIA=";
   };
@@ -25,16 +22,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "unittests" ];
+  enabledTestPaths = [ "unittests" ];
 
   pythonImportsCheck = [ "cart" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for the CaRT Neutering format";
     mainProgram = "cart";
     homepage = "https://github.com/CybercentreCanada/cart";
     changelog = "https://github.com/CybercentreCanada/cart/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

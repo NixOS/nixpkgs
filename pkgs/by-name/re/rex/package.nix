@@ -7,7 +7,6 @@
   rsync,
   which,
   installShellFiles,
-  ...
 }:
 perlPackages.buildPerlPackage rec {
   pname = "Rex";
@@ -70,7 +69,7 @@ perlPackages.buildPerlPackage rec {
     FileLibMagic
     HashMerge
     HTTPMessage
-    IOPty
+    IOTty
     IOString
     JSONMaybeXS
     LWP

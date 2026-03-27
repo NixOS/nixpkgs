@@ -1,9 +1,9 @@
 {
   lib,
   isPyPy,
-  pythonOlder,
   fetchFromGitHub,
   buildPythonPackage,
+  nix-update-script,
 
   # build
   cython,
@@ -41,18 +41,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "sqlalchemy";
-  version = "2.0.40";
+  version = "2.0.48";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
-    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-RMfK6XrO7WjDw0T31IY4Hi2C68CsBCwAih/Z5SNS/iY=";
+    tag = "rel_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-0MHxHcQr7XvRZ3j1wj/PMIk94TVhyixDAgeAYKd1nGk=";
   };
 
   postPatch = ''
@@ -109,12 +107,17 @@ buildPythonPackage rec {
     "test/aaa_profiling"
   ];
 
-  meta = with lib; {
-    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/rel_${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }";
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^rel_([0-9]+)_([0-9]+)_([0-9]+)$"
+    ];
+  };
+
+  meta = {
+    changelog = "https://github.com/sqlalchemy/sqlalchemy/releases/tag/${finalAttrs.src.tag}";
     description = "Python SQL toolkit and Object Relational Mapper";
     homepage = "http://www.sqlalchemy.org/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
-}
+})

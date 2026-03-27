@@ -1,0 +1,24 @@
+diff --git a/pulp/apis/coin_api.py b/pulp/apis/coin_api.py
+index c69d278..e299069 100644
+--- a/pulp/apis/coin_api.py
++++ b/pulp/apis/coin_api.py
+@@ -48,7 +48,7 @@ import ctypes
+ import warnings
+ from tempfile import mktemp
+ 
+-cbc_path = "cbc"
++cbc_path = "@cbc@"
+ if operating_system == "win":
+     cbc_path += ".exe"
+ 
+@@ -56,9 +56,7 @@ coinMP_path = ["libCoinMP.so"]
+ # workaround for (https://github.com/coin-or/pulp/issues/802)
+ if operating_system == "osx":
+     arch = "i64"
+-pulp_cbc_path = os.path.join(
+-    os.path.dirname(__file__), f"../solverdir/cbc/{operating_system}/{arch}/{cbc_path}"
+-)
++pulp_cbc_path = "@cbc@"
+ 
+ 
+ class COIN_CMD(LpSolver_CMD):

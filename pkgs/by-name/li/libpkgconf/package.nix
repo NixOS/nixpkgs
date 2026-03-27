@@ -2,17 +2,21 @@
   lib,
   stdenv,
   fetchurl,
+  autoconf,
+  automake,
+  libtool,
   removeReferencesTo,
   gitUpdater,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
-  version = "2.4.3";
+  version = "2.5.1";
 
   src = fetchurl {
-    url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
-    hash = "sha256-USA9me1XP6c0S/B8pibxDHzAlOCEasSqACO9DIPCWkE=";
+    url = "https://github.com/pkgconf/pkgconf/archive/refs/tags/pkgconf-${finalAttrs.version}.tar.gz";
+    hash = "sha256-eXIbrcrRmH3q2cNgnrSHerm1iCHAa9rLgk8siJfBHyo=";
   };
 
   outputs = [
@@ -23,39 +27,44 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs = [ removeReferencesTo ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    libtool
+    removeReferencesTo
+    autoreconfHook
+  ];
 
   enableParallelBuilding = true;
 
   # Debian has outputs like these too
   # (https://packages.debian.org/source/bullseye/pkgconf), so it is safe to
   # remove those references
-  postFixup =
-    ''
-      remove-references-to \
-        -t "${placeholder "out"}" \
-        "${placeholder "lib"}"/lib/*
-      remove-references-to \
-        -t "${placeholder "dev"}" \
-        "${placeholder "lib"}"/lib/* \
-        "${placeholder "out"}"/bin/*
-    ''
-    # Move back share/aclocal. Yes, this normally goes in the dev output for good
-    # reason, but in this case the dev output is for the `libpkgconf` library,
-    # while the aclocal stuff is for the tool. The tool is already for use during
-    # development, so there is no reason to have separate "dev-bin" and "dev-lib"
-    # outputs or something.
-    + ''
-      mv ${placeholder "dev"}/share ${placeholder "out"}
-    '';
+  postFixup = ''
+    remove-references-to \
+      -t "${placeholder "out"}" \
+      "${placeholder "lib"}"/lib/*
+    remove-references-to \
+      -t "${placeholder "dev"}" \
+      "${placeholder "lib"}"/lib/* \
+      "${placeholder "out"}"/bin/*
+  ''
+  # Move back share/aclocal. Yes, this normally goes in the dev output for good
+  # reason, but in this case the dev output is for the `libpkgconf` library,
+  # while the aclocal stuff is for the tool. The tool is already for use during
+  # development, so there is no reason to have separate "dev-bin" and "dev-lib"
+  # outputs or something.
+  + ''
+    mv ${placeholder "dev"}/share ${placeholder "out"}
+  '';
 
   passthru.updateScript = gitUpdater {
-    url = "https://gitea.treehouse.systems/ariadne/pkgconf";
+    url = "https://github.com/pkgconf/pkgconf";
     rev-prefix = "pkgconf-";
   };
 
   meta = {
-    homepage = "https://gitea.treehouse.systems/ariadne/pkgconf";
+    homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
       pkgconf is a program which helps to configure compiler and linker flags
@@ -66,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
-    changelog = "https://gitea.treehouse.systems/ariadne/pkgconf/src/tag/pkgconf-${finalAttrs.version}/NEWS";
+    changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     mainProgram = "pkgconf";
     maintainers = with lib.maintainers; [

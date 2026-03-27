@@ -9,14 +9,14 @@
   sbcl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "roswell";
   version = "24.10.115";
 
   src = fetchFromGitHub {
     owner = "roswell";
     repo = "roswell";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2aYA1AzRPXaM82Sh+dMiQJcOAD0rzwV09VyLy0oS6as=";
   };
 
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     curl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lisp implementation installer/manager and launcher";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hiro98 ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hiro98 ];
+    platforms = lib.platforms.unix;
     homepage = "https://github.com/roswell/roswell";
-    changelog = "https://github.com/roswell/roswell/blob/v${version}/ChangeLog";
+    changelog = "https://github.com/roswell/roswell/blob/v${finalAttrs.version}/ChangeLog";
     mainProgram = "ros";
   };
-}
+})

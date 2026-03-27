@@ -5,14 +5,14 @@
   lib,
   stdenv,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dnstap";
   version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "dnstap";
     repo = "golang-dnstap";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GmwHJ6AQ4HcPEFNeodKqJe/mYE1Fa95hRiQWoka/nv4=";
   };
 
@@ -38,10 +38,10 @@ buildGoModule rec {
       unstructured textual format logging.
     '';
     homepage = "https://dnstap.info";
-    changelog = "https://github.com/dnstap/golang-dnstap/releases/tag/${src.rev}";
+    changelog = "https://github.com/dnstap/golang-dnstap/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.asl20;
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ lib.maintainers.azahi ];
     mainProgram = "dnstap";
   };
-}
+})

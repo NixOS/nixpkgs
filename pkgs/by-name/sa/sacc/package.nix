@@ -7,12 +7,12 @@
   patches ? [ ], # allow users to easily override config.def.h
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sacc";
   version = "1.07";
 
   src = fetchurl {
-    url = "ftp://bitreich.org/releases/sacc/sacc-${version}.tar.gz";
+    url = "ftp://bitreich.org/releases/sacc/sacc-${finalAttrs.version}.tar.gz";
     hash = "sha256-LdEeZH+JWb7iEEzikAXaxG0N5GMPxjgTId4THLgdU2w=";
   };
 
@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
       --replace "/usr/local" "$out"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal gopher client";
     mainProgram = "sacc";
     homepage = "gopher://bitreich.org/1/scm/sacc";
-    license = licenses.isc;
-    maintainers = [ maintainers.sternenseemann ];
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    platforms = lib.platforms.unix;
   };
-}
+})

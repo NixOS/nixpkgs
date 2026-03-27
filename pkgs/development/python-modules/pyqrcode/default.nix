@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "pyqrcode";
   version = "1.2.1";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "PyQRCode";
@@ -17,10 +18,10 @@ buildPythonPackage rec {
   # No tests in PyPI tarball
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "QR code generator written purely in Python with SVG, EPS, PNG and terminal output";
     homepage = "https://github.com/mnooner256/pyqrcode";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }

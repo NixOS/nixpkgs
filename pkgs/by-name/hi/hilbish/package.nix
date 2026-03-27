@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "hilbish";
   version = "2.3.4";
 
   src = fetchFromGitHub {
     owner = "Rosettea";
     repo = "Hilbish";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rEBUrDdJBCywuSmsxFLl4+uSwz06km2nztH5aCGcGiE=";
     fetchSubmodules = true;
   };
@@ -35,12 +35,12 @@ buildGoModule rec {
     cp -r nature $out/share/hilbish/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Interactive Unix-like shell written in Go";
     mainProgram = "hilbish";
-    changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${version}";
+    changelog = "https://github.com/Rosettea/Hilbish/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/Rosettea/Hilbish";
-    maintainers = with maintainers; [ moni ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ moni ];
+    license = lib.licenses.mit;
   };
-}
+})

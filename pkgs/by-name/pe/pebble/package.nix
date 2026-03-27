@@ -5,14 +5,14 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pebble";
   version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "letsencrypt";
-    repo = pname;
-    rev = "v${version}";
+    repo = "pebble";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-YPU/bl7h6rOWg+5ut0Thn2UupeKpJ7u4KXc2svIeZEM=";
   };
 
@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests = {
@@ -35,6 +35,6 @@ buildGoModule rec {
     longDescription = "Miniature version of Boulder, Pebble is a small RFC 8555 ACME test server not suited for a production CA";
     license = [ lib.licenses.mpl20 ];
     mainProgram = "pebble";
-    maintainers = lib.teams.acme.members;
+    teams = [ lib.teams.acme ];
   };
-}
+})

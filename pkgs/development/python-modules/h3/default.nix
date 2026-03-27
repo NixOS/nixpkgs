@@ -14,17 +14,17 @@
   stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "h3";
-  version = "4.2.2";
+  version = "4.4.2";
   pyproject = true;
 
   # pypi version does not include tests
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3-py";
-    tag = "v${version}";
-    hash = "sha256-HvJT5SuE7UHhGMlaQG3YSHfGkgsdDAVVGsGRsAeNHGQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+2cf/m+8BEEjNgIyuYmLDD7wsmc3Bg8QXaIjC0Px+Qk=";
   };
 
   dontConfigure = true;
@@ -34,19 +34,18 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  build-system =
-    [
-      scikit-build-core
-      cmake
-      cython
-      ninja
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # On Linux the .so files ends up referring to libh3.so instead of the full
-      # Nix store path. I'm not sure why this is happening! On Darwin it works
-      # fine.
-      autoPatchelfHook
-    ];
+  build-system = [
+    scikit-build-core
+    cmake
+    cython
+    ninja
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # On Linux the .so files ends up referring to libh3.so instead of the full
+    # Nix store path. I'm not sure why this is happening! On Darwin it works
+    # fine.
+    autoPatchelfHook
+  ];
 
   # This is not needed per-se, it's only added for autoPatchelfHook to work
   # correctly. See the note above ^^
@@ -76,9 +75,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "h3" ];
 
   meta = {
+    changelog = "https://github.com/uber/h3-py/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     homepage = "https://github.com/uber/h3-py";
     description = "Hierarchical hexagonal geospatial indexing system";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.kalbasit ];
   };
-}
+})

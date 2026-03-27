@@ -4,9 +4,9 @@
   fetchzip,
   libGLU,
   libGL,
-  libXrandr,
-  libX11,
-  libXxf86vm,
+  libxrandr,
+  libx11,
+  libxxf86vm,
   zlib,
 }:
 
@@ -20,14 +20,13 @@ stdenv.mkDerivation {
 
   src = common.src;
 
-  postPatch =
-    ''
-      sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
-    ''
-    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      substituteInPlace source/Irrlicht/Makefile \
-        --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
-    '';
+  postPatch = ''
+    sed -i -e '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    substituteInPlace source/Irrlicht/Makefile \
+      --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
+  '';
 
   preConfigure = ''
     cd source/Irrlicht
@@ -47,15 +46,18 @@ stdenv.mkDerivation {
   buildInputs = [
     libGLU
     libGL
-    libXrandr
-    libX11
-    libXxf86vm
-  ] ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
+    libxrandr
+    libx11
+    libxxf86vm
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 
   meta = {
     homepage = "https://irrlicht.sourceforge.io/";
     license = lib.licenses.zlib;
     description = "Open source high performance realtime 3D engine written in C++";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # The last successful Darwin Hydra build was in 2023
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -8,19 +8,19 @@
   cmrt,
   libdrm,
   libva,
-  libX11,
+  libx11,
   libGL,
   wayland,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "intel-hybrid-driver";
   version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "intel-hybrid-driver";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-uYX7RoU1XVzcC2ea3z/VBjmT47xmzK67Y4LaiFXyJZ8=";
   };
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     cmrt
     libdrm
     libva
-    libX11
+    libx11
     libGL
     wayland
   ];
@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     sed -i -e "s,LIBVA_DRIVERS_PATH=.*,LIBVA_DRIVERS_PATH=$out/lib/dri," configure
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://01.org/linuxmedia";
     description = "Intel driver for the VAAPI library with partial HW acceleration";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tadfisher ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tadfisher ];
+    platforms = lib.platforms.linux;
   };
-}
+})

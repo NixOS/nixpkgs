@@ -71,7 +71,7 @@ buildPythonPackage rec {
     tox
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   patches = [
     (fetchpatch {
@@ -92,13 +92,13 @@ buildPythonPackage rec {
     rm -rf $TMP_TURSES
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Twitter client for the console";
     homepage = "https://github.com/louipc/turses";
     changelog = "https://github.com/louipc/turses/blob/v${version}/HISTORY.rst";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     mainProgram = "turses";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

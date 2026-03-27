@@ -8,6 +8,7 @@
   libbfd,
   libbfd_2_38,
   elfutils,
+  openssl,
   readline,
   zlib,
   python3,
@@ -15,12 +16,18 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bpftools";
 
   inherit (linuxHeaders) version src;
 
   separateDebugInfo = true;
+
+  patches = [
+    # fix unknown type name '__vector128' on powerpc64*
+    # https://www.spinics.net/lists/bpf/msg28613.html
+    ./include-asm-types-for-powerpc64.patch
+  ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs =
     (
-      if (lib.versionAtLeast version "5.20") then
+      if (lib.versionAtLeast finalAttrs.version "5.20") then
         [
           libopcodes
           libbfd
@@ -44,6 +51,7 @@ stdenv.mkDerivation rec {
     ++ [
       elfutils
       zlib
+      openssl
       readline
     ];
 
@@ -72,14 +80,14 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin bpf_dbg
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libbpf/bpftool";
     description = "Debugging/program analysis tools for the eBPF subsystem";
     license = [
-      licenses.gpl2Only
-      licenses.bsd2
+      lib.licenses.gpl2Only
+      lib.licenses.bsd2
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ thoughtpolice ];
   };
-}
+})

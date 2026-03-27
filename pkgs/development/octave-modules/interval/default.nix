@@ -7,21 +7,21 @@
 
 buildOctavePackage rec {
   pname = "interval";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/octave/${pname}-${version}.tar.gz";
-    sha256 = "sha256-OOUmQnN1cTIpqz2Gpf4/WghVB0fYQgVBcG/eqQk/3Og=";
+    sha256 = "sha256-wBMbet0UveqpB8Fo68yYe2RA9ny1YGmEmyS8rSwK0XY=";
   };
 
   propagatedBuildInputs = [
     mpfr
   ];
 
-  meta = with lib; {
-    homepage = "https://octave.sourceforge.io/interval/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ KarlJoad ];
+  meta = {
+    homepage = "https://gnu-octave.github.io/packages/interval/";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ KarlJoad ];
     description = "Interval arithmetic to evaluate functions over subsets of their domain";
     longDescription = ''
       The interval package for real-valued interval arithmetic allows one to

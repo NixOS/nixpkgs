@@ -5,12 +5,12 @@
   updateAutotoolsGnuConfigScriptsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lzo";
   version = "2.10";
 
   src = fetchurl {
-    url = "https://www.oberhumer.com/opensource/lzo/download/${pname}-${version}.tar.gz";
+    url = "https://www.oberhumer.com/opensource/lzo/download/lzo-${finalAttrs.version}.tar.gz";
     sha256 = "0wm04519pd3g8hqpjqhfr72q8qmbiwqaxcs3cndny9h86aa95y60";
   };
 
@@ -24,7 +24,13 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
+
+  meta = {
     description = "Real-time data (de)compression library";
     longDescription = ''
       LZO is a portable lossless data compression library written in ANSI C.
@@ -37,8 +43,8 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = "http://www.oberhumer.com/opensource/lzo";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

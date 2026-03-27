@@ -7,19 +7,19 @@
   pkg-config,
   python3,
   libxml2,
-  libXinerama,
-  libXcursor,
-  libXau,
-  libXrandr,
-  libICE,
-  libSM,
+  libxinerama,
+  libxcursor,
+  libxau,
+  libxrandr,
+  libice,
+  libsm,
   imlib2,
   pango,
   libstartup_notification,
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "openbox";
   version = "3.6.1";
 
@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libxml2
-    libXinerama
-    libXcursor
-    libXau
-    libXrandr
-    libICE
-    libSM
+    libxinerama
+    libxcursor
+    libxau
+    libxrandr
+    libice
+    libsm
     libstartup_notification
     python3
   ];
@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://openbox.org/dist/openbox/${pname}-${version}.tar.gz";
+    url = "https://openbox.org/dist/openbox/openbox-${finalAttrs.version}.tar.gz";
     sha256 = "1xvyvqxlhy08n61rjkckmrzah2si1i7nmc7s8h07riqq01vc0jlb";
   };
 
   setlayoutSrc = fetchurl {
-    url = "http://openbox.org/dist/tools/setlayout.c";
+    url = "https://openbox.org/dist/tools/setlayout.c";
     sha256 = "1ci9lq4qqhl31yz1jwwjiawah0f7x0vx44ap8baw7r6rdi00pyiv";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/bin/openbox-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-gnome-session" --prefix XDG_DATA_DIRS : "$out/share"
     wrapProgram "$out/bin/openbox-kde-session" --prefix XDG_DATA_DIRS : "$out/share"
-    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out ''${pythonPath[*]}"
   '';
 
   meta = {
@@ -95,4 +95,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
   };
-}
+})

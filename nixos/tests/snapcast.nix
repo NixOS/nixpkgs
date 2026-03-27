@@ -1,4 +1,5 @@
 {
+  lib,
   pkgs,
   ...
 }:
@@ -12,7 +13,7 @@ let
 in
 {
   name = "snapcast";
-  meta = with pkgs.lib.maintainers; {
+  meta = with lib.maintainers; {
     maintainers = [ hexa ];
   };
 
@@ -20,30 +21,30 @@ in
     server = {
       services.snapserver = {
         enable = true;
-        port = port;
-        tcp.port = tcpPort;
-        http.port = httpPort;
-        openFirewall = true;
-        buffer = bufferSize;
-        streams = {
-          mpd = {
-            type = "pipe";
-            location = "/run/snapserver/mpd";
-            query.mode = "create";
+        settings = {
+          stream = {
+            source = [
+              "pipe:///run/snapserver/mpd?name=mpd&mode=create"
+              "pipe:///run/snapserver/bluetooth?name=bluetooth"
+              "tcp://127.0.0.1:${toString tcpStreamPort}?name=tcp"
+              "meta:///mpd/bluetooth/tcp?name=meta"
+            ];
+            buffer = bufferSize;
           };
-          bluetooth = {
-            type = "pipe";
-            location = "/run/snapserver/bluetooth";
+          tcp-streaming = {
+            enabled = true;
+            port = port;
           };
-          tcp = {
-            type = "tcp";
-            location = "127.0.0.1:${toString tcpStreamPort}";
+          tcp-control = {
+            enabled = true;
+            port = tcpPort;
           };
-          meta = {
-            type = "meta";
-            location = "/mpd/bluetooth/tcp";
+          http = {
+            enabled = true;
+            port = httpPort;
           };
         };
+        openFirewall = true;
       };
       environment.systemPackages = [ pkgs.snapcast ];
     };
@@ -78,6 +79,8 @@ in
         )
 
     with subtest("test a ipv6 connection"):
+        # URI scheme does not support IPv6 literals
+        # https://github.com/snapcast/snapcast/issues/1472
         server.execute("systemd-run --unit=snapcast-local-client snapclient -h ::1 -p ${toString port}")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
@@ -85,7 +88,7 @@ in
         server.wait_until_succeeds("journalctl -o cat -u snapcast-local-client | grep -q 'buffer: ${toString bufferSize}'")
 
     with subtest("test a connection"):
-        client.execute("systemd-run --unit=snapcast-client snapclient -h server -p ${toString port}")
+        client.execute("systemd-run --unit=snapcast-client snapclient 'tcp://server:${toString port}'")
         server.wait_until_succeeds(
             "journalctl -o cat -u snapserver.service | grep -q 'Hello from'"
         )

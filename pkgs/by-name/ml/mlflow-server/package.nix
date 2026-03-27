@@ -20,15 +20,13 @@ py.toPythonApplication (
       py.mysqlclient
     ];
 
-    postPatch =
-      (old.postPatch or "")
-      + ''
-        cat mlflow/utils/process.py
+    postPatch = (old.postPatch or "") + ''
+      cat mlflow/utils/process.py
 
-        substituteInPlace mlflow/utils/process.py --replace-fail \
-          "process = subprocess.Popen(" \
-          "cmd[0]='${gunicornScript}'; process = subprocess.Popen("
-      '';
+      substituteInPlace mlflow/utils/process.py --replace-fail \
+        "process = subprocess.Popen(" \
+        "cmd[0]='${gunicornScript}'; process = subprocess.Popen("
+    '';
 
     postInstall = ''
       gpath=$out/bin/gunicornMlflow

@@ -1,18 +1,24 @@
 {
-  buildGo123Module,
-  buildNpmPackage,
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
+  buildGoModule,
+  buildNpmPackage,
+  fetchPnpmDeps,
+  pnpmConfigHook,
+  nodejs_24,
+  pnpm_10,
+  nix-update-script,
+  nixosTests,
 }:
 
 let
-  version = "2.31.0";
+  version = "2.61.2";
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-zLM1fLrucIhzGdTTDu81ZnTIipK+iRnPhgfMiT1P+yg=";
+    hash = "sha256-/8bBYRzWJ00FpcLMB8M6hkyMUEM/0PM8jsvR+m7jfpc=";
   };
 
   frontend = buildNpmPackage rec {
@@ -21,9 +27,22 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-5/yEMWkNPAS8/PkaHlPBGFLiJu7xK2GHYo5dYqHAfCE=";
+    nativeBuildInputs = [ pnpm_10 ];
+    npmConfigHook = pnpmConfigHook;
+    npmDeps = pnpmDeps;
+    nodejs = nodejs_24;
 
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 3;
+      pnpm = pnpm_10;
+      hash = "sha256-2e3Gr5/pdOsT3cSTdOz5mAjZaWB1C3qGDikpoa5BoII=";
+    };
 
     installPhase = ''
       runHook preInstall
@@ -34,12 +53,13 @@ let
       runHook postInstall
     '';
   };
+
 in
-buildGo123Module {
+buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-N5aUs8rgTYXeb0qJhPQBCa6lUDkT6lH1bh+1u4bixos=";
+  vendorHash = "sha256-aY3OIr0Kbno38Y/PZ03JK5wCCD4HRdnznJ3OaaH/WVA=";
 
   excludedPackages = [ "tools" ];
 
@@ -47,15 +67,23 @@ buildGo123Module {
     cp -r ${frontend}/dist frontend/
   '';
 
+  ldflags = [
+    "-X github.com/filebrowser/filebrowser/v2/version.Version=v${version}"
+  ];
+
   passthru = {
+    updateScript = nix-update-script { };
     inherit frontend;
+    tests = {
+      inherit (nixosTests) filebrowser;
+    };
   };
 
-  meta = with lib; {
-    description = "Filebrowser is a web application for managing files and directories";
+  meta = {
+    description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ oakenshield ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ oakenshield ];
     mainProgram = "filebrowser";
   };
 }

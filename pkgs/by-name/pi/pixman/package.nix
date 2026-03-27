@@ -13,8 +13,7 @@
   qemu,
   scribus,
   tigervnc,
-  wlroots_0_17,
-  wlroots_0_18,
+  wlroots_0_19,
   xwayland,
 
   gitUpdater,
@@ -25,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.44.2";
+  version = "0.46.4";
 
   src = fetchurl {
-    urls = with finalAttrs; [
-      "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
-      "https://cairographics.org/releases/${pname}-${version}.tar.gz"
+    urls = [
+      "mirror://xorg/individual/lib/pixman-${finalAttrs.version}.tar.gz"
+      "https://cairographics.org/releases/pixman-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-Y0kGHOGjOKtpUrkhlNGwN3RyJEII1H/yW++G/HGXNGY=";
+    hash = "sha256-0JxE68O9W+5wIcefki/o+y+1f3Mg9V6X/5kU0jRqWRw=";
   };
 
   # Raise test timeout, 120s can be slightly exceeded on slower hardware
@@ -78,8 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
         qemu
         scribus
         tigervnc
-        wlroots_0_17
-        wlroots_0_18
+        wlroots_0_19
         xwayland
         ;
       pkg-config = testers.hasPkgConfigModules {
@@ -92,11 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    homepage = "http://pixman.org";
+  meta = {
+    homepage = "https://pixman.org";
     description = "Low-level library for pixel manipulation";
-    license = licenses.mit;
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "pixman-1" ];
   };
 })

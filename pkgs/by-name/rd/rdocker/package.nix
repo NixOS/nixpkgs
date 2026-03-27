@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "rdocker";
-  version = "unstable-2018-07-17";
+  version = "0-unstable-2018-07-17";
 
   src = fetchFromGitHub {
     owner = "dvddarias";
@@ -28,12 +28,12 @@ stdenv.mkDerivation {
       --prefix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Securely control a remote docker daemon CLI using ssh forwarding, no SSL setup needed";
     mainProgram = "rdocker";
     homepage = "https://github.com/dvddarias/rdocker";
     maintainers = [ lib.maintainers.pneumaticat ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

@@ -10,6 +10,16 @@
   xdg-user-dirs,
   keybinder3,
   libnotify,
+  gst_all_1,
+  libva,
+  libvdpau,
+  lcms2,
+  libarchive,
+  alsa-lib,
+  libpulseaudio,
+  libgbm,
+  libxscrnsaver,
+  libxv,
 }:
 
 let
@@ -17,11 +27,11 @@ let
     rec {
       x86_64-linux = {
         urlSuffix = "linux-x86_64.tar.gz";
-        hash = "sha256-WUAyGx7RcLlQsYpfcbV69k1ESaif5VraxUFAslMi5lo=";
+        hash = "sha256-A2XPADCc63OqskfPpkMwL8jCp9k7QsPyN2/FL+eCpfI=";
       };
       x86_64-darwin = {
         urlSuffix = "macos-universal.zip";
-        hash = "sha256-fB6DCp2+7T9ozHuMdsv6IwwIyD6+t7LxVWMj9lDJ5Fw=";
+        hash = "sha256-YanQYRaGCqq5bOLeSFqUYbq0EtVun80gxGdFJtyZdoI=";
       };
       aarch64-darwin = x86_64-darwin;
     }
@@ -30,7 +40,7 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
-  version = "0.8.8";
+  version = "0.11.4";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${finalAttrs.version}/AppFlowy-${finalAttrs.version}-${dist.urlSuffix}";
@@ -41,12 +51,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     gtk3
     keybinder3
     libnotify
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    libva
+    libvdpau
+    lcms2
+    libarchive
+    alsa-lib
+    libpulseaudio
+    libgbm
+    libxscrnsaver
+    libxv
   ];
 
   dontBuild = true;
@@ -100,14 +122,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
-    description = "An open-source alternative to Notion";
+  meta = {
+    description = "Open-source alternative to Notion";
     homepage = "https://www.appflowy.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.agpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.agpl3Only;
     changelog = "https://github.com/AppFlowy-IO/appflowy/releases/tag/${finalAttrs.version}";
-    maintainers = with maintainers; [ darkonion0 ];
-    platforms = [ "x86_64-linux" ] ++ platforms.darwin;
+    maintainers = with lib.maintainers; [ darkonion0 ];
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "appflowy";
   };
 })

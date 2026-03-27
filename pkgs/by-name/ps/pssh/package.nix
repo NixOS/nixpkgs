@@ -6,16 +6,19 @@
   rsync,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pssh";
-  version = "2.3.4";
+  version = "2.3.6";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "pssh";
-    rev = "v${version}";
-    hash = "sha256-B1dIa6hNeq4iE8GKVhTp3Gzq7vp+v5Yyzj8uF8X71yg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KG/7sHJn++eQ/tRT5pMeWDYxkf/Rk5q1x73fQoBdyx4=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   postPatch = ''
     for f in bin/*; do
@@ -29,15 +32,16 @@ python3Packages.buildPythonApplication rec {
   # Tests do not run with python3: https://github.com/lilydjwg/pssh/issues/126
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Parallel SSH Tools";
     longDescription = ''
       PSSH provides parallel versions of OpenSSH and related tools,
       including pssh, pscp, prsync, pnuke and pslurp.
     '';
-    inherit (src.meta) homepage;
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/lilydjwg/pssh/blob/${finalAttrs.src.tag}/ChangeLog";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ chris-martin ];
   };
-}
+})

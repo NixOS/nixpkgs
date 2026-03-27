@@ -30,12 +30,32 @@ let
         __structuredAttrs = enable;
       });
     });
+  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
+    { lib, ... }:
+    {
+      name = "runNixOSTest-test";
+      nodes.machine =
+        { pkgs, ... }:
+        {
+          system.nixos = dummyVersioning;
+          environment.systemPackages = [
+            pkgs.proof-of-overlay-hello
+            pkgs.figlet
+          ];
+        };
+      testScript = ''
+        machine.succeed("hello | figlet >/dev/console")
+      '';
+    }
+  );
 
 in
 lib.recurseIntoAttrs {
   lycheeLinkCheck = lib.recurseIntoAttrs pkgs.lychee.tests;
 
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
+
+  hasCmakeConfigModules = pkgs.callPackage ../hasCmakeConfigModules/tests.nix { };
 
   shellcheck = pkgs.callPackage ../shellcheck/tests.nix { };
 
@@ -64,24 +84,27 @@ lib.recurseIntoAttrs {
     };
   };
 
-  runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest (
-    { lib, ... }:
-    {
-      name = "runNixOSTest-test";
-      nodes.machine =
-        { pkgs, ... }:
-        {
-          system.nixos = dummyVersioning;
-          environment.systemPackages = [
-            pkgs.proof-of-overlay-hello
-            pkgs.figlet
-          ];
-        };
-      testScript = ''
-        machine.succeed("hello | figlet >/dev/console")
-      '';
-    }
-  );
+  inherit runNixOSTest-example;
+
+  runNixOSTest-extendNixOS =
+    let
+      t = runNixOSTest-example.extendNixOS {
+        module =
+          { hi, lib, ... }:
+          {
+            config = {
+              assertions = [ { assertion = hi; } ];
+            };
+            options = {
+              itsProofYay = lib.mkOption { };
+            };
+          };
+        specialArgs.hi = true;
+      };
+    in
+    assert lib.isDerivation t;
+    assert t.nodes.machine ? itsProofYay;
+    t;
 
   # Check that the wiring of nixosTest is correct.
   # Correct operation of the NixOS test driver should be asserted elsewhere.
@@ -247,22 +270,40 @@ lib.recurseIntoAttrs {
       '';
     };
 
-    fileMissing = testers.testBuildFailure (
-      testers.testEqualContents {
-        assertion = "Directories with different file list are not recognized as equal";
-        expected = runCommand "expected" { } ''
-          mkdir -p -- "$out/c"
-          echo a >"$out/a"
-          echo b >"$out/b"
-          echo d >"$out/c/d"
+    # - Test whether a missing file triggers a failure as expected
+    # - Test the postFailureMessage
+    fileMissing =
+      let
+        log = testers.testBuildFailure (
+          testers.testEqualContents {
+            assertion = "Directories with different file list are not recognized as equal";
+            expected = runCommand "expected" { } ''
+              mkdir -p -- "$out/c"
+              echo a >"$out/a"
+              echo b >"$out/b"
+              echo d >"$out/c/d"
+            '';
+            actual = runCommand "actual" { } ''
+              mkdir -p -- "$out/c"
+              echo a >"$out/a"
+              echo d >"$out/c/d"
+            '';
+            inherit postFailureMessage;
+          }
+        );
+        postFailureMessage = ''
+          If after careful review, you find that the changes are acceptable, run `suchandsuch` to adopt the new behavior.
         '';
-        actual = runCommand "actual" { } ''
-          mkdir -p -- "$out/c"
-          echo a >"$out/a"
-          echo d >"$out/c/d"
+      in
+      runCommand "fileMissing-failure-and-log-check"
+        {
+          inherit log;
+          inherit postFailureMessage;
+        }
+        ''
+          grep -F "$postFailureMessage" "$log/testBuildFailure.log"
+          touch $out
         '';
-      }
-    );
 
     equalExe = testers.testEqualContents {
       assertion = "The same executable file contents at different paths are recognized as equal";

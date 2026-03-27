@@ -10,19 +10,19 @@
   pkg-config,
   vala,
   gettext,
-  wrapGAppsHook3,
-  unstableGitUpdater,
+  wrapGAppsNoGuiHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vala-lint";
-  version = "0-unstable-2024-08-28";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "4ed1443c35a8a84445fb59292d539358365d8263";
-    sha256 = "sha256-NPadBrL2g5w95slwDpp7kNXBgLJ9na8Yd/J7zm28SSo=";
+    rev = finalAttrs.version;
+    hash = "sha256-63T+wLdnGtVBxKkkkj7gJx0ebApam922Z+cmk2R7Ys0=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     ninja
     pkg-config
     vala
-    wrapGAppsHook3
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -39,30 +39,22 @@ stdenv.mkDerivation {
     json-glib
   ];
 
-  postPatch = ''
-    # https://github.com/vala-lang/vala-lint/issues/181
-    substituteInPlace test/meson.build \
-      --replace "test('auto-fix', auto_fix_test, env: test_envars)" ""
-  '';
-
   doCheck = true;
 
   passthru = {
-    updateScript = unstableGitUpdater {
-      url = "https://github.com/vala-lang/vala-lint.git";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vala-lang/vala-lint";
     description = "Check Vala code files for code-style errors";
     longDescription = ''
       Small command line tool and library for checking Vala code files for code-style errors.
       Based on the elementary Code-Style guidelines.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.vala-lint";
   };
-}
+})

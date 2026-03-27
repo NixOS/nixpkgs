@@ -8,24 +8,25 @@
   ninja,
   installShellFiles,
   libxcb,
-  xcbutilkeysyms,
-  xcbutil,
-  xcbutilwm,
+  libxcb-keysyms,
+  libxcb-util,
+  libxcb-wm,
   xcbutilxrm,
   libstartup_notification,
-  libX11,
+  libx11,
   pcre2,
   libev,
   yajl,
-  xcb-util-cursor,
+  libxcb-cursor,
   perl,
   pango,
   perlPackages,
   libxkbcommon,
-  xorgserver,
+  xorg-server,
   xvfb-run,
   xdotool,
-  xorg,
+  xrandr,
+  setxkbmap,
   which,
   asciidoc,
   xmlto,
@@ -68,17 +69,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libxcb
-    xcbutilkeysyms
-    xcbutil
-    xcbutilwm
+    libxcb-keysyms
+    libxcb-util
+    libxcb-wm
     xcbutilxrm
     libxkbcommon
     libstartup_notification
-    libX11
+    libx11
     pcre2
     libev
     yajl
-    xcb-util-cursor
+    libxcb-cursor
     perl
     pango
     perlPackages.AnyEventI3
@@ -103,11 +104,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.hostPlatform.isLinux;
 
   nativeCheckInputs = lib.optionals finalAttrs.finalPackage.doCheck [
-    xorgserver
+    xorg-server
     xvfb-run
     xdotool
-    xorg.setxkbmap
-    xorg.xrandr
+    setxkbmap
+    xrandr
     which
   ];
 
@@ -154,10 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Tiling window manager";
     homepage = "https://i3wm.org";
-    maintainers = with lib.maintainers; [
-      modulistic
-      fpletz
-    ];
+    maintainers = with lib.maintainers; [ fpletz ];
     mainProgram = "i3";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

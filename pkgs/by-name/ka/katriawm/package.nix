@@ -2,28 +2,28 @@
   lib,
   stdenv,
   fetchzip,
-  libX11,
-  libXft,
-  libXrandr,
+  libx11,
+  libxft,
+  libxrandr,
   pkg-config,
   gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katriawm";
-  version = "23.08";
+  version = "25.04";
 
   src = fetchzip {
     url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-IWviLboZz421/Amz/QG4o8jYaG8Y/l5PvmvXfK5nzJE=";
+    hash = "sha256-3cWgLz4BO1X8KkhoQp3hbq5XAx9NzDhsIL3fDSQaG5M=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    libX11
-    libXft
-    libXrandr
+    libx11
+    libxft
+    libxrandr
   ];
 
   outputs = [
@@ -56,6 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "katriawm";
     maintainers = [ ];
-    inherit (libX11.meta) platforms;
+    inherit (libx11.meta) platforms;
   };
 })

@@ -81,6 +81,8 @@ let
 
     arteplussept = callPackage ../applications/video/kodi/addons/arteplussept { };
 
+    bluetooth-manager = callPackage ../applications/video/kodi/addons/bluetooth-manager { };
+
     controller-topology-project =
       callPackage ../applications/video/kodi/addons/controller-topology-project
         { };
@@ -127,15 +129,19 @@ let
 
     netflix = callPackage ../applications/video/kodi/addons/netflix { };
 
+    plex-for-kodi = callPackage ../applications/video/kodi/addons/plex-for-kodi { };
+
     orftvthek = callPackage ../applications/video/kodi/addons/orftvthek { };
 
     radioparadise = callPackage ../applications/video/kodi/addons/radioparadise { };
 
     raiplay = callPackage ../applications/video/kodi/addons/raiplay { };
 
-    skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
+    robotocjksc = callPackage ../applications/video/kodi/addons/robotocjksc { };
 
-    svtplay = callPackage ../applications/video/kodi/addons/svtplay { };
+    screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
+
+    skyvideoitalia = callPackage ../applications/video/kodi/addons/skyvideoitalia { };
 
     steam-controller = callPackage ../applications/video/kodi/addons/steam-controller { };
 
@@ -156,6 +162,8 @@ let
     pvr-vdr-vnsi = callPackage ../applications/video/kodi/addons/pvr-vdr-vnsi { };
 
     osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
+
+    texturemaker = callPackage ../applications/video/kodi/addons/texturemaker { };
 
     upnext = callPackage ../applications/video/kodi/addons/upnext { };
 
@@ -213,6 +221,8 @@ let
 
     inputstreamhelper = callPackage ../applications/video/kodi/addons/inputstreamhelper { };
 
+    jurialmunkey = callPackage ../applications/video/kodi/addons/jurialmunkey { };
+
     kodi-six = callPackage ../applications/video/kodi/addons/kodi-six { };
 
     myconnpy = callPackage ../applications/video/kodi/addons/myconnpy { };
@@ -260,4 +270,6 @@ self
     throw
       "kodi.packages.controllers has been replaced with kodi.packages.controller-topology-project - a package which contains a large number of controller profiles."
       { };
+
+  svtplay = throw "kodiPackages.svtplay has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-12
 }

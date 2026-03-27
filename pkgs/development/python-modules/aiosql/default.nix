@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pg8000,
+  psycopg,
   pytest-asyncio,
+  pytest-postgresql,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   setuptools-scm,
   sphinx-rtd-theme,
@@ -14,21 +16,19 @@
 
 buildPythonPackage rec {
   pname = "aiosql";
-  version = "13.3";
+  version = "15.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   outputs = [
-    "doc"
     "out"
+    "doc"
   ];
 
   src = fetchFromGitHub {
     owner = "nackjicholson";
     repo = "aiosql";
     tag = version;
-    hash = "sha256-FCCS91nH/HPhez+bJE7+JoFW4hKkXMdY4bAaEOZ06jU=";
+    hash = "sha256-zKKp37tM0pBnWJuLmQhoQpWnUinLG/Nmnpv1rdM8wYM=";
   };
 
   sphinxRoot = "docs/source";
@@ -40,20 +40,29 @@ buildPythonPackage rec {
     sphinxHook
   ];
 
-  propagatedBuildInputs = [ pg8000 ];
-
   nativeCheckInputs = [
+    pg8000
+    psycopg
     pytest-asyncio
+    pytest-postgresql
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aiosql" ];
 
-  meta = with lib; {
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Tests that require port binding fail in darwin sandbox
+    # port_for.exceptions.PortForException: Can't select a port
+    "tests/test_pg8000.py"
+    "tests/test_apsycopg3.py"
+    "tests/test_psycopg3.py"
+  ];
+
+  meta = {
     description = "Simple SQL in Python";
     homepage = "https://nackjicholson.github.io/aiosql/";
-    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${version}";
-    license = with licenses; [ bsd2 ];
-    maintainers = with maintainers; [ kaction ];
+    changelog = "https://github.com/nackjicholson/aiosql/releases/tag/${src.tag}";
+    license = with lib.licenses; [ bsd2 ];
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

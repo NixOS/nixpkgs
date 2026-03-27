@@ -13,14 +13,14 @@
   autoreconfHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jbig2enc";
   version = "0.30";
 
   src = fetchFromGitHub {
     owner = "agl";
     repo = "jbig2enc";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-B19l2NdMq+wWKQ5f/y5aoPiBtQnn6sqpaIoyIq+ugTg=";
   };
 
@@ -58,4 +58,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/agl/jbig2enc";
     mainProgram = "jbig2";
   };
-}
+})

@@ -114,4 +114,48 @@ expectFailure '(internal._ipv6.split "/::/").prefixLength'   "is not a valid IPv
 expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"2001:db8:0:0:0:0:0:ffff","prefixLength":64}'
 expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","prefixLength":44}'
 
+expectSuccess 'mkEUI64Suffix "00:11:22:AA:BB:CC"'  '"211:22ff:feaa:bbcc"'
+expectSuccess 'mkEUI64Suffix "00-11-22-AA-BB-CC"'  '"211:22ff:feaa:bbcc"'
+expectSuccess 'mkEUI64Suffix "00.11.22.AA.BB.CC"'  '"211:22ff:feaa:bbcc"'
+expectSuccess 'mkEUI64Suffix "00:11:22:aa:bb:cc"'  '"211:22ff:feaa:bbcc"'
+expectSuccess 'mkEUI64Suffix "00-11-22-aa-bb-cc"'  '"211:22ff:feaa:bbcc"'
+expectSuccess 'mkEUI64Suffix "00.11.22.aa.bb.cc"'  '"211:22ff:feaa:bbcc"'
+
+expectSuccess 'mkEUI64Suffix "12:34:56:78:9A:bc"'  '"1034:56ff:fe78:9abc"'
+expectSuccess 'mkEUI64Suffix "123456789ABC"'       '"1034:56ff:fe78:9abc"'
+
+expectSuccess 'mkEUI64Suffix "001122AABBCC"'       '"211:22ff:feaa:bbcc"'
+expectSuccess 'mkEUI64Suffix "001122aabbcc"'       '"211:22ff:feaa:bbcc"'
+
+expectSuccess 'mkEUI64Suffix "ff-ff-ff-ff-ff-ff"'  '"fdff:ffff:feff:ffff"'
+expectSuccess 'mkEUI64Suffix "ffffffffffff"'       '"fdff:ffff:feff:ffff"'
+expectSuccess 'mkEUI64Suffix "00.00.00.00.00.00"'  '"200:00ff:fe00:0000"'
+expectSuccess 'mkEUI64Suffix "000000000000"'       '"200:00ff:fe00:0000"'
+
+expectFailure 'mkEUI64Suffix "123456789AB"'        "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "123456789A"'         "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "123456789"'          "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "12345678"'           "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "1234567"'            "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "123456"'             "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "12345"'              "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "1234"'               "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "123"'                "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "12"'                 "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "1"'                  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix ""'                   "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "------------"'       "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "............"'       "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "::::::::::::"'       "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "1:2:3:4:5:6"'        "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "0.0.0.0.0.0"'        "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "00:11:-2:AA:BB:CC"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "00:-11:22:AA:BB:CC"' "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "ab:cd:ef:g0:12:34"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "AB:CD:EF:G0:12:34"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "ab:cd:ef:gh:jk:lm"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "AB:CD:EF:GH:JK:LM"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "01:23:3a:bc:de:fg"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+expectFailure 'mkEUI64Suffix "01:23:3A:BC:DE:FG"'  "is not a valid MAC address \(expected 6 octets of hex digits\)"
+
 echo >&2 tests ok

@@ -1,6 +1,6 @@
 {
   lib,
-  bash,
+  dash,
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
@@ -8,20 +8,19 @@
   dbus,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
 
   pname = "rescrobbled";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "InputUsername";
     repo = "rescrobbled";
-    rev = "v${version}";
-    hash = "sha256-1E+SeKjHCah+IFn2QLAyyv7jgEcZ1gtkh8iHgiVBuz4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-/p9SY4XZNXl1ApB2gI8PMAp53lOBl0gcSPybRJe5MtE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oXj3pMT7lBcj/cNa6FY8ehr9TVSRUwqW3B4g5VeyH2w=";
+  cargoHash = "sha256-1uQiMn8X5joyBcIbzTDVM7GQB6Ks/jaEuSb4KR3hBW0=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -32,20 +31,20 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     # Required for tests
-    substituteInPlace src/filter.rs --replace '#!/usr/bin/bash' '#!${bash}/bin/bash'
+    substituteInPlace src/filter.rs --replace-fail '#!/usr/bin/env sh' '#!${dash}/bin/dash'
   '';
 
   postInstall = ''
-    substituteInPlace rescrobbled.service --replace '%h/.cargo/bin/rescrobbled' "$out/bin/rescrobbled"
+    substituteInPlace rescrobbled.service --replace-fail '%h/.cargo/bin/rescrobbled' "$out/bin/rescrobbled"
     install -Dm644 rescrobbled.service -t "$out/share/systemd/user"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "MPRIS music scrobbler daemon";
     homepage = "https://github.com/InputUsername/rescrobbled";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "rescrobbled";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ negatethis ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ negatethis ];
   };
-}
+})

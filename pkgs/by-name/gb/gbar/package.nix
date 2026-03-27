@@ -8,7 +8,7 @@
   pkg-config,
   libdbusmenu-gtk3,
   gtk-layer-shell,
-  stb,
+  libsass,
   wayland-protocols,
   wayland-scanner,
   bluez,
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation {
   pname = "gbar";
-  version = "unstable-2023-09-21";
+  version = "0-unstable-2024-12-17";
 
   src = fetchFromGitHub {
     owner = "scorpion-26";
     repo = "gBar";
-    rev = "96485f408efe411f281fa27dceb6d86399ec7804";
-    hash = "sha256-4zPvo0JBQOV1qn2X2iI8/JWYEQjFf9sDEICIWSCeaWk=";
+    rev = "03bedc7471add061fb15e0ca1c9d2f729b8c5d7b";
+    hash = "sha256-4OfcG1DcqemLrK5D75S1x25g9K0k2+eEUQUXgYEYBf8=";
     fetchSubmodules = true;
   };
 
@@ -44,16 +44,16 @@ stdenv.mkDerivation {
     gtk3
     gtk-layer-shell
     libpulseaudio
-    stb
+    libsass
     libdbusmenu-gtk3
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Blazingly fast status bar written with GTK";
     homepage = "https://github.com/scorpion-26/gBar";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ocfox ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ocfox ];
     mainProgram = "gBar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

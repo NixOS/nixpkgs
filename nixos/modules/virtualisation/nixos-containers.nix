@@ -53,23 +53,23 @@ let
       trap "exit 0" SIGRTMIN+3
 
       # Initialise the container side of the veth pair.
-      if [ -n "$HOST_ADDRESS" ]   || [ -n "$HOST_ADDRESS6" ]  ||
-         [ -n "$LOCAL_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS6" ] ||
-         [ -n "$HOST_BRIDGE" ]; then
+      if [[ -n "''${HOST_ADDRESS-}" ]]   || [[ -n "''${HOST_ADDRESS6-}" ]]  ||
+         [[ -n "''${LOCAL_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS6-}" ]] ||
+         [[ -n "''${HOST_BRIDGE-}" ]]; then
         ip link set host0 name eth0
         ip link set dev eth0 up
 
-        if [ -n "$LOCAL_ADDRESS" ]; then
+        if [[ -n "''${LOCAL_ADDRESS-}" ]]; then
           ip addr add $LOCAL_ADDRESS dev eth0
         fi
-        if [ -n "$LOCAL_ADDRESS6" ]; then
+        if [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
           ip -6 addr add $LOCAL_ADDRESS6 dev eth0
         fi
-        if [ -n "$HOST_ADDRESS" ]; then
+        if [[ -n "''${HOST_ADDRESS-}" ]]; then
           ip route add $HOST_ADDRESS dev eth0
           ip route add default via $HOST_ADDRESS
         fi
-        if [ -n "$HOST_ADDRESS6" ]; then
+        if [[ -n "''${HOST_ADDRESS6-}" ]]; then
           ip -6 route add $HOST_ADDRESS6 dev eth0
           ip -6 route add default via $HOST_ADDRESS6
         fi
@@ -92,15 +92,16 @@ let
     # Declare root explicitly to avoid shellcheck warnings, it comes from the env
     declare root
 
+    mkdir -p "$root/usr/bin"
     mkdir -p "$root/etc" "$root/var/lib"
     chmod 0755 "$root/etc" "$root/var/lib"
     mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
     chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
-    if ! [ -e "$root/etc/os-release" ] && ! [ -h "$root/etc/os-release" ]; then
+    if ! [[ -e "$root/etc/os-release" ]] && ! [[ -h "$root/etc/os-release" ]]; then
       touch "$root/etc/os-release"
     fi
 
-    if ! [ -e "$root/etc/machine-id" ]; then
+    if ! [[ -e "$root/etc/machine-id" ]]; then
       touch "$root/etc/machine-id"
     fi
 
@@ -113,28 +114,36 @@ let
 
     cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
+    if [ -n "''${FLAKE-}" ] && [ ! -e "/nix/var/nix/profiles/per-container/$INSTANCE/system" ]; then
+      # we create the etc/nixos-container config file, then if we utilize the update function, we can then build all the necessary system files for the container
+      ${lib.getExe nixos-container} update "$INSTANCE"
+    fi
+
     declare -a extraFlags
 
-    if [ "$PRIVATE_NETWORK" = 1 ]; then
+    if [[ "''${PRIVATE_NETWORK-}" = 1 ]]; then
       extraFlags+=("--private-network")
     fi
 
     NIX_BIND_OPT=""
-    if [ -n "$PRIVATE_USERS" ]; then
+    if [[ -n "''${PRIVATE_USERS-}" ]]; then
       extraFlags+=("--private-users=$PRIVATE_USERS")
-      if [ "$PRIVATE_USERS" = "pick" ] || { [ "$PRIVATE_USERS" != "identity" ] && [ "$PRIVATE_USERS" -gt 0 ]; }; then
-        # when user namespacing is enabled, we use `idmap` mount option
-        # so that bind mounts under /nix get proper owner (and not nobody/nogroup).
+      if [[
+        "$PRIVATE_USERS" = "pick"
+        || ("$PRIVATE_USERS" =~ ^[[:digit:]]+$ && "$PRIVATE_USERS" -gt 0)
+      ]]; then
+        # when user namespacing is enabled, we use `idmap` mount option so that
+        # bind mounts under /nix get proper owner (and not nobody/nogroup).
         NIX_BIND_OPT=":idmap"
       fi
     fi
 
-    if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
-       [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
+    if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
+       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
       extraFlags+=("--network-veth")
     fi
 
-    if [ -n "$HOST_PORT" ]; then
+    if [[ -n "''${HOST_PORT-}" ]]; then
       OIFS=$IFS
       IFS=","
       for i in $HOST_PORT
@@ -144,28 +153,28 @@ let
       IFS=$OIFS
     fi
 
-    if [ -n "$HOST_BRIDGE" ]; then
+    if [[ -n "''${HOST_BRIDGE-}" ]]; then
       extraFlags+=("--network-bridge=$HOST_BRIDGE")
     fi
 
-    if [ -n "$NETWORK_NAMESPACE_PATH" ]; then
+    if [[ -n "''${NETWORK_NAMESPACE_PATH-}" ]]; then
       extraFlags+=("--network-namespace-path=$NETWORK_NAMESPACE_PATH")
     fi
 
     extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
-    for iface in $INTERFACES; do
+    for iface in ''${INTERFACES-}; do
       extraFlags+=("--network-interface=$iface")
     done
 
-    for iface in $MACVLANS; do
+    for iface in ''${MACVLANS-}; do
       extraFlags+=("--network-macvlan=$iface")
     done
 
     # If the host is 64-bit and the container is 32-bit, add a
     # --personality flag.
     ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
-      if [ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]; then
+      if [[ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]]; then
         extraFlags+=("--personality=x86")
       fi
     ''}
@@ -190,14 +199,14 @@ let
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
       ${optionalString (!cfg.ephemeral) "--link-journal=try-guest"} \
-      --setenv PRIVATE_NETWORK="$PRIVATE_NETWORK" \
-      --setenv PRIVATE_USERS="$PRIVATE_USERS" \
-      --setenv HOST_BRIDGE="$HOST_BRIDGE" \
-      --setenv HOST_ADDRESS="$HOST_ADDRESS" \
-      --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
-      --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
-      --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
-      --setenv HOST_PORT="$HOST_PORT" \
+      --setenv PRIVATE_NETWORK="''${PRIVATE_NETWORK-}" \
+      --setenv PRIVATE_USERS="''${PRIVATE_USERS-}" \
+      --setenv HOST_BRIDGE="''${HOST_BRIDGE-}" \
+      --setenv HOST_ADDRESS="''${HOST_ADDRESS-}" \
+      --setenv LOCAL_ADDRESS="''${LOCAL_ADDRESS-}" \
+      --setenv HOST_ADDRESS6="''${HOST_ADDRESS6-}" \
+      --setenv LOCAL_ADDRESS6="''${LOCAL_ADDRESS6-}" \
+      --setenv HOST_PORT="''${HOST_PORT-}" \
       --setenv PATH="$PATH" \
       ${optionalString cfg.ephemeral "--ephemeral"} \
       ${
@@ -208,9 +217,9 @@ let
       ${
         optionalString (
           cfg.tmpfs != null && cfg.tmpfs != [ ]
-        ) ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
+        ) "--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}"
       } \
-      $EXTRA_NSPAWN_FLAGS \
+      ''${EXTRA_NSPAWN_FLAGS-} \
       ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
   '';
 
@@ -218,8 +227,8 @@ let
     # Clean up existing machined registration and interfaces.
     machinectl terminate "$INSTANCE" 2> /dev/null || true
 
-    if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
-       [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
+    if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
+       [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
       ip link del dev "ve-$INSTANCE" 2> /dev/null || true
       ip link del dev "vb-$INSTANCE" 2> /dev/null || true
     fi
@@ -236,8 +245,8 @@ let
         cfg: ipcmd: variable: attribute:
         if cfg.${attribute} == null then
           ''
-            if [ -n "${variable}" ]; then
-              ${ipcmd} add "${variable}" dev "$ifaceHost"
+            if [[ -n "''${${variable}-}" ]]; then
+              ${ipcmd} add "''${${variable}}" dev "$ifaceHost"
             fi
           ''
         else
@@ -269,16 +278,16 @@ let
           '';
     in
     ''
-      if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
-         [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
-        if [ -z "$HOST_BRIDGE" ]; then
+      if [[ -n "''${HOST_ADDRESS-}" ]]  || [[ -n "''${LOCAL_ADDRESS-}" ]] ||
+         [[ -n "''${HOST_ADDRESS6-}" ]] || [[ -n "''${LOCAL_ADDRESS6-}" ]]; then
+        if [[ -z "''${HOST_BRIDGE-}" ]]; then
           ifaceHost=ve-$INSTANCE
           ip link set dev "$ifaceHost" up
 
-          ${ipcall cfg "ip addr" "$HOST_ADDRESS" "hostAddress"}
-          ${ipcall cfg "ip -6 addr" "$HOST_ADDRESS6" "hostAddress6"}
-          ${ipcall cfg "ip route" "$LOCAL_ADDRESS" "localAddress"}
-          ${ipcall cfg "ip -6 route" "$LOCAL_ADDRESS6" "localAddress6"}
+          ${ipcall cfg "ip addr" "HOST_ADDRESS" "hostAddress"}
+          ${ipcall cfg "ip -6 addr" "HOST_ADDRESS6" "hostAddress6"}
+          ${ipcall cfg "ip route" "LOCAL_ADDRESS" "localAddress"}
+          ${ipcall cfg "ip -6 route" "LOCAL_ADDRESS6" "localAddress6"}
         fi
       fi
       ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
@@ -408,11 +417,11 @@ let
               description = "The protocol specifier for port forwarding between host and container";
             };
             hostPort = mkOption {
-              type = types.int;
+              type = types.port;
               description = "Source port of the external interface on host";
             };
             containerPort = mkOption {
-              type = types.nullOr types.int;
+              type = types.nullOr types.port;
               default = null;
               description = "Target port of container";
             };
@@ -501,19 +510,31 @@ in
 
     boot.isContainer = mkOption {
       type = types.bool;
-      default = false;
+      default = config.boot.isNspawnContainer;
+      defaultText = "config.boot.isNspawnContainer";
       description = ''
         Whether this NixOS machine is a lightweight container running
         in another NixOS system.
       '';
     };
 
+    boot.isNspawnContainer = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the machine is running in an nspawn container. This
+        option is added because [](#opt-boot.isContainer) is heavily used
+        for non-nspawn environments as well, hence nspawn-specific settings
+        are guarded by this option.
+      '';
+    };
+
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = true;
+      default = config.containers != { };
+      defaultText = lib.literalExpression "config.containers != { }";
       description = ''
-        Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used).
+        Whether to enable support for NixOS containers.
       '';
     };
 
@@ -543,14 +564,13 @@ in
                           extraConfig =
                             { options, ... }:
                             {
-                              _file = "module at ${__curPos.file}:${toString __curPos.line}";
                               config = {
                                 nixpkgs =
                                   if options.nixpkgs ? hostPlatform then
                                     { inherit (host.pkgs.stdenv) hostPlatform; }
                                   else
                                     { localSystem = host.pkgs.stdenv.hostPlatform; };
-                                boot.isContainer = true;
+                                boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
                                 assertions = [
@@ -721,7 +741,7 @@ in
                   so that no overlapping UID/GID ranges are assigned to multiple containers.
                   This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
 
-                  See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
+                  See <https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users=> for details.
                 '';
               };
 
@@ -841,9 +861,20 @@ in
                 '';
               };
 
+              flake = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
+                default = null;
+                example = "github:NixOS/nixpkgs/master";
+                description = ''
+                  The Flake URI of the NixOS configuration to use for the container.
+                  Replaces the option {option}`containers.<name>.path`.
+                '';
+              };
+
               # Removed option. See `checkAssertion` below for the accompanying error message.
               pkgs = mkOption { visible = false; };
-            } // networkOptions;
+            }
+            // networkOptions;
 
             config =
               let
@@ -864,13 +895,18 @@ in
                       - containers.${name}.config.nixpkgs.pkgs
                         This only sets the `pkgs` argument used inside the container modules.
                     ''
+                  else if options.config.isDefined && (options.flake.value != null) then
+                    throw ''
+                      The options 'containers.${name}.path' and 'containers.${name}.flake' cannot both be set.
+                    ''
                   else
                     null;
               in
               {
-                path =
-                  builtins.seq checkAssertion mkIf options.config.isDefined
-                    config.config.system.build.toplevel;
+                path = builtins.seq checkAssertion mkMerge [
+                  (mkIf options.config.isDefined config.config.system.build.toplevel)
+                  (mkIf (config.flake != null) "/nix/var/nix/profiles/per-container/${name}")
+                ];
               };
           }
         )
@@ -926,7 +962,12 @@ in
 
           unitConfig.RequiresMountsFor = "${stateDirectory}/%i";
 
-          path = [ pkgs.iproute2 ];
+          path = [
+            pkgs.iproute2
+            config.nix.package
+          ];
+
+          enableStrictShellChecks = true;
 
           environment = {
             root = "${stateDirectory}/%i";
@@ -1003,7 +1044,7 @@ in
                   serviceConfig = serviceDirectives containerConfig;
                   unitConfig.RequiresMountsFor =
                     lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i"
-                    ++ builtins.map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
+                    ++ map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
                       builtins.attrValues cfg.bindMounts
                     );
                   environment.root =
@@ -1041,7 +1082,12 @@ in
             name: cfg:
             nameValuePair "${configurationDirectoryName}/${name}.conf" {
               text = ''
-                SYSTEM_PATH=${cfg.path}
+                ${optionalString (cfg.flake == null) ''
+                  SYSTEM_PATH=${cfg.path}
+                ''}
+                ${optionalString (cfg.flake != null) ''
+                  FLAKE=${cfg.flake}
+                ''}
                 ${optionalString cfg.privateNetwork ''
                   PRIVATE_NETWORK=1
                   ${optionalString (cfg.hostBridge != null) ''

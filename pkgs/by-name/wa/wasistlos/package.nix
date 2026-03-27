@@ -21,9 +21,10 @@
   pcre,
   pcre2,
   pkg-config,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
-  xorg,
+  libxtst,
+  libxdmcp,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,9 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
     pcre2
     sqlite
-    webkitgtk_4_0
-    xorg.libXdmcp
-    xorg.libXtst
+    webkitgtk_4_1
+    libxdmcp
+    libxtst
   ];
 
   meta = {

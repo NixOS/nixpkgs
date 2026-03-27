@@ -6,22 +6,19 @@
   boost,
   blas,
   gmp,
-  tbb_2021_11,
+  onetbb,
   gfortran,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scipopt-papilo";
-  version = "2.4.1";
-
-  # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "papilo";
-    tag = "v${version}";
-    hash = "sha256-oQ9iq5UkFK0ghUx6uxdJIOo5niQjniHegSZptqi2fgE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oxuXv/xWQiApxrrVdH3aEUOp40Em6kCz/DJXXpCxdzs=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -31,7 +28,7 @@ stdenv.mkDerivation rec {
     gmp
     gfortran
     boost
-    tbb_2021_11
+    onetbb
   ];
 
   cmakeFlags = [
@@ -42,18 +39,13 @@ stdenv.mkDerivation rec {
     #   > include/boost/multiprecision/mpfr.hpp:22: fatal error: mpfr.h: No such file or directory
     #   > compilation terminated.
     (lib.cmakeBool "SOPLEX" false)
-
-    # (lib.cmakeBool "GMP" true)
-    # (lib.cmakeBool "QUADMATH" true)
-    # (lib.cmakeBool "TBB" true)
   ];
   doCheck = true;
   meta = {
-    maintainers = with lib.maintainers; [ fettgoenner ];
-    changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
+    maintainers = with lib.maintainers; [ pmeinhold ];
     description = "Parallel Presolve for Integer and Linear Optimization";
     license = lib.licenses.lgpl3Plus;
     homepage = "https://github.com/scipopt/papilo";
     mainProgram = "papilo";
   };
-}
+})

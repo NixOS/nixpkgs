@@ -7,41 +7,41 @@
   gitpython,
   jsonfeed,
   mkdocs,
+  pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
   validator-collection,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.1";
+  version = "1.17.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
-    tag = version;
-    hash = "sha256-Qa8EgjucJaxvKivE45kXSUgTx5RnLEpYCNZJRTO2E1Q=";
+    tag = finalAttrs.version;
+    hash = "sha256-rUMjS0+895SsU7qNckLL3BprUQa/3lJDjpwhMkF0jYg=";
   };
 
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
-
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     cachecontrol
     gitpython
     mkdocs
-  ];
+  ]
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     feedparser
     jsonfeed
+    pytest-cov-stub
     pytestCheckHook
     validator-collection
   ];
@@ -52,6 +52,11 @@ buildPythonPackage rec {
     # Tests require network access
     "test_plugin_config_through_mkdocs"
     "test_remote_image"
+    # Configuration error
+    "test_plugin_config_blog_enabled"
+    "test_plugin_config_social_cards_enabled_but_integration_disabled"
+    "test_plugin_config_theme_material"
+    "test_simple_build"
   ];
 
   disabledTestPaths = [
@@ -61,11 +66,11 @@ buildPythonPackage rec {
     "tests/test_build.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin to generate a RSS feeds for created and updated pages, using git log and YAML frontmatter";
     homepage = "https://github.com/Guts/mkdocs-rss-plugin";
-    changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/Guts/mkdocs-rss-plugin/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

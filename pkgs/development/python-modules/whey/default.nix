@@ -55,14 +55,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "whey" ];
 
   optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.concatAttrValues (lib.removeAttrs optional-dependencies [ "all" ]);
     editable = [
       editables
     ];
     readme = [
       docutils
       pyproject-parser
-    ] ++ pyproject-parser.optional-dependencies.readme;
+    ]
+    ++ pyproject-parser.optional-dependencies.readme;
   };
 
   nativeCheckInputs = [
@@ -75,6 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Simple Python wheel builder for simple projects";
     homepage = "https://github.com/repo-helper/whey";
+    changelog = "https://github.com/repo-helper/whey/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tyberius-prime ];
   };

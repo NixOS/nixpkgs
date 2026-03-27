@@ -3,22 +3,24 @@
   buildNpmPackage,
   fetchFromGitHub,
   makeBinaryWrapper,
-  nodejs,
+  nodejs_20,
+  nix-update-script,
   nixosTests,
 }:
-
 buildNpmPackage rec {
   pname = "send";
-  version = "3.4.23";
+  version = "3.4.27";
 
   src = fetchFromGitHub {
     owner = "timvisee";
     repo = "send";
     tag = "v${version}";
-    hash = "sha256-bqQEXLwUvTKX+m2yNHRnrl+eeaGmcovXpXugxd+j14A=";
+    hash = "sha256-tfntox8Sw3xzlCOJgY/LThThm+mptYY5BquYDjzHonQ=";
   };
 
-  npmDepsHash = "sha256-r1iaurKuhpP0sevB5pFdtv9j1ikM1fKL7Jgakh4FzTI=";
+  nodejs = nodejs_20;
+
+  npmDepsHash = "sha256-ZVegUECrwkn/DlAwqx5VDmcwEIJV/jAAV99Dq29Tm2w=";
 
   nativeBuildInputs = [
     makeBinaryWrapper
@@ -26,13 +28,13 @@ buildNpmPackage rec {
 
   env = {
     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
+
+    NODE_OPTIONS = "--openssl-legacy-provider";
   };
 
   makeCacheWritable = true;
 
   npmPackFlags = [ "--ignore-scripts" ];
-
-  NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall = ''
     cp -r dist $out/lib/node_modules/send/
@@ -43,8 +45,11 @@ buildNpmPackage rec {
       --set "NODE_ENV" "production"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) send;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) send;
+    };
   };
 
   meta = {
@@ -52,7 +57,10 @@ buildNpmPackage rec {
     changelog = "https://github.com/timvisee/send/releases/tag/v${version}";
     homepage = "https://github.com/timvisee/send";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ moraxyc ];
+    maintainers = with lib.maintainers; [
+      moraxyc
+      MrSom3body
+    ];
     mainProgram = "send";
   };
 }

@@ -3,7 +3,7 @@
 
 # Tested in lib/tests/sources.sh
 let
-  inherit (builtins)
+  inherit (lib.strings)
     match
     split
     storeDir
@@ -20,7 +20,7 @@ let
 
   /**
     A basic filter for `cleanSourceWith` that removes
-    directories of version control system, backup files (*~)
+    directories of version control system, backup files (`*~`)
     and some generated files.
 
     # Inputs
@@ -42,7 +42,16 @@ let
       # Filter out version control software files/directories
       (
         baseName == ".git"
-        || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")
+        ||
+          type == "directory"
+          && (
+            baseName == ".svn"
+            || baseName == "CVS"
+            || baseName == ".hg"
+            || baseName == ".jj"
+            || baseName == ".pijul"
+            || baseName == "_darcs"
+          )
       )
       ||
         # Filter out editor backup / swap files.
@@ -63,7 +72,7 @@ let
     );
 
   /**
-    Filters a source tree removing version control files and directories using cleanSourceFilter.
+    Filters a source tree removing version control files and directories using `cleanSourceFilter`.
 
     # Inputs
 
@@ -122,7 +131,7 @@ let
       # that src.filter is called lazily.
       # For implementing a filter, see
       # https://nixos.org/nix/manual/#builtin-filterSource
-      # Type: A function (path -> type -> bool)
+      # Type: A function (Path -> Type -> Bool)
       filter ? _path: _type: true,
       # Optional name to use as part of the store path.
       # This defaults to `src.name` or otherwise `"source"`.
@@ -149,7 +158,7 @@ let
     # Type
 
     ```
-    sources.trace :: sourceLike -> Source
+    sources.trace :: SourceLike -> Source
     ```
   */
   trace =
@@ -191,7 +200,7 @@ let
     ## `sourceByRegex` usage example
 
     ```nix
-    src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]
+    src = sourceByRegex ./my-subproject [".*\\.py$" "^database\\.sql$"]
     ```
 
     :::
@@ -232,7 +241,7 @@ let
     # Type
 
     ```
-    sourceLike -> [String] -> Source
+    sourceFilesBySuffices :: SourceLike -> [String] -> Source
     ```
 
     # Examples
@@ -403,24 +412,103 @@ let
       };
     };
 
+  # urlToName : (URL | Path | String) -> String
+  #
+  # Transform a URL (or path, or string) into a clean package name.
+  urlToName =
+    url:
+    let
+      inherit (lib.strings) stringLength;
+      base = baseNameOf (lib.removeSuffix "/" (lib.last (lib.splitString ":" (toString url))));
+      # chop away one git or archive-related extension
+      removeExt =
+        name:
+        let
+          matchExt = match "(.*)\\.(git|tar|zip|gz|tgz|bz|tbz|bz2|tbz2|lzma|txz|xz|zstd)$" name;
+        in
+        if matchExt != null then lib.head matchExt else name;
+      # apply function f to string x while the result shrinks
+      shrink =
+        f: x:
+        let
+          v = f x;
+        in
+        if stringLength v < stringLength x then shrink f v else x;
+    in
+    shrink removeExt base;
+
+  # shortRev : (String | Integer) -> String
+  #
+  # Given a package revision (like "refs/tags/v12.0"), produce a short revision ("12.0").
+  shortRev =
+    rev:
+    let
+      baseRev = baseNameOf (toString rev);
+      matchHash = match "[a-f0-9]+" baseRev;
+      matchVer = match "([A-Za-z]+[-_. ]?)*(v)?([0-9.]+.*)" baseRev;
+    in
+    if matchHash != null then
+      builtins.substring 0 7 baseRev
+    else if matchVer != null then
+      lib.last matchVer
+    else
+      baseRev;
+
+  # revOrTag : String -> String -> String
+  #
+  # Turn git `rev` and `tag` pair into a revision usable in `repoRevToName*`.
+  revOrTag =
+    rev: tag:
+    if tag != null then
+      tag
+    else if rev != null then
+      rev
+    else
+      "HEAD";
+
+  # repoRevToNameFull : (URL | Path | String) -> (String | Integer | null) -> (String | null) -> String
+  #
+  # See `repoRevToName` below.
+  repoRevToNameFull =
+    repo_: rev_: suffix_:
+    let
+      repo = urlToName repo_;
+      rev = if rev_ != null then "-${shortRev rev_}" else "";
+      suffix = if suffix_ != null then "-${suffix_}" else "";
+    in
+    "${repo}${rev}${suffix}-source";
+
+  # repoRevToName : String -> (URL | Path | String) -> (String | Integer | null) -> String -> String
+  #
+  # Produce derivation.name attribute for a given repository URL/path/name and (optionally) its revision/version tag.
+  #
+  # This is used by fetch(zip|git|FromGitHub|hg|svn|etc) to generate discoverable
+  # /nix/store paths.
+  #
+  # This uses a different implementation depending on the `pretty` argument:
+  #  "source" -> name everything as "source"
+  #  "versioned" -> name everything as "${repo}-${rev}-source"
+  #  "full" -> name everything as "${repo}-${rev}-${fetcher}-source"
+  repoRevToName =
+    kind:
+    # match on `kind` first to minimize the thunk
+    if kind == "source" then
+      (
+        repo: rev: suffix:
+        "source"
+      )
+    else if kind == "versioned" then
+      (
+        repo: rev: suffix:
+        repoRevToNameFull repo rev null
+      )
+    else if kind == "full" then
+      repoRevToNameFull
+    else
+      throw "repoRevToName: invalid kind";
+
 in
 {
-
-  pathType =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathType has been moved to lib.filesystem.pathType."
-      lib.filesystem.pathType;
-
-  pathIsDirectory =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsDirectory has been moved to lib.filesystem.pathIsDirectory."
-      lib.filesystem.pathIsDirectory;
-
-  pathIsRegularFile =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsRegularFile has been moved to lib.filesystem.pathIsRegularFile."
-      lib.filesystem.pathIsRegularFile;
-
   inherit
     pathIsGitRepo
     commitIdFromGitRepo
@@ -431,9 +519,16 @@ in
     pathHasContext
     canCleanSource
 
+    urlToName
+    shortRev
+    revOrTag
+    repoRevToName
+
     sourceByRegex
     sourceFilesBySuffices
 
     trace
     ;
+
+  inherit (builtins) filterSource;
 }

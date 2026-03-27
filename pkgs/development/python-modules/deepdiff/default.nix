@@ -2,9 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  stdenv,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   orderly-set,
@@ -17,28 +18,30 @@
   # tests
   jsonpickle,
   numpy,
+  pandas,
+  polars,
+  pydantic,
   pytestCheckHook,
   python-dateutil,
-  toml,
+  pytz,
   tomli-w,
-  polars,
-  pandas,
+  uuid6,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "8.4.1";
+  version = "8.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "deepdiff";
     tag = version;
-    hash = "sha256-RXr+6DLzhnuow9JNqqnNmuehE89eOY4oYn4tw4VSI+A=";
+    hash = "sha256-1DB1OgIS/TSMd+Pqd2vvW+qwM/b5+Dy3qStlg+asidE=";
   };
 
   build-system = [
-    setuptools
+    flit-core
   ];
 
   dependencies = [
@@ -58,20 +61,25 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jsonpickle
     numpy
+    pandas
+    polars
+    pydantic
     pytestCheckHook
     python-dateutil
+    pytz
     tomli-w
-    polars
-    pandas
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+    uuid6
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
-    # not compatible with pydantic 2.x
-    "test_pydantic1"
-    "test_pydantic2"
     # Require pytest-benchmark
     "test_cache_deeply_nested_a1"
     "test_lfu"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Times out on darwin in Hydra
+    "test_repeated_timer"
   ];
 
   pythonImportsCheck = [ "deepdiff" ];

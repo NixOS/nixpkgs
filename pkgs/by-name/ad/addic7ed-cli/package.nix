@@ -4,16 +4,21 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "addic7ed-cli";
   version = "1.4.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "182cpwxpdybsgl1nps850ysvvjbqlnx149kri4hxhgm58nqq0qf5";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     requests
     pyquery
   ];
@@ -22,12 +27,12 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
   pythonImportsCheck = [ "addic7ed_cli" ];
 
-  meta = with lib; {
+  meta = {
     description = "Commandline access to addic7ed subtitles";
     homepage = "https://github.com/BenoitZugmeyer/addic7ed-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aethelz ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aethelz ];
+    platforms = lib.platforms.unix;
     mainProgram = "addic7ed";
   };
-}
+})

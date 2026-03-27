@@ -58,23 +58,6 @@ let
                           Path to use for the pid file.
                         '';
                       };
-
-                      template = lib.mkOption {
-                        default = null;
-                        type = with types; nullOr (listOf (attrsOf anything));
-                        description =
-                          let
-                            upstreamDocs =
-                              if flavour == "vault-agent" then
-                                "https://developer.hashicorp.com/vault/docs/agent/template"
-                              else
-                                "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#templates";
-                          in
-                          ''
-                            Template section of ${flavour}.
-                            Refer to <${upstreamDocs}> for supported values.
-                          '';
-                      };
                     };
                   };
 
@@ -89,7 +72,7 @@ let
                           "https://github.com/hashicorp/consul-template/blob/main/docs/configuration.md#configuration-file";
                     in
                     ''
-                      Free-form settings written directly to the `config.json` file.
+                      Free-form settings written directly to the {file}`config.json` file.
                       Refer to <${upstreamDocs}> for supported values.
 
                       ::: {.note}

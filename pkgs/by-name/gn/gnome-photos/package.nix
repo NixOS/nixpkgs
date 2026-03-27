@@ -6,7 +6,7 @@
   babl,
   dbus,
   desktop-file-utils,
-  dleyna-renderer,
+  dleyna,
   gdk-pixbuf,
   gegl,
   geocode-glib_2,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gnome-photos/${lib.versions.major version}/gnome-photos-${version}.tar.xz";
     sha256 = "544hA5fTxigJxs1VIdpuzLShHd6lvyr4YypH9Npcgp4=";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     babl
     dbus
-    dleyna-renderer
+    dleyna
     gdk-pixbuf
     gegl
     geocode-glib_2
@@ -117,12 +117,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Access, organize and share your photos";
     mainProgram = "gnome-photos";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-photos";
-    license = licenses.gpl3Plus;
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.linux;
   };
 }

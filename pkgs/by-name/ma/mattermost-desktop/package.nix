@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildNpmPackage,
-  electron_33,
+  electron_40,
   makeWrapper,
   testers,
   mattermost-desktop,
@@ -10,21 +10,21 @@
 }:
 
 let
-  electron = electron_33;
+  electron = electron_40;
 in
 
 buildNpmPackage rec {
   pname = "mattermost-desktop";
-  version = "5.10.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-LHjVmrsOdk8vfsqvNEWkzpusm6jbz3SOb3bEaIb7rb4=";
+    hash = "sha256-5sVYDnz5RPkHfCpA3I1+Lm7z7YLa3fOFYOTEI6Sbxz8=";
   };
 
-  npmDepsHash = "sha256-LAbqsMdMmmHGgvg2ilz6neQxMOK3jtCKt8K0M8BWifs=";
+  npmDepsHash = "sha256-YdpF/wuH2H+ouBDzCUcTQWLB8s8wa9L12UiGj4MnurQ=";
   npmBuildScript = "build-prod";
   makeCacheWritable = true;
 
@@ -59,7 +59,7 @@ buildNpmPackage rec {
       $out/share/applications \
       $out/share/icons/hicolor/512x512/apps
 
-    readonly dist=release/linux-unpacked
+    readonly dist=release/*-unpacked
 
     cp -a $dist/resources $out/share/${pname}
 
@@ -87,7 +87,7 @@ buildNpmPackage rec {
       command = "env HOME=/tmp ${meta.mainProgram} --version";
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex=^(\\d+\\.\\d+\\.\\d+)$" ];
+      extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ];
     };
   };
 

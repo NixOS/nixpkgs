@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  stdenv,
 
   # build-system
   cmake,
@@ -12,7 +10,6 @@
   scikit-build-core,
   setuptools,
   setuptools-scm,
-  typing-extensions,
 
   # native dependencies
   libsoxr,
@@ -26,15 +23,14 @@
 
 buildPythonPackage rec {
   pname = "soxr";
-  version = "0.5.0.post1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dofuuz";
     repo = "python-soxr";
     tag = "v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-Fpayc+MOpDUCdpoyJaIqSbMzuO0jYb6UN5ARFaxxOHk=";
+    hash = "sha256-8NVQD1LamIRe77bKEs8YqHXeXifdMJpQUedmeiBRHSI=";
   };
 
   patches = [ ./cmake-nanobind.patch ];
@@ -46,20 +42,16 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  pypaBuildFlags = [
-    "--config=cmake.define.USE_SYSTEM_LIBSOXR=ON"
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_LIBSOXR" true)
   ];
 
-  build-system =
-    [
-      scikit-build-core
-      nanobind
-      setuptools
-      setuptools-scm
-    ]
-    ++ lib.optionals (pythonOlder "3.11") [
-      typing-extensions
-    ];
+  build-system = [
+    scikit-build-core
+    nanobind
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ libsoxr ];
 
@@ -69,10 +61,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/dofuuz/python-soxr/releases/tag/${src.tag}";
     description = "High quality, one-dimensional sample-rate conversion library";
     homepage = "https://github.com/dofuuz/python-soxr/tree/main";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

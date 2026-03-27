@@ -6,29 +6,31 @@
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "carapace-bridge";
-  version = "1.2.5";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bridge";
-    tag = "v${version}";
-    hash = "sha256-NdEGQp3fd/dIZqGYut6tz9oze48ym/+05X8CMQhFKzk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-URIRdoG/P6YrcuOdZmQHD1cvcpYg++JS39fj/wJdLWY=";
   };
 
-  # buildGoModule try to run `go mod vendor` instead of `go work vendor` on the
-  # workspace if proxyVendor is off
+  # buildGoModule tries to run `go mod vendor` instead of `go work vendor` on
+  # the workspace if proxyVendor is off
   proxyVendor = true;
-  vendorHash = "sha256-zfV5IcpwtK3n76jWs4ldMlpEqbyNmmXZWDj+fh66luw=";
+  vendorHash = "sha256-1TTo5Maka7lp20ZC7/Sebt+/stUQSheRXrEuhykbLN0=";
 
   postPatch = ''
     substituteInPlace cmd/carapace-bridge/main.go \
       --replace-fail "var version = \"develop\"" "var version = \"$version\""
+
+    # Remove docker examples
+    rm -r .docker
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -36,9 +38,9 @@ buildGoModule rec {
   meta = {
     description = "Multi-shell completion bridge for carapace";
     homepage = "https://carapace.sh/";
-    changelog = "https://github.com/carapace-sh/carapace-bridge/releases/tag/v${version}";
+    changelog = "https://github.com/carapace-sh/carapace-bridge/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ famfo ];
     license = lib.licenses.mit;
     mainProgram = "carapace-bridge";
   };
-}
+})

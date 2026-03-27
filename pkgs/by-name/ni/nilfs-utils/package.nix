@@ -8,15 +8,15 @@
   e2fsprogs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nilfs-utils";
-  version = "2.2.11";
+  version = "2.2.12";
 
   src = fetchFromGitHub {
     owner = "nilfs-dev";
     repo = "nilfs-utils";
-    rev = "v${version}";
-    sha256 = "sha256-qvs0PBkMYzGfIQ/Z2Wz0aHe2Y2Ia6fA4pMSk5Jhejf4=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-9IUuam5g24+eywEeNZET8TAvKJVevJBwHTHSwN9Tz58=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -51,14 +51,20 @@ stdenv.mkDerivation rec {
     find . -name .libs -exec rm -rf -- {} +
   '';
 
-  meta = with lib; {
+  outputs = [
+    "out"
+    "man"
+    "dev"
+  ];
+
+  meta = {
     description = "NILFS utilities";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
-    license = with licenses; [
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [
       gpl2Plus
       lgpl21
     ];
     downloadPage = "http://nilfs.sourceforge.net/en/download.html";
   };
-}
+})

@@ -6,8 +6,7 @@
   qtdeclarative,
   pkg-config,
   alsa-lib,
-  gstreamer,
-  gst-plugins-base,
+  gst_all_1,
   libpulseaudio,
   wayland,
 }:
@@ -20,6 +19,7 @@ qtModule {
   ];
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
+    with gst_all_1;
     [
       gstreamer
       gst-plugins-base

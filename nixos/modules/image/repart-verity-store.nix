@@ -140,8 +140,8 @@ in
           pkgs.runCommand ukiFile
             {
               nativeBuildInputs = [
-                pkgs.jq
-                pkgs.systemdUkify
+                pkgs.buildPackages.jq
+                pkgs.buildPackages.systemdUkify
               ];
             }
             ''
@@ -177,9 +177,9 @@ in
               };
 
               nativeBuildInputs = previousAttrs.nativeBuildInputs ++ [
-                pkgs.systemdUkify
+                pkgs.buildPackages.systemdUkify
                 verityHashCheck
-                pkgs.jq
+                pkgs.buildPackages.jq
               ];
 
               preBuild = ''
@@ -194,8 +194,8 @@ in
                   | assert_uki_repart_match.py "${config.system.build.intermediateImage}/repart-output.json"
 
                 # copy the uncompressed intermediate image, so that systemd-repart picks it up
-                cp -v ${config.system.build.intermediateImage}/${config.image.repart.imageFileBasename}.raw .
-                chmod +w ${config.image.repart.imageFileBasename}.raw
+                cp -v ${config.system.build.intermediateImage}/${config.image.baseName}.raw .
+                chmod +w ${config.image.baseName}.raw
               '';
 
               # replace "TBD" with the original roothash values

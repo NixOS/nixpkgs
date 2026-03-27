@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   # build-system
   setuptools,
@@ -29,16 +28,14 @@
 
 buildPythonPackage rec {
   pname = "certomancer";
-  version = "0.12.3";
+  version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "certomancer";
     tag = "v${version}";
-    hash = "sha256-2BjLoGUWU0RaWVI9JA3s/Hf5aVtmv8hn+fB2jkWdQNY=";
+    hash = "sha256-2/qTTN/UuSMHjkSsOs/KbfzKLBjJSLHY51XtgQ6x1Wo=";
   };
 
   build-system = [
@@ -71,7 +68,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytz
     requests
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "certomancer" ];
 

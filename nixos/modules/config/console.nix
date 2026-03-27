@@ -9,7 +9,7 @@ let
 
   makeColor = i: lib.concatMapStringsSep "," (x: "0x" + lib.substring (2 * i) 2 x);
 
-  isUnicode = lib.hasSuffix "UTF-8" (lib.toUpper config.i18n.defaultLocale);
+  isUnicode = config.i18n.defaultCharset == "UTF-8" || cfg.useXkbConfig;
 
   optimizedKeymap =
     pkgs.runCommand "keymap"
@@ -139,7 +139,9 @@ in
   config = lib.mkMerge [
     {
       console.keyMap =
-        with config.services.xserver;
+        let
+          inherit (config.services.xserver) xkb;
+        in
         lib.mkIf cfg.useXkbConfig (
           pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
             '${pkgs.buildPackages.ckbcomp}/bin/ckbcomp' \
@@ -191,19 +193,17 @@ in
           boot.initrd.systemd.additionalUpstreamUnits = [
             "systemd-vconsole-setup.service"
           ];
-          boot.initrd.systemd.storePaths =
-            [
-              "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
-              "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
-              "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
-              "${config.boot.initrd.systemd.package.kbd.gzip}/bin/gzip" # Fonts and keyboard layouts are compressed
-            ]
-            ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
-              "${cfg.font}"
-            ]
-            ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
-              "${cfg.keyMap}"
-            ];
+          boot.initrd.systemd.storePaths = [
+            "${config.boot.initrd.systemd.package}/lib/systemd/systemd-vconsole-setup"
+            "${config.boot.initrd.systemd.package.kbd}/bin/setfont"
+            "${config.boot.initrd.systemd.package.kbd}/bin/loadkeys"
+          ]
+          ++ lib.optionals (cfg.font != null && lib.hasPrefix builtins.storeDir cfg.font) [
+            "${cfg.font}"
+          ]
+          ++ lib.optionals (lib.hasPrefix builtins.storeDir cfg.keyMap) [
+            "${cfg.keyMap}"
+          ];
 
           systemd.additionalUpstreamSystemUnits = [
             "systemd-vconsole-setup.service"

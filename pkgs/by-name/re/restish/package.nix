@@ -2,43 +2,41 @@
   lib,
   stdenv,
   buildGoModule,
-  darwin,
   fetchFromGitHub,
   restish,
   testers,
-  xorg,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxcursor,
+  libx11,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "restish";
-  version = "0.20.0";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "restish";
-    tag = "v${version}";
-    hash = "sha256-a0ObgFgWEsLYjGmCCi/py2PADAWJ0By+AZ4wh+Yeam4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C+fB9UeEq+h6SlBtVPPZWs5fCCsJVe/TJFy4KhhaItU=";
   };
 
-  vendorHash = "sha256-qeArar0WnMACUnKBlC+PcFeJPzofwbK440A4M/rQ04U=";
+  vendorHash = "sha256-5+N6iL9wD5J/E6H5qn1InQR8bbuAlTOzPQn0sawVbrI=";
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Kernel
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXrandr
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libx11
+    libxcursor
+    libxi
+    libxinerama
+    libxrandr
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
+    "-X=main.version=${finalAttrs.version}"
   ];
 
   preCheck = ''
@@ -47,14 +45,15 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = restish;
+    command = "HOME=$(mktemp -d) restish --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool for interacting with REST-ish HTTP APIs";
     homepage = "https://rest.sh/";
-    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/danielgtaylor/restish/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "restish";
   };
-}
+})

@@ -6,7 +6,6 @@
   jwcrypto,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   redis,
   requests,
   simplejson,
@@ -17,11 +16,9 @@ buildPythonPackage rec {
   version = "0.13.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "novnc";
-    repo = pname;
+    repo = "websockify";
     tag = "v${version}";
     hash = "sha256-b57L4o071zEt/gX9ZVzEpcnp0RCeo3peZrby2mccJgQ=";
   };
@@ -44,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "websockify" ];
 
-  meta = with lib; {
+  meta = {
     description = "WebSockets support for any application/server";
     mainProgram = "websockify";
     homepage = "https://github.com/kanaka/websockify";
     changelog = "https://github.com/novnc/websockify/releases/tag/${src.tag}";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

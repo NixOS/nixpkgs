@@ -20,7 +20,7 @@ let
   mkMassRebuild =
     args:
     mkOption (
-      builtins.removeAttrs args [ "feature" ]
+      removeAttrs args [ "feature" ]
       // {
         type = args.type or (types.uniq types.bool);
         default = args.default or false;
@@ -45,8 +45,15 @@ let
       internal = true;
     };
 
+    # Should be replaced by importing <nixos/modules/misc/assertions.nix> in the future
+    # see also https://github.com/NixOS/nixpkgs/pull/207187
     warnings = mkOption {
       type = types.listOf types.str;
+      default = [ ];
+      internal = true;
+    };
+    assertions = mkOption {
+      type = types.listOf types.anything;
       default = [ ];
       internal = true;
     };
@@ -57,6 +64,119 @@ let
       description = "Whether to warn when `config` contains an unrecognized attribute.";
       type = types.bool;
       default = false;
+    };
+
+    fetchedSourceNameDefault = mkOption {
+      type = types.uniq (
+        types.enum [
+          "source"
+          "versioned"
+          "full"
+        ]
+      );
+      default = "source";
+      description = ''
+        This controls the default derivation `name` attribute set by the
+        `fetch*` (`fetchzip`, `fetchFromGitHub`, etc) functions.
+
+        Possible values and the resulting `.name`:
+
+        - `"source"` -> `"source"`
+        - `"versioned"` -> `"''${repo}-''${rev}-source"`
+        - `"full"` -> `"''${repo}-''${rev}-''${fetcherName}-source"`
+
+        The default `"source"` is the best choice for minimal rebuilds, it
+        will ignore any non-hash changes (like branches being renamed, source
+        URLs changing, etc) at the cost of `/nix/store` being easily
+        cache-poisoned (see [NixOS/nix#969](https://github.com/NixOS/nix/issues/969)).
+
+        Setting this to `"versioned"` greatly helps with discoverability of
+        sources in `/nix/store` and makes cache-poisoning of `/nix/store` much
+        harder, at the cost of a single mass-rebuild for all `src`
+        derivations, and an occasional rebuild when a source changes some of
+        its non-hash attributes.
+
+        Setting this to `"full"` is similar to setting it to `"versioned"`,
+        but the use of `fetcherName` in the derivation name will force a
+        rebuild when `src` switches between `fetch*` functions, thus forcing
+        `nix` to check new derivation's `outputHash`, which is useful for
+        debugging.
+
+        Also, `"full"` is useful for easy collection and tracking of
+        statistics of where the packages you use are hosted.
+
+        If you are a developer, you should probably set this to at
+        least`"versioned"`.
+
+        Changing the default will cause a mass rebuild.
+      '';
+    };
+
+    gitConfig = mkOption {
+      type = types.attrsOf (types.attrsOf types.anything);
+      description = ''
+        The default [git configuration](https://git-scm.com/docs/git-config#_variables) for all [`pkgs.fetchgit`](#fetchgit) calls.
+
+        Among many other potential uses, this can be used to override URLs to point to local mirrors.
+
+        Changing this will not cause any rebuilds because `pkgs.fetchgit` produces a [fixed-output derivation](https://nix.dev/manual/nix/stable/glossary.html?highlight=fixed-output%20derivation#gloss-fixed-output-derivation).
+
+        To set the configuration file directly, use the [`gitConfigFile`](#opt-gitConfigFile) option instead.
+
+        To set the configuration file for individual calls, use `fetchgit { gitConfigFile = "..."; }`.
+      '';
+      default = { };
+      example = {
+        url."https://my-github-mirror.local".insteadOf = [ "https://github.com" ];
+      };
+    };
+
+    # A rendered version of gitConfig that can be reused by all pkgs.fetchgit calls
+    gitConfigFile = mkOption {
+      type = types.nullOr types.path;
+      description = ''
+        A path to a [git configuration](https://git-scm.com/docs/git-config#_variables) file, to be used for all [`pkgs.fetchgit`](#fetchgit) calls.
+
+        This overrides the [`gitConfig`](#opt-gitConfig) option, see its documentation for more details.
+      '';
+      default =
+        if config.gitConfig != { } then
+          builtins.toFile "gitconfig" (lib.generators.toGitINI config.gitConfig)
+        else
+          null;
+    };
+
+    npmRegistryOverrides = mkOption {
+      type = types.attrsOf types.str;
+      description = ''
+        The default NPM registry overrides for all `fetchNpmDeps` calls, as an attribute set.
+
+        For each attribute, all files fetched from the host corresponding to the name will instead be fetched from the host (and sub-path) specified in the value.
+
+        For example, an override like `"registry.npmjs.org" = "my-mirror.local/registry.npmjs.org"` will replace a URL like `https://registry.npmjs.org/foo.tar.gz` with `https://my-mirror.local/registry.npmjs.org/foo.tar.gz`.
+
+        To set the string directly, see [`npmRegistryOverridesString`](#opt-npmRegistryOverridesString).
+      '';
+      default = { };
+      example = {
+        "registry.npmjs.org" = "my-mirror.local/registry.npmjs.org";
+      };
+    };
+
+    npmRegistryOverridesString = mkOption {
+      type = types.addCheck types.str (
+        s:
+        let
+          j = builtins.fromJSON s;
+        in
+        lib.isAttrs j && lib.all builtins.isString (builtins.attrValues j)
+      );
+      description = ''
+        A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
+
+        This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
+      '';
+      default = builtins.toJSON config.npmRegistryOverrides;
     };
 
     doCheckByDefault = mkMassRebuild {
@@ -113,6 +233,23 @@ let
       '';
     };
 
+    allowUnfreePackages = mkOption {
+      type = with lib.types; listOf str;
+      default = [ ];
+      example = [ "ut1999" ];
+      description = ''
+        Allows specific unfree packages to be used.
+
+        This option composes with `nixpkgs.config.allowUnfreePredicate` by also allowing the listed package names.
+
+        Unlike `nixpkgs.config.allowUnfreePredicate`, this option merges additively, similar to `environment.systemPackages`.
+        This enables defining allowed unfree packages in multiple modules, close to where they are used.
+
+        This avoids the need to centralize all unfree package declarations or globally enable unfree packages via
+        `nixpkgs.config.allowUnfree = true`.
+      '';
+    };
+
     allowBroken = mkOption {
       type = types.bool;
       default = false;
@@ -137,10 +274,52 @@ let
       '';
     };
 
-    cudaSupport = mkMassRebuild {
+    allowVariants = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
+      description = ''
+        Whether to expose the nixpkgs variants.
+
+        Variants are instances of the current nixpkgs instance with different stdenvs or other applied options.
+        This allows for using different toolchains, libcs, or global build changes across nixpkgs.
+        Disabling can ensure nixpkgs is only building for the platform which you specified.
+      '';
+    };
+
+    cudaSupport = mkMassRebuild {
       feature = "build packages with CUDA support by default";
+    };
+
+    cudaCapabilities = mkOption {
+      type = types.listOf types.str;
+      default = [ ];
+      description = ''
+        A list of CUDA capabilities to build for.
+
+        Packages may use this option to control device code generation to
+        take advantage of architecture-specific functionality, speed up
+        compile times by producing less device code, or slim package closures.
+
+        For example, you can build for Ada Lovelace GPUs with
+        `cudaCapabilities = [ "8.9" ];`.
+
+        If not provided, the default value is calculated per-package set,
+        derived from a list of GPUs supported by that CUDA version.
+
+        See the [CUDA section](https://nixos.org/manual/nixpkgs/stable/#cuda) in
+        the Nixpkgs manual for more information.
+      '';
+    };
+
+    cudaForwardCompat = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to enable PTX support for future hardware.
+
+        When enabled, packages will include PTX code that can be JIT-compiled
+        for GPUs newer than those explicitly targeted by `cudaCapabilities`.
+      '';
     };
 
     replaceBootstrapFiles = mkMassRebuild {
@@ -171,9 +350,23 @@ let
       '';
     };
 
+    replaceStdenv = mkMassRebuild {
+      type = types.nullOr (types.functionTo types.package);
+      default = null;
+      defaultText = literalExpression "null";
+      description = ''
+        A function to replace the standard environment (stdenv).
+
+        The function receives an attribute set with `pkgs` and should return
+        a stdenv derivation.
+
+        This can be used to globally replace the stdenv with a custom one,
+        for example to use ccache or distcc.
+      '';
+      example = literalExpression "{ pkgs }: pkgs.ccacheStdenv";
+    };
+
     rocmSupport = mkMassRebuild {
-      type = types.bool;
-      default = false;
       feature = "build packages with ROCm support by default";
     };
 
@@ -199,6 +392,71 @@ let
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
+
+    hashedMirrors = mkOption {
+      type = types.listOf types.str;
+      default = [ "https://tarballs.nixos.org" ];
+      description = ''
+        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](#sec-pkgs-fetchers-fetchurl).
+        In case `pkgs.fetchurl` can't download from the given URLs,
+        it will try the hashed mirrors based on the expected output hash.
+
+        See [`copy-tarballs.pl`](https://github.com/NixOS/nixpkgs/blob/a2d829eaa7a455eaa3013c45f6431e705702dd46/maintainers/scripts/copy-tarballs.pl)
+        for more details on how hashed mirrors are constructed.
+      '';
+    };
+
+    rewriteURL = mkOption {
+      type = types.functionTo (types.nullOr types.str);
+      description = ''
+        A hook to rewrite/filter URLs before they are fetched.
+
+        The function is passed the URL as a string, and is expected to return a new URL, or null if the given URL should not be attempted.
+
+        This function is applied _prior_ to resolving mirror:// URLs.
+
+        The intended use is to allow URL rewriting to insert company-internal mirrors, or work around company firewalls and similar network restrictions.
+      '';
+      default = lib.id;
+      defaultText = literalExpression "(url: url)";
+      example = literalExpression ''
+        {
+          # Use Nix like it's 2024! ;-)
+          rewriteURL = url: "https://web.archive.org/web/2024/''${url}";
+        }
+      '';
+    };
+
+    microsoftVisualStudioLicenseAccepted = mkOption {
+      type = types.bool;
+      default = false;
+      # getEnv part is in check-meta.nix
+      defaultText = literalExpression ''false || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1"'';
+      description = ''
+        If the Microsoft Visual Studio license has been accepted.
+
+        Please read https://www.visualstudio.com/license-terms/mt644918/ and enable this config if you accept.
+      '';
+    };
+
+    allowDeprecatedx86_64Darwin = mkOption {
+      # `force` does nothing; it’s reserved for forward compatibility
+      # with 26.11. We hide it from the documentation to avoid a
+      # footgun, as it will make the error in 26.11 less useful.
+      type = types.either types.bool (types.enum [ "force" ]) // {
+        inherit (types.bool) description descriptionClass;
+      };
+      default = false;
+      description = ''
+        Silence the warning for the upcoming deprecation of the
+        `x86_64-darwin` platform in Nixpkgs 26.11.
+
+        See the [release notes](#x86_64-darwin-26.05) for more
+        information.
+      '';
+    };
+
+    problems = (import ../stdenv/generic/problems.nix { inherit lib; }).configOptions;
   };
 
 in
@@ -221,9 +479,39 @@ in
   inherit options;
 
   config = {
-    warnings = optionals config.warnUndeclaredOptions (
-      mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
-    );
+    warnings =
+      optionals config.warnUndeclaredOptions (
+        mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or { }
+      )
+      ++ lib.optional (config.showDerivationWarnings != [ ]) ''
+        `config.showDerivationWarnings = [ "maintainerless" ]` is deprecated, use `config.problems` instead:
+
+          config.problems.matchers = [ { kind = "maintainerless"; handler = "warn"; } ];
+
+        See this page for more details: https://nixos.org/manual/nixpkgs/unstable#sec-problems
+      '';
+
+    assertions =
+      # Collect the assertions from the problems.matchers.* submodules, propagate them into here
+      lib.concatMap (matcher: matcher.assertions) config.problems.matchers;
+
+    # Put the default value for matchers in here (as in, not as an *actual* mkDefault default value),
+    # to force it being merged with any custom values instead of being overridden.
+    problems.matchers = [
+      {
+        kind = "broken";
+        handler = "error";
+      }
+      # Be loud and clear about package removals
+      {
+        kind = "removal";
+        handler = "warn";
+      }
+      (lib.mkIf (lib.elem "maintainerless" config.showDerivationWarnings) {
+        kind = "maintainerless";
+        handler = "warn";
+      })
+    ];
   };
 
 }

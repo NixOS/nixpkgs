@@ -7,15 +7,14 @@
   libkate,
   pango,
   cairo,
-  darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libtiger";
   version = "0.3.4";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libtiger/libtiger-${version}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/libtiger/libtiger-${finalAttrs.version}.tar.gz";
     sha256 = "0rj1bmr9kngrgbxrjbn4f4f9pww0wmf6viflinq7ava7zdav4hkk";
   };
 
@@ -35,13 +34,13 @@ stdenv.mkDerivation rec {
     libkate
     pango
     cairo
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
+  ];
 
   meta = {
     homepage = "https://code.google.com/archive/p/libtiger/";
     description = "Rendering library for Kate streams using Pango and Cairo";
     platforms = lib.platforms.unix;
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ matthewbauer ];
+    maintainers = [ ];
   };
-}
+})

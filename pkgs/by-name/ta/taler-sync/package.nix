@@ -19,12 +19,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-sync";
-  version = "0.14.2-unstable-2025-03-02";
+  version = "1.3.0";
 
   src = fetchgit {
     url = "https://git.taler.net/sync.git";
-    rev = "10d0e97f191a8bd7de07049559a2eccb29a78507";
-    hash = "sha256-aihxgknPCE8tbRfncbMO/zHGg395LHVuXWyln2ryiCw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1m26ORKsN0GHJWQ/5gtMO3x1ng+GsZK9Y80413vF5pI=";
   };
 
   strictDeps = true;
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.taler.net/sync.git";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ wegank ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

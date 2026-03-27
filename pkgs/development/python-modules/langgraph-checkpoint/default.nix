@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -13,29 +13,33 @@
 
   # testing
   dataclasses-json,
+  numpy,
+  pandas,
+  pycryptodome,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  redis,
 
   # passthru
-  nix-update-script,
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langgraph-checkpoint";
-  version = "2.0.24";
+  version = "4.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    tag = "checkpoint==${version}";
-    hash = "sha256-NlTpBXBeADlIHQDlt0muJEuoKOgXiAtAo8GoU5CsvZo=";
+    tag = "checkpoint==${finalAttrs.version}";
+    hash = "sha256-NJSmpVshj/x6ws+jFYXGarNKNztbk5OIIMA1neFOyIY=";
   };
 
-  sourceRoot = "${src.name}/libs/checkpoint";
+  sourceRoot = "${finalAttrs.src.name}/libs/checkpoint";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
@@ -48,31 +52,30 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dataclasses-json
+    numpy
+    pandas
+    pycryptodome
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+    redis
   ];
 
-  disabledTests = [
-    # AssertionError
-    "test_serde_jsonplus"
-  ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "checkpoint==(\\d+\\.\\d+\\.\\d+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "checkpoint==";
+    };
   };
 
   meta = {
-    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpoint==${version}";
+    changelog = "https://github.com/langchain-ai/langgraph/releases/tag/${finalAttrs.src.tag}";
     description = "Library with base interfaces for LangGraph checkpoint savers";
     homepage = "https://github.com/langchain-ai/langgraph/tree/main/libs/checkpoint";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       sarahec
     ];
   };
-}
+})

@@ -46,8 +46,10 @@ stdenv.mkDerivation {
     "PREFIX=${placeholder "out"}"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
-  FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
+  env = {
+    FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+    FONTCONFIG_PATH = "${fontconfig.out}/etc/fonts/";
+  };
 
   postPatch = ''
     substituteInPlace cpp/src/Options.cpp \
@@ -56,11 +58,11 @@ stdenv.mkDerivation {
       --replace "-Werror" "-Werror -Wno-format"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C++ library to control Z-Wave Networks via a USB Z-Wave Controller";
     homepage = "http://www.openzwave.net/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -4,19 +4,19 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "licenseclassifier";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "licenseclassifier";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-j+8hX8W0VD0h09Qmu7POnHT8f8+SeG5Si1fI0CDIwuo=";
   };
 
   # The new and improved "License Classifier v2" is hidden in a subdirectory.
-  sourceRoot = "${src.name}/v2";
+  sourceRoot = "${finalAttrs.src.name}/v2";
 
   vendorHash = "sha256-u0VR8DCmbZS0MF26Y4HfqtLaGyX2n2INdAidVNbnXPE=";
 
@@ -25,7 +25,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "License Classifier";
     mainProgram = "identify_license";
     longDescription = ''
@@ -36,8 +36,8 @@ buildGoModule rec {
       license text in a comment.
     '';
     homepage = "https://github.com/google/licenseclassifier";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ tnias ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tnias ];
   };
-}
+})

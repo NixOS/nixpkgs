@@ -12,13 +12,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gruvbox-plus-icons";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "SylEleuth";
     repo = "gruvbox-plus-icon-pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MCof2CFQfh/ChFNlsxw9BmrFf1A804HzWoHJdNsrW74=";
+    hash = "sha256-4UJOiDdw5BxtOjLQjCpkQnUwQRs49GZTShpcElWjAU8=";
   };
 
   patches = [ ./folder-color.patch ];
@@ -36,9 +36,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/share/icons
     cp -r Gruvbox-Plus-Dark $out/share/icons/
+    cp -r Gruvbox-Plus-Light $out/share/icons/
     patchShebangs scripts/folders-color-chooser
     ./scripts/folders-color-chooser -c ${folder-color}
     gtk-update-icon-cache $out/share/icons/Gruvbox-Plus-Dark
+    gtk-update-icon-cache $out/share/icons/Gruvbox-Plus-Light
 
     runHook postInstall
   '';

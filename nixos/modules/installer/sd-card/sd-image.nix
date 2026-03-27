@@ -21,12 +21,12 @@
 with lib;
 
 let
-  rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix (
+  rootfsImage = pkgs.callPackage config.sdImage.rootFilesystemCreator (
     {
       inherit (config.sdImage) storePaths;
       compressImage = config.sdImage.compressImage;
       populateImageCommands = config.sdImage.populateRootCommands;
-      volumeLabel = "NIXOS_SD";
+      volumeLabel = config.sdImage.rootVolumeLabel;
     }
     // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
       uuid = config.sdImage.rootPartitionUUID;
@@ -80,8 +80,7 @@ in
       type = types.int;
       default = 8;
       description = ''
-        Gap in front of the /boot/firmware partition, in mebibytes (1024×1024
-        bytes).
+        Gap in front of the /boot/firmware partition, in MiB (1024×1024 bytes).
         Can be increased to make more space for boards requiring to dd u-boot
         SPL before actual partitions.
 
@@ -118,6 +117,40 @@ in
       '';
     };
 
+    rootVolumeLabel = mkOption {
+      type = types.str;
+      default = "NIXOS_SD";
+      example = "NIXOS_PENDRIVE";
+      description = ''
+        Label for the NixOS root volume.
+        Usually used when creating a recovery NixOS media installation
+        that avoids conflicting with previous instalation label.
+      '';
+    };
+
+    rootFilesystemCreator = mkOption {
+      type = types.oneOf [
+        types.package
+        types.path
+      ];
+      default = ../../../lib/make-ext4-fs.nix;
+      example = ''
+        nixpkgs/nixos/lib/make-btrfs-fs.nix
+      '';
+      description = ''
+        The filesystem creator used for the root partition.
+      '';
+    };
+
+    rootFilesystemImage = mkOption {
+      type = types.package;
+      default = rootfsImage;
+      description = ''
+        The finished root partition image with all custom fileystem modifications.
+        Used to override the filesystem creator itself.
+      '';
+    };
+
     firmwareSize = mkOption {
       type = types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
@@ -146,12 +179,44 @@ in
       '';
     };
 
+    preBuildCommands = mkOption {
+      type = types.lines;
+      example = literalExpression ''
+        '''
+          if [ ! -w "$root_fs" ]; then
+            cp --no-preserve=mode "$root_fs" ./root-fs.img
+            root_fs=./root-fs.img
+          fi
+          resize2fs $root_fs 15G
+        '''
+      '';
+      default = "";
+      description = ''
+        Shell commands to run after the root filesystem image has been
+        prepared, but before the final SD image is assembled.
+
+        The path to the root filesystem image is available in the
+        {var}`root_fs` shell variable. This hook can be used to modify
+        the rootfs, for example to resize it or inject additional files.
+
+        Note that when {option}`sdImage.compressImage` is disabled,
+        {var}`root_fs` points to a read-only store path. To modify it,
+        first copy it to a writable location and update {var}`root_fs`
+        to point to the copy.
+      '';
+    };
+
     postBuildCommands = mkOption {
+      type = types.lines;
       example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
-        Shell commands to run after the image is built.
-        Can be used for boards requiring to dd u-boot SPL before actual partitions.
+        Shell commands to run after the SD image has been assembled.
+
+        The path to the image is available in the {var}`img` shell
+        variable. This hook is typically used for boards that require
+        writing a bootloader (such as u-boot SPL) to a fixed offset
+        before the first partition.
       '';
     };
 
@@ -198,7 +263,7 @@ in
         ];
       };
       "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
+        device = "/dev/disk/by-label/${config.sdImage.rootVolumeLabel}";
         fsType = "ext4";
       };
     };
@@ -206,7 +271,7 @@ in
     sdImage.storePaths = [ config.system.build.toplevel ];
 
     image.extension = if config.sdImage.compressImage then "img.zst" else "img";
-    image.filePath = "sd-card/${config.image.fileName}";
+    image.filePath = "sd-image/${config.image.fileName}";
     system.nixos.tags = [ "sd-card" ];
     system.build.image = config.system.build.sdImage;
     system.build.sdImage = pkgs.callPackage (
@@ -228,7 +293,8 @@ in
           libfaketime
           mtools
           util-linux
-        ] ++ lib.optional config.sdImage.compressImage zstd;
+        ]
+        ++ lib.optional config.sdImage.compressImage zstd;
 
         inherit (config.sdImage) compressImage;
 
@@ -243,12 +309,14 @@ in
             echo "file sd-image $img" >> $out/nix-support/hydra-build-products
           fi
 
-          root_fs=${rootfsImage}
+          root_fs=${config.sdImage.rootFilesystemImage}
           ${lib.optionalString config.sdImage.compressImage ''
             root_fs=./root-fs.img
             echo "Decompressing rootfs image"
-            zstd -d --no-progress "${rootfsImage}" -o $root_fs
+            zstd -d --no-progress "${config.sdImage.rootFilesystemImage}" -o $root_fs
           ''}
+
+          ${config.sdImage.preBuildCommands}
 
           # Gap in front of the first partition, in MiB
           gap=${toString config.sdImage.firmwarePartitionOffset}

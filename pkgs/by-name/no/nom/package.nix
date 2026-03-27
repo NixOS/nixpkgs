@@ -1,30 +1,42 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nom";
-  version = "2.8.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "guyfedwards";
     repo = "nom";
-    tag = "v${version}";
-    hash = "sha256-2YXecurdmlho5LvkkMc97GiyrSy/kTZINTPtC+J+eL0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-q2vnReYAxU8UcTPIy1dIVO9jQwC+9dYfO9cDls0Voyo=";
   };
 
-  vendorHash = "sha256-d5KTDZKfuzv84oMgmsjJoXGO5XYLVKxOB5XehqgRvYw=";
+  vendorHash = "sha256-pPd7wpZ55thW0Xq2c/0qSAlGQ71tE8GptsEBJD839Bg=";
 
-  meta = with lib; {
+  ldflags = [
+    "-X 'main.version=${finalAttrs.version}'"
+  ];
+
+  # only run xdg-specific test on linux
+  checkFlags = lib.optional stdenv.hostPlatform.isDarwin "-skip=^TestNewDefaultWithXDGConfigHome$";
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     homepage = "https://github.com/guyfedwards/nom";
+    changelog = "https://github.com/guyfedwards/nom/releases/tag/v${finalAttrs.version}";
     description = "RSS reader for the terminal";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       nadir-ishiguro
       matthiasbeyer
     ];
     mainProgram = "nom";
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   spglib,
   numpy,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "sumo";
-  version = "2.3.11";
+  version = "2.3.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SMTG-UCL";
     repo = "sumo";
     tag = "v${version}";
-    hash = "sha256-A6lwTQsX8J+7+9jkkZjBS0MLcJHneBVpy7RsJA22Bic=";
+    hash = "sha256-OdoXcdLT/mTkSw/JOrpYjgvUiNLOnBI4avrjrXhzF3U=";
   };
 
   build-system = [

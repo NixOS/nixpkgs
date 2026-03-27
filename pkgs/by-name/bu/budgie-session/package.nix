@@ -14,7 +14,7 @@
   gnome-settings-daemon,
   dbus,
   json-glib,
-  libICE,
+  libice,
   xmlto,
   docbook_xsl,
   docbook_xml_dtd_412,
@@ -24,20 +24,20 @@
   makeWrapper,
   nix-update-script,
   systemd,
-  xorg,
+  xtrans,
   libepoxy,
   bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-session";
-  version = "0.9.1";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-session";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mz+Yh3NK2Tag+MWVofFFXYYXspxhmYBD6YCiuATpZSI=";
+    hash = "sha256-MqFZ/0Xe2EXVzbhviNSO3gbZK8R+wLGQOoVkJDA6/Eg=";
   };
 
   outputs = [
@@ -70,10 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
-    libICE
+    libice
     gnome-desktop
     json-glib
-    xorg.xtrans
+    xtrans
     adwaita-icon-theme
     gnome-settings-daemon
     gsettings-desktop-schemas
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-session";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-session/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     platforms = lib.platforms.linux;
   };
 })

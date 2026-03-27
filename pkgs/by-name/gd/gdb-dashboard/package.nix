@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  name = "gdb-dashboard";
-  version = "0.17.3";
+  pname = "gdb-dashboard";
+  version = "0.17.4";
 
   src = fetchFromGitHub {
     owner = "cyrus-and";
     repo = "gdb-dashboard";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x3XcAJdj2Q8s+ZkIBHpGZvCroedPzBmqt5W9Hc1FL7s=";
+    hash = "sha256-xoBkAFwkbaAsvgPwGwe1JxE1C8gPR6GP1iXeNKK5Z70=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Modular visual interface for GDB in Python";
     homepage = "https://github.com/cyrus-and/gdb-dashboard";
     downloadPage = "https://github.com/cyrus-and/gdb-dashboard";
-    changelog = "https://github.com/cyrus-and/gdb-dashboard/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/cyrus-and/gdb-dashboard/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ethancedwards8 ];
   };

@@ -11,13 +11,13 @@
   libxcb,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "radeontop";
   version = "1.4";
 
   src = fetchFromGitHub {
     sha256 = "0kwqddidr45s1blp0h8r8h1dd1p50l516yb6mb4s6zsc827xzgg3";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     repo = "radeontop";
     owner = "clbr";
   };
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patchPhase = ''
-    substituteInPlace getver.sh --replace ver=unknown ver=${version}
+    substituteInPlace getver.sh --replace ver=unknown ver=${finalAttrs.version}
     substituteInPlace Makefile --replace pkg-config "$PKG_CONFIG"
   '';
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : $out/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Top-like tool for viewing AMD Radeon GPU utilization";
     mainProgram = "radeontop";
     longDescription = ''
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       loads.
     '';
     homepage = "https://github.com/clbr/radeontop";
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
-}
+})

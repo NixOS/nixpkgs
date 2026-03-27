@@ -3,15 +3,15 @@
   fetchFromGitHub,
   buildGoModule,
 }:
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "puffin";
-  version = "2.1.1";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "siddhantac";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-5lglIiVOsxnMbeR/E3O5TaMtoR5DJACWjStE4d7hDao=";
+    repo = "puffin";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-cXhnCCg5A/G/FKWfCpq130qSD1iTGpgidqzGGnIPqO8=";
   };
 
   vendorHash = "sha256-ZxAqR3D5VUtbntktrpnywPG3m9rq1utO4fdum0Qe6TU=";
@@ -23,4 +23,4 @@ buildGoModule rec {
     mainProgram = "puffin";
     maintainers = with lib.maintainers; [ renesat ];
   };
-}
+})

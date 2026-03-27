@@ -8,36 +8,44 @@
   fetchFromGitHub,
   pandas,
   pytest-asyncio,
+  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   responses,
-  setuptools,
+  uv-build,
   tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "azure-kusto-ingest";
-  version = "4.6.3";
+  version = "6.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-kusto-python";
     tag = "v${version}";
-    hash = "sha256-VndOEvSi4OMf/yAjNl34X9IFF0T+wNfjlPW8NfdrwUo=";
+    hash = "sha256-jg8VueMohp7z45va5Z+cF0Hz+RMW4Vd5AchJX/wngLc=";
   };
 
   sourceRoot = "${src.name}/${pname}";
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.8.9,<0.9.0" uv-build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     azure-kusto-data
     azure-storage-blob
     azure-storage-queue
     tenacity
+  ];
+
+  pythonRelaxDeps = [
+    "azure-storage-blob"
+    "azure-storage-queue"
   ];
 
   optional-dependencies = {
@@ -47,9 +55,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aiohttp
     pytest-asyncio
+    pytest-xdist
     pytestCheckHook
     responses
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "azure.kusto.ingest" ];
 
@@ -63,6 +73,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-kusto-python/tree/master/azure-kusto-ingest";
     changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

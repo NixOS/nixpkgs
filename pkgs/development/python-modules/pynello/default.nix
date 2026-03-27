@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   python-dateutil,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "2.0.3";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
-
   src = fetchFromGitHub {
     owner = "pschmitt";
-    repo = pname;
+    repo = "pynello";
     rev = version;
     hash = "sha256-sUy37sEPEMyFYFVBzFVdcg31nZAyC+Ricm4LqxmjuQQ=";
   };
@@ -33,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pynello" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library for nello.io intercoms";
     mainProgram = "nello";
     homepage = "https://github.com/pschmitt/pynello";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

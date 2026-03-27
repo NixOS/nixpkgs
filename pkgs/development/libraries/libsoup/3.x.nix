@@ -24,47 +24,46 @@
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
-  version = "3.6.4";
+  version = "3.6.6";
 
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-m1THb1J2sFvryvK2wqFBoYj8e7HQYk7aJZ2sE6ZmXIo=";
+    hash = "sha256-Ue0K4G+dWkD0Af9Fni5fZS+aUQt3MOE1nuZtFNSHJ0A=";
   };
 
   depsBuildBuild = [
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      glib
-      python3
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+    python3
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      sqlite
-      libpsl
-      glib.out
-      brotli
-      libnghttp2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libsysprof-capture
-    ];
+  buildInputs = [
+    sqlite
+    libpsl
+    glib.out
+    brotli
+    libnghttp2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libsysprof-capture
+  ];
 
   propagatedBuildInputs = [
     glib
@@ -86,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO: For some reason the pkg-config setup hook does not pick this up.
-  PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
+  env.PKG_CONFIG_PATH = "${libnghttp2.dev}/lib/pkgconfig";
 
   # HSTS tests fail.
   doCheck = false;
@@ -104,7 +103,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
-      packageName = pname;
+      packageName = "libsoup";
       versionPolicy = "odd-unstable";
     };
   };
@@ -113,6 +112,7 @@ stdenv.mkDerivation rec {
     description = "HTTP client/server library for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
-    inherit (glib.meta) maintainers platforms;
+    changelog = "https://gitlab.gnome.org/GNOME/libsoup/-/blob/${version}/NEWS";
+    inherit (glib.meta) maintainers platforms teams;
   };
 }

@@ -4,6 +4,7 @@
   httpx,
   lib,
   poetry-core,
+  pyaudio,
   pydantic,
   pydantic-core,
   requests,
@@ -11,20 +12,16 @@
   websockets,
 }:
 
-let
-  version = "1.56.0";
-  tag = "v${version}";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "elevenlabs";
-  inherit version;
+  version = "2.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elevenlabs";
     repo = "elevenlabs-python";
-    inherit tag;
-    hash = "sha256-BDHfEhg8nj41jZa4Cuw1Ck2qWwY2GlKK8GQ9ZqMQHcs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1t+CJ+gHnF8wpq6/NpbuophKczXE/usKwwYCrgAZqsY=";
   };
 
   build-system = [ poetry-core ];
@@ -38,16 +35,20 @@ buildPythonPackage {
     websockets
   ];
 
+  optional-dependencies = {
+    pyaudio = [ pyaudio ];
+  };
+
   pythonImportsCheck = [ "elevenlabs" ];
 
   # tests access the API on the internet
   doCheck = false;
 
   meta = {
-    changelog = "https://github.com/elevenlabs/elevenlabs-python/releases/tag/${tag}";
+    changelog = "https://github.com/elevenlabs/elevenlabs-python/releases/tag/${finalAttrs.src.tag}";
     description = "Official Python API for ElevenLabs Text to Speech";
     homepage = "https://github.com/elevenlabs/elevenlabs-python";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };
-}
+})

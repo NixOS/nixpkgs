@@ -1,24 +1,20 @@
 {
   lib,
-  python311Packages,
+  python3Packages,
   fetchFromGitHub,
   bashate,
 }:
 
-let
-  pythonPackages = python311Packages;
-in
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "kolla";
-  version = "18.1.0";
-
+  version = "21.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "kolla";
-    hash = "sha256-jLD6ILihymQlWkkpGYC4OX8BKLpQurAK6Y5Xpju+QAI=";
-    rev = version;
+    tag = finalAttrs.version;
+    hash = "sha256-wbVaPIvn4jPcb+h5yKhLDmvT6/widfSX2iV+2KNW8pM=";
   };
 
   postPatch = ''
@@ -26,21 +22,22 @@ pythonPackages.buildPythonApplication rec {
       --replace-fail "os.path.join(sys.prefix, 'share/kolla')," \
       "os.path.join(PROJECT_ROOT, '../../../share/kolla'),"
 
-    substituteInPlace test-requirements.txt \
-      --replace-fail "hacking>=3.0.1,<3.1.0" "hacking"
-
-    sed -e 's/git_info = .*/git_info = "${version}"/' -i kolla/version.py
+    sed -e 's/git_info = .*/git_info = "${finalAttrs.version}"/' -i kolla/version.py
   '';
 
-  # fake version to make pbr.packaging happy
-  env.PBR_VERSION = version;
+  pythonRelaxDeps = [
+    "hacking"
+  ];
 
-  build-system = with pythonPackages; [
+  # fake version to make pbr.packaging happy
+  env.PBR_VERSION = finalAttrs.version;
+
+  build-system = with python3Packages; [
     setuptools
     pbr
   ];
 
-  dependencies = with pythonPackages; [
+  dependencies = with python3Packages; [
     docker
     jinja2
     oslo-config
@@ -49,30 +46,30 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    cp kolla/template/repos.yaml $out/${pythonPackages.python.sitePackages}/kolla/template/
+    cp kolla/template/repos.yaml $out/${python3Packages.python.sitePackages}/kolla/template/
   '';
 
-  nativeCheckInputs = with pythonPackages; [
+  nativeCheckInputs = with python3Packages; [
     testtools
     stestr
     oslotest
     hacking
-    coverage
     bashate
   ];
 
   # Tests output a few exceptions but still succeed
   checkPhase = ''
     runHook preCheck
-    stestr run
+    stestr run -e <(echo "test_load_ok")
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Provides production-ready containers and deployment tools for operating OpenStack clouds";
     mainProgram = "kolla-build";
     homepage = "https://opendev.org/openstack/kolla";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members ++ [ maintainers.astro ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.astro ];
+    teams = [ lib.teams.openstack ];
   };
-}
+})

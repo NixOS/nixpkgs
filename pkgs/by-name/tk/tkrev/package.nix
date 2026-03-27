@@ -6,13 +6,13 @@
   tk,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tkrev";
-  version = "9.4.1";
+  version = "9.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tkcvs/tkrev_${version}.tar.gz";
-    sha256 = "sha256-WHDZPShEB9Q+Bjbb37mogJLUZk2GuWoO8bz+Zydc7i4=";
+    url = "mirror://sourceforge/tkcvs/tkrev_${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-hWGxxL7ArWPi1uCeigJIccke5vYTLn2OWHR7t8TIrZc=";
   };
 
   buildInputs = [
@@ -37,4 +37,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
   };
-}
+})

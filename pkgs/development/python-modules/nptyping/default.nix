@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   beartype,
   invoke,
@@ -16,11 +15,9 @@ buildPythonPackage rec {
   version = "2.5.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "ramonhagenaars";
-    repo = pname;
+    repo = "nptyping";
     tag = "v${version}";
     hash = "sha256-hz4YrcvARCAA7TXapmneIwle/F4pzcIYLPSmiFHC0VQ=";
   };
@@ -63,12 +60,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nptyping" ];
 
-  meta = with lib; {
+  meta = {
     description = "Type hints for numpy";
     homepage = "https://github.com/ramonhagenaars/nptyping";
     changelog = "https://github.com/ramonhagenaars/nptyping/blob/v${version}/HISTORY.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bcdarwin
       pandapip1
     ];

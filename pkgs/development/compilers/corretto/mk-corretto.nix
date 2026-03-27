@@ -6,6 +6,7 @@
   stdenv,
   gradle,
   extraConfig ? [ ],
+  extraNativeBuildInputs ? [ ],
   rsync,
   runCommand,
   testers,
@@ -28,31 +29,54 @@ in
 jdk.overrideAttrs (
   finalAttrs: oldAttrs: {
     inherit pname version src;
-    name = "${pname}-${version}";
 
-    nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [
-      jdk
-      gradle
-      rsync
-    ];
+    nativeBuildInputs =
+      oldAttrs.nativeBuildInputs
+      ++ [
+        jdk
+        gradle
+        rsync
+      ]
+      ++ extraNativeBuildInputs;
 
     dontConfigure = true;
 
     postPatch =
       let
         extra_config = builtins.concatStringsSep " " extraConfig;
+        jdk_configure_flags = "'" + builtins.concatStringsSep "', '" oldAttrs.configureFlags + "'";
       in
-      ''
+      (oldAttrs.postPatch or "")
+      + ''
         # The rpm/deb task definitions require a Gradle plugin which we don't
-        # have and so the build fails. We'll simply remove them here because
-        # they are not needed anyways.
-        rm -rf installers/linux/universal/{rpm,deb}
+        # have and so the build fails. We'll simply empty them here because
+        # they are not needed anyways. The directories are kept because Gradle
+        # still expects them.
+        rm -rf installers/linux/universal/{rpm,deb}/{*,.*}
+
+        # These fixes are necessary as long as we use Gradle 9 to build
+        # Corretto but upstream is not yet using it. I.e. as long as upstream
+        # hasn't fixed compatibility with Gradle 9 issues.
+        find /build/source/installers -type d -exec cp /build/source/version.txt {}/version.txt \;
+        find /build/source/installers -name 'build.gradle' -exec sed -i '/fileMode =/d' {} \;
+        for d in source pre-build; do
+          # These subprojects (see settings.gradle) don't exist. Create them
+          # here so that Gradle doesn't complain.
+          mkdir /build/source/$d
+          cp /build/source/version.txt /build/source/$d/version.txt
+        done
 
         # `/usr/bin/rsync` is invoked to copy the source tree. We don't have that.
         for file in $(find installers -name "build.gradle"); do
           substituteInPlace $file --replace-warn "workingDir '/usr/bin'" "workingDir '.'"
         done
 
+        # Prepend corresponding OpenJDK flags to Corretto's own configure flags.
+        # This will provide us with the version-specific fixes (see
+        # openjdk/generic.nix) while giving Corretto's flags precedence.
+        # Note that the OpenJdK flags contain "--with-boot-jdk=..."!
+        substituteInPlace build.gradle --replace-fail "correttoCommonFlags = [" "correttoCommonFlags = [${jdk_configure_flags} ,"
+        # Finally, *append* nix-corretto-version specific flags.
         gradleFlagsArray+=(-Pcorretto.extra_config="${extra_config}")
       '';
 
@@ -67,27 +91,25 @@ jdk.overrideAttrs (
       else
         ":installers:linux:universal:tar:packageBuildResults";
 
-    postBuild =
-      ''
-        # Prepare for the installPhase so that it looks like if a normal
-        # OpenJDK had been built.
-        dir=build/jdkImageName/images
-        mkdir -p $dir
-        file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
-        tar -xzf $file -C $dir
-        mv $dir/amazon-corretto-* $dir/jdk
-      ''
-      + oldAttrs.postBuild or "";
+    postBuild = ''
+      # Prepare for the installPhase so that it looks like if a normal
+      # OpenJDK had been built.
+      dir=build/jdkImageName/images
+      mkdir -p $dir
+      file=$(find ./installers -name 'amazon-corretto-${version}*.tar.gz')
+      tar -xzf $file -C $dir
+      mv $dir/amazon-corretto-* $dir/jdk
+      chmod +x $dir/jdk/bin/*
+    ''
+    + oldAttrs.postBuild or "";
 
-    installPhase =
-      oldAttrs.installPhase
-      + ''
-        # The installPhase will place everything in $out/lib/openjdk and
-        # reference through symlinks. We don't rewrite the installPhase but at
-        # least move the folder to convey that this is not OpenJDK anymore.
-        mv $out/lib/openjdk $out/lib/corretto
-        ln -s $out/lib/corretto $out/lib/openjdk
-      '';
+    installPhase = oldAttrs.installPhase + ''
+      # The installPhase will place everything in $out/lib/openjdk and
+      # reference through symlinks. We don't rewrite the installPhase but at
+      # least move the folder to convey that this is not OpenJDK anymore.
+      mv $out/lib/openjdk $out/lib/corretto
+      ln -s $out/lib/corretto $out/lib/openjdk
+    '';
 
     passthru =
       let
@@ -115,14 +137,13 @@ jdk.overrideAttrs (
         };
       };
 
-    # Some of the OpenJDK derivation set their `pos` by hand. We need to
-    # overwrite this in order to point to Corretto, not OpenJDK.
-    pos = __curPos;
     meta = oldAttrs.meta // {
       homepage = "https://aws.amazon.com/corretto";
       license = lib.licenses.gpl2Only;
       description = "Amazon's distribution of OpenJDK";
       maintainers = with lib.maintainers; [ rollf ];
+      platforms = lib.platforms.linux;
+      teams = [ ];
     };
   }
 )

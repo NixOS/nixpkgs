@@ -5,7 +5,7 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/mypy-boto3/default.nix
 
-#nix-update python312Packages.botocore-stubs --commit --build
+#nix-update python3Packages.botocore-stubs --commit --build
 
 packages=(
   mypy-boto3-accessanalyzer
@@ -368,7 +368,7 @@ for package in "${packages[@]}"; do
   if [ "${version}" != "${old_version}" ]; then
     url="https://pypi.io/packages/source/m/${package//-/_}/${package//-/_}-${version}.tar.gz"
     hash=$(nix-prefetch-url --type sha256 $url)
-    sri_hash="$(nix hash to-sri --type sha256 $hash)"
+    sri_hash="$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $hash)"
 
     awk -i inplace -v pkg="\"$package_short_name\"" -v new_version="$version" -v new_sha256="$sri_hash" '
       # Match the line containing the package name
@@ -385,7 +385,7 @@ for package in "${packages[@]}"; do
 
     nixfmt ${source_file}
 
-    git commit ${source_file} -m "python312Packages.${package}: ${old_version} -> ${version}"
+    git commit ${source_file} -m "python3Packages.${package}: ${old_version} -> ${version}"
   fi
 
 done

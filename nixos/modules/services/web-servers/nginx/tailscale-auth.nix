@@ -105,6 +105,6 @@ in
     });
   };
 
-  meta.maintainers = with maintainers; [ phaer ];
+  meta.maintainers = [ ];
 
 }

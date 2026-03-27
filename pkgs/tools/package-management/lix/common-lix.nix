@@ -9,7 +9,7 @@
   # `lix-doc`.
   docCargoDeps ? null,
   patches ? [ ],
-  maintainers ? lib.teams.lix.members,
+  knownVulnerabilities ? [ ],
 }@args:
 
 assert lib.assertMsg (
@@ -21,6 +21,8 @@ assert lib.assertMsg (
 
 {
   stdenv,
+  closureInfo,
+  runCommand,
   meson,
   bison,
   boehmgc,
@@ -43,27 +45,31 @@ assert lib.assertMsg (
   libarchive,
   libcpuid,
   libsodium,
+  libsystemtap,
   llvmPackages,
   lowdown,
   lowdown-unsandboxed,
   lsof,
   mercurial,
   mdbook,
-  mdbook-linkcheck,
   nlohmann_json,
   ninja,
   openssl,
+  pkgsStatic,
   rustc,
+  rust-cbindgen,
   toml11,
   pegtl,
-  python3,
+  buildPackages,
   pkg-config,
   rapidcheck,
-  Security,
   sqlite,
+  systemtap-sdt,
   util-linuxMinimal,
   removeReferencesTo,
   xz,
+  yq,
+  zstd,
   nixosTests,
   rustPlatform,
   # Only used for versions before 2.92.
@@ -76,11 +82,22 @@ assert lib.assertMsg (
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableStrictLLVMChecks ? true,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
+  # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
+  withDtrace ?
+    lib.meta.availableOn stdenv.hostPlatform libsystemtap
+    && lib.meta.availableOn stdenv.buildPlatform systemtap-sdt,
   # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
   withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp,
   libseccomp,
+  pastaFod ? lib.meta.availableOn stdenv.hostPlatform passt,
+  passt,
+  withPlugins ? lib.versionAtLeast version "2.95" && !enableStatic,
 
   confDir,
   stateDir,
@@ -90,6 +107,23 @@ let
   isLLVMOnly = lib.versionAtLeast version "2.92";
   hasExternalLixDoc = lib.versionOlder version "2.92";
   isLegacyParser = lib.versionOlder version "2.91";
+  hasDtraceSupport = lib.versionAtLeast version "2.93";
+  parseToYAML = lib.versionAtLeast version "2.93";
+  usesCapnp = lib.versionAtLeast version "2.94";
+
+  mesonCrossFile =
+    deps:
+    runCommand "lix-cross-file.conf"
+      {
+        input = ''
+          [project options]
+          builtin-dep-closure = @deps@
+        '';
+        passAsFile = [ "input" ];
+      }
+      ''
+        substitute $inputPath $out --replace-fail @deps@ "$(cat ${deps})"
+      '';
 in
 # gcc miscompiles coroutines at least until 13.2, possibly longer
 # do not remove this check unless you are sure you (or your users) will not report bugs to Lix upstream about GCC miscompilations.
@@ -99,20 +133,19 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "lix";
 
   version = "${version}${suffix}";
-  VERSION_SUFFIX = suffix;
+  env.VERSION_SUFFIX = suffix;
 
   inherit src patches;
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals enableDocumentation [
-      "man"
-      "doc"
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals enableDocumentation [
+    "man"
+    "doc"
+    "devdoc"
+  ];
 
   strictDeps = true;
   disallowedReferences = lib.optionals isLLVMOnly [
@@ -121,76 +154,123 @@ stdenv.mkDerivation (finalAttrs: {
     # We don't want the underlying GCC neither!
     stdenv.cc.cc.stdenv.cc.cc
   ];
+  __structuredAttrs = true;
+
+  # dep closure for builtin builders in meson array form for immediate use
+  builtinDeps =
+    if stdenv.hostPlatform.isStatic then
+      builtins.toFile "lix-static-dep-closure" "[]"
+    else
+      runCommand "lix-builtin-dep-closure"
+        {
+          closure = closureInfo {
+            # closureInfo does not work all that well for things like lowdown,
+            # where it finds only -out but not -lib. we'll take -out and -lib,
+            # ignoring -bin, -man, -dev, etc. and hope that'll be good enough.
+            rootPaths = lib.flatten (
+              map
+                (drv: [
+                  (drv.out or [ ])
+                  (drv.lib or [ ])
+                ])
+                (
+                  lib.subtractLists finalAttrs.disallowedReferences (
+                    finalAttrs.buildInputs ++ finalAttrs.propagatedBuildInputs
+                  )
+                )
+            );
+          };
+        }
+        ''
+          closure=($(cat $closure/store-paths))
+          closure="$(printf ", '%s'" "''${closure[@]}")"
+          printf "[%s]" "''${closure:2}" >$out
+        '';
 
   # We only include CMake so that Meson can locate toml11, which only ships CMake dependency metadata.
   dontUseCmakeConfigure = true;
 
-  nativeBuildInputs =
-    [
-      # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
-      (python3.pythonOnBuildForHost.withPackages (p: [
+  nativeBuildInputs = [
+    # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
+    (buildPackages.python3.withPackages (
+      p:
+      [ p.python-frontmatter ]
+      ++ lib.optionals (lib.versionOlder version "2.94") [ p.toml ]
+      ++ lib.optionals finalAttrs.doInstallCheck [
+        p.aiohttp
         p.pytest
+        p.pytest-timeout
         p.pytest-xdist
-        p.python-frontmatter
-      ]))
-      pkg-config
-      flex
-      jq
-      meson
-      ninja
-      cmake
-      python3
-      # Required for libstd++ assertions that leaks inside of the final binary.
-      removeReferencesTo
+        p.pyxattr
+        p.tappy
+        p.ruff
+      ]
+      ++ lib.optionals usesCapnp [ p.pycapnp ]
+    ))
+    pkg-config
+    flex
+    jq
+    meson
+    ninja
+    cmake
+    # Required for libstd++ assertions that leaks inside of the final binary.
+    removeReferencesTo
 
-      # Tests
-      git
-      mercurial
-      jq
-      lsof
-    ]
-    ++ lib.optionals isLLVMOnly [
-      rustc
-      cargo
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals isLegacyParser [ bison ]
-    ++ lib.optionals enableDocumentation [
-      (lib.getBin lowdown-unsandboxed)
-      mdbook
-      mdbook-linkcheck
-      doxygen
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ];
+    # Tests
+    git
+    mercurial
+    jq
+    lsof
+  ]
+  ++ lib.optionals isLLVMOnly [
+    rustc
+    rust-cbindgen
+    cargo
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals isLegacyParser [ bison ]
+  ++ lib.optionals enableDocumentation [
+    (lib.getBin lowdown-unsandboxed)
+    mdbook
+    doxygen
+  ]
+  ++ lib.optionals (hasDtraceSupport && withDtrace) [ systemtap-sdt ]
+  ++ lib.optionals pastaFod [ passt ]
+  ++ lib.optionals parseToYAML [ yq ]
+  ++ lib.optionals usesCapnp [ capnproto ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linuxMinimal ]
+  ++ lib.optionals (lib.versionAtLeast version "2.94") [ zstd ]
+  ++ lib.optionals (withPlugins && finalAttrs.doInstallCheck) [
+    curl
+  ];
 
-  buildInputs =
-    [
-      boost
-      brotli
-      bzip2
-      curl
-      capnproto
-      editline
-      libsodium
-      openssl
-      sqlite
-      xz
-      gtest
-      libarchive
-      lowdown
-      rapidcheck
-      toml11
-    ]
-    ++ lib.optionals hasExternalLixDoc [ lix-doc ]
-    ++ lib.optionals (!isLegacyParser) [ pegtl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ]
-    # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
-    # libunwind library path directly in the wrappers, but it does inject
-    # -lunwind without injecting the library path...
-    ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
-    ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
-    ++ lib.optionals withLibseccomp [ libseccomp ]
-    ++ lib.optionals withAWS [ aws-sdk-cpp ];
+  buildInputs = [
+    boost
+    brotli
+    bzip2
+    curl
+    capnproto
+    editline
+    openssl
+    sqlite
+    xz
+    gtest
+    libarchive
+    lowdown
+    rapidcheck
+    toml11
+  ]
+  ++ lib.optionals hasExternalLixDoc [ lix-doc ]
+  ++ lib.optionals (!isLegacyParser) [ pegtl ]
+  ++ lib.optionals (lib.versionOlder version "2.94") [ libsodium ]
+  # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
+  # libunwind library path directly in the wrappers, but it does inject
+  # -lunwind without injecting the library path...
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ llvmPackages.libunwind ]
+  ++ lib.optionals (stdenv.hostPlatform.isx86_64) [ libcpuid ]
+  ++ lib.optionals withLibseccomp [ libseccomp ]
+  ++ lib.optionals withAWS [ aws-sdk-cpp ]
+  ++ lib.optionals (hasDtraceSupport && withDtrace) [ libsystemtap ];
 
   inherit cargoDeps;
 
@@ -200,7 +280,7 @@ stdenv.mkDerivation (finalAttrs: {
     # would be in a Cargo registry cache.
     MESON_PACKAGE_CACHE_DIR =
       if finalAttrs.cargoDeps != null then
-        finalAttrs.cargoDeps
+        "${finalAttrs.cargoDeps}/source-registry-0"
       else
         "lix: no `MESON_PACKAGE_CACHE_DIR`, set `cargoDeps`";
   };
@@ -217,7 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462
-    lib.optionalString (!enableStatic) ''
+    lib.optionalString (lib.versionOlder version "2.91" && !enableStatic) ''
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
@@ -240,28 +320,66 @@ stdenv.mkDerivation (finalAttrs: {
   # We use -O2 upstream https://gerrit.lix.systems/c/lix/+/554
   mesonBuildType = "debugoptimized";
 
-  mesonFlags =
-    [
-      # Enable LTO, since it improves eval performance a fair amount
-      # LTO is disabled on:
-      # - static builds (strange linkage errors)
-      (lib.mesonBool "b_lto" (!stdenv.hostPlatform.isStatic && (isLLVMOnly || stdenv.cc.isGNU)))
-      (lib.mesonEnable "gc" true)
-      (lib.mesonBool "enable-tests" true)
-      (lib.mesonBool "enable-docs" enableDocumentation)
-      (lib.mesonEnable "internal-api-docs" enableDocumentation)
-      (lib.mesonBool "enable-embedded-sandbox-shell" (
-        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
-      ))
-      (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
+  mesonFlags = [
+    # Enable LTO, since it improves eval performance a fair amount
+    # LTO is disabled on:
+    # - static builds (strange linkage errors)
+    # - darwin builds (install test failures. see fj#568 & fj#832)
+    (lib.mesonBool "b_lto" (
+      !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isDarwin && (isLLVMOnly || stdenv.cc.isGNU)
+    ))
+    (lib.mesonEnable "gc" true)
+    (lib.mesonBool "enable-tests" true)
+    (lib.mesonBool "enable-docs" enableDocumentation)
+    (lib.mesonEnable "internal-api-docs" enableDocumentation)
+    (lib.mesonBool "enable-embedded-sandbox-shell" (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+    ))
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.95") [
+    (lib.mesonBool "enable-contrib-plugins" withPlugins)
+  ]
+  ++ [
+    (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
 
-      (lib.mesonOption "store-dir" storeDir)
-      (lib.mesonOption "state-dir" stateDir)
-      (lib.mesonOption "sysconfdir" confDir)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-    ];
+    (lib.mesonOption "store-dir" storeDir)
+    (lib.mesonOption "state-dir" stateDir)
+    (lib.mesonOption "sysconfdir" confDir)
+  ]
+  ++ lib.optionals hasDtraceSupport [
+    (lib.mesonEnable "dtrace-probes" withDtrace)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
+  ]
+  ++
+    lib.optionals
+      (
+        stdenv.hostPlatform.isLinux
+        && finalAttrs.doInstallCheck
+        && lib.versionAtLeast version "2.94"
+        && lib.versionOlder version "2.95"
+      )
+      [
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
+      ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.95")
+      [
+        (lib.mesonOption "build-test-env" (
+          lib.makeBinPath [
+            pkgsStatic.busybox
+            pkgsStatic.acl
+          ]
+        ))
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.bash}/bin")
+      ]
+  ++ lib.optionals (lib.versionAtLeast version "2.95") [
+    "--${
+      if stdenv.hostPlatform != stdenv.buildPlatform then "cross" else "native"
+    }-file=${mesonCrossFile finalAttrs.builtinDeps}"
+  ];
 
   ninjaFlags = [ "-v" ];
 
@@ -273,16 +391,15 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p $devdoc/nix-support
       echo "devdoc internal-api $devdoc/share/doc/nix/internal-api" >> $devdoc/nix-support/hydra-build-products
     ''
-    + lib.optionalString (!hasExternalLixDoc) ''
+    + lib.optionalString (lib.versionOlder version "2.94" && !hasExternalLixDoc) ''
       # We do not need static archives.
-      # FIXME(Raito): why are they getting installed _at all_ ?
       rm $out/lib/liblix_doc.a
     ''
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       mkdir -p $out/nix-support
       echo "file binary-dist $out/bin/nix" >> $out/nix-support/hydra-build-products
     ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    + lib.optionalString (lib.versionOlder version "2.91" && stdenv.hostPlatform.isDarwin) ''
       for lib in liblixutil.dylib liblixexpr.dylib; do
         install_name_tool \
           -change "${lib.getLib boost}/lib/libboost_context.dylib" \
@@ -311,7 +428,8 @@ stdenv.mkDerivation (finalAttrs: {
     rapidcheck
   ];
 
-  doInstallCheck = true;
+  # Python splices are broken (https://github.com/NixOS/nixpkgs/issues/476822), causing build failure in `buildPackages.python3Packages.bcrypt`.
+  doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   mesonInstallCheckFlags = [
     "--suite=installcheck"
     "--print-errorlogs"
@@ -331,16 +449,14 @@ stdenv.mkDerivation (finalAttrs: {
     meson test --no-rebuild "''${flagsArray[@]}"
     runHook postInstallCheck
   '';
-  hardeningDisable =
-    [
-      "shadowstack"
-      # strictoverflow is disabled because we trap on signed overflow instead
-      "strictoverflow"
-    ]
-    # fortify breaks the build with lto and musl for some reason
-    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable = [
+    "shadowstack"
+    # strictoverflow is disabled because we trap on signed overflow instead
+    "strictoverflow"
+  ]
+  # fortify breaks the build with lto and musl for some reason
+  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;
   enableParallelBuilding = true;
 
@@ -350,8 +466,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit aws-sdk-cpp boehmgc;
     tests = {
-      misc = nixosTests.nix-misc.lix;
-      installer = nixosTests.installer.lix-simple;
+      misc = nixosTests.nix-misc.default.passthru.override { nixPackage = finalAttrs.finalPackage; };
+      installer = nixosTests.installer.simple.override { selectNixPackage = _: finalAttrs.finalPackage; };
     };
   };
 
@@ -369,9 +485,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://lix.systems";
     license = lib.licenses.lgpl21Plus;
-    inherit maintainers;
+    teams = [ lib.teams.lix ];
     platforms = lib.platforms.unix;
     outputsToInstall = [ "out" ] ++ lib.optional enableDocumentation "man";
     mainProgram = "nix";
+    inherit knownVulnerabilities;
   };
 })

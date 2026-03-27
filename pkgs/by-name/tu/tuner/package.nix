@@ -12,22 +12,20 @@
   desktop-file-utils,
   libsoup_3,
   json-glib,
-  geoclue2,
-  geocode-glib,
   libgee,
   gtk3,
   pantheon,
   gst_all_1,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tuner";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "louis77";
     repo = "tuner";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-i6I5NSwiS8FJuZaHbrXvUcumo9RZvEVPcfKOkHUXiLo=";
   };
 
@@ -45,8 +43,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libsoup_3
     json-glib
-    geoclue2
-    geocode-glib
     libgee
     glib
     gtk3
@@ -69,4 +65,4 @@ stdenv.mkDerivation rec {
       aleksana
     ];
   };
-}
+})

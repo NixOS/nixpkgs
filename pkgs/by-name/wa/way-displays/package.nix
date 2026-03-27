@@ -9,15 +9,15 @@
   yaml-cpp,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "way-displays";
-  version = "1.13.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "way-displays";
-    rev = version;
-    sha256 = "sha256-auZhA29l3eBz5OALLP5MDqoT8DxLLyOpjMAbNf4pYwg=";
+    rev = finalAttrs.version;
+    sha256 = "sha256-M1d6o4mODnFNInSt0GL1aCUcRU9VBVhHFQuwTrw6zY4=";
   };
 
   strictDeps = true;
@@ -44,12 +44,12 @@ stdenv.mkDerivation rec {
     "CXX:=$(CXX)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alex-courtis/way-displays";
     description = "Auto Manage Your Wayland Displays";
-    license = licenses.mit;
-    maintainers = with maintainers; [ simoneruffini ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ simoneruffini ];
+    platforms = lib.platforms.linux;
     mainProgram = "way-displays";
   };
-}
+})

@@ -6,26 +6,18 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "scons";
-  version = "4.7.0";
+  version = "4.10.1";
 
   src = fetchFromGitHub {
     owner = "Scons";
     repo = "scons";
-    rev = version;
-    hash = "sha256-7VzGuz9CAUF6MRCEpj5z1FkZD19/Ic+YBukYQocvkr0=";
+    tag = version;
+    hash = "sha256-Lq6sDd6Bs9lMfTptlxdeNhOc1acP7xuLdDhIi65uqFo=";
   };
 
   pyproject = true;
 
-  patches = [
-    ./env.patch
-    ./no-man-pages.patch
-    # Fix builds on sandboxed Darwin: https://github.com/SCons/scons/pull/4603
-    (fetchpatch {
-      url = "https://github.com/SCons/scons/commit/2d5e3a40a613225b329776ab9dbd9abcd2d24222.patch";
-      hash = "sha256-N1xQOvsPTi7a2maEZJQVu6vJ9AoWMqDOsScXHp9KuXI=";
-    })
-  ];
+  patches = [ ./env.patch ];
 
   build-system = [
     python3Packages.setuptools
@@ -54,6 +46,6 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://scons.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

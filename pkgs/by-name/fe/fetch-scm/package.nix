@@ -5,14 +5,14 @@
   guile,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "fetch-scm";
   version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "KikyTokamuro";
     repo = "fetch.scm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WdYi8EVxQ6xPtld8JyZlUmgpxroevBehtkRANovMh2E=";
   };
 
@@ -26,12 +26,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "System information fetcher written in GNU Guile Scheme";
     homepage = "https://github.com/KikyTokamuro/fetch.scm";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ vel ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ vel ];
     mainProgram = "fetch-scm";
   };
-}
+})

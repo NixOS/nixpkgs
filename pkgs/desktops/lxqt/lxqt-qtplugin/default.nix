@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   libdbusmenu-lxqt,
-  libdbusmenu ? null,
   libfm-qt,
   libqtxdg,
   lxqt-build-tools,
@@ -13,23 +12,17 @@
   qtsvg,
   qttools,
   wrapQtAppsHook,
-  version ? "2.1.0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lxqt-qtplugin";
-  inherit version;
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
-    rev = version;
-    hash =
-      {
-        "1.4.1" = "sha256-sp/LvQNfodMYQ4kNbBv4PTNfs38XjYLezuxRltZd4kc=";
-        "2.1.0" = "sha256-F171IgAhRXJ9sTt8VVDVO9hrmyHbCElsskdDmFr3HB0=";
-      }
-      ."${version}";
+    repo = "lxqt-qtplugin";
+    tag = finalAttrs.version;
+    hash = "sha256-3rY9VpZKnl1E3ma1ioiKECpazeymQYVuXrLXhRL407o=";
   };
 
   nativeBuildInputs = [
@@ -40,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    (if lib.versionAtLeast version "2.0.0" then libdbusmenu-lxqt else libdbusmenu)
+    libdbusmenu-lxqt
     libfm-qt
     libqtxdg
     qtbase
@@ -54,11 +47,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lxqt-qtplugin";
     description = "LXQt Qt platform integration plugin";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})

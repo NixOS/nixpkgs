@@ -7,18 +7,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "krep";
-  version = "0.3.6";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "davidesantangelo";
     repo = "krep";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-wfMNyqZgqoEkp51gompWUn65kaeVZIMfvo0VStW4EPA=";
+    hash = "sha256-hSfFFnp1/fDBAvqqg/oHYfYcls9qkftFV27UJWhsRbk=";
   };
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "ENABLE_ARCH_DETECTION=0"
+    "HAS_AVX512=0"
+    "HAS_AVX2=0"
   ];
 
   installFlags = [
@@ -27,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
   doInstallCheck = true;
-  nativeInstallCheck = [ versionCheckHook ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Blazingly fast string search utility designed for performance-critical applications";

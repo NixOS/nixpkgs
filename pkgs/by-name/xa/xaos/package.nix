@@ -9,9 +9,9 @@
 let
   datapath = "$out/share/XaoS";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xaos";
-  version = "4.3.3";
+  version = "4.3.4";
   outputs = [
     "out"
     "man"
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "xaos-project";
     repo = "XaoS";
-    tag = "release-${version}";
-    hash = "sha256-EUhh1j0OVpCggpKcUJTRJOMKKy3ZF5Fdrk9yuXc2uEY=";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-vOFwZbdbcrcJLHUa1QzxzadPcx5GF5uNPg+MZ7NbAPc=";
   };
 
   nativeBuildInputs = [
@@ -33,12 +33,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt6.qtbase ];
 
-  QMAKE_LRELEASE = "lrelease";
+  env = {
+    QMAKE_LRELEASE = "lrelease";
 
-  DEFINES = [
-    "USE_OPENGL"
-    "USE_FLOAT128"
-  ];
+    DEFINES = toString [
+      "USE_OPENGL"
+      "USE_FLOAT128"
+    ];
+  };
 
   postPatch = ''
     substituteInPlace src/include/config.h \
@@ -62,12 +64,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = src.meta // {
+  meta = finalAttrs.src.meta // {
     description = "Real-time interactive fractal zoomer";
     mainProgram = "xaos";
     homepage = "https://xaos-project.github.io/";
     license = lib.licenses.gpl2Plus;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ ehmry ];
   };
-}
+})

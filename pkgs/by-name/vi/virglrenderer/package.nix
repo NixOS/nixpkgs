@@ -1,81 +1,89 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   meson,
   ninja,
   pkg-config,
-  python3,
+  buildPackages,
   libGLU,
   libepoxy,
-  libX11,
+  libx11,
   libdrm,
   libgbm,
-  nativeContextSupport ? stdenv.hostPlatform.isLinux,
-  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
   vulkan-headers,
   vulkan-loader,
-  gitUpdater,
+  nix-update-script,
+  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  nativeContextSupport ? stdenv.hostPlatform.isLinux,
+  vaapiSupport ? !stdenv.hostPlatform.isDarwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "virglrenderer";
-  version = "1.1.0";
+  version = "1.3.0";
 
-  src = fetchurl {
-    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/${version}/virglrenderer-${version}.tar.bz2";
-    hash = "sha256-XGgKst7ENLKCUv0jU/HiEtTYe+7b9sHnSufj0PZVsb0=";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "virgl";
+    repo = "virglrenderer";
+    tag = finalAttrs.version;
+    hash = "sha256-2RoKIjtxShJCaezbkCrtW+lSaWKnOoUZzpSEPCJHSC8=";
   };
 
   separateDebugInfo = true;
-
-  buildInputs =
-    [
-      libepoxy
-    ]
-    ++ lib.optionals vaapiSupport [ libva ]
-    ++ lib.optionals vulkanSupport [
-      vulkan-headers
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGLU
-      libX11
-      libdrm
-      libgbm
-    ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
+    (buildPackages.python3.withPackages (ps: [
+      ps.pyyaml
+    ]))
   ];
 
-  mesonFlags =
-    [
-      (lib.mesonBool "video" vaapiSupport)
-      (lib.mesonBool "venus" vulkanSupport)
-    ]
-    ++ lib.optionals nativeContextSupport [
-      (lib.mesonOption "drm-renderers" "amdgpu-experimental,msm")
-    ];
+  buildInputs = [
+    libepoxy
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGLU
+    libx11
+    libdrm
+    libgbm
+  ]
+  ++ lib.optionals vaapiSupport [
+    libva
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-headers
+    vulkan-loader
+  ];
+
+  mesonFlags = [
+    (lib.mesonBool "video" vaapiSupport)
+    (lib.mesonBool "venus" vulkanSupport)
+    (lib.mesonOption "drm-renderers" (
+      lib.optionalString nativeContextSupport (
+        lib.concatStringsSep "," [
+          "amdgpu-experimental"
+          "asahi"
+          "msm"
+        ]
+      )
+    ))
+  ];
 
   passthru = {
-    updateScript = gitUpdater {
-      url = "https://gitlab.freedesktop.org/virgl/virglrenderer.git";
-      rev-prefix = "virglrenderer-";
-    };
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
-    description = "Virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
+  meta = {
+    description = "Virtual 3D GPU for use inside QEMU virtual machines";
+    homepage = "https://docs.mesa3d.org/drivers/virgl";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "virgl_test_server";
-    homepage = "https://virgil3d.github.io/";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.xeji ];
+    platforms = lib.platforms.unix;
   };
-}
+})

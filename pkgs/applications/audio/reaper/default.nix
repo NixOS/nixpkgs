@@ -11,12 +11,13 @@
   curl,
   gtk3,
   lame,
-  libxml2,
+  libxml2_13,
   ffmpeg,
   vlc,
   xdg-utils,
   xdotool,
   which,
+  openssl,
 
   jackSupport ? stdenv.hostPlatform.isLinux,
   jackLibrary,
@@ -36,46 +37,44 @@ let
         builtins.replaceStrings [ "." ] [ "" ] version
       }_linux_${arch}.tar.xz";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "reaper";
-  version = "7.35";
+  version = "7.59";
 
   src = fetchurl {
-    url = url_for_platform version stdenv.hostPlatform.qemuArch;
+    url = url_for_platform finalAttrs.version stdenv.hostPlatform.qemuArch;
     hash =
       if stdenv.hostPlatform.isDarwin then
-        "sha256-X3KNESHUmcs3zcwURKvaDqvkf9P/XncO/hpsOGxKMmg="
+        "sha256-S4RAXWss1tPzmO0zzKfkXPrcgBqwNN5EE1jpjEZ5mYk="
       else
         {
-          x86_64-linux = "sha256-VD2VUTZUYi+7rDCG1joElajbfxLiramQwwrUgDDpuPI=";
-          aarch64-linux = "sha256-TFhv4CS7VCysup3Xy/uXHxaWhG4J8WCgxtaooGFj4vw=";
+          x86_64-linux = "sha256-II2QOv7eHD4JtE5We1uuEuCt5RZmK6VFtZFyLEArUSc=";
+          aarch64-linux = "sha256-/iDQBnYf+1xYJ+JFFT5ikGWDmQdhe2L1o+lZr8pB+Q0=";
         }
         .${stdenv.hostPlatform.system};
   };
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      which
-      autoPatchelfHook
-      xdg-utils # Required for desktop integration
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      undmg
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    which
+    autoPatchelfHook
+    xdg-utils # Required for install script
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    undmg
+  ];
 
   sourceRoot = lib.optionalString stdenv.hostPlatform.isDarwin "Reaper.app";
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gtk3
-      alsa-lib
-    ];
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc) # reaper and libSwell need libstdc++.so.6
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gtk3
+    alsa-lib
+  ];
 
   runtimeDependencies =
     lib.optionals stdenv.hostPlatform.isLinux [
@@ -112,45 +111,49 @@ stdenv.mkDerivation rec {
         # Setting the rpath of the plugin shared object files does not
         # seem to have an effect for some plugins.
         # We opt for wrapping the executable with LD_LIBRARY_PATH prefix.
-        # Note that libcurl and libxml2 are needed for ReaPack to run.
+        # Note that libcurl and libxml2_13 are needed for ReaPack to run.
         wrapProgram $out/opt/REAPER/reaper \
+          --prefix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
           --prefix LD_LIBRARY_PATH : "${
             lib.makeLibraryPath [
               curl
               lame
-              libxml2
+              libxml2_13
               ffmpeg
               vlc
               xdotool
               stdenv.cc.cc
+              openssl
             ]
           }"
 
         mkdir $out/bin
         ln -s $out/opt/REAPER/reaper $out/bin/
 
+        # Avoid store path in Exec, since we already link to $out/bin
+        substituteInPlace $out/share/applications/cockos-reaper.desktop \
+          --replace-fail "Exec=\"$out/opt/REAPER/reaper\"" "Exec=reaper"
+
         runHook postInstall
       '';
 
   passthru.updateScript = ./updater.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     homepage = "https://www.reaper.fm/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    maintainers = with maintainers; [
-      atinba
+    maintainers = with lib.maintainers; [
       ilian
-      orivej
-      uniquepointer
       viraptor
+      pancaek
     ];
   };
-}
+})

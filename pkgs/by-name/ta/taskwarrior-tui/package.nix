@@ -5,19 +5,18 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "taskwarrior-tui";
-  version = "0.26.3";
+  version = "0.26.6";
 
   src = fetchFromGitHub {
     owner = "kdheepak";
     repo = "taskwarrior-tui";
-    rev = "v${version}";
-    sha256 = "sha256-8PFGlsm9B6qHRrY7YIPwknmGS+Peg5MWd0kMT173wIQ=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-3RUTNQe0D9EquqWowsXI3Ho9mKdckC0XilDcNLmtfCk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-y5tHZIsbHLU9acIUM/QUx1T0eLK/E/jR+XXys5JnGjU=";
+  cargoHash = "sha256-dXdbvsQ1RJWORZMWsxF///8y1wsar6FiCblHyZD7t8o=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,11 +28,11 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion completions/taskwarrior-tui.{bash,fish} --zsh completions/_taskwarrior-tui
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal user interface for taskwarrior";
     homepage = "https://github.com/kdheepak/taskwarrior-tui";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "taskwarrior-tui";
   };
-}
+})

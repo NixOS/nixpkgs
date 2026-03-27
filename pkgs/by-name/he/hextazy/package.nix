@@ -4,26 +4,25 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "hextazy";
-  version = "0.7";
+  version = "0.8.5";
 
   src = fetchFromGitHub {
     owner = "0xfalafel";
     repo = "hextazy";
-    rev = "${version}";
-    hash = "sha256-j8KY8OTYG+Hl86OppbMyAFBSA89TO7hc8mcNgTGTlgM=";
+    tag = finalAttrs.version;
+    hash = "sha256-Q7gTupoyxioxMibiqhhgnvy38EgnAw+ceSuXzElyga8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JPY1mge4aqO/QERCXYk+HzONjDJHi5og6lwQ68nUxqE=";
+  cargoHash = "sha256-MzshiOBMi5eJiRogfwygybQc6MEW58ZMpKAinmpBp1E=";
 
   meta = {
     description = "TUI hexeditor in Rust with colored bytes";
     homepage = "https://github.com/0xfalafel/hextazy";
-    changelog = "https://github.com/0xfalafel/hextazy/releases/tags/${src.rev}";
+    changelog = "https://github.com/0xfalafel/hextazy/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ akechishiro ];
     mainProgram = "hextazy";
   };
-}
+})

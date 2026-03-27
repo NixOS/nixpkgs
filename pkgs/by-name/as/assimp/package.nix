@@ -2,14 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
-  boost,
   zlib,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
-  version = "5.4.3";
+  version = "6.0.2";
   outputs = [
     "out"
     "lib"
@@ -19,29 +20,57 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
-    rev = "v${version}";
-    hash = "sha256-sOYhYHBz3Tg+pi1OIJ1mGmsjEc6dPO6nFH0aolfpLRA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
   };
 
+  patches = [
+    # Fix build with gcc15
+    # https://github.com/assimp/assimp/pull/6283
+    (fetchpatch {
+      name = "assimp-fix-invalid-vector-gcc15.patch";
+      url = "https://github.com/assimp/assimp/commit/59bc03d931270b6354690512d0c881eec8b97678.patch";
+      hash = "sha256-O+JPwcOdyFtmFE7eZojHo1DUavF5EhLYlUyxtYo/KF4=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
-    boost
     zlib
   ];
 
-  cmakeFlags = [ "-DASSIMP_BUILD_ASSIMP_TOOLS=ON" ];
+  strictDeps = true;
+  enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    # Needed with GCC 12
-    "-Wno-error=array-bounds"
-  ]);
+  cmakeFlags = [
+    (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
+    (lib.cmakeBool "ASSIMP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+  ];
 
-  meta = with lib; {
+  # Some matrix tests fail on non-86_64-linux:
+  # https://github.com/assimp/assimp/issues/6246
+  # https://github.com/assimp/assimp/issues/6247
+  # On Darwin, the bundled googletest is not compatible with Clang 21.
+  #  contrib/googletest/googletest/include/gtest/gtest-printers.h:498:35:
+  #  error: implicit conversion from 'char16_t' to 'char32_t' may change the meaning of the represented code unit
+  #  [-Werror,-Wcharacter-conversion]
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64;
+  checkPhase = ''
+    runHook preCheck
+    bin/unit
+    runHook postCheck
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    changelog = "https://github.com/assimp/assimp/releases/tag/${finalAttrs.src.tag}";
     description = "Library to import various 3D model formats";
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

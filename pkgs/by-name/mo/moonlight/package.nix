@@ -1,33 +1,49 @@
 {
   lib,
   stdenv,
+  pnpm,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
-  pnpm_9,
   fetchFromGitHub,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.9";
+  version = "2026.3.2";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WhPQ7JYfE8RBhDknBunKdW1VBxrklb3UGnMgk5LFVFA=";
+    hash = "sha256-VcYHwjm5RUfvkABts5ZP+qqqxBHyiF6JwTcBBG+xABA=";
   };
 
   nativeBuildInputs = [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm
   ];
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
-
-    hash = "sha256-KZFHcW/OVjTDXZltxPYGuO+NWjuD5o6HE/E9JQZmrG8=";
+    fetcherVersion = 3;
+    hash = "sha256-1jGEzTPPlwAFDKPbH92HvYg4rzFrUJLqhZRMNS+H6GI=";
   };
+
+  env = {
+    NODE_ENV = "production";
+    MOONLIGHT_BRANCH = "stable";
+    MOONLIGHT_VERSION = "v${finalAttrs.version} (nixpkgs)";
+  };
+
+  patches = [
+    ./disable_updates.patch
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -45,9 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withMoonlight
+    );
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Discord client modification, focused on enhancing user and developer experience";
     longDescription = ''
       Moonlight is a ***passion project***—yet another Discord client mod—focused on providing a decent user
@@ -55,12 +76,14 @@ stdenv.mkDerivation (finalAttrs: {
       All core code is original or used with permission from their respective authors where not copyleft.
     '';
     homepage = "https://moonlight-mod.github.io";
-    changelog = "https://github.com/moonlight-mod/moonlight/blob/main/CHANGELOG.md";
+    downloadPage = "https://moonlight-mod.github.io/using/install/#nix";
+    changelog = "https://raw.githubusercontent.com/moonlight-mod/moonlight/refs/tags/v${finalAttrs.version}/CHANGELOG.md";
 
-    license = licenses.lgpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.lgpl3;
+    maintainers = with lib.maintainers; [
       ilys
-      donteatoreo
+      FlameFlag
+      isabelroses
     ];
   };
 })

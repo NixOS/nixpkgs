@@ -20,7 +20,7 @@ buildGoModule {
     })
     # Undoes part of the above PR: We don't want to require write access
     # to the repository, that's only needed for GitHub's native CODEOWNERS.
-    # Furthermore, it removes an unneccessary check from the code
+    # Furthermore, it removes an unnecessary check from the code
     # that breaks tokens generated for GitHub Apps.
     ./permissions.patch
     # Allows setting a custom CODEOWNERS path using the OWNERS_FILE env var

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlcl";
-  version = "24.4.3.070.2106";
+  version = "25.4.2.044.1837";
 
   src = fetchurl {
     url = "https://download.oracle.com/otn_software/java/sqldeveloper/sqlcl-${finalAttrs.version}.zip";
-    hash = "sha256-7/8J+XY2Uk/CUWimrTf8/ikjZQT2+4/jNdhs8K1sWjI=";
+    hash = "sha256-VHLCJZWSGEJVih1hyCLmv94YoWgEPNdKoVvHDCgDpQw=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir "$out/libexec/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Oracle's Oracle DB CLI client";
     longDescription = ''
       Oracle SQL Developer Command Line (SQLcl) is a free command line
@@ -42,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
       also supporting your previously written SQL*Plus scripts.
     '';
     homepage = "https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ misterio77 ];
+    maintainers = with lib.maintainers; [ misterio77 ];
   };
 })

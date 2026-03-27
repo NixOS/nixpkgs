@@ -10,21 +10,18 @@
   mkdocstrings,
   pdm-backend,
   pytestCheckHook,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mkdocstrings-python";
-  version = "1.13.0";
+  version = "2.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "python";
-    tag = version;
-    hash = "sha256-NgVCKV3AWk4pRT7/+6YGXmKSZETL4ZOWDWGeb/qjdng=";
+    tag = finalAttrs.version;
+    hash = "sha256-MCR304sOqlS4azZOoNa4klITDdr+bD8N6wEZBuHhZms=";
   };
 
   build-system = [ pdm-backend ];
@@ -51,11 +48,11 @@ buildPythonPackage rec {
     "test_format_code"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python handler for mkdocstrings";
     homepage = "https://github.com/mkdocstrings/python";
-    changelog = "https://github.com/mkdocstrings/python/blob/${version}/CHANGELOG.md";
-    license = licenses.isc;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/mkdocstrings/python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

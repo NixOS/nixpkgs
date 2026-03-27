@@ -2,7 +2,6 @@
   lib,
   _experimental-update-script-combinators,
   curl,
-  darwin,
   duktape,
   fetchFromGitHub,
   gi-docgen,
@@ -25,38 +24,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
-  version = "0.5.9";
+  version = "0.5.12";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals withIntrospection [
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals withIntrospection [
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "libproxy";
     repo = "libproxy";
-    rev = finalAttrs.version;
-    hash = "sha256-Z70TjLk5zulyYMAK+uMDhpsdvLa6m25pY8jahUA6ASE=";
+    tag = finalAttrs.version;
+    hash = "sha256-pkvmeD7O2EUDzw59/e7YcgiHDf2vvIXmd11axGSwCEs=";
   };
 
-  patches =
-    [
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # Disable schema presence detection, it would fail because it cannot be autopatched,
-      # and it will be hardcoded by the next patch anyway.
-      ./skip-gsettings-detection.patch
+  patches = [
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # Disable schema presence detection, it would fail because it cannot be autopatched,
+    # and it will be hardcoded by the next patch anyway.
+    ./skip-gsettings-detection.patch
 
-      # Hardcode path to Settings schemas for GNOME & related desktops.
-      # Otherwise every app using libproxy would need to be wrapped individually.
-      (replaceVars ./hardcode-gsettings.patch {
-        gds = glib.getSchemaPath gsettings-desktop-schemas;
-      })
-    ];
+    # Hardcode path to Settings schemas for GNOME & related desktops.
+    # Otherwise every app using libproxy would need to be wrapped individually.
+    (replaceVars ./hardcode-gsettings.patch {
+      gds = glib.getSchemaPath gsettings-desktop-schemas;
+    })
+  ];
 
   postPatch = ''
     # Fix running script that will try to install git hooks.
@@ -71,45 +68,35 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "requires_private: 'gobject-2.0'" "requires: 'gobject-2.0'"
   '';
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals withIntrospection [
-      gi-docgen
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals withIntrospection [
+    gi-docgen
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      curl
-      duktape
-    ]
-    ++ (
-      if stdenv.hostPlatform.isDarwin then
-        (with darwin.apple_sdk.frameworks; [
-          Foundation
-        ])
-      else
-        [
-          glib
-          gsettings-desktop-schemas
-        ]
-    );
+  buildInputs = [
+    curl
+    duktape
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    glib
+    gsettings-desktop-schemas
+  ];
 
-  mesonFlags =
-    [
-      # Prevent installing commit hook.
-      "-Drelease=true"
-      (lib.mesonBool "docs" withIntrospection)
-      (lib.mesonBool "introspection" withIntrospection)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-Dconfig-gnome=false"
-    ];
+  mesonFlags = [
+    # Prevent installing commit hook.
+    "-Drelease=true"
+    (lib.mesonBool "docs" withIntrospection)
+    (lib.mesonBool "introspection" withIntrospection)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-Dconfig-gnome=false"
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -141,11 +128,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides automatic proxy configuration management";
     homepage = "https://libproxy.github.io/libproxy/";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     badPlatforms = [
       # Mandatory libpxbackend-1.0 shared library.
       lib.systems.inspect.platformPatterns.isStatic

@@ -4,17 +4,17 @@
   makeDesktopItem,
   freetype,
   fontconfig,
-  libX11,
-  libXrender,
+  libx11,
+  libxrender,
   zlib,
   jdk,
   glib,
   glib-networking,
   gtk,
-  libXtst,
+  libxtst,
   libsecret,
   gsettings-desktop-schemas,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   makeWrapper,
   perl,
   ...
@@ -28,7 +28,7 @@
   version,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   desktopItem = makeDesktopItem {
@@ -52,12 +52,13 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk
     jdk
-    libX11
-    libXrender
-    libXtst
+    libx11
+    libxrender
+    libxtst
     libsecret
     zlib
-  ] ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0;
+  ]
+  ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1;
 
   buildCommand = ''
     # Unpack tarball.
@@ -72,8 +73,8 @@ stdenv.mkDerivation rec {
       lib.makeLibraryPath [
         freetype
         fontconfig
-        libX11
-        libXrender
+        libx11
+        libxrender
         zlib
       ]
     } $libCairo
@@ -90,10 +91,10 @@ stdenv.mkDerivation rec {
           [
             glib
             gtk
-            libXtst
+            libxtst
             libsecret
           ]
-          ++ lib.optional (webkitgtk_4_0 != null) webkitgtk_4_0
+          ++ lib.optional (webkitgtk_4_1 != null) webkitgtk_4_1
         )
       } \
       --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
@@ -102,7 +103,7 @@ stdenv.mkDerivation rec {
 
     # Create desktop item.
     mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp ${finalAttrs.desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
 
@@ -122,5 +123,4 @@ stdenv.mkDerivation rec {
     ];
     maintainers = [ lib.maintainers.jerith666 ];
   };
-
-}
+})

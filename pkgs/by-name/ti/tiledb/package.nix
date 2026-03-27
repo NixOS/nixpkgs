@@ -8,10 +8,9 @@
   bzip2,
   zstd,
   spdlog,
-  tbb,
+  onetbb,
   openssl,
   boost,
-  libpqxx,
   clang-tools,
   catch2_3,
   python3,
@@ -22,7 +21,10 @@
   libpng,
   file,
   runCommand,
-  catch2,
+  curl,
+  capnproto,
+  nlohmann_json,
+  c-blosc2,
   useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
@@ -33,25 +35,22 @@ let
     cp -r ${rapidcheck.dev}/* $out
   '';
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiledb";
-  version = "2.27.2";
+  version = "2.30.0";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
-    tag = version;
-    hash = "sha256-zk4jkXJMh6wpuEKaCvuKUDod+F8B/6W5Lw8gwelcPEM=";
+    tag = finalAttrs.version;
+    hash = "sha256-wzeWLwwsZXtrKsmlglZG7YvIki/ba7IwsDBq+40ltcg=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./generate_embedded_data_header.patch ];
+  patches = [ ./0001-fix-cross-compilation-with-capnproto.patch ];
 
-  # libcxx (as of llvm-19) does not yet support `stop_token` and `jthread`
-  # without the -fexperimental-library flag. Tiledb adds its own
-  # implementations in the std namespace which conflict with libcxx. This
-  # test can be re-enabled once libcxx supports stop_token and jthread.
-  postPatch = lib.optionalString (stdenv.cc.libcxx != null) ''
-    truncate -s0 tiledb/stdx/test/CMakeLists.txt
+  postPatch = ''
+    substituteInPlace tiledb/sm/misc/test/unit_parse_argument.cc \
+      --replace-fail '"catch.hpp"' '<catch2/catch_all.hpp>'
   '';
 
   env.TILEDB_DISABLE_AUTO_VCPKG = "1";
@@ -61,42 +60,50 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DTILEDB_WEBP=OFF"
     "-DTILEDB_WERROR=OFF"
+    "-DTILEDB_SERIALIZATION=ON"
     # https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
+  ]
+  ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
 
   nativeBuildInputs = [
-    catch2_3
+    capnproto
     clang-tools
     cmake
     python3
     doxygen
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
-    zlib
-    lz4
-    bzip2
-    zstd
-    spdlog
-    tbb
-    openssl
     boost
-    libpqxx
-    libpng
+    bzip2
+    c-blosc2
+    capnproto
+    catch2_3
+    curl
     file
+    libpng
+    lz4
+    nlohmann_json
+    onetbb
+    openssl
     rapidcheck'
-    catch2
+    spdlog
+    zlib
+    zstd
   ];
 
-  # fatal error: catch.hpp: No such file or directory
-  doCheck = false;
+  preBuild = ''
+    cmake --build . --target update-serialization
+  '';
 
   nativeCheckInputs = [
     gtest
-    catch2
   ];
+
+  strictDeps = true;
 
   # test commands taken from
   # https://github.com/TileDB-Inc/TileDB/blob/dev/.github/workflows/unit-test-runs.yml
@@ -118,14 +125,14 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib
+    install_name_tool -add_rpath ${onetbb}/lib $out/lib/libtiledb.dylib
   '';
 
   meta = {
-    description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
+    description = "Allows you to manage massive dense and sparse multi-dimensional array data";
     homepage = "https://github.com/TileDB-Inc/TileDB";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ rakesh4g ];
   };
-}
+})

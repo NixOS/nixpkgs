@@ -17,7 +17,6 @@
   meson,
   ninja,
   pkg-config,
-  poppler,
   python3,
   rustPlatform,
   rustc,
@@ -25,20 +24,20 @@
   wrapGAppsHook4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rnote";
-  version = "0.11.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "flxzt";
     repo = "rnote";
-    tag = "v${version}";
-    hash = "sha256-RbuEgmly6Mjmx58zOV+tg6Mv5ghCNy/dE5FXYrEXtdg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bNe9PW7hkSmdU6HTDwD7bMbHZFs8fRDrIEC9f6xjliI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-0c3Me9SobMvUiJqTyz/3zhEvntkiJFS92BNJ9rRBAv0=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-15TOc+X0E/uGVUfgIOM6pEIp2LZUmDrM7BRzdbLarbc=";
   };
 
   nativeBuildInputs = [
@@ -64,19 +63,17 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "cli" true)
   ];
 
-  buildInputs =
-    [
-      appstream
-      glib
-      gst_all_1.gstreamer
-      gtk4
-      libadwaita
-      libxml2
-      poppler
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-    ];
+  buildInputs = [
+    appstream
+    glib
+    gst_all_1.gstreamer
+    gtk4
+    libadwaita
+    libxml2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+  ];
 
   postPatch = ''
     chmod +x build-aux/*.py
@@ -89,7 +86,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/flxzt/rnote";
-    changelog = "https://github.com/flxzt/rnote/releases/tag/${src.rev}";
+    changelog = "https://github.com/flxzt/rnote/releases/tag/${finalAttrs.src.tag}";
     description = "Simple drawing application to create handwritten notes";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
@@ -99,4 +96,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})

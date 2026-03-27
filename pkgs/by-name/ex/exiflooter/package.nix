@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "exiflooter";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "aydinnyunus";
     repo = "exiflooter";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-E7fxV+w8N9xi8UuaKBTZBzPjIHJt9/U+oVIu2+Ond+Y=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Finds geolocation on all image urls and directories";
     homepage = "https://github.com/aydinnyunus/exiflooter";
-    changelog = "https://github.com/aydinnyunus/exifLooter/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ octodi ];
+    changelog = "https://github.com/aydinnyunus/exifLooter/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ octodi ];
     mainProgram = "exiflooter";
   };
-}
+})

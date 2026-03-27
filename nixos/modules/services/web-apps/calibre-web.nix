@@ -27,6 +27,8 @@ in
 
       package = lib.mkPackageOption pkgs "calibre-web" { };
 
+      calibrePackage = lib.mkPackageOption pkgs "calibre" { };
+
       listen = {
         ip = mkOption {
           type = types.str;
@@ -91,7 +93,7 @@ in
           '';
         };
 
-        enableKepubify = mkEnableOption "kebup conversion support";
+        enableKepubify = mkEnableOption "kepub conversion support";
 
         enableBookUploading = mkOption {
           type = types.bool;
@@ -149,8 +151,8 @@ in
             cfg.options.calibreLibrary != null
           ) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
           ++ optionals cfg.options.enableBookConversion [
-            "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
-            "config_binariesdir = '${pkgs.calibre}/bin/'"
+            "config_converterpath = '${cfg.calibrePackage}/bin/ebook-convert'"
+            "config_binariesdir = '${cfg.calibrePackage}/bin/'"
           ]
           ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
         );
@@ -160,29 +162,76 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          {
-            Type = "simple";
-            User = cfg.user;
-            Group = cfg.group;
+        # fix book cover cache directory defaults to a path under /nix/store/
+        environment.CACHE_DIR = "/var/cache/calibre-web";
 
-            ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
-              ''
-                __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
+        serviceConfig = {
+          Type = "simple";
+          User = cfg.user;
+          Group = cfg.group;
 
-                ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
-              ''
-              + optionalString (cfg.options.calibreLibrary != null) ''
-                test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
-              ''
-            );
+          ExecStartPre = pkgs.writeShellScript "calibre-web-pre-start" (
+            ''
+              __RUN_MIGRATIONS_AND_EXIT=1 ${calibreWebCmd}
 
-            ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
-            Restart = "on-failure";
-          }
-          // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
-            StateDirectory = cfg.dataDir;
-          };
+              ${pkgs.sqlite}/bin/sqlite3 ${appDb} "update settings set ${settings}"
+            ''
+            + optionalString (cfg.options.calibreLibrary != null) ''
+              test -f "${cfg.options.calibreLibrary}/metadata.db" || { echo "Invalid Calibre library"; exit 1; }
+            ''
+          );
+
+          ExecStart = "${calibreWebCmd} -i ${cfg.listen.ip}";
+          Restart = "on-failure";
+
+          CacheDirectory = "calibre-web";
+          CacheDirectoryMode = "0750";
+
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ReadWritePaths =
+            lib.optional (lib.hasPrefix "/" cfg.dataDir) cfg.dataDir
+            ++ lib.optional (cfg.options.calibreLibrary != null) cfg.options.calibreLibrary;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RestrictSUIDSGID = true;
+          ProtectHome = true;
+          ProtectProc = "invisible";
+          ProcSubset = "pid";
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RemoveIPC = true;
+          CapabilityBoundingSet = "";
+          AmbientCapabilities = "";
+          ProtectKernelModules = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+            "AF_NETLINK"
+          ];
+          SystemCallFilter = [
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@resources"
+            "~@mount"
+            "~@debug"
+            "~@cpu-emulation"
+          ];
+        }
+        // lib.optionalAttrs (!(lib.hasPrefix "/" cfg.dataDir)) {
+          StateDirectory = cfg.dataDir;
+        };
       };
 
     networking.firewall = mkIf cfg.openFirewall {

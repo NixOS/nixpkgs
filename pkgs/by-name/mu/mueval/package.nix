@@ -17,7 +17,8 @@ let
 
 in
 stdenv.mkDerivation {
-  name = "mueval-env";
+  pname = "mueval";
+  inherit (haskellPackages.mueval) version;
 
   inherit (haskellPackages) mueval;
 

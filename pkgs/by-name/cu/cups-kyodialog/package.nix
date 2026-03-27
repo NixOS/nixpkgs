@@ -24,8 +24,8 @@
 assert region == "Global" || region == "EU";
 
 let
-  kyodialog_version = "9.3";
-  date = "20230720";
+  kyodialog_version = "9.4";
+  date = "20240521";
 in
 stdenv.mkDerivation rec {
   pname = "cups-kyodialog";
@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
     # 3. Locate e.g. "Linux Print Driver (9.3)" in the list
     urls = [
       "https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
-      "https://web.archive.org/web/20231021143259/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
+      "https://web.archive.org/web/20260107200228/https://www.kyoceradocumentsolutions.us/content/download-center-americas/us/drivers/drivers/KyoceraLinuxPackages_${date}_tar_gz.download.gz"
     ];
-    hash = "sha256-3h2acOmaQIiqe2Fd9QiqEfre5TrxzRrll6UlUruwj1o=";
+    hash = "sha256-H9n4KpaLGNk5du4+BAmMjRyLmXaHap8HdNZlX/Kia4E=";
     extension = "tar.gz";
     stripRoot = false;
     postFetch = ''
@@ -70,7 +70,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     python3Packages.wrapPython
-  ] ++ lib.optionals withQtGui [ qt5.wrapQtAppsHook ];
+  ]
+  ++ lib.optionals withQtGui [ qt5.wrapQtAppsHook ];
 
   buildInputs = [ cups ] ++ lib.optionals withQtGui [ qt5.qtbase ];
 
@@ -82,42 +83,41 @@ stdenv.mkDerivation rec {
     setuptools
   ];
 
-  installPhase =
-    ''
-      # allow cups to find the ppd files
-      mkdir -p $out/share/cups/model
-      mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
+  installPhase = ''
+    # allow cups to find the ppd files
+    mkdir -p $out/share/cups/model
+    mv ./usr/share/kyocera${kyodialog_version}/ppd${kyodialog_version} $out/share/cups/model/Kyocera
 
-      # remove absolute path prefixes to filters in ppd
-      find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
-
-
-      mkdir -p $out/lib/cups/
-      mv ./usr/lib/cups/filter/ $out/lib/cups/
-      # for lib/cups/filter/kyofilter_pre_H
-      wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
+    # remove absolute path prefixes to filters in ppd
+    find $out -name "*.ppd" -exec sed -E -i "s:/usr/lib/cups/filter/::g" {} \;
 
 
-      install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
-    ''
-    + lib.optionalString withQtGui ''
-      install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
-      install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
+    mkdir -p $out/lib/cups/
+    mv ./usr/lib/cups/filter/ $out/lib/cups/
+    # for lib/cups/filter/kyofilter_pre_H
+    wrapPythonProgramsIn $out/lib/cups/filter "$propagatedBuildInputs"
 
-      install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
 
-      install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
-      substituteInPlace $out/share/applications/kyodialog.desktop \
-        --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
-        --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
-    '';
+    install -Dm444 usr/share/doc/kyodialog/copyright $out/share/doc/${pname}/copyright
+  ''
+  + lib.optionalString withQtGui ''
+    install -D usr/bin/kyoPPDWrite_H $out/bin/kyoPPDWrite_H
+    install -D usr/bin/kyodialog${kyodialog_version} $out/bin/kyodialog
 
-  meta = with lib; {
+    install -Dm444 usr/share/kyocera${kyodialog_version}/appicon_H.png $out/share/${pname}/icons/appicon_H.png
+
+    install -Dm444 usr/share/applications/kyodialog${kyodialog_version}.desktop $out/share/applications/kyodialog.desktop
+    substituteInPlace $out/share/applications/kyodialog.desktop \
+      --replace Exec=\"/usr/bin/kyodialog${kyodialog_version}\" Exec=\"$out/bin/kyodialog\" \
+      --replace Icon=/usr/share/kyocera/appicon_H.png Icon=$out/share/${pname}/icons/appicon_H.png
+  '';
+
+  meta = {
     description = "CUPS drivers for several Kyocera printers";
     homepage = "https://www.kyoceradocumentsolutions.com";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = [ maintainers.steveej ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.steveej ];
     platforms = [
       "i686-linux"
       "x86_64-linux"

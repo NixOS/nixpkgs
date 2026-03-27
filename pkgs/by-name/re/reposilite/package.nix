@@ -10,7 +10,7 @@
 }:
 let
   pluginsDir = linkFarm "reposilite-plugins" (
-    builtins.map (p: {
+    map (p: {
       name = (builtins.parseDrvName p.name).name + ".jar";
       path = p.outPath or p;
     }) plugins
@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
-  version = "3.5.23";
+  version = "3.5.28";
 
   src = fetchurl {
     url = "https://maven.reposilite.com/releases/com/reposilite/reposilite/${finalAttrs.version}/reposilite-${finalAttrs.version}-all.jar";
-    hash = "sha256-7DNl0u2iYAlqhflJCIppy8huMKtFjjyRJzUPcWHoRnE=";
+    hash = "sha256-sKbwO5Lk/DeRQhO3c2zHuHe/CPdb4wRLzG55tP7DVVE=";
   };
 
   dontUnpack = true;

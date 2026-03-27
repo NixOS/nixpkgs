@@ -9,30 +9,34 @@
 }:
 
 let
-  commitHash = "d5bc935e4801a02fdbd953f8f0ae7989eaef50cf"; # matches tag release
+  commitHash = "1ebda7ab9c9796369af484fccf4d3c54e7c97f5d"; # matches tag release
   shortCommitHash = builtins.substring 0 7 commitHash;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "copywrite";
-  version = "0.22.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "copywrite";
-    tag = "v${version}";
-    hash = "sha256-gPVlHgFlLxoAj4pkg3OxD4CGQaLdAL312/Zn/pJ+7fg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IRmcR2wQFoI7jDNY64ioRpTFNpyVKJlDq++DTeMNkMI=";
   };
 
-  vendorHash = "sha256-Qxp6BwN/Y6Xb1BwFGT/T8WYsXGPgN27mzoTE0i6cS1Q=";
+  vendorHash = "sha256-+wgUT72LzGrn+rnEfRtJ9J0oLodhR52zbQ8sAd2BQvg=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/hashicorp/copywrite/cmd.version=${version}"
+    "-X github.com/hashicorp/copywrite/cmd.version=${finalAttrs.version}"
     "-X github.com/hashicorp/copywrite/cmd.commit=${shortCommitHash}"
   ];
 
   env.CGO_ENABLED = 0;
+
+  checkFlags = [
+    "-skip=Test_FormatCopyrightYears_AutoDetect" # depends on git metadata
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -65,8 +69,8 @@ buildGoModule rec {
     description = "Automate copyright headers and license files at scale";
     mainProgram = "copywrite";
     homepage = "https://github.com/hashicorp/copywrite";
-    changelog = "https://github.com/hashicorp/copywrite/releases/tag/v${version}";
+    changelog = "https://github.com/hashicorp/copywrite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dvcorreia ];
   };
-}
+})

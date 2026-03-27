@@ -24,8 +24,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-Ppc+6ex3yLC4xuhbZGZDKLqxDjSdGpgrLDpbbbqMgPY=";
   };
 
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "glean-core/python/tests" ];
+  enabledTestPaths = [ "glean-core/python/tests" ];
 
   disabledTests = [
     # RuntimeError: No ping received.
@@ -62,6 +61,5 @@ buildPythonPackage rec {
     description = "Telemetry client libraries and are a part of the Glean project";
     homepage = "https://mozilla.github.io/glean/book/index.html";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ melling ];
   };
 }

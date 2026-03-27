@@ -4,39 +4,50 @@
   meson,
   fetchFromGitLab,
   systemd,
+  libdrm,
   libgudev,
   pkg-config,
+  wrapGAppsNoGuiHook,
   glib,
   python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  version = "3.0";
+in
+python3Packages.buildPythonApplication {
   pname = "switcheroo-control";
-  version = "2.6";
-
-  format = "other";
+  inherit version;
+  pyproject = false;
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "switcheroo-control";
-    rev = version;
-    hash = "sha256-F+5HhMxM8pcnAGmVBARKWNCL0rIEzHW/jsGHHqYZJug=";
+    tag = version;
+    hash = "sha256-7P0o8fBYe4izRmNL7DimUSJfzj13KXW9we6c/A2iNo8=";
   };
+
+  postPatch = ''
+    substituteInPlace data/meson.build \
+      --replace-fail "rules_dir" "'${placeholder "out"}/lib/udev/rules.d'"
+  '';
 
   nativeBuildInputs = [
     ninja
     meson
     pkg-config
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
     systemd
+    libdrm
     libgudev
     glib
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python3Packages.pygobject3
   ];
 
@@ -45,13 +56,17 @@ python3Packages.buildPythonApplication rec {
     "-Dhwdbdir=${placeholder "out"}/etc/udev/hwdb.d"
   ];
 
-  meta = with lib; {
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
+
+  meta = {
     description = "D-Bus service to check the availability of dual-GPU";
     mainProgram = "switcherooctl";
     homepage = "https://gitlab.freedesktop.org/hadess/switcheroo-control/";
     changelog = "https://gitlab.freedesktop.org/hadess/switcheroo-control/-/blob/${version}/NEWS";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

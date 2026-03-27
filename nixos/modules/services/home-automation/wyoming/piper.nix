@@ -10,6 +10,7 @@ let
   cfg = config.services.wyoming.piper;
 
   inherit (lib)
+    literalExpression
     mkOption
     mkEnableOption
     mkPackageOption
@@ -36,12 +37,24 @@ in
       '';
       type = types.attrsOf (
         types.submodule (
-          { ... }:
+          { name, ... }:
           {
             options = {
               enable = mkEnableOption "Wyoming Piper server";
 
-              piper = mkPackageOption pkgs "piper-tts" { };
+              zeroconf = {
+                enable = mkEnableOption "zeroconf discovery" // {
+                  default = true;
+                };
+
+                name = mkOption {
+                  type = str;
+                  default = "piper-${name}";
+                  description = ''
+                    The advertised name for zeroconf discovery.
+                  '';
+                };
+              };
 
               voice = mkOption {
                 type = str;
@@ -96,6 +109,15 @@ in
                 apply = toString;
               };
 
+              useCUDA = mkOption {
+                type = bool;
+                default = pkgs.config.cudaSupport;
+                defaultText = literalExpression "pkgs.config.cudaSupport";
+                description = ''
+                  Whether to accelerate the underlying onnxruntime library with CUDA.
+                '';
+              };
+
               extraArgs = mkOption {
                 type = listOf str;
                 default = [ ];
@@ -145,8 +167,6 @@ in
                 "/var/lib/wyoming/piper"
                 "--uri"
                 options.uri
-                "--piper"
-                (lib.getExe options.piper)
                 "--voice"
                 options.voice
                 "--speaker"
@@ -155,8 +175,15 @@ in
                 options.lengthScale
                 "--noise-scale"
                 options.noiseScale
-                "--noise-w"
+                "--noise-w-scale"
                 options.noiseWidth
+              ]
+              ++ lib.optionals options.zeroconf.enable [
+                "--zeroconf"
+                options.zeroconf.name
+              ]
+              ++ lib.optionals options.useCUDA [
+                "--use-cuda"
               ]
               ++ options.extraArgs
             );
@@ -164,7 +191,7 @@ in
             DeviceAllow = "";
             DevicePolicy = "closed";
             LockPersonality = true;
-            MemoryDenyWriteExecute = true;
+            MemoryDenyWriteExecute = false; # required for onnxruntime
             PrivateDevices = true;
             PrivateUsers = true;
             ProtectHome = true;
@@ -174,11 +201,15 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            ProcSubset = "all"; # for onnxruntime, which queries cpuinfo
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
               "AF_UNIX"
+            ]
+            ++ lib.optionals options.zeroconf.enable [
+              # Zeroconf support require network interface enumeration
+              "AF_NETLINK"
             ];
             RestrictNamespaces = true;
             RestrictRealtime = true;

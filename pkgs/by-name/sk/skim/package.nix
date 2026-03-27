@@ -1,6 +1,7 @@
 {
   lib,
-  stdenv,
+  tmux,
+  hexdump,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
@@ -9,10 +10,9 @@
   skim,
   testers,
 }:
-
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "skim";
-  version = "0.16.1";
+  version = "4.0.0";
 
   outputs = [
     "out"
@@ -23,18 +23,21 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "skim-rs";
     repo = "skim";
-    tag = "v${version}";
-    hash = "sha256-lIVOML7UNR778RkmYvMvj4ynoOdMnb5lcsxFiO9BZAI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1ckQ9ZWf4PWgRxE8jtQL7yuitPGvgebNJFPMWQ3xdrU=";
   };
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-llvVss7P9Bl9/6A4EtntXtmnFc5XbMvKms1lYNtaZaw=";
+  cargoHash = "sha256-AIMmgspcj40Ktw5THk2p/bOcPBsqjD0/9jfpOJEm23w=";
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [
+    tmux
+    hexdump
+  ];
 
   postBuild = ''
     cat <<SCRIPT > sk-share
@@ -52,11 +55,18 @@ rustPlatform.buildRustPackage rec {
 
     installBin sk-share
     installManPage $(find man -type f)
+    installShellCompletion \
+      --cmd sk \
+      --bash shell/completion.bash \
+      --fish shell/completion.fish \
+      --zsh shell/completion.zsh
   '';
 
-  # Doc tests are broken on aarch64
-  # https://github.com/lotabout/skim/issues/440
-  cargoTestFlags = lib.optional stdenv.hostPlatform.isAarch64 "--all-targets";
+  useNextest = true;
+
+  checkPhase = ''
+    cargo nextest run --features test-utils --release --offline --lib --bins --examples --tests
+  '';
 
   passthru = {
     tests.version = testers.testVersion { package = skim; };
@@ -66,12 +76,13 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/skim-rs/skim";
-    changelog = "https://github.com/skim-rs/skim/releases/tag/v${version}";
+    changelog = "https://github.com/skim-rs/skim/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       dywedir
       getchoo
+      krovuxdev
     ];
     mainProgram = "sk";
   };
-}
+})

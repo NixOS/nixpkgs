@@ -28,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Construct is an abstraction over x86 NASM Assembly";
+  meta = {
+    description = "Abstraction over x86 NASM Assembly";
     longDescription = "Construct adds features such as while loops, if statements, scoped macros and function-call syntax to NASM Assembly.";
     homepage = "https://github.com/Thomas-de-Bock/construct";
-    maintainers = with maintainers; [ rucadi ];
-    platforms = platforms.all;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ rucadi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
     mainProgram = "construct";
   };
 })

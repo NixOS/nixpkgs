@@ -8,16 +8,16 @@
 # requires openrazer-daemon to be running on the system
 # on NixOS hardware.openrazer.enable or pkgs.openrazer-daemon
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "razer-cli";
-  version = "2.2.1";
+  version = "2.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lolei";
     repo = "razer-cli";
-    rev = "v${version}";
-    hash = "sha256-p/RcBpkvtqYQ3Ekt0pLvKyi1Vv93oHDd7hqSTu/5CSw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uwTqDCYmG/5dyse0tF/CPG+9SlThyRyeHJ0OSBpcQio=";
   };
 
   build-system = with python3.pkgs; [
@@ -40,4 +40,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ lib.maintainers.kaylorben ];
     platforms = lib.platforms.linux;
   };
-}
+})

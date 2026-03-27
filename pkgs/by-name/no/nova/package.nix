@@ -4,26 +4,26 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "nova";
-  version = "3.11.2";
+  version = "3.11.13";
 
   src = fetchFromGitHub {
     owner = "FairwindsOps";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-7GAA5Kc5ximdf71Bd8Q5o2pXixLOobXykKxfI31j/4A=";
+    repo = "nova";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-t3Qvt+Bfn5TSGQgYsdyT/ih2COIld/ZV+hTMG9m8q0U=";
   };
 
-  vendorHash = "sha256-tWUE3OUpacxRpShbJQtFbHhjEDt4ULL1wc4vfX4DJ2c=";
+  vendorHash = "sha256-k6gIt3bSvzVg/JdANQ6M9lMMlZ1hftmLrkRWrvkoync=";
 
   ldflags = [
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
     "-s"
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Find outdated or deprecated Helm charts running in your cluster";
     mainProgram = "nova";
     longDescription = ''
@@ -33,7 +33,7 @@ buildGoModule rec {
       your current version is deprecated, it will let you know.
     '';
     homepage = "https://nova.docs.fairwinds.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
-}
+})

@@ -1,24 +1,25 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pinniped";
-  version = "0.38.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "pinniped";
-    rev = "v${version}";
-    sha256 = "sha256-vnmH8zhjecghaNe7/oguCOs9OXmtBRGdZeH4n24oXsg=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-eReGKJRfn2MPJQjSSYf32WeElNw52egJxJF4aCkdHlg=";
   };
 
   subPackages = "cmd/pinniped";
 
-  vendorHash = "sha256-dX8bbUX6ya1S282677OqOlQT+dNW4dKpAX1Hw3B6fZU=";
+  vendorHash = "sha256-zRc5kNsduZqMvBexwKfXppXxADE0egFh6KQ0qqByKZc=";
 
   ldflags = [
     "-s"
@@ -27,18 +28,18 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pinniped \
       --bash <($out/bin/pinniped completion bash) \
       --fish <($out/bin/pinniped completion fish) \
       --zsh <($out/bin/pinniped completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to securely log in to your Kubernetes clusters";
     mainProgram = "pinniped";
     homepage = "https://pinniped.dev/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bpaulin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bpaulin ];
   };
-}
+})

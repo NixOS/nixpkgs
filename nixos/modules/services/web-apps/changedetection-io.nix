@@ -14,6 +14,8 @@ in
   options.services.changedetection-io = {
     enable = mkEnableOption "changedetection-io";
 
+    package = lib.mkPackageOption pkgs "changedetection-io" { };
+
     user = mkOption {
       default = "changedetection-io";
       type = types.str;
@@ -142,15 +144,16 @@ in
             StateDirectory = mkIf defaultStateDir "changedetection-io";
             StateDirectoryMode = mkIf defaultStateDir "0750";
             WorkingDirectory = cfg.datastorePath;
-            Environment =
-              [ "HIDE_REFERER=true" ]
-              ++ lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
-              ++ lib.optional cfg.behindProxy "USE_X_SETTINGS=1"
-              ++ lib.optional cfg.webDriverSupport "WEBDRIVER_URL=http://127.0.0.1:${toString cfg.chromePort}/wd/hub"
-              ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
+            Environment = [
+              "HIDE_REFERER=true"
+            ]
+            ++ lib.optional (cfg.baseURL != null) "BASE_URL=${cfg.baseURL}"
+            ++ lib.optional cfg.behindProxy "USE_X_SETTINGS=1"
+            ++ lib.optional cfg.webDriverSupport "WEBDRIVER_URL=http://127.0.0.1:${toString cfg.chromePort}/wd/hub"
+            ++ lib.optional cfg.playwrightSupport "PLAYWRIGHT_DRIVER_URL=ws://127.0.0.1:${toString cfg.chromePort}/?stealth=1&--disable-web-security=true";
             EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
             ExecStart = ''
-              ${pkgs.changedetection-io}/bin/changedetection.py \
+              ${cfg.package}/bin/changedetection.py \
                 -h ${cfg.listenAddress} -p ${toString cfg.port} -d ${cfg.datastorePath}
             '';
             ProtectHome = true;

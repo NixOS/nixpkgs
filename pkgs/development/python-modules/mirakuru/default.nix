@@ -3,8 +3,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
+  pytest-rerunfailures,
+  pytest-xdist,
   setuptools,
   psutil,
   netcat,
@@ -14,33 +15,32 @@
 
 buildPythonPackage rec {
   pname = "mirakuru";
-  version = "2.5.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.9";
+  version = "3.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ClearcodeHQ";
     repo = "mirakuru";
     tag = "v${version}";
-    hash = "sha256-blk4Oclb3+Cj3RH7BhzacfoPFDBIP/zgv4Ct7fawGnQ=";
+    hash = "sha256-3WyjvHxr+6kG+cLSCEZkHoA70mSoT66ubmp0W9g2yJM=";
   };
 
-  patches = [
-    # https://github.com/ClearcodeHQ/mirakuru/pull/810
-    ./tmpdir.patch
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ psutil ];
+  dependencies = [ psutil ];
 
   nativeCheckInputs = [
     netcat.nc
     ps
     python-daemon
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
   ];
+
+  # socket bind races, but requires xdist_group
+  dontUsePytestXdist = true;
+
   pythonImportsCheck = [ "mirakuru" ];
 
   # Necessary for the tests to pass on Darwin with sandbox enabled.
@@ -51,20 +51,19 @@ buildPythonPackage rec {
   # > ps: vsz: requires entitlement
   # > ps: rss: requires entitlement
   # > ps: time: requires entitlement
-  disabledTests =
-    [
-      "test_forgotten_stop"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_mirakuru_cleanup"
-      "test_daemons_killing"
-    ];
+  disabledTests = [
+    "test_forgotten_stop"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_mirakuru_cleanup"
+    "test_daemons_killing"
+  ];
 
-  meta = with lib; {
-    homepage = "https://pypi.org/project/mirakuru";
+  meta = {
+    homepage = "https://github.com/dbfixtures/mirakuru";
     description = "Process orchestration tool designed for functional and integration tests";
-    changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/v${version}/CHANGES.rst";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ bcdarwin ];
+    changelog = "https://github.com/ClearcodeHQ/mirakuru/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

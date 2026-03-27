@@ -11,14 +11,14 @@
   withTimestamp ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doas";
   version = "6.8.2";
 
   src = fetchFromGitHub {
     owner = "Duncaen";
     repo = "OpenDoas";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "9uOQ2Ta5HzEpbCz2vbqZEEksPuIjL8lvmfmynfqxMeM=";
   };
 
@@ -39,25 +39,24 @@ stdenv.mkDerivation rec {
   # ./configure script does not understand `--disable-shared`
   dontAddStaticConfigureFlags = true;
 
-  postPatch =
-    ''
-      sed -i '/\(chown\|chmod\)/d' GNUmakefile
-    ''
-    + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
-      sed -i 's/-lpam/-lpam -laudit/' configure
-    '';
+  postPatch = ''
+    sed -i '/\(chown\|chmod\)/d' GNUmakefile
+  ''
+  + lib.optionalString (withPAM && stdenv.hostPlatform.isStatic) ''
+    sed -i 's/-lpam/-lpam -laudit/' configure
+  '';
 
   nativeBuildInputs = [ bison ];
   buildInputs = [ ] ++ lib.optional withPAM pam ++ lib.optional (!withPAM) libxcrypt;
 
   passthru.tests = { inherit (nixosTests) doas; };
 
-  meta = with lib; {
+  meta = {
     description = "Executes the given command as another user";
     mainProgram = "doas";
     homepage = "https://github.com/Duncaen/OpenDoas";
-    license = licenses.isc;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ cole-h ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ cole-h ];
   };
-}
+})

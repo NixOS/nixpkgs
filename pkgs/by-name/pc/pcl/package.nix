@@ -3,18 +3,20 @@
   stdenv,
   config,
   fetchFromGitHub,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
-  libsForQt5,
+  qt6,
   pkg-config,
 
   # buildInputs
   eigen,
-  libXt,
+  libxt,
   libpcap,
   libusb1,
   llvmPackages,
+  nanoflann,
 
   # nativeBuildInputs
   boost,
@@ -32,14 +34,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcl";
-  version = "1.15.0";
+  version = "1.15.1";
 
   src = fetchFromGitHub {
     owner = "PointCloudLibrary";
     repo = "pcl";
     tag = "pcl-${finalAttrs.version}";
-    hash = "sha256-UCuQMWGwe+YxeGj0Y6m5IT58NW2lAWN5RqyZnvyFSr4=";
+    hash = "sha256-+KyaajJM0I5CAcr8AiOLC4TkGV3Gm73a0/X8LQWFZMI=";
   };
+
+  patches = [
+    (fetchpatch {
+      # see https://github.com/NixOS/nixpkgs/issues/485826 to be removed at next release after 1.15.1
+      name = "boost-1.89.patch";
+      url = "https://github.com/PointCloudLibrary/pcl/commit/99333442ac63971297b4cdd05fab9d2bd2ff57a4.patch";
+      hash = "sha256-5vg8VjxoAfEOx9n7Tby1DXe1u4rn+zharkefUovLHv0=";
+    })
+  ];
+
+  strictDeps = true;
 
   # remove attempt to prevent (x86/x87-specific) extended precision use
   # when SSE not detected
@@ -49,18 +62,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
     pkg-config
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   buildInputs = [
     eigen
-    libXt
+    libxt
     libpcap
-    libsForQt5.qtbase
+    qt6.qtbase
     libusb1
-    llvmPackages.openmp
-  ];
+    nanoflann
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   propagatedBuildInputs = [
     boost
@@ -71,8 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
     vtk
   ];
 
-  cmakeFlags = lib.optionals cudaSupport [
-    (lib.cmakeBool "WITH_CUDA" true)
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_CUDA" cudaSupport)
+    (lib.cmakeBool "BUILD_GPU" cudaSupport)
+    (lib.cmakeBool "PCL_ENABLE_MARCHNATIVE" false)
+    (lib.cmakeBool "WITH_CUDA" cudaSupport)
   ];
 
   passthru.updateScript = gitUpdater {

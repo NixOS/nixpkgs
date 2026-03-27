@@ -6,14 +6,14 @@
   protobuf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "goldberg-emu";
   version = "0.2.5";
 
   src = fetchFromGitLab {
     owner = "mr_goldberg";
     repo = "goldberg_emulator";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-goOgMNjtDmIKOAv9sZwnPOY0WqTN90LFJ5iEp3Vkzog=";
   };
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ln -s $out/share/goldberg/tools/find_interfaces.sh $out/bin/find_interfaces
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://gitlab.com/Mr_Goldberg/goldberg_emulator";
     changelog = "https://gitlab.com/Mr_Goldberg/goldberg_emulator/-/releases";
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
       use the steam multiplayer apis on a LAN without steam or an internet connection.
     '';
     mainProgram = "lobby_connect";
-    license = licenses.lgpl3Only;
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl3Only;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

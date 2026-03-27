@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "entropy";
   version = "1.0.7";
 
   src = fetchFromGitHub {
     owner = "EwenQuim";
     repo = "entropy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Wj+WSJ2dt4mE0yoMSYIQVNVklBxaTXwP2XND4+76VCI=";
   };
 
@@ -24,4 +24,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ starsep ];
     mainProgram = "entropy";
   };
-}
+})

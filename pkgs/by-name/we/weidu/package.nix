@@ -10,20 +10,20 @@
 }:
 
 let
-  # 1. Needs ocaml >= 4.04 and <= 4.11 (patched against 4.14)
-  # 2. ocaml 4.10 defaults to safe (immutable) strings so we need a version with
+  # 1. Needs ocaml >= 4.04 and <= 4.11 but works with 4.14 when patched
+  # 2. ocaml 4.10+ defaults to safe (immutable) strings so we need a version with
   #    that disabled as weidu is strongly dependent on mutable strings
   ocaml' = ocaml-ng.ocamlPackages_4_14_unsafe_string.ocaml;
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "weidu";
   version = "249.00";
 
   src = fetchFromGitHub {
     owner = "WeiDUorg";
     repo = "weidu";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-+vkKTzFZdAzY2dL+mZ4A0PDxhTKGgs9bfArz7S6b4m4=";
   };
 
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substitute sample.Configuration Configuration \
-      --replace /usr/bin ${lib.makeBinPath [ ocaml' ]} \
-      --replace /usr/local/bin ${lib.makeBinPath [ ocaml' ]} \
-      --replace elkhound ${elkhound}/bin/elkhound
+      --replace-fail /usr/bin ${lib.makeBinPath [ ocaml' ]} \
+      --replace-fail /usr/local/bin ${lib.makeBinPath [ ocaml' ]} \
+      --replace-fail elkhound ${lib.getExe elkhound}
 
     mkdir -p obj/{.depend,x86_LINUX}
 
@@ -71,12 +71,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "InfinityEngine Modding Engine";
     homepage = "https://weidu.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ peterhoeg ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peterhoeg ];
     # should work fine on Windows
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
+    mainProgram = "weidu";
   };
-}
+})

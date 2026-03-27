@@ -4,19 +4,19 @@
   fetchPypi,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "doitlive";
-  version = "5.0.0";
+  version = "5.2.1";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jAoibszDpQJjiNCZDhX3fLniALOG7r9YqaYEySkmMM4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-dYelfAT6dHGOdstGIvme9rdi8chh0MHC+EOra+xT0GM=";
   };
 
-  nativeBuildInputs = with python3Packages; [ setuptools ];
+  build-system = with python3Packages; [ flit-core ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     click
     click-completion
     click-didyoumean
@@ -25,12 +25,12 @@ python3Packages.buildPythonApplication rec {
   # disable tests (too many failures)
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for live presentations in the terminal";
     homepage = "https://github.com/sloria/doitlive";
-    changelog = "https://github.com/sloria/doitlive/blob/${version}/CHANGELOG.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mbode ];
+    changelog = "https://github.com/sloria/doitlive/blob/${finalAttrs.version}/CHANGELOG.rst";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mbode ];
     mainProgram = "doitlive";
   };
-}
+})

@@ -1,13 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   replaceVars,
   ruff,
   click,
-  click-default-group,
-  docformatter,
   jinja2,
   toposort,
   typing-extensions,
@@ -19,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "xsdata";
-  version = "24.12";
+  version = "26.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "tefra";
     repo = "xsdata";
     tag = "v${version}";
-    hash = "sha256-ARq7QNwEtnXo0Q04CNWf3bAwyjl92YnFUp/Y51sgsLU=";
+    hash = "sha256-h5VGXGXQSG4o8H+Q+Z0SN9rw4mFI8EORNtB+4VAKg/k=";
   };
 
   patches = [
@@ -49,8 +44,6 @@ buildPythonPackage rec {
   optional-dependencies = {
     cli = [
       click
-      click-default-group
-      docformatter
       jinja2
       toposort
     ];
@@ -58,13 +51,10 @@ buildPythonPackage rec {
     soap = [ requests ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.cli
-    ++ optional-dependencies.lxml
-    ++ optional-dependencies.soap;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTestPaths = [ "tests/integration/benchmarks" ];
 
@@ -87,7 +77,7 @@ buildPythonPackage rec {
     description = "Naive XML & JSON bindings for Python";
     mainProgram = "xsdata";
     homepage = "https://github.com/tefra/xsdata";
-    changelog = "https://github.com/tefra/xsdata/blob/${src.rev}/CHANGES.md";
+    changelog = "https://github.com/tefra/xsdata/blob/${src.tag}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

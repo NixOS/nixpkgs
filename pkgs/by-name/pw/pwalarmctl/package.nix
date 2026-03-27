@@ -6,7 +6,7 @@
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pwalarmctl";
   version = "0.1.0";
 
@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "amyipdev";
     repo = "pwalarmd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-xoC1PtDQjkvoWb9x8A43ITo6xyYOv9hxH2pxiZBBvKI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-wD6djP2FQgJNL9EryRrv6NrEex0bnqDJmfYw+S2x508=";
 
   preBuild = ''
@@ -42,4 +41,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ amyipdev ];
   };
-}
+})

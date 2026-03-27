@@ -6,7 +6,7 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
-  fetchpatch,
+  fetchurl,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -16,8 +16,8 @@
   jansson,
   libjack2,
   libxkbcommon,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   qtbase,
   qtsvg,
   speex,
@@ -25,7 +25,7 @@
   x264,
   curl,
   wayland,
-  xorg,
+  libx11,
   pkg-config,
   libvlc,
   libGL,
@@ -40,7 +40,7 @@
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
   browserSupport ? true,
-  libcef,
+  cef-binary,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   withFdk ? true,
@@ -60,128 +60,121 @@
   libdatachannel,
   libvpl,
   qrcodegencpp,
+  simde,
   nix-update-script,
+  extra-cmake-modules,
 }:
 
 let
   inherit (lib) optional optionals;
 
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
+
+  cef = cef-binary.overrideAttrs (
+    oldAttrs:
+    let
+      version = "6533";
+      revision = "6";
+    in
+    {
+      inherit version;
+
+      src = fetchurl {
+        url = "https://cdn-fastly.obsproject.com/downloads/cef_binary_${version}_linux_${
+          selectSystem {
+            aarch64-linux = "aarch64";
+            x86_64-linux = "x86_64";
+          }
+        }_v${revision}.tar.xz";
+        hash = selectSystem {
+          aarch64-linux = "sha256-ZCUURp6qKaXIh4kQhNLnP33C10Bfffp3JrLbwkswmZk=";
+          x86_64-linux = "sha256-eWMzVRmhnM3FIz9zNMWrAjAm4vPpoMxBcAfAnYZggUY=";
+        };
+      };
+    }
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.3";
+  version = "32.1.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-i1wkGlafPvfMTsQr5Ww5iwmUu+23cr0YmN10llJfohA=";
+    hash = "sha256-edmDqavmDT8+bl0nXmDqYPpkuitg9T8u2fI/j6mWoFc=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
   patches = [
-    # Lets obs-browser build against CEF 90.1.0+
-    ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
-    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
-    (fetchpatch {
-      name = "Check-source-validity-before-attempting-to-log-rende.patch";
-      url = "https://github.com/obsproject/obs-browser/pull/478.patch";
-      revert = true;
-      stripLen = 1;
-      extraPrefix = "plugins/obs-browser/";
-      hash = "sha256-mQVhK4r8LlK2F9/jlDHA1V6M29mAfxWAU/VsMXYNrhU=";
-    })
-    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
-    (fetchpatch {
-      name = "Print-browser-source-renderer-crashes-to-OBS-log.patch";
-      url = "https://github.com/obsproject/obs-browser/pull/475.patch";
-      revert = true;
-      stripLen = 1;
-      extraPrefix = "plugins/obs-browser/";
-      hash = "sha256-ha77OYpWn57JovPNE+izyDOB/2KlF3qWVv/PGEgyu84=";
-    })
-    # TODO: remove when CHROME_VERSION_BUILD(libcef) >= 6367
-    (fetchpatch {
-      name = "Log-error-if-CefInitialize-fails.patch.patch";
-      url = "https://github.com/obsproject/obs-browser/pull/477.patch";
-      revert = true;
-      stripLen = 1;
-      extraPrefix = "plugins/obs-browser/";
-      hash = "sha256-MMLFQtpWjfpti/38qEcOuXr1L3s1MPRHjuaZCjNmvt0=";
-    })
   ];
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      cmake
-      ninja
-      pkg-config
-      wrapGAppsHook3
-      wrapQtAppsHook
-    ]
-    ++ optional scriptingSupport swig
-    ++ optional cudaSupport autoAddDriverRunpath;
+  nativeBuildInputs = [
+    addDriverRunpath
+    cmake
+    ninja
+    pkg-config
+    wrapGAppsHook3
+    wrapQtAppsHook
+    extra-cmake-modules
+  ]
+  ++ optional scriptingSupport swig
+  ++ optional cudaSupport autoAddDriverRunpath;
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      jansson
-      libjack2
-      libv4l
-      libxkbcommon
-      libpthreadstubs
-      libXdmcp
-      qtbase
-      qtsvg
-      speex
-      wayland
-      x264
-      libvlc
-      mbedtls
-      pciutils
-      librist
-      cjson
-      libva
-      srt
-      qtwayland
-      nlohmann_json
-      websocketpp
-      asio
-      libdatachannel
-      libvpl
-      qrcodegencpp
-      uthash
-      nv-codec-headers-12
-    ]
-    ++ optionals scriptingSupport [
-      luajit
-      python3
-    ]
-    ++ optional alsaSupport alsa-lib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optionals pipewireSupport [
-      pipewire
-      libdrm
-    ]
-    ++ optional browserSupport libcef
-    ++ optional withFdk fdk_aac;
+  buildInputs = [
+    curl
+    ffmpeg
+    jansson
+    libjack2
+    libv4l
+    libxkbcommon
+    libpthread-stubs
+    libxdmcp
+    qtbase
+    qtsvg
+    speex
+    wayland
+    x264
+    libvlc
+    mbedtls
+    pciutils
+    librist
+    cjson
+    libva
+    srt
+    qtwayland
+    nlohmann_json
+    websocketpp
+    asio
+    libdatachannel
+    libvpl
+    qrcodegencpp
+    uthash
+    nv-codec-headers-12
+  ]
+  ++ optionals scriptingSupport [
+    luajit
+    python3
+  ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optionals pipewireSupport [
+    pipewire
+    libdrm
+  ]
+  ++ optional browserSupport cef
+  ++ optional withFdk fdk_aac;
+
+  propagatedBuildInputs = [ simde ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''
-    mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
-    for i in ${libcef}/share/cef/*; do
-      ln -s $i cef/Release/
-      ln -s $i cef/Resources/
-    done
-    ln -s ${libcef}/lib/*.so* cef/Release/
-    ln -s ${libcef}/libexec/cef/chrome-sandbox cef/Release/
-    ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    ln -s ${libcef}/include cef/
+    ln -s ${cef} cef
   '';
 
   postPatch = ''
@@ -197,12 +190,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
+    (lib.cmakeBool "ENABLE_SCRIPTING" scriptingSupport)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
     (lib.cmakeBool "ENABLE_BROWSER" browserSupport)
-  ] ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
+  ]
+  ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
@@ -214,10 +209,11 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       wrapperLibraries = [
-        xorg.libX11
+        libx11
         libvlc
         libGL
-      ] ++ optionals decklinkSupport [ blackmagic-desktop-video ];
+      ]
+      ++ optionals decklinkSupport [ blackmagic-desktop-video ];
     in
     ''
       qtWrapperArgs+=(
@@ -243,14 +239,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.optionalString browserSupport ''
       # Link cef components again after patchelfing other libs
-      ln -s ${libcef}/lib/* $out/lib/obs-plugins/
-      ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
+      ln -sf ${cef}/${cef.buildType}/* $out/lib/obs-plugins/
     '')
   ];
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Free and open source software for video recording and live streaming";
     longDescription = ''
       This project is a rewrite of what was formerly known as "Open Broadcaster
@@ -258,12 +253,12 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jb55
       materus
       fpletz
     ];
-    license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
+    license = with lib.licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [
       "x86_64-linux"
       "i686-linux"

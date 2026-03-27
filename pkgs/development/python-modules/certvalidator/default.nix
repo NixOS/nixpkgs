@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "wbond";
-    repo = pname;
+    repo = "certvalidator";
     rev = version;
     hash = "sha256-yVF7t4FuU3C9fDg67JeM7LWZZh/mv5F4EKmjlO4AuBY=";
   };
@@ -33,10 +33,10 @@ buildPythonPackage rec {
   '';
   pythonImportsCheck = [ "certvalidator" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wbond/certvalidator";
     description = "Validates X.509 certificates and paths";
-    license = licenses.mit;
-    maintainers = with maintainers; [ baloo ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ baloo ];
   };
 }

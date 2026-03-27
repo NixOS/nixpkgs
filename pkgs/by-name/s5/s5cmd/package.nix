@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "s5cmd";
   version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "peak";
     repo = "s5cmd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+wSVJkXmu+1BzvO1o31jhKZLXeG7y+YkABIZZ1TlK/g=";
   };
 
@@ -20,11 +20,11 @@ buildGoModule rec {
   # Skip e2e tests requiring network access
   excludedPackages = [ "./e2e" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/peak/s5cmd";
     description = "Parallel S3 and local filesystem execution tool";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomberek ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomberek ];
     mainProgram = "s5cmd";
   };
-}
+})

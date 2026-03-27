@@ -2,23 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "5.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "5.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "joerick";
-    repo = pname;
+    repo = "pyinstrument";
     tag = "v${version}";
-    hash = "sha256-uJ9KRgSETuxpeEIpBKFz66+Qci86jy36lKkUKpvmKIg=";
+    hash = "sha256-OP4B2E3le67oT5nV8OmOFQvkrEog5qoq4pihRpXIxcY=";
   };
 
   nativeBuildInputs = [
@@ -31,12 +28,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyinstrument" ];
 
-  meta = with lib; {
+  meta = {
     description = "Call stack profiler for Python";
     mainProgram = "pyinstrument";
     homepage = "https://github.com/joerick/pyinstrument";
-    changelog = "https://github.com/joerick/pyinstrument/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    changelog = "https://github.com/joerick/pyinstrument/releases/tag/${src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

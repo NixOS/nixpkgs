@@ -5,18 +5,18 @@
   stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "klog-rs";
-  version = "0.4.1";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "tobifroe";
     repo = "klog";
-    rev = version;
-    hash = "sha256-t53HC5eBC587jyvJKxlG3B3Im7RM6bDcZfUO4npgGfM=";
+    rev = finalAttrs.version;
+    hash = "sha256-VyUUzhVwJ1tNLICXwy7f85queH+pn4vL5HTL8IHcQ7w=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-HmKMxI94j0cLLAjmUJQhymop9qiH71Rm8dnVVs2VDF8=";
+
+  cargoHash = "sha256-KJxssCN9/WoRR1Cv67CK5muVy+cqEEfzSioQtptplQs=";
   checkFlags = [
     # this integration test depends on a running kubernetes cluster
     "--skip=k8s::tests::test_get_pod_list"
@@ -26,10 +26,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tool to tail logs of multiple Kubernetes pods simultaneously";
     homepage = "https://github.com/tobifroe/klog";
-    changelog = "https://github.com/tobifroe/klog/releases/tag/${version}";
+    changelog = "https://github.com/tobifroe/klog/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     mainProgram = "klog";
     maintainers = with lib.maintainers; [ tobifroe ];
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

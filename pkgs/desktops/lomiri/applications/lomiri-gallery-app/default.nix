@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
   gitUpdater,
   nixosTests,
   cmake,
@@ -25,28 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-gallery-app";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/apps/lomiri-gallery-app";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-uKGPic9XYUj0rLA05i6GjLM+n17MYgiFJMWnLXHKmIU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5/mZszPEsSZqgioJ+Mc7+0gEcpUKr7n/LgyXJ20P2Zg=";
   };
-
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/merge_requests/152 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-gallery-app-bindtextdomain.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/592eff118cb5056886b73e6698f8941c7a16f2e0.patch";
-      hash = "sha256-aR/Lnzvq4RuRLI75mMd4xTGMAcijm1adSAGVFZZ++No=";
-    })
-    (fetchpatch {
-      name = "0002-lomiri-gallery-app-C++ify-i18n.patch";
-      url = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/commit/a7582abbe0acef4d49c77a4395bc22dbd1707ef3.patch";
-      hash = "sha256-qzqTXqIYX+enoOwwV9d9fxe7tVYLuh1WkL8Ij/Qx0H0=";
-    })
-  ];
 
   postPatch = ''
     # Make splash path in desktop file relative
@@ -118,19 +103,30 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.vm = nixosTests.lomiri-gallery-app;
+    tests = {
+      inherit (nixosTests.lomiri-gallery-app)
+        basic
+        format-mp4
+        format-gif
+        format-bmp
+        format-jpg
+        format-png
+        ;
+    };
     updateScript = gitUpdater { rev-prefix = "v"; };
   };
 
   meta = {
     description = "Photo gallery application for Ubuntu Touch devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app";
-    changelog = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/blob/${
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+    }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only
       cc-by-sa-30
     ];
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     mainProgram = "lomiri-gallery-app";
     platforms = lib.platforms.linux;
   };

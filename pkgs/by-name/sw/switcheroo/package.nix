@@ -2,7 +2,6 @@
   lib,
   blueprint-compiler,
   cargo,
-  darwin,
   desktop-file-utils,
   fetchFromGitLab,
   glib,
@@ -21,19 +20,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "switcheroo";
-  version = "2.2.0";
+  version = "2.5.2";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Switcheroo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AwecOA8HWGimhQyCEG3Z3hhwa9RVWssykUXsdvqqs9U=";
+    hash = "sha256-1SMFkzSH8ekJeP0VOPKxkvUNMh/wRzj31PIy6h051Ng=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
     name = "switcheroo-${finalAttrs.version}";
-    hash = "sha256-Ose1gx6vwKZCdtMDkyM9Y+f6wt7VDKTI3Wc7kep1428=";
+    hash = "sha256-QHdzLlmYCktQCUGZhIcuPhmR4rMUDeneptTdyPrwh1E=";
   };
 
   nativeBuildInputs = [
@@ -48,15 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk4
-      libadwaita
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Foundation
-    ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
@@ -80,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Converter/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "switcheroo";
-    maintainers = lib.teams.gnome-circle.members;
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.unix;
   };
 })

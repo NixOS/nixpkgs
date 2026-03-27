@@ -3,6 +3,7 @@
   pkg-config,
   lib,
   grpc,
+  php,
 }:
 
 buildPecl {
@@ -25,6 +26,7 @@ buildPecl {
     description = "High performance, open source, general RPC framework that puts mobile and HTTP/2 first";
     homepage = "https://github.com/grpc/grpc/tree/master/src/php/ext/grpc";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
+    broken = lib.versionAtLeast php.version "8.5";
   };
 }

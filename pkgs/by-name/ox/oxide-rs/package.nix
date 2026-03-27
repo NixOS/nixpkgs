@@ -7,35 +7,36 @@
   libgit2,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxide-rs";
-  version = "0.9.0+20241204.0.0";
+  version = "0.15.0+2026021301.0.0";
 
   src = fetchFromGitHub {
     owner = "oxidecomputer";
     repo = "oxide.rs";
-    rev = "v${version}";
-    hash = "sha256-NtTXpXDYazcXilQNW455UDkqMCFzFPvTUkbEBQsWIDo=";
-    # leaveDotGit is necessary because `build.rs` expects git information which
-    # is used to write a `built.rs` file which is read by the CLI application
-    # to display version information.
-    leaveDotGit = true;
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-PFcQ4zNLh1Q5wMgBeWptix9+ii4TY2RtnI6JIyMYa14=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-We5yNF8gtHWAUAead0uc99FIoMcicDWdGbTzPgpiFyY=";
-
-  cargoPatches = [
-    ./0001-use-crates-io-over-git-dependencies.patch
+  patches = [
+    # original patch: https://git.iliana.fyi/nixos-configs/tree/packages/oxide-git-version.patch?id=0e4dc0d21def9084e2c6c1e20f3da08c31590945
+    ./rm-built-ref-head-lookup.patch
+    ./rm-commit-hash-in-version-output.patch
   ];
+
+  checkFlags = [
+    # skip since output check includes git commit hash
+    "--skip=cmd_version::version_success"
+    # skip due to failure with loopback on debug
+    "--skip=test_cmd_auth_debug_logging"
+  ];
+
+  cargoHash = "sha256-Yf5PG5jRoufP+rf3WHCwT3zvDp++68Ewl2KFTCO5w54=";
 
   cargoBuildFlags = [
     "--package=oxide-cli"
-    "--package=xtask"
   ];
 
   cargoTestFlags = [
@@ -47,24 +48,19 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      curl
-      libgit2
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    curl
+    libgit2
+    openssl
+    zlib
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
   meta = {
-    description = "The Oxide Rust SDK and CLI";
+    description = "Oxide Rust SDK and CLI";
     homepage = "https://github.com/oxidecomputer/oxide.rs";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
@@ -73,4 +69,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "oxide";
   };
-}
+})

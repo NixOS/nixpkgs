@@ -17,7 +17,7 @@
   gsl,
   harminv,
   libctl,
-  libGDSII,
+  libgdsii,
   guile,
   mpb,
   python,
@@ -28,6 +28,7 @@
   cython,
   autograd,
   mpi4py,
+  distutils,
 }:
 
 assert !blas.isILP64;
@@ -35,22 +36,16 @@ assert !lapack.isILP64;
 
 buildPythonPackage rec {
   pname = "meep";
-  version = "1.30.0";
+  version = "1.32.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
-    repo = pname;
+    repo = "meep";
     tag = "v${version}";
-    hash = "sha256-9cQHvwUAeop5dRMVvedph+KQvTcmnkHdfqPQlSY280c=";
+    hash = "sha256-XyGs4U8r3ZaqCq2ArMeeI/wFmJEig8iBaPytf7QIehw=";
   };
 
-  format = "other";
-
-  # https://github.com/NanoComp/meep/issues/2819
-  postPatch = lib.optionalString (!pythonOlder "3.12") ''
-    substituteInPlace configure.ac doc/docs/setup.py python/visualization.py \
-      --replace-fail "distutils" "setuptools._distutils"
-  '';
+  pyproject = false;
 
   # MPI is needed in nativeBuildInputs too, otherwise MPI libs will be missing
   # at runtime
@@ -70,26 +65,27 @@ buildPythonPackage rec {
     hdf5-mpi
     harminv
     libctl
-    libGDSII
+    libgdsii
     guile
     gsl
     mpb
   ];
 
-  propagatedBuildInputs =
-    [
-      mpi
-      numpy
-      scipy
-      matplotlib
-      h5py-mpi
-      cython
-      autograd
-      mpi4py
-    ]
-    ++ lib.optionals (!pythonOlder "3.12") [
-      setuptools # used in python/visualization.py
-    ];
+  propagatedBuildInputs = [ mpi ];
+
+  dependencies = [
+    numpy
+    scipy
+    matplotlib
+    h5py-mpi
+    cython
+    autograd
+    mpi4py
+  ]
+  ++ lib.optionals (!pythonOlder "3.12") [
+    setuptools # used in python/visualization.py
+    distutils
+  ];
 
   propagatedUserEnvPkgs = [ mpi ];
 
@@ -100,7 +96,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     export HDF5_MPI=ON
-    export PYTHON=${python}/bin/${python.executable};
+    export PYTHON=${python.interpreter};
   '';
 
   configureFlags = [

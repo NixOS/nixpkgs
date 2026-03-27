@@ -3,57 +3,40 @@
   stdenv,
   fetchFromSourcehut,
   makeBinaryWrapper,
-  curlMinimal,
-  mandoc,
-  ncurses,
+  openssl,
+  libssh2,
   nim,
-  pandoc,
   pkg-config,
-  zlib,
-  unstableGitUpdater,
-  replaceVars,
+  brotli,
+  gitUpdater,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chawan";
-  version = "0-unstable-2025-03-27";
+  version = "0.3.3";
 
   src = fetchFromSourcehut {
     owner = "~bptato";
     repo = "chawan";
-    rev = "b2d954b96f227597b62cfae1ac64785bd8f0fb37";
-    hash = "sha256-1kxqzzEMGDFNk25mQX8p7TuADuTMIz+hHZ7p+i7m494=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GVDh94pgdMlwHMyqtT8q2yM+rwioodBYQfA+AOZ/CsU=";
   };
-
-  patches = [ ./mancha-augment-path.diff ];
-
-  # Include chawan's man pages in mancha's search path
-  postPatch = ''
-    # As we need the $out reference, we can't use `replaceVars` here.
-    substituteInPlace adapter/protocol/man.nim \
-      --replace-fail '@out@' "$out"
-  '';
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optional stdenv.cc.isClang "-Wno-error=implicit-function-declaration"
-  );
 
   nativeBuildInputs = [
     makeBinaryWrapper
     nim
-    pandoc
     pkg-config
+    brotli
   ];
 
   buildInputs = [
-    curlMinimal
-    ncurses
-    zlib
+    openssl
+    libssh2
   ];
 
   buildFlags = [
     "all"
-    "manpage"
   ];
   installFlags = [
     "DESTDIR=$(out)"
@@ -63,23 +46,27 @@ stdenv.mkDerivation {
   postInstall =
     let
       makeWrapperArgs = ''
-        --set MANCHA_CHA $out/bin/cha \
-        --set MANCHA_MAN ${mandoc}/bin/man
+        --set MANCHA_CHA $out/bin/cha
       '';
     in
     ''
-      wrapProgram $out/bin/cha ${makeWrapperArgs}
       wrapProgram $out/bin/mancha ${makeWrapperArgs}
     '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Lightweight and featureful terminal web browser";
     homepage = "https://sr.ht/~bptato/chawan/";
-    license = lib.licenses.publicDomain;
+    changelog = "https://git.sr.ht/~bptato/chawan/refs/v${finalAttrs.version}";
+    license = lib.licenses.unlicense;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ jtbx ];
+    maintainers = [ ];
     mainProgram = "cha";
   };
-}
+})

@@ -24,7 +24,6 @@
   fetchgit,
   makeWrapper,
   gitMinimal,
-  libobjc,
   ruby,
   bundler,
 }@defs:
@@ -108,32 +107,29 @@ lib.makeOverridable (
   in
 
   stdenv.mkDerivation (
-    (builtins.removeAttrs attrs [ "source" ])
+    (removeAttrs attrs [ "source" ])
     // {
       inherit ruby;
       inherit dontBuild;
       inherit dontStrip;
       inherit suffix;
+      inherit version;
       gemType = type;
-
-      nativeBuildInputs =
-        [
-          ruby
-          makeWrapper
-        ]
-        ++ lib.optionals (type == "git") [ gitMinimal ]
-        ++ lib.optionals (type != "gem") [ bundler ]
-        ++ nativeBuildInputs;
-
-      buildInputs =
-        [
-          ruby
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ]
-        ++ buildInputs;
-
-      #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
+      pname = gemName;
       name = attrs.name or "${namePrefix}${gemName}-${suffix}";
+
+      nativeBuildInputs = [
+        ruby
+        makeWrapper
+      ]
+      ++ lib.optionals (type == "git") [ gitMinimal ]
+      ++ lib.optionals (type != "gem") [ bundler ]
+      ++ nativeBuildInputs;
+
+      buildInputs = [
+        ruby
+      ]
+      ++ buildInputs;
 
       inherit src;
 
@@ -221,7 +217,14 @@ lib.makeOverridable (
           export GEM_HOME=$out/${ruby.gemPath}
           mkdir -p $GEM_HOME
 
-          echo "buildFlags: $buildFlags"
+          # When __structuredAttrs is enabled, this is not added to the environment by default,
+          # but nix-bundle-install.rb needs it.
+          export ruby
+
+          local -a flagsArray
+          concatTo flagsArray buildFlags
+
+          echo "buildFlags: ''${flagsArray[@]}"
 
           ${lib.optionalString (type == "url") ''
             ruby ${./nix-bundle-install.rb} \
@@ -260,7 +263,7 @@ lib.makeOverridable (
               --backtrace \
               --no-env-shebang \
               ${documentFlag} \
-              $gempkg $gemFlags -- $buildFlags
+              $gempkg -- "''${flagsArray[@]}"
 
             # looks like useless files which break build repeatability and consume space
             pushd $out/${ruby.gemPath}
@@ -303,7 +306,8 @@ lib.makeOverridable (
         # default to Ruby's platforms
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
-      } // meta;
+      }
+      // meta;
     }
   )
 

@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "mastotool";
   version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "mastotool";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-KmYUt2WXLY6i17dZ+o5HOTyMwbQnynY7IT43LIEN3B0=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of command-line tools to work with your Mastodon account";
     homepage = "https://github.com/muesli/mastotool";
-    changelog = "https://github.com/muesli/mastotool/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/muesli/mastotool/releases/tag/${finalAttrs.src.rev}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
     mainProgram = "mastotool";
   };
-}
+})

@@ -5,37 +5,35 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sshocker";
-  version = "0.3.6";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "sshocker";
-    tag = "v${version}";
-    hash = "sha256-ehsQ/Z1LCSpnvIvABLCIR2aLG4DK33VJ9gidoSEoeqw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7s5jPMt6q7RUXxwA7rwVXhWGRrwfMc/EcEQxicwEHjs=";
   };
 
-  vendorHash = "sha256-9le1ETAdMZ1s7Hl2STz76/9eU0YkI4yNM/PZVXOwndQ=";
+  vendorHash = "sha256-FGaZTE8CCZ16ozsZr5MUFNkEy8+nkBYXH55n5TJG4Bg=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/lima-vm/sshocker/pkg/version.Version=${version}"
+    "-X=github.com/lima-vm/sshocker/pkg/version.Version=${finalAttrs.version}"
   ];
 
   doInstallCheck = true;
 
-  versionCheckProgramArg = "--version";
-
-  meta = with lib; {
+  meta = {
     description = "Tool for SSH, reverse sshfs and port forwarder";
     homepage = "https://github.com/lima-vm/sshocker";
-    changelog = "https://github.com/lima-vm/sshocker/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/lima-vm/sshocker/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "sshocker";
   };
-}
+})

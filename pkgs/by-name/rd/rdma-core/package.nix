@@ -6,23 +6,22 @@
   pkg-config,
   docutils,
   pandoc,
-  ethtool,
-  iproute2,
   libnl,
   udev,
+  udevCheckHook,
   python3,
   perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdma-core";
-  version = "56.0";
+  version = "62.0";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nzd7BDP72o0TsSTrCGT6HOF7td+3ex4/c68GdjIA6Bc=";
+    hash = "sha256-1n33KH8HTyZ0jHtDanopxwABiLjAvt+V7lgaeabJs8s=";
   };
 
   strictDeps = true;
@@ -39,11 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     pandoc
     pkg-config
     python3
+    udevCheckHook
   ];
 
   buildInputs = [
-    ethtool
-    iproute2
     libnl
     perl
     udev
@@ -72,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
         "${perl}/bin/perl" "${perl}/bin/perl -I $out/${perl.libPrefix}"
     done
   '';
+
+  doInstallCheck = true;
 
   meta = {
     description = "RDMA Core Userspace Libraries and Daemons";

@@ -4,31 +4,38 @@
   buildGoModule,
   enableWebui ? true,
   pnpm_9,
+  fetchPnpmDeps,
+  pnpmConfigHook,
   nodejs,
   nixosTests,
 }:
-
 buildGoModule rec {
   pname = "rmfakecloud";
-  version = "0.0.24";
+  version = "0.0.29";
 
   src = fetchFromGitHub {
     owner = "ddvk";
     repo = "rmfakecloud";
     rev = "v${version}";
-    hash = "sha256-ZsYq1+Bb6SyMGdbiy5UzanDiUiFOt4uhttiPKC0ESis=";
+    hash = "sha256-N6hAv8dVCM3VWuKpHlK82mjQh6RB7W+n9KBNNQXDrC8=";
   };
 
-  vendorHash = "sha256-S2P80uhX86IVUVEoR4tZ7e6qMe7CK+6bmmjBgjXGZmo=";
+  vendorHash = "sha256-XksCJ9b5NDIutwqnWP63R2udp/Y5qkkgo2a4TPUi0Z4=";
 
   # if using webUI build it
   # use env because of https://github.com/NixOS/nixpkgs/issues/358844
   env.pnpmRoot = "ui";
-  env.pnpmDeps = pnpm_9.fetchDeps {
-    inherit pname version src;
+  env.pnpmDeps = fetchPnpmDeps {
+    inherit
+      pname
+      version
+      src
+      ;
     sourceRoot = "${src.name}/ui";
     pnpmLock = "${src}/ui/pnpm-lock.yaml";
-    hash = "sha256-VNmCT4um2W2ii8jAm+KjQSjixYEKoZkw7CeRwErff/o=";
+    pnpm = pnpm_9;
+    fetcherVersion = 3;
+    hash = "sha256-5dsrf6Iff8z4ujzUccuNFwChChbWzXeXDilh8uZyl+U=";
   };
   preBuild = lib.optionals enableWebui ''
     # using sass-embedded fails at executing node_modules/sass-embedded-linux-x64/dart-sass/src/dart
@@ -41,7 +48,8 @@ buildGoModule rec {
   '';
   nativeBuildInputs = lib.optionals enableWebui [
     nodejs
-    pnpm_9.configHook
+    pnpmConfigHook
+    pnpm_9
   ];
 
   # ... or don't embed it in the server
@@ -57,11 +65,11 @@ buildGoModule rec {
 
   passthru.tests.rmfakecloud = nixosTests.rmfakecloud;
 
-  meta = with lib; {
+  meta = {
     description = "Host your own cloud for the Remarkable";
     homepage = "https://ddvk.github.io/rmfakecloud/";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       euxane
       martinetd
     ];

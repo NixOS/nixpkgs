@@ -14,7 +14,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lumina-desktop";
-    repo = pname;
+    repo = "lumina-pdf";
     rev = "v${version}";
     sha256 = "08caj4nashp79fbvj94rabn0iaa1hymifqmb782x03nb2vkn38r6";
   };
@@ -42,12 +42,12 @@ mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  meta = {
     description = "PDF viewer for the Lumina Desktop";
     mainProgram = "lumina-pdf";
     homepage = "https://github.com/lumina-desktop/lumina-pdf";
-    license = licenses.bsd3;
-    platforms = platforms.unix;
-    maintainers = teams.lumina.members;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.lumina ];
   };
 }

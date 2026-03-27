@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -11,19 +10,16 @@
   # tests
   pandas,
   pytestCheckHook,
-  undefined,
 }:
 
 buildPythonPackage rec {
   pname = "pyfakefs";
-  version = "5.8.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-flRX7jzGcGnTzvbieCJ+z8gL+2HpJbwKTTsK8y0cmc4=";
+    hash = "sha256-BZ/QshdL/u1JnssKWbzP9VfyZ8xtiFr8Dlt254ttUNo=";
   };
 
   build-system = [ setuptools ];
@@ -33,27 +29,25 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pandas
     pytestCheckHook
-    undefined
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "pyfakefs/tests"
   ];
 
-  disabledTests =
-    [
-      "test_expand_root"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      # this test fails on darwin due to case-insensitive file system
-      "test_rename_dir_to_existing_dir"
-    ]);
+  disabledTests = [
+    "test_expand_root"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    # this test fails on darwin due to case-insensitive file system
+    "test_rename_dir_to_existing_dir"
+  ]);
 
-  meta = with lib; {
+  meta = {
     description = "Fake file system that mocks the Python file system modules";
     homepage = "https://pyfakefs.org/";
     changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

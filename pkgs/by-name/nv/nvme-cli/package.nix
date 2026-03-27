@@ -9,21 +9,22 @@
   json_c,
   zlib,
   python3Packages,
+  udevCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nvme-cli";
-  version = "2.11";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
-    rev = "v${version}";
-    hash = "sha256-LkFYkfHeBKC/0kr33DKu7oXxXrtfu1YcpuwzRRWsHpc=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-gW95iJF9RnPC1mcoLjS3r+4tZhX+TP4BSOMU0uB256A=";
   };
 
   mesonFlags = [
-    "-Dversion-tag=${version}"
+    "-Dversion-tag=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3Packages.nose2
+    udevCheckHook
   ];
   buildInputs = [
     libnvme
@@ -38,8 +40,10 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage; # https://nvmexpress.org/
+  doInstallCheck = true;
+
+  meta = {
+    inherit (finalAttrs.src.meta) homepage; # https://nvmexpress.org/
     description = "NVM-Express user space tooling for Linux";
     longDescription = ''
       NVM-Express is a fast, scalable host controller interface designed to
@@ -49,12 +53,12 @@ stdenv.mkDerivation rec {
       tooling for NVM-Express drives. It was made specifically for Linux as it
       relies on the IOCTLs defined by the mainline kernel driver.
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       mic92
       vifino
     ];
     mainProgram = "nvme";
   };
-}
+})

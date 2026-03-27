@@ -19,18 +19,17 @@
   stdenv,
   wayland,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bite";
   version = "0.3";
 
   src = fetchFromGitHub {
     owner = "WINSDK";
     repo = "bite";
-    rev = "V${version}";
+    rev = "V${finalAttrs.version}";
     hash = "sha256-gio4J+V8achSuR2vQa2dnvOR/u4Zbb5z0UE0xP0gGCU=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ESGX1hnDnU2taKQXre4AQRzQxTC7W+0cEIoQPPC9Lfs=";
 
   nativeBuildInputs = [
@@ -40,36 +39,34 @@ rustPlatform.buildRustPackage rec {
     imagemagick
   ];
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      libxkbcommon
-      pango
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-    ];
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    libxkbcommon
+    pango
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
-  runtimeDependencies =
-    [
-      libxkbcommon
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-    ];
+  runtimeDependencies = [
+    libxkbcommon
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/bite \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeDependencies}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.runtimeDependencies}"
 
     mkdir -p $out/share/icons/hicolor/64x64/apps
     convert $src/assets/iconx64.png -background black -alpha remove -alpha off $out/share/icons/hicolor/64x64/apps/bite.png
@@ -78,10 +75,10 @@ rustPlatform.buildRustPackage rec {
   desktopItems = [
     (makeDesktopItem {
       name = "BiTE";
-      exec = meta.mainProgram;
+      exec = finalAttrs.meta.mainProgram;
       icon = "bite";
       desktopName = "BiTE";
-      comment = meta.description;
+      comment = finalAttrs.meta.description;
       categories = [
         "Development"
         "Utility"
@@ -89,11 +86,11 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
-    license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ vinnymeller ];
     mainProgram = "bite";
   };
-}
+})

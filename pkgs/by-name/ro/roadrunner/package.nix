@@ -1,19 +1,20 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "roadrunner";
-  version = "2024.3.5";
+  version = "2025.1.6";
 
   src = fetchFromGitHub {
     repo = "roadrunner";
     owner = "roadrunner-server";
-    tag = "v${version}";
-    hash = "sha256-zENTLo3jVOUE1yerIGTb+jFAMnClOVpU/IbUor+bi+g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-qoPQxJbZ1BH9Gy06qmp9LGWF6YPJL0gRZX3+S5ej6XY=";
   };
 
   nativeBuildInputs = [
@@ -24,11 +25,11 @@ buildGoModule rec {
   # https://github.com/roadrunner-server/roadrunner/blob/fe572d0eceae8fd05225fbd99ba50a9eb10c4393/.github/workflows/release.yml#L89
   ldflags = [
     "-s"
-    "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.version=${version}"
+    "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.version=${finalAttrs.version}"
     "-X=github.com/roadrunner-server/roadrunner/v2023/internal/meta.buildTime=1970-01-01T00:00:00Z"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rr \
       --bash <($out/bin/rr completion bash) \
       --zsh <($out/bin/rr completion zsh) \
@@ -46,14 +47,16 @@ buildGoModule rec {
       --replace "127.0.0.1:0" "127.0.0.1:55554"
   '';
 
-  vendorHash = "sha256-/2MuuvWEyo6zY3op359BUjG/HcjKxRSIv7Qb+6vtNqM=";
+  __darwinAllowLocalNetworking = true;
+
+  vendorHash = "sha256-LSeQACVgBywJqHfRE2q6HxL1ADKZtrJP83U3Zd1oIDw=";
 
   meta = {
-    changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/roadrunner-server/roadrunner/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "High-performance PHP application server, process manager written in Go and powered with plugins";
     homepage = "https://roadrunner.dev";
     license = lib.licenses.mit;
     mainProgram = "rr";
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = [ ];
   };
-}
+})

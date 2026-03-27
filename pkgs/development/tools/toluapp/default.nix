@@ -25,12 +25,20 @@ stdenv.mkDerivation rec {
     ./headers.patch
   ];
 
-  meta = with lib; {
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required ( VERSION 2.8 )' \
+      'cmake_minimum_required ( VERSION 4.0 )'
+  '';
+
+  strictDeps = true;
+
+  meta = {
     description = "Tool to integrate C/Cpp code with Lua";
     homepage = "http://www.codenix.com/~tolua/";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ colinsane ];
     mainProgram = "tolua++";
-    platforms = with platforms; unix;
+    platforms = with lib.platforms; unix;
   };
 }

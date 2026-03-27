@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "jello";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
     repo = "jello";
-    rev = "v${version}";
-    hash = "sha256-EN09Kcnw4HNT2roCoQyZkoHEfkM9qxqtneZPuBg46z4=";
+    tag = "v${version}";
+    hash = "sha256-RAQ04R1zDL9hk1q19GSFvdkxse5rJZXpboAondOoHEc=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     installManPage man/jello.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to filter JSON and JSON Lines data with Python syntax";
     mainProgram = "jello";
     homepage = "https://github.com/kellyjonbrazil/jello";
-    changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

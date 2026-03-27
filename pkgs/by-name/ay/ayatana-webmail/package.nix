@@ -17,14 +17,15 @@
   libcanberra-gtk3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "ayatana-webmail";
   version = "24.5.17";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-webmail";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-k557FWKGq2MXODVxVzOetC5kkwTNYOoLO8msCOabais=";
   };
   postConfigure = ''
@@ -52,7 +53,11 @@ python3Packages.buildPythonApplication rec {
     glib # For compiling gsettings-schemas
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     urllib3
     babel
     psutil
@@ -88,4 +93,4 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ doronbehar ];
   };
-}
+})

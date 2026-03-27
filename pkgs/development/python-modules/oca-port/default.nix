@@ -1,45 +1,49 @@
 {
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   gitpython,
+  giturlparse,
+  git-filter-repo,
   lib,
   nix-update-script,
   requests,
   setuptools-scm,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oca-port";
-  version = "0.18";
-  format = "pyproject";
+  version = "0.21";
+  pyproject = true;
 
-  src = fetchPypi {
+  src = fetchFromGitHub {
     inherit version;
-    pname = "oca_port";
-    hash = "sha256-JqSnt23SQSyh/7hKAy04k/ocpAN61qQ+VebQv5Ddbjk=";
+    owner = "OCA";
+    repo = "oca-port";
+    tag = "v${version}";
+    hash = "sha256-zewR/ArgNSXK2+S90UveELyeqIaqM3gquos0rQOTXag=";
   };
 
-  nativeBuildInputs = [
-    setuptools
+  build-system = [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
+    giturlparse
     gitpython
     requests
+    git-filter-repo
   ];
 
   passthru.updateScript = nix-update-script { };
 
   pythonImportsCheck = [ "oca_port" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool helping to port an addon or missing commits of an addon from one branch to another";
     homepage = "https://github.com/OCA/oca-port";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ yajo ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ yajo ];
   };
 }

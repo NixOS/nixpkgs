@@ -9,18 +9,17 @@
   qrencode,
   python3,
   help2man,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vsmartcard-vpcd";
-  version = "0.9-unstable-2025-01-25";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "frankmorgner";
     repo = "vsmartcard";
-    rev = "7369dae26bcb709845003ae2128b8db9df7031ae";
-    hash = "sha256-mfw/Yv12ceBVZIyAKJqBh+w4otj3rYYZbJUjKRLcsr4=";
+    tag = "virtualsmartcard-${finalAttrs.version}";
+    hash = "sha256-+BrX2aqByUvIUbN4K+sdq9bH29FD2rtTt4q+URPgx7A=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/virtualsmartcard";
@@ -32,23 +31,19 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
   ];
 
-  buildInputs =
-    [
-      pcsclite
-      qrencode
-      (python3.withPackages (
-        pp: with pp; [
-          pyscard
-          pycrypto
-          pbkdf2
-          pillow
-          gnureadline
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.PCSC
-    ];
+  buildInputs = [
+    pcsclite
+    qrencode
+    (python3.withPackages (
+      pp: with pp; [
+        pyscard
+        pycrypto
+        pbkdf2
+        pillow
+        gnureadline
+      ]
+    ))
+  ];
 
   configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--enable-infoplist";
 

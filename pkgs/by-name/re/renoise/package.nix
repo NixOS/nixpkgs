@@ -5,12 +5,12 @@
   alsa-lib,
   fetchurl,
   libjack2,
-  libX11,
-  libXcursor,
-  libXext,
-  libXinerama,
-  libXrandr,
-  libXtst,
+  libx11,
+  libxcursor,
+  libxext,
+  libxinerama,
+  libxrandr,
+  libxtst,
   mpg123,
   pipewire,
   releasePath ? null,
@@ -25,18 +25,18 @@ let
   platforms = {
     x86_64-linux = {
       archSuffix = "x86_64";
-      hash = "sha256-b+YXBVnxu54HfC/tWapcs/ZYzwBOJswYbEbEU3SVNss=";
+      hash = "sha256-UxhGe22W50cqjNMoAdxHnyFmTmiysYd8EkASRFrpuYs=";
     };
     aarch64-linux = {
       archSuffix = "arm64";
-      hash = "sha256-l54FAtT+Rj4Mv3GuOF0/9WuKdJowgbZDZYo7VCh6Flg=";
+      hash = "sha256-itWnH1JiG+AhYZtNtrJtW9p7LlRF/ab5+npFODiKznY=";
     };
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "renoise";
-  version = "3.4.4";
+  version = "3.5.1";
 
   src =
     if releasePath != null then
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     libjack2
-    libX11
-    libXcursor
-    libXext
-    libXinerama
-    libXrandr
-    libXtst
+    libx11
+    libxcursor
+    libxext
+    libxinerama
+    libxrandr
+    libxtst
     pipewire
   ];
 

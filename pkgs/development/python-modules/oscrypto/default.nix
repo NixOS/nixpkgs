@@ -7,7 +7,6 @@
   fetchpatch,
   openssl,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -15,11 +14,9 @@ buildPythonPackage rec {
   version = "1.3.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "wbond";
-    repo = pname;
+    repo = "oscrypto";
     rev = version;
     hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };
@@ -56,10 +53,10 @@ buildPythonPackage rec {
     "TrustListTests"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Encryption library for Python";
     homepage = "https://github.com/wbond/oscrypto";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

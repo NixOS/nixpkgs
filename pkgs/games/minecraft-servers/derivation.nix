@@ -39,16 +39,17 @@ stdenv.mkDerivation {
     updateScript = ./update.py;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minecraft Server";
     homepage = "https://minecraft.net";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.unfreeRedistributable;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.unfreeRedistributable;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       tomberek
       costrouc
     ];
+    mainProgram = "minecraft-server";
   };
 }

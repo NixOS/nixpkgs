@@ -29,31 +29,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zd+g86cZLyibLhYLal6XzUb9wFu7kHROp0KzRM95Qng=";
   };
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      file
-      gettext
-      glib # for gdbus-codegen
-      pkg-config
-    ]
-    ++ lib.optionals withGnome [
-      gtk4 # for gtk4-builder-tool
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    file
+    gettext
+    glib # for gdbus-codegen
+    pkg-config
+  ]
+  ++ lib.optionals withGnome [
+    gtk4 # for gtk4-builder-tool
+  ];
 
-  buildInputs =
-    [
-      sstp
-      networkmanager
-      ppp
-    ]
-    ++ lib.optionals withGnome [
-      gtk3
-      gtk4
-      libsecret
-      libnma
-      libnma-gtk4
-    ];
+  buildInputs = [
+    sstp
+    networkmanager
+    ppp
+  ]
+  ++ lib.optionals withGnome [
+    gtk3
+    gtk4
+    libsecret
+    libnma
+    libnma-gtk4
+  ];
 
   postPatch = ''
     sed -i 's#/sbin/pppd#${ppp}/bin/pppd#' src/nm-sstp-service.c
@@ -61,8 +59,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--with-gtk4=${if withGnome then "yes" else "no"}"
+    "--with-gnome=${lib.boolToYesNo withGnome}"
+    "--with-gtk4=${lib.boolToYesNo withGnome}"
     "--with-pppd-plugin-dir=$(out)/lib/pppd/2.5.0"
     "--enable-absolute-paths"
   ];
@@ -77,9 +75,9 @@ stdenv.mkDerivation rec {
     networkManagerPlugin = "VPN/nm-sstp-service.name";
   };
 
-  meta = with lib; {
+  meta = {
     description = "NetworkManager's sstp plugin";
-    inherit (networkmanager.meta) maintainers platforms;
-    license = licenses.gpl2Plus;
+    inherit (networkmanager.meta) maintainers teams platforms;
+    license = lib.licenses.gpl2Plus;
   };
 }

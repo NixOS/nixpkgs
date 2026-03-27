@@ -9,7 +9,7 @@ stdenvNoCC.mkDerivation rec {
   version = "0.2.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wqy/${pname}-${version}-beta.tar.gz";
+    url = "mirror://sourceforge/wqy/wqy-microhei-${version}-beta.tar.gz";
     hash = "sha256-KAKsgCOqNqZupudEWFTjoHjTd///QhaTQb0jeHH3IT4=";
   };
 
@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "(mainly) Chinese Unicode font";
+    description = "Chinese Unicode font optimized for screen display";
     homepage = "http://wenq.org";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.pkmx ];

@@ -58,6 +58,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         ExecStart = ''
@@ -103,5 +104,5 @@ in
     };
   };
 
-  meta.maintainers = [ lib.maintainers.oxzi ];
+  meta.maintainers = [ ];
 }

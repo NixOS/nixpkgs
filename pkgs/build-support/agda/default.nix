@@ -44,8 +44,8 @@ let
       ghc ? ghcWithPackages (p: with p; [ ieee754 ]),
     }:
     let
-      library-file = mkLibraryFile pkgs;
-      pname = "agdaWithPackages";
+      libraryFile = mkLibraryFile pkgs;
+      pname = "${Agda.meta.mainProgram}WithPackages";
       version = Agda.version;
     in
     runCommand "${pname}-${version}"
@@ -54,7 +54,10 @@ let
         nativeBuildInputs = [ makeWrapper ];
         passthru = {
           unwrapped = Agda;
-          inherit withPackages;
+          inherit
+            withPackages
+            libraryFile
+            ;
           tests = {
             inherit (nixosTests) agda;
             allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
@@ -65,10 +68,12 @@ let
       }
       ''
         mkdir -p $out/bin
-        makeWrapper ${Agda.bin}/bin/agda $out/bin/agda \
-          --add-flags "--with-compiler=${ghc}/bin/ghc" \
-          --add-flags "--library-file=${library-file}"
-        ln -s ${Agda.bin}/bin/agda-mode $out/bin/agda-mode
+        makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
+          ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
+          --add-flags "--library-file=${libraryFile}"
+        if [ -e ${lib.getExe' Agda "agda-mode"} ]; then
+          ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
+        fi
       '';
 
   withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
@@ -89,28 +94,24 @@ let
     {
       pname,
       meta,
+      passthru ? { },
       buildInputs ? [ ],
-      everythingFile ? "./Everything.agda",
-      includePaths ? [ ],
       libraryName ? pname,
       libraryFile ? "${libraryName}.agda-lib",
       buildPhase ? null,
       installPhase ? null,
       extraExtensions ? [ ],
       ...
-    }:
+    }@args:
     let
-      agdaWithArgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
-      includePathArgs = concatMapStrings (path: "-i" + path + " ") (
-        includePaths ++ [ (dirOf everythingFile) ]
-      );
+      agdaWithPkgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
     in
     {
       inherit libraryName libraryFile;
 
       isAgdaDerivation = true;
 
-      buildInputs = buildInputs ++ [ agdaWithArgs ];
+      buildInputs = buildInputs ++ [ agdaWithPkgs ];
 
       buildPhase =
         if buildPhase != null then
@@ -118,8 +119,7 @@ let
         else
           ''
             runHook preBuild
-            agda ${includePathArgs} ${everythingFile}
-            rm ${everythingFile} ${lib.interfaceFile Agda.version everythingFile}
+            ${lib.getExe agdaWithPkgs} --build-library
             runHook postBuild
           '';
 
@@ -136,19 +136,25 @@ let
             runHook postInstall
           '';
 
-      # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
-      # we need to set LC_ALL to an UTF-8-supporting locale. However, on
-      # darwin, it seems that there is no standard such locale; luckily,
-      # the referenced issue doesn't seem to surface on darwin. Hence let's
-      # set this only on non-darwin.
-      LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
+      env = args.env or { } // {
+        # As documented at https://github.com/NixOS/nixpkgs/issues/172752,
+        # we need to set LC_ALL to an UTF-8-supporting locale. However, on
+        # darwin, it seems that there is no standard such locale; luckily,
+        # the referenced issue doesn't seem to surface on darwin. Hence let's
+        # set this only on non-darwin.
+        LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
+      };
 
       meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 
       # Retrieve all packages from the finished package set that have the current package as a dependency and build them
-      passthru.tests = filterAttrs (
-        name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
-      ) self;
+      passthru = passthru // {
+        tests =
+          passthru.tests or { }
+          // filterAttrs (
+            name: pkg: self.lib.isUnbrokenAgdaPackage pkg && elem pname (map (pkg: pkg.pname) pkg.buildInputs)
+          ) self;
+      };
     };
 in
 {

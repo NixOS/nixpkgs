@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   guile,
   libgit2,
   scheme-bytestructures,
@@ -10,20 +11,30 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-git";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitLab {
     owner = "guile-git";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-lFBoA1VBJRHcZkP3h2gnlXQrMjDFWS4jl9RlF8VVf/Q=";
+    repo = "guile-git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ihKpEnng6Uemrguecbd25vElEhIu2Efb86aM8679TAc=";
   };
 
   patches = [
-    ./0001-structs-Omit-free-field-from-config-entry-on-libgit2.patch
-    ./0002-structs-Add-update-refs-field-to-remote-callbacks-on.patch
+    # remove > 0.10.0
+    (fetchpatch {
+      name = "catch-git-error-guile";
+      url = "https://gitlab.com/guile-git/guile-git/-/commit/9c76c6b31e217c470c8576172b123be9c373dc9b.diff";
+      hash = "sha256-H0s7Ebl+HNL8Zak58kJmFETWZJcNq+Z5gTGRqU9gj58=";
+    })
+    # remove > 0.10.0
+    (fetchpatch {
+      name = "test-typo";
+      url = "https://gitlab.com/guile-git/guile-git/-/commit/4451c0808fbdf8cd13d486a18b03881f998f6e88.diff";
+      hash = "sha256-K2f67WXUBLI/09eF8Xg3JMX7gkISFTZK3yHu0VDVQ4E=";
+    })
   ];
 
   strictDeps = true;
@@ -52,11 +63,11 @@ stdenv.mkDerivation rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Bindings to Libgit2 for GNU Guile";
     homepage = "https://gitlab.com/guile-git/guile-git";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
     platforms = guile.meta.platforms;
   };
-}
+})

@@ -16,6 +16,8 @@ stdenv.mkDerivation {
     owner = "retronetworking";
     repo = "wvdial";
     rev = "42d084173cc939586c1963b8835cb00ec56b2823";
+    # "download .tar.gz" has been disabled
+    forceFetchGit = true;
     hash = "sha256-q7pFvpJvv+ZvbN4xxolI9ZRULr+N5sqO9BOXUqSG5v4=";
   };
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "A dialer that automatically recognises the modem";
+    description = "Dialer that automatically recognises the modem";
     homepage = "https://gitea.osmocom.org/retronetworking/wvdial";
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ flokli ];

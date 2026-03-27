@@ -49,18 +49,17 @@ stdenv'.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      curl
-      libarchive
-      libpkgconf
-      nlohmann_json
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libossp_uuid
-      pkgsStatic.fmt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
+  buildInputs = [
+    curl
+    libarchive
+    libpkgconf
+    nlohmann_json
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libossp_uuid
+    pkgsStatic.fmt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
 
   mesonFlags = [ "-Dbenchmarks=false" ];
 
@@ -159,14 +158,14 @@ stdenv'.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
-    description = "An unofficial, unendorsed language server for Meson written in C++";
+  meta = {
+    description = "Unofficial, unendorsed language server for Meson written in C++";
     homepage = "https://github.com/JCWasmx86/mesonlsp";
     changelog = "https://github.com/JCWasmx86/mesonlsp/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "mesonlsp";
-    maintainers = with maintainers; [ paveloom ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     # ../src/liblog/log.cpp:41:7: error: call to 'format' is ambiguous
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };

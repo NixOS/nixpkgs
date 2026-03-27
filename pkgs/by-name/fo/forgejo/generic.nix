@@ -21,16 +21,16 @@
   nixosTests,
   openssh,
   sqliteSupport ? true,
-  xorg,
+  lndir,
   runCommand,
   stdenv,
-  fetchFromGitea,
+  fetchFromCodeberg,
   buildNpmPackage,
+  writableTmpDirAsHomeHook,
 }:
 
 let
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "forgejo";
     repo = "forgejo";
     inherit rev hash;
@@ -40,9 +40,9 @@ let
     pname = "forgejo-frontend";
     inherit src version npmDepsHash;
 
-    patches = [
-      ./package-json-npm-build-frontend.patch
-    ];
+    buildPhase = ''
+      ./node_modules/.bin/webpack
+    '';
 
     # override npmInstallHook
     installPhase = ''
@@ -77,6 +77,7 @@ buildGoModule rec {
   nativeCheckInputs = [
     git
     openssh
+    writableTmpDirAsHomeHook
   ];
 
   patches = [
@@ -103,17 +104,18 @@ buildGoModule rec {
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
 
+  # expose and use the GO_TEST_PACKAGES var from the Makefile
+  # instead of manually copying over the entire list:
+  # https://codeberg.org/forgejo/forgejo/src/tag/v11.0.6/Makefile#L128
+  # https://codeberg.org/forgejo/forgejo/src/tag/v13.0.0/Makefile#L290
   preCheck = ''
-    # $HOME is required for ~/.ssh/authorized_keys and such
-    export HOME="$TMPDIR/home"
-
-    # expose and use the GO_TEST_PACKAGES var from the Makefile
-    # instead of manually copying over the entire list:
-    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
-    echo -e 'show-backend-tests:\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    echo -e 'show-backend-tests:${lib.optionalString (lib.versionAtLeast version "13") " | compute-go-test-packages"}\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
     getGoDirs() {
       make show-backend-tests
     }
+
+    # TestRunHookPrePostReceive (cmd/hook_test.go) needs .git to pass
+    git init
   '';
 
   checkFlags =
@@ -128,12 +130,16 @@ buildGoModule rec {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  preInstall = ''
+    mv "$GOPATH/bin/forgejo.org" "$GOPATH/bin/forgejo"
+  '';
+
   postInstall = ''
     mkdir $data
     cp -R ./{templates,options} ${frontend}/public $data
     mkdir -p $out
     cp -R ./options/locale $out/locale
-    wrapProgram $out/bin/gitea \
+    wrapProgram $out/bin/forgejo \
       --prefix PATH : ${
         lib.makeBinPath [
           bash
@@ -160,7 +166,7 @@ buildGoModule rec {
         {
           nativeBuildInputs = [
             brotli
-            xorg.lndir
+            lndir
           ];
         }
         ''
@@ -187,16 +193,9 @@ buildGoModule rec {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
-    license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      emilylange
-      urandom
-      bendlas
-      adamcstephens
-      marie
-      pyrox0
-    ];
+    license = lib.licenses.gpl3Plus;
+    teams = [ lib.teams.forgejo ];
     broken = stdenv.hostPlatform.isDarwin;
-    mainProgram = "gitea";
+    mainProgram = "forgejo";
   };
 }

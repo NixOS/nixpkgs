@@ -1,4 +1,4 @@
-{ buildNpmPackage, autoPatchelfHook }:
+{ buildNpmPackage }:
 
 {
   version,
@@ -11,15 +11,8 @@ buildNpmPackage {
   inherit version src;
   sourceRoot = "${src.name}/coolercontrol-ui";
 
-  npmDepsHash = "sha256-t+QShKaXpQuEzeeu/ljBBEzeYsxqvMpx5waDZ2gyPAI=";
-
-  preBuild = ''
-    autoPatchelf node_modules/sass-embedded-linux-x64/dart-sass/src/dart
-  '';
-
-  nativeBuildInputs = [ autoPatchelfHook ];
-
-  dontAutoPatchelf = true;
+  npmDepsFetcherVersion = 2;
+  npmDepsHash = "sha256-AzRw6DuloOFC7VN7yM9czqxosfVIoXAltv2xHUxac7k=";
 
   postBuild = ''
     cp -r dist $out

@@ -5,27 +5,30 @@
   pytestCheckHook,
   pytest-html,
   pyyaml,
-  setuptools,
-  setuptools-scm,
+  uv-build,
 }:
 
 buildPythonPackage rec {
   pname = "cucumber-tag-expressions";
-  version = "6.1.2";
+  version = "9.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cucumber";
     repo = "tag-expressions";
     tag = "v${version}";
-    hash = "sha256-ptDsN6loFXrKT1xeR138kXzA5TbHPH1G7I/25ZD8Nj4=";
+    hash = "sha256-jkuez7C3YDGmv484Lmc5PszVbnVXkcC12RryvTJkxxg=";
   };
 
   sourceRoot = "${src.name}/python";
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.10.0,<0.11.0" uv_build
+  '';
+
   build-system = [
-    setuptools
-    setuptools-scm
+    uv-build
   ];
 
   nativeCheckInputs = [
@@ -34,10 +37,11 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/cucumber/tag-expressions/blob/${src.tag}/CHANGELOG.md";
     homepage = "https://github.com/cucumber/tag-expressions";
     description = "Provides tag-expression parser for cucumber/behave";
-    license = licenses.mit;
-    maintainers = with maintainers; [ maxxk ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ maxxk ];
   };
 }

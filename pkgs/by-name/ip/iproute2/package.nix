@@ -11,29 +11,26 @@
   elfutils,
   libmnl,
   libbpf,
+  python3,
   gitUpdater,
   pkgsStatic,
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.14.0";
+  version = "6.19.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-ptI1iBUAllkcPQD8J6MkqC7nHXoanup4313xetm4Rh8=";
+    hash = "sha256-kzIhPTVIC2RwhqcMMC3oVo3oNFWph3TTXeIWxM4ZEAY=";
   };
 
   patches = [
+    # musl build fix: https://lore.kernel.org/netdev/20260223223435.289652-1-slyich@gmail.com/T/#u
     (fetchurl {
-      name = "musl-endian.patch";
-      url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
-      hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
-    })
-    (fetchurl {
-      name = "musl-basename.patch";
-      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
-      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
+      name = "musl.patch";
+      url = "https://lore.kernel.org/netdev/20260223223435.289652-1-slyich@gmail.com/raw";
+      hash = "sha256-H45PUilF1D+1DxgtxSRBCgH4RQ7+APBfIW4QE9v6gUE=";
     })
   ];
 
@@ -45,6 +42,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+    "scripts"
   ];
 
   configureFlags = [
@@ -52,21 +50,20 @@ stdenv.mkDerivation rec {
     "auto"
   ];
 
-  makeFlags =
-    [
-      "PREFIX=$(out)"
-      "SBINDIR=$(out)/sbin"
-      "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
-      "HDRDIR=$(dev)/include/iproute2"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "SHARED_LIBS=n"
-      # all build .so plugins:
-      "TC_CONFIG_NO_XT=y"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "HOSTCC=$(CC_FOR_BUILD)"
-    ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+    "HDRDIR=$(dev)/include/iproute2"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [
+    "SHARED_LIBS=n"
+    # all build .so plugins:
+    "TC_CONFIG_NO_XT=y"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "HOSTCC=$(CC_FOR_BUILD)"
+  ];
 
   buildFlags = [
     "CONFDIR=/etc/iproute2"
@@ -76,23 +73,27 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
+  postInstall = ''
+    moveToOutput sbin/routel "$scripts"
+  '';
+
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [
     bison
     flex
     pkg-config
   ];
-  buildInputs =
-    [
-      db
-      iptables
-      libmnl
-    ]
-    # needed to uploaded bpf programs
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-      elfutils
-      libbpf
-    ];
+  buildInputs = [
+    db
+    iptables
+    libmnl
+    python3
+  ]
+  # needed to uploaded bpf programs
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    elfutils
+    libbpf
+  ];
 
   enableParallelBuilding = true;
 
@@ -104,15 +105,13 @@ stdenv.mkDerivation rec {
   # needed for nixos-anywhere
   passthru.tests.static = pkgsStatic.iproute2;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
-      primeos
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
     ];
   };
 }

@@ -6,22 +6,21 @@
   nix-update-script,
 }:
 let
-  inherit (dotnetCorePackages) sdk_8_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
 in
 
-buildDotnetGlobalTool rec {
+buildDotnetGlobalTool (finalAttrs: {
   pname = "csharp-ls";
-  version = "0.16.0";
+  version = "0.22.0";
 
-  nugetHash = "sha256-1uj0GlnrOXIYcjJSbkr3Kugft9xrHX4RYOeqH0hf1VU=";
+  nugetHash = "sha256-11ysfIiYnQG1vpfvmUWHuCR//rOLfYVRoQWedThojqc=";
 
-  dotnet-sdk = sdk_8_0;
-  dotnet-runtime = sdk_8_0;
+  inherit dotnet-sdk;
+  dotnet-runtime = dotnet-sdk;
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
@@ -30,7 +29,7 @@ buildDotnetGlobalTool rec {
     description = "Roslyn-based LSP language server for C#";
     mainProgram = "csharp-ls";
     homepage = "https://github.com/razzmatazz/csharp-language-server";
-    changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${version}";
+    changelog = "https://github.com/razzmatazz/csharp-language-server/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ GaetanLepage ];
@@ -41,4 +40,4 @@ buildDotnetGlobalTool rec {
       "aarch64-darwin"
     ];
   };
-}
+})

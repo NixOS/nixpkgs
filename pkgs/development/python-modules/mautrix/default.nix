@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   # deps
   setuptools,
   aiohttp,
   attrs,
   yarl,
   # optional deps
+  base58,
   python-magic,
   python-olm,
   unpaddedbase64,
@@ -25,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.20.7";
+  version = "0.21.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-tOX/KQrECeEV3/0q3tpO4brUdalmw6IincF6pHzsEE8=";
+    hash = "sha256-4nEjKIWzXd0e/cLL4py9SS+/YIcGHq2f+cCTEY2ENmE=";
   };
 
   build-system = [ setuptools ];
@@ -43,11 +41,13 @@ buildPythonPackage rec {
     aiohttp
     attrs
     yarl
-  ] ++ lib.optionals withOlm optional-dependencies.encryption;
+  ]
+  ++ lib.optionals withOlm optional-dependencies.encryption;
 
   optional-dependencies = {
     detect_mimetype = [ python-magic ];
     encryption = [
+      base58
       python-olm
       unpaddedbase64
       pycryptodome
@@ -66,14 +66,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mautrix" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asyncio Matrix framework";
     homepage = "https://github.com/tulir/mautrix-python";
-    changelog = "https://github.com/mautrix/python/releases/tag/v${version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mautrix/python/releases/tag/${src.tag}";
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       nyanloutre
-      ma27
       sumnerevans
       nickcao
     ];

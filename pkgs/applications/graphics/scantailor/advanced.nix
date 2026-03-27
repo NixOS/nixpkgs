@@ -1,45 +1,45 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
-  mkDerivation,
   cmake,
+  libsForQt5,
   libjpeg,
   libpng,
   libtiff,
   boost,
-  qtbase,
-  qttools,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scantailor-advanced";
   version = "1.0.19";
 
   src = fetchFromGitHub {
     owner = "vigri";
     repo = "scantailor-advanced";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-mvoCoYdRTgXW5t8yd9Y9TOl7D3RDVwcjUv2YDUWrtRI=";
   };
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qttools
   ];
   buildInputs = [
     libjpeg
     libpng
     libtiff
     boost
-    qtbase
+    libsForQt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/vigri/scantailor-advanced";
     description = "Interactive post-processing tool for scanned pages (vigri's fork)";
     mainProgram = "scantailor";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with platforms; gnu ++ linux ++ darwin;
+    platforms = with lib.platforms; gnu ++ linux ++ darwin;
   };
-}
+})

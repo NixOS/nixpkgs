@@ -4,15 +4,15 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gvproxy";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
-    rev = "v${version}";
-    hash = "sha256-rWZYwQ/wWYAbM0RRNcNboWzKUuNNPDigIFFbFdXDNuo=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-wwQ4Wf9KtXwYTpoCUMuMUpTQBPlgynGe/VFqP/79xUA=";
   };
 
   vendorHash = null;
@@ -29,11 +29,11 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/containers/gvisor-tap-vsock/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/containers/gvisor-tap-vsock/releases/tag/${finalAttrs.src.rev}";
     description = "Network stack based on gVisor";
     homepage = "https://github.com/containers/gvisor-tap-vsock";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.podman ];
   };
-}
+})

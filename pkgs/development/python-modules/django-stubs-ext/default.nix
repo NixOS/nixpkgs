@@ -2,29 +2,37 @@
   lib,
   buildPythonPackage,
   django,
-  fetchPypi,
+  fetchFromGitHub,
+  uv-build,
   oracledb,
+  pytest-mypy-plugins,
+  pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
   redis,
-  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs-ext";
-  version = "5.1.3";
+  version = "5.2.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "django_stubs_ext";
-    inherit version;
-    hash = "sha256-PmD4Izfw1Ao2LzSb8VU5FEuW5M6029Ajm+HNcfanStA=";
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "django-stubs";
+    tag = version;
+    hash = "sha256-42FluS2fmfgj4qk2u+Z/7TGhXY4WKUc0cI00go6rnGc=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    cd ext
+    ln -s ../scripts
+
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.9,<0.10.0" uv_build
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     django
@@ -36,15 +44,26 @@ buildPythonPackage rec {
     oracle = [ oracledb ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-mypy-plugins
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # error: Skipping analyzing "django.db": module is installed, but missing library stubs or py.typed marker  [import-untyped] (diff)
+    "tests/typecheck"
+  ];
+
+  # Tests are not shipped with PyPI
 
   pythonImportsCheck = [ "django_stubs_ext" ];
 
-  meta = with lib; {
+  meta = {
     description = "Extensions and monkey-patching for django-stubs";
     homepage = "https://github.com/typeddjango/django-stubs";
-    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

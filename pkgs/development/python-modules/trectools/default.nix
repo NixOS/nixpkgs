@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   beautifulsoup4,
-  pythonOlder,
   pandas,
   python,
   numpy,
@@ -19,8 +18,7 @@
 buildPythonPackage {
   pname = "trectools";
   version = "0.0.50";
-
-  disabled = pythonOlder "3.6";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joaopalotti";

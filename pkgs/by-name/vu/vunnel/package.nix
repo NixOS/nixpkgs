@@ -5,16 +5,17 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "vunnel";
-  version = "0.31.0";
+  version = "0.55.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = "vunnel";
-    tag = "v${version}";
-    hash = "sha256-3o4ap8BElDxxg3pohzXz38AQlQbzOPeSc5/OYZg8VFM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-gjkrANO97sdSeW2U+Ah5eo/bbwn32xqmZDrUi5cjD60=";
+    leaveDotGit = true;
   };
 
   pythonRelaxDeps = [
@@ -27,41 +28,49 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    uv-dynamic-versioning
   ];
 
-  dependencies = with python3.pkgs; [
-    click
-    colorlog
-    cvss
-    defusedxml
-    ijson
-    importlib-metadata
-    iso8601
-    lxml
-    mashumaro
-    mergedeep
-    orjson
-    packageurl-python
-    pytest-snapshot
-    python-dateutil
-    pyyaml
-    requests
-    sqlalchemy
-    xsdata
-    xxhash
-    zstandard
-  ];
+  dependencies =
+    with python3.pkgs;
+    [
+      click
+      colorlog
+      cvss
+      defusedxml
+      ijson
+      importlib-metadata
+      iso8601
+      lxml
+      mashumaro
+      mergedeep
+      oras
+      orjson
+      packageurl-python
+      pytest-snapshot
+      python-dateutil
+      pyyaml
+      requests
+      sqlalchemy
+      xsdata
+      xxhash
+      yardstick
+      zstandard
+    ]
+    ++ xsdata.optional-dependencies.cli
+    ++ xsdata.optional-dependencies.lxml
+    ++ xsdata.optional-dependencies.soap;
 
-  nativeCheckInputs =
-    [ git ]
-    ++ (with python3.pkgs; [
-      jsonschema
-      pytest-mock
-      pytest-unordered
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    git
+  ]
+  ++ (with python3.pkgs; [
+    jsonschema
+    pytest-mock
+    pytest-unordered
+    pytestCheckHook
+  ]);
 
   pythonImportsCheck = [ "vunnel" ];
 
@@ -70,14 +79,16 @@ python3.pkgs.buildPythonApplication rec {
     "test_status"
     # TypeError
     "test_parser"
+    # Test require network access
+    "test_rhel_provider_supports_ignore_hydra_errors"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool for collecting vulnerability data from various sources";
     homepage = "https://github.com/anchore/vunnel";
-    changelog = "https://github.com/anchore/vunnel/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/anchore/vunnel/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "vunnel";
   };
-}
+})

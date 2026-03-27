@@ -4,31 +4,29 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "theharvester";
-  version = "4.7.0";
+  version = "4.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
-    tag = version;
-    hash = "sha256-eO4jRyzMZQT4Fy1i1OHIf5UDqX8o1gmj6yHrIAxc0Mw=";
+    tag = finalAttrs.version;
+    hash = "sha256-ajXGf8wH8WoVGNHDAUJ+fC3FN2OtUuKaIrXJ4KuRif0=";
   };
 
-  postPatch = ''
-    # Requirements are pinned
-    sed -i 's/==.*//' requirements/base.txt
-  '';
+  pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "winloop" ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3.pkgs; [ flit-core ];
 
   dependencies = with python3.pkgs; [
     aiodns
     aiofiles
     aiohttp
+    aiohttp-socks
     aiomultiprocess
     aiosqlite
     beautifulsoup4
@@ -36,19 +34,19 @@ python3.pkgs.buildPythonApplication rec {
     certifi
     dnspython
     fastapi
+    httpx
     lxml
     netaddr
-    ujson
     playwright
     plotly
     pyppeteer
     python-dateutil
     pyyaml
-    requests
     retrying
     shodan
     slowapi
     starlette
+    ujson
     uvicorn
     uvloop
   ];
@@ -65,7 +63,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gather E-mails, subdomains and names from different public sources";
     longDescription = ''
       theHarvester is a very simple, yet effective tool designed to be used in the early
@@ -74,13 +72,12 @@ python3.pkgs.buildPythonApplication rec {
       gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
     '';
     homepage = "https://github.com/laramies/theHarvester";
-    changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
-      c0bw3b
+    changelog = "https://github.com/laramies/theHarvester/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fab
       treemo
     ];
     mainProgram = "theHarvester";
   };
-}
+})

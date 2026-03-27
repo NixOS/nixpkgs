@@ -16,19 +16,37 @@
   vte-gtk4,
   libspelling,
   nix-update-script,
+  blueprint-compiler,
+  libportal,
+  webkitgtk_6_0,
+  pipewire,
+  glib-networking,
+  bash,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  pythonPackages = python3Packages.overrideScope (
+    self: super: {
+      bibtexparser = self.bibtexparser_2;
+    }
+  );
+in
+pythonPackages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "5.3.0";
+  version = "9.2.1";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     tag = version;
-    hash = "sha256-dp/v5PZoDqSp2h0gtZk97ImDKO201VZMiCBv2XnqoGQ=";
+    hash = "sha256-deTn3Q2cy56Qj00dYp2QrCHif+Pk3t110HRTnie9/b8=";
   };
+
+  postPatch = ''
+    substituteInPlace src/widgets/activities/terminal.py \
+      --replace-fail "['bash', '-c', ';\n'.join(self.prepare_script())]," "['${bash}/bin/bash', '-c', ';\n'.join(self.prepare_script())],"
+  '';
 
   nativeBuildInputs = [
     appstream
@@ -38,6 +56,7 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
     wrapGAppsHook4
     desktop-file-utils
+    blueprint-compiler
   ];
 
   buildInputs = [
@@ -45,21 +64,45 @@ python3Packages.buildPythonApplication rec {
     gtksourceview5
     vte-gtk4
     libspelling
+    libportal
+    webkitgtk_6_0
+    pipewire # pipewiresrc
+    glib-networking
   ];
 
-  dependencies = with python3Packages; [
-    pygobject3
-    requests
-    pillow
-    pypdf
-    html2text
-    youtube-transcript-api
-    pydbus
-    odfpy
-    pyicu
-    matplotlib
-    openai
-  ];
+  dependencies =
+    with pythonPackages;
+    [
+      pygobject3
+      requests
+      pillow
+      html2text
+      youtube-transcript-api
+      pydbus
+      odfpy
+      pyicu
+      matplotlib
+      openai
+      markitdown
+      gst-python
+      opencv4
+      zstandard
+      pythonPackages.ollama
+    ]
+    ++ lib.concatAttrValues optional-dependencies;
+
+  optional-dependencies = with pythonPackages; {
+    speech-to-text = [
+      openai-whisper
+      pyaudio
+    ];
+    text-to-speech = [
+      kokoro
+      sounddevice
+      spacy-models.en_core_web_sm
+    ];
+    image-tools = [ rembg ];
+  };
 
   dontWrapGApps = true;
 
@@ -71,9 +114,6 @@ python3Packages.buildPythonApplication rec {
         ollama
       ]
     }"
-    # Declared but not used in src/window.py, for later reference
-    # https://github.com/flatpak/flatpak/issues/3229
-    "--set FLATPAK_DEST ${placeholder "out"}"
   ];
 
   passthru.updateScript = nix-update-script { };
@@ -88,6 +128,7 @@ python3Packages.buildPythonApplication rec {
       }
       ```
       Or using `pkgs.ollama-rocm` for AMD GPUs.
+      For a vendor agnostic solution, use: `pkgs.ollama-vulkan`.
     '';
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;

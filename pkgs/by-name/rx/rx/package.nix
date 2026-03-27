@@ -6,22 +6,26 @@
   makeWrapper,
   cmake,
   pkg-config,
-  xorg ? null,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   libGL ? null,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rx";
   version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = "rx";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-LTpaV/fgYUgA2M6Wz5qLHnTNywh13900g+umhgLvciM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-gRhjqQNL1Cu6/RpF2AeIGwbuDkFvyOf3gnpYt5Hlhfc=";
 
   nativeBuildInputs = [
@@ -30,18 +34,15 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux (
-    with xorg;
-    [
-      # glfw-sys dependencies:
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libXi
-      libXext
-    ]
-  );
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    # glfw-sys dependencies:
+    libx11
+    libxrandr
+    libxinerama
+    libxcursor
+    libxi
+    libxext
+  ];
 
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
@@ -52,15 +53,14 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${libGL}/lib
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern and extensible pixel editor implemented in Rust";
     mainProgram = "rx";
     homepage = "https://rx.cloudhead.io/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       minijackson
-      Br1ght0ne
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

@@ -5,22 +5,19 @@
   fetchFromGitHub,
   markdown,
   pillow,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-markdownx";
-  version = "4.0.7";
+  version = "4.0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "neutronX";
     repo = "django-markdownx";
     tag = "v${version}";
-    hash = "sha256-FZPUlogVd3FMGeH1vfKHA3tXVps0ET+UCQJflpiV2lE=";
+    hash = "sha256-il9bXi8URq7mQMCyKl5ikHT4nH2R9ixMDHSpH8gfnVU=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -36,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "markdownx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Comprehensive Markdown plugin built for Django";
     homepage = "https://github.com/neutronX/django-markdownx/";
-    changelog = "https://github.com/neutronX/django-markdownx/releases/tag/v${version}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ derdennisop ];
+    changelog = "https://github.com/neutronX/django-markdownx/releases/tag/${src.tag}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ derdennisop ];
   };
 }

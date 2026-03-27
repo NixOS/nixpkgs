@@ -1,33 +1,39 @@
 {
   lib,
   buildPythonPackage,
-  django,
   django-stubs-ext,
-  fetchPypi,
+  django,
+  fetchFromGitHub,
+  uv-build,
+  redis,
   mypy,
+  pytest-mypy-plugins,
+  oracledb,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
-  tomli,
   types-pytz,
   types-pyyaml,
+  types-redis,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "5.1.3";
+  version = "5.2.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "django_stubs";
-    inherit version;
-    hash = "sha256-jCMLxb6+5tooK6iietFQPISgxM0vRuY9FJ520qY+Y5o=";
+  src = fetchFromGitHub {
+    owner = "typeddjango";
+    repo = "django-stubs";
+    tag = version;
+    hash = "sha256-42FluS2fmfgj4qk2u+Z/7TGhXY4WKUc0cI00go6rnGc=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.9,<0.10.0" "uv_build>=0.9.9"
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [
     django
@@ -35,23 +41,40 @@ buildPythonPackage rec {
     types-pytz
     types-pyyaml
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ];
 
   optional-dependencies = {
     compatible-mypy = [ mypy ];
+    oracle = [ oracledb ];
+    redis = [
+      redis
+      types-redis
+    ];
   };
 
   nativeCheckInputs = [
+    pytest-mypy-plugins
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTests = [
+    # AttributeError: module 'django.contrib.auth.forms' has no attribute 'SetUnusablePasswordMixin'
+    "test_find_classes_inheriting_from_generic"
+  ];
+
+  disabledTestPaths = [
+    # Skip type checking
+    "tests/typecheck/"
+  ];
 
   pythonImportsCheck = [ "django-stubs" ];
 
-  meta = with lib; {
+  meta = {
     description = "PEP-484 stubs for Django";
     homepage = "https://github.com/typeddjango/django-stubs";
-    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    changelog = "https://github.com/typeddjango/django-stubs/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

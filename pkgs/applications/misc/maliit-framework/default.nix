@@ -1,6 +1,6 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   fetchpatch,
 
@@ -17,33 +17,27 @@
   pcre,
   util-linux,
   wayland,
-  xorg,
+  libxtst,
+  libxdmcp,
 
   cmake,
   doxygen,
   pkg-config,
   wayland-protocols,
   wayland-scanner,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation {
   pname = "maliit-framework";
-  version = "2.3.0";
+  version = "2.3.0-unstable-2024-06-24";
 
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    tag = version;
-    sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
+    rev = "ba6f7eda338a913f2c339eada3f0382e04f7dd67";
+    hash = "sha256-iwWLnstQMG8F6uE5rKF6t2X43sXQuR/rIho2RN/D9jE=";
   };
-
-  patches = [
-    # FIXME: backport GCC 12 build fix, remove for next release
-    (fetchpatch {
-      url = "https://github.com/maliit/framework/commit/86e55980e3025678882cb9c4c78614f86cdc1f04.diff";
-      hash = "sha256-5R+sCI05vJX5epu6hcDSWWzlZ8ns1wKEJ+u8xC6d8Xo=";
-    })
-  ];
 
   buildInputs = [
     at-spi2-atk
@@ -57,8 +51,8 @@ mkDerivation rec {
     pcre
     util-linux
     wayland
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ];
 
   nativeBuildInputs = [
@@ -67,17 +61,18 @@ mkDerivation rec {
     pkg-config
     wayland-protocols
     wayland-scanner
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [
     "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Core libraries of Maliit and server";
     mainProgram = "maliit-server";
     homepage = "http://maliit.github.io/";
-    license = licenses.lgpl21Plus;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

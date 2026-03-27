@@ -4,52 +4,46 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   libgit2,
   zlib,
   buildPackages,
+  versionCheckHook,
+  nix-update-script,
   withClipboard ? true,
-  withTrash ? !stdenv.hostPlatform.isDarwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.45.1";
+  version = "1.55.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
-    rev = "v${version}";
-    hash = "sha256-xLmVqYjQqjWMBm2A5OJl2wFIvxbWviX//J10BnKgWyk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5P/7AtiEBvogFvi/k3XylMy0T8Hy7RqQ7n9LCmeiUx8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-8QRqRAXyqWS13TxUlSawjh/Qo4Qs5yQtNlqXj0hMW0c=";
+  cargoHash = "sha256-J8MD77lsZKIA98R5SsIJVhOeCWyb6p8kazdVmv36YEo=";
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [ libgit2 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
-  buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
 
-  RUSTONIG_SYSTEM_LIBONIG = true;
+  env.RUSTONIG_SYSTEM_LIBONIG = true;
 
   postPatch = ''
     # Fill the version stub in the man page. We can't fill the date
     # stub reproducibly.
     substitute man/page man/broot.1 \
-      --replace "#version" "${version}"
+      --replace-fail "#version" "${finalAttrs.version}"
   '';
 
   postInstall =
@@ -84,16 +78,16 @@ rustPlatform.buildRustPackage rec {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
-    $out/bin/broot --version | grep "${version}"
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Interactive tree view, a fuzzy search, a balanced BFS descent and customizable commands";
     homepage = "https://dystroy.org/broot/";
-    changelog = "https://github.com/Canop/broot/releases/tag/v${version}";
-    maintainers = with maintainers; [ dywedir ];
-    license = with licenses; [ mit ];
+    changelog = "https://github.com/Canop/broot/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ dywedir ];
+    license = with lib.licenses; [ mit ];
     mainProgram = "broot";
   };
-}
+})

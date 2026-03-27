@@ -5,17 +5,14 @@
   stdenv,
 
   # build-system
-  setuptools,
+  hatchling,
 
   # dependencies
   absl-py,
-  dm-env,
   etils,
   flask,
   flask-cors,
   flax,
-  grpcio,
-  gym,
   jax,
   jaxlib,
   jaxopt,
@@ -27,44 +24,40 @@
   optax,
   orbax-checkpoint,
   pillow,
-  pytinyrenderer,
   scipy,
   tensorboardx,
-  trimesh,
+  typing-extensions,
 
   # tests
+  dm-env,
+  gym,
   pytestCheckHook,
   pytest-xdist,
   transforms3d,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brax";
-  version = "0.12.1";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
-    tag = "v${version}";
-    hash = "sha256-whkkqTTy5CY6soyS5D7hWtBZuVHc6si1ArqwLgzHDkw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/oznBa44xKl+9T1YrTVhCbuKZj16V1BTlnmCGRbF45g=";
   };
 
   build-system = [
-    setuptools
+    hatchling
   ];
 
   dependencies = [
     absl-py
-    # TODO: remove dm_env after dropping legacy v1 code
-    dm-env
     etils
     flask
     flask-cors
     flax
-    # TODO: remove grpcio and gym after dropping legacy v1 code
-    grpcio
-    gym
     jax
     jaxlib
     jaxopt
@@ -76,20 +69,32 @@ buildPythonPackage rec {
     optax
     orbax-checkpoint
     pillow
-    # TODO: remove pytinyrenderer after dropping legacy v1 code
-    pytinyrenderer
     scipy
     tensorboardx
-    trimesh
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    dm-env
+    gym
     pytestCheckHook
     pytest-xdist
     transforms3d
   ];
 
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+  disabledTests = [
+    # AttributeError: 'functools.partial' object has no attribute 'value'
+    "testModelEncoding0"
+    "testModelEncoding1"
+    "testTrain"
+    "testTrainDomainRandomize"
+
+    # ValueError: Error: no decoder found for mesh file 'meshes/pyramid.stl'
+    "test_convex_convex"
+    "test_dumps"
+    "test_dumps_invalidstate_raises"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # Flaky:
     # AssertionError: Array(-0.00135638, dtype=float32) != 0.0 within 0.001 delta (Array(0.00135638, dtype=float32) difference)
     "test_pendulum_period2"
@@ -100,9 +105,7 @@ buildPythonPackage rec {
     "brax/generalized/constraint_test.py"
   ];
 
-  pythonImportsCheck = [
-    "brax"
-  ];
+  pythonImportsCheck = [ "brax" ];
 
   meta = {
     description = "Massively parallel rigidbody physics simulation on accelerator hardware";
@@ -110,4 +113,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

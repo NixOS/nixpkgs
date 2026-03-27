@@ -49,16 +49,15 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, reliable, and secure dependency management for javascript";
     homepage = "https://classic.yarnpkg.com/";
     changelog = "https://github.com/yarnpkg/yarn/blob/v${finalAttrs.version}/CHANGELOG.md";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
-      offline
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       screendriver
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "yarn";
   };
 })

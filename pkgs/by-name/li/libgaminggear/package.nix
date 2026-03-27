@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchurl,
   cmake,
   pkg-config,
@@ -10,18 +11,26 @@
   libnotify,
   pcre,
   sqlite,
-  xorg,
+  libxdmcp,
+  libpthread-stubs,
   harfbuzz,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgaminggear";
   version = "0.15.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libgaminggear/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/libgaminggear/libgaminggear-${finalAttrs.version}.tar.bz2";
     sha256 = "0jf5i1iv8j842imgiixbhwcr6qcwa93m27lzr6gb01ri5v35kggz";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/cmake_min_version.patch?h=libgaminggear&id=bfe7db62db76dbcefa8ba47640a35c80183f91d3";
+      hash = "sha256-loznfqxlucYlDUSYotMdUBmivKu+DD+OYhRIWpcrSgE=";
+    })
+  ];
 
   outputs = [
     "dev"
@@ -41,8 +50,8 @@ stdenv.mkDerivation rec {
     libnotify
     pcre
     sqlite
-    xorg.libXdmcp
-    xorg.libpthreadstubs
+    libxdmcp
+    libpthread-stubs
   ];
 
   cmakeFlags = [
@@ -64,4 +73,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
   };
-}
+})

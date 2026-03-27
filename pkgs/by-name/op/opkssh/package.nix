@@ -8,32 +8,34 @@
 
 buildGoModule (finalAttrs: {
   pname = "opkssh";
-  version = "0.3.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "openpubkey";
     repo = "opkssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RtTo/wj4v+jtJ4xZJD0YunKtxT7zZ1esgJOSEtxnLOg=";
+    hash = "sha256-cIIbeCsQq/TWf58m9l07aVg2gJNqsEyGqC3UPPb63sQ=";
   };
 
   ldflags = [ "-X main.Version=${finalAttrs.version}" ];
 
-  vendorHash = "sha256-MK7lEBKMVZv4jbYY2Vf0zYjw7YV+13tB0HkO3tCqzEI=";
+  vendorHash = "sha256-aZUwuujE5x2ZCbalvH8DzKP835tgRr6MQbDtvcAZRsk=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/openpubkey/opkssh";
-    description = "Integrating SSO with SSH - short-lived SSH keys with an OpenID provider";
+    description = "Enables SSH to be used with OpenID Connect";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.johnrichardrinehart ];
+    maintainers = with lib.maintainers; [
+      johnrichardrinehart
+      sarcasticadmin
+    ];
     mainProgram = "opkssh";
   };
 })

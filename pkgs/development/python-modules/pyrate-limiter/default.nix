@@ -2,35 +2,95 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+
+  # build-system
+  hatchling,
+  uv-dynamic-versioning,
+
+  # optional dependencies
+  filelock,
+  psycopg,
+  psycopg-pool,
+  redis,
+
+  # test
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-xdist,
+  redisTestHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyrate-limiter";
-  version = "2.10.0";
-  format = "pyproject";
+  version = "4.0.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vutran1710";
     repo = "PyrateLimiter";
-    rev = "v${version}";
-    hash = "sha256-CPusPeyTS+QyWiMHsU0ii9ZxPuizsqv0wQy3uicrDw0=";
+    tag = "v${version}";
+    hash = "sha256-xWxe70J69g9Tq35GjdJeT7MjUdoSEGj8w1cIKvLxJss=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    # tests cause too many connections to the postgres server and crash/timeout
+    sed -i "/create_postgres_bucket,/d" tests/conftest.py
+  '';
+
+  build-system = [
+    hatchling
+    uv-dynamic-versioning
+  ];
+
+  optional-dependencies = {
+    all = [
+      filelock
+      redis
+      psycopg
+      psycopg-pool
+    ];
+  };
+
+  # Show each test name and track the slowest
+  # This helps with identifying bottlenecks in the test suite
+  # that are causing the build to time out on Hydra.
+  pytestFlags = [
+    "--durations=10"
+    "-vv"
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-xdist
+    redisTestHook
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
+
+  disabledTestPaths = [
+    # Slow: > 1.5 seconds/test run standalone on a fast machine
+    # (Apple M3 Max with highest performance settings and 36GB RAM)
+    # and/or hang under load
+    # https://github.com/vutran1710/PyrateLimiter/issues/245
+    # https://github.com/vutran1710/PyrateLimiter/issues/247
+    "tests/test_bucket_all.py"
+    "tests/test_bucket_factory.py"
+    "tests/test_limiter.py"
+    "tests/test_multiprocessing.py"
+    "tests/test_postgres_concurrent.py"
+    "tests/test_multi_bucket.py"
+  ];
+
+  # For redisTestHook
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
-  # The only consumer of this is Lutris (via python-moddb), and it requires 2.x,
-  # so don't auto-update it and break Lutris every python-updates.
-  # FIXME: remove when python-moddb updates.
-  passthru.skipBulkUpdate = true;
-
-  meta = with lib; {
+  meta = {
     description = "Python Rate-Limiter using Leaky-Bucket Algorimth Family";
     homepage = "https://github.com/vutran1710/PyrateLimiter";
-    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kranzes ];
+    changelog = "https://github.com/vutran1710/PyrateLimiter/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

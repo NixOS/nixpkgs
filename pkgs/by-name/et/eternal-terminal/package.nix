@@ -9,18 +9,17 @@
   protobuf,
   zlib,
   catch2,
-  darwin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eternal-terminal";
-  version = "6.2.9";
+  version = "6.2.11";
 
   src = fetchFromGitHub {
     owner = "MisterTea";
     repo = "EternalTerminal";
-    tag = "et-v${version}";
-    hash = "sha256-vukh3a6SxHaVCT4hmoVt4hEGB8Sqylu53Nz8fgBWkTM";
+    tag = "et-v${finalAttrs.version}";
+    hash = "sha256-d3mCZQO12NUQjGIOX1FWTLUq+adMTNb9QYCSU3ibZMY=";
   };
 
   nativeBuildInputs = [
@@ -46,21 +45,20 @@ stdenv.mkDerivation rec {
     "-DDISABLE_CRASH_LOG=TRUE"
   ];
 
-  CXXFLAGS = lib.optionals stdenv.cc.isClang [
-    "-std=c++17"
-  ];
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    CXXFLAGS = toString [ "-std=c++17" ];
+  };
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Remote shell that automatically reconnects without interrupting the session";
     homepage = "https://eternalterminal.dev/";
-    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      dezgeg
+    changelog = "https://github.com/MisterTea/EternalTerminal/releases/tag/et-v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       jshort
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

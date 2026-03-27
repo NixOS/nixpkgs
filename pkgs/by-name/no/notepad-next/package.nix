@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "notepad-next";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "dail8859";
     repo = "NotepadNext";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qpJXby355iSyAGzj19jJJFmFkKeBRgOGod2rrZJqU9Y=";
+    hash = "sha256-YD4tIPh5iJpbcDMZk334k2AV9jTVWCSGP34Mj2x0cJ0=";
     # External dependencies - https://github.com/dail8859/NotepadNext/issues/135
     fetchSubmodules = true;
   };
@@ -24,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt5.wrapQtAppsHook
   ];
   buildInputs = [ qt5.qtx11extras ];
+
+  # Fix build with GCC 14+: Scintilla needs cstdint for intptr_t/uintptr_t types
+  # https://github.com/dail8859/NotepadNext/issues/752
+  postPatch = ''
+    sed -i '1i #include <cstdint>' src/scintilla/include/ScintillaTypes.h
+  '';
 
   qmakeFlags = [
     "PREFIX=${placeholder "out"}"

@@ -1,43 +1,60 @@
 {
+  "activitywatch-status": [
+    "activitywatch-status@cweiske.de",
+    "aw-status@brayo.dev"
+  ],
   "applications-menu": [
     "Applications_Menu@rmy.pobox.com",
     "apps-menu@gnome-shell-extensions.gcampax.github.com"
   ],
-  "persian-calendar": [
-    "persian-calendar@iamrezamousavi.gmail.com",
-    "PersianCalendar@oxygenws.com"
-  ],
-  "system-monitor": [
-    "system-monitor@gnome-shell-extensions.gcampax.github.com",
-    "System_Monitor@bghome.gmail.com"
-  ],
-  "fuzzy-clock": [
-    "fuzzy-clock@keepawayfromfire.co.uk",
-    "FuzzyClock@johngoetz",
-    "FuzzyClock@fire-man-x"
+  "auto-select-headset": [
+    "autoselectheadset@Anduril97.github.com",
+    "autoselectheadset@josephlbarnett.github.com"
   ],
   "battery-time": [
-    "batterytime@typeof.pw",
-    "batime@martin.zurowietz.de"
+    "batime@martin.zurowietz.de",
+    "battery-time@eetumos.github.com",
+    "batterytime@typeof.pw"
   ],
-  "nepali-calendar": [
-    "nepali-date@biplab",
-    "nepali-calendar-gs-extension@subashghimire.info.np"
+  "eur-usd": [
+    "eur-usd-gshell@vezza.github.com",
+    "usd-mxn-gshell@kinduff.github.com"
+  ],
+  "fuzzy-clock": [
+    "FuzzyClock@fire-man-x",
+    "FuzzyClock@johngoetz"
+  ],
+  "lock-keys": [
+    "lockkeys@febueldo.test",
+    "lockkeys@vaina.lt"
+  ],
+  "memento-mori": [
+    "memento-mori@paveloom",
+    "memento-mori@vedeshpadal"
   ],
   "mouse-follows-focus": [
     "mouse-follows-focus@crisidev.org",
     "mousefollowsfocus@matthes.biz"
   ],
-  "power-profile-indicator": [
-    "power-profile-indicator@laux.wtf",
-    "power-profile@fthx"
+  "nepali-calendar": [
+    "nepali-calendar-gs-extension@subashghimire.info.np",
+    "nepali-date@biplab"
   ],
-  "fullscreen-to-empty-workspace": [
-    "fullscreen-to-empty-workspace@aiono.dev",
-    "fullscreen-to-empty-workspace2@corgijan.dev"
+  "net-speed": [
+    "netspeed@alynx.one",
+    "netspeed@shivamksharma.github.io"
   ],
-  "eur-usd": [
-    "eur-usd-gshell@vezza.github.com",
-    "usd-mxn-gshell@kinduff.github.com"
+  "night-light-toggle": [
+    "night-light-toggle@egoistpizza.github.com",
+    "nightlighttoggle@sam"
+  ],
+  "persian-calendar": [
+    "PersianCalendar@oxygenws.com",
+    "persian-calendar@iamrezamousavi.gmail.com"
+  ],
+  "system-monitor": [
+    "System_Monitor@bghome.gmail.com",
+    "system-monitor@axet.github.com",
+    "system-monitor@gnome-shell-extensions.gcampax.github.com"
   ]
 }

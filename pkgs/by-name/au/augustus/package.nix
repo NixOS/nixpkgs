@@ -11,26 +11,27 @@
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "augustus";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "Keriew";
     repo = "augustus";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-UWJmxirRJJqvL4ZSjBvFepeKVvL77+WMp4YdZuFNEkg=";
   };
 
   patches = [ ./darwin-fixes.patch ];
 
-  nativeBuildInputs =
-    [ cmake ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.sigtool
-      libicns
-      imagemagick
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.sigtool
+    libicns
+    imagemagick
+  ];
 
   buildInputs = [
     SDL2
@@ -45,15 +46,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source re-implementation of Caesar III. Fork of Julius incorporating gameplay changes";
     mainProgram = "augustus";
     homepage = "https://github.com/Keriew/augustus";
-    license = licenses.agpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       Thra11
       matteopacini
     ];
   };
-}
+})

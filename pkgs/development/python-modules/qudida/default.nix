@@ -4,7 +4,6 @@
   fetchPypi,
   numpy,
   opencv-python,
-  pythonOlder,
   scikit-learn,
   typing-extensions,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "qudida";
   version = "0.0.4";
   format = "setuptools";
-
-  disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
@@ -33,10 +30,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qudida" ];
 
-  meta = with lib; {
+  meta = {
     description = "QUick and DIrty Domain Adaptation";
     homepage = "https://github.com/arsenyinfo/qudida";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }

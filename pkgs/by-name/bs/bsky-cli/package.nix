@@ -8,16 +8,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "bsky-cli";
-  version = "0.0.73";
+  version = "0.0.77";
 
   src = fetchFromGitHub {
     owner = "mattn";
     repo = "bsky";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GTuF/ZbZ84tTcbjp8eXKdpUGCsOkg2rxEcslKTsgpu4=";
+    hash = "sha256-cO2Ub9DVkDcz9+x+EskJsfgJ3xnTba5rWYsxmXfQ2a0=";
   };
 
-  vendorHash = "sha256-dLhrPHjhEHEJOokkjll1Z+zhDlBXuhlJJBtCFXfhyws=";
+  vendorHash = "sha256-WFGViuC+8Ba6NCU//Z+MTcwNPJbYzpXeCbf4M9mBFPM=";
 
   buildInputs = [
     libpcap
@@ -30,13 +30,12 @@ buildGoModule (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/bsky";
-  versionCheckProgramArg = "--version";
   nativeBuildInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A cli application for bluesky social";
+    description = "Cli application for bluesky social";
     homepage = "https://github.com/mattn/bsky";
     changelog = "https://github.com/mattn/bsky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;

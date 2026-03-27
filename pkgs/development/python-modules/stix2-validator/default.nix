@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jsonschema,
   python-dateutil,
-  pythonOlder,
   requests,
   setuptools,
   simplejson,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "stix2-validator";
   version = "3.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "oasis-open";

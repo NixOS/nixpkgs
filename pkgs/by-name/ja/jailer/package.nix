@@ -1,33 +1,27 @@
 {
   lib,
+  stdenv,
+  fetchFromGitHub,
   ant,
   copyDesktopItems,
-  fetchFromGitHub,
   jdk,
   jre,
   makeDesktopItem,
   makeWrapper,
-  stdenv,
   stripJavaArchivesHook,
   wrapGAppsHook4,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "jailer";
-  version = "16.2";
+  version = "16.11";
 
   src = fetchFromGitHub {
     owner = "Wisser";
     repo = "Jailer";
-    rev = "bc00c6883bac0d09b549e35a10e202da477e4cb1";
-    hash = "sha256-nXxTKbhvrBlorNqiF3wZDEgf1VrBamWw8ZSQSUqpGT8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-bSwLxO7UtKv82WoF/OcFROtbLfkdeupLtoR2/ELzO1U=";
   };
-
-  buildPhase = ''
-    runHook preBuild
-    rm jailer.jar
-    ant
-    runHook postBuild
-  '';
 
   nativeBuildInputs = [
     ant
@@ -37,6 +31,15 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     copyDesktopItems
   ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    rm jailer.jar
+    ant
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -50,9 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/bin
     mkdir -p $out/share
-    mkdir -p $out/share/pixmaps
     cp driverlist.csv $out/share
-    cp admin/jailer.png $out/share/pixmaps
+    install -D admin/jailer.png -t $out/share/icons/hicolor/256x256/apps
 
     # On first run, create a local configuration folder and copy driverlist.csv there.
     cat << EOF > $out/bin/jailer
@@ -82,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tool for database subsetting and relational data browsing";
     license = lib.licenses.asl20;
     homepage = "https://github.com/Wisser/Jailer";
-    changelog = "https://github.com/Wisser/Jailer/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/Wisser/Jailer/releases/tag/v${finalAttrs.version}";
     maintainers = with lib.maintainers; [ guillaumematheron ];
     mainProgram = "jailer";
   };

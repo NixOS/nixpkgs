@@ -6,15 +6,15 @@
   testers,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "lazydocker";
-  version = "0.24.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "jesseduffield";
     repo = "lazydocker";
-    rev = "v${version}";
-    sha256 = "sha256-cVjDdrxmGt+hj/WWP9B3BT739k9SSr4ryye5qWb3XNM=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-ZZl0gt0gNjEI3JC96Xc29SZAyKh15jCuGHyEanIwNwY=";
   };
 
   vendorHash = null;
@@ -31,21 +31,20 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   passthru.tests.version = testers.testVersion {
     package = lazydocker;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple terminal UI for both docker and docker-compose";
     homepage = "https://github.com/jesseduffield/lazydocker";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       das-g
-      Br1ght0ne
     ];
     mainProgram = "lazydocker";
   };
-}
+})

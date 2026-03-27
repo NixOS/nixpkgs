@@ -2,124 +2,113 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  alembic,
-  attrs,
-  build,
-  charset-normalizer,
-  dill,
-  distro,
-  fastapi,
-  granian,
-  gunicorn,
+  pythonAtLeast,
+
+  # build-system
   hatchling,
+  pre-commit,
+  toml,
+
+  # dependencies
+  alembic,
+  click,
+  granian,
   httpx,
-  jinja2,
-  lazy-loader,
-  numpy,
   packaging,
-  pandas,
-  pillow,
   platformdirs,
-  playwright,
-  plotly,
   psutil,
   pydantic,
-  pytest-asyncio,
-  pytest-mock,
-  python-dotenv,
-  pytestCheckHook,
-  python-engineio,
   python-multipart,
   python-socketio,
   redis,
   reflex-hosting-cli,
   rich,
   sqlmodel,
-  starlette-admin,
-  tomlkit,
-  twine,
-  typer,
+  starlette,
   typing-extensions,
+  wrapt,
+
+  # tests
+  attrs,
+  numpy,
+  pandas,
+  pillow,
+  playwright,
+  plotly,
+  pytest-asyncio,
+  pytest-mock,
+  pytestCheckHook,
+  python-dotenv,
+  ruff,
+  starlette-admin,
   unzip,
   uvicorn,
   versionCheckHook,
-  wheel,
-  wrapt,
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "reflex";
-  version = "0.7.5";
+  version = "0.8.28";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
-    tag = "v${version}";
-    hash = "sha256-uHlLItjONHGnuE4t2UOcVRYxcDDbRldUwHd8mPn7JfY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sohID83qFnXV8vsaRy+t4cKxkki97U7sFxHIEYIEWeY=";
   };
 
-  pythonRelaxDeps = [
-    "fastapi"
-    "gunicorn"
-  ];
+  # For some reason, pre_commit is supposedly missing when python>=3.14
+  postPatch = lib.optionalString (pythonAtLeast "3.14") ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"pre_commit", ' ""
+  '';
 
-  pythonRemoveDeps = [
-    "setuptools"
-    "build"
+  build-system = [
+    hatchling
+    pre-commit
+    toml
   ];
-
-  build-system = [ hatchling ];
 
   dependencies = [
     alembic
-    build # used in custom_components/custom_components.py
-    charset-normalizer
-    dill
-    distro
-    fastapi
+    click
     granian
-    granian.optional-dependencies.reload
-    gunicorn
     httpx
-    jinja2
-    lazy-loader
     packaging
     platformdirs
     psutil
     pydantic
-    python-engineio
     python-multipart
     python-socketio
     redis
     reflex-hosting-cli
     rich
     sqlmodel
-    starlette-admin
-    tomlkit
-    twine # used in custom_components/custom_components.py
-    typer
+    starlette
     typing-extensions
-    uvicorn
-    wheel
     wrapt
-  ];
+  ]
+  ++ granian.optional-dependencies.reload;
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
-    pytest-mock
-    python-dotenv
-    playwright
     attrs
     numpy
-    plotly
     pandas
     pillow
+    playwright
+    plotly
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+    python-dotenv
+    ruff
+    starlette-admin
     unzip
-    writableTmpDirAsHomeHook
+    uvicorn
     versionCheckHook
+    writableTmpDirAsHomeHook
   ];
   versionCheckProgramArg = "--version";
 
@@ -134,10 +123,16 @@ buildPythonPackage rec {
     # flaky
     "test_preprocess" # KeyError: 'reflex___state____state'
     "test_send" # AssertionError: Expected 'post' to have been called once. Called 0 times.
+    "test_state_manager_lock" # Lock expired for token 87164611-f...
     # tries to pin the string of a traceback, doesn't account for ansi colors
     "test_state_with_invalid_yield"
     # tries to run bun or npm
     "test_output_system_info"
+    # Comparison with magic string
+    "test_background_task_no_block"
+    # reflex.utils.exceptions.StateSerializationError: Failed to serialize state
+    # reflex___istate___dynamic____dill_state due to unpicklable object.
+    "test_fallback_pickle"
   ];
 
   disabledTestPaths = [
@@ -145,14 +140,16 @@ buildPythonPackage rec {
     "tests/integration/"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "reflex" ];
 
   meta = {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
-    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${src.tag}";
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "reflex";
   };
-}
+})

@@ -6,19 +6,18 @@
   cmake,
   pkg-config,
   gitUpdater,
-  libdevil,
   soundtouch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avisynthplus";
-  version = "3.7.4";
+  version = "3.7.5";
 
   src = fetchFromGitHub {
     owner = "AviSynth";
     repo = "AviSynthPlus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M+F7bUSlH6kAyQLCq0RxmaE19RqHPPleTMyRuz5zqPg=";
+    hash = "sha256-RkEZWsAKZABtl+SbRLCjMqyQoi9ainbaI9hWlpO6Fwo=";
   };
 
   patchPhase = ''
@@ -27,7 +26,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    libdevil
     soundtouch
   ];
 
@@ -46,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Improved version of the AviSynth frameserver";
     homepage = "https://avs-plus.net/";
     changelog = "https://github.com/AviSynth/AviSynthPlus/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     pkgConfigModules = [ "avisynth" ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jopejoe1 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

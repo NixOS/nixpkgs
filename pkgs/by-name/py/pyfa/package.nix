@@ -5,31 +5,32 @@
   gsettings-desktop-schemas,
   adwaita-icon-theme,
   wrapGAppsHook3,
+  gobject-introspection,
   gdk-pixbuf,
   makeDesktopItem,
   copyDesktopItems,
 }:
 let
-  version = "2.62.2";
+  version = "2.66.1";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
   pname = "pyfa";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-7YFObKV4vXiTWgCfek7k4yVq7IG3JMtaB36Jhu7rGjk=";
+    hash = "sha256-lSX+ZCPUjXE5t8OmKcA9yD+g6Xiizj1Qi6+SstZbq2g=";
   };
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = "${pname} %U";
+      name = "pyfa";
+      exec = "pyfa %U";
       icon = "pyfa";
-      desktopName = pname;
+      desktopName = "pyfa";
       genericName = "Python fitting assistant for Eve Online";
       categories = [ "Game" ];
     })
@@ -51,6 +52,7 @@ python3Packages.buildPythonApplication rec {
     numpy
     python-jose
     requests-cache
+    pygobject3
   ];
 
   buildInputs = [
@@ -62,6 +64,7 @@ python3Packages.buildPythonApplication rec {
   dontWrapGApps = true;
   nativeBuildInputs = [
     python3Packages.pyinstaller
+    gobject-introspection
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -73,7 +76,7 @@ python3Packages.buildPythonApplication rec {
     cat > setup.py <<EOF
       from setuptools import setup
       setup(
-        name = "${pname}",
+        name = "pyfa",
         version = "${version}",
         scripts = ["pyfa.py"],
         packages = setuptools.find_packages(),
@@ -107,12 +110,10 @@ python3Packages.buildPythonApplication rec {
     runHook preInstall
 
     mkdir -p $out/bin
-    mkdir -p $out/share/pixmaps
     mkdir -p $out/share/icons/hicolor/64x64/apps/
 
     cp -r dist/pyfa $out/share/
-    cp imgs/gui/pyfa64.png $out/share/pixmaps/pyfa.png
-    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/${pname}.png
+    cp imgs/gui/pyfa64.png $out/share/icons/hicolor/64x64/apps/pyfa.png
     ln -sf $out/share/pyfa/pyfa $out/bin/pyfa
 
     runHook postInstall

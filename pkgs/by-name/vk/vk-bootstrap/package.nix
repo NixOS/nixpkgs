@@ -5,47 +5,46 @@
   cmake,
   vulkan-headers,
   glfw,
-  catch2,
+  catch2_3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vk-bootstrap";
-  version = "0.7";
-  outputs = [
-    "out"
-    "dev"
-  ];
+  version = "1.4.335";
 
   src = fetchFromGitHub {
     owner = "charles-lunarg";
     repo = "vk-bootstrap";
-    rev = "v${version}";
-    hash = "sha256-X3ANqfplrCF1R494+H5/plcwMH7rbW6zpLA4MZrYaoE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WFROoVAOl4HBNb/a8rx522Zz2LP4m2Zk03jckWxv7w0=";
   };
 
-  postPatch = ''
-    # Upstream uses cmake FetchContent to resolve glfw and catch2
-    # needed for examples and tests
-    sed -i 's=add_subdirectory(ext)==g' CMakeLists.txt
-    sed -i 's=Catch2==g' tests/CMakeLists.txt
-  '';
+  patches = [
+    ./0001-disable-fetch-content.patch
+    ./0002-fix-install-tests.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     vulkan-headers
-    glfw
-    catch2
   ];
+
+  checkInputs = [
+    glfw
+    catch2_3
+  ];
+
+  doCheck = true;
 
   cmakeFlags = [
-    "-DVK_BOOTSTRAP_VULKAN_HEADER_DIR=${vulkan-headers}/include"
+    "-DVK_BOOTSTRAP_INSTALL=1"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Vulkan Bootstrapping Library";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/charles-lunarg/vk-bootstrap";
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "waylib";
-  version = "0.6.13";
+  version = "0.6.14";
 
   src = fetchFromGitHub {
     owner = "vioken";
     repo = "waylib";
     rev = finalAttrs.version;
-    hash = "sha256-djFwUe/+5CNEnOTKL5OAC8zVQqsT8BSqQEWjkbEt7xQ=";
+    hash = "sha256-Yp7j1L+b41pmLWhxYN4M9W8OjXA31za3Ufp/iE3U/vM=";
   };
 
   depsBuildBuild = [
@@ -69,6 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
     ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
   };
 })

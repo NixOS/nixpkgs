@@ -2,40 +2,62 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  mdformat,
-  mdformat-admon,
+
+  # build-system
+  uv-build,
+
+  mdformat-beautysh,
+  mdformat-footnote,
+  mdformat-front-matters,
   mdformat-gfm,
+  mdformat-simple-breaks,
+  mdformat,
   mdit-py-plugins,
   more-itertools,
-  pythonOlder,
   pytest-snapshot,
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "mdformat-mkdocs";
-  version = "4.1.1";
+  version = "5.2.0b0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "KyleKing";
     repo = "mdformat-mkdocs";
-    tag = "v${version}";
-    hash = "sha256-KH0edaqH5STRYtcSqbR0uTdlZVKuHRS7AUgd25fjvEE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d91XskyUFi7e/soC2fYN6FJUzOP8bZ+ZguLNNAxJC9c=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "uv_build>=0.9.10" "uv_build"
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    uv-build
+  ];
+
+  dependencies = [
     mdformat
-    mdformat-admon
     mdformat-gfm
     mdit-py-plugins
     more-itertools
   ];
+
+  optional-dependencies = {
+    recommended = [
+      mdformat-beautysh
+      # mdformat-config
+      mdformat-footnote
+      mdformat-front-matters
+      # mdformat-ruff
+      mdformat-simple-breaks
+      # mdformat-web
+      # mdformat-wikilink
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-snapshot
@@ -49,11 +71,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mdformat_mkdocs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mdformat plugin for MkDocs";
     homepage = "https://github.com/KyleKing/mdformat-mkdocs";
-    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    changelog = "https://github.com/KyleKing/mdformat-mkdocs/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
-}
+})

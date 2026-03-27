@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.9.2";
+  version = "3.9.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-b3CYD/4IpksRS2hxgy/QLYbJkDX4l2qPH4Eh2tb8pCU=";
+    hash = "sha256-eLdk1MhDsEVfs5223rQhpI1dPruEZTe6ZESv4QfE68E=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A bytecode decompiler for Python versions 3.8 and below";
+    description = "Bytecode decompiler for Python versions 3.8 and below";
     homepage = "https://github.com/rocky/python-uncompyle6";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ melvyn2 ];

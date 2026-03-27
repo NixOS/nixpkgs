@@ -20,15 +20,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "srain";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "SrainApp";
     repo = "srain";
-    rev = version;
-    hash = "sha256-c5dy5dD5Eb/MVNCpLqIGNuafsrmgLjEfRfSxKVxu5wY=";
+    rev = finalAttrs.version;
+    hash = "sha256-F7TFCPTAU856403QNUUyf+10s/Yr4xDN/CarJNcUv4A=";
   };
 
   nativeBuildInputs = [
@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Modern IRC client written in GTK";
     mainProgram = "srain";
     homepage = "https://srain.silverrainz.me";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
   };
-}
+})

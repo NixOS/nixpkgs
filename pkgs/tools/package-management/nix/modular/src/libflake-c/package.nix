@@ -18,17 +18,16 @@ mkMesonLibrary (finalAttrs: {
 
   workDir = ./.;
 
-  propagatedBuildInputs =
-    [
-      nix-expr-c
-      nix-store-c
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
-      nix-fetchers-c
-    ]
-    ++ [
-      nix-flake
-    ];
+  propagatedBuildInputs = [
+    nix-expr-c
+    nix-store-c
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "2.29pre") [
+    nix-fetchers-c
+  ]
+  ++ [
+    nix-flake
+  ];
 
   mesonFlags = [
   ];

@@ -10,15 +10,6 @@
 }:
 
 let
-  pname = "anytype-heart";
-  version = "0.39.11";
-  src = fetchFromGitHub {
-    owner = "anyproto";
-    repo = "anytype-heart";
-    tag = "v${version}";
-    hash = "sha256-+H63bc4aJPERfclzKh4E3uYEEwNycLfe0BCPSlilqCc=";
-  };
-
   arch =
     {
       # https://github.com/anyproto/anytype-heart/blob/f33a6b09e9e4e597f8ddf845fc4d6fe2ef335622/pkg/lib/localstore/ftsearch/ftsearchtantivy.go#L3
@@ -29,12 +20,24 @@ let
     }
     .${stdenv.hostPlatform.system}
       or (throw "anytype-heart not supported on ${stdenv.hostPlatform.system}");
-
 in
-buildGoModule {
-  inherit pname version src;
+buildGoModule (finalAttrs: {
+  pname = "anytype-heart";
 
-  vendorHash = "sha256-fbZ1DiRcD9dnS8e7BMrKPYApqZmQbaH6DsSSO1knDmo=";
+  # Use only versions specified in anytype-ts middleware.version file:
+  #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
+  version = "0.48.5";
+
+  # Update only together with 'anytype' package.
+  # nixpkgs-update: no auto update
+  src = fetchFromGitHub {
+    owner = "anyproto";
+    repo = "anytype-heart";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-h7oXx/twHXWb97xHr5hoviYY5lRLKUnT+uMIiLlD5pw=";
+  };
+
+  vendorHash = "sha256-vmOEt3cpkq8JJ3s6+VUOOwr+DyF8W1pavW1P+XnrBw8=";
 
   subPackages = [ "cmd/grpcserver" ];
   tags = [
@@ -81,10 +84,12 @@ buildGoModule {
   meta = {
     description = "Shared library for Anytype clients";
     homepage = "https://anytype.io/";
+    changelog = "https://github.com/anyproto/anytype-heart/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.unfreeRedistributable;
     maintainers = with lib.maintainers; [
       autrimpo
       adda
+      kira-bruneau
     ];
     platforms = [
       "x86_64-linux"
@@ -92,5 +97,6 @@ buildGoModule {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

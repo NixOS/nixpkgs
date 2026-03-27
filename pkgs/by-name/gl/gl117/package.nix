@@ -12,12 +12,12 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gl-117";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/gl-117/gl-117/GL-117%20Source/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/gl-117/gl-117/GL-117%20Source/gl-117-${finalAttrs.version}.tar.bz2";
     sha256 = "1yvg1rp1yijv0b45cz085b29x5x0g5fkm654xdv5qwh2l6803gb4";
   };
 
@@ -34,12 +34,12 @@ stdenv.mkDerivation rec {
     libtool
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Air combat simulator";
     mainProgram = "gl-117";
     homepage = "https://sourceforge.net/projects/gl-117";
-    maintainers = with maintainers; [ raskin ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -11,7 +11,7 @@
 }:
 buildPythonPackage rec {
   pname = "language-tool-python";
-  version = "2.9.0";
+  version = "3.2.2";
 
   pyproject = true;
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "jxmorris12";
     repo = "language_tool_python";
     tag = version;
-    hash = "sha256-CiKwuCMfgU7Vo0rwbKyI++EJBuKBrN1q7alwYGKuXXQ=";
+    hash = "sha256-GhFAX0x17EveJPUT8b98zAB4w9+wkVAO8EQHdtWoIv8=";
   };
 
   build-system = [ setuptools ];

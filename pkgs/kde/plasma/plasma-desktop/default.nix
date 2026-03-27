@@ -13,7 +13,11 @@
   breeze,
   SDL2,
   xkeyboard_config,
-  xorg,
+  xorg-server,
+  xf86-input-libinput,
+  xf86-input-evdev,
+  libxft,
+  libxcursor,
   libcanberra,
   libwacom,
   libxkbfile,
@@ -55,11 +59,11 @@ mkKdeDerivation {
     libxkbfile
     xkeyboard_config
 
-    xorg.libXcursor
-    xorg.libXft
-    xorg.xf86inputlibinput
-    xorg.xf86inputevdev
-    xorg.xorgserver
+    libxcursor
+    libxft
+    xf86-input-libinput
+    xf86-input-evdev
+    xorg-server
 
     ibus
   ];

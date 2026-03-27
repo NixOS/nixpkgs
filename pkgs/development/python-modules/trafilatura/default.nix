@@ -1,17 +1,22 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   certifi,
   charset-normalizer,
   courlan,
-  fetchPypi,
   htmldate,
   justext,
   lxml,
-  pytestCheckHook,
-  pythonOlder,
-  setuptools,
   urllib3,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -19,11 +24,11 @@ buildPythonPackage rec {
   version = "2.0.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zrcJSm7Ml+cv6nPH26NnFMXFtXe2Rw5FINyok3BtYkc=";
+  src = fetchFromGitHub {
+    owner = "adbar";
+    repo = "trafilatura";
+    tag = "v${version}";
+    hash = "sha256-Cf1W3JEGSMkVmRZVTXYsXzZK/Nt/aDG890Sf0/0OZAA=";
   };
 
   postPatch = ''
@@ -48,6 +53,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
+    # TypeError: argument of type 'NoneType' is not iterable
+    # https://github.com/adbar/trafilatura/issues/805
+    "test_external"
+    "test_extract"
+
+    # AttributeError: 'NoneType' object has no attribute 'find'
+    # https://github.com/adbar/trafilatura/issues/805
+    "test_table_processing"
+
     # Disable tests that require an internet connection
     "test_cli_pipeline"
     "test_crawl_page"
@@ -61,6 +75,10 @@ buildPythonPackage rec {
     "test_queue"
     "test_redirection"
     "test_whole"
+
+    # AssertionError: assert ['deflate', 'gzip', 'zstd'] == ['deflate', 'gzip']
+    # https://github.com/adbar/trafilatura/issues/823
+    "test_config"
   ];
 
   pythonImportsCheck = [ "trafilatura" ];
@@ -69,6 +87,7 @@ buildPythonPackage rec {
     description = "Python package and command-line tool designed to gather text on the Web";
     homepage = "https://trafilatura.readthedocs.io";
     changelog = "https://github.com/adbar/trafilatura/blob/v${version}/HISTORY.md";
+    downloadPage = "https://github.com/adbar/trafilatura";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jokatzke ];
     mainProgram = "trafilatura";

@@ -1,16 +1,15 @@
 {
   lib,
+  pkgs,
   buildPythonPackage,
-  fetchFromGitea,
-  fetchpatch,
+  fetchFromGitHub,
   replaceVars,
   colord,
-  setuptools,
+  flit-core,
   pikepdf,
   pillow,
   stdenv,
   exiftool,
-  ghostscript,
   imagemagick,
   mupdf-headless,
   netpbm,
@@ -23,23 +22,19 @@
 
 buildPythonPackage rec {
   pname = "img2pdf";
-  version = "0.6.0";
+  version = "0.6.3";
   pyproject = true;
 
-  src = fetchFromGitea {
-    domain = "gitlab.mister-muffin.de";
+  # gitlab.mister-muffin.de produces a 500 error on 0.6.1
+  # when upgrading, switch src attribute back to gitlab if fixed.
+  src = fetchFromGitHub {
     owner = "josch";
     repo = "img2pdf";
     tag = version;
-    hash = "sha256-/nxXgGsnj5ktxUYt9X8/9tJzXgoU8idTjVgLh+8jol8=";
+    hash = "sha256-uHcGCx5DdUxFnATG3T565R+NatLukPPpnRj0TZHToC0=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "exiftool-13.23-compat.patch";
-      url = "https://gitlab.mister-muffin.de/josch/img2pdf/commit/59132f20f8a40f6ed4e5cd2a3719bf55473ba4d7.patch";
-      hash = "sha256-A36YSZ6kBFzEa2lSKIVHRg9r6Oi8FGkOnmt2YxlkwWw=";
-    })
     (replaceVars ./default-icc-profile.patch {
       srgbProfile =
         if stdenv.hostPlatform.isDarwin then
@@ -52,7 +47,7 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools ];
+  build-system = [ flit-core ];
 
   dependencies = [
     pikepdf
@@ -67,7 +62,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     exiftool
-    ghostscript
+    pkgs.ghostscript
     imagemagick
     mupdf-headless
     netpbm
@@ -89,6 +84,13 @@ buildPythonPackage rec {
     "test_miff_cmyk16"
     "test_png_gray16"
     "test_png_rgb16"
+    # these only fail on aarch64
+    "test_png_rgba8"
+    "test_png_gray8a"
+    # AssertionError: assert 'resolution' not in ...
+    # (starting with ImagMagick 7.1.2-5)
+    "test_date"
+    "test_jpg"
   ];
 
   pythonImportsCheck = [ "img2pdf" ];

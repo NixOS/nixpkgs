@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -20,8 +19,6 @@ buildPythonPackage rec {
   pname = "inflect";
   version = "7.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
@@ -54,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jaraco/inflect";
     changelog = "https://github.com/jaraco/inflect/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = lib.teams.tts.members;
+    teams = [ lib.teams.tts ];
   };
 }

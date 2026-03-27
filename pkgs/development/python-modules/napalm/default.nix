@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -32,23 +32,21 @@
   mock,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "napalm";
-  version = "5.0.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "5.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "napalm-automation";
     repo = "napalm";
-    tag = version;
-    hash = "sha256-Abw3h69qTFwOOFeAfivqAIWLozErJ1yZZfx7CbMy1AI=";
+    tag = finalAttrs.version;
+    hash = "sha256-kIQgr5W9xkdcQkscJkOiABJ5HBxZOT9D7jSKWGNoBGA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cffi
     jinja2
     junos-eznc
@@ -76,10 +74,9 @@ buildPythonPackage rec {
     ddt
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network Automation and Programmability Abstraction Layer with Multivendor support";
     homepage = "https://github.com/napalm-automation/napalm";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.c3d2.members;
+    license = lib.licenses.asl20;
   };
-}
+})

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  pythonOlder,
   fetchPypi,
   hatchling,
   hatch-nodejs-version,
@@ -19,7 +18,6 @@ buildPythonPackage rec {
   pname = "nbformat";
   version = "5.10.4";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -46,13 +44,7 @@ buildPythonPackage rec {
     testpath
   ];
 
-  disabledTestPaths = lib.optionals (pythonAtLeast "3.13") [
-    # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffff54954e0>
-    "tests/test_validator.py"
-    "tests/v4/test_convert.py"
-    "tests/v4/test_json.py"
-    "tests/v4/test_validate.py"
-  ];
+  pytestFlags = [ "-Wignore::pytest.PytestUnraisableExceptionWarning" ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
@@ -62,6 +54,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-trust";
     homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ globin ];
+    maintainers = [ ];
   };
 }

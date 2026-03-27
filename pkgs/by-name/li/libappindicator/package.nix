@@ -67,24 +67,23 @@ stdenv.mkDerivation (finalAttrs: {
     }
     .${gtkVersion} or throwBadGtkVersion;
 
-  buildInputs =
-    [
-      glib
-      dbus-glib
-      {
-        "2" = libindicator-gtk2;
-        "3" = libindicator-gtk3;
-      }
-      .${gtkVersion} or throwBadGtkVersion
-    ]
-    ++ lib.optionals monoSupport [
-      mono
-      {
-        "2" = gtk-sharp-2_0;
-        "3" = gtk-sharp-3_0;
-      }
-      .${gtkVersion} or throwBadGtkVersion
-    ];
+  buildInputs = [
+    glib
+    dbus-glib
+    {
+      "2" = libindicator-gtk2;
+      "3" = libindicator-gtk3;
+    }
+    .${gtkVersion} or throwBadGtkVersion
+  ]
+  ++ lib.optionals monoSupport [
+    mono
+    {
+      "2" = gtk-sharp-2_0;
+      "3" = gtk-sharp-3_0;
+    }
+    .${gtkVersion} or throwBadGtkVersion
+  ];
 
   preAutoreconf = ''
     gtkdocize
@@ -106,10 +105,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Library to allow applications to export a menu into the Unity Menu bar";
     homepage = "https://launchpad.net/libappindicator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       lgpl3
     ];
@@ -119,8 +118,8 @@ stdenv.mkDerivation (finalAttrs: {
         "3" = [ "appindicator3-0.1" ];
       }
       .${gtkVersion} or throwBadGtkVersion;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.msteen ];
     # TODO: Resolve the issues with the Mono bindings.
     broken = monoSupport;
   };

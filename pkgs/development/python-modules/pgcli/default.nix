@@ -16,23 +16,30 @@
   pendulum,
   pytestCheckHook,
   setuptools,
+  setuptools-scm,
   sshtunnel,
   mock,
+  tzlocal,
 }:
 
 # this is a pythonPackage because of the ipython line magics in pgcli.magic
 # integrating with ipython-sql
 buildPythonPackage rec {
   pname = "pgcli";
-  version = "4.3.0";
+  version = "4.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dlrhVQxVCKSB8Z8WqZcWwlP+ka+yVXl63S1jXaILau8=";
+    hash = "sha256-vV+NaK8o/WlVGjy0iihJytX2hUqkgCLp2YxiNtEJ7q4=";
   };
 
-  build-system = [ setuptools ];
+  pythonRelaxDeps = [ "click" ];
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     cli-helpers
@@ -47,6 +54,7 @@ buildPythonPackage rec {
     keyring
     pendulum
     sshtunnel
+    tzlocal
   ];
 
   nativeCheckInputs = [
@@ -55,11 +63,13 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # requires running postgres
+    # requires running postgres and postgresqlTestHook does not work
     "test_application_name_in_env"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_application_name_db_uri" ];
+    "test_init_command_option"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_application_name_db_uri" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line interface for PostgreSQL";
     mainProgram = "pgcli";
     longDescription = ''
@@ -68,9 +78,8 @@ buildPythonPackage rec {
     '';
     homepage = "https://pgcli.com";
     changelog = "https://github.com/dbcli/pgcli/raw/v${version}/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
-      dywedir
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       SuperSandro2000
     ];
   };

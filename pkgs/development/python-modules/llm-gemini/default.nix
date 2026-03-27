@@ -1,10 +1,10 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-gemini,
   httpx,
   ijson,
   pytestCheckHook,
@@ -15,24 +15,22 @@
 }:
 buildPythonPackage rec {
   pname = "llm-gemini";
-  version = "0.17";
+  version = "0.29";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-gemini";
     tag = version;
-    hash = "sha256-CF3kRrW1wV1JZC+spOmb2BFBKjFzvWG+vFIscZuVp2U=";
+    hash = "sha256-6UqQJDPJIprxpZCrPT/pGpghvCWQpseodrJfcKgRtaA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
-    llm
     httpx
     ijson
+    llm
   ];
 
   nativeCheckInputs = [
@@ -45,15 +43,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "llm_gemini" ];
 
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-gemini;
 
   meta = {
     description = "LLM plugin to access Google's Gemini family of models";
     homepage = "https://github.com/simonw/llm-gemini";
     changelog = "https://github.com/simonw/llm-gemini/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ josh ];
+    maintainers = with lib.maintainers; [
+      josh
+      philiptaron
+    ];
   };
 }

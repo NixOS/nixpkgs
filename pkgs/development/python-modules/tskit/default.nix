@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  pythonOlder,
   numpy,
   jsonschema,
   svgwrite,
@@ -11,14 +10,12 @@
 
 buildPythonPackage rec {
   pname = "tskit";
-  version = "0.6.1";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IrrI3AQx53mdbrZ9o0zN7C2XDVD8iLgOrWDV9At0tR0=";
+    hash = "sha256-d6XzOSPVh1jsRg1A49aMWFyWVN29naYyYVXs82KQ0OA=";
   };
 
   postPatch = ''
@@ -46,6 +43,6 @@ buildPythonPackage rec {
     mainProgram = "tskit";
     homepage = "https://github.com/tskit-dev/tskit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ alxsimon ];
+    maintainers = [ ];
   };
 }

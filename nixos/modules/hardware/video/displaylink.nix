@@ -23,6 +23,8 @@ in
     boot.extraModulePackages = [ evdi ];
     boot.kernelModules = [ "evdi" ];
 
+    services.xserver.externallyConfiguredDrivers = [ "displaylink" ];
+
     environment.etc."X11/xorg.conf.d/40-displaylink.conf".text = ''
       Section "OutputClass"
         Identifier  "DisplayLink"
@@ -35,7 +37,7 @@ in
 
     # make the device available
     services.xserver.displayManager.sessionCommands = ''
-      ${lib.getBin pkgs.xorg.xrandr}/bin/xrandr --setprovideroutputsource 1 0
+      ${lib.getBin pkgs.xrandr}/bin/xrandr --setprovideroutputsource 1 0
     '';
 
     # Those are taken from displaylink-installer.sh and from Arch Linux AUR package.

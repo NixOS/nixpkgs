@@ -22,7 +22,7 @@ let
       src = fetchFromGitHub {
         owner = "varnish";
         repo = "varnish-modules";
-        rev = version;
+        tag = version;
         inherit hash;
       };
 
@@ -43,10 +43,10 @@ let
 
       postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages
 
-      meta = with lib; {
+      meta = {
         description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
         homepage = "https://github.com/varnish/varnish-modules";
-        inherit (varnish.meta) license platforms maintainers;
+        inherit (varnish.meta) license platforms;
       };
     };
 in
@@ -55,12 +55,12 @@ in
     version = "0.15.1";
     hash = "sha256-Et/iWOk2FWJBDOpKjNXm4Nh5i1SU4zVPaID7kh+Uj9M=";
   };
-  modules24 = common {
-    version = "0.24.0";
-    hash = "sha256-2MfcrhhkBz9GyQxEWzjipdn1CBEqnCvC3t1G2YSauak=";
+  modules26 = common {
+    version = "0.26.0";
+    hash = "sha256-xKMOkqm6/GoBve0AhPqyVMQv/oh5Rtj6uCeg/yId7BU=";
   };
-  modules25 = common {
-    version = "0.25.0";
-    hash = "sha256-m/7moizVyvoP8xnpircAFVUqCmCfTGkgVyRc6zkdVsk=";
+  modules27 = common {
+    version = "0.27.0";
+    hash = "sha256-1hE+AKsC6Td+Al7LFN6bgPicU8dtWd3A8PP7VKZLvYM=";
   };
 }

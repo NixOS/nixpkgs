@@ -4,18 +4,22 @@
   fetchPypi,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mlarchive2maildir";
   version = "0.0.9";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     sha256 = "02zjwa7zbcbqj76l0qmg7bbf3fqli60pl2apby3j4zwzcrrryczs";
   };
 
-  nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
+  build-system = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     click
     click-log
@@ -23,11 +27,13 @@ python3.pkgs.buildPythonApplication rec {
     six
   ];
 
-  meta = with lib; {
+  pythonImportsCheck = [ "mlarchive2maildir" ];
+
+  meta = {
     homepage = "https://github.com/flokli/mlarchive2maildir";
     description = "Imports mail from (pipermail) archives into a maildir";
     mainProgram = "mlarchive2maildir";
-    license = licenses.mit;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ flokli ];
   };
-}
+})

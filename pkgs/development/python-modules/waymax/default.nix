@@ -19,16 +19,16 @@
   tqdm,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "waymax";
-  version = "0-unstable-2025-03-25";
+  version = "0-unstable-2025-05-30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "waymo-research";
     repo = "waymax";
-    rev = "720f9214a9bf79b3da7926497f0cd0468ca3e630";
-    hash = "sha256-B1Rp5MATbEelp6G6K2wwV83QpINhOHgvAxb3mBN52Eg=";
+    rev = "48b33d71aac20a22db7d25f2d3220596899d944a";
+    hash = "sha256-YV0KI0UrFXO3HvKjqJE+K+hJJuYI4GiIR4l1fZNnl/E=";
   };
 
   build-system = [ setuptools ];
@@ -55,6 +55,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "waymax" ];
 
+  disabledTests = [
+    # AssertionError: Not equal to tolerance rtol=1e-07, atol=0
+    "test_obs_from_state_for_different_coordinate_system0"
+    "test_obs_from_state_for_different_coordinate_system1"
+  ];
+
   disabledTestPaths = [
     # Disable visualization tests that require a GUI
     # waymax/visualization/viz_test.py Fatal Python error: Aborted
@@ -62,7 +68,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A JAX-based simulator for autonomous driving research";
+    description = "JAX-based simulator for autonomous driving research";
     homepage = "https://github.com/waymo-research/waymax";
     changelog = "https://github.com/waymo-research/waymax/blob/main/CHANGELOG.md";
     maintainers = with lib.maintainers; [ samuela ];

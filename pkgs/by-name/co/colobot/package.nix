@@ -19,23 +19,33 @@
   doxygen,
   python3,
   callPackage,
+  fetchpatch,
 }:
 
 let
   colobot-data = callPackage ./data.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "colobot";
   # Maybe require an update to package colobot-data as well
   # in file data.nix next to this one
-  version = "0.2.1-alpha";
+  version = "0.2.2-alpha";
 
   src = fetchFromGitHub {
     owner = "colobot";
     repo = "colobot";
-    rev = "colobot-gold-${version}";
-    hash = "sha256-3iea2+5xCT0//NAjMHrynZKSoiOSgLTNMUQkRhXuXg8=";
+    tag = "colobot-gold-${finalAttrs.version}";
+    hash = "sha256-QhNHtAG+hKq7qJhKWCJcP4ejm5YDOU8pyYtitJppVlU=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/colobot/colobot/commit/1561854b03500d39955c66971c9c98de1937d7e6.patch";
+      relative = "colobot-app/src";
+      extraPrefix = "src/app/";
+      hash = "sha256-TVd/TsmFb1qQILUJr6E1zdFl/bQkREYKC/cm2I3M/iw=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -58,8 +68,6 @@ stdenv.mkDerivation rec {
     openal
   ];
 
-  enableParallelBuilding = false;
-
   # The binary ends in games directory
   postInstall = ''
     mv $out/games $out/bin
@@ -68,11 +76,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://colobot.info/";
-    description = "Colobot: Gold Edition is a real-time strategy game, where you can program your bots";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ freezeboy ];
-    platforms = platforms.linux;
+    description = "Real-time strategy game with programmable bots";
+    license = lib.licenses.gpl3;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

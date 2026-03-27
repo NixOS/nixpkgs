@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "pycycling";
   version = "0.4.1";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
@@ -23,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ pname ];
 
-  meta = with lib; {
+  meta = {
     description = "Package for interacting with Bluetooth Low Energy (BLE) compatible bike trainers, power meters, radars and heart rate monitors";
     homepage = "https://github.com/zacharyedwardbull/pycycling";
     changelog = "https://github.com/zacharyedwardbull/pycycling/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ viraptor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ viraptor ];
   };
 }

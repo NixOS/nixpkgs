@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     exiv2

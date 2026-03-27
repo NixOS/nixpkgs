@@ -8,7 +8,6 @@
   pkg-config,
   pkgs,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -16,11 +15,9 @@ buildPythonPackage rec {
   version = "0.4.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "kovidgoyal";
-    repo = pname;
+    repo = "html5-parser";
     tag = "v${version}";
     hash = "sha256-0Qn+To/d3+HMx+KhhgJBEHVYPOfIeBnngBraY7r4uSs=";
   };
@@ -41,12 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "html5_parser" ];
 
-  pytestFlagsArray = [ "test/*.py" ];
+  enabledTestPaths = [ "test/*.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast C based HTML 5 parsing for python";
     homepage = "https://html5-parser.readthedocs.io";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

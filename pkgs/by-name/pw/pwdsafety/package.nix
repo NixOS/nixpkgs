@@ -4,30 +4,30 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "pwdsafety";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "edoardottt";
     repo = "pwdsafety";
-    tag = "v${version}";
-    hash = "sha256-cKxTcfNjvwcDEw0Z1b50A4u0DUYXlGMMfGWJLPaSkcw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/kLnlOJu+G+RDVhjH+zsXzF2PdFhqu8ZOz72wqbuixU=";
   };
 
-  vendorHash = "sha256-RoRq9JZ8lOMtAluz8TB2RRuDEWFOBtWVhz21aTkXXy4=";
+  vendorHash = "sha256-4Nd4QU934XpCOH6aqiGLvRbfuPu+z4WwzxBIb/SPH8w=";
 
   ldflags = [
     "-w"
     "-s"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool checking password safety";
     homepage = "https://github.com/edoardottt/pwdsafety";
-    changelog = "https://github.com/edoardottt/pwdsafety/releases/tag/v${version}";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/edoardottt/pwdsafety/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "pwdsafety";
   };
-}
+})

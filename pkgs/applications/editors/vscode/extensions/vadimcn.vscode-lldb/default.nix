@@ -1,23 +1,22 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
-  makeWrapper,
-  llvmPackages,
-  buildNpmPackage,
+  callPackage,
+  cargo,
   cmake,
+  fetchFromGitHub,
+  lib,
+  llvmPackages_19,
+  makeRustPlatform,
+  makeWrapper,
   nodejs,
-  unzip,
   python3,
-  pkg-config,
-  libsecret,
+  rustc,
+  unzip,
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.10.0";
+  version = "1.12.1";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -25,23 +24,39 @@ let
 
   src = fetchFromGitHub {
     owner = "vadimcn";
-    repo = "vscode-lldb";
+    repo = "codelldb";
     rev = "v${version}";
-    hash = "sha256-ExSS5HxDmJJtYypRYJNz7nY0D50gjoDBc4CnJMfgVw8=";
+    hash = "sha256-B8iCy4NXG7IzJVncbYm5VoAMfhMfxGF+HW7M5sVn5b0=";
   };
 
-  # need to build a custom version of lldb and llvm for enhanced rust support
-  lldb = (import ./lldb.nix { inherit fetchFromGitHub llvmPackages; });
+  lldb = llvmPackages_19.lldb;
+  stdenv = llvmPackages_19.libcxxStdenv;
+
+  cargoHash = "sha256-fuUTLdavMiYfpyxctXes2GJCsNZd5g1d4B/v+W/Rnu8=";
 
   adapter = (
-    import ./adapter.nix {
-      inherit
-        lib
-        lldb
-        makeWrapper
-        rustPlatform
-        stdenv
+    callPackage ./adapter.nix {
+      # The adapter is meant to be compiled with clang++,
+      # based on the provided CMake toolchain files.
+      # <https://github.com/vadimcn/codelldb/tree/master/cmake>
+      rustPlatform = makeRustPlatform {
+        inherit stdenv cargo rustc;
+      };
 
+      inherit
+        pname
+        src
+        version
+        stdenv
+        cargoHash
+        codelldb-launch
+        ;
+    }
+  );
+
+  nodeDeps = (
+    callPackage ./node_deps.nix {
+      inherit
         pname
         src
         version
@@ -49,17 +64,32 @@ let
     }
   );
 
-  nodeDeps = (
-    import ./node_deps.nix {
-      inherit
-        buildNpmPackage
-        libsecret
-        pkg-config
-        python3
+  codelldb-types = (
+    callPackage ./codelldb-types.nix {
+      rustPlatform = makeRustPlatform {
+        inherit stdenv cargo rustc;
+      };
 
+      inherit
         pname
         src
         version
+        cargoHash
+        ;
+    }
+  );
+
+  codelldb-launch = (
+    callPackage ./codelldb-launch.nix {
+      rustPlatform = makeRustPlatform {
+        inherit stdenv cargo rustc;
+      };
+
+      inherit
+        pname
+        src
+        version
+        cargoHash
         ;
     }
   );
@@ -82,24 +112,24 @@ stdenv.mkDerivation {
     makeWrapper
     nodejs
     unzip
+    codelldb-types
+    codelldb-launch
   ];
 
   patches = [ ./patches/cmake-build-extension-only.patch ];
 
-  postPatch = ''
-    # temporary patch for forgotten version updates
-    substituteInPlace CMakeLists.txt \
-      --replace-fail "1.9.2" ${version}
+  # Make devDependencies available to tools/prep-package.js
+  preConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
   '';
 
-  postConfigure =
-    ''
-      cp -r ${nodeDeps}/lib/node_modules .
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      export HOME="$TMPDIR/home"
-      mkdir $HOME
-    '';
+  postConfigure = ''
+    cp -r ${nodeDeps}/lib/node_modules .
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export HOME="$TMPDIR/home"
+    mkdir $HOME
+  '';
 
   cmakeFlags = [
     # Do not append timestamp to version.
@@ -117,12 +147,17 @@ stdenv.mkDerivation {
 
     unzip ./codelldb-bootstrap.vsix 'extension/*' -d ./vsix-extracted
 
-    mkdir -p $ext/{adapter,formatters}
+    mkdir -p $ext/adapter
     mv -t $ext vsix-extracted/extension/*
     cp -t $ext/ -r ${adapter}/share/*
     wrapProgram $ext/adapter/codelldb \
       --prefix LD_LIBRARY_PATH : "$ext/lldb/lib" \
       --set-default LLDB_DEBUGSERVER_PATH "${adapter.lldbServer}"
+
+    # Used by VSCode
+    mkdir -p $ext/bin
+    cp ${codelldb-launch}/bin/codelldb-launch $ext/bin/codelldb-launch
+
     # Mark that all components are installed.
     touch $ext/platform.ok
 
@@ -137,7 +172,8 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    inherit lldb adapter;
+    inherit lldb;
+    adapter = adapter.override { standalone = true; };
     updateScript = ./update.sh;
   };
 

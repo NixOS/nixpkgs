@@ -5,17 +5,15 @@
   cmake,
   ninja,
   pkg-config,
-  tomlplusplus,
-  cli11,
   gtest,
   libei,
   libportal,
-  libX11,
+  libx11,
   libxkbfile,
-  libXtst,
-  libXinerama,
-  libXi,
-  libXrandr,
+  libxtst,
+  libxinerama,
+  libxi,
+  libxrandr,
   libxkbcommon,
   pugixml,
   python3,
@@ -29,17 +27,18 @@
   lerc,
   doxygen,
   writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.20.1";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
-    tag = "v${version}";
-    hash = "sha256-lX8K7HuC/Sxa5M0h+r5NmdFf032nVrE9JF6H+IBWPUA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IclKXYCvYHMK4e1z1efmOHUaJqnmZgofK5r6Ml+i5OI=";
   };
 
   postPatch = ''
@@ -64,17 +63,15 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
-    tomlplusplus
-    cli11
     gtest
     libei
     libportal
-    libX11
+    libx11
     libxkbfile
-    libXinerama
-    libXi
-    libXrandr
-    libXtst
+    libxinerama
+    libxi
+    libxrandr
+    libxtst
     libxkbcommon
     pugixml
     gdk-pixbuf
@@ -83,6 +80,8 @@ stdenv.mkDerivation rec {
     qt6.qtbase
     wayland-protocols
     qt6.qtwayland
+    qt6.qtdeclarative
+    qt6.qttools
     wayland
     libsysprof-capture
     lerc
@@ -100,21 +99,32 @@ stdenv.mkDerivation rec {
     runHook preCheck
 
     export QT_QPA_PLATFORM=offscreen
-    ./bin/unittests
-    ./bin/integtests
+    ./bin/legacytests
 
     runHook postCheck
   '';
+
+  postInstall = ''
+    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/deskflow/deskflow";
     description = "Share one mouse and keyboard between multiple computers on Windows, macOS and Linux";
     mainProgram = "deskflow";
-    maintainers = with lib.maintainers; [ ];
-    license = with lib; [
-      licenses.gpl2Plus
-      licenses.openssl
+    maintainers = with lib.maintainers; [ flacks ];
+    license = with lib.licenses; [
+      gpl2Plus
+      openssl
+      mit # share/applications/org.deskflow.deskflow.desktop
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

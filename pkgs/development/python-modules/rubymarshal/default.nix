@@ -2,30 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "rubymarshal";
-  version = "1.2.9";
+  version = "1.2.10";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-OqTbHV2duO4SmP6O9+tfaSD7fKOJ/PmzX5dUW9eoBBg=";
+    hash = "sha256-iZtG5khSANCHhY/1YpWIF2T/Umj2/fAbfsxOTgPT7Xw=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   # pypi doesn't distribute tests
   doCheck = false;
 
   pythonImportsCheck = [ "rubymarshal" ];
 
-  meta = with lib; {
+  meta = {
     description = "Read and write Ruby-marshalled data";
     homepage = "https://github.com/d9pouces/RubyMarshal/";
-    license = licenses.wtfpl;
-    maintainers = with maintainers; [ ryantm ];
+    license = lib.licenses.wtfpl;
+    maintainers = with lib.maintainers; [ ryantm ];
   };
 }

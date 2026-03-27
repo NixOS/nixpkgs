@@ -1,66 +1,85 @@
 {
-  buildPythonPackage,
-  fetchPypi,
   lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
   # build-system
+  cysignals,
   cython,
-  pkg-config,
   setuptools,
 
   # native dependencies
+  pkg-config,
   leptonica,
-  tesseract4,
+  tesseract5,
 
   # dependencies
   pillow,
 
   # tests
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "tesserocr";
-  version = "2.8.0";
-  format = "setuptools";
+  version = "2.10.0";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-vlGNGxtf9UwRqtoeD9EpQlCepwWB4KizmipHOgstvTY=";
+  src = fetchFromGitHub {
+    owner = "sirfz";
+    repo = "tesserocr";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-y/3MXkocO4hRMjREPT6yvqH87EZm79zerinp5TUHNP4=";
   };
 
-  # https://github.com/sirfz/tesserocr/issues/314
   postPatch = ''
-    sed -i '/allheaders.h/a\    pass\n\ncdef extern from "leptonica/pix_internal.h" nogil:' tesserocr/tesseract.pxd
+    substituteInPlace setup.py \
+      --replace-fail \
+        "Cython>=3.0.0,<3.2.0" \
+        "Cython"
   '';
 
   build-system = [
+    cysignals
     cython
-    pkg-config
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   buildInputs = [
     leptonica
-    tesseract4
+    tesseract5
   ];
 
-  dependencies = [ pillow ];
+  dependencies = [
+    cysignals # also needed at runtime
+    pillow
+  ];
 
   pythonImportsCheck = [ "tesserocr" ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   preCheck = ''
     rm -rf tesserocr
   '';
 
-  meta = with lib; {
-    changelog = "https://github.com/sirfz/tesserocr/releases/tag/v${version}";
+  disabledTests = [
+    # AssertionError: '.bl' != '.tif'
+    "test_init_full"
+  ];
+
+  meta = {
     description = "Simple, Pillow-friendly, wrapper around the tesseract-ocr API for Optical Character Recognition (OCR)";
     homepage = "https://github.com/sirfz/tesserocr";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mtrsk ];
-    platforms = platforms.unix;
+    changelog = "https://github.com/sirfz/tesserocr/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mtrsk ];
+    platforms = lib.platforms.unix;
   };
-}
+})

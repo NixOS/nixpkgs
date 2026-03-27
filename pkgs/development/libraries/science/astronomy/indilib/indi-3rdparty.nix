@@ -37,15 +37,17 @@
   limesuite,
   pkg-config,
   zeromq,
+  udevCheckHook,
 }:
 
 let
+  thirdparty_version = "2.1.9";
   fxload = libusb1.override { withExamples = true; };
   src-3rdparty = fetchFromGitHub {
     owner = "indilib";
     repo = "indi-3rdparty";
-    rev = "v${indilib.version}";
-    hash = "sha256-WYvinfAbMxgF5Q9iB/itQTMsVmG83lY45JriUo3kzFg=";
+    rev = "v${thirdparty_version}";
+    hash = "sha256-zHcJDbi+xsI1xDnZTFmUbk4GNGD8WqZUzf3hfSCmvpU=";
   };
 
   buildIndi3rdParty =
@@ -56,7 +58,7 @@ let
       cmakeFlags ? [ ],
       postInstall ? "",
       doCheck ? true,
-      version ? indilib.version,
+      version ? thirdparty_version,
       src ? src-3rdparty,
       meta ? { },
       ...
@@ -69,24 +71,25 @@ let
 
         sourceRoot = "${src.name}/${pname}";
 
-        cmakeFlags =
-          [
-            "-DCMAKE_INSTALL_LIBDIR=lib"
-            "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DINDI_DATA_DIR=share/indi/"
-          ]
-          ++ lib.optional doCheck [
-            "-DINDI_BUILD_UNITTESTS=ON"
-            "-DINDI_BUILD_INTEGTESTS=ON"
-          ]
-          ++ cmakeFlags;
+        cmakeFlags = [
+          "-DCMAKE_INSTALL_LIBDIR=lib"
+          "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DINDI_DATA_DIR=share/indi/"
+        ]
+        ++ lib.optional doCheck [
+          "-DINDI_BUILD_UNITTESTS=ON"
+          "-DINDI_BUILD_INTEGTESTS=ON"
+        ]
+        ++ cmakeFlags;
 
         nativeBuildInputs = [
           cmake
           ninja
           pkg-config
-        ] ++ nativeBuildInputs;
+          udevCheckHook
+        ]
+        ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
 
@@ -103,52 +106,35 @@ let
           ${postInstall}
         '';
 
+        doInstallCheck = true;
+
         meta =
-          with lib;
+
           {
             homepage = "https://www.indilib.org/";
             description = "Third party drivers for the INDI astronomical software suite";
             changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
-            license = licenses.lgpl2Plus;
-            maintainers = with maintainers; [
-              hjones2199
+            license = lib.licenses.lgpl2Plus;
+            maintainers = with lib.maintainers; [
               sheepforce
               returntoreality
             ];
-            platforms = platforms.linux;
+            platforms = lib.platforms.linux;
           }
           // meta;
       }
     );
 
-  libahp-gt = buildIndi3rdParty {
-    pname = "libahp-gt";
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
-    };
-  };
-
-  # broken: needs libdfu
-  libahp-xc = buildIndi3rdParty {
-    pname = "libahp-xc";
-    buildInputs = [
-      libusb-compat-0_1
-      urjtag
-      libftdi1
-    ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      broken = true;
-      platforms = [ ];
-    };
-  };
-
   libaltaircam = buildIndi3rdParty {
     pname = "libaltaircam";
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    meta = {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
@@ -159,11 +145,11 @@ let
       indilib
       libusb1
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     cmakeFlags = [ "-DCONF_DIR=etc/" ];
-    meta = with lib; {
-      license = licenses.mpl20;
-      platforms = platforms.linux;
+    meta = {
+      license = lib.licenses.mpl20;
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -171,6 +157,7 @@ let
     pname = "libasi";
 
     postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace 99-asi.rules \
         --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
         --replace-fail "/bin/sh" "${lib.getExe bash}" \
@@ -181,44 +168,72 @@ let
       libusb1
       (lib.getLib stdenv.cc.cc)
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = [
+        "i686-linux"
+        "x86_64-linux"
+        "armv6l-linux"
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+      ];
     };
   };
 
   libastroasis = buildIndi3rdParty {
     pname = "libastroasis";
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
     buildInputs = [ (lib.getLib stdenv.cc.cc) ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = [
+        "i686-linux"
+        "x86_64-linux"
+        "armv6l-linux"
+        "armv7l-linux"
+        "x86_64-darwin"
+      ];
     };
   };
 
   libatik = buildIndi3rdParty {
     pname = "libatik";
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
       systemd
       libdc1394
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ i686 ++ arm;
     };
   };
 
   libbressercam = buildIndi3rdParty {
     pname = "libbressercam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
-      license = licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
+      license = lib.licenses.unfreeRedistributable;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
@@ -234,9 +249,9 @@ let
       libusb1
     ];
 
-    meta = with lib; {
-      license = licenses.bsd2;
-      platforms = platforms.linux;
+    meta = {
+      license = lib.licenses.bsd2;
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -246,9 +261,9 @@ let
       indilib
       libusb1
     ];
-    meta = with lib; {
-      license = licenses.bsd2;
-      platforms = platforms.linux;
+    meta = {
+      license = lib.licenses.bsd2;
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -259,64 +274,100 @@ let
       libusb1
     ];
     nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+      platforms = [
+        "i686-linux"
+        "x86_64-linux"
+        "armv6l-linux"
+        "armv7l-linux"
+        "aarch64-linux"
+      ];
     };
   };
 
   libmallincam = buildIndi3rdParty {
     pname = "libmallincam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libmeadecam = buildIndi3rdParty {
     pname = "libmeadecam";
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
     buildInputs = [ libusb1 ];
-    meta = with lib; {
+    meta = {
       license = lib.licenses.lgpl21Only;
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 
   libmicam = buildIndi3rdParty {
     pname = "libmicam";
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
     buildInputs = [ libusb1 ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm ++ i686;
     };
   };
 
   libnncam = buildIndi3rdParty {
     pname = "libnncam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libogmacam = buildIndi3rdParty {
     pname = "libogmacam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libomegonprocam = buildIndi3rdParty {
     pname = "libomegonprocam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
@@ -324,8 +375,8 @@ let
   libpigpiod = buildIndi3rdParty {
     pname = "libpigpiod";
     buildInputs = [ indilib ];
-    meta = with lib; {
-      license = licenses.unlicense;
+    meta = {
+      license = lib.licenses.unlicense;
       broken = true;
       platforms = [ ];
     };
@@ -341,15 +392,17 @@ let
 
     buildInputs = [ indilib ];
 
-    meta = with lib; {
-      license = licenses.lgpl3Plus;
-      platforms = platforms.linux;
+    meta = {
+      license = lib.licenses.lgpl3Plus;
+      platforms = lib.platforms.linux;
     };
   };
 
   libplayerone = buildIndi3rdParty {
     pname = "libplayerone";
+
     postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace 99-player_one_astronomy.rules \
         --replace-fail "/bin/echo" "${lib.getBin coreutils}/bin/echo" \
         --replace-fail "/bin/sh" "${lib.getExe bash}"
@@ -360,10 +413,10 @@ let
       libusb1
       systemd
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
@@ -371,6 +424,7 @@ let
     pname = "libqhy";
 
     postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace CMakeLists.txt \
         --replace-fail "/lib/firmware" "lib/firmware"
 
@@ -388,11 +442,17 @@ let
       (lib.getLib stdenv.cc.cc)
       libusb1
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
-    meta = with lib; {
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = [
+        "x86_64-linux"
+        "armv6l-linux"
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+      ];
     };
   };
 
@@ -402,10 +462,10 @@ let
       libftdi1
       indilib
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = platforms.linux;
+      platforms = lib.platforms.linux;
     };
   };
 
@@ -415,10 +475,10 @@ let
       (lib.getLib stdenv.cc.cc)
       libusb1
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ i686 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ i686 ++ arm;
     };
   };
 
@@ -426,6 +486,7 @@ let
     pname = "libsbig";
 
     postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
       substituteInPlace CMakeLists.txt --replace-fail "/lib/firmware" "lib/firmware"
       substituteInPlace 51-sbig-debian.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
@@ -435,60 +496,92 @@ let
     '';
 
     buildInputs = [ libusb1 ];
-    nativeBuildInputs = [ autoPatchelfHook ];
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
 
-    meta = with lib; {
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libstarshootg = buildIndi3rdParty {
     pname = "libstarshootg";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libsvbony = buildIndi3rdParty {
     pname = "libsvbony";
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
     buildInputs = [
       (lib.getLib stdenv.cc.cc)
       libusb1
     ];
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm ++ i686;
+      platforms = [
+        "i686-linux"
+        "x86_64-linux"
+        "armv6l-linux"
+        "armv7l-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+      ];
     };
   };
 
   libsvbonycam = buildIndi3rdParty {
     pname = "libsvbonycam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libtoupcam = buildIndi3rdParty {
     pname = "libtoupcam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
   libtscam = buildIndi3rdParty {
     pname = "libtscam";
-    nativeBuildInputs = [ autoPatchelfHook ];
-    meta = with lib; {
+
+    postPatch = ''
+      sed -i '/FIX_MACOS_LIBRARIES/d' CMakeLists.txt
+    '';
+
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+    meta = {
       license = lib.licenses.unfreeRedistributable;
-      platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+      platforms = with lib.platforms; x86_64 ++ aarch64 ++ arm;
     };
   };
 
@@ -505,13 +598,12 @@ in
     buildInputs = [
       cfitsio
       indilib
-      libahp-xc
       libnova
       zlib
     ];
     meta = {
-      platforms = libahp-xc.meta.platforms;
-      # libahc-xc needs libdfu, which is not packaged
+      platforms = [ ];
+      # libahc-xc not packaged
       broken = true;
     };
   };
@@ -677,11 +769,9 @@ in
       indilib
       gsl
       gtest
-      libahp-gt
       libnova
       zlib
     ];
-    meta.platforms = libahp-gt.meta.platforms;
   };
 
   indi-ffmv = buildIndi3rdParty {
@@ -709,6 +799,7 @@ in
   indi-fli = buildIndi3rdParty {
     pname = "indi-fli";
     buildInputs = [
+      libusb1
       cfitsio
       indilib
       zlib

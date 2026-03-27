@@ -6,24 +6,22 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mprocs";
-  version = "0.7.2";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "pvolok";
     repo = "mprocs";
-    tag = "v${version}";
-    hash = "sha256-bNA+P6Mnhxi6YH5gAUwvAPN7STUvwDnU/r/ZBYwzgrw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UZFFeaesT71UQHPjiG2w5O2Ulyt86OVuFw7i3A7b91I=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-UnrwAff7Eer5Bpn2CTL2XOyM8J2Z2xofcH6d9eTr2yQ=";
+  cargoHash = "sha256-htgl0zh73oHXbc9E90xtb5jM8zhXvSJCE9DBhd1SH2E=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -33,13 +31,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "TUI tool to run multiple commands in parallel and show the output of each command separately";
     homepage = "https://github.com/pvolok/mprocs";
-    changelog = "https://github.com/pvolok/mprocs/releases/tag/v${version}";
+    changelog = "https://github.com/pvolok/mprocs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      GaetanLepage
-      pyrox0
-    ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;
     mainProgram = "mprocs";
   };
-}
+})

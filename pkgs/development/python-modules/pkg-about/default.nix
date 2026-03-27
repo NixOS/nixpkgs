@@ -3,25 +3,24 @@
   buildPythonPackage,
   docutils,
   fetchPypi,
-  pythonOlder,
   importlib-metadata,
   importlib-resources,
   setuptools,
   packaging,
+  typing-extensions,
+  appdirs,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pkg-about";
-  version = "1.2.11";
+  version = "2.0.12";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pkg_about";
     inherit version;
-    hash = "sha256-fm/b4Vm7YGTq+BXVltwRz42qXYULXL9KBCINB8mMuWI=";
+    hash = "sha256-WFhOMeBvAPaU/AIGoGlSziJ633TrGBgOcbfBxAm3H8E=";
   };
 
   # tox is listed in build requirements but not actually used to build
@@ -41,17 +40,21 @@ buildPythonPackage rec {
     importlib-resources
     packaging
     setuptools
+    typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    appdirs
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pkg_about" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python metadata sharing at runtime";
     homepage = "https://github.com/karpierz/pkg_about/";
     changelog = "https://github.com/karpierz/pkg_about/blob/${version}/CHANGES.rst";
-    license = licenses.zlib;
-    maintainers = teams.ororatech.members;
+    license = lib.licenses.zlib;
+    maintainers = with lib.maintainers; [ kip93 ];
   };
 }

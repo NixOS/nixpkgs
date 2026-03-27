@@ -7,26 +7,26 @@
   pytest-mock,
   pytestCheckHook,
   python3-openid,
-  pythonOlder,
   semantic-version,
+  setuptools,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "liccheck";
-  version = "0.9.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "0.9.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dhatim";
     repo = "python-license-check";
     tag = version;
-    hash = "sha256-2WJw5TVMjOr+GX4YV0nssOtQeYvDHBLnlWquJQWPL9I=";
+    hash = "sha256-ohq3ZsbZcyqhwmvaVF/+mo7lNde5gjbz8pwhzHi3SPY=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     configparser
     semantic-version
     toml
@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "liccheck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Check python packages from requirement.txt and report issues";
-    mainProgram = "liccheck";
     homepage = "https://github.com/dhatim/python-license-check";
-    changelog = "https://github.com/dhatim/python-license-check/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/dhatim/python-license-check/releases/tag/${src.tag}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "liccheck";
   };
 }

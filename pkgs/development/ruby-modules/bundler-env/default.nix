@@ -69,7 +69,7 @@ else
     bundlerEnvArgs = {
       inherit ignoreCollisions;
 
-      name = basicEnv.name;
+      inherit (basicEnv) pname version;
 
       paths = envPaths;
       pathsToLink = [ "/lib" ];
@@ -90,7 +90,8 @@ else
 
       meta = {
         platforms = ruby.meta.platforms;
-      } // meta;
+      }
+      // meta;
       passthru =
         basicEnv.passthru
         // {

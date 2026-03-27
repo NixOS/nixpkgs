@@ -7,14 +7,14 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "7.1.5";
   pname = "multitail";
 
   src = fetchFromGitHub {
     owner = "folkertvanheusden";
     repo = "multitail";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-c9NlQLgHngNBbADZ6/legWFaKHJAQR/LZIfh8bJoc4Y=";
   };
 
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/folkertvanheusden/multitail";
-    description = "tail on Steroids";
+    description = "tail on steroids";
     maintainers = with lib.maintainers; [ matthiasbeyer ];
     platforms = lib.platforms.unix;
     license = lib.licenses.asl20;
     mainProgram = "multitail";
   };
-}
+})

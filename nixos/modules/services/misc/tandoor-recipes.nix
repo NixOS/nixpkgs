@@ -7,31 +7,36 @@
 let
   cfg = config.services.tandoor-recipes;
   pkg = cfg.package;
+  stateDir = "/var/lib/tandoor-recipes";
+  useNewMediaRoot = lib.versionAtLeast config.system.stateVersion "26.05";
 
   # SECRET_KEY through an env file
-  env =
-    {
-      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-      DEBUG = "0";
-      DEBUG_TOOLBAR = "0";
-      MEDIA_ROOT = "/var/lib/tandoor-recipes";
-    }
-    // lib.optionalAttrs (config.time.timeZone != null) {
-      TZ = config.time.timeZone;
-    }
-    // (lib.mapAttrs (_: toString) cfg.extraConfig);
+  env = {
+    GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+    DEBUG = "0";
+    DEBUG_TOOLBAR = "0";
+    MEDIA_ROOT = "${stateDir}${lib.optionalString useNewMediaRoot "/media"}";
+  }
+  // lib.optionalAttrs (config.time.timeZone != null) {
+    TZ = config.time.timeZone;
+  }
+  // (lib.mapAttrs (_: toString) cfg.extraConfig);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
-    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
+    # UID is a read-only shell variable
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service | tr '[:upper:]' '[:lower:]')"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
+      -t $mainpid -m -S $uid -G $gid --wdns=${stateDir} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
 {
-  meta.maintainers = with lib.maintainers; [ jvanbruegge ];
+  meta = {
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+    doc = ./tandoor-recipes.md;
+  };
 
   options.services.tandoor-recipes = {
     enable = lib.mkOption {
@@ -88,9 +93,23 @@ in
     };
 
     package = lib.mkPackageOption pkgs "tandoor-recipes" { };
+
+    database = {
+      createLocally = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Configure local PostgreSQL database server for Tandoor Recipes.
+        '';
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
+    warnings = lib.mkIf (!useNewMediaRoot && !(cfg.extraConfig ? MEDIA_ROOT)) [
+      "`services.tandoor-recipes.extraConfig.MEDIA_ROOT` is unset. This is considered insecure for `system.stateVersion` < 26.05. See https://nixos.org/manual/nixos/unstable/#module-services-tandoor-recipes-migrating-media for migration instructions."
+    ];
+
     users.users = lib.mkIf (cfg.user == "tandoor_recipes") {
       tandoor_recipes = {
         inherit (cfg) group;
@@ -105,6 +124,9 @@ in
     systemd.services.tandoor-recipes = {
       description = "Tandoor Recipes server";
 
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
+      after = lib.optional cfg.database.createLocally "postgresql.target";
+
       serviceConfig = {
         ExecStart = ''
           ${pkg.python.pkgs.gunicorn}/bin/gunicorn recipes.wsgi
@@ -113,8 +135,11 @@ in
 
         User = cfg.user;
         Group = cfg.group;
-        StateDirectory = "tandoor-recipes";
-        WorkingDirectory = env.MEDIA_ROOT;
+        StateDirectory = [
+          "tandoor-recipes"
+        ]
+        ++ lib.optional (env.MEDIA_ROOT == "/var/lib/tandoor-recipes/media") "tandoor-recipes/media";
+        WorkingDirectory = stateDir;
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
@@ -169,6 +194,24 @@ in
       environment = env // {
         PYTHONPATH = "${pkg.python.pkgs.makePythonPath pkg.propagatedBuildInputs}:${pkg}/lib/tandoor-recipes";
       };
+    };
+
+    services.tandoor-recipes.extraConfig = lib.mkIf cfg.database.createLocally {
+      DB_ENGINE = "django.db.backends.postgresql";
+      POSTGRES_HOST = "/run/postgresql";
+      POSTGRES_USER = "tandoor_recipes";
+      POSTGRES_DB = "tandoor_recipes";
+    };
+
+    services.postgresql = lib.mkIf cfg.database.createLocally {
+      enable = true;
+      ensureDatabases = [ "tandoor_recipes" ];
+      ensureUsers = [
+        {
+          name = "tandoor_recipes";
+          ensureDBOwnership = true;
+        }
+      ];
     };
   };
 }

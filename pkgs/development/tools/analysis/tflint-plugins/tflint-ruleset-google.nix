@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "tflint-ruleset-google";
-  version = "0.31.0";
+  version = "0.39.0";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DMFIJ0ywR2goHad3SvUSbj5w2057HJ4k0pNbiR/Y0pI=";
+    hash = "sha256-Lzre5IMgf1K0S+932R8GqZHdrLp0eElvpxPpy93zNyo=";
   };
 
-  vendorHash = "sha256-plXiB1MTesjg54s0JZGdyf1hR159LlaewJhhyK7raZY=";
+  vendorHash = "sha256-mR9EBeADVFMpykd+CV0tjX95Mn8hJbszLFqNL204IuQ=";
 
   # upstream Makefile also does a go test $(go list ./... | grep -v integration)
   preCheck = ''
@@ -25,15 +25,21 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   postInstall = ''
+    # allow use as a versioned dependency, i.e., with `source = ...` and
+    # `version = ...` in `.tflintrc`:
     mkdir -p $out/github.com/terraform-linters/${pname}/${version}
     mv $out/bin/${pname} $out/github.com/terraform-linters/${pname}/${version}/
+
+    # allow use as an unversioned dependency, e.g., if one wants `.tflintrc` to
+    # solely rely on Nix to pin versions:
+    ln -s $out/github.com/terraform-linters/${pname}/${version}/${pname} $out/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/terraform-linters/tflint-ruleset-google";
     description = "TFLint ruleset plugin for Terraform Google Provider";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ john-rodewald ];
-    license = with licenses; [ mpl20 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ john-rodewald ];
+    license = with lib.licenses; [ mpl20 ];
   };
 }

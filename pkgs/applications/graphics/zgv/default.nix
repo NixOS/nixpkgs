@@ -11,11 +11,11 @@
   libtiff,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zgv";
   version = "5.9";
   src = fetchurl {
-    url = "https://www.svgalib.org/rus/zgv/${pname}-${version}.tar.gz";
+    url = "https://www.svgalib.org/rus/zgv/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1fk4i9x0cpnpn3llam0zy2pkmhlr2hy3iaxhxg07v9sizd4dircj";
   };
 
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
     cp src/zgv $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.svgalib.org/rus/zgv/";
     description = "Picture viewer with a thumbnail-based selector";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "zgv";
   };
-}
+})

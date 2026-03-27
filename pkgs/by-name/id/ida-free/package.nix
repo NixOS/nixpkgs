@@ -2,7 +2,7 @@
   autoPatchelfHook,
   cairo,
   dbus,
-  fetchurl,
+  requireFile,
   fontconfig,
   freetype,
   glib,
@@ -12,29 +12,39 @@
   libGL,
   libkrb5,
   libsecret,
-  libsForQt5,
   libunwind,
   libxkbcommon,
   makeWrapper,
   openssl,
   stdenv,
-  xorg,
+  libxcb-wm,
+  libxcb-render-util,
+  libxcb-keysyms,
+  libxcb-image,
+  libxcb-cursor,
+  libxrender,
+  libxi,
+  libxext,
+  libxau,
+  libx11,
+  libsm,
+  libice,
+  libxcb,
   zlib,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ida-free";
-  version = "9.0sp1";
+  version = "9.3";
 
-  src = fetchurl {
-    url = "https://archive.org/download/ida-free-pc_90sp1_x64linux/ida-free-pc_90sp1_x64linux.run";
-    hash = "sha256-e5uCcJVn6xDwmVm14QCBUvNcB1MpVxNA2WcLyuK23vo=";
+  src = requireFile {
+    name = "ida-free-pc_${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}_x64linux.run";
+    url = "https://my.hex-rays.com/dashboard/download-center/installers/release/${finalAttrs.version}/ida-free";
+    hash = "sha256-eSX6/nT9joEMs48qFq92qT8Qr25B38xy4FxxaPIOwLw=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     autoPatchelfHook
-    libsForQt5.wrapQtAppsHook
   ];
 
   # We just get a runfile in $src, so no need to unpack it.
@@ -52,28 +62,35 @@ stdenv.mkDerivation rec {
     libGL
     libkrb5
     libsecret
-    libsForQt5.qtbase
     libunwind
     libxkbcommon
     openssl
     stdenv.cc.cc
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libXau
-    xorg.libxcb
-    xorg.libXext
-    xorg.libXi
-    xorg.libXrender
-    xorg.xcbutilimage
-    xorg.xcbutilkeysyms
-    xorg.xcbutilrenderutil
-    xorg.xcbutilwm
+    libice
+    libsm
+    libx11
+    libxau
+    libxcb
+    libxext
+    libxi
+    libxrender
+    libxcb-image
+    libxcb-keysyms
+    libxcb-render-util
+    libxcb-wm
+    libxcb-cursor
     zlib
   ];
-  buildInputs = runtimeDependencies;
+  buildInputs = finalAttrs.runtimeDependencies;
 
-  dontWrapQtApps = true;
+  # IDA comes with its own Qt6, some dependencies are missing in the installer.
+  autoPatchelfIgnoreMissingDeps = [
+    "libQt6Network.so.6"
+    "libQt6EglFSDeviceIntegration.so.6"
+    "libQt6WaylandEglClientHwIntegration.so.6"
+    "libQt6WaylandCompositor.so.6"
+    "libQt6WlShellIntegration.so.6"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -83,7 +100,7 @@ stdenv.mkDerivation rec {
 
     # IDA depends on quite some things extracted by the runfile, so first extract everything
     # into $out/opt, then remove the unnecessary files and directories.
-    IDADIR=$out/opt
+    IDADIR=$out/opt/${finalAttrs.pname}-${finalAttrs.version}
 
     # The installer doesn't honor `--prefix` in all places,
     # thus needing to set `HOME` here.
@@ -100,11 +117,9 @@ stdenv.mkDerivation rec {
     # Some libraries come with the installer.
     addAutoPatchelfSearchPath $IDADIR
 
-    for bb in ida assistant; do
-      wrapProgram $IDADIR/$bb \
-        --prefix QT_PLUGIN_PATH : $IDADIR/plugins/platforms
-      ln -s $IDADIR/$bb $out/bin/$bb
-    done
+    # Wrap the ida executable to set QT_PLUGIN_PATH
+    wrapProgram $IDADIR/ida --prefix QT_PLUGIN_PATH : $IDADIR/plugins/platforms
+    ln -s $IDADIR/ida $out/bin/ida
 
     # runtimeDependencies don't get added to non-executables, and openssl is needed
     #  for cloud decompilation
@@ -116,14 +131,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Freeware version of the world's smartest and most feature-full disassembler";
     homepage = "https://hex-rays.com/ida-free/";
     changelog = "https://hex-rays.com/products/ida/news/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "ida";
-    maintainers = with maintainers; [ msanft ];
+    maintainers = with lib.maintainers; [ msanft ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})

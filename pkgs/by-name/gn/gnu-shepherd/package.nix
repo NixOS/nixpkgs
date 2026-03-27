@@ -7,13 +7,13 @@
   guile-fibers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-shepherd";
-  version = "1.0.3";
+  version = "1.0.9";
 
   src = fetchurl {
-    url = "mirror://gnu/shepherd/shepherd-${version}.tar.gz";
-    hash = "sha256-QOd561/9dvvoXN6VM9N/DamARihT4Bl0gWCT9VEL89g=";
+    url = "mirror://gnu/shepherd/shepherd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5IjFhchBjfbo9HbcqBtykQ8zfJzTYI+0Z95SYABAANY=";
   };
 
   configureFlags = [ "--localstatedir=/" ];
@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/shepherd/";
     description = "Service manager that looks after the herd of system services";
-    license = with licenses; [ gpl3Plus ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ kloenk ];
+    license = with lib.licenses; [ gpl3Plus ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ kloenk ];
   };
-}
+})

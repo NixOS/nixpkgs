@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "transifex-cli";
   version = "1.6.17";
 
   src = fetchFromGitHub {
     owner = "transifex";
     repo = "cli";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-jzAt/SalItGG0KI3GZb4/pT4T7oHwCji2bjNR1BTJXI=";
   };
 
@@ -20,7 +20,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X 'github.com/transifex/cli/internal/txlib.Version=${version}'"
+    "-X 'github.com/transifex/cli/internal/txlib.Version=${finalAttrs.version}'"
   ];
 
   postInstall = ''
@@ -30,11 +30,11 @@ buildGoModule rec {
   # Tests contain network calls
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Transifex command-line client";
     homepage = "https://github.com/transifex/cli";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ thornycrackers ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ thornycrackers ];
     mainProgram = "tx";
   };
-}
+})

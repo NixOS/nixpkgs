@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gfal2";
-  version = "2.23.0";
+  version = "2.23.5";
 
   src = fetchFromGitHub {
     owner = "cern-fts";
     repo = "gfal2";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-LEvmjd3A+7JHfUOAnyRyXMsJd/8JO2rVpcIT7QGSJoo=";
+    hash = "sha256-Dt6xA7U4aPKFZmO2iAiYM99w5ZIZNQJ+JXzuVItIlBM=";
   };
 
   passthru.enablePluginStatus = {
@@ -109,6 +109,36 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  preConfigure =
+    let
+      cmakeFiles = [
+        "CMakeLists.txt"
+        "src/CMakeLists.txt"
+        "src/core/CMakeLists.txt"
+        "src/core/transfer/CMakeLists.txt"
+        "src/plugins/CMakeLists.txt"
+        "src/plugins/dcap/CMakeLists.txt"
+        "src/plugins/file/CMakeLists.txt"
+        "src/plugins/gridftp/CMakeLists.txt"
+        "src/plugins/http/CMakeLists.txt"
+        "src/plugins/lfc/CMakeLists.txt"
+        "src/plugins/mock/CMakeLists.txt"
+        "src/plugins/rfio/CMakeLists.txt"
+        "src/plugins/sftp/CMakeLists.txt"
+        "src/plugins/srm/CMakeLists.txt"
+        "src/plugins/xrootd/CMakeLists.txt"
+        "src/utils/CMakeLists.txt"
+        "src/version/CMakeLists.txt"
+      ];
+    in
+    ''
+      for f in ${lib.escapeShellArgs cmakeFiles}; do
+        substituteInPlace "$f" \
+          --replace-fail 'cmake_minimum_required (VERSION 2.6)' \
+                         'cmake_minimum_required (VERSION 3.10)'
+      done
+    '';
+
   cmakeFlags =
     (map (
       pluginName:
@@ -131,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multi-protocol data management library by CERN";
     longDescription = ''
       GFAL (Grid File Access Library )
@@ -141,9 +171,9 @@ stdenv.mkDerivation (finalAttrs: {
       behind a simple common POSIX API.
     '';
     homepage = "https://github.com/cern-fts/gfal2";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ShamrockLee ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ShamrockLee ];
     mainProgram = "gfal2";
   };
 })

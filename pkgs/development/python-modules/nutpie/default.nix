@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
@@ -9,10 +10,13 @@
   rustc,
 
   # dependencies
+  arro3-core,
   arviz,
+  obstore,
   pandas,
   pyarrow,
   xarray,
+  zarr,
 
   # tests
   # bridgestan, (not packaged)
@@ -28,22 +32,21 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nutpie";
-  version = "0.14.3";
+  version = "0.16.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
-    tag = "v${version}";
-    hash = "sha256-l2TEGa9VVJmU4mKZwfUdhiloW6Bh41OqIQzTRvYK3eg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-OW638p0mUlzv9SSVwhixozFguh31fvc1FxIYsOJD1SI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-hPKT+YM9s7XZhI3sfnLBfokbGQhwDa9y5Fgg1TItO4M=";
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-4ENBTEBRpSDC6G0vDHx0BO8Kc4KOwnPBXAggSNBQ4tY=";
   };
 
   build-system = [
@@ -54,15 +57,14 @@ buildPythonPackage rec {
     rustc
   ];
 
-  pythonRelaxDeps = [
-    "xarray"
-  ];
-
   dependencies = [
+    arro3-core
     arviz
+    obstore
     pandas
     pyarrow
     xarray
+    zarr
   ];
 
   pythonImportsCheck = [ "nutpie" ];
@@ -81,6 +83,11 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # flaky (assert np.float64(0.0017554642626285276) > 0.01)
+    "test_normalizing_flow"
+  ];
+
   disabledTestPaths = [
     # Require unpackaged bridgestan
     "tests/test_stan.py"
@@ -89,8 +96,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python wrapper for nuts-rs";
     homepage = "https://github.com/pymc-devs/nutpie";
-    changelog = "https://github.com/pymc-devs/nutpie/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pymc-devs/nutpie/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

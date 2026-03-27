@@ -7,13 +7,13 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
-  version = "2.4.3";
+stdenv.mkDerivation (finalAttrs: {
+  version = "2.5.1";
   pname = "sshguard";
 
   src = fetchurl {
-    url = "mirror://sourceforge/sshguard/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZAKd7/bekP3u+x9JfUFPDkBFB2aTqR2hpw63WV6X7+s=";
+    url = "mirror://sourceforge/sshguard/sshguard-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-mXoeDsKyFltHV8QviUgWLrU0GDlGr1LvxAaIXZfLifw=";
   };
 
   doCheck = true;
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  meta = with lib; {
+  meta = {
     description = "Protects hosts from brute-force attacks";
     mainProgram = "sshguard";
     longDescription = ''
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       If an attack, such as several login failures within a few seconds, is detected, the offending IP is blocked.
     '';
     homepage = "https://sshguard.net";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sargon ];
-    platforms = with platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
+    license = lib.licenses.bsd3;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux ++ darwin ++ freebsd ++ netbsd ++ openbsd;
   };
-}
+})

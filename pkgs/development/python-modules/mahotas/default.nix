@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "mahotas";
-  version = "1.4.14";
+  version = "1.4.18";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
     tag = "v${version}";
-    hash = "sha256-9tjk3rhcfAYROZKwmwHzHAN7Ui0EgmxPErQyF//K0r8=";
+    hash = "sha256-NZOas2fL01QZhi6ebIkW0/jfviwiUl+AqjC7XmC4xH4=";
   };
 
   propagatedBuildInputs = [
@@ -49,14 +49,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mahotas" ];
 
-  disabled = stdenv.hostPlatform.isi686; # Failing tests
-
-  meta = with lib; {
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+  meta = {
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
+      # Failing tests
+      || stdenv.hostPlatform.isi686;
     description = "Computer vision package based on numpy";
     homepage = "https://mahotas.readthedocs.io/";
-    maintainers = with maintainers; [ luispedro ];
-    license = licenses.mit;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ luispedro ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

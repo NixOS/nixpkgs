@@ -9,20 +9,21 @@
   # tests
   pillow,
   pytestCheckHook,
+  syrupy,
 
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "textual-image";
-  version = "0.8.2";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lnqs";
     repo = "textual-image";
     tag = "v${version}";
-    hash = "sha256-ik/zvnxXN5u2jXHfsGsCLnymZZ+IQiixagOJdEMRDlw=";
+    hash = "sha256-gkLsM02oQ2H4UUhezbcmaOa2FQfzvFRsa0gd07eNucw=";
   };
 
   buildInputs = [ setuptools ];
@@ -34,11 +35,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "textual_image" ];
 
-  doCheck = false; # tests require [syrupy](https://github.com/syrupy-project/syrupy)
+  doCheck = true;
 
   meta = {
     description = "Render images in the terminal with Textual and rich";

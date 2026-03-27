@@ -3,28 +3,29 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  setuptools-scm,
   docutils,
   jinja2,
   nbconvert,
   nbformat,
   sphinx,
   traitlets,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.9.7";
+  version = "0.9.8";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-q9KYpobVX6iU72l8UdRPJOU6oxLa2uOOgpIPJQpUVv4=";
+    hash = "sha256-0HZZCDmajuK1e+euiBzy6ljWbbOve78z5utI+DvqVJU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     docutils
@@ -38,15 +39,15 @@ buildPythonPackage rec {
   # The package has not tests
   doCheck = false;
 
-  JUPYTER_PATH = "${nbconvert}/share/jupyter";
+  env.JUPYTER_PATH = "${nbconvert}/share/jupyter";
 
   pythonImportsCheck = [ "nbsphinx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Jupyter Notebook Tools for Sphinx";
     homepage = "https://nbsphinx.readthedocs.io/";
     changelog = "https://github.com/spatialaudio/nbsphinx/blob/${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

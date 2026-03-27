@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc15Stdenv,
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
@@ -15,18 +15,18 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  libXdmcp,
+  libxdmcp,
   debug ? false,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.4.3";
+  version = "0.4.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uxPknq5vuSl5h3kV1s+PzrCul2m8jgXcFEx/OMTchlg=";
+    hash = "sha256-7zYWeFIqdpvH5rQ0KF0dSyNaKghyTAXeEvhrgXiXCs8=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     wayland-scanner
-    libXdmcp
+    libxdmcp
   ];
 
   postInstall = ''
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.hyprland.members;
+    teams = [ lib.teams.hyprland ];
     platforms = wayland.meta.platforms;
     mainProgram = "hyprpicker";
   };

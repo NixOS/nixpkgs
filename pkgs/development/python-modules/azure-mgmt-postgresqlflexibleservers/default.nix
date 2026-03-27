@@ -7,18 +7,19 @@
   azure-common,
   azure-mgmt-core,
   isodate,
+  msrest,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-postgresqlflexibleservers";
-  version = "1.1.0";
+  version = "3.0.0b1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "azure_mgmt_postgresqlflexibleservers";
     inherit version;
-    hash = "sha256-nt6di6Y+nSh5y3StyQPGSa87xUYKAnhyh7DNGNdUrxQ=";
+    hash = "sha256-Vo1/vuxAAgVznCppDZCTygNFAMl5uopc3QbiEeFbLv8=";
   };
 
   build-system = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     azure-common
     azure-mgmt-core
     isodate
+    msrest
     typing-extensions
   ];
 
@@ -41,6 +43,6 @@ buildPythonPackage rec {
     description = "Microsoft Azure Postgresqlflexibleservers Management Client Library for Python";
     homepage = "https://pypi.org/project/azure-mgmt-postgresqlflexibleservers/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

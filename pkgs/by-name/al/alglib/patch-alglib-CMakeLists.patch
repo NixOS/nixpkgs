@@ -1,7 +1,7 @@
 --- /dev/null
 +++ b/CMakeLists.txt
 @@ -0,0 +1,20 @@
-+cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
 +
 +project(alglib3 CXX)
 +

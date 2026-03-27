@@ -2,88 +2,106 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nix-update-script,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   boto3,
+  langchain,
   langchain-core,
   numpy,
   pydantic,
 
+  # optional-dependencies
+  anthropic,
+  langchain-anthropic,
+
   # tests
   langchain-tests,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
+
+  # passthru
+  gitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "langchain-aws";
-  version = "0.2.15";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-aws";
-    tag = "v${version}";
-    hash = "sha256-tEkwa+rpitGxstci754JH5HCqD7+WX0No6ielJJnbxk=";
+    tag = "langchain-aws==${finalAttrs.version}";
+    hash = "sha256-1zeZsLff0dcn9rJZu6zR6l/oXvXPXNTqKo0Ma+cXafo=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "--snapshot-warn-unused" "" \
-      --replace-fail "--cov=langchain_aws" ""
-    substituteInPlace tests/unit_tests/{test_standard.py,chat_models/test_bedrock_converse.py} \
-      --replace-fail "langchain_standard_tests" "langchain_tests"
+      --replace-fail "--snapshot-warn-unused" ""
   '';
 
-  sourceRoot = "${src.name}/libs/aws";
+  sourceRoot = "${finalAttrs.src.name}/libs/aws";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     boto3
+    langchain
     langchain-core
     numpy
     pydantic
   ];
 
   pythonRelaxDeps = [
-    # Boto @ 1.35 has outstripped the version requirement
+    # Boto3 spec has outstripped the version requirement
     "boto3"
-    # Each component release requests the exact latest core.
-    # That prevents us from updating individul components.
-    "langchain-core"
   ];
 
-  nativeCheckInputs = [
-    langchain-tests
-    pytest-asyncio
-    pytestCheckHook
-  ];
-
-  pytestFlagsArray = [ "tests/unit_tests" ];
-
-  pythonImportsCheck = [ "langchain_aws" ];
-
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "^langchain-aws==([0-9.]+)$"
+  optional-dependencies = {
+    anthropic = [
+      anthropic.optional-dependencies.bedrock
+      langchain-anthropic
     ];
   };
 
+  nativeCheckInputs = [
+    anthropic
+    langchain-tests
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.passthru.optional-dependencies;
+
+  enabledTestPaths = [ "tests/unit_tests" ];
+
+  disabledTests = [
+    # Fails when langchain-core gets ahead of this package
+    "test_serdes"
+  ];
+
+  pythonImportsCheck = [ "langchain_aws" ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-aws==";
+    };
+  };
+
   meta = {
-    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/v${version}";
+    changelog = "https://github.com/langchain-ai/langchain-aws/releases/tag/${finalAttrs.src.tag}";
     description = "Build LangChain application on AWS";
     homepage = "https://github.com/langchain-ai/langchain-aws/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      drupol
       natsukium
       sarahec
     ];
   };
-}
+})

@@ -22,6 +22,7 @@
   huggingface-hub,
   mktestdocs,
   pytest,
+  scikit-image,
 
   # tests
   jaxlib,
@@ -30,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "minari";
-  version = "0.5.2";
+  version = "0.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
     tag = "v${version}";
-    hash = "sha256-7iIM1WGQRmhUh8idP/vtLnAbBncK6ezMyTvSAKW/9FE=";
+    hash = "sha256-LvJwp2dZdGPazJPWQtrk+v7zaPjOlomBu5j9avVdCcA=";
   };
 
   build-system = [
@@ -69,6 +70,7 @@ buildPythonPackage rec {
       # gymnasium-robotics
       mktestdocs
       pytest
+      scikit-image
     ];
   };
 
@@ -77,7 +79,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     jaxlib
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   disabledTests = [
     # Require internet access

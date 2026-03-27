@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "cloud-custodian";
   version = "0.9.38.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "cloud-custodian";
     repo = "cloud-custodian";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-jGWPwHiETS4+hk9euLLxs0PBb7mxz2PHCbYYlFfLQUw=";
   };
 
@@ -45,12 +45,11 @@ python3.pkgs.buildPythonApplication rec {
     $out/bin/custodian --help
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rules engine for cloud security, cost optimization, and governance";
     homepage = "https://cloudcustodian.io";
-    changelog = "https://github.com/cloud-custodian/cloud-custodian/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bhipple ];
+    changelog = "https://github.com/cloud-custodian/cloud-custodian/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.asl20;
     mainProgram = "custodian";
   };
-}
+})

@@ -3,9 +3,8 @@
   lib,
   git,
   fetchFromGitHub,
-  darwin,
+  pythonAtLeast,
   setuptools,
-  stdenv,
   git-annex,
   pyside6,
   pyqtdarktheme,
@@ -29,6 +28,11 @@ buildPythonPackage {
     hash = "sha256-8779SLcV4wwJ3124lteGzvimDxgijyxa818ZrumPMs4=";
   };
 
+  patches = [
+    # https://github.com/datalad/datalad-gooey/pull/441
+    ./setuptools.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -37,7 +41,7 @@ buildPythonPackage {
     datalad-next
     outdated
     datalad
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppleScriptKit ];
+  ];
 
   pythonRemoveDeps = [ "applescript" ];
 
@@ -50,6 +54,10 @@ buildPythonPackage {
     pytest-qt
     git
     git-annex
+  ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.14") [
+    "test_lsfiles"
   ];
 
   pythonImportsCheck = [ "datalad_gooey" ];

@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
   pybind11,
@@ -9,14 +11,17 @@
 
   # dependencies
   einops,
-  numpy,
   matplotlib,
+  numpy,
   pandas,
   pytorch-msssim,
   scipy,
+  tomli,
   torch,
   torch-geometric,
   torchvision,
+  tqdm,
+  typing-extensions,
 
   # optional-dependencies
   ipywidgets,
@@ -27,17 +32,17 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "compressai";
-  version = "1.2.6";
+  version = "1.2.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "InterDigitalInc";
     repo = "CompressAI";
-    tag = "v${version}";
-    hash = "sha256-xvzhhLn0iBzq3h1nro8/83QWEQe9K4zRa3RSZk+hy3Y=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-Fgobh7Q1rKomcqAT4kJl2RsM1W13ErO8sFB2urCqrCk=";
   };
 
   build-system = [
@@ -45,16 +50,22 @@ buildPythonPackage rec {
     setuptools
   ];
 
+  pythonRelaxDeps = [
+    "numpy"
+  ];
   dependencies = [
     einops
-    numpy
     matplotlib
+    numpy
     pandas
     pytorch-msssim
     scipy
+    tomli
     torch
     torch-geometric
     torchvision
+    tqdm
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -69,11 +80,9 @@ buildPythonPackage rec {
     "compressai._CXX"
   ];
 
+  # We have to delete the source because otherwise it is used intead the installed package.
   preCheck = ''
-    # We have to delete the source because otherwise it is used intead the installed package.
     rm -rf compressai
-
-    export HOME=$(mktemp -d)
   '';
 
   nativeCheckInputs = [
@@ -90,7 +99,23 @@ buildPythonPackage rec {
     "test_pretrained"
 
     # Flaky (AssertionError: assert 0.08889999999999998 < 0.064445)
+    "test_compiling"
     "test_find_close"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # AttributeError: '...' object has no attribute '__annotations__'
+    "test_gdn"
+    "test_gdn1"
+    "test_lower_bound_script"
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cause pytest to hang on Darwin after the tests are done
+    "tests/test_eval_model.py"
+    "tests/test_train.py"
+
+    # fails in sandbox as it tries to launch a web browser (which fails due to missing `osascript`)
+    "tests/test_plot.py::test_plot[plotly-ms-ssim-rgb]"
   ];
 
   meta = {
@@ -99,4 +124,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3Clear;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

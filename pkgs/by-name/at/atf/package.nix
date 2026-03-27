@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  darwin,
   fetchFromGitHub,
   fetchpatch,
   autoreconfHook,
@@ -8,27 +9,20 @@
   gitUpdater,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # atf is a dependency of libiconv. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
+  stdenv' = if stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   pname = "atf";
-  version = "0.22";
+  version = "0.23";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "atf";
     tag = "atf-${finalAttrs.version}";
-    hash = "sha256-vZfBk/lH+04d3NbTUYjAaxwGFHtnagl/kY04hgkE4Iw=";
+    hash = "sha256-g9cXeiCaiyGQXtg6eyrbRQpqk4VLGSFuhfPB+ynbDIo=";
   };
-
-  patches = [
-    # https://github.com/freebsd/atf/issues/88
-    # https://github.com/freebsd/atf/pull/85
-    # Maintainer say it fix some tests in issue 88.
-    ./pr-85.patch
-    (fetchpatch {
-      url = "https://github.com/freebsd/atf/commit/b42c98612cb99fa3f52766a46203263dc1de7187.patch?full_index=1";
-      hash = "sha256-goDPIdIF8vHXDengVIYbxw5W/JT5kfsG5japgtranas=";
-    })
-  ];
 
   postPatch =
     lib.optionalString finalAttrs.doInstallCheck ''
@@ -37,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'atf_test_program{name="srcdir_test"}' ""
     ''
     # These tests fail on Darwin.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isDarwin) ''
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv'.hostPlatform.isDarwin) ''
       substituteInPlace atf-c/detail/process_test.c \
         --replace-fail 'ATF_TP_ADD_TC(tp, status_coredump);' ""
     ''
     # This test fails on Linux.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isLinux) ''
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv'.hostPlatform.isLinux) ''
       substituteInPlace atf-c/detail/fs_test.c \
         --replace-fail 'ATF_TP_ADD_TC(tp, eaccess);' ""
     '';
@@ -63,6 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     kyua
   ];
+
+  # Don’t install the test programs for ATF itself; they’re useless
+  # other than as part of the `installCheckPhase`, and they contain
+  # non‐reproducible references to the build directory.
+  postInstall = ''
+    rm -r $out/tests
+  '';
 
   installCheckPhase = ''
     runHook preInstallCheck

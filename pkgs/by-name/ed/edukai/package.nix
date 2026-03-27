@@ -9,7 +9,6 @@ stdenvNoCC.mkDerivation rec {
   version = "5.0";
 
   src = fetchzip {
-    name = "${pname}-${version}";
     url = "https://language.moe.gov.tw/001/Upload/Files/site_content/M0001/edukai-${version}.zip";
     sha256 = "sha256-3+w9n6GJQg9+HfHYukC7tlm4GVs8vEOO23hrLw6qjTY=";
   };
@@ -20,7 +19,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Standard Kai Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
+    description = "MOE Standard Kai Font, a Chinese font by the Ministry of Education, ROC (Taiwan)";
     longDescription = ''
       The MOE Standard Kai Font is a kai (regular srcipt) font
       provided by

@@ -2,10 +2,10 @@
   lib,
   fetchFromGitHub,
   python3,
-  substituteAll,
+  replaceVars,
   fetchpatch,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "recon-ng";
   version = "5.1.2";
   pyproject = true;
@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "lanmaster53";
     repo = "recon-ng";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-W7pL4Rl86i881V53SAwECAMp2Qj/azPM3mdvxvt+gjc=";
   };
 
@@ -49,9 +49,8 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch =
     let
-      setup = substituteAll {
-        src = ./setup.py;
-        inherit pname version;
+      setup = replaceVars ./setup.py {
+        inherit (finalAttrs) pname version;
       };
     in
     ''
@@ -69,4 +68,4 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/lanmaster53/recon-ng/";
     maintainers = with lib.maintainers; [ gamedungeon ];
   };
-}
+})

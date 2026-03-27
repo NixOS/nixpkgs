@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   devtools,
   fastapi,
@@ -17,8 +17,6 @@ buildPythonPackage rec {
   pname = "prometheus-fastapi-instrumentator";
   version = "7.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "trallnag";
@@ -44,6 +42,9 @@ buildPythonPackage rec {
     requests
   ];
 
+  # numerous test failures on Darwin
+  doCheck = stdenv.hostPlatform.isLinux;
+
   pythonImportsCheck = [ "prometheus_fastapi_instrumentator" ];
 
   meta = {
@@ -55,6 +56,6 @@ buildPythonPackage rec {
       bsd3
     ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.linux; # numerous test failures on Darwin
+    platforms = lib.platforms.unix;
   };
 }

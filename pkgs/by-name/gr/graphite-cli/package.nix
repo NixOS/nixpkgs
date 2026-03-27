@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchurl,
   git,
@@ -8,14 +9,14 @@
 
 buildNpmPackage rec {
   pname = "graphite-cli";
-  version = "1.6.1";
+  version = "1.7.18";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@withgraphite/graphite-cli/-/graphite-cli-${version}.tgz";
-    hash = "sha256-r7tChs0vsg60LXFf9WZjthqMxXGgohNL4ojdjXNZcCo=";
+    hash = "sha256-IDj1hahbggDZTxOpy+UsCuqmIDFZ0Ud8IjYxhlp1zl8=";
   };
 
-  npmDepsHash = "sha256-DoK3GaGIwei9kumvAwfgaIY9iw+Z6ysFzUm5dMVV2W4=";
+  npmDepsHash = "sha256-6VYynLO3fH8B5MKcf7it/BGXBb7pLTD4NngjdzhJLso=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json
@@ -28,7 +29,7 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gt \
       --bash <($out/bin/gt completion) \
       --fish <(GT_PAGER= $out/bin/gt fish) \
@@ -44,6 +45,6 @@ buildNpmPackage rec {
     homepage = "https://graphite.dev/docs/graphite-cli";
     license = lib.licenses.unfree; # no license specified
     mainProgram = "gt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ joshheinrichs-shopify ];
   };
 }

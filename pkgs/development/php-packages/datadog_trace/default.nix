@@ -9,53 +9,48 @@
   curl,
   pcre2,
   libiconv,
-  darwin,
-  php,
 }:
 
 buildPecl rec {
   pname = "ddtrace";
-  version = "0.97.0";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-Kx2HaWvRT+mFIs0LAAptx6nm9DQ83QEuyHNcEPEr7A4=";
+    hash = "sha256-o9g0PT/EbBlB9h2FGyYJsKoNUcJIhGR0hv3owztcvcw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src;
-    hash = "sha256-cwhE6M8r8QnrIiNgEekI25GcKTByySrZsigPd9/Fq7o=";
+    hash = "sha256-vcM+iLpJiIxMqw/Xgq4E3hbY77+H1T1UkdJpUOO6dmo=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-O2";
 
-  nativeBuildInputs =
-    [
-      cargo
-      rustc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      rustPlatform.bindgenHook
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.rustPlatform.bindgenHook
-      darwin.apple_sdk_11_0.rustPlatform.cargoSetupHook
-    ];
+  # Fix double slashes in Makefile paths to prevent impure path errors during
+  # linking. The Makefile has /$(builddir)/components-rs/... but builddir is
+  # already absolute (/build/source), creating //build/source/... paths.
+  postConfigure = ''
+    substituteInPlace Makefile --replace-fail '/$(builddir)/components-rs' '$(builddir)/components-rs'
+  '';
 
-  buildInputs =
-    [
-      curl
-      pcre2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-      libiconv
-    ];
+  nativeBuildInputs = [
+    cargo
+    rustc
+    rustPlatform.bindgenHook
+    rustPlatform.cargoSetupHook
+  ];
+
+  buildInputs = [
+    curl
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   meta = {
     changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
@@ -65,7 +60,6 @@ buildPecl rec {
       asl20
       bsd3
     ];
-    maintainers = lib.teams.php.members;
-    broken = lib.versionAtLeast php.version "8.4";
+    teams = [ lib.teams.php ];
   };
 }

@@ -21,7 +21,6 @@ let
     ];
   configType = with types; attrsOf (nullOr (oneOrMore valueType));
 
-  toBool = val: if val then "yes" else "no";
   serialize =
     val:
     with types;
@@ -32,17 +31,22 @@ let
     else if path.check val then
       toString val
     else if bool.check val then
-      toBool val
+      boolToYesNo val
     else if builtins.isList val then
       (concatMapStringsSep "," serialize val)
     else
       "";
 
-  configDir = pkgs.writeTextDir "recursor.conf" (
-    concatStringsSep "\n" (flip mapAttrsToList cfg.settings (name: val: "${name}=${serialize val}"))
-  );
+  settingsFormat = pkgs.formats.yaml { };
 
   mkDefaultAttrs = mapAttrs (n: v: mkDefault v);
+
+  mkForwardZone = mapAttrsToList (
+    zone: uri: {
+      inherit zone;
+      forwarders = [ uri ];
+    }
+  );
 
 in
 {
@@ -159,7 +163,7 @@ in
       default = "validate";
       description = ''
         Controls the level of DNSSEC processing done by the PowerDNS Recursor.
-        See https://doc.powerdns.com/md/recursor/dnssec/ for a detailed explanation.
+        See <https://doc.powerdns.com/md/recursor/dnssec/> for a detailed explanation.
       '';
     };
 
@@ -176,7 +180,7 @@ in
     };
 
     settings = mkOption {
-      type = configType;
+      type = settingsFormat.type;
       default = { };
       example = literalExpression ''
         {
@@ -188,7 +192,7 @@ in
         PowerDNS Recursor settings. Use this option to configure Recursor
         settings not exposed in a NixOS option or to bypass one.
         See the full documentation at
-        <https://doc.powerdns.com/recursor/settings.html>
+        <https://doc.powerdns.com/recursor/yamlsettings.html>
         for the available options.
       '';
     };
@@ -205,41 +209,49 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc."pdns-recursor".source = configDir;
+    environment.etc."/pdns-recursor/recursor.yml".source =
+      settingsFormat.generate "recursor.yml" cfg.settings;
 
-    services.pdns-recursor.settings = mkDefaultAttrs {
-      local-address = cfg.dns.address;
-      local-port = cfg.dns.port;
-      allow-from = cfg.dns.allowFrom;
+    networking.resolvconf.useLocalResolver = lib.mkDefault true;
 
-      webserver-address = cfg.api.address;
-      webserver-port = cfg.api.port;
-      webserver-allow-from = cfg.api.allowFrom;
+    services.pdns-recursor.settings = {
+      incoming = mkDefaultAttrs {
+        listen = cfg.dns.address;
+        port = cfg.dns.port;
+        allow_from = cfg.dns.allowFrom;
+      };
 
-      forward-zones = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZones;
-      forward-zones-recurse = mapAttrsToList (zone: uri: "${zone}.=${uri}") cfg.forwardZonesRecurse;
-      export-etc-hosts = cfg.exportHosts;
-      dnssec = cfg.dnssecValidation;
-      serve-rfc1918 = cfg.serveRFC1918;
-      lua-config-file = pkgs.writeText "recursor.lua" cfg.luaConfig;
+      webservice = mkDefaultAttrs {
+        address = cfg.api.address;
+        port = cfg.api.port;
+        allow_from = cfg.api.allowFrom;
+      };
 
-      daemon = false;
-      write-pid = false;
-      log-timestamp = false;
-      disable-syslog = true;
+      recursor = mkDefaultAttrs {
+        forward_zones = mkForwardZone cfg.forwardZones;
+        forward_zones_recurse = mkForwardZone cfg.forwardZonesRecurse;
+        export_etc_hosts = cfg.exportHosts;
+        serve_rfc1918 = cfg.serveRFC1918;
+        lua_config_file = pkgs.writeText "recursor.lua" cfg.luaConfig;
+        daemon = false;
+        write_pid = false;
+      };
+
+      dnssec = mkDefaultAttrs {
+        validation = cfg.dnssecValidation;
+      };
+
+      logging = mkDefaultAttrs {
+        timestamp = false;
+        disable_syslog = true;
+      };
     };
 
     systemd.packages = [ pkgs.pdns-recursor ];
 
     systemd.services.pdns-recursor = {
+      restartTriggers = [ config.environment.etc."/pdns-recursor/recursor.yml".source ];
       wantedBy = [ "multi-user.target" ];
-
-      serviceConfig = {
-        ExecStart = [
-          ""
-          "${pkgs.pdns-recursor}/bin/pdns_recursor --config-dir=${configDir}"
-        ];
-      };
     };
 
     users.users.pdns-recursor = {
@@ -258,6 +270,35 @@ in
       "pdns-recursor"
       "extraConfig"
     ] "To change extra Recursor settings use services.pdns-recursor.settings instead.")
+
+    (mkRenamedOptionModule
+      [
+        "services"
+        "pdns-recursor"
+        "yaml-settings"
+      ]
+      [
+        "services"
+        "pdns-recursor"
+        "settings"
+      ]
+    )
+
+    (mkRemovedOptionModule
+      [
+        "services"
+        "pdns-recursor"
+        "old-settings"
+      ]
+      ''
+        pdns-recursor has changed its configuration file format from pdns-recursor.conf
+        (mapped to `services.pdns-recursor.old-settings`) to the newer pdns-recursor.yml
+        (mapped to `services.pdns-recursor.settings`).
+
+        Support for the older format has been removed, please migrate your settings over.
+        See <https://doc.powerdns.com/recursor/yamlsettings.html>.
+      ''
+    )
   ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

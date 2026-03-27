@@ -7,18 +7,21 @@
   gitMinimal,
   ripgrep,
   writableTmpDirAsHomeHook,
+
+  versionCheckHook,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "seagoat";
-  version = "0.54.6";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kantord";
     repo = "SeaGOAT";
-    tag = "v${version}";
-    hash = "sha256-KEFA1DUfsJpeNkWui/WKazImGCSwTFlPD8qsGFJNtr0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HdIvXXpMEynZV6J++kClNDubXuPORn6GEPHSD+UYBv0=";
   };
 
   build-system = [ python3Packages.poetry-core ];
@@ -26,6 +29,9 @@ python3Packages.buildPythonApplication rec {
   pythonRelaxDeps = [
     "chromadb"
     "psutil"
+    "setuptools"
+    "stop-words"
+    "ollama"
   ];
 
   dependencies = with python3Packages; [
@@ -42,6 +48,7 @@ python3Packages.buildPythonApplication rec {
     ollama
     psutil
     pygments
+    python-dotenv
     requests
     stop-words
     waitress
@@ -59,6 +66,7 @@ python3Packages.buildPythonApplication rec {
     ++ [
       gitMinimal
       ripgrep
+      versionCheckHook
       writableTmpDirAsHomeHook
     ];
 
@@ -80,12 +88,16 @@ python3Packages.buildPythonApplication rec {
       --prefix PATH : "${ripgrep}/bin"
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Local-first semantic code search engine";
     homepage = "https://kantord.github.io/SeaGOAT/";
-    changelog = "https://github.com/kantord/SeaGOAT/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/kantord/SeaGOAT/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ lavafroth ];
     mainProgram = "seagoat";
   };
-}
+})

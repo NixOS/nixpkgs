@@ -9,7 +9,7 @@
   llvmPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "aaphoto";
   version = "0.45";
 
@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/${pname}
+    install -Dm644 NEWS README REMARKS TODO -t $out/share/doc/aaphoto
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/log69/aaphoto";
     description = "Free and open source automatic photo adjusting software";
     longDescription = ''
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
       don't intend to spend a lot of time with manually correcting the images
       one-by-one.
     '';
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "aaphoto";
   };
 }

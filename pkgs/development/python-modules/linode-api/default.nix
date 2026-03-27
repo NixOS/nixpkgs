@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   polling,
@@ -14,17 +13,15 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.29.0";
+  version = "5.39.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
     tag = "v${version}";
-    hash = "sha256-9dDEEjY9ajh/eMuXTLkLVSGb38TOi3RDmRIf2vKknkI=";
+    hash = "sha256-WYPKq+WSEnqQdqZ0R8cUm7QYgE6EYtQ/NXdBfV2d8dI=";
   };
 
   build-system = [ setuptools ];

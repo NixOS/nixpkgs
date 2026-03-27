@@ -13,7 +13,7 @@ set -euo pipefail
 #   https://github.com/postgres/postgres/blob/7510ac6203bc8e3c56eae95466feaeebfc1b4f31/src/bin/pg_config/pg_config.sh
 #   https://github.com/postgres/postgres/blob/master/src/bin/pg_config/pg_config.c
 
-source @postgresql-dev@/nix-support/pg_config.env
+source @pg_config.env@
 
 help="
 pg_config provides information about the installed version of PostgreSQL.
@@ -70,7 +70,7 @@ for opt; do
         --mandir)               show+=("$MANDIR") ;;
         --sharedir)             show+=("$PGSHAREDIR") ;;
         --sysconfdir)           show+=("$SYSCONFDIR") ;;
-        --pgxs)                 show+=("@postgresql-dev@/lib/pgxs/src/makefiles/pgxs.mk") ;;
+        --pgxs)                 show+=("$PGXS") ;;
         --configure)            show+=("$CONFIGURE_ARGS") ;;
         --cc)                   show+=("$CC") ;;
         --cppflags)             show+=("$CPPFLAGS") ;;
@@ -108,7 +108,7 @@ LOCALEDIR = $LOCALEDIR
 MANDIR = $MANDIR
 SHAREDIR = $PGSHAREDIR
 SYSCONFDIR = $SYSCONFDIR
-PGXS = @postgresql-dev@/lib/pgxs/src/makefiles/pgxs.mk
+PGXS = $PGXS
 CONFIGURE = $CONFIGURE_ARGS
 CC = $CC
 CPPFLAGS = $CPPFLAGS

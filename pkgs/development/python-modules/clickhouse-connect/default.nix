@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   # build_requires
   cython,
@@ -24,17 +23,15 @@
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.8.16";
+  version = "0.10.0";
 
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
     tag = "v${version}";
-    hash = "sha256-qPlxgBWISd3hb2L5fgFDo1fREJ3DRgQeayzv9EkIVY0=";
+    hash = "sha256-D2D0sOFb0gcbLfMigYn0/GrT8zJav2Q6T39dONLxui4=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -50,13 +47,12 @@ buildPythonPackage rec {
     lz4
   ];
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-dotenv
-    ]
-    ++ optional-dependencies.sqlalchemy
-    ++ optional-dependencies.numpy;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-dotenv
+  ]
+  ++ optional-dependencies.sqlalchemy
+  ++ optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [
@@ -78,10 +74,10 @@ buildPythonPackage rec {
     orjson = [ orjson ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "ClickHouse Database Core Driver for Python, Pandas, and Superset";
     homepage = "https://github.com/ClickHouse/clickhouse-connect";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cpcloud ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cpcloud ];
   };
 }

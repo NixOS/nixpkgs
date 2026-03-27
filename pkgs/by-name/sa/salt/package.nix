@@ -10,14 +10,14 @@
   extraInputs ? [ ],
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "salt";
-  version = "3007.1";
+  version = "3007.13";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-uTOsTLPksRGLRtraVcnMa9xvD5S0ySh3rsRLJcaijJo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-xmOnOGy9R6/pSm2LCxrx/M3DUFnM7CuTMQ55IHBTRPs=";
   };
 
   patches = [
@@ -47,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3.pkgs;
     [
+      cryptography
       distro
       jinja2
       jmespath
@@ -64,18 +65,18 @@ python3.pkgs.buildPythonApplication rec {
     ++ extraInputs;
 
   # Don't use fixed dependencies on Darwin
-  USE_STATIC_REQUIREMENTS = "0";
+  env.USE_STATIC_REQUIREMENTS = "0";
 
   # The tests fail due to socket path length limits at the very least;
   # possibly there are more issues but I didn't leave the test suite running
   # as is it rather long.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://saltproject.io/";
-    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${version}.html";
+    changelog = "https://docs.saltproject.io/en/latest/topics/releases/${finalAttrs.version}.html";
     description = "Portable, distributed, remote execution and configuration management system";
-    maintainers = with maintainers; [ Flakebi ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
   };
-}
+})

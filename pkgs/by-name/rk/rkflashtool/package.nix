@@ -3,38 +3,31 @@
   stdenv,
   fetchurl,
   libusb1,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rkflashtool";
-  version = "5.1";
+  version = "6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rkflashtool/rkflashtool-${version}-src.tar.bz2";
-    sha256 = "0dbp1crw7pjav9gffrnskhkf0gxlj4xgp65clqhvfmv32460xb9c";
-  };
-
-  versionh = fetchurl {
-    url = "mirror://sourceforge/rkflashtool/version.h";
-    sha256 = "1mkcy3yyfaddhzg524hjnhvmwdmdfzbavib8d9p5y38pcqy8xgdp";
+    url = "mirror://sourceforge/rkflashtool/rkflashtool-${finalAttrs.version}-src.tar.bz2";
+    hash = "sha256-K8DsWAyqeQsK7mNDiKkRCkKbr0uT/yxPzj2atYP1Ezk=";
   };
 
   buildInputs = [ libusb1 ];
-
-  preBuild = ''
-    cp $versionh version.h
-  '';
+  nativeBuildInputs = [ pkg-config ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp rkunpack rkcrc rkflashtool rkparameters rkparametersblock rkunsign rkmisc $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/rkflashtool/";
     description = "Tools for flashing Rockchip devices";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
   };
-}
+})

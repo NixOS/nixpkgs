@@ -1,24 +1,24 @@
 {
   lib,
-  # broken with go 1.24 for some reason
-  buildGo123Module,
+  stdenv,
+  buildGoModule,
   fetchFromGitHub,
   gitMinimal,
   installShellFiles,
 }:
 
-buildGo123Module rec {
+buildGoModule (finalAttrs: {
   pname = "ko";
-  version = "0.17.1";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "ko-build";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-OQtYyokARrjaf0MWQ0sMqJPb+C5pRkKFumAmtxS4SBo=";
+    repo = "ko";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-o/Hin6GDFki1ynZ/rDQOhcNUTtQVvXZTAApxAaerRCU=";
   };
 
-  vendorHash = "sha256-YQggwX6fUsfZMM+GdgeNAIHkfX84FMF84xHsP/SNiS4=";
+  vendorHash = "sha256-gYDYKNLTmJT0JvQ4wi/5p/3YmaaS4Re/wFqZxRbRVpg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +30,7 @@ buildGo123Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/google/ko/pkg/commands.Version=${version}"
+    "-X github.com/google/ko/pkg/commands.Version=${finalAttrs.version}"
   ];
 
   checkFlags = [
@@ -56,16 +56,16 @@ buildGo123Module rec {
     unset GOOS GOARCH GOARM
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ko \
       --bash <($out/bin/ko completion bash) \
       --fish <($out/bin/ko completion fish) \
       --zsh <($out/bin/ko completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ko-build/ko";
-    changelog = "https://github.com/ko-build/ko/releases/tag/v${version}";
+    changelog = "https://github.com/ko-build/ko/releases/tag/v${finalAttrs.version}";
     description = "Build and deploy Go applications";
     mainProgram = "ko";
     longDescription = ''
@@ -74,12 +74,12 @@ buildGo123Module rec {
       ko builds images by effectively executing go build on your local machine, and as such doesn't require docker to be installed. This can make it a good fit for lightweight CI/CD use cases.
       ko makes multi-platform builds easy, produces SBOMs by default, and includes support for simple YAML templating which makes it a powerful tool for Kubernetes applications.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nickcao
       jk
       vdemeester
       developer-guy
     ];
   };
-}
+})

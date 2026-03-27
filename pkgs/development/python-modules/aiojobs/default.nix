@@ -1,33 +1,27 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
   pytest-aiohttp,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiojobs";
-  version = "1.3.0";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  version = "1.4.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiojobs";
     tag = "v${version}";
-    hash = "sha256-FNc71YyAjtR+hd0UOqFAy6XW0PwHSlM76C3ecPM5vsU=";
+    hash = "sha256-MgGUmDG0b0V/k+mCeiVRnBxa+ChK3URnGv6P8QP7RzQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   optional-dependencies = {
     aiohttp = [ aiohttp ];
@@ -37,7 +31,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-aiohttp
     pytest-cov-stub
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "aiojobs" ];
 
@@ -51,7 +46,7 @@ buildPythonPackage rec {
   meta = {
     description = "Jobs scheduler for managing background task (asyncio)";
     homepage = "https://github.com/aio-libs/aiojobs";
-    changelog = "https://github.com/aio-libs/aiojobs/blob/v${version}/CHANGES.rst";
+    changelog = "https://github.com/aio-libs/aiojobs/blob/${src.tag}/CHANGES.rst";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ cmcdragonkai ];
   };

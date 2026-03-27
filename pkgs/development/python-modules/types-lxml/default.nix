@@ -13,7 +13,6 @@
   pyright,
   pytestCheckHook,
   typeguard,
-  types-beautifulsoup4,
   types-html5lib,
   typing-extensions,
   urllib3,
@@ -21,21 +20,23 @@
 
 buildPythonPackage rec {
   pname = "types-lxml";
-  version = "2025.03.04";
+  version = "2026.01.01";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abelcheung";
     repo = "types-lxml";
     tag = version;
-    hash = "sha256-dA9sspqEChHarwk2LrK2F7Ehri2ffjOlGk3nj4KFsfU=";
+    hash = "sha256-odkIwuh2VxDliRd6cPTCBSz19zxIBOBlVN0Sisngkn0=";
   };
+
+  pythonRelaxDeps = [ "beautifulsoup4" ];
 
   build-system = [ pdm-backend ];
 
   dependencies = [
     cssselect
-    types-beautifulsoup4
+    beautifulsoup4
     types-html5lib
     typing-extensions
   ];
@@ -54,7 +55,8 @@ buildPythonPackage rec {
     pytestCheckHook
     typeguard
     urllib3
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "lxml-stubs" ];
 
@@ -71,13 +73,18 @@ buildPythonPackage rec {
   disabledTests = [
     "test_single_ns_all_tag_2"
     "test_default_ns"
+    # Tests require network access
+    "TestRelaxNGInput"
+    "TestXmldtdid"
+    "TestIddict"
+    "TestParseid"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Complete lxml external type annotation";
     homepage = "https://github.com/abelcheung/types-lxml";
     changelog = "https://github.com/abelcheung/types-lxml/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   cmake,
   libxml2,
@@ -16,11 +17,11 @@
   alsa-lib,
   speex,
   ilbc,
-  mkDerivation,
   bcg729,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "twinkle";
   version = "unstable-2024-20-11";
 
@@ -51,6 +52,7 @@ mkDerivation rec {
     bison
     flex
     bcg729
+    wrapQtAppsHook
   ];
 
   cmakeFlags = [
@@ -61,12 +63,12 @@ mkDerivation rec {
     # "-DWITH_DIAMONDCARD=On" seems ancient and broken
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/LubosD/twinkle/blob/${version}/NEWS";
     description = "SIP-based VoIP client";
     homepage = "http://twinkle.dolezel.info/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mkg20001 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.mkg20001 ];
+    platforms = lib.platforms.linux;
   };
 }

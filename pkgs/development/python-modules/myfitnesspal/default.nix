@@ -12,7 +12,6 @@
   mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   rich,
   setuptools,
@@ -24,12 +23,12 @@ buildPythonPackage rec {
   version = "2.1.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-eE807M8qFDlSMAcE+GFJyve1YfmlWmB3ML9VJhMUeIE=";
   };
+
+  pythonRelaxDeps = [ "typing-extensions" ];
 
   nativeBuildInputs = [ setuptools ];
 
@@ -74,6 +73,5 @@ buildPythonPackage rec {
     mainProgram = "myfitnesspal";
     homepage = "https://github.com/coddingtonbear/python-myfitnesspal";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bhipple ];
   };
 }

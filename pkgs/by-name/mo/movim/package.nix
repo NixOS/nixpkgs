@@ -6,7 +6,7 @@
   php,
   phpCfg ? null,
   withPostgreSQL ? true, # “strongly recommended” according to docs
-  withMySQL ? false,
+  withMariaDB ? false,
   minifyStaticFiles ? false, # default files are often not minified
   esbuild,
   lightningcss,
@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject2 (finalAttrs: {
   pname = "movim";
-  version = "0.30";
+  version = "0.32.1";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rW751UhDBhakOrAT4BOiRDPpGldf1EwNZY8iavXlpLk=";
+    hash = "sha256-1sNStxgvP8iaiINIa4UOFz8RGeQlFvJK5+RGlK/3Xa8=";
   };
 
   php = php.buildEnv (
@@ -71,7 +71,7 @@ php.buildComposerProject2 (finalAttrs: {
           all.pdo_pgsql
           all.pgsql
         ]
-        ++ lib.optionals withMySQL [
+        ++ lib.optionals withMariaDB [
           all.mysqli
           all.mysqlnd
           all.pdo_mysql
@@ -88,7 +88,7 @@ php.buildComposerProject2 (finalAttrs: {
     ++ lib.optional minify.style.enable lightningcss
     ++ lib.optional minify.svg.enable scour;
 
-  vendorHash = "sha256-NuX6CX2QXea8BcL0nzFOdxIBs36igD8lvixna+vsviM=";
+  vendorHash = "sha256-8tEs+kQGB0pmhEQndOOOUDTFkIq+OvyKTmi9YAvK6qc=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -100,8 +100,8 @@ php.buildComposerProject2 (finalAttrs: {
 
     # Point to PHP + PHP INI in the Nix store
     substituteInPlace src/Movim/Console/DaemonCommand.php \
-      --replace-fail "<info>php vendor/bin/phinx migrate</info>" \
-        "<info>${lib.getBin finalAttrs.php} vendor/bin/phinx migrate</info>" \
+      --replace-fail "<info>composer movim:migrate</info>" \
+        "<info>${lib.getBin finalAttrs.php.packages.composer} movim:migrate</info>" \
       --replace-fail "<info>php daemon.php setAdmin {jid}</info>" \
         "<info>${finalAttrs.meta.mainProgram} setAdmin {jid}</info>"
 
@@ -154,7 +154,7 @@ php.buildComposerProject2 (finalAttrs: {
     mkdir -p $out/bin
     cat << EOF > $out/bin/movim
     #!${lib.getExe dash}
-    ${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php "\$@"
+    ${lib.getExe finalAttrs.php} $out/share/php/movim/daemon.php "\$@"
     EOF
     chmod +x $out/bin/movim
 

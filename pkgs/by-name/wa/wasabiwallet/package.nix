@@ -8,7 +8,9 @@
   lttng-ust_2_12,
   fontconfig,
   openssl,
-  xorg,
+  libx11,
+  libsm,
+  libice,
   zlib,
 }:
 
@@ -19,19 +21,19 @@ let
     fontconfig.lib
     openssl
     (lib.getLib stdenv.cc.cc)
-    xorg.libX11
-    xorg.libICE
-    xorg.libSM
+    libx11
+    libice
+    libsm
     zlib
   ];
 in
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "2.5.1";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "https://github.com/WalletWasabi/WalletWasabi/releases/download/v${version}/Wasabi-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-DTgxLg8NwjHX085Ai6zxXgjL3x8ZHqVIpvxk/KRl+7w=";
+    sha256 = "sha256-o2e2NDG2aMrEYc/7x5iFex9oRlrQXeKIINuW80ZwWcI=";
   };
 
   dontBuild = true;
@@ -71,12 +73,12 @@ stdenv.mkDerivation rec {
     cp -v $desktopItem/share/applications/* $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Privacy focused Bitcoin wallet";
     homepage = "https://wasabiwallet.io/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ mmahut ];
+    maintainers = with lib.maintainers; [ mmahut ];
   };
 }

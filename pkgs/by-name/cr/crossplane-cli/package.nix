@@ -7,23 +7,23 @@
   crossplane-cli,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "crossplane-cli";
-  version = "1.19.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "crossplane";
     repo = "crossplane";
-    rev = "v${version}";
-    hash = "sha256-pQIiVdDWy3+PrqhvVHDwgGHHCQCYWtWt9ympc8QbBcE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SRqZKr/MTdfDwN5/mqWT5AcQAjNiCcbLyuTJCOcruzE=";
   };
 
-  vendorHash = "sha256-adf1CyrADCa4Uc4e4yWv47S/TIl5YUPJUox+/VlaMRA=";
+  vendorHash = "sha256-vilm41nN7Qhyu9LfVk6Me9hA3YAipLYGjhSU/JZhfEM=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/crossplane/crossplane/internal/version.version=v${version}"
+    "-X github.com/crossplane/crossplane/v2/internal/version.version=v${finalAttrs.version}"
   ];
 
   subPackages = [ "cmd/crank" ];
@@ -34,18 +34,18 @@ buildGoModule rec {
 
   passthru.tests.version = testers.testVersion {
     package = crossplane-cli;
-    command = "crossplane version || true";
-    version = "v${version}";
+    command = "crossplane version --client || true";
+    version = "v${finalAttrs.version}";
   };
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.crossplane.io/";
-    changelog = "https://github.com/crossplane/crossplane/releases/tag/v${version}";
+    changelog = "https://github.com/crossplane/crossplane/releases/tag/v${finalAttrs.version}";
     description = "Utility to make using Crossplane easier";
     mainProgram = "crossplane";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ selfuryon ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ selfuryon ];
   };
-}
+})

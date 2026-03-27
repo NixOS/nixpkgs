@@ -15,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pathspec";
   version = "0.12.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cpburnz/python-path-specification";
     changelog = "https://github.com/cpburnz/python-pathspec/blob/v${version}/CHANGES.rst";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ copumpkin ];
+    maintainers = [ ];
   };
 }

@@ -5,27 +5,26 @@
   poetry-core,
   pysigma,
   pytestCheckHook,
-  pythonOlder,
   requests,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pysigma-backend-sqlite";
-  version = "0.2.0";
+  version = "1.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = "pySigma-backend-sqlite";
-    tag = "v${version}";
-    hash = "sha256-PQByKARf0OOMC9LRTz3XVrFZp6ODSggMJeA6PNK/AuA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+QiRfuLdhRo8wlQG3EM2wGD1VhlauuMrbrX8NDflguA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "pysigma" ];
 
-  propagatedBuildInputs = [ pysigma ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ pysigma ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -34,11 +33,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.sqlite" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support sqlite for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-backend-sqlite";
-    changelog = "https://github.com/SigmaHQ/pySigma-backend-sqlite/releases/tag/v${version}";
-    license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/SigmaHQ/pySigma-backend-sqlite/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

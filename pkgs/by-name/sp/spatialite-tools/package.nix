@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   env = {
     NIX_LDFLAGS = toString [
+      "-lm"
       "-lxml2"
       (lib.optionalString stdenv.hostPlatform.isDarwin "-liconv")
     ];
@@ -67,7 +68,8 @@ stdenv.mkDerivation rec {
       lgpl21Plus
     ];
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ dotlambda ]);
+    maintainers = with lib.maintainers; [ dotlambda ];
+    teams = [ lib.teams.geospatial ];
     mainProgram = "spatialite_tool";
   };
 }

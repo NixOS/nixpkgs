@@ -7,6 +7,7 @@
 buildPythonPackage rec {
   pname = "meshlabxml";
   version = "2018.3";
+  format = "setuptools";
 
   src = fetchPypi {
     pname = "MeshLabXML";
@@ -20,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "meshlabxml" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/3DLIRIOUS/MeshLabXML";
     description = "Create and run MeshLab XML scripts with Python";
-    license = licenses.lgpl21;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ nh2 ];
   };
 }

@@ -1,12 +1,14 @@
 {
   lib,
   fetchFromGitLab,
-  fetchzip,
   cpio,
+  cups,
   ddcutil,
   easyeffects,
   gjs,
   glib,
+  gnome-menus,
+  gtk3,
   nautilus,
   gobject-introspection,
   gsound,
@@ -27,6 +29,9 @@
   vte,
   wrapGAppsHook3,
   xdg-utils,
+  gtk4,
+  desktop-file-utils,
+  xdg-user-dirs,
 }:
 let
   # Helper method to reduce redundancy
@@ -47,8 +52,32 @@ in
 # the upstream repository's sources.
 super:
 lib.trivial.pipe super [
+  (patchExtension "apps-menu@gnome-shell-extensions.gcampax.github.com" (old: {
+    patches = [
+      (replaceVars
+        ./extensionOverridesPatches/apps-menu_at_gnome-shell-extensions.gcampax.github.com.patch
+        {
+          gmenu_path = "${gnome-menus}/lib/girepository-1.0";
+        }
+      )
+    ];
+  }))
+
   (patchExtension "caffeine@patapon.info" (old: {
     meta.maintainers = with lib.maintainers; [ eperuffo ];
+  }))
+
+  (patchExtension "copyous@boerdereinar.dev" (old: {
+    buildInputs = [
+      libgda6
+      gsound
+    ];
+    preInstall = ''
+        sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${libgda6}/lib/girepository-1.0');\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/preferences/dependencies/dependencies.js
+      sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${libgda6}/lib/girepository-1.0');\n" lib/misc/db.js
+      sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/common/sound.js
+      sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${gsound}/lib/girepository-1.0');\n" lib/preferences/general/feedbackSettings.js
+    '';
   }))
 
   (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
@@ -69,6 +98,20 @@ lib.trivial.pipe super [
       patchShebangs "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
       wrapGApp "$out/share/gnome-shell/extensions/ddterm@amezin.github.com/bin/com.github.amezin.ddterm"
     '';
+  }))
+
+  (patchExtension "ding@rastersoft.com" (old: {
+    nativeBuildInputs = [ wrapGAppsHook3 ];
+    patches = [
+      (replaceVars ./extensionOverridesPatches/ding_at_rastersoft.com.patch {
+        inherit gjs;
+        util_linux = util-linux;
+        xdg_utils = xdg-utils;
+        gtk3_gsettings_path = glib.getSchemaPath gtk3;
+        nautilus_gsettings_path = glib.getSchemaPath nautilus;
+        typelib_path = "${gtk3}/lib/girepository-1.0";
+      })
+    ];
   }))
 
   (patchExtension "display-brightness-ddcutil@themightydeity.github.com" (old: {
@@ -111,16 +154,6 @@ lib.trivial.pipe super [
     ];
   }))
 
-  (patchExtension "gnome-shell-screenshot@ttll.de" (old: {
-    # Requires gjs
-    # https://github.com/NixOS/nixpkgs/issues/136112
-    postPatch = ''
-      for file in *.js; do
-        substituteInPlace $file --replace "gjs" "${gjs}/bin/gjs"
-      done
-    '';
-  }))
-
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
     nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [
@@ -128,7 +161,9 @@ lib.trivial.pipe super [
         inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
-        nautilus_gsettings_path = "${glib.getSchemaPath nautilus}";
+        gtk_update_icon_cache = "${gtk4.out}/bin/gtk4-update-icon-cache";
+        update_desktop_database = "${desktop-file-utils.out}/bin/update-desktop-database";
+        nautilus_gsettings_path = glib.getSchemaPath nautilus;
       })
     ];
   }))
@@ -165,21 +200,13 @@ lib.trivial.pipe super [
     }
   ))
 
-  (patchExtension "pano@elhan.io" (
-    final: prev: {
-      version = "23-alpha3";
-      src = fetchzip {
-        url = "https://github.com/oae/gnome-shell-pano/releases/download/v${final.version}/pano@elhan.io.zip";
-        hash = "sha256-LYpxsl/PC8hwz0ZdH5cDdSZPRmkniBPUCqHQxB4KNhc=";
-        stripRoot = false;
-      };
-      preInstall = ''
-        substituteInPlace extension.js \
-          --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
-          --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
-      '';
-    }
-  ))
+  (patchExtension "printers@linux-man.org" (old: {
+    patches = [
+      (replaceVars ./extensionOverridesPatches/printers_at_linux-man.org.patch {
+        inherit cups;
+      })
+    ];
+  }))
 
   (patchExtension "system-monitor@gnome-shell-extensions.gcampax.github.com" (old: {
     patches = [
@@ -217,4 +244,25 @@ lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
+
+  (patchExtension "pwcalc@thilomaurer.de" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm settings-importexport.ui
+    '';
+  })
+
+  (patchExtension "TeaTimer@zener.sbg.at" {
+    postPatch = ''
+      # remove unused dangling symlink
+      rm utilities-teatime.svg
+    '';
+  })
+
+  (patchExtension "named-workspaces@a31.at" {
+    postPatch = ''
+      # remove duplicate schema file
+      rm schemas/org.gnome.shell.extensions.workspace-name.gschema.xml
+    '';
+  })
 ]

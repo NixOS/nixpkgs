@@ -9,7 +9,6 @@
   oslo-utils,
   oslotest,
   pbr,
-  pythonOlder,
   setuptools,
   sphinxHook,
   stestr,
@@ -17,16 +16,14 @@
 
 buildPythonPackage rec {
   pname = "osc-placement";
-  version = "4.5.0";
+  version = "4.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-placement";
     tag = version;
-    hash = "sha256-PUwyYOg1dymlnnTr6TnxS42ISmbS00YfOdkL+5MbYFI=";
+    hash = "sha256-txxLtg3fDrkPqU0k/PlwvpJJBzVLtJXz82mhPWo+rKc=";
   };
 
   env.PBR_VERSION = version;
@@ -65,9 +62,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "osc_placement" ];
 
   meta = {
-    homepage = "https://opendev.org/openstack/osc-placement";
+    homepage = "https://github.com/openstack/osc-placement";
     description = "OpenStackClient plugin for the Placement service";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
 }

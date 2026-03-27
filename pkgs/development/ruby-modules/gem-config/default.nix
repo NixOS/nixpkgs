@@ -27,12 +27,11 @@
   libkrb5,
   libxml2,
   libxslt,
-  python2,
   stdenv,
   which,
   libiconv,
   libpq,
-  nodejs,
+  nodejs-slim,
   clang,
   sqlite,
   zlib,
@@ -46,6 +45,10 @@
   tzdata,
   icu,
   libffi,
+  libdeflate,
+  xz,
+  zstd,
+  libwebp,
   cmake,
   libssh2,
   openssl,
@@ -61,7 +64,9 @@
   libossp_uuid,
   lxc,
   libpcap,
-  xorg,
+  libxtst,
+  libxdmcp,
+  libpthread-stubs,
   gtk3,
   lerc,
   buildRubyGem,
@@ -87,6 +92,7 @@
   fribidi,
   harfbuzz,
   bison,
+  h3_3,
   flex,
   pango,
   python3,
@@ -104,7 +110,6 @@
   shared-mime-info,
   libthai,
   libdatrie,
-  CoreServices,
   DarwinTools,
   cctools,
   libtool,
@@ -120,6 +125,7 @@
   libsysprof-capture,
   imlib2,
   autoSignDarwinBinariesHook,
+  systemd,
 }@args:
 
 let
@@ -143,7 +149,8 @@ in
       rake
       bundler
       pkg-config
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       gobject-introspection
       wrapGAppsHook3
@@ -176,8 +183,8 @@ in
       glib
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -188,8 +195,8 @@ in
       expat
       libsysprof-capture
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
+      libpthread-stubs
+      libxdmcp
     ];
   };
 
@@ -332,7 +339,7 @@ in
 
   mini_racer = attrs: {
     buildFlags = [
-      "--with-v8-dir=\"${nodejs.libv8}\""
+      "--with-v8-dir=\"${nodejs-slim.libv8}\""
     ];
     dontBuild = false;
     postPatch = ''
@@ -373,7 +380,8 @@ in
       pkg-config
       bundler
       rake
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       gobject-introspection
       wrapGAppsHook3
@@ -386,7 +394,8 @@ in
       pkg-config
       bundler
       rake
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     propagatedBuildInputs = [
       gobject-introspection
       wrapGAppsHook3
@@ -405,18 +414,18 @@ in
     nativeBuildInputs = [
       pkg-config
       gobject-introspection
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs =
-      [
-        glib
-        libsysprof-capture
-        pcre2
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        util-linux
-        libselinux
-        libsepol
-      ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = [
+      glib
+      libsysprof-capture
+      pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux
+      libselinux
+      libsepol
+    ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -469,83 +478,42 @@ in
     meta.mainProgram = "rbprettier";
   };
 
-  prometheus-client-mmap =
-    attrs:
-    {
-      dontBuild = false;
-      postPatch =
-        let
-          getconf = if stdenv.hostPlatform.isGnu then stdenv.cc.libc else getconf;
-        in
-        ''
-          substituteInPlace lib/prometheus/client/page_size.rb --replace "getconf" "${lib.getBin getconf}/bin/getconf"
-        '';
-    }
-    // lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0") {
-      cargoDeps = rustPlatform.fetchCargoVendor {
-        src = stdenv.mkDerivation {
-          inherit (buildRubyGem { inherit (attrs) gemName version source; })
-            name
-            src
-            unpackPhase
-            nativeBuildInputs
-            ;
-          dontBuilt = true;
-          installPhase = ''
-            cp -R ext/fast_mmaped_file_rs $out
-            cp Cargo.lock $out
-          '';
-        };
-        hash = "sha256-KVbmDAa9EFwTUTHPF/8ZzycbieMhAuiidiz5rqGIKOo=";
-      };
-
-      nativeBuildInputs = [
-        cargo
-        rustc
-        rustPlatform.cargoSetupHook
-        rustPlatform.bindgenHook
-      ];
-
-      disallowedReferences = [
-        rustc.unwrapped
-      ];
-
-      preInstall = ''
-        export CARGO_HOME="$PWD/../.cargo/"
-      '';
-
-      postInstall = ''
-        find $out -type f -name .rustc_info.json -delete
-      '';
-    };
-
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
     buildInputs = [
       glib
       libsysprof-capture
       pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux
+      libselinux
+      libsepol
     ];
   };
 
   gtk3 = attrs: {
-    nativeBuildInputs =
-      [
-        binutils
-        pkg-config
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        util-linux
-        libselinux
-        libsepol
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    nativeBuildInputs = [
+      binutils
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux
+      libselinux
+      libsepol
+      systemd
+    ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
       fribidi
       gobject-introspection
       gtk3
+      libdeflate
+      xz
+      libwebp
+      zstd
       cairo
       harfbuzz
       lerc
@@ -553,9 +521,9 @@ in
       libsysprof-capture
       libthai
       pcre2
-      xorg.libpthreadstubs
-      xorg.libXdmcp
-      xorg.libXtst
+      libpthread-stubs
+      libxdmcp
+      libxtst
       libxkbcommon
       libepoxy
     ];
@@ -590,14 +558,15 @@ in
     };
 
   grpc = attrs: {
-    nativeBuildInputs =
-      [ pkg-config ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin cctools
-      ++ lib.optional (
-        lib.versionAtLeast attrs.version "1.53.0"
-        && stdenv.hostPlatform.isDarwin
-        && stdenv.hostPlatform.isAarch64
-      ) autoSignDarwinBinariesHook;
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin cctools
+    ++ lib.optional (
+      lib.versionAtLeast attrs.version "1.53.0"
+      && stdenv.hostPlatform.isDarwin
+      && stdenv.hostPlatform.isAarch64
+    ) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
     env = lib.optionalAttrs (lib.versionOlder attrs.version "1.68.1") {
@@ -614,23 +583,39 @@ in
       })
     ];
     dontBuild = false;
-    postPatch =
-      ''
-        substituteInPlace Makefile \
-          --replace '-Wno-invalid-source-encoding' ""
-      ''
-      + lib.optionalString (lib.versionOlder attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin) ''
-        # For < v1.48.0
-        substituteInPlace src/ruby/ext/grpc/extconf.rb \
-          --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
-        # For >= v1.48.0
-        substituteInPlace src/ruby/ext/grpc/extconf.rb \
-          --replace 'apple_toolchain = ' 'apple_toolchain = false && '
-      '';
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace '-Wno-invalid-source-encoding' ""
+    ''
+    + lib.optionalString (lib.versionOlder attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin) ''
+      # For < v1.48.0
+      substituteInPlace src/ruby/ext/grpc/extconf.rb \
+        --replace "ENV['AR'] = 'libtool -o' if RUBY_PLATFORM =~ /darwin/" ""
+      # For >= v1.48.0
+      substituteInPlace src/ruby/ext/grpc/extconf.rb \
+        --replace 'apple_toolchain = ' 'apple_toolchain = false && '
+    '';
   };
 
-  hitimes = attrs: {
-    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
+  h3 = attrs: {
+    # This gem attempts to build h3 using cmake, but fails because that is not in the path
+    # Use h3 from nixpkgs instead, and reduce closure size by deleting the h3 source code
+    dontBuild = false; # allow applying patches
+    postPatch = ''
+      substituteInPlace ext/h3/Makefile \
+        --replace-fail 'cd src; cmake . -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DBUILD_SHARED_LIBS=true -DBUILD_FILTERS=OFF -DBUILD_BENCHMARKS=OFF -DENABLE_LINTING=OFF; make' ':'
+      substituteInPlace lib/h3/bindings/base.rb \
+        --replace-fail '__dir__ + "/../../../ext/h3/src/lib"' '"${h3_3}/lib"'
+    '';
+    postInstall = ''
+      rm -rf $out/${ruby.gemPath}/gems/h3-${attrs.version}/ext/h3/src
+    '';
+  };
+
+  hiredis-client = attrs: {
+    buildInputs = [
+      openssl
+    ];
   };
 
   hpricot = attrs: {
@@ -639,6 +624,10 @@ in
       # Fix incompatible function pointer conversion errors with clang 16
       ./hpricot-fix-incompatible-function-pointer-conversion.patch
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   iconv = attrs: {
@@ -646,6 +635,7 @@ in
       "--with-iconv-dir=${lib.getLib libiconv}"
       "--with-iconv-include=${lib.getDev libiconv}/include"
     ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   idn-ruby = attrs: {
@@ -665,19 +655,18 @@ in
   };
 
   execjs = attrs: {
-    propagatedBuildInputs = [ nodejs.libv8 ];
+    propagatedBuildInputs = [ nodejs-slim.libv8 ];
   };
 
   libxml-ruby = attrs: {
-    buildFlags =
-      [
-        "--with-xml2-lib=${libxml2.out}/lib"
-        "--with-xml2-include=${libxml2.dev}/include/libxml2"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        "--with-iconv-dir=${lib.getLib libiconv}"
-        "--with-opt-include=${lib.getDev libiconv}/include"
-      ];
+    buildFlags = [
+      "--with-xml2-lib=${libxml2.out}/lib"
+      "--with-xml2-include=${libxml2.dev}/include/libxml2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--with-iconv-dir=${lib.getLib libiconv}"
+      "--with-opt-include=${lib.getDev libiconv}/include"
+    ];
   };
 
   mathematical = attrs: {
@@ -790,22 +779,21 @@ in
     attrs:
     (
       {
-        buildFlags =
-          [
-            "--use-system-libraries"
-            "--with-zlib-lib=${zlib.out}/lib"
-            "--with-zlib-include=${zlib.dev}/include"
-            "--with-xml2-lib=${libxml2.out}/lib"
-            "--with-xml2-include=${libxml2.dev}/include/libxml2"
-            "--with-xslt-lib=${libxslt.out}/lib"
-            "--with-xslt-include=${libxslt.dev}/include"
-            "--with-exslt-lib=${libxslt.out}/lib"
-            "--with-exslt-include=${libxslt.dev}/include"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            "--with-iconv-dir=${libiconv}"
-            "--with-opt-include=${libiconv}/include"
-          ];
+        buildFlags = [
+          "--use-system-libraries"
+          "--with-zlib-lib=${zlib.out}/lib"
+          "--with-zlib-include=${zlib.dev}/include"
+          "--with-xml2-lib=${libxml2.out}/lib"
+          "--with-xml2-include=${libxml2.dev}/include/libxml2"
+          "--with-xslt-lib=${libxslt.out}/lib"
+          "--with-xslt-include=${libxslt.dev}/include"
+          "--with-exslt-lib=${libxslt.out}/lib"
+          "--with-exslt-include=${libxslt.dev}/include"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          "--with-iconv-dir=${libiconv}"
+          "--with-opt-include=${libiconv}/include"
+        ];
       }
       // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
         buildInputs = [ libxml2 ];
@@ -850,23 +838,23 @@ in
   pango = attrs: {
     nativeBuildInputs = [
       pkg-config
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
-    buildInputs =
-      [
-        libdatrie
-        libthai
-        fribidi
-        harfbuzz
-        libsysprof-capture
-        pcre2
-        xorg.libpthreadstubs
-        xorg.libXdmcp
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libselinux
-        libsepol
-        util-linux
-      ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = [
+      libdatrie
+      libthai
+      fribidi
+      harfbuzz
+      libsysprof-capture
+      pcre2
+      libpthread-stubs
+      libxdmcp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libselinux
+      libsepol
+      util-linux
+    ];
     propagatedBuildInputs = [
       gobject-introspection
       wrapGAppsHook3
@@ -996,6 +984,7 @@ in
 
   ruby-lxc = attrs: {
     buildInputs = [ lxc ];
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   };
 
   ruby-terminfo = attrs: {
@@ -1018,6 +1007,9 @@ in
       cd "$(cat $out/nix-support/gem-meta/install-path)"
 
       substituteInPlace lib/vips.rb \
+        --replace 'FFI.library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'FFI.library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
+        --replace 'FFI.library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
         --replace 'library_name("vips", 42)' '"${lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}"' \
         --replace 'library_name("glib-2.0", 0)' '"${glib.out}/lib/libglib-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"' \
         --replace 'library_name("gobject-2.0", 0)' '"${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"'
@@ -1029,13 +1021,15 @@ in
       cmake
       pkg-config
       which
-    ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
     buildInputs = [
       openssl
       libssh2
       zlib
     ];
     dontUseCmakeConfigure = true;
+    buildFlags = [ "--with-ssh" ];
   };
 
   sassc = attrs: {
@@ -1127,6 +1121,13 @@ in
 
   treetop = attrs: {
     meta.mainProgram = "tt";
+  };
+
+  trilogy = attrs: {
+    postInstall = ''
+      installPath=$(cat "$out/nix-support/gem-meta/install-path")
+      ln -s contrib/ruby/trilogy.gemspec "$installPath/trilogy.gemspec"
+    '';
   };
 
   typhoeus = attrs: {

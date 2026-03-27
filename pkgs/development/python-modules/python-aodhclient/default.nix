@@ -1,39 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  cliff,
   fetchFromGitHub,
-  keystoneauth1,
-  openstackdocstheme,
+  pbr,
+  setuptools,
+
+  # direct
+  cliff,
   osc-lib,
   oslo-i18n,
   oslo-serialization,
   oslo-utils,
-  oslotest,
   osprofiler,
-  pbr,
+  keystoneauth1,
   pyparsing,
-  pythonOlder,
-  setuptools,
+
+  # tests
+  stestrCheckHook,
+  versionCheckHook,
+  openstacksdk,
+  oslotest,
+  tempest,
+  testtools,
+  pifpaf,
+
+  # docs
   sphinxHook,
-  stestr,
+  openstackdocstheme,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "python-aodhclient";
-  version = "3.6.0";
+  version = "3.10.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-aodhclient";
-    tag = version;
-    hash = "sha256-FArXBkDOY0Weu3Fm/M0Qgg0XHTy95MqlUidZ/hUZfB8=";
+    tag = finalAttrs.version;
+    hash = "sha256-xm42ZicdBxxm4LTDHPhEIeNU6evBZtp2PGvGy6V2t8c=";
   };
 
-  env.PBR_VERSION = version;
+  env.PBR_VERSION = finalAttrs.version;
 
   build-system = [
     pbr
@@ -46,6 +54,10 @@ buildPythonPackage rec {
   ];
 
   sphinxBuilders = [ "man" ];
+
+  patches = [
+    ./fix-pyproject.patch
+  ];
 
   dependencies = [
     cliff
@@ -60,23 +72,31 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    stestrCheckHook
+    openstacksdk
     oslotest
-    stestr
+    tempest
+    testtools
+    pifpaf
   ];
 
-  checkPhase = ''
-    runHook preCheck
-    stestr run
-    runHook postCheck
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  pythonImportsCheck = [ "aodhclient" ];
+  pythonImportsCheck = [
+    "aodhclient"
+    "aodhclient.v2"
+    "aodhclient.tests"
+    "aodhclient.tests.functional"
+    "aodhclient.tests.unit"
+  ];
 
   meta = {
-    homepage = "https://opendev.org/openstack/python-aodhclient";
-    description = "Client library for OpenStack Aodh API";
+    description = "Client library for OpenStack AOodh API";
+    homepage = "https://docs.openstack.org/python-aodhclient/latest/";
+    downloadPage = "https://github.com/openstack/python-aodhclientz /releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     mainProgram = "aodh";
-    maintainers = lib.teams.openstack.members;
+    teams = [ lib.teams.openstack ];
   };
-}
+})

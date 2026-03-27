@@ -4,15 +4,15 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "awslogs";
   version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jorgebastida";
-    repo = pname;
-    rev = version;
+    repo = "awslogs";
+    tag = finalAttrs.version;
     sha256 = "sha256-o6xZqwlqAy01P+TZ0rB5rpEddWNUBzzHp7/cycpcwes=";
   };
 
@@ -38,11 +38,11 @@ python3.pkgs.buildPythonApplication rec {
     "awslogs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AWS CloudWatch logs for Humans";
     mainProgram = "awslogs";
     homepage = "https://github.com/jorgebastida/awslogs";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dbrock ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dbrock ];
   };
-}
+})

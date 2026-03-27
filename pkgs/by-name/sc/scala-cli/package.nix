@@ -25,7 +25,8 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     installShellFiles
     makeWrapper
-  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs =
     assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
       scala-cli requires Java 17 or newer, but ${jre.name} is ${jre.version}
@@ -79,14 +80,14 @@ stdenv.mkDerivation {
         --zsh <(scala-cli completions zsh)
     '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://scala-cli.virtuslab.org";
     downloadPage = "https://github.com/VirtusLab/scala-cli/releases/v${version}";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.asl20;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     mainProgram = "scala-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       kubukoz
       agilesteel
     ];

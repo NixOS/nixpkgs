@@ -5,7 +5,9 @@
   desktop-file-utils,
   glib,
   gtk3,
+  gtk-layer-shell,
   intltool,
+  libxfce4windowing,
   meson,
   ninja,
   nix-update-script,
@@ -16,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop-view";
-  version = "1.3";
+  version = "10.10.2";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop-view";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-k6VfAGWvUarhBFnREasOvWH3M9uuT5SFUpMFmKo1fmE=";
+    hash = "sha256-XwfNbrK9+FCYtO2tiz5TfHsJmctFbcEaUORiVs/aynE=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     gtk3
+    gtk-layer-shell
+    libxfce4windowing
   ];
 
   mesonFlags = [ (lib.mesonBool "werror" false) ];
@@ -51,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop-view";
     changelog = "https://github.com/BuddiesOfBudgie/budgie-desktop-view/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.budgie.members;
+    teams = [ lib.teams.budgie ];
     mainProgram = "org.buddiesofbudgie.budgie-desktop-view";
     platforms = lib.platforms.linux;
   };

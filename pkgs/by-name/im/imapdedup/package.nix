@@ -3,16 +3,16 @@
   python3Packages,
   fetchFromGitHub,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "imapdedup";
-  version = "1.1";
+  version = "1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "quentinsf";
     repo = "IMAPdedup";
-    tag = version;
-    hash = "sha256-s49nnMjX1beZKTrlcjzp0nESIVRb/LZDycpnzz8fG+o=";
+    tag = finalAttrs.version;
+    hash = "sha256-CmWkLz9hdmedUxcojmUVTkPjqpaMmtEeHnF7aglKR+s=";
   };
 
   build-system = with python3Packages; [ hatchling ];
@@ -28,4 +28,4 @@ python3Packages.buildPythonApplication rec {
     license = with lib.licenses; [ gpl2Only ];
     mainProgram = "imapdedup";
   };
-}
+})

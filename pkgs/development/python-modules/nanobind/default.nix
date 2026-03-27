@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cmake,
@@ -25,20 +24,18 @@
 
   nanobind,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "nanobind";
-  version = "2.6.1";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wjakob";
     repo = "nanobind";
-    tag = "v${version}";
-    hash = "sha256-1CU5aRhiVPGXLVYZzOM8ELgRwa3hz7kQSwlTYsvFE7s=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-IsR3e6eWKXFtOXq8iZLpXgwrjXVqNnHtuiKdIbTsDlc=";
   };
-
-  disabled = pythonOlder "3.8";
 
   build-system = [
     cmake
@@ -61,18 +58,17 @@ buildPythonPackage rec {
     make -j $NIX_BUILD_CORES
   '';
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      numpy
-      scipy
-      torch
-    ]
-    ++ lib.optionals (!(builtins.elem stdenv.hostPlatform.system tensorflow-bin.meta.badPlatforms)) [
-      tensorflow-bin
-      jax
-      jaxlib
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    numpy
+    scipy
+    torch
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform tensorflow-bin) [
+    tensorflow-bin
+    jax
+    jaxlib
+  ];
 
   passthru.tests = {
     pytest = nanobind.overridePythonAttrs { doCheck = true; };
@@ -80,7 +76,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/wjakob/nanobind";
-    changelog = "https://github.com/wjakob/nanobind/blob/${src.tag}/docs/changelog.rst";
+    changelog = "https://github.com/wjakob/nanobind/blob/${finalAttrs.src.tag}/docs/changelog.rst";
     description = "Tiny and efficient C++/Python bindings";
     longDescription = ''
       nanobind is a small binding library that exposes C++ types in Python and
@@ -92,4 +88,4 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ parras ];
   };
-}
+})

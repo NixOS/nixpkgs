@@ -7,14 +7,14 @@
   testers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rinetd";
   version = "0.73";
 
   src = fetchFromGitHub {
     owner = "samhocevar";
     repo = "rinetd";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-W8PLGd3RwmBTh1kw3k8+ZfP6AzRhZORCkxZzQ9ZbPN4=";
   };
 
@@ -31,12 +31,12 @@ stdenv.mkDerivation rec {
     command = "rinetd --version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "TCP/UDP port redirector";
     homepage = "https://github.com/samhocevar/rinetd";
-    changelog = "https://github.com/samhocevar/rinetd/blob/${src.rev}/CHANGES.md";
-    license = licenses.gpl2Plus;
+    changelog = "https://github.com/samhocevar/rinetd/blob/${finalAttrs.src.rev}/CHANGES.md";
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "rinetd";
   };
-}
+})

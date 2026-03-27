@@ -4,6 +4,8 @@
   fetchFromGitHub,
   coreutils,
   bash,
+  nix-update-script,
+  fetchpatch,
 
   linuxManualConfig,
   fetchurl,
@@ -12,14 +14,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "u-root";
-  version = "0.14.0-unstable-2024-09-26";
+  version = "0.15.0-unstable-2026-02-12";
 
   src = fetchFromGitHub {
     owner = "u-root";
     repo = "u-root";
-    rev = "a620c4fc0eeeaa71ea68c27d6ef96352ed814829";
-    hash = "sha256-8B2H3AwGo9friveBk4bijOph9bSSNR7PPKJYEuywgm4=";
+    rev = "0f23b8374acf4f00b457c69c13c3fe73dd5bab86";
+    hash = "sha256-RwEegwzBpw0r0fPyNhB35hyaAcqSt8dUmYf2N5WrpQQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/u-root/u-root/commit/aeeb2aafd6a35416d5941b496e44a94594021424.patch";
+      hash = "sha256-h+b/s9NkreQfFWezEup1DpQjfyiJpHQGTD/RyKmkF8s=";
+    })
+  ];
 
   vendorHash = null;
 
@@ -52,10 +61,11 @@ buildGoModule (finalAttrs: {
       };
       allowImportFromDerivation = true;
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "A fully Go userland with Linux bootloaders";
+    description = "Fully Go userland with Linux bootloaders";
     longDescription = ''
       u-root can create a one-binary root file system (initramfs) containing a busybox-like set of tools written in Go.
 

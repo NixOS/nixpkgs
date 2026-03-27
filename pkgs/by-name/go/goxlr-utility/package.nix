@@ -8,21 +8,21 @@
   dbus,
   openssl,
   speechd-minimal,
+  udevCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "goxlr-utility";
-  version = "1.1.4";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "GoXLR-on-Linux";
     repo = "goxlr-utility";
-    rev = "v${version}";
-    hash = "sha256-aThIu+3eNHCKS6lsio7cLZeIMg0509qkE0YQ6M6vPAI=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-WPEk7rMfvwN3YyUfxu3wP09rfOZQ+GMPt1OAY5jEj8Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-EhqniqdgD95yUwiaqlA0vtRZfq4cR7wxsGPmjpvzgdI=";
+  cargoHash = "sha256-7s2P9kvYEfgVRFaOkkzsVHbgTaxodvG6bOw5/HTmvyI=";
 
   buildInputs = [
     libpulseaudio
@@ -35,15 +35,18 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     installShellFiles
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildFeatures = [ "tts" ];
+
+  doInstallCheck = true;
 
   postInstall = ''
     install -Dm644 "50-goxlr.rules" "$out/etc/udev/rules.d/50-goxlr.rules"
     install -Dm644 "daemon/resources/goxlr-utility.png" "$out/share/icons/hicolor/48x48/apps/goxlr-utility.png"
     install -Dm644 "daemon/resources/goxlr-utility.svg" "$out/share/icons/hicolor/scalable/apps/goxlr-utility.svg"
-    install -Dm644 "daemon/resources/goxlr-utility-large.png" "$out/share/pixmaps/goxlr-utility.png"
+    install -Dm644 "daemon/resources/goxlr-utility-large.png" "$out/share/icons/hicolor/128x128/apps/goxlr-utility.png"
     install -Dm644 "daemon/resources/goxlr-utility.desktop" "$out/share/applications/goxlr-utility.desktop"
     substituteInPlace $out/share/applications/goxlr-utility.desktop \
       --replace-fail /usr/bin $out/bin
@@ -58,10 +61,10 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh  $completions_dir/_goxlr-daemon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unofficial GoXLR App replacement for Linux, Windows and MacOS";
     homepage = "https://github.com/GoXLR-on-Linux/goxlr-utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [ errnoh ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ errnoh ];
   };
-}
+})

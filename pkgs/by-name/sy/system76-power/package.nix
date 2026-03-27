@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "system76-power";
-  version = "1.2.3";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "system76-power";
     tag = finalAttrs.version;
-    hash = "sha256-fyatAoWw/4ORojayA90er+H5weRykg+2ZzTsGThpW5g=";
+    hash = "sha256-tzcU31Q09y4f1RyacHWgE8Ymo2vhIpLDqiJ4PLKJyHQ=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -24,8 +24,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     libusb1
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/dhuWgHysJ2oWgJ6jc9u4tsUOxlFt/awlK/9Jk1GHCM=";
+  cargoHash = "sha256-S2tw/kae5EOVv1JqPwUrZvO54obTvy6hnf07OqBJ5DA=";
 
   postInstall = ''
     install -D -m 0644 data/com.system76.PowerDaemon.conf $out/etc/dbus-1/system.d/com.system76.PowerDaemon.conf

@@ -3,7 +3,21 @@
   lib,
   stdenv,
   squashfsTools,
-  xorg,
+  libxtst,
+  libxscrnsaver,
+  libxrender,
+  libxrandr,
+  libxi,
+  libxfixes,
+  libxext,
+  libxdamage,
+  libxcursor,
+  libxcomposite,
+  libx11,
+  libsm,
+  libice,
+  libxshmfence,
+  libxcb,
   alsa-lib,
   freetype,
   glib,
@@ -37,8 +51,8 @@
 let
   # determine these versions from
   # curl -H 'Snap-Device-Series: 16' http://api.snapcraft.io/v2/snaps/info/nordpass
-  version = "5.23.13";
-  snapVersion = "192";
+  version = "6.5.20";
+  snapVersion = "203";
   snapId = "00CQ2MvSr0Ex7zwdGhCYTa0ZLMw3H6hf";
   snapBaseUrl = "https://api.snapcraft.io/api/v1/snaps/download/";
 
@@ -70,21 +84,21 @@ let
     pango
     stdenv.cc.cc
     systemd
-    xorg.libICE
-    xorg.libSM
-    xorg.libX11
-    xorg.libxcb
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXScrnSaver
-    xorg.libxshmfence
-    xorg.libXtst
+    libice
+    libsm
+    libx11
+    libxcb
+    libxcomposite
+    libxcursor
+    libxdamage
+    libxext
+    libxfixes
+    libxi
+    libxrandr
+    libxrender
+    libxscrnsaver
+    libxshmfence
+    libxtst
     zlib
   ];
 
@@ -95,7 +109,7 @@ let
 
     src = fetchurl {
       url = "${snapBaseUrl}${snapId}_${snapVersion}.snap";
-      hash = "sha256-teqeeLzqLVL/l5WsTXlRj3GM0YMHm+Z2MWy4GE8s7k8=";
+      hash = "sha256-t78kbKVI9WAhL1+1qZ4tJWXUoXhXUCuUYobbbm09peA=";
     };
 
     nativeBuildInputs = [ squashfsTools ];
@@ -136,14 +150,14 @@ let
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       homepage = "https://nordpass.com/";
       description = "Secure and simple password manager for a stress-free online experience";
-      license = licenses.unfree;
+      license = lib.licenses.unfree;
       mainProgram = "nordpass";
-      maintainers = with maintainers; [ coconnor ];
+      maintainers = with lib.maintainers; [ coconnor ];
       platforms = [ "x86_64-linux" ];
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     };
   };
 in

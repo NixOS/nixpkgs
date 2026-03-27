@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   hatch-vcs,
   colorcet,
+  hypothesis,
   multipledispatch,
   numba,
   numpy,
@@ -24,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "datashader";
-  version = "0.17.0";
+  version = "0.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "holoviz";
     repo = "datashader";
     tag = "v${version}";
-    hash = "sha256-ZmVuDqmFTjq2cgnG+Eve07pynMkEyqFkLtNiCXSandA=";
+    hash = "sha256-Pc2mORxJA2JKioIzuBYU/LjUkij6ecqQh6tN/8z9ttI=";
   };
 
   build-system = [
@@ -60,6 +58,11 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-xdist
     writableTmpDirAsHomeHook
+    hypothesis
+  ];
+
+  disabledTestPaths = [
+    "scripts/download_data.py"
   ];
 
   pythonImportsCheck = [ "datashader" ];
@@ -68,7 +71,11 @@ buildPythonPackage rec {
     description = "Data visualization toolchain based on aggregating into a grid";
     mainProgram = "datashader";
     homepage = "https://datashader.org";
+    changelog = "https://github.com/holoviz/datashader/blob/${src.tag}/CHANGELOG.rst";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ nickcao ];
+    maintainers = with lib.maintainers; [
+      nickcao
+      locnide
+    ];
   };
 }

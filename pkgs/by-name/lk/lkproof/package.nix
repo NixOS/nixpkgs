@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   version = "3.1";
 
   src = fetchurl {
-    url = "http://mirror.ctan.org/macros/latex/contrib/lkproof.zip";
+    url = "https://mirror.ctan.org/macros/latex/contrib/lkproof.zip";
     sha256 = "1qjkjhpc4rm62qxn18r83zdlwnj1wvnkcpdiqlv7w4bakh0gvjly";
   };
 
@@ -21,8 +21,8 @@ stdenv.mkDerivation {
     cp -prd *.sty $out/share/texmf-nix/tex/generic/lkproof
   ";
 
-  meta = with lib; {
-    platforms = platforms.unix;
-    license = licenses.gpl1Plus;
+  meta = {
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl1Plus;
   };
 }

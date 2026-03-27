@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   autoreconfHook,
   openssl,
   protobufc,
@@ -10,15 +9,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "umurmur";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "umurmur";
     repo = "umurmur";
-    rev = version;
-    sha256 = "sha256-q5k1Lv+/Kz602QFcdb/FoWWaH9peAQIf7u1NTCWKTBM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pJRGyfG5y5wdB+zoWiJ1+2O1L3TThC6IairVDlE76tA=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -26,14 +25,6 @@ stdenv.mkDerivation rec {
     openssl
     protobufc
     libconfig
-  ];
-
-  patches = [
-    # https://github.com/umurmur/umurmur/issues/175
-    (fetchpatch {
-      url = "https://github.com/umurmur/umurmur/commit/2c7353eaabb88544affc0b0d32d2611994169159.patch";
-      hash = "sha256-Ws4Eqb6yI5Vnwfeu869hDtisi8NcobEK6dC7RWnWSJA=";
-    })
   ];
 
   configureFlags = [
@@ -47,14 +38,14 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimalistic Murmur (Mumble server)";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/umurmur/umurmur";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ _3JlOy-PYCCKUi ];
     mainProgram = "umurmurd";
   };
-}
+})

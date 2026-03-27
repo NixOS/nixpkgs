@@ -22,6 +22,10 @@ rec {
     linux-kernel.autoModules = false;
   };
 
+  ##
+  ## POWER
+  ##
+
   powernv = {
     linux-kernel = {
       name = "PowerNV";
@@ -29,16 +33,16 @@ rec {
       baseConfig = "powernv_defconfig";
       target = "vmlinux";
       autoModules = true;
-      # avoid driver/FS trouble arising from unusual page size
-      extraConfig = ''
-        PPC_64K_PAGES n
-        PPC_4K_PAGES y
-        IPV6 y
+    };
+  };
 
-        ATA_BMDMA y
-        ATA_SFF y
-        VIRTIO_MENU y
-      '';
+  ppc64 = {
+    linux-kernel = {
+      name = "powerpc64";
+
+      baseConfig = "ppc64_defconfig";
+      target = "vmlinux";
+      autoModules = true;
     };
   };
 
@@ -85,7 +89,6 @@ rec {
         BLK_DEV_DM m
         DM_CRYPT m
         MD y
-        REISERFS_FS m
         BTRFS_FS m
         XFS_FS m
         JFS_FS m
@@ -430,7 +433,6 @@ rec {
         BLK_DEV_DM m
         DM_CRYPT m
         MD y
-        REISERFS_FS m
         EXT4_FS m
         USB_STORAGE_CYPRESS_ATACB m
 
@@ -475,7 +477,6 @@ rec {
         FRAMEBUFFER_CONSOLE y
         EXT2_FS y
         EXT3_FS y
-        REISERFS_FS y
         MAGIC_SYSRQ y
 
         # The kernel doesn't boot at all, with FTRACE
@@ -572,6 +573,27 @@ rec {
     };
   };
 
+  loongarch64-multiplatform = {
+    gcc = {
+      # https://github.com/loongson/la-softdev-convention/blob/master/la-softdev-convention.adoc#10-operating-system-package-build-requirements
+      arch = "la64v1.0";
+      strict-align = false;
+      # Avoid text sections of large apps exceeding default code model
+      # Will be default behavior in LLVM 21 and hopefully GCC16
+      # https://github.com/loongson-community/discussions/issues/43
+      # https://github.com/llvm/llvm-project/pull/132173
+      cmodel = "medium";
+    };
+    linux-kernel = {
+      name = "loongarch-multiplatform";
+      target = "vmlinuz.efi";
+      autoModules = true;
+      preferBuiltin = true;
+      baseConfig = "defconfig";
+      DTB = true;
+    };
+  };
+
   # This function takes a minimally-valid "platform" and returns an
   # attrset containing zero or more additional attrs which should be
   # included in the platform in order to further elaborate it.
@@ -598,15 +620,20 @@ rec {
     else if platform.isAarch64 then
       if platform.isDarwin then apple-m1 else aarch64-multiplatform
 
+    else if platform.isLoongArch64 then
+      loongarch64-multiplatform
+
     else if platform.isRiscV then
       riscv-multiplatform
 
     else if platform.parsed.cpu == lib.systems.parse.cpuTypes.mipsel then
       (import ./examples.nix { inherit lib; }).mipsel-linux-gnu
 
-    else if platform.parsed.cpu == lib.systems.parse.cpuTypes.powerpc64le then
-      powernv
+    else if platform.isPower64 then
+      if platform.isLittleEndian then powernv else ppc64
 
+    else if platform.isLoongArch64 then
+      loongarch64-multiplatform
     else
       { };
 }

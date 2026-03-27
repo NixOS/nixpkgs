@@ -6,22 +6,23 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "php-codesniffer";
-  version = "3.12.2";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
     owner = "PHPCSStandards";
     repo = "PHP_CodeSniffer";
     tag = finalAttrs.version;
-    hash = "sha256-6bv5ejTsCAlSoCqtb7NOGVWJ9rYodAgl2zke+2x7ZaM=";
+    hash = "sha256-63W9GMTDrIIMWSieYjv+xAHEj9xjsnvXsUXQ1I7fQFo=";
   };
 
-  vendorHash = "sha256-z3DWMACau49Z46OiUw88y7aTuaFywbFquhjla90FS3E=";
+  vendorHash = "sha256-h+EVwPtIeXnVHEMCMYJFwuqeWXvZaYLTxrb/RKycIx0=";
 
   meta = {
     changelog = "https://github.com/PHPCSStandards/PHP_CodeSniffer/releases/tag/${finalAttrs.version}";
     description = "PHP coding standard tool";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/PHPCSStandards/PHP_CodeSniffer/";
-    maintainers = with lib.maintainers; [ javaguirre ] ++ lib.teams.php.members;
+    maintainers = with lib.maintainers; [ javaguirre ];
+    teams = [ lib.teams.php ];
   };
 })

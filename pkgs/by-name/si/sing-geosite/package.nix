@@ -41,13 +41,12 @@ buildGoModule (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm644 geosite.db $out/share/sing-box/geosite.db
     install -Dm644 rule-set/* -t $out/share/sing-box/rule-set
     runHook postInstall
   '';
 
   meta = {
-    description = "community managed domain list";
+    description = "Community managed domain list";
     homepage = "https://github.com/SagerNet/sing-geosite";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;

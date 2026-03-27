@@ -15,12 +15,12 @@
   jackSupport ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lingot";
   version = "1.1.1";
 
   src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/lingot/lingot-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-xPl+SWo2ZscHhtE25vLMxeijgT6wjNo1ys1+sNFvTVY=";
   };
 
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     fftw
     fftwFloat
     json_c
-  ] ++ lib.optional jackSupport libjack2;
+  ]
+  ++ lib.optional jackSupport libjack2;
 
   configureFlags = lib.optional (!jackSupport) "--disable-jack";
 
@@ -49,4 +50,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; linux;
     maintainers = [ ];
   };
-}
+})

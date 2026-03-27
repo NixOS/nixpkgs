@@ -7,7 +7,7 @@
   unzip,
   fpc,
   lazarus,
-  libX11,
+  libx11,
   glib,
   gtk2,
   gdk-pixbuf,
@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "transgui";
-  version = "5.18.0-unstable-2024-10-03";
+  version = "5.18.0-unstable-2026-02-24";
 
   src = fetchFromGitHub {
     owner = "transmission-remote-gui";
     repo = "transgui";
-    rev = "8854357ece266e749e8981a93c8002465a93d8f2";
-    hash = "sha256-8ycivjjPeXBdPbqNNlO2hcre6T9sFhqg6vUfCREtd8k=";
+    rev = "da71b860d4920f7ab847a48bd8d804725ddbad7b";
+    hash = "sha256-ZrzC0Pnf4HXC/XqOCzPfhAhfUvuchW2CgX3izfQAALo=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     fpc
     lazarus
     stdenv.cc
-    libX11
+    libx11
     glib
     gtk2
     gdk-pixbuf
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  NIX_LDFLAGS = ''
+  env.NIX_LDFLAGS = ''
     -L${lib.getLib stdenv.cc.cc}/lib -lX11 -lglib-2.0 -lgtk-x11-2.0
     -lgdk-x11-2.0 -lgdk_pixbuf-2.0 -lpango-1.0 -latk-1.0 -lcairo
     -lc -lcrypto
@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace restranslator.pas --replace /usr/ $out/
+
+    # Fix build with lazarus 4.0, https://github.com/transmission-remote-gui/transgui/issues/1486
+    substituteInPlace main.pas --replace-warn "h <> INVALID_HANDLE_VALUE" "h >= 0"
   '';
 
   preBuild = ''
@@ -68,7 +71,7 @@ stdenv.mkDerivation rec {
     "INSTALL_PREFIX=$(out)"
   ];
 
-  LCL_PLATFORM = "gtk2";
+  env.LCL_PLATFORM = "gtk2";
 
   desktopItem = makeDesktopItem {
     name = pname;
@@ -105,7 +108,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A cross platform front-end for the Transmission BitTorrent client";
+    description = "Cross platform front-end for the Transmission BitTorrent client";
     homepage = "https://sourceforge.net/p/transgui";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ramkromberg ];

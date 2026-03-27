@@ -4,16 +4,16 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "lacus";
-  version = "1.13.0";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "lacus";
-    tag = "v${version}";
-    hash = "sha256-5hADBSvbdazCMAbPya5H2iOl/sQjg6ixv7crJ2FlFpk=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fk6NfBdUGGyOhVOJcGCRNldcw4JRHFr7p+tFuccYp7Y=";
   };
 
   pythonRelaxDeps = [
@@ -36,11 +36,11 @@ python3.pkgs.buildPythonApplication rec {
     werkzeug
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Capturing system using playwright";
     homepage = "https://github.com/ail-project/lacus";
-    changelog = "https://github.com/ail-project/lacus/releases/tag/${src.tag}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/ail-project/lacus/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

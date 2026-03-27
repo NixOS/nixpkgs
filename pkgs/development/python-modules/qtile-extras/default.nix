@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  anyio,
   gobject-introspection,
   gtk3,
   imagemagick,
@@ -10,24 +11,28 @@
   pulseaudio,
   pytest-asyncio,
   pytest-lazy-fixture,
+  pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   qtile,
   requests,
   setuptools-scm,
-  xorgserver,
+  xorg-server,
+  nixosTests,
 }:
-
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "qtile-extras";
-  version = "0.29.0";
+  version = "0.35.0";
+  # nixpkgs-update: no auto update
+  # should be updated alongside with `qtile`
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
-    tag = "v${version}";
-    hash = "sha256-QkcLts2cqhA49/L9nuekf0n+ZRBxKdGL9Ql1sgtyTiw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xZ1pxe1EUnnjqz+46R4R9DWKi7M2j1pgvY4uy1dBak8=";
   };
 
   build-system = [ setuptools-scm ];
@@ -35,17 +40,20 @@ buildPythonPackage rec {
   dependencies = [ gtk3 ];
 
   nativeCheckInputs = [
+    anyio
     gobject-introspection
     imagemagick
     keyring
     pulseaudio
     pytest-asyncio
     pytest-lazy-fixture
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
     python-dateutil
     qtile
     requests
-    xorgserver
+    xorg-server
     # stravalib  # marked as broken due to https://github.com/stravalib/stravalib/issues/379
   ];
 
@@ -84,11 +92,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qtile_extras" ];
 
-  meta = with lib; {
+  passthru.tests.qtile-extras = nixosTests.qtile-extras;
+
+  meta = {
     description = "Extra modules and widgets for the Qtile tiling window manager";
     homepage = "https://github.com/elParaguayo/qtile-extras";
-    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${src.rev}/CHANGELOG";
-    license = licenses.mit;
-    maintainers = with maintainers; [ arjan-s ];
+    changelog = "https://github.com/elParaguayo/qtile-extras/blob/${finalAttrs.src.tag}/CHANGELOG";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ arjan-s ];
   };
-}
+})

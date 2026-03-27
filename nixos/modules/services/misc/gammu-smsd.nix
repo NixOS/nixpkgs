@@ -11,7 +11,7 @@ let
     [gammu]
     Device = ${cfg.device.path}
     Connection = ${cfg.device.connection}
-    SynchronizeTime = ${if cfg.device.synchronizeTime then "yes" else "no"}
+    SynchronizeTime = ${lib.boolToYesNo cfg.device.synchronizeTime}
     LogFormat = ${cfg.log.format}
     ${lib.optionalString (cfg.device.pin != null) "PIN = ${cfg.device.pin}"}
     ${cfg.extraConfig.gammu}
@@ -238,7 +238,7 @@ in
 
       wants =
         with cfg.backend;
-        [ ] ++ lib.optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.service" ];
+        [ ] ++ lib.optionals (service == "sql" && sql.driver == "native_pgsql") [ "postgresql.target" ];
 
       preStart =
         with cfg.backend;

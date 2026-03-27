@@ -5,7 +5,6 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  xorg,
   gtk2,
   sqlite,
   openal,
@@ -16,44 +15,57 @@
   libglvnd,
   pipewire,
   libpulseaudio,
-  dotnet-runtime_7,
+  dotnet-runtime_8,
+  x11Support ? true,
+  libxi,
+  libxcursor,
+  libx11,
+  waylandSupport ? false,
+  wayland ? null,
+  libxkbcommon ? null,
+  imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+assert x11Support || waylandSupport;
+assert waylandSupport -> wayland != null;
+assert waylandSupport -> libxkbcommon != null;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "vintagestory";
-  version = "1.20.6";
+  version = "1.21.6";
 
   src = fetchurl {
-    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-/4ITVd/vdQaM9uWgpp1//XF2W+HgEBKkZlGvW2csECk=";
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${finalAttrs.version}.tar.gz";
+    hash = "sha256-LkiL/8W9MKpmJxtK+s5JvqhOza0BLap1SsaDvbLYR0c=";
   };
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    imagemagick
   ];
 
-  buildInputs = [ dotnet-runtime_7 ];
-
-  runtimeLibs = lib.makeLibraryPath (
-    [
-      gtk2
-      sqlite
-      openal
-      cairo
-      libGLU
-      SDL2
-      freealut
-      libglvnd
-      pipewire
-      libpulseaudio
-    ]
-    ++ (with xorg; [
-      libX11
-      libXi
-      libXcursor
-    ])
-  );
+  runtimeLibs = [
+    gtk2
+    sqlite
+    openal
+    cairo
+    libGLU
+    SDL2
+    freealut
+    libglvnd
+    pipewire
+    libpulseaudio
+  ]
+  ++ lib.optionals x11Support [
+    libx11
+    libxi
+    libxcursor
+  ]
+  ++ lib.optionals waylandSupport [
+    wayland
+    libxkbcommon
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -64,43 +76,66 @@ stdenv.mkDerivation rec {
       comment = "Innovate and explore in a sandbox world";
       categories = [ "Game" ];
     })
+
+    (makeDesktopItem {
+      name = "vsmodinstall-handler";
+      desktopName = "Vintage Story 1-click Mod Install Handler";
+      comment = "Handler for vintagestorymodinstall:// URI scheme";
+      exec = "vintagestory -i %u";
+      mimeTypes = [ "x-scheme-handler/vintagestorymodinstall" ];
+      noDisplay = true;
+      terminal = false;
+    })
   ];
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/vintagestory $out/bin $out/share/pixmaps $out/share/fonts/truetype
+    mkdir -p $out/share/vintagestory $out/bin $out/share/icons/hicolor/512x512/apps $out/share/fonts/truetype
     cp -r * $out/share/vintagestory
-    cp $out/share/vintagestory/assets/gameicon.xpm $out/share/pixmaps/vintagestory.xpm
+    magick $out/share/vintagestory/assets/gameicon.xpm $out/share/icons/hicolor/512x512/apps/vintagestory.png
     cp $out/share/vintagestory/assets/game/fonts/*.ttf $out/share/fonts/truetype
 
     runHook postInstall
   '';
 
   preFixup =
+    let
+      runtimeLibs' = lib.strings.makeLibraryPath finalAttrs.runtimeLibs;
+    in
     ''
-      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
+        --set-default mesa_glthread true \
+        ${lib.strings.optionalString waylandSupport ''
+          --set-default OPENTK_4_USE_WAYLAND 1 \
+        ''} \
         --add-flags $out/share/vintagestory/Vintagestory.dll
-      makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+
+      makeWrapper ${lib.meta.getExe dotnet-runtime_8} $out/bin/vintagestory-server \
+        --prefix LD_LIBRARY_PATH : "${runtimeLibs'}" \
+        --set-default mesa_glthread true \
         --add-flags $out/share/vintagestory/VintagestoryServer.dll
-    ''
-    + ''
+
       find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
         local filename="$(basename -- "$file")"
         ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
       done
     '';
 
-  meta = with lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       artturin
       gigglesquid
-      niraethm
+      dtomvan
     ];
+    mainProgram = "vintagestory";
   };
-}
+})

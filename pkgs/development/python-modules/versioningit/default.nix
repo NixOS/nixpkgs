@@ -1,11 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
-  importlib-metadata,
   packaging,
-  tomli,
   pytestCheckHook,
   build,
   hatchling,
@@ -13,31 +10,30 @@
   pytest-cov-stub,
   pytest-mock,
   setuptools,
-  git,
+  gitMinimal,
   mercurial,
 }:
 
 buildPythonPackage rec {
   pname = "versioningit";
-  version = "3.1.2";
+  version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Tbg+2Z9WsH2DlAvuNEXKRsoSDRO2swTNtftE5apO3sA=";
+    hash = "sha256-uRrX1z5z0hIg5pVA8gIT8rcpofmzXATp4Tfq8o0iFNo=";
   };
+
+  postPatch = ''
+    substituteInPlace tox.ini \
+      --replace-fail "ignore:.*No source for code:coverage.exceptions.CoverageWarning" ""
+  '';
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [ packaging ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-
-  # AttributeError: type object 'CaseDetails' has no attribute 'model_validate_json'
-  doCheck = lib.versionAtLeast pydantic.version "2";
+  dependencies = [
+    packaging
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -47,23 +43,26 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     setuptools
-    git
+    gitMinimal
     mercurial
   ];
 
   disabledTests = [
     # wants to write to the Nix store
     "test_editable_mode"
+    # network access
+    "test_install_from_git_url"
+    "test_install_from_zip_url"
   ];
 
   pythonImportsCheck = [ "versioningit" ];
 
-  meta = with lib; {
-    description = "setuptools plugin for determining package version from VCS";
+  meta = {
+    description = "Setuptools plugin for determining package version from VCS";
     mainProgram = "versioningit";
     homepage = "https://github.com/jwodder/versioningit";
     changelog = "https://versioningit.readthedocs.io/en/latest/changelog.html";
-    license = licenses.mit;
-    maintainers = with maintainers; [ DeeUnderscore ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ DeeUnderscore ];
   };
 }

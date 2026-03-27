@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "20230902";
 
   src = fetchurl {
-    url = "https://groups.csail.mit.edu/mac/users/gjs/6946/mechanics-system-installation/native-code/${finalAttrs.pname}-src-${finalAttrs.version}.tar.gz";
+    url = "https://groups.csail.mit.edu/mac/users/gjs/6946/mechanics-system-installation/native-code/scmutils-src-${finalAttrs.version}.tar.gz";
     hash = "sha256-9/shOxoKwJ4uDTHmvXqhemgy3W+GUCmoqFm5e1t3W0M=";
   };
 

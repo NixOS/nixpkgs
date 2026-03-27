@@ -12,7 +12,7 @@
   syslinux ? null,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.14.4";
   pname = "wimlib";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ fuse3 ];
 
   src = fetchurl {
-    url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
+    url = "https://wimlib.net/downloads/wimlib-${finalAttrs.version}.tar.gz";
     hash = "sha256-NjPbK2yLJV64bTvz3zBZeWvR8I5QuMlyjH62ZmLlEwA=";
   };
 
@@ -61,15 +61,15 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wimlib.net";
     description = "Library and program to extract, create, and modify WIM files";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl3
       mit
     ];
   };
-}
+})

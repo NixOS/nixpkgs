@@ -2,41 +2,36 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rune";
-  version = "0.13.4";
+  version = "0.14.1";
 
   src = fetchCrate {
     pname = "rune-cli";
-    inherit version;
-    hash = "sha256-+2eXTkn9yOMhvS8cFwAorLBNIPvIRwsPOsGCl3gtRSE=";
+    inherit (finalAttrs) version;
+    hash = "sha256-Y/iCH6hwYRhDnu+lPVcJd2YaK3c4YJbfp9VEP1/c1ic=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-SgfgoMqr2Cc7+qhf9Ejl4Ect1JR9RqI9I0b+PrdvdOs=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  cargoHash = "sha256-Xp87BvDh3uPtvUMmG1R8g6lEZcf/frEHVXdQ/+kV5OI=";
 
   env = {
-    RUNE_VERSION = version;
+    RUNE_VERSION = finalAttrs.version;
   };
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Interpreter for the Rune Language, an embeddable dynamic programming language for Rust";
     homepage = "https://rune-rs.github.io/";
-    changelog = "https://github.com/rune-rs/rune/releases/tag/${version}";
-    license = with licenses; [
+    changelog = "https://github.com/rune-rs/rune/releases/tag/${finalAttrs.version}";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "rune";
   };
-}
+})

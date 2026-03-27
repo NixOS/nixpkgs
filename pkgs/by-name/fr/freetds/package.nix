@@ -6,37 +6,42 @@
   pkg-config,
   openssl,
   odbcSupport ? true,
-  unixODBC ? null,
+  unixodbc ? null,
 }:
 
-assert odbcSupport -> unixODBC != null;
+assert odbcSupport -> unixodbc != null;
 
 # Work is in progress to move to cmake so revisit that later
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freetds";
-  version = "1.4.26";
+  version = "1.5.6";
 
   src = fetchurl {
-    url = "https://www.freetds.org/files/stable/${pname}-${version}.tar.bz2";
-    hash = "sha256-dGQaZswr+uMCwqZKSyaKPbj7DMc2TceXXETFfWXNjRw=";
+    url = "https://www.freetds.org/files/stable/freetds-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-2twI5prvFFI/2u4JFw1Z2vG2QT6NWFjQnJSWZ0ugjFc=";
   };
+
+  patches = [
+    ./gettext-0.25.patch
+  ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optional odbcSupport unixODBC;
+  ]
+  ++ lib.optional odbcSupport unixodbc;
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
     homepage = "https://www.freetds.org";
-    changelog = "https://github.com/FreeTDS/freetds/releases/tag/v${version}";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.all;
+    changelog = "https://github.com/FreeTDS/freetds/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.all;
   };
-}
+})

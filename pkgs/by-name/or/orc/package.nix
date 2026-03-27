@@ -23,7 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional buildDevDoc "devdoc";
+  ]
+  ++ lib.optional buildDevDoc "devdoc";
   outputBin = "dev"; # compilation tools
 
   src = fetchurl {
@@ -40,16 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "gtk_doc" buildDevDoc)
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-    ]
-    ++ lib.optionals buildDevDoc [
-      gtk-doc
-      file
-      docbook-xsl-nons
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ]
+  ++ lib.optionals buildDevDoc [
+    gtk-doc
+    file
+    docbook-xsl-nons
+  ];
 
   # https://gitlab.freedesktop.org/gstreamer/orc/-/issues/41
   doCheck =
@@ -66,17 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
     qt6-qtmultimedia = qt6.qtmultimedia;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
     changelog = "https://gitlab.freedesktop.org/gstreamer/orc/-/blob/${finalAttrs.version}/RELEASE";
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       bsd2
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 })

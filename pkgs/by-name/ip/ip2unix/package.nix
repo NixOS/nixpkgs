@@ -18,14 +18,14 @@
   mesonEmulatorHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ip2unix";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+p5wQbX35LAjZ4vIE4AhI4M6gQ7gVviqf9jJDAr9xg8";
   };
 
@@ -51,7 +51,8 @@ stdenv.mkDerivation rec {
     python3Packages.pytest
     python3Packages.pytest-timeout
     systemd
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [ yaml-cpp ];
 
@@ -77,4 +78,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.aszlig ];
     mainProgram = "ip2unix";
   };
-}
+})

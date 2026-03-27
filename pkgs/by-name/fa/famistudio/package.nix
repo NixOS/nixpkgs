@@ -7,12 +7,14 @@
   fetchFromGitHub,
   ffmpeg,
   glfw,
+  gtk3,
   libglvnd,
   libogg,
   libvorbis,
   openal,
   portaudio,
   rtmidi,
+  wrapGAppsHook3,
   _experimental-update-script-combinators,
   gitUpdater,
 }:
@@ -28,13 +30,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "famistudio";
-  version = "4.3.3";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     tag = finalAttrs.version;
-    hash = "sha256-jxxZIWdP/j707Zxv/3UESMDIdnsP5h4XLhyYepl6CkI=";
+    hash = "sha256-hYJ82EXR1kP8hzUj+CCXnGuohVzyA1O9TBpWjRccj9Y=";
   };
 
   postPatch =
@@ -59,56 +61,55 @@ buildDotnetModule (finalAttrs: {
           expectedName = "${libPrefix}${args.depname}";
           ourName = "${libPrefix}${args.depname}";
         };
-      librariesToReplace =
-        [
-          # Unmodified native libraries that we can fully substitute
-          {
-            package = glfw;
-            expectedName = "libglfw";
-            ourName = "libglfw";
-          }
-          {
-            package = rtmidi;
-            expectedName = "librtmidi";
-            ourName = "librtmidi";
-          }
-        ]
-        ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-          {
-            package = openal;
-            expectedName = "libopenal32";
-            ourName = "libopenal";
-          }
-        ]
-        ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-          {
-            package = portaudio;
-            expectedName = "libportaudio.2";
-            ourName = "libportaudio.2";
-          }
-        ]
-        ++ [
-          # Native libraries, with extra code for the C# wrapping
-          (nativeWrapperToReplaceFormat { depname = "GifDec"; })
-          (nativeWrapperToReplaceFormat { depname = "NesSndEmu"; })
-          (nativeWrapperToReplaceFormat {
-            depname = "NotSoFatso";
-            extraPostPatch = ''
-              # C++17 does not allow register storage class specifier
-              substituteInPlace build.sh \
-                --replace-fail "$CXX" "$CXX -std=c++14"
-            '';
-          })
-          (nativeWrapperToReplaceFormat { depname = "ShineMp3"; })
-          (nativeWrapperToReplaceFormat { depname = "Stb"; })
-          (nativeWrapperToReplaceFormat {
-            depname = "Vorbis";
-            buildInputs = [
-              libogg
-              libvorbis
-            ];
-          })
-        ];
+      librariesToReplace = [
+        # Unmodified native libraries that we can fully substitute
+        {
+          package = glfw;
+          expectedName = "libglfw";
+          ourName = "libglfw";
+        }
+        {
+          package = rtmidi;
+          expectedName = "librtmidi";
+          ourName = "librtmidi";
+        }
+      ]
+      ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+        {
+          package = openal;
+          expectedName = "libopenal32";
+          ourName = "libopenal";
+        }
+      ]
+      ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+        {
+          package = portaudio;
+          expectedName = "libportaudio.2";
+          ourName = "libportaudio.2";
+        }
+      ]
+      ++ [
+        # Native libraries, with extra code for the C# wrapping
+        (nativeWrapperToReplaceFormat { depname = "GifDec"; })
+        (nativeWrapperToReplaceFormat { depname = "NesSndEmu"; })
+        (nativeWrapperToReplaceFormat {
+          depname = "NotSoFatso";
+          extraPostPatch = ''
+            # C++17 does not allow register storage class specifier
+            substituteInPlace build.sh \
+              --replace-fail "$CXX" "$CXX -std=c++14"
+          '';
+        })
+        (nativeWrapperToReplaceFormat { depname = "ShineMp3"; })
+        (nativeWrapperToReplaceFormat { depname = "Stb"; })
+        (nativeWrapperToReplaceFormat {
+          depname = "Vorbis";
+          buildInputs = [
+            libogg
+            libvorbis
+          ];
+        })
+      ];
       libraryReplaceArgs = lib.strings.concatMapStringsSep " " (
         library:
         "--replace-fail '${libname library.expectedName}' '${lib.getLib library.package}/lib/${libname library.ourName}'"
@@ -133,9 +134,16 @@ buildDotnetModule (finalAttrs: {
   nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
+  nativeBuildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    wrapGAppsHook3
+  ];
+
   runtimeDeps = lib.optionals stdenvNoCC.hostPlatform.isLinux [
+    gtk3
     libglvnd
   ];
+
+  dontWrapGApps = true;
 
   executables = [ "FamiStudio" ];
 
@@ -146,11 +154,19 @@ buildDotnetModule (finalAttrs: {
     done
   '';
 
-  postFixup = ''
+  postFixup =
+    # Need GSettings schemas
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      makeWrapperArgs+=(
+        "''${gappsWrapperArgs[@]}"
+      )
+    ''
     # FFMpeg looked up from PATH
-    wrapProgram $out/bin/FamiStudio \
-      --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
-  '';
+    + ''
+      wrapProgram $out/bin/FamiStudio \
+        --prefix PATH : ${lib.makeBinPath [ ffmpeg ]} \
+        ''${makeWrapperArgs[@]}
+    '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (gitUpdater { }).command

@@ -2,12 +2,11 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  setuptools-scm,
   beautifulsoup4,
   boto3,
   freezegun,
+  hatchling,
   lxml,
   openpyxl,
   parameterized,
@@ -19,24 +18,21 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "108";
-
-  disabled = pythonOlder "3.10";
-
+  version = "116";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
-    hash = "sha256-VMGP5yl+7kiZ3Ww4ESJPHABDCMZG1VsVDgVoLnGU5r4=";
+    hash = "sha256-wrPEwYeM4HjhgRO51XyPx6e/TsX52378bFhPw1NZreM=";
   };
 
   postPatch = ''
     rm bx_py_utils_tests/publish.py
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [ hatchling ];
 
   pythonImportsCheck = [
     "bx_py_utils.anonymize"
@@ -76,15 +72,24 @@ buildPythonPackage rec {
     # too closely affected by bs4 updates
     "test_pretty_format_html"
     "test_assert_html_snapshot_by_css_selector"
+    # test accesses the internet
+    "test_happy_path"
+    # cli_base module not found
+    "test_doctests"
+    # leaks unix timestamp of 1980 into test fixtures
+    "test_xlsx2dict_complex"
+    "test_xlsx2dict_simple"
   ];
 
-  disabledTestPaths =
-    [ "bx_py_utils_tests/tests/test_project_setup.py" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # processify() doesn't work under darwin
-      # https://github.com/boxine/bx_py_utils/issues/80
-      "bx_py_utils_tests/tests/test_processify.py"
-    ];
+  disabledTestPaths = [
+    # depends on cli-base-utilities, which depends on bx-py-utils
+    "bx_py_utils_tests/tests/test_project_setup.py"
+    # processify() doesn't work under darwin
+    # https://github.com/boxine/bx_py_utils/issues/80
+    # Also not working under Linux anymore
+    # _pickle.PicklingError: Can't pickle local object <function processify.<locals>.process_func at 0x7ffff36deda0>
+    "bx_py_utils_tests/tests/test_processify.py"
+  ];
 
   meta = {
     description = "Various Python utility functions";

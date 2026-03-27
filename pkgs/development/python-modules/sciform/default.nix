@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "sciform";
-  version = "0.39.0";
+  version = "0.39.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jagerber48";
     repo = "sciform";
     tag = version;
-    hash = "sha256-5rgTnvckR9bGDgcVZEie+swpc5MEwKQuFHa7zvHiqr8=";
+    hash = "sha256-t43v3xnZap6NayzqBVvw2PzPzHZ5QPSEO5aRzS8AKKE=";
   };
 
   build-system = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A package for formatting numbers into scientific formatted strings";
+    description = "Package for formatting numbers into scientific formatted strings";
     homepage = "https://sciform.readthedocs.io/en/stable/";
     downloadPage = "https://github.com/jagerber48/sciform";
     changelog = "https://github.com/jagerber48/sciform/blob/${src.tag}/CHANGELOG.rst";

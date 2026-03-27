@@ -1,33 +1,37 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
+  pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "bitstruct";
-  version = "8.20.0";
+  version = "8.22.1";
   pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "eerimoq";
+    repo = "bitstruct";
+    tag = version;
+    hash = "sha256-Egiac+1x3HaaGV6ThjChfjKbT0WvQDb1EMuyOxLY7Kg=";
+  };
 
   build-system = [
     setuptools
   ];
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9rFqkwlzE/KmwUZkDJPl+YijnDM2T4wgpChqwcXtXa4=";
-  };
-
   pythonImportsCheck = [ "bitstruct" ];
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  meta = {
     description = "Python bit pack/unpack package";
     homepage = "https://github.com/eerimoq/bitstruct";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jakewaksbaum ];
   };
 }

@@ -7,25 +7,27 @@
   # build-system
   cmake,
   ninja,
-  pybind11,
+  nanobind,
   scikit-build-core,
 
   # dependencies
+  mlx-lm,
+  numpy,
   pydantic,
-  sentencepiece,
-  tiktoken,
   torch,
   transformers,
   triton,
 
   # tests
   pytestCheckHook,
+  sentencepiece,
+  tiktoken,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "xgrammar";
-  version = "0.1.14";
+  version = "0.1.31";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -33,33 +35,47 @@ buildPythonPackage rec {
     repo = "xgrammar";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-ohsoc3g5XUp9vSXxyOGj20wXzCXZC02ktHYVQjDqNeM=";
+    hash = "sha256-Baa/DiRoNcIv4UOC+msi4PgfRWnwprnZpLG2v7qB2h4=";
   };
+
+  patches = [
+    ./0001-fix-find-nanobind-from-python-module.patch
+  ];
 
   build-system = [
     cmake
     ninja
-    pybind11
+    nanobind
     scikit-build-core
   ];
   dontUseCmakeConfigure = true;
 
-  dependencies =
-    [
-      pydantic
-      sentencepiece
-      tiktoken
-      torch
-      transformers
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
-      triton
-    ];
+  dependencies = [
+    numpy
+    pydantic
+    torch
+    transformers
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) [
+    triton
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    mlx-lm
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    sentencepiece
+    tiktoken
     writableTmpDirAsHomeHook
   ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    NIX_CFLAGS_COMPILE = toString [
+      # xgrammar hardcodes -flto=auto while using static linking, which can cause linker errors without this additional flag.
+      "-ffat-lto-objects"
+    ];
+  };
 
   disabledTests = [
     # You are trying to access a gated repo.
@@ -70,10 +86,19 @@ buildPythonPackage rec {
     "test_grammar_matcher_json_schema"
     "test_grammar_matcher_tag_dispatch"
     "test_regex_converter"
+    "test_serialize_compiled_grammar_with_hf_tokenizer"
     "test_tokenizer_info"
 
     # Torch not compiled with CUDA enabled
     "test_token_bitmask_operations"
+
+    # AssertionError
+    "test_json_schema_converter"
+  ];
+
+  disabledTestPaths = [
+    # Requires internet access
+    "tests/python/test_structural_tag_converter.py"
   ];
 
   pythonImportsCheck = [ "xgrammar" ];
@@ -81,7 +106,11 @@ buildPythonPackage rec {
   meta = {
     description = "Efficient, Flexible and Portable Structured Generation";
     homepage = "https://xgrammar.mlc.ai";
-    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/v${version}";
+    changelog = "https://github.com/mlc-ai/xgrammar/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
+    badPlatforms = [
+      # error: ‘operator delete’ called on unallocated object ‘result’ [-Werror=free-nonheap-object]
+      "aarch64-linux"
+    ];
   };
 }

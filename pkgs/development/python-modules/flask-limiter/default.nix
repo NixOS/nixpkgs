@@ -4,33 +4,31 @@
   buildPythonPackage,
   fetchFromGitHub,
   flask,
+  hatchling,
+  hatch-vcs,
   hiro,
   limits,
   ordered-set,
   pymemcache,
   pymongo,
+  pytest-check,
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   redis,
   rich,
-  setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.12";
+  version = "4.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
     tag = version;
-    hash = "sha256-3GFbLQExd4c3Cyr7UDX/zOAfedOluXMwCbBhOgoKfn0=";
+    hash = "sha256-lrq4WCc2gxm039nXW6tiDt7laJFEICO0x9jw71UUwaI=";
   };
 
   postPatch = ''
@@ -39,16 +37,19 @@ buildPythonPackage rec {
       --replace-fail "import flask_restful" ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   dependencies = [
     flask
     limits
     ordered-set
-    rich
   ];
 
   optional-dependencies = {
+    cli = [ rich ];
     redis = limits.optional-dependencies.redis;
     memcached = limits.optional-dependencies.memcached;
     mongodb = limits.optional-dependencies.mongodb;
@@ -56,6 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     asgiref
+    pytest-check
     pytest-cov-stub
     pytest-mock
     pytestCheckHook
@@ -63,7 +65,8 @@ buildPythonPackage rec {
     redis
     pymemcache
     pymongo
-  ];
+  ]
+  ++ optional-dependencies.cli;
 
   disabledTests = [
     # flask-restful is unmaintained and breaks regularly
@@ -92,11 +95,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_limiter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
     changelog = "https://github.com/alisaifee/flask-limiter/blob/${src.tag}/HISTORY.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

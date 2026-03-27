@@ -5,15 +5,12 @@
   lark,
   pydot,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "amarna";
   version = "0.1.5";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "crytic";
@@ -31,11 +28,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "amarna" ];
 
-  meta = with lib; {
+  meta = {
     description = "Static-analyzer and linter for the Cairo programming language";
     mainProgram = "amarna";
     homepage = "https://github.com/crytic/amarna";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ raitobezarius ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ raitobezarius ];
   };
 }

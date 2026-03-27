@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  wxGTK32,
+  wxwidgets_3_2,
   gtk3,
   zlib,
   libjpeg,
@@ -17,7 +17,8 @@
   libsepol,
   libthai,
   libdatrie,
-  xorg,
+  libxtst,
+  libxdmcp,
   lerc,
   libxkbcommon,
   libepoxy,
@@ -68,7 +69,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     gtk3
-    wxGTK32
+    wxwidgets_3_2
     zlib
     libjpeg
     libvncserver-patched
@@ -84,8 +85,8 @@ stdenv.mkDerivation {
     lerc
     libxkbcommon
     libepoxy
-    xorg.libXdmcp
-    xorg.libXtst
+    libxdmcp
+    libxtst
   ];
 
   nativeBuildInputs = [

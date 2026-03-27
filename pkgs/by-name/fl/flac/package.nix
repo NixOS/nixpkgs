@@ -1,45 +1,50 @@
 {
   cmake,
   doxygen,
-  fetchFromGitHub,
+  fetchurl,
   graphviz,
   lib,
   libogg,
   nix-update-script,
-  pandoc,
+  buildPackages,
   pkg-config,
   stdenv,
   versionCheckHook,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "flac";
   version = "1.5.0";
 
-  src = fetchFromGitHub {
-    owner = "xiph";
-    repo = "flac";
-    tag = finalAttrs.version;
-    hash = "sha256-B6XRai5UOAtY/7JXNbI3YuBgazi1Xd2ZOs6vvLq9LIs=";
+  # Building from tarball instead of GitHub to include pre-built manpages.
+  # This prevents huge numbers of rebuilds for pandoc / haskell-updates.
+  # It also enables manpages for platforms where pandoc is not available.
+  src = fetchurl {
+    url = "https://downloads.xiph.org/releases/flac/flac-${finalAttrs.version}.tar.xz";
+    hash = "sha256-8sHHZZKoL//4QTujxKEpm2x6sGxzTe4D/YhjBIXCuSA=";
   };
+
+  hardeningDisable = [ "trivialautovarinit" ];
 
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
-    pandoc
     pkg-config
   ];
 
   buildInputs = [ libogg ];
 
-  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [ "-DBUILD_SHARED_LIBS=ON" ];
-
-  CFLAGS = [
-    "-O3"
-    "-funroll-loops"
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isStatic) [
+    "-DBUILD_SHARED_LIBS=ON"
   ];
-  CXXFLAGS = [ "-O3" ];
+
+  env = {
+    CFLAGS = toString [
+      "-O3"
+      "-funroll-loops"
+    ];
+    CXXFLAGS = toString [ "-O3" ];
+  };
 
   patches = [ ./package.patch ];
   doCheck = true;
@@ -48,13 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
     "dev"
     "doc"
-    "man"
     "out"
+    "man"
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

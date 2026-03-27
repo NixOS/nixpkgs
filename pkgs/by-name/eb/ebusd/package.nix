@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ebusd";
-  version = "24.1";
+  version = "26.1";
 
   src = fetchFromGitHub {
     owner = "john30";
     repo = "ebusd";
     rev = version;
-    sha256 = "sha256-+3QOB7/yCgR4j2UGfhWQ5s5sldoNfWSzX7qa//FHeJ4=";
+    sha256 = "sha256-CmArhkJfxf8lL6FoHRQKjk/8ObfEy3Xef9DUtOVKRas=";
   };
 
   nativeBuildInputs = [
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ebusd";
     homepage = "https://github.com/john30/ebusd";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nathan-gs ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nathan-gs ];
+    platforms = lib.platforms.linux;
   };
 }

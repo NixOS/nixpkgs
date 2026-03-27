@@ -10,7 +10,6 @@
   psutil,
   pynput,
   pyperclip,
-  pythonOlder,
   regex,
   requests,
   setuptools,
@@ -20,15 +19,13 @@
   werkzeug,
   wmctrl,
   xdotool,
-  xorg,
+  xprop,
 }:
 
 buildPythonPackage rec {
   pname = "dragonfly";
   version = "0.35.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "dictation-toolbox";
@@ -42,7 +39,7 @@ buildPythonPackage rec {
       --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"'
     substituteInPlace dragonfly/windows/x11_window.py \
       --replace-fail 'xdotool = "xdotool"'${" "}'xdotool = "${xdotool}/bin/xdotool"' \
-      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${xorg.xprop}/bin/xprop"' \
+      --replace-fail 'xprop = "xprop"'${" "}'xprop = "${xprop}/bin/xprop"' \
       --replace-fail 'wmctrl = "wmctrl"'${" "}'wmctrl = "${wmctrl}/bin/wmctrl"'
   '';
 
@@ -77,11 +74,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dragonfly" ];
 
-  meta = with lib; {
+  meta = {
     description = "Speech recognition framework allowing powerful Python-based scripting";
     homepage = "https://github.com/dictation-toolbox/dragonfly";
     changelog = "https://github.com/dictation-toolbox/dragonfly/blob/${version}/CHANGELOG.rst";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     maintainers = [ ];
   };
 }

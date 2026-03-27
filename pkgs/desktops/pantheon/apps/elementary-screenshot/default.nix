@@ -6,24 +6,27 @@
   ninja,
   pkg-config,
   vala,
-  wrapGAppsHook4,
+  wrapGAppsHook3,
   gdk-pixbuf,
   glib,
-  granite7,
-  gtk4,
-  libportal,
+  granite,
+  gtk3,
+  libhandy,
   nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot";
-  version = "8.0.1";
+  # nixpkgs-update: no auto update
+  # We disabled x-d-p-pantheon due to https://github.com/elementary/portals/issues/157
+  # so hold back this before the issue is fixed since later versions enforce using portals.
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "screenshot";
     rev = version;
-    hash = "sha256-qhXTOdxMpiCPJR0Gp65itr6Em9e6OzMn3m/OyS7YfcA=";
+    hash = "sha256-z7FP+OZYF/9YLXYCQF/ElihKjKHVfeHc38RHdPb2aIE=";
   };
 
   nativeBuildInputs = [
@@ -31,27 +34,27 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     vala
-    wrapGAppsHook4
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     gdk-pixbuf
     glib
-    granite7
-    gtk4
-    libportal
+    granite
+    gtk3
+    libhandy
   ];
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot tool designed for elementary OS";
     homepage = "https://github.com/elementary/screenshot";
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
     mainProgram = "io.elementary.screenshot";
   };
 }

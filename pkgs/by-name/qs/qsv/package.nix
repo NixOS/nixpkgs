@@ -1,58 +1,64 @@
 {
+  stdenv,
   fetchFromGitHub,
   file,
   lib,
   pkg-config,
   rustPlatform,
   sqlite,
-  stdenv,
   zstd,
+  cmake,
+  python3,
+  wayland,
+  withPolars ? true,
+  withPython ? stdenv.buildPlatform == stdenv.hostPlatform,
+  withUi ? true,
+  buildFeatures ?
+    # enable all features except self_update by default
+    # https://github.com/dathere/qsv/blob/18.0.0/Cargo.toml#L370
+    [
+      "apply"
+      "feature_capable"
+      "fetch"
+      "foreach"
+      "geocode"
+      "luau"
+      "to"
+    ]
+    ++ lib.optional withPolars "polars"
+    ++ lib.optional withPython "python"
+    ++ lib.optional withUi "ui",
+  mainProgram ? "qsv",
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qsv";
-  version = "2.2.1";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "18.0.0";
+
+  inherit buildFeatures;
 
   src = fetchFromGitHub {
     owner = "dathere";
     repo = "qsv";
-    rev = version;
-    hash = "sha256-LE3iQCZb3FKSsrb8/E5awjh26wGv9FlXw63+rNyzIIk=";
+    rev = finalAttrs.version;
+    hash = "sha256-2S10BYLSB2pLMX5kiLv1v4naSwFL66rl7NPzBGrz9Rg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Nse3IrhXKdEJ3BMWq8LEdd6EvhSEtzx1RbHQT9AoEb8=";
+  cargoHash = "sha256-IdzTG3L3bzOMrmQls1mTsPQYp3hHThZ5l968fH+4Q5s=";
 
   buildInputs = [
     file
     sqlite
     zstd
-  ];
+  ]
+  ++ lib.optional (lib.elem "ui" buildFeatures && stdenv.hostPlatform.isLinux) wayland;
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
-  ];
-
-  buildFeatures = [
-    "apply"
-    "feature_capable"
-    "fetch"
-    "foreach"
-    "geocode"
-    "to"
-  ];
-
-  checkFeatures = [
-    "apply"
-    "feature_capable"
-    "fetch"
-    "foreach"
-    "geocode"
-  ];
+    cmake
+  ]
+  ++ lib.optional (lib.elem "python" buildFeatures) python3;
 
   doCheck = false;
 
@@ -63,15 +69,16 @@ rustPlatform.buildRustPackage {
   meta = {
     description = "CSVs sliced, diced & analyzed";
     homepage = "https://github.com/dathere/qsv";
-    changelog = "https://github.com/dathere/qsv/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dathere/qsv/blob/${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit
       # or
       unlicense
     ];
+    inherit mainProgram;
     maintainers = with lib.maintainers; [
       detroyejr
-      uncenter
+      misuzu
     ];
   };
-}
+})

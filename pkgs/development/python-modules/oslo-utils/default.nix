@@ -2,72 +2,75 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  ddt,
-  debtcollector,
-  eventlet,
-  fixtures,
-  iso8601,
-  libxcrypt-legacy,
-  netaddr,
-  netifaces,
-  oslo-i18n,
-  oslotest,
-  packaging,
+
+  # build-system
   pbr,
+  setuptools,
+
+  # dependencies
+  debtcollector,
+  iso8601,
+  netaddr,
+  oslo-i18n,
+  packaging,
   psutil,
   pyparsing,
   pytz,
+
+  # tests
+  ddt,
+  eventlet,
+  fixtures,
+  iana-etc,
+  libredirect,
+  libxcrypt-legacy,
+  oslotest,
+  pyyaml,
   qemu-utils,
-  replaceVars,
-  setuptools,
   stdenv,
   stestr,
   testscenarios,
   tzdata,
-  pyyaml,
-  iana-etc,
-  libredirect,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "8.2.0";
+  version = "10.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo_utils";
     inherit version;
-    hash = "sha256-3PeNFLlo+3sUJjx3J4srkwp4YdPKqIfTpYsokPZlmDU=";
+    hash = "sha256-u0ZxPnYNlERqCE9elMHPJzk1NpMIrYjuW1OReSPZw5M=";
   };
 
-  patches = [
-    (replaceVars ./ctypes.patch {
-      crypt = "${lib.getLib libxcrypt-legacy}/lib/libcrypt${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
+  postPatch =
+    let
+      soext = stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    ''
+      substituteInPlace oslo_utils/secretutils.py \
+        --replace-fail "ctypes.util.find_library(\"crypt\")" '"${lib.getLib libxcrypt-legacy}/lib/libcrypt${soext}"'
 
-  postPatch = ''
-    # only a small portion of the listed packages are actually needed for running the tests
-    # so instead of removing them one by one remove everything
-    rm test-requirements.txt
-  '';
+      # only a small portion of the listed packages are actually needed for running the tests
+      # so instead of removing them one by one remove everything
+      rm test-requirements.txt
+    '';
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     debtcollector
     iso8601
     netaddr
-    netifaces
     oslo-i18n
     packaging
     psutil
     pyparsing
     pytz
-    tzdata
   ];
 
   nativeCheckInputs = [
@@ -76,10 +79,11 @@ buildPythonPackage rec {
     fixtures
     libredirect.hook
     oslotest
+    pyyaml
     qemu-utils
     stestr
     testscenarios
-    pyyaml
+    tzdata
   ];
 
   # disabled tests:
@@ -92,15 +96,16 @@ buildPythonPackage rec {
     stestr run -e <(echo "
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ip
       oslo_utils.tests.test_netutils.NetworkUtilsTest.test_is_valid_ipv4
+      oslo_utils.tests.test_eventletutils.EventletUtilsTest.test_event_set_clear_timeout
     ")
   '';
 
   pythonImportsCheck = [ "oslo_utils" ];
 
-  meta = with lib; {
+  meta = {
     description = "Oslo Utility library";
     homepage = "https://github.com/openstack/oslo.utils";
-    license = licenses.asl20;
-    maintainers = teams.openstack.members;
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.openstack ];
   };
 }

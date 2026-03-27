@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   hatchling,
   dask,
@@ -9,6 +8,7 @@
   python-dateutil,
   spatial-image,
   xarray,
+  xarray-dataclass,
   zarr,
   dask-image,
   fsspec,
@@ -22,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "multiscale-spatial-image";
-  version = "2.0.2";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "multiscale-spatial-image";
     tag = "v${version}";
-    hash = "sha256-aJp9RrCy88XFpM5GU7jADHQZFNZgXvlqSsCbmay3gww=";
+    hash = "sha256-uF9ZccLvP1ref6qn3l6EpedsoK29Q8lAdr68JjsYMis=";
   };
 
   build-system = [ hatchling ];
@@ -42,6 +40,7 @@ buildPythonPackage rec {
     python-dateutil
     spatial-image
     xarray
+    xarray-dataclass
     zarr
   ];
 
@@ -72,7 +71,7 @@ buildPythonPackage rec {
   meta = {
     description = "Generate a multiscale, chunked, multi-dimensional spatial image data structure that can serialized to OME-NGFF";
     homepage = "https://github.com/spatial-image/multiscale-spatial-image";
-    changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/v${version}";
+    changelog = "https://github.com/spatial-image/multiscale-spatial-image/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

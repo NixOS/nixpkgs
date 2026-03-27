@@ -33,7 +33,8 @@ pkgs.stdenv.mkDerivation {
     libfaketime
     perl
     fakeroot
-  ] ++ lib.optional compressImage zstd;
+  ]
+  ++ lib.optional compressImage zstd;
 
   buildCommand = ''
     ${if compressImage then "img=temp.img" else "img=$out"}
@@ -100,7 +101,7 @@ pkgs.stdenv.mkDerivation {
 
     resize2fs $img $new_size
 
-    if [ ${builtins.toString compressImage} ]; then
+    if [ ${toString compressImage} ]; then
       echo "Compressing image"
       zstd -T$NIX_BUILD_CORES -v --no-progress ./$img -o $out
     fi

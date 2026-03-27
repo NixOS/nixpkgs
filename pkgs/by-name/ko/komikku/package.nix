@@ -1,14 +1,15 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromCodeberg,
   desktop-file-utils,
   gettext,
   glib,
+  glib-networking,
   gobject-introspection,
   blueprint-compiler,
   gtk4,
   libadwaita,
-  libnotify,
+  libglycin,
   webkitgtk_6_0,
   meson,
   ninja,
@@ -21,17 +22,16 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "komikku";
-  version = "1.72.0";
+  version = "1.105.0";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "valos";
     repo = "Komikku";
-    rev = "v${version}";
-    hash = "sha256-Kdt4nEWdxfZB7rmPbCegbj4abfv1nMSvAAC6mmUcv44=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Zd+YUFnklu6JbytT/oS8hUU+IcqMfF4f/u6OKmg8uT4=";
   };
 
   nativeBuildInputs = [
@@ -48,26 +48,30 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+    glib-networking
     gtk4
     libadwaita
-    libnotify
+    libglycin
     webkitgtk_6_0
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     beautifulsoup4
     brotli
     colorthief
     dateparser
+    ebooklib
     emoji
+    jxlpy
     keyring
     lxml
     natsort
     piexif
     pillow
-    pillow-heif
     curl-cffi
     pygobject3
+    pyjwt
+    pypdf
     python-magic
     rarfile
     requests
@@ -92,12 +96,7 @@ python3.pkgs.buildPythonApplication rec {
 
   # Prevent double wrapping.
   dontWrapGApps = true;
-
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${gappsWrapperArgs[@]}"
-    )
-  '';
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -108,13 +107,11 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "komikku";
     homepage = "https://apps.gnome.org/Komikku/";
     license = lib.licenses.gpl3Plus;
-    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${version}";
-    maintainers =
-      with lib.maintainers;
-      [
-        chuangzhu
-        Gliczy
-      ]
-      ++ lib.teams.gnome-circle.members;
+    changelog = "https://codeberg.org/valos/Komikku/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
+      chuangzhu
+      Gliczy
+    ];
+    teams = [ lib.teams.gnome-circle ];
   };
-}
+})

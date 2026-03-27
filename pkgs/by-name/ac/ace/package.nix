@@ -7,12 +7,12 @@
   perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ace";
   version = "7.0.11";
 
   src = fetchurl {
-    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
+    url = "https://download.dre.vanderbilt.edu/previous_versions/ACE-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-r+LRiu/u1qMcbrjkSr8ErnemX6zvhgvc5cLWu8AQhww=";
   };
 
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
     > include/makeinclude/platform_macros.GNU
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.dre.vanderbilt.edu/~schmidt/ACE.html";
     description = "ADAPTIVE Communication Environment";
     mainProgram = "ace_gperf";
-    license = licenses.doc;
-    maintainers = with maintainers; [ nico202 ];
-    platforms = platforms.linux;
+    license = lib.licenses.doc;
+    maintainers = with lib.maintainers; [ nico202 ];
+    platforms = lib.platforms.linux;
   };
-}
+})

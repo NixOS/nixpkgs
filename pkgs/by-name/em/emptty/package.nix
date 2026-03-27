@@ -2,36 +2,36 @@
   buildGoModule,
   fetchFromGitHub,
   lib,
-  libX11,
+  libx11,
   pam,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "emptty";
-  version = "0.13.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "tvrzna";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-xZfR4sn20fDaTNAxuxVflpr+8AFg5Z7vesO7P8Jxw6A=";
+    repo = "emptty";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JP9PElmwSHk8rcP7NF1PsZETul978UZR+MUulT3BtYs=";
   };
 
   buildInputs = [
     pam
-    libX11
+    libx11
   ];
 
   vendorHash = "sha256-PLyemAUcCz9H7+nAxftki3G7rQoEeyPzY3YUEj2RFn4=";
 
-  meta = with lib; {
+  meta = {
     description = "Dead simple CLI Display Manager on TTY";
     homepage = "https://github.com/tvrzna/emptty";
-    license = licenses.mit;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.mit;
+    maintainers = [ ];
     # many undefined functions
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "emptty";
   };
-}
+})

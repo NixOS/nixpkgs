@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL_net";
-  version = "1.2.8-unstable-2024-04-23";
+  version = "1.2.8-unstable-2026-03-17";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL_net";
-    rev = "0043be2e559f8d562d04bf62d6e3f4162ed8edad";
-    hash = "sha256-/W1Mq6hzJNNwpcx+VUT4DRGP3bE06GGMbYDGHBc4XlQ=";
+    rev = "cd5a2ebdea1a15b27f503cc7ffdcaf056d047b73";
+    hash = "sha256-z3bJYf3PzS0ydoeL0Ay0HOZ9ImKZMyLbVZhD+u5BD6w=";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL networking library";
     license = lib.licenses.zlib;
-    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
+    teams = [ lib.teams.sdl ];
     inherit (SDL.meta) platforms;
   };
 })

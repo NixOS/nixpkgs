@@ -26,15 +26,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test_apipkg.py" ];
+  enabledTestPaths = [ "test_apipkg.py" ];
 
   pythonImportsCheck = [ "apipkg" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pytest-dev/apipkg/blob/main/CHANGELOG";
     description = "Namespace control and lazy-import mechanism";
     homepage = "https://github.com/pytest-dev/apipkg";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

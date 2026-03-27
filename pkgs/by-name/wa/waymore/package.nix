@@ -6,15 +6,16 @@
   testers,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "waymore";
-  version = "4.7";
+  version = "6.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "waymore";
-    tag = "v${version}";
-    hash = "sha256-oaswuXQPdAl2XExwEWnSN15roqNj9OVUr1Y1vsX461o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3nvdbQydtnk/tod2WyJLAGKKjwTv6Z6JA7+qwqgp2o4=";
   };
 
   preBuild = ''
@@ -23,6 +24,11 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     setuptools
+  ];
+
+  pythonRemoveDeps = [
+    # python already provides urllib.parse
+    "urlparse3"
   ];
 
   dependencies = with python3Packages; [
@@ -34,18 +40,20 @@ python3Packages.buildPythonApplication rec {
     tldextract
   ];
 
+  pythonImportsCheck = [ "waymore.waymore" ];
+
   passthru.tests.version = testers.testVersion {
     package = waymore;
     command = "waymore --version";
-    version = "Waymore - v${version}";
+    version = "Waymore - v${finalAttrs.version}";
   };
 
   meta = {
     description = "Find way more from the Wayback Machine";
     homepage = "https://github.com/xnl-h4ck3r/waymore";
-    changelog = "https://github.com/xnl-h4ck3r/waymore/releases/tag/v${version}";
+    changelog = "https://github.com/xnl-h4ck3r/waymore/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ genga898 ];
     mainProgram = "waymore";
   };
-}
+})

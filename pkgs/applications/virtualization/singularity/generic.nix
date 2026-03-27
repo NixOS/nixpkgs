@@ -12,16 +12,6 @@
   extraDescription ? "",
   extraMeta ? { },
 }:
-
-let
-  # Backward compatibility layer for the obsolete workaround of
-  # the "vendor-related attributes not overridable" issue (#86349),
-  # whose solution (#225051) is merged and released.
-  # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  _defaultGoVendorArgs = {
-    inherit vendorHash deleteVendor proxyVendor;
-  };
-in
 {
   lib,
   buildGoModule,
@@ -97,28 +87,9 @@ in
   #   "path/to/source/file1" = [ "<originalDefaultPath11>" "<originalDefaultPath12>" ... ];
   # }
   sourceFilesWithDefaultPaths ? { },
-  # Placeholders for the obsolete workaround of #86349
-  # TODO(@ShamrockLee): Remove after the Nixpkgs 25.05 branch-off.
-  vendorHash ? null,
-  deleteVendor ? null,
-  proxyVendor ? null,
-}@args:
+}:
 
 let
-  # Backward compatibility layer for the obsolete workaround of #86349
-  # TODO(@ShamrockLee): Convert to simple inheritance after the Nixpkgs 25.05 branch-off.
-  moduleArgsOverridingCompat =
-    argName:
-    if args.${argName} or null == null then
-      _defaultGoVendorArgs.${argName}
-    else
-      lib.warn
-        "${projectName}: Override ${argName} with .override is deprecated. Use .overrideAttrs instead."
-        args.${argName};
-  vendorHash = moduleArgsOverridingCompat "vendorHash";
-  deleteVendor = moduleArgsOverridingCompat "deleteVendor";
-  proxyVendor = moduleArgsOverridingCompat "proxyVendor";
-
   addShellDoubleQuotes = s: lib.escapeShellArg ''"'' + s + lib.escapeShellArg ''"'';
 in
 (buildGoModule {
@@ -164,36 +135,34 @@ in
   # apptainer/apptainer: https://github.com/apptainer/apptainer/blob/main/dist/debian/control
   # sylabs/singularity: https://github.com/sylabs/singularity/blob/main/debian/control
 
-  buildInputs =
-    [
-      bash # To patch /bin/sh shebangs.
-      conmon
-      cryptsetup
-      gpgme
-      libuuid
-      openssl
-      squashfsTools # Required at build time by SingularityCE
-    ]
-    # Optional dependencies.
-    # Formatting: Optional dependencies are likely to increase.
-    # Don't squash them into the same line.
-    ++ lib.optional enableNvidiaContainerCli nvidia-docker
-    ++ lib.optional enableSeccomp libseccomp;
+  buildInputs = [
+    bash # To patch /bin/sh shebangs.
+    conmon
+    cryptsetup
+    gpgme
+    libuuid
+    openssl
+    squashfsTools # Required at build time by SingularityCE
+  ]
+  # Optional dependencies.
+  # Formatting: Optional dependencies are likely to increase.
+  # Don't squash them into the same line.
+  ++ lib.optional enableNvidiaContainerCli nvidia-docker
+  ++ lib.optional enableSeccomp libseccomp;
 
   configureScript = "./mconfig";
 
-  configureFlags =
-    [
-      "--localstatedir=${
-        if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
-      }"
-      "--runstatedir=/var/run"
-    ]
-    ++ lib.optional (!enableSeccomp) "--without-seccomp"
-    ++ lib.optional (enableSuid != defaultToSuid) (
-      if enableSuid then "--with-suid" else "--without-suid"
-    )
-    ++ extraConfigureFlags;
+  configureFlags = [
+    "--localstatedir=${
+      if externalLocalStateDir != null then externalLocalStateDir else "${placeholder "out"}/var/lib"
+    }"
+    "--runstatedir=/var/run"
+  ]
+  ++ lib.optional (!enableSeccomp) "--without-seccomp"
+  ++ lib.optional (enableSuid != defaultToSuid) (
+    if enableSuid then "--with-suid" else "--without-suid"
+  )
+  ++ extraConfigureFlags;
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
@@ -211,7 +180,8 @@ in
     mount # mount
     squashfsTools # mksquashfs unsquashfs # Make / unpack squashfs image
     squashfuse # squashfuse_ll squashfuse # Mount (without unpacking) a squashfs image without privileges
-  ] ++ lib.optional enableNvidiaContainerCli nvidia-docker;
+  ]
+  ++ lib.optional enableNvidiaContainerCli nvidia-docker;
 
   postPatch = ''
     if [[ ! -e .git || ! -e VERSION ]]; then
@@ -229,7 +199,7 @@ in
           lib.concatStringsSep " " [
             "--replace-fail"
             (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+            (addShellDoubleQuotes "$systemDefaultPath\${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}\${inputsDefaultPath:+:}$inputsDefaultPath")
           ]
         ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
@@ -307,7 +277,6 @@ in
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/${projectName}";
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -326,7 +295,8 @@ in
       ShamrockLee
     ];
     mainProgram = projectName;
-  } // extraMeta;
+  }
+  // extraMeta;
 }).overrideAttrs
   (
     finalAttrs: prevAttrs: {

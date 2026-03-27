@@ -4,15 +4,12 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "aiomultiprocess";
   version = "0.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "omnilib";
@@ -25,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "aiomultiprocess/tests/*.py" ];
+  enabledTestPaths = [ "aiomultiprocess/tests/*.py" ];
 
   disabledTests = [
     # tests are flaky and make the whole test suite time out
@@ -38,7 +35,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aiomultiprocess" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to improve performance";
     longDescription = ''
       aiomultiprocess presents a simple interface, while running a full
@@ -48,7 +45,7 @@ buildPythonPackage rec {
       the workload and number of cores available.
     '';
     homepage = "https://github.com/omnilib/aiomultiprocess";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.fab ];
   };
 }

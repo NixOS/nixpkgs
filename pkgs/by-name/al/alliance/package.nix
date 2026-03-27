@@ -1,32 +1,32 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   xorgproto,
   motif,
-  libX11,
-  libXt,
-  libXpm,
+  libx11,
+  libxt,
+  libxpm,
   bison,
   flex,
   automake,
   autoconf,
   libtool,
+  unstableGitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alliance";
-  version = "unstable-2022-01-13";
+  version = "5.1.1-unstable-2025-02-24";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.lip6.fr";
-    owner = "vlsi-eda";
+  src = fetchFromGitHub {
+    owner = "lip6";
     repo = "alliance";
-    rev = "ebece102e15c110fc79f1da50524c68fd9523f0c";
-    hash = "sha256-NGtE3ZmN9LrgXG4NIKrp7dFRVzrKMoudlPUtYYKrZjY=";
+    rev = "a8502d32df0a4ad1bd29ab784c4332319669ecd2";
+    hash = "sha256-b2uaYZEzHMB3qCMRVANNnjTxr6OYb1Unswxjq5knYzM=";
   };
 
-  prePatch = "cd alliance/src";
+  sourceRoot = "${finalAttrs.src.name}/alliance/src";
 
   nativeBuildInputs = [
     libtool
@@ -37,22 +37,18 @@ stdenv.mkDerivation {
   buildInputs = [
     xorgproto
     motif
-    libX11
-    libXt
-    libXpm
+    libx11
+    libxt
+    libxpm
     bison
   ];
 
-  # Disable parallel build, errors:
-  #  ./pat_decl_y.y:736:5: error: expected '=', ...
-  enableParallelBuilding = false;
-
-  ALLIANCE_TOP = placeholder "out";
-
   configureFlags = [
-    "--prefix=${placeholder "out"}"
     "--enable-alc-shared"
   ];
+
+  # To avoid compiler error in LoadDataBase.c:366:27
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   postPatch = ''
     # texlive for docs seems extreme
@@ -73,11 +69,14 @@ stdenv.mkDerivation {
     cp -p distrib/*.png $out/icons/hicolor/48x48/apps/
   '';
 
-  meta = with lib; {
+  passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
+
+  meta = {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
-    license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ l-as ];
-    platforms = with platforms; linux;
+    license = with lib.licenses; gpl2Plus;
+    maintainers = [ ];
+    platforms = with lib.platforms; linux;
+    broken = true;
   };
-}
+})

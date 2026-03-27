@@ -62,12 +62,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ftZACUf2lAHokcUXj45LRA7/3goOcIy521cGl6qhR98=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     distutils # required in python312 to call subcommands (see https://github.com/Ericsson/codechecker/issues/4350)
     lxml
     sqlalchemy
@@ -77,13 +76,9 @@ python3Packages.buildPythonApplication rec {
     multiprocess
     thrift
     gitpython
+    pyyaml
     types-pyyaml
     sarif-tools
-    pytest
-    pycodestyle
-    pylint
-    mkdocs
-    coverage
   ];
 
   pythonRelaxDeps = [
@@ -110,18 +105,19 @@ python3Packages.buildPythonApplication rec {
     }
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Ericsson/codechecker";
     changelog = "https://github.com/Ericsson/codechecker/releases/tag/v${version}";
     description = "Analyzer tooling, defect database and viewer extension for the Clang Static Analyzer and Clang Tidy";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       llvm-exception
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       zebreus
       felixsinger
     ];
     mainProgram = "CodeChecker";
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 }

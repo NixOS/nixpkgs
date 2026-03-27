@@ -2,19 +2,20 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  python3,
+  python312,
+  writableTmpDirAsHomeHook,
 }:
 let
-  python = python3.override {
+  python = python312.override {
     self = python;
     packageOverrides = self: super: {
       impacket = super.impacket.overridePythonAttrs {
-        version = "0.12.0.dev1-unstable-2023-11-30";
+        version = "0.14.0-unstable-2025-12-03";
         src = fetchFromGitHub {
-          owner = "Pennyw0rth";
+          owner = "fortra";
           repo = "impacket";
-          rev = "d370e6359a410063b2c9c68f6572c3b5fb178a38";
-          hash = "sha256-Jozn4lKAnLQ2I53+bx0mFY++OH5P4KyqVmrS5XJUY3E=";
+          rev = "caba5facdd3a01b5d0decc6daf5871839f22f792";
+          hash = "sha256-jyn5qSSAipGYhHm2EROwDHa227mnmW+d+0H0/++i1OY=";
         };
         # Fix version to be compliant with Python packaging rules
         postPatch = ''
@@ -25,16 +26,16 @@ let
     };
   };
 in
-python.pkgs.buildPythonApplication rec {
+python.pkgs.buildPythonApplication (finalAttrs: {
   pname = "netexec";
-  version = "1.3.0";
+  version = "1.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pennyw0rth";
     repo = "NetExec";
-    tag = "v${version}";
-    hash = "sha256-Pub7PAw6CTN4c/PHTPE9KcnDR2a6hSza1ODp3EWMOH0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BKqBmpA2cSKwC9zX++Z6yTSDIyr4iZVGC/Eea6zoMLQ=";
   };
 
   pythonRelaxDeps = true;
@@ -42,12 +43,20 @@ python.pkgs.buildPythonApplication rec {
   pythonRemoveDeps = [
     # Fail to detect dev version requirement
     "neo4j"
+    # No python package in nixpkgs; use bloodhound-py instead.
+    "bloodhound-ce"
   ];
 
   postPatch = ''
+    substituteInPlace nxc/first_run.py \
+      --replace-fail "from os import mkdir" "from os import mkdir, chmod" \
+      --replace-fail "shutil.copy(default_path, NXC_PATH)" $'shutil.copy(default_path, CONFIG_PATH)\n        chmod(CONFIG_PATH, 0o600)'
+
     substituteInPlace pyproject.toml \
-      --replace-fail '{ git = "https://github.com/fortra/impacket.git" }' '"*"' \
-      --replace-fail '{ git = "https://github.com/Pennyw0rth/NfsClient" }' '"*"'
+      --replace-fail " @ git+https://github.com/Pennyw0rth/Certipy" "" \
+      --replace-fail " @ git+https://github.com/fortra/impacket" "" \
+      --replace-fail " @ git+https://github.com/wbond/oscrypto" "" \
+      --replace-fail " @ git+https://github.com/Pennyw0rth/NfsClient" ""
   '';
 
   build-system = with python.pkgs; [
@@ -56,6 +65,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python.pkgs; [
+    jwt
     aardwolf
     aioconsole
     aiosqlite
@@ -63,6 +73,7 @@ python.pkgs.buildPythonApplication rec {
     asyauth
     beautifulsoup4
     bloodhound-py
+    certipy-ad
     dploot
     dsinternals
     impacket
@@ -73,6 +84,7 @@ python.pkgs.buildPythonApplication rec {
     msldap
     neo4j
     paramiko
+    pefile
     pyasn1-modules
     pylnk3
     pynfsclient
@@ -89,19 +101,12 @@ python.pkgs.buildPythonApplication rec {
     xmltodict
   ];
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ];
-
-  # Tests no longer works out-of-box with 1.3.0
-  doCheck = false;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ [ writableTmpDirAsHomeHook ];
 
   meta = {
     description = "Network service exploitation tool (maintained fork of CrackMapExec)";
     homepage = "https://github.com/Pennyw0rth/NetExec";
-    changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${version}";
+    changelog = "https://github.com/Pennyw0rth/NetExec/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ vncsb ];
     mainProgram = "nxc";
@@ -110,4 +115,4 @@ python.pkgs.buildPythonApplication rec {
     # $ /nix/store/<hash>-wrap-python-hook/nix-support/setup-hook: line 65: 47758 Killed: 9               sed -i "$f" -e "1 s^#!/nix/store/<hash>-python3-3.11.7^#!/nix/store/<hash>-python3-3.11.7^"
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

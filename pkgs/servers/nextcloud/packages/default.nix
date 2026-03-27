@@ -25,22 +25,20 @@ let
     {
       # Create a derivation from the official Nextcloud apps.
       # This takes the data generated from the go tool.
-      mkNextcloudDerivation = self.callPackage (
-        { }:
+      mkNextcloudDerivation =
         { pname, data }:
         pkgs.fetchNextcloudApp {
           appName = pname;
           appVersion = data.version;
           license = appBaseDefs.${pname};
-          maintainers = lib.teams.nextcloud.members;
+          teams = [ lib.teams.nextcloud ];
           inherit (data)
             url
             hash
             description
             homepage
             ;
-        }
-      ) { };
+        };
 
     }
     // lib.mapAttrs (

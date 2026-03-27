@@ -1,8 +1,10 @@
 {
-  stdenv,
   fetchFromGitHub,
+  git,
   lib,
   python3,
+  rpm,
+  stdenv,
 }:
 
 let
@@ -34,30 +36,38 @@ let
     "bfup"
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bfscripts";
-  version = "unstable-2023-05-15";
+  version = "unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "Mellanox";
-    repo = pname;
-    rev = "1da79f3ece7cdf99b2571c00e8b14d2e112504a4";
-    hash = "sha256-pTubrnZKEFmtAj/omycFYeYwrCog39zBDEszoCrsQNQ=";
+    repo = "bfscripts";
+    rev = "ed8ede79fa002a2d83719a1bef6fbe0f7dcf37a4";
+    hash = "sha256-x+hpH6D5HTl39zD0vYj6wRFw881M4AcfM+ePcgXMst8=";
   };
 
   buildInputs = [
     python3
   ];
 
+  nativeBuildInputs = [
+    git
+    rpm
+  ];
+
   installPhase = ''
     ${lib.concatStringsSep "\n" (map (b: "install -D ${b} $out/bin/${b}") binaries)}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Collection of scripts used for BlueField SoC system management";
     homepage = "https://github.com/Mellanox/bfscripts";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ nikstur ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      nikstur
+      thillux
+    ];
   };
 }

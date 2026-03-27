@@ -55,14 +55,24 @@ let
           were removed. Please use, respectively, {rescanIntervalS,fsWatcherEnabled,fsWatcherDelayS} instead.
         ''
         {
-          devices = map (
-            device:
-            if builtins.isString device then { deviceId = cfg.settings.devices.${device}.id; } else device
-          ) folder.devices;
+          devices =
+            let
+              folderDevices = folder.devices;
+            in
+            map (
+              device:
+              if builtins.isString device then
+                { deviceId = cfg.settings.devices.${device}.id; }
+              else if builtins.isAttrs device then
+                { deviceId = cfg.settings.devices.${device.name}.id; } // device
+              else
+                throw "Invalid type for devices in folder '${folderName}'; expected list or attrset."
+            ) folderDevices;
         }
   ) (filterAttrs (_: folder: folder.enable) cfg.settings.folders);
 
   jq = "${pkgs.jq}/bin/jq";
+  grep = lib.getExe pkgs.gnugrep;
   updateConfig = pkgs.writers.writeBash "merge-syncthing-config" (
     ''
       set -efu
@@ -83,6 +93,61 @@ let
               --retry 1000 --retry-delay 1 --retry-all-errors \
               "$@"
       }
+
+      # Before version 2.0.0, Syncthing used LevelDB. In version 2.0.0,
+      # Syncthing started using SQLite. If you upgrade from an older version of
+      # Syncthing that uses LevelDB to a newer version of Syncthing that uses
+      # SQLite, then Syncthing will automatically do a one time database
+      # migration [1]. While the migration is happening, the regular Syncthing
+      # REST API is not available. Instead, a temporary API is made available
+      # in its place.
+      #
+      # The rest of this script depends on Syncthing’s regular REST API. This
+      # next part checks to see if Syncthing is currently providing the
+      # temporary API. If it is, this next part will wait until the regular API
+      # is available.
+      #
+      # [1]: <https://github.com/syncthing/syncthing/releases/tag/v2.0.0>
+      while true
+      do
+        # We can use pretty much any API endpoint here. I chose to use
+        # /rest/noauth/health because it doesn’t return a lot of data and
+        # because doing a “health check” seems like an appropriate way to check
+        # to see if the regular API is “alive” or not.
+        content_type="$(curl \
+          -o /dev/null \
+          -w '%header{Content-Type}' \
+          ${curlAddressArgs "/rest/noauth/health"}
+        )"
+        # The “($|([ \t]*;.*))” part at the end allows us to not worry about
+        # whether or not the Content-Type contains any parameters. “$” matches
+        # the end of the string which indicates that no parameters were used
+        # [1][2]. The “[ \t]*;” part matches OWS [3] followed by a semicolon
+        # which indicates that at least one parameter was used [4].
+        #
+        # We use “grep -i” here because media types are case-insensitive [2].
+        #
+        # [1]: <https://httpwg.org/specs/rfc9110.html#field.content-type>
+        # [2]: <https://httpwg.org/specs/rfc9110.html#media.type>
+        # [3]: <https://httpwg.org/specs/rfc9110.html#whitespace>
+        # [4]: <https://httpwg.org/specs/rfc9110.html#parameter>
+        if printf %s "$content_type" | ${lib.escapeShellArg grep} -qiP '^text/plain($|([ \t]*;.*))'
+        then
+          echo Waiting for Syncthing to finish its database migration…
+          sleep 30
+        # TODO: This next regex pattern can be simplified if this Syncthing bug gets fixed [1].
+        #
+        # [1]: <https://github.com/syncthing/syncthing/issues/10500>
+        elif printf %s "$content_type" | ${lib.escapeShellArg grep} -qiP '^application/json($|([ \t]*;.*))'
+        then
+          echo 'Syncthing is not doing a database migration (anymore).'
+          break
+        else
+          printf 'ERROR: Syncthing responded with an unexpected Content-Type: %s\n' "$content_type"
+          # This is the EX_PROTOCOL exit status from <man:sysexits.h(3head)>.
+          exit 76
+        fi
+      done
     ''
     +
 
@@ -108,6 +173,7 @@ let
             override = cfg.overrideFolders;
             conf = folders;
             baseAddress = curlAddressArgs "/rest/config/folders";
+            ignoreAddress = curlAddressArgs "/rest/db/ignores";
           };
         }
         [
@@ -128,9 +194,87 @@ let
               # don't exist in the array given. That's why we use here `POST`, and
               # only if s.override == true then we DELETE the relevant folders
               # afterwards.
-              (map (new_cfg: ''
-                curl -d ${lib.escapeShellArg (builtins.toJSON new_cfg)} -X POST ${s.baseAddress}
-              ''))
+              (map (
+                new_cfg:
+                let
+                  jsonPreSecretsFile = pkgs.writeTextFile {
+                    name = "${conf_type}-${new_cfg.id}-conf-pre-secrets.json";
+                    # Remove the ignorePatterns attribute, it is handled separately
+                    text = builtins.toJSON (removeAttrs new_cfg [ "ignorePatterns" ]);
+                  };
+                  injectSecretsJqCmd =
+                    {
+                      # There are no secrets in `devs`, so no massaging needed.
+                      "devs" = "${jq} .";
+                      "dirs" =
+                        let
+                          folder = new_cfg;
+                          devicesWithSecrets = lib.pipe folder.devices [
+                            (lib.filter (device: (builtins.isAttrs device) && device ? encryptionPasswordFile))
+                            (map (device: {
+                              deviceId = device.deviceId;
+                              variableName = "secret_${builtins.hashString "sha256" device.encryptionPasswordFile}";
+                              secretPath = device.encryptionPasswordFile;
+                            }))
+                          ];
+                          # At this point, `jsonPreSecretsFile` looks something like this:
+                          #
+                          #   {
+                          #     ...,
+                          #     "devices": [
+                          #       {
+                          #         "deviceId": "id1",
+                          #         "encryptionPasswordFile": "/etc/bar-encryption-password",
+                          #         "name": "..."
+                          #       }
+                          #     ],
+                          #   }
+                          #
+                          # We now generate a `jq` command that can replace those
+                          # `encryptionPasswordFile`s with `encryptionPassword`.
+                          # The `jq` command ends up looking like this:
+                          #
+                          #   jq --rawfile secret_DEADBEEF /etc/bar-encryption-password '
+                          #     .devices[] |= (
+                          #       if .deviceId == "id1" then
+                          #         del(.encryptionPasswordFile) |
+                          #         .encryptionPassword = $secret_DEADBEEF
+                          #       else
+                          #         .
+                          #       end
+                          #     )
+                          #   '
+                          jqUpdates = map (device: ''
+                            .devices[] |= (
+                              if .deviceId == "${device.deviceId}" then
+                                del(.encryptionPasswordFile) |
+                                .encryptionPassword = ''$${device.variableName}
+                              else
+                                .
+                              end
+                            )
+                          '') devicesWithSecrets;
+                          jqRawFiles = map (
+                            device: "--rawfile ${device.variableName} ${lib.escapeShellArg device.secretPath}"
+                          ) devicesWithSecrets;
+                        in
+                        "${jq} ${lib.concatStringsSep " " jqRawFiles} ${
+                          lib.escapeShellArg (lib.concatStringsSep "|" ([ "." ] ++ jqUpdates))
+                        }";
+                    }
+                    .${conf_type};
+                in
+                ''
+                  ${injectSecretsJqCmd} ${jsonPreSecretsFile} | curl --json @- -X POST ${s.baseAddress}
+                ''
+                /*
+                  Check if we are configuring a folder which has ignore patterns.
+                  If it does, write the ignore patterns to the rest API.
+                */
+                + lib.optionalString ((conf_type == "dirs") && (new_cfg.ignorePatterns != null)) ''
+                  curl -d '{"ignore": ${builtins.toJSON new_cfg.ignorePatterns}}' -X POST ${s.ignoreAddress}?folder=${lib.strings.escapeURL new_cfg.id}
+                ''
+              ))
               (lib.concatStringsSep "\n")
             ]
             /*
@@ -142,11 +286,11 @@ let
               stale_${conf_type}_ids="$(curl -X GET ${s.baseAddress} | ${jq} \
                 --argjson new_ids ${lib.escapeShellArg (builtins.toJSON s.new_conf_IDs)} \
                 --raw-output \
-                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]'
+                '[.[].${s.GET_IdAttrName}] - $new_ids | .[]|@uri'
               )"
               for id in ''${stale_${conf_type}_ids}; do
                 >&2 echo "Deleting stale device: $id"
-                curl -X DELETE ${s.baseAddress}/$id
+                curl -X DELETE "${s.baseAddress}/$id"
               done
             ''
           ))
@@ -157,13 +301,14 @@ let
     +
       /*
         Now we update the other settings defined in cleanedConfig which are not
-        "folders" or "devices".
+        "folders", "devices", or "guiPasswordFile".
       */
       (lib.pipe cleanedConfig [
         builtins.attrNames
         (lib.subtractLists [
           "folders"
           "devices"
+          "guiPasswordFile"
         ])
         (map (subOption: ''
           curl -X PUT -d ${
@@ -172,6 +317,12 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ])
+    +
+      # Now we hash the contents of guiPasswordFile and use the result to update the gui password
+      (lib.optionalString (cfg.guiPasswordFile != null) ''
+        ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
+        curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+      '')
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -203,6 +354,14 @@ in
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
@@ -257,7 +416,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.int;
+                      type = types.nullOr types.port;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.
@@ -438,11 +597,43 @@ in
                       };
 
                       devices = mkOption {
-                        type = types.listOf types.str;
+                        type = types.listOf (
+                          types.oneOf [
+                            types.str
+                            (types.submodule (
+                              { ... }:
+                              {
+                                freeformType = settingsFormat.type;
+                                options = {
+                                  name = mkOption {
+                                    type = types.str;
+                                    default = null;
+                                    description = ''
+                                      The name of a device defined in the
+                                      [devices](#opt-services.syncthing.settings.devices)
+                                      option.
+                                    '';
+                                  };
+                                  encryptionPasswordFile = mkOption {
+                                    type = types.nullOr types.externalPath;
+                                    default = null;
+                                    description = ''
+                                      Path to encryption password. If set, the file will be read during
+                                      service activation, without being embedded in derivation.
+                                    '';
+                                  };
+                                };
+                              }
+                            ))
+                          ]
+                        );
                         default = [ ];
                         description = ''
                           The devices this folder should be shared with. Each device must
                           be defined in the [devices](#opt-services.syncthing.settings.devices) option.
+
+                          A list of either strings or attribute sets, where values
+                          are device names or device configurations.
                         '';
                       };
 
@@ -517,6 +708,26 @@ in
                           On Unix systems, tries to copy file/folder ownership from the parent directory (the directory it’s located in).
                           Requires running Syncthing as a privileged user, or granting it additional capabilities (e.g. CAP_CHOWN on Linux).
                         '';
+                      };
+
+                      ignorePatterns = mkOption {
+                        type = types.nullOr (types.listOf types.str);
+                        default = null;
+                        description = ''
+                          Syncthing can be configured to ignore certain files in a folder using ignore patterns.
+                          Enter them as a list of strings, one string per line.
+                          See the Syncthing documentation for syntax: <https://docs.syncthing.net/users/ignoring.html>
+                          Patterns set using the WebUI will be overridden if you define this option.
+                          If you want to override the ignore patterns to be empty, use `ignorePatterns = []`.
+                          Deleting the `ignorePatterns` option will not remove the patterns from Syncthing automatically
+                          because patterns are only handled by the module if this option is defined. Either use
+                          `ignorePatterns = []` before deleting the option or remove the patterns afterwards using the WebUI.
+                        '';
+                        example = [
+                          "// This is a comment"
+                          "*.part // Firefox downloads and other things"
+                          "*.crdownload // Chrom(ium|e) downloads"
+                        ];
                       };
                     };
                   }
@@ -675,30 +886,30 @@ in
     };
   };
 
-  imports =
-    [
-      (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
-        This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
-        It can be enabled on a per-folder basis through the web interface.
-      '')
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "extraOptions" ]
-        [ "services" "syncthing" "settings" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "folders" ]
-        [ "services" "syncthing" "settings" "folders" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "devices" ]
-        [ "services" "syncthing" "settings" "devices" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "options" ]
-        [ "services" "syncthing" "settings" "options" ]
-      )
-    ]
-    ++ map
+  imports = [
+    (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
+      This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
+      It can be enabled on a per-folder basis through the web interface.
+    '')
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "extraOptions" ]
+      [ "services" "syncthing" "settings" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "folders" ]
+      [ "services" "syncthing" "settings" "folders" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "devices" ]
+      [ "services" "syncthing" "settings" "devices" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "options" ]
+      [ "services" "syncthing" "settings" "options" ]
+    )
+  ]
+  ++
+    map
       (o: mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ])
       [
         "cert"
@@ -721,6 +932,12 @@ in
           from the configuration, creating path conflicts.
         '';
       }
+      {
+        assertion = (lib.hasAttrByPath [ "gui" "password" ] cfg.settings) -> cfg.guiPasswordFile == null;
+        message = ''
+          Please use only one of services.syncthing.settings.gui.password or services.syncthing.guiPasswordFile.
+        '';
+      }
     ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
@@ -731,7 +948,8 @@ in
       ];
     };
 
-    systemd.packages = [ pkgs.syncthing ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} = {
@@ -757,7 +975,8 @@ in
           STNORESTART = "yes";
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
-        } // config.networking.proxy.envVars;
+        }
+        // config.networking.proxy.envVars;
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
@@ -770,20 +989,25 @@ in
               "+${pkgs.writers.writeBash "syncthing-copy-keys" ''
                 install -dm700 -o ${cfg.user} -g ${cfg.group} ${cfg.configDir}
                 ${optionalString (cfg.cert != null) ''
-                  install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.cert} ${cfg.configDir}/cert.pem
+                  install -Dm644 -o ${cfg.user} -g ${cfg.group} ${toString cfg.cert} ${cfg.configDir}/cert.pem
                 ''}
                 ${optionalString (cfg.key != null) ''
-                  install -Dm400 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
+                  install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart = ''
-            ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
-              ${escapeShellArgs cfg.extraFlags}
-          '';
+          ExecStart =
+            let
+              args = lib.escapeShellArgs (
+                (lib.cli.toCommandLineGNU { } {
+                  "no-browser" = true;
+                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "config" = cfg.configDir;
+                  "data" = cfg.databaseDir;
+                })
+                ++ cfg.extraFlags
+              );
+            in
+            "${lib.getExe cfg.package} ${args}";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

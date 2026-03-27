@@ -3,37 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  pythonOlder,
   mpv,
   setuptools,
+  pytestCheckHook,
+  pyvirtualdisplay,
+  xvfb,
 }:
 
 buildPythonPackage rec {
   pname = "mpv";
-  version = "1.0.7";
-  format = "pyproject";
+  version = "1.0.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
-    rev = "v${version}";
-    hash = "sha256-2sYWTzj7+ozezNX0uFdJW+A0K6bwAmiVvqo/lr9UToA=";
+    tag = "v${version}";
+    hash = "sha256-MHdQnnjxnbOkIf56VLGi7vgNbrjhU/ODUBdZoXjxXxE=";
   };
-
-  patches = [
-    # https://github.com/jellyfin/jellyfin-mpv-shim/issues/448
-    (fetchpatch {
-      url = "https://github.com/jaseg/python-mpv/commit/12850b34bd3b64704f8abd30341a647a73719267.patch";
-      hash = "sha256-2O7w8PeWinCzrigGX3IV+9PVCtU9KCM2UJ32Y1kE6m0=";
-    })
-  ];
-
-  disabled = pythonOlder "3.9";
-
-  nativeBuildInputs = [ setuptools ];
-
-  buildInputs = [ mpv ];
 
   postPatch = ''
     substituteInPlace mpv.py \
@@ -41,12 +28,24 @@ buildPythonPackage rec {
                      'sofile = "${mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
+  build-system = [ setuptools ];
+
+  buildInputs = [ mpv ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pyvirtualdisplay
+  ]
+  ++ lib.optionals stdenv.isLinux [
+    xvfb
+  ];
+
   pythonImportsCheck = [ "mpv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python interface to the mpv media player";
     homepage = "https://github.com/jaseg/python-mpv";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

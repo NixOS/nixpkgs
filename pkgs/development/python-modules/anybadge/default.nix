@@ -5,7 +5,6 @@
   setuptools,
   packaging,
   pytestCheckHook,
-  pythonOlder,
   requests,
   sh,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "anybadge";
   version = "1.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jongracecox";
@@ -60,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jongracecox/anybadge";
     changelog = "https://github.com/jongracecox/anybadge/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fabiangd ];
+    maintainers = [ ];
   };
 }

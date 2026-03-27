@@ -8,15 +8,23 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, lib, ... }:
+  {
+    config,
+    lib,
+    pkgs,
+    ...
+  }:
   let
-    accessKey = "BKIKJAA5BMMU2RHO6IBB";
-    secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
+    accessKey = "GK85bae09276df06d47a1ed2bf";
+    secretKey = "eac031e3379beb05477a9c8381ade716c8f5860f1dffec915ae2a728a88c88c6";
 
-    rootCredentialsFile = pkgs.writeText "minio-credentials-full" ''
-      MINIO_ROOT_USER=${accessKey}
-      MINIO_ROOT_PASSWORD=${secretKey}
-    '';
+    awsCfg = "${pkgs.writeText "aws.cfg" ''
+      [default]
+      endpoint_url=https://acme.test
+      aws_access_key_id=${accessKey}
+      aws_secret_access_key=${secretKey}
+      region=garage
+    ''}";
   in
   {
     inherit name;
@@ -26,71 +34,153 @@ runTest (
 
     nodes = {
       nextcloud =
-        { config, pkgs, ... }:
         {
-          networking.firewall.allowedTCPPorts = [ 9000 ];
-          environment.systemPackages = [ pkgs.minio-client ];
-
+          pkgs,
+          nodes,
+          ...
+        }:
+        {
           services.nextcloud.config.dbtype = "sqlite";
+
+          environment.variables.AWS_CONFIG_FILE = awsCfg;
+          environment.variables.AWS_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
 
           services.nextcloud.config.objectstore.s3 = {
             enable = true;
             bucket = "nextcloud";
-            autocreate = true;
+            verify_bucket_exists = true;
             key = accessKey;
             secretFile = "${pkgs.writeText "secretKey" secretKey}";
-            hostname = "nextcloud";
-            useSsl = false;
-            port = 9000;
+            hostname = "acme.test";
+            useSsl = true;
+            port = 443;
             usePathStyle = true;
-            region = "us-east-1";
+            region = "garage";
           };
 
-          services.minio = {
+          security.pki.certificates = [
+            (builtins.readFile ../common/acme/server/ca.cert.pem)
+          ];
+
+          environment.systemPackages = [ pkgs.awscli2 ];
+
+          # The dummy certs are for acme.test, so we pretend that's the FQDN
+          # of the garage VM.
+          networking.extraHosts = ''
+            ${nodes.garage.networking.primaryIPAddress} acme.test
+          '';
+        };
+
+      client =
+        { pkgs, nodes, ... }:
+        {
+          environment.variables.AWS_CONFIG_FILE = awsCfg;
+          environment.variables.AWS_CA_BUNDLE = "/etc/ssl/certs/ca-bundle.crt";
+          environment.systemPackages = [ pkgs.awscli2 ];
+
+          security.pki.certificates = [
+            (builtins.readFile ../common/acme/server/ca.cert.pem)
+          ];
+          networking.extraHosts = ''
+            ${nodes.garage.networking.primaryIPAddress} acme.test
+          '';
+        };
+
+      garage =
+        { pkgs, ... }:
+        {
+          security.pki.certificates = [
+            (builtins.readFile ../common/acme/server/ca.cert.pem)
+          ];
+
+          services.garage = {
             enable = true;
-            listenAddress = "0.0.0.0:9000";
-            consoleAddress = "0.0.0.0:9001";
-            inherit rootCredentialsFile;
+            package = pkgs.garage_2;
+            settings = {
+              rpc_bind_addr = "[::]:3901";
+              rpc_public_addr = "[::]:3901";
+              rpc_secret = "81e5ab61625a5097c5953a09a16a524479c290ca01921560704395b830ad248d";
+              replication_factor = 1;
+
+              s3_api = {
+                s3_region = "garage";
+                api_bind_addr = "[::]:3900";
+              };
+            };
           };
+
+          services.nginx = {
+            enable = true;
+            recommendedProxySettings = true;
+
+            virtualHosts."acme.test" = {
+              onlySSL = true;
+              sslCertificate = ../common/acme/server/acme.test.cert.pem;
+              sslCertificateKey = ../common/acme/server/acme.test.key.pem;
+              locations."/".proxyPass = "http://127.0.0.1:3900";
+            };
+          };
+
+          networking.extraHosts = ''
+            127.0.0.1 acme.test
+          '';
+
+          environment.systemPackages = [ pkgs.gawk ];
+
+          virtualisation.diskSize = 2 * 1024;
+
+          networking.firewall.allowedTCPPorts = [
+            3900
+            80
+            443
+          ];
         };
     };
 
-    test-helpers.init = ''
-      nextcloud.wait_for_open_port(9000)
+    test-helpers.provision = ''
+      garage.start()
+      garage.wait_for_open_port(3900)
+      garage.wait_for_unit("nginx.service")
+      garage.wait_for_open_port(443)
+
+      node_id = garage.succeed("garage status | tail -n1 | awk '{ print $1 }'")
+      garage.succeed(
+          "garage status",
+          f"garage layout assign -c 1GB -z garage {node_id}",
+          "garage layout apply --version 1",
+          "garage key import ${accessKey} ${secretKey} --yes",
+          "garage bucket create nextcloud",
+          "garage key list >&2",
+          "garage bucket allow --read --write --owner nextcloud --key ${accessKey}"
+      )
     '';
 
     test-helpers.extraTests =
       { nodes, ... }:
       ''
+
         with subtest("File is not on the filesystem"):
             nextcloud.succeed("test ! -e ${nodes.nextcloud.services.nextcloud.home}/data/root/files/test-shared-file")
 
         with subtest("Check if file is in S3"):
-            nextcloud.succeed(
-                "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} --api s3v4"
-            )
-            files = nextcloud.succeed('mc ls minio/nextcloud|sort').strip().split('\n')
+            files = [
+                f.rsplit(' ', 2)
+                for f in nextcloud.succeed('aws s3 ls s3://nextcloud/|sort').strip().split('\n')
+            ]
+            print(files)
 
             # Cannot assert an exact number here, nc27 writes more stuff initially into S3.
             # For now let's assume it's always the most recently added file.
             assert len(files) > 0, f"""
-              Expected to have at least one object in minio/nextcloud. But `mc ls` gave output:
+              Expected to have at least one object in garage/nextcloud. But `mc ls` gave output:
 
               '{files}'
             """
 
-            import re
-            ptrn = re.compile("^\[[A-Z0-9 :-]+\] +(?P<details>[A-Za-z0-9 :]+)$")
-            match = ptrn.match(files[-1].strip())
-            assert match, "Cannot match mc client output!"
-            size, type_, file = tuple(match.group('details').split(' '))
+            _, size, file = files[-1]
 
-            assert size == "3B", f"""
+            assert size == "3", f"""
               Expected size of uploaded file to be 3 bytes, got {size}
-            """
-
-            assert type_ == 'STANDARD', f"""
-              Expected type of bucket entry to be a file, i.e. 'STANDARD'. Got {type_}
             """
 
             assert file.startswith('urn:oid'), """
@@ -99,9 +189,8 @@ runTest (
 
         with subtest("Test download from S3"):
             client.succeed(
-                "env AWS_ACCESS_KEY_ID=${accessKey} AWS_SECRET_ACCESS_KEY=${secretKey} "
-                + f"${lib.getExe pkgs.awscli2} s3 cp s3://nextcloud/{file} test --endpoint-url http://nextcloud:9000 "
-                + "--region us-east-1"
+                f"aws s3 cp s3://nextcloud/{file} test "
+                + "--ca-bundle /etc/ssl/certs/ca-bundle.crt"
             )
 
             client.succeed("test hi = $(cat test)")

@@ -6,7 +6,6 @@
   pkg-config,
   lua,
   fpc,
-  pcre,
   portaudio,
   freetype,
   libpng,
@@ -19,14 +18,13 @@
   ffmpeg,
   sqlite,
   zlib,
-  libX11,
+  libx11,
   libGLU,
   libGL,
 }:
 
 let
   sharedLibs = [
-    pcre
     portaudio
     freetype
     SDL2
@@ -38,22 +36,22 @@ let
     sqlite
     lua
     zlib
-    libX11
+    libx11
     libGLU
     libGL
     ffmpeg
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ultrastardx";
-  version = "2025.3.0";
+  version = "2026.3.0";
 
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
-    rev = "v${version}";
-    hash = "sha256-tMYw+nkyEEK7AqG9AvMchCGzzKWlfut4poXc1WK6vkA=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xVlg24EaHyfrpdfnCk4Wupi33BVKwisvg0hN5Q/dNC4=";
   };
 
   nativeBuildInputs = [
@@ -63,12 +61,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fpc
     libpng
-  ] ++ sharedLibs;
-
-  postPatch = ''
-    substituteInPlace src/config.inc.in \
-      --subst-var-by libpcre_LIBNAME libpcre.so.1
-  '';
+  ]
+  ++ sharedLibs;
 
   preBuild =
     let
@@ -81,12 +75,15 @@ stdenv.mkDerivation rec {
   # dlopened libgcc requires the rpath not to be shrinked
   dontPatchELF = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://usdx.eu/";
     description = "Free and open source karaoke game";
     mainProgram = "ultrastardx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ Profpatsch ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      diogotcorreia
+      Profpatsch
+    ];
+    platforms = lib.platforms.linux;
   };
-}
+})

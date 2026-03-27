@@ -1,22 +1,22 @@
 {
-  autoPatchelfHook,
   lib,
+  flutter332,
   fetchFromGitHub,
-  flutter327,
+  autoPatchelfHook,
   mpv,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "simple-live-app";
-  version = "1.7.6";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "xiaoyaocz";
     repo = "dart_simple_live";
     tag = "v${version}";
-    hash = "sha256-nnbGSqPyqoGNOjFx75soy+0liYv6pVwiLBGb7yV1AgI=";
+    hash = "sha256-6kEty4QZZQW3Xzz4213ThC4FF+quMNE4oAuZ1limxFg=";
   };
 
   sourceRoot = "${src.name}/simple_live_app";
@@ -39,14 +39,12 @@ flutter327.buildFlutterApplication rec {
       icon = "simple-live-app";
       genericName = "Simple-Live";
       desktopName = "Simple-Live";
-      keywords = [
-        "Simple Live"
-      ];
+      keywords = [ "Simple Live" ];
     })
   ];
 
   postInstall = ''
-    install -Dm644 assets/logo.png $out/share/pixmaps/simple-live-app.png
+    install -Dm644 assets/logo.png $out/share/icons/hicolor/1024x1024/apps/simple-live-app.png
   '';
 
   extraWrapProgramArgs = ''
@@ -60,7 +58,7 @@ flutter327.buildFlutterApplication rec {
     homepage = "https://github.com/xiaoyaocz/dart_simple_live";
     mainProgram = "simple_live_app";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

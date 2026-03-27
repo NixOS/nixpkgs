@@ -1,37 +1,38 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   alsa-lib,
   ffmpeg,
   libjack2,
-  libX11,
-  libXext,
-  libXinerama,
+  libx11,
+  libxext,
+  libxinerama,
   qtx11extras,
-  libXfixes,
+  libxfixes,
   libGLU,
   libGL,
   pkg-config,
   libpulseaudio,
   libv4l,
+  pipewire,
   qtbase,
   qttools,
+  wrapQtAppsHook,
   cmake,
   ninja,
-  nix-update-script,
+  unstableGitUpdater,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "simplescreenrecorder";
-  version = "0.4.4-unstable-2024-08-13";
+  version = "0.4.4-unstable-2025-12-28";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
     repo = "ssr";
-    rev = "4e3ba13dd212fc4213fe0911f371bc7d34033b8d";
-    hash = "sha256-jBZkyrZOrUljWgO8U4SZOTCu3sOm83unQ7vyv+KkAuE=";
+    rev = "d790385b49de937976165d6feb39414c75ad6a3d";
+    hash = "sha256-QfFK43iwtwZvTRbxNXiphcsxhn/ofllGX993XppiRBw=";
   };
 
   cmakeFlags = [
@@ -52,31 +53,34 @@ mkDerivation {
     pkg-config
     cmake
     ninja
+    wrapQtAppsHook
   ];
+
   buildInputs = [
     alsa-lib
     ffmpeg
     libjack2
-    libX11
-    libXext
-    libXfixes
-    libXinerama
+    libx11
+    libxext
+    libxfixes
+    libxinerama
     libGLU
     libGL
     libpulseaudio
     libv4l
+    pipewire
     qtbase
     qttools
     qtx11extras
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "Screen recorder for Linux";
     homepage = "https://www.maartenbaert.be/simplescreenrecorder";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

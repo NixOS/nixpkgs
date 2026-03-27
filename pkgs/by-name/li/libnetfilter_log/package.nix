@@ -7,12 +7,12 @@
   libmnl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libnetfilter_log";
   version = "1.0.2";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_log/files/${pname}-${version}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_log/files/libnetfilter_log-${finalAttrs.version}.tar.bz2";
     sha256 = "1spy9xs41v76kid5ana8n126f3mvgq6fjibbfbj4kn0larbhix73";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libnfnetlink ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     description = "Userspace library providing interface to packets that have been logged by the kernel packet filter";
     longDescription = ''
       libnetfilter_log is a userspace library providing interface to packets
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
       library has been previously known as libnfnetlink_log.
     '';
     homepage = "https://netfilter.org/projects/libnetfilter_log/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

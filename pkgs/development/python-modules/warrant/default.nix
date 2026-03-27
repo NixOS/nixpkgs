@@ -49,7 +49,7 @@ buildPythonPackage {
   # all the checks are failing
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Python library for using AWS Cognito with support for SRP";
     homepage = "https://github.com/capless/warrant";
     license = lib.licenses.asl20;

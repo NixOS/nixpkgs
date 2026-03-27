@@ -4,28 +4,28 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "dblab";
-  version = "0.30.1";
+  version = "0.34.3";
 
   src = fetchFromGitHub {
     owner = "danvergara";
     repo = "dblab";
-    rev = "v${version}";
-    hash = "sha256-a0452fNr78FDhVoBF8RkKbtamvc5e6gEbTOeRdgGQs4=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-mK5DpFD1FgKmZscqJGHy+HY+GlYm2a6UgPFJHhjwtnU=";
   };
 
-  vendorHash = "sha256-n1Z3sNvNLX1QpfpDSGDygjbC6IE85SBJHvyliy11OjU=";
+  vendorHash = "sha256-NhBT0dBS3jKgWHxCMVV6NUMcvqCbKS+tlm3y1YI/sAE=";
 
-  ldflags = [ "-s -w -X main.version=${version}" ];
+  ldflags = [ "-s -w -X main.version=${finalAttrs.version}" ];
 
   # some tests require network access
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Database client every command line junkie deserves";
     homepage = "https://github.com/danvergara/dblab";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

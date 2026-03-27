@@ -20,6 +20,15 @@
   postgresql,
   buildPackages,
 
+  # Curl
+  curlSupport ?
+    lib.meta.availableOn stdenv.hostPlatform curl
+    # Building statically fails with:
+    # configure: error: library 'curl' does not provide curl_multi_init
+    # https://www.postgresql.org/message-id/487dacec-6d8d-46c0-a36f-d5b8c81a56f1%40technowledgy.de
+    && !stdenv.hostPlatform.isStatic,
+  curl,
+
   # GSSAPI
   gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
   libkrb5,
@@ -31,19 +40,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.4";
+  version = "18.2";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_4";
-    hash = "sha256-TEpvX28chR3CXiOQsNY12t8WfM9ywoZVX1e/6mj9DqE=";
+    rev = "refs/tags/REL_18_2";
+    hash = "sha256-cvBXxA7/kEwDGxFv/YoZCIh17jzUujrCtfKAmtSxKTw=";
   };
 
   __structuredAttrs = true;
-
-  hardeningEnable = lib.optionals (!stdenv.cc.isClang) [ "pie" ];
 
   outputs = [
     "out"
@@ -53,16 +60,17 @@ stdenv.mkDerivation (finalAttrs: {
     disallowedReferences = [ "dev" ];
     disallowedRequisites = [
       stdenv.cc
-    ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+    ]
+    ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
   };
 
-  buildInputs =
-    [
-      zlib
-      openssl
-    ]
-    ++ lib.optionals gssSupport [ libkrb5 ]
-    ++ lib.optionals nlsSupport [ gettext ];
+  buildInputs = [
+    zlib
+    openssl
+  ]
+  ++ lib.optionals curlSupport [ curl ]
+  ++ lib.optionals gssSupport [ libkrb5 ]
+  ++ lib.optionals nlsSupport [ gettext ];
 
   nativeBuildInputs = [
     bison
@@ -91,18 +99,27 @@ stdenv.mkDerivation (finalAttrs: {
     "-fdata-sections -ffunction-sections"
     + (if stdenv.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
-  configureFlags =
-    [
-      "--enable-debug"
-      "--sysconfdir=/etc"
-      "--with-openssl"
-      "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      "--without-icu"
-      "--without-perl"
-      "--without-readline"
-    ]
-    ++ lib.optionals gssSupport [ "--with-gssapi" ]
-    ++ lib.optionals nlsSupport [ "--enable-nls" ];
+  # This flag was introduced upstream in:
+  # https://github.com/postgres/postgres/commit/b6c7cfac88c47a9194d76f3d074129da3c46545a
+  # It causes errors when linking against libpq.a in pkgsStatic:
+  #   undefined reference to `pg_encoding_to_char'
+  # Unsetting the flag fixes it. The upstream reasoning to introduce it is about the risk
+  # to have initdb load a libpq.so from a different major version and how to avoid that.
+  # This doesn't apply to us with Nix.
+  env.NIX_CFLAGS_COMPILE = "-UUSE_PRIVATE_ENCODING_FUNCS";
+
+  configureFlags = [
+    "--enable-debug"
+    "--sysconfdir=/etc"
+    "--with-openssl"
+    "--with-system-tzdata=${tzdata}/share/zoneinfo"
+    "--without-icu"
+    "--without-perl"
+    "--without-readline"
+  ]
+  ++ lib.optionals curlSupport [ "--with-libcurl" ]
+  ++ lib.optionals gssSupport [ "--with-gssapi" ]
+  ++ lib.optionals nlsSupport [ "--enable-nls" ];
 
   patches = lib.optionals stdenv.hostPlatform.isLinux [
     ./patches/socketdir-in-run-13+.patch
@@ -110,6 +127,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     cat ${./pg_config.env.mk} >> src/common/Makefile
+  ''
+  # Explicitly disable building the shared libs, because that would fail with pkgsStatic.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace src/interfaces/libpq/Makefile \
+      --replace-fail "all: all-lib libpq-refs-stamp" "all: all-lib"
+    substituteInPlace src/Makefile.shlib \
+      --replace-fail "all-lib: all-shared-lib" "all-lib: all-static-lib" \
+      --replace-fail "install-lib: install-lib-shared" "install-lib: install-lib-static"
   '';
 
   installPhase = ''
@@ -118,7 +143,15 @@ stdenv.mkDerivation (finalAttrs: {
     make -C src/common install pg_config.env
     make -C src/include install
     make -C src/interfaces/libpq install
+  ''
+  + lib.optionalString curlSupport ''
+    make -C src/interfaces/libpq-oauth install
+  ''
+  + ''
     make -C src/port install
+
+    substituteInPlace src/common/pg_config.env \
+      --replace-fail "$out" "@out@"
 
     install -D src/common/pg_config.env "$dev/nix-support/pg_config.env"
     moveToOutput "lib/*.a" "$dev"
@@ -130,26 +163,22 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # PostgreSQL always builds both shared and static libs, so we delete those we don't want.
-  postInstall =
-    if stdenv.hostPlatform.isStatic then
-      ''
-        rm -rfv $out/lib/*.so*
-        touch $out/empty
-      ''
-    else
-      "rm -rfv $dev/lib/*.a";
+  postInstall = if stdenv.hostPlatform.isStatic then "touch $out/empty" else "rm -rfv $dev/lib/*.a";
 
   doCheck = false;
 
   passthru.pg_config = buildPackages.callPackage ./pg_config.nix {
     inherit (finalAttrs) finalPackage;
+    outputs = {
+      out = lib.getOutput "out" finalAttrs.finalPackage;
+    };
   };
 
   meta = {
     inherit (postgresql.meta)
       homepage
       license
-      maintainers
+      teams
       platforms
       ;
     description = "C application programmer's interface to PostgreSQL";

@@ -13,14 +13,21 @@
 let
   validAccents = [
     "default"
-    "purple"
+    "blue"
+    "flamingo"
+    "green"
+    "grey"
+    "lavender"
+    "maroon"
+    "mauve"
+    "peach"
     "pink"
     "red"
-    "orange"
-    "yellow"
-    "green"
+    "rosewater"
+    "sapphire"
+    "sky"
     "teal"
-    "grey"
+    "yellow"
     "all"
   ];
   validShades = [
@@ -59,13 +66,13 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
   stdenv.mkDerivation
   {
     pname = "magnetic-${lib.toLower pname}";
-    version = "0-unstable-2024-11-06";
+    version = "0-unstable-2026-01-15";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Catppuccin-GTK-Theme";
-      rev = "be79b8289200aa1a17620f84dde3fe4c3b9c5998";
-      hash = "sha256-QItHmYZpe7BiPC+2CtFwiRXyMTG7+ex0sJTs63xmkAo=";
+      rev = "f25d8cf688d8f224f0ce396689ffcf5767eb647e";
+      hash = "sha256-W+NGyPnOEKoicJPwnftq26iP7jya1ZKq38lMjx/k9ss=";
     };
 
     nativeBuildInputs = [
@@ -101,11 +108,11 @@ lib.checkListOfEnum "${pname} Valid theme accent(s)" validAccents accent lib.che
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "GTK Theme with Catppuccin colour scheme";
       homepage = "https://github.com/Fausto-Korpsvart/Catppuccin-GTK-Theme";
-      license = licenses.gpl3Only;
-      maintainers = with maintainers; [ icy-thought ];
-      platforms = platforms.all;
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ icy-thought ];
+      platforms = lib.platforms.all;
     };
   }

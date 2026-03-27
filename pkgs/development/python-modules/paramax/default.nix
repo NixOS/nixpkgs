@@ -16,16 +16,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "paramax";
-  version = "0.0.0";
+  version = "0.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "danielward27";
     repo = "paramax";
-    tag = "v${version}";
-    hash = "sha256-w6F9XuQEwRfOei6gDAyCHt2HUY7I4H92AlEv1Xddv54=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UPSnFtypQYtnDRl2GCoy+OQ8Ws7eX+iPsd8WWBsgmlo=";
   };
 
   build-system = [
@@ -46,10 +46,10 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A small library of paramaterizations and parameter constraints for PyTrees";
+    description = "Small library of paramaterizations and parameter constraints for PyTrees";
     homepage = "https://github.com/danielward27/paramax";
-    changelog = "https://github.com/danielward27/paramax/releases/tag/v${version}";
+    changelog = "https://github.com/danielward27/paramax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

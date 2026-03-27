@@ -4,18 +4,18 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "aws-iam-authenticator";
-  version = "0.6.31";
+  version = "0.7.11";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-v0CWwDLgjMU9kjPx5yUUauWNnzP0gP5zm4xCzBMPZpE=";
+    repo = "aws-iam-authenticator";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ObvzeAqvECQ3wdILg5fLSvANWG19PcWfE+IlN145N+A=";
   };
 
-  vendorHash = "sha256-dR98s5g2KFGJIFbgYHmW2813GEhLFZZvV5nja84a0Ik=";
+  vendorHash = "sha256-cEWsTYwWVo7UKcAjXf+dUQ8pboIUnT+0D8yFhD6WSSk=";
 
   ldflags =
     let
@@ -24,19 +24,22 @@ buildGoModule rec {
     [
       "-s"
       "-w"
-      "-X=${PKG}/pkg.Version=${version}"
+      "-X=${PKG}/pkg.Version=${finalAttrs.version}"
       "-X=${PKG}/pkg.BuildDate=1970-01-01T01:01:01Z"
-      "-X ?${PKG}/pkg.CommitID=${version}"
+      "-X ?${PKG}/pkg.CommitID=${finalAttrs.version}"
     ];
 
   subPackages = [ "cmd/aws-iam-authenticator" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kubernetes-sigs/aws-iam-authenticator";
     description = "AWS IAM credentials for Kubernetes authentication";
     mainProgram = "aws-iam-authenticator";
-    changelog = "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ srhb ];
+    changelog = "https://github.com/kubernetes-sigs/aws-iam-authenticator/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      srhb
+      ryan4yin
+    ];
   };
-}
+})

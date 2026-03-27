@@ -1,18 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubesec";
   version = "2.14.2";
 
   src = fetchFromGitHub {
     owner = "controlplaneio";
     repo = "kubesec";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4jVRd6XQekL4wMZ+Icoa2DEsTGzBISK2QPO+gu890kA=";
   };
 
@@ -23,13 +24,13 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/controlplaneio/kubesec/v${lib.versions.major version}/cmd.version=v${version}"
+    "-X=github.com/controlplaneio/kubesec/v${lib.versions.major finalAttrs.version}/cmd.version=v${finalAttrs.version}"
   ];
 
   # Tests wants to download the kubernetes schema for use with kubeval
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubesec \
       --bash <($out/bin/kubesec completion bash) \
       --fish <($out/bin/kubesec completion fish) \
@@ -41,20 +42,20 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/kubesec --help
-    $out/bin/kubesec version | grep "${version}"
+    $out/bin/kubesec version | grep "${finalAttrs.version}"
 
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Security risk analysis tool for Kubernetes resources";
     mainProgram = "kubesec";
     homepage = "https://github.com/controlplaneio/kubesec";
-    changelog = "https://github.com/controlplaneio/kubesec/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/controlplaneio/kubesec/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
       fab
       jk
     ];
   };
-}
+})

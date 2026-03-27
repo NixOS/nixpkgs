@@ -31,20 +31,28 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      joblib
-      lz4
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      distutils
-    ];
+  dependencies = [
+    joblib
+    lz4
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    distutils
+  ];
 
   pythonImportsCheck = [ "mtcnn" ];
 
   nativeCheckInputs = [
     keras
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Failing since keras 3.13.0.
+    # ValueError: Exception encountered when calling Conv2D.call().
+    # The convolution operation resulted in an empty output. Output shape: (0, 48, 48, 3).
+    # This can happen if the input is too small for the given kernel size, strides, dilation rate,
+    # and padding mode. Please check the input shape and convolution parameters.
+    "test_detect_no_faces"
   ];
 
   meta = {

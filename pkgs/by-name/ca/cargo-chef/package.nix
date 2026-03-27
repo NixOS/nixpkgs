@@ -4,23 +4,22 @@
   fetchCrate,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-chef";
-  version = "0.1.71";
+  version = "0.1.77";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-ZbbRo+AAlh7sW1HROxHfmnDxchJRWUId3oh5wgPauuQ=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-R2on81B11ploV9QwiV5VCvRUCLQWbP21dazNliqkhGA=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/VqFs5wzKbnfZRfKERUGjuCj/H+o1iI/ioMPq/FugDo=";
+  cargoHash = "sha256-iOZjyqoykCwrNsXN7nMF6deuSSlyD6r2+atxPeNmX2c=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo-subcommand to speed up Rust Docker builds using Docker layer caching";
     mainProgram = "cargo-chef";
     homepage = "https://github.com/LukeMathWalker/cargo-chef";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kkharji ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kkharji ];
   };
-}
+})

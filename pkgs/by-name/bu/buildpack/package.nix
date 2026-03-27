@@ -1,21 +1,19 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
 }:
 
-let
+buildGoModule (finalAttrs: {
   pname = "pack";
   version = "0.37.0";
-in
-buildGoModule {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "buildpacks";
-    repo = pname;
-    rev = "refs/tags/v${version}";
+    repo = "pack";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-QCN0UvWa5u9XX5LvY3yD8Xz2s1XzZUg/WXnAfWwZnY0=";
   };
 
@@ -28,10 +26,10 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/buildpacks/pack.Version=${version}"
+    "-X github.com/buildpacks/pack.Version=${finalAttrs.version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pack \
       --zsh $(PACK_HOME=$PWD $out/bin/pack completion --shell zsh) \
       --bash $(PACK_HOME=$PWD $out/bin/pack completion --shell bash) \
@@ -40,10 +38,10 @@ buildGoModule {
 
   meta = {
     homepage = "https://buildpacks.io/";
-    changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
+    changelog = "https://github.com/buildpacks/pack/releases/tag/v${finalAttrs.version}";
     description = "CLI for building apps using Cloud Native Buildpacks";
     mainProgram = "pack";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ momeemt ];
   };
-}
+})

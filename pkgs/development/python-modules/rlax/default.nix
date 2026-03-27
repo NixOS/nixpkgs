@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   absl-py,
@@ -15,7 +14,6 @@
   jax,
   jaxlib,
   numpy,
-  tensorflow-probability,
 
   # tests
   dm-haiku,
@@ -26,27 +24,18 @@
 
 buildPythonPackage rec {
   pname = "rlax";
-  version = "0.1.6";
+  version = "0.1.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "rlax";
     tag = "v${version}";
-    hash = "sha256-v2Lbzya+E9d7tlUVlQQa4fuPp2q3E309Qvyt70mcdb0=";
+    hash = "sha256-E/zYFd5bfx58FfA3uR7hzRAIs844QzJA8TZTwmwDByk=";
   };
 
-  patches = [
-    (fetchpatch {
-      # Follow chex API change (https://github.com/google-deepmind/chex/pull/52)
-      name = "replace-deprecated-chex-assertions";
-      url = "https://github.com/google-deepmind/rlax/commit/30e7913a1102667137654d6e652a6c4b9e9ba1f4.patch";
-      hash = "sha256-OPnuTKEtwZ28hzR1660v3DcktxTYjhR1xYvFbQvOhgs=";
-    })
-  ];
-
   build-system = [
-    setuptools
+    flit-core
   ];
 
   dependencies = [
@@ -57,7 +46,6 @@ buildPythonPackage rec {
     jax
     jaxlib
     numpy
-    tensorflow-probability
   ];
 
   nativeCheckInputs = [
@@ -94,7 +82,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library of reinforcement learning building blocks in JAX";
     homepage = "https://github.com/deepmind/rlax";
-    changelog = "https://github.com/google-deepmind/rlax/releases/tag/v${version}";
+    changelog = "https://github.com/google-deepmind/rlax/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ onny ];
   };

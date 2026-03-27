@@ -3,15 +3,16 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  buildPackages,
   installShellFiles,
-  testers,
+  writableTmpDirAsHomeHook,
+  versionCheckHook,
   nix-update-script,
-  dprint,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dprint";
-  version = "0.49.1";
+  version = "0.53.0";
 
   # Prefer repository rather than crate here
   #   - They have Cargo.lock in the repository
@@ -19,15 +20,26 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "dprint";
     repo = "dprint";
-    tag = version;
-    hash = "sha256-6ye9FqOGW40TqoDREQm6pZAQaSuO2o9SY5RSfpmwKV4=";
+    tag = finalAttrs.version;
+    hash = "sha256-4LtE/r/qUiZb4bOph/XEx+U0g11fvyX/nKZh8Ikt0SQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-OHRXujyewiDlY4AQEEqmcnmdec1lbWH/y6tPW1nNExE=";
+  cargoHash = "sha256-BV+hyiuIvn811E1y0IWOTkjtEpH/l6drWHXeMIXeOWk=";
 
-  nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    installShellFiles
+  nativeBuildInputs = [ installShellFiles ];
+
+  # Avoiding "Undefined symbols" such as "___unw_remove_find_dynamic_unwind_sections" since dprint 0.50.1
+  # Adding "libunwind" in buildInputs did not resolve it.
+  env.RUSTFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-C link-args=-Wl,-undefined,dynamic_lookup";
+
+  cargoBuildFlags = [
+    "--package=dprint"
+    # Required only for dprint package tests; the binary is removed in postInstall.
+    "--package=test-process-plugin"
+  ];
+
+  cargoTestFlags = [
+    "--package=dprint"
   ];
 
   checkFlags = [
@@ -40,41 +52,53 @@ rustPlatform.buildRustPackage rec {
     "--skip=utils::url::test::unsafe_ignore_cert"
   ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export DPRINT_CACHE_DIR="$(mktemp -d)"
-    installShellCompletion --cmd dprint \
-      --bash <($out/bin/dprint completions bash) \
-      --zsh <($out/bin/dprint completions zsh) \
-      --fish <($out/bin/dprint completions fish)
-  '';
+  postInstall =
+    let
+      dprint =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/dprint"
+        else
+          lib.getExe buildPackages.dprint;
+    in
+    ''
+      rm "$out/bin/test-process-plugin"
+      export DPRINT_CACHE_DIR="$(mktemp -d)"
+      installShellCompletion --cmd dprint \
+        --bash <(${dprint} completions bash) \
+        --zsh <(${dprint} completions zsh) \
+        --fish <(${dprint} completions fish)
+    '';
+
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/dprint";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      inherit version;
-
-      package = dprint;
-      command = ''
-        DPRINT_CACHE_DIR="$(mktemp --directory)" dprint --version
-      '';
+    updateScript = nix-update-script {
+      # Follow upstream's release policy. Git tags are not enough for this package:
+      # https://github.com/dprint/dprint/issues/1113
+      extraArgs = [ "--use-github-releases" ];
     };
-
-    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Code formatting platform written in Rust";
     longDescription = ''
       dprint is a pluggable and configurable code formatting platform written in Rust.
       It offers multiple WASM plugins to support various languages. It's written in
       Rust, so it’s small, fast, and portable.
     '';
-    changelog = "https://github.com/dprint/dprint/releases/tag/${version}";
+    changelog = "https://github.com/dprint/dprint/releases/tag/${finalAttrs.version}";
     homepage = "https://dprint.dev";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      khushraj
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kachick
+      phanirithvij
     ];
     mainProgram = "dprint";
   };
-}
+})

@@ -196,7 +196,7 @@ in
       description = "Matrix-IRC bridge";
       before = [ "matrix-synapse.service" ]; # So the registration can be used by Synapse
       after = lib.optionals (cfg.settings.database.engine == "postgres") [
-        "postgresql.service"
+        "postgresql.target"
       ];
       wantedBy = [ "multi-user.target" ];
 
@@ -229,7 +229,7 @@ in
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
         fi
         if ! [ -f "${cfg.settings.ircService.mediaProxy.signingKeyPath}" ]; then
-          ${lib.getExe pkgs.nodejs} ${pkg}/lib/generate-signing-key.js > "${cfg.settings.ircService.mediaProxy.signingKeyPath}"
+          ${lib.getExe pkgs.nodejs-slim} ${pkg}/lib/generate-signing-key.js > "${cfg.settings.ircService.mediaProxy.signingKeyPath}"
         fi
         # Allow synapse access to the registration
         if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then

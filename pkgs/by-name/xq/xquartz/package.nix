@@ -5,7 +5,61 @@
   makeFontsConf,
   gnused,
   writeScript,
-  xorg,
+  xorg-server,
+  tab-window-manager,
+  libxpm,
+  font-alias,
+  font-util,
+  font-misc-misc,
+  font-cursor-misc,
+  font-bh-lucidatypewriter-75dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bh-100dpi,
+  font-encodings,
+  xwud,
+  xwininfo,
+  xwd,
+  xvinfo,
+  xset,
+  xsetroot,
+  xrefresh,
+  xrdb,
+  xrandr,
+  xpr,
+  xprop,
+  xmodmap,
+  xmessage,
+  xlsclients,
+  xlsatoms,
+  xkill,
+  xkbutils,
+  xkbevd,
+  xkbcomp,
+  xinput,
+  xinit,
+  xhost,
+  xgamma,
+  xfs,
+  xeyes,
+  xev,
+  xdriinfo,
+  xdpyinfo,
+  xdm,
+  xcursorgen,
+  xcmsdb,
+  xclock,
+  xbacklight,
+  xauth,
+  x11perf,
+  smproxy,
+  setxkbmap,
+  sessreg,
+  mkfontscale,
+  makedepend,
+  luit,
+  lndir,
+  iceauth,
+  bdftopcf,
   bashInteractive,
   xterm,
   xcbuild,
@@ -77,20 +131,19 @@ let
     sudo launchctl load -w /Library/LaunchAgents/$agentName
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
-  fontDirs =
-    [
-      ttf_bitstream_vera
-      freefont_ttf
-      liberation_ttf
-      xorg.fontmiscmisc
-      xorg.fontcursormisc
-    ]
-    ++ lib.optionals unfreeFonts [
-      xorg.fontbhlucidatypewriter100dpi
-      xorg.fontbhlucidatypewriter75dpi
-      xorg.fontbh100dpi
-    ]
-    ++ extraFontDirs;
+  fontDirs = [
+    ttf_bitstream_vera
+    freefont_ttf
+    liberation_ttf
+    font-misc-misc
+    font-cursor-misc
+  ]
+  ++ lib.optionals unfreeFonts [
+    font-bh-lucidatypewriter-100dpi
+    font-bh-lucidatypewriter-75dpi
+    font-bh-100dpi
+  ]
+  ++ extraFontDirs;
   fontsConf = makeFontsConf {
     fontDirectories = fontDirs ++ [
       "/Library/Fonts"
@@ -98,10 +151,15 @@ let
     ];
   };
   fonts = import ./system-fonts.nix {
-    inherit stdenv xorg fontDirs;
+    inherit
+      stdenv
+      font-alias
+      mkfontscale
+      fontDirs
+      ;
   };
   # any X related programs expected to be available via $PATH
-  pkgs = with xorg; [
+  pkgs = [
     # non-xorg
     quartz-wm
     xterm
@@ -110,18 +168,18 @@ let
     xlsfonts
     xfontsel
     bdftopcf
-    fontutil
+    font-util
     iceauth
-    libXpm
+    libxpm
     lndir
     luit
     makedepend
-    mkfontdir
+    mkfontscale
     mkfontscale
     sessreg
     setxkbmap
     smproxy
-    twm
+    tab-window-manager
     x11perf
     xauth
     xbacklight
@@ -160,7 +218,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "xquartz";
-  version = lib.getVersion xorg.xorgserver;
+  version = lib.getVersion xorg-server;
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -169,9 +227,9 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    cp -rT ${xorg.xinit} $out
+    cp -rT ${xinit} $out
     chmod -R u+w $out
-    cp -rT ${xorg.xorgserver} $out
+    cp -rT ${xorg-server} $out
     chmod -R u+w $out
 
     cp ${installer} $out/bin/xquartz-install
@@ -182,10 +240,10 @@ stdenv.mkDerivation {
     cp ${fontsConf} $fontsConfPath
 
     substituteInPlace $out/bin/startx \
-      --replace "bindir=${xorg.xinit}/bin" "bindir=$out/bin" \
-      --replace 'defaultserver=${xorg.xorgserver}/bin/X' "defaultserver=$out/bin/Xquartz" \
-      --replace "${xorg.xinit}" "$out" \
-      --replace "${xorg.xorgserver}" "$out" \
+      --replace "bindir=${xinit}/bin" "bindir=$out/bin" \
+      --replace 'defaultserver=${xorg-server}/bin/X' "defaultserver=$out/bin/Xquartz" \
+      --replace "${xinit}" "$out" \
+      --replace "${xorg-server}" "$out" \
       --replace "eval xinit" "eval $out/bin/xinit" \
       --replace "sysclientrc=/etc/X11/xinit/xinitrc" "sysclientrc=$out/etc/X11/xinit/xinitrc"
 
@@ -204,16 +262,16 @@ stdenv.mkDerivation {
     EOF
 
     substituteInPlace $out/etc/X11/xinit/xinitrc \
-      --replace ${xorg.xinit} $out \
-      --replace xmodmap ${xorg.xmodmap}/bin/xmodmap \
-      --replace xrdb ${xorg.xrdb}/bin/xrdb
+      --replace ${xinit} $out \
+      --replace xmodmap ${xmodmap}/bin/xmodmap \
+      --replace xrdb ${xrdb}/bin/xrdb
 
     mkdir -p $out/etc/X11/xinit/xinitrc.d
 
     cp ${./10-fontdir.sh} $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh
     substituteInPlace $out/etc/X11/xinit/xinitrc.d/10-fontdir.sh \
       --subst-var-by "SYSTEM_FONTS" "${fonts}/share/X11-fonts/" \
-      --subst-var-by "XSET"         "${xorg.xset}/bin/xset"
+      --subst-var-by "XSET"         "${xset}/bin/xset"
 
     cp ${./98-user.sh} $out/etc/X11/xinit/xinitrc.d/98-user.sh
 
@@ -223,15 +281,15 @@ stdenv.mkDerivation {
     chmod +x $out/etc/X11/xinit/xinitrc.d/99-quartz-wm.sh
 
     substituteInPlace $out/etc/X11/xinit/privileged_startx.d/20-font_cache \
-      --replace ${xorg.xinit} $out
+      --replace ${xinit} $out
 
     cp ${./font_cache} $out/bin/font_cache
     substituteInPlace $out/bin/font_cache \
       --subst-var-by "shell"           "${stdenv.shell}" \
       --subst-var-by "PATH"            "$out/bin" \
-      --subst-var-by "ENCODINGSDIR"    "${xorg.encodings}/share/fonts/X11/encodings" \
-      --subst-var-by "MKFONTDIR"       "${xorg.mkfontdir}/bin/mkfontdir" \
-      --subst-var-by "MKFONTSCALE"     "${xorg.mkfontscale}/bin/mkfontscale" \
+      --subst-var-by "ENCODINGSDIR"    "${font-encodings}/share/fonts/X11/encodings" \
+      --subst-var-by "MKFONTDIR"       "${mkfontscale}/bin/mkfontdir" \
+      --subst-var-by "MKFONTSCALE"     "${mkfontscale}/bin/mkfontscale" \
       --subst-var-by "FC_CACHE"        "${fontconfig.bin}/bin/fc-cache" \
       --subst-var-by "FONTCONFIG_FILE" "$fontsConfPath"
   '';
@@ -240,9 +298,9 @@ stdenv.mkDerivation {
     inherit pkgs;
   };
 
-  meta = with lib; {
-    platforms = platforms.darwin;
+  meta = {
+    platforms = lib.platforms.darwin;
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

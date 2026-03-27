@@ -3,20 +3,32 @@
   stdenv,
   fetchurl,
   ocaml,
-  findlib,
-  ocamlbuild,
+  version ? if lib.versionAtLeast ocaml.version "4.14" then "0.10.0" else "0.8.0",
   topkg,
-  result,
-  lwt,
-  cmdliner,
-  fmt,
-  fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
-  js_of_ocaml-compiler,
-  jsooSupport ? true,
-  lwtSupport ? true,
+  buildTopkgPackage,
   cmdlinerSupport ? true,
+  cmdliner,
+  fmtSupport ? lib.versionAtLeast ocaml.version "4.08",
+  fmt,
+  jsooSupport ? true,
+  js_of_ocaml-compiler,
+  lwtSupport ? true,
+  lwt,
 }:
 let
+  param =
+    {
+      "0.8.0" = {
+        minimalOCamlVersion = "4.03";
+        hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
+      };
+      "0.10.0" = {
+        minimalOCamlVersion = "4.14";
+        hash = "sha256-dg7CkcEo11t0gmCRM3dk+SW1ykFLAuLTNqCze/MN9Oo=";
+      };
+    }
+    .${version};
+
   pname = "logs";
   webpage = "https://erratique.ch/software/${pname}";
 
@@ -48,40 +60,24 @@ let
   ]) optional_deps;
   optional_buildInputs = map (d: d.pkg) (lib.filter (d: d.enabled) optional_deps);
 in
+buildTopkgPackage {
+  inherit pname version;
+  inherit (param) minimalOCamlVersion;
 
-if lib.versionOlder ocaml.version "4.03" then
-  throw "logs is not available for OCaml ${ocaml.version}"
-else
+  src = fetchurl {
+    url = "${webpage}/releases/${pname}-${version}.tbz";
+    inherit (param) hash;
+  };
 
-  stdenv.mkDerivation rec {
-    name = "ocaml${ocaml.version}-${pname}-${version}";
-    version = "0.8.0";
+  buildInputs = optional_buildInputs;
 
-    src = fetchurl {
-      url = "${webpage}/releases/${pname}-${version}.tbz";
-      hash = "sha256-mmFRQJX6QvMBIzJiO2yNYF1Ce+qQS2oNF3+OwziCNtg=";
-    };
+  buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
 
-    nativeBuildInputs = [
-      ocaml
-      findlib
-      ocamlbuild
-      topkg
-    ];
-    buildInputs = [ topkg ] ++ optional_buildInputs;
-    propagatedBuildInputs = [ result ];
-
-    strictDeps = true;
-
-    buildPhase = "${topkg.run} build ${lib.escapeShellArgs enable_flags}";
-
-    inherit (topkg) installPhase;
-
-    meta = with lib; {
-      description = "Logging infrastructure for OCaml";
-      homepage = webpage;
-      inherit (ocaml.meta) platforms;
-      maintainers = [ maintainers.sternenseemann ];
-      license = licenses.isc;
-    };
-  }
+  meta = {
+    description = "Logging infrastructure for OCaml";
+    homepage = webpage;
+    inherit (ocaml.meta) platforms;
+    maintainers = with lib.maintainers; [ sternenseemann ];
+    license = lib.licenses.isc;
+  };
+}

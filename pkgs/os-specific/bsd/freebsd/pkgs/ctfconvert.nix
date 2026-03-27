@@ -3,6 +3,7 @@
   mkDerivation,
   compatIfNeeded,
   libdwarf,
+  libelf,
   zlib,
   libspl,
 }:
@@ -29,6 +30,7 @@ mkDerivation {
     libdwarf
     zlib
     libspl
+    libelf
   ];
 
   meta.license = lib.licenses.cddl;

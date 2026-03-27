@@ -13,7 +13,7 @@ let
   opt = options.services.grafana;
   provisioningSettingsFormat = pkgs.formats.yaml { };
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (
-    builtins.map (pkg: {
+    map (pkg: {
       name = pkg.pname;
       path = pkg;
     }) cfg.declarativePlugins
@@ -85,7 +85,10 @@ let
       fi
     '';
   provisionConfDir =
-    pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; }
+    pkgs.runCommand "grafana-provisioning"
+      {
+        nativeBuildInputs = [ pkgs.lndir ];
+      }
       ''
         mkdir -p $out/{alerting,datasources,dashboards,plugins}
         ${ln {
@@ -126,7 +129,7 @@ let
       '';
 
   # Get a submodule without any embedded metadata:
-  _filter = x: filterAttrs (k: v: k != "_module") x;
+  _filter = x: removeAttrs x [ "_module" ];
 
   # https://grafana.com/docs/grafana/latest/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
@@ -414,7 +417,14 @@ in
     declarativePlugins = mkOption {
       type = with types; nullOr (listOf path);
       default = null;
-      description = "If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot be manually installed.";
+      description = ''
+        If non-null, then a list of packages containing Grafana plugins to install. If set, plugins cannot
+        be manually installed.
+
+        Keep in mind that this turns off drilldown: for this to work, you need to add
+        `grafana-metricsdrilldown-app`, `grafana-lokiexplore-app`, `grafana-exploretraces-app`
+        and `grafana-pyroscope-app` to this option.
+      '';
       example = literalExpression "with pkgs.grafanaPlugins; [ grafana-piechart-panel ]";
       # Make sure each plugin is added only once; otherwise building
       # the link farm fails, since the same path is added multiple
@@ -428,6 +438,12 @@ in
       description = "Data directory.";
       default = "/var/lib/grafana";
       type = types.path;
+    };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open the ports in the firewall for the server.";
     };
 
     settings = mkOption {
@@ -860,14 +876,21 @@ in
 
             secret_key = mkOption {
               description = ''
-                Secret key used for signing. Please note that the contents of this option
+                Secret key used for signing data source settings like secrets and passwords.
+                Set this to a unique, random string in production, generated for example by running `openssl rand -hex 32`.
+
+                If you change this later you will need to update data source settings to re-encode them.
+
+                <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key>
+
+                Please note that the contents of this option
                 will end up in a world-readable Nix store. Use the file provider
                 pointing at a reasonably secured file in the local filesystem
                 to work around that. Look at the documentation for details:
                 <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#file-provider>
               '';
-              default = "SW2YcwTIb9zpOOhoPsMm";
-              type = types.str;
+              type = types.nullOr types.str;
+              default = null;
             };
 
             disable_gravatar = mkOption {
@@ -979,10 +1002,13 @@ in
 
             x_xss_protection = mkOption {
               description = ''
-                Set to `false` to disable the `X-XSS-Protection` header,
+                Set to `true` to enable the `X-XSS-Protection` header,
                 which tells browsers to stop pages from loading when they detect reflected cross-site scripting (XSS) attacks.
+
+                __Note:__ this is the default in Grafana, it's turned off here
+                since it's [recommended to not use this header anymore](https://owasp.org/www-project-secure-headers/#x-xss-protection).
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 
@@ -1220,12 +1246,6 @@ in
               type = types.bool;
             };
 
-            editors_can_admin = mkOption {
-              description = "Editors can administrate dashboards, folders and teams they create.";
-              default = false;
-              type = types.bool;
-            };
-
             user_invite_max_lifetime_duration = mkOption {
               description = ''
                 The duration in time a user invitation remains valid before expiring.
@@ -1257,7 +1277,7 @@ in
                 No IP addresses are being tracked, only simple counters to track running instances, versions, dashboard and error counts.
                 Counters are sent every 24 hours.
               '';
-              default = true;
+              default = false;
               type = types.bool;
             };
 
@@ -1290,6 +1310,18 @@ in
               type = types.bool;
             };
           };
+
+          plugins = {
+            preinstall_disabled = mkOption {
+              description = ''
+                When set to `true`, disables the Background Plugin Installer, which runs before Grafana starts.
+                This component causes issues with `declarativePlugins` and is disabled by default if those are used.
+              '';
+              default = cfg.declarativePlugins != null;
+              defaultText = literalExpression "cfg.declarativePlugins != null";
+              type = types.bool;
+            };
+          };
         };
       };
     };
@@ -1318,6 +1350,16 @@ in
                     description = "Config file version.";
                     default = 1;
                     type = types.int;
+                  };
+
+                  prune = mkOption {
+                    default = false;
+                    type = types.bool;
+                    description = ''
+                      When `true`, provisioned datasources from this file will be deleted
+                      automatically when removed from
+                      {option}`services.grafana.provision.datasources.settings.datasources`.
+                    '';
                   };
 
                   datasources = mkOption {
@@ -1969,6 +2011,12 @@ in
 
     assertions = [
       {
+        assertion = !(cfg.settings.users ? editors_can_admin);
+        message = ''
+          Option `services.grafana.settings.users.editors_can_admin` has been removed in Grafana 12.
+        '';
+      }
+      {
         assertion = cfg.provision.datasources.settings == null || cfg.provision.datasources.path == null;
         message = "Cannot set both datasources settings and datasources path";
       }
@@ -2013,15 +2061,32 @@ in
           || cfg.provision.alerting.muteTimings.path == null;
         message = "Cannot set both mute timings settings and mute timings path";
       }
+      {
+        assertion = cfg.settings.security.secret_key != null;
+        message = ''
+          Grafana's secret key (services.grafana.settings.security.secret_key) doesn't have a default
+          value anymore. Please generate your own and use a file-provider on this option! See also
+          https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#secret_key
+          for more information.
+
+          See https://grafana.com/docs/grafana/latest/setup-grafana/configure-security/configure-database-encryption/#re-encrypt-secrets on how to re-encrypt.
+
+          As stated in the NixOS changelog for 26.05, there's no official way to rotate.
+          Either hard-code the old key ("SW2YcwTIb9zpOOhoPsMm") if your setup doesn't have any secrets in the DB that need
+          special protection or perform a rotation with a 3rd-party tool
+          (https://github.com/erooke/grafana-secretkey-rotation-tool/tree/d9dc788902fa5185e15cb15ce6129f7237ab6138).
+        '';
+      }
     ];
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
       wantedBy = [ "multi-user.target" ];
-      after =
-        [ "networking.target" ]
-        ++ lib.optional usePostgresql "postgresql.service"
-        ++ lib.optional useMysql "mysql.service";
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional usePostgresql "postgresql.target"
+      ++ lib.optional useMysql "mysql.service";
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
@@ -2067,7 +2132,8 @@ in
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
+        ]
+        ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''
@@ -2075,6 +2141,8 @@ in
         ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
       '';
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.server.http_port ];
 
     users.users.grafana = {
       uid = config.ids.uids.grafana;

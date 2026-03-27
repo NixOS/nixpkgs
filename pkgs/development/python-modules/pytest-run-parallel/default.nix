@@ -15,19 +15,20 @@
   # tests
   pytest-cov-stub,
   pytest-order,
+  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-run-parallel";
-  version = "0.3.1";
+  version = "0.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "pytest-run-parallel";
     tag = "v${version}";
-    hash = "sha256-YBky+aoMO3dclod6RTQZF0X8fE8CAgHHY4es8vWHb3U=";
+    hash = "sha256-/EoIemQvQFgo9Ic+ZcQJk7fC8S+OHOHaHODrsivarhY=";
   };
 
   build-system = [ setuptools ];
@@ -43,6 +44,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytest-order
+    pytest-xdist
     pytestCheckHook
   ];
 
@@ -51,7 +53,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A simple pytest plugin to run tests concurrently";
+    description = "Simple pytest plugin to run tests concurrently";
     homepage = "https://github.com/Quansight-Labs/pytest-run-parallel";
     changelog = "https://github.com/Quansight-Labs/pytest-run-parallel/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;

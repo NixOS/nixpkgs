@@ -2,24 +2,24 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
-  libXrandr,
+  libx11,
+  libxrandr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "yeahconsole";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "jceb";
     repo = "yeahconsole";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ea6erNF9hEhDHlWLctu1SHFVoXXXsPeWUbvCBSZwn4s=";
   };
 
   buildInputs = [
-    libX11
-    libXrandr
+    libx11
+    libxrandr
   ];
 
   preConfigure = ''
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [ jceb ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

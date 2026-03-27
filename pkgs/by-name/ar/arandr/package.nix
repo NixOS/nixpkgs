@@ -1,6 +1,5 @@
 {
   lib,
-  fetchurl,
   fetchFromGitLab,
   python3Packages,
   gobject-introspection,
@@ -8,25 +7,53 @@
   gtk3,
   wrapGAppsHook3,
   xrandr,
+  nix-update-script,
 }:
 
 let
-  inherit (python3Packages) buildPythonApplication docutils pygobject3;
+  inherit (python3Packages)
+    buildPythonApplication
+    setuptools
+    docutils
+    pygobject3
+    ;
 in
-buildPythonApplication rec {
+buildPythonApplication (finalAttrs: {
   pname = "arandr";
   version = "0.1.11";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "arandr";
     repo = "arandr";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-nQtfOKAnWKsy2DmvtRGJa4+Y9uGgX41BeHpd9m4d9YA=";
   };
 
   # patch to set mtime=0 on setup.py
   patches = [ ./gzip-timestamp-fix.patch ];
   patchFlags = [ "-p0" ];
+
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook3
+  ];
+
+  propagatedBuildInputs = [
+    xrandr
+  ];
+
+  buildInputs = [
+    gsettings-desktop-schemas
+    gtk3
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    docutils
+    pygobject3
+  ];
 
   preBuild = ''
     rm -rf data/po/*
@@ -35,25 +62,26 @@ buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  buildInputs = [
-    docutils
-    gsettings-desktop-schemas
-    gtk3
-  ];
-  nativeBuildInputs = [
-    gobject-introspection
-    wrapGAppsHook3
-  ];
-  propagatedBuildInputs = [
-    xrandr
-    pygobject3
-  ];
+  dontWrapGApps = true;
 
-  meta = with lib; {
-    homepage = "https://christian.amsuess.com/tools/arandr/";
-    description = "Simple visual front end for XRandR";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ gepbird ];
-    mainProgram = "arandr";
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex=(\\d.*)"
+    ];
   };
-}
+
+  meta = {
+    changelog = "https://gitlab.com/arandr/arandr/-/blob/${finalAttrs.src.tag}/ChangeLog";
+    description = "Simple visual front end for XRandR";
+    homepage = "https://christian.amsuess.com/tools/arandr/";
+    license = lib.licenses.gpl3Plus;
+    mainProgram = "arandr";
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
+  };
+})

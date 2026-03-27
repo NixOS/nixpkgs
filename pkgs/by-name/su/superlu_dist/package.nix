@@ -5,6 +5,7 @@
   fetchurl,
   llvmPackages,
   cmake,
+  pkg-config,
   gfortran,
   blas,
   lapack,
@@ -12,18 +13,18 @@
   mpiCheckPhaseHook,
   metis,
   parmetis,
-  withExamples ? false,
-  fortranSupport ? stdenv.hostPlatform.isLinux,
-  enableOpenMP ? true,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
-}:
+  isILP64 ? false,
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+  # passthru.tests
+  mpich,
+  superlu_dist,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu_dist";
-  version = "9.1.0";
+  version = "9.2.0";
 
   __structuredAttrs = true;
 
@@ -33,65 +34,76 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Remove non‐free files.
     postFetch = "rm $out/SRC/prec-independent/mc64ad_dist.c";
-    hash = "sha256-NMAEtTmTY189p8BlmsTugwMuxKZh+Bs1GyuwUHkLA1U=";
+    hash = "sha256-i/Gg+9oMNNRlviwXUSRkWNaLRZLPWZRtA1fGYqh2X0k=";
   };
+
+  # --oversubscribe unrecognized by mpich
+  # see https://github.com/xiaoyeli/superlu_dist/issues/208
+  postPatch = ''
+    substituteInPlace TEST/CMakeLists.txt \
+      --replace-fail "-oversubscribe" ""
+  '';
 
   patches = [
     ./mc64ad_dist-stub.patch
-    (fetchurl {
-      url = "https://github.com/xiaoyeli/superlu_dist/commit/8ef3f7fda091529d7e7f16087864fee66c4834c9.patch";
-      hash = "sha256-kCSqojYKpk75m+FwhS0hXHSybm+GZzOYikePcf2U3Fw=";
-    })
   ];
 
-  postPatch = ''
-    substituteInPlace SRC/prec-independent/util.c \
-      --replace-fail "LargeDiag_MC64" "NOROWPERM"
-  '';
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gfortran
+  ];
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals fortranSupport [
-      gfortran
-    ];
+  buildInputs = [
+    mpi
+    # always build with lp64 BLAS/LAPACK.
+    # see https://github.com/xiaoyeli/superlu_dist/issues/132#issuecomment-2323093701
+    (blas.override { isILP64 = false; })
+    (lapack.override { isILP64 = false; })
+  ]
+  ++ lib.optionals withParmetis [
+    metis
+    parmetis
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    gfortran.cc.lib
+    llvmPackages.openmp
+  ];
 
-  buildInputs =
-    lib.optionals (enableOpenMP && stdenv.cc.isClang) [
-      # cmake can not find mpi if openmp is placed after mpi
-      llvmPackages.openmp
-    ]
-    ++ [
-      mpi
-      lapack
-    ]
-    ++ lib.optionals withParmetis [
-      metis
-      parmetis
-    ];
-
-  propagatedBuildInputs = [ blas ];
-
-  cmakeFlags =
-    [
-      (lib.cmakeBool "enable_examples" withExamples)
-      (lib.cmakeBool "enable_openmp" enableOpenMP)
-      (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
-      (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
-      (lib.cmakeBool "XSDK_ENABLE_Fortran" fortranSupport)
-      (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
-      (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
-      (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
-    ]
-    ++ lib.optionals withParmetis [
-      (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
-      (lib.cmakeFeature "TPL_PARMETIS_INCLUDE_DIRS" "${lib.getDev parmetis}/include")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "enable_examples" false)
+    (lib.cmakeBool "enable_openmp" true)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+    (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "XSDK_ENABLE_Fortran" true)
+    (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
+    (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
+    (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
+    (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
+    (lib.cmakeFeature "XSDK_INDEX_SIZE" (if isILP64 then "64" else "32"))
+  ]
+  ++ lib.optionals withParmetis [
+    (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
+    (lib.cmakeFeature "TPL_PARMETIS_INCLUDE_DIRS" "${lib.getDev parmetis}/include")
+  ];
 
   doCheck = true;
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [ mpiCheckPhaseHook ];
+
+  passthru = {
+    inherit isILP64;
+    tests = {
+      ilp64 = superlu_dist.override { isILP64 = true; };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      mpich = superlu_dist.override {
+        mpi = mpich;
+      };
+    };
+  };
 
   meta = {
     homepage = "https://portal.nersc.gov/project/sparse/superlu/";

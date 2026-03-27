@@ -7,15 +7,15 @@
   futhark,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "smlfut";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "diku-dk";
     repo = "smlfut";
-    rev = "v${version}";
-    hash = "sha256-0Bqgoyp43Y961BMghJFBUx+1lcM2HHlPDjPyLHquWiE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-xICcobdvSdHZfNxz4WRDOsaL4JGFRK7LmhMzKOZY5FY=";
   };
 
   enableParallelBuilding = true;
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
 
   checkTarget = "run_test";
 
-  meta = with lib; {
+  meta = {
     description = "Allow SML programs to call Futhark programs";
     homepage = "https://github.com/diku-dk/smlfut";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     platforms = mlton.meta.platforms;
-    maintainers = with maintainers; [ athas ];
+    maintainers = with lib.maintainers; [ athas ];
     mainProgram = "smlfut";
   };
-}
+})

@@ -2,18 +2,18 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  xorg,
+  xrdb,
 }:
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "posting";
-  version = "2.5.4";
+  version = "2.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
-    tag = version;
-    hash = "sha256-6nFQSGCdmR4qZuleiY0xh76WgBIjs9OZtfpc16b4iws=";
+    tag = finalAttrs.version;
+    hash = "sha256-BX1D9XgBqRIfavDxAQH7mPP/dnayQu3xSSAF6/JSM54=";
   };
 
   pythonRelaxDeps = true;
@@ -23,7 +23,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # Required for x resources themes
-  buildInputs = [ xorg.xrdb ];
+  buildInputs = [
+    xrdb
+  ];
 
   dependencies =
     with python3Packages;
@@ -41,6 +43,8 @@ python3Packages.buildPythonApplication rec {
       textual-autocomplete
       textual
       openapi-pydantic
+      tree-sitter-json
+      tree-sitter-html
     ]
     ++ httpx.optional-dependencies.brotli
     ++ textual.optional-dependencies.syntax;
@@ -49,9 +53,12 @@ python3Packages.buildPythonApplication rec {
     description = "Modern API client that lives in your terminal";
     mainProgram = "posting";
     homepage = "https://posting.sh/";
-    changelog = "https://github.com/darrenburns/posting/releases/tag/${version}";
+    changelog = "https://github.com/darrenburns/posting/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jorikvanveen ];
+    maintainers = with lib.maintainers; [
+      jorikvanveen
+      fullmetalsheep
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

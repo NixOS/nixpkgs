@@ -2,19 +2,19 @@
   lib,
   stdenvNoCC,
   fetchzip,
-  xorg,
+  mkfontscale,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "anakron";
-  version = "0.3.1";
+  version = "0.3.3";
 
   src = fetchzip {
     url = "https://github.com/molarmanful/ANAKRON/releases/download/v${version}/ANAKRON-release_v${version}.zip";
-    hash = "sha256-YggeGSFc+NoDUZjV/cEhQGUR278f97X+WpcDLY66iqg";
+    hash = "sha256-l4MA3OsMnqPIBWKx3ZO5XnxjE0gnIGyAtsZe2z/9zrw=";
   };
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale ];
 
   installPhase = ''
     runHook preInstall

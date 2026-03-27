@@ -11,7 +11,7 @@
   which,
   jre,
   nixosTests,
-  # generation is the attribute version suffix such as 3_11 in pkgs.cassandra_3_11
+  # generation is the attribute version suffix such as 4 in pkgs.cassandra_4
   generation,
   version,
   sha256,
@@ -130,17 +130,17 @@ stdenv.mkDerivation rec {
   };
 
   meta =
-    with lib;
+
     {
       homepage = "https://cassandra.apache.org/";
       description = "Massively scalable open source NoSQL database";
-      platforms = platforms.unix;
-      license = licenses.asl20;
-      sourceProvenance = with sourceTypes; [
+      platforms = lib.platforms.unix;
+      license = lib.licenses.asl20;
+      sourceProvenance = with lib.sourceTypes; [
         binaryBytecode
         binaryNativeCode # bundled dependency libsigar
       ];
-      maintainers = [ maintainers.roberth ];
+      maintainers = [ lib.maintainers.roberth ];
     }
     // extraMeta;
 }

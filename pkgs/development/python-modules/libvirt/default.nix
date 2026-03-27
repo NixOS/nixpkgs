@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
-  version = "11.0.0";
+  version = "12.1.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
     tag = "v${version}";
-    hash = "sha256-c6viZTQFpLB+k/f45m/AZe+ggDxQbGjQgD51yCuyepc=";
+    hash = "sha256-1WxrDg3aJJ7lwIZXj3IXsyi3zSnxmknsVMmNQ8T+oHY=";
   };
 
   postPatch = ''
@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libvirt.org/python.html";
-    description = "libvirt Python bindings";
-    license = licenses.lgpl2;
-    maintainers = [ maintainers.fpletz ];
+    description = "Libvirt Python bindings";
+    license = lib.licenses.lgpl2;
+    maintainers = [ lib.maintainers.fpletz ];
   };
 }

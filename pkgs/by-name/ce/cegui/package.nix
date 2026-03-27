@@ -7,21 +7,24 @@
   freetype,
   boost,
   expat,
-  darwin,
   libiconv,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
   pname = "cegui";
-  version = "0-unstable-2023-03-18";
+  version = "0-unstable-2025-04-06";
 
   src = fetchFromGitHub {
     owner = "paroj";
     repo = "cegui";
-    rev = "186ce900e293b98f2721c11930248a8de54aa338";
-    hash = "sha256-RJ4MnxklcuxC+ZYEbfma5RDc2aeJ95LuTwNk+FnEhdo=";
+    rev = "a630bcc3f1e4b66edcf0fd00edcb9b29ad8446a3";
+    hash = "sha256-9lZ7eBwmxZ33XNDJXQ2lbCcH5JyH0KoY1mj/g+2HOJs=";
   };
+
+  patches = [
+    ./cmake-minimum-required.patch
+  ];
 
   strictDeps = true;
 
@@ -29,26 +32,22 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs =
-    [
-      ogre
-      freetype
-      boost
-      expat
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-      darwin.apple_sdk.frameworks.Foundation
-      libiconv
-    ];
+  buildInputs = [
+    ogre
+    freetype
+    boost
+    expat
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
-  cmakeFlags =
-    [
-      "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-      "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
-    ];
+  cmakeFlags = [
+    "-DCEGUI_OPTION_DEFAULT_IMAGECODEC=OgreRenderer-0"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    "-DCMAKE_OSX_ARCHITECTURES=${stdenv.hostPlatform.darwinArch}"
+  ];
 
   passthru.updateScript = unstableGitUpdater {
     branch = "v0";
@@ -60,11 +59,11 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "http://cegui.org.uk/";
     description = "C++ Library for creating GUIs";
     mainProgram = "CEGUISampleFramework-0.9999";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
   };
 }

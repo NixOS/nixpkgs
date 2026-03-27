@@ -18,6 +18,27 @@ let
     ;
 in
 {
+  # Pull in some builtins not included elsewhere.
+  inherit (builtins)
+    pathExists
+    readFile
+    isBool
+    isInt
+    isFloat
+    add
+    sub
+    mul
+    div
+    lessThan
+    seq
+    deepSeq
+    genericClosure
+    bitAnd
+    bitOr
+    bitXor
+    ceil
+    floor
+    ;
 
   ## Simple (higher order) functions
 
@@ -90,7 +111,7 @@ in
     # Type
 
     ```
-    pipe :: a -> [<functions>] -> <return type of last function>
+    pipe :: a -> [(a -> b) (b -> c) ... (x -> y) (y -> z)] -> z
     ```
 
     # Examples
@@ -179,8 +200,14 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    or :: Bool -> Bool -> Bool
+    ```
   */
-  or = x: y: x || y;
+  "or" = x: y: x || y;
 
   /**
     boolean “and”
@@ -194,6 +221,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    and :: Bool -> Bool -> Bool
+    ```
   */
   and = x: y: x && y;
 
@@ -209,6 +242,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    xor :: bool -> bool -> bool
+    ```
   */
   # We explicitly invert the arguments purely as a type assertion.
   # This is invariant under XOR, so it does not affect the result.
@@ -216,6 +255,12 @@ in
 
   /**
     bitwise “not”
+
+    # Type
+
+    ```
+    bitNot :: Number -> Number
+    ```
   */
   bitNot = builtins.sub (-1);
 
@@ -235,15 +280,33 @@ in
     # Type
 
     ```
-    boolToString :: bool -> string
+    boolToString :: Bool -> String
     ```
   */
   boolToString = b: if b then "true" else "false";
 
   /**
-    Merge two attribute sets shallowly, right side trumps left
+    Converts a boolean to a string.
 
-    mergeAttrs :: attrs -> attrs -> attrs
+    This function uses the strings "yes" and "no" to represent
+    boolean values.
+
+    # Inputs
+
+    `b`
+
+    : The boolean to convert
+
+    # Type
+
+    ```
+    boolToYesNo :: Bool -> String
+    ```
+  */
+  boolToYesNo = b: if b then "yes" else "no";
+
+  /**
+    Merge two attribute sets shallowly, right side trumps left
 
     # Inputs
 
@@ -254,6 +317,12 @@ in
     `y`
 
     : Right attribute set (higher precedence for equal keys)
+
+    # Type
+
+    ```
+    mergeAttrs :: AttrSet -> AttrSet -> AttrSet
+    ```
 
     # Examples
     :::{.example}
@@ -307,7 +376,7 @@ in
     f b a;
 
   /**
-    Return `maybeValue` if not null, otherwise return `default`.
+    Returns `maybeValue` if not null, otherwise return `default`.
 
     # Inputs
 
@@ -318,6 +387,12 @@ in
     `maybeValue`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    defaultTo :: a -> (b | Null) -> (b | a)
+    ```
 
     # Examples
     :::{.example}
@@ -349,6 +424,12 @@ in
 
     : Argument to check for null before passing it to `f`
 
+    # Type
+
+    ```
+    mapNullable :: (a -> b) -> (a | Null) -> (b | Null)
+    ```
+
     # Examples
     :::{.example}
     ## `lib.trivial.mapNullable` usage example
@@ -363,24 +444,6 @@ in
     :::
   */
   mapNullable = f: a: if a == null then a else f a;
-
-  # Pull in some builtins not included elsewhere.
-  inherit (builtins)
-    pathExists
-    readFile
-    isBool
-    isInt
-    isFloat
-    add
-    sub
-    lessThan
-    seq
-    deepSeq
-    genericClosure
-    bitAnd
-    bitOr
-    bitXor
-    ;
 
   ## nixpkgs version strings
 
@@ -409,7 +472,7 @@ in
   */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
-    2411;
+    2511;
 
   /**
     Whether a feature is supported in all supported releases (at the time of
@@ -439,7 +502,7 @@ in
     On each release the first letter is bumped and a new animal is chosen
     starting with that new letter.
   */
-  codeName = "Warbler";
+  codeName = "Yarara";
 
   /**
     Returns the current nixpkgs version suffix as string.
@@ -463,7 +526,7 @@ in
     # Type
 
     ```
-    revisionWithDefault :: string -> string
+    revisionWithDefault :: String -> String
     ```
   */
   revisionWithDefault =
@@ -488,7 +551,7 @@ in
     # Type
 
     ```
-    inNixShell :: bool
+    inNixShell :: Bool
     ```
   */
   inNixShell = builtins.getEnv "IN_NIX_SHELL" != "";
@@ -501,7 +564,7 @@ in
     # Type
 
     ```
-    inPureEvalMode :: bool
+    inPureEvalMode :: Bool
     ```
   */
   inPureEvalMode = !builtins ? currentSystem;
@@ -509,7 +572,7 @@ in
   ## Integer operations
 
   /**
-    Return minimum of two numbers.
+    Returns minimum of two numbers.
 
     # Inputs
 
@@ -520,11 +583,17 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    min :: Number -> Number -> Number
+    ```
   */
   min = x: y: if x < y then x else y;
 
   /**
-    Return maximum of two numbers.
+    Returns maximum of two numbers.
 
     # Inputs
 
@@ -535,6 +604,12 @@ in
     `y`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    max :: Number -> Number -> Number
+    ```
   */
   max = x: y: if x > y then x else y;
 
@@ -550,6 +625,12 @@ in
     `int`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    mod :: Int -> Int -> Int
+    ```
 
     # Examples
     :::{.example}
@@ -584,6 +665,12 @@ in
     `b`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    compare :: a -> a -> Int
+    ```
   */
   compare =
     a: b:
@@ -625,7 +712,7 @@ in
     # Type
 
     ```
-    (a -> bool) -> (a -> a -> int) -> (a -> a -> int) -> (a -> a -> int)
+    splitByAndCompare :: (a -> Bool) -> (a -> a -> Int) -> (a -> a -> Int) -> (a -> a -> Int)
     ```
 
     # Examples
@@ -699,7 +786,7 @@ in
     # Type
 
     ```
-    importJSON :: path -> any
+    importJSON :: Path -> Any
     ```
   */
   importJSON = path: builtins.fromJSON (builtins.readFile path);
@@ -746,10 +833,10 @@ in
     # Type
 
     ```
-    importTOML :: path -> any
+    importTOML :: Path -> Any
     ```
   */
-  importTOML = path: builtins.fromTOML (builtins.readFile path);
+  importTOML = path: fromTOML (builtins.readFile path);
 
   /**
     `warn` *`message`* *`value`*
@@ -772,7 +859,7 @@ in
     # Type
 
     ```
-    String -> a -> a
+    warn :: String -> a -> a
     ```
   */
   warn =
@@ -819,7 +906,7 @@ in
     # Type
 
     ```
-    Bool -> String -> a -> a
+    warnIf :: Bool -> String -> a -> a
     ```
   */
   warnIf = cond: msg: if cond then warn msg else x: x;
@@ -846,7 +933,7 @@ in
     # Type
 
     ```
-    Boolean -> String -> a -> a
+    warnIfNot :: Bool -> String -> a -> a
     ```
   */
   warnIfNot = cond: msg: if cond then x: x else warn msg;
@@ -875,7 +962,7 @@ in
     # Type
 
     ```
-    bool -> string -> a -> a
+    throwIfNot :: Bool -> String -> a -> (a | Never)
     ```
 
     # Examples
@@ -893,7 +980,7 @@ in
   throwIfNot = cond: msg: if cond then x: x else throw msg;
 
   /**
-    Like throwIfNot, but negated (throw if the first argument is `true`).
+    Like `throwIfNot`, but negated (throw if the first argument is `true`).
 
     # Inputs
 
@@ -908,7 +995,7 @@ in
     # Type
 
     ```
-    bool -> string -> a -> a
+    throwIf :: Bool -> String -> a -> (a | Never)
     ```
   */
   throwIf = cond: msg: if cond then throw msg else x: x;
@@ -933,7 +1020,7 @@ in
     # Type
 
     ```
-    String -> List ComparableVal -> List ComparableVal -> a -> a
+    checkListOfEnum :: String -> [a] -> [a] -> ((b -> b) | Never)
     ```
 
     # Examples
@@ -955,7 +1042,7 @@ in
       unexpected = lib.subtractLists valid given;
     in
     lib.throwIfNot (unexpected == [ ])
-      "${msg}: ${builtins.concatStringsSep ", " (builtins.map builtins.toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (builtins.map builtins.toString valid)}";
+      "${msg}: ${builtins.concatStringsSep ", " (map toString unexpected)} unexpected; valid ones: ${builtins.concatStringsSep ", " (map toString valid)}";
 
   info = msg: builtins.trace "INFO: ${msg}";
 
@@ -968,11 +1055,10 @@ in
     The metadata should match the format given by
     builtins.functionArgs, i.e. a set from expected argument to a bool
     representing whether that argument has a default or not.
-    setFunctionArgs : (a → b) → Map String Bool → (a → b)
 
     This function is necessary because you can't dynamically create a
-    function of the { a, b ? foo, ... }: format, but some facilities
-    like callPackage expect to be able to query expected arguments.
+    function of the `{ a, b ? foo, ... }:` format, but some facilities
+    like `callPackage` expect to be able to query expected arguments.
 
     # Inputs
 
@@ -983,6 +1069,12 @@ in
     `args`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    setFunctionArgs : (a -> b) -> { [String] :: Bool } -> (a -> b)
+    ```
   */
   setFunctionArgs = f: args: {
     # TODO: Should we add call-time "type" checking like built in?
@@ -992,16 +1084,21 @@ in
 
   /**
     Extract the expected function arguments from a function.
-    This works both with nix-native { a, b ? foo, ... }: style
-    functions and functions with args set with 'setFunctionArgs'. It
-    has the same return type and semantics as builtins.functionArgs.
-    setFunctionArgs : (a → b) → Map String Bool.
+    This works both with nix-native `{ a, b ? foo, ... }:` style
+    functions and functions with args set with `setFunctionArgs`. It
+    has the same return type and semantics as `builtins.functionArgs`.
 
     # Inputs
 
     `f`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    functionArgs : (a -> b) -> { [String] :: Bool }
+    ```
   */
   functionArgs =
     f:
@@ -1019,6 +1116,12 @@ in
     `f`
 
     : 1\. Function argument
+
+    # Type
+
+    ```
+    isFunction : Any -> Bool
+    ```
   */
   isFunction = f: builtins.isFunction f || (f ? __functor && isFunction (f.__functor f));
 
@@ -1105,38 +1208,60 @@ in
     # Type
 
     ```
-    fromHexString :: String -> [ String ]
+    fromHexString :: String -> Int
     ```
 
     # Examples
-
+    :::{.example}
+    ## `lib.trivial.fromHexString` usage examples
     ```nix
     fromHexString "FF"
     => 255
 
-    fromHexString (builtins.hashString "sha256" "test")
+    fromHexString "0x7fffffffffffffff"
     => 9223372036854775807
     ```
+    :::
   */
   fromHexString =
-    value:
+    str:
     let
-      noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower value);
+      match = builtins.match "(0x)?([0-7]?[0-9A-Fa-f]{1,15})" str;
     in
-    let
-      parsed = builtins.fromTOML "v=0x${noPrefix}";
-    in
-    parsed.v;
+    if match != null then
+      (fromTOML "v=0x${builtins.elemAt match 1}").v
+    else
+      # TODO: Turn this into a `throw` in 26.05.
+      assert lib.warn "fromHexString: ${
+        lib.generators.toPretty { } str
+      } is not a valid input and will be rejected in 26.05" true;
+      let
+        noPrefix = lib.strings.removePrefix "0x" (lib.strings.toLower str);
+      in
+      (fromTOML "v=0x${noPrefix}").v;
 
   /**
     Convert the given positive integer to a string of its hexadecimal
-    representation. For example:
+    representation.
 
+    # Type
+
+    ```
+    toHexString :: Int -> String
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toHexString` usage example
+
+    ```nix
     toHexString 0 => "0"
 
     toHexString 16 => "10"
 
     toHexString 250 => "FA"
+    ```
+    :::
   */
   toHexString =
     let
@@ -1153,14 +1278,8 @@ in
     i: lib.concatMapStrings toHexDigit (toBaseDigits 16 i);
 
   /**
-    `toBaseDigits base i` converts the positive integer i to a list of its
-    digits in the given base. For example:
-
-    toBaseDigits 10 123 => [ 1 2 3 ]
-
-    toBaseDigits 2 6 => [ 1 1 0 ]
-
-    toBaseDigits 16 250 => [ 15 10 ]
+    `toBaseDigits base i` converts the positive integer `i` to a list of its
+    digits in the given base.
 
     # Inputs
 
@@ -1171,6 +1290,25 @@ in
     `i`
 
     : 2\. Function argument
+
+    # Type
+
+    ```
+    toBaseDigits :: Int -> Int -> [Int]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.toBaseDigits`
+
+    ```nix
+    toBaseDigits 10 123 => [ 1 2 3 ]
+
+    toBaseDigits 2 6 => [ 1 1 0 ]
+
+    toBaseDigits 16 250 => [ 15 10 ]
+    ```
+    :::
   */
   toBaseDigits =
     base: i:

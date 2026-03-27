@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
   autobahn,
   twisted,
@@ -9,14 +9,16 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "magic-wormhole-transit-relay";
-  version = "0.4.0";
+  version = "0.5.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-kS2DXaIbESZsdxEdybXlgAJj/AuY8KF5liJn30GBnow=";
+  src = fetchFromGitHub {
+    owner = "magic-wormhole";
+    repo = "magic-wormhole-transit-relay";
+    tag = finalAttrs.version;
+    hash = "sha256-UhV0M8Nl9Y850PQcJoDyIvIPRyBS8gyF2Ub9qF3aq0U=";
   };
 
   postPatch = ''
@@ -30,7 +32,6 @@ buildPythonPackage rec {
 
   dependencies = [
     autobahn
-    setuptools # pkg_resources is referenced at runtime
     twisted
   ];
 
@@ -51,8 +52,8 @@ buildPythonPackage rec {
   meta = {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
-    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${version}/NEWS.md";
+    changelog = "https://github.com/magic-wormhole/magic-wormhole-transit-relay/blob/${finalAttrs.src.rev}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.mjoerg ];
   };
-}
+})

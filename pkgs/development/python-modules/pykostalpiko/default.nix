@@ -4,7 +4,6 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,11 +11,9 @@ buildPythonPackage rec {
   version = "1.1.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "Florian7843";
-    repo = pname;
+    repo = "pykostalpiko";
     rev = "v${version}";
     hash = "sha256-kmzFsOgmMb8bOkulg7G6vXEPdb0xizh7u5LjnHfEWWQ=";
   };
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pykostalpiko" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library and CLI-tool to fetch the data from a Kostal Piko inverter";
     homepage = "https://github.com/Florian7843/pykostalpiko";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

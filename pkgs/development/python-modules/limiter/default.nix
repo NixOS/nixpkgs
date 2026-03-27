@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   strenum,
   token-bucket,
 }:
@@ -12,11 +11,9 @@ buildPythonPackage rec {
   version = "0.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.10";
-
   src = fetchFromGitHub {
     owner = "alexdelorenzo";
-    repo = pname;
+    repo = "limiter";
     rev = "v${version}";
     hash = "sha256-2Et4ozVf9t+tp2XtLbDk/LgLIU+jQAEAlU8hA5lpxdk=";
   };
@@ -31,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "limiter" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python rate-limiting, thread-safe and asynchronous decorators and context managers";
     homepage = "https://github.com/alexdelorenzo/limiter";
-    license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ agpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -11,17 +11,21 @@
   autoreconfHook,
   makeWrapper,
   jq,
+  libgcrypt,
+  texinfo,
+  curl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "taler-merchant";
-  version = "0.14.6-unstable-2025-03-02";
+  version = "1.3.0";
 
   src = fetchgit {
     url = "https://git.taler.net/merchant.git";
-    rev = "c84ed905e2d4af60162a7def5c0fc430394930e6";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-LXmrY8foiYOxCik23d3f4t9+tldbm7bVGG8eQOLsm+A=";
+    hash = "sha256-nrXokwZ0IFXAH3B12/FDAhhyE6JAiiJ59cuWLwLM684=";
   };
 
   postUnpack = ''
@@ -35,13 +39,16 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'TALER_TEMPLATING_init (TALER_MERCHANT_project_data ())' "TALER_TEMPLATING_init_path (\"merchant\", \"$out/share/taler\")"
 
     substituteInPlace src/backend/taler-merchant-httpd_spa.c \
-      --replace-fail 'GNUNET_DISK_directory_scan (dn,' "GNUNET_DISK_directory_scan (\"$out/share/taler/merchant/spa/\","
+      --replace-fail 'TALER_MHD_spa_load (TALER_MERCHANT_project_data (),' "TALER_MHD_spa_load_dir (\"$out/share/taler/merchant/spa/\");" \
+      --replace-fail '"spa/");' ""
   '';
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
     makeWrapper
+    libgcrypt # AM_PATH_LIBGCRYPT
+    texinfo # makeinfo
   ];
 
   buildInputs = taler-exchange.buildInputs ++ [
@@ -50,6 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     # for ltdl.h
     libtool
   ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [ gnunet ];
 
@@ -62,6 +71,10 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
+  configureFlags = [
+    "ac_cv_path__libcurl_config=${lib.getDev curl}/bin/curl-config"
+  ];
+
   # NOTE: The executables that need database access fail to detect the
   # postgresql library in `$out/lib/taler`, so we need to wrap them.
   postInstall = ''
@@ -71,6 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  postFixup = ''
+    # - taler-merchant-dbinit expects `versioning.sql` under `share/taler/sql`
+    # - taler-merchant-httpd expects `share/taler/merchant/templates`
+    mkdir -p $out/share/taler/sql
+    ln -s $out/share/taler-merchant $out/share/taler/merchant
+    ln -s $out/share/taler-merchant/sql $out/share/taler/sql/merchant
+  '';
+
   enableParallelBuilding = true;
 
   doInstallCheck = true;
@@ -78,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [ jq ];
 
   checkTarget = "check";
+
+  passthru.tests = nixosTests.taler.basic;
 
   meta = {
     description = "Merchant component for the GNU Taler electronic payment system";
@@ -93,6 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.taler.net/merchant.git/tree/ChangeLog";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ astro ];
+    teams = with lib.teams; [ ngi ];
     platforms = lib.platforms.linux;
   };
 })

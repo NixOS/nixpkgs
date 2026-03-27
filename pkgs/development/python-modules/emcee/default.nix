@@ -5,7 +5,6 @@
   numpy,
   pytestCheckHook,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -13,11 +12,9 @@ buildPythonPackage rec {
   version = "3.1.6";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "dfm";
-    repo = pname;
+    repo = "emcee";
     tag = "v${version}";
     hash = "sha256-JVZK3kvDwWENho0OxZ9OxATcm3XpGmX+e7alPclRsHY=";
   };
@@ -30,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "emcee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Kick ass affine-invariant ensemble MCMC sampling";
     homepage = "https://emcee.readthedocs.io/";
     changelog = "https://github.com/dfm/emcee/releases/tag/v${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

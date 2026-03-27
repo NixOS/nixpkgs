@@ -2,27 +2,26 @@
   stdenvNoCC,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   makeBinaryWrapper,
   makeDesktopItem,
   jdk17,
-  gradle_8,
+  gradle_9,
   which,
   copyDesktopItems,
 }:
 
 let
   pname = "freeplane";
-  version = "1.12.8";
+  version = "1.12.16";
 
   jdk = jdk17;
-  gradle = gradle_8;
+  gradle = gradle_9;
 
   src = fetchFromGitHub {
     owner = "freeplane";
     repo = "freeplane";
     rev = "release-${version}";
-    hash = "sha256-yzjzaobXuQH8CHz183ditL2LsCXU5xLh4+3El4Ffu20=";
+    hash = "sha256-I7vp67UXoiBDxmIOlgCWk6sKOZSWHHI7A2Sdu6cl488=";
   };
 
 in
@@ -34,14 +33,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     jdk
     gradle
     copyDesktopItems
-  ];
-
-  patches = [
-    # Plugin update to support Gradle 8.13; remove when included in a release.
-    (fetchpatch {
-      url = "https://github.com/freeplane/freeplane/commit/e58958783ef6f85ab00bf270c1f897093c4d7006.patch";
-      hash = "sha256-oQF/GbItl2ZEVlTKzojqk9xTWl8CVP7V3yig/py71hk=";
-    })
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -101,7 +92,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       } \
       --prefix _JAVA_AWT_WM_NONREPARENTING : 1 \
-      --prefix _JAVA_OPTIONS : "-Dawt.useSystemAAFontSettings=on"
+      --prefix _JAVA_OPTIONS " " "-Dawt.useSystemAAFontSettings=gasp"
 
     runHook postInstall
   '';

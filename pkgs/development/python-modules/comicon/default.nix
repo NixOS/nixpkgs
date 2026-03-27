@@ -9,20 +9,18 @@
   poetry-core,
   pypdf,
   python-slugify,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "comicon";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "comicon";
     tag = "v${version}";
-    hash = "sha256-jZ/ZhSFg0ZPTYI10s8Cn1s9UZRFFnuLjS96lnUFVekQ=";
+    hash = "sha256-E5Jmk/dQcEuH7kq5RL80smHUuL/Sw0F1wk4V1/4sKSQ=";
   };
 
   build-system = [
@@ -38,7 +36,10 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "ebooklib"
+    "lxml"
     "pillow"
+    "pypdf"
   ];
 
   doCheck = false; # test artifacts are not public

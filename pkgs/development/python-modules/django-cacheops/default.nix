@@ -13,23 +13,20 @@
   dill,
   jinja2,
   before-after,
-  pythonOlder,
-  nettools,
+  net-tools,
   pkgs,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.1";
+  version = "7.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "django_cacheops";
     inherit version;
-    hash = "sha256-7Aeau5aFVzIe4gjGJ0ggIxgg+YymN33alx8EmBvCq1I=";
+    hash = "sha256-y8EcwDISlaNkTie8smlA8Iy5wucdPuUGy8/wvdoanzM=";
   };
 
   pythonRelaxDeps = [ "funcy" ];
@@ -52,18 +49,18 @@ buildPythonPackage rec {
     dill
     jinja2
     before-after
-    nettools
+    net-tools
     pkgs.valkey
     redisTestHook
   ];
 
-  DJANGO_SETTINGS_MODULE = "tests.settings";
+  env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
-  meta = with lib; {
+  meta = {
     description = "Slick ORM cache with automatic granular event-driven invalidation for Django";
     homepage = "https://github.com/Suor/django-cacheops";
     changelog = "https://github.com/Suor/django-cacheops/blob/${version}/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

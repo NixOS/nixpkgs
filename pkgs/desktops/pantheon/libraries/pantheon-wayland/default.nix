@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pantheon-wayland";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "pantheon-wayland";
     rev = finalAttrs.version;
-    hash = "sha256-UKGgz3G960dPmcDaFwLjDy55x+mDPdQQv2Ejs7BujLg=";
+    hash = "sha256-Wfulo/fXsb51ShT7E2wTg56TULAK1chB59L/ggGh2EY=";
   };
 
   outputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Wayland integration library to the Pantheon Desktop";
     homepage = "https://github.com/elementary/pantheon-wayland";
     license = lib.licenses.lgpl3Plus;
-    maintainers = lib.teams.pantheon.members;
+    teams = [ lib.teams.pantheon ];
     platforms = lib.platforms.linux;
   };
 })

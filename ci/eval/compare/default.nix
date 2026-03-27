@@ -1,23 +1,71 @@
 {
+  callPackage,
   lib,
   jq,
   runCommand,
   writeText,
-  ...
-}:
-{
-  beforeResultDir,
-  afterResultDir,
-  touchedFilesJson,
+  python3,
+  stdenvNoCC,
+  makeWrapper,
+  codeowners,
 }:
 let
+  python = python3.withPackages (ps: [
+    ps.numpy
+    ps.pandas
+    ps.scipy
+    ps.tabulate
+  ]);
+
+  cmp-stats = stdenvNoCC.mkDerivation {
+    pname = "cmp-stats";
+    version = lib.trivial.release;
+
+    dontUnpack = true;
+
+    nativeBuildInputs = [ makeWrapper ];
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/cmp-stats
+
+      cp ${./cmp-stats.py} "$out/share/cmp-stats/cmp-stats.py"
+
+      makeWrapper ${python.interpreter} "$out/bin/cmp-stats" \
+          --add-flags "$out/share/cmp-stats/cmp-stats.py"
+
+      runHook postInstall
+    '';
+
+    meta = {
+      description = "Performance comparison of Nix evaluation statistics";
+      license = lib.licenses.mit;
+      mainProgram = "cmp-stats";
+      maintainers = with lib.maintainers; [ philiptaron ];
+    };
+  };
+in
+{
+  combinedDir,
+  touchedFilesJson,
+  ownersFile ? ../../OWNERS,
+}:
+let
+  # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
+  # nix store paths around. These need to be turned into (fake) derivations again to track
+  # dependencies properly.
+  # We use two steps for evaluation, because we compare results from two different checkouts.
+  # CI additionalls spreads evaluation across multiple workers.
+  combined = if lib.isDerivation combinedDir then combinedDir else lib.toDerivation combinedDir;
+
   /*
     Derivation that computes which packages are affected (added, changed or removed) between two revisions of nixpkgs.
     Note: "platforms" are "x86_64-linux", "aarch64-darwin", ...
 
     ---
     Inputs:
-    - beforeResultDir, afterResultDir: The evaluation result from before and after the change.
+    - beforeDir, afterDir: The evaluation result from before and after the change.
       They can be obtained by running `nix-build -A ci.eval.full` on both revisions.
 
     ---
@@ -29,10 +77,10 @@ let
             changed: ["package2", "package3"],
             removed: ["package4"],
           },
-          labels: [
-            "10.rebuild-darwin: 1-10",
-            "10.rebuild-linux: 1-10"
-          ],
+          labels: {
+            "10.rebuild-darwin: 1-10": true,
+            "10.rebuild-linux: 1-10": true
+          },
           rebuildsByKernel: {
             darwin: ["package1", "package2"],
             linux: ["package1", "package2", "package3"]
@@ -63,7 +111,6 @@ let
       Example: { name = "python312Packages.numpy"; platform = "x86_64-linux"; }
   */
   inherit (import ./utils.nix { inherit lib; })
-    diff
     groupByKernel
     convertToPackagePlatformAttrs
     groupByPlatform
@@ -71,25 +118,12 @@ let
     getLabels
     ;
 
-  getAttrs =
-    dir:
-    let
-      raw = builtins.readFile "${dir}/outpaths.json";
-      # The file contains Nix paths; we need to ignore them for evaluation purposes,
-      # else there will be a "is not allowed to refer to a store path" error.
-      data = builtins.unsafeDiscardStringContext raw;
-    in
-    builtins.fromJSON data;
-  beforeAttrs = getAttrs beforeResultDir;
-  afterAttrs = getAttrs afterResultDir;
-
   # Attrs
-  # - keys: "added", "changed" and "removed"
+  # - keys: "added", "changed", "removed" and "rebuilds"
   # - values: lists of `packagePlatformPath`s
-  diffAttrs = diff beforeAttrs afterAttrs;
+  diffAttrs = builtins.fromJSON (builtins.readFile "${combined}/combined-diff.json");
 
-  rebuilds = diffAttrs.added ++ diffAttrs.changed;
-  rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs rebuilds;
+  rebuildsPackagePlatformAttrs = convertToPackagePlatformAttrs diffAttrs.rebuilds;
 
   changed-paths =
     let
@@ -101,40 +135,138 @@ let
     in
     writeText "changed-paths.json" (
       builtins.toJSON {
-        attrdiff = lib.mapAttrs (_: extractPackageNames) diffAttrs;
+        attrdiff = lib.mapAttrs (_: extractPackageNames) { inherit (diffAttrs) added changed removed; };
         inherit
           rebuildsByPlatform
           rebuildsByKernel
           rebuildCountByKernel
           ;
         labels =
-          (getLabels rebuildCountByKernel)
-          # Adds "10.rebuild-*-stdenv" label if the "stdenv" attribute was changed
-          ++ lib.mapAttrsToList (kernel: _: "10.rebuild-${kernel}-stdenv") (
-            lib.filterAttrs (_: kernelRebuilds: kernelRebuilds ? "stdenv") rebuildsByKernel
-          );
+          getLabels rebuildCountByKernel
+          # Sets "10.rebuild-*-stdenv" label to whether the "stdenv" attribute was changed.
+          // lib.mapAttrs' (
+            kernel: rebuilds: lib.nameValuePair "10.rebuild-${kernel}-stdenv" (lib.elem "stdenv" rebuilds)
+          ) rebuildsByKernel
+          // {
+            "10.rebuild-nixos-tests" =
+              lib.elem "nixosTests.simple" (extractPackageNames diffAttrs.rebuilds)
+              &&
+                # Only set this label when no other label with indication for staging has been set.
+                # This avoids confusion whether to target staging or batch this with kernel updates.
+                lib.last (lib.sort lib.lessThan (lib.attrValues rebuildCountByKernel)) <= 500;
+          };
       }
     );
 
-  maintainers = import ./maintainers.nix {
-    changedattrs = lib.attrNames (lib.groupBy (a: a.name) rebuildsPackagePlatformAttrs);
-    changedpathsjson = touchedFilesJson;
-  };
+  getMaintainers = callPackage ./maintainers.nix { };
+
+  inherit
+    (getMaintainers {
+      affectedAttrPaths = map (a: a.packagePath) (
+        convertToPackagePlatformAttrs (diffAttrs.changed ++ diffAttrs.removed)
+      );
+      changedFiles = lib.importJSON touchedFilesJson;
+    })
+    users
+    teams
+    packages
+    ;
 in
 runCommand "compare"
   {
-    nativeBuildInputs = [ jq ];
-    maintainers = builtins.toJSON maintainers;
-    passAsFile = [ "maintainers" ];
+    # Don't depend on -dev outputs to reduce closure size for CI.
+    nativeBuildInputs = map lib.getBin [
+      jq
+      cmp-stats
+      codeowners
+    ];
+    users = builtins.toJSON users;
+    teams = builtins.toJSON teams;
+    packages = builtins.toJSON (lib.map (lib.concatStringsSep ".") packages);
+    passAsFile = [
+      "users"
+      "teams"
+      "packages"
+    ];
   }
   ''
     mkdir $out
 
     cp ${changed-paths} $out/changed-paths.json
 
-    jq -r -f ${./generate-step-summary.jq} < ${changed-paths} > $out/step-summary.md
+    {
+      echo
+      echo "# Packages"
+      echo
+      jq -r -f ${./generate-step-summary.jq} < ${changed-paths}
+    } >> $out/step-summary.md
 
-    cp "$maintainersPath" "$out/maintainers.json"
+    if jq -e '(.attrdiff.added | length == 0) and (.attrdiff.removed | length == 0)' "${changed-paths}" > /dev/null; then
+      # Chunks have changed between revisions
+      # We cannot generate a performance comparison
+      {
+        echo
+        echo "# Performance comparison"
+        echo
+        echo "This compares the performance of this branch against its pull request base branch (e.g., 'master')"
+        echo
+        echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
+        echo
+      } >> $out/step-summary.md
 
-    # TODO: Compare eval stats
+      cmp-stats --explain ${combined}/before/stats ${combined}/after/stats >> $out/step-summary.md
+
+    else
+      # Package chunks are the same in both revisions
+      # We can use the to generate a performance comparison
+      {
+        echo
+        echo "# Performance Comparison"
+        echo
+        echo "Performance stats were skipped because the package sets differ between the two revisions."
+        echo
+        echo "For further help please refer to: [ci/README.md](https://github.com/NixOS/nixpkgs/blob/master/ci/README.md)"
+      } >> $out/step-summary.md
+    fi
+
+    jq -r '.[]' "${touchedFilesJson}" > ./touched-files
+    readarray -t touchedFiles < ./touched-files
+    echo "This PR touches ''${#touchedFiles[@]} files"
+
+    # TODO: Move ci/OWNERS to Nix and produce owners.json instead of owners.txt.
+    touch "$out/owners.txt"
+    for file in "''${touchedFiles[@]}"; do
+        result=$(codeowners --file "${ownersFile}" "$file")
+
+        # Remove the file prefix and trim the surrounding spaces
+        read -r owners <<< "''${result#"$file"}"
+        if [[ "$owners" == "(unowned)" ]]; then
+            echo "File $file is unowned"
+            continue
+        fi
+        echo "File $file is owned by $owners"
+
+        # Split up multiple owners, separated by arbitrary amounts of spaces
+        IFS=" " read -r -a entries <<< "$owners"
+
+        for entry in "''${entries[@]}"; do
+            # GitHub technically also supports Emails as code owners,
+            # but we can't easily support that, so let's not
+            if [[ ! "$entry" =~ @(.*) ]]; then
+                echo -e "\e[33mCodeowner \"$entry\" for file $file is not valid: Must start with \"@\"\e[0m"
+                # Don't fail, because the PR for which this script runs can't fix it,
+                # it has to be fixed in the base branch
+                continue
+            fi
+            # The first regex match is everything after the @
+            entry=''${BASH_REMATCH[1]}
+
+            echo "$entry" >> "$out/owners.txt"
+        done
+
+    done
+
+    cp "$usersPath" "$out/maintainers.json"
+    cp "$teamsPath" "$out/teams.json"
+    cp "$packagesPath" "$out/packages.json"
   ''

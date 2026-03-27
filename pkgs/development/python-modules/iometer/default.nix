@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "iometer";
-  version = "0.1.0";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "iometer-gmbh";
     repo = "iometer.py";
     tag = "v${version}";
-    hash = "sha256-+Ox9FlS2mswCt2jaJfKuvt21byjUrnCYp3vcv1D83Rs=";
+    hash = "sha256-FO9IwBXGIBh522JaaATjxo93zbGwnB+Y9dy7724d1Rw=";
   };
 
   build-system = [ poetry-core ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/test.py"
   ];
 

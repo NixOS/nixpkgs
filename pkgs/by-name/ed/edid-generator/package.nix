@@ -3,8 +3,8 @@
   stdenv,
   fetchFromGitHub,
   dos2unix,
-  edid-decode,
   hexdump,
+  v4l-utils,
   zsh,
 }:
 
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dos2unix
-    edid-decode
     hexdump
+    v4l-utils
     zsh
   ];
 
@@ -43,19 +43,22 @@ stdenv.mkDerivation {
     patchShebangs modeline2edid
   '';
 
-  passAsFile = [ "modelines" ];
   clean = false;
   modelines = "";
 
   configurePhase = ''
+    runHook preConfigure
+
     test "$clean" != 1 || rm *x*.S
-    ./modeline2edid - <"$modelinesPath"
+    echo "$modelines" | ./modeline2edid -
 
     for file in *.S ; do
       echo "--- generated file: $file"
       cat "$file"
     done
     make clean
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
@@ -73,6 +76,8 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm 444 *.bin -t "$out/lib/firmware/edid"
   '';
+
+  __structuredAttrs = true;
 
   meta = {
     description = "Hackerswork to generate an EDID blob from given Xorg Modelines";

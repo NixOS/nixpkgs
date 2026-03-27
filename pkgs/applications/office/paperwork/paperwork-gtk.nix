@@ -38,7 +38,7 @@ in
 python3Packages.buildPythonApplication rec {
   inherit src version;
   pname = "paperwork";
-  format = "pyproject";
+  pyproject = true;
 
   sample_docs = sample_documents // {
     # a trick for the update script
@@ -92,7 +92,8 @@ python3Packages.buildPythonApplication rec {
     (lib.getBin gettext)
     which
     gdk-pixbuf # for the setup hook
-  ] ++ documentation_deps;
+  ]
+  ++ documentation_deps;
 
   buildInputs = [
     adwaita-icon-theme

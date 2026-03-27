@@ -6,27 +6,25 @@
   php,
   fetchFromGitHub,
   pcre2,
-  darwin,
 }:
 
 buildPecl rec {
   pname = "snuffleupagus";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "jvoisin";
     repo = "snuffleupagus";
     rev = "v${version}";
-    hash = "sha256-W+EQXjvmDHih5YW/SjRcEdUELePUPKrNWB8vW9dLK/g=";
+    hash = "sha256-14Hci2/f1kSV/lCAlFTNrv/WLJxeh+Wyf0QF0+xoedc=";
   };
 
-  buildInputs =
-    [ pcre2 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreFoundation
-      darwin.apple_sdk_11_0.Libsystem
-      libiconv
-    ];
+  buildInputs = [
+    pcre2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   internalDeps = with php.extensions; [ session ];
 
@@ -39,9 +37,10 @@ buildPecl rec {
   '';
 
   meta = {
-    description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest!";
+    description = "Security module for php7 and php8 - Killing bugclasses and virtual-patching the rest";
     homepage = "https://github.com/jvoisin/snuffleupagus";
     license = lib.licenses.lgpl3Only;
-    maintainers = lib.teams.php.members ++ [ lib.maintainers.zupo ];
+    maintainers = [ lib.maintainers.zupo ];
+    teams = [ lib.teams.php ];
   };
 }

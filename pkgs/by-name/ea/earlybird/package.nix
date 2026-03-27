@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "earlybird";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "americanexpress";
     repo = "earlybird";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-guSm/ha4ICaOcoynvAwFeojE6ikaCykMcdfskD/ehTw=";
   };
 
@@ -22,12 +22,12 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
     mainProgram = "earlybird";
     homepage = "https://github.com/americanexpress/earlybird";
-    changelog = "https://github.com/americanexpress/earlybird/releases/tag/v${version}";
-    license = licenses.asl20;
+    changelog = "https://github.com/americanexpress/earlybird/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
-}
+})

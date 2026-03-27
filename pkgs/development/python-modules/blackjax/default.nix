@@ -4,55 +4,57 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   setuptools-scm,
 
   # dependencies
   fastprogress,
+  ipython,
   jax,
   jaxlib,
-  jaxopt,
+  numpy,
   optax,
+  scipy,
   typing-extensions,
 
   # checks
+  chex,
   pytestCheckHook,
   pytest-xdist,
-
-  stdenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.2.5";
+  version = "1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
-    tag = version;
-    hash = "sha256-2GTjKjLIWFaluTjdWdUF9Iim973y81xv715xspghRZI=";
+    tag = finalAttrs.version;
+    hash = "sha256-x/K/M7C+XNhqMdRZdDPpKmGgmnrjGsruDL3lFia2ioQ=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     fastprogress
+    ipython
     jax
     jaxlib
-    jaxopt
+    numpy
     optax
+    scipy
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    chex
     pytestCheckHook
     pytest-xdist
-  ];
-
-  pytestFlagsArray = [
-    # DeprecationWarning: JAXopt is no longer maintained
-    "-W"
-    "ignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -62,35 +64,29 @@ buildPythonPackage rec {
     "tests/mcmc/test_integrators.py"
   ];
 
-  disabledTests =
-    [
-      # too slow
-      "test_adaptive_tempered_smc"
+  disabledTests = [
+    # too slow
+    "test_adaptive_tempered_smc"
 
-      # AssertionError on numerical values
-      "test_barker"
-      "test_mclmc"
-      "test_mcse4"
-      "test_normal_univariate"
-      "test_nuts__with_device"
-      "test_nuts__with_jit"
-      "test_nuts__without_device"
-      "test_nuts__without_jit"
-      "test_smc_waste_free__with_jit"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Numerical test (AssertionError)
-      # https://github.com/blackjax-devs/blackjax/issues/668
-      "test_chees_adaptation"
-    ];
+    # AssertionError on numerical values
+    "test_barker"
+    "test_mclmc"
+    "test_mcse4"
+    "test_normal_univariate"
+    "test_nuts__with_device"
+    "test_nuts__with_jit"
+    "test_nuts__without_device"
+    "test_nuts__without_jit"
+    "test_smc_waste_free__with_jit"
+  ];
 
   pythonImportsCheck = [ "blackjax" ];
 
   meta = {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
-    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
+    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

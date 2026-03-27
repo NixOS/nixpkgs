@@ -3,16 +3,16 @@
   stdenv,
   fetchurl,
   hexdump,
-  wxGTK32,
+  wxwidgets_3_2,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "comical";
   version = "0.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/comical/comical-${version}.tar.gz";
+    url = "mirror://sourceforge/comical/comical-${finalAttrs.version}.tar.gz";
     hash = "sha256-C2UnzAayWpNwQfHrJI0P2IHPBVNiCXA2uTmBf3hauF4=";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wxGTK32
+    wxwidgets_3_2
     zlib
   ];
 
@@ -49,4 +49,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; unix;
     mainProgram = "comical";
   };
-}
+})

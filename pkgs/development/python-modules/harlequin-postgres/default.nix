@@ -2,29 +2,32 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  poetry-core,
+  hatchling,
   psycopg,
+  duckdb,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "harlequin-postgres";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "harlequin_postgres";
     inherit version;
-    hash = "sha256-9US0aaXP2F+UVM9pY43KpnB05KC0/uDxrpZAYOJ+RR0=";
+    hash = "sha256-01MllGk8dFeWtbpENCGGYs4/nlq7aLLkFZqCXGLrN4s=";
   };
 
   build-system = [
-    poetry-core
+    hatchling
   ];
 
   dependencies = [
     psycopg
     psycopg.pool
-  ];
+  ]
+  ++ lib.optional (pythonAtLeast "3.14") duckdb;
 
   # To prevent circular dependency
   # as harlequin-postgres requires harlequin which requires harlequin-postgres
@@ -34,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A Harlequin adapter for Postgres";
+    description = "Harlequin adapter for Postgres";
     homepage = "https://pypi.org/project/harlequin-postgres/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pcboy ];

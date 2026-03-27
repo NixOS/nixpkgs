@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "cross-seed";
-  version = "6.11.1";
+  version = "6.13.6";
 
   src = fetchFromGitHub {
     owner = "cross-seed";
     repo = "cross-seed";
     tag = "v${version}";
-    hash = "sha256-ZyagXbbYUZA2CfoqVh0pmKt91kTLUGB8hUItgHbPb2w=";
+    hash = "sha256-E2tnlDU2/msNcSsoDXvwGWFhWpXEByloUmlVp2tckwo=";
   };
 
-  npmDepsHash = "sha256-hSiGnw3Fo//oTONBmtuv0sDvldCzs1PsdImxdGWEpMo=";
+  npmDepsHash = "sha256-tR7zPoIX6yjlRx8QbRSxskvueQ1BsP3gGAlonKHH0RY=";
 
   passthru = {
     updateScript = nix-update-script;

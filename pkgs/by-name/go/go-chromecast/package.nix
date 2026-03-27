@@ -7,26 +7,26 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "go-chromecast";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "vishen";
     repo = "go-chromecast";
-    tag = "v${version}";
-    hash = "sha256-6I10UZ7imH1R78L2uM/697PskPYjhKSiPHoMM7EFElU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FFe87Z0aiNP5aGAiJ2WJkKRAMCQGWEBB0gLDGBpE3fk=";
   };
 
-  vendorHash = "sha256-cu8PuZLkWLatU46VieaeoV5oyejyjR0uVUMVzOrheLM=";
+  vendorHash = "sha256-MOC9Yqo5p02eZLFJYBE8CxHxZv3RcpqV2sEPZOWiDeE=";
 
   env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.version=${version}"
-    "-X=main.commit=${src.rev}"
+    "-X=main.version=${finalAttrs.version}"
+    "-X=main.commit=${finalAttrs.src.rev}"
     "-X=main.date=unknown"
   ];
 
@@ -37,8 +37,6 @@ buildGoModule rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-
-  versionCheckProgramArg = "--version";
 
   postInstall = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
     installShellCompletion --cmd go-chromecast \
@@ -54,4 +52,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.zi3m5f ];
     mainProgram = "go-chromecast";
   };
-}
+})

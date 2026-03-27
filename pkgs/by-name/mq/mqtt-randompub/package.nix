@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "mqtt-randompub";
   version = "0.3.0";
   pyproject = true;
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fabaff";
     repo = "mqtt-randompub";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-X9gITmzyUNtYW8IMTcBiubPscBEO5OGjdxot9wRD/BY=";
   };
 
@@ -28,9 +28,9 @@ python3.pkgs.buildPythonApplication rec {
   meta = {
     description = "Tool that sends random MQTT messages to random topics";
     homepage = "https://github.com/fabaff/mqtt-randompub";
-    changelog = "https://github.com/fabaff/mqtt-randompub/blob/${src.rev}/ChangeLog";
+    changelog = "https://github.com/fabaff/mqtt-randompub/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "mqtt-randompub";
   };
-}
+})

@@ -7,7 +7,6 @@ let
     listToAttrs
     maintainers
     platforms
-    readFile
     ;
 in
 
@@ -15,7 +14,8 @@ listToAttrs (
   map (v: {
     inherit (v) name;
     value = fetchFromGitHub {
-      name = "${v.name}-theme-${v.version}";
+      pname = v.name;
+      version = v.version;
       owner = "DFgraphics";
       repo = v.name;
       rev = v.version;
@@ -23,7 +23,6 @@ listToAttrs (
       meta = {
         platforms = platforms.all;
         maintainers = [
-          maintainers.matthewbauer
           maintainers.shazow
         ];
         license = licenses.unfree;

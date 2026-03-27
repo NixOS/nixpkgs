@@ -71,7 +71,7 @@ buildGoModule {
 
   meta = {
     homepage = "https://nuvolaris.io/";
-    description = "A CLI tool for running tasks using the Nuvolaris serverless engine";
+    description = "CLI tool for running tasks using the Nuvolaris serverless engine";
     license = lib.licenses.asl20;
     mainProgram = "nuv";
     maintainers = with lib.maintainers; [

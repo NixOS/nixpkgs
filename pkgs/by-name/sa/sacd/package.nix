@@ -30,15 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=$(out)"
   ];
 
-  meta = with lib; {
-    description = "Converts SACD image files, Philips DSDIFF and Sony DSF files to 24-bit high resolution wave files. Handles both DST and DSD streams.";
+  meta = {
+    description = "Converts SACD image files, Philips DSDIFF and Sony DSF files to 24-bit high resolution wave files. Handles both DST and DSD streams";
     longDescription = ''
       Super Audio CD decoder. Converts SACD image files, Philips DSDIFF and Sony DSF files to 24-bit high resolution wave files.
       Handles both DST and DSD streams.
     '';
     homepage = "https://github.com/Sound-Linux-More/sacd";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.doronbehar ];
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.doronbehar ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "sacd";
   };

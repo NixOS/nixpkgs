@@ -2,18 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "syncer";
   version = "2.0.3";
   format = "setuptools";
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "miyakogi";
-    repo = pname;
+    repo = "syncer";
     rev = "v${version}";
     sha256 = "sha256-3EYWy6LuZ/3i+9d0QaclCqWMMw5O3WzhTY3LUL5iMso=";
   };
@@ -23,10 +21,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "syncer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python async to sync converter";
     homepage = "https://github.com/miyakogi/syncer";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -7,7 +7,6 @@
   license-expression,
   ply,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   rdflib,
   semantic-version,
@@ -17,26 +16,24 @@
   xmltodict,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "spdx-tools";
-  version = "0.8.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "0.8.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "spdx";
     repo = "tools-python";
-    tag = "v${version}";
-    hash = "sha256-r7+RYGoq3LJYN1jYfwzb1r3fc/kL+CPd4pmGATFq8Pw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-loD+YXRCEYRynOKf7Da43SA7JQVYP1IzJe2f7ssJTtI=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beartype
     click
     license-expression
@@ -63,11 +60,11 @@ buildPythonPackage rec {
     "test_json_writer"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "SPDX parser and tools";
     homepage = "https://github.com/spdx/tools-python";
-    changelog = "https://github.com/spdx/tools-python/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/spdx/tools-python/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

@@ -1,38 +1,66 @@
 {
+  config,
   lib,
   stdenv,
-  fetchFromGitHub,
-  fftwFloat,
+  alsa-lib,
+  autoPatchelfHook,
   chafa,
   curl,
-  glib,
-  libopus,
-  opusfile,
-  libvorbis,
-  taglib,
   faad2,
+  fetchFromGitHub,
+  fftwFloat,
+  gdk-pixbuf,
+  glib,
   libogg,
-  pkg-config,
-  versionCheckHook,
+  libopus,
+  libjack2,
+  libpulseaudio,
+  libvorbis,
   nix-update-script,
+  opusfile,
+  pkg-config,
+  taglib,
+  versionCheckHook,
+
+  withALSA ? stdenv.hostPlatform.isLinux,
+  withJACK ? false,
+  withPulseaudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
 }:
+
+let
+  uppercaseFirst =
+    x: (lib.toUpper (lib.substring 0 1 x)) + (lib.substring 1 ((lib.strings.stringLength x) - 1) x);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.1.2";
+  version = "3.7.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-64xdxRx4OanAcLgir9N7p/q71+gQYhffnWnxZzz93h8=";
+    hash = "sha256-134SOyYnMPt7pIS8fb+lSA6ouubJQMGlIXPLyoRg6xA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail '$(shell uname -s)' '${uppercaseFirst stdenv.hostPlatform.parsed.kernel.name}' \
+      --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}' \
+  '';
+
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
+
   buildInputs = [
     fftwFloat.dev
     chafa
     curl.dev
+    gdk-pixbuf
     glib.dev
     libopus
     opusfile
@@ -42,6 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
     libogg
   ];
 
+  runtimeDependencies =
+    lib.optionals withPulseaudio [
+      libpulseaudio
+    ]
+    ++ lib.optionals (withALSA || withJACK) [
+      alsa-lib
+    ]
+    ++ lib.optionals withJACK [
+      libjack2
+    ];
+
+  enableParallelBuilding = true;
+
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
     "PREFIX=${placeholder "out"}"
@@ -49,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
 
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

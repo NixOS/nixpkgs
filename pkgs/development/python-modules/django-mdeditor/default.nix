@@ -10,6 +10,7 @@ in
 buildPythonPackage {
   pname = "django-mdeditor";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pylixm";
@@ -28,11 +29,11 @@ buildPythonPackage {
   doCheck = false;
   pythonImportsCheck = [ "mdeditor" ];
 
-  meta = with lib; {
+  meta = {
     description = "Markdown Editor plugin application for django based on Editor.md";
     homepage = "https://github.com/pylixm/django-mdeditor";
     changelog = "https://github.com/pylixm/django-mdeditor/releases";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ augustebaum ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ augustebaum ];
   };
 }

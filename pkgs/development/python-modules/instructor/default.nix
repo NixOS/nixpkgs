@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -10,9 +9,11 @@
   # dependencies
   aiohttp,
   docstring-parser,
+  jinja2,
   jiter,
   openai,
   pydantic,
+  requests,
   rich,
   tenacity,
   typer,
@@ -21,38 +22,43 @@
   anthropic,
   diskcache,
   fastapi,
+  google-genai,
   google-generativeai,
-  jinja2,
+  jsonref,
   pytest-asyncio,
   pytestCheckHook,
   python-dotenv,
   redis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "instructor";
-  version = "1.7.4";
+  version = "1.14.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jxnl";
     repo = "instructor";
-    tag = version;
-    hash = "sha256-TrNGTWnZShOYeMGonSEib7NiEbrwWNtujeWo2gaewf4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-MxFHCjtIUESuvDkNvEEcZdWXTLAxGFH9ZJ1wx8E4N14=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "jiter"
+    "openai"
+    "rich"
+  ];
 
   dependencies = [
     aiohttp
     docstring-parser
+    jinja2
     jiter
     openai
     pydantic
+    requests
     rich
     tenacity
     typer
@@ -62,8 +68,9 @@ buildPythonPackage rec {
     anthropic
     diskcache
     fastapi
+    google-genai
     google-generativeai
-    jinja2
+    jsonref
     pytest-asyncio
     pytestCheckHook
     python-dotenv
@@ -77,6 +84,10 @@ buildPythonPackage rec {
     "successfully"
     "test_mode_functions_deprecation_warning"
     "test_partial"
+    "test_provider_invalid_type_raises_error"
+
+    # instructor.core.exceptions.ConfigurationError: response_model must be a Pydantic BaseModel subclass, got type
+    "test_openai_schema_raises_error"
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
@@ -84,20 +95,35 @@ buildPythonPackage rec {
     # Checks magic values and this fails on Python 3.13
     "test_raw_base64_autodetect_jpeg"
     "test_raw_base64_autodetect_png"
+
+    # Performance benchmarks that sometimes fail when running many parallel builds
+    "test_combine_system_messages_benchmark"
+    "test_extract_system_messages_benchmark"
+
+    # pydantic validation mismatch
+    "test_control_characters_not_allowed_in_anthropic_json_strict_mode"
+    "test_control_characters_allowed_in_anthropic_json_non_strict_mode"
+
+    # Upstream bug: test expects TypeError but code raises ConfigurationError
+    "test_openai_schema_raises_error"
   ];
 
   disabledTestPaths = [
     # Tests require OpenAI API key
-    "tests/test_distil.py"
     "tests/llm/"
+    # Network and requires API keys
+    "tests/test_auto_client.py"
+    # annoying dependencies
+    "tests/docs"
+    "examples"
   ];
 
   meta = {
     description = "Structured outputs for llm";
     homepage = "https://github.com/jxnl/instructor";
-    changelog = "https://github.com/jxnl/instructor/releases/tag/${src.tag}";
+    changelog = "https://github.com/jxnl/instructor/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mic92 ];
     mainProgram = "instructor";
   };
-}
+})

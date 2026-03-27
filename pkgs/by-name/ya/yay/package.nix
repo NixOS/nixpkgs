@@ -10,16 +10,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "yay";
-  version = "12.4.2";
+  version = "12.5.7";
 
   src = fetchFromGitHub {
     owner = "Jguer";
     repo = "yay";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QLkqpeHVdR9dxhSGl2wQ7WL1mX6JJm3z6pLeI37z3oM=";
+    hash = "sha256-ampSNPa/PkYM6zEbukToDDmLQ5Bq9gmxwgD3RsnX3vU=";
   };
 
-  vendorHash = "sha256-BKxhRa2y/liBDtMLg0Rlf/ysjQOgIaFjXbPWYBw53Po=";
+  vendorHash = "sha256-Lkqrtb37bq1uwIZ4PzJdSM7QOZ28JMyDx68huxHHuGg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,15 +52,14 @@ buildGoModule (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
-  postInstall =
-    ''
-      installManPage doc/yay.8
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --name yay.bash --bash completions/bash
-      installShellCompletion --name yay.fish --fish completions/fish
-      installShellCompletion --name _yay --zsh completions/zsh
-    '';
+  postInstall = ''
+    installManPage doc/yay.8
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --name yay.bash --bash completions/bash
+    installShellCompletion --name yay.fish --fish completions/fish
+    installShellCompletion --name _yay --zsh completions/zsh
+  '';
 
   meta = {
     description = "AUR Helper written in Go";
@@ -68,6 +67,6 @@ buildGoModule (finalAttrs: {
     mainProgram = "yay";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 })

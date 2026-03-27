@@ -225,7 +225,7 @@ in
         };
 
         smtpPort = lib.mkOption {
-          type = lib.types.int;
+          type = lib.types.port;
           description = "MTA port.";
           default = 25;
         };
@@ -322,7 +322,8 @@ in
         settings = {
           "listen.owner" = config.services.nginx.user;
           "listen.group" = config.services.nginx.group;
-        } // cfg.poolConfig;
+        }
+        // cfg.poolConfig;
       };
     };
 
@@ -398,5 +399,5 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ michaelshmitty ];
+  meta.maintainers = [ ];
 }

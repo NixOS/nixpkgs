@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
 
   # build-system
@@ -15,6 +16,7 @@
   pytestCheckHook,
   torch,
   transformers,
+  writableTmpDirAsHomeHook,
   wurlitzer,
 }:
 
@@ -24,6 +26,11 @@ buildPythonPackage rec {
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
   sourceRoot = "${src.name}/python";
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11==" "pybind11>="
+  '';
 
   build-system = [
     pybind11
@@ -37,6 +44,8 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+
   pythonImportsCheck = [
     # https://opennmt.net/CTranslate2/python/overview.html
     "ctranslate2"
@@ -49,15 +58,19 @@ buildPythonPackage rec {
     pytestCheckHook
     torch
     transformers
+    writableTmpDirAsHomeHook
     wurlitzer
   ];
 
   preCheck = ''
     # run tests against build result, not sources
     rm -rf ctranslate2
-
-    export HOME=$TMPDIR
   '';
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    "test_invalid_model_path"
+  ];
 
   disabledTestPaths = [
     # TODO: ModuleNotFoundError: No module named 'opennmt'
@@ -66,11 +79,11 @@ buildPythonPackage rec {
     "tests/test_transformers.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fast inference engine for Transformer models";
     homepage = "https://github.com/OpenNMT/CTranslate2";
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

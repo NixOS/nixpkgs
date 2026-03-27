@@ -42,7 +42,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   hardeningDisable = [ "fortify" ];
-  CXXFLAGS = lib.optionals (withOpenMP) [ "-fopenmp" ];
+
+  env = lib.optionalAttrs withOpenMP {
+    CXXFLAGS = "-fopenmp";
+  };
 
   doCheck = true;
 
@@ -52,18 +55,18 @@ stdenv.mkDerivation rec {
   installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
 
-  meta = with lib; {
+  meta = {
     description = "Free C++ class library of cryptographic schemes";
     homepage = "https://cryptopp.com/";
     changelog = [
       "https://raw.githubusercontent.com/weidai11/cryptopp/CRYPTOPP_${underscoredVersion}/History.txt"
       "https://github.com/weidai11/cryptopp/releases/tag/CRYPTOPP_${underscoredVersion}"
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       boost
       publicDomain
     ];
-    platforms = platforms.all;
-    maintainers = with maintainers; [ c0bw3b ];
+    platforms = lib.platforms.all;
+    maintainers = [ ];
   };
 }

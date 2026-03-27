@@ -8,18 +8,20 @@
   numpy,
   pillow,
   materialyoucolor,
+  python-magic,
+  pywal16,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "kde-material-you-colors";
-  version = "1.10.0";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "kde-material-you-colors";
-    tag = "v${version}";
-    hash = "sha256-qT2F3OtRzYagbBH/4kijuy4udD6Ak74WacIhfzaNWqo=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fvDWBcXCIviCXMlLFPowJttNmpX1JO1OZsnSPyNhLv8=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +30,8 @@ buildPythonPackage rec {
     numpy
     pillow
     materialyoucolor
+    python-magic
+    pywal16
   ];
 
   pythonImportsCheck = [ "kde_material_you_colors" ];
@@ -41,4 +45,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "kde-material-you-colors";
   };
-}
+})

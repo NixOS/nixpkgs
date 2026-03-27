@@ -13,11 +13,11 @@
   gengetopt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libu2f-server";
   version = "1.1.0";
   src = fetchurl {
-    url = "https://developers.yubico.com/libu2f-server/Releases/${pname}-${version}.tar.xz";
+    url = "https://developers.yubico.com/libu2f-server/Releases/libu2f-server-${finalAttrs.version}.tar.xz";
     sha256 = "0xx296nmmqa57w0v5p2kasl5zr1ms2gh6qi4lhv6xvzbmjp3rkcd";
   };
 
@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://developers.yubico.com/libu2f-server/";
     description = "C library that implements the server-side of the U2F protocol";
     mainProgram = "u2f-server";
-    license = licenses.bsd2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ philandstuff ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ philandstuff ];
   };
-}
+})

@@ -21,13 +21,12 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ bc ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags =
-    [
-      "ARCH=${stdenv.hostPlatform.linuxArch}"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ];
+  makeFlags = [
+    "ARCH=${stdenv.hostPlatform.linuxArch}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
@@ -48,5 +47,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ chuangzhu ];
+    broken = kernel.kernelAtLeast "6.17";
   };
 }

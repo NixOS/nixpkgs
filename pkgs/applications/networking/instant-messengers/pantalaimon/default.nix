@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pantalaimon";
-  version = "0.10.5";
+  version = "0.10.6";
   pyproject = true;
 
   # pypi tarball miss tests
@@ -19,16 +19,15 @@ python3Packages.buildPythonApplication rec {
     owner = "matrix-org";
     repo = "pantalaimon";
     rev = version;
-    hash = "sha256-yMhE3wKRbFHoL0vdFR8gMkNU7Su4FHbAwKQYADaaWpk=";
+    hash = "sha256-g+ZWarZnjlSOpD75yf53Upqj1qDlil7pdbfEsMAsjh0=";
   };
 
-  build-system =
-    [
-      installShellFiles
-    ]
-    ++ (with python3Packages; [
-      setuptools
-    ]);
+  build-system = [
+    installShellFiles
+  ]
+  ++ (with python3Packages; [
+    setuptools
+  ]);
 
   pythonRelaxDeps = [
     "matrix-nio"
@@ -38,7 +37,6 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       aiohttp
-      appdirs
       attrs
       cachetools
       click
@@ -47,6 +45,7 @@ python3Packages.buildPythonApplication rec {
       logbook
       (matrix-nio.override { withOlm = true; })
       peewee
+      platformdirs
       prompt-toolkit
     ]
     ++ lib.optionals enableDbusUi optional-dependencies.ui;
@@ -66,7 +65,7 @@ python3Packages.buildPythonApplication rec {
       pytest-aiohttp
       pytestCheckHook
     ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ lib.concatAttrValues optional-dependencies;
 
   nativeBuildInputs = lib.optionals enableDbusUi [
     wrapGAppsHook3
@@ -88,10 +87,10 @@ python3Packages.buildPythonApplication rec {
     inherit (nixosTests) pantalaimon;
   };
 
-  meta = with lib; {
+  meta = {
     description = "End-to-end encryption aware Matrix reverse proxy daemon";
     homepage = "https://github.com/matrix-org/pantalaimon";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ valodim ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ valodim ];
   };
 }

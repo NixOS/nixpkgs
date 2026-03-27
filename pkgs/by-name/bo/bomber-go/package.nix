@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "bomber-go";
   version = "0.4.7";
 
   src = fetchFromGitHub {
     owner = "devops-kung-fu";
     repo = "bomber";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-q3x3duXc2++BvVul2a5fBTcPHWrOHpPOGHBUXL08syg=";
   };
 
@@ -26,12 +26,12 @@ buildGoModule rec {
     "-skip=TestEnrich" # Requires network access
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tool to scans Software Bill of Materials (SBOMs) for vulnerabilities";
     homepage = "https://github.com/devops-kung-fu/bomber";
-    changelog = "https://github.com/devops-kung-fu/bomber/releases/tag/v${version}";
-    license = licenses.mpl20;
+    changelog = "https://github.com/devops-kung-fu/bomber/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mpl20;
     mainProgram = "bomber";
-    maintainers = with maintainers; [ fab ];
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

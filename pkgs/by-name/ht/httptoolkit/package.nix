@@ -6,22 +6,30 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  electron,
+  electron_39,
   httptoolkit-server,
 }:
 
+let
+  electron = electron_39;
+in
 buildNpmPackage rec {
   pname = "httptoolkit";
-  version = "1.19.4";
+
+  # update together with httptoolkit-server
+  # nixpkgs-update: no auto update
+  version = "1.24.4";
 
   src = fetchFromGitHub {
     owner = "httptoolkit";
     repo = "httptoolkit-desktop";
     tag = "v${version}";
-    hash = "sha256-oDwAosyFY4ff9MP82O8q5o+mN/X6+J7hM3b7myfOq7k=";
+    hash = "sha256-b1u+DFhxU/ED4GgMHFaF51zNfC+0vIg6ujyA8jIy8AQ=";
   };
 
-  npmDepsHash = "sha256-4kREJgw7OjKkOF/J1HpD3uPn+awtQIfUGWqJctwq3N0=";
+  npmDepsHash = "sha256-FX8sClJL66zvWEaaw0lmoat7cM396RA8Rq9NgRVh0Vw=";
+
+  makeCacheWritable = true;
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -31,7 +39,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
 
   npmBuildScript = "build:src";
 
@@ -40,7 +49,7 @@ buildNpmPackage rec {
         '"forceCodeSigning": true' \
         '"forceCodeSigning": false'
 
-    cp -r ${electron.dist} electron-dist
+    cp -rL ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \

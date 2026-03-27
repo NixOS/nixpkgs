@@ -6,18 +6,17 @@
   libxcb,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kmon";
   version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "kmon";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-DzbbeVZifuxgmIu3yNv6EI7Jyh8MA0/oSaR5IEPNUN8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-B1sxbifMTnr6tLZCAuxVlQPL5oKCUL0wtw3/wOyfyyw=";
 
   nativeBuildInputs = [ installShellFiles ];
@@ -30,16 +29,15 @@ rustPlatform.buildRustPackage rec {
       --zsh $releaseDir/../completions/_kmon
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux Kernel Manager and Activity Monitor";
     homepage = "https://github.com/orhun/kmon";
-    changelog = "https://github.com/orhun/kmon/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
-      figsoda
+    changelog = "https://github.com/orhun/kmon/blob/v${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       matthiasbeyer
     ];
     mainProgram = "kmon";
   };
-}
+})

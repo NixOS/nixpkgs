@@ -6,7 +6,7 @@
 
 buildGoModule {
   pname = "reftools";
-  version = "unstable-2021-02-13";
+  version = "0-unstable-2021-02-13";
 
   src = fetchFromGitHub {
     owner = "davidrjenni";
@@ -21,10 +21,10 @@ buildGoModule {
 
   excludedPackages = "cmd/fillswitch/test-fixtures";
 
-  meta = with lib; {
+  meta = {
     description = "Refactoring tools for Go";
     homepage = "https://github.com/davidrjenni/reftools";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

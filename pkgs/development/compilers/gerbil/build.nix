@@ -74,6 +74,10 @@ stdenv.mkDerivation rec {
     "--enable-march=" # Avoid non-portable invalid instructions. Use =native if local build only.
   ];
 
+  env.NIX_CFLAGS_COMPILE =
+    # Required for legacy C code in source
+    "-Wno-error=implicit-function-declaration";
+
   configurePhase = ''
     export CC=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}gcc \
            CXX=${gccStdenv.cc}/bin/${gccStdenv.cc.targetPrefix}g++ \
@@ -114,18 +118,17 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out/gerbil $out/bin
-      ./install.sh
-      (cd $out/bin ; ln -s ../gerbil/bin/* .)
-      runHook postInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      libgerbil="$(realpath "$out/gerbil/lib/libgerbil.so")"
-      install_name_tool -id "$libgerbil" "$libgerbil"
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/gerbil $out/bin
+    ./install.sh
+    (cd $out/bin ; ln -s ../gerbil/bin/* .)
+    runHook postInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    libgerbil="$(realpath "$out/gerbil/lib/libgerbil.so")"
+    install_name_tool -id "$libgerbil" "$libgerbil"
+  '';
 
   dontStrip = true;
 

@@ -17,9 +17,13 @@ PLATFORMS=(
   aarch64-unknown-linux-musl
   x86_64-apple-darwin
   aarch64-apple-darwin
+  powerpc64-unknown-linux-gnu
   powerpc64le-unknown-linux-gnu
+  powerpc64le-unknown-linux-musl
   riscv64gc-unknown-linux-gnu
   s390x-unknown-linux-gnu
+  loongarch64-unknown-linux-gnu
+  loongarch64-unknown-linux-musl
   x86_64-unknown-freebsd
 )
 BASEURL=https://static.rust-lang.org/dist

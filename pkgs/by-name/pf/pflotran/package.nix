@@ -11,7 +11,7 @@
   parmetis,
   hdf5-fortran-mpi,
   mpiCheckPhaseHook,
-  python3,
+  python312Packages,
 }:
 
 let
@@ -31,6 +31,7 @@ let
       {
         withMetis = true;
         withParmetis = true;
+        python3Packages = python312Packages;
       };
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -74,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
       --subst-var-by "HDF5_FORTRAN_INCLUDE" "${lib.getDev hdf5-fortran-mpi}/include"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Parallel, multi-physics simulation code for subsurface flow and transport";
     homepage = "https://pflotran.org/";
-    license = licenses.lgpl3Only;
-    maintainers = [ maintainers.sheepforce ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = [ lib.maintainers.sheepforce ];
   };
 })

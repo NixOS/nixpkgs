@@ -1,26 +1,24 @@
 {
   lib,
+  boto3,
   buildPythonPackage,
   fetchFromGitHub,
   jsonschema,
   pytestCheckHook,
-  pythonOlder,
   requests,
   setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "oras";
-  version = "0.2.28";
+  version = "0.2.41";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras-py";
-    tag = version;
-    hash = "sha256-JUKInJDBR9Qnqg04FDG2SlktSRRWCf30+96tDuhYc1Y=";
+    tag = finalAttrs.version;
+    hash = "sha256-2gGqZ5LLzrpiV7LIZUJMeJfs3ePik0yUls+GNK+2pnM=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +28,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    boto3
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "oras" ];
 
@@ -40,11 +41,11 @@ buildPythonPackage rec {
     "test_ssl"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ORAS Python SDK";
     homepage = "https://github.com/oras-project/oras-py";
-    changelog = "https://github.com/oras-project/oras-py/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/oras-project/oras-py/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

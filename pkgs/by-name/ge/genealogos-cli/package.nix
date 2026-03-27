@@ -8,14 +8,14 @@
   crate ? "cli",
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "genealogos-${crate}";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = "genealogos";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-EQrKInsrqlpjySX6duylo++2qwglB3EqGfLFJucOQM8=";
     # Genealogos' fixture tests contain valid nix store paths, and are thus incompatible with a fixed-output-derivation.
     # To avoid this, we just remove the tests
@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-R3HQXPpTtqgXfc7nLNdJp5zUMEpfccKWOQtS5Y786Jc=";
 
   cargoBuildFlags = [
@@ -43,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tweag/genealogos";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ erin ];
-    changelog = "https://github.com/tweag/genealogos/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/tweag/genealogos/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram =
       {
         api = "genealogos-api";
@@ -52,4 +51,4 @@ rustPlatform.buildRustPackage rec {
       .${crate};
     platforms = lib.platforms.unix;
   };
-}
+})

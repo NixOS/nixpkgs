@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picotts";
-  version = "unstable-2018-10-19";
+  version = "0-unstable-2018-10-19";
 
   src = fetchFromGitHub {
     repo = "picotts";

@@ -8,11 +8,11 @@
   alsa-lib,
   libjack2,
   freetype,
-  libX11,
+  libx11,
   gtk3,
   pcre,
-  libpthreadstubs,
-  libXdmcp,
+  libpthread-stubs,
+  libxdmcp,
   libxkbcommon,
   libepoxy,
   at-spi2-core,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     inherit owner;
-    repo = pname;
+    repo = "HybridReverb2";
     rev = rev;
     hash = "sha256-+uwTKHQ3nIWKbBCPtf/axvyW6MU0gemVtd2ZqqiT/w0=";
     fetchSubmodules = true;
@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
     freetype
-    libX11
+    libx11
     gtk3
     pcre
-    libpthreadstubs
-    libXdmcp
+    libpthread-stubs
+    libxdmcp
     libxkbcommon
     libepoxy
     at-spi2-core
@@ -77,16 +77,16 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p $out/share/${pname}/
-    cp  -r ${impulseDB}/* $out/share/${pname}/
+    mkdir -p $out/share/HybridReverb2/
+    cp  -r ${impulseDB}/* $out/share/HybridReverb2/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jpcima/HybridReverb2";
     description = "Reverb effect using hybrid impulse convolution";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "HybridReverb2";
   };
 }

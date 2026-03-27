@@ -5,15 +5,15 @@
   nixosTests,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "zeronet-conservancy";
   version = "0.7.10";
-  format = "other";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "zeronet-conservancy";
     repo = "zeronet-conservancy";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-ZQYdK0B0z0cXTx7ujFngW3wSa/j8sEuwHB+BC5Xqq8o=";
   };
 
@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
     nixos-test = nixosTests.zeronet-conservancy;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Fork/continuation of the ZeroNet project";
     mainProgram = "zeronet";
     longDescription = ''
@@ -70,7 +70,7 @@ python3Packages.buildPythonApplication rec {
       while gradually switching to a better designed network.
     '';
     homepage = "https://github.com/zeronet-conservancy/zeronet-conservancy";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
-}
+})

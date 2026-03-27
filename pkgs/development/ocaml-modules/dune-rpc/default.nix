@@ -4,6 +4,7 @@
   dune_3,
   csexp,
   stdune,
+  ocamlc-loc,
   ordering,
   pp,
   xdg,
@@ -21,20 +22,17 @@ buildDunePackage {
   propagatedBuildInputs = [
     csexp
     stdune
+    ocamlc-loc
     ordering
     pp
     xdg
     dyn
   ];
 
-  preBuild = ''
-    rm -r vendor/csexp
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Library to connect and control a running dune instance";
     inherit (dune_3.meta) homepage;
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

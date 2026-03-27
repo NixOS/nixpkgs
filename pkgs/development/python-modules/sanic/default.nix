@@ -5,7 +5,6 @@
   aioquic,
   beautifulsoup4,
   buildPythonPackage,
-  cacert,
   fetchFromGitHub,
   gunicorn,
   html5tagger,
@@ -13,7 +12,7 @@
   multidict,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
+  sanic-ext,
   sanic-routing,
   sanic-testing,
   setuptools,
@@ -27,20 +26,18 @@
 
 buildPythonPackage rec {
   pname = "sanic";
-  version = "24.12.0";
+  version = "25.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "sanic-org";
     repo = "sanic";
     tag = "v${version}";
-    hash = "sha256-17Nr0iNeZC1sHm0JETIufdMVqrhORts1WxCh8cukCKg=";
+    hash = "sha256-ygMTULkavd/5Mqxn/iS1TC29hfFcF6q3/kT8S7V1Xdo=";
   };
 
-  # https://github.com/sanic-org/sanic/issues/3031
-  patches = [ ./websockets-14.2-compat.patch ];
+  # test compat for testing with pytest-asyncio
+  patches = [ ./pytest9-compat.patch ];
 
   build-system = [ setuptools ];
 
@@ -58,33 +55,32 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    ext = [
-      # TODO: sanic-ext
-    ];
+    ext = [ sanic-ext ];
     http3 = [ aioquic ];
   };
 
   nativeCheckInputs = [
     beautifulsoup4
     gunicorn
-    pytest-asyncio
+    pytest-asyncio # upstream tests with anyio + pytest-sanic instead
     pytestCheckHook
     sanic-testing
     uvicorn
-  ] ++ optional-dependencies.http3;
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ]
+  ++ optional-dependencies.http3;
 
   preCheck = ''
     # Some tests depends on sanic on PATH
     PATH="$out/bin:$PATH"
     PYTHONPATH=$PWD:$PYTHONPATH
 
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-
     # needed for relative paths for some packages
     cd tests
+  ''
+  # Work around "OSError: AF_UNIX path too long"
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace worker/test_socket.py \
+      --replace-fail '"./test.sock"' '"/tmp/test.sock"'
   '';
 
   disabledTests = [
@@ -98,6 +94,23 @@ buildPythonPackage rec {
     "test_input_is_dir"
     # Racy, e.g. Address already in use
     "test_logger_vhosts"
+    # Event loop is closed
+    "test_asyncio_server_no_start_serving"
+    "test_asyncio_server_start_serving"
+    "test_create_asyncio_server"
+    "test_create_server_main_convenience"
+    "test_create_server_main"
+    "test_create_server_no_startup"
+    "test_create_server_trigger_events"
+    "test_multiple_uvloop_configs_display_warning"
+    "test_uvloop_cannot_never_called_with_create_server"
+    # Our mailcap database has a different mime type name for xml documentations
+    # AssertionError: assert 'text/xml; charset=utf-8' == 'application/xml'
+    "test_guess_content_type"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # KeyError: "getgrnam(): name not found: 'root'"
+    "test_validate_group_sets_gid"
   ];
 
   disabledTestPaths = [
@@ -107,6 +120,8 @@ buildPythonPackage rec {
     "typing/test_typing.py"
     # occasionally hangs
     "test_multiprocessing.py"
+    # Failed: async def functions are not natively supported.
+    "test_touchup.py"
   ];
 
   # Avoid usage of nixpkgs-review in darwin since tests will compete usage
@@ -115,12 +130,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sanic" ];
 
-  meta = with lib; {
+  meta = {
     description = "Web server and web framework";
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = [ ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ p0lyw0lf ];
     mainProgram = "sanic";
   };
 }

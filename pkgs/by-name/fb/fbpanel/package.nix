@@ -3,9 +3,9 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libX11,
-  libXmu,
-  libXpm,
+  libx11,
+  libxmu,
+  libxpm,
   gtk2,
   libpng,
   libjpeg,
@@ -30,9 +30,9 @@ stdenv.mkDerivation {
     pypy2
   ];
   buildInputs = [
-    libX11
-    libXmu
-    libXpm
+    libx11
+    libxmu
+    libxpm
     gtk2
     libpng
     libjpeg
@@ -49,16 +49,18 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [ "V=1" ];
-  NIX_CFLAGS_COMPILE = [
+
+  env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error"
+    "-Wno-error=incompatible-pointer-types" # not implied by -Wno-error
     "-I${gdk-pixbuf-xlib.dev}/include/gdk-pixbuf-2.0"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Stand-alone panel";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     mainProgram = "fbpanel";
   };
 

@@ -10,12 +10,13 @@
   curl,
   nss,
   nspr,
-  xorg,
+  libxdamage,
+  libx11,
   libdrm,
   alsa-lib,
   cups,
   libgbm,
-  systemd,
+  systemdLibs,
   openssl,
   libglvnd,
 }:
@@ -53,8 +54,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   buildInputs = [
     gnome-keyring
-    xorg.libXdamage
-    xorg.libX11
+    libxdamage
+    libx11
     libsecret
     git
     curl
@@ -92,7 +93,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   runtimeDependencies = [
-    (lib.getLib systemd)
+    systemdLibs
   ];
 
   meta = {
@@ -100,7 +101,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://desktop.github.com/";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";
-    maintainers = with lib.maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

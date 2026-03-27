@@ -21,15 +21,14 @@ rustPlatform.buildRustPackage {
     tagPrefix = "v";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-HcwdUwhiSkULCevsHTnRyazNfHDvLZv44SFXKxrHxYY=";
 
-  meta = with lib; {
+  meta = {
     description = "Tiling layout generator for river";
     homepage = "https://gitlab.com/snakedye/kile";
-    license = licenses.mit;
-    platforms = platforms.linux; # It's meant for river, a wayland compositor
-    maintainers = with maintainers; [ moni ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux; # It's meant for river, a wayland compositor
+    maintainers = with lib.maintainers; [ moni ];
     mainProgram = "kile";
   };
 }

@@ -1,20 +1,25 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  fetchFromGitLab,
-  fetchpatch,
+  fetchFromCodeberg,
   cmake,
   git,
   pkg-config,
-  boost,
-  eigen,
+  boost188,
+  eigen_5,
   glm,
+  gcc,
   libGL,
   libpng,
+  makeWrapper,
   openexr,
-  tbb,
-  xorg,
+  onetbb,
+  libxrandr,
+  libxi,
+  libxinerama,
+  libxext,
+  libxcursor,
+  libx11,
   ilmbase,
   llvmPackages,
   unstableGitUpdater,
@@ -22,14 +27,13 @@
 
 stdenv.mkDerivation {
   pname = "curv";
-  version = "0.5-unstable-2025-01-20";
+  version = "0.5-unstable-2026-02-26";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
+  src = fetchFromCodeberg {
     owner = "doug-moen";
     repo = "curv";
-    rev = "ef082c6612407dd8abce06015f9a16b1ebf661b8";
-    hash = "sha256-BGL07ZBA+ao3fg3qp56sVTe+3tM2SOp8TGu/jF7SVlM=";
+    rev = "bf573da133f94efacc6a42c9dc94666bfbfab6bc";
+    hash = "sha256-5tcF0vEvxd/SgNWM7lgZTujBsIF+v8t0I0g4tykBCPY=";
     fetchSubmodules = true;
   };
 
@@ -38,58 +42,32 @@ stdenv.mkDerivation {
     cmake
     git
     pkg-config
+    makeWrapper
   ];
 
-  buildInputs =
-    [
-      boost
-      # https://codeberg.org/doug-moen/curv/issues/228
-      # reverts 'eigen: 3.4.0 -> 3.4.0-unstable-2022-05-19'
-      # https://github.com/nixos/nixpkgs/commit/d298f046edabc84b56bd788e11eaf7ed72f8171c
-      (eigen.overrideAttrs (old: rec {
-        version = "3.4.0";
-        src = fetchFromGitLab {
-          owner = "libeigen";
-          repo = "eigen";
-          rev = version;
-          hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
-        };
-        patches = (old.patches or [ ]) ++ [
-          # Fixes e.g. onnxruntime on aarch64-darwin:
-          # https://hydra.nixos.org/build/248915128/nixlog/1,
-          # originally suggested in https://github.com/NixOS/nixpkgs/pull/258392.
-          #
-          # The patch is from
-          # ["Fix vectorized reductions for Eigen::half"](https://gitlab.com/libeigen/eigen/-/merge_requests/699)
-          # which is two years old,
-          # but Eigen hasn't had a release in two years either:
-          # https://gitlab.com/libeigen/eigen/-/issues/2699.
-          (fetchpatch {
-            url = "https://gitlab.com/libeigen/eigen/-/commit/d0e3791b1a0e2db9edd5f1d1befdb2ac5a40efe0.patch";
-            hash = "sha256-8qiNpuYehnoiGiqy0c3Mcb45pwrmc6W4rzCxoLDSvj0=";
-          })
-        ];
-      }))
-      glm
-      libGL
-      libpng
-      openexr
-      tbb
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXext
-      xorg.libXi
-      xorg.libXinerama
-      xorg.libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ilmbase
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    boost188
+    eigen_5
+    glm
+    libGL
+    libpng
+    openexr
+    onetbb
+    libx11
+    libxcursor
+    libxext
+    libxi
+    libxinerama
+    libxrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ilmbase
+    llvmPackages.openmp
+  ];
 
   # force char to be unsigned on aarch64
   # https://codeberg.org/doug-moen/curv/issues/227
-  NIX_CFLAGS_COMPILE = [ "-fsigned-char" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-fsigned-char" ];
 
   # GPU tests do not work in sandbox, instead we do this for sanity
   doInstallCheck = true;
@@ -99,15 +77,33 @@ stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
+  postPatch = ''
+    substituteInPlace extern/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
+  ## support runtime compilation with -Ojit
+  fixupPhase = ''
+    wrapProgram $out/bin/curv \
+      --set NIX_CFLAGS_COMPILE_${gcc.suffixSalt} "$NIX_CFLAGS_COMPILE" \
+      --set NIX_LDFLAGS_${gcc.suffixSalt} "$NIX_LDFLAGS" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gcc
+        ]
+      }"
+  '';
+
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "2D and 3D geometric modelling programming language for creating art with maths";
     homepage = "https://codeberg.org/doug-moen/curv";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    # aarch64 fails installCheckPhase: https://hydra.nixos.org/build/319705783
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
+    maintainers = with lib.maintainers; [ pbsds ];
     mainProgram = "curv";
   };
 }

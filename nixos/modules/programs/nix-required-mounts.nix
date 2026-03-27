@@ -53,12 +53,15 @@ let
     config.hardware.graphics.package
 
     # nvidia_x11, etc:
-  ] ++ config.hardware.graphics.extraPackages; # nvidia_x11
+  ]
+  ++ config.hardware.graphics.extraPackages; # nvidia_x11
 
   defaults = {
     nvidia-gpu.onFeatures = package.allowedPatterns.nvidia-gpu.onFeatures;
     nvidia-gpu.paths = package.allowedPatterns.nvidia-gpu.paths ++ driverPaths;
-    nvidia-gpu.unsafeFollowSymlinks = false;
+    # TODO: Refactor `hardware.graphics` to ease referencing the closure
+    # NOTE: A naive implementation may e.g. introduce a conditional infinite recursion (https://github.com/NixOS/nixpkgs/pull/488199)
+    nvidia-gpu.unsafeFollowSymlinks = true;
   };
 in
 {
@@ -76,7 +79,7 @@ in
     '';
     allowedPatterns =
       with lib.types;
-      lib.mkOption rec {
+      lib.mkOption {
         type = attrsOf Pattern;
         description = "The hook config, describing which paths to mount for which system features";
         default = { };
@@ -90,7 +93,7 @@ in
           }
         '';
         example.require-ipfs.paths = [ "/ipfs" ];
-        example.require-ipfs.onFeatures = [ "ifps" ];
+        example.require-ipfs.onFeatures = [ "ipfs" ];
       };
     extraWrapperArgs = lib.mkOption {
       type = with lib.types; listOf str;
@@ -108,6 +111,7 @@ in
     lib.mkMerge [
       { nix.settings.pre-build-hook = lib.getExe cfg.package; }
       (lib.mkIf cfg.presets.nvidia-gpu.enable {
+        hardware.graphics.enable = lib.mkDefault true;
         nix.settings.system-features = cfg.allowedPatterns.nvidia-gpu.onFeatures;
         programs.nix-required-mounts.allowedPatterns = {
           inherit (defaults) nvidia-gpu;

@@ -7,7 +7,6 @@
   idna,
   platformdirs,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   uritools,
 }:
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "urlextract";
   version = "1.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -49,12 +46,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urlextract" ];
 
-  meta = with lib; {
+  meta = {
     description = "Collects and extracts URLs from given text";
     mainProgram = "urlextract";
     homepage = "https://github.com/lipoja/URLExtract";
     changelog = "https://github.com/lipoja/URLExtract/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ilkecan ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ilkecan ];
   };
 }

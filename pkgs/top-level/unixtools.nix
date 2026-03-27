@@ -42,13 +42,13 @@ let
           priority = 10;
           platforms = platforms.${stdenv.hostPlatform.parsed.kernel.name} or platforms.all;
         };
-        passthru =
-          {
-            inherit provider;
-          }
-          // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
-            binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
-          };
+        inherit (provider) version pname;
+        passthru = {
+          inherit provider;
+        }
+        // lib.optionalAttrs (builtins.hasAttr "binlore" providers) {
+          binlore.out = (binlore.synthesize (getBin bins.${cmd}) providers.binlore);
+        };
         preferLocalBuild = true;
       }
       ''
@@ -71,15 +71,20 @@ let
 
   # more is unavailable in darwin
   # so we just use less
-  more_compat = runCommand "more-${pkgs.less.name}" { } ''
-    mkdir -p $out/bin
-    ln -s ${pkgs.less}/bin/less $out/bin/more
-  '';
+  more_compat =
+    runCommand pkgs.less.name
+      {
+        inherit (pkgs.less) version pname;
+      }
+      ''
+        mkdir -p $out/bin
+        ln -s ${pkgs.less}/bin/less $out/bin/more
+      '';
 
   bins = mapAttrs singleBinary {
     # singular binaries
     arp = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.arp;
     };
@@ -95,7 +100,7 @@ let
       linux = pkgs.util-linux;
     };
     getconf = {
-      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc else pkgs.netbsd.getconf;
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.libc else pkgs.netbsd.getconf;
       darwin = pkgs.darwin.system_cmds;
       # I don't see any obvious arg exec in the doc/manpage
       binlore = ''
@@ -103,8 +108,7 @@ let
       '';
     };
     getent = {
-      linux =
-        if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent else pkgs.netbsd.getent;
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.libc.getent else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
       freebsd = pkgs.freebsd.getent;
       openbsd = pkgs.openbsd.getent;
@@ -127,13 +131,13 @@ let
       darwin = pkgs.darwin.shell_cmds;
     };
     hostname = {
-      linux = pkgs.nettools;
+      linux = pkgs.hostname-debian;
       darwin = pkgs.darwin.shell_cmds;
       freebsd = pkgs.freebsd.bin;
       openbsd = pkgs.openbsd.hostname;
     };
     ifconfig = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.ifconfig;
       openbsd = pkgs.openbsd.ifconfig;
@@ -154,6 +158,7 @@ let
     };
     logger = {
       linux = pkgs.util-linux;
+      darwin = pkgs.darwin.remote_cmds;
     };
     more = {
       linux = pkgs.util-linux;
@@ -173,7 +178,7 @@ let
       '';
     };
     netstat = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.netstat;
     };
@@ -199,7 +204,7 @@ let
       darwin = pkgs.darwin.diskdev_cmds;
     };
     route = {
-      linux = pkgs.nettools;
+      linux = pkgs.net-tools;
       darwin = pkgs.darwin.network_cmds;
       freebsd = pkgs.freebsd.route;
       openbsd = pkgs.openbsd.route;
@@ -237,6 +242,7 @@ let
     };
     wall = {
       linux = pkgs.util-linux;
+      darwin = pkgs.darwin.remote_cmds;
     };
     watch = {
       linux = pkgs.procps;
@@ -261,8 +267,7 @@ let
   makeCompat =
     pname: paths:
     buildEnv {
-      name = "${pname}-${version}";
-      inherit paths;
+      inherit paths pname version;
     };
 
   # Compatibility derivations
@@ -289,7 +294,7 @@ let
         col
         column
       ];
-      nettools = [
+      net-tools = [
         arp
         hostname
         ifconfig

@@ -7,14 +7,14 @@
   numpy,
   pillow,
   pytestCheckHook,
-  pythonOlder,
+  pytest-cov-stub,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "wordcloud";
-  version = "1.9.4";
+  version = "1.9.6";
 
   pyproject = true;
 
@@ -23,17 +23,10 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-snPYpd7ZfT6tkEBGtJRk3LcRGe5534dQcqTBBcrdNHo=";
+    hash = "sha256-3xfEaP+QO9CrpPh8ZUB0XROkkxIg3Uk3yzY62FpHcbk=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov --cov-report xml --tb=short" ""
-  '';
 
   nativeBuildInputs = [ cython ];
 
@@ -43,7 +36,10 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   preCheck = ''
     cd test
@@ -59,12 +55,12 @@ buildPythonPackage rec {
     "test_coloring_black_works"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Word cloud generator in Python";
     mainProgram = "wordcloud_cli";
     homepage = "https://github.com/amueller/word_cloud";
     changelog = "https://github.com/amueller/word_cloud/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jm2dev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jm2dev ];
   };
 }

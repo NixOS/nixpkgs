@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  darwin,
 
   # Build runit-init as a static binary
   static ? false,
@@ -13,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "2.2.0";
 
   src = fetchurl {
-    url = "http://smarden.org/runit/${pname}-${version}.tar.gz";
+    url = "https://smarden.org/runit/${pname}-${version}.tar.gz";
     sha256 = "sha256-le9NKGi5eMcXn+R5AeXFeOEc8nPSkr1iCL06fMsCkpA=";
   };
 
@@ -30,23 +29,20 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs =
-    lib.optionals static [
-      stdenv.cc.libc
-      stdenv.cc.libc.static
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
+  buildInputs = lib.optionals static [
+    stdenv.cc.libc
+    stdenv.cc.libc.static
+  ];
 
-  postPatch =
-    ''
-      sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
-      # usernamespace sandbox of nix seems to conflict with runit's assumptions
-      # about unix users. Therefor skip the check
-      sed -i '/.\/chkshsgr/d' src/Makefile
-    ''
-    + lib.optionalString (!static) ''
-      sed -i 's,-static,,g' src/Makefile
-    '';
+  postPatch = ''
+    sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
+    # usernamespace sandbox of nix seems to conflict with runit's assumptions
+    # about unix users. Therefor skip the check
+    sed -i '/.\/chkshsgr/d' src/Makefile
+  ''
+  + lib.optionalString (!static) ''
+    sed -i 's,-static,,g' src/Makefile
+  '';
 
   preBuild = ''
     cd src
@@ -64,11 +60,11 @@ stdenv.mkDerivation rec {
     cp -r ../man $man/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "UNIX init scheme with service supervision";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "http://smarden.org/runit";
-    maintainers = with maintainers; [ joachifm ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

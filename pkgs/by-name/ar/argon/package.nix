@@ -7,29 +7,27 @@
   zstd,
   stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "argon";
-  version = "2.0.23";
+  version = "2.0.28";
 
   src = fetchFromGitHub {
     owner = "argon-rbx";
     repo = "argon";
-    tag = version;
-    hash = "sha256-Pj6czSNFaMtu5fZV51lFDYEiWlMcj1peu7i8JUnFSXk=";
+    tag = finalAttrs.version;
+    hash = "sha256-QXGiDcn5BM1psCZf88gEyKqoK9EDFquLgyzJeZOhwMU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Lc9k6WDp7ZU4lBGbXJJATcH/+SQkbutMTgzmxZh2JCk=";
+  cargoHash = "sha256-okfQn/dgBN6s1aO1cnU/bY7BIqwM9iq1iPZ321ez4C4=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      udev
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    udev
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -38,9 +36,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Full featured tool for Roblox development";
     homepage = "https://github.com/argon-rbx/argon";
-    changelog = "https://github.com/argon-rbx/argon/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/argon-rbx/argon/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ StayBlue ];
     mainProgram = "argon";
   };
-}
+})

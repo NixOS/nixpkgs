@@ -58,19 +58,23 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  env = {
+    NIX_CFLAGS_COMPILE = "-std=gnu17";
+  };
+
   postInstall = ''
-    wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"
+    wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin" --set-default LANG "C.UTF-8"
   '';
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "ANSI Common Lisp Implementation";
     homepage = "https://common-lisp.net/project/mkcl/";
-    license = licenses.lgpl2Plus;
+    license = lib.licenses.lgpl2Plus;
     mainProgram = "mkcl";
-    maintainers = lib.teams.lisp.members;
-    platforms = platforms.linux;
+    teams = [ lib.teams.lisp ];
+    platforms = lib.platforms.linux;
   };
 }

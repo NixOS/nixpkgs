@@ -8,17 +8,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "abc-verifier";
-  version = "unstable-2023-10-13";
+  version = "0.62";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
     repo = "abc";
-    rev = "896e5e7dedf9b9b1459fa019f1fa8aa8101fdf43";
-    hash = "sha256-ou+E2lvDEOxXRXNygE/TyVi7quqk+CJHRI+HDI0xljE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-T6Hj8zrr3XuI3Eh0I5rJI3+DAsuQIMtWEsaBJ8a5Cag=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
+
+  cmakeFlags = [
+    # This prevents CMake from trying to download googletest during the build
+    (lib.cmakeBool "ABC_SKIP_TESTS" true)
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -29,15 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   # needed by yosys
   passthru.rev = finalAttrs.src.rev;
 
-  meta = with lib; {
-    description = "Tool for squential logic synthesis and formal verification";
+  meta = {
+    description = "Tool for sequential logic synthesis and formal verification";
     homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       Luflosi
     ];
     mainProgram = "abc";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

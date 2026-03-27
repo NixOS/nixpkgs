@@ -10,8 +10,9 @@
   pandas,
   poetry-core,
   pyarrow,
+  pybreaker,
+  pyjwt,
   pytestCheckHook,
-  pythonOlder,
   sqlalchemy,
   thrift,
   requests,
@@ -20,28 +21,27 @@
 
 buildPythonPackage rec {
   pname = "databricks-sql-connector";
-  version = "4.0.2";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "4.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sql-python";
     tag = "v${version}";
-    hash = "sha256-zrEbenakeaFd6/DkmtHDjw9zgl6FxEXmBGTT7pFvUVU=";
+    hash = "sha256-QoauhA2Zx2UvlCuKe9mxaOFJKpglVHQmPVVS56np4A0=";
   };
 
   pythonRelaxDeps = [
+    "pandas"
     "pyarrow"
     "thrift"
   ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     lz4
     numpy
@@ -49,6 +49,8 @@ buildPythonPackage rec {
     openpyxl
     pandas
     pyarrow
+    pybreaker
+    pyjwt
     sqlalchemy
     thrift
     requests
@@ -57,15 +59,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   pythonImportsCheck = [ "databricks" ];
 
-  meta = with lib; {
+  meta = {
     description = "Databricks SQL Connector for Python";
     homepage = "https://docs.databricks.com/dev-tools/python-sql-connector.html";
     changelog = "https://github.com/databricks/databricks-sql-python/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ harvidsen ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ harvidsen ];
   };
 }

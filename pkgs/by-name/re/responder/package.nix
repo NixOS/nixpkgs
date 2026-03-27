@@ -5,23 +5,24 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "responder";
-  version = "3.1.5.0";
-  format = "other";
+  version = "3.2.2.0";
+  pyproject = false;
 
   src = fetchFromGitHub {
     owner = "lgandx";
     repo = "Responder";
-    tag = "v${version}";
-    hash = "sha256-iFNdGHe31TnYmC931kdO0vbliqhpsht97bDteZi4kdw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vzn+7w7RgAsCt1pOz53cvBE1F1U+NFE4c1MehwLoFeQ=";
   };
 
   nativeBuildInputs = [
     makeWrapper
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
+    aioquic
     netifaces
   ];
 
@@ -48,10 +49,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "LLMNR, NBT-NS and MDNS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server";
-    mainProgram = "responder";
     homepage = "https://github.com/lgandx/Responder";
     changelog = "https://github.com/lgandx/Responder/blob/master/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "responder";
   };
-}
+})

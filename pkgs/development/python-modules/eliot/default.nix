@@ -37,6 +37,11 @@ buildPythonPackage rec {
     hash = "sha256-x6zonKL6Ys1fyUjyOgVgucAN64Dt6dCzdBrxRZa+VDQ=";
   };
 
+  patches = [
+    # Upstream PR: https://github.com/itamarst/eliot/pull/520
+    ./python-3.14.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -55,7 +60,8 @@ buildPythonPackage rec {
     pytestCheckHook
     testtools
     twisted
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -67,6 +73,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/itamarst/eliot/blob/${version}/docs/source/news.rst";
     mainProgram = "eliot-prettyprint";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dpausp ];
   };
 }

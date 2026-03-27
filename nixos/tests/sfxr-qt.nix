@@ -1,35 +1,39 @@
-import ./make-test-python.nix (
-  { pkgs, ... }:
-  {
-    name = "sfxr-qt";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ fgaz ];
+{ pkgs, ... }:
+{
+  name = "sfxr-qt";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ fgaz ];
+  };
+
+  nodes.machine =
+    { config, pkgs, ... }:
+    {
+      imports = [
+        ./common/x11.nix
+      ];
+
+      services.xserver.enable = true;
+      boot.kernelModules = [ "snd-dummy" ];
+      services.pulseaudio = {
+        enable = true;
+        systemWide = true;
+      };
+      services.pipewire.enable = false;
+      environment.systemPackages = [ pkgs.sfxr-qt ];
     };
 
-    machine =
-      { config, pkgs, ... }:
-      {
-        imports = [
-          ./common/x11.nix
-        ];
+  enableOCR = true;
 
-        services.xserver.enable = true;
-        environment.systemPackages = [ pkgs.sfxr-qt ];
-      };
+  testScript = ''
+    machine.wait_for_x()
+    # Add a dummy sound card, or the program won't start
+    machine.execute("modprobe snd-dummy")
 
-    enableOCR = true;
+    machine.execute("sfxr-qt >&2 &")
 
-    testScript = ''
-      machine.wait_for_x()
-      # Add a dummy sound card, or the program won't start
-      machine.execute("modprobe snd-dummy")
-
-      machine.execute("sfxr-qt >&2 &")
-
-      machine.wait_for_window(r"sfxr")
-      machine.sleep(10)
-      machine.wait_for_text("requency")
-      machine.screenshot("screen")
-    '';
-  }
-)
+    machine.wait_for_window(r"sfxr")
+    machine.sleep(10)
+    machine.wait_for_text("requency")
+    machine.screenshot("screen")
+  '';
+}

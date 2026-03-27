@@ -23,6 +23,7 @@
   nlohmann_json,
   pcre2,
   pkg-config,
+  python3,
   systemd,
   wayland,
   yaml-cpp,
@@ -30,31 +31,33 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.5.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nmDFmj3DawgjRB0+vlcvPX+kj6lzAu14HySFc2NsJss=";
+    hash = "sha256-N8FDoQDEfv0xGjtnKx+jNfRwxvJdb4ETvQnZuBvlccQ=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
-        --replace-fail '-march=native' '# -march=native' \
-        --replace-fail '-flto' '# -flto'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests/)' ""
-    '';
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
+      --replace-fail '-march=native' '# -march=native'
+  ''
+  # Fix compat with newer Mir
+  # https://github.com/miracle-wm-org/miracle-wm/commit/aaae6e64261d8a00c2a1df47e2eab99400382d69
+  # Remove when version > 0.8.3
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'pkg_check_modules(MIRRENDERER REQUIRED mirrenderer' 'pkg_check_modules(MIRRENDERER mirrenderer'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests/)' ""
+  '';
 
   strictDeps = true;
-
-  # Source has a path "session/usr/local/...", don't break references to that
-  dontFixCmake = true;
 
   nativeBuildInputs = [
     cmake
@@ -76,6 +79,12 @@ stdenv.mkDerivation (finalAttrs: {
     mir
     nlohmann_json
     pcre2
+    (python3.withPackages (
+      ps: with ps; [
+        dbus-next
+        tenacity
+      ]
+    ))
     wayland
     yaml-cpp
   ];
@@ -83,7 +92,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_LTO" true)
     (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
+    (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -91,7 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
   checkPhase = ''
     runHook preCheck
 
-    ./bin/miracle-wm-tests
+    export XDG_RUNTIME_DIR=$TMP
+
+    ./tests/miracle-wm-tests
 
     runHook postCheck
   '';

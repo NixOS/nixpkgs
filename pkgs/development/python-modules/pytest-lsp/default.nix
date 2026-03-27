@@ -6,17 +6,18 @@
   pygls,
   pytestCheckHook,
   pytest-asyncio,
+  packaging,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-lsp";
-  version = "0.4.3";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pytest_lsp";
-    hash = "sha256-ND9r2i+qMg7V/Ld8lCDScDzlZdHRRP6CfjGYp9wpkRw=";
+    hash = "sha256-uoyVstl1o2Akn/pXaOHm9E2H0Q73dUBw07MhECckovE=";
   };
 
   build-system = [
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   dependencies = [
     pygls
     pytest-asyncio
+    packaging
   ];
 
   nativeCheckInputs = [

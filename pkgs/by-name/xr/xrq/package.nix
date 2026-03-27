@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libX11,
+  libx11,
 }:
 
 stdenv.mkDerivation {
   pname = "xrq";
-  version = "unstable-2016-01-15";
+  version = "0-unstable-2016-01-15";
 
   src = fetchFromGitHub {
     owner = "arianon";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     "man"
   ];
 
-  buildInputs = [ libX11 ];
+  buildInputs = [ libx11 ];
 
   meta = {
     description = "X utility for querying xrdb";

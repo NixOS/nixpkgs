@@ -2,11 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   flit-core,
+  pythonRelaxDepsHook,
+
+  # dependencies
   jinja2,
   loguru,
   matplotlib,
+  natsort,
   numpy,
   orjson,
   pandas,
@@ -32,29 +37,40 @@
   ipykernel,
   attrs,
   graphviz,
+  pyglet,
+  typing-extensions,
+
   # tests
   jsondiff,
   jsonschema,
   pytest-regressions,
+  pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "gdsfactory";
-  version = "8.18.1";
+  version = "9.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "gdsfactory";
-    rev = "v${version}";
-    hash = "sha256-wDz8QpRgu40FB8+otnGsHVn2e6/SWXIZgA1aeMqMhPQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uXFH+6uZx+fFo1QfozI/JVomchFlnWx805CwbAj7CPQ=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [
+    flit-core
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   dependencies = [
     jinja2
     loguru
     matplotlib
+    natsort
     numpy
     orjson
     pandas
@@ -80,18 +96,21 @@ buildPythonPackage rec {
     ipykernel
     attrs
     graphviz
+    pyglet
+    typing-extensions
   ];
 
   nativeCheckInputs = [
     jsondiff
     jsonschema
-    pytestCheckHook
     pytest-regressions
+    pytestCheckHook
   ];
 
   pythonRelaxDeps = [
     "pydantic"
     "trimesh"
+    "kfactory"
   ];
 
   # tests require >32GB of RAM
@@ -99,10 +118,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gdsfactory" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to generate GDS layouts";
     homepage = "https://github.com/gdsfactory/gdsfactory";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
+    changelog = "https://github.com/gdsfactory/gdsfactory/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
   };
-}
+})

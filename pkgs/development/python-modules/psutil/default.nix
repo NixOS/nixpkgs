@@ -2,27 +2,24 @@
   lib,
   stdenv,
   buildPythonPackage,
-  CoreFoundation,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
-  IOKit,
   pytestCheckHook,
-  python,
-  pythonOlder,
+  pytest-instafail,
+  pytest-xdist,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "7.0.0";
+  version = "7.2.1";
   pyproject = true;
 
-  inherit stdenv;
-
-  disabled = pythonOlder "3.7";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-e+nD66OL7Mtkleozr9mCpEB0t48oxDSh9RzAf9MVxFY=";
+  src = fetchFromGitHub {
+    owner = "giampaolo";
+    repo = "psutil";
+    tag = "release-${version}";
+    hash = "sha256-HGIFf7E356o0OcgLOPjACmrPXneQt/8IhzyudKKuLdg=";
   };
 
   postPatch = ''
@@ -35,12 +32,11 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs =
-    # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-instafail
+    pytest-xdist
+  ];
 
   # Segfaults on darwin:
   # https://github.com/giampaolo/psutil/issues/1715
@@ -50,9 +46,9 @@ buildPythonPackage rec {
   # our sandboxing which we can work around by disabling some tests:
   # - cpu_times was flaky on darwin
   # - the other disabled tests are likely due to sandboxing (missing specific errors)
-  pytestFlagsArray = [
+  enabledTestPaths = [
     # Note: $out must be referenced as test import paths are relative
-    "${placeholder "out"}/${python.sitePackages}/psutil/tests/test_system.py"
+    "tests/test_system.py"
   ];
 
   disabledTests = [
@@ -68,13 +64,21 @@ buildPythonPackage rec {
     "test_disk_partitions" # problematic on Hydra's Linux builders, apparently
   ];
 
+  preCheck = ''
+    rm -rf psutil
+  '';
+
   pythonImportsCheck = [ "psutil" ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Process and system utilization information interface";
     homepage = "https://github.com/giampaolo/psutil";
-    changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
-    license = licenses.bsd3;
+    changelog = "https://github.com/giampaolo/psutil/blob/${src.tag}/HISTORY.rst";
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

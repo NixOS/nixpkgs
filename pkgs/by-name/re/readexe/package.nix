@@ -18,14 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Reads out structural information on Microsoft .exe formats";
     homepage = "https://github.com/segin/readexe";
-    license = with licenses; [
+    license = with lib.licenses; [
       isc
       bsd3
     ];
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
     mainProgram = "readexe";
   };
 })

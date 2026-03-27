@@ -6,15 +6,15 @@
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "portunus";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "majewsky";
     repo = "portunus";
-    rev = "v${version}";
-    sha256 = "sha256-+pMMIutj+OWKZmOYH5NuA4a7aS5CD+33vAEC9bJmyfM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PvsqI0kwO0pA2xOouI3DmhwzDCrtyBXCBXyWDy4bEmI=";
   };
 
   buildInputs = [ libxcrypt ];
@@ -23,11 +23,14 @@ buildGoModule rec {
 
   passthru.tests = { inherit (nixosTests) portunus; };
 
-  meta = with lib; {
+  meta = {
     description = "Self-contained user/group management and authentication service";
     homepage = "https://github.com/majewsky/portunus";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ majewsky ] ++ teams.c3d2.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      majewsky
+      SuperSandro2000
+    ];
   };
-}
+})

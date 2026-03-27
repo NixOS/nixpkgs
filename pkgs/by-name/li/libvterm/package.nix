@@ -7,12 +7,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libvterm";
   version = "0.99.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libvterm/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/libvterm/libvterm-${finalAttrs.version}.tar.gz";
     sha256 = "10gaqygmmwp0cwk3j8qflri5caf8vl3f7pwfl2svw5whv8wkn0k2";
   };
 
@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libvterm.sourceforge.net/";
     description = "Terminal emulator library to mimic both vt100 and rxvt";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

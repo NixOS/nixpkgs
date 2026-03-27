@@ -3,19 +3,18 @@
   buildGoModule,
   fetchFromGitHub,
   fetchpatch,
-  darwin,
   alsa-lib,
   stdenv,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "sampler";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "sqshq";
-    repo = pname;
-    rev = "v${version}";
+    repo = "sampler";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-H7QllAqPp35wHeJ405YSfPX3S4lH0/hdQ8Ja2OGLVtE=";
   };
 
@@ -33,17 +32,13 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildInputs =
-    lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.OpenAL
-    ];
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib;
 
-  meta = with lib; {
+  meta = {
     description = "Tool for shell commands execution, visualization and alerting";
     homepage = "https://sampler.dev";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ uvnikita ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ uvnikita ];
     mainProgram = "sampler";
   };
-}
+})

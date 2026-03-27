@@ -16,12 +16,12 @@
 let
   baseURI = "https://launchpad.net/~leolik/+archive/leolik";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "notify-osd";
   version = "0.9.35+16.04.20160415";
 
   src = fetchurl {
-    url = "${baseURI}/+files/notify-osd_${version}-0ubuntu1-leolik~ppa0.tar.gz";
+    url = "${baseURI}/+files/notify-osd_${finalAttrs.version}-0ubuntu1-leolik~ppa0.tar.gz";
     sha256 = "026dr46jh3xc4103wnslzy7pxbxkkpflh52c59j8vzwaa7bvvzkv";
     name = "notify-osd-customizable.tar.gz";
   };
@@ -49,12 +49,12 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Daemon that displays passive pop-up notifications";
     mainProgram = "notify-osd";
     homepage = "https://launchpad.net/notify-osd";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.imalison ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.imalison ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -14,7 +14,7 @@
   perl,
   # mxnet cuda support is turned off, but dependencies like opencv can still be built with cudaSupport
   # and fail to compile without the cudatoolkit
-  # mxnet cuda support will not be availaible, as mxnet requires version <=11
+  # mxnet cuda support will not be available, as mxnet requires version <=11
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 }:
@@ -22,13 +22,13 @@
 # mxnet is not maintained, and other projects are migrating away from it.
 # https://github.com/apache/mxnet/issues/21206
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mxnet";
   version = "1.9.1";
 
   src = fetchurl {
-    name = "apache-mxnet-src-${version}-incubating.tar.gz";
-    url = "mirror://apache/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
+    name = "apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
+    url = "mirror://apache/incubator/mxnet/${finalAttrs.version}/apache-mxnet-src-${finalAttrs.version}-incubating.tar.gz";
     hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
 
@@ -52,20 +52,20 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs =
-    [
-      opencv4
-      gtest
-      blas.provider
-    ]
-    ++ lib.optional stdenv.cc.isGNU gomp
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optionals cudaSupport [
-      # needed for OpenCV cmake module
-      cudaPackages.cudatoolkit
-    ];
+  buildInputs = [
+    opencv4
+    gtest
+    blas.provider
+  ]
+  ++ lib.optional stdenv.cc.isGNU gomp
+  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+  ++ lib.optionals cudaSupport [
+    # needed for OpenCV cmake module
+    cudaPackages.cudatoolkit
+  ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
     "-DUSE_MKL_IF_AVAILABLE=OFF"
     "-DUSE_CUDA=OFF"
     "-DUSE_CUDNN=OFF"
@@ -89,11 +89,11 @@ stdenv.mkDerivation rec {
     rm "$out"/lib/*.a
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight, Portable, Flexible Distributed/Mobile Deep Learning with Dynamic, Mutation-aware Dataflow Dep Scheduler";
     homepage = "https://mxnet.incubator.apache.org/";
-    maintainers = with maintainers; [ abbradar ];
-    license = licenses.asl20;
-    platforms = platforms.linux;
+    maintainers = [ ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
   };
-}
+})

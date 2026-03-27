@@ -4,29 +4,26 @@
 This hook starts a Memcached server during `checkPhase`. Example:
 
 ```nix
-{
-  stdenv,
-  memcachedTestHook,
-}:
+{ stdenv, memcachedTestHook }:
 stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [
-    memcachedTestHook
-  ];
+  nativeCheckInputs = [ memcachedTestHook ];
 }
 ```
 
 If you use a custom `checkPhase`, remember to add the `runHook` calls:
 ```nix
-  checkPhase ''
+{
+  checkPhase = ''
     runHook preCheck
 
     # ... your tests
 
     runHook postCheck
-  ''
+  '';
+}
 ```
 
 ## Variables {#sec-memcachedTestHook-variables}
@@ -43,11 +40,10 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeCheckInputs = [
-    memcachedTestHook
-  ];
+  nativeCheckInputs = [ memcachedTestHook ];
 
   preCheck = ''
-    memcachedTestPort=1234
-  ''
+    memcachedTestPort=1234;
+  '';
 }
+```

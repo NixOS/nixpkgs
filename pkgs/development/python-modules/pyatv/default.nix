@@ -13,7 +13,7 @@
   pydantic,
   pyfakefs,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-httpserver,
   pytest-timeout,
   pytestCheckHook,
@@ -27,22 +27,17 @@
   zeroconf,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyatv";
-  version = "0.16.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "postlund";
     repo = "pyatv";
-    tag = "v${version}";
-    hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wsLqG1yJf5A3BMgpbQMrXn6NzpcF4BU1TD+0NJ6Nt7c=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pytest-runner" ""
-  '';
 
   pythonRelaxDeps = [
     "aiohttp"
@@ -79,8 +74,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     deepdiff
     pyfakefs
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-asyncio_0
     pytest-httpserver
     pytest-timeout
     pytestCheckHook
@@ -106,11 +101,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyatv" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python client library for the Apple TV";
     homepage = "https://github.com/postlund/pyatv";
-    changelog = "https://github.com/postlund/pyatv/blob/v${version}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    changelog = "https://github.com/postlund/pyatv/blob/${finalAttrs.src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

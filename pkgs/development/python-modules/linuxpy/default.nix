@@ -5,20 +5,17 @@
   pytestCheckHook,
   setuptools,
   ward,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "linuxpy";
-  version = "0.20.0";
+  version = "0.23.0";
 
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mNWmzl52GEZUEL3q8cP59qxMduG1ijgsvGoD5ddSG94=";
+    sha256 = "sha256-q3gPUJL8M1krSjcPZokmMNxE+g1WLWFJYP4g6Q5/APc=";
   };
 
   pythonImportsCheck = [ "linuxpy" ];
@@ -34,11 +31,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Human friendly interface to Linux subsystems using Python";
     homepage = "https://github.com/tiagocoutinho/linuxpy";
-    license = licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ kekschen ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ willow ];
     platforms = lib.platforms.linux;
   };
 }

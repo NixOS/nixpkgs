@@ -5,6 +5,9 @@
 ecmEnvHook() {
     addToSearchPath XDG_DATA_DIRS "$1/share"
     addToSearchPath XDG_CONFIG_DIRS "$1/etc/xdg"
+    if [ -n "${qtQmlPrefix-}" ]; then
+      addToSearchPath NIXPKGS_QML_SEARCH_PATHS "$1/$qtQmlPrefix"
+    fi
 }
 addEnvHooks "$hostOffset" ecmEnvHook
 
@@ -51,7 +54,7 @@ ecmPostHook() {
     appendToVar cmakeFlags "-DKDE_INSTALL_APPDIR=${!outputBin}/share/applications"
     appendToVar cmakeFlags "-DKDE_INSTALL_DESKTOPDIR=${!outputBin}/share/desktop-directories"
     appendToVar cmakeFlags "-DKDE_INSTALL_MIMEDIR=${!outputBin}/share/mime/packages"
-    appendToVar cmakeFlags "-DKDE_INSTALL_METAINFODIR=${!outputBin}/share/appdata"
+    appendToVar cmakeFlags "-DKDE_INSTALL_METAINFODIR=${!outputBin}/share/metainfo"
     appendToVar cmakeFlags "-DKDE_INSTALL_QTQCHDIR=${!outputLib}/share/doc/qch"
     appendToVar cmakeFlags "-DKDE_INSTALL_QCHDIR=${!outputLib}/share/doc/qch"
     appendToVar cmakeFlags "-DKDE_INSTALL_MANDIR=${!outputBin}/share/man"
@@ -104,10 +107,5 @@ ecmHostPathHook() {
             break
         fi
     done
-
-    if [ -d "$1/share/dbus-1" ]
-    then
-        appendToVar propagatedUserEnvPkgs "$1"
-    fi
 }
 addEnvHooks "$hostOffset" ecmHostPathHook

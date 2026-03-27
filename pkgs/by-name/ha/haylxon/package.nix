@@ -2,24 +2,19 @@
   lib,
   rustPlatform,
   fetchCrate,
-  stdenv,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "haylxon";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchCrate {
-    inherit version;
+    inherit (finalAttrs) version;
     pname = "hxn";
-    hash = "sha256-zAqYaPtbXqC1YFzCL8EwE1HhuSqVl5lAfnAftwBvnoE=";
+    hash = "sha256-pNOMCltMIKLJ8dNDzVa7MShpAROzvqK65d37fj+VXLQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cKYHC8qz81P4xtehGQIvNH/g/pa90IJQbKz0RM9tjws=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  cargoHash = "sha256-3muxqWOYCNXcV6WEcUwtmn2fKudU0vJtNegr8Nf6x50=";
 
   meta = {
     description = "Save screenshots of urls and webpages from terminal";
@@ -28,4 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ scientiac ];
     mainProgram = "hxn";
   };
-}
+})

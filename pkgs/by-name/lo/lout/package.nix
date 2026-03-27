@@ -5,15 +5,15 @@
   ghostscript,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lout";
-  version = "3.43.1";
+  version = "3.43.3";
 
   src = fetchFromGitHub {
     owner = "william8000";
     repo = "lout";
-    rev = version;
-    hash = "sha256-bXLhkJqhv8pftDZYv6vn9ycy5u3vde+m3gCPvWJz2M8=";
+    rev = finalAttrs.version;
+    hash = "sha256-kZRc+d6tQGJTR41yNYOyfu/vTMH4mkwru3IQvnHS4yo=";
   };
 
   buildInputs = [ ghostscript ];
@@ -53,4 +53,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = [ ];
   };
-}
+})

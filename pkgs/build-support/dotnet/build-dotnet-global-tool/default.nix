@@ -72,7 +72,8 @@ buildDotnetModule (
       passthru = {
         updateScript = ./update.sh;
         nupkg = nupkg;
-      } // args.passthru or { };
+      }
+      // args.passthru or { };
     }
   )
     (if lib.isFunction fnOrAttrs then fnOrAttrs finalAttrs else fnOrAttrs)

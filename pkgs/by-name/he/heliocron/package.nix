@@ -4,25 +4,24 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "heliocron";
-  version = "0.8.1";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "mfreeborn";
     repo = "heliocron";
-    rev = "v${version}";
-    hash = "sha256-5rzFz29Bpy2GR6bEt2DdCq9RtpdcY3SK/KnZrBrHUvk=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tqwVYIU8RXb1hiKnP7AlkxHsMhbAlwSmPGyFFMHIbAo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-as1rMyLqK0Z+UrO6B7Fzn2nNQM0xRrLoEPd2WlANxe8=";
+  cargoHash = "sha256-rQriNb/njEUBUmCUy5NKEfOYkOLy9i7ClU0vR72udOo=";
 
   meta = {
     description = "Execute tasks relative to sunset, sunrise and other solar events";
     longDescription = "A simple command line application that integrates with `cron` to execute tasks relative to sunset, sunrise and other such solar events.";
     homepage = "https://github.com/mfreeborn/heliocron";
-    changelog = "https://github.com/mfreeborn/heliocron/releases/tag/v${version}";
+    changelog = "https://github.com/mfreeborn/heliocron/releases/tag/v${finalAttrs.version}";
     license = with lib.licenses; [
       mit
       asl20
@@ -31,4 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "heliocron";
     platforms = lib.platforms.linux;
   };
-}
+})

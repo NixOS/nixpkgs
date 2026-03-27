@@ -4,17 +4,16 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ansi-escape-sequences-cli";
-  version = "0.1.4";
+  version = "0.2.2";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-KGPlNXkF16VdoOb3tg3nsQRdtgU83z7ibPy965bvvDk=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-55CdEw1bVgabWRbZIRe9jytwDf70Y92nITwDRQaTXaQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-r2dZ3io8YRWE1BJQ+gM5uwhz56RgvjHvgmARnHVsQCA=";
+  cargoHash = "sha256-g+FP98lcC3EeQtcGO0kE+g6Z9tUgrlieTlVJYKs/ig4=";
 
   meta = {
     description = "Quickly get ANSI escape sequences";
@@ -27,4 +26,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phip1611 ];
     mainProgram = "ansi";
   };
-}
+})

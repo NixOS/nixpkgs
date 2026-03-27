@@ -12,18 +12,18 @@
   pkg-config,
   powertop,
   testers,
-  xorg,
+  xset,
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "powertop";
   version = "2.15";
 
   src = fetchFromGitHub {
     owner = "fenrus75";
     repo = "powertop";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-53jfqt0dtMqMj3W3m6ravUTzApLQcljDHfdXejeZa4M=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/main.cpp --replace-fail "/sbin/modprobe" "modprobe"
-    substituteInPlace src/calibrate/calibrate.cpp --replace-fail "/usr/bin/xset" "${lib.getExe xorg.xset}"
+    substituteInPlace src/calibrate/calibrate.cpp --replace-fail "/usr/bin/xset" "${lib.getExe xset}"
     substituteInPlace src/tuning/bluetooth.cpp --replace-fail "/usr/bin/hcitool" "hcitool"
   '';
 
@@ -57,20 +57,20 @@ stdenv.mkDerivation rec {
     tests.version = testers.testVersion {
       package = powertop;
       command = "powertop --version";
-      inherit version;
+      inherit (finalAttrs) version;
     };
   };
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
-    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${version}";
+  meta = {
+    inherit (finalAttrs.src.meta) homepage;
+    changelog = "https://github.com/fenrus75/powertop/releases/tag/v${finalAttrs.version}";
     description = "Analyze power consumption on Intel-based laptops";
     mainProgram = "powertop";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       fpletz
       anthonyroussel
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

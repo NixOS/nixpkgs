@@ -9,13 +9,12 @@
   parameterized,
   pycryptodome,
   pytest-aiohttp,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-cov-stub,
   pytest-golden,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   requests-mock,
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
-  version = "6.0.2";
+  version = "6.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "pyrainbird";
     tag = version;
-    hash = "sha256-CcoZZ60PItqy0bCc36WfyNF9Fc28aHwQ6hhnY41lBNg=";
+    hash = "sha256-ac/QzhdfvOpqKi8tjz2Udge2+AIg/yEQBmbYCu0i/0A=";
   };
 
   build-system = [ setuptools ];
@@ -54,8 +51,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     parameterized
-    pytest-aiohttp
-    pytest-asyncio
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
+    pytest-asyncio_0
     pytest-cov-stub
     pytest-golden
     pytest-mock
@@ -66,11 +63,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyrainbird" ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to interact with Rainbird controllers";
     homepage = "https://github.com/allenporter/pyrainbird";
     changelog = "https://github.com/allenporter/pyrainbird/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -8,7 +8,7 @@
   openssl,
   pkg-config,
   protobuf,
-  pythonOlder,
+  typing-extensions,
   setuptools,
   zlib,
 }:
@@ -18,15 +18,18 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.71.0";
+  version = "1.78.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-K4X3ggR1rT7ewgnT2Jp5Ca2hbKqwXT8uCKforjIApVw=";
+    hash = "sha256-c4K5UYlUbzdcF09TpfqHPO+RxLgAX6oFzFs77qnE8cU=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail cython==3.1.1 cython
+  '';
 
   outputs = [
     "out"
@@ -46,23 +49,27 @@ buildPythonPackage rec {
     zlib
   ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    typing-extensions
+  ];
 
-  preBuild =
-    ''
-      export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
-      if [ -z "$enableParallelBuilding" ]; then
-        GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
-      fi
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      unset AR
-    '';
+  preBuild = ''
+    export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+    if [ -z "$enableParallelBuilding" ]; then
+      GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    unset AR
+  '';
 
-  GRPC_BUILD_WITH_BORING_SSL_ASM = "";
-  GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
-  GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  env = {
+    GRPC_BUILD_WITH_BORING_SSL_ASM = "";
+    GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_ZLIB = 1;
+    GRPC_PYTHON_BUILD_SYSTEM_CARES = 1;
+  };
 
   # does not contain any tests
   doCheck = false;
@@ -71,11 +78,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "grpc" ];
 
-  meta = with lib; {
+  meta = {
     description = "HTTP/2-based RPC framework";
     homepage = "https://grpc.io/grpc/python/";
     changelog = "https://github.com/grpc/grpc/releases/tag/v${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

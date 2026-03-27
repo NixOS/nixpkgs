@@ -1,17 +1,40 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  swig,
+  testers,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libcap-ng";
-  version = "0.8.5";
+  version = "0.9";
 
-  src = fetchurl {
-    url = "https://people.redhat.com/sgrubb/libcap-ng/libcap-ng-${version}.tar.gz";
-    hash = "sha256-O6UpTRy9+pivqs+8ALavntK4PoohgXGF39hEzIx6xv8=";
+  src = fetchFromGitHub {
+    owner = "stevegrubb";
+    repo = "libcap-ng";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KF4SaES6FYuoBoZB+hhWlFuQemWM4Vg8aybCOgXM+Uc=";
   };
+
+  # NEWS needs to exist or else the build fails
+  postPatch = ''
+    touch NEWS
+    substituteInPlace utils/captest.c \
+      --replace-fail /usr/bin/captest ${placeholder "out"}/bin/captest
+  '';
+
+  strictDeps = true;
+  enableParallelBuilding = true;
+
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    swig
+  ];
 
   outputs = [
     "out"
@@ -23,10 +46,26 @@ stdenv.mkDerivation rec {
     "--without-python"
   ];
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    };
+  };
+
+  # assumption: build machine runs linux kernel 5.0 or newer
+  # see https://github.com/stevegrubb/libcap-ng?tab=readme-ov-file#note-to-distributions
+  doCheck = true;
+
+  meta = {
+    changelog = "https://people.redhat.com/sgrubb/libcap-ng/ChangeLog";
     description = "Library for working with POSIX capabilities";
     homepage = "https://people.redhat.com/sgrubb/libcap-ng/";
-    platforms = platforms.linux;
-    license = licenses.lgpl21;
+    pkgConfigModules = [ "libcap-ng" ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21;
+    maintainers = with lib.maintainers; [ grimmauld ];
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "libcap-ng_project" finalAttrs.version;
   };
-}
+})

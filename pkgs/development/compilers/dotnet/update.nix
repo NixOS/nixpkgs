@@ -18,7 +18,16 @@
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel tag;
+  inherit (lib.importJSON releaseManifestFile) channel tag sdkVersion;
+
+  # version including up to the sdk feature band
+  sdkVersionPrefix =
+    let
+      parts = lib.take 3 (lib.splitVersion sdkVersion);
+      patch = lib.elemAt parts 2;
+      band = lib.substring 0 (lib.stringLength patch - 2) patch;
+    in
+    lib.concatStringsSep "." (lib.replaceElemAt parts 2 band);
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -48,118 +57,148 @@ let
     lib.path.removePrefix root path;
 
 in
-writeScript "update-dotnet-vmr.sh" ''
-  #! ${nix}/bin/nix-shell
-  #! nix-shell -i ${runtimeShell} --pure ${drv} --keep UPDATE_NIX_ATTR_PATH
-  set -euo pipefail
+writeScript "update-dotnet-vmr.sh" (
+  ''
+    #! ${nix}/bin/nix-shell
+    #! nix-shell -i ${runtimeShell} --pure ${drv} --keep UPDATE_NIX_ATTR_PATH
+    set -euo pipefail
 
-  tag=''${1-}
+    tag=''${1-}
 
-  if [[ -n $tag ]]; then
-      query=$(cat <<EOF
-          map(
-              select(
-                  (.tag_name == "$tag"))) |
-          first
-  EOF
-      )
-  else
-      query=$(cat <<EOF
-          map(
-              select(
-                  ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
-                  .draft == false and
-                  (.tag_name | startswith("v${channel}")))) |
-          first
-  EOF
-      )
-  fi
+    if [[ -n $tag ]]; then
+        query=$(cat <<EOF
+            map(
+                select(
+                    (.tag_name == "$tag"))) |
+            first
+    EOF
+        )
+    else
+        query=$(cat <<EOF
+            map(
+                select(
+                    ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
+                    .draft == false and
+                    (.tag_name | startswith("v${sdkVersionPrefix}")))) |
+            first
+    EOF
+        )
+    fi
 
-  query="$query "$(cat <<EOF
-      | (
-          .tag_name,
-          (.assets |
-              .[] |
-              select(.name == "release.json") |
-              .browser_download_url),
-          (.assets |
-              .[] |
-              select(.name | endswith(".tar.gz.sig")) |
-              .browser_download_url))
-  EOF
-  )
+    query="$query "$(cat <<EOF
+        | (
+            .tag_name,
+            (.assets |
+                .[] |
+                select(.name == "release.json") |
+                .browser_download_url),
+            (.assets |
+                .[] |
+                select(.name | endswith(".tar.gz.sig")) |
+                .browser_download_url))
+    EOF
+    )
 
-  (
-      curl -fsSL https://api.github.com/repos/dotnet/dotnet/releases | \
-      jq -er "$query" \
-  ) | (
-      read tagName
-      read releaseUrl
-      read sigUrl
+    (
+        curl -fsSL https://api.github.com/repos/dotnet/dotnet/releases | \
+        jq -er "$query" \
+    ) | (
+        read tagName
+        read releaseUrl
+        read sigUrl
 
-      tmp="$(mktemp -d)"
-      trap 'rm -rf "$tmp"' EXIT
+        # TMPDIR might be really long, which breaks gpg
+        tmp="$(TMPDIR=/tmp mktemp -d)"
+        trap 'rm -rf "$tmp"' EXIT
 
-      cd "$tmp"
+        cd "$tmp"
 
-      curl -fsSL "$releaseUrl" -o release.json
+        curl -fsSL "$releaseUrl" -o release.json
 
-      if [[ -z $tag && "$tagName" == "${tag}" ]]; then
-          >&2 echo "release is already $tagName"
-          exit
-      fi
+        if [[ -z $tag && "$tagName" == "${tag}" ]]; then
+            >&2 echo "release is already $tagName"
+            exit
+        fi
 
-      tarballUrl=https://github.com/dotnet/dotnet/archive/refs/tags/$tagName.tar.gz
+        tarballUrl=https://github.com/dotnet/dotnet/archive/refs/tags/$tagName.tar.gz
 
-      mapfile -t prefetch < <(nix-prefetch-url --print-path "$tarballUrl")
-      tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
-      tarball=''${prefetch[1]}
+        mapfile -t prefetch < <(nix-prefetch-url --print-path "$tarballUrl")
+        tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
+        tarball=''${prefetch[1]}
 
-      curl -fssL "$sigUrl" -o release.sig
+        # recent dotnet 10 releases don't have a signature for the github tarball
+        if [[ ! $sigUrl = */dotnet-source-* ]]; then
+          curl -fssL "$sigUrl" -o release.sig
 
-      (
-          export GNUPGHOME=$PWD/.gnupg
-          trap 'gpgconf --kill all' EXIT
-          gpg --batch --import ${releaseKey}
-          gpg --batch --verify release.sig "$tarball"
-      )
+          (
+              export GNUPGHOME=$PWD/.gnupg
+              mkdir -m 700 -p $GNUPGHOME
+              trap 'gpgconf --kill all' EXIT
+              gpg --no-autostart --batch --import ${releaseKey}
+              gpg --no-autostart --batch --verify release.sig "$tarball"
+          )
+        fi
 
-      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json
-      artifactsVersion=$(xq -r '.Project.PropertyGroup |
-          map(select(.PrivateSourceBuiltArtifactsVersion))
-          | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
+        tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json \*/prep\*.sh
+        artifactsVersion=$(xq -r '.Project.PropertyGroup |
+            map(select(.PrivateSourceBuiltArtifactsVersion))
+            | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
-      if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://builds.dotnet.microsoft.com/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
-      else
-          artifactsUrl=$(xq -r '.Project.PropertyGroup |
-              map(select(.PrivateSourceBuiltArtifactsUrl))
-              | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
-      fi
-      artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
+        if [[ "$artifactsVersion" != "" ]]; then
+            artifactVar=$(grep ^defaultArtifactsRid= prep-source-build.sh)
+            eval "$artifactVar"
 
-      artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
+            artifactsFile=Private.SourceBuilt.Artifacts.$artifactsVersion.$defaultArtifactsRid.tar.gz
+            artifactsUrl=https://builds.dotnet.microsoft.com/${
+              if lib.versionAtLeast channel "10" then "dotnet/source-build" else "source-built-artifacts/assets"
+            }/$artifactsFile
 
-      sdkVersion=$(jq -er .tools.dotnet global.json)
+            curl -fsSL "$artifactsUrl" --head || {
+              [[ $? == 22 ]]
+              artifactsUrl=https://ci.dot.net/public/source-build/$artifactsFile
+            }
+        else
+            artifactsUrl=$(xq -r '.Project.PropertyGroup |
+                map(select(.PrivateSourceBuiltArtifactsUrl))
+                | .[] | .PrivateSourceBuiltArtifactsUrl' eng/Versions.props)
+            artifactsUrl="''${artifactsUrl/dotnetcli.azureedge.net/builds.dotnet.microsoft.com}"
+        fi
 
-      # below needs to be run in nixpkgs because toOutputPath uses relative paths
-      cd -
+        artifactsHash=$(nix-prefetch-url "$artifactsUrl")
+        artifactsHash=$(nix-hash --to-sri --type sha256 "$artifactsHash")
 
-      cp "$tmp"/release.json "${toOutputPath releaseManifestFile}"
+        sdkVersion=$(jq -er .tools.dotnet global.json)
 
-      jq --null-input \
-          --arg _0 "$tarballHash" \
-          --arg _1 "$artifactsUrl" \
-          --arg _2 "$artifactsHash" \
-          '{
-              "tarballHash": $_0,
-              "artifactsUrl": $_1,
-              "artifactsHash": $_2,
-          }' > "${toOutputPath releaseInfoFile}"
+        # below needs to be run in nixpkgs because toOutputPath uses relative paths
+        cd -
 
-      ${lib.escapeShellArg (toOutputPath ./update.sh)} \
-          -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$sdkVersion"
+        cp "$tmp"/release.json "${toOutputPath releaseManifestFile}"
 
-      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
-  )
-''
+        jq --null-input \
+            --arg _0 "$tarballHash" \
+            --arg _1 "$artifactsUrl" \
+            --arg _2 "$artifactsHash" \
+            '{
+                "tarballHash": $_0,
+                "artifactsUrl": $_1,
+                "artifactsHash": $_2,
+            }' > "${toOutputPath releaseInfoFile}"
+  ''
+  + lib.optionalString (bootstrapSdkFile != null) ''
+    updateSDK() {
+        ${lib.escapeShellArg (toOutputPath ./update.sh)} \
+            -o ${lib.escapeShellArg (toOutputPath bootstrapSdkFile)} --sdk "$1" >&2
+    }
+
+    updateSDK "$sdkVersion" || if [[ $? == 2 ]]; then
+        >&2 echo "WARNING: bootstrap sdk missing, attempting to bootstrap with self"
+        updateSDK "$(jq -er .sdkVersion "$tmp"/release.json)"
+    else
+        exit 1
+    fi
+  ''
+  + ''
+        $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link) >&2
+    )
+  ''
+)

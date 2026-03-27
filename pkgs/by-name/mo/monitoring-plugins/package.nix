@@ -35,11 +35,6 @@ let
     net-snmp
     procps
   ];
-
-  mailq = runCommand "mailq-wrapper" { preferLocalBuild = true; } ''
-    mkdir -p $out/bin
-    ln -s /run/wrappers/bin/sendmail $out/bin/mailq
-  '';
 in
 stdenv.mkDerivation rec {
   pname = "monitoring-plugins";
@@ -72,7 +67,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--libexecdir=${placeholder "out"}/bin"
-    "--with-mailq-command=${mailq}/bin/mailq"
+    "--with-mailq-command=/run/wrappers/bin/mailq"
     "--with-sudo-command=/run/wrappers/bin/sudo"
   ];
 
@@ -98,14 +93,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Official monitoring plugins for Nagios/Icinga/Sensu and others";
     homepage = "https://www.monitoring-plugins.org";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       relrod
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

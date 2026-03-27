@@ -20,7 +20,8 @@ let
         crateName = "nixtestcrate";
         version = "0.1.0";
         authors = [ "Test <test@example.com>" ];
-      } // args;
+      }
+      // args;
     in
     buildRustCrate p;
   mkHostCrate = mkCrate buildRustCrate;
@@ -90,9 +91,15 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (
+        removeAttrs crateArgs [
+          "expectedTestOutputs"
+          "expectedTestBinaries"
+        ]
+      );
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
+      expectedTestBinaries = crateArgs.expectedTestBinaries or [ ];
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
       isLib = crateArgs ? libName || crateArgs ? libPath;
       crateName = crateArgs.crateName or "nixtestcrate";
@@ -133,6 +140,10 @@ let
           ''
         else if stdenv.hostPlatform == stdenv.buildPlatform then
           ''
+            ${lib.concatMapStringsSep "\n" (
+              b:
+              "test -x ${crate}/tests/${lib.escapeShellArg b} || { echo 'expected test binary \"${b}\" not found in:'; ls ${crate}/tests; exit 23; }"
+            ) expectedTestBinaries}
             for file in ${crate}/tests/*; do
               $file 2>&1 >> $out
             done
@@ -181,7 +192,7 @@ let
     assert (builtins.isList expectedFiles);
 
     let
-      crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       crateOutput = if output == null then crate else crate."${output}";
       expectedFilesFile = writeTextFile {
         name = "expected-files-${name}";
@@ -227,7 +238,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -418,10 +429,32 @@ rec {
             ];
           };
           buildTests = true;
+          # Cargo names tests/<dir>/main.rs as <dir>, not <dir>_main.
+          expectedTestBinaries = [
+            "foo"
+            "bar"
+          ];
           expectedTestOutputs = [
             "test src_main ... ok"
             "test tests_foo ... ok"
             "test tests_bar ... ok"
+          ];
+        };
+        rustBinTestsFlatMainSuffix = {
+          # A flat-style test whose name happens to end in _main must keep
+          # its suffix — only tests/<dir>/main.rs gets the _main stripped.
+          src = symlinkJoin {
+            name = "rust-bin-tests-flat-main-suffix";
+            paths = [
+              (mkTestFileWithMain "src/main.rs" "src_main")
+              (mkTestFile "tests/foo_main.rs" "flat_test")
+            ];
+          };
+          buildTests = true;
+          expectedTestBinaries = [ "foo_main" ];
+          expectedTestOutputs = [
+            "test src_main ... ok"
+            "test flat_test ... ok"
           ];
         };
         linkAgainstRlibCrate = {
@@ -476,6 +509,7 @@ rec {
           crateName = "build-script-feature-env";
           features = [
             "some-feature"
+            "some-c++17-thing"
             "crate/another_feature"
           ];
           src = symlinkJoin {
@@ -487,6 +521,10 @@ rec {
                 fn feature_not_visible() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_err());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_err());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
                 fn main() {}
               '')
@@ -494,6 +532,10 @@ rec {
                 fn main() {
                   assert!(std::env::var("CARGO_FEATURE_SOME_FEATURE").is_ok());
                   assert!(option_env!("CARGO_FEATURE_SOME_FEATURE").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_SOME_C++17_THING").is_ok());
+                  assert!(option_env!("CARGO_FEATURE_SOME_C++17_THING").is_none());
+                  assert!(std::env::var("CARGO_FEATURE_ANOTHER_FEATURE").is_err());
+                  assert!(option_env!("CARGO_FEATURE_ANOTHER_FEATURE").is_none());
                 }
               '')
             ];
@@ -705,7 +747,7 @@ rec {
 
         rustCargoTomlInTopDir =
           let
-            withoutCargoTomlSearch = builtins.removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
+            withoutCargoTomlSearch = removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
           in
           withoutCargoTomlSearch
           // {
@@ -766,15 +808,15 @@ rec {
           ];
           src = mkBin "src/foobar.rs";
         };
-        expectedFiles =
-          [
-            "./bin/test_binary1"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            # On Darwin, the debug symbols are in a separate directory.
-            "./bin/test_binary1.dSYM/Contents/Info.plist"
-            "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
-          ];
+        expectedFiles = [
+          "./bin/test_binary1"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+          # On Darwin, the debug symbols are in a separate directory.
+          "./bin/test_binary1.dSYM/Contents/Info.plist"
+          "./bin/test_binary1.dSYM/Contents/Resources/DWARF/test_binary1"
+          "./bin/test_binary1.dSYM/Contents/Resources/Relocations/${stdenv.hostPlatform.rust.platform.arch}/test_binary1.yml"
+        ];
       };
 
       crateBinNoPath1Outputs = assertOutputs {
@@ -838,6 +880,19 @@ rec {
         ];
       };
 
+      crateWasm32BinHyphens = assertOutputs {
+        name = "wasm32-crate-bin-hyphens";
+        mkCrate = mkCrate pkgsCross.wasm32-unknown-none.buildRustCrate;
+        crateArgs = {
+          crateName = "wasm32-crate-bin-hyphens";
+          crateBin = [ { name = "wasm32-crate-bin-hyphens"; } ];
+          src = mkBin "src/main.rs";
+        };
+        expectedFiles = [
+          "./bin/wasm32-crate-bin-hyphens.wasm"
+        ];
+      };
+
       brotliTest =
         let
           pkg = brotliCrates.brotli_2_5_0 { };
@@ -897,13 +952,14 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
       maintainers = [ ];
     };
-    constituents = builtins.attrValues tests;
+    constituents = builtins.attrValues (lib.filterAttrs (_: v: lib.isDerivation v) tests);
   };
 }

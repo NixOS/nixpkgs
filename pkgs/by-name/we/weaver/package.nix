@@ -1,39 +1,87 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchNpmDeps,
   testers,
-  weaver,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  nodejs,
+  npmHooks,
+  python3,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "weaver";
-  version = "0.13.2";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
-    rev = "v${version}";
-    hash = "sha256-kfBWI+1f39oSSKYflXfXnBTc96OZch7o5HWfOgOfuxs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-LMDJg3IKrKRPDkprwlWmBVeaZeI2dZht0eHv7eVGqjo=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-KK6Cp6viQPp9cSxs1dP1tf/bIMgkKiaKPE6VytyHyZA=";
+  cargoHash = "sha256-EzY7OtgPDxT3g2ISV0VZTKa9kLqtKJZH4zT9v2xN/s8=";
+
+  postPatch = ''
+    # Remove build.rs to build UI separately.
+    rm build.rs
+  '';
+
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/ui";
+    hash = "sha256-VOL2BLTfJ1nM2L3IZpixOuAaBUHVJX032MGb3+eousY=";
+  };
+  npmRoot = "ui";
+
+  buildInputs = [ openssl ];
+
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    nodejs
+    npmHooks.npmConfigHook
+    python3
+  ];
+
+  env = {
+    CXXFLAGS = "-std=c++20";
+    OPENSSL_NO_VENDOR = true;
+  };
+
+  preBuild = ''
+    pushd ui
+    npm run build
+    popd
+  '';
 
   checkFlags = [
     # Skip tests requiring network
     "--skip=test_cli_interface"
   ];
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd ${finalAttrs.meta.mainProgram} \
+      --bash <($out/bin/${finalAttrs.meta.mainProgram} completion bash) \
+      --zsh <($out/bin/${finalAttrs.meta.mainProgram} completion zsh) \
+      --fish <($out/bin/${finalAttrs.meta.mainProgram} completion fish)
+  '';
+
   passthru.tests.version = testers.testVersion {
-    package = weaver;
+    package = finalAttrs.finalPackage;
   };
 
   meta = {
     description = "OpenTelemetry tool for dealing with semantic conventions and application telemetry schemas";
     homepage = "https://github.com/open-telemetry/weaver";
+    changelog = "https://github.com/open-telemetry/weaver/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "weaver";
   };
-}
+})

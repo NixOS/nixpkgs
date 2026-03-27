@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Collection of wallpapers for elementary";
     homepage = "https://github.com/elementary/wallpapers";
-    license = licenses.publicDomain;
-    platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.pantheon ];
   };
 }

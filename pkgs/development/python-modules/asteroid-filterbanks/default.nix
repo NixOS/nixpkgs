@@ -54,28 +54,27 @@ buildPythonPackage {
     scipy
   ];
 
-  disabledTests =
-    [
-      # RuntimeError: cannot cache function '__o_fold': no locator available for file
-      # '/nix/store/d1znhn1n48z2raj0j9zbz80hhg4k2shw-python3.12-librosa-0.10.2.post1/lib/python3.12/site-packages/librosa/core/notation.py'
-      "test_melgram_encoder"
-      "test_melscale"
+  disabledTests = [
+    # RuntimeError: cannot cache function '__o_fold': no locator available for file
+    # '/nix/store/d1znhn1n48z2raj0j9zbz80hhg4k2shw-python3.12-librosa-0.10.2.post1/lib/python3.12/site-packages/librosa/core/notation.py'
+    "test_melgram_encoder"
+    "test_melscale"
 
-      # AssertionError: The values for attribute 'shape' do not match
-      "test_torch_stft"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Issue with JIT on darwin:
-      # RuntimeError: required keyword attribute 'value' has the wrong type
-      "test_jit_filterbanks"
-      "test_jit_filterbanks_enc"
-      "test_pcen_jit"
-      "test_stateful_pcen_jit"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Flaky: AssertionError: Tensor-likes are not close!
-      "test_fb_def_and_forward_lowdim"
-    ];
+    # AssertionError: The values for attribute 'shape' do not match
+    "test_torch_stft"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Issue with JIT on darwin:
+    # RuntimeError: required keyword attribute 'value' has the wrong type
+    "test_jit_filterbanks"
+    "test_jit_filterbanks_enc"
+    "test_pcen_jit"
+    "test_stateful_pcen_jit"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Flaky: AssertionError: Tensor-likes are not close!
+    "test_fb_def_and_forward_lowdim"
+  ];
 
   meta = {
     description = "PyTorch-based audio source separation toolkit for researchers";

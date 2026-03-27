@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Muqtxdir";
-    repo = pname;
+    repo = "yaru-remix";
     rev = "v${version}";
     sha256 = "0xilhw5gbxsyy80ixxgj0nw6w782lz9dsinhi24026li1xny804c";
   };
@@ -41,16 +41,16 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
-  meta = with lib; {
+  meta = {
     description = "Fork of the Yaru GTK theme";
     homepage = "https://github.com/Muqtxdir/yaru-remix";
-    license = with licenses; [
+    license = with lib.licenses; [
       cc-by-sa-40
       gpl3Plus
       lgpl21Only
       lgpl3Only
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hoppla20 ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hoppla20 ];
   };
 }

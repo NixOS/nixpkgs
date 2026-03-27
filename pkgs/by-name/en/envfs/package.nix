@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-bpATdm/lB+zomPYGCxA7omWK/SKPIaqr94J+fjMaXfE=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nMUdAFRHJZDwvLASBVykzzkwk3HxslDehqqm1U99qYg=";
 
   postInstall = ''
@@ -26,7 +25,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   passthru = {
     tests = {
-      envfs = nixosTests.envfs;
+      inherit (nixosTests) envfs envfs-systemd-stage-1;
     };
 
     updateScript = nix-update-script { };

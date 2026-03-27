@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "umap-learn";
-  version = "0.5.8";
+  version = "0.5.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lmcinnes";
     repo = "umap";
     tag = "release-${version}";
-    hash = "sha256-VR+qBZyFtpW/xuFXI8pxDkkwJKt9qajnUtvuZLFZtF0=";
+    hash = "sha256-V63W9ax7iOq5+oZFRWaQbAws942JBeufnQ3IF4rcgko=";
   };
 
   build-system = [ setuptools ];
@@ -73,7 +73,10 @@ buildPythonPackage rec {
       tensorflow-probability
     ];
 
-    tbb = [ tbb ];
+    tbb = [
+      # Not packaged.
+      #tbb
+    ];
 
     all = plot ++ parametric_umap ++ tbb;
   };
@@ -101,7 +104,7 @@ buildPythonPackage rec {
   meta = {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
-    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${version}";
+    changelog = "https://github.com/lmcinnes/umap/releases/tag/release-${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

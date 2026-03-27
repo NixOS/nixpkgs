@@ -20,15 +20,15 @@
   nodejs,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sticky-notes";
-  version = "0.2.6";
+  version = "0.2.7";
 
   src = fetchFromGitHub {
     owner = "vixalien";
     repo = "sticky";
-    rev = "v${version}";
-    hash = "sha256-keSxUTil4/QO8Wn4p6LB7oERxXHKD83qIRPZ93ZygWE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-82Yxw8NSw82rxhuAgsdN2lCiQ/hli4tQiU6jCgGyp4U=";
     fetchSubmodules = true;
   };
 
@@ -56,8 +56,8 @@ stdenv.mkDerivation rec {
   ];
 
   yarnOfflineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
-    hash = "sha256-GThcufSAr/VYL9AWFOBY2FDXQZGY5L7TbBdadPh7CAc=";
+    yarnLock = finalAttrs.src + "/yarn.lock";
+    hash = "sha256-NDGuG2rXJH0bHsD7yQMY6HAZDkMq0j63SYVz8+X3fPQ=";
   };
 
   preConfigure = ''
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    meson rewrite kwargs set project / version '${version}'
+    meson rewrite kwargs set project / version '${finalAttrs.version}'
   '';
 
   postFixup = ''
@@ -81,10 +81,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Simple sticky notes app for GNOME";
     homepage = "https://github.com/vixalien/sticky";
-    changelog = "https://github.com/vixalien/sticky/releases/tag/v${version}";
+    changelog = "https://github.com/vixalien/sticky/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pokon548 ];
     mainProgram = "com.vixalien.sticky";
     platforms = lib.platforms.linux;
   };
-}
+})

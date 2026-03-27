@@ -1,5 +1,5 @@
 diff --git a/shells/bash_test.go b/shells/bash_test.go
-index 9ed9e65ff..02b6e6d5f 100644
+index bbbe949f4..955992d3f 100644
 --- a/shells/bash_test.go
 +++ b/shells/bash_test.go
 @@ -4,11 +4,9 @@ package shells
@@ -11,10 +11,10 @@ index 9ed9e65ff..02b6e6d5f 100644
  
  	"github.com/stretchr/testify/assert"
 -	"github.com/stretchr/testify/require"
- 	"gitlab.com/gitlab-org/gitlab-runner/common"
- )
  
-@@ -90,65 +88,6 @@ func TestBash_CheckForErrors(t *testing.T) {
+ 	"gitlab.com/gitlab-org/gitlab-runner/common"
+ 	"gitlab.com/gitlab-org/gitlab-runner/common/spec"
+@@ -78,65 +76,6 @@ func TestBash_CheckForErrors(t *testing.T) {
  	}
  }
  

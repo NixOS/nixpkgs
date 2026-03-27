@@ -4,45 +4,55 @@
   fetchFromGitHub,
   rustPlatform,
   protobuf,
+  nixosTests,
   nix-update-script,
-  darwin,
+  installShellFiles,
   withQuic ? false, # with QUIC protocol support
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "easytier";
-  version = "2.2.4";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "EasyTier";
     repo = "EasyTier";
-    tag = "v${version}";
-    hash = "sha256-YrWuNHpNDs1VVz6Sahi2ViPT4kcJf10UUMRWEs4Y0xc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-XnEfxWDKUTQFWYKtqetI7sLbOmGqw2BqpU5by1ajZGA=";
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-uUmF4uIhSx+byG+c4hlUuuy+O87Saw8wRJ5OGk3zaPA=";
+  cargoHash = "sha256-ueDulcv7DnwvMWYayc3hzBVtldX6gg7fP7YQpdUPq7c=";
 
   nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+    installShellFiles
   ];
 
   buildNoDefaultFeatures = stdenv.hostPlatform.isMips;
   buildFeatures = lib.optional stdenv.hostPlatform.isMips "mips" ++ lib.optional withQuic "quic";
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd easytier-cli \
+      --bash <($out/bin/easytier-cli gen-autocomplete bash) \
+      --fish <($out/bin/easytier-cli gen-autocomplete fish) \
+      --zsh <($out/bin/easytier-cli gen-autocomplete zsh)
+    installShellCompletion --cmd easytier-core \
+      --bash <($out/bin/easytier-core --gen-autocomplete bash) \
+      --fish <($out/bin/easytier-core --gen-autocomplete fish) \
+      --zsh <($out/bin/easytier-core --gen-autocomplete zsh)
+  '';
+
   doCheck = false; # tests failed due to heavy rely on network
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    tests = { inherit (nixosTests) easytier; };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://github.com/EasyTier/EasyTier";
-    changelog = "https://github.com/EasyTier/EasyTier/releases/tag/v${version}";
+    changelog = "https://github.com/EasyTier/EasyTier/releases/tag/v${finalAttrs.version}";
     description = "Simple, decentralized mesh VPN with WireGuard support";
     longDescription = ''
       EasyTier is a simple, safe and decentralized VPN networking solution implemented
@@ -53,4 +63,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; unix ++ windows;
     maintainers = with lib.maintainers; [ ltrump ];
   };
-}
+})

@@ -12,18 +12,18 @@
   libwebp,
   libtiff,
   withXorg ? true,
-  libXpm,
+  libxpm,
   libavif,
   fontconfig,
   freetype,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gd";
   version = "2.3.3";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
+    url = "https://github.com/libgd/libgd/releases/download/gd-${finalAttrs.version}/libgd-${finalAttrs.version}.tar.xz";
     sha256 = "0qas3q9xz3wgw06dm2fj0i189rain6n60z1vyq50d5h7wbn25s1z";
   };
 
@@ -38,12 +38,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags =
-    [
-      "--enable-gd-formats"
-    ]
-    # -pthread gets passed to clang, causing warnings
-    ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
+  configureFlags = [
+    "--enable-gd-formats"
+  ]
+  # -pthread gets passed to clang, causing warnings
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-werror=no";
 
   nativeBuildInputs = [
     autoconf
@@ -51,20 +50,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      zlib
-      freetype
-      libpng
-      libjpeg
-      libwebp
-      libtiff
-      libavif
-    ]
-    ++ lib.optionals withXorg [
-      fontconfig
-      libXpm
-    ];
+  buildInputs = [
+    zlib
+    freetype
+    libpng
+    libjpeg
+    libwebp
+    libtiff
+    libavif
+  ]
+  ++ lib.optionals withXorg [
+    fontconfig
+    libxpm
+  ];
 
   outputs = [
     "bin"
@@ -76,11 +74,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 2 tests
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libgd.github.io/";
     description = "Dynamic image creation library";
-    license = licenses.free; # some custom license
-    platforms = platforms.unix;
+    license = lib.licenses.free; # some custom license
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

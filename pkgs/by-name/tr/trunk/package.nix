@@ -6,15 +6,15 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "trunk";
-  version = "0.21.13";
+  version = "0.21.14";
 
   src = fetchFromGitHub {
     owner = "trunk-rs";
     repo = "trunk";
-    rev = "v${version}";
-    hash = "sha256-Kj0XUO8GSLBUwkvskOidA489cvcHdf9IKSVZ/OqlAnE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-0T8ZkBA1Zf4z2HXYeBwJ+2EGoUpxGrqSb4fS4CnL28A=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -22,17 +22,13 @@ rustPlatform.buildRustPackage rec {
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oXLB/Jbb/J8oXl0IyECIjjv4pdKz94pocD/iTBv4GRs=";
+  cargoHash = "sha256-/5zvbSlMzZHxnAwuu0Jd6WVVjxJtIAQpRwZZHgYyPbs=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
     mainProgram = "trunk";
-    maintainers = with maintainers; [
-      freezeboy
-      ctron
-    ];
-    license = with licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ ctron ];
+    license = with lib.licenses; [ asl20 ];
   };
-}
+})

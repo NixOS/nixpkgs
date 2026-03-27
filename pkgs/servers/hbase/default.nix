@@ -35,10 +35,10 @@ let
 
       passthru = { inherit tests; };
 
-      meta = with lib; {
+      meta = {
         description = "Distributed, scalable, big data store";
         homepage = "https://hbase.apache.org";
-        license = licenses.asl20;
+        license = lib.licenses.asl20;
         maintainers = with lib.maintainers; [ illustris ];
         platforms = lib.platforms.linux;
       };
@@ -51,13 +51,13 @@ in
     tests.standalone = nixosTests.hbase_2_4;
   };
   hbase_2_5 = common {
-    version = "2.5.10";
-    hash = "sha256-uYc5IZGQdLOm5gAEyyGtJtcgf+GxADEEuxjixZbG3Qs=";
+    version = "2.5.11";
+    hash = "sha256-W3o8J+aY2bQoiu1Lr1n5EQWDVoS1OwWTNIUAU03a5Es=";
     tests.standalone = nixosTests.hbase_2_5;
   };
   hbase_2_6 = common {
-    version = "2.6.1";
-    hash = "sha256-dubu/4Ilk82NtNEcKt8uLbcH8n81EncxOvkZOwk2kVA=";
+    version = "2.6.2";
+    hash = "sha256-X/mjmTAx9anh2U/Xlfuf+O4AO5BXDkdsY69tPddEpYM=";
     tests.standalone = nixosTests.hbase2;
   };
   hbase_3_0 = common {

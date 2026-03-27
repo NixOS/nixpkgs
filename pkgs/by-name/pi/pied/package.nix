@@ -1,19 +1,19 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter329,
   gst_all_1,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "pied";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "Elleo";
     repo = "pied";
     tag = "v${version}";
-    hash = "sha256-I2p3GIb54r9r/phbKJsz/cFw1ECdwZ2RnCYVxjsHzg0=";
+    hash = "sha256-STeSpto70b4m03ExikUrIwsHCqj1QH2jvVZ8G/ybw28=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -29,7 +29,7 @@ flutter327.buildFlutterApplication rec {
 
   postInstall = ''
     install -D flatpak/com.mikeasoft.pied.desktop -t $out/share/applications
-    install -D flatpak/com.mikeasoft.pied.png -t $out/share/pixmaps
+    install -D flatpak/com.mikeasoft.pied.png -t $out/share/icons/hicolor/256x256/apps
   '';
 
   meta = {

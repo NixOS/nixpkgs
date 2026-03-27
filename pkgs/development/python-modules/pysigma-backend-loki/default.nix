@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-loki";
-  version = "0.12.3";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "pySigma-backend-loki";
     tag = "v${version}";
-    hash = "sha256-tsAtD98vWU8mB+Y3ePp2S54dSDu5R7DIDYDin+JJgSg=";
+    hash = "sha256-36fdFuvUSAeGyV5z55/MGcdMiCNz12EbiRw87MjmaKY=";
   };
 
   build-system = [ poetry-core ];
@@ -29,10 +29,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sigma.backends.loki" ];
 
-  meta = with lib; {
+  disabledTestPaths = [
+    # Tests are out-dated
+    "tests/test_backend_loki_field_modifiers.py"
+  ];
+
+  meta = {
     description = "Library to support the loki backend for pySigma";
     homepage = "https://github.com/grafana/pySigma-backend-loki";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ peterromfeldhk ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

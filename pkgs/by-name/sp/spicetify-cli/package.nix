@@ -3,35 +3,29 @@
   buildGoModule,
   fetchFromGitHub,
   testers,
-  replaceVars,
   spicetify-cli,
 }:
-let
-  version = "2.39.6";
-in
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "spicetify-cli";
-  inherit version;
+  version = "2.42.14";
 
   src = fetchFromGitHub {
     owner = "spicetify";
     repo = "cli";
-    tag = "v${version}";
-    hash = "sha256-rdyHVHKVgl9fOviFYQuXY8Ko+/XwpKlKDfriQAgkusE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0ACf7GAWLquAkGrvsRaE+0YvmJqHZe+2pjHvf5eNtqI=";
   };
 
-  vendorHash = "sha256-sC8HmszcH5fYnuoPW6aElB8UXPwk3Lpp2odsBaiP4mI=";
+  vendorHash = "sha256-uuvlu5yocqnDh6OO5a4Ngp5SahqURc/14fcg1Kr9sec=";
+
+  postPatch = ''
+    substituteInPlace src/preprocess/preprocess.go \
+      --replace-fail 'version != "Dev"' 'version != "${finalAttrs.version}"'
+  '';
 
   ldflags = [
     "-s -w"
-    "-X 'main.version=${version}'"
-  ];
-
-  patches = [
-    # Stops spicetify from attempting to fetch a newer css-map.json
-    (replaceVars ./version.patch {
-      inherit version;
-    })
+    "-X 'main.version=${finalAttrs.version}'"
   ];
 
   postInstall =
@@ -64,4 +58,4 @@ buildGoModule {
     ];
     mainProgram = "spicetify";
   };
-}
+})

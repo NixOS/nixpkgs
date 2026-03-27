@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "mplcursors";
-  version = "0.6";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anntzer";
     repo = "mplcursors";
     rev = "v${version}";
-    hash = "sha256-L5pJqRpgPRQEsRDoP10+Pi8uzH5TQNBuGRx7hIL1x7s=";
+    hash = "sha256-ZHX//AUVSF91cHxyiL4klglJ2Ef3iSE6oOancL+gQbA=";
   };
 
   build-system = [

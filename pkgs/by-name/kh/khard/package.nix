@@ -2,30 +2,25 @@
   lib,
   python3,
   fetchPypi,
-  khard,
-  testers,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
-  version = "0.19.1";
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "khard";
+  version = "0.20.1";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-WfMKDaPD2j6wT02+GO5HY5E7aF2Z7IQY/VdKiMSRxJA=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
     setuptools-scm
-    sphinxHook
-    sphinx-autoapi
-    sphinx-autodoc-typehints
   ];
 
-  sphinxBuilders = [ "man" ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    atomicwrites
+  dependencies = with python3.pkgs; [
     configobj
     ruamel-yaml
     unidecode
@@ -37,19 +32,24 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   preCheck = ''
-    # see https://github.com/scheibler/khard/issues/263
+    # see https://github.com/lucc/khard/issues/263
     export COLUMNS=80
   '';
 
   pythonImportsCheck = [ "khard" ];
 
-  passthru.tests.version = testers.testVersion { package = khard; };
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
 
   meta = {
-    homepage = "https://github.com/scheibler/khard";
+    homepage = "https://github.com/lucc/khard";
     description = "Console carddav client";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ matthiasbeyer ];
+    maintainers = with lib.maintainers; [
+      matthiasbeyer
+      doronbehar
+    ];
     mainProgram = "khard";
   };
-}
+})

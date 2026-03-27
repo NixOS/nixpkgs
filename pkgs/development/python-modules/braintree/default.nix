@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "braintree";
-  version = "4.29.0";
+  version = "4.41.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "braintree";
     repo = "braintree_python";
     rev = version;
-    hash = "sha256-5MF8W2zUVvNiOnmszgJkMDmeYLZ6ppFHqmH6dmlCzQY=";
+    hash = "sha256-5rTYRzlx/XueL6vF0/kM73bgN/QjvM55ZSLIWNI8YiQ=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "braintree" ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/"
     "tests/fixtures"
     "tests/unit"

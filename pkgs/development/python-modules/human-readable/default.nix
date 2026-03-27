@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "human-readable";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     pname = "human_readable";
     inherit version;
-    hash = "sha256-VuuUReVgzPoGlZCK4uyLAIG4bUnroaCDO8CuD0TWxOk=";
+    hash = "sha256-7Iky53uBlvvQ+UQLI8gP+glk6nb/llg29gT0HuSLWU8=";
   };
 
   pyproject = true;
@@ -23,10 +23,10 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to make data intended for machines, readable to humans";
     homepage = "https://github.com/staticdev/human-readable";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

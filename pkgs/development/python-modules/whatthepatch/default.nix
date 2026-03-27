@@ -4,7 +4,6 @@
   fetchFromGitHub,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -12,11 +11,9 @@ buildPythonPackage rec {
   version = "1.0.7";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
   src = fetchFromGitHub {
     owner = "cscorley";
-    repo = pname;
+    repo = "whatthepatch";
     tag = version;
     hash = "sha256-0pkkwVo9yaFEZyitfpKMC8EVr8HgPLUkrGWmyYOdZNE=";
   };

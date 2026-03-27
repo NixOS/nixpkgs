@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "dockerfile-parse";
   version = "2.0.1";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -27,11 +24,10 @@ buildPythonPackage rec {
     "test_all_versions_match"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing Dockerfile files";
     homepage = "https://github.com/DBuildService/dockerfile-parse";
     changelog = "https://github.com/containerbuildsystem/dockerfile-parse/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.bsd3;
   };
 }

@@ -22,8 +22,6 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "pic" ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
-
   prePatch = ''
     substituteInPlace ./Makefile \
       --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
@@ -37,10 +35,11 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Realtek 8814AU USB WiFi driver";
     homepage = "https://github.com/morrownr/8814au";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.lassulus ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.lassulus ];
+    broken = kernel.kernelOlder "5.2" || kernel.kernelAtLeast "6.15";
   };
 }

@@ -24,35 +24,41 @@
   colors,
   buildTests,
   codegenUnits,
+  capLints,
 }:
 
 let
-  baseRustcOpts =
-    [
-      (if release then "-C opt-level=3" else "-C debuginfo=2")
-      "-C codegen-units=${toString codegenUnits}"
-      "--remap-path-prefix=$NIX_BUILD_TOP=/"
-      (mkRustcDepArgs dependencies crateRenames)
-      (mkRustcFeatureArgs crateFeatures)
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--target"
-      stdenv.hostPlatform.rust.rustcTargetSpec
-    ]
-    ++ lib.optionals (needUnstableCLI dependencies) [
-      "-Z"
-      "unstable-options"
-    ]
-    ++ extraRustcOpts
-    # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
-    # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
-    ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
-    ++
-      lib.optional (stdenv.hostPlatform.linker == "lld" && rustc ? llvmPackages.lld) # Needed when building for targets that use lld. e.g. 'wasm32-unknown-unknown'
-        "-C linker=${rustc.llvmPackages.lld}/bin/lld"
-    ++ lib.optional (
-      stdenv.hasCC && stdenv.hostPlatform.linker != "lld"
-    ) "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  baseRustcOpts = [
+    (if release then "-C opt-level=3" else "-C debuginfo=2")
+    "-C codegen-units=${toString codegenUnits}"
+    "--remap-path-prefix=$NIX_BUILD_TOP=/"
+    # When the rust-src component is present (common with rust-overlay
+    # toolchains), rustc unvirtualises libstd source paths. Panic
+    # locations from monomorphised generic std code then embed the
+    # toolchain store path in .rodata, pulling the entire toolchain into
+    # the closure. Remap to a stable placeholder to break the reference.
+    "--remap-path-prefix=${rustc}=/rustc"
+    (mkRustcDepArgs dependencies crateRenames)
+    (mkRustcFeatureArgs crateFeatures)
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--target"
+    stdenv.hostPlatform.rust.rustcTargetSpec
+  ]
+  ++ lib.optionals (needUnstableCLI dependencies) [
+    "-Z"
+    "unstable-options"
+  ]
+  ++ extraRustcOpts
+  # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
+  # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
+  ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
+  ++
+    lib.optional (stdenv.hostPlatform.linker == "lld" && rustc ? llvmPackages.lld) # Needed when building for targets that use lld. e.g. 'wasm32-unknown-unknown'
+      "-C linker=${rustc.llvmPackages.lld}/bin/lld"
+  ++ lib.optional (
+    stdenv.hasCC && stdenv.hostPlatform.linker != "lld"
+  ) "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
 
   # build the final rustc arguments that can be different between different
@@ -74,6 +80,7 @@ in
   LIB_EXT="${stdenv.hostPlatform.extensions.library}"
   LIB_PATH="${libPath}"
   LIB_NAME="${libName}"
+  CAP_LINTS="${capLints}"
 
   CRATE_NAME='${lib.replaceStrings [ "-" ] [ "_" ] libName}'
 

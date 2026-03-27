@@ -1,43 +1,63 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  isPy27,
   fetchFromGitHub,
+  hatchling,
   django,
   redis,
   rq,
-  sentry-sdk,
+  prometheus-client,
+  pytest-django,
+  pytestCheckHook,
+  pyyaml,
+  redisTestHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "django-rq";
-  version = "3.0";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "4.0.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rq";
-    repo = pname;
-    tag = "v${version}";
-    hash = "sha256-5X3Fnud33SuC2dbM1dpSQRDF5s45AHk7/DVsQwzOmjg=";
+    repo = "django-rq";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7V3kZVK9YsJDYrME4LHc1+U2lk1qBJU8Vza7o3JzuU0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     django
     redis
     rq
-    sentry-sdk
   ];
 
-  pythonImportsCheck = [ "django_rq" ];
+  optional-dependencies = {
+    prometheus = [ prometheus-client ];
+  };
 
-  doCheck = false; # require redis-server
+  # redis hook does not support darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    pytest-django
+    pytestCheckHook
+    pyyaml
+    redisTestHook
+  ]
+  ++ lib.concatAttrValues finalAttrs.finalPackage.optional-dependencies;
+
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE=tests.settings
+  '';
+
+  meta = {
     description = "Simple app that provides django integration for RQ (Redis Queue)";
     homepage = "https://github.com/rq/django-rq";
-    changelog = "https://github.com/rq/django-rq/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    changelog = "https://github.com/rq/django-rq/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-}
+})

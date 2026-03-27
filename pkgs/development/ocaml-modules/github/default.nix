@@ -13,13 +13,13 @@
 
 buildDunePackage rec {
   pname = "github";
-  version = "4.4.1";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "mirage";
     repo = "ocaml-github";
     rev = version;
-    sha256 = "sha256-psUIiIvjVV2NTlBtHnBisWreaKKnsqIjKT2+mLnfsxg=";
+    sha256 = "sha256-nxHXOdZAvFe5/lKNw7tTJmY86xzfdFT+fW+lnKioyPM=";
   };
 
   duneVersion = "3";
@@ -34,10 +34,10 @@ buildDunePackage rec {
     stringext
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mirage/ocaml-github";
     description = "GitHub APIv3 OCaml library";
-    license = licenses.mit;
-    maintainers = with maintainers; [ niols ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ niols ];
   };
 }

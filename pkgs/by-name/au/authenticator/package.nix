@@ -21,7 +21,6 @@
   sqlite,
   wayland,
   zbar,
-  glycin-loaders,
   nix-update-script,
 }:
 
@@ -78,8 +77,6 @@ stdenv.mkDerivation (finalAttrs: {
     gappsWrapperArgs+=(
       # vp8enc preset
       --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
-      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
 
@@ -92,7 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "authenticator";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ austinbutler ] ++ lib.teams.gnome-circle.members;
+    maintainers = with lib.maintainers; [ austinbutler ];
+    teams = [ lib.teams.gnome-circle ];
     platforms = lib.platforms.linux;
   };
 })

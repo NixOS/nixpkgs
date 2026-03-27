@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   libGL,
@@ -13,26 +14,28 @@
   libglvnd,
   vulkan-loader,
   autoPatchelfHook,
+  installShellFiles,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "jay";
-  version = "1.9.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = "jay";
-    rev = "v${version}";
-    sha256 = "sha256-dUp3QYno2rB3wuJmSvBpCqowSpfMQIJqUYc0lDVqVPA=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-mm2bXxl9TaKwmeCwFz3IKznqjsfY8RKEVU/RK4zd63U=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ovQxpUrRZAP1lHlsObfbIsgIjgMp+BLf6Ul+mzDVN5o=";
+  cargoHash = "sha256-T7053eAH3IqkAxNZpYHdC6Z7JZtArrOqGMjoIccjemI=";
 
-  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
+  env.SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     autoPatchelfHook
+    installShellFiles
     pkgconf
   ];
 
@@ -54,14 +57,26 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -D etc/jay.portal $out/share/xdg-desktop-portal/portals/jay.portal
     install -D etc/jay-portals.conf $out/share/xdg-desktop-portal/jay-portals.conf
+    install -D etc/jay.desktop $out/share/wayland-sessions/jay.desktop
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd jay \
+      --bash <("$out/bin/jay" generate-completion bash) \
+      --zsh <("$out/bin/jay" generate-completion zsh) \
+      --fish <("$out/bin/jay" generate-completion fish)
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = nix-update-script { };
+    providedSessions = [ "jay" ];
+  };
+
+  meta = {
     description = "Wayland compositor written in Rust";
     homepage = "https://github.com/mahkoh/jay";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "jay";
   };
-}
+})

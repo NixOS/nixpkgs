@@ -5,38 +5,30 @@
   fetchPypi,
   git, # shells out to git
   hatchling,
-  importlib-resources,
   incremental,
   jinja2,
   mock,
   pytestCheckHook,
-  pythonOlder,
-  tomli,
   twisted,
 }:
 
 buildPythonPackage rec {
   pname = "towncrier";
-  version = "24.8.0";
+  version = "25.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ATQj7n7tECsvOTwofSLZX2bxo+oQpLqoLSmAAafxivM=";
+    hash = "sha256-7vFtKfgxrVers64yoFZXOYZiGfHr+90pfTKJTrmUDrE=";
   };
 
   build-system = [ hatchling ];
 
-  dependencies =
-    [
-      click
-      incremental
-      jinja2
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  dependencies = [
+    click
+    incremental
+    jinja2
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -51,11 +43,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "towncrier" ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to produce useful, summarised news files";
     homepage = "https://github.com/twisted/towncrier/";
     changelog = "https://github.com/twisted/towncrier/blob/${version}/NEWS.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     mainProgram = "towncrier";
   };

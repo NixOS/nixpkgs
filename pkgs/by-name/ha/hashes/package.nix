@@ -17,17 +17,17 @@
   glib,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "hashes";
-  version = "1.1.1";
+  version = "1.1.2";
 
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "zefr0x";
     repo = "hashes";
-    tag = "v${version}";
-    hash = "sha256-4khMRtKvYQkTwhiqv7FUy/jroGboNTdG1Q6wlTD4cwA=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Nyf7jED6LnsFu86zWhRh05sdGKwVAybVsGLGFFsz6eA=";
   };
 
   nativeBuildInputs = [
@@ -61,11 +61,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/zefr0x/hashes/tree/main";
-    changelog = "https://github.com/zefr0x/hashes/releases/tag/v${version}";
+    changelog = "https://github.com/zefr0x/hashes/releases/tag/v${finalAttrs.version}";
     description = "Simple hash algorithm identification GUI";
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
     license = lib.licenses.gpl3Plus;
     mainProgram = "hashes";
     platforms = lib.platforms.unix;
   };
-}
+})

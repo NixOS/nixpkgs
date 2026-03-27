@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  libsoup_2_4,
+  libsoup_3,
   webkitgtk_4_1,
   gtk3,
   glib-networking,
@@ -11,15 +11,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vimb";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "fanglingsu";
     repo = "vimb";
-    tag = version;
-    hash = "sha256-NW9B/hybSOaojKIubaxiQ+Nd5f/D4XKxPl9vUyFoX/k=";
+    tag = finalAttrs.version;
+    hash = "sha256-3h4dTjGQ0Ds2BDG0cUmbNvtEmDuizDJ0BYvpCfMz+I0=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    libsoup_2_4
+    libsoup_3
     webkitgtk_4_1
     glib-networking
     gsettings-desktop-schemas
@@ -56,4 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = lib.platforms.linux;
   };
-}
+})

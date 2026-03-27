@@ -4,49 +4,46 @@
   rustPlatform,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
+  distributed ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
-  version = "0.10.0";
+rustPlatform.buildRustPackage (finalAttrs: {
+  version = "0.14.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
-    rev = "v${version}";
-    sha256 = "sha256-VEDMeRFQKNPS3V6/DhMWxHR7YWsCzAXTzp0lO+COl08=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-vpfkWoKu1oksHmgq86QYN7fzIcptormN9ffzXbrJJLs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1kfKBN4uRbU5LjbC0cLgMqoGnOSEAdC0S7EzXlfaDPo=";
+  cargoHash = "sha256-oiB/KKxNyKu1sxlu/Ep2cgilyJPWzRkohjKL7/azVP0=";
+
+  buildFeatures = lib.optionals distributed [
+    "dist-client"
+    "dist-server"
+  ];
 
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   # Tests fail because of client server setup which is not possible inside the
   # pure environment, see https://github.com/mozilla/sccache/issues/460
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Ccache with Cloud Storage";
     mainProgram = "sccache";
     homepage = "https://github.com/mozilla/sccache";
-    changelog = "https://github.com/mozilla/sccache/releases/tag/v${version}";
-    maintainers = with maintainers; [
+    changelog = "https://github.com/mozilla/sccache/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [
       doronbehar
-      figsoda
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

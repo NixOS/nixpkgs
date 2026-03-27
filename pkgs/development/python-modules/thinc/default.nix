@@ -1,44 +1,53 @@
 {
   lib,
-  blas,
-  blis,
   buildPythonPackage,
-  catalogue,
-  confection,
+  fetchFromGitHub,
+
+  # build-system
+  blis,
   cymem,
-  cython_0,
-  fetchPypi,
-  hypothesis,
-  mock,
+  cython,
   murmurhash,
   numpy,
   preshed,
-  pydantic,
-  pytestCheckHook,
   setuptools,
+
+  # buildInputs
+  blas,
+
+  # dependencies
+  catalogue,
+  confection,
+  pydantic,
   srsly,
   wasabi,
+
+  # tests
+  hypothesis,
+  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "thinc";
-  version = "9.1.1";
+  version = "8.3.12";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IfrimG13d6bwULkEbcnqsRhS8cmpl9zJAy8+zCJ4Sko=";
+  src = fetchFromGitHub {
+    owner = "explosion";
+    repo = "thinc";
+    tag = "release-v${finalAttrs.version}";
+    hash = "sha256-8nf+AWAD7Fy50XRJDINmyk42F7KMDhGgATwqbln3r04=";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml setup.cfg \
-      --replace-fail "blis>=1.0.0,<1.1.0" blis
+    substituteInPlace pyproject.toml \
+      --replace-fail coverage.exceptions.CoverageWarning ""
   '';
 
   build-system = [
     blis
     cymem
-    cython_0
+    cython
     murmurhash
     numpy
     preshed
@@ -62,25 +71,39 @@ buildPythonPackage rec {
     wasabi
   ];
 
+  pythonImportsCheck = [ "thinc" ];
+
   nativeCheckInputs = [
     hypothesis
-    mock
     pytestCheckHook
   ];
 
+  # avoid local paths, relative imports wont resolve correctly
   preCheck = ''
-    # avoid local paths, relative imports wont resolve correctly
     mv thinc/tests tests
     rm -r thinc
   '';
 
-  pythonImportsCheck = [ "thinc" ];
+  pytestFlags = [
+    # UserWarning: Core Pydantic V1 functionality isn't compatible with Python 3.14 or greater.
+    "-Wignore::UserWarning"
+  ];
+
+  disabledTestPaths = [
+    # pydantic.v1.error_wrappers.ValidationError: 1 validation error for DefaultsSchema
+    "tests/test_config.py"
+  ];
+
+  disabledTests = [
+    # RecursionError: Stack overflow (used 8148 kB)
+    "test_pickle_with_flatten"
+  ];
 
   meta = {
     description = "Library for NLP machine learning";
     homepage = "https://github.com/explosion/thinc";
-    changelog = "https://github.com/explosion/thinc/releases/tag/v${version}";
+    changelog = "https://github.com/explosion/thinc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aborsu ];
+    maintainers = [ ];
   };
-}
+})

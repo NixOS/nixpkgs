@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-json-logger";
-  version = "3.2.1";
+  version = "4.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nhairs";
     repo = "python-json-logger";
     tag = "v${version}";
-    hash = "sha256-dM9/ehPY/BnJSNBq1BiTUpJRigdzbGb3jD8Uhx+hmKc=";
+    hash = "sha256-YFtM+YWXDCaipqhQntdGeGbTmWO5XMGfpWhgQwicxFQ=";
   };
 
   build-system = [ setuptools ];
@@ -39,10 +39,10 @@ buildPythonPackage rec {
       "test_json_default_encoder_with_timestamp"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Json Formatter for the standard python logger";
     homepage = "https://github.com/madzak/python-json-logger";
-    license = licenses.bsdOriginal;
+    license = lib.licenses.bsdOriginal;
     maintainers = [ ];
   };
 }

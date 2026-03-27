@@ -1,45 +1,38 @@
 {
-  lib,
-  fetchCrate,
-  rustPlatform,
-  pkg-config,
-  installShellFiles,
-  openssl,
   dbus,
+  fetchCrate,
+  installShellFiles,
+  lib,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  rustPlatform,
   sqlite,
   stdenv,
-  darwin,
-  testers,
-  leetcode-cli,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "leetcode-cli";
-  version = "0.4.6";
+  version = "0.5.0";
 
   src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-AYBBW9VtdvqqqiouhkS3diPcOdaQOs8Htkw9DTRX2t4=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-EafEz5MhY9f56N1LCPaW+ktYrV01r9vHCbublDnfAKg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-o2RkhYsSQKwU+dsHQvlcxAVKUjOTqg424dqrM7JRoN8=";
+  cargoHash = "sha256-8bHpNckEsJ4VWlmEaDTeMW+Txi9SQh30lK5CKKperC8=";
 
   nativeBuildInputs = [
-    pkg-config
     installShellFiles
+    pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-      dbus
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    dbus
+    openssl
+    sqlite
+  ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetcode \
@@ -48,18 +41,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/leetcode completions zsh)
   '';
 
-  passthru.tests = testers.testVersion {
-    package = leetcode-cli;
-    command = "leetcode -V";
-    version = "leetcode ${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  meta = with lib; {
-    description = "May the code be with you 👻";
-    longDescription = "Use leetcode.com in command line";
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Leetcode CLI utility";
     homepage = "https://github.com/clearloop/leetcode-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ congee ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ congee ];
     mainProgram = "leetcode";
   };
-}
+})

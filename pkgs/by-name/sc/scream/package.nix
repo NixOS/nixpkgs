@@ -16,14 +16,14 @@
   libpcap,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scream";
   version = "4.0";
 
   src = fetchFromGitHub {
     owner = "duncanthrax";
     repo = "scream";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-lP5mdNhZjkEVjgQUEsisPy+KXUqsE6xj6dFWcgD+VGM=";
   };
 
@@ -57,12 +57,12 @@ stdenv.mkDerivation rec {
     $out/bin/scream -h 2>&1 | grep -q Usage:
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audio receiver for the Scream virtual network sound card";
     homepage = "https://github.com/duncanthrax/scream";
-    license = licenses.mspl;
-    platforms = platforms.linux;
+    license = lib.licenses.mspl;
+    platforms = lib.platforms.linux;
     mainProgram = "scream";
-    maintainers = with maintainers; [ arcnmx ];
+    maintainers = with lib.maintainers; [ arcnmx ];
   };
-}
+})

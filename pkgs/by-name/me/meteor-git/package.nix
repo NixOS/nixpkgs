@@ -4,15 +4,15 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "meteor-git";
-  version = "0.26.0";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "stefanlogue";
     repo = "meteor";
-    rev = "v${version}";
-    hash = "sha256-DWnwofNJhILdVITRDh8MNlGl6PSENCS2PkaFm1o+MW8=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-oqfJDIT+4n9ySwmN5DoTvAcEY9wmI/bhVSYFHudMwl0=";
   };
 
   vendorHash = "sha256-jKd/eJwp5SZvTrP3RN7xT7ibAB0PQondGR3RT+HQXIo=";
@@ -24,4 +24,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nebunebu ];
   };
-}
+})

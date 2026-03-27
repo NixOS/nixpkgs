@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "portugueslab";
-    repo = pname;
+    repo = "lightparam";
     rev = "v${version}";
     sha256 = "13hlkvjcyz2lhvlfqyavja64jccbidshhs39sl4fibrn9iq34s3i";
   };
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/portugueslab/lightparam";
     description = "Another attempt at parameters in Python";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ tbenst ];
+    maintainers = [ ];
   };
 }

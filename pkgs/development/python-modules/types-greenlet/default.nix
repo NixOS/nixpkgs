@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-greenlet";
-  version = "3.1.0.20250401";
+  version = "3.3.0.20251206";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_greenlet";
     inherit version;
-    hash = "sha256-lJOJtkw0ypRy9jNRien+Cy6XBENtTwhQ456bcUWQkII=";
+    hash = "sha256-PhqzEqtxVMCO3C6BEPvwDZkgMj7cEUStRZt7AFIGMFU=";
   };
 
   build-system = [ setuptools ];

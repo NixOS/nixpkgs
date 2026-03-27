@@ -4,32 +4,32 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "chamber";
-  version = "3.1.1";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "segmentio";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-1ySOlP0sFk3+IRt/zstZK6lEE2pzoVSiZz3wFxdesgc=";
+    repo = "chamber";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vmWRbQzgZJA2dQMdmZ/dLFlYb5O2yAexBZt3Oc2FLMM=";
   };
 
   env.CGO_ENABLED = 0;
 
-  vendorHash = "sha256-KlouLjW9hVKFi9uz34XHd4CzNOiyO245QNygkB338YQ=";
+  vendorHash = "sha256-Yin8hNavlcANY8ynmzceLVHUfgk/MbH9Xx9MfW12E+0=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.Version=v${version}"
+    "-X main.Version=v${finalAttrs.version}"
   ];
 
-  meta = with lib; {
-    description = "A tool for managing secrets by storing them in AWS SSM Parameter Store";
+  meta = {
+    description = "Tool for managing secrets by storing them in AWS SSM Parameter Store";
     homepage = "https://github.com/segmentio/chamber";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalekseev ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalekseev ];
     mainProgram = "chamber";
   };
-}
+})

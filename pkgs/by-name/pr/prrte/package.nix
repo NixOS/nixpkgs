@@ -16,15 +16,15 @@
   pmix,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "prrte";
-  version = "3.0.9";
+  version = "3.0.13";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
-    rev = "v${version}";
-    hash = "sha256-wLM+txjngY5gh/+yiaSKrenG6oIzF2dPgMumIGyCsXU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-T/iHmSO2isyIjsaiTrNYeTiBobM/9eg7gTP12m7ehno=";
     fetchSubmodules = true;
   };
 
@@ -75,6 +75,12 @@ stdenv.mkDerivation rec {
     pmix
   ];
 
+  # Setting this manually, required for RiscV cross-compile
+  configureFlags = [
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
+  ];
+
   enableParallelBuilding = true;
 
   meta = {
@@ -84,4 +90,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ markuskowa ];
     platforms = lib.platforms.unix;
   };
-}
+})

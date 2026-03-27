@@ -4,29 +4,29 @@
   colorlog,
   fetchFromGitHub,
   lib,
+  python-dateutil,
   setuptools,
   websockets,
 }:
 
 buildPythonPackage rec {
   pname = "livisi";
-  version = "0.0.25";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "planbnet";
     repo = "livisi";
     tag = "v${version}";
-    hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
+    hash = "sha256-5TRJfI4irg2/ZxpfgzShXE08HWU2aWLR8zGbrZKpwbc=";
   };
-
-  pythonRelaxDeps = [ "colorlog" ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
     colorlog
+    python-dateutil
     websockets
   ];
 
@@ -36,6 +36,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
+    changelog = "https://github.com/planbnet/livisi/releases/tag/${src.tag}";
     description = "Connection library for the abandoned Livisi Smart Home system";
     homepage = "https://github.com/planbnet/livisi";
     license = lib.licenses.asl20;

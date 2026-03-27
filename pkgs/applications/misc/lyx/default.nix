@@ -1,24 +1,25 @@
 {
   fetchurl,
   lib,
-  mkDerivation,
+  stdenv,
   pkg-config,
   python3,
   file,
   bc,
   qtbase,
+  wrapQtAppsHook,
   qtsvg,
   hunspell,
   makeWrapper, # , mythes, boost
 }:
 
-mkDerivation rec {
-  version = "2.4.3";
+stdenv.mkDerivation rec {
+  version = "2.4.4";
   pname = "lyx";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.4.x/${pname}-${version}.tar.xz";
-    hash = "sha256-+mdh9ZilkVr1CkI90qYHBIvbxUCm1XI4X+Qi31ge6/Y=";
+    hash = "sha256-/6zTdIDzIPPz+PMERf5AiX6d9EyU7oe6BBPjZAhvS5A=";
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
@@ -27,6 +28,7 @@ mkDerivation rec {
     makeWrapper
     python3
     qtbase
+    wrapQtAppsHook
   ];
   buildInputs = [
     qtbase
@@ -52,11 +54,11 @@ mkDerivation rec {
   # python is run during runtime to do various tasks
   qtWrapperArgs = [ " --prefix PATH : ${python3}/bin" ];
 
-  meta = with lib; {
+  meta = {
     description = "WYSIWYM frontend for LaTeX, DocBook";
-    homepage = "http://www.lyx.org";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vcunat ];
-    platforms = platforms.linux;
+    homepage = "https://www.lyx.org";
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.vcunat ];
+    platforms = lib.platforms.linux;
   };
 }

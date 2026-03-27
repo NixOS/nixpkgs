@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   pname = "parametrize-from-file";
   version = "0.20.0";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -55,11 +55,11 @@ buildPythonPackage rec {
     "test_load_suite_params_err"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Read unit test parameters from config files";
     homepage = "https://github.com/kalekundert/parametrize_from_file";
     changelog = "https://github.com/kalekundert/parametrize_from_file/blob/v${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jpetrucciani ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jpetrucciani ];
   };
 }

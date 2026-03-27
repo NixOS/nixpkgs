@@ -1,64 +1,71 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  jre,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stegsolve";
-  version = "1.3";
+  version = "1.3.1";
 
-  src = fetchurl {
-    # No versioned binary is published :(
-    url = "https://web.archive.org/web/20230319054116if_/http://www.caesum.com/handbook/Stegsolve.jar";
-    sha256 = "0np5zb28sg6yzkp1vic80pm8iiaamvjpbf5dxmi9kwvqcrh4jyq0";
+  src = fetchFromGitHub {
+    owner = "fee1-dead";
+    repo = "Stegsolve";
+    rev = finalAttrs.version;
+    hash = "sha256-WiIZymeYnub0JilWGLXKhQKEoO1hce5DarbEjp+rTGQ==";
   };
-
-  dontUnpack = true;
-
-  desktopItems = [
-    (makeDesktopItem {
-      type = "Application";
-      name = finalAttrs.pname;
-      desktopName = "Stegsolve";
-      comment = "A steganographic image analyzer, solver and data extractor for challanges";
-      exec = finalAttrs.pname;
-      categories = [ "Graphics" ];
-    })
-  ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
+  buildInputs = [ jdk ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    mkdir -p out/
+    javac -d out/ -sourcepath src/ -classpath out/ -encoding utf8 src/**/*.java
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    export JAR=$out/share/java/stegsolve/stegsolve.jar
-    install -D $src $JAR
-    makeWrapper ${jre}/bin/java $out/bin/stegsolve \
-      --add-flags "-jar $JAR"
+    mkdir -p $out/lib/
+    mv out $out/lib/stegsolve
+
+    makeWrapper ${jdk}/bin/java $out/bin/stegsolve \
+      --add-flags "-classpath $out/lib/stegsolve stegsolve.StegSolve"
 
     runHook postInstall
   '';
 
-  meta = with lib; {
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = "stegsolve";
+      desktopName = "Stegsolve";
+      comment = "A steganographic image analyzer, solver and data extractor for challanges";
+      exec = "stegsolve";
+      categories = [ "Graphics" ];
+    })
+  ];
+
+  meta = {
     description = "Steganographic image analyzer, solver and data extractor for challanges";
     homepage = "https://www.wechall.net/forum/show/thread/527/Stegsolve_1.3/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = {
-      fullName = "Cronos License";
-      url = "http://www.caesum.com/legal.php";
-      free = false;
-      redistributable = true;
-    };
-    maintainers = with maintainers; [ emilytrau ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      emilytrau
+      fee1-dead
+    ];
+    platforms = lib.platforms.all;
     mainProgram = "stegsolve";
   };
 })

@@ -21,41 +21,47 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.3.4";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CY5Emg5TsMVs++2EukhVzqn9440kF/BO8HZGQgCpGu4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-ihg7sos2pyyZjXiYMct/gg/ianiu0yagNtXio+A7J3c=";
   };
+
+  # Setting cpu doesn't seem to work (or maybe isn't enough / gets overwritten by the wrapper's arch flag?), errors about unsupported instructions for target
+  # (this is for code that gets executed conditionally if the cpu at runtime supports their features, so setting this should be fine)
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'ASMFLAGS  -pipe -mcpu=cortex-a76' 'ASMFLAGS  -pipe -march=armv8.2-a+fp16+dotprod'
+  '';
 
   nativeBuildInputs = [
     cmake
     python3
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "NOGIT" true)
+  cmakeFlags = [
+    (lib.cmakeBool "NOGIT" true)
 
-      # Arch mega-option
-      (lib.cmakeBool "ARM64" stdenv.hostPlatform.isAarch64)
-      (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
-      (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
-      (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
-      (lib.cmakeBool "LD80BITS" true)
-      (lib.cmakeBool "NOALIGN" true)
-    ]
-    ++ [
-      # Arch dynarec
-      (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
-      (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
-      (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
-    ];
+    # Arch mega-option
+    (lib.cmakeBool "ARM64" stdenv.hostPlatform.isAarch64)
+    (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
+    (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+    (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
+    (lib.cmakeBool "LD80BITS" true)
+    (lib.cmakeBool "NOALIGN" true)
+  ]
+  ++ [
+    # Arch dynarec
+    (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
+    (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
+    (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -76,20 +82,19 @@ stdenv.mkDerivation (finalAttrs: {
     $out/bin/box64 -v
 
     echo Checking if Dynarec option was respected
-    $out/bin/box64 -v | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec
+    $out/bin/box64 -v 2>&1 | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec
 
     runHook postInstallCheck
   '';
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
-    tests.hello =
-      runCommand "box64-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
-        # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
-        # tell what problems the emulator has run into.
-        ''
-          BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version | tee $out
-        '';
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      allowedVersions = "\\.[02468]$";
+    };
+    tests.hello = runCommand "box64-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+      BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version 2>&1 | tee $out
+    '';
   };
 
   meta = {

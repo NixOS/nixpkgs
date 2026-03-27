@@ -4,7 +4,6 @@
   certbot,
   cloudflare,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -13,7 +12,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   inherit (certbot) src version;
-  disabled = pythonOlder "3.9";
 
   sourceRoot = "${src.name}/certbot-dns-cloudflare";
 
@@ -27,12 +25,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
+  pytestFlags = [
+    "-pno:cacheprovider"
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
-    "-W"
-    "ignore::DeprecationWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = certbot.meta // {

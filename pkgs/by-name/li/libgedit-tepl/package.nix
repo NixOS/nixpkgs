@@ -15,11 +15,12 @@
   pkg-config,
   gtk-doc,
   docbook-xsl-nons,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-tepl";
-  version = "6.12.0";
+  version = "6.14.0";
 
   outputs = [
     "out"
@@ -32,23 +33,22 @@ stdenv.mkDerivation rec {
     group = "World";
     owner = "gedit";
     repo = "libgedit-tepl";
-    rev = version;
-    hash = "sha256-s3b7wj6b2SM0+i0vXUDDhnspgPcsRAsA5kLblh0orJE=";
+    tag = finalAttrs.version;
+    hash = "sha256-KtmExJCEfa4c6alrtWOLNSKZUs65tZ7p9zcT9f8ZC+k=";
   };
 
   strictDeps = true;
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      gobject-introspection
-      pkg-config
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    gobject-introspection
+    pkg-config
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     icu
@@ -62,14 +62,15 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
   ];
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { ignoredVersions = "(alpha|beta|rc).*"; };
+
+  meta = {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
-    maintainers = with maintainers; [
-      manveru
+    maintainers = with lib.maintainers; [
       bobby285271
     ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.linux;
   };
-}
+})

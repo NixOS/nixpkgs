@@ -8,19 +8,20 @@
   ninja,
   stdenv,
   tacent,
-  xorg,
+  libx11,
+  libxcb,
   zenity,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tacentview";
-  version = "1.0.46";
+  version = "1.0.46-unstable-2025-10-12";
 
   src = fetchFromGitHub {
     owner = "bluescan";
     repo = "tacentview";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-d4A26p1hmkYEZ+h6kRbHHr4QmAc3PMe3qYdkeKIRGkU=";
+    rev = "51569b34ecd3dac9c40106b92deceb4b56feb5de";
+    hash = "sha256-SblGqUiwYg+Bk17H41R3ytG2SQH/YfrYskyZOi5QSIc=";
   };
 
   nativeBuildInputs = [
@@ -33,8 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     stdenv.cc.cc.lib
     tacent
-    xorg.libX11
-    xorg.libxcb
+    libx11
+    libxcb
     zenity
   ];
 

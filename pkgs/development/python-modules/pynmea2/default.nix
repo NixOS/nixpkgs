@@ -5,15 +5,12 @@
   fetchpatch,
   pytestCheckHook,
   setuptools,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pynmea2";
   version = "1.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -40,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Knio/pynmea2";
     changelog = "https://github.com/Knio/pynmea2/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

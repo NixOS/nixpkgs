@@ -37,7 +37,7 @@ buildNpmPackage rec {
   ];
 
   # workaround for https://github.com/webpack/webpack/issues/14532
-  NODE_OPTIONS = "--openssl-legacy-provider";
+  env.NODE_OPTIONS = "--openssl-legacy-provider";
 
   postInstall =
     let
@@ -45,7 +45,8 @@ buildNpmPackage rec {
         bash
         nodejs
         which
-      ] ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ v4l-utils ];
       crc32Patch = replaceVars ./fix-musl-detection.patch {
         isMusl = if stdenv.hostPlatform.isMusl then "true" else "false";
       };
@@ -70,9 +71,9 @@ buildNpmPackage rec {
       popd
     '';
 
-  meta = with lib; {
-    description = "Resource manager for TV tuners.";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ midchildan ];
+  meta = {
+    description = "Resource manager for TV tuners";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ midchildan ];
   };
 }

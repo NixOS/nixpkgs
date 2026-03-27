@@ -1,9 +1,7 @@
 {
-  AppKit,
   cmake,
   fetchFromGitHub,
   fetchpatch2,
-  Foundation,
   jsoncpp,
   lib,
   libGL,
@@ -13,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvr";
-  version = "2.5.1";
+  version = "2.12.14";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "openvr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-bIKjZ7DvJVmDK386WgXaAFQrS0E1TNEUMhfQp7FNnvk=";
+    hash = "sha256-G+xoFIabSbYEaWATGSzHP3SWkaqQhQQ6kMkYfjBXBUU=";
   };
 
   patches = [
@@ -48,15 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs =
-    [
-      jsoncpp
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      AppKit
-      Foundation
-    ];
+  buildInputs = [
+    jsoncpp
+    libGL
+  ];
 
   cmakeFlags = [
     "-DUSE_SYSTEM_JSONCPP=ON"

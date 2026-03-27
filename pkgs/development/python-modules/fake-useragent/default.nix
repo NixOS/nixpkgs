@@ -2,8 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  importlib-metadata,
-  importlib-resources,
   setuptools,
   pythonOlder,
   pytestCheckHook,
@@ -11,16 +9,14 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "fake-useragent";
     repo = "fake-useragent";
     tag = version;
-    hash = "sha256-pEZfbFw9JWmR4Zf9AH0mw7zBJVbo6v9iUTU0awHSAt4=";
+    hash = "sha256-CaFIXcS5y6m9mAfy4fniuA4VPTl6JfFq1WHnlLFz6fA=";
   };
 
   postPatch = ''
@@ -28,10 +24,6 @@ buildPythonPackage rec {
   '';
 
   build-system = [ setuptools ];
-
-  dependencies =
-    lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

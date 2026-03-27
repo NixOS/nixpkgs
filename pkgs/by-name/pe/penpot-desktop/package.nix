@@ -2,29 +2,30 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron,
+  electron_39,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
   makeWrapper,
-  nodejs_22,
+  nodejs_24,
   stdenv,
 }:
 
 let
   description = "Unofficial desktop application for the open-source design tool, Penpot";
   icon = "penpot";
-  nodejs = nodejs_22;
+  nodejs = nodejs_24;
+  electron = electron_39;
 in
 buildNpmPackage rec {
   pname = "penpot-desktop";
-  version = "0.11.0";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "author-more";
     repo = "penpot-desktop";
     tag = "v${version}";
-    hash = "sha256-33LAhR0L7pAnS27dz5DuqgfUllyAFA9JVZRmrHoajE4=";
+    hash = "sha256-2thLD8ECfHZMD3Yw/lQgnCqqEGxCE1AXsHGP9JKof+Q=";
   };
 
   makeCacheWritable = true;
@@ -32,7 +33,7 @@ buildNpmPackage rec {
     "--engine-strict"
     "--legacy-peer-deps"
   ];
-  npmDepsHash = "sha256-BR51Oi9Ffxy7d0fBkSQ6Iz/PVi+ghIaLqzm3Loq6aDo=";
+  npmDepsHash = "sha256-uyt9gmmytDwSCnXk9HUBwJoPMcqMt2wLwHHmY2Kx0yk=";
   # Do not run the default build script as it leads to errors caused by the electron-builder configuration
   dontNpmBuild = true;
 

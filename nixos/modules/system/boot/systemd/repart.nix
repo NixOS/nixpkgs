@@ -72,6 +72,29 @@ in
         example = "require";
         default = "refuse";
       };
+
+      discard = lib.mkOption {
+        type = lib.types.bool;
+        description = ''
+          Controls whether to issue the BLKDISCARD I/O control command on the
+          space taken up by any added partitions or on the space in between them.
+          Usually, it's a good idea to issue this request since it tells the underlying
+          hardware that the covered blocks shall be considered empty, improving performance.
+
+          See {manpage}`systemd-repart(8)` for details.
+        '';
+        default = true;
+      };
+
+      extraArgs = lib.mkOption {
+        description = ''
+          Extra command-line arguments to pass to systemd-repart.
+
+          See {manpage}`systemd-repart(8)` for all available options.
+        '';
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+      };
     };
 
     systemd.repart = {
@@ -125,7 +148,8 @@ in
           'boot.initrd.systemd.repart.enable' requires 'boot.initrd.systemd.enable' to be enabled.
         '';
       }
-    ] ++ partitionAssertions;
+    ]
+    ++ partitionAssertions;
 
     # systemd-repart uses loopback devices for partition creation
     boot.initrd.availableKernelModules = lib.optional initrdCfg.enable "loop";
@@ -163,6 +187,8 @@ in
                                   --definitions=/etc/repart.d \
                                   --dry-run=no \
                                   --empty=${initrdCfg.empty} \
+                                  --discard=${lib.boolToString initrdCfg.discard} \
+                                  ${utils.escapeSystemdExecArgs initrdCfg.extraArgs} \
                                   ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
               ''
             ];

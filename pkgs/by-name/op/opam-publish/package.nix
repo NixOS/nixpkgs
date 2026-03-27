@@ -17,15 +17,15 @@ let
     ;
 in
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "opam-publish";
-  version = "2.5.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "ocaml-opam";
     repo = "opam-publish";
-    rev = version;
-    hash = "sha256-HjMba80c4vOEm9p7r0cfFBf3y0XoFf986XjTDCPzn38=";
+    tag = finalAttrs.version;
+    hash = "sha256-yaFkR+MxkN6/skXx9euKVjTGXk9DraxDj+/2XQuHK4I=";
   };
 
   buildInputs = [
@@ -38,14 +38,14 @@ buildDunePackage rec {
     github-unix
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ocaml-opam/opam-publish";
     description = "Tool to ease contributions to opam repositories";
     mainProgram = "opam-publish";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Only
       ocamlLgplLinkingException
     ];
-    maintainers = with maintainers; [ niols ];
+    maintainers = with lib.maintainers; [ niols ];
   };
-}
+})

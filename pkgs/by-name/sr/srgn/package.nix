@@ -3,36 +3,36 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  stdenv,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "srgn";
-  version = "0.13.6";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
-    rev = "srgn-v${version}";
-    hash = "sha256-q6LFNymfCkKhmQXsJvKOya9WPchURI1SBdk64bpmsts=";
+    rev = "srgn-v${finalAttrs.version}";
+    hash = "sha256-K9pHtsPD3Ab0I68y+QjHhzQwYBIQoJ0rc/fRomBDzVg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qS1I4+pL3K4HIXNFID/ajldxIJJJXhpi0hxivHWk9Vg=";
+  cargoHash = "sha256-jgxA8T7Q7QXw7J53SDHpLEv2mFtgv89uGrbKlxzmhJQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash zsh fish; do
       installShellCompletion --cmd srgn "--$shell" <("$out/bin/srgn" --completions "$shell")
     done
   '';
 
-  meta = with lib; {
-    description = "A code surgeon for precise text and code transplantation";
-    license = licenses.mit;
-    maintainers = with maintainers; [ magistau ];
+  meta = {
+    description = "Code surgeon for precise text and code transplantation";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ magistau ];
     mainProgram = "srgn";
-    homepage = "https://github.com/${src.owner}/${src.repo}/";
-    downloadPage = "https://github.com/${src.owner}/${src.repo}/releases/tag/${src.rev}";
-    changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/CHANGELOG.md";
+    homepage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/";
+    downloadPage = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/${finalAttrs.src.owner}/${finalAttrs.src.repo}/blob/${finalAttrs.src.rev}/CHANGELOG.md";
   };
-}
+})

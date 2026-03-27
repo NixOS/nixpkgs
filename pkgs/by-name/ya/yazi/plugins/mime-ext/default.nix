@@ -5,18 +5,17 @@
 }:
 mkYaziPlugin {
   pname = "mime-ext.yazi";
-  version = "25.4.4-unstable-2025-04-04";
+  version = "0-unstable-2026-01-12";
 
   src = fetchFromGitHub {
     owner = "yazi-rs";
     repo = "plugins";
-    rev = "9a095057d698aaaedc4dd23d638285bd3fd647e9";
-    hash = "sha256-Lx+TliqMuaXpjaUtjdUac7ODg2yc3yrd1mSWJo9Mz2Q=";
+    rev = "75f6f7276fadf306597c2d2b4e264335fa0937cf";
+    hash = "sha256-iiV6WSLdc7LPjXr+DRwVKzgJr+0Z8hO2eil5cdAgW4g=";
   };
 
   meta = {
-    description = "Previewing archive contents with mime-ext";
-    homepage = "https://yazi-rs.github.io";
+    description = "Mime-type provider based on a file extension database, replacing the builtin file to speed up mime-type retrieval at the expense of accuracy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ khaneliman ];
   };

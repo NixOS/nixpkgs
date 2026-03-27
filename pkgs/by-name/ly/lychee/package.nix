@@ -1,30 +1,51 @@
 {
   callPackage,
   lib,
-  rustPlatform,
+  stdenv,
+  buildPackages,
   fetchFromGitHub,
-  pkg-config,
-  openssl,
+  rustPlatform,
+  installShellFiles,
   testers,
+  cacert,
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  canRun = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  lychee = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/lychee${stdenv.hostPlatform.extensions.executable}";
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lychee";
-  version = "0.18.1";
+  version = "0.23.0";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
-    repo = pname;
-    rev = "lychee-v${version}";
-    hash = "sha256-aT7kVN2KM90M193h4Xng6+v69roW0J4GLd+29BzALhI=";
+    repo = "lychee";
+    tag = "lychee-v${finalAttrs.version}";
+    leaveDotGit = true;
+    postFetch = ''
+      GIT_DATE=$(git -C $out/.git show -s --format=%cs)
+      substituteInPlace $out/lychee-bin/build.rs \
+        --replace-fail \
+          '("cargo:rustc-env=GIT_DATE={}", git_date())' \
+          '("cargo:rustc-env=GIT_DATE={}", "'$GIT_DATE'")'
+      rm -rf $out/.git
+    '';
+    hash = "sha256-Rfdys16a4N6B3NsmPsB3OpKjLGElFYvd4UtiRipy8iQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TKKhT4AhV2uzXOHRnKHiZJusNoCWUliKmKvDw+Aeqnc=";
+  cargoHash = "sha256-5KL/PmBSU8xkOE9/w7uUBkJSOBPsj3Z4o/2VmzA/f3Q=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
-  buildInputs = [ openssl ];
+  nativeCheckInputs = [ cacert ];
+
+  postFixup = lib.optionalString canRun ''
+    ${lychee} --generate man > lychee.1
+    installManPage lychee.1
+  '';
 
   cargoTestFlags = [
     # don't run doctests since they tend to use the network
@@ -36,8 +57,8 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     #  Network errors for all of these tests
     # "error reading DNS system conf: No such file or directory (os error 2)" } }
-    "--skip=archive::wayback::tests::wayback_suggestion"
-    "--skip=archive::wayback::tests::wayback_suggestion_unknown_url"
+    "--skip=archive::wayback::tests::wayback_suggestion_real_unknown"
+    "--skip=archive::wayback::tests::wayback_api_no_breaking_changes"
     "--skip=cli::test_dont_dump_data_uris_by_default"
     "--skip=cli::test_dump_data_uris_in_verbose_mode"
     "--skip=cli::test_exclude_example_domains"
@@ -45,6 +66,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=cli::test_local_file"
     "--skip=client::tests"
     "--skip=collector::tests"
+    "--skip=commands::generate::tests::test_examples_work"
     "--skip=src/lib.rs"
     # Color error for those tests as we are not in a tty
     "--skip=formatters::response::color::tests::test_format_response_with_error_status"
@@ -63,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
-    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${finalAttrs.version}";
     license = with lib.licenses; [
       asl20
       mit
@@ -74,4 +96,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "lychee";
   };
-}
+})

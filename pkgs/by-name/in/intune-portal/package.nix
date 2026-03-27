@@ -4,12 +4,12 @@
   fetchurl,
   dpkg,
   libuuid,
-  xorg,
+  libx11,
   curlMinimal,
-  openssl,
+  openssl_3,
   libsecret,
-  webkitgtk_4_0,
-  libsoup_2_4,
+  webkitgtk_4_1,
+  libsoup_3,
   gtk3,
   atk,
   pango,
@@ -17,18 +17,23 @@
   sqlite,
   zlib,
   systemd,
-  msalsdk-dbusclient,
   pam,
+  p11-kit,
   dbus,
   nixosTests,
 }:
+let
+  curlMinimal_openssl_3 = curlMinimal.override {
+    openssl = openssl_3;
+  };
+in
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2405.17-jammy";
+  version = "1.2511.7-noble";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
-    hash = "sha256-WpVPWzh8jN092MaY2rMXhLfpVXsflMl9hOY9nNGJlLk=";
+    url = "https://packages.microsoft.com/ubuntu/24.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
+    hash = "sha256-MHvAmkemx28ZNcVloFNxJ03YbxrgVPvB7OOMYR6Oyo8=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -39,20 +44,20 @@ stdenv.mkDerivation rec {
         intune = lib.makeLibraryPath [
           stdenv.cc.cc
           libuuid
-          xorg.libX11
-          curlMinimal
-          openssl
+          libx11
+          curlMinimal_openssl_3
+          openssl_3
           libsecret
-          webkitgtk_4_0
-          libsoup_2_4
+          webkitgtk_4_1
+          libsoup_3
           gtk3
           atk
           glib
           pango
+          p11-kit
           sqlite
           zlib
           systemd
-          msalsdk-dbusclient
           dbus
         ];
         pam = lib.makeLibraryPath [ pam ];
@@ -104,10 +109,10 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) intune; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Microsoft Intune Portal allows you to securely access corporate apps, data, and resources";
     homepage = "https://www.microsoft.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ rhysmdnz ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];

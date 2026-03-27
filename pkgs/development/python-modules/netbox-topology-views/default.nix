@@ -4,25 +4,31 @@
   fetchFromGitHub,
   setuptools,
   netbox,
-  pythonAtLeast,
+  django,
+  netaddr,
+  python,
 }:
 buildPythonPackage rec {
   pname = "netbox-topology-views";
-  version = "4.2.1";
+  version = "4.5.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.13";
+  disabled = python.pythonVersion != netbox.python.pythonVersion;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox-topology-views";
     tag = "v${version}";
-    hash = "sha256-ysupqyRFOKVa+evNbfSdW2W57apI0jVEU92afz6+AaE=";
+    hash = "sha256-1KEkNfo++lX0uF0xS9JOyG7dQBQYYo2cSGkjicJ5+vE=";
   };
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ netbox ];
+  nativeCheckInputs = [
+    netbox
+    django
+    netaddr
+  ];
 
   preFixup = ''
     export PYTHONPATH=${netbox}/opt/netbox/netbox:$PYTHONPATH

@@ -1,27 +1,34 @@
 {
   lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  # Mitmproxy requirements
-  aioquic,
+  aioquic_1_2,
   argon2-cffi,
   asgiref,
+  bcrypt,
   brotli,
+  buildPythonPackage,
   certifi,
   cryptography,
+  fetchFromGitHub,
   flask,
   h11,
   h2,
   hyperframe,
+  hypothesis,
   kaitaistruct,
   ldap3,
   mitmproxy-rs,
   msgpack,
-  passlib,
+  nixosTests,
   publicsuffix2,
   pyopenssl,
   pyparsing,
   pyperclip,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-timeout,
+  pytest-xdist,
+  pytestCheckHook,
+  requests,
   ruamel-yaml,
   setuptools,
   sortedcontainers,
@@ -29,43 +36,42 @@
   urwid,
   wsproto,
   zstandard,
-  # Additional check requirements
-  hypothesis,
-  pytest-asyncio,
-  pytest-timeout,
-  pytest-xdist,
-  pytestCheckHook,
-  requests,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.1.3";
+  version = "12.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
     tag = "v${version}";
-    hash = "sha256-gTeXxNQWVMQYiGdIyy7SS6JcuYG16KLnjxBBdjhi+lE=";
+    hash = "sha256-z3JJOql4JacXSeo6dRbKOaL+kLlSnpKQkeXzZdzLQJo=";
   };
 
   pythonRelaxDeps = [
-    "h2"
-    "passlib"
-    "protobuf"
+    # requested by maintainer
+    "brotli"
+    # just keep those
+    "typing-extensions"
+
+    "urwid"
+    "asgiref"
     "pyparsing"
     "ruamel.yaml"
-    "urwid"
+    "tornado"
+    "wsproto"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    aioquic
+    aioquic_1_2
     argon2-cffi
     asgiref
     brotli
+    bcrypt
     certifi
     cryptography
     flask
@@ -76,7 +82,6 @@ buildPythonPackage rec {
     ldap3
     mitmproxy-rs
     msgpack
-    passlib
     publicsuffix2
     pyopenssl
     pyparsing
@@ -92,6 +97,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytest-asyncio
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -99,6 +105,12 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  postPatch = ''
+    # Rename to fix pytest exception
+    substituteInPlace pyproject.toml \
+      --replace-warn "[tool.pytest.individual_coverage]" "[tool.mitmproxy.individual_coverage]"
+  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -126,6 +138,9 @@ buildPythonPackage rec {
     "test_errorcheck"
     "test_dns"
     "test_order"
+    # fails in pytest asyncio internals
+    "test_decorator"
+    "test_exception_handler"
   ];
 
   disabledTestPaths = [
@@ -143,11 +158,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mitmproxy" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) mitmproxy;
+  };
+
+  meta = {
     description = "Man-in-the-middle proxy";
     homepage = "https://mitmproxy.org/";
-    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/mitmproxy/mitmproxy/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    mainProgram = "mitmproxy";
   };
 }

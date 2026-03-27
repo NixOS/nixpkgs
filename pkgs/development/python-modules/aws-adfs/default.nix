@@ -11,7 +11,6 @@
   poetry-core,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-kerberos,
   toml,
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "aws-adfs";
-  version = "2.11.2";
+  version = "2.12.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "venth";
     repo = "aws-adfs";
     tag = "v${version}";
-    hash = "sha256-ZzQ92VBa8CApd0WkfPrUZsEZICK2fhwmt45P2sx2mK0=";
+    hash = "sha256-U1ptI/VynHArJ1SwX4LanHB0f4U38YZO9XDCXcLBu+s=";
   };
 
   build-system = [
@@ -37,6 +34,8 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "configparser"
+    "fido2"
+    "lxml"
     "requests-kerberos"
   ];
 
@@ -63,12 +62,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aws_adfs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to ease AWS CLI authentication against ADFS";
     homepage = "https://github.com/venth/aws-adfs";
-    changelog = "https://github.com/venth/aws-adfs/releases/tag/v${version}";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ bhipple ];
+    changelog = "https://github.com/venth/aws-adfs/releases/tag/${src.tag}";
+    license = lib.licenses.psfl;
     mainProgram = "aws-adfs";
   };
 }

@@ -1,3 +1,4 @@
+# nixpkgs-update: no auto update
 {
   lib,
   stdenv,
@@ -6,14 +7,14 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tt-rss";
-  version = "0-unstable-2025-03-19";
+  version = "0-unstable-2025-11-01";
 
   src = fetchgit {
-    url = "https://git.tt-rss.org/fox/tt-rss.git";
-    rev = "5dcb8db933f1e49526137a55638d26f4d8d2d182";
-    hash = "sha256-8iHWrfyV2Gm4P91E/1Y8Z58Um4r5a1mwJ1Y7vNYpIM8=";
+    url = "https://github.com/tt-rss/tt-rss.git";
+    rev = "912162ad811869af334232d32fe6c79b3cf095ca";
+    hash = "sha256-2U9V4MTWGNZzdVr9AlH/S7KdBGPap+mm5/KieWLcF1A=";
   };
 
   installPhase = ''
@@ -24,25 +25,25 @@ stdenv.mkDerivation rec {
 
     # see the code of Config::get_version(). you can check that the version in
     # the footer of the preferences pages is not UNKNOWN
-    echo "${version}" > $out/version_static.txt
+    echo "${finalAttrs.version}" > $out/version_static.txt
 
     runHook postInstall
   '';
 
   passthru = {
-    inherit (nixosTests) tt-rss;
+    tests = { inherit (nixosTests) tt-rss; };
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Web-based news feed (RSS/Atom) aggregator";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://tt-rss.org";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       gileri
       globin
       zohl
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})

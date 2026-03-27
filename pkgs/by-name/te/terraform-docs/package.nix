@@ -4,19 +4,28 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  testers,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "terraform-docs";
-  version = "0.20.0";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "terraform-docs";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-DiKoYAe7vcNy35ormKHYZcZrGK/MEb6VmcHWPgrbmUg=";
+    repo = "terraform-docs";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vucMB0S8fYVTCqX+H29XdJTG9uQOMJii8aLAhiIGilg=";
   };
 
-  vendorHash = "sha256-ynyYpX41LJxGhf5kF2AULj+VKROjsvTjVPBnqG+JGSg=";
+  vendorHash = "sha256-jk5NjGxFK8iSOK1RoqeIqFC52BLRDi2vhmYJwm94IUY=";
+
+  ldflags = [
+    "-s"
+    "-w"
+  ];
+
+  env.CGO_ENABLED = 0;
 
   excludedPackages = [ "scripts" ];
 
@@ -29,11 +38,19 @@ buildGoModule rec {
     installShellCompletion terraform-docs.{bash,fish,zsh}
   '';
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = "v${finalAttrs.version}";
+  };
+
+  meta = {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      zimbatm
+      anthonyroussel
+    ];
   };
-}
+})

@@ -2,51 +2,48 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libsForQt5,
-  openrgb,
   glib,
   libgtop,
   lm_sensors,
   pkg-config,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openrgb-plugin-hardwaresync";
-  version = "0.9";
+  version = "1.0rc2";
 
   src = fetchFromGitLab {
     owner = "OpenRGBDevelopers";
     repo = "OpenRGBHardwareSyncPlugin";
-    rev = "release_${finalAttrs.version}";
-    hash = "sha256-3sQFiqmXhuavce/6v3XBpp6PAduY7t440nXfbfCX9a0=";
+    tag = "release_candidate_${finalAttrs.version}";
+    hash = "sha256-t5NPlmCg0btHpD/hpHSwDRl8LjVoOiT89WoOm3PmhXA=";
+    fetchSubmodules = true;
   };
 
   postPatch = ''
-    # Use the source of openrgb from nixpkgs instead of the submodule
-    rmdir OpenRGB
-    ln -s ${openrgb.src} OpenRGB
     # Remove prebuilt stuff
     rm -r dependencies/lhwm-cpp-wrapper
   '';
 
-  buildInputs = with libsForQt5; [
-    qtbase
+  buildInputs = [
+    qt6Packages.qtbase
     glib
     libgtop
     lm_sensors
   ];
 
-  nativeBuildInputs = with libsForQt5; [
-    qmake
+  nativeBuildInputs = [
     pkg-config
-    wrapQtAppsHook
+    qt6Packages.qmake
+    qt6Packages.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/OpenRGBDevelopers/OpenRGBHardwareSyncPlugin";
     description = "Sync your ARGB devices colors with hardware measures (CPU, GPU, fan speed, etc...)";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.linux;
   };
 })

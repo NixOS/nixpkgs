@@ -8,16 +8,16 @@
   wrapGAppsHook3,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication (finalAttrs: {
   pname = "nwg-hello";
-  version = "0.3.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
-    tag = "v${version}";
-    hash = "sha256-ZqZikkwV3UVA0e9VCFHjXAAIegvz3I6CNURZSP4owmU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sWp9fSCPb2MrHdvTBnmsvf3idrRPcqmBFsFbRXGjFB0=";
   };
 
   nativeBuildInputs = [
@@ -39,15 +39,15 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     # hard coded paths
     substituteInPlace nwg_hello/main.py \
-      --replace '/etc/nwg-hello' "$out/etc/nwg-hello" \
-      --replace "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
-      --replace "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
+      --replace-fail '/etc/nwg-hello' "$out/etc/nwg-hello" \
+      --replace-fail "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
+      --replace-fail "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
 
     substituteInPlace nwg-hello-default.json \
-      --replace "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
-      --replace "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
+      --replace-fail "/usr/share/xsessions" "/run/current-system/sw/share/xsessions" \
+      --replace-fail "/usr/share/wayland-sessions" "/run/current-system/sw/share/wayland-sessions"
 
-    substituteInPlace nwg_hello/ui.py --replace '/usr/share/nwg-hello' "$out/share/nwg-hello"
+    substituteInPlace nwg_hello/ui.py --replace-fail '/usr/share/nwg-hello' "$out/share/nwg-hello"
   '';
 
   postInstall = ''
@@ -68,11 +68,11 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     homepage = "https://github.com/nwg-piotr/nwg-hello";
-    changelog = "https://github.com/nwg-piotr/nwg-hello/releases/tag/${src.tag}";
+    changelog = "https://github.com/nwg-piotr/nwg-hello/releases/tag/${finalAttrs.src.tag}";
     description = "GTK3-based greeter for the greetd daemon, written in python";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "nwg-hello";
   };
-}
+})

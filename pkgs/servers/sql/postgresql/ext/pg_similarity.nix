@@ -4,7 +4,6 @@
   lib,
   postgresql,
   postgresqlBuildExtension,
-  stdenv,
 }:
 
 postgresqlBuildExtension {
@@ -39,6 +38,6 @@ postgresqlBuildExtension {
     '';
     platforms = postgresql.meta.platforms;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ danbst ];
+    maintainers = [ ];
   };
 }

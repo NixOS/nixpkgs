@@ -1,48 +1,42 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
   git,
-  darwin,
   makeWrapper,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) CoreServices;
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-mobile2";
-  version = "0.17.6";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "0.22.3";
+
   src = fetchFromGitHub {
     owner = "tauri-apps";
-    repo = pname;
-    rev = "cargo-mobile2-v${version}";
-    hash = "sha256-kIy5Ic7Zk6twcEbZN/wRLwMK0XeMF0lNkFDIc2vO944=";
+    repo = "cargo-mobile2";
+    rev = "cargo-mobile2-v${finalAttrs.version}";
+    hash = "sha256-rPLGh7/lGsmoidtr+UNrxzUgqtiHvkqZs2/la4L6zQM=";
   };
 
   # Manually specify the sourceRoot since this crate depends on other crates in the workspace. Relevant info at
   # https://discourse.nixos.org/t/difficulty-using-buildrustpackage-with-a-src-containing-multiple-cargo-workspaces/10202
   # sourceRoot = "${src.name}/tooling/cli";
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-An9EuNv+6ttNKp50RutzxtHl/RS5gn9sUNlWtipAujk=";
+  cargoHash = "sha256-ht9ofFa4H/Ux6a31vMNdKNhrX48yoYM1qAPoxCjude0=";
+
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    git
+    makeWrapper
+  ];
 
   preBuild = ''
     mkdir -p $out/share/
     # during the install process tauri-mobile puts templates and commit information in CARGO_HOME
     export CARGO_HOME=$out/share/
   '';
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-  nativeBuildInputs = [
-    pkg-config
-    git
-    makeWrapper
-  ];
 
   preFixup = ''
     for bin in $out/bin/cargo-*; do
@@ -51,13 +45,13 @@ rustPlatform.buildRustPackage {
     done
   '';
 
-  meta = with lib; {
-    description = "Rust on mobile made easy!";
+  meta = {
+    description = "Rust on mobile made easy";
     homepage = "https://tauri.app/";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada ];
   };
-}
+})

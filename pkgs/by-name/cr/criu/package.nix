@@ -27,15 +27,15 @@
   buildPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "criu";
-  version = "4.1";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = "criu";
-    rev = "v${version}";
-    hash = "sha256-Z4prbaPYRdN/fPdBwDz7D3/gKybh2ulA3UM1LZGeAK0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-SfpJskXX7r3jbAwgZl2qpa7j1M4i8/sV6rlAWiUEoQs=";
   };
 
   enableParallelBuilding = true;
@@ -48,7 +48,6 @@ stdenv.mkDerivation rec {
     asciidoc
     xmlto
     libpaper
-    libuuid
     docbook_xsl
     which
     makeWrapper
@@ -64,21 +63,21 @@ stdenv.mkDerivation rec {
     libnet
     nftables
     libbsd
+    libuuid
   ];
-  propagatedBuildInputs =
-    [
-      protobufc
-    ]
-    ++ (with python3.pkgs; [
-      python
-      python3.pkgs.protobuf
-    ]);
+  propagatedBuildInputs = [
+    protobufc
+  ]
+  ++ (with python3.pkgs; [
+    python
+    python3.pkgs.protobuf
+  ]);
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile \
       --replace "2>/dev/null" "" \
       --replace "-m custom.xsl" "-m custom.xsl --skip-validation -x ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${version}.0"
+    substituteInPlace ./Makefile --replace "head-name := \$(shell git tag -l v\$(CRIU_VERSION))" "head-name = ${finalAttrs.version}.0"
     ln -sf ${protobuf}/include/google/protobuf/descriptor.proto ./images/google/protobuf/descriptor.proto
   '';
 
@@ -95,6 +94,7 @@ stdenv.mkDerivation rec {
         "powerpc" = "ppc64";
         "s390" = "s390";
         "mips" = "mips";
+        "loongarch" = "loongarch64";
       };
     in
     [
@@ -138,15 +138,16 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Userspace checkpoint/restore for Linux";
     homepage = "https://criu.org";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
       "armv7l-linux"
+      "loongarch64-linux"
     ];
-    maintainers = [ maintainers.thoughtpolice ];
+    maintainers = [ lib.maintainers.thoughtpolice ];
   };
-}
+})

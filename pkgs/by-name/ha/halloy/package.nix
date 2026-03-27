@@ -12,23 +12,25 @@
   rustPlatform,
   vulkan-loader,
   wayland,
-  xorg,
+  libxi,
+  libxcursor,
+  libx11,
+  libxcb,
   alsa-lib,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "halloy";
-  version = "2025.2";
+  version = "2026.5";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
-    tag = version;
-    hash = "sha256-ijSUGiAowxSqYwH3OxSWiGvm99n88ETJxAFn5x4m/BE=";
+    tag = finalAttrs.version;
+    hash = "sha256-K+kNn7GPNZWXkXS+hfOjdmaWEjina6Vy4FfAJGZ5cPE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-j4lx3sSQZ7BKl+d5nFJQkMhgQWjn0xkNNCWMlbKLwVQ=";
+  cargoHash = "sha256-ij08oI0IIihVoHY4RS1FGpkvsWLcjCv2fp8voAae+DI=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -36,19 +38,19 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libxkbcommon
-      vulkan-loader
-      wayland
-      xorg.libX11
-      xorg.libXcursor
-      xorg.libXi
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libxkbcommon
+    vulkan-loader
+    wayland
+    libx11
+    libxcursor
+    libxi
+    libxcb
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -56,7 +58,7 @@ rustPlatform.buildRustPackage rec {
       desktopName = "Halloy";
       comment = "IRC client written in Rust";
       icon = "org.squidowl.halloy";
-      exec = pname;
+      exec = finalAttrs.meta.mainProgram;
       terminal = false;
       mimeTypes = [
         "x-scheme-handler/irc"
@@ -89,36 +91,35 @@ rustPlatform.buildRustPackage rec {
     ''
   );
 
-  postInstall =
-    ''
-      install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
-        $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      APP_DIR="$out/Applications/Halloy.app/Contents"
+  postInstall = ''
+    install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
+      $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    APP_DIR="$out/Applications/Halloy.app/Contents"
 
-      mkdir -p "$APP_DIR/MacOS"
-      cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+    mkdir -p "$APP_DIR/MacOS"
+    cp -r ${finalAttrs.src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
 
-      substituteInPlace "$APP_DIR/Info.plist" \
-        --replace-fail "{{ VERSION }}" "${version}" \
-        --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+    substituteInPlace "$APP_DIR/Info.plist" \
+      --replace-fail "{{ VERSION }}" "${finalAttrs.version}" \
+      --replace-fail "{{ BUILD }}" "${finalAttrs.version}-nixpkgs"
 
-      makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
-    '';
+    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
+  '';
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "IRC application";
     homepage = "https://github.com/squidowl/halloy";
-    changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/squidowl/halloy/blob/${finalAttrs.version}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       fab
       iivusly
       ivyfanchiang
     ];
     mainProgram = "halloy";
   };
-}
+})

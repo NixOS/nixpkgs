@@ -6,9 +6,9 @@
   makePkgconfigItem,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symfpu";
-  version = "unstable-2019-05-17";
+  version = "0-unstable-2019-05-17";
 
   src = fetchFromGitHub {
     owner = "martin-cs";
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
   pkgconfigItems = [
     (makePkgconfigItem {
       name = "symfpu";
-      inherit version;
+      inherit (finalAttrs) version;
       cflags = [ "-I\${includedir}" ];
       variables = {
         includedir = "@includedir@";
       };
-      inherit (meta) description;
+      inherit (finalAttrs.meta) description;
     })
   ];
 
@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "A (concrete or symbolic) implementation of IEEE-754 / SMT-LIB floating-point";
+  meta = {
+    description = "Implementation of SMT-LIB / IEEE-754 operations in terms of bit-vector operations";
     homepage = "https://github.com/martin-cs/symfpu";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ shadaj ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ shadaj ];
   };
-}
+})

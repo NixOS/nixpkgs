@@ -14,10 +14,9 @@ mkKdeDerivation rec {
   inherit (sources.${pname}) version;
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    # include version in the name so we invalidate the FOD
-    name = "${pname}-${version}";
+    inherit pname version;
     src = sources.${pname};
-    hash = "sha256-5TMHytHLIjdzY6O1+V9do/JCfxFfBkYD+bd+FNLlrMk=";
+    hash = "sha256-aGpmkuw7Y0PRFp0+0ozv5/A80O2T9lMN9SJfKfExx/o=";
   };
 
   extraNativeBuildInputs = [
@@ -32,4 +31,7 @@ mkKdeDerivation rec {
     corrosion
     qcoro
   ];
+
+  # FIXME: work around Qt 6.10 cmake API changes
+  cmakeFlags = [ "-DQT_FIND_PRIVATE_MODULES=1" ];
 }

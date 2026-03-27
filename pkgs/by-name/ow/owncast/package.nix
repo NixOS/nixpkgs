@@ -8,20 +8,25 @@
   ffmpeg,
   makeBinaryWrapper,
 }:
-
 let
-  version = "0.2.0";
+  version = "0.2.4";
 in
 buildGoModule {
   pname = "owncast";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "owncast";
     repo = "owncast";
-    rev = "v${version}";
-    hash = "sha256-MdquhDdbOdP1shnKHBlzQrSDe41fp0qnMzgaqL89jTk=";
+    tag = "v${version}";
+    hash = "sha256-euqmAsGLh7enMbRKeGS7pB3L+12uAHFM2mqahst/bww=";
   };
-  vendorHash = "sha256-ERilQZ8vnhGW1IEcLA4CcmozDooHKbnmASMw87tjYD4=";
+
+  patches = [
+    ./fix-go.sum.diff
+  ];
+
+  vendorHash = "sha256-XQXv1XeedHQozB56+boi32jsXQoCtD2XIg3deDvXIfw=";
 
   propagatedBuildInputs = [ ffmpeg ];
 
@@ -46,13 +51,15 @@ buildGoModule {
 
   passthru.tests.owncast = nixosTests.owncast;
 
-  meta = with lib; {
-    description = "self-hosted video live streaming solution";
+  meta = {
+    description = "Self-hosted video live streaming solution";
     homepage = "https://owncast.online";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ MayNiklas ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      flexiondotorg
+      MayNiklas
+    ];
     mainProgram = "owncast";
   };
-
 }

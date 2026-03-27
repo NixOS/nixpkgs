@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation {
   pname = "ubus";
-  version = "unstable-2023-12-18";
+  version = "unstable-202-10-17";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/ubus.git";
-    rev = "65bb027054def3b94a977229fd6ad62ddd32345b";
-    hash = "sha256-n82Ub0IiuvWbnlDCoN+0hjo/1PbplEbc56kuOYMrHxQ=";
+    rev = "60e04048a0e2f3e33651c19e62861b41be4c290f";
+    hash = "sha256-fjxO77z+do5gZ7nLwHbC14UnP9cmZ5eANNn4X6Sudn0=";
   };
 
   cmakeFlags = [ "-DBUILD_LUA=OFF" ];
@@ -30,11 +30,11 @@ stdenv.mkDerivation {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     description = "OpenWrt system message/RPC bus";
     homepage = "https://git.openwrt.org/?p=project/ubus.git;a=summary";
-    license = licenses.lgpl21Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

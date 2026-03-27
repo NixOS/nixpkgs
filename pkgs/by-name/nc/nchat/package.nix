@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+  replaceVars,
   file, # for libmagic
   ncurses,
   openssl,
@@ -10,18 +12,18 @@
   zlib,
   cmake,
   gperf,
-  stdenv,
-  darwin,
+  nix-update-script,
+  withWhatsApp ? true,
 }:
 
 let
-  version = "5.4.2";
+  version = "5.13.17";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-NrAU47GA7ZASJ7vCo1S8nyGBpfsZn4EBBqx2c4HKx7k=";
+    hash = "sha256-VSya6s3/+vII/M76tHmeJEZh7/gv9L5tYdILuthdO5s=";
   };
 
   libcgowm = buildGoModule {
@@ -29,45 +31,32 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-EdbOO5cCDT1CcPlCBgMoPDg65FcoOYvBwZa4bz0hfGE=";
+    vendorHash = "sha256-lfy7uHH3rLYx6kzIy72ftEiO1CkJkEr7rRXHhuFU/ac=";
 
     buildPhase = ''
+      runHook preBuild
+
       mkdir -p $out/
       go build -o $out/ -buildmode=c-archive
       mv $out/go.a $out/libcgowm.a
       ln -s $out/libcgowm.a $out/libref-cgowm.a
       mv $out/go.h $out/libcgowm.h
+
+      runHook postBuild
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nchat";
   inherit version src;
 
-  nl = "\n";
-  postPatch = ''
-    substituteInPlace lib/tgchat/ext/td/CMakeLists.txt \
-      --replace "get_git_head_revision" "#get_git_head_revision"
-    substituteInPlace lib/tgchat/CMakeLists.txt \
-      --replace-fail "list(APPEND OPENSSL_ROOT_DIR" "#list(APPEND OPENSSL_ROOT_DIR"
-
-    # specific mangling to handle whatsapp go module:
-
-    substituteInPlace CMakeLists.txt \
-      --replace "if(HAS_WHATSAPP AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))" \
-      "if(FALSE AND (NOT GO_VERSION VERSION_GREATER_EQUAL GO_VERSION_MIN))"
-
-    substituteInPlace lib/wmchat/CMakeLists.txt \
-      --replace-fail "add_subdirectory(go)" \
-    "set(GO_LIBRARIES ${libcgowm}/libcgowm.a)${nl}target_include_directories(wmchat PRIVATE ${libcgowm})"
-
-    substituteInPlace lib/wmchat/CMakeLists.txt \
-      --replace-fail "target_link_libraries(wmchat PUBLIC ref-cgowm ncutil \''${GO_LIBRARIES})" \
-      "target_link_libraries(wmchat PUBLIC ${libcgowm}/libcgowm.a ncutil \''${GO_LIBRARIES})"
-
-    substituteInPlace lib/wmchat/CMakeLists.txt \
-      --replace-fail "add_dependencies(wmchat ref-cgowm)" "#add_dependencies(wmchat ref-cgowm)"
-  '';
+  patches = [
+    (replaceVars ./go-libs-build.patch {
+      inherit libcgowm;
+    })
+    # Don't use brew
+    ./fix-darwin.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -75,27 +64,29 @@ stdenv.mkDerivation rec {
     libcgowm
   ];
 
-  buildInputs =
-    [
-      file # for libmagic
-      ncurses
-      openssl
-      readline
-      sqlite
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        AppKit
-        Cocoa
-        Foundation
-      ]
-    );
+  buildInputs = [
+    file # for libmagic
+    ncurses
+    openssl
+    readline
+    sqlite
+    zlib
+  ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "HAS_WHATSAPP" withWhatsApp)
   ];
+
+  passthru = {
+    inherit libcgowm;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "libcgowm"
+      ];
+    };
+  };
 
   meta = {
     description = "Terminal-based chat client with support for Telegram and WhatsApp";

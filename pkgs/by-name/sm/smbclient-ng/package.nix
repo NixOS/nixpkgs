@@ -4,21 +4,22 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "smbclient-ng";
-  version = "2.1.7";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "smbclient-ng";
-    tag = version;
-    hash = "sha256-gZbXtgxB5GkypU6U2oe9miobBbwnz/eXs/yWkzVUCcc=";
+    tag = finalAttrs.version;
+    hash = "sha256-W0f+PxPjI5raIjUNK7fcfPvFugrJxLZTWZPpX/6P56w=";
   };
 
   pythonRelaxDeps = [
     "impacket"
     "pefile"
+    "rich"
   ];
 
   build-system = with python3.pkgs; [ poetry-core ];
@@ -30,14 +31,17 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
+  # Project has no unit tests
+  doCheck = false;
+
   pythonImportsCheck = [ "smbclientng" ];
 
   meta = {
     description = "Tool to interact with SMB shares";
     homepage = "https://github.com/p0dalirius/smbclient-ng";
-    changelog = "https://github.com/p0dalirius/smbclient-ng/releases/tag/${version}";
+    changelog = "https://github.com/p0dalirius/smbclient-ng/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "smbclientng";
   };
-}
+})

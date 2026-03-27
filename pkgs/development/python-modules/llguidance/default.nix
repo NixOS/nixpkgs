@@ -3,8 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
-  # build-system
+  # nativeBuildInputs
   cargo,
   pkg-config,
   rustPlatform,
@@ -18,27 +19,26 @@
   pytestCheckHook,
   torch,
   transformers,
-  pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llguidance";
-  version = "0.7.11";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "llguidance";
-    tag = "v${version}";
-    hash = "sha256-d0xwBaWiBBlPrKHpDKDBINBGU+PCfpfnL4FOxNmFvG8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f9qSnNpLl4KUdv1ZzN68MUytCOjP/+a3ZjocX7DiAlw=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    hash = "sha256-UeBgYMYFAVSa6QQIqZ2iY+xIRxQdFBetZ7dIalim+FQ=";
+    inherit (finalAttrs) src pname version;
+    hash = "sha256-scHxmG5XAbWMR88yyFru0ar2v7Uj/OQP0gpL5wo7Du8=";
   };
 
-  build-system = [
+  nativeBuildInputs = [
     cargo
     pkg-config
     rustPlatform.cargoSetupHook
@@ -71,31 +71,38 @@ buildPythonPackage rec {
     rm -r python/llguidance
   '';
 
-  disabledTests =
-    [
-      # Require internet access (https://huggingface.co)
-      "test_grammar"
-      "test_par_grammar"
-      "test_par_errors"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # torch._inductor.exc.CppCompileError: C++ compile error
-      # OpenMP support not found.
-      "test_mask_data_torch"
-    ];
+  disabledTests = [
+    # Require internet access (https://huggingface.co)
+    "test_grammar"
+    "test_incomplete_tokenizer"
+    "test_par_errors"
+    "test_par_grammar"
+    "test_tokenize_partial_basic"
+    "test_tokenize_partial_docs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # torch._inductor.exc.CppCompileError: C++ compile error
+    # OpenMP support not found.
+    "test_mask_data_torch"
+  ];
 
   disabledTestPaths = [
     # Require internet access (https://huggingface.co)
+    "python/torch_tests/test_hf.py"
+    "python/torch_tests/test_llamacpp.py"
+    "python/torch_tests/test_tiktoken.py"
     "scripts/tokenizer_test.py"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.14") [
+    # RuntimeError: torch.compile is not supported on Python 3.14+
+    "python/torch_tests/test_bitmask.py"
   ];
-
-  # As dynamo is not supported on Python 3.13+, no successful tests remain.
-  doCheck = pythonOlder "3.13";
 
   meta = {
     description = "Super-fast Structured Outputs";
     homepage = "https://github.com/guidance-ai/llguidance";
+    changelog = "https://github.com/guidance-ai/llguidance/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
-}
+})

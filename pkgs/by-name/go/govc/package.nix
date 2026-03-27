@@ -4,32 +4,32 @@
   buildGoModule,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "govc";
-  version = "0.46.3";
-
-  subPackages = [ "govc" ];
+  version = "0.53.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
-    sha256 = "sha256-vwvhVC+Avi55uenlW68tWGREEHRZw8RUjgiC0r7BgQ4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-//OqlBGek/UqxMUgjNDxJ1YkUNoYjeZRx1MIUgJzZys=";
   };
 
-  vendorHash = "sha256-ddofXjBnyHRn7apS8hpM57S1oo+1w5i4n0Z6ZPKQEDI=";
+  vendorHash = "sha256-t5yzwXz037umvqxZ/Y9T3Cld3xyA6BOJrDSzCvFdE5o=";
+
+  sourceRoot = "${finalAttrs.src.name}/govc";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/vmware/govmomi/govc/flags.BuildVersion=${version}"
+    "-X github.com/vmware/govmomi/govc/flags.BuildVersion=${finalAttrs.version}"
   ];
 
   meta = {
     description = "VSphere CLI built on top of govmomi";
-    homepage = "https://github.com/vmware/govmomi/tree/master/govc";
+    homepage = "https://github.com/vmware/govmomi/tree/main/govc";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nicknovitski ];
     mainProgram = "govc";
   };
-}
+})

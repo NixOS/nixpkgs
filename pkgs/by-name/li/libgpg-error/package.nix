@@ -25,16 +25,23 @@ in
 stdenv.mkDerivation (
   rec {
     pname = "libgpg-error";
-    version = "1.51";
+    version = "1.58";
 
     src = fetchurl {
-      url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
-      hash = "sha256-vg8bLba5Pu1VNpzfefGfcnUMjHw5/CC1d+ckVFQn5rI=";
+      url = "mirror://gnupg/libgpg-error/libgpg-error-${version}.tar.bz2";
+      hash = "sha256-+UOuqagwqL2TjlEktXnvrs4koyJf9MPSdhGoDOEmDCc=";
     };
 
     postPatch = ''
       sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    ''
+    # libgpg-error insists on having these generated files. They should be fairly ABI stable,
+    # so add one for FreeBSD.
+    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-freebsd") ''
+      cp ${./lock-obj-pub.x86_64-unknown-freebsd.h} src/syscfg/lock-obj-pub.freebsd.h
     '';
+
+    hardeningDisable = [ "strictflexarrays3" ];
 
     configureFlags = [
       # See https://dev.gnupg.org/T6257#164567
@@ -72,7 +79,7 @@ stdenv.mkDerivation (
 
     doCheck = true; # not cross
 
-    meta = with lib; {
+    meta = {
       homepage = "https://www.gnupg.org/software/libgpg-error/index.html";
       changelog = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgpg-error.git;a=blob;f=NEWS;hb=refs/tags/libgpg-error-${version}";
       description = "Small library that defines common error values for all GnuPG components";
@@ -85,8 +92,8 @@ stdenv.mkDerivation (
         Daemon and possibly more in the future.
       '';
 
-      license = licenses.lgpl2Plus;
-      platforms = platforms.all;
+      license = lib.licenses.lgpl2Plus;
+      platforms = lib.platforms.all;
       maintainers = [ ];
     };
   }

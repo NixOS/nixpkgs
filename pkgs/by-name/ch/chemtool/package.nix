@@ -3,18 +3,18 @@
   stdenv,
   fetchurl,
   pkg-config,
-  libX11,
+  libx11,
   gtk2,
   fig2dev,
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chemtool";
   version = "1.6.14";
 
   src = fetchurl {
-    url = "http://ruby.chemie.uni-freiburg.de/~martin/${pname}/${pname}-${version}.tar.gz";
+    url = "http://ruby.chemie.uni-freiburg.de/~martin/chemtool/chemtool-${finalAttrs.version}.tar.gz";
     sha256 = "hhYaBGE4azNKX/sXzfCUpJGUGIRngnL0V0mBNRTdr8s=";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
   buildInputs = [
-    libX11
+    libx11
     gtk2
     fig2dev
   ];
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ fig2dev ]}")
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://ruby.chemie.uni-freiburg.de/~martin/chemtool/";
     description = "Draw chemical structures";
     longDescription = ''
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
       symbols, seven colors, drawing at several zoom scales, and square and
       hexagonal backdrop grids for easier alignment.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
-}
+})

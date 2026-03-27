@@ -1,5 +1,4 @@
 {
-  aiodns,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -10,21 +9,17 @@
 
 buildPythonPackage rec {
   pname = "pyjvcprojector";
-  version = "1.1.2";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SteveEasley";
     repo = "pyjvcprojector";
     tag = "v${version}";
-    hash = "sha256-ow9pCigbQpxLibIq1hsRifXuzJfbWnqpWmnkM5lC3I4=";
+    hash = "sha256-AXBayuGR8FxamyNMXzMO0sLaQNEmxkSbn/dcZxmLNG4=";
   };
 
   build-system = [ setuptools ];
-
-  dependencies = [
-    aiodns
-  ];
 
   pythonImportsCheck = [ "jvcprojector" ];
 

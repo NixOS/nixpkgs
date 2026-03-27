@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchFromBitbucket,
+  fetchpatch2,
+  dos2unix,
   nix-update-script,
   boost,
   zlib,
@@ -44,11 +46,12 @@ let
   staticBuildInputs = [
     boost
     zlib
-  ] ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+  ]
+  ++ lib.optional withQt (if supportWayland then qt5.qtwayland else qt5.qtbase);
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5090";
+  version = "5101";
 
   outputs = [ "out" ];
 
@@ -56,7 +59,7 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-2k1I3wGnUSMgwzxXY3SKhS8nBtrFU8zH9VaFwdWYgOU=";
+    hash = "sha256-C+1tmQ8cKGpigWDh5p0mqv9B7/Tv8iJ4JVc835Q4y40=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -76,7 +79,22 @@ stdenv.mkDerivation rec {
 
   buildInputs = staticBuildInputs ++ dlopenBuildInputs;
 
+  prePatch = ''
+    # update-vgm.patch : Hunk #1 FAILED at 18 (different line endings)
+    find 3rdparty/vgm/ -type f -exec ${dos2unix}/bin/dos2unix {} \;
+  '';
   patches = [
+    # fix https://hydra.nixos.org/build/317966891
+    (fetchpatch2 {
+      name = "xmp-fix-for-gcc-15.patch";
+      url = "https://github.com/vitamin-caig/zxtune/commit/7f853a38924f78a25b86ac674b41e2f0fd2524a5.patch?full_index=1";
+      hash = "sha256-F6gD+w4lFymSRHXgDngYX/dZI26f7onOmYFlHkPKms8=";
+    })
+    (fetchpatch2 {
+      name = "update-vgm.patch";
+      url = "https://github.com/vitamin-caig/zxtune/commit/31e3ff7a8d13b72e6f72caecd15ae87cefca0465.patch?full_index=1";
+      hash = "sha256-uEa2LY/r/jVWHHEpFtsQba66YdIjA82fDlm+StKp/EI=";
+    })
     ./disable_updates.patch
   ];
 
@@ -88,12 +106,12 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     let
-      setOptionalSupport = name: var: "support_${name}=" + (if (var) then "1" else "");
+      setOptionalSupport = name: var: "support_${name}=" + (if var then "1" else "");
       makeOptsCommon = [
-        ''-j$NIX_BUILD_CORES''
-        ''root.version=${src.rev}''
-        ''system.zlib=1''
-        ''platform=${platformName}''
+        "-j$NIX_BUILD_CORES"
+        "root.version=${src.rev}"
+        "system.zlib=1"
+        "platform=${platformName}"
         ''includes.dirs.${platformName}="${lib.makeSearchPathOutput "dev" "include" buildInputs}"''
         ''libraries.dirs.${platformName}="${lib.makeLibraryPath staticBuildInputs}"''
         ''ld_flags="-Wl,-rpath=\"${lib.makeLibraryPath dlopenBuildInputs}\""''
@@ -107,18 +125,18 @@ stdenv.mkDerivation rec {
         (setOptionalSupport "pulseaudio" withPulse)
       ];
       makeOptsQt = [
-        ''tools.uic=${qt5.qtbase.dev}/bin/uic''
-        ''tools.moc=${qt5.qtbase.dev}/bin/moc''
-        ''tools.rcc=${qt5.qtbase.dev}/bin/rcc''
+        "tools.uic=${qt5.qtbase.dev}/bin/uic"
+        "tools.moc=${qt5.qtbase.dev}/bin/moc"
+        "tools.rcc=${qt5.qtbase.dev}/bin/rcc"
       ];
     in
     ''
       runHook preBuild
-      make ${builtins.toString makeOptsCommon} -C apps/xtractor
-      make ${builtins.toString makeOptsCommon} -C apps/zxtune123
+      make ${toString makeOptsCommon} -C apps/xtractor
+      make ${toString makeOptsCommon} -C apps/zxtune123
     ''
     + lib.optionalString withQt ''
-      make ${builtins.toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
+      make ${toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
     ''
     + ''
       runHook postBuild
@@ -129,19 +147,18 @@ stdenv.mkDerivation rec {
   # load ("Status: Available" or "Status: Failed to load dynamic library...").
   dontPatchELF = true;
 
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 bin/linux/release/xtractor -t $out/bin
-      install -Dm755 bin/linux/release/zxtune123 -t $out/bin
-    ''
-    + lib.optionalString withQt ''
-      install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
-      install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
-    ''
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 bin/linux/release/xtractor -t $out/bin
+    install -Dm755 bin/linux/release/zxtune123 -t $out/bin
+  ''
+  + lib.optionalString withQt ''
+    install -Dm755 bin/linux/release/zxtune-qt -t $out/bin
+    install -Dm755 apps/zxtune-qt/res/theme_default/zxtune.png -t $out/share/icons/hicolor/48x48/apps
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   # Only wrap the gui
   dontWrapQtApps = true;
@@ -162,7 +179,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Crossplatform chiptunes player";
     longDescription = ''
       Chiptune music player with truly extensive format support. Supported
@@ -172,11 +189,14 @@ stdenv.mkDerivation rec {
       sidplay, and many other libraries.
     '';
     homepage = "https://zxtune.bitbucket.io/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # zxtune supports mac and windows, but more work will be needed to
     # integrate with the custom make system (see platformName above)
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ EBADBEEF ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      pbsds
+      EBADBEEF
+    ];
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }

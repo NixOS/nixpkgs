@@ -20,13 +20,18 @@ maturinBuildHook() {
     local flagsArray=(
         "--jobs=$NIX_BUILD_CORES"
         "--offline"
-        "--target" "@rustcTarget@"
+        "--target" "@rustcTargetSpec@"
         "--manylinux" "off"
         "--strip"
-        "--release"
         "--out" "$dist"
         "--interpreter" "$interpreter_name"
     )
+
+    if [ -n "${maturinBuildProfile}" ]; then
+      flagsArray+=("--profile" "${maturinBuildProfile}")
+    else
+      flagsArray+=("--release")
+    fi
 
     concatTo flagsArray maturinBuildFlags
 

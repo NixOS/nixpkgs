@@ -8,7 +8,7 @@
   expat,
   fontconfig,
   gtk2,
-  xorg,
+  libsm,
   autoPatchelfHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -40,13 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     fontconfig.lib
     gtk2
-    xorg.libSM
+    libsm
   ];
 
   installPhase = ''
     runHook preInstall
     install -m755 -D hterm $out/bin/hterm
-    install -m644 -D desktop/hterm.png $out/share/pixmaps/hterm.png
+    install -m644 -D desktop/hterm.png -t $out/share/icons/hicolor/32x32/apps
     install -m644 -D desktop/hterm.desktop $out/share/applications/hterm.desktop
     runHook postInstall
   '';
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://www.der-hammer.info/pages/terminal.html";
     changelog = "https://www.der-hammer.info/terminal/CHANGELOG.txt";
-    description = "A terminal program for serial communication";
+    description = "Terminal program for serial communication";
     # See https://www.der-hammer.info/terminal/LICENSE.txt
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];

@@ -5,7 +5,6 @@
   imageio,
   numpy,
   pytestCheckHook,
-  pythonOlder,
   scikit-image,
   slicerator,
 }:
@@ -15,11 +14,9 @@ buildPythonPackage rec {
   version = "0.7";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "soft-matter";
-    repo = pname;
+    repo = "pims";
     tag = "v${version}";
     hash = "sha256-3SBZk11w6eTZFmETMRJaYncxY38CYne1KzoF5oRgzuY=";
   };
@@ -37,9 +34,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pims" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::Warning"
+  pytestFlags = [
+    "-Wignore::Warning"
   ];
 
   disabledTests = [
@@ -52,11 +48,11 @@ buildPythonPackage rec {
     "pims/tests/test_display.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Module to load video and sequential images in various formats";
     homepage = "https://github.com/soft-matter/pims";
     changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

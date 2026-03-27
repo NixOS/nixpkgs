@@ -1,139 +1,96 @@
 {
-  lib,
-  llvmPackages,
   fetchFromGitHub,
-  writeShellScript,
-  bash,
-  meson,
-  ninja,
-  jq,
+  llvmPackages,
+  libbpf,
   pkg-config,
   bpftools,
   elfutils,
   zlib,
   zstd,
-  scx-common,
+  scx,
+  libseccomp,
 }:
 
-let
-  # Fixes a bug with the meson build script where it specifies
-  # /bin/bash twice in the script
-  misbehaviorBash = writeShellScript "bash" ''
-    shift 1
-    exec ${lib.getExe bash} "$@"
-  '';
-
-in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
-  inherit (scx-common) version src;
+  version = "0-unstable-2026-01-13";
 
-  # scx needs specific commits of bpftool and libbpf
-  # can be found in meson.build of scx src
-  # grep 'bpftool_commit =' ./meson.build
-  bpftools_src = fetchFromGitHub {
-    owner = "libbpf";
-    repo = "bpftool";
-    inherit (scx-common.versionInfo.bpftool) rev hash;
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner = "sched-ext";
+    repo = "scx-c-examples";
+    rev = "82c692afe32ed4e79fd047a93d3ff316bf399287";
+    hash = "sha256-buXwId/4TwDfo/5mApMAEWHri92bW9x3jLEE5rawS3w=";
   };
-  # grep 'libbpf_commit = ' ./meson.build
-  libbpf_src = fetchFromGitHub {
-    owner = "libbpf";
-    repo = "libbpf";
-    inherit (scx-common.versionInfo.libbpf) rev hash;
-    fetchSubmodules = true;
-  };
-
-  # this imitates the fetch_bpftool and fetch_libbpf script in src/meson-scripts
-  fetchBpftool = writeShellScript "fetch_bpftool" ''
-    [ "$2" == '${finalAttrs.bpftools_src.rev}' ] || exit 1
-    cd "$1"
-    cp --no-preserve=mode,owner -r "${finalAttrs.bpftools_src}/" ./bpftool
-  '';
-  fetchLibbpf = writeShellScript "fetch_libbpf" ''
-    [ "$2" == '${finalAttrs.libbpf_src.rev}' ] || exit 1
-    cd "$1"
-    cp --no-preserve=mode,owner -r "${finalAttrs.libbpf_src}/" ./libbpf
-    mkdir -p ./libbpf/src/usr/include
-  '';
 
   postPatch = ''
-    rm meson-scripts/fetch_bpftool meson-scripts/fetch_libbpf
-    patchShebangs ./meson-scripts
-    cp ${finalAttrs.fetchBpftool} meson-scripts/fetch_bpftool
-    cp ${finalAttrs.fetchLibbpf} meson-scripts/fetch_libbpf
-    substituteInPlace meson.build \
-      --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
+    substituteInPlace ./scheds/c/Makefile \
+      --replace-fail '/usr/local' '${placeholder "out"}'
   '';
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      jq
-      pkg-config
-      zstd
-    ]
-    ++ bpftools.buildInputs
-    ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs = [
+    pkg-config
+    zstd
+    bpftools
+    libbpf
+  ];
 
   buildInputs = [
     elfutils
     zlib
+    libseccomp
   ];
 
-  mesonFlags = [
-    (lib.mapAttrsToList lib.mesonEnable {
-      # systemd unit is implemented in the nixos module
-      # upstream systemd files are a hassle to patch
-      "systemd" = false;
-      # not for nix
-      "openrc" = false;
-      "libalpm" = false;
-    })
-    (lib.mapAttrsToList lib.mesonBool {
-      # needed libs are already fetched as FOD
-      "offline" = true;
-      # rust based schedulers are built separately
-      "enable_rust" = false;
-    })
-    # Clang to use when compiling .bpf.c
-    (lib.mesonOption "bpf_clang" (lib.getExe llvmPackages.clang))
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
   ];
 
   hardeningDisable = [
-    "stackprotector"
     "zerocallusedregs"
   ];
 
-  # We copy the compiled header files to the dev output
-  # These are needed for the rust schedulers
-  preInstall = ''
-    mkdir -p ${placeholder "dev"}/libbpf ${placeholder "dev"}/bpftool
-    cp -r libbpf/* ${placeholder "dev"}/libbpf/
-    cp -r bpftool/* ${placeholder "dev"}/bpftool/
+  __structuredAttrs = true;
+  EXPECTED_SCHEDULERS = finalAttrs.passthru.schedulers;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    cd $out/bin
+    found=(scx_*)
+    if [[ "''${found[@]}" != "''${EXPECTED_SCHEDULERS[@]}" ]]; then
+      echo "List of available schedulers changed, expected: ''${EXPECTED_SCHEDULERS[@]}, found: ''${found[@]}"
+      exit 1
+    fi
+
+    runHook postInstallCheck
   '';
 
-  outputs = [
-    "bin"
-    "dev"
-    "out"
-  ];
+  passthru = {
+    inherit (scx.rustscheds.passthru) tests;
+    schedulers = [
+      "scx_central"
+      "scx_flatcg"
+      "scx_nest"
+      "scx_pair"
+      "scx_prev"
+      "scx_qmap"
+      "scx_simple"
+      "scx_userland"
+    ];
+  };
 
-  # Enable this when default kernel in nixpkgs is 6.12+
-  doCheck = false;
-
-  meta = scx-common.meta // {
-    description = "Sched-ext C userspace schedulers";
+  meta = scx.rustscheds.meta // {
+    description = "Sched-ext C example schedulers";
     longDescription = ''
-      This includes C based schedulers such as scx_central, scx_flatcg,
-      scx_nest, scx_pair, scx_qmap, scx_simple, scx_userland.
+      This includes C based example schedulers such as scx_central, scx_flatcg,
+      scx_nest, scx_pair, scx_qmap, scx_simple, scx_userland. These are examples,
+      and generally not recommended for end users.
 
       ::: {.note}
       Sched-ext schedulers are only available on kernels version 6.12 or later.
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
+    homepage = "https://github.com/sched-ext/scx/tree/main/scheds/c";
   };
 })

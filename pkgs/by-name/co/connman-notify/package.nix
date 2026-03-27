@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication {
     hash = "sha256-EsF+Ckjojnn2o5PCDIexKrNIYxcIM1CZUNaTEIwvq8w=";
   };
 
-  format = "other";
+  pyproject = false;
 
   nativeBuildInputs = [
     gobject-introspection
@@ -39,12 +39,12 @@ python3Packages.buildPythonApplication {
     install -D -t $out/share/doc README.rst
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Desktop notification integration for connman";
     mainProgram = "connman-notify";
     homepage = "https://gitlab.com/wavexx/connman-notify";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.romildo ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.romildo ];
   };
 }

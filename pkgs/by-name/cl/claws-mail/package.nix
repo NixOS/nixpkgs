@@ -24,7 +24,7 @@
 
   # Arguments to include external libraries
   enableLibSM ? true,
-  xorg,
+  libsm,
   enableGnuTLS ? true,
   gnutls,
   enableEnchant ? enableSpellcheck,
@@ -55,7 +55,7 @@
   enablePluginClamd ? true,
   enablePluginDillo ? true,
   enablePluginFancy ? true,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   enablePluginFetchInfo ? true,
   enablePluginKeywordWarner ? true,
   enablePluginLibravatar ? enablePluginRavatar,
@@ -147,7 +147,7 @@ let
     {
       flags = [ "fancy-plugin" ];
       enabled = enablePluginFancy;
-      deps = [ webkitgtk_4_0 ];
+      deps = [ webkitgtk_4_1 ];
     }
     {
       flags = [ "fetchinfo-plugin" ];
@@ -179,7 +179,7 @@ let
     {
       flags = [ "libsm" ];
       enabled = enableLibSM;
-      deps = [ xorg.libSM ];
+      deps = [ libsm ];
     }
     {
       flags = [ "litehtml_viewer-plugin" ];
@@ -273,13 +273,13 @@ let
     }
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "claws-mail";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchurl {
-    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    hash = "sha256-2K3yEMdnq1glLfxas8aeYD1//bcoGh4zQNLYYGL0aKY=";
+    url = "https://claws-mail.org/download.php?file=releases/claws-mail-${finalAttrs.version}.tar.xz";
+    hash = "sha256-A+BUnV8PzXpZgEGGUkEF0F67XlNNQqS4apqQ9ynKJVs=";
   };
 
   outputs = [
@@ -295,14 +295,14 @@ stdenv.mkDerivation rec {
     # autotools check tries to dlopen libpython as a requirement for the python plugin
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${python3}/lib
     # generate version without .git
-    [ -e version ] || echo "echo ${version}" > version
+    [ -e version ] || echo "echo ${finalAttrs.version}" > version
   '';
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace 'm4_esyscmd([./get-git-version])' '${version}'
+      --replace-fail 'm4_esyscmd([./get-git-version])' '${finalAttrs.version}'
     substituteInPlace src/procmime.c \
-        --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
+      --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
   nativeBuildInputs = [
@@ -319,17 +319,17 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     glib-networking
     gtk3
-  ] ++ lib.concatMap (f: lib.optionals f.enabled f.deps) (lib.filter (f: f ? deps) features);
+  ]
+  ++ lib.concatMap (f: lib.optionals f.enabled f.deps) (lib.filter (f: f ? deps) features);
 
-  configureFlags =
-    [
-      "--disable-manual" # Missing docbook-tools, e.g., docbook2html
-      "--disable-compface" # Missing compface library
-      "--disable-jpilot" # Missing jpilot library
-    ]
-    ++ (map (
-      feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags
-    ) features);
+  configureFlags = [
+    "--disable-manual" # Missing docbook-tools, e.g., docbook2html
+    "--disable-compface" # Missing compface library
+    "--disable-jpilot" # Missing jpilot library
+  ]
+  ++ (map (
+    feature: map (flag: lib.strings.enableFeature feature.enabled flag) feature.flags
+  ) features);
 
   enableParallelBuilding = true;
 
@@ -343,18 +343,15 @@ stdenv.mkDerivation rec {
     cp claws-mail.desktop $out/share/applications
   '';
 
-  meta = with lib; {
+  meta = {
     description = "User-friendly, lightweight, and fast email client";
     mainProgram = "claws-mail";
     homepage = "https://www.claws-mail.org/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       fpletz
-      globin
-      orivej
-      oxzi
       ajs124
     ];
   };
-}
+})

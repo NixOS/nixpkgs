@@ -7,7 +7,6 @@
   version ? null,
 }:
 
-with lib;
 mkCoqDerivation {
   pname = "ElmExtraction";
   repo = "coq-elm-extraction";
@@ -16,24 +15,27 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
-    with versions;
-    switch
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
+    lib.switch
       [
         coq.coq-version
         metacoq.version
       ]
       [
-        {
-          cases = [
-            (range "8.17" "8.20")
-            (range "1.3.1" "1.3.4")
-          ];
-          out = "0.1.0";
-        }
+        (case (lib.versions.range "8.17" "9.0") (lib.versions.range "1.3.1" "1.3.4") "0.1.1")
       ]
       null;
 
   release."0.1.0".sha256 = "EWjubBHsxAl2HuRAfJI3B9qzP2mj89eh0CUc8y7/7Ds=";
+  release."0.1.1".sha256 = "SDSyXqtOQlW9m9yH8OC909fsC/ePhKkSiY+BoQE76vk=";
 
   releaseRev = v: "v${v}";
 
@@ -42,11 +44,11 @@ mkCoqDerivation {
     metacoq
   ];
 
-  postPatch = ''patchShebangs ./tests/process-extraction-examples.sh'';
+  postPatch = "patchShebangs ./tests/process-extraction-examples.sh";
 
   meta = {
-    description = "A framework for extracting Coq programs to Elm";
-    maintainers = with maintainers; [ _4ever2 ];
-    license = licenses.mit;
+    description = "Framework for extracting Coq programs to Elm";
+    maintainers = with lib.maintainers; [ _4ever2 ];
+    license = lib.licenses.mit;
   };
 }

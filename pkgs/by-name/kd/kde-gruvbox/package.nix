@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "kde-gruvbox";
-  version = "unstable-2015-08-09";
+  version = "0-unstable-2015-08-09";
 
   src = fetchFromGitHub {
     owner = "printesoi";
@@ -26,11 +26,11 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Suite of themes for KDE applications that match the retro gruvbox colorscheme";
     homepage = "https://github.com/printesoi/kde-gruvbox";
-    license = licenses.mit;
-    maintainers = [ maintainers.ymarkus ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ymarkus ];
+    platforms = lib.platforms.all;
   };
 }

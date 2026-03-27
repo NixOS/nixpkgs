@@ -19,9 +19,7 @@ buildFHSEnv {
   unsharePid = false;
 
   targetPkgs =
-    pkgs:
-    with pkgs;
-    [
+    pkgs: with pkgs; [
       libGLU
       libGL
       alsa-lib
@@ -33,43 +31,44 @@ buildFHSEnv {
       nspr
       expat
       pciutils
+      libdrm
       libxkbcommon
       libudev0-shim
-      tbb
+      onetbb
       xwayland
       qt5.qtwayland
-      nettools # needed by licensing tools
+      net-tools # needed by licensing tools
       bintools # needed for ld and other tools, so ctypes can find/load sos from python
       ocl-icd # needed for opencl
       numactl # needed by hfs ocl backend
       zstd # needed from 20.0
-    ]
-    ++ (with xorg; [
-      libICE
-      libSM
-      libXmu
-      libXi
-      libXt
-      libXext
-      libX11
-      libXrender
-      libXcursor
-      libXfixes
-      libXrender
-      libXcomposite
-      libXdamage
-      libXtst
+      libice
+      libsm
+      libxmu
+      libxi
+      libxt
+      libxext
+      libx11
+      libxrender
+      libxcursor
+      libxfixes
+      libxrender
+      libxcomposite
+      libxdamage
+      libxtst
       libxcb
-      libXScrnSaver
-      libXrandr
+      libxscrnsaver
+      libxrandr
       libxcb
-      xcbutil
-      xcbutilimage
-      xcbutilrenderutil
-      xcbutilcursor
-      xcbutilkeysyms
-      xcbutilwm
-    ]);
+      libxkbfile
+      libxshmfence
+      libxcb-util
+      libxcb-image
+      libxcb-render-util
+      libxcb-cursor
+      libxcb-keysyms
+      libxcb-wm
+    ];
 
   passthru = {
     inherit unwrapped;
@@ -127,7 +126,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       canndrew
       kwohlfahrt
-      pedohorse
+      permahorse
     ];
   };
 }

@@ -5,29 +5,29 @@
   cmake,
   clipper2,
   gtest,
-  glm,
-  tbb_2021_11,
+  onetbb,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "manifold";
-  version = "3.0.1";
+  version = "3.4.1";
 
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-wbeWxAeKyqjEPemc2e5n357gwq83pQlASOvMd0ZCE7g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-QcsyX1YwjqNaPAMJy6LtfHxocbBrqVGaRpZ2kxE4xXQ=";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     gtest
-    glm
-    tbb_2021_11
-    clipper2
+    onetbb
   ];
+
+  propagatedBuildInputs = [ clipper2 ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
@@ -36,19 +36,31 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMANIFOLD_PAR=TBB"
   ];
 
+  excludedTestPatterns = [
+  ];
   doCheck = true;
   checkPhase = ''
-    test/manifold_test
+    test/manifold_test --gtest_filter=-${lib.escapeShellArg (builtins.concatStringsSep ":" finalAttrs.excludedTestPatterns)}
   '';
+
+  passthru = {
+    tests = {
+      python = python3Packages.manifold3d;
+    };
+  };
 
   meta = {
     description = "Geometry library for topological robustness";
     homepage = "https://github.com/elalish/manifold";
+    changelog = "https://github.com/elalish/manifold/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      hzeller
-      pca006132
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        hzeller
+        pca006132
+      ]
+      ++ python3Packages.manifold3d.meta.maintainers;
     platforms = lib.platforms.unix;
   };
 })

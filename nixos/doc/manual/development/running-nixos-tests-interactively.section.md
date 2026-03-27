@@ -11,6 +11,17 @@ $ ./result/bin/nixos-test-driver
 ```
 
 ::: {.note}
+Tests using `systemd-nspawn` container machines require root privileges to run interactively,
+since the driver calls `systemd-nspawn` directly to start the containers:
+
+```
+$ sudo ./result/bin/nixos-test-driver
+[...]
+>>>
+```
+:::
+
+::: {.note}
 By executing the test driver in this way,
 the VMs executed may gain network & Internet access via their backdoor control interface,
 typically recognized as `eth0`.
@@ -30,7 +41,7 @@ back into the test driver command line upon its completion. This allows
 you to inspect the state of the VMs after the test (e.g. to debug the
 test script).
 
-## Shell access in interactive mode {#sec-nixos-test-shell-access}
+## Shell access to VMs in interactive mode {#sec-nixos-test-shell-access}
 
 The function `<yourmachine>.shell_interact()` grants access to a shell running
 inside a virtual machine. To use it, replace `<yourmachine>` with the name of a
@@ -63,6 +74,68 @@ using:
 Once the connection is established, you can enter commands in the socat terminal
 where socat is running.
 
+## SSH Access for test VMs {#sec-nixos-test-ssh-access}
+
+An SSH-based backdoor to log into machines can be enabled with
+
+```nix
+{
+  name = "…";
+  nodes.machines = {
+    # …
+  };
+  interactive.sshBackdoor.enable = true;
+}
+```
+
+::: {.warning}
+Make sure to only enable the backdoor for interactive tests
+(i.e. by using `interactive.sshBackdoor.enable`)! This is the only
+supported configuration.
+
+Running a test in a sandbox with this will fail because `/dev/vhost-vsock` isn't available
+in the sandbox.
+:::
+
+This creates a [vsock socket](https://man7.org/linux/man-pages/man7/vsock.7.html)
+for each VM to log in with SSH. This configures root login with an empty password.
+
+When the VMs get started interactively with the test-driver, it's possible to
+connect to `machine` with
+
+```
+$ ssh vsock/3 -o User=root
+```
+
+The socket numbers correspond to the node number of the test VM, but start
+at three instead of one because that's the lowest possible
+vsock number. The exact SSH commands are also printed out when starting
+`nixos-test-driver`.
+
+On non-NixOS systems you'll probably need to enable
+the SSH config from {manpage}`systemd-ssh-proxy(1)` yourself.
+
+If starting VM fails with an error like
+
+```
+qemu-system-x86_64: -device vhost-vsock-pci,guest-cid=3: vhost-vsock: unable to set guest cid: Address already in use
+```
+
+it means that the vsock numbers for the VMs are already in use. This can happen
+if another interactive test with SSH backdoor enabled is running on the machine.
+
+In that case, you need to assign another range of vsock numbers. You can pick another
+offset with
+
+```nix
+{
+  sshBackdoor = {
+    enable = true;
+    vsockOffset = 23542;
+  };
+}
+```
+
 ## Port forwarding to NixOS test VMs {#sec-nixos-test-port-forwarding}
 
 If your test has only a single VM, you may use e.g.
@@ -87,10 +160,10 @@ must be configured to allow these connections.
 ## Reuse VM state {#sec-nixos-test-reuse-vm-state}
 
 You can re-use the VM states coming from a previous run by setting the
-`--keep-vm-state` flag.
+`--keep-machine-state` flag.
 
 ```ShellSession
-$ ./result/bin/nixos-test-driver --keep-vm-state
+$ ./result/bin/nixos-test-driver --keep-machine-state
 ```
 
 The machine state is stored in the `$TMPDIR/vm-state-machinename`

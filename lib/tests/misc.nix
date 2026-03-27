@@ -6,7 +6,8 @@
   which is `throw`'s and `abort`'s, without error messages.
 
   If you need to test error messages or more complex evaluations, see
-  `lib/tests/modules.sh`, `lib/tests/sources.sh` or `lib/tests/filesystem.sh` as examples.
+  `lib/tests/modules.sh`, `lib/tests/sources.sh`, `lib/tests/filesystem.sh` or
+  `lib/tests/debug.sh` as examples.
 
   To run these tests:
 
@@ -69,6 +70,7 @@ let
     id
     ifilter0
     isStorePath
+    join
     lazyDerivation
     length
     lists
@@ -77,6 +79,8 @@ let
     makeIncludePath
     makeOverridable
     mapAttrs
+    mapAttrsToListRecursive
+    mapAttrsToListRecursiveCond
     mapCartesianProduct
     matchAttrs
     mergeAttrs
@@ -91,6 +95,7 @@ let
     range
     recursiveUpdateUntil
     removePrefix
+    replaceString
     replicate
     runTests
     setFunctionArgs
@@ -112,6 +117,7 @@ let
     toIntBase10
     toShellVars
     types
+    uniqueStrings
     updateManyAttrsByPath
     versions
     xor
@@ -144,6 +150,11 @@ let
       inherit expected;
     };
 
+  dummyDerivation = derivation {
+    name = "name";
+    builder = "builder";
+    system = "system";
+  };
 in
 
 runTests {
@@ -191,6 +202,85 @@ runTests {
       c = true;
     };
   };
+
+  testOverridePreserveFunctionMetadata =
+    let
+      toCallableAttrs = f: setFunctionArgs f (functionArgs f);
+      constructDefinition =
+        {
+          a ? 3,
+        }:
+        toCallableAttrs (
+          {
+            b ? 5,
+          }:
+          {
+            inherit a b;
+          }
+        )
+        // {
+          inherit a;
+          c = 7;
+        };
+      construct0 = makeOverridable constructDefinition { };
+      construct1 = makeOverridable construct0;
+      construct0p = construct0.override { a = 11; };
+      construct1p = construct1.override { a = 11; };
+    in
+    {
+      expr = {
+        construct-metadata = {
+          inherit (construct1) a c;
+        };
+        construct-overridden-metadata = {
+          v = construct0p.a;
+          inherit (construct1p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = mapAttrs (_: f: (f { }) ? override) {
+            inherit construct1 construct1p;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit ((construct1p { }).override { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct1p { b = 13; }) a b;
+            };
+            v = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+          };
+        };
+      };
+      expected = {
+        construct-metadata = {
+          inherit (construct0) a c;
+        };
+        construct-overridden-metadata = {
+          v = 11;
+          inherit (construct0p) a c;
+        };
+        construct-overridden-result-overrider = {
+          result-overriders-exist = {
+            construct1 = true;
+            construct1p = true;
+          };
+          result-overrider-functionality = {
+            overridden = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            direct = {
+              inherit (construct0p { b = 13; }) a b;
+            };
+            v = {
+              a = 11;
+              b = 13;
+            };
+          };
+        };
+      };
+    };
 
   testCallPackageWithOverridePreservesArguments =
     let
@@ -379,14 +469,25 @@ runTests {
     expected = 255;
   };
 
-  testFromHexStringSecondExample = {
-    expr = fromHexString (builtins.hashString "sha256" "test");
+  # Highest supported integer value in Nix.
+  testFromHexStringMaximum = {
+    expr = fromHexString "7fffffffffffffff";
     expected = 9223372036854775807;
   };
 
+  testFromHexStringLeadingZeroes = {
+    expr = fromHexString "00ffffffffffffff";
+    expected = 72057594037927935;
+  };
+
   testFromHexStringWithPrefix = {
-    expr = fromHexString "0Xf";
+    expr = fromHexString "0xf";
     expected = 15;
+  };
+
+  testFromHexStringMixedCase = {
+    expr = fromHexString "eEeEe";
+    expected = 978670;
   };
 
   testToBaseDigits = {
@@ -414,6 +515,15 @@ runTests {
   };
 
   # STRINGS
+
+  testJoin = {
+    expr = join "," [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = "a,b,c";
+  };
 
   testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") [
@@ -495,6 +605,11 @@ runTests {
       ]
     );
     expected = "/usr/include:/usr/local/include";
+  };
+
+  testReplaceStringString = {
+    expr = strings.replaceString "." "_" "v1.2.3";
+    expected = "v1_2_3";
   };
 
   testReplicateString = {
@@ -631,6 +746,101 @@ runTests {
     ];
   };
 
+  testSplitStringBySimpleDelimiter = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      builtins.elem curr [
+        "."
+        "-"
+      ]
+    ) false "foo.bar-baz";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByLeadingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false ".foo.bar.baz";
+    expected = [
+      ""
+      "foo"
+      "bar"
+      "baz"
+    ];
+  };
+
+  testSplitStringByTrailingDelimiter = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo.bar.baz.";
+    expected = [
+      "foo"
+      "bar"
+      "baz"
+      ""
+    ];
+  };
+
+  testSplitStringByMultipleConsecutiveDelimiters = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "foo...bar";
+    expected = [
+      "foo"
+      ""
+      ""
+      "bar"
+    ];
+  };
+
+  testSplitStringByKeepingSplitChar = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) true "foo.bar.baz";
+    expected = [
+      "foo"
+      ".bar"
+      ".baz"
+    ];
+  };
+
+  testSplitStringByCaseTransition = {
+    expr = strings.splitStringBy (
+      prev: curr: builtins.match "[a-z]" prev != null && builtins.match "[A-Z]" curr != null
+    ) true "fooBarBaz";
+    expected = [
+      "foo"
+      "Bar"
+      "Baz"
+    ];
+  };
+
+  testSplitStringByEmptyString = {
+    expr = strings.splitStringBy (prev: curr: builtins.elem curr [ "." ]) false "";
+    expected = [ "" ];
+  };
+
+  testSplitStringByComplexPredicate = {
+    expr = strings.splitStringBy (
+      prev: curr:
+      prev != ""
+      && curr != ""
+      && builtins.match "[0-9]" prev != null
+      && builtins.match "[a-z]" curr != null
+    ) true "123abc456def";
+    expected = [
+      "123"
+      "abc456"
+      "def"
+    ];
+  };
+
+  testSplitStringByUpperCaseStart = {
+    expr = strings.splitStringBy (prev: curr: builtins.match "[A-Z]" curr != null) true "FooBarBaz";
+    expected = [
+      ""
+      "Foo"
+      "Bar"
+      "Baz"
+    ];
+  };
+
   testEscapeShellArg = {
     expr = strings.escapeShellArg "esc'ape\nme";
     expected = "'esc'\\''ape\nme'";
@@ -655,19 +865,24 @@ runTests {
     expected = "'á'";
   };
 
+  testEscapeNixIdentifierNoQuote = {
+    expr = strings.escapeNixIdentifier "foo";
+    expected = "foo";
+  };
+
+  testEscapeNixIdentifierNumber = {
+    expr = strings.escapeNixIdentifier "1foo";
+    expected = ''"1foo"'';
+  };
+
+  testEscapeNixIdentifierKeyword = {
+    expr = strings.escapeNixIdentifier "assert";
+    expected = ''"assert"'';
+  };
+
   testSplitStringsDerivation = {
-    expr = take 3 (
-      strings.splitString "/" (derivation {
-        name = "name";
-        builder = "builder";
-        system = "system";
-      })
-    );
-    expected = [
-      ""
-      "nix"
-      "store"
-    ];
+    expr = lib.dropEnd 1 (strings.splitString "/" dummyDerivation);
+    expected = strings.splitString "/" builtins.storeDir;
   };
 
   testSplitVersionSingle = {
@@ -715,7 +930,7 @@ runTests {
       in
       {
         storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
+        storePathDerivation = isStorePath dummyDerivation;
         storePathAppendix = isStorePath "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
         asPath = isStorePath (/. + goodPath);
@@ -800,7 +1015,7 @@ runTests {
   };
 
   testHasInfixDerivation = {
-    expr = hasInfix "hello" (import ../.. { system = "x86_64-linux"; }).hello;
+    expr = hasInfix "name" dummyDerivation;
     expected = true;
   };
 
@@ -851,8 +1066,8 @@ runTests {
   };
 
   testEscapeC = {
-    expr = strings.escapeC [ " " ] "Hello World";
-    expected = "Hello\\x20World";
+    expr = strings.escapeC [ "\n" " " ] "Hello World\n";
+    expected = "Hello\\x20World\\x0a";
   };
 
   testEscapeURL = testAllTrue [
@@ -873,6 +1088,28 @@ runTests {
   };
 
   testToSentenceCasePath = testingThrow (strings.toSentenceCase ./.);
+
+  testToCamelCase = {
+    expr = strings.toCamelCase "hello world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromKebab = {
+    expr = strings.toCamelCase "hello-world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromSnake = {
+    expr = strings.toCamelCase "hello_world";
+    expected = "helloWorld";
+  };
+
+  testToCamelCaseFromPascal = {
+    expr = strings.toCamelCase "HelloWorld";
+    expected = "helloWorld";
+  };
+
+  testToCamelCasePath = testingThrow (strings.toCamelCase ./.);
 
   testToInt = testAllTrue [
     # Naive
@@ -1146,25 +1383,23 @@ runTests {
     expected = [ 15 ];
   };
 
-  testFold =
+  testFoldr =
     let
-      f = op: fold: fold op 0 (range 0 100);
-      # fold with associative operator
+      f = op: foldr: foldr op 0 (range 0 100);
+      # foldr with associative operator
       assoc = f builtins.add;
-      # fold with non-associative operator
+      # foldr with non-associative operator
       nonAssoc = f builtins.sub;
     in
     {
       expr = {
         assocRight = assoc foldr;
-        # right fold with assoc operator is same as left fold
+        # foldr with assoc operator is same as foldl
         assocRightIsLeft = assoc foldr == assoc foldl;
         nonAssocRight = nonAssoc foldr;
         nonAssocLeft = nonAssoc foldl;
-        # with non-assoc operator the fold results are not the same
+        # with non-assoc operator the foldr results are not the same
         nonAssocRightIsNotLeft = nonAssoc foldl != nonAssoc foldr;
-        # fold is an alias for foldr
-        foldIsRight = nonAssoc fold == nonAssoc foldr;
       };
       expected = {
         assocRight = 5050;
@@ -1172,7 +1407,6 @@ runTests {
         nonAssocRight = 50;
         nonAssocLeft = (-5050);
         nonAssocRightIsNotLeft = true;
-        foldIsRight = true;
       };
     };
 
@@ -1261,6 +1495,69 @@ runTests {
       ])
     )
   ];
+
+  testTakeEnd =
+    let
+      inherit (lib) takeEnd;
+    in
+    testAllTrue [
+      (
+        takeEnd 0 [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (
+        takeEnd 1 [
+          1
+          2
+          3
+        ] == [ 3 ]
+      )
+      (
+        takeEnd 2 [
+          1
+          2
+          3
+        ] == [
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 3 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (
+        takeEnd 4 [
+          1
+          2
+          3
+        ] == [
+          1
+          2
+          3
+        ]
+      )
+      (takeEnd 0 [ ] == [ ])
+      (takeEnd 1 [ ] == [ ])
+      (
+        takeEnd (-1) [
+          1
+          2
+          3
+        ] == [ ]
+      )
+      (takeEnd (-1) [ ] == [ ])
+    ];
 
   testDrop =
     let
@@ -1548,6 +1845,11 @@ runTests {
     ];
   };
 
+  testReplaceString = {
+    expr = replaceString "world" "Nix" "Hello, world!";
+    expected = "Hello, Nix!";
+  };
+
   testReplicate = {
     expr = replicate 3 "a";
     expected = [
@@ -1743,7 +2045,103 @@ runTests {
     expected = false;
   };
 
+  testUniqueStrings_empty = {
+    expr = uniqueStrings [ ];
+    expected = [ ];
+  };
+  testUniqueStrings_singles = {
+    expr = uniqueStrings [
+      "all"
+      "unique"
+      "already"
+    ];
+    expected = [
+      "all"
+      "already"
+      "unique"
+    ];
+  };
+  testUniqueStrings_allDuplicates = {
+    expr = uniqueStrings [
+      "dup"
+      "dup"
+      "dup"
+    ];
+    expected = [ "dup" ];
+  };
+  testUniqueStrings_some_duplicates = {
+    expr = uniqueStrings [
+      "foo"
+      "foo"
+      "bar"
+      "bar"
+      "baz"
+    ];
+    expected = [
+      "bar"
+      "baz"
+      "foo"
+    ];
+  };
+  testUniqueStrings_unicode = {
+    expr = uniqueStrings [
+      "café"
+      "@"
+      "#"
+      "@"
+      "#"
+      "$"
+      "😎"
+      "😎"
+      "🙃"
+      ""
+      ""
+    ];
+    expected = [
+      ""
+      "#"
+      "$"
+      "@"
+      "café"
+      "😎"
+      "🙃"
+    ];
+  };
+
   # ATTRSETS
+
+  testGenAttrs = {
+    expr = attrsets.genAttrs [ "foo" "bar" ] (name: "x_" + name);
+    expected = {
+      foo = "x_foo";
+      bar = "x_bar";
+    };
+  };
+  testGenAttrs' = {
+    expr = attrsets.genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s));
+    expected = {
+      x_foo = "y_foo";
+      x_bar = "y_bar";
+    };
+  };
+  testGenAttrs'Example2 = {
+    expr = attrsets.genAttrs' [
+      {
+        x = "foo";
+        y = "baz";
+      }
+    ] (s: lib.nameValuePair ("x_" + s.x) ("y_" + s.y));
+    expected = {
+      x_foo = "y_baz";
+    };
+  };
+  testGenAttrs'ConflictingName = {
+    # c.f. warning of genAttrs'
+    expr = attrsets.genAttrs' [ "foo" "bar" "baz" ] (s: nameValuePair "foo" s);
+    expected = {
+      foo = "foo";
+    };
+  };
 
   testConcatMapAttrs = {
     expr =
@@ -2236,7 +2634,7 @@ runTests {
       sections = {
       };
     };
-    expected = '''';
+    expected = "";
   };
 
   testToINIWithGlobalSectionGlobalEmptyIsTheSameAsToINI =
@@ -2402,6 +2800,7 @@ runTests {
         ];
         emptylist = [ ];
         attrs = {
+          "assert" = false;
           foo = null;
           "foo b/ar" = "baz";
         };
@@ -2421,7 +2820,7 @@ runTests {
         functionArgs = "<function, args: {arg?, foo}>";
         list = "[ 3 4 ${function} [ false ] ]";
         emptylist = "[ ]";
-        attrs = "{ foo = null; \"foo b/ar\" = \"baz\"; }";
+        attrs = "{ \"assert\" = false; foo = null; \"foo b/ar\" = \"baz\"; }";
         emptyattrs = "{ }";
         drv = "<derivation ${deriv.name}>";
       };
@@ -2603,12 +3002,12 @@ runTests {
 
   testToLuaEmptyAttrSet = {
     expr = generators.toLua { } { };
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaEmptyList = {
     expr = generators.toLua { } [ ];
-    expected = ''{}'';
+    expected = "{}";
   };
 
   testToLuaListOfVariousTypes = {
@@ -2653,7 +3052,7 @@ runTests {
       41
       43
     ];
-    expected = ''{ 41, 43 }'';
+    expected = "{ 41, 43 }";
   };
 
   testToLuaEmptyBindings = {
@@ -2800,6 +3199,86 @@ runTests {
     expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
+  testToCommandLine = {
+    expr =
+      let
+        optionFormat = optionName: {
+          option = "-${optionName}";
+          sep = "=";
+          explicitBool = true;
+        };
+      in
+      cli.toCommandLine optionFormat {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+      };
+
+    expected = [
+      "-data={\"id\":0}"
+      "-e=s/a/b/"
+      "-e=s/b/c/"
+      "-i=.bak"
+      "-n=false"
+      "-testsuite=unit"
+      "-testsuite=integration"
+      "-v=true"
+      "-verbose=true"
+      "-verbose=true"
+      "-verbose=false"
+    ];
+  };
+
+  testToCommandLineGNU = {
+    expr = cli.toCommandLineGNU { } {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
+      ];
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
+    };
+
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
+  };
+
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
     name = "..foo";
     expected = "foo";
@@ -2912,6 +3391,149 @@ runTests {
         "bar"
       ]
     ];
+  };
+
+  testEmptyValueOption = {
+    expr =
+      let
+        module =
+          { lib, ... }:
+          {
+            options = {
+              "empty-value" = lib.mkOption {
+                type = lib.mkOptionType {
+                  name = "propagate-empty-value-to-default";
+                  emptyValue.value = 2;
+                };
+              };
+            };
+          };
+        eval = evalModules {
+          modules = [ module ];
+        };
+      in
+      filter (o: o.name == "empty-value") (optionAttrSetToDocList eval.options);
+    expected = [
+      {
+        declarations = [ ];
+        default = {
+          _type = "literalExpression";
+          text = "2";
+        };
+        description = null;
+        internal = false;
+        loc = [ "empty-value" ];
+        name = "empty-value";
+        readOnly = false;
+        type = "propagate-empty-value-to-default";
+        visible = true;
+      }
+    ];
+  };
+
+  testDocOptionVisiblity = {
+    expr =
+      let
+        submodule =
+          { lib, ... }:
+          {
+            freeformType = lib.types.attrsOf (
+              lib.types.submodule {
+                options.bar = lib.mkOption { };
+              }
+            );
+            options.foo = lib.mkOption { };
+          };
+
+        module =
+          { lib, ... }:
+          {
+            options = {
+              shallow = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "shallow";
+              };
+              transparent = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = "transparent";
+              };
+              "true" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = true;
+              };
+              "false" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                visible = false;
+              };
+              "internal" = lib.mkOption {
+                type = lib.types.submodule submodule;
+                internal = true;
+              };
+            };
+          };
+
+        options =
+          (evalModules {
+            modules = [ module ];
+          }).options;
+      in
+      pipe options [
+        optionAttrSetToDocList
+        (filter (opt: !(builtins.elem "_module" opt.loc)))
+        (map (
+          opt:
+          nameValuePair opt.name {
+            inherit (opt) visible internal;
+          }
+        ))
+        listToAttrs
+      ];
+    expected = {
+      shallow = {
+        visible = true;
+        internal = false;
+      };
+      transparent = {
+        visible = false;
+        internal = false;
+      };
+      "transparent.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "transparent.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "true" = {
+        visible = true;
+        internal = false;
+      };
+      "true.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "true.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+      "false" = {
+        visible = false;
+        internal = false;
+      };
+      "internal" = {
+        visible = true;
+        internal = true;
+      };
+      "internal.foo" = {
+        visible = true;
+        internal = false;
+      };
+      "internal.<name>.bar" = {
+        visible = true;
+        internal = false;
+      };
+    };
   };
 
   testAttrsWithName = {
@@ -3270,6 +3892,118 @@ runTests {
       133
       233
       333
+    ];
+  };
+
+  testMapAttrsToListRecursive = {
+    expr = mapAttrsToListRecursive (p: v: "${concatStringsSep "." p}=${v}") {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "a.b=A"
+      "c.d=B"
+      "c.e.f=C"
+      "c.e.g=D"
+      "h.i.j.k=E"
+    ];
+  };
+
+  testMapAttrsToListRecursiveWithLists = {
+    expr = mapAttrsToListRecursive (p: v: v) {
+      a = [ ];
+      b = {
+        c = [ [ ] ];
+      };
+      d = {
+        e = {
+          f = [ [ [ ] ] ];
+        };
+      };
+    };
+    expected = [
+      [ ]
+      [ [ ] ]
+      [ [ [ ] ] ]
+    ];
+  };
+
+  testMapAttrsToListRecursiveCond = {
+    expr = mapAttrsToListRecursiveCond (p: as: !(as ? stop)) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          stop = null;
+          f = "C";
+          g = {
+            h = "D";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        stop = null;
+        f = "C";
+        g = {
+          h = "D";
+        };
+      }
+    ];
+  };
+
+  testMapAttrsToListRecursiveCondPath = {
+    expr = mapAttrsToListRecursiveCond (p: as: length p < 2) (p: v: v) {
+      a = {
+        b = "A";
+      };
+      c = {
+        d = "B";
+        e = {
+          f = "C";
+          g = "D";
+        };
+      };
+      h = {
+        i = {
+          j = {
+            k = "E";
+          };
+        };
+      };
+    };
+    expected = [
+      "A"
+      "B"
+      {
+        f = "C";
+        g = "D";
+      }
+      {
+        j = {
+          k = "E";
+        };
+      }
     ];
   };
 
@@ -3967,6 +4701,34 @@ runTests {
     };
   };
 
+  # Make sure that passing a string for the `directory` works.
+  #
+  # See: https://github.com/NixOS/nixpkgs/pull/361424#discussion_r1934813568
+  # See: https://github.com/NixOS/nix/issues/9428
+  testPackagesFromDirectoryRecursiveStringDirectory = {
+    expr = packagesFromDirectoryRecursive {
+      callPackage = path: overrides: import path overrides;
+      # Do NOT remove the `builtins.toString` call here!!!
+      directory = toString ./packages-from-directory/plain;
+    };
+    expected = {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
+  };
+
   # Check that `packagesFromDirectoryRecursive` can process a directory with a
   # top-level `package.nix` file into a single package.
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
@@ -4064,4 +4826,190 @@ runTests {
         };
       };
     };
+
+  # Check that makeScope provides a default callPackage
+  testMakeScopeDefaultCallPackage =
+    let
+      scope = lib.makeScope lib.callPackageWith (self: {
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value";
+    };
+
+  # Check that callPackage can be overridden by the scope function
+  testMakeScopeOverrideCallPackage =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+    in
+    {
+      expr = scope.foo;
+      expected = "foo-value-custom";
+    };
+
+  # Check that overriding callPackage persists through overrideScope
+  testMakeScopeOverrideCallPackagePersistsThroughOverrideScope =
+    let
+      customCallPackage =
+        _self: fn: args:
+        (fn args) + "-custom";
+      scope = lib.makeScope lib.callPackageWith (self: {
+        callPackage = customCallPackage self;
+        foo = self.callPackage ({ }: "foo-value") { };
+      });
+      overridden = scope.overrideScope (
+        _final: _prev: {
+          bar = scope.callPackage ({ }: "bar-value") { };
+        }
+      );
+    in
+    {
+      expr = { inherit (overridden) foo bar; };
+      expected = {
+        foo = "foo-value-custom";
+        bar = "bar-value-custom";
+      };
+    };
+
+  testFilesystemResolveDefaultNixFile1 = {
+    expr = lib.filesystem.resolveDefaultNix ./foo.nix;
+    expected = ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2 = {
+    expr = lib.filesystem.resolveDefaultNix ./default.nix;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1 = {
+    expr = lib.filesystem.resolveDefaultNix ./.;
+    expected = ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./foo.nix);
+    expected = toString ./foo.nix;
+  };
+
+  testFilesystemResolveDefaultNixFile2_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./default.nix);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./default.nix;
+  };
+
+  testFilesystemResolveDefaultNixDir1_toString2 = {
+    expr = lib.filesystem.resolveDefaultNix (toString ./.);
+    expected = toString ./. + "/default.nix";
+  };
+
+  testFilesystemResolveDefaultNixNonExistent = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs";
+  };
+
+  testFilesystemResolveDefaultNixNonExistentDir = {
+    expr = lib.filesystem.resolveDefaultNix "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/";
+    expected = "/non-existent/this/does/not/exist/for/real/please-dont-mess-with-your-local-fs/default.nix";
+  };
+
+  testRenameCrossIndexFrom = {
+    expr = lib.renameCrossIndexFrom "pkgs" {
+      pkgsBuildBuild = "dummy-build-build";
+      pkgsBuildHost = "dummy-build-host";
+      pkgsBuildTarget = "dummy-build-target";
+      pkgsHostHost = "dummy-host-host";
+      pkgsHostTarget = "dummy-host-target";
+      pkgsTargetTarget = "dummy-target-target";
+    };
+    expected = {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+  };
+
+  testRenameCrossIndexTo = {
+    expr = lib.renameCrossIndexTo "self" {
+      buildBuild = "dummy-build-build";
+      buildHost = "dummy-build-host";
+      buildTarget = "dummy-build-target";
+      hostHost = "dummy-host-host";
+      hostTarget = "dummy-host-target";
+      targetTarget = "dummy-target-target";
+    };
+    expected = {
+      selfBuildBuild = "dummy-build-build";
+      selfBuildHost = "dummy-build-host";
+      selfBuildTarget = "dummy-build-target";
+      selfHostHost = "dummy-host-host";
+      selfHostTarget = "dummy-host-target";
+      selfTargetTarget = "dummy-target-target";
+    };
+  };
+
+  testMapCrossIndex = {
+    expr = lib.mapCrossIndex (x: x * 10) {
+      buildBuild = 1;
+      buildHost = 2;
+      buildTarget = 3;
+      hostHost = 4;
+      hostTarget = 5;
+      targetTarget = 6;
+    };
+    expected = {
+      buildBuild = 10;
+      buildHost = 20;
+      buildTarget = 30;
+      hostHost = 40;
+      hostTarget = 50;
+      targetTarget = 60;
+    };
+  };
+
+  testMapCrossIndexString = {
+    expr = lib.mapCrossIndex (x: "prefix-${x}") {
+      buildBuild = "bb";
+      buildHost = "bh";
+      buildTarget = "bt";
+      hostHost = "hh";
+      hostTarget = "ht";
+      targetTarget = "tt";
+    };
+    expected = {
+      buildBuild = "prefix-bb";
+      buildHost = "prefix-bh";
+      buildTarget = "prefix-bt";
+      hostHost = "prefix-hh";
+      hostTarget = "prefix-ht";
+      targetTarget = "prefix-tt";
+    };
+  };
+
+  testReplaceElemAt = {
+    expr = lib.replaceElemAt [ 1 2 3 ] 1 "a";
+    expected = [
+      1
+      "a"
+      3
+    ];
+  };
+
+  testReplaceElemAtOutOfRange = testingThrow (lib.replaceElemAt [ 1 2 3 ] 5 "a");
+
+  testReplaceElemAtNegative = testingThrow (lib.replaceElemAt [ 1 2 3 ] (-1) "a");
 }

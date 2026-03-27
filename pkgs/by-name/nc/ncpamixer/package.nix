@@ -10,15 +10,15 @@
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ncpamixer";
-  version = "1.3.9";
+  version = "1.3.11";
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
-    tag = version;
-    hash = "sha256-uafjAaXtn97NNmRPxeHmbAaMeHIR/nrQKsTqDX5NRGU=";
+    tag = finalAttrs.version;
+    hash = "sha256-N7GtMOcZb345tjcT5S3QOGx+n4SpDohiKPOjsgwgr6I=";
   };
 
   patches = [
@@ -49,15 +49,19 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
+    runHook preConfigure
+
     make PREFIX=$out USE_WIDE=1 RELEASE=1 build/Makefile
+
+    runHook postConfigure
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Terminal mixer for PulseAudio inspired by pavucontrol";
     homepage = "https://github.com/fulhax/ncpamixer";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = teams.c3d2.members;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "ncpamixer";
   };
-}
+})

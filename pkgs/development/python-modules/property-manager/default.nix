@@ -5,7 +5,7 @@
   humanfriendly,
   verboselogs,
   coloredlogs,
-  pytest,
+  pytestCheckHook,
   pytest-cov-stub,
 }:
 
@@ -27,14 +27,14 @@ buildPythonPackage rec {
     verboselogs
   ];
   nativeCheckInputs = [
-    pytest
+    pytestCheckHook
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Useful property variants for Python programming";
     homepage = "https://github.com/xolox/python-property-manager";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
   };
 }

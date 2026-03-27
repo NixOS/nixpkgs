@@ -5,12 +5,12 @@ let
 
   template-bootstrap3 = pkgs.stdenv.mkDerivation rec {
     name = "bootstrap3";
-    version = "2022-07-27";
+    version = "2024-02-06";
     src = pkgs.fetchFromGitHub {
       owner = "giterlizzi";
       repo = "dokuwiki-template-bootstrap3";
       rev = "v${version}";
-      hash = "sha256-B3Yd4lxdwqfCnfmZdp+i/Mzwn/aEuZ0ovagDxuR6lxo=";
+      hash = "sha256-PSA/rHMkM/kMvOV7CP1byL8Ym4Qu7a4Rz+/aPX31x9k=";
     };
     installPhase = "mkdir -p $out; cp -R * $out/";
   };
@@ -30,14 +30,6 @@ let
     r13y  reproducibility
   '';
 
-  dwWithAcronyms = pkgs.dokuwiki.overrideAttrs (prev: {
-    installPhase =
-      prev.installPhase or ""
-      + ''
-        ln -sf ${acronymsFile} $out/share/dokuwiki/conf/acronyms.local.conf
-      '';
-  });
-
   mkNode =
     webserver:
     { ... }:
@@ -55,9 +47,11 @@ let
             };
           };
           "site2.local" = {
-            package = dwWithAcronyms;
             usersFile = "/var/lib/dokuwiki/site2.local/users.auth.php";
             plugins = [ plugin-icalevents ];
+            extraConfigs = {
+              "acronyms.local.conf" = acronymsFile;
+            };
             settings = {
               useacl = true;
               superuser = "admin";
@@ -104,8 +98,8 @@ let
 in
 {
   name = "dokuwiki";
-  meta = with pkgs.lib; {
-    maintainers = with maintainers; [
+  meta = {
+    maintainers = with pkgs.lib.maintainers; [
       _1000101
       onny
       e1mo

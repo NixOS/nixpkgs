@@ -4,10 +4,10 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  libXdmcp,
+  libxdmcp,
   libexif,
   libfm-qt,
-  libpthreadstubs,
+  libpthread-stubs,
   lxqt-build-tools,
   menu-cache,
   qtbase,
@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lximage-qt";
-  version = "2.1.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lximage-qt";
     rev = version;
-    hash = "sha256-Y9lBXEROC4LIl1M7js0TvJBBNyO06qCWpHxvQjcYPhc=";
+    hash = "sha256-RJKXcaZJe5gyDubdglOmzmJ9XCH0gAW4fc7OR3anCoU=";
   };
 
   nativeBuildInputs = [
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libXdmcp
+    libxdmcp
     libexif
     libfm-qt
-    libpthreadstubs
+    libpthread-stubs
     menu-cache
     qtbase
     qtimageformats # add-on module to support more image file formats
@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/lximage-qt";
     description = "Image viewer and screenshot tool for lxqt";
     mainProgram = "lximage-qt";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; unix;
-    maintainers = teams.lxqt.members;
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; unix;
+    teams = [ lib.teams.lxqt ];
   };
 }

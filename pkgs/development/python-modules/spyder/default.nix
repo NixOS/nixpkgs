@@ -4,7 +4,7 @@
   fetchPypi,
 
   # nativeBuildInputs
-  pyqtwebengine,
+  pyqt6-webengine,
 
   # build-system
   setuptools,
@@ -13,6 +13,7 @@
   aiohttp,
   asyncssh,
   atomicwrites,
+  bcrypt,
   chardet,
   cloudpickle,
   cookiecutter,
@@ -27,6 +28,7 @@
   nbconvert,
   numpy,
   numpydoc,
+  packaging,
   pickleshare,
   psutil,
   pygithub,
@@ -34,7 +36,9 @@
   pylint-venv,
   pyls-spyder,
   pyopengl,
+  pyqt6,
   python-lsp-black,
+  python-lsp-ruff,
   python-lsp-server,
   pyuca,
   pyzmq,
@@ -52,28 +56,40 @@
   three-merge,
   watchdog,
   yarl,
+  qt6,
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.0a1";
+  version = "6.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Yjii1YUmdWdrrSLe3trAoATJXt2bfjc0JX5CBMVIEq8=";
+    hash = "sha256-bgkiihfqqIHnYes5gvIvAdQ7arUAm7NmGLaqnP/Ml40=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
 
-  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
+  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "ipython"
+    "python-lsp-server"
+  ];
+
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
 
   dependencies = [
     aiohttp
     asyncssh
     atomicwrites
+    bcrypt
     chardet
     cloudpickle
     cookiecutter
@@ -88,6 +104,7 @@ buildPythonPackage rec {
     nbconvert
     numpy
     numpydoc
+    packaging
     pickleshare
     psutil
     pygithub
@@ -95,8 +112,9 @@ buildPythonPackage rec {
     pylint-venv
     pyls-spyder
     pyopengl
-    pyqtwebengine
+    pyqt6-webengine
     python-lsp-black
+    python-lsp-ruff
     python-lsp-server
     pyuca
     pyzmq
@@ -114,10 +132,14 @@ buildPythonPackage rec {
     three-merge
     watchdog
     yarl
-  ] ++ python-lsp-server.optional-dependencies.all;
+    pyqt6
+  ]
+  ++ python-lsp-server.optional-dependencies.all;
 
   # There is no test for spyder
   doCheck = false;
+
+  env.SPYDER_QT_BINDING = "pyqt6";
 
   postInstall = ''
     # Add Python libs to env so Spyder subprocesses
@@ -141,9 +163,9 @@ buildPythonPackage rec {
     '';
     homepage = "https://www.spyder-ide.org/";
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
-    changelog = "https://github.com/spyder-ide/spyder/blob/master/CHANGELOG.md";
+    changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -1,25 +1,26 @@
 {
   lib,
   fetchFromGitHub,
+  installShellFiles,
   libxcb,
   makeBinaryWrapper,
   nix-update-script,
   pkg-config,
   rustPlatform,
-  xcb-util-cursor,
+  libxcb-cursor,
   xwayland,
   withSystemd ? true,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "xwayland-satellite";
-  version = "0.5.1";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "Supreeeme";
     repo = "xwayland-satellite";
-    tag = "v${version}";
-    hash = "sha256-/hBM43/Gd0/tW+egrhlWgOIISeJxEs2uAOIYVpfDKeU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BUE41HjLIGPjq3U8VXPjf8asH8GaMI7FYdgrIHKFMXA=";
   };
 
   postPatch = ''
@@ -27,10 +28,10 @@ rustPlatform.buildRustPackage rec {
       --replace-fail '/usr/local/bin' "$out/bin"
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1tt7YNornw9U9FRdsRkdWx3Al3FZtvtCBXn9Pln+gk4=";
+  cargoHash = "sha256-16L6gsvze+m7XCJlOA1lsPNELE3D364ef2FTdkh0rVY=";
 
   nativeBuildInputs = [
+    installShellFiles
     makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
@@ -38,16 +39,24 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libxcb
-    xcb-util-cursor
+    libxcb-cursor
   ];
 
   buildNoDefaultFeatures = true;
   buildFeatures = lib.optional withSystemd "systemd";
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   # All integration tests require a running display server
   doCheck = false;
 
-  postInstall = lib.optionalString withSystemd ''
+  postInstall = ''
+    installManPage --name xwayland-satellite.1 xwayland-satellite.man
+  ''
+  + lib.optionalString withSystemd ''
     install -Dm0644 resources/xwayland-satellite.service -t $out/lib/systemd/user
   '';
 
@@ -64,7 +73,7 @@ rustPlatform.buildRustPackage rec {
       Grants rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base.
     '';
     homepage = "https://github.com/Supreeeme/xwayland-satellite";
-    changelog = "https://github.com/Supreeeme/xwayland-satellite/releases/tag/v${version}";
+    changelog = "https://github.com/Supreeeme/xwayland-satellite/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       if-loop69420
@@ -74,4 +83,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "xwayland-satellite";
     platforms = lib.platforms.linux;
   };
-}
+})

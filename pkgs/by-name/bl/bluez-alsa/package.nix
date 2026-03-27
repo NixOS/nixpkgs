@@ -15,38 +15,44 @@
   pkg-config,
   readline,
   sbc,
+  python3,
+  systemdSupport ? true,
+  systemdLibs,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez-alsa";
-  version = "4.1.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Vebxyku7xl/ReU025iThEbvfHsi4kCbvFqlBGDWrHxc=";
   };
+
+  postPatch = ''
+    patchShebangs src/dbus-codegen.py
+  '';
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
-  ];
+    python3
+  ]
+  ++ lib.optional systemdSupport systemdLibs;
 
-  buildInputs =
-    [
-      alsa-lib
-      bluez
-      glib
-      sbc
-      dbus
-      readline
-      libbsd
-      ncurses
-    ]
-    ++ lib.optionals aacSupport [
-      fdk_aac
-    ];
+  buildInputs = [
+    alsa-lib
+    bluez
+    glib
+    sbc
+    dbus
+    readline
+    libbsd
+    ncurses
+  ]
+  ++ lib.optional aacSupport fdk_aac;
 
   configureFlags = [
     (lib.enableFeature aacSupport "aac")
@@ -54,6 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "rfcomm")
     (lib.withFeatureAs true "alsaplugindir" "${placeholder "out"}/lib/alsa-lib")
     (lib.withFeatureAs true "dbusconfdir" "${placeholder "out"}/share/dbus-1/system.d")
+    (lib.enableFeature systemdSupport "systemd")
+    (lib.withFeatureAs systemdSupport "systemdsystemunitdir" "${placeholder "out"}/lib/systemd/system")
+    (lib.withFeatureAs systemdSupport "bluealsauser" "bluealsa")
+    (lib.withFeatureAs systemdSupport "bluealsaaplayuser" "bluealsa")
   ];
 
   passthru.updateScript = gitUpdater { };

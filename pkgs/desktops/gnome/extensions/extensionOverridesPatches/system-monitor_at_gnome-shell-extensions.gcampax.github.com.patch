@@ -17,7 +17,7 @@ index 37d2eb1..232d0d5 100644
  
  import * as Main from 'resource:///org/gnome/shell/ui/main.js';
  
-+GIRepository.Repository.prepend_search_path('@gtop_path@');
++GIRepository.Repository.dup_default().prepend_search_path('@gtop_path@');
 +const GTop = (await import("gi://GTop")).default;
 +
  const THRESHOLD_HIGH = 0.80;

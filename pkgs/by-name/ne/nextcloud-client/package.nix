@@ -21,9 +21,9 @@
   libsysprof-capture,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-client";
-  version = "3.16.2";
+  version = "4.0.8";
 
   outputs = [
     "out"
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    tag = "v${version}";
-    hash = "sha256-CBGvASIPN5xB2kgSDXg2vWpnsFBD3c3wudUAL6u64U8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EKJj2z3CkWrNL2idBHu5jHuPXQXKwjEjUAgo6OOY/08=";
   };
 
   patches = [
@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '"''${SYSTEMD_USER_UNIT_DIR}"' "\"$out/lib/systemd/user\""
+
     for file in src/libsync/vfs/*/CMakeLists.txt; do
       substituteInPlace $file \
         --replace-fail "PLUGINDIR" "KDE_INSTALL_PLUGINDIR"
@@ -89,22 +92,17 @@ stdenv.mkDerivation rec {
     "-DMIRALL_VERSION_SUFFIX=" # remove git suffix from version
   ];
 
-  postBuild = ''
-    make doc-man
-  '';
-
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
-    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
+    changelog = "https://github.com/nextcloud/desktop/releases/tag/v${finalAttrs.version}";
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kranzes
       SuperSandro2000
     ];
     platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };
-}
+})

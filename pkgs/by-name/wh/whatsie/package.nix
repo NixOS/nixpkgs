@@ -4,7 +4,7 @@
   stdenv,
   makeDesktopItem,
   copyDesktopItems,
-  libX11,
+  libx11,
   libxcb,
   qt5,
 }:
@@ -24,16 +24,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   desktopItems = [
     (makeDesktopItem {
-      name = finalAttrs.pname;
+      name = "whatsie";
       desktopName = "Whatsie";
-      icon = finalAttrs.pname;
-      exec = finalAttrs.pname;
+      icon = "whatsie";
+      exec = "whatsie";
       comment = finalAttrs.meta.description;
     })
   ];
 
   buildInputs = [
-    libX11
+    libx11
     libxcb
     qt5.qtwebengine
   ];

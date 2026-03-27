@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "ia-writer-quattro";
-  version = "unstable-2023-06-16";
+  version = "0-unstable-2023-06-16";
 
   src = fetchFromGitHub {
     owner = "iaolo";
@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "iA Writer Quattro Typeface";
     homepage = "https://github.com/iaolo/iA-Fonts";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = [ maintainers.x0ba ];
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.x0ba ];
   };
 }

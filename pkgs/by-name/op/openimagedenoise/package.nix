@@ -3,27 +3,30 @@
   config,
   cudaPackages,
   cudaSupport ? config.cudaSupport,
-  darwin,
   fetchzip,
   ispc,
   lib,
   python3,
   stdenv,
-  tbb,
+  onetbb,
   xcodebuild,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openimagedenoise";
-  version = "2.3.2";
+  version = "2.4.1";
 
   # The release tarballs include pretrained weights, which would otherwise need to be fetched with git-lfs
   src = fetchzip {
     url = "https://github.com/RenderKit/oidn/releases/download/v${finalAttrs.version}/oidn-${finalAttrs.version}.src.tar.gz";
-    sha256 = "sha256-yTa6U/1idfidbfNTQ7mXcroe7M4eM7Frxi45A/7e2A8=";
+    hash = "sha256-SM0Bn4qgeqRJAXr2MMjNjfWJVTcciERZxMHiyx4Z1hA=";
   };
 
-  patches = lib.optional cudaSupport ./cuda.patch;
+  strictDeps = true;
+
+  patches = lib.optionals cudaSupport [
+    ./cuda.patch
+  ];
 
   postPatch = ''
     # fix build failure with GCC14
@@ -31,42 +34,35 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-      ispc
-    ]
-    ++ lib.optional cudaSupport cudaPackages.cuda_nvcc
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    ispc
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
-  buildInputs =
-    [ tbb ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk_11_0.frameworks;
-      [
-        Accelerate
-        MetalKit
-        MetalPerformanceShadersGraph
-      ]
-    )
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ];
+  buildInputs = [
+    onetbb
+  ]
+
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)
-    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${tbb.dev}/include")
-    (lib.cmakeFeature "TBB_ROOT" "${tbb}")
+    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${lib.getDev onetbb}/include")
+    (lib.cmakeFeature "TBB_ROOT" "${onetbb}")
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.openimagedenoise.org";
     description = "High-Performance Denoising Library for Ray Tracing";
-    license = licenses.asl20;
-    maintainers = [ maintainers.leshainc ];
-    platforms = platforms.unix;
-    changelog = "https://github.com/RenderKit/oidn/blob/v${version}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.leshainc ];
+    platforms = lib.platforms.unix;
+    changelog = "https://github.com/RenderKit/oidn/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
 })

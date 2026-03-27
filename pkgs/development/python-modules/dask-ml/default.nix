@@ -41,20 +41,19 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies =
-    [
-      dask-glm
-      distributed
-      multipledispatch
-      numba
-      numpy
-      packaging
-      pandas
-      scikit-learn
-      scipy
-    ]
-    ++ dask.optional-dependencies.array
-    ++ dask.optional-dependencies.dataframe;
+  dependencies = [
+    dask-glm
+    distributed
+    multipledispatch
+    numba
+    numpy
+    packaging
+    pandas
+    scikit-learn
+    scipy
+  ]
+  ++ dask.optional-dependencies.array
+  ++ dask.optional-dependencies.dataframe;
 
   pythonImportsCheck = [
     "dask_ml"

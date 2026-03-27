@@ -55,7 +55,7 @@ stdenv.mkDerivation (
           cp META $out/lib/ocaml/${ocaml.version}/site-lib/seq
         '';
 
-        meta.description = "dummy backward-compatibility package for iterators";
+        meta.description = "Dummy backward-compatibility package for iterators";
 
       }
   )

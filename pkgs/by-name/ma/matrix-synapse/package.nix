@@ -3,15 +3,12 @@
   stdenv,
   makeWrapper,
   matrix-synapse-unwrapped,
-  extras ?
-    [
-      "postgres"
-      "url-preview"
-      "user-search"
-    ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd) "systemd",
+  extras ? [
+    "postgres"
+    "url-preview"
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform matrix-synapse-unwrapped.python.pkgs.systemd-python) "systemd",
   plugins ? [ ],
-  ...
 }:
 
 let
@@ -26,7 +23,8 @@ let
   searchPath = "${pythonEnv}/${matrix-synapse-unwrapped.python.sitePackages}";
 in
 stdenv.mkDerivation {
-  name = (lib.appendToName "wrapped" matrix-synapse-unwrapped).name;
+  pname = (lib.appendToName "wrapped" matrix-synapse-unwrapped).pname;
+  inherit (matrix-synapse-unwrapped) version;
 
   nativeBuildInputs = [
     makeWrapper

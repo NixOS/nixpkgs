@@ -5,7 +5,6 @@
 
   # pythonPackages
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -13,8 +12,6 @@ buildPythonPackage {
   pname = "oyaml";
   version = "unstable-2021-12-03";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "wimglenn";
@@ -29,10 +26,10 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "oyaml" ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for PyYAML which preserves dict ordering";
     homepage = "https://github.com/wimglenn/oyaml";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kamadorueda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kamadorueda ];
   };
 }

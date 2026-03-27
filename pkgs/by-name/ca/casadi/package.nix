@@ -38,70 +38,68 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "casadi";
-  version = "3.7.0";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "casadi";
     repo = "casadi";
-    rev = finalAttrs.version;
-    hash = "sha256-WumXAWO65XnNQqHMqAwfj2Y+KGOVTWx95qIuyE1M9us=";
+    tag = finalAttrs.version;
+    hash = "sha256-I6CYtKVvE67NSYH/JGJFP5wHhm1xACctz7uTwOFFihA=";
   };
 
   patches = [
+    # Add missing include
+    # ref. https://github.com/casadi/casadi/pull/4192
     (fetchpatch {
-      name = "fix-FindMUMPS.cmake.patch";
-      url = "https://github.com/casadi/casadi/pull/3899/commits/274f4b23f73e60c5302bec0479fe1e92682b63d2.patch";
-      hash = "sha256-3GWEWlN8dKLD6htpnOQLChldcT3hE09JWLeuCfAhY+4=";
+      url = "https://github.com/casadi/casadi/pull/4192/commits/fc1a83e8db37f328657eabff41f00a9a34d3cc74.patch";
+      hash = "sha256-9GXOtYa/BFq5vp6tE8HxO8xW3ep3my6TPD3FvkDhUUA=";
     })
-    # update include file path and link with clangAPINotes
-    # https://github.com/casadi/casadi/issues/3969
-    ./clang-19.diff
+
+    # Fix build with osqp v1
+    # ref. https://github.com/casadi/casadi/pull/4105
+    (fetchpatch {
+      url = "https://github.com/casadi/casadi/pull/4105/commits/cca4eb5d423c9d034f0666f71338063d3f8c9c43.patch";
+      hash = "sha256-pDI9x4yzPj+rjtzZpFKwfSsyE52Jt20izfqo5blkUOA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/casadi/casadi/pull/4105/commits/6035a95e48088928134c3827ab90a2a3a82b1389.patch";
+      hash = "sha256-1nOcCLXVwFBRH/abAhTly28+1oNjDumJCjT0NyRAgz0=";
+    })
   ];
 
-  postPatch =
-    ''
-      # fix case of hpipmConfig.cmake
-      substituteInPlace CMakeLists.txt --replace-fail \
-        "FATROP HPIPM" \
-        "FATROP hpipm"
+  postPatch = ''
+    # fix case of hpipmConfig.cmake
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "FATROP HPIPM" \
+      "FATROP hpipm"
 
-      # nix provide lib/clang headers in libclang, not in llvm.
-      substituteInPlace casadi/interfaces/clang/CMakeLists.txt --replace-fail \
-        '$'{CLANG_LLVM_LIB_DIR} \
-        ${lib.getLib llvmPackages.libclang}/lib
+    # help casadi find its own libs
+    substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
+      "std::vector<std::string> search_paths;" \
+      "std::vector<std::string> search_paths;
+       search_paths.push_back(\"$out/lib\");"
+  ''
+  + lib.optionalString pythonSupport ''
+    # fix including Python.h issue
+    substituteInPlace swig/python/CMakeLists.txt --replace-fail \
+      "add_library(_casadi MODULE \''${PYTHON_FILE})" \
+      "add_library(_casadi MODULE \''${PYTHON_FILE})
+       target_include_directories(_casadi SYSTEM PRIVATE
+         ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
 
-      # help casadi find its own libs
-      substituteInPlace casadi/core/casadi_os.cpp --replace-fail \
-        "std::vector<std::string> search_paths;" \
-        "std::vector<std::string> search_paths;
-         search_paths.push_back(\"$out/lib\");"
-    ''
-    + lib.optionalString pythonSupport ''
-      # fix including Python.h issue
-      substituteInPlace swig/python/CMakeLists.txt --replace-fail \
-        "add_library(_casadi MODULE \''${PYTHON_FILE})" \
-        "add_library(_casadi MODULE \''${PYTHON_FILE})
-         target_include_directories(_casadi SYSTEM PRIVATE
-           ${python3Packages.python}/include/python3.${python3Packages.python.sourceVersion.minor})"
-
-      # I have no clue. without this, it tries to install a non existent file.
-      # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.
-      # but we need SWIG_IMPORT at some point for something else TODO
-      substituteInPlace swig/python/CMakeLists.txt --replace-fail \
-        "if (SWIG_IMPORT)" \
-        "if (NOT SWIG_IMPORT)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # this is only printing stuff, and is not defined on all CPU
-      substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
-        "d_print_exp_tran_mat" \
-        "//d_print_exp_tran_mat"
-
-      # fix missing symbols
-      substituteInPlace cmake/FindCLANG.cmake --replace-fail \
-        "clangBasic)" \
-        "clangBasic clangASTMatchers clangSupport)"
-    '';
+    # I have no clue. without this, it tries to install a non existent file.
+    # maybe a run without SWIG_IMPORT is required before a run with SWIG_IMPORT.
+    # but we need SWIG_IMPORT at some point for something else TODO
+    substituteInPlace swig/python/CMakeLists.txt --replace-fail \
+      "if (SWIG_IMPORT)" \
+      "if (NOT SWIG_IMPORT)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # this is only printing stuff, and is not defined on all CPU
+    substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
+      "d_print_exp_tran_mat" \
+      "//d_print_exp_tran_mat"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -109,43 +107,42 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      #alpaqa
-      blas
-      blasfeo
-      bzip2
-      bonmin
-      cbc
-      clp
-      fatrop
-      highs
-      hpipm
-      ipopt
-      lapack
-      llvmPackages.clang
-      llvmPackages.libclang
-      llvmPackages.llvm
-      mumps
-      osqp
-      proxsuite
-      sleqp
-      suitesparse
-      #sundials
-      superscs
-      spral
-      swig
-      tinyxml-2
-    ]
-    ++ lib.optionals withUnfree [
-      cplex
-      gurobi
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.python
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
+  buildInputs = [
+    #alpaqa
+    blas
+    blasfeo
+    bzip2
+    bonmin
+    cbc
+    clp
+    fatrop
+    highs
+    hpipm
+    ipopt
+    lapack
+    llvmPackages.clang
+    llvmPackages.libclang
+    llvmPackages.llvm
+    mumps
+    osqp
+    proxsuite
+    sleqp
+    suitesparse
+    #sundials
+    superscs
+    spral
+    swig
+    tinyxml-2
+  ]
+  ++ lib.optionals withUnfree [
+    cplex
+    gurobi
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.python
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)
@@ -178,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WITH_TINYXML" true)
     (lib.cmakeBool "WITH_BUILD_DSDP" true) # not sure where this come from
     (lib.cmakeBool "WITH_DSDP" true)
-    (lib.cmakeBool "WITH_CLANG" true)
+    # "clang_compiler.cpp has basically been abandonded for several years", ref.
+    # https://github.com/casadi/casadi/issues/4225#issuecomment-3352552113
+    (lib.cmakeBool "WITH_CLANG" false)
     (lib.cmakeBool "WITH_LAPACK" true)
     (lib.cmakeBool "WITH_QPOASES" true)
     (lib.cmakeBool "WITH_BLOCKSQP" true)
@@ -202,8 +201,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   meta = {
-    description = "CasADi is a symbolic framework for numeric optimization implementing automatic differentiation in forward and reverse modes on sparse matrix-valued computational graphs. It supports self-contained C-code generation and interfaces state-of-the-art codes such as SUNDIALS, IPOPT etc. It can be used from C++, Python or Matlab/Octave";
+    description = "Symbolic framework for numeric optimization";
+    longDescription = ''
+      CasADi is a symbolic framework for numeric optimization
+      implementing automatic differentiation in forward and reverse
+      modes on sparse matrix-valued computational graphs. It supports
+      self-contained C-code generation and interfaces state-of-the-art
+      codes such as SUNDIALS, IPOPT etc. It can be used from C++,
+      Python or Matlab/Octave
+    '';
     homepage = "https://github.com/casadi/casadi";
+    changelog = "https://github.com/casadi/casadi/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.all;

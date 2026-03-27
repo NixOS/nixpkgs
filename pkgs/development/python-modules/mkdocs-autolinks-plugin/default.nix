@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   mkdocs,
-  pythonOlder,
   setuptools,
 }:
 
@@ -11,7 +10,6 @@ buildPythonPackage rec {
   pname = "mkdocs-autolinks-plugin";
   version = "071";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zachhannum";
@@ -30,10 +28,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mkdocs_autolinks_plugin" ];
 
-  meta = with lib; {
+  meta = {
     description = "MkDocs plugin that simplifies relative linking between documents";
     homepage = "https://github.com/zachhannum/mkdocs-autolinks-plugin";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lucas-deangelis ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lucas-deangelis ];
   };
 }

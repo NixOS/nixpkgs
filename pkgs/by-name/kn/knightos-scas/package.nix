@@ -12,21 +12,22 @@ let
   isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scas";
   version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "KnightOS";
     repo = "scas";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-JGQE+orVDKKJsTt8sIjPX+3yhpZkujISroQ6g19+MzU=";
   };
 
   cmakeFlags = [ "-DSCAS_LIBRARY=1" ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "TARGETS scas scdump scwrap" "TARGETS scas scdump scwrap generate_tables"
+      --replace-fail "TARGETS scas scdump scwrap" "TARGETS scas scdump scwrap generate_tables" \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
   '';
   strictDeps = true;
 
@@ -48,11 +49,11 @@ stdenv.mkDerivation rec {
     make DESTDIR=$out install_man
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://knightos.org/";
     description = "Assembler and linker for the Z80";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.all;
   };
-}
+})

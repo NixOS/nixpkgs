@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   linux-pam,
@@ -7,28 +8,25 @@
   shpool,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shpool";
-  version = "0.8.0";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "shell-pool";
     repo = "shpool";
-    rev = "v${version}";
-    hash = "sha256-pSSMC4pUtB38c6UNOj+Ma/Y1jcSfm33QV1B4tA/MyKY=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-4+4R0RnynU8AF6FL+zmokRux7SzDANwLAhbg35okUBQ=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace systemd/shpool.service \
       --replace-fail '/usr/bin/shpool' "$out/bin/shpool"
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-JDMgYd9mKsLdqc8rpDg3ymgFj/ntpBBF5fSDb2cLOJs=";
+  cargoHash = "sha256-RHObvJs8hgM3jMLh7sG0EzQcWTRR2vy9e2rS5dUKEeg=";
 
-  buildInputs = [
-    linux-pam
-  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ linux-pam ];
 
   # The majority of tests rely on impure environment
   # (such as systemd socket, ssh socket), and some of them
@@ -36,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   # tried skipping them but failed
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 systemd/shpool.service -t $out/lib/systemd/user
     install -Dm444 systemd/shpool.socket -t $out/lib/systemd/user
   '';
@@ -52,6 +50,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     mainProgram = "shpool";
     maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})

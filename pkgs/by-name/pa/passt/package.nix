@@ -11,12 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "passt";
-  version = "2025_03_20.32f6212";
+  version = "2025_09_19.623dbf6";
 
   src = fetchurl {
     url = "https://passt.top/passt/snapshot/passt-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TRtFwBUUOnRwcLtB3vwU5nG/ufi9D36waXW5Yuboowk=";
+    hash = "sha256-3krWW/QKijgZsmHuelMjpcaL8OyRqmPKC/wUvag0ZHI=";
   };
+
+  separateDebugInfo = true;
 
   postPatch = ''
     substituteInPlace Makefile --replace-fail \
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://passt.top/passt/about/";
     description = "Plug A Simple Socket Transport";
     longDescription = ''
@@ -56,11 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
       privileges.
     '';
     license = [
-      licenses.bsd3 # and
-      licenses.gpl2Plus
+      lib.licenses.bsd3 # and
+      lib.licenses.gpl2Plus
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _8aed ];
+    platforms = lib.platforms.linux;
     mainProgram = "passt";
   };
 })

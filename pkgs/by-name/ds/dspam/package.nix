@@ -37,12 +37,12 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dspam";
   version = "3.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/dspam/dspam/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/dspam/dspam/dspam-${finalAttrs.version}/dspam-${finalAttrs.version}.tar.gz";
     sha256 = "1acklnxn1wvc7abn31l3qdj8q6k13s51k5gv86vka7q20jb5cxmf";
   };
   patches = [
@@ -50,15 +50,16 @@ stdenv.mkDerivation rec {
     ./mariadb.patch
   ];
 
-  buildInputs =
-    [ perlPackages.perl ]
-    ++ lib.optionals withMySQL [
-      zlib
-      mariadb-connector-c.out
-    ]
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withDB db;
+  buildInputs = [
+    perlPackages.perl
+  ]
+  ++ lib.optionals withMySQL [
+    zlib
+    mariadb-connector-c.out
+  ]
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withDB db;
   nativeBuildInputs = [
     libpq.pg_config
     makeWrapper
@@ -68,29 +69,28 @@ stdenv.mkDerivation rec {
     sed -i 's/atoi(m) >= 5/1/g' configure m4/mysql_drv.m4
   '';
 
-  configureFlags =
-    [
-      "--with-storage-driver=${drivers}"
-      "--sysconfdir=/etc/dspam"
-      "--localstatedir=/var"
-      "--with-dspam-home=/var/lib/dspam"
-      "--with-logdir=/var/log/dspam"
-      "--with-logfile=/var/log/dspam/dspam.log"
+  configureFlags = [
+    "--with-storage-driver=${drivers}"
+    "--sysconfdir=/etc/dspam"
+    "--localstatedir=/var"
+    "--with-dspam-home=/var/lib/dspam"
+    "--with-logdir=/var/log/dspam"
+    "--with-logfile=/var/log/dspam/dspam.log"
 
-      "--enable-daemon"
-      "--enable-clamav"
-      "--enable-syslog"
-      "--enable-large-scale"
-      "--enable-virtual-users"
-      "--enable-split-configuration"
-      "--enable-preferences-extension"
-      "--enable-long-usernames"
-      "--enable-external-lookup"
-    ]
-    ++ lib.optionals withMySQL [
-      "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
-      "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
-    ];
+    "--enable-daemon"
+    "--enable-clamav"
+    "--enable-syslog"
+    "--enable-large-scale"
+    "--enable-virtual-users"
+    "--enable-split-configuration"
+    "--enable-preferences-extension"
+    "--enable-long-usernames"
+    "--enable-external-lookup"
+  ]
+  ++ lib.optionals withMySQL [
+    "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
+    "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -144,11 +144,11 @@ stdenv.mkDerivation rec {
       $out/bin/dspam_maintenance
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dspam.sourceforge.net/";
     description = "Community Driven Antispam Filter";
-    license = licenses.agpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.agpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

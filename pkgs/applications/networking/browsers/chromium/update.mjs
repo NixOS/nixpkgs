@@ -62,7 +62,7 @@ for (const attr_path of Object.keys(lockfile)) {
       chromedriver: !ungoogled ? await fetch_chromedriver_binaries(await get_latest_chromium_release('mac')) : undefined,
       deps: {
         depot_tools: {},
-        gn: {},
+        gn: await fetch_gn(chromium_rev, lockfile_initial[attr_path].deps.gn),
         'ungoogled-patches': !ungoogled ? undefined : {
           rev: ungoogled_patches.rev,
           hash: ungoogled_patches.hash,
@@ -76,12 +76,6 @@ for (const attr_path of Object.keys(lockfile)) {
     lockfile[attr_path].deps.depot_tools = {
       rev: depot_tools.rev,
       hash: depot_tools.hash,
-    }
-
-    const gn = await fetch_gn(chromium_rev, lockfile_initial[attr_path].deps.gn)
-    lockfile[attr_path].deps.gn = {
-      rev: gn.rev,
-      hash: gn.hash,
     }
 
     // DEPS update loop
@@ -133,10 +127,34 @@ for (const attr_path of Object.keys(lockfile)) {
 
 async function fetch_gn(chromium_rev, gn_previous) {
   const DEPS_file = await get_gitiles_file('https://chromium.googlesource.com/chromium/src', chromium_rev, 'DEPS')
-  const gn_rev = /^\s+'gn_version': 'git_revision:(?<rev>.+)',$/m.exec(DEPS_file).groups.rev
-  const hash = gn_rev === gn_previous.rev ? gn_previous.hash : ''
+  const { rev } = /^\s+'gn_version': 'git_revision:(?<rev>.+)',$/m.exec(DEPS_file).groups
 
-  return await prefetch_gitiles('https://gn.googlesource.com/gn', gn_rev, hash)
+  const cache_hit = rev === gn_previous.rev;
+  if (cache_hit) {
+    return gn_previous
+  }
+
+  const commit_date = await get_gitiles_commit_date('https://gn.googlesource.com/gn', rev)
+  const version = `0-unstable-${commit_date}`
+
+  const expr = [`(import ./. {}).gn.override { version = "${version}"; rev = "${rev}"; hash = ""; }`]
+  const derivation = await $nixpkgs`nix-instantiate --expr ${expr}`
+
+  return {
+    version,
+    rev,
+    hash: await prefetch_FOD(derivation),
+  }
+}
+
+
+async function get_gitiles_commit_date(base_url, rev) {
+  const url = `${base_url}/+/${rev}?format=json`
+  const response = await (await fetch(url)).text()
+  const json = JSON.parse(response.replace(`)]}'\n`, ''))
+
+  const date = new Date(json.committer.time)
+  return date.toISOString().split("T")[0]
 }
 
 
@@ -259,4 +277,3 @@ async function prefetch_FOD(...args) {
 
   return hash
 }
-

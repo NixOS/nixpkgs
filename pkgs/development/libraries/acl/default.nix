@@ -35,10 +35,12 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (attr.meta) platforms badPlatforms;
     homepage = "https://savannah.nongnu.org/projects/acl";
     description = "Library and tools for manipulating access control lists";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.security-review ];
+    identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "acl_project" version;
   };
 }

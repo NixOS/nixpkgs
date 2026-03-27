@@ -7,14 +7,16 @@
   copyDesktopItems,
   buildFHSEnv,
   alsa-lib,
+  alsa-plugins,
   freetype,
   nghttp2,
-  libX11,
+  libx11,
+  expat,
 }:
 
 let
   pname = "decent-sampler";
-  version = "1.12.5";
+  version = "1.16.0";
 
   icon = fetchurl {
     url = "https://www.decentsamples.com/wp-content/uploads/2018/09/cropped-Favicon_512x512.png";
@@ -25,9 +27,9 @@ let
     inherit pname version;
 
     src = fetchzip {
-      # dropbox links: https://www.dropbox.com/sh/dwyry6xpy5uut07/AABBJ84bjTTSQWzXGG5TOQpfa\
-      url = "https://www.dropbox.com/scl/fo/a0i0udw7ggfwnjoi05hh3/APOyrCpI3CaO46Gq1IFUv-A/Decent_Sampler-1.12.5-Linux-Static-x86_64.tar.gz?rlkey=orvjprslmwn0dkfs0ncx6nxnm&dl=0";
-      hash = "sha256-jr2bl8nQhfWdpZZGQU6T6TDKSW6SZpweJ2GiQz7n9Ug=";
+      # Download page: https://store.decentsamples.com/downloads/decent-sampler/versions
+      url = "https://cdn.decentsamples.com/production/builds/ds/${version}/Decent_Sampler-${version}-Linux-Static-x86_64.tar.gz";
+      hash = "sha256-KeHWdlrPEAt45YeivmPjA645x+F2cKLYNGJBToEHAok=";
     };
 
     nativeBuildInputs = [ copyDesktopItems ];
@@ -53,7 +55,7 @@ let
       install -Dm755 DecentSampler $out/bin/decent-sampler
       install -Dm755 DecentSampler.so -t $out/lib/vst
       install -d "$out/lib/vst3" && cp -r "DecentSampler.vst3" $out/lib/vst3
-      install -Dm444 ${icon} $out/share/pixmaps/decent-sampler.png
+      install -Dm444 ${icon} $out/share/icons/hicolor/512x512/apps/decent-sampler.png
 
       runHook postInstall
     '';
@@ -66,10 +68,12 @@ buildFHSEnv {
 
   targetPkgs = pkgs: [
     alsa-lib
+    alsa-plugins
     decent-sampler
     freetype
     nghttp2
-    libX11
+    libx11
+    expat
   ];
 
   runScript = "decent-sampler";
@@ -79,7 +83,7 @@ buildFHSEnv {
     cp -r ${decent-sampler}/share $out/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audio sample player";
     longDescription = ''
       Decent Sampler is an audio sample player.
@@ -90,11 +94,13 @@ buildFHSEnv {
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
     # It claims to be free but we currently cannot find any license
     # that it is released under.
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       adam248
       chewblacka
+      kaptcha0
     ];
   };
 }

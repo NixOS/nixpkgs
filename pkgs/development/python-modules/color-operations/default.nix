@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   pname = "color-operations";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vincentsarago";
@@ -55,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/vincentsarago/color-operations";
     changelog = "https://github.com/vincentsarago/color-operations/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

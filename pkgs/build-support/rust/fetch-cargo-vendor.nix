@@ -5,6 +5,7 @@
   writers,
   python3Packages,
   cargo,
+  gitMinimal,
   nix-prefetch-git,
   cacert,
 }:
@@ -22,9 +23,13 @@ let
   } (builtins.readFile ./replace-workspace-values.py);
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
-    libraries = with python3Packages; [
-      requests
-    ];
+    libraries =
+      with python3Packages;
+      [
+        requests
+        tomli-w
+      ]
+      ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
     flakeIgnore = [
       "E501"
     ];
@@ -58,10 +63,14 @@ let
       nativeBuildInputs = [
         fetchCargoVendorUtil
         cacert
-        # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
-        # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
-        (nix-prefetch-git.override { git-lfs = null; })
-      ] ++ nativeBuildInputs;
+        (nix-prefetch-git.override {
+          git = gitMinimal;
+          # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
+          # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
+          git-lfs = null;
+        })
+      ]
+      ++ nativeBuildInputs;
 
       buildPhase = ''
         runHook preBuild
@@ -85,7 +94,7 @@ let
       outputHashAlgo = if hash == "" then "sha256" else null;
       outputHashMode = "recursive";
     }
-    // builtins.removeAttrs args removedArgs
+    // removeAttrs args removedArgs
   );
 in
 

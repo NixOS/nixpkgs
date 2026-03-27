@@ -6,12 +6,12 @@
   doxygen,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bliss";
   version = "0.73";
 
   src = fetchurl {
-    url = "http://www.tcs.hut.fi/Software/bliss/${pname}-${version}.zip";
+    url = "http://www.tcs.hut.fi/Software/bliss/bliss-${finalAttrs.version}.zip";
     sha256 = "f57bf32804140cad58b1240b804e0dbd68f7e6bf67eba8e0c0fa3a62fd7f0f84";
   };
 
@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
     mv *.h *.hh $out/include/bliss
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source tool for computing automorphism groups and canonical forms of graphs. It has both a command line user interface as well as C++ and C programming language APIs";
     mainProgram = "bliss";
     homepage = "http://www.tcs.hut.fi/Software/bliss/";
-    license = licenses.lgpl3;
+    license = lib.licenses.lgpl3;
     platforms = [
       "i686-linux"
       "x86_64-linux"
       "aarch64-linux"
     ];
   };
-}
+})

@@ -28,11 +28,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ];
+
     security.wrappers."gsr-kms-server" = {
       owner = "root";
       group = "root";
       capabilities = "cap_sys_admin+ep";
-      source = "${package}/bin/gsr-kms-server";
+      source = lib.getExe' package "gsr-kms-server";
     };
   };
 

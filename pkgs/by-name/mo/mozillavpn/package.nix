@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -12,6 +13,7 @@
   libsecret,
   nix-update-script,
   pkg-config,
+  polkit,
   python3,
   qt6,
   rustPlatform,
@@ -22,15 +24,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.26.0";
+  version = "2.35.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-BKD8X4nPLyTtY0x06nCSRRK36XKucpnhvjJN8aZssUs=";
+    hash = "sha256-H3Oa0SJR74dzZvg9u2drLmH/FNsc1hVUz2MEz/TV1rg=";
   };
-  patches = [ ];
+  patches = [
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
@@ -45,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-tVTXlGO969qPR9/TbOJbDdOiwOI1PT11MvNYdLqgDlo=";
+    hash = "sha256-ZcLbrLtaGOPSi9AUtiaFYefdlGMq5ygZF6KOgSQehAE=";
   };
 
   buildInputs = [
@@ -53,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     libgcrypt
     libgpg-error
     libsecret
+    polkit
     qt6.qt5compat
     qt6.qtbase
     qt6.qtnetworkauth
@@ -80,16 +84,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(ADDON_BUILD_ARGS ' 'set(ADDON_BUILD_ARGS -q ${qt6.qttools.dev}/bin '
 
     substituteInPlace src/cmake/linux.cmake \
-      --replace-fail '/usr/share/dbus-1' "$out/share/dbus-1" \
-      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '/usr/share/dbus-1' '${"$"}{CMAKE_INSTALL_DATADIR}/dbus-1' \
+      --replace-fail '${"$"}{POLKIT_POLICY_DIR}' '${"$"}{CMAKE_INSTALL_DATADIR}/polkit-1/actions' \
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' '${"$"}{CMAKE_INSTALL_LIBDIR}/systemd/system'
 
     substituteInPlace extension/CMakeLists.txt \
-      --replace-fail '/etc' "$out/etc"
+      --replace-fail '/etc' '${"$"}{CMAKE_INSTALL_SYSCONFDIR}'
 
     substituteInPlace extension/socks5proxy/bin/CMakeLists.txt \
-      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
+      --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' '${"$"}{CMAKE_INSTALL_LIBDIR}/systemd/system'
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
+
+    patchShebangs scripts/utils/xlifftool.py
   '';
 
   cmakeFlags = [
@@ -97,7 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"
@@ -105,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     ":"
     (lib.makeBinPath [ wireguard-tools ])
   ];
+
+  postInstall = ''
+    mkdir "$out/share/polkit-1/rules.d"
+    cp ../linux/org.mozilla.vpn.rules-others "$out/share/polkit-1/rules.d/org.mozilla.vpn.rules"
+  '';
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })

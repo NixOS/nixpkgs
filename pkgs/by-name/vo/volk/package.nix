@@ -2,30 +2,23 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   python3,
+  removeReferencesTo,
   enableModTool ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "volk";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "volk";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-R1FT5sbl0fAAl6YIX5aD5CiQ/AjZkCSDPPQPiuy4WBY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-9bURoGyjdNoKCcgGvZL9VygQqUQxOrwthp154Was2/s=";
     fetchSubmodules = true;
   };
-  patches = [
-    # https://github.com/gnuradio/volk/pull/766
-    (fetchpatch {
-      url = "https://github.com/gnuradio/volk/commit/e46771a739658b5483c25ee1203587bf07468c4d.patch";
-      hash = "sha256-33V6lA4Ch50o2E7HPUMQ2NPqHXx/i6FUbz3vIaQa9Wc=";
-    })
-  ];
 
   cmakeFlags = [ (lib.cmakeBool "ENABLE_MODTOOL" enableModTool) ];
 
@@ -33,15 +26,24 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
     python3.pkgs.mako
+    removeReferencesTo
   ];
+
+  # Don't embed the path to stdenv.cc in the output, see:
+  #
+  # - https://github.com/gnuradio/volk/blob/v3.2.0/lib/constants.c.in#L37-L41
+  # - https://github.com/gnuradio/volk/blob/v3.2.0/lib/CMakeLists.txt#L403-L405
+  postInstall = ''
+    remove-references-to -t ${stdenv.cc} $(readlink -f "''${!outputLib}"/lib/libvolk${stdenv.hostPlatform.extensions.sharedLibrary})
+  '';
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://libvolk.org/";
     description = "Vector Optimized Library of Kernels";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ doronbehar ];
+    platforms = lib.platforms.all;
   };
 })

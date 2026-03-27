@@ -4,16 +4,15 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dotenvy";
   version = "0.15.7";
 
   src = fetchCrate {
-    inherit pname version;
+    inherit (finalAttrs) pname version;
     hash = "sha256-virK/TpYBmwTf5UCQCqC/df8iKYAzPBfsQ1nQkFKF2Y=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eDmSPl1wsEriOtesv0KpLlpdeJPSQzbwh+QeZcFzDbc=";
 
   cargoBuildFlags = [
@@ -30,4 +29,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ phlip9 ];
   };
-}
+})

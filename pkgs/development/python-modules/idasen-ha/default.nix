@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "idasen-ha";
-  version = "2.6.3";
+  version = "2.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "idasen-ha";
     tag = version;
-    hash = "sha256-Z4MfJGL2uDqY1ddoV2fB+Ty/dKFhCUY8qBfP/i/naJs=";
+    hash = "sha256-CBm9vCsfiVYj7tFTXWC+I3QYUdQ9EsjDJ6ed/BDf4S4=";
   };
 
   build-system = [ setuptools ];

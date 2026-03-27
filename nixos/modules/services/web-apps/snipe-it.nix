@@ -387,7 +387,8 @@ in
         "listen.mode" = "0660";
         "listen.owner" = user;
         "listen.group" = group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     services.nginx = {
@@ -402,7 +403,7 @@ in
           locations = {
             "/" = {
               index = "index.php";
-              extraConfig = ''try_files $uri $uri/ /index.php?$query_string;'';
+              extraConfig = "try_files $uri $uri/ /index.php?$query_string;";
             };
             "~ \\.php$" = {
               extraConfig = ''
@@ -509,8 +510,9 @@ in
               sed -i 's/APP_KEY=/APP_KEY=base64:/' "${cfg.dataDir}/.env"
           fi
 
-          # purge cache
-          rm "${cfg.dataDir}"/bootstrap/cache/*.php || true
+          # pruge and rebuild caches
+          ${lib.getExe artisan} optimize:clear
+          ${lib.getExe artisan} optimize
 
           # migrate db
           ${lib.getExe artisan} migrate --force

@@ -5,19 +5,17 @@
   fetchpatch,
   lxml,
   poetry-core,
-  pythonOlder,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "xpath-expressions";
   version = "1.1.0";
-  format = "pyproject";
-  disabled = pythonOlder "3.5";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "orf";
-    repo = pname;
+    repo = "xpath-expressions";
     rev = "v${version}";
     hash = "sha256-UAzDXrz1Tr9/OOjKAg/5Std9Qlrnizei8/3XL3hMSFA=";
   };
@@ -40,10 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xpath" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to handle XPath expressions";
     homepage = "https://github.com/orf/xpath-expressions";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

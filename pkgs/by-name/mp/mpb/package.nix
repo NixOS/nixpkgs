@@ -17,14 +17,14 @@
 assert !blas.isILP64;
 assert !lapack.isILP64;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpb";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "NanoComp";
     repo = "mpb";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-naxVKD7pxefb/ht5Pa4e/T9eDzlZ0raNYPSvKNaZUn8=";
   };
 
@@ -54,9 +54,12 @@ stdenv.mkDerivation rec {
     "--with-libctl=${libctl}"
     "--enable-maintainer-mode"
     "--disable-dependency-tracking"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   doCheck = true;
+
+  preCheck = "export OMP_NUM_THREADS=2";
 
   meta = {
     description = "MIT Photonic-Bands: computation of photonic band structures in periodic media";
@@ -67,4 +70,4 @@ stdenv.mkDerivation rec {
       sheepforce
     ];
   };
-}
+})

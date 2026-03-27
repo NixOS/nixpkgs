@@ -1,10 +1,11 @@
---- a/mesonbuild/backend/backends.py
-+++ b/mesonbuild/backend/backends.py
-@@ -723,6 +723,21 @@
-     @staticmethod
-     def get_rpath_dirs_from_link_args(args: T.List[str]) -> T.Set[str]:
+diff --git a/mesonbuild/build.py b/mesonbuild/build.py
+index 9014d09fb..4dda63a96 100644
+--- a/mesonbuild/build.py
++++ b/mesonbuild/build.py
+@@ -1888,6 +1888,20 @@ class BuildTarget(Target):
+     def get_rpath_dirs_from_link_args(cls, args: T.List[str]) -> T.Set[str]:
          dirs: T.Set[str] = set()
-+
+ 
 +        nix_ldflags = os.environ.get('NIX_LDFLAGS', '').split()
 +        next_is_path = False
 +        # Try to add rpaths set by user or ld-wrapper so that they are not removed.
@@ -19,6 +20,6 @@
 +                    dirs.add(flag)
 +                next_is_path = False
 +
-         # Match rpath formats:
-         # -Wl,-rpath=
-         # -Wl,-rpath,
+         for arg in args:
+             if not arg.startswith('-Wl,'):
+                 continue

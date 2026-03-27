@@ -1,5 +1,4 @@
 {
-  darwin,
   fetchFromGitHub,
   fetchpatch,
   lib,
@@ -7,21 +6,19 @@
   openssl,
   pkg-config,
   rustPlatform,
-  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "microbin";
   version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "szabodanika";
     repo = "microbin";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fsRpqSYDsuV0M6Xar2GVoyTgCPT39dcKJ6eW4YXCkQ0=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-cQyb9KpmdJ2DB395Ce24JX8YcMLQn3fmeYZUo72L38s=";
 
   patches = [
@@ -66,29 +63,24 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      oniguruma
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    oniguruma
+    openssl
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tiny, self-contained, configurable paste bin and URL shortener written in Rust";
     homepage = "https://github.com/szabodanika/microbin";
-    changelog = "https://github.com/szabodanika/microbin/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/szabodanika/microbin/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       dit7ya
-      figsoda
     ];
     mainProgram = "microbin";
   };
-}
+})

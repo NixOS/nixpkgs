@@ -5,6 +5,7 @@
   buildPythonPackage,
   chalice,
   channels,
+  cross-web,
   daphne,
   django,
   email-validator,
@@ -31,7 +32,6 @@
   pytestCheckHook,
   python-dateutil,
   python-multipart,
-  pythonOlder,
   rich,
   sanic,
   sanic-testing,
@@ -44,16 +44,14 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
-  version = "0.263.1";
+  version = "0.289.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     tag = version;
-    hash = "sha256-w36KY1zl/OguRFs6sM6K4F17bYQcA+bA6XS62VhRgA8=";
+    hash = "sha256-eiIyAYId5MHKWmn87Cj/TCNN4YU5KkAWMEMhoMIR8xM=";
   };
 
   postPatch = ''
@@ -64,6 +62,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+    cross-web
     graphql-core
     python-dateutil
     typing-extensions
@@ -138,7 +137,8 @@ buildPythonPackage rec {
     pytest-snapshot
     pytestCheckHook
     sanic-testing
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.concatAttrValues optional-dependencies;
 
   pythonImportsCheck = [ "strawberry" ];
 
@@ -152,20 +152,20 @@ buildPythonPackage rec {
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
+    "tests/sanic/test_file_upload.py"
     "tests/test_dataloaders.py"
-    "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
     "tests/litestar/"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
     changelog = "https://github.com/strawberry-graphql/strawberry/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ izorkin ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ izorkin ];
     mainProgram = "strawberry";
   };
 }

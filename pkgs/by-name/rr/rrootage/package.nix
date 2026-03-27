@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   pname = "rrootage";
   inherit version;
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/rrootage/rRootage-${version}.tar.gz";
+    url = "https://downloads.sourceforge.net/rrootage/rRootage-${version}.tar.gz";
     sha256 = "01zzg4ih3kmbhsn1p9zr7g8srv1d2dhrp8cdd86y9qq233idnkln";
   };
 
@@ -77,11 +77,11 @@ stdenv.mkDerivation {
     install -m 644 readme_linux "$out"/share/doc/rrootage/README
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Abstract shooter created by Kenta Cho";
     mainProgram = "rrootage";
     homepage = "https://rrootage.sourceforge.net/";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ fgaz ];
   };
 }

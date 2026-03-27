@@ -31,83 +31,34 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion =
     let
+      case = case: out: { inherit case out; };
       inherit (lib.versions) range;
     in
     lib.switch coq.coq-version [
-      {
-        case = range "8.19" "9.0";
-        out = "2.3.0";
-      }
-      {
-        case = range "8.17" "8.20";
-        out = "2.2.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "2.1.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "2.0.0";
-      }
-      {
-        case = range "8.19" "8.20";
-        out = "1.19.0";
-      }
-      {
-        case = range "8.17" "8.18";
-        out = "1.18.0";
-      }
-      {
-        case = range "8.15" "8.18";
-        out = "1.17.0";
-      }
-      {
-        case = range "8.13" "8.18";
-        out = "1.16.0";
-      }
-      {
-        case = range "8.14" "8.16";
-        out = "1.15.0";
-      }
-      {
-        case = range "8.11" "8.15";
-        out = "1.14.0";
-      }
-      {
-        case = range "8.11" "8.15";
-        out = "1.13.0";
-      }
-      {
-        case = range "8.10" "8.13";
-        out = "1.12.0";
-      }
-      {
-        case = range "8.7" "8.12";
-        out = "1.11.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "1.10.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "1.9.0";
-      }
-      {
-        case = range "8.7" "8.9";
-        out = "1.8.0";
-      }
-      {
-        case = range "8.6" "8.9";
-        out = "1.7.0";
-      }
-      {
-        case = range "8.5" "8.7";
-        out = "1.6.4";
-      }
+      (case (range "8.20" "9.1") "2.5.0")
+      (case (range "8.20" "9.1") "2.4.0")
+      (case (range "8.19" "9.0") "2.3.0")
+      (case (range "8.17" "8.20") "2.2.0")
+      (case (range "8.17" "8.18") "2.1.0")
+      (case (range "8.17" "8.18") "2.0.0")
+      (case (range "8.19" "8.20") "1.19.0")
+      (case (range "8.17" "8.18") "1.18.0")
+      (case (range "8.15" "8.18") "1.17.0")
+      (case (range "8.13" "8.18") "1.16.0")
+      (case (range "8.14" "8.16") "1.15.0")
+      (case (range "8.11" "8.15") "1.14.0")
+      (case (range "8.11" "8.15") "1.13.0")
+      (case (range "8.10" "8.13") "1.12.0")
+      (case (range "8.7" "8.12") "1.11.0")
+      (case (range "8.7" "8.11") "1.10.0")
+      (case (range "8.7" "8.11") "1.9.0")
+      (case (range "8.7" "8.9") "1.8.0")
+      (case (range "8.6" "8.9") "1.7.0")
+      (case (range "8.5" "8.7") "1.6.4")
     ] null;
   release = {
+    "2.5.0".sha256 = "sha256-M/6IP4WhTQ4j2Bc8nXBXjSjWO08QzNIYI+a2owfOh+8=";
+    "2.4.0".sha256 = "sha256-A1XgLLwZRvKS8QyceCkSQa7ue6TYyf5fMft5gSx9NOs=";
     "2.3.0".sha256 = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
     "2.2.0".sha256 = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";
     "2.1.0".sha256 = "sha256-XDLx0BIkVRkSJ4sGCIE51j3rtkSGemNTs/cdVmTvxqo=";
@@ -131,22 +82,37 @@ let
   releaseRev = v: "mathcomp-${v}";
 
   # list of core mathcomp packages sorted by dependency order
-  packages = [
-    "ssreflect"
-    "fingroup"
-    "algebra"
-    "solvable"
-    "field"
-    "character"
-    "all"
-  ];
+  packages = {
+    "boot" = [ ];
+    "order" = [ "boot" ];
+    "fingroup" = [ "boot" ];
+    "ssreflect" = [
+      "boot"
+      "order"
+    ];
+    "algebra" = [
+      "order"
+      "fingroup"
+    ];
+    "solvable" = [ "algebra" ];
+    "field" = [ "solvable" ];
+    "character" = [ "field" ];
+    "all" = [ "character" ];
+  };
+  meta = {
+    homepage = "https://math-comp.github.io/";
+    license = lib.licenses.cecill-b;
+    maintainers = with lib.maintainers; [
+      vbgl
+      jwiegley
+      cohencyril
+    ];
+  };
 
   mathcomp_ =
     package:
     let
-      mathcomp-deps = lib.optionals (package != "single") (
-        map mathcomp_ (lib.head (lib.splitList (lib.pred.equal package) packages))
-      );
+      mathcomp-deps = lib.optionals (package != "single") (map mathcomp_ packages.${package});
       pkgpath = if package == "single" then "." else package;
       pname = if package == "single" then "mathcomp" else "mathcomp-${package}";
       pkgallMake = ''
@@ -164,6 +130,7 @@ let
             releaseRev
             repo
             owner
+            meta
             ;
 
           mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
@@ -176,33 +143,22 @@ let
 
           buildFlags = lib.optional withDoc "doc";
 
-          preBuild =
-            ''
-              if [[ -f etc/utils/ssrcoqdep ]]
-              then patchShebangs etc/utils/ssrcoqdep
-              fi
-              if [[ -f etc/buildlibgraph ]]
-              then patchShebangs etc/buildlibgraph
-              fi
-            ''
-            + ''
-              # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
-              test -d mathcomp && cd mathcomp
-              cd ${pkgpath}
-            ''
-            + lib.optionalString (package == "all") pkgallMake;
-
-          meta = {
-            homepage = "https://math-comp.github.io/";
-            license = lib.licenses.cecill-b;
-            maintainers = with lib.maintainers; [
-              vbgl
-              jwiegley
-              cohencyril
-            ];
-          };
+          preBuild = ''
+            if [[ -f etc/utils/ssrcoqdep ]]
+            then patchShebangs etc/utils/ssrcoqdep
+            fi
+            if [[ -f etc/buildlibgraph ]]
+            then patchShebangs etc/buildlibgraph
+            fi
+          ''
+          + ''
+            # handle mathcomp < 2.4.0 which had an extra base mathcomp directory
+            test -d mathcomp && cd mathcomp
+            cd ${pkgpath} || cd ssreflect  # before 2.5, boot didn't exist, make it behave as ssreflect
+          ''
+          + lib.optionalString (package == "all") pkgallMake;
         }
-        // lib.optionalAttrs (package != "single") { passthru = lib.genAttrs packages mathcomp_; }
+        // lib.optionalAttrs (package != "single") { passthru = lib.mapAttrs (p: _: mathcomp_ p) packages; }
         // lib.optionalAttrs withDoc {
           htmldoc_template = fetchzip {
             url = "https://github.com/math-comp/math-comp.github.io/archive/doc-1.12.0.zip";
@@ -264,7 +220,64 @@ let
           propagatedBuildInputs = o.propagatedBuildInputs ++ [ stdlib ];
         }
       );
+      # boot and order packages didn't exist before 2.5,
+      # so make boot behave as ssreflect then (c.f., above)
+      # and building nothing in order and ssreflect
+      patched-derivation5 = patched-derivation4.overrideAttrs (
+        o:
+        lib.optionalAttrs
+          (
+            lib.elem package [
+              "order"
+              "ssreflect"
+            ]
+            && o.version != null
+            && o.version != "dev"
+            && lib.versions.isLt "2.5" o.version
+          )
+          {
+            preBuild = "";
+            buildPhase = "echo doing nothing";
+            installPhase = "echo doing nothing";
+          }
+      );
     in
-    patched-derivation4;
+    patched-derivation5;
 in
-mathcomp_ (if single then "single" else "all")
+# this is just a wrapper for rocqPackages.mathcomp for Rocq >= 9.0
+if coq.rocqPackages ? mathcomp && version != "2.3.0" && version != "2.4.0" then
+  let
+    mc = coq.rocqPackages.mathcomp.override {
+      inherit version withDoc single;
+      inherit
+        ncurses
+        graphviz
+        lua
+        fetchzip
+        hierarchy-builder
+        ;
+      inherit (coq.rocqPackages) rocq-core;
+    };
+  in
+  mc
+  // {
+    ssreflect = mkCoqDerivation {
+      inherit
+        version
+        defaultVersion
+        release
+        releaseRev
+        repo
+        owner
+        meta
+        ;
+      pname = "mathcomp-ssreflect";
+      propagatedBuildInputs = [
+        mc.boot
+        mc.order
+      ];
+      preBuild = "cd ssreflect";
+    };
+  }
+else
+  mathcomp_ (if single then "single" else "all")

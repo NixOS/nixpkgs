@@ -6,21 +6,26 @@
   kas,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication (finalAttrs: {
   pname = "kas";
-  version = "4.7";
+  version = "5.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "siemens";
-    repo = pname;
-    tag = version;
-    hash = "sha256-P2I3lLa8kuCORdlrwcswrWFwOA8lW2WL4Apv/2T7+f8=";
+    repo = "kas";
+    tag = finalAttrs.version;
+    hash = "sha256-lEhgEotQE5ceH1NEBlTzD33W09NQjzo4bCpZi9rcQE0=";
   };
 
   patches = [ ./pass-terminfo-env.patch ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
+    setuptools # pkg_resources is imported during runtime
     kconfiglib
     jsonschema
     distro
@@ -32,13 +37,15 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
   passthru.tests.version = testers.testVersion {
     package = kas;
-    command = "${pname} --version";
+    command = "kas --version";
   };
 
-  meta = with lib; {
+  pythonImportsCheck = [ "kas" ];
+
+  meta = {
     homepage = "https://github.com/siemens/kas";
     description = "Setup tool for bitbake based projects";
-    license = licenses.mit;
-    maintainers = with maintainers; [ bachp ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bachp ];
   };
-}
+})

@@ -1,39 +1,47 @@
 {
+  lib,
+  stdenv,
+  pkgs,
   buildPythonPackage,
-  cffi,
-  cssselect2,
-  fetchPypi,
-  flit-core,
+  fetchFromGitHub,
   fontconfig,
-  fonttools,
-  ghostscript,
   glib,
   harfbuzz,
-  lib,
   pango,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  cffi,
+  cssselect2,
+  fonttools,
   pillow,
   pydyf,
   pyphen,
-  pytest-cov-stub,
-  pytestCheckHook,
-  pythonOlder,
-  replaceVars,
-  stdenv,
   tinycss2,
   tinyhtml5,
+
+  # tests
+  pytest-cov-stub,
+  pytestCheckHook,
+  replaceVars,
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "weasyprint";
-  version = "65.0";
+  version = "68.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  __darwinAllowLocalNetworking = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "weasyprint";
-    hash = "sha256-PGed6Wp8hxrgDwjNHncgDzPipJ014gnHIRWTJ1eN+Yg=";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "WeasyPrint";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-kAJgSQz1RKrPwzO7I5xHXyXcXYJtvca9izjrAgTy3ek=";
   };
 
   patches = [
@@ -58,12 +66,15 @@ buildPythonPackage rec {
     pyphen
     tinycss2
     tinyhtml5
-  ] ++ fonttools.optional-dependencies.woff;
+  ]
+  ++ fonttools.optional-dependencies.woff;
 
   nativeCheckInputs = [
-    ghostscript
+    pkgs.ghostscript
     pytest-cov-stub
     pytestCheckHook
+    versionCheckHook
+    writableTmpDirAsHomeHook
   ];
 
   disabledTests = [
@@ -86,26 +97,28 @@ buildPythonPackage rec {
     "test_visibility_3"
     "test_visibility_4"
     "test_woff_simple"
+    # AssertionError
+    "test_2d_transform"
+    # Reported upstream: https://github.com/Kozea/WeasyPrint/issues/2666
+    "test_text_stroke"
   ];
 
-  FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
+  env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
-  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}" ];
-
-  preCheck = ''
-    # Fontconfig wants to create a cache.
-    export HOME=$TMPDIR
-  '';
+  makeWrapperArgs = [ "--set-default FONTCONFIG_FILE ${finalAttrs.env.FONTCONFIG_FILE}" ];
 
   pythonImportsCheck = [ "weasyprint" ];
 
   meta = {
-    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/v${version}";
+    changelog = "https://github.com/Kozea/WeasyPrint/releases/tag/${finalAttrs.src.tag}";
     description = "Converts web documents to PDF";
-    mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.apm.members;
+    mainProgram = "weasyprint";
+    maintainers = with lib.maintainers; [
+      DutchGerman
+      friedow
+    ];
   };
-}
+})

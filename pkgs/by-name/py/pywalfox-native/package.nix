@@ -6,6 +6,7 @@
 python3.pkgs.buildPythonApplication {
   pname = "pywalfox-native";
   version = "2.7.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Frewacom";
@@ -14,13 +15,15 @@ python3.pkgs.buildPythonApplication {
     hash = "sha256-i1DgdYmNVvG+mZiFiBmVHsQnFvfDFOFTGf0GEy81lpE=";
   };
 
+  build-system = with python3.pkgs; [ setuptools ];
+
   pythonImportsCheck = [ "pywalfox" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Frewacom/pywalfox-native";
     description = "Native app used alongside the Pywalfox addon";
     mainProgram = "pywalfox";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ tsandrini ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ tsandrini ];
   };
 }

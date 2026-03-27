@@ -9,8 +9,8 @@ The basic steps to add a new core are:
 
 1. Add a new core using `mkLibretroCore` function (use one of the existing
    cores as an example)
-2. Add your new core to [`default.nix`](./default.nix) file
-3. Try to build your core with `nix-build -A libretro.<core>`
+2. Add your new core to [`default.nix`](./default.nix) file.
+3. Try to build your core with `nix-build -A libretro.<core>`.
 
 ## Using RetroArch with cores
 
@@ -22,16 +22,18 @@ this:
 { pkgs, ... }:
 
 let
-  retroarchWithCores = (pkgs.retroarch.withCores (cores: with cores; [
-    bsnes
-    mgba
-    quicknes
-  ]));
+  retroarchWithCores = (
+    pkgs.retroarch.withCores (
+      cores: with cores; [
+        bsnes
+        mgba
+        quicknes
+      ]
+    )
+  );
 in
 {
-  environment.systemPackages = [
-    retroarchWithCores
-  ];
+  environment.systemPackages = [ retroarchWithCores ];
 }
 ```
 

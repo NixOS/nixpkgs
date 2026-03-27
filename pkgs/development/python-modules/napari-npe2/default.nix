@@ -1,34 +1,46 @@
 {
   lib,
-  appdirs,
-  build,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
   hatch-vcs,
-  magicgui,
-  napari, # reverse dependency, for tests
+
+  # dependencies
+  build,
+  platformdirs,
+  psygnal,
   pydantic,
-  pythonOlder,
-  pytomlpp,
+  pydantic-extra-types,
   pyyaml,
   rich,
-  typer,
   tomli-w,
+  typer,
+
+  # tests
+  imagemagick,
+  jsonschema,
+  magicgui,
+  napari-plugin-engine,
+  numpy,
+  pytest-pretty,
+  pytestCheckHook,
+
+  # passthru
+  napari, # reverse dependency, for tests
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "napari-npe2";
-  version = "0.7.8";
+  version = "0.8.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
-    tag = "v${version}";
-    hash = "sha256-J15CmJ1L173M54fCo4oTV9XP7946c0aHzLqKjTvzG0g=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aZOs9wTYcblt9EZftYHKFWI/GvpZcC2KqVTAis15+Iw=";
   };
 
   build-system = [
@@ -37,28 +49,53 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    appdirs
     build
-    magicgui
+    platformdirs
+    psygnal
     pydantic
-    pytomlpp
+    pydantic-extra-types
     pyyaml
     rich
-    typer
     tomli-w
+    typer
   ];
 
   pythonImportsCheck = [ "npe2" ];
+
+  nativeCheckInputs = [
+    imagemagick
+    jsonschema
+    magicgui
+    napari-plugin-engine
+    numpy
+    pytest-pretty
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Require internet connection
+    "test_cli_fetch"
+    "test_fetch_npe1_manifest_dock_widget_as_attribute"
+    "test_fetch_npe1_manifest_with_sample_data"
+    "test_fetch_npe2_manifest"
+    "test_get_manifest_from_wheel"
+    "test_get_pypi_url"
+
+    # No package or entry point found with name 'svg'
+    "test_cli_convert_svg"
+    "test_conversion"
+  ];
 
   passthru.tests = {
     inherit napari;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Plugin system for napari (the image visualizer)";
     homepage = "https://github.com/napari/npe2";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SomeoneSerge ];
+    changelog = "https://github.com/napari/npe2/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SomeoneSerge ];
     mainProgram = "npe2";
   };
-}
+})

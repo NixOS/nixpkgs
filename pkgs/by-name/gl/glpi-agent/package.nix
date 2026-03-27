@@ -1,12 +1,13 @@
 {
   lib,
   perlPackages,
+  libiec61850,
   nix,
   dmidecode,
   pciutils,
   usbutils,
   iproute2,
-  nettools,
+  net-tools,
   fetchFromGitHub,
   makeWrapper,
   versionCheckHook,
@@ -15,13 +16,13 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "glpi-agent";
-  version = "1.11";
+  version = "1.16";
 
   src = fetchFromGitHub {
     owner = "glpi-project";
     repo = "glpi-agent";
     tag = version;
-    hash = "sha256-WdQ+/ZnMCRqLZK64oJNoR9dtMPq+CghsA8NUwt3EpjA=";
+    hash = "sha256-JocNClbFH6fSZJDAVQCPaRvHrkLboNbQVTpyHjOV7go=";
   };
 
   postPatch = ''
@@ -38,38 +39,38 @@ perlPackages.buildPerlPackage rec {
     with perlPackages;
     [
       CGI
+      CpanelJSONXS
+      CryptDES
       DataStructureUtil
+      DataUUID
+      DateTime
+      DigestSHA1
       FileCopyRecursive
+      HTTPDaemon
       HTTPProxy
       HTTPServerSimple
       HTTPServerSimpleAuthen
       IOCapture
+      IOCompress
       IOSocketSSL
       IPCRun
       JSON
       LWPProtocolHttps
       ModuleInstall
+      NetPing
       NetSNMP
+      ParallelForkManager
+      ParseEDID
       TestCompile
       TestDeep
       TestException
       TestMockModule
       TestMockObject
       TestNoWarnings
-      CpanelJSONXS
-      XMLLibXML
-      NetPing
-      ParallelForkManager
-      DigestSHA1
-      CryptDES
-      FileCopyRecursive
-      URIEscapeXS
-      DateTime
-      DataUUID
       URI
-      HTTPDaemon
+      URIEscapeXS
+      XMLLibXML
       YAML
-      IOCompress
     ]
   );
 
@@ -101,11 +102,12 @@ perlPackages.buildPerlPackage rec {
         sed -e "s|./lib|$out/lib|" -i "$cur"
         wrapProgram "$cur" --prefix PATH : ${
           lib.makeBinPath [
+            libiec61850
             nix
             dmidecode
             pciutils
             usbutils
-            nettools
+            net-tools
             iproute2
           ]
         }
@@ -118,7 +120,6 @@ perlPackages.buildPerlPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
