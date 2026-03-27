@@ -1,30 +1,24 @@
 {
   fetchFromGitHub,
   lib,
-  openssl,
-  pkg-config,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dness";
-  version = "0.5.7";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "nickbabcock";
     repo = "dness";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Vty4ec6aoUh3p2b9vLkNeS5R4pJWzjwYrC5DtVVyhT8=";
+    hash = "sha256-Znlygpq0EetCLjtZC39ksaVFeuwMmqI5FhHxsliw+oE=";
   };
 
-  cargoHash = "sha256-WhSeNukPjgM7Cy8LWi/s1YGa5/UxsFU1NGL7vIUlU58=";
+  cargoHash = "sha256-2NT67tVMI511iISDln3p66Ls8XSLze0JSQZ50/s24tM=";
 
   doCheck = false; # Many tests require network access
-
-  nativeBuildInputs = [ pkg-config ];
-
-  buildInputs = [ openssl ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

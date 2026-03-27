@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "argonaut";
-  version = "2.14.1";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "darksworm";
     repo = "argonaut";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vD7XDgENQWexNNMq41W0eC0snUA+JUZeXIBTCH1lbks=";
+    hash = "sha256-LDw2/8l/jipCVIMYeco08LukIfx3Kk1ROXkvU69SK5g=";
   };
 
   vendorHash = "sha256-xln/WmZbi0+rHqMMHRgt0ar/EaBDNscCsd/NckJZnMw=";

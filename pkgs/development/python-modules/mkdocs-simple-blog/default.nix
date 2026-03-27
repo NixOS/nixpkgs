@@ -9,14 +9,14 @@
 }:
 buildPythonPackage rec {
   pname = "mkdocs-simple-blog";
-  version = "0.3.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "FernandoCelmer";
     repo = "mkdocs-simple-blog";
     tag = "v${version}";
-    hash = "sha256-1RzorEsGXA8mRzMSS9S5vbPqJXK0vPMlRixo+Yrq27U=";
+    hash = "sha256-lp0+mJYyP7Qz/gJCI7+tKh9fZArWs2u1ZusnVUax7A4=";
   };
 
   build-system = [ poetry-core ];
