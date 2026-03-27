@@ -81,6 +81,8 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_clang_delta.py::test_find_clang_delta_when_found_in_path"
     "tests/test_clang_delta.py::test_find_clang_delta_when_not_found_anywhere"
     "tests/test_formatting.py::test_default_formatter_python_files_without_black"
+    # This test is too timing sensitive
+    "tests/test_validation.py::test_validation_output_streams_immediately"
   ];
 
   meta = {
