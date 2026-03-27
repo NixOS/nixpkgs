@@ -22,23 +22,23 @@ let
 in
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "julec";
-  version = "0.1.7";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "julelang";
     repo = "jule";
     tag = "jule${finalAttrs.version}";
     name = "jule-${finalAttrs.version}";
-    hash = "sha256-7py8QrNMX8LwpI7LCp5XgRFUzgltFP1rTbuzqw/1D8o=";
+    hash = "sha256-fwltqCmpCzWkCFGxGrhozW7LQmDwGT8nR9NO5s0nMfI=";
   };
 
   irSrc = fetchFromGitHub {
     owner = "julelang";
     repo = "julec-ir";
-    # revision determined by the upstream commit hash in julec-ir/README.md
-    rev = "81ddbed06a715428a90d3645f7242fa4e522ea16";
+    # revision determined by the upstream commit hash
+    rev = "e4134d89f34588e9fb5cc5698f27b0471918e057";
     name = "jule-ir-${finalAttrs.version}";
-    hash = "sha256-Az9RDrwRY2kuMgL/Lf/x6YctfySr96/imWZeOa+J/rM=";
+    hash = "sha256-hdS/q2/V/N97fM0r6jrj2SEGWdx9pFivGE4K4l8iVag=";
   };
 
   dontConfigure = true;
@@ -62,7 +62,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     echo "Building ${finalAttrs.meta.mainProgram}-bootstrap v${finalAttrs.version} for ${clangStdenv.hostPlatform.system}..."
     mkdir -p bin
     ${clangStdenv.cc.targetPrefix}c++ ir.cpp \
-      --std=c++17 \
+      --std=c++20 \
       -Wno-everything \
       -fwrapv \
       -ffloat-store \

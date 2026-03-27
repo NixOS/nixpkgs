@@ -8502,6 +8502,12 @@
     githubId = 88741530;
     name = "Fabian Rigoll";
   };
+  fallenbagel = {
+    name = "fallenbagel";
+    github = "fallenbagel";
+    githubId = 98979876;
+    email = "hello@fallenbagel.com";
+  };
   famfo = {
     name = "famfo";
     email = "famfo+nixpkgs@famfo.xyz";
