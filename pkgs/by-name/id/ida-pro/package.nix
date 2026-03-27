@@ -47,7 +47,6 @@ pkgs.stdenv.mkDerivation rec {
     makeWrapper
     copyDesktopItems
     autoPatchelfHook
-    qt6.wrapQtAppsHook
     perl
   ];
 
@@ -66,8 +65,6 @@ pkgs.stdenv.mkDerivation rec {
     libGL
     libkrb5
     libsecret
-    qt6.qtbase
-    qt6.qtwayland
     libunwind
     libxkbcommon
     libsecret
@@ -89,7 +86,11 @@ pkgs.stdenv.mkDerivation rec {
     curl.out
     pythonForIDA
   ];
-  buildInputs = runtimeDependencies;
+  autoPatchelfIgnoreMissingDeps = [
+    "libQt6WaylandCompositor.so.6"
+    "libQt6WlShellIntegration.so.6"
+  ];
+  buildInputs = runtimeDependencies ++ (with pkgs; [qt6.qtbase.propagatedBuildInputs qt6.qtwayland.propagatedBuildInputs]);
 
   dontWrapQtApps = true;
 
