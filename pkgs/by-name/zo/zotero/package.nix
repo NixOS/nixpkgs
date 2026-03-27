@@ -27,13 +27,13 @@ let
   nodejs = nodejs_22;
 
   pname = "zotero";
-  version = "8.0.3";
+  version = "8.0.5";
 
   src = fetchFromGitHub {
     owner = "zotero";
     repo = "zotero";
     tag = version;
-    hash = "sha256-I6s6m8CG1b1BXQK2qIdOqmsNyxzwj3fAfFFuHK7t6ec=";
+    hash = "sha256-Amk2ehdzrQjFhx1eEHcnq+Z+un+2bT/u4kpbWqD5Sbc=";
     fetchSubmodules = true;
   };
 
@@ -326,6 +326,7 @@ buildNpmPackage (finalAttrs: {
   meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
+    changelog = "https://www.zotero.org/support/changelog";
     mainProgram = "zotero";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
