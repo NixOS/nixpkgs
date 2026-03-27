@@ -31,6 +31,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    homepage = "https://stephenberry.github.io/glaze/";
+    changelog = "https://github.com/stephenberry/glaze/releases/tag/v${finalAttrs.version}";
     description = "Extremely fast, in memory, JSON and interface library for modern C++";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ moni ];
