@@ -106,12 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-liconv";
 
-  postConfigure = lib.optionalString (lib.strings.versionAtLeast version "2.4") ''
-    substituteInPlace src/lib-regex/Makefile --replace-fail \
-      "test_regex_DEPENDENCIES = libdregex.la \$(LIBPCRE_LIBS)" \
-      "test_regex_DEPENDENCIES = libdregex.la"
-  '';
-
   postPatch = ''
     sed -i -E \
       -e 's!/bin/sh\b!${stdenv.shell}!g' \
