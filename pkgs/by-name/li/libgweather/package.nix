@@ -3,7 +3,6 @@
   stdenv,
   buildPackages,
   fetchurl,
-  makeWrapper,
   meson,
   ninja,
   pkg-config,
