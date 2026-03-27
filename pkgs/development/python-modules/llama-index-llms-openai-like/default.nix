@@ -5,18 +5,17 @@
   hatchling,
   llama-index-core,
   llama-index-llms-openai,
-  transformers,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "llama-index-llms-openai-like";
-  version = "0.6.0";
+  version = "0.7.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_llms_openai_like";
     inherit (finalAttrs) version;
-    hash = "sha256-aTjP7WLHeHa6Q/JlGaq/VVd1/Y4Ofhry3fN6n8kdyjI=";
+    hash = "sha256-znzvNoax5i18CBNLTYylZwbMqBbkxAmOrt4zACgppvk=";
   };
 
   build-system = [ hatchling ];
@@ -24,7 +23,6 @@ buildPythonPackage (finalAttrs: {
   dependencies = [
     llama-index-core
     llama-index-llms-openai
-    transformers
   ];
 
   # Tests are only available in the mono repo

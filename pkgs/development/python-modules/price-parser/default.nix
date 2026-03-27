@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "price-parser";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "price-parser";
     tag = version;
-    hash = "sha256-1aMWRyrmvilON+crWibrREIN2Rf3hCzewI+vmRppvrg=";
+    hash = "sha256-QM8kmfxExD7r4kX73QBT028zGbZosXtncCqguLj8Q4U=";
   };
 
   build-system = [ hatchling ];

@@ -65,6 +65,7 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     "pycep-parser"
     "rustworkx"
     "schema"
+    "tabulate"
     "termcolor"
     "urllib3"
   ];

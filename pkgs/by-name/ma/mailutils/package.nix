@@ -25,7 +25,6 @@
   system-sendmail,
   libxcrypt,
   mkpasswd,
-  nss_wrapper,
 
   pythonSupport ? true,
   guileSupport ? true,
@@ -113,20 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     dejagnu
     mkpasswd
-    nss_wrapper
   ];
-
-  preCheck = ''
-    # The nix sandbox's /etc/passwd has literal quotes around the home directory
-    # (e.g. "/build" instead of /build). imap4d's mu_homedir_assert (new in
-    # 3.21) calls stat() on this path, which fails because no directory named
-    # '"/build"' exists. Use nss_wrapper to provide a fixed passwd to the tests.
-    sed 's/"//g' /etc/passwd > "$TMPDIR/passwd"
-    sed 's/"//g' /etc/group > "$TMPDIR/group" 2>/dev/null || echo "nixbld:x:100:" > "$TMPDIR/group"
-    export LD_PRELOAD="${nss_wrapper}/lib/libnss_wrapper.so"
-    export NSS_WRAPPER_PASSWD="$TMPDIR/passwd"
-    export NSS_WRAPPER_GROUP="$TMPDIR/group"
-  '';
 
   doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
 

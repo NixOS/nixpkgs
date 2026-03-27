@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   numpy,
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-UyPQ8aTNmZviRqkNWAyeHptYS5iIf2KY05dhEIfvhgs=";
   };
+
+  # removed by next version, https://github.com/pyamg/pyamg/pull/420
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'setuptools_scm[toml]==8.3.0' \
+        'setuptools_scm>=8.3.0' \
+  '';
 
   nativeBuildInputs = [ setuptools-scm ];
 
@@ -50,6 +59,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyamg/pyamg";
     changelog = "https://github.com/pyamg/pyamg/blob/v${version}/changelog.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ stephen-huan ];
+    broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast python.version "3.14";
   };
 }

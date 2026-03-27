@@ -10,7 +10,11 @@
   gobject-introspection,
   gtk4,
   libglvnd,
+  libx11,
+  libxcursor,
+  libxi,
   libxkbcommon,
+  libxrandr,
   pango,
   pkg-config,
   rustPlatform,
@@ -86,6 +90,10 @@ let
         lib.makeLibraryPath [
           fontconfig
           libglvnd
+          libx11
+          libxcursor
+          libxi
+          libxrandr
           libxkbcommon
           wayland
         ]

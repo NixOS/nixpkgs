@@ -365,8 +365,8 @@ let
         mktplcRef = {
           name = "nix-env-selector";
           publisher = "arrterian";
-          version = "1.1.0";
-          hash = "sha256-c5WX5L1hufKwBX64UiaLWOQaZTYma+6AbOphLPEQ9C8=";
+          version = "1.2.0";
+          hash = "sha256-dvJmBoljMNS7I7c1DicIWW0t4GQvBFF9jAz2Z2v4lXw=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5019,6 +5019,8 @@ let
         };
       };
 
+      vitest.explorer = callPackage ./vitest.explorer { };
+
       vlanguage.vscode-vlang = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-vlang";
@@ -5219,8 +5221,8 @@ let
         mktplcRef = {
           name = "gitblame";
           publisher = "waderyan";
-          version = "12.1.0";
-          sha256 = "sha256-S+OeS7YlygElzO/jgHidlIMLFmAOL3tQPcv/063LIEM=";
+          version = "13.0.0";
+          sha256 = "sha256-I6b4GDM8Ogf+ZH2lD2g4fUkQY9ktuO1xqxfSH6vAMVk=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/waderyan.gitblame/changelog";

@@ -131,9 +131,8 @@ let
           nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
             (haskell.lib.compose.enableCabalFlag "lix")
             (haskell.lib.compose.overrideCabal (drv: {
-              # https://github.com/aristanetworks/nix-serve-ng/issues/46
               # Resetting (previous) broken flag since it may be related to C++ Nix
-              broken = lib.versionAtLeast self.lix.version "2.93";
+              broken = false;
             }))
           ];
 

@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "exegol";
-  version = "5.1.9";
+  version = "5.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ThePorgs";
     repo = "Exegol";
     tag = version;
-    hash = "sha256-nYtJkLpg7kaaENodSNJ9lf91/ry+jR+QuKjM0P39qIw=";
+    hash = "sha256-iyzTBZHOzr6CfZDqHvycdWZply/BXH7kESaO5pDLBMY=";
   };
 
   build-system = with python3Packages; [ pdm-backend ];
