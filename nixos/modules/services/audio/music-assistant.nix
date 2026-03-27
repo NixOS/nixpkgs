@@ -131,7 +131,7 @@ in
         ++ lib.optionals (lib.elem "airplay_receiver" cfg.providers) [
           shairport-sync
         ]
-        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
+        ++ lib.optionals (lib.elem "spotify" cfg.providers || lib.elem "spotify_connect" cfg.providers) [
           librespot-ma
         ]
         ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
