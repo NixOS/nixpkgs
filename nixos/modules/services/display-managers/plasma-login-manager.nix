@@ -65,6 +65,16 @@ in
       path = [ cfg.package ];
       wantedBy = [ "graphical.target" ];
       restartIfChanged = false;
+      environment.XDG_DATA_DIRS = lib.mkIf (
+        dmcfg.sessionPackages != [ ]
+      ) "${dmcfg.sessionData.desktops}/share";
+    };
+
+    systemd.user.services.plasma-login = {
+      overrideStrategy = "asDropin";
+      environment.XDG_DATA_DIRS = lib.mkIf (
+        dmcfg.sessionPackages != [ ]
+      ) "${dmcfg.sessionData.desktops}/share";
     };
 
     systemd.defaultUnit = "graphical.target";
