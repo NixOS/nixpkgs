@@ -5,11 +5,15 @@
   python3,
   qmake,
   qtbase,
-  qtquickcontrols,
+  qtdeclarative,
+  qtquickcontrols ? null, # Qt6: merged into qtdeclarative
   qtsvg,
   ncurses,
 }:
 
+let
+  withQt6 = lib.strings.versionAtLeast qtbase.version "6";
+in
 stdenv.mkDerivation rec {
   pname = "pyotherside";
   version = "1.6.2";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python3
     qtbase
-    qtquickcontrols
+    (if withQt6 then qtdeclarative else qtquickcontrols)
     qtsvg
     ncurses
   ];
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
   installTargets = [ "sub-src-install_subtargets" ];
 
   meta = {
-    description = "Asynchronous Python 3 Bindings for Qt 5";
+    description = "Asynchronous Python 3 Bindings for Qt ${lib.versions.major qtbase.version}";
     homepage = "https://thp.io/2011/pyotherside/";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.mic92 ];
