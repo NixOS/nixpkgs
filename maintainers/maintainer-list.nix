@@ -22563,6 +22563,11 @@
     githubId = 21069876;
     name = "Reed Williams";
   };
+  refactoriel = {
+    name = "Daniel Hähnke";
+    github = "refactoriel";
+    githubId = 11663234;
+  };
   refi64 = {
     name = "Ryan Gonzalez";
     email = "git@refi64.dev";
