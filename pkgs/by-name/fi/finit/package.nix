@@ -7,6 +7,8 @@
   libcap,
   libite,
   libuev,
+  shadow,
+  sysctl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,8 +62,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
-    "-D_PATH_LOGIN=\"/run/current-system/sw/bin/login\""
-    "-DSYSCTL_PATH=\"/run/current-system/sw/bin/sysctl\""
+    "-D_PATH_LOGIN=\"${shadow}/bin/login\""
+    "-DSYSCTL_PATH=\"${sysctl}/bin/sysctl\""
   ];
 
   meta = {
