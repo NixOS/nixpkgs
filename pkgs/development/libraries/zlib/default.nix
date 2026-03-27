@@ -46,6 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-uzKaCizQJ00FUZ1hxmfAYuBpkNcuEl7i36jeZPARnRY=";
     };
 
+  # https://github.com/madler/zlib/pull/1171
+  patches = [
+    ./export-variable.patch
+  ];
+
   postPatch = ''
     substituteInPlace configure \
       --replace-fail '/usr/bin/libtool' '${stdenv.cc.targetPrefix}ar' \
