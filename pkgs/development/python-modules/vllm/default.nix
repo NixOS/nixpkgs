@@ -178,8 +178,8 @@ let
   triton-kernels = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    tag = "v3.5.0";
-    hash = "sha256-F6T0n37Lbs+B7UHNYzoIQHjNNv3TcMtoXjNrT8ZUlxY=";
+    tag = "v3.6.0";
+    hash = "sha256-JFSpQn+WsNnh7CAPlcpOcUp0nyKXNbJEANdXqmkt4Tc=";
   };
 
   # grep for GIT_TAG in the following file
@@ -381,6 +381,18 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
         'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
   '';
 
+  pythonRelaxDeps = true;
+
+  pythonRemoveDeps = [
+    "flashinfer-cubin"
+    "nvidia-cudnn-frontend"
+
+    # QuACK and Cutlass DSL seem to be added only for FA4
+    # which in our case handles its own deps
+    "nvidia-cutlass-dsl"
+    "quack-kernels"
+  ];
+
   nativeBuildInputs = [
     which
   ]
@@ -578,9 +590,12 @@ buildPythonPackage.override { stdenv = torch.stdenv; } (finalAttrs: {
     export MAX_JOBS="$NIX_BUILD_CORES"
   '';
 
-  pythonRelaxDeps = true;
-
   pythonImportsCheck = [ "vllm" ];
+  makeWrapperArgs = lib.optionals (cudaSupport && cudaPackages ? nccl) [
+    "--set"
+    "VLLM_NCCL_SO_PATH"
+    "${cudaPackages.nccl}/lib/libnccl.so"
+  ];
 
   passthru = {
     # make internal dependency available to overlays
