@@ -7,14 +7,16 @@
   bison,
   flex,
   pkg-config,
+  pythonSupport ? false,
+  swig ? null,
+  python ? null,
+  enableDocs ? false,
   doxygen,
   graphviz,
   mscgen,
   asciidoc,
   sourceHighlight,
-  pythonSupport ? false,
-  swig ? null,
-  python ? null,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,9 +36,12 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "man"
   ]
-  ++ lib.optional pythonSupport "py";
+  ++ lib.optional pythonSupport "py"
+  ++ lib.optional enableDocs "doc";
 
   enableParallelBuilding = true;
+
+  configureFlags = [ (lib.enableFeature enableDocs "doc") ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -44,18 +49,33 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     pkg-config
     file
+  ]
+  ++ lib.optionals pythonSupport [
+    swig
+  ]
+  ++ lib.optionals enableDocs [
     doxygen
     graphviz
     mscgen
     asciidoc
     sourceHighlight
-  ]
-  ++ lib.optional pythonSupport swig;
+    python3Packages.pygments
+  ];
 
   postBuild = lib.optionalString pythonSupport ''
     cd python
     ${python.pythonOnBuildForHost.interpreter} setup.py install --prefix=../pythonlib
     cd -
+  '';
+
+  postInstall = lib.optionalString enableDocs ''
+    patchShebangs doc
+    # See tools/build_release.sh
+    make -C doc
+    make -C doc gendoc
+    make -C doc dist
+    mkdir -p $doc/share/doc/libnl
+    cp doc/libnl-doc-${finalAttrs.version}.tar.gz $doc/share/doc/libnl
   '';
 
   postFixup = lib.optionalString pythonSupport ''
