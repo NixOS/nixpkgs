@@ -8,11 +8,13 @@
   undmg,
 
   alsa-lib,
+  libjack2,
   curl,
   gtk3,
   lame,
   libxml2_13,
-  ffmpeg,
+  ffmpeg_4-headless,
+  ffmpeg ? ffmpeg_4-headless,
   vlc,
   xdg-utils,
   xdotool,
@@ -20,7 +22,7 @@
   openssl,
 
   jackSupport ? stdenv.hostPlatform.isLinux,
-  jackLibrary,
+  jackLibrary ? libjack2, # Another option is "pipewire.jack".
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
 }:
