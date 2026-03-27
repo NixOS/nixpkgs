@@ -18,6 +18,10 @@
   moreutils,
   jq,
   gst_all_1,
+  glib-networking,
+  cacert,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
 
   # NOTE: this is enabled by default for better compatibility, but it may slow
   # down performance.
@@ -83,6 +87,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk3
     librsvg
     openssl
+    glib-networking
+    cacert
+    gsettings-desktop-schemas
+    adwaita-icon-theme
     # TTS
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -95,7 +103,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pnpm setup-vendors
   '';
 
-  preFixup = lib.optionalString withNvidiaFix ''
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --set GIO_EXTRA_MODULES "${glib-networking}/lib/gio/modules"
+      --set NIX_SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+    )
+  ''
+  + lib.optionalString withNvidiaFix ''
     # fix Nvidia issues with Tauri
     # https://github.com/tauri-apps/tauri/issues/9394
     # https://github.com/tauri-apps/tauri/issues/9304
@@ -112,7 +126,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/readest/readest/releases/tag/v${finalAttrs.version}";
     mainProgram = "readest";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ eljamm ];
+    maintainers = with lib.maintainers; [
+      eljamm
+      kasifrasi
+    ];
     platforms = lib.platforms.linux;
   };
 })
