@@ -50,6 +50,20 @@ in
       inherit wxSupport systemdSupport;
     };
 
+    erlang_24 =
+      (callErlang ../development/interpreters/erlang/24.nix {
+        inherit wxSupport systemdSupport;
+      }).overrideAttrs
+        (old: {
+          # OTP 24 uses `bool` as a variable name in dist.c, which conflicts
+          # with the C23 keyword in GCC 14+.
+          postPatch = (old.postPatch or "") + ''
+            substituteInPlace erts/emulator/beam/dist.c \
+              --replace-fail 'Eterm bool' 'Eterm spawn_monitor_p' \
+              --replace-fail 'ref, bool' 'ref, spawn_monitor_p'
+          '';
+        });
+
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
     # `beam.packages.erlang_27.elixir`.
@@ -77,5 +91,6 @@ in
     erlang_28 = self.packagesWith self.interpreters.erlang_28;
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
+    erlang_24 = self.packagesWith self.interpreters.erlang_24;
   };
 }
