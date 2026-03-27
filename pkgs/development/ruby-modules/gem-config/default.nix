@@ -125,6 +125,7 @@
   libsysprof-capture,
   imlib2,
   autoSignDarwinBinariesHook,
+  systemd,
 }@args:
 
 let
@@ -483,6 +484,11 @@ in
       glib
       libsysprof-capture
       pcre2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      util-linux
+      libselinux
+      libsepol
     ];
   };
 
@@ -491,12 +497,13 @@ in
       binutils
       pkg-config
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       util-linux
       libselinux
       libsepol
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+      systemd
+    ];
     propagatedBuildInputs = [
       atk
       gdk-pixbuf
