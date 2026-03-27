@@ -10,7 +10,6 @@
   gtk4,
   libadwaita,
   libgee,
-  libgnome-games-support_2_0,
   pango,
   gnome,
   desktop-file-utils,
@@ -48,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     gtk4
     libadwaita
     libgee
-    libgnome-games-support_2_0
     pango
   ];
 
