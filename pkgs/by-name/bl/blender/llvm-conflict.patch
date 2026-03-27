@@ -1,0 +1,18 @@
+diff --git a/extern/hipew/src/util.h b/extern/hipew/src/util.h
+index 2aafc4b7f9..b9ed1c0cd3 100644
+--- a/extern/hipew/src/util.h
++++ b/extern/hipew/src/util.h
+@@ -40,11 +40,12 @@
+ #  define dynamic_library_close(lib)         FreeLibrary(lib)
+ #  define dynamic_library_find(lib, symbol)  GetProcAddress(lib, symbol)
+ #else
++#  define _GNU_SOURCE
+ #  include <dlfcn.h>
+ 
+ typedef void* DynamicLibrary;
+ 
+-#  define dynamic_library_open(path)         dlopen(path, RTLD_NOW)
++#  define dynamic_library_open(path)         dlmopen(LM_ID_NEWLM, path, RTLD_NOW)
+ #  define dynamic_library_close(lib)         dlclose(lib)
+ #  define dynamic_library_find(lib, symbol)  dlsym(lib, symbol)
+ #endif

@@ -126,7 +126,10 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   # Minimal backport of hiprt 3.x support from https://projects.blender.org/blender/blender/pulls/144889
-  patches = lib.optional rocmSupport ./hiprt-3-compat.patch;
+  patches = lib.optionals rocmSupport [
+    ./hiprt-3-compat.patch
+    ./llvm-conflict.patch
+  ];
 
   postPatch =
     (lib.optionalString stdenv.hostPlatform.isDarwin ''
