@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   writeText,
   replaceVars,
   meson,
@@ -19,6 +20,7 @@
   systemd,
   xkeyboard-config,
   fontconfig,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./fix-paths.patch {
       fcmatch = "${fontconfig}/bin/fc-match";
     })
+
+    # fix build without udev, see https://gitlab.freedesktop.org/plymouth/plymouth/-/merge_requests/382 - drop on next release
+    (fetchpatch {
+      name = "fix-build-without-udev.patch";
+      url = "https://gitlab.freedesktop.org/plymouth/plymouth/-/commit/f1ce78764482699b28f60c89af1a071ea0ae13ca.patch";
+      hash = "sha256-t5xt/scO8mVwESU8pFPTSXILd0FhmG/XRZ8O/4baQB8=";
+    })
   ];
 
   strictDeps = true;
@@ -67,8 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libxkbcommon
     pango
-    systemd
     xkeyboard-config
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
   ];
 
   mesonFlags =
@@ -87,9 +98,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dbackground-start-color-stop=0x000000"
       "-Dbackground-end-color-stop=0x000000"
       "-Drelease-file=/etc/os-release"
-      "-Dudev=enabled"
+      "-Dudev=${if systemdSupport then "enabled" else "disabled"}"
       "-Drunstatedir=/run"
       "-Druntime-plugins=true"
+      "-Dsystemd-integration=${lib.boolToString systemdSupport}"
+    ]
+    ++ lib.optionals systemdSupport [
       "--cross-file=${crossFile}"
     ];
 
