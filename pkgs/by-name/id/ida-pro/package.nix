@@ -2,7 +2,7 @@
   pkgs,
   lib,
   extraFiles ? "",
-  hexPatches ? [],
+  hexPatches ? [ ],
   # hexPatches: hex patterns to substitute in specified files immediately after
   # install. Can be used, for example, to replace the embedded SSL certificates
   # for compatibility with a self-hosted Lumina server.
@@ -12,12 +12,12 @@
 }:
 let
   pythonForIDA = pkgs.python313.withPackages (ps: with ps; [ rpyc ]);
-  patchScript = lib.concatMapStringsSep "\n" (p:
+  patchScript = lib.concatMapStringsSep "\n" (
+    p:
     let
-      forcecntDecl =
-        lib.optionalString (p ? assertCount)
-          "my $forcecnt = ${toString p.assertCount};";
-          in ''
+      forcecntDecl = lib.optionalString (p ? assertCount) "my $forcecnt = ${toString p.assertCount};";
+    in
+    ''
       perl -0777 -pi -e '${forcecntDecl} my $cnt = (s/\Q''${\pack("H*","${p.from}")}\E/''${\pack("H*","${p.to}")}/g) || 0; die "Expected $forcecnt substitutions, did $cnt\n" if defined $forcecnt && $cnt != $forcecnt' "$IDADIR/${p.filename}"
     ''
   ) hexPatches;
@@ -158,7 +158,10 @@ pkgs.stdenv.mkDerivation rec {
     homepage = "https://hex-rays.com/ida-pro/";
     license = licenses.unfree;
     mainProgram = "ida";
-    maintainers = with maintainers; [ msanft yanmaani ];
+    maintainers = with maintainers; [
+      msanft
+      yanmaani
+    ];
     platforms = [ "x86_64-linux" ]; # Right now, the installation script only supports Linux.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
