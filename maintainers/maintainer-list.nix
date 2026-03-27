@@ -2994,6 +2994,12 @@
     githubId = 127523;
     name = "Herman Fries";
   };
+  barrettruth = {
+    email = "br@barrettruth.com";
+    github = "barrettruth";
+    githubId = 62671086;
+    name = "Barrett Ruth";
+  };
   BarrOff = {
     name = "BarrOff";
     github = "BarrOff";
