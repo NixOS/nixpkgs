@@ -3,6 +3,7 @@
   stdenv,
   stdenvNoCC,
   fetchFromGitLab,
+  callPackage,
   meson,
   ninja,
   pkg-config,
@@ -101,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
     };
+    tests.dependency-versions = callPackage ./test-dependency-versions.nix { inherit gvdb; };
     updateScript = nix-update-script { };
   };
 
