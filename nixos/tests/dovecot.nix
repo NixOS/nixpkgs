@@ -12,6 +12,8 @@
       services.dovecot2 = {
         enable = true;
         settings = {
+          dovecot_config_version = dovecot.version;
+          dovecot_storage_version = dovecot.version;
           protocols = [
             "imap"
             "pop3"
