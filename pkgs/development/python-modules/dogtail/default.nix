@@ -94,7 +94,7 @@ buildPythonPackage (finalAttrs: {
     homepage = "https://gitlab.com/dogtail/dogtail";
     license = lib.licenses.gpl2Plus;
     mainProgram = "dogtail-headless";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ phanirithvij ];
     platforms = lib.platforms.linux;
   };
 })
