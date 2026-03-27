@@ -54,6 +54,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       yuka
     ];
-    platforms = [ "aarch64-linux" ];
+    platforms = lib.platforms.linux;
   };
 })
