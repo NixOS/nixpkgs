@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AJe7ZvF88gKrW6IsTLpYI7RmzetFGZifntHzX7aNcG4=";
   };
 
+  postPatch = ''
+    substituteInPlace src/fs.h \
+      --replace-fail '"unzip.h"' '<minizip/unzip.h>'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
