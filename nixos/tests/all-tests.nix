@@ -1484,6 +1484,7 @@ in
   solanum = runTest ./solanum.nix;
   sonarr = runTest ./sonarr.nix;
   sonic-server = runTest ./sonic-server.nix;
+  sourcehut = import ./sourcehut { inherit system pkgs; };
   spacecookie = runTest ./spacecookie.nix;
   spark = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./spark { };
   speedtest-tracker = runTest ./speedtest-tracker.nix;
