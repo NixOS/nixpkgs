@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "dnspeep";
     homepage = "https://github.com/jvns/dnspeep";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })
