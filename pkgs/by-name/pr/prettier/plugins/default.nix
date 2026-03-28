@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
+  gems,
   nodejs,
   pnpm_9,
   stdenv,
@@ -28,6 +29,20 @@
       nodejs
       stdenv
       pnpm_9
+      ;
+  };
+
+  ## Prettier: failed to parse buffer
+  prettier-plugin-ruby = import ./prettier/plugin-ruby {
+    inherit
+      fetchFromGitHub
+      fetchYarnDeps
+      gems
+      nodejs
+      stdenv
+      yarnBuildHook
+      yarnConfigHook
+      yarnInstallHook
       ;
   };
 }
