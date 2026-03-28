@@ -53,10 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Tools for software verification and analysis";
-    homepage = "https://saw.galois.com";
+    homepage = "https://tools.galois.com/saw";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
     platforms = lib.attrNames sources;
     maintainers = [ lib.maintainers.thoughtpolice ];
+    mainProgram = "saw";
   };
 })
