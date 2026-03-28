@@ -29998,6 +29998,12 @@
     name = "Yusuf Bera Ertan";
     keys = [ { fingerprint = "9270 66BD 8125 A45B 4AC4 0326 6180 7181 F60E FCB2"; } ];
   };
+  yus314 = {
+    email = "shizhaoyoujie@gmail.com";
+    github = "Yus314";
+    githubId = 91413196;
+    name = "minera";
+  };
   yusuf-duran = {
     github = "postgnostic";
     githubId = 37774475;
