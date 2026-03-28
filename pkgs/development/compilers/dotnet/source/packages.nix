@@ -12,7 +12,7 @@
 }:
 
 let
-  mkWrapper = callPackage ./wrapper.nix { };
+  mkWrapper = callPackage ../wrapper.nix { };
   mkCommon =
     type: args:
     mkWrapper type (
