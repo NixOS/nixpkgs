@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  tetex,
+  texliveMedium,
 }:
 
 stdenv.mkDerivation {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     "-std=gnu17"
   ];
 
-  nativeBuildInputs = [ tetex ];
+  nativeBuildInputs = [ texliveMedium ];
   enableParallelBuilding = true;
 
   makeFlags = [
