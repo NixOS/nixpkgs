@@ -51,6 +51,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/charmbracelet/soft-serve/releases/tag/v${finalAttrs.version}";
     mainProgram = "soft";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ miniharinn ];
   };
 })
