@@ -119,6 +119,7 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
+    pname = "${finalAttrs.pname}-gpuCheck";
     requiredSystemFeatures = [ "cuda" ];
 
     env = (old.env or { }) // {
