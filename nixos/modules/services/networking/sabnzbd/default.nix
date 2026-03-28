@@ -33,7 +33,7 @@ let
     "__version__" = 19;
     "__encoding__" = "utf-8";
   };
-  allSettings = cfg.settings // mandatoryGlobalSettings;
+  allSettings = mandatoryGlobalSettings // cfg.settings;
 
   # sabnzbd uses configobj type inis, which support
   # nested sections specified by increasing numbers
