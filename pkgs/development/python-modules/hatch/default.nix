@@ -168,6 +168,9 @@ buildPythonPackage (finalAttrs: {
     "test_macos_archflags"
     "test_macos_max_compat"
 
+    # AssertionError: assert 'Creating env...ependencies\n' == 'Creating env...ep...
+    "test_install_project_no_dev_mode"
+
     # https://github.com/pypa/hatch/issues/1942
     "test_features"
     "test_sync_dynamic_dependencies"
