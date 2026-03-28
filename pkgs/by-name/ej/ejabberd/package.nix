@@ -76,7 +76,6 @@ let
     builder = lib.makeOverridable buildRebar3;
 
     overrides = final: prev: {
-      jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
       cache_tab = prev.cache_tab.override { buildPlugins = [ beamPackages.pc ]; };
       mqtree = prev.mqtree.override { buildPlugins = [ beamPackages.pc ]; };
       stringprep = prev.stringprep.override { buildPlugins = [ beamPackages.pc ]; };
@@ -140,7 +139,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "26.02";
+  version = "26.03";
 
   nativeBuildInputs = [
     makeWrapper
@@ -170,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-izP7Rz65Lr4LDOCzZPdDWb3TyXDSTd/8gOPSfovVGM8=";
+    hash = "sha256-M38niXEW++SPAvqQ2cqEd23+w7lBDO5EPgu/QRdYbXo=";
   };
 
   passthru.tests = {
