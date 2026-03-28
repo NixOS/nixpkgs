@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "oslotest";
-  version = "6.0.0";
+  version = "6.1.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CHBKOnoEtZtQAu5YTFPKlYn0VU/hAA5nbs4wwZVHgj4=";
+    hash = "sha256-j86DR3S5aGNdCIb/HgC8yyXbz+KIrFInGbFe5pvzUY4=";
   };
 
   nativeBuildInputs = [ pbr ];
