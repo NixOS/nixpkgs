@@ -14915,7 +14915,7 @@
   laurids = {
     email = "laurids.dechow@gmail.com";
     github = "Laurids33";
-    githubId = 187098082; 
+    githubId = 187098082;
     name = "Laurids Dechow";
   };
   lavafroth = {
