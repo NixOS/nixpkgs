@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  callPackage,
   fetchFromCodeberg,
   libGL,
   libx11,
   libevdev,
   libinput,
   libxkbcommon,
+  nix-update-script,
   pixman,
   pkg-config,
   scdoc,
@@ -38,8 +38,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  deps = callPackage ./build.zig.zon.nix { };
-
   nativeBuildInputs = [
     pkg-config
     wayland-scanner
@@ -64,12 +62,13 @@ stdenv.mkDerivation (finalAttrs: {
     libx11
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ]
-  ++ lib.optional withManpages "-Dman-pages"
-  ++ lib.optional xwaylandSupport "-Dxwayland";
+  zigDeps = zig_0_15.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-YZCZIYplucQpFX2eEikcf9Rk7FjVeF1O1I7hSnpReX0=";
+  };
+
+  zigBuildFlags =
+    lib.optional withManpages "-Dman-pages" ++ lib.optional xwaylandSupport "-Dxwayland";
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -81,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     providedSessions = [ "river" ];
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = {
