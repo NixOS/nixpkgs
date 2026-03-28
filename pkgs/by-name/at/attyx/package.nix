@@ -2,11 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  callPackage,
-
   pkg-config,
   zig,
-
   fontconfig,
   freetype,
   glfw,
@@ -27,8 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-fREiPiBTzzJtFEPWOISiZ/BI5lZmPyn80oAXohEEGig=";
   };
 
-  deps = callPackage ./build.zig.zon.nix { };
-
   nativeBuildInputs = [
     pkg-config
     zig
@@ -45,10 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     libxrandr
   ];
 
-  zigBuildFlags = [
-    "--system"
-    "${finalAttrs.deps}"
-  ];
+  zigDeps = zig.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-6QDLHWlRqlW42t+qdruHgLF4bAFDfNzdV8JPLUH4HKs=";
+  };
 
   meta = {
     description = "Fast GPU-accelerated terminal emulator built with Zig";
