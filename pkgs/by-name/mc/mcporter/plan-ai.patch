@@ -1,0 +1,70 @@
+From 9177cd9bfe96846bdaa2fd09044f22862ea7ce26 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Maciej=20Kr=C3=BCger?= <mkg20001@gmail.com>
+Date: Sat, 28 Mar 2026 16:30:05 +0100
+Subject: [PATCH] feat(config): load extra config from ~/.mcporter/plan-ai.json
+
+Add plan-ai.json as an optional config layer between home and project
+configs, allowing Plan AI-specific server definitions to be managed
+separately.
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+---
+ src/config/path-discovery.ts | 9 +++++++++
+ src/config/read-config.ts    | 7 ++++++-
+ 2 files changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/src/config/path-discovery.ts b/src/config/path-discovery.ts
+index 1d3b216..6017cbd 100644
+--- a/src/config/path-discovery.ts
++++ b/src/config/path-discovery.ts
+@@ -26,6 +26,11 @@ export async function listConfigLayerPaths(
+     paths.push(existingHome);
+   }
+ 
++  const planAiPath = planAiConfigPath();
++  if (pathExists(planAiPath)) {
++    paths.push(planAiPath);
++  }
++
+   const projectPath = path.resolve(rootDir, 'config', 'mcporter.json');
+   if (pathExists(projectPath)) {
+     paths.push(projectPath);
+@@ -60,6 +65,10 @@ export function homeConfigCandidates(): string[] {
+   return [path.join(base, 'mcporter.json'), path.join(base, 'mcporter.jsonc')];
+ }
+ 
++export function planAiConfigPath(): string {
++  return path.join(os.homedir(), '.mcporter', 'plan-ai.json');
++}
++
+ export function pathExists(filePath: string): boolean {
+   try {
+     fsSync.accessSync(filePath);
+diff --git a/src/config/read-config.ts b/src/config/read-config.ts
+index 820f4cb..ed01e83 100644
+--- a/src/config/read-config.ts
++++ b/src/config/read-config.ts
+@@ -3,7 +3,7 @@ import path from 'node:path';
+ import { type LoadConfigOptions, type RawConfig, RawConfigSchema } from '../config-schema.js';
+ import { expandHome } from '../env.js';
+ import { parseJsonBuffer } from './imports/shared.js';
+-import { homeConfigCandidates, pathExists, pathExistsAsync } from './path-discovery.js';
++import { homeConfigCandidates, pathExists, pathExistsAsync, planAiConfigPath } from './path-discovery.js';
+ 
+ export type ConfigLayer = {
+   config: RawConfig;
+@@ -27,6 +27,11 @@ export async function loadConfigLayers(options: LoadConfigOptions, rootDir: stri
+     layers.push({ config: await readConfigFile(existingHome, false), path: existingHome, explicit: false });
+   }
+ 
++  const planAi = planAiConfigPath();
++  if (pathExists(planAi)) {
++    layers.push({ config: await readConfigFile(planAi, false), path: planAi, explicit: false });
++  }
++
+   const projectPath = path.resolve(rootDir, 'config', 'mcporter.json');
+   if (pathExists(projectPath)) {
+     layers.push({ config: await readConfigFile(projectPath, false), path: projectPath, explicit: false });
+-- 
+2.53.0
+
