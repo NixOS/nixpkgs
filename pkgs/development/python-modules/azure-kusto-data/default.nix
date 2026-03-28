@@ -39,6 +39,10 @@ buildPythonPackage rec {
 
   build-system = [ uv-build ];
 
+  pythonRelaxDeps = [
+    "ijson"
+  ];
+
   dependencies = [
     azure-core
     azure-identity
