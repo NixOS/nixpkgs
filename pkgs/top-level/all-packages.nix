@@ -233,9 +233,6 @@ with pkgs;
   autoreconfHook269 = autoreconfHook.override {
     autoconf = autoconf269;
   };
-  autoreconfHook271 = autoreconfHook.override {
-    autoconf = autoconf271;
-  };
 
   autoPatchelfHook = makeSetupHook {
     name = "auto-patchelf-hook";
@@ -5481,7 +5478,6 @@ with pkgs;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
-  autoconf271 = callPackage ../development/tools/misc/autoconf/2.71.nix { };
 
   automake = automake118x;
 
