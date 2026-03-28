@@ -156,7 +156,10 @@ python3Packages.buildPythonApplication (finalAttrs: {
     homepage = "https://github.com/suitenumerique/docs";
     changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     mainProgram = "docs";
     platforms = lib.platforms.all;
   };

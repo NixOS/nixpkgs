@@ -60,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/suitenumerique/docs/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     mainProgram = "docs-collaboration-server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ soyouzpanda ];
+    maintainers = with lib.maintainers; [
+      soyouzpanda
+      ma27
+    ];
     platforms = lib.platforms.all;
   };
 })
