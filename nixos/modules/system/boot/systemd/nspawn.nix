@@ -102,61 +102,71 @@ let
     (assertValueOneOf "VirtualEthernet" boolValues)
   ];
 
-  instanceOptions = {
-    options = (getAttrs [ "enable" ] sharedOptions) // {
-      execConfig = mkOption {
-        default = { };
-        example = {
-          Parameters = "/bin/sh";
+  instanceOptions =
+    { name, config, ... }:
+    {
+      options = (getAttrs [ "enable" ] sharedOptions) // {
+        execConfig = mkOption {
+          default = { };
+          example = {
+            Parameters = "/bin/sh";
+          };
+          type = types.addCheck (types.attrsOf unitOption) checkExec;
+          description = ''
+            Each attribute in this set specifies an option in the
+            `[Exec]` section of this unit. See
+            {manpage}`systemd.nspawn(5)` for details.
+          '';
         };
-        type = types.addCheck (types.attrsOf unitOption) checkExec;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Exec]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
+
+        filesConfig = mkOption {
+          default = { };
+          example = {
+            Bind = [ "/home/alice" ];
+          };
+          type = types.addCheck (types.attrsOf unitOption) checkFiles;
+          description = ''
+            Each attribute in this set specifies an option in the
+            `[Files]` section of this unit. See
+            {manpage}`systemd.nspawn(5)` for details.
+          '';
+        };
+
+        networkConfig = mkOption {
+          default = { };
+          example = {
+            Private = false;
+          };
+          type = types.addCheck (types.attrsOf unitOption) checkNetwork;
+          description = ''
+            Each attribute in this set specifies an option in the
+            `[Network]` section of this unit. See
+            {manpage}`systemd.nspawn(5)` for details.
+          '';
+        };
+
+        extraDrvConfig = mkOption {
+          type = types.nullOr types.package;
+          default = null;
+          description = ''
+            Extra config for an nspawn-unit that is generated via `nix-build`.
+            This is necessary since nspawn doesn't support overrides in
+            `/etc/systemd/nspawn` natively and sometimes a derivation
+            is needed for configs (e.g. to determine all needed store-paths to bind-mount
+            into a machine).
+          '';
+        };
+
+        unit = mkOption {
+          readOnly = true;
+          type = types.pathInStore;
+          default = instanceToUnit name config;
+          defaultText = "nspawn unit file";
+          description = "The generated .nspawn unit file";
+        };
       };
 
-      filesConfig = mkOption {
-        default = { };
-        example = {
-          Bind = [ "/home/alice" ];
-        };
-        type = types.addCheck (types.attrsOf unitOption) checkFiles;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Files]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
-      };
-
-      networkConfig = mkOption {
-        default = { };
-        example = {
-          Private = false;
-        };
-        type = types.addCheck (types.attrsOf unitOption) checkNetwork;
-        description = ''
-          Each attribute in this set specifies an option in the
-          `[Network]` section of this unit. See
-          {manpage}`systemd.nspawn(5)` for details.
-        '';
-      };
-
-      extraDrvConfig = mkOption {
-        type = types.nullOr types.package;
-        default = null;
-        description = ''
-          Extra config for an nspawn-unit that is generated via `nix-build`.
-          This is necessary since nspawn doesn't support overrides in
-          `/etc/systemd/nspawn` natively and sometimes a derivation
-          is needed for configs (e.g. to determine all needed store-paths to bind-mount
-          into a machine).
-        '';
-      };
     };
-
-  };
 
   makeUnit' =
     name: def:
@@ -224,7 +234,7 @@ in
     let
       units = mapAttrs' (name: value: {
         name = "systemd/nspawn/${name}.nspawn";
-        value.source = instanceToUnit "${name}.nspawn" value;
+        value.source = value.unit;
       }) cfg;
     in
     mkMerge [
