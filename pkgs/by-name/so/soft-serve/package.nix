@@ -9,7 +9,7 @@
 }:
 
 let
-  version = "0.11.5";
+  version = "0.11.6";
 in
 buildGoModule {
   pname = "soft-serve";
@@ -18,11 +18,11 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "soft-serve";
-    rev = "v${version}";
-    hash = "sha256-6ZPb8qL6E2lJp5uNRWNTcTWcVecGfsoXxshfvTP1UBk=";
+    tag = "v${version}";
+    hash = "sha256-oWZfhB14Yjj3/BKKhowKDKX5v4RvIwjHDCSFfnI+f54=";
   };
 
-  vendorHash = "sha256-BiusDvmXyS0HYx1mTLF1iECmIKPVlkI6B76NVnANEy4=";
+  vendorHash = "sha256-nsrfohr2b6zpbhWVRfOPydCpyUZzbR3YJz5viWGUwmQ=";
 
   doCheck = false;
 
