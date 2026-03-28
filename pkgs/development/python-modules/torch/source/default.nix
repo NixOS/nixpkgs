@@ -754,7 +754,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    tests = callPackage ../tests { };
+    tests = callPackage ../tests {
+      inherit rocmSupport cudaSupport;
+    };
   };
 
   meta = {
