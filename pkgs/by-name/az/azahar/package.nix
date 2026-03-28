@@ -46,6 +46,7 @@
   gamemode,
   enableGamemode ? lib.meta.availableOn stdenv.hostPlatform gamemode,
   nix-update-script,
+  darwinMinVersionHook,
 }:
 let
   inherit (lib)
@@ -120,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals stdenv.hostPlatform.isDarwin [
     moltenvk
+    (darwinMinVersionHook "13.4")
   ];
 
   postPatch = ''
@@ -145,10 +147,24 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "ENABLE_SSE42" enableSSE42)
   ];
 
+  installPhase = optionalString stdenv.isDarwin ''
+    runHook preInstall
+
+    mkdir -p $out/Applications $out/bin
+
+    cp ./bin/Release/${finalAttrs.pname}-room $out/bin
+    cp -r ./bin/Release/${finalAttrs.pname}.app $out/Applications
+
+    runHook postInstall
+  '';
+
   preFixup = ''
     qtWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      ${optionalString stdenv.isDarwin "--prefix DYLD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ moltenvk ]
+      }"}
     )
   '';
 

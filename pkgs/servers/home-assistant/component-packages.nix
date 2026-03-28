@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2026.3.3";
+  version = "2026.3.4";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -2351,7 +2351,8 @@
       ];
     "hegel" =
       ps: with ps; [
-      ]; # missing inputs: hegel-ip-client
+        hegel-ip-client
+      ];
     "heicko" =
       ps: with ps; [
       ];
@@ -2534,7 +2535,8 @@
       ];
     "homevolt" =
       ps: with ps; [
-      ]; # missing inputs: homevolt
+        homevolt
+      ];
     "homewizard" =
       ps: with ps; [
         python-homewizard-energy
@@ -2738,7 +2740,8 @@
     "idrive_e2" =
       ps: with ps; [
         aiobotocore
-      ]; # missing inputs: idrive-e2-client
+        idrive-e2-client
+      ];
     "idteck_prox" =
       ps: with ps; [
         rfk101py
@@ -2824,7 +2827,8 @@
       ];
     "indevolt" =
       ps: with ps; [
-      ]; # missing inputs: indevolt-api
+        indevolt-api
+      ];
     "indianamichiganpower" =
       ps: with ps; [
       ];
@@ -2900,7 +2904,8 @@
       ];
     "intelliclima" =
       ps: with ps; [
-      ]; # missing inputs: pyintelliclima
+        pyintelliclima
+      ];
     "intellifire" =
       ps: with ps; [
         intellifire4py
@@ -3421,7 +3426,8 @@
       ];
     "liebherr" =
       ps: with ps; [
-      ]; # missing inputs: pyliebherrhomeapi
+        pyliebherrhomeapi
+      ];
     "life360" =
       ps: with ps; [
       ];
@@ -4023,7 +4029,8 @@
       ];
     "mta" =
       ps: with ps; [
-      ]; # missing inputs: py-nymta
+        py-nymta
+      ];
     "mullvad" =
       ps: with ps; [
         mullvad-api
@@ -4046,7 +4053,8 @@
       ];
     "myneomitis" =
       ps: with ps; [
-      ]; # missing inputs: pyaxencoapi
+        pyaxencoapi
+      ];
     "myq" =
       ps: with ps; [
       ];
@@ -5152,7 +5160,8 @@
       ];
     "redgtech" =
       ps: with ps; [
-      ]; # missing inputs: redgtech-api
+        redgtech-api
+      ];
     "refoss" =
       ps: with ps; [
         refoss-ha
@@ -5388,7 +5397,8 @@
       ];
     "saunum" =
       ps: with ps; [
-      ]; # missing inputs: pysaunum
+        pysaunum
+      ];
     "scene" =
       ps: with ps; [
       ];
@@ -6099,7 +6109,8 @@
       ];
     "systemnexa2" =
       ps: with ps; [
-      ]; # missing inputs: python-sn2
+        python-sn2
+      ];
     "tado" =
       ps: with ps; [
         python-tado
@@ -6486,7 +6497,8 @@
       ];
     "trane" =
       ps: with ps; [
-      ]; # missing inputs: steamloop
+        steamloop
+      ];
     "transmission" =
       ps: with ps; [
         transmission-rpc
@@ -7205,7 +7217,8 @@
       ];
     "zinvolt" =
       ps: with ps; [
-      ]; # missing inputs: zinvolt
+        zinvolt
+      ];
     "zodiac" =
       ps: with ps; [
       ];
@@ -7581,6 +7594,7 @@
     "hddtemp"
     "hdfury"
     "hdmi_cec"
+    "hegel"
     "heos"
     "here_travel_time"
     "hikvision"
@@ -7604,6 +7618,7 @@
     "homekit_controller"
     "homematic"
     "homematicip_cloud"
+    "homevolt"
     "homewizard"
     "homeworks"
     "honeywell"
@@ -7626,6 +7641,7 @@
     "ibeacon"
     "icloud"
     "idasen_desk"
+    "idrive_e2"
     "ifttt"
     "igloohome"
     "ign_sismologia"
@@ -7638,6 +7654,7 @@
     "immich"
     "improv_ble"
     "incomfort"
+    "indevolt"
     "inels"
     "influxdb"
     "inkbird"
@@ -7649,6 +7666,7 @@
     "input_text"
     "insteon"
     "integration"
+    "intelliclima"
     "intellifire"
     "intent"
     "intent_script"
@@ -7709,6 +7727,7 @@
     "lg_thinq"
     "libre_hardware_monitor"
     "lidarr"
+    "liebherr"
     "life360"
     "lifx"
     "light"
@@ -7800,10 +7819,12 @@
     "mqtt_json"
     "mqtt_room"
     "mqtt_statestream"
+    "mta"
     "mullvad"
     "music_assistant"
     "mutesync"
     "my"
+    "myneomitis"
     "myq"
     "mysensors"
     "mystrom"
@@ -7968,6 +7989,7 @@
     "recorder"
     "recovery_mode"
     "reddit"
+    "redgtech"
     "refoss"
     "rehlko"
     "remember_the_milk"
@@ -8005,6 +8027,7 @@
     "samsungtv"
     "sanix"
     "satel_integra"
+    "saunum"
     "scene"
     "schedule"
     "schlage"
@@ -8111,6 +8134,7 @@
     "system_health"
     "system_log"
     "systemmonitor"
+    "systemnexa2"
     "tado"
     "tag"
     "tailscale"
@@ -8166,6 +8190,7 @@
     "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
+    "trane"
     "transmission"
     "transport_nsw"
     "trend"
@@ -8277,6 +8302,7 @@
     "zeversolar"
     "zha"
     "zimi"
+    "zinvolt"
     "zodiac"
     "zone"
     "zoneminder"

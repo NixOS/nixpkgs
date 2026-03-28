@@ -1043,57 +1043,57 @@ Our example, `toolz`, does not have any dependencies on other Python packages or
 Dependencies can belong to multiple arguments, for example if something is both a build time requirement & a runtime dependency.
 
 The following example shows which arguments are given to [`buildPythonPackage`](#buildpythonpackage-function) in
-order to build [`datashape`](https://github.com/blaze/datashape).
+order to build [`dirigera`](https://github.com/Leggin/dirigera).
 
 ```nix
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-
-  # build dependencies
-  setuptools,
-
-  # dependencies
-  numpy,
-  multipledispatch,
-  python-dateutil,
-
-  # tests
+  fetchFromGitHub,
+  pydantic,
   pytestCheckHook,
+  requests,
+  setuptools,
+  websocket-client,
 }:
 
 buildPythonPackage (finalAttrs: {
-  pname = "datashape";
-  version = "0.4.7";
+  pname = "dirigera";
+  version = "1.2.6";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit (finalAttrs) pname version;
-    hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
+  src = fetchFromGitHub {
+    owner = "Leggin";
+    repo = "dirigera";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-5pfzmaIkIEtxDtkhG1lOLSTjWahEDgQKLJKbAG5rBjE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    multipledispatch
-    numpy
-    python-dateutil
+    pydantic
+    requests
+    websocket-client
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonImportsCheck = [ "dirigera" ];
+
   meta = {
-    changelog = "https://github.com/blaze/datashape/releases/tag/${finalAttrs.version}";
-    homepage = "https://github.com/ContinuumIO/datashape";
-    description = "Data description language";
-    license = lib.licenses.bsd2;
+    description = "Module for controlling the IKEA Dirigera Smart Home Hub";
+    homepage = "https://github.com/Leggin/dirigera";
+    changelog = "https://github.com/Leggin/dirigera/releases/tag/${finalAttrs.src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
+    mainProgram = "generate-token";
   };
 })
 ```
 
-We can see several runtime dependencies, `numpy`, `multipledispatch`, and
-`python-dateutil`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
+We can see several runtime dependencies, `pydantic`, `requests`, and
+`websocket-client`. Furthermore, we have [`nativeCheckInputs`](#var-stdenv-nativeCheckInputs) with `pytestCheckHook`.
 `pytestCheckHook` is a test runner hook and is only used during the [`checkPhase`](#ssec-check-phase) and is
 therefore not added to `dependencies`.
 

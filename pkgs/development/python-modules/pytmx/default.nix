@@ -52,6 +52,6 @@ buildPythonPackage {
     homepage = "https://github.com/bitcraft/PyTMX";
     description = "Python library to read Tiled Map Editor's TMX maps";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

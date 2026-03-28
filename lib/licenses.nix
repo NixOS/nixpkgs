@@ -304,6 +304,11 @@ lib.mapAttrs mkLicense (
       redistributable = true;
     };
 
+    bzip2 = {
+      spdxId = "bzip2-1.0.6";
+      fullName = "bzip2 and libbzip2 License v1.0.6";
+    };
+
     cal10 = {
       spdxId = "CAL-1.0";
       fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";

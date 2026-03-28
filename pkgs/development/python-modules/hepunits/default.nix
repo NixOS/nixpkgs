@@ -4,6 +4,7 @@
   fetchPypi,
   hatch-vcs,
   hatchling,
+  pint,
   pytestCheckHook,
 }:
 
@@ -22,7 +23,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pint
+  ];
 
   meta = {
     description = "Units and constants in the HEP system of units";

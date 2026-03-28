@@ -324,6 +324,8 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   meta = {
+    # https://hydra.nixos.org/job/nixpkgs/unstable/arrow-cpp.x86_64-darwin/all
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/docs/cpp/";
     changelog = "https://arrow.apache.org/release/${finalAttrs.version}.html";

@@ -31,24 +31,25 @@
   spacy,
   sqlalchemy,
   tenacity,
+  tinytag,
   tiktoken,
   tree-sitter,
   typing-inspect,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "llama-index-core";
-  version = "0.14.12";
+  version = "0.14.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "llama_index";
-    tag = "v${version}";
-    hash = "sha256-grF9IToAMc3x5/40+u3lHU9RyjROWu1e3M6N1owq0f4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xcssJPBXq3bjSD13nsR6jRTmTWPVks8aKHZCZ3lSKY4=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${finalAttrs.pname}";
 
   # When `llama-index` is imported, it uses `nltk` to look for the following files and tries to
   # download them if they aren't present.
@@ -96,6 +97,7 @@ buildPythonPackage rec {
     spacy
     sqlalchemy
     tenacity
+    tinytag
     tiktoken
     typing-inspect
   ];
@@ -133,6 +135,8 @@ buildPythonPackage rec {
     "tests/tools/"
     "tests/schema/"
     "tests/multi_modal_llms/"
+    "tests/prompts/"
+    "tests/base/llms/"
   ];
 
   disabledTests = [
@@ -160,8 +164,8 @@ buildPythonPackage rec {
   meta = {
     description = "Data framework for your LLM applications";
     homepage = "https://github.com/run-llama/llama_index/";
-    changelog = "https://github.com/run-llama/llama_index/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/run-llama/llama_index/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

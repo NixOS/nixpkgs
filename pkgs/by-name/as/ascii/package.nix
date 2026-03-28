@@ -8,26 +8,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ascii";
-  version = "3.31";
+  version = "3.32";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "ascii";
     tag = finalAttrs.version;
-    hash = "sha256-fXVREwjiSpLdwNAm6hbuPiCNFqFlpeBiwKsXGaMiY6s=";
+    hash = "sha256-dqleZdqJIjwUy6Ky0329iLfYSluAgHs68LHgLkQcu5Y=";
   };
 
   nativeBuildInputs = [
     asciidoctor
   ];
 
-  prePatch = ''
-    sed -i -e "s|^PREFIX = .*|PREFIX = $out|" Makefile
-  '';
-
-  preInstall = ''
-    mkdir -vp "$out/bin" "$out/share/man/man1"
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+  ];
 
   passthru.updateScript = gitUpdater { };
 

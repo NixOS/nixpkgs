@@ -1129,9 +1129,11 @@ in
       hash = "sha256-8lYvdraKEd1nf8dkZuSDQRVJvX56gHCcTZVtyoy/0IM=";
     };
 
-    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
-      if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua"
-    );
+    env = old.env // {
+      NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
+        if lua.pkgs.isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua"
+      );
+    };
 
     nativeBuildInputs = old.nativeBuildInputs ++ [
       cargo

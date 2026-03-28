@@ -149,6 +149,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
           services.radicle.package = finalAttrs.finalPackage;
         };
       };
+      ci-broker = nixosTests.radicle-ci-broker.extendNixOS {
+        module = {
+          services.radicle.package = finalAttrs.finalPackage;
+        };
+      };
     };
   };
 

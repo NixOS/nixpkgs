@@ -1187,6 +1187,8 @@ let
           cohttp = cohttp_5_3; # due to cohttp_static_handler pulling in cohttp_5_3
         };
 
+        malfunction = callPackage ../development/ocaml-modules/malfunction { };
+
         mariadb = callPackage ../development/ocaml-modules/mariadb {
           inherit (pkgs) mariadb;
         };
@@ -1517,6 +1519,7 @@ let
         ocamlformat_0_26_2 = ocamlformat.override { version = "0.26.2"; };
         ocamlformat_0_27_0 = ocamlformat.override { version = "0.27.0"; };
         ocamlformat_0_28_1 = ocamlformat.override { version = "0.28.1"; };
+        ocamlformat_0_29_0 = ocamlformat.override { version = "0.29.0"; };
 
         ocamlformat = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat.nix { };
 
@@ -1745,6 +1748,8 @@ let
         };
 
         posix-base = callPackage ../development/ocaml-modules/posix/base.nix { };
+
+        posix-errno = callPackage ../development/ocaml-modules/posix/errno.nix { };
 
         posix-math2 = callPackage ../development/ocaml-modules/posix/math2.nix { };
 

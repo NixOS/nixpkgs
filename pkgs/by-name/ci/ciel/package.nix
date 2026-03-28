@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ciel";
-  version = "3.10.1";
+  version = "3.10.2";
 
   src = fetchFromGitHub {
     owner = "AOSC-Dev";
     repo = "ciel-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g1+LSu3K+GOqlHGYbJNHjWHzEnrVI/8rGq8uUPqDCLc=";
+    hash = "sha256-lYw1Dzh3zQ9V5TqZGVJ5LTHuAsnEYsJsShkiJcXMGfc=";
   };
 
-  cargoHash = "sha256-ez+gm8sLqjcZznrvH776r1kFpeHADkA/b13zdO6UqiU=";
+  cargoHash = "sha256-RSdJFjFO0ah2WXazc2QDFQzvNwOKxe0IKiNIjRHO0EQ=";
 
   nativeBuildInputs = [
     pkg-config

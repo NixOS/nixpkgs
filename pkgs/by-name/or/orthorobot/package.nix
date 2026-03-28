@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Stabyourself";
     repo = "orthorobot";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
   };
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
-    makeWrapper ${love}/bin/love $out/bin/orthorobot \
+    makeWrapper ${lib.getExe love} $out/bin/orthorobot \
                 --add-flags $out/share/games/lovegames/orthorobot.love
     runHook postInstall
   '';
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Recharge the robot";
     mainProgram = "orthorobot";
-    platforms = lib.platforms.linux;
+    platforms = love.meta.platforms;
     license = lib.licenses.wtfpl;
     downloadPage = "https://stabyourself.net/orthorobot/";
   };

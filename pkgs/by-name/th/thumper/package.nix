@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "thumper";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "kaaveland";
     repo = "thumper";
     tag = "${finalAttrs.version}";
-    hash = "sha256-+W4dBtvqCobxeFa+Zux1/dYVQoO17SscYR8FoAS7KLM=";
+    hash = "sha256-6ZjtYS6CE1T7zdLPqILv8HUV8cyXWUGesW8MaYCGeyI=";
   };
 
-  cargoHash = "sha256-m8B0+w0BddK8wQgaFfVUUPYdSDvqfs++A0a0WTIF5Qo=";
+  cargoHash = "sha256-H7QV0704bcD7dgkQot81gmtHFEtUccR25FmAK10pYaw=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

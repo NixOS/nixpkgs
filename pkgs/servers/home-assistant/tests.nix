@@ -75,6 +75,7 @@ let
     hyperion = getComponentDeps "camera";
     ifttt = getComponentDeps "assist_pipeline" ++ getComponentDeps "camera";
     image_processing = getComponentDeps "conversation";
+    intelliclima = getComponentDeps "intellifire";
     intent = getComponentDeps "conversation";
     light = getComponentDeps "conversation";
     local_file = getComponentDeps "camera";
@@ -198,6 +199,10 @@ let
     systemmonitor = [
       # sandbox doesn't grant access to /sys/class/power_supply
       "tests/components/systemmonitor/test_config_flow.py::test_add_and_remove_processes"
+    ];
+    trane = [
+      # TraneConfigFlow doesn't support step reauth
+      "tests/components/trane/test_init.py::test_setup_auth_error"
     ];
     youtube = [
       # outdated snapshot

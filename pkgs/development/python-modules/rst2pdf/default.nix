@@ -78,6 +78,6 @@ buildPythonPackage rec {
     homepage = "https://rst2pdf.org/";
     changelog = "https://github.com/rst2pdf/rst2pdf/blob/${version}/CHANGES.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

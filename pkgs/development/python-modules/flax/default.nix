@@ -13,13 +13,11 @@
   numpy,
   optax,
   orbax-checkpoint,
+  orbax-export,
   pyyaml,
   rich,
   tensorstore,
   typing-extensions,
-
-  # optional-dependencies
-  matplotlib,
 
   # tests
   cloudpickle,
@@ -36,16 +34,16 @@
   tomlq,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "flax";
-  version = "0.12.2";
+  version = "0.12.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
-    tag = "v${version}";
-    hash = "sha256-Wdfc35/iah98C5WNYZWiAd2FJUJlyGLJ8xELpuYD3GU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rIDfF9W8cxF0njH4e4uhqURQ0C4N8Boe76u6meMgC34=";
   };
 
   build-system = [
@@ -60,16 +58,13 @@ buildPythonPackage rec {
     numpy
     optax
     orbax-checkpoint
+    orbax-export
     pyyaml
     rich
     tensorstore
     treescope
     typing-extensions
   ];
-
-  optional-dependencies = {
-    all = [ matplotlib ];
-  };
 
   pythonImportsCheck = [ "flax" ];
 
@@ -132,8 +127,8 @@ buildPythonPackage rec {
   meta = {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
-    changelog = "https://github.com/google/flax/releases/tag/v${version}";
+    changelog = "https://github.com/google/flax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ ndl ];
   };
-}
+})

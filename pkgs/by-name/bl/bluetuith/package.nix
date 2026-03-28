@@ -44,7 +44,6 @@ buildGoModule (finalAttrs: {
     platforms = lib.platforms.linux;
     mainProgram = "bluetuith";
     maintainers = with lib.maintainers; [
-      pyrox0
       katexochen
     ];
   };

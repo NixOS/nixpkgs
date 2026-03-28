@@ -115,20 +115,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "immich";
-  version = "2.6.1";
+  version = "2.6.3";
 
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SfvX4QTo/rXXQouwIAGrUdVbaVC4q2Ba3BRaZzjAgig=";
+    hash = "sha256-7N11eqKxrSO7+KRvwbYG7VaMrcDNru12DXJHe+G6gj8=";
   };
 
   pnpmDeps = fetchPnpmDeps {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-KH2uqAow8oEm6LB3+CVhlCmOjISuW4E0YAdbdrwjiuU=";
+    hash = "sha256-Tsb1sdKeyP1Bhw2l+L0jDQF6AaWqTEgrOOvTsAyt9dQ=";
   };
 
   postPatch = ''

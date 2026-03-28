@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Transforming styles with JS plugins";
     homepage = "https://postcss.org/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

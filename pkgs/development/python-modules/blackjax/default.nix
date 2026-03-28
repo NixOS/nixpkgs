@@ -4,55 +4,57 @@
   fetchFromGitHub,
 
   # build-system
+  setuptools,
   setuptools-scm,
 
   # dependencies
   fastprogress,
+  ipython,
   jax,
   jaxlib,
-  jaxopt,
+  numpy,
   optax,
+  scipy,
   typing-extensions,
 
   # checks
+  chex,
   pytestCheckHook,
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "blackjax";
-  version = "1.3";
+  version = "1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
-    tag = version;
-    hash = "sha256-ystvPfIsnMFYkC+LNtcRQsI19i/y/905SnPSApM8v4E=";
+    tag = finalAttrs.version;
+    hash = "sha256-x/K/M7C+XNhqMdRZdDPpKmGgmnrjGsruDL3lFia2ioQ=";
   };
 
-  build-system = [ setuptools-scm ];
-
-  pythonRelaxDeps = [
-    "jaxopt"
+  build-system = [
+    setuptools
+    setuptools-scm
   ];
+
   dependencies = [
     fastprogress
+    ipython
     jax
     jaxlib
-    jaxopt
+    numpy
     optax
+    scipy
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    chex
     pytestCheckHook
     pytest-xdist
-  ];
-
-  pytestFlags = [
-    # DeprecationWarning: JAXopt is no longer maintained
-    "-Wignore::DeprecationWarning"
   ];
 
   disabledTestPaths = [
@@ -83,8 +85,8 @@ buildPythonPackage rec {
   meta = {
     homepage = "https://blackjax-devs.github.io/blackjax";
     description = "Sampling library designed for ease of use, speed and modularity";
-    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${version}";
+    changelog = "https://github.com/blackjax-devs/blackjax/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };
-}
+})

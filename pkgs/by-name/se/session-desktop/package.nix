@@ -31,14 +31,14 @@ let
 
   libsession-util-nodejs = stdenv.mkDerivation (finalAttrs: {
     pname = "libsession-util-nodejs";
-    version = "0.6.12"; # find version in pnpm-lock.yaml
+    version = "0.6.16"; # find version in pnpm-lock.yaml
     src = fetchFromGitHub {
       owner = "session-foundation";
       repo = "libsession-util-nodejs";
       tag = "v${finalAttrs.version}";
       fetchSubmodules = true;
       deepClone = true; # need git rev for all submodules
-      hash = "sha256-6+eAofi4uapRKqJvCrekP7MWTfdd4VhOnSbc/8rsFic=";
+      hash = "sha256-xTaXPz5p+NBCdjCTErQVrG2gBA4oxHCvSqJTN8g9uE4=";
       # fetchgit is not reproducible with deepClone + fetchSubmodules:
       # https://github.com/NixOS/nixpkgs/issues/100498
       postFetch = ''
@@ -109,7 +109,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "session-desktop";
-  version = "1.17.14";
+  version = "1.17.15";
   src =
     (fetchFromGitHub {
       owner = "session-foundation";
@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
         rm -rf .git
         popd
       '';
-      hash = "sha256-SrXlAOl6X5/4Vqrow+VONIiXPBC53Nm6M+xpcUTwjhk=";
+      hash = "sha256-snQYyXwybXqDkCBHtIeSMTkQLIXrc8zET7kRiWjPwpI=";
     }).overrideAttrs
       (oldAttrs: {
         # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version src;
     inherit pnpm;
     fetcherVersion = 3;
-    hash = "sha256-nIBMPw0laFDQWlY05x0YsSmYHLyAxKOD4ArbZ6wLZ7Y=";
+    hash = "sha256-cinhhPTFSzrr/hc/+Tyv1IKRn84MYpycOQ1qxCMQuy8=";
   };
 
   buildPhase = ''

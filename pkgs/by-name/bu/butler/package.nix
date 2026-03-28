@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "butler";
-  version = "15.26.0";
+  version = "15.26.1";
 
   src = fetchFromGitHub {
     owner = "itchio";
     repo = "butler";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FaYxvqC/ZYFukh6H63A0dx/8IkSM0Awf4JDBZgvc5W4=";
+    hash = "sha256-/Sdk9uYWjYtJFvc/xmrewgHlC+6cpqPoUP22xIfowj8=";
   };
 
   buildInputs = [ brotli ];

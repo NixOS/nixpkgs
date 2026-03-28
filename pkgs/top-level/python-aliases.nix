@@ -136,6 +136,7 @@ mapAliases {
   cx_Freeze = throw "'cx_Freeze' has been renamed to/replaced by 'cx-freeze'"; # Converted to throw 2025-10-29
   cx_oracle = throw "'cx_oracle' has been renamed to/replaced by 'cx-oracle'"; # Converted to throw 2025-10-29
   dalle-mini = throw "'dalle-mini' has been removed due to lack of upstream maintenance"; # added 2026-02-26
+  datashape = throw "'datashape' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   datatable = throw "'datatable' has been removed due to lack of upstream maintenance"; # added 2026-02-02
   dateutil = throw "'dateutil' has been renamed to/replaced by 'python-dateutil'"; # Converted to throw 2025-10-29
   debian = throw "'debian' has been renamed to/replaced by 'python-debian'"; # Converted to throw 2025-10-29
@@ -289,6 +290,11 @@ mapAliases {
   line_profiler = throw "'line_profiler' has been renamed to/replaced by 'line-profiler'"; # Converted to throw 2025-10-29
   linear-garage-door = throw "'linear-garage-door' has been superseded by 'nice-go'"; # Added 2025-11-16
   linear_operator = throw "'linear_operator' has been renamed to/replaced by 'linear-operator'"; # Converted to throw 2025-10-29
+  llama-cloud-services = throw "'llama-cloud-services' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-25
+  llama-index-indices-managed-llama-cloud = throw "'llama-index-indices-managed-llama-cloud' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-24
+  llama-index-multi-modal-llms-openai = throw "'llama-index-multi-modal-llms-openai' has been removed as it was deprecated in favor of 'llama-index-llms-openai'"; # added 2026-03-25
+  llama-index-readers-llama-parse = throw "'llama-index-readers-llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
+  llama-parse = throw "'llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
   lmcloud = throw "'lmcloud' has been renamed to/replaced by 'pylamarzocco'"; # Converted to throw 2025-10-29
   logilab_common = throw "'logilab_common' has been renamed to/replaced by 'logilab-common'"; # Converted to throw 2025-10-29
   loo-py = throw "'loo-py' has been renamed to/replaced by 'loopy'"; # Converted to throw 2025-10-29
@@ -498,6 +504,7 @@ mapAliases {
   ruamel_base = throw "'ruamel_base' has been renamed to/replaced by 'ruamel-base'"; # Converted to throw 2025-10-29
   ruamel_yaml = throw "'ruamel_yaml' has been renamed to/replaced by 'ruamel-yaml'"; # Converted to throw 2025-10-29
   ruamel_yaml_clib = throw "'ruamel_yaml_clib' has been renamed to/replaced by 'ruamel-yaml-clib'"; # Converted to throw 2025-10-29
+  ruffus = throw "'ruffus' has been removed as it was unmaintained and abandoned upstream"; # Added 2026-03-21
   sapi-python-client = throw "'sapi-python-client' has been renamed to/replaced by 'kbcstorage'"; # Converted to throw 2025-10-29
   schemainspect = throw "schemainspect has been removed because it has transitively been marked broken since May 2024, and is unmaintained upstream."; # Added 2025-10-11
   scikitimage = throw "'scikitimage' has been renamed to/replaced by 'scikit-image'"; # Converted to throw 2025-10-29
@@ -527,6 +534,7 @@ mapAliases {
   sphinx-version-warning = throw "'sphinx-version-warning' has been abandoned upstream in 2019"; # Added 2026-01-18
   sphinx_rtd_theme = throw "'sphinx_rtd_theme' has been renamed to/replaced by 'sphinx-rtd-theme'"; # Converted to throw 2025-10-29
   sphinxcontrib-autoapi = throw "'sphinxcontrib-autoapi' has been renamed to/replaced by 'sphinx-autoapi'"; # Converted to throw 2025-10-29
+  sphinxcontrib-newsfeed = throw "'sphinxcontrib-newsfeed has been removed due to abandonment upstream"; # Added 2026-03-24
   sphinxcontrib_httpdomain = throw "'sphinxcontrib_httpdomain' has been renamed to/replaced by 'sphinxcontrib-httpdomain'"; # Converted to throw 2025-10-29
   sphinxcontrib_newsfeed = throw "'sphinxcontrib_newsfeed' has been renamed to/replaced by 'sphinxcontrib-newsfeed'"; # Converted to throw 2025-10-29
   sphinxcontrib_plantuml = throw "'sphinxcontrib_plantuml' has been renamed to/replaced by 'sphinxcontrib-plantuml'"; # Converted to throw 2025-10-29

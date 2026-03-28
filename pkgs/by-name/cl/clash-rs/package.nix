@@ -10,27 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.5";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ymxT6AGBDTfiMbpU4Ou/SwAnUZF3vKvtt/BgWRtQTJc=";
+    hash = "sha256-5o98Yj8a30Tn/Cf3QMZ5EaCjCgD3XttqaHHuIjBWg4s=";
   };
 
-  cargoHash = "sha256-G1RLUFnQVX6tbLIF6ql6RDGZUwGPGFBHgx15KT3/tNQ=";
-
-  cargoPatches = [ ./Cargo.patch ];
-
-  patches = [
-    ./unbounded-shifts.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace clash-lib/Cargo.toml \
-      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
-  '';
+  cargoHash = "sha256-tRAkA64D2UOEqLbkKiSBDbNlvX7tejSJwYF7+VwicAk=";
 
   nativeBuildInputs = [
     cmake

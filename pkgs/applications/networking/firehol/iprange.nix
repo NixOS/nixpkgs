@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     mainProgram = "iprange";
     homepage = "https://github.com/firehol/iprange";
     license = lib.licenses.gpl2;
-    maintainers = with lib.maintainers; [ oxzi ];
+    maintainers = [ ];
   };
 }

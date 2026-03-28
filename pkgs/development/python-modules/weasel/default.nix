@@ -59,6 +59,11 @@ buildPythonPackage (finalAttrs: {
     "test_project_assets"
     "test_project_git_dir_asset"
     "test_project_git_file_asset"
+
+    # configparser.InterpolationMissingOptionError: Bad value substitution: option 'commands' in
+    # section 'project' contains an interpolation key 'vars.b.e' which is not a valid option name.
+    # Raw value: '[{"name": "x", "script": ["hello ${vars.a} ${vars.b.e}"]}]'
+    "test_project_config_interpolation"
   ];
 
   passthru = {

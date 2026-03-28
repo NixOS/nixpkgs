@@ -46,11 +46,6 @@ rustPlatform.buildRustPackage {
     OPENSSL_NO_VENDOR = 1;
   };
 
-  cargoPatches = [
-    # Duplicate versions of tao-macros make fetchCargoVendor fail, keep one of them.
-    ./patch-cargo-lock.patch
-  ];
-
   postPatch = ''
     # We disable the option to try to use the bleeding-edge version of mihomo
     # If you need a newer version, you can override the mihomo input of the wrapped package

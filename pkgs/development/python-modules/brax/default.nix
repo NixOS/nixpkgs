@@ -36,16 +36,16 @@
   transforms3d,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "brax";
-  version = "0.14.0";
+  version = "0.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "brax";
-    tag = "v${version}";
-    hash = "sha256-CkRXEYtlP8IhEZ7lVnpxlwiyLdICAfILwHfRUfuub08=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/oznBa44xKl+9T1YrTVhCbuKZj16V1BTlnmCGRbF45g=";
   };
 
   build-system = [
@@ -88,6 +88,11 @@ buildPythonPackage rec {
     "testModelEncoding1"
     "testTrain"
     "testTrainDomainRandomize"
+
+    # ValueError: Error: no decoder found for mesh file 'meshes/pyramid.stl'
+    "test_convex_convex"
+    "test_dumps"
+    "test_dumps_invalidstate_raises"
   ]
   ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     # Flaky:
@@ -100,9 +105,7 @@ buildPythonPackage rec {
     "brax/generalized/constraint_test.py"
   ];
 
-  pythonImportsCheck = [
-    "brax"
-  ];
+  pythonImportsCheck = [ "brax" ];
 
   meta = {
     description = "Massively parallel rigidbody physics simulation on accelerator hardware";
@@ -110,4 +113,4 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ nim65s ];
   };
-}
+})

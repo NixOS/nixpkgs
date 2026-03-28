@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "hardhat-solidity";
     publisher = "nomicfoundation";
-    version = "0.8.28";
-    hash = "sha256-IKJ0d/Da0haRmtR5r/bKvDNkDV58cDdARuPGoJ2mUqI=";
+    version = "0.8.29";
+    hash = "sha256-0WC4MBCjY2TyZmeBtiCsKD95dudtCfo2HzvMWorWbOY=";
   };
 
   meta = {

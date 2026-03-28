@@ -50,6 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
 
+    substituteInPlace data/asus-shutdown.service \
+      --replace-fail /usr/bin/asus-shutdown $out/bin/asus-shutdown
+
     substituteInPlace Makefile \
       --replace-fail /usr/bin/grep ${lib.getExe gnugrep}
 

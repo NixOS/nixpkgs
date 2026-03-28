@@ -9,15 +9,10 @@ let
 
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
-  testDriver = hostPkgs.python3Packages.callPackage ../test-driver {
+  testDriver = config.pythonTestDriverPackage.override {
     inherit (config) enableOCR extraPythonPackages;
     qemu_pkg = config.qemu.package;
-    imagemagick_light = hostPkgs.imagemagick_light.override { inherit (hostPkgs) libtiff; };
-    tesseract4 = hostPkgs.tesseract4.override { enableLanguages = [ "eng" ]; };
-
     enableNspawn = config.containers != { };
-    # We want `pkgs.systemd`, *not* `python3Packages.system`.
-    systemd = hostPkgs.systemd;
   };
 
   vlans = map (
@@ -135,6 +130,12 @@ let
 in
 {
   options = {
+    pythonTestDriverPackage = mkOption {
+      description = "Package containing the python NixOS test driver implemetnation";
+      type = types.package;
+      default = hostPkgs.nixos-test-driver;
+      readOnly = true;
+    };
 
     driver = mkOption {
       description = "Package containing a script that runs the test.";

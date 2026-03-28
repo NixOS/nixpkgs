@@ -176,7 +176,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
       hexa
-      supinie
     ];
     teams = with lib.teams; [ ngi ];
     mainProgram = "servo";

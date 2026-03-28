@@ -176,6 +176,12 @@ buildPythonPackage (finalAttrs: {
   ];
 
   disabledTests = [
+    # AttributeError: 'google._upb._message.FieldDescriptor' object has no attribute 'label'
+    "test_health_handler"
+    "test_list_handler"
+    "test_liveness_handler"
+    "test_server_readiness"
+
     # Started failing since vllm was updated to 0.13.0
     # pydantic_core._pydantic_core.ValidationError: 1 validation error for RerankResponse
     # usage.prompt_tokens

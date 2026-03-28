@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lepton-jpeg-util";
-  version = "0.5.3";
+  version = "0.5.8";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "lepton_jpeg_rust";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DfVgQGGnrOOa/UdkYHSENbtxkbR0cTe08uglUM2hfGI=";
+    hash = "sha256-G46++ZRHdfaSElt9LwI1keDXXE2/VKH2m9+EY+QNOK4=";
   };
 
-  cargoHash = "sha256-AryHUFB6EWSUvKs+lBI16+A27VfRsr6aUtrwsiZxT28=";
+  cargoHash = "sha256-jO+LHoZKn0RORKRw5GIwO8kBoQMjvBrofRYN33OHm/I=";
 
   buildAndTestSubdir = "util";
 
