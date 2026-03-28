@@ -6900,6 +6900,8 @@ self: super: with self; {
 
   hatasmota = callPackage ../development/python-modules/hatasmota { };
 
+  hatch = callPackage ../development/python-modules/hatch/default.nix { };
+
   hatch-autorun = callPackage ../development/python-modules/hatch-autorun { };
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
@@ -15581,6 +15583,8 @@ self: super: with self; {
   python-didl-lite = callPackage ../development/python-modules/python-didl-lite { };
 
   python-digitalocean = callPackage ../development/python-modules/python-digitalocean { };
+
+  python-discovery = callPackage ../development/python-modules/python-discovery { };
 
   python-djvulibre = callPackage ../development/python-modules/python-djvulibre { };
 

@@ -35,7 +35,7 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+      - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
       # TODO: Figure out how to best enable caching for the treefmt job. Cachix won't work well,
       # because the cache would be invalidated on every commit - treefmt checks every file.
@@ -70,7 +70,7 @@ jobs:
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+      - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
       - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
         continue-on-error: true
@@ -100,7 +100,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
           target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@1ca7d21a94afc7c957383a2d217460d980de4934 # v31.10.1
+      - uses: cachix/install-nix-action@96951a368ba55167b55f1c916f7d416bac6505fe # v31.10.3
 
       - uses: cachix/cachix-action@1eb2ef646ac0255473d23a5907ad7b04ce94065c # v17
         continue-on-error: true

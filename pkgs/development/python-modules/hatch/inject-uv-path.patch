@@ -1,11 +1,14 @@
 diff --git a/src/hatch/env/virtual.py b/src/hatch/env/virtual.py
-index 72605e58..546b6ad1 100644
+index 7a9b7e65..38f69fb7 100644
 --- a/src/hatch/env/virtual.py
 +++ b/src/hatch/env/virtual.py
-@@ -108,26 +108,7 @@ class VirtualEnvironment(EnvironmentInterface):
-         if self.explicit_uv_path:
-             return self.explicit_uv_path
+@@ -108,29 +108,7 @@ class VirtualEnvironment(EnvironmentInterface):
  
+     @cached_property
+     def uv_path(self) -> str:
+-        if self.explicit_uv_path:
+-            return self.explicit_uv_path
+-
 -        from hatch.env.internal import is_default_environment
 -
 -        env_name = "hatch-uv"
@@ -16,7 +19,7 @@ index 72605e58..546b6ad1 100644
 -            or is_default_environment(env_name, self.app.project.config.internal_envs[env_name])
 -        ):
 -            uv_env = self.app.project.get_environment(env_name)
--            self.app.project.prepare_environment(uv_env)
+-            self.app.project.prepare_environment(uv_env, keep_env=bool(os.environ.get(AppEnvVars.KEEP_ENV)))
 -            with uv_env:
 -                return self.platform.modules.shutil.which("uv")
 -
@@ -44,7 +47,7 @@ index d8c6379e..874f8936 100644
              command.append("--system-site-packages")
  
 diff --git a/tests/conftest.py b/tests/conftest.py
-index 44681a10..d7e91d36 100644
+index b47e90e8..542035d9 100644
 --- a/tests/conftest.py
 +++ b/tests/conftest.py
 @@ -205,7 +205,7 @@ def python_on_path():

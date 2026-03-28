@@ -75,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
 
+  postInstall = ''
+    install contrib/river.desktop -Dt $out/share/wayland-sessions
+  '';
+
   passthru = {
     providedSessions = [ "river" ];
     updateScript = ./update.sh;

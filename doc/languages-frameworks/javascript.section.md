@@ -147,10 +147,10 @@ If these are not defined, `npm pack` may miss some files, and no binaries will b
 * `npmDepsHash`: The output hash of the dependencies for this project. Can be calculated in advance with [`prefetch-npm-deps`](#javascript-buildNpmPackage-prefetch-npm-deps).
 * `makeCacheWritable`: Whether to make the cache writable prior to installing dependencies. Don't set this unless npm tries to write to the cache directory, as it can slow down the build.
 * `npmBuildScript`: The script to run to build the project. Defaults to `"build"`.
-* `npmWorkspace`: The workspace directory within the project to build and install.
+* []{#javascript-buildNpmPackage-npmWorkspace} `npmWorkspace`: The workspace directory within the project to build and install.
 * `dontNpmBuild`: Option to disable running the build script. Set to `true` if the package does not have a build script. Defaults to `false`. Alternatively, setting `buildPhase` explicitly also disables this.
 * `dontNpmInstall`: Option to disable running `npm install`. Defaults to `false`. Alternatively, setting `installPhase` explicitly also disables this.
-* `npmFlags`: Flags to pass to all npm commands.
+* []{#javascript-buildNpmPackage-npmFlags} `npmFlags`: Flags to pass to all npm commands.
 * `npmInstallFlags`: Flags to pass to `npm ci`.
 * `npmBuildFlags`: Flags to pass to `npm run ${npmBuildScript}`.
 * `npmPackFlags`: Flags to pass to `npm pack`.

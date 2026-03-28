@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=sampo-v([0-9\.]*)" ]; };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=sampo-v([0-9\\.]*)" ]; };
 
   meta = {
     description = "Automate changelogs, versioning, and publishing—even for monorepos across multiple package registries";
