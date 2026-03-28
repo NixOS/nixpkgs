@@ -135,6 +135,7 @@ python3Packages.buildPythonApplication rec {
     "regex"
     "tornado"
     "unidecode"
+    "wand"
   ];
 
   nativeCheckInputs = lib.concatAttrValues optional-dependencies;

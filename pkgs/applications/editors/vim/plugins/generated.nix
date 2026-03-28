@@ -13239,6 +13239,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  pi-nvim = buildVimPlugin {
+    pname = "pi.nvim";
+    version = "0-unstable-2026-03-26";
+    src = fetchFromGitHub {
+      owner = "pablopunk";
+      repo = "pi.nvim";
+      rev = "cc2377f88c99871bc44b45490ef9d91a5d1c31e1";
+      hash = "sha256-xguHPNrQ16ddWbnxR38Zm6gtDP63b93pxR4bsbN9YZE=";
+    };
+    meta.homepage = "https://github.com/pablopunk/pi.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   pig-vim = buildVimPlugin {
     pname = "pig.vim";
     version = "0-unstable-2017-06-08";
@@ -23328,6 +23341,19 @@ final: prev: {
       hash = "sha256-oGiXbSXo48NbaImzIKquEvplPCotLeIs4scvbhO6wyA=";
     };
     meta.homepage = "https://github.com/gbprod/yanky.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  yank-path-nvim = buildVimPlugin {
+    pname = "yank-path.nvim";
+    version = "0-unstable-2025-12-11";
+    src = fetchFromGitHub {
+      owner = "ywpkwon";
+      repo = "yank-path.nvim";
+      rev = "e660248de1e4c91a760f510fc165c172a19cc1d5";
+      hash = "sha256-z6USTspCiWU6UEP9TyACvzlb4MGEadBKUfxN2vJyeV0=";
+    };
+    meta.homepage = "https://github.com/ywpkwon/yank-path.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
