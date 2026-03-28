@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elm-test-rs";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "mpizenberg";
     repo = "elm-test-rs";
     tag = "v${version}";
-    hash = "sha256-NGonWCOLxON1lxsgRlWgY67TtIJYsLPXi96NcxF4Tso=";
+    hash = "sha256-H9InR28T0PQjxqT99ojw8ey29tk79BPeXpkHL3VNnkU=";
   };
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
-  cargoHash = "sha256-qs6ujXl4j9gCEDQV5i47oa0eaqWZf4NqsVbNDsao5fI=";
+  cargoHash = "sha256-Y3hqSw8SyU9uVE9jBsLV9bL5KzaB9pw96Yqy3Dvh4QA=";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;
