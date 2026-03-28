@@ -68,7 +68,6 @@ let
       pkgs_aarch64_darwin = packageSet' { system = "aarch64-darwin"; };
       pkgs_armv6l_linux = packageSet' { system = "armv6l-linux"; };
       pkgs_armv7l_linux = packageSet' { system = "armv7l-linux"; };
-      pkgs_x86_64_darwin = packageSet' { system = "x86_64-darwin"; };
       pkgs_x86_64_freebsd = packageSet' { system = "x86_64-freebsd"; };
       pkgs_i686_freebsd = packageSet' { system = "i686-freebsd"; };
       pkgs_i686_cygwin = packageSet' { system = "i686-cygwin"; };
@@ -90,8 +89,6 @@ let
       pkgs_armv6l_linux
     else if system == "armv7l-linux" then
       pkgs_armv7l_linux
-    else if system == "x86_64-darwin" then
-      pkgs_x86_64_darwin
     else if system == "x86_64-freebsd" then
       pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then
