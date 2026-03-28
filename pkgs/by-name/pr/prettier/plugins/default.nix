@@ -2,6 +2,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   nodejs,
+  pnpm_9,
   stdenv,
   yarnBuildHook,
   yarnConfigHook,
@@ -18,6 +19,15 @@
       yarnBuildHook
       yarnConfigHook
       yarnInstallHook
+      ;
+  };
+
+  prettier-plugin-pug = import ./prettier/plugin-pug {
+    inherit
+      fetchFromGitHub
+      nodejs
+      stdenv
+      pnpm_9
       ;
   };
 }
