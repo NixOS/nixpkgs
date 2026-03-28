@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   libpcap,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -23,10 +24,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     LIBPCAP_VER = libpcap.version;
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Spy on the DNS queries your computer is making";
     mainProgram = "dnspeep";
     homepage = "https://github.com/jvns/dnspeep";
+    changelog = "https://github.com/jvns/dnspeep/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.progrm_jarvis ];
   };
