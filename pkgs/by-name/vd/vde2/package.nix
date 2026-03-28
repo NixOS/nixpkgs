@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Yf6QB7j5lYld2XtqhYspK4037lTtimoFc7nCavCP+mU=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/vde2/musl-build-fix.patch?id=ddee2f86a48e087867d4a2c12849b2e3baccc238";
       sha256 = "0b5382v541bkxhqylilcy34bh83ag96g71f39m070jzvi84kx8af";
