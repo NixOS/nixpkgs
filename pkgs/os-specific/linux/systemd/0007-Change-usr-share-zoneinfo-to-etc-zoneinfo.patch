@@ -75,10 +75,10 @@ index 5dd00af952..e682337ef0 100644
                  return -EINVAL;
          if (!timezone_is_valid(e, LOG_DEBUG))
 diff --git a/src/firstboot/firstboot.c b/src/firstboot/firstboot.c
-index 38e3adaed6..953ad05fb5 100644
+index ae1899593c..20d3071114 100644
 --- a/src/firstboot/firstboot.c
 +++ b/src/firstboot/firstboot.c
-@@ -576,7 +576,7 @@ static int prompt_timezone(int rfd, sd_varlink **mute_console_link) {
+@@ -584,7 +584,7 @@ static int prompt_timezone(int rfd, sd_varlink **mute_console_link) {
  
  static int process_timezone(int rfd, sd_varlink **mute_console_link) {
          _cleanup_close_ int pfd = -EBADF;
@@ -87,7 +87,7 @@ index 38e3adaed6..953ad05fb5 100644
          const char *e;
          int r;
  
-@@ -622,12 +622,9 @@ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
+@@ -630,12 +630,9 @@ static int process_timezone(int rfd, sd_varlink **mute_console_link) {
          if (isempty(arg_timezone))
                  return 0;
  
@@ -103,10 +103,10 @@ index 38e3adaed6..953ad05fb5 100644
                  return log_error_errno(r, "Failed to create /etc/localtime symlink: %m");
  
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 764e82df8b..5dc706be4f 100644
+index a0052c1c88..39f2b1f1e5 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -1820,8 +1820,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
+@@ -1856,8 +1856,8 @@ int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t uid, gid
  static const char *timezone_from_path(const char *path) {
          return PATH_STARTSWITH_SET(
                          path,
@@ -118,10 +118,10 @@ index 764e82df8b..5dc706be4f 100644
  
  static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index 9b1fe439f1..916886aeff 100644
+index 1455830cba..532fe3684b 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -266,7 +266,7 @@ static int context_read_data(Context *c) {
+@@ -268,7 +268,7 @@ static int context_read_data(Context *c) {
  
          r = get_timezone(&t);
          if (r == -EINVAL)
@@ -130,7 +130,7 @@ index 9b1fe439f1..916886aeff 100644
          else if (r < 0)
                  log_warning_errno(r, "Failed to get target of /etc/localtime: %m");
  
-@@ -290,7 +290,7 @@ static int context_write_data_timezone(Context *c) {
+@@ -292,7 +292,7 @@ static int context_write_data_timezone(Context *c) {
  
          if (isempty(c->zone) || streq(c->zone, "UTC")) {
  
@@ -139,7 +139,7 @@ index 9b1fe439f1..916886aeff 100644
  
                          if (unlink(etc_localtime()) < 0 && errno != ENOENT)
                                  return -errno;
-@@ -298,9 +298,9 @@ static int context_write_data_timezone(Context *c) {
+@@ -300,9 +300,9 @@ static int context_write_data_timezone(Context *c) {
                          return 0;
                  }
  
