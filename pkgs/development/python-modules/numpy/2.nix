@@ -63,6 +63,22 @@ buildPythonPackage (finalAttrs: {
       --replace-fail '/bin/true' '${lib.getExe' coreutils "true"}'
   '';
 
+  mesonFlags = [
+    # This is required to support CPUs with feature-sets earlier than x86-64-v2
+    # (before 2009). This will still build optimizations for newer features, but
+    # allow for importing with older machines. See:
+    #
+    #  - https://github.com/NixOS/nixpkgs/issues/496822
+    #  - https://numpy.org/devdocs/reference/simd/build-options.html
+    #  - https://github.com/numpy/numpy/issues/31073
+    #
+    # NOTE: It is possible to enable CPU features based upon attributes defined
+    # in `lib/systems/architectures.nix`, but that might trigger tons of
+    # rebuilds on old x86_64 CPU machines, and it will be too complex for
+    # maintenance.
+    (lib.mesonOption "cpu-baseline" "none")
+  ];
+
   build-system = [
     cython
     gfortran
