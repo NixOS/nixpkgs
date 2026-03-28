@@ -46,7 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh completions/zsh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(.+)"
+    ];
+  };
 
   meta = {
     description = "Executes commands in response to file modifications";
