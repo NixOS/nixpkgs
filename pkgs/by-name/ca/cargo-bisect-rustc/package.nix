@@ -8,6 +8,7 @@
   runCommand,
   patchelf,
   zlib,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -49,6 +50,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   checkFlags = [
     "--skip=test_github" # requires internet
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Bisects rustc, either nightlies or CI artifacts";
