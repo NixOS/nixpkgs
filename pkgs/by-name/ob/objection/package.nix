@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "objection";
-  version = "1.12.3";
+  version = "1.12.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sensepost";
     repo = "objection";
     tag = version;
-    hash = "sha256-xOqBYwpq46czRZggTNmNcqGqTA8omTLiOeZaF7zSvxo=";
+    hash = "sha256-sXMhLwTsksLRFBGEsKSmDaD0+uDugz2U3yn50rHFbnQ=";
   };
 
   build-system = with python3Packages; [
