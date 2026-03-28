@@ -321,7 +321,9 @@
       ]
 
       # Fix docs build with Sphinx >= 9 https://gitlab.haskell.org/ghc/ghc/-/issues/26810
-      ++ [ ./ghc-9.6-or-later-docs-sphinx-9.patch ]
+      ++ lib.optionals (lib.versionOlder version "9.15.20260129") [
+        ./ghc-9.6-or-later-docs-sphinx-9.patch
+      ]
 
       # Fixes rts/Types.h missing from the install when targeting javascript
       # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/15740, krank:ignore-line
