@@ -45,6 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/virtualsquare/vde-2";
     description = "Virtual Distributed Ethernet, an Ethernet compliant virtual network";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2Plus;
+    license = [
+      # Effectively `lib.licenses.gpl2Only`, but file headers differ.
+      lib.licenses.gpl2Plus
+      lib.licenses.gpl2Only
+      # libvdeplug and code copied from glibc.
+      lib.licenses.lgpl21Plus
+    ];
   };
 })
