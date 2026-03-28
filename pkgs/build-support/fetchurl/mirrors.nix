@@ -140,6 +140,11 @@
     "https://archive.mozilla.org/pub/"
   ];
 
+  # JavaScript packages
+  npm = [
+    "https://registry.npmjs.org/"
+  ];
+
   # OSDN (formerly SourceForge.jp)
   osdn = [
     "https://osdn.dl.osdn.jp/"
