@@ -1,0 +1,23 @@
+{
+  fetchFromGitHub,
+  fetchYarnDeps,
+  nodejs,
+  stdenv,
+  yarnBuildHook,
+  yarnConfigHook,
+  yarnInstallHook,
+  ...
+}:
+{
+  prettier-plugin-php = import ./prettier/plugin-php {
+    inherit
+      fetchFromGitHub
+      fetchYarnDeps
+      nodejs
+      stdenv
+      yarnBuildHook
+      yarnConfigHook
+      yarnInstallHook
+      ;
+  };
+}
