@@ -24,6 +24,8 @@
 
   isDesktopVariant ? false,
   buildWithFrontend ? !isDesktopVariant,
+
+  callPackage,
 }:
 
 # you may only toggle this when building the server
@@ -166,7 +168,17 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${jre} "$res_dir/runtime/jre"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    services.default = {
+      imports = [
+        # do what importApply does without duplicating tons of arguments
+        (lib.setDefaultModuleLocation ./service.nix (callPackage ./service.nix { }))
+      ];
+      stirling-pdf.package = lib.mkDefault finalAttrs.finalPackage;
+    };
+    updateScript = nix-update-script { };
+    tests = callPackage ./tests { };
+  };
 
   meta = {
     changelog = "https://github.com/Stirling-Tools/Stirling-PDF/releases/tag/v${finalAttrs.version}";
