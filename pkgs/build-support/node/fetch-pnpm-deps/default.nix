@@ -79,10 +79,20 @@ in
           ++ args.nativeBuildInputs or [ ];
 
           impureEnvVars =
-            lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_REGISTRY" ] ++ args.impureEnvVars or [ ];
+            lib.fetchers.proxyImpureEnvVars
+            ++ [
+              "NIX_NPM_REGISTRY"
+              "NIX_MIRRORS_npm"
+            ]
+            ++ args.impureEnvVars or [ ];
 
           installPhase = ''
             runHook preInstall
+
+            if [ -n "$NIX_NPM_REGISTRY" ]; then
+              echo "WARNING: Setting NIX_NPM_REGISTRY is deprecated. Please use NIX_MIRRORS_npm="https://my-npm.mirror.tld/" instead"
+              [ -z "$NIX_MIRRORS_npm" ] && export NIX_MIRRORS_npm="$NIX_NPM_REGISTRY"
+            fi
 
             lockfileVersion="$(yq -r .lockfileVersion pnpm-lock.yaml)"
             if [[ ''${lockfileVersion:0:1} -gt ${lib.versions.major pnpm.version} ]]; then
@@ -122,7 +132,7 @@ in
                 --ignore-scripts \
                 ${lib.escapeShellArgs filterFlags} \
                 ${lib.escapeShellArgs pnpmInstallFlags} \
-                --registry="$NIX_NPM_REGISTRY" \
+                --registry "$NIX_MIRRORS_npm" \
                 --frozen-lockfile
 
             # Store newer fetcherVersion in case pnpmConfigHook also needs it
