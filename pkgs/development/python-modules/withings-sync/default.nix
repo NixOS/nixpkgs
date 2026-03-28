@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "withings-sync";
-  version = "5.3.0";
+  version = "5.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jaroslawhartman";
     repo = "withings-sync";
     tag = "v${version}";
-    hash = "sha256-Q9zOXQIdl4jpCK6a5Xp4kZK67MqudX0thDAkRmdL3AQ=";
+    hash = "sha256-1pDM5paSXPQCOG5LRFxnp19K1iHcsfrGC9e7SEyxUDs=";
   };
 
   postPatch = ''
