@@ -33,15 +33,14 @@ let
             buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
           };
 
-        ## Files in versions/ are generated automatically by update.sh ##
         dotnet-bin = lib.mergeAttrsList (
           map buildDotnetSdk [
-            ./versions/6.0.nix
-            ./versions/7.0.nix
-            ./versions/8.0.nix
-            ./versions/9.0.nix
-            ./versions/10.0.nix
-            ./versions/11.0.nix
+            ./6.0/releases.nix
+            ./7.0/releases.nix
+            ./8.0/releases.nix
+            ./9.0/releases.nix
+            ./10.0/releases.nix
+            ./11.0/releases.nix
           ]
         );
 
@@ -92,11 +91,11 @@ let
         mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
         addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
 
-        dotnet_8 = lib.recurseIntoAttrs (callPackage ./8 { });
-        dotnet_9 = lib.recurseIntoAttrs (callPackage ./9 { });
-        dotnet_10 = lib.recurseIntoAttrs (callPackage ./10 { });
-        dotnet_10_0_2xx = lib.recurseIntoAttrs (callPackage ./10_0_2xx { });
-        dotnet_11 = lib.recurseIntoAttrs (callPackage ./11 { });
+        dotnet_8 = lib.recurseIntoAttrs (callPackage ./8.0 { });
+        dotnet_9 = lib.recurseIntoAttrs (callPackage ./9.0 { });
+        dotnet_10 = lib.recurseIntoAttrs (callPackage ./10.0 { });
+        dotnet_10_0_2xx = lib.recurseIntoAttrs (callPackage ./10.0.2xx { });
+        dotnet_11 = lib.recurseIntoAttrs (callPackage ./11.0 { });
       }
     );
   };
