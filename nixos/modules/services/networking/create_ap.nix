@@ -42,7 +42,11 @@ in
       services.create_ap = {
         wantedBy = [ "multi-user.target" ];
         description = "Create AP Service";
-        after = [ "network.target" ];
+        after = [
+          "network.target"
+          "sys-subsystem-net-devices-${cfg.settings.WIFI_IFACE}.device"
+          "sys-subsystem-net-devices-${cfg.settings.INTERNET_IFACE}.device"
+        ];
         restartTriggers = [ configFile ];
         serviceConfig = {
           ExecStart = "${pkgs.linux-wifi-hotspot}/bin/create_ap --config ${configFile}";
