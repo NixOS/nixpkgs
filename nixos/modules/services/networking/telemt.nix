@@ -88,6 +88,19 @@ in
           See the [upstream example](https://github.com/telemt/telemt/blob/main/config.toml).
         '';
       };
+
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = ''
+          Whether to automatically open the firewall for Telemt.
+          Opens the data-plane MTProto TCP port based on the `services.telemt.settings.server.port`.
+
+          Does not work with `services.telemt.configFile`.
+          When using an external config file, the port is not known to NixOS, so the firewall cannot be configured automatically.
+          Use `networking.firewall.allowedTCPPorts` manually in this case.
+        '';
+      };
     };
   };
 
@@ -102,6 +115,26 @@ in
             - Set `services.telemt.configFile` with path to external TOML file.
         '';
       }
+      {
+        assertion = !cfg.openFirewall || cfg.configFile == null;
+        message = ''
+          `services.telemt.openFirewall` cannot be used with `services.telemt.configFile`.
+          When using an external config file, the port is not known to NixOS, so the firewall cannot be configured automatically.
+
+          Either:
+            - Use `services.telemt.settings` with `services.telemt.settings.server.port` set and remove `services.telemt.configFile`, or
+            - Disable `services.telemt.openFirewall` and configure `networking.firewall.allowedTCPPorts` manually.
+        '';
+      }
+      {
+        assertion =
+          cfg.openFirewall && cfg.configFile == null && cfg.settings ? server && cfg.settings.server ? port;
+        message = ''
+          `services.telemt.openFirewall` requires `services.telemt.settings.server.port` to be set.
+
+          When opening the firewall automatically, the port must be specified in the Nix configuration.
+        '';
+      }
     ];
 
     systemd.services.telemt = {
@@ -112,7 +145,7 @@ in
       serviceConfig = {
         Type = "simple";
         Restart = "on-failure";
-        RestartSec = "5s";
+        RestartSec = "5";
 
         DynamicUser = true;
 
@@ -169,6 +202,10 @@ in
         SystemCallArchitectures = "native";
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.optional (
+      cfg.openFirewall && cfg.configFile == null && cfg.settings ? server && cfg.settings.server ? port
+    ) cfg.settings.server.port;
   };
 
   meta.maintainers = with lib.maintainers; [
