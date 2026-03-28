@@ -63,12 +63,12 @@ let
     sdk = ".NET SDK ${version}";
   };
 
-  mkWrapper = callPackage ./wrapper.nix { };
+  mkWrapper = callPackage ../wrapper.nix { };
 
   hostRid = systemToDotnetRid stdenv.hostPlatform.system;
   targetRid = systemToDotnetRid stdenv.targetPlatform.system;
 
-  sigtool = callPackage ./sigtool.nix { };
+  sigtool = callPackage ../sigtool.nix { };
   signAppHost = callPackage ./sign-apphost.nix { };
 
   hasILCompiler = lib.versionAtLeast version (if hostRid == "osx-arm64" then "8" else "7");
