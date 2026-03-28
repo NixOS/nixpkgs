@@ -12,7 +12,11 @@ build() {
 
 build openclaw
 upload openclaw
-for flavour in cpu rocm cuda vulkan; do
+flavours="cpu"
+if [ "$(uname)" != "Darwin" ]; then
+  flavours="cpu rocm cuda vulkan"
+fi
+for flavour in $flavours; do
   build "ollama-$flavour"
   upload "ollama/$flavour"
 done
