@@ -45,4 +45,16 @@
       yarnInstallHook
       ;
   };
+
+  prettier-plugin-xml = import ./prettier/plugin-xml {
+    inherit
+      fetchFromGitHub
+      fetchYarnDeps
+      nodejs
+      stdenv
+      yarnBuildHook
+      yarnConfigHook
+      yarnInstallHook
+      ;
+  };
 }
