@@ -14,6 +14,7 @@
   wayland,
   xorg,
   alsa-lib,
+  fetchpatch2,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +29,19 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-lxRLTVtc2Gu3x3bt4po4q5/sfmRXb7CslEQIP8hX0+Q=";
+
+  patches = [
+    (fetchpatch2 {
+      name = "CVE-2026-32733.patch";
+      url = "https://github.com/squidowl/halloy/commit/0f77b2cfc5f822517a256ea5a4b94bad8bfe38b6.patch?full_index=1";
+      hash = "sha256-hi3idb7obz7cGDzG9hdNMOjolGsEEZhjgc6T61Gee+Q=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2026-32810.patch";
+      url = "https://github.com/squidowl/halloy/commit/f180e41061db393acf65bc99f5c5e7397586d9cb.patch?full_index=1";
+      hash = "sha256-1S+xSwx/PANs8HSzQvXTAmzFJkZCw5BRUEttcl5v0pM=";
+    })
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
