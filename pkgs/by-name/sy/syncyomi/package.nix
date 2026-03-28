@@ -93,7 +93,10 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/SyncYomi/SyncYomi";
     changelog = "https://github.com/SyncYomi/SyncYomi/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ eriedaberrie ];
+    maintainers = with lib.maintainers; [
+      eriedaberrie
+      miniharinn
+    ];
     mainProgram = "syncyomi";
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
