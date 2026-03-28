@@ -8,6 +8,7 @@
   fetchPnpmDeps,
   pnpmConfigHook,
   esbuild,
+  nix-update-script,
 }:
 let
   lockedEsbuild = esbuild.overrideAttrs (
@@ -87,6 +88,8 @@ buildGoModule (finalAttrs: {
   postInstall = lib.optionalString (!stdenvNoCC.hostPlatform.isDarwin) ''
     mv $out/bin/SyncYomi $out/bin/syncyomi
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Open-source project to synchronize Tachiyomi manga reading progress and library across multiple devices";
