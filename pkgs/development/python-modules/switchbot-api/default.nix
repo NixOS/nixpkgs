@@ -1,29 +1,43 @@
 {
   lib,
   aiohttp,
+  aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pycryptodome,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezer,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "switchbot-api";
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SeraphicCorp";
     repo = "py-switchbot-api";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s6ezIkW36eIaxqedOfIk4KNhCwjXPFkc49qqK2p2eGw=";
+    hash = "sha256-n2KAKILbywObqxG/lDNHkXWVCcrEJAaqv6xBDH8ed/Q=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [ aiohttp ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aioresponses
+    pycryptodome
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-freezer
+    pytestCheckHook
+    syrupy
+  ];
 
   pythonImportsCheck = [ "switchbot_api" ];
 
