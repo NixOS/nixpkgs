@@ -37,6 +37,7 @@ stdenv.mkDerivation {
     description = "CUPS Linux drivers for Canon printers";
     homepage = "https://www.canon.com/";
     license = lib.licenses.gpl3Plus;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [
       ewok
     ];
