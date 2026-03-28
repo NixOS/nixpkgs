@@ -2,6 +2,8 @@
   fetchFromGitHub,
   lib,
   rustPlatform,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,10 +19,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-CXIfE1EsNwm4vsybQSdfKewBYpzBh+uQu1jYAm8DDtI=";
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "High performance csv viewer with cjk/emoji support";
     mainProgram = "csview";
     homepage = "https://github.com/wfxr/csview";
+    changelog = "https://github.com/wfxr/csview/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       mit # or
       asl20
