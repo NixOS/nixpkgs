@@ -46,10 +46,10 @@ index 862d57dcb6..8ba0ca4486 100644
  
  systemd_sleep_dir=${prefix}/lib/systemd/system-sleep
 diff --git a/src/libsystemd/sd-path/path-lookup.c b/src/libsystemd/sd-path/path-lookup.c
-index 389d7e2ad9..0819689ffa 100644
+index 32c14fb14a..7f0bf62844 100644
 --- a/src/libsystemd/sd-path/path-lookup.c
 +++ b/src/libsystemd/sd-path/path-lookup.c
-@@ -86,11 +86,7 @@ int runtime_directory(RuntimeScope scope, const char *fallback_suffix, char **re
+@@ -102,11 +102,7 @@ int runtime_directory(RuntimeScope scope, const char *fallback_suffix, char **re
  }
  
  static const char* const user_data_unit_paths[] = {
@@ -61,7 +61,7 @@ index 389d7e2ad9..0819689ffa 100644
          NULL
  };
  
-@@ -498,16 +494,13 @@ int lookup_paths_init(
+@@ -519,16 +515,13 @@ int lookup_paths_init(
                                         persistent_config,
                                         SYSTEM_CONFIG_UNIT_DIR,
                                         "/etc/systemd/system",
@@ -79,7 +79,7 @@ index 389d7e2ad9..0819689ffa 100644
                                         STRV_IFNOTNULL(generator_late));
                          break;
  
-@@ -525,13 +518,10 @@ int lookup_paths_init(
+@@ -546,13 +539,10 @@ int lookup_paths_init(
                          add = strv_new(persistent_config,
                                         USER_CONFIG_UNIT_DIR,
                                         "/etc/systemd/user",
@@ -95,7 +95,7 @@ index 389d7e2ad9..0819689ffa 100644
                          break;
  
                  case RUNTIME_SCOPE_USER:
-@@ -670,7 +660,6 @@ void lookup_paths_log(LookupPaths *lp) {
+@@ -692,7 +682,6 @@ void lookup_paths_log(LookupPaths *lp) {
  static const char* const system_generator_paths[] = {
          "/run/systemd/system-generators",
          "/etc/systemd/system-generators",
@@ -103,7 +103,7 @@ index 389d7e2ad9..0819689ffa 100644
          SYSTEM_GENERATOR_DIR,
          NULL,
  };
-@@ -678,7 +667,6 @@ static const char* const system_generator_paths[] = {
+@@ -700,7 +689,6 @@ static const char* const system_generator_paths[] = {
  static const char* const user_generator_paths[] = {
          "/run/systemd/user-generators",
          "/etc/systemd/user-generators",
@@ -111,7 +111,7 @@ index 389d7e2ad9..0819689ffa 100644
          USER_GENERATOR_DIR,
          NULL,
  };
-@@ -686,7 +674,6 @@ static const char* const user_generator_paths[] = {
+@@ -708,7 +696,6 @@ static const char* const user_generator_paths[] = {
  static const char* const system_env_generator_paths[] = {
          "/run/systemd/system-environment-generators",
          "/etc/systemd/system-environment-generators",
@@ -119,7 +119,7 @@ index 389d7e2ad9..0819689ffa 100644
          SYSTEM_ENV_GENERATOR_DIR,
          NULL,
  };
-@@ -694,7 +681,6 @@ static const char* const system_env_generator_paths[] = {
+@@ -716,7 +703,6 @@ static const char* const system_env_generator_paths[] = {
  static const char* const user_env_generator_paths[] = {
          "/run/systemd/user-environment-generators",
          "/etc/systemd/user-environment-generators",

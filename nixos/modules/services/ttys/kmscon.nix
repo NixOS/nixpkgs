@@ -172,10 +172,15 @@ in
       ];
 
       restartIfChanged = false;
+      # logind spawns autovt@ttyN.service on VT switch; point it at kmscon
       aliases = [ "autovt@.service" ];
     };
 
-    systemd.suppressedSystemUnits = [ "autovt@.service" ];
+    # tty1 is special: logind does not spawn autovt@tty1, it expects a static
+    # pull-in via getty.target. With getty@ suppressed, we must replace it.
+    systemd.services."kmsconvt@tty1".wantedBy = [ "getty.target" ];
+
+    systemd.suppressedSystemUnits = [ "getty@.service" ];
 
     services.kmscon.extraConfig =
       let
