@@ -34,8 +34,6 @@ let
         }).name;
       expected = "test-env-1.0";
     };
-
-    testMissingNameThrows = testingThrow (buildEnv { paths = [ ]; }).drvPath;
   };
 
   tests-passthru-paths = {

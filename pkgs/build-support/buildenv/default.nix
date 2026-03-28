@@ -121,10 +121,6 @@ lib.makeOverridable (
           (lib.remove null)
         ];
       in
-      assert
-        args ? name
-        || (args ? pname && args ? version)
-        || throw "buildEnv: expects arguments 'pname' and 'version', or 'name'";
       compatArgs
       // derivationArgs
       // {
