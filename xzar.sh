@@ -22,3 +22,5 @@ for flavour in $flavours; do
 done
 build nix
 upload nix
+build mcporter
+upload mcporter
