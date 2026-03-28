@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.40.0";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-0QzCY9E79hRrLQwxrB6t04NUM6sDQmWIyl/y0H0R3ak=";
+    hash = "sha256-OeTTrIcvY9bhnctc6h1xUdSriQN4RNy3vjxWKKlT0ew=";
   };
 
   postPatch = ''
