@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "7.5.2";
+  version = "7.5.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "pip-tools";
     tag = "v${version}";
-    hash = "sha256-+y4oXiLWGFIzIT75EZFpcYCX5HKeEyPsk+phTOyoKl8=";
+    hash = "sha256-MkYGD/ropw+MLLrk4gRZZguOv5extzNNXwTy6NQnCu0=";
   };
 
   patches = [
