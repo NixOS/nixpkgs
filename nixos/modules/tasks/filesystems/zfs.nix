@@ -158,16 +158,8 @@ let
     }:
     lib.nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
-      # We wait for systemd-udev-settle to ensure devices are available,
-      # but don't *require* it, because mounts shouldn't be killed if it's stopped.
-      # In the future, hopefully someone will complete this:
-      # https://github.com/zfsonlinux/zfs/pull/4943
-      wants = [
-        "systemd-udev-settle.service"
-      ]
-      ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
+      wants = lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
       after = [
-        "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
       ]
@@ -189,6 +181,11 @@ let
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        # We wait for the udev events queue to empty in the *hope* that the
+        # devices needed by the pool become available. This is terribly broken
+        # and essentially no better than a random sleep(), but we can't do any
+        # better, see upstream issue https://github.com/openzfs/zfs/issues/10891
+        ExecStartPre = "${lib.getExe' pkgs.systemd "udevadm"} settle --timeout=180";
       };
       environment.ZFS_FORCE = lib.optionalString force "-f";
       script =
