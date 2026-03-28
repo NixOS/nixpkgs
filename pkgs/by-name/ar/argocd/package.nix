@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "argocd";
-  version = "3.3.4";
+  version = "3.3.5";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U4HTnzBzgCN06XNCNpIyG8lpTJT6l+l8Pkz08muwtzo=";
+    hash = "sha256-sih7HrF9qwSI7j8A76iZl54CcO5aI09dt65YdupZ08c=";
   };
 
   ui = stdenv.mkDerivation {
@@ -45,7 +45,7 @@ buildGoModule (finalAttrs: {
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-moXY/30Zu1HTfbEYYG61KwaH2Pj3zVOCfSzwZhOvsE8=";
+  vendorHash = "sha256-ABhvLf1wZm/2WdkzMOBBK/mycSjX+6/kKc0VcUhxvok=";
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile

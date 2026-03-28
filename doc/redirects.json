@@ -134,6 +134,12 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "javascript-buildNpmPackage-npmFlags": [
+    "index.html#javascript-buildNpmPackage-npmFlags"
+  ],
+  "javascript-buildNpmPackage-npmWorkspace": [
+    "index.html#javascript-buildNpmPackage-npmWorkspace"
+  ],
   "libcxxhardeningextensive": [
     "index.html#libcxxhardeningextensive"
   ],
@@ -206,8 +212,107 @@
   "no-broken-symlinks.sh": [
     "index.html#no-broken-symlinks.sh"
   ],
+  "nodejs-install-executables": [
+    "index.html#nodejs-install-executables"
+  ],
+  "nodejs-install-executables-example": [
+    "index.html#nodejs-install-executables-example"
+  ],
+  "nodejs-install-executables-exclusive-variables": [
+    "index.html#nodejs-install-executables-exclusive-variables"
+  ],
+  "nodejs-install-executables-variables": [
+    "index.html#nodejs-install-executables-variables"
+  ],
+  "nodejs-install-executables-wrapper-args": [
+    "index.html#nodejs-install-executables-wrapper-args"
+  ],
+  "nodejs-install-manuals": [
+    "index.html#nodejs-install-manuals"
+  ],
+  "nodejs-install-manuals-example": [
+    "index.html#nodejs-install-manuals-example"
+  ],
   "nostrictaliasing": [
     "index.html#nostrictaliasing"
+  ],
+  "npm-build-hook": [
+    "index.html#npm-build-hook"
+  ],
+  "npm-build-hook-dont": [
+    "index.html#npm-build-hook-dont"
+  ],
+  "npm-build-hook-example-snippet": [
+    "index.html#npm-build-hook-example-snippet"
+  ],
+  "npm-build-hook-exclusive-variables": [
+    "index.html#npm-build-hook-exclusive-variables"
+  ],
+  "npm-build-hook-flags": [
+    "index.html#npm-build-hook-flags"
+  ],
+  "npm-build-hook-honored-variables": [
+    "index.html#npm-build-hook-honored-variables"
+  ],
+  "npm-build-hook-script": [
+    "index.html#npm-build-hook-script"
+  ],
+  "npm-build-hook-snippet": [
+    "index.html#npm-build-hook-snippet"
+  ],
+  "npm-build-hook-variables": [
+    "index.html#npm-build-hook-variables"
+  ],
+  "npm-config-hook": [
+    "index.html#npm-config-hook"
+  ],
+  "npm-config-hook-deps": [
+    "index.html#npm-config-hook-deps"
+  ],
+  "npm-config-hook-exclusive-variables": [
+    "index.html#npm-config-hook-exclusive-variables"
+  ],
+  "npm-config-hook-honored-variables": [
+    "index.html#npm-config-hook-honored-variables"
+  ],
+  "npm-config-hook-install-flags": [
+    "index.html#npm-config-hook-install-flags"
+  ],
+  "npm-config-hook-rebuild-flags": [
+    "index.html#npm-config-hook-rebuild-flags"
+  ],
+  "npm-config-hook-snippet": [
+    "index.html#npm-config-hook-snippet"
+  ],
+  "npm-config-hook-variables": [
+    "index.html#npm-config-hook-variables"
+  ],
+  "npm-config-hook-writable-cache": [
+    "index.html#npm-config-hook-writable-cache"
+  ],
+  "npm-install-hook": [
+    "index.html#npm-install-hook"
+  ],
+  "npm-install-hook-dont": [
+    "index.html#npm-install-hook-dont"
+  ],
+  "npm-install-hook-dont-prune": [
+    "index.html#npm-install-hook-dont-prune"
+  ],
+  "npm-install-hook-exclusive-variables": [
+    "index.html#npm-install-hook-exclusive-variables"
+  ],
+  "npm-install-hook-honored-variables": [
+    "index.html#npm-install-hook-honored-variables"
+  ],
+  "npm-install-hook-prune-flags": [
+    "index.html#npm-install-hook-prune-flags"
+  ],
+  "npm-install-hook-snippet": [
+    "index.html#npm-install-hook-snippet"
+  ],
+  "npm-install-hook-variables": [
+    "index.html#npm-install-hook-variables"
   ],
   "pkgs-replacevars": [
     "index.html#pkgs-replacevars",

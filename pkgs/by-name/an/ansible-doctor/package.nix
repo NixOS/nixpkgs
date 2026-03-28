@@ -4,6 +4,7 @@
   python3Packages,
   fetchFromGitHub,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication (finalAttrs: {
@@ -45,8 +46,11 @@ python3Packages.buildPythonApplication (finalAttrs: {
 
   pythonImportsCheck = [ "ansibledoctor" ];
 
-  # ansible.errors.AnsibleError: Unable to create local directories(/private/var/empty/.ansible/tmp)
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+    versionCheckHook
+  ];
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   meta = {
     description = "Annotation based documentation for your Ansible roles";
