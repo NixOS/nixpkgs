@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   gitMinimal,
   python3,
   m4,
@@ -20,31 +19,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "magic-vlsi";
-  version = "8.3.628";
+  version = "8.3.629";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = finalAttrs.version;
-    hash = "sha256-Zs9M2UgN+tIty7/DwLKVLjrPZxfd0qpM90F9QjUI6wM=";
+    hash = "sha256-K/w2El2jkXN8qIa0kWvN8rCKWzjd8DcM3O6hb5UVQnw=";
     leaveDotGit = true;
   };
 
   hardeningDisable = [ "fortify" ];
-
-  patches = [
-    (fetchpatch {
-      name = "fix-buffer-overflow-runstats.patch";
-      url = "https://github.com/RTimothyEdwards/magic/commit/6a07bc172b4bdae8bc22f51905194cdd427912cc.patch";
-      hash = "sha256-QPVl+SfUWj51u/G+EjTCVQZdG7tTdOlEFN/hS7E1Ojg=";
-    })
-
-    (fetchpatch {
-      name = "fix_txinput_termbits.patch";
-      url = "https://github.com/RTimothyEdwards/magic/commit/790f0196d4fef21dc8a3f5646ccf87a531c4d6aa.patch";
-      hash = "sha256-zpmFT813USxX3PDpi6TGlWpWX4xfdirVrVtAlBtkSF0=";
-    })
-  ];
 
   nativeBuildInputs = [
     python3
