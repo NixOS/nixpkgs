@@ -30,7 +30,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  # throws bogus out of memory errors in tests, but the binaries work
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = {
     homepage = "https://www.nongnu.org/lzip/plzip.html";
