@@ -8,13 +8,13 @@
 
 buildGo126Module (finalAttrs: {
   pname = "tsgolint";
-  version = "0.17.4";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "tsgolint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-C0n1L1oIQXPWFX27DDoSSHJm7KrZkWObsq50jFAETGM=";
+    hash = "sha256-7uHdK1fQ77d+4Yl4wmYP2IR0t+/ddt+LBups+BOvpEo=";
     fetchSubmodules = true;
   };
 
@@ -26,12 +26,11 @@ buildGo126Module (finalAttrs: {
 
   # These patches are applied to the typescript-go submodule in upstream justfile's "init" target.
   patches = [
-    (finalAttrs.src + "/patches/0001-Parallel-readDirectory-visitor.patch")
-    (finalAttrs.src + "/patches/0002-Adapt-project-service-for-single-run-mode.patch")
-    (finalAttrs.src + "/patches/0003-patch-expose-more-functions-via-the-shim-with-type-f.patch")
-    (finalAttrs.src + "/patches/0004-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
-    (finalAttrs.src + "/patches/0005-fix-collections-avoid-internal-json-import-in-ordere.patch")
-    (finalAttrs.src + "/patches/0006-perf-vfs-cache-ReadFile-results-in-cachedvfs.patch")
+    (finalAttrs.src + "/patches/0001-Adapt-project-service-for-single-run-mode.patch")
+    (finalAttrs.src + "/patches/0002-patch-expose-more-functions-via-the-shim-with-type-f.patch")
+    (finalAttrs.src + "/patches/0003-fix-early-return-from-invalid-tsconfig-for-better-er.patch")
+    (finalAttrs.src + "/patches/0004-fix-collections-avoid-internal-json-import-in-ordere.patch")
+    (finalAttrs.src + "/patches/0005-perf-vfs-cache-ReadFile-results-in-cachedvfs.patch")
   ];
 
   postPatch =

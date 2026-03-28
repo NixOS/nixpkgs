@@ -103,12 +103,10 @@ stdenv.mkDerivation (finalAttrs: {
     CONFIG_SQLITE=y
   '';
 
-  passAsFile = [ "extraConfig" ];
-
   configurePhase = ''
     cd hostapd
     cp -v defconfig .config
-    cat $extraConfigPath >> .config
+    printf "%s" "$extraConfig" >> .config
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
@@ -123,6 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit (nixosTests) wpa_supplicant;
   };
+
+  __structuredAttrs = true;
 
   meta = {
     homepage = "https://w1.fi/hostapd/";

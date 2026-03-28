@@ -5,7 +5,6 @@
   fetchFromGitLab,
   git-unroll,
   buildPythonPackage,
-  fetchpatch,
   python,
   runCommand,
   writeShellScript,
@@ -118,7 +117,7 @@ let
 
   setBool = v: if v then "1" else "0";
 
-  # https://github.com/pytorch/pytorch/blob/v2.10.0/torch/utils/cpp_extension.py#L2411-L2414
+  # https://github.com/pytorch/pytorch/blob/v2.11.0/torch/utils/cpp_extension.py#L2569-L2572
   supportedTorchCudaCapabilities =
     let
       real = [
@@ -141,10 +140,10 @@ let
         "9.0a"
         "10.0"
         "10.0a"
-        "11.0"
-        "11.0a"
         "10.3"
         "10.3a"
+        "11.0"
+        "11.0a"
         "12.0"
         "12.0a"
         "12.1"
@@ -281,7 +280,7 @@ in
 buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.10.0";
+  version = "2.11.0";
   pyproject = true;
 
   outputs = [
@@ -305,14 +304,6 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
-    # [CPUBLAS] Fix UB: use vector::resize() instead of reserve() before operator[] access
-    # Merged in https://github.com/pytorch/pytorch/pull/175315
-    # TODO: drop at the next release
-    (fetchpatch {
-      name = "fix-ub-in-cpublas";
-      url = "https://github.com/pytorch/pytorch/commit/f08aafa9e82c5ae142b97dbfcac1ebd5d9ca7fde.patch";
-      hash = "sha256-J9QNKDWytA0nBpKr5q4kVnufyMEJHev0mfmyQCxog/w=";
-    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -368,12 +359,8 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
       --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
       '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
   ''
+  # Doesn't pick up the environment variable?
   + lib.optionalString rocmSupport ''
-    # https://github.com/facebookincubator/gloo/pull/297
-    substituteInPlace third_party/gloo/cmake/Hipify.cmake \
-      --replace-fail "\''${HIPIFY_COMMAND}" "python \''${HIPIFY_COMMAND}"
-
-    # Doesn't pick up the environment variable?
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
   ''
