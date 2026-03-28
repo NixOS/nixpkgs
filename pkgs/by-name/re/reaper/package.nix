@@ -12,7 +12,8 @@
   gtk3,
   lame,
   libxml2_13,
-  ffmpeg,
+  libjack2,
+  ffmpeg_4-headless,
   vlc,
   xdg-utils,
   xdotool,
@@ -20,7 +21,7 @@
   openssl,
 
   jackSupport ? stdenv.hostPlatform.isLinux,
-  jackLibrary,
+  jackLibrary ? libjack2, # Another option is "pipewire.jack"
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
 }:
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
               curl
               lame
               libxml2_13
-              ffmpeg
+              ffmpeg_4-headless
               vlc
               xdotool
               stdenv.cc.cc

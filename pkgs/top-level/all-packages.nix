@@ -10405,11 +10405,6 @@ with pkgs;
     withXineBackend = true;
   };
 
-  reaper = callPackage ../applications/audio/reaper {
-    jackLibrary = libjack2; # Another option is "pipewire.jack".
-    ffmpeg = ffmpeg_4-headless;
-  };
-
   rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
 
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };
