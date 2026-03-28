@@ -2,6 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  iana-etc,
+  libredirect,
   buildGoModule,
   nodejs,
   pnpm_9,
@@ -77,6 +79,12 @@ buildGoModule (finalAttrs: {
 
   preConfigure = ''
     cp -r $web/* web/dist
+  '';
+
+  nativeCheckInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [ libredirect.hook ];
+
+  preCheck = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
   '';
 
   ldflags = [
