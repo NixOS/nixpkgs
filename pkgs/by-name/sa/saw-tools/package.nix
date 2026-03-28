@@ -57,7 +57,10 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.bsd3;
     platforms = lib.attrNames sources;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      thelissimus
+    ];
     mainProgram = "saw";
   };
 })
