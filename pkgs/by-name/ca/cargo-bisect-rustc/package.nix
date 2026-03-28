@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-bisect-rustc";
-  version = "0.6.8";
+  version = "0.6.11";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "cargo-bisect-rustc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7HiM1oRuLSfRaum66duag/w8ncFdxRLF0yeSGlIey0Y=";
+    hash = "sha256-uyIdQn9EQnjBAHBPqvphaKg2KRufveOXOiHEKk0fTGQ=";
   };
 
   patches =
@@ -45,10 +45,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  cargoHash = "sha256-SigRm2ZC7jH1iCEGRpka1G/e9kBEieFVU0YDBl2LfTM=";
+  cargoHash = "sha256-WSO5LvdJkAorSwsICz9NAWKNM7x4aeNvhGLhJSO6Vi8=";
 
   checkFlags = [
     "--skip=test_github" # requires internet
+    "--skip=cli_tests" # trycmd does not seem to work in nix's sandbox
   ];
 
   passthru = {
