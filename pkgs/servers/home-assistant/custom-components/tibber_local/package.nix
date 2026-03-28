@@ -23,7 +23,7 @@ buildHomeAssistantComponent rec {
 
   meta = {
     changelog = "https://github.com/marq24/ha-tibber-pulse-local/releases/tag/${version}";
-    description = "Home Assistant integration framework for (garbage collection) schedules";
+    description = "Local/LAN Tibber Pulse IR/Bridge Integration for Home Assistant";
     homepage = "https://github.com/marq24/ha-tibber-pulse-local";
     maintainers = with lib.maintainers; [ hensoko ];
     license = lib.licenses.asl20;
