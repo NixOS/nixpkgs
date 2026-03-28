@@ -17,17 +17,33 @@ use std::{
 };
 use url::Url;
 
+const NPM_REGISTRY_HOST: &str = "registry.npmjs.org";
+
+pub fn get_mirror_from_env(host: &str) -> Option<String> {
+    if let Ok(npm_mirrors) = env::var("NIX_NPM_REGISTRY_OVERRIDES")
+        && let Ok(mirrors) = serde_json::from_str::<Map<String, Value>>(&npm_mirrors)
+        && let Some(mirror) = mirrors.get(host)
+    {
+        Some(mirror.to_string())
+    } else if host == NPM_REGISTRY_HOST
+        && let Ok(mirror) = env::var("NIX_MIRRORS_npm")
+    {
+        Some(mirror)
+    } else {
+        None
+    }
+}
+
 pub fn get_url(url: &Url) -> Result<Body, anyhow::Error> {
     let url_ = url.clone();
     let mut url = url.clone();
     // Respect NIX_NPM_REGISTRY_OVERRIDES environment variable, which should be a JSON mapping in the shape of:
     // `{ "registry.example.com": "my-registry.local", ... }`
+    // Alternatively, respect NIX_MIRRORS_npm for registry.npmjs.org specifically
     if let Some(host) = url.host_str()
-        && let Ok(npm_mirrors) = env::var("NIX_NPM_REGISTRY_OVERRIDES")
-        && let Ok(mirrors) = serde_json::from_str::<Map<String, Value>>(&npm_mirrors)
-        && let Some(mirror) = mirrors.get(host).and_then(serde_json::Value::as_str)
+        && let Some(mirror) = get_mirror_from_env(host)
     {
-        let mirror_url = Url::parse(mirror)?;
+        let mirror_url = Url::parse(&mirror)?;
         url.set_path(&(mirror_url.path().to_owned() + url.path()));
         url.set_host(Some(mirror_url.host_str().unwrap_or_else(|| {
             panic!("Mirror URL without host part: {mirror_url}")

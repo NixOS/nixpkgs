@@ -272,7 +272,10 @@
 
         # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
         # `{ "registry.example.com": "example-registry-bearer-token", ... }`
-        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
+        impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
+          "NIX_NPM_TOKENS"
+          "NIX_MIRRORS_npm"
+        ];
 
         env = {
           NIX_NPM_REGISTRY_OVERRIDES = npmRegistryOverridesString;
