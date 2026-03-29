@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "irccat";
-  version = "0.4.12";
+  version = "0.4.13";
 
   src = fetchFromGitHub {
     owner = "irccloud";
     repo = "irccat";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W6Qj+zg6jC304bEIQeFB8unSFgjV60zXV+I8hpw3AFA=";
+    hash = "sha256-mc5ccJnnDKTZr4GHI6YUOEr8Rwtkw1rrpL4gwOlLyb0=";
   };
 
   vendorHash = "sha256-SUE868jVJywqE0A5yjMWohrMw58OUnxGGxvcR8UzPfE=";
