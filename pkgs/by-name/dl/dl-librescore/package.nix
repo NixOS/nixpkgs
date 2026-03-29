@@ -6,6 +6,7 @@
   fetchpatch,
   python3,
   cctools,
+  nodejs_22,
 }:
 
 buildNpmPackage rec {
@@ -19,7 +20,10 @@ buildNpmPackage rec {
     hash = "sha256-IuHX4wFhilSK09WWNopHtkAfd9Mm2oo5M2m4KcRkCBE=";
   };
 
-  npmDepsHash = "sha256-DCjN9x6sjw66UIATxhRclJpz6v/1ZVUiGqlbZUDMpBY=";
+  nodejs = nodejs_22;
+
+  npmDepsHash = "sha256-jeo2z0Ha2nn0XHQqXBb2UWpvHXs+64Pz1ny0U8U6Ing=";
+  npmDepsFetcherVersion = 2;
 
   patches = [
     # https://github.com/LibreScore/dl-librescore/pull/144
