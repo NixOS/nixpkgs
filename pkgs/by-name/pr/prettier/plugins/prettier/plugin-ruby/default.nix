@@ -7,7 +7,7 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
-  gems,
+  rubyPackages_4_0,
   nodejs,
   stdenv,
   yarnBuildHook,
@@ -44,7 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    cp -r . $out
+    mkdir $out
+
+    cp -r ./bin ./exe ./lib ./node_modules ./package.json ./prettier.gemspec ./src $out/
   '';
 
   nativeBuildInputs = [
@@ -54,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
   ];
 
-  buildInputs = with gems; [
+  propagatedBuildInputs = with rubyPackages_4_0; [
     prettier_print
     syntax_tree
     syntax_tree-haml

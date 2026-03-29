@@ -1,7 +1,7 @@
 {
   fetchFromGitHub,
   fetchYarnDeps,
-  gems,
+  rubyPackages_4_0,
   nodejs,
   pnpm_9,
   stdenv,
@@ -37,7 +37,7 @@
     inherit
       fetchFromGitHub
       fetchYarnDeps
-      gems
+      rubyPackages_4_0
       nodejs
       stdenv
       yarnBuildHook
