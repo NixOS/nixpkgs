@@ -43,20 +43,19 @@ let
     };
   };
   python3Packages = python.pkgs;
-  src =
-    (fetchFromGitHub {
-      owner = "LuteOrg";
-      repo = "lute-v3";
-      tag = version;
-      hash = "sha256-ZeMXFky/MBW/nce+aUDYerh/9LHBDjl/Eh4f/4obXs8=";
-      fetchSubmodules = true;
-    }).overrideAttrs
-      # https://github.com/NixOS/nixpkgs/issues/195117#issuecomment-1410398050
-      {
-        GIT_CONFIG_COUNT = 1;
-        GIT_CONFIG_KEY_0 = "url.https://github.com/.insteadOf";
-        GIT_CONFIG_VALUE_0 = "git@github.com:";
-      };
+  src = fetchFromGitHub {
+    owner = "LuteOrg";
+    repo = "lute-v3";
+    tag = version;
+    hash = "sha256-ZeMXFky/MBW/nce+aUDYerh/9LHBDjl/Eh4f/4obXs8=";
+    fetchSubmodules = true;
+    # Rewrite the submodule's SSH URL so the fetcher can resolve it in the sandbox.
+    preFetch = ''
+      export GIT_CONFIG_COUNT=1
+      export GIT_CONFIG_KEY_0=url.https://github.com/.insteadOf
+      export GIT_CONFIG_VALUE_0=git@github.com:
+    '';
+  };
 in
 python3Packages.buildPythonApplication {
   inherit src version;

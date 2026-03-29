@@ -26,6 +26,8 @@ buildPythonPackage {
     hatchling
   ];
 
+  pythonRelaxDeps = [ "xmltodict" ];
+
   dependencies = [
     beautifulsoup4
     xmltodict
