@@ -7,6 +7,7 @@
   cuda_cudart,
   cuda_nvcc,
   cuda_nvml_dev,
+  cuda_nvrtc,
   cuda_nvtx,
   cudaAtLeast,
   cudaMajorMinorVersion,
@@ -16,6 +17,7 @@
   gdrcopy,
   lib,
   libfabric,
+  libnvjitlink,
   mpi,
   nccl,
   ninja,
@@ -46,13 +48,13 @@ backendStdenv.mkDerivation (finalAttrs: {
   # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
   name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "libnvshmem";
-  version = "3.4.5-0";
+  version = "3.6.5-0";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvshmem";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RHZzjDMYlL7vAVP1/UXM/Pt4bhajeWdCi3ihICeD2mc=";
+    hash = "sha256-2E3/WGbg6srT/e3ykK0qxTy1ZlJ9JGGLlergG0ITwTY=";
   };
 
   outputs = [ "out" ];
@@ -94,9 +96,11 @@ backendStdenv.mkDerivation (finalAttrs: {
     cuda_cccl
     cuda_cudart
     cuda_nvml_dev
+    cuda_nvrtc
     cuda_nvtx
     gdrcopy
     libfabric
+    libnvjitlink
     nccl
     pmix
     rdma-core
@@ -179,6 +183,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Parallel programming interface for NVIDIA GPUs based on OpenSHMEM";
     homepage = "https://github.com/NVIDIA/nvshmem";
+    changelog = "https://github.com/NVIDIA/nvshmem/releases/tag/${finalAttrs.src.tag}";
     broken = _cuda.lib._mkMetaBroken finalAttrs;
     # NOTE: There are many licenses:
     # https://github.com/NVIDIA/nvshmem/blob/7dd48c9fd7aa2134264400802881269b7822bd2f/License.txt
@@ -187,7 +192,10 @@ backendStdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = [ maintainers.connorbaker ];
+    maintainers = with maintainers; [
+      connorbaker
+      GaetanLepage
+    ];
     teams = [ teams.cuda ];
   };
 })

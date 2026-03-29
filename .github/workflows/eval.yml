@@ -154,7 +154,7 @@ jobs:
     # to not interrupt main Eval's compare step.
     continue-on-error: ${{ matrix.version != '' }}
     name: ${{ matrix.system }}${{ matrix.version && format(' @ {0} ({1})', matrix.version, needs.versions.outputs.ciPinBumpCommitShort) || '' }}
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       # This is not supposed to be used and just acts as a fallback.
       # Without swap, when Eval runs OOM, it will fail badly with a
