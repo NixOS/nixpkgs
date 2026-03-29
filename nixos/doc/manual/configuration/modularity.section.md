@@ -113,7 +113,7 @@ Interactive exploration of the configuration is possible using `nix
   repl`, a read-eval-print loop for Nix expressions. A typical use:
 
 ```ShellSession
-$ nix repl '<nixpkgs/nixos>'
+$ nix repl --expr 'import <nixpkgs/nixos> {}'
 
 nix-repl> config.networking.hostName
 "mandark"
@@ -121,6 +121,10 @@ nix-repl> config.networking.hostName
 nix-repl> map (x: x.hostName) config.services.httpd.virtualHosts
 [ "example.org" "example.gov" ]
 ```
+
+Note that this default to the configuration file paths stored in
+`NIX_PATH`. You may pass a different path as
+`'import <nixpkgs/nixos> { configuration = /path/to/configuration.nix; }'`
 
 While abstracting your configuration, you may find it useful to generate
 modules using code, instead of writing files. The example below would
