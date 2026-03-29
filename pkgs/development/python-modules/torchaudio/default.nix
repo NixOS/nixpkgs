@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -68,6 +69,11 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
     #   RuntimeError: Test is known to fail for Python 3.10, disabling for now
     #   See: https://github.com/pytorch/audio/pull/2224#issuecomment-1048329450
     TORCHAUDIO_TEST_ALLOW_SKIP_IF_ON_PYTHON_310 = true;
+
+    # Fails on aarch64-linux with:
+    #   RuntimeError: `fbgemm` is not available
+    TORCHAUDIO_TEST_ALLOW_SKIP_IF_NO_QUANTIZATION =
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
 
   build-system = [
@@ -116,6 +122,13 @@ buildPythonPackage.override { inherit (torch) stdenv; } (finalAttrs: {
 
     # Very long to run
     "AutogradCPUTest"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # AssertionError: Tensor-likes are not close!
+    "test_batch_inverse_spectrogram"
+    "test_batch_pitch_shift"
+    "test_batch_spectrogram"
+    "test_griffinlim_0_99"
   ];
 
   passthru.gpuCheck = torchaudio.overridePythonAttrs (old: {
