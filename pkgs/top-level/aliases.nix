@@ -244,7 +244,7 @@ in
 
 mapAliases {
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_21;
+  llvmPackages_latest = llvmPackages_22;
   llvmPackages_git = (callPackages ../development/compilers/llvm { }).git;
   # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
   clang18Stdenv = lib.lowPrio llvmPackages_18.stdenv;
