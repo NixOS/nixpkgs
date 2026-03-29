@@ -6752,11 +6752,6 @@ with pkgs;
 
   libubox = callPackage ../development/libraries/libubox { with_ustream_ssl = true; };
 
-  libubox-wolfssl = callPackage ../development/libraries/libubox {
-    with_ustream_ssl = true;
-    ustream-ssl = ustream-ssl-wolfssl;
-  };
-
   libubox-mbedtls = callPackage ../development/libraries/libubox {
     with_ustream_ssl = true;
     ustream-ssl = ustream-ssl-mbedtls;
