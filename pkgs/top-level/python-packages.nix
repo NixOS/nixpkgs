@@ -1122,6 +1122,8 @@ self: super: with self; {
 
   async-stagger = callPackage ../development/python-modules/async-stagger { };
 
+  async-tiff = callPackage ../development/python-modules/async-tiff { };
+
   async-timeout = callPackage ../development/python-modules/async-timeout { };
 
   async-tkinter-loop = callPackage ../development/python-modules/async-tkinter-loop { };
