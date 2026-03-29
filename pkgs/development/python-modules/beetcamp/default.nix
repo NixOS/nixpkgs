@@ -17,14 +17,14 @@
 
 buildPythonPackage (finalAttrs: {
   pname = "beetcamp";
-  version = "0.23.0";
+  version = "0.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "beetcamp";
     tag = finalAttrs.version;
-    hash = "sha256-8FEDpobEGZ0Lw1+JRoFIEe3AuiuX7dwsRab+P3hC3W0=";
+    hash = "sha256-Oe5pZ4gYgqBHuzt9LBe4G14+RYXrNL+L5GIGMMflyMI=";
   };
 
   patches = [
