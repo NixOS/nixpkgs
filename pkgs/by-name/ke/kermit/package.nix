@@ -1,51 +1,59 @@
 {
-  lib,
-  stdenv,
   fetchurl,
-  ncurses,
+  lib,
   libxcrypt,
+  ncurses,
+  stdenv,
+  versionCheckHook,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kermit";
   version = "9.0.302";
 
   src = fetchurl {
-    url = "ftp://ftp.kermitproject.org/kermit/archives/cku302.tar.gz";
-    sha256 = "0487mh6s99ijqf1pfmbm302pa5i4pzmm8s439hdl1ffs5g8jqpqd";
+    url = "ftp://ftp.kermitproject.org/kermit/archives/cku${lib.versions.patch finalAttrs.version}.tar.gz";
+    hash = "sha256-DV8s0SvauUAbTINoVOu/JBZ1BRh1VXeDwzKmpA2sBxE=";
   };
 
-  buildInputs = [
-    ncurses
-    libxcrypt
-  ];
+  sourceRoot = ".";
 
-  unpackPhase = ''
-    mkdir -p src
-    pushd src
-    tar xvzf $src
-  '';
+  strictDeps = true;
+
+  buildInputs = [
+    libxcrypt
+    ncurses
+  ];
 
   postPatch = ''
     sed -i -e 's@-I/usr/include/ncurses@@' \
       -e 's@/usr/local@'"$out"@ makefile
   '';
 
-  buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags -std=gnu89' LNKFLAGS='-lcrypt -lresolv'";
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/man/man1
-    make -f makefile install
-  '';
-
   env.NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration -Wno-implicit-int";
 
+  buildPhase = ''
+    runHook preBuild
+    make linux KFLAGS='-D_IO_file_flags -std=gnu89' LNKFLAGS='-lcrypt -lresolv'
+    runHook postBuild
+  '';
+
+  preInstall = ''
+    mkdir --parents $out/{bin,man/man1}
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   meta = {
-    homepage = "https://www.kermitproject.org/ck90.html";
+    changelog = "https://www.kermitproject.org/ckupdates.html#ck${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }";
     description = "Portable Scriptable Network and Serial Communication Software";
+    homepage = "https://www.kermitproject.org/ck90.html";
     license = lib.licenses.bsd3;
+    mainProgram = "kermit";
     maintainers = with lib.maintainers; [ pSub ];
-    platforms = with lib.platforms; linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
