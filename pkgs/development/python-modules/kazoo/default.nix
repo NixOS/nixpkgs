@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "kazoo";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kFeWrk9MEr1OSukubl0BhDnmtWyM+7JIJTYuebIw2rE=";
+    hash = "sha256-V+fm9pKVyPkiURSI7reWgHKeFLuOs4LVytg6oRNFw2w=";
   };
 
   # tests take a long time to run and leave threads hanging
