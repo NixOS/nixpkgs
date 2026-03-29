@@ -5,21 +5,21 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "3.3.4";
   pname = "modsecurity-crs";
+  version = "4.24.0";
 
   src = fetchFromGitHub {
     owner = "coreruleset";
     repo = "coreruleset";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-WDJW4K85YdHrw9cys3LrnZUoTxc0WhiuCW6CiC1cAbk=";
+    sha256 = "sha256-BUkeQPXjS5t+UQEBjj2p0SC89q38xDLOcnsSshcgdFg=";
   };
 
   installPhase = ''
     install -D -m444 -t $out/rules ${finalAttrs.src}/rules/*.conf
     install -D -m444 -t $out/rules ${finalAttrs.src}/rules/*.data
     install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/*.md
-    install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/{CHANGES,INSTALL,LICENSE}
+    install -D -m444 -t $out/share/doc/modsecurity-crs ${finalAttrs.src}/LICENSE
     install -D -m444 -t $out/share/modsecurity-crs ${finalAttrs.src}/rules/*.example
     install -D -m444 -t $out/share/modsecurity-crs ${finalAttrs.src}/crs-setup.conf.example
     cat > $out/share/modsecurity-crs/modsecurity-crs.load.example <<EOF
