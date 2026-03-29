@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+# bug's not found unzip.h
   postPatch = ''
-      # bug's not found unzip.h
     substituteInPlace ./Source/System/System.cpp \
       --replace-fail '#include "unzip.h"' '#include "minizip/unzip.h"'
    '';
