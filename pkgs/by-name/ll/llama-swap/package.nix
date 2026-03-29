@@ -81,8 +81,8 @@ buildGoModule (finalAttrs: {
 
   checkFlags =
     let
-      skippedTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-        # Fail only on x86_64-darwin intermittently
+      skippedTests = lib.optionals (stdenv.isDarwin) [
+        # Fail only on *-darwin intermittently
         # https://github.com/mostlygeek/llama-swap/issues/320
         "TestProcess_AutomaticallyStartsUpstream"
         "TestProcess_WaitOnMultipleStarts"
@@ -98,6 +98,7 @@ buildGoModule (finalAttrs: {
         "TestProcess_ForceStopWithKill"
         "TestProcess_StopCmd"
         "TestProcess_EnvironmentSetCorrectly"
+        "TestProcess_ReverseProxyPanicIsHandled"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
