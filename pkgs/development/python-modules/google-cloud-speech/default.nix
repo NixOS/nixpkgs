@@ -14,13 +14,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-speech";
-  version = "2.36.0";
+  version = "2.38.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "google_cloud_speech";
     inherit version;
-    hash = "sha256-OkRaAzzHdy99BzwDFCp+gASEFdtCmBNyxrge3Hah4no=";
+    hash = "sha256-GFS1HLt5Vyc7a6YfSmz0neyNCexFCZFYeJflAmfqylE=";
   };
 
   build-system = [ setuptools ];
