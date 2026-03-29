@@ -52,6 +52,11 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail 'ruamel.yaml~=0.17,<0.19' 'ruamel.yaml==${ruamel-yaml.version}'
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
