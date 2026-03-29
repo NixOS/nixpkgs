@@ -41,6 +41,13 @@ let
     hash = "sha256-uu/SIG8fgVVWhsGxmszTPHwe4SQtLgbxdShOMKbeg2w=";
   };
 
+  lixLowdown30Patch = fetchpatch {
+    name = "lix-lowdown-3.0-support.patch";
+    url = "https://git.lix.systems/lix-project/lix/commit/af0390c27bdc401ece8f8192cb3024f0ff08e977.patch";
+    excludes = [ "flake.nix" ];
+    hash = "sha256-ZBkbgeZ/D7H2teX8bPy5NEG1aXbQVksTDV3aVBZdRPM=";
+  };
+
   makeLixScope =
     {
       attrName,
@@ -229,6 +236,8 @@ lib.makeExtensible (
           })
 
           lixMdbookPatch
+
+          lixLowdown30Patch
         ];
       };
     };
@@ -253,7 +262,10 @@ lib.makeExtensible (
           hash = "sha256-APm8m6SVEAO17BBCka13u85/87Bj+LePP7Y3zHA3Mpg=";
         };
 
-        patches = [ lixMdbookPatch ];
+        patches = [
+          lixMdbookPatch
+          lixLowdown30Patch
+        ];
       };
     };
 
@@ -283,14 +295,14 @@ lib.makeExtensible (
       attrName = "git";
 
       lix-args = rec {
-        version = "2.96.0-pre-20260317_${builtins.substring 0 12 src.rev}";
+        version = "2.96.0-pre-20260318_${builtins.substring 0 12 src.rev}";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
-          rev = "96db7c79cf2a9a06725360b0d12e5de583bef07d";
-          hash = "sha256-Ixwk38HArs7MZXxdWRkSZFzUhUdlCro+8+M/sO+fE/Y=";
+          rev = "8294cd534b2f01ee967b28aa73fcab1535d62b3d";
+          hash = "sha256-BFijbNDCrfzpDdW+gNauP25QsTvEZ39dygWEI/RYeyY=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {
