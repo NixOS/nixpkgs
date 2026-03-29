@@ -104,6 +104,7 @@ let
         ewok
         dritter
       ];
+      mainProgram = "Enpass";
     };
 
     nativeBuildInputs = [ makeWrapper ];
