@@ -2,28 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitLab,
+
+  # build-system
   cmake,
   nanobind,
   ninja,
   scikit-build-core,
   setuptools,
+
+  # dependencies
   numpy,
+
+  # tests
+  pytest-xdist,
   pytestCheckHook,
   scipy,
-  pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "ducc0";
-  version = "0.40.0";
+  version = "0.41.0";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "mtr";
     repo = "ducc";
-    tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-0QzCY9E79hRrLQwxrB6t04NUM6sDQmWIyl/y0H0R3ak=";
+    tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-OeTTrIcvY9bhnctc6h1xUdSriQN4RNy3vjxWKKlT0ew=";
   };
 
   postPatch = ''
@@ -46,22 +52,23 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   nativeCheckInputs = [
+    pytest-xdist
     pytestCheckHook
     scipy
-    pytest-xdist
   ];
   enabledTestPaths = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
   postInstall = ''
     mkdir -p $out/include
-    cp -r ${src}/src/ducc0 $out/include
+    cp -r ${finalAttrs.src}/src/ducc0 $out/include
   '';
 
   meta = {
-    homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
     description = "Efficient algorithms for Fast Fourier transforms and more";
+    homepage = "https://gitlab.mpcdf.mpg.de/mtr/ducc";
+    changelog = "https://gitlab.mpcdf.mpg.de/mtr/ducc/-/blob/${finalAttrs.src.tag}/ChangeLog?ref_type=tags";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ parras ];
   };
-}
+})

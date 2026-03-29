@@ -38,6 +38,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  preCheck = "rm -r fastremap/";
+
   pythonImportsCheck = [
     "fastremap"
   ];
