@@ -106,29 +106,16 @@ in
     };
 
   testScript = ''
-    machine.wait_for_unit("sabnzbd.service")
-    machine.wait_until_succeeds(
-        "curl --fail -L http://localhost:8080/"
-    )
+    def wait_for_up(m):
+      m.wait_for_unit("sabnzbd.service")
+      m.wait_until_succeeds("curl --fail -L http://localhost:8080")
+
+    wait_for_up(machine)
+    wait_for_up(with_writeable_config)
+    wait_for_up(with_raw_config_file)
 
     machine.succeed("do_test")
-
-
-
-    with_writeable_config.wait_for_unit("sabnzbd.service")
-    with_writeable_config.wait_until_succeeds(
-        "curl --fail -L http://localhost:8080/"
-    )
-
     with_writeable_config.succeed("do_test")
-
-
-
-    with_raw_config_file.wait_for_unit("sabnzbd.service")
-    with_raw_config_file.wait_until_succeeds(
-        "curl --fail -L http://localhost:8080/"
-    )
-
     with_raw_config_file.succeed("do_test_2")
   '';
 }
