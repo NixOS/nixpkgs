@@ -12,7 +12,6 @@
   aws-lc,
   libressl,
   openssl,
-  wolfssl,
   lua5_4,
   pcre2,
 }:
@@ -21,7 +20,6 @@ assert lib.assertOneOf "sslLibrary" sslLibrary [
   "aws-lc"
   "libressl"
   "openssl"
-  "wolfssl"
 ];
 let
   sslPkgs = {
@@ -30,10 +28,6 @@ let
       libressl
       openssl
       ;
-    wolfssl = wolfssl.override {
-      variant = "haproxy";
-      extraConfigureFlags = [ "--enable-quic" ];
-    };
   };
   sslPkg = sslPkgs.${sslLibrary};
 in
@@ -84,9 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (sslLibrary == "openssl" && lib.versionOlder openssl.version "3.5.2") [
     "USE_QUIC_OPENSSL_COMPAT=yes"
-  ]
-  ++ lib.optionals (sslLibrary == "wolfssl") [
-    "USE_OPENSSL_WOLFSSL=yes"
   ]
   ++ lib.optionals usePcre [
     "USE_PCRE2=yes"
