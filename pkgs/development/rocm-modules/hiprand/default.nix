@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   clr,
@@ -12,9 +12,27 @@
   gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/hiprand";
+    hash = "sha256-7+qoimAqqxxSdbR5+x1t9gpOMakkvR2zg3K3dredCbw=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
+stdenv.mkDerivation {
   pname = "hiprand";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -22,13 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildTests [
     "test"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "hipRAND";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-mhhwYswewcRYKGoVAB/ZTIY8ubFSlTDXKZFoJpoDf2o=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -61,17 +72,11 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "HIP wrapper for rocRAND and cuRAND";
-    homepage = "https://github.com/ROCm/hipRAND";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

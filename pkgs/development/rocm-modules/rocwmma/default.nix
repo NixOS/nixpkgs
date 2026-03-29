@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   rocm-smi,
@@ -17,9 +17,27 @@
   gpuTargets ? clr.localGpuTargets or [ ],
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocwmma";
+    hash = "sha256-S0nqzWHG/snrdmQ4hie/NJOt0VvyB4De/bOwrx2PnHE=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
+stdenv.mkDerivation {
   pname = "rocwmma";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -33,13 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildSamples [
     "sample"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocWMMA";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-O+P+pobPnlKnmJQylFp/qUQLE1kJKbxjMWyGS6lc3Mo=";
-  };
 
   patches = lib.optionals (buildTests || buildBenchmarks) [
     ./0000-dont-fetch-googletest.patch
@@ -99,17 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "Mixed precision matrix multiplication and accumulation";
-    homepage = "https://github.com/ROCm/rocWMMA";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

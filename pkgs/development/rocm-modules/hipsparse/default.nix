@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   rocsparse,
@@ -17,9 +17,27 @@
 }:
 
 # This can also use cuSPARSE as a backend instead of rocSPARSE
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/hipsparse";
+    hash = "sha256-HhuBrEl97vAnlP80mb7SPscG/pJKmuM2Ea/mw+K3w0Y=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -30,13 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildSamples [
     "sample"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "hipSPARSE";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-DmanHHlDny/SweYrSes4xQeWoF6TV+AoThyDHQpz+hQ=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -131,15 +142,9 @@ stdenv.mkDerivation (finalAttrs: {
       } $sample/bin/example_*
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "ROCm SPARSE marshalling library";
-    homepage = "https://github.com/ROCm/hipSPARSE";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

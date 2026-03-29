@@ -1,21 +1,32 @@
 {
   lib,
   stdenv,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
-  fetchFromGitHub,
   rocm-cmake,
-  rocmUpdateScript,
 }:
-stdenv.mkDerivation (finalAttrs: {
-  pname = "hipblas-common";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "hipBLAS-common";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oOelDrk7TLe9/17fzaw6CDPL4MGAoITJL90ahHzhaAE=";
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/hipblas-common";
+    hash = "sha256-hZqgZz9sDHXSNFCRZQ242YLZChR82c0KpBx51oflV7o=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
   };
+in
+stdenv.mkDerivation {
+  pname = "hipblas-common";
+  inherit (source) version src sourceRoot;
 
   nativeBuildInputs = [
     cmake
@@ -27,16 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
   meta = {
+    inherit (source) homepage;
     description = "Common files shared by hipBLAS and hipBLASLt";
-    homepage = "https://github.com/ROCm/hipBLASlt";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

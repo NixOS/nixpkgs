@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   clr,
@@ -19,9 +19,27 @@
 }:
 
 # Can also use cuSOLVER
-stdenv.mkDerivation (finalAttrs: {
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/hipsolver";
+    hash = "sha256-ZINsCwNTJnqtvl01dFJHBqQJttdH25aTRvBJSagaxco=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
+stdenv.mkDerivation {
   pname = "hipsolver";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -35,13 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildSamples [
     "sample"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "hipSOLVER";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-xrzRU3X0zlmK6t8Bz4p5ihnJnadrqiW1BW2HLRDpu1M=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -100,17 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "ROCm SOLVER marshalling library";
-    homepage = "https://github.com/ROCm/hipSOLVER";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

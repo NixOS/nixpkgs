@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   clr,
   python3,
@@ -18,16 +18,27 @@
   gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocfft";
+    hash = "sha256-2xm82nNFKPsMof7Jeyf5Glye9MbADvswNNELmE0gvSo=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft${clr.gpuArchSuffix}";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocFFT";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AFBV5tlhNYH9+d0KG7mCjSifKfRt+8c1ie5wASTiQXM=";
-  };
+  inherit (source) version src sourceRoot;
 
   nativeBuildInputs = [
     cmake
@@ -68,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-test";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "${finalAttrs.src.name}/clients/tests";
+      sourceRoot = "${finalAttrs.sourceRoot}/clients/tests";
 
       nativeBuildInputs = [
         cmake
@@ -97,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-benchmark";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "${finalAttrs.src.name}/clients/rider";
+      sourceRoot = "${finalAttrs.sourceRoot}/clients/rider";
 
       nativeBuildInputs = [
         cmake
@@ -127,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
       pname = "${finalAttrs.pname}-samples";
       inherit (finalAttrs) version src;
 
-      sourceRoot = "${finalAttrs.src.name}/clients/samples";
+      sourceRoot = "${finalAttrs.sourceRoot}/clients/samples";
 
       nativeBuildInputs = [
         cmake
@@ -150,18 +161,13 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
+    inherit (source) homepage;
     description = "FFT implementation for ROCm";
-    homepage = "https://github.com/ROCm/rocFFT";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

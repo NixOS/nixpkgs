@@ -1,9 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
   fetchpatch,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   clr,
@@ -37,17 +37,26 @@
 
 let
   gpuTargets' = lib.concatStringsSep ";" gpuTargets;
-in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "rocblas${clr.gpuArchSuffix}";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocBLAS";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oY6yELFnpnDDksu63Go88TGLAgC64tUaPIbaRgD2qus=";
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocblas";
+    hash = "sha256-hFnNFA1DFjppMBm0bEjEgwRroiIXNey5+VnkBhQZ5UU=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
   };
+in
+stdenv.mkDerivation {
+  pname = "rocblas${clr.gpuArchSuffix}";
+  inherit (source) version src sourceRoot;
 
   outputs = [ "out" ] ++ lib.optional buildBenchmarks "benchmark" ++ lib.optional buildTests "test";
 
@@ -185,23 +194,16 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     '';
 
-  passthru = {
-    amdgpu_targets = gpuTargets';
-    updateScript = rocmUpdateScript {
-      name = finalAttrs.pname;
-      inherit (finalAttrs.src) owner;
-      inherit (finalAttrs.src) repo;
-    };
-  };
+  passthru.amdgpu_targets = gpuTargets';
 
   enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = {
+    inherit (source) homepage;
     description = "BLAS implementation for ROCm platform";
-    homepage = "https://github.com/ROCm/rocBLAS";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

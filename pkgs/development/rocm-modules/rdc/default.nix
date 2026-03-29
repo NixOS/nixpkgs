@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   pkg-config,
   amdsmi,
@@ -46,10 +46,26 @@ let
       ]
     )
   );
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/rdc";
+    hash = "sha256-5yU9UA9SM3GXoPhUFiiungfJn1wUILh5UEbSO86Xm/o=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rdc";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -60,13 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildTests [
     "test"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rdc";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-gF17mcbsqsL2K9pwTAVG9E6nVY4pi2lC88WyPa0xMes=";
-  };
 
   patches = [
     # https://github.com/ROCm/rocm-systems/pull/2423
@@ -133,17 +142,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/bin/rdctst_tests $test/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "Simplifies administration and addresses infrastructure challenges in cluster and datacenter environments";
-    homepage = "https://github.com/ROCm/rdc";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   clr,
   rocm-device-libs,
@@ -17,9 +17,27 @@
   buildTests ? false,
 }:
 
+let
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/roctracer";
+    hash = "sha256-KUNLX5ZonE0bW/xOacD3k3hCcg7M3Vk1dM3WQSDYMvM=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -30,13 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildTests [
     "test"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "roctracer";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-LCtdPnE+rJU/ccI1PTFDMPNXxgl1GrRgc5z7LjOw3zA=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -101,15 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
       rm -rf $out/test
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "Tracer callback/activity library";
-    homepage = "https://github.com/ROCm/roctracer";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;

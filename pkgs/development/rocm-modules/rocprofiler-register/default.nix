@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   rocm-runtime,
   rocprofiler,
   numactl,
   libpciaccess,
   libxml2,
   elfutils,
-  fetchFromGitHub,
-  rocmUpdateScript,
   cmake,
   clang,
   clr,
@@ -16,17 +16,28 @@
   gpuTargets ? clr.gpuTargets,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "rocprofiler-register";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocprofiler-register";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6jr6dfmCjeP5PCNfLDMmh8IO9Hxz6RvLlacNwIWQduQ=";
-    fetchSubmodules = true;
+let
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocprofiler-register";
+    hash = "sha256-2u5rLLT4Aif0jwAqqlIzrzh9kICJG15nZAslbiL7H9g=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+      fetchSubmodules = true;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
   };
+in
+stdenv.mkDerivation {
+  pname = "rocprofiler-register";
+  inherit (source) version src sourceRoot;
 
   nativeBuildInputs = [
     cmake
@@ -64,17 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = "rocprofiler-register";
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "Profiling with perf-counters and derived metrics";
-    homepage = "https://github.com/ROCm/rocprofiler";
     license = with lib.licenses; [ mit ]; # mitx11
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

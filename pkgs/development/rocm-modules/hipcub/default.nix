@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   rocm-cmake,
   rocprim,
@@ -15,9 +15,27 @@
 }:
 
 # CUB can also be used as a backend instead of rocPRIM.
-stdenv.mkDerivation (finalAttrs: {
+let
+  source = rec {
+    repo = "rocm-libraries";
+    version = rocmVersion;
+    sourceSubdir = "projects/hipcub";
+    hash = "sha256-YZsUU1GujXV094+0+n92SyK692wHZCVE7fFWAdLU9eA=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
+in
+stdenv.mkDerivation {
   pname = "hipcub";
-  version = "7.2.0";
+  inherit (source) version src sourceRoot;
 
   outputs = [
     "out"
@@ -28,13 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals buildBenchmarks [
     "benchmark"
   ];
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "hipCUB";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-hIIpU1E/X6bPIhFfauNLPnFNBYSwtoxZV335Huw9fCA=";
-  };
 
   nativeBuildInputs = [
     cmake
@@ -83,17 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "Thin wrapper library on top of rocPRIM or CUB";
-    homepage = "https://github.com/ROCm/hipCUB";
     license = with lib.licenses; [ bsd3 ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
-})
+}

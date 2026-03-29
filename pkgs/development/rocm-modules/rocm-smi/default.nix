@@ -1,24 +1,35 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   pkg-config,
   libdrm,
   cmake,
   wrapPython,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "rocm-smi";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocm_smi_lib";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-IeOutA/Mpt/75VpdcfPnZrWvx6GG/JLaQNfBrNKb+Mw=";
+let
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocm-smi-lib";
+    hash = "sha256-fbyWS/OC0rAQsqLj+YdKQfba7g7FDz3xRRR01U+OwF8=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
   };
+in
+stdenv.mkDerivation {
+  pname = "rocm-smi";
+  inherit (source) version src sourceRoot;
 
   propagatedBuildInputs = [
     libdrm
@@ -55,18 +66,12 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s ${libdrm.dev}/include/libdrm/ $out/include/
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
-
   meta = {
+    inherit (source) homepage;
     description = "System management interface for AMD GPUs supported by ROCm";
-    homepage = "https://github.com/ROCm/rocm_smi_lib";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ lovesegfault ];
     teams = [ lib.teams.rocm ];
     platforms = [ "x86_64-linux" ];
   };
-})
+}

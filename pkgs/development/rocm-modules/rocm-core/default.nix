@@ -1,8 +1,8 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchRocmMonorepoSource,
+  rocmVersion,
   cmake,
   writeText,
 }:
@@ -14,17 +14,26 @@
 # only the last usage makes sense in nixpkgs
 let
   padIfSingle = s: if lib.stringLength s == 1 then "0${s}" else s;
+  source = rec {
+    repo = "rocm-systems";
+    version = rocmVersion;
+    sourceSubdir = "projects/rocm-core";
+    hash = "sha256-Y3WuDwruD5zKN2epwfUCZAGq5vgxCT27awJN8JxmOsY=";
+    src = fetchRocmMonorepoSource {
+      inherit
+        hash
+        repo
+        sourceSubdir
+        version
+        ;
+    };
+    sourceRoot = "${src.name}/${sourceSubdir}";
+    homepage = "https://github.com/ROCm/${repo}/tree/rocm-${version}/${sourceSubdir}";
+  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "7.2.0";
-
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "rocm-core";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AqD6MByFAtY6IzAFXdCrCANPXqROaGHybdKixv3NbXE=";
-  };
+  inherit (source) version src sourceRoot;
 
   patches = [
     ./env-rocm-path.patch
@@ -78,16 +87,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   passthru.ROCM_LIBPATCH_VERSION = finalAttrs.env.ROCM_LIBPATCH_VERSION;
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-    page = "tags?per_page=4";
-  };
+  passthru.updateScript = [ ../update-rocm-monorepos.sh ];
 
   meta = {
+    inherit (source) homepage;
     description = "Utility for getting the ROCm release version";
-    homepage = "https://github.com/ROCm/rocm-core";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
