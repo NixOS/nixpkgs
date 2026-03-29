@@ -632,8 +632,6 @@ rec {
     else if platform.isPower64 then
       if platform.isLittleEndian then powernv else ppc64
 
-    else if platform.isLoongArch64 then
-      loongarch64-multiplatform
     else
       { };
 }

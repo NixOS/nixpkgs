@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  srcOnly,
   kernel,
   kernelModuleMakeFlags,
   nix-update-script,
@@ -10,28 +9,32 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg";
-  version = "1.0.20251009";
+  version = "1.0.20260322";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OcMlwXOwjxLqHkAQHSwDigK6wuOFCSzoE5spVwybN1M=";
+    hash = "sha256-Y6TETOo5oAr3ZtqsJX909zm38rXq+1fAXiRFSt+g2Gw=";
   };
+
+  patches = [
+    # fix aarch64-linux builds with NEON
+    # upstream PR: https://github.com/amnezia-vpn/amneziawg-linux-kernel-module/pull/159
+    ./neon-619.patch
+  ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildFlags = [
-    "apply-patches"
     "module"
   ];
 
-  makeFlags =
-    kernelModuleMakeFlags
-    ++ [ "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ]
-    ++ lib.optional (lib.versionAtLeast kernel.version "5.6") "KERNEL_SOURCE_DIR=${srcOnly kernel}";
+  makeFlags = kernelModuleMakeFlags ++ [
+    "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+  ];
 
   enableParallelBuilding = true;
 

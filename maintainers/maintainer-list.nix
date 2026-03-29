@@ -2807,6 +2807,12 @@
     github = "azazak123";
     githubId = 50211158;
   };
+  azban = {
+    name = "azban";
+    matrix = "azban@matrix.org";
+    github = "azban";
+    githubId = 714931;
+  };
   azd325 = {
     email = "tim.kleinschmidt@gmail.com";
     github = "Azd325";
@@ -15503,6 +15509,11 @@
     github = "lluchs";
     githubId = 516527;
     name = "Lukas Werling";
+  };
+  lnk3 = {
+    github = "lnk3";
+    githubId = 23727619;
+    name = "Luca Ruperto";
   };
   lnl7 = {
     email = "daiderd@gmail.com";

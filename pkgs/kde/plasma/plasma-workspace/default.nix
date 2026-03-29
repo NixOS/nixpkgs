@@ -37,6 +37,9 @@ mkKdeDerivation {
       # @QtBinariesDir@ only appears in the *removed* lines of the diff
       QtBinariesDir = null;
     })
+
+    # stop accidentally duplicating fontconfig configs
+    ./fontconfig.patch
   ];
 
   outputs = [
