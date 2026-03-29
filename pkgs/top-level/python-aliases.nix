@@ -291,6 +291,8 @@ mapAliases {
   linear-garage-door = throw "'linear-garage-door' has been superseded by 'nice-go'"; # Added 2025-11-16
   linear_operator = throw "'linear_operator' has been renamed to/replaced by 'linear-operator'"; # Converted to throw 2025-10-29
   llama-cloud-services = throw "'llama-cloud-services' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-25
+  llama-index-embeddings-gemini = throw "'llama-index-embeddings-gemini' has been removed as it was deprecated upstream in favor of 'llama-index-embeddings-google-genai'"; # Added 2026-03-25
+  llama-index-embeddings-google = throw "'llama-index-embeddings-google' has been removed as it was deprecated upstream in favor of 'llama-index-embeddings-google-genai'"; # Added 2026-03-25
   llama-index-indices-managed-llama-cloud = throw "'llama-index-indices-managed-llama-cloud' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-24
   llama-index-multi-modal-llms-openai = throw "'llama-index-multi-modal-llms-openai' has been removed as it was deprecated in favor of 'llama-index-llms-openai'"; # added 2026-03-25
   llama-index-readers-llama-parse = throw "'llama-index-readers-llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25

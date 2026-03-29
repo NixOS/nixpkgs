@@ -14,6 +14,7 @@
   openssl,
   libstemmer,
   perl,
+  python3,
   withLDAP ? true,
   cyrus_sasl,
   openldap,
@@ -68,9 +69,15 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional withLDAP "--with-ldap";
 
-  preBuild = lib.optionalString (lib.strings.versionOlder version "2.4" && stdenv.isDarwin) ''
+  preBuild = lib.optionalString (!isCurrent && stdenv.isDarwin) ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -undefined dynamic_lookup"
   '';
+
+  # https://github.com/dovecot/pigeonhole/blob/2.4.3/src/plugins/settings/Makefile.am#L43-L44
+  makeFlags = lib.optionals isCurrent [
+    "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
+    "SETTINGS_HISTORY_PY=${dovecot}/libexec/dovecot/settings-history.py"
+  ];
 
   enableParallelBuilding = true;
 
