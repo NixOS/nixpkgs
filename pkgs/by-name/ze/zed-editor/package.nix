@@ -15,6 +15,7 @@
   sqlite,
   zlib,
   zstd,
+  glib,
   alsa-lib,
   libxkbcommon,
   wayland,
@@ -75,6 +76,9 @@ let
           glibc
           # required by at least https://github.com/zed-industries/package-version-server
           openssl
+          # required by at least the Codex CLI agent
+          libcap
+          zlib
         ])
         ++ additionalPkgs pkgs;
 
@@ -107,7 +111,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.226.5";
+  version = "0.229.0";
 
   outputs = [
     "out"
@@ -120,7 +124,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZfYwlHTWirUb2RjEIQyonIHMneCi7ZGD2kPYOfe5HiI=";
+    hash = "sha256-ZO4HzzzTb5rlBbzVCpE14DEzLkE3a7v2IKdyzlCTpaA=";
   };
 
   postPatch = ''
@@ -132,6 +136,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # newer versions work just as well.
     substituteInPlace script/generate-licenses \
       --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # webrtc-sys expects glib headers to be in the sysroot, so we have to point it in the right direction
+    substituteInPlace $cargoDepsCopy/*/webrtc-sys-*/build.rs \
+      --replace-fail 'builder.include(&glib_path);' 'builder.include("${lib.getInclude glib}/include/glib-2.0");' \
+      --replace-fail 'builder.include(&glib_path_config);' 'builder.include("${lib.getLib glib}/lib/glib-2.0/include");'
   '';
 
   # remove package that has a broken Cargo.toml
@@ -140,7 +150,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rm -r $out/git/*/candle-book/
   '';
 
-  cargoHash = "sha256-kdGHSNfvB/GUQ/7iqzXcCF4sbyaMiLYq+/zogg9N/aU=";
+  cargoHash = "sha256-Q7sjd5u1jPIK6WogCByaXAVU7D6jcev1oRmfQ7y39i4=";
 
   nativeBuildInputs = [
     cmake
@@ -168,6 +178,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zstd
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib
     alsa-lib
     libxkbcommon
     wayland

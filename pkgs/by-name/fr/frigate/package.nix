@@ -11,17 +11,18 @@
   sqlite-vec,
   frigate,
   nixosTests,
+  go2rtc,
 }:
 
 let
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     tag = "v${version}";
-    hash = "sha256-K41tWnj0u+Fw+G++aPFfMa0uFYEvvZ0r6xNPQ7J1cYs=";
+    hash = "sha256-jQQ54By77dOVSIu08YhJn+EUV0D03j1bcMQRk9404RE=";
   };
 
   frigate-web = callPackage ./web.nix {
@@ -250,6 +251,11 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     # Test needs network access
     "test_plus_labelmap"
+    # Expects go2rtc on :1984
+    "test_admin_can_access_any_stream"
+    "test_restricted_role_can_access_allowed_camera"
+    "test_stream_alias_allowed_for_owning_camera"
+    "test_unconfigured_role_can_access_any_stream"
   ];
 
   passthru = {

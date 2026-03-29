@@ -125,9 +125,15 @@ py.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    cat > aws.zsh <<EOF
+    #compdef aws
+    autoload -U +X bashcompinit && bashcompinit
+    complete -C $out/bin/aws_completer aws
+    EOF
+
     installShellCompletion --cmd aws \
       --bash <(echo "complete -C $out/bin/aws_completer aws") \
-      --zsh $out/bin/aws_zsh_completer.sh
+      --zsh aws.zsh
   ''
   + lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     rm $out/bin/aws.cmd

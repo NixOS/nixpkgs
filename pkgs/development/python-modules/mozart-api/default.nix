@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bang-olufsen/mozart-open-api";
     changelog = "https://github.com/bang-olufsen/mozart-open-api/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }

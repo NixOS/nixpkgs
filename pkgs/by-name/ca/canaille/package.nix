@@ -12,14 +12,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "yaal";
     repo = "canaille";
     tag = version;
-    hash = "sha256-hJt2BU8Z0XF94skgK5x1TJUZ9bwEt+VJvaeLLyykpsE=";
+    hash = "sha256-kBbkqoXyGO238EArwYyjO46Kk5SkfP31Dc51qglLmqQ=";
   };
 
   build-system = with python.pkgs; [

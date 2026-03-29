@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-insta";
-  version = "1.46.3";
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "insta";
     tag = finalAttrs.version;
-    hash = "sha256-MRGtD6ZbZkiblq9tadiJPrOGWZ2uM+8qIw2KlP/KuJc=";
+    hash = "sha256-htOQlSHTaNPlf6H7iYrR2uZgvUMDwqbmbNdSPAySgx0=";
   };
 
-  cargoHash = "sha256-lp7jaftj/BXorK+xxO4FS8aCpi1SSAC2/xt0CX25Dos=";
+  cargoHash = "sha256-O8Si1FvehgIMXKQcBekN9ebkjpWBuEzg/mNiBHVvZW0=";
 
   postPatch = ''
     substituteInPlace cargo-insta/tests/functional/test_runner_fallback.rs \

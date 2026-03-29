@@ -131,9 +131,8 @@ let
           nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
             (haskell.lib.compose.enableCabalFlag "lix")
             (haskell.lib.compose.overrideCabal (drv: {
-              # https://github.com/aristanetworks/nix-serve-ng/issues/46
               # Resetting (previous) broken flag since it may be related to C++ Nix
-              broken = lib.versionAtLeast self.lix.version "2.93";
+              broken = false;
             }))
           ];
 
@@ -238,14 +237,14 @@ lib.makeExtensible (
       attrName = "lix_2_94";
 
       lix-args = rec {
-        version = "2.94.0";
+        version = "2.94.1";
 
         src = fetchFromGitea {
           domain = "git.lix.systems";
           owner = "lix-project";
           repo = "lix";
           rev = version;
-          hash = "sha256-X6X3NhgLnpkgWUbLs0nLjusNx/el3L1EkVm6OHqY2z8=";
+          hash = "sha256-+VJmizrdZPygtffgS/yfMb4PkZUUK5JmyGGzn0GPsKc=";
         };
 
         cargoDeps = rustPlatform.fetchCargoVendor {
@@ -255,6 +254,28 @@ lib.makeExtensible (
         };
 
         patches = [ lixMdbookPatch ];
+      };
+    };
+
+    lix_2_95 = self.makeLixScope {
+      attrName = "lix_2_95";
+
+      lix-args = rec {
+        version = "2.95.1";
+
+        src = fetchFromGitea {
+          domain = "git.lix.systems";
+          owner = "lix-project";
+          repo = "lix";
+          rev = version;
+          hash = "sha256-eZEynXdDcrjDMjGVfDhFJJrU5ENal7wlx7bn/wkggTg=";
+        };
+
+        cargoDeps = rustPlatform.fetchCargoVendor {
+          name = "lix-${version}";
+          inherit src;
+          hash = "sha256-a5XtutX+NS4wOqxeqbscWZMs99teKick5+cQfbCRGxQ=";
+        };
       };
     };
 
@@ -280,7 +301,7 @@ lib.makeExtensible (
       };
     };
 
-    latest = self.lix_2_94;
+    latest = self.lix_2_95;
 
     stable = self.lix_2_94;
 

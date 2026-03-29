@@ -204,7 +204,12 @@ in
           RuntimeDirectory = "radicle-ci-broker";
           WorkingDirectory = "/run/radicle-ci-broker";
 
-          BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths;
+          ImportCredential = config.systemd.services.radicle-node.serviceConfig.ImportCredential or [ ];
+          LoadCredential = config.systemd.services.radicle-node.serviceConfig.LoadCredential or [ ];
+
+          BindReadOnlyPaths = config.systemd.services.radicle-node.serviceConfig.BindReadOnlyPaths ++ [
+            "/run/credentials/radicle-ci-broker.service/xyz.radicle.node.secret:/var/lib/radicle/keys/radicle"
+          ];
           ReadWritePaths = [ RAD_HOME ];
 
           ExecStart = "${lib.getExe' cfg.package "cib"} --config ${configFile} process-events";

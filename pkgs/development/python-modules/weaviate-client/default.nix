@@ -43,6 +43,7 @@ buildPythonPackage rec {
     "httpx"
     "validators"
     "authlib"
+    "protobuf"
   ];
 
   build-system = [ setuptools-scm ];

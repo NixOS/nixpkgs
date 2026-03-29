@@ -16,6 +16,7 @@
   ## wandb
   buildPythonPackage,
   replaceVars,
+  fetchpatch,
 
   # build-system
   hatchling,
@@ -75,12 +76,12 @@
 }:
 
 let
-  version = "0.25.0";
+  version = "0.25.1";
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
     tag = "v${version}";
-    hash = "sha256-ouJHMPcWiHn2p0mFatmC28xUmjzxsoDW9WBX6FzjyDc=";
+    hash = "sha256-jrHj+dNW/eUMcqT5XJbiAz1tlviVBhdtroJ8dA7GBr4=";
   };
 
   gpu-stats = rustPlatform.buildRustPackage {
@@ -107,7 +108,7 @@ let
     };
   };
 
-  wandb-core = buildGoModule rec {
+  wandb-core = buildGoModule {
     pname = "wandb-core";
     inherit src version;
 
@@ -161,6 +162,13 @@ buildPythonPackage (finalAttrs: {
     # Replace git paths
     (replaceVars ./hardcode-git-path.patch {
       git = lib.getExe gitMinimal;
+    })
+
+    # https://github.com/wandb/wandb/pull/11552
+    (fetchpatch {
+      name = "add-protobuf-7-compatibility";
+      url = "https://github.com/wandb/wandb/commit/4ef09f3dd1ee408eb9194ea8b7feea2b1128839c.patch";
+      hash = "sha256-6weMJI51cWXz2mCxOGWYGrh0QCxtMGqz6HAVRF5b1xs=";
     })
   ];
 

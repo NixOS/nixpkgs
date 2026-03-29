@@ -8,12 +8,12 @@
 }:
 buildPythonPackage rec {
   pname = "jsonpath-python";
-  version = "1.1.4";
+  version = "1.1.5";
   pyproject = true;
   src = fetchPypi {
     inherit version;
     pname = "jsonpath_python";
-    hash = "sha256-uz4ThU5IB8B4oVA64th8IRuL/02bQLZFXtWDs7UKf90=";
+    hash = "sha256-zuou/Z5WrdCTMKLJYx6j1VKXuWGTSMEFXlv7nLC4xTg=";
   };
   build-system = [ hatchling ];
   nativeCheckInputs = [

@@ -14,12 +14,12 @@
 }:
 
 let
-  version = "2.2.0";
+  version = "2.2.2";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-QmFuPKbhPX+pgUPmeUglmg2OvqBRpeeA9Xz0l1tscfM=";
+    hash = "sha256-+Tqo9z+QXzcYNWZl+DoHaClkMokTa6a2S1FlazZBDyI=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -36,8 +36,8 @@ let
         sourceRoot
         ;
       pnpm = pnpm_10_29_2;
-      fetcherVersion = 1;
-      hash = "sha256-j84UVbLIqPz56Djy0vafhAOn9ZFM+kuTcBhfYZBYEDI=";
+      fetcherVersion = 3;
+      hash = "sha256-M1bAP9FRrMQ9TggQaXx3+PCZMTPvIxF9QVO0gKr1Irg=";
     };
 
     nativeBuildInputs = [

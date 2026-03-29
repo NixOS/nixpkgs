@@ -11,6 +11,7 @@
   etcd_3_4,
   mock,
   pyopenssl,
+  python,
 }:
 
 buildPythonPackage {
@@ -25,7 +26,12 @@ buildPythonPackage {
     hash = "sha256-osiSeBdZBT3w9pJUBxD7cI9/2T7eiyj6M6+87T8bTj0=";
   };
 
-  patches = [ ./remove-getheader-usage.patch ];
+  patches = [
+    ./remove-getheader-usage.patch
+  ]
+  ++ lib.optionals (python.pythonAtLeast "3.14") [
+    ./Fix-multiprocessing-errors-for-python-3.14.patch
+  ];
 
   build-system = [ setuptools ];
 

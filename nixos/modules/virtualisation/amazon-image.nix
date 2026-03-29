@@ -96,7 +96,16 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      path = [ pkgs.curl ];
+      path = with pkgs; [
+        bzip2
+        curl
+        file
+        gzip
+        lzip
+        mktemp
+        xz
+        zstd
+      ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
       serviceConfig.StandardOutput = "journal+console";

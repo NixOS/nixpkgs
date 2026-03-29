@@ -106,9 +106,9 @@
   };
 
   beancount = {
-    version = "2.5.0";
+    version = "2.5.1";
     url = "github:polarmutex/tree-sitter-beancount";
-    hash = "sha256-eJ1XAPrVCoGQtrRJdcB/V4ULUmYXemUAE3FQijpH8q8=";
+    hash = "sha256-UJ8bswQJB7UYspNKLWaEXMOR4XlKVHfd7rvV5iaA5Tw=";
     meta = {
       license = lib.licenses.mit;
     };
@@ -1329,12 +1329,15 @@
   };
 
   just = {
-    version = "0-unstable-2025-01-05";
-    url = "github:IndianBoy42/tree-sitter-just";
-    rev = "bb0c898a80644de438e6efe5d88d30bf092935cd";
-    hash = "sha256-FwEuH/2R745jsuFaVGNeUTv65xW+MPjbcakRNcAWfZU=";
+    version = "0-unstable-2026-03-15";
+    url = "github:casey/tree-sitter-just";
+    rev = "d9da862c156020c1a83d3c6ccdda32be6d8a5d4a";
+    hash = "sha256-YV+vab/QqGHVPV1e3wjd0w1nFskJEIU4ukq/yIlojk0=";
     meta = {
       license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        Stebalien
+      ];
     };
   };
 
@@ -1679,10 +1682,10 @@
   };
 
   nim = {
-    version = "0.6.2-unstable-2026-01-11";
+    version = "0.6.2-unstable-2026-03-21";
     url = "github:alaviss/tree-sitter-nim";
-    rev = "9b4ede21a6ca866d29263f6b66c070961bc622b4";
-    hash = "sha256-3BHcQrLNcXe1RMkV7ECCMzzEukgTlARH3+DDo2M5b0w=";
+    rev = "3878440d9398515ae053c6f6024986e69868bb74";
+    hash = "sha256-mdAT1jTFeVP8TYi4H36sjd826KmxHQ1EZ+8gd37NGfY=";
     meta = {
       license = lib.licenses.mpl20;
       maintainers = with lib.maintainers; [

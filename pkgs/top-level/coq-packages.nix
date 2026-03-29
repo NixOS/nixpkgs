@@ -241,6 +241,7 @@ let
       );
       Velisarios = callPackage ../development/coq-modules/Velisarios { };
       Verdi = callPackage ../development/coq-modules/Verdi { };
+      verified-extraction = callPackage ../development/coq-modules/verified-extraction { };
       Vpl = callPackage ../development/coq-modules/Vpl { };
       VplTactic = callPackage ../development/coq-modules/VplTactic { };
       vscoq-language-server = callPackage ../development/coq-modules/vscoq-language-server { };

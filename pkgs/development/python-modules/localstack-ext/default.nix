@@ -4,6 +4,7 @@
   fetchPypi,
   setuptools,
   setuptools-scm,
+  click,
   dill,
   dnslib,
   dnspython,
@@ -11,10 +12,13 @@
   pyaes,
   pyjwt,
   pyotp,
-  python-jose,
-  requests,
   python-dateutil,
+  python-jose,
+  pyyaml,
+  requests,
+  rich,
   tabulate,
+  semver,
 
   # use for testing promoted localstack
   pkgs,
@@ -43,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    click
     dill
     dnslib
     dnspython
@@ -52,8 +57,11 @@ buildPythonPackage rec {
     pyotp
     python-dateutil
     python-jose
+    pyyaml
     requests
+    rich
     tabulate
+    semver
   ]
   ++ python-jose.optional-dependencies.cryptography;
 

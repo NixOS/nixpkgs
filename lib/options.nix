@@ -589,11 +589,16 @@ rec {
             renderOptionValue opt.example
           );
         }
-        // optionalAttrs (opt ? defaultText || opt ? default) {
-          default = builtins.addErrorContext "while evaluating the ${
-            if opt ? defaultText then "defaultText" else "default value"
-          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-        }
+        //
+          optionalAttrs (opt ? defaultText || opt ? default || ((opt.type or { }).emptyValue or { }) ? value)
+            {
+              default =
+                builtins.addErrorContext
+                  "while evaluating the ${
+                    if opt ? defaultText then "defaultText" else "default value"
+                  } of option `${name}`"
+                  (renderOptionValue (opt.defaultText or opt.default or opt.type.emptyValue.value));
+            }
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
           inherit (opt) relatedPackages;
         };

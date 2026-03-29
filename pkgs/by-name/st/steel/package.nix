@@ -17,18 +17,18 @@
   includeLSP ? true,
   includeForge ? true,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "steel";
-  version = "0-unstable-2026-02-12";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "e9cb24fe9c6584f4a352c3cb43e7f0bd934e3277";
-    hash = "sha256-9ZyAPqZNcAP1ObxVxjK+q87ZyKMPzaDno1v7JweU6z4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-GZ0VeoAwVGnK/Px5IvBGIHlpEsAh2do/QPuYtLexLt4=";
   };
 
-  cargoHash = "sha256-ss3S4eRoczvF0DlTpUS9mZ09pfMKgyLNAmjm3WWi8KQ=";
+  cargoHash = "sha256-Z5v+8bhIgBCB2pDB5AgX42vFiNkgqjU95gata0sLUrA=";
 
   nativeBuildInputs = [
     curl
@@ -103,7 +103,10 @@ rustPlatform.buildRustPackage {
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+    extraArgs = [
+      "--version-regex"
+      "^v(.*)"
+    ];
   };
 
   meta = {
@@ -118,4 +121,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.unix;
     sourceProvenance = [ lib.sourceTypes.fromSource ];
   };
-}
+})

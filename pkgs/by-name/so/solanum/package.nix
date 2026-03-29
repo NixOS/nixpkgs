@@ -1,80 +1,79 @@
 {
   lib,
   stdenv,
-  autoconf,
-  automake,
+  fetchFromGitHub,
+
+  # build
   libtool,
   bison,
-  fetchFromGitHub,
+  meson,
+  ninja,
   flex,
+
+  # runtime
   lksctp-tools,
+  hyperscan,
+  libxcrypt,
   openssl,
   pkg-config,
   sqlite,
-  util-linux,
   unstableGitUpdater,
   nixosTests,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "solanum";
-  version = "0-unstable-2026-02-12";
+  version = "0-unstable-2026-03-22";
 
   src = fetchFromGitHub {
     owner = "solanum-ircd";
     repo = "solanum";
-    rev = "59e35e3f5e0943729f2b55f860416b63c4a0e73f";
-    hash = "sha256-sK0cbVP8IcPhSfBgO70Y7gXYaar6Ua7OZM1HzU0rk9Y=";
+    rev = "6ac4d0e24e4b872b9f30adc743cf743e964d75d1";
+    hash = "sha256-5pW3QkSkmLoRrW/WjsDm4zCJLjwG0KVBKWbQe/iIgnM=";
   };
 
-  patches = [
-    ./dont-create-logdir.patch
-  ];
-
   postPatch = ''
-    substituteInPlace include/defaults.h --replace-fail 'ETCPATH "' '"/etc/solanum'
+    substituteInPlace include/defaults.h \
+      --replace-fail 'ETCPATH "' '"/etc/solanum'
+
+    # fhs path touching in the build sandbox breaks
+    sed -i "/install_emptydir/d" meson.build
   '';
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  configureFlags = [
-    "--enable-epoll"
-    "--enable-ipv6"
-    "--enable-openssl=${openssl.dev}"
-    "--with-program-prefix=solanum-"
-    "--localstatedir=/var"
-    "--with-rundir=/run"
-    "--with-logdir=/var/log"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
-    "--enable-sctp=${lksctp-tools.out}/lib"
+  mesonBuildType = "debugoptimized";
+  mesonFlags = [
+    # (lib.mesonOption "custom_version" finalAttrs.src.rev)
+    (lib.mesonBool "fhs_paths" true)
+    (lib.mesonOption "localstatedir" "/var")
+    (lib.mesonOption "logdir" "/var/log")
+    (lib.mesonOption "rundir" "/run")
+    (lib.mesonEnable "mbedtls" false)
+    (lib.mesonEnable "openssl" true)
+    (lib.mesonEnable "gnutls" false)
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
     bison
     flex
+    libtool
+    meson
+    ninja
     pkg-config
-    util-linux
   ];
 
   buildInputs = [
+    hyperscan
+    libxcrypt
     openssl
     sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lksctp-tools
   ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   enableParallelBuilding = true;
-  # Missing install depends:
-  #   ...-binutils-2.40/bin/ld: cannot find ./.libs/libircd.so: No such file or directory
-  #   collect2: error: ld returned 1 exit status
-  #   make[4]: *** [Makefile:634: solanum] Error 1
-  enableParallelInstalling = false;
 
   passthru = {
     tests = { inherit (nixosTests) solanum; };
@@ -88,4 +87,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = lib.platforms.unix;
   };
-}
+})

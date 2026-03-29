@@ -39,6 +39,10 @@ buildPythonPackage rec {
 
   build-system = [ uv-build ];
 
+  pythonRelaxDeps = [
+    "ijson"
+  ];
+
   dependencies = [
     azure-core
     azure-identity
@@ -78,6 +82,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-kusto-python/tree/master/azure-kusto-data";
     changelog = "https://github.com/Azure/azure-kusto-python/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pyrox0 ];
+    maintainers = [ ];
   };
 }
