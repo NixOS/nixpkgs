@@ -46,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     mainProgram = "cwal";
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ gustlik501 ];
+    maintainers = with lib.maintainers; [
+      gustlik501
+      nitinbhat972
+    ];
   };
 })
