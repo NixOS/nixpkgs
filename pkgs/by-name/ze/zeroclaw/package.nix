@@ -10,6 +10,8 @@
   gitMinimal,
   versionCheckHook,
   nix-update-script,
+  # makes zeroclaw-web overrideable
+  npmDepsHash ? "sha256-RMiFoPj4cbUYONURsCp4FrNuy9bR1eRWqgAnACrVXsI=",
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -25,7 +27,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch =
     let
-      zeroclaw-web = callPackage ./zeroclaw-web { inherit (finalAttrs) src version; };
+      zeroclaw-web = callPackage ./zeroclaw-web {
+        inherit (finalAttrs) src version;
+        inherit npmDepsHash;
+      };
     in
     ''
       mkdir -p web
