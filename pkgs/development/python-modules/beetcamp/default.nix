@@ -13,21 +13,17 @@
   filelock,
   writableTmpDirAsHomeHook,
   nix-update-script,
-  beetcamp ? null, # For `passthru.tests`.
 }:
 
-let
-  version = "0.23.0";
-in
-buildPythonPackage {
+buildPythonPackage (finalAttrs: {
   pname = "beetcamp";
-  inherit version;
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snejus";
     repo = "beetcamp";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-8FEDpobEGZ0Lw1+JRoFIEe3AuiuX7dwsRab+P3hC3W0=";
   };
 
@@ -69,7 +65,7 @@ buildPythonPackage {
         pluginOverrides = {
           beetcamp = {
             enable = true;
-            propagatedBuildInputs = [ beetcamp ];
+            propagatedBuildInputs = [ finalAttrs.finalPackage ];
           };
         };
       };
@@ -85,4 +81,4 @@ buildPythonPackage {
     ];
     mainProgram = "beetcamp";
   };
-}
+})
