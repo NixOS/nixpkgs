@@ -48,8 +48,6 @@
   rtmpdump,
   scpSupport ? zlibSupport && !stdenv.hostPlatform.isSunOS && !stdenv.hostPlatform.isCygwin,
   libssh2,
-  wolfsslSupport ? false,
-  wolfssl,
   rustlsSupport ? false,
   rustls-ffi,
   zlibSupport ? true,
@@ -80,7 +78,6 @@ assert
     (lib.count (x: x) [
       gnutlsSupport
       opensslSupport
-      wolfsslSupport
       rustlsSupport
     ]) > 1
   );
@@ -160,7 +157,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pslSupport libpsl
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional scpSupport libssh2
-    ++ lib.optional wolfsslSupport wolfssl
     ++ lib.optional rustlsSupport rustls-ffi
     ++ lib.optional zlibSupport zlib
     ++ lib.optional zstdSupport zstd;
@@ -192,7 +188,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeatureAs idnSupport "libidn2" (lib.getDev libidn2))
     (lib.withFeatureAs opensslSupport "openssl" (lib.getDev openssl))
     (lib.withFeatureAs scpSupport "libssh2" (lib.getDev libssh2))
-    (lib.withFeatureAs wolfsslSupport "wolfssl" (lib.getDev wolfssl))
+    # TODO: Clean up on `staging`.
+    "--without-wolfssl"
   ]
   ++ lib.optional gssSupport "--with-gssapi=${lib.getDev libkrb5}"
   # For the 'urandom', maybe it should be a cross-system option
@@ -203,7 +200,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-ca-bundle"
     "--without-ca-path"
   ]
-  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !wolfsslSupport && !rustlsSupport) [
+  ++ lib.optionals (!gnutlsSupport && !opensslSupport && !rustlsSupport) [
     "--without-ssl"
   ]
   ++ lib.optionals (rustlsSupport && !stdenv.hostPlatform.isDarwin) [
