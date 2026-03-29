@@ -36,7 +36,7 @@ class CreateMachineProtocol(Protocol):
         name: Optional[str] = None,
         keep_machine_state: bool = False,
         **kwargs: Any, # to allow usage of deprecated keep_vm_state
-    ) -> BaseMachine:
+    ) -> QemuMachine:
         raise Exception("This is just type information for the Nix test driver")
 
 
