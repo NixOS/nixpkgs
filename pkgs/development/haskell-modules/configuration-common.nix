@@ -159,6 +159,29 @@ with haskellLib;
     guardian
     ;
 
+  # Stack uses pure nix-shells for certain operations including HTTPS requests
+  # This patch makes stack add pkgs.cacert, so the certificate DB is available.
+  # https://github.com/commercialhaskell/stack/pull/6854 krank:ignore-line
+  stack =
+    appendPatches
+      [
+        (pkgs.fetchpatch {
+          name = "stack-add-cacert-to-pure-shells.patch";
+          url = "https://github.com/commercialhaskell/stack/commit/e869263cbd84a9e59ce1fa467e82993c8e7fb1dd.patch";
+          hash = "sha256-O7GaNgcGBY6m6GHqVtejqOu2HCWWKWXARPnr/upT1RQ=";
+          includes = [ "src/Stack/Nix.hs" ];
+        })
+      ]
+      (
+        overrideCabal (drv: {
+          # Stack's source files use CRLF
+          prePatch = ''
+            ${drv.prePatch or ""}
+            sed -i -e 's/\r$//' src/Stack/Nix.hs
+          '';
+        }) super.stack
+      );
+
   # Extensions wants a specific version of Cabal for its list of Haskell
   # language extensions.
   extensions = doJailbreak (
