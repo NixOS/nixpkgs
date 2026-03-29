@@ -31,7 +31,7 @@ let
   # determine the version number, there might be different ones per architecture
   version =
     {
-      x86_64-linux = "21.10.0.0.0";
+      x86_64-linux = "21.18.0.0.0";
       aarch64-linux = "19.10.0.0.0";
       x86_64-darwin = "19.8.0.0.0";
       aarch64-darwin = "23.3.0.23.09";
@@ -40,7 +40,7 @@ let
 
   directory =
     {
-      x86_64-linux = "2110000";
+      x86_64-linux = "2118000";
       aarch64-linux = "191000";
       x86_64-darwin = "198000";
       aarch64-darwin = "233023";
@@ -51,11 +51,11 @@ let
   hashes =
     {
       x86_64-linux = {
-        basic = "sha256-uo0QBOmx7TQyroD+As60IhjEkz//+0Cm1tWvLI3edaE=";
-        sdk = "sha256-TIBFi1jHLJh+SUNFvuL7aJpxh61hG6gXhFIhvdPgpts=";
-        sqlplus = "sha256-mF9kLjhZXe/fasYDfmZrYPL2CzAp3xDbi624RJDA4lM=";
-        tools = "sha256-ay8ynzo1fPHbCg9GoIT5ja//iZPIZA2yXI/auVExiRY=";
-        odbc = "sha256-3M6/cEtUrIFzQay8eHNiLGE+L0UF+VTmzp4cSBcrzlk=";
+        basic = "sha256-adJAcs8FeLKBmRJQAhDYqSzUbLGS1J32t1a2+B/5Mtg=";
+        sdk = "sha256-I4VA/hFcxCKW3bid9IlvXANy9inHhO5RQjdy0IbD450=";
+        sqlplus = "sha256-RZB8k4zD7Q20P43reeVfdoVTHeC0HvczApSGH12bNBY=";
+        tools = "sha256-YpVAYvKnDJXYmlCvKcr2+u1jzaoWCoEcWa3g6bxxbQY=";
+        odbc = "sha256-gqT3ME1ZPYP7EWmh2DwKW9g3qDfIDzKevLT5P2ezkow=";
       };
       aarch64-linux = {
         basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
@@ -162,7 +162,12 @@ stdenv.mkDerivation {
     "lib"
   ];
 
-  unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip $curSrc";
+  unpackCmd = if isDarwinAarch64 then "7zz x $curSrc -aoa -oinstantclient" else "unzip -o $curSrc";
+  sourceRoot =
+    let
+      parts = lib.splitString "." version;
+    in
+    "instantclient_${builtins.elemAt parts 0}_${builtins.elemAt parts 1}";
 
   installPhase = ''
     mkdir -p "$out/"{bin,include,lib,"share/java","share/${pname}-${version}/demo/"} $lib/lib
