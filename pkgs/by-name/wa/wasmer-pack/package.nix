@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/wasmerio/wasmer-pack";
     changelog = "https://github.com/wasmerio/wasmer-pack/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
   };
 })
