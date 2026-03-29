@@ -2,6 +2,8 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -17,10 +19,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-qVE4MOFr0YO+9rAbfnz92h0KocaLu+v2u5ompwY/o6k=";
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "File deduplicator";
     homepage = "https://github.com/Canop/backdown";
-    changelog = "https://github.com/Canop/backdown/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Canop/backdown/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "backdown";
