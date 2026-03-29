@@ -7,14 +7,14 @@
 buildNpmPackage (finalAttrs: {
   pname = "${llama-swap.pname}-ui";
   inherit (llama-swap) version src;
-  npmDepsHash = "sha256-fIDn3vfrqTZfzK8dc+Vpckw9M2iyJi5ggHFEV8PeXtU=";
+  npmDepsHash = "sha256-gTDsuWPLCWsPltioziygFmSQFdLqjkZpmmVWIWoZwoc=";
 
   postPatch = ''
     substituteInPlace vite.config.ts \
       --replace-fail "../proxy/ui_dist" "${placeholder "out"}/ui_dist"
   '';
 
-  sourceRoot = "${finalAttrs.src.name}/ui";
+  sourceRoot = "${finalAttrs.src.name}/ui-svelte";
 
   # bundled "ui_dist" doesn't need node_modules
   postInstall = ''
