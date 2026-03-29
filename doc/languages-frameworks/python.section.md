@@ -1238,7 +1238,7 @@ thus can cause issues when a test suite asserts on that behavior.
 
 ::: {.note}
 Tests should only be disabled if they don't agree with nix
-(e.g. external dependencies, network access, flakey tests), however,
+(e.g. external dependencies, network access, flaky tests), however,
 as many tests should be enabled as possible. Failing tests can still be
 a good indication that the package is not in a valid state.
 :::

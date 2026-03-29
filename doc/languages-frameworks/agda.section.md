@@ -257,7 +257,7 @@ This will build all reverse dependencies of the standard library,
 for example `agdaPackages.agda-categories`.
 
 In some cases it is useful to build _all_ Agda packages.
-This can be done with the following Github comment:
+This can be done with the following GitHub comment:
 
 ```
 @ofborg build agda.passthru.tests.allPackages

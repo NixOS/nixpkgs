@@ -170,7 +170,7 @@ Sometimes plugins require an override that must be changed when the plugin is up
 
 To add a new plugin, run `nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater add "[owner]/[name]"'`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
-Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `vimPluginsUpdater` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
+Finally, there are some plugins that are also packaged in nodePackages because they have JavaScript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `vimPluginsUpdater` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
 
 ## Updating plugins in nixpkgs {#updating-plugins-in-nixpkgs}
 
