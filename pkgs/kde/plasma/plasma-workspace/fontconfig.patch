@@ -1,0 +1,15 @@
+diff --git a/kcms/fonts/kxftconfig.cpp b/kcms/fonts/kxftconfig.cpp
+index b67d885de7..d5c469687a 100644
+--- a/kcms/fonts/kxftconfig.cpp
++++ b/kcms/fonts/kxftconfig.cpp
+@@ -310,6 +310,10 @@ bool KXftConfig::apply()
+             m_excludePixelRange.from = (int)point2Pixel(m_excludeRange.from);
+             m_excludePixelRange.to = (int)point2Pixel(m_excludeRange.to);
+ 
++            // Ensure m_doc is the config file we want
++            m_doc.clear();
++            parseConfigFile(m_file);
++
+             FcAtomic *atomic = FcAtomicCreate((const unsigned char *)(QFile::encodeName(m_file).data()));
+ 
+             ok = false;
