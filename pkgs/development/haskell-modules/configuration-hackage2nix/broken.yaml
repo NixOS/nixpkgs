@@ -2720,7 +2720,6 @@ broken-packages:
   - helisp # failure in job https://hydra.nixos.org/build/233221194 at 2023-09-02
   - helium-overture # failure in job https://hydra.nixos.org/build/295094176 at 2025-04-22
   - helix # failure in job https://hydra.nixos.org/build/233254335 at 2023-09-02
-  - hell # failure in job https://hydra.nixos.org/build/295094172 at 2025-04-22
   - helm # failure in job https://hydra.nixos.org/build/233251620 at 2023-09-02
   - help-esb # failure in job https://hydra.nixos.org/build/233202622 at 2023-09-02
   - hemkay # failure in job https://hydra.nixos.org/build/233227889 at 2023-09-02
