@@ -78,6 +78,20 @@
 }:
 
 let
+  desktopItem = makeDesktopItem {
+    name = pname;
+    exec = binaryName;
+    icon = pname;
+    inherit desktopName;
+    genericName = meta.description;
+    categories = [
+      "Network"
+      "InstantMessaging"
+    ];
+    mimeTypes = [ "x-scheme-handler/discord" ];
+    startupWMClass = "discord";
+  };
+
   discordMods = [
     withVencord
     withEquicord
@@ -235,23 +249,9 @@ stdenv.mkDerivation (finalAttrs: {
       echo 'require("${moonlight}/injector.js").inject(require("path").join(__dirname, "../_app.asar"));' > $out/opt/${binaryName}/resources/app/injector.js
     '';
 
-  desktopItem = makeDesktopItem {
-    name = pname;
-    exec = binaryName;
-    icon = pname;
-    inherit desktopName;
-    genericName = meta.description;
-    categories = [
-      "Network"
-      "InstantMessaging"
-    ];
-    mimeTypes = [ "x-scheme-handler/discord" ];
-    startupWMClass = "discord";
-  };
-
   passthru = {
     # make it possible to run disableBreakingUpdates standalone
-    inherit disableBreakingUpdates;
+    inherit desktopItem disableBreakingUpdates;
     updateScript = ./update.py;
 
     tests = {
