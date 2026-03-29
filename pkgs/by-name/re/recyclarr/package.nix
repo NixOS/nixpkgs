@@ -9,28 +9,27 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "7.4.1";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eutlnIHOcRnucgFDwJIheTPXA7avqvp4H0xUX2Cv2z8=";
+    hash = "sha256-q2WEa28TYmmg2KDTIsT7AHQC5o0YwpOw+zmepvhoLaI=";
   };
 
-  projectFile = "Recyclarr.sln";
+  projectFile = "Recyclarr.slnx";
   nugetDeps = ./deps.json;
 
   prePatch = ''
     substituteInPlace src/Recyclarr.Cli/Console/CliSetup.cs \
       --replace-fail '$"v{GitVersionInformation.SemVer} ({GitVersionInformation.FullBuildMetaData})"' '"${finalAttrs.version}-nixpkgs"'
-
     substituteInPlace src/Recyclarr.Cli/Console/Setup/ProgramInformationDisplayTask.cs \
       --replace-fail 'GitVersionInformation.InformationalVersion' '"${finalAttrs.version}-nixpkgs"'
+    substituteInPlace src/Recyclarr.Core/ResourceProviders/Infrastructure/ConfigTemplatesStrategy.cs \
+      --replace-fail 'GitVersionInformation.Major' '"${lib.versions.major finalAttrs.version}"'
 
-    substituteInPlace Recyclarr.sln \
-      --replace-fail ".config\dotnet-tools.json = .config\dotnet-tools.json" ""
-
+    sed -i '/dotnet-tools\.json/d' Recyclarr.slnx
     rm .config/dotnet-tools.json
   '';
   patches = [ ./001-Git-Version.patch ];
@@ -39,9 +38,9 @@ buildDotnetModule (finalAttrs: {
 
   doCheck = false;
 
-  dotnet-sdk = dotnetCorePackages.sdk_9_0;
-  dotnet-runtime = dotnetCorePackages.runtime_9_0;
-  dotnet-test-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_10_0;
+  dotnet-runtime = dotnetCorePackages.runtime_10_0;
+  dotnet-test-sdk = dotnetCorePackages.sdk_10_0;
 
   executables = [ "recyclarr" ];
   makeWrapperArgs = [
@@ -55,7 +54,10 @@ buildDotnetModule (finalAttrs: {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "HOME=$(mktemp -d) recyclarr --version";
+    };
   };
 
   meta = {
