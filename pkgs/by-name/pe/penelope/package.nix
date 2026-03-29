@@ -16,12 +16,6 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-72HFPByH4FBRIYaTeEWaZ2dW43Q1OjosT3qAOMiu5t4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "[project.scripts]" "" \
-      --replace-fail 'penelope = "penelope:main"' ""
-  '';
-
   build-system = with python3.pkgs; [ setuptools ];
 
   # Project has no tests
@@ -31,9 +25,9 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     description = "Penelope Shell Handler";
     homepage = "https://github.com/brightio/penelope";
     changelog = "https://github.com/brightio/penelope/releases/tag/${finalAttrs.src.tag}";
-    license = lib.licenses.gpl3Only;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "penelope.py";
+    mainProgram = "penelope";
     platforms = lib.platforms.all;
   };
 })

@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "20kly";
-  version = "1.5.0";
+  version = "1.5.2";
 
   pyproject = false;
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication (finalAttrs: {
     owner = "20kly";
     repo = "20kly";
     tag = "v${finalAttrs.version}";
-    sha256 = "1zxsxg49a02k7zidx3kgk2maa0vv0n1f9wrl5vch07sq3ghvpphx";
+    sha256 = "sha256-7i1tHylnXWlTvfu9CbStTcA0qsFFqQcGX6bUUTUcYBw=";
   };
 
   patchPhase = ''

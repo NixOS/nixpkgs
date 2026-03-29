@@ -15,6 +15,8 @@ python3.pkgs.buildPythonApplication (finalAttrs: {
     hash = "sha256-s+W/rfa11+jxaNDDIMdLlU5NDvQZSyh5EUD+V3pI+Ug=";
   };
 
+  patches = [ ./khard-sphinx.patch ];
+
   build-system = with python3.pkgs; [
     setuptools
     setuptools-scm

@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "wpprobe";
-  version = "0.11.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "Chocapikk";
     repo = "wpprobe";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ELj2qDRUqcSP1T0Q0/5oX8cLDTqq2LKgT364ctJakTA=";
+    hash = "sha256-ZPivKTcbJub3uUBvTMnfFflra+RKQQUsvpAdfOjWHnI=";
   };
 
   vendorHash = "sha256-pAKFrdja+rH0kiJH6hToZwLjE8lLBHFAUCjnCLbgxVo=";
