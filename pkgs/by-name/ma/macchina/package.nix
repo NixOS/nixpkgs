@@ -33,6 +33,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       _414owen
+      progrm_jarvis
     ];
     mainProgram = "macchina";
   };
