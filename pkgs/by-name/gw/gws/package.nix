@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gws";
-  version = "0.22.1";
+  version = "0.22.3";
 
   src = fetchFromGitHub {
     owner = "googleworkspace";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yDgUvFXBhm7SNi51JeOm4+EOowNmY3dS0vF+AM6BygM=";
+    hash = "sha256-7bkTSDX6Mr/QcHkqCAI6oTAjLWdWzNicnvUu0IG/ejQ=";
   };
 
-  cargoHash = "sha256-9Ncn0r3Pih962l/4HKZjyWCvyCPQODIPX/oyroA1kL0=";
+  cargoHash = "sha256-iJ8M7NVqPbtPt1oeyDlh/46bWr5sKxO786sV4szhLCk=";
 
   nativeBuildInputs = [ pkg-config ];
 
