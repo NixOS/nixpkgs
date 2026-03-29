@@ -30031,6 +30031,12 @@
     githubId = 1866448;
     name = "Eric Bailey";
   };
+  yus314 = {
+    email = "shizhaoyoujie@gmail.com";
+    github = "Yus314";
+    githubId = 91413196;
+    name = "minera";
+  };
   yusdacra = {
     email = "y.bera003.06@protonmail.com";
     matrix = "@yusdacra:nixos.dev";
