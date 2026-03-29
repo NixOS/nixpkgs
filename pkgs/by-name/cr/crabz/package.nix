@@ -3,6 +3,8 @@
   rustPlatform,
   fetchFromGitHub,
   cmake,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -19,6 +21,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   cargoHash = "sha256-JzzDkbDVL6az6b/s640KikSNJCwv8hf0aFcmGnvYQu4=";
 
   nativeBuildInputs = [ cmake ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Cross platform, fast, compression and decompression tool";
