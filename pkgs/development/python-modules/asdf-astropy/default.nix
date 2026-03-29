@@ -18,7 +18,7 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "asdf-astropy";
   version = "0.11.0";
   pyproject = true;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astropy";
     repo = "asdf-astropy";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-dHi+VFMo5RcJAIExR8OFTljtG3P/VXT2jzkbBobwVKg=";
   };
 
@@ -63,8 +63,8 @@ buildPythonPackage rec {
   meta = {
     description = "Extension library for ASDF to provide support for Astropy";
     homepage = "https://github.com/astropy/asdf-astropy";
-    changelog = "https://github.com/astropy/asdf-astropy/blob/${src.tag}/CHANGES.rst";
+    changelog = "https://github.com/astropy/asdf-astropy/blob/${finalAttrs.src.tag}/CHANGES.rst";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})
