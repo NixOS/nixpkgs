@@ -1,21 +1,22 @@
 {
   buildPythonPackage,
-  colorama,
-  colorlog,
   fetchFromGitHub,
   lib,
+  pytestCheckHook,
+  versionCheckHook,
+
+  colorama,
+  colorlog,
   packaging,
   parse,
   pathspec,
   prompt-toolkit,
   psutil,
-  pytestCheckHook,
   requests,
   resolvelib,
   ruamel-yaml,
   setuptools,
   typing-extensions,
-  versionCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
