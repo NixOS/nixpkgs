@@ -1,4 +1,6 @@
 {
+  lib,
+  lua,
   luarocks_bootstrap,
   fetchFromGitHub,
   unstableGitUpdater,
@@ -42,5 +44,10 @@ luarocks_bootstrap.overrideAttrs (old: {
       platforms
       ;
     mainProgram = "luarocks";
+    # luarocks-nix is based on upstream 3.11.0, which predates Lua 5.5 support;
+    # Lua 5.5 makes for-loop variables const, breaking luarocks source code
+    # throughout (e.g. luarocks/core/util.lua:96). Upstream luarocks 3.13.0 has
+    # the fixes, but the nix-community fork has not been rebased yet.
+    broken = lib.versionAtLeast lua.luaversion "5.5";
   };
 })
