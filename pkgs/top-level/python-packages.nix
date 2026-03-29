@@ -11319,6 +11319,8 @@ self: super: with self; {
 
   obsidian-media = callPackage ../development/python-modules/obsidian-media { };
 
+  obspec = callPackage ../development/python-modules/obspec { };
+
   obspy = callPackage ../development/python-modules/obspy { };
 
   obstore = callPackage ../development/python-modules/obstore { };
