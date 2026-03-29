@@ -7,15 +7,17 @@
 
 python3Packages.buildPythonApplication (finalAttrs: {
   pname = "pyprland";
-  version = "3.1.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "pyprland";
     tag = finalAttrs.version;
-    hash = "sha256-qayntjpE3WYBl6idfpwtvkEo61oHtc80uNEm0m4XA2o=";
+    hash = "sha256-h7eoNn8ygdtg5rp9S2PSgCa9HSTgDZOjFvGl6KRbAtY=";
   };
+
+  build-system = [ python3Packages.hatchling ];
 
   nativeBuildInputs = with python3Packages; [ poetry-core ];
 
