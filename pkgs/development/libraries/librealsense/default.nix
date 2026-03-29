@@ -36,7 +36,7 @@ in
 
 stdenv'.mkDerivation rec {
   pname = "librealsense";
-  version = "2.56.3";
+  version = "2.57.7";
 
   outputs = [
     "out"
@@ -47,7 +47,7 @@ stdenv'.mkDerivation rec {
     owner = "IntelRealSense";
     repo = "librealsense";
     rev = "v${version}";
-    sha256 = "sha256-Stx337mGcpMCg9DlZmvX4LPQmCSzLRFcUQPxaD/Y0Ds=";
+    sha256 = "sha256-d/FkvnUa7CqW25ZG8PY9+cd7uRL4zC1Md/JT8B/qAKU=";
   };
 
   buildInputs = [
