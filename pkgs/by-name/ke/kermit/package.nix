@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       -e 's@/usr/local@'"$out"@ makefile
   '';
 
-  buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags' LNKFLAGS='-lcrypt -lresolv'";
+  buildPhase = "make -f makefile linux KFLAGS='-D_IO_file_flags -std=gnu89' LNKFLAGS='-lcrypt -lresolv'";
 
   installPhase = ''
     mkdir -p $out/bin
