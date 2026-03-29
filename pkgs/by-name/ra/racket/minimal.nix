@@ -160,5 +160,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ rc-zb ];
     mainProgram = "racket";
     platforms = lib.platforms.all;
+    /*
+      > checking size of void *... 0
+      > Something has gone wrong getting the pointer size; see config.log
+    */
+    badPlatforms = lib.platforms.darwin;
   };
 })
