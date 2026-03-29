@@ -2,7 +2,6 @@
 {
   name = "freshrss-caddy-sqlite";
   meta.maintainers = with lib.maintainers; [
-    etu
     stunkymonkey
   ];
 
