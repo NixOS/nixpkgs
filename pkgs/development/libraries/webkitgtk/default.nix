@@ -51,6 +51,7 @@
   libintl,
   lcms2,
   libmanette,
+  librice,
   geoclue2,
   flite,
   fontconfig,
@@ -197,6 +198,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableExperimental [
     # For ENABLE_WEB_RTC
     openssl
+    librice
     # For ENABLE_WEBXR
     openxr-loader
   ]
