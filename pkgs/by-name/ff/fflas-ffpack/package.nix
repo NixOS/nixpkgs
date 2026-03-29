@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-COJxb1Y47rLBogJuXzznKHOSs9gAX1BtN+j8pEqOhLY=";
       excludes = [ "benchmarks/*" ];
     })
+    (fetchpatch2 {
+      name = "do-not-use-_mm_permute_ps-for-simd128_float.patch";
+      url = "https://github.com/linbox-team/fflas-ffpack/commit/be33b602ecdef543a30ea494899b08610c7e0a74.patch?full_index=1";
+      hash = "sha256-YWUFnPViXwyyHLXuewX6KQsgUiwgl6vfYnZX2JzgkE4=";
+    })
   ];
 
   nativeCheckInputs = [
