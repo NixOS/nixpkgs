@@ -9,13 +9,13 @@
 }:
 buildDotnetModule (finalAttrs: {
   pname = "recyclarr";
-  version = "8.5.0";
+  version = "8.5.1";
 
   src = fetchFromGitHub {
     owner = "recyclarr";
     repo = "recyclarr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aN3dbRulRPb+252/tBey91SJRweDxZSkK11hKWci83k=";
+    hash = "sha256-q2WEa28TYmmg2KDTIsT7AHQC5o0YwpOw+zmepvhoLaI=";
   };
 
   projectFile = "Recyclarr.slnx";
