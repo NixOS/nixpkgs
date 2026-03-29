@@ -12,18 +12,18 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "dl-librescore";
-  version = "0.35.34";
+  version = "0.35.40";
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IuHX4wFhilSK09WWNopHtkAfd9Mm2oo5M2m4KcRkCBE=";
+    hash = "sha256-jCwySndc3ZeEoKVA9Ne2PLStyM73hDPO1vaNeVShwQ0=";
   };
 
   nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-jeo2z0Ha2nn0XHQqXBb2UWpvHXs+64Pz1ny0U8U6Ing=";
+  npmDepsHash = "sha256-8x1WuzIaxzaEgM9hu2cCtXr4GLCE6DHt3F7lvnbcMgk=";
   npmDepsFetcherVersion = 2;
 
   makeCacheWritable = true;
