@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       unlicense # or
       mit
     ];
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.progrm_jarvis ];
     mainProgram = "crabz";
   };
 })
