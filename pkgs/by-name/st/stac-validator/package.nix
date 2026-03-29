@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "stac-validator";
-  version = "3.10.2";
+  version = "3.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stac-utils";
     repo = "stac-validator";
     tag = "v${version}";
-    hash = "sha256-Csw7+/0VTZuZ7xBmdPAWBk8NMGXtjKfr15F3IkbCFZ8=";
+    hash = "sha256-5wcnEdk8+/stdJVQ97Me/+H3GrS7DA+Nd0OQtPEXDl4=";
   };
 
   build-system = [ python3Packages.setuptools ];

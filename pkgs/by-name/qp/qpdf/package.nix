@@ -11,7 +11,6 @@
   # for passthru.tests
   cups-filters,
   pdfmixtool,
-  pdfslicer,
   python3,
   testers,
   versionCheckHook,
@@ -80,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
     inherit
       cups-filters
       pdfmixtool
-      pdfslicer
       ;
   };
 

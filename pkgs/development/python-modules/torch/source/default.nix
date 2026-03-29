@@ -3,6 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   git-unroll,
   buildPythonPackage,
   python,
@@ -304,6 +305,18 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
 
   patches = [
     ./clang19-template-warning.patch
+
+    # The GCC version upperbounds were wrong for cuda 12.8 and 12.9, which led downstream builds to
+    # illegitimately fail with:
+    #   RuntimeError: The current installed version of g++ (14.3.0) is greater than the maximum
+    #   required version by CUDA 12.9. Please make sure to use an adequate version of g++
+    #   (>=6.0.0, <14.0).
+    # TODO: remove at the next release
+    (fetchpatch {
+      name = "allow-gcc-14-with-cuda-12.8-9";
+      url = "https://github.com/pytorch/pytorch/commit/39565a7dcf8f93ea22cedeaa20088b24ff6d2634.patch";
+      hash = "sha256-Au5fVbs7i33d9c4Xj8koiBP7lGnsTGTaX4VlE2gAfy8=";
+    })
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -741,7 +754,9 @@ buildPythonPackage.override { inherit stdenv; } (finalAttrs: {
     blasProvider = blas.provider;
     # To help debug when a package is broken due to CUDA support
     inherit brokenConditions;
-    tests = callPackage ../tests { };
+    tests = callPackage ../tests {
+      inherit rocmSupport cudaSupport;
+    };
   };
 
   meta = {

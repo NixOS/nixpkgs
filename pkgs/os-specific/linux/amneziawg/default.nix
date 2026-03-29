@@ -9,20 +9,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amneziawg";
-  version = "1.0.20260322";
+  version = "1.0.20260329-2";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amneziawg-linux-kernel-module";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Y6TETOo5oAr3ZtqsJX909zm38rXq+1fAXiRFSt+g2Gw=";
+    hash = "sha256-BlWnncTzVKDpCVvtLp8L+bABs81YH/Ce+9JGCoCm1LI=";
   };
-
-  patches = [
-    # fix aarch64-linux builds with NEON
-    # upstream PR: https://github.com/amnezia-vpn/amneziawg-linux-kernel-module/pull/159
-    ./neon-619.patch
-  ];
 
   sourceRoot = "${finalAttrs.src.name}/src";
   hardeningDisable = [ "pic" ];

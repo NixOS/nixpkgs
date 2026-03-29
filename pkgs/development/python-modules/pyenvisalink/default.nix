@@ -5,19 +5,22 @@
   colorlog,
   fetchPypi,
   pyserial,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage (finalAttrs: {
   pname = "pyenvisalink";
-  version = "4.8";
-  format = "setuptools";
+  version = "4.9";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-IgYOlH0mYqhRLTO3McBAstChqYWHQkwuOVPL8gKdcTo=";
+    inherit (finalAttrs) pname version;
+    hash = "sha256-WtBopLUCArWM4JwA517bnYidfOwqU3v7ApZCbsMuY/o=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     async-timeout
     colorlog
     pyserial
@@ -31,7 +34,8 @@ buildPythonPackage rec {
   meta = {
     description = "Python interface for Envisalink 2DS/3 Alarm API";
     homepage = "https://github.com/Cinntax/pyenvisalink";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/ufodone/pyenvisalink/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
-}
+})

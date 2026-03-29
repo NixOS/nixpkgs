@@ -14365,6 +14365,12 @@
     githubId = 659440;
     name = "Kornelijus";
   };
+  korny666 = {
+    email = "korny@publicgrave.de";
+    github = "korny666";
+    githubId = 12656521;
+    name = "Korny";
+  };
   koschi13 = {
     email = "maximilian.konter@protonmail.com";
     github = "koschi13";

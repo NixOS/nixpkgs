@@ -1,0 +1,15 @@
+diff --git a/js/desktop.js b/js/desktop.js
+index f3fcb25..a92a884 100644
+--- a/js/desktop.js
++++ b/js/desktop.js
+@@ -123,7 +123,9 @@ export function loadOpenWithBlockbenchFile() {
+ 	})
+ 	if (electron.process.argv.length >= 2) {
+ 		let path = electron.process.argv.last();
+-		load(path);
++		if (!path.endsWith("app.asar")) {
++			load(path);
++		}
+ 	}
+ }
+ console.log('Electron '+process.versions.electron+', Node '+process.versions.node)
