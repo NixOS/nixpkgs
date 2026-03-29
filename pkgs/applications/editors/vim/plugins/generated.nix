@@ -5956,6 +5956,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  gitlineage-nvim = buildVimPlugin {
+    pname = "gitlineage.nvim";
+    version = "0-unstable-2026-02-14";
+    src = fetchFromGitHub {
+      owner = "LionyxML";
+      repo = "gitlineage.nvim";
+      rev = "da795833925aae2e4d0cf75d2529d258bf4fb82c";
+      hash = "sha256-SlZQMc7xQ3/cCFSgZV+hK9fjEdoIdZR/ESAJ3Z1gbxk=";
+    };
+    meta.homepage = "https://github.com/LionyxML/gitlineage.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   gitlinker-nvim = buildVimPlugin {
     pname = "gitlinker.nvim";
     version = "0-unstable-2023-02-03";
