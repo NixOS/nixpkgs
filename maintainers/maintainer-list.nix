@@ -15504,6 +15504,11 @@
     githubId = 516527;
     name = "Lukas Werling";
   };
+  lnk3 = {
+    github = "lnk3";
+    githubId = 23727619;
+    name = "Luca Ruperto";
+  };
   lnl7 = {
     email = "daiderd@gmail.com";
     github = "LnL7";
