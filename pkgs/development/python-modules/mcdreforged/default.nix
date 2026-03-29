@@ -52,6 +52,8 @@ buildPythonPackage rec {
     versionCheckHook
   ];
 
+  pythonRelaxDeps = [ "ruamel.yaml" ];
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
