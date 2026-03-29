@@ -17,16 +17,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
   #    |                                               ^~~~~~~~~~~~~~~~~~~~
   #    |                                               rice_turn_config_free
   # Unpin when https://gitlab.gnome.org/GNOME/gnome-build-meta/-/blob/gnome-50/elements/sdk/librice.bst moves to newer version.
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "ystreet";
     repo = "librice";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CM+YoeVdWfnT/RjkHP0ILwMOkFEylFaN83B71r+S5Ik=";
+    hash = "sha256-yIPPQfS3svMWgDzo1/XnEBz4TxeyvCDmd5F18uu4IIY=";
   };
 
-  cargoHash = "sha256-GNqzAFAnOYP5tCE4qb9F9XAlinX1xV4QyBWJjqXb5VE=";
+  cargoHash = "sha256-HiuAre8MC7oPnKBNCNTuFH92qX5u7VWxPcfpHUD1HZ8=";
 
   nativeBuildInputs = [
     cargo-c
