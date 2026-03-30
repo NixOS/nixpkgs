@@ -14729,6 +14729,14 @@
     github = "kxxt";
     githubId = 18085551;
   };
+  kybe236 = {
+    name = "kybe236";
+    github = "kybe236";
+    githubId = 118068228;
+    email = "kybe@kybe.xyz";
+    matrix = "@kybe:kybe.xyz";
+    keys = [ { fingerprint = "4B20 67C3 BD6D 410F 13E5  36A3 43CE 4393 8A3C 7A8F"; } ];
+  };
   kyehn = {
     name = "kyehn";
     github = "kyehn";

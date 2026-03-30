@@ -12,14 +12,14 @@
 }:
 buildPythonPackage (finalAttrs: {
   pname = "sphinx-last-updated-by-git";
-  version = "0.3.8";
+  version = "0.3.8-unstable-2026-03-22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mgeier";
     repo = "sphinx-last-updated-by-git";
-    rev = "07ac1a98af2a927e773a65c6524ce83067c977b8";
-    hash = "sha256-2TGFR11Ejh/9zpVC/TEdmMNaBt38wE5yeJeYixZSVUE=";
+    rev = "8d4eef2561996319e6f785b4faa914a1e6545476";
+    hash = "sha256-30pZiqWs6Da+O8j08EIHrUoiJfJUPT6FdDiPBjmvRL8=";
     fetchSubmodules = true;
     leaveDotGit = true;
   };
