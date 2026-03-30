@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "discid";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cWChIRrD1qbYIT+4jdPXPjKr5eATNqWkyYWwgql9QzU=";
+    sha256 = "sha256-UP09tEXK60S593Y3d+1JaIw89GM9qZ00DCW5GUlrqLU=";
   };
 
   build-system = [
