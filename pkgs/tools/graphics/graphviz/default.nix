@@ -74,9 +74,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ]
-  # TODO: this should probably be !withXorg instead of false, however it causes 17k rebuilds
-  ++ optional false "--without-x";
+    (lib.withFeature withXorg "x")
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
