@@ -2178,13 +2178,13 @@ final: prev: {
     }:
     buildLuarocksPackage {
       pname = "lua-rtoml";
-      version = "0.2-0";
+      version = "0.3-0";
 
       src = fetchFromGitHub {
         owner = "lblasc";
         repo = "lua-rtoml";
-        rev = "c83f56b9519d85968d663308e303f384c55c7b18";
-        hash = "sha256-PRoaUQSSvzl9VFK+aGHbJqCW37AsO+oFXNYgM0OdIoY=";
+        rev = "aedc4030912e1c86a1490428dc547f35a1a99be6";
+        hash = "sha256-Ge2Acy1XuAQENhoJpuRudazY2D8HSiVv1Ab+jqMjo0U=";
       };
 
       disabled = luaOlder "5.1";

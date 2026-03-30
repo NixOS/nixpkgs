@@ -3,8 +3,6 @@
   config,
   callPackage,
   newScope,
-  symlinkJoin,
-  fetchFromGitHub,
   boost179,
   opencv,
   python3Packages,

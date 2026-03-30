@@ -2807,6 +2807,12 @@
     github = "azazak123";
     githubId = 50211158;
   };
+  azban = {
+    name = "azban";
+    matrix = "@azban:matrix.org";
+    github = "azban";
+    githubId = 714931;
+  };
   azd325 = {
     email = "tim.kleinschmidt@gmail.com";
     github = "Azd325";
@@ -8522,12 +8528,6 @@
     name = "Fang-Pen Lin";
     keys = [ { fingerprint = "7130 3454 A7CD 0F0A 941A  F9A3 2A26 9964 AD29 2131"; } ];
   };
-  farcaller = {
-    name = "Vladimir Pouzanov";
-    email = "farcaller@gmail.com";
-    github = "farcaller";
-    githubId = 693;
-  };
   fare = {
     email = "fahree@gmail.com";
     github = "fare";
@@ -13738,6 +13738,12 @@
     githubId = 15855440;
     name = "Keanu Ashwell";
   };
+  kasifrasi = {
+    name = "Ardit Abrashi";
+    github = "Kasifrasi";
+    githubId = 73264146;
+    email = "ardit.abrashi03@gmail.com";
+  };
   katanallama = {
     github = "katanallama";
     githubId = 70604257;
@@ -14359,6 +14365,12 @@
     githubId = 659440;
     name = "Kornelijus";
   };
+  korny666 = {
+    email = "korny@publicgrave.de";
+    github = "korny666";
+    githubId = 12656521;
+    name = "Korny";
+  };
   koschi13 = {
     email = "maximilian.konter@protonmail.com";
     github = "koschi13";
@@ -14716,6 +14728,14 @@
     matrix = "@kxxt:matrix.org";
     github = "kxxt";
     githubId = 18085551;
+  };
+  kybe236 = {
+    name = "kybe236";
+    github = "kybe236";
+    githubId = 118068228;
+    email = "kybe@kybe.xyz";
+    matrix = "@kybe:kybe.xyz";
+    keys = [ { fingerprint = "4B20 67C3 BD6D 410F 13E5  36A3 43CE 4393 8A3C 7A8F"; } ];
   };
   kyehn = {
     name = "kyehn";
@@ -15503,6 +15523,11 @@
     github = "lluchs";
     githubId = 516527;
     name = "Lukas Werling";
+  };
+  lnk3 = {
+    github = "lnk3";
+    githubId = 23727619;
+    name = "Luca Ruperto";
   };
   lnl7 = {
     email = "daiderd@gmail.com";
@@ -24268,13 +24293,6 @@
     github = "screendriver";
     githubId = 149248;
     name = "Christian Rackerseder";
-  };
-  Scriptkiddi = {
-    email = "nixos@scriptkiddi.de";
-    matrix = "@fritz.otlinghaus:helsinki-systems.de";
-    github = "Scriptkiddi";
-    githubId = 3598650;
-    name = "Fritz Otlinghaus";
   };
   Scrumplex = {
     name = "Sefa Eyeoglu";

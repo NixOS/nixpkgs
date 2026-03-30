@@ -291,6 +291,8 @@ mapAliases {
   linear-garage-door = throw "'linear-garage-door' has been superseded by 'nice-go'"; # Added 2025-11-16
   linear_operator = throw "'linear_operator' has been renamed to/replaced by 'linear-operator'"; # Converted to throw 2025-10-29
   llama-cloud-services = throw "'llama-cloud-services' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-25
+  llama-index-embeddings-gemini = throw "'llama-index-embeddings-gemini' has been removed as it was deprecated upstream in favor of 'llama-index-embeddings-google-genai'"; # Added 2026-03-25
+  llama-index-embeddings-google = throw "'llama-index-embeddings-google' has been removed as it was deprecated upstream in favor of 'llama-index-embeddings-google-genai'"; # Added 2026-03-25
   llama-index-indices-managed-llama-cloud = throw "'llama-index-indices-managed-llama-cloud' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # Added 2026-03-24
   llama-index-multi-modal-llms-openai = throw "'llama-index-multi-modal-llms-openai' has been removed as it was deprecated in favor of 'llama-index-llms-openai'"; # added 2026-03-25
   llama-index-readers-llama-parse = throw "'llama-index-readers-llama-parse' has been removed as it was deprecated upstream in favor of 'llama-cloud'"; # added 2026-03-25
@@ -418,6 +420,7 @@ mapAliases {
   pyramid_mako = throw "'pyramid_mako' has been renamed to/replaced by 'pyramid-mako'"; # Converted to throw 2025-10-29
   pyramid_multiauth = throw "'pyramid_multiauth' has been renamed to/replaced by 'pyramid-multiauth'"; # Converted to throw 2025-10-29
   pyreadability = throw "'pyreadability' has been renamed to/replaced by 'readability-lxml'"; # Converted to throw 2025-10-29
+  pyreaderwriterlock = throw "'pyreaderwriterlock' has been removed as it was unmaintained upstream"; # Added 2026-03-21
   pyRFC3339 = throw "'pyRFC3339' has been renamed to/replaced by 'pyrfc3339'"; # Converted to throw 2025-10-29
   Pyro4 = throw "'Pyro4' has been renamed to/replaced by 'pyro4'"; # Converted to throw 2025-10-29
   Pyro5 = throw "'Pyro5' has been renamed to/replaced by 'pyro5'"; # Converted to throw 2025-10-29

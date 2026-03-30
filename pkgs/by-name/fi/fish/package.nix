@@ -149,13 +149,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.5.0";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-9EhvCStAeL+ADkLy9b4gXPx+JrVzUZ5Fdkf+imY3Vw0=";
+    hash = "sha256-lhixotjhD8+xb8Hw6Mu1uJPtCq0zlQsBAXpHRzT+moI=";
   };
 
   env = {
@@ -168,7 +168,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-RVg6Zciy9mqZQwM5P3ngJi2NjC0qwFH7XgVEanaKnsg=";
+    hash = "sha256-zua2O3eGi7dXh4w0IoUGL2RxvGIW0O3WpVg/tT8942Q=";
   };
 
   patches = [
@@ -195,37 +195,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Fix FHS paths in tests
   postPatch = ''
-    substituteInPlace src/builtins/test.rs \
-      --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
-
     substituteInPlace src/highlight/highlight.rs \
-      --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
-      --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"'
+      --replace-fail '/usr/bin/e' '${coreutils}/bin/e'
 
     substituteInPlace src/highlight/file_tester.rs \
       --replace-fail '/usr' '/'
-
-    substituteInPlace tests/checks/cd.fish \
-      --replace-fail '/bin/pwd' '${lib.getExe' coreutils "pwd"}'
-
-    substituteInPlace tests/checks/redirect.fish \
-      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
     substituteInPlace tests/checks/vars_as_commands.fish \
       --replace-fail '/usr/bin' '${coreutils}/bin'
 
     substituteInPlace tests/checks/jobs.fish \
-      --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
-      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
-
-    substituteInPlace tests/checks/job-control-noninteractive.fish \
-      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
-
-    substituteInPlace tests/checks/complete.fish \
-      --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
-
-    substituteInPlace tests/checks/output-buffering.fish \
-      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+      --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o'
 
     substituteInPlace tests/pexpects/wait.py \
       --replace-fail 'expect_prompt("Job ' 'expect_prompt("fish: Job ' \

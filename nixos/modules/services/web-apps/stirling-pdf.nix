@@ -19,12 +19,13 @@ in
         lib.types.oneOf [
           lib.types.str
           lib.types.int
+          lib.types.bool
         ]
       );
       default = { };
       example = {
         SERVER_PORT = 8080;
-        INSTALL_BOOK_AND_ADVANCED_HTML_OPS = "true";
+        INSTALL_BOOK_AND_ADVANCED_HTML_OPS = true;
       };
       description = ''
         Environment variables for the stirling-pdf app.
@@ -44,7 +45,9 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.stirling-pdf = {
-      environment = lib.mapAttrs (_: toString) cfg.environment;
+      environment = lib.mapAttrs (
+        _: v: if (builtins.isBool v) then (lib.boolToString v) else (toString v)
+      ) cfg.environment;
 
       # following https://docs.stirlingpdf.com/Installation/Unix%20Installation
       path =

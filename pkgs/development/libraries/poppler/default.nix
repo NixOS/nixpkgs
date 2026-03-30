@@ -39,7 +39,6 @@
   gdal,
   gegl,
   inkscape,
-  pdfslicer,
   scribus,
   vips,
   testers,
@@ -168,7 +167,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       inherit
         gegl
-        pdfslicer
         vips
         ;
       gdal = gdal.override { usePoppler = true; };
