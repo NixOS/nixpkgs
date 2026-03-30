@@ -4,6 +4,7 @@
   fetchFromGitLab,
   autoreconfHook,
   pkg-config,
+  buildPackages,
   cairo,
   expat,
   flex,
@@ -15,6 +16,7 @@
   libtool,
   makeWrapper,
   pango,
+  runCommand,
   bash,
   bison,
   libxrender,
@@ -35,14 +37,14 @@ let
     optionalAttrs
     ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "graphviz";
   version = "12.2.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-Uxqg/7+LpSGX4lGH12uRBxukVw0IswFPfpb2EkLsaiI=";
   };
 
@@ -77,6 +79,7 @@ stdenv.mkDerivation rec {
   ++ optional false "--without-x";
 
   enableParallelBuilding = true;
+  strictDeps = true;
 
   env = optionalAttrs (withXorg && stdenv.hostPlatform.isDarwin) {
     CPPFLAGS = "-I${cairo.dev}/include/cairo";
@@ -86,6 +89,19 @@ stdenv.mkDerivation rec {
 
   preAutoreconf = ''
     ./autogen.sh
+  '';
+
+  # Invoke `dot -c` even while cross compiling else lib/graphviz/config6 will not load at runtime.
+  postPatch = ''
+    substituteInPlace cmd/dot/Makefile.am --replace-fail \
+      'if test "x$(DESTDIR)" = "x" -a "x$(build)" = "x$(host)"; then if test -x $(bindir)/dot$(EXEEXT); then if test -x /sbin/ldconfig; then /sbin/ldconfig 2>/dev/null; fi; cd $(bindir); ./dot$(EXEEXT) -c; else cd $(bindir); ./dot_static$(EXEEXT) -c; fi; fi' \
+      '${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+        if test -x $(bindir)/dot$(EXEEXT); then \
+          cd $(bindir); ${stdenv.hostPlatform.emulator buildPackages} ./dot$(EXEEXT) -c; \
+        else \
+          cd $(bindir); ${stdenv.hostPlatform.emulator buildPackages} ./dot_static$(EXEEXT) -c; \
+        fi
+      ''}'
   '';
 
   postFixup = optionalString withXorg ''
@@ -109,6 +125,14 @@ stdenv.mkDerivation rec {
       fltk
       graphicsmagick
       ;
+    dot-can-load-plugins =
+      runCommand "dot-can-load-plugins"
+        {
+          nativeBuildInputs = [ finalAttrs.finalPackage ];
+        }
+        ''
+          dot -P -o $out
+        '';
   };
 
   meta = {
@@ -121,4 +145,4 @@ stdenv.mkDerivation rec {
       raskin
     ];
   };
-}
+})
