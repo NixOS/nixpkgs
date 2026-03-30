@@ -209,7 +209,7 @@ mkDerivation rec {
     homepage = "https://www.plotjuggler.io/";
     description = "Fast, intuitive and extensible time series visualization tool.";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ bouk ];
+    maintainers = with maintainers; [ toel ];
     platforms = platforms.unix;
   };
 }
