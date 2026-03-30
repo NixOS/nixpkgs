@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchDebianPatch,
   gitUpdater,
   testers,
   dbus,
@@ -29,7 +30,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-t69jUOTCyVWlbEinCesm8YVnYuT+SQ10z+2GXAtAPTA=";
   };
 
+  patches = [
+    # Make systemd service activatable via dbus
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname;
+      version = "0.11.10";
+      debianRevision = "1";
+      patch = "2000-systemd-dbus-activation.patch";
+      hash = "sha256-zo/wOAw3rEQGrg8L0vJwDKitDQf4fi2Z2ajfdGWaBLw=";
+    })
+
+    # Add functionality needed in Lomiri
+    (fetchDebianPatch {
+      inherit (finalAttrs) pname;
+      version = "0.11.10";
+      debianRevision = "1";
+      patch = "2004_Add-method-to-enable-disable-sync-profiles-for-a-specific-service.patch";
+      hash = "sha256-EpZb1HgiM5tM09GFeQBvkWmsYnUXjzeTE6Ima8eI9cI=";
+    })
+  ];
+
   postPatch = ''
+    # TODO Send this upstream, Debian ships a similar change but with more changes to the install location
     # Wildcard breaks file installation (tries to run ~ "install source/* target/*")
     substituteInPlace doc/doc.pro \
       --replace-fail 'htmldocs.files = $${PWD}/html/*' 'htmldocs.files = $${PWD}/html' \
