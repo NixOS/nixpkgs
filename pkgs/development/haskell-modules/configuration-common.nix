@@ -480,9 +480,6 @@ with haskellLib;
     sha256 = "1c7knpvxr7p8c159jkyk6w29653z5yzgjjqj11130bbb8mk9qhq7";
   }) super.c2hsc;
 
-  # 2025-02-10: Too strict bounds on bytestring < 0.12
-  ghc-debug-common = doJailbreak super.ghc-debug-common;
-
   # https://github.com/agrafix/superbuffer/issues/4
   # Too strict bounds on bytestring < 0.12
   superbuffer = doJailbreak super.superbuffer;
