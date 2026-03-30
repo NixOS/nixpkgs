@@ -144,6 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "duckdb";
     maintainers = with lib.maintainers; [
+      cameronraysmith
       costrouc
       cpcloud
     ];
