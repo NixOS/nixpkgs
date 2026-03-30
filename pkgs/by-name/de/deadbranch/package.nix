@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deadbranch";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "armgabrielyan";
     repo = "deadbranch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-8KNo/6hdeBY8RbLlXt2gpLCk2DfvSuoeXJ0oh2NDX2s=";
+    hash = "sha256-ub06sn3CUlbU9LkDCbZJmoZ7CQef97HeXhRdW6ESw1U=";
   };
 
-  cargoHash = "sha256-iY39RBA0fl/BpX6mlCH2bHuN+XsLdq4f7CTzjHz9Ots=";
+  cargoHash = "sha256-9AhTTvSv0HGQxglifmcEU0ApZuCIng7gFgfCMQLXpLo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
