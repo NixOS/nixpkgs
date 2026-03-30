@@ -17,8 +17,11 @@
   gd,
   autoreconfHook,
   gawk,
+  applyPatches,
   fetchFromGitHub,
   fetchgit,
+  fetchNpmDeps,
+  fetchpatch2,
   beamPackages,
   nixosTests,
   withMysql ? false,
@@ -35,6 +38,9 @@
   withRedis ? false,
   withImagemagick ? false,
   imagemagick,
+  withBootstrap ? true, # used for the built-in mod_invites page
+  nodejs,
+  npmHooks,
 }:
 
 let
@@ -136,6 +142,7 @@ let
     "ezlib"
   ];
 
+  npmToolingUsed = withBootstrap;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
@@ -150,6 +157,10 @@ stdenv.mkDerivation (finalAttrs: {
         rebar3_hex
       ];
     })
+  ]
+  ++ lib.optionals npmToolingUsed [
+    nodejs
+    npmHooks.npmConfigHook
   ];
 
   buildInputs = [
@@ -165,12 +176,36 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withLua allBeamDeps.luerl
   ++ lib.optional withRedis allBeamDeps.eredis;
 
+  npmDeps = lib.optionalDrvAttr npmToolingUsed (fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    src =
+      if builtins.isNull finalAttrs.patches || builtins.length finalAttrs.patches <= 0 then
+        finalAttrs.src
+      else
+        # A bit of a hack, but if the package*.json files are patched,
+        # fetchNpmDeps will be out of sync
+        applyPatches {
+          inherit (finalAttrs) src patches;
+          name = "${finalAttrs.pname}-${finalAttrs.version}-patched";
+        };
+    hash = "sha256-MTyoc8ozrCi3W0CXmxyLpyU8v+vlUjcbLnv/1ev/Qqo=";
+  });
+
   src = fetchFromGitHub {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
     hash = "sha256-M38niXEW++SPAvqQ2cqEd23+w7lBDO5EPgu/QRdYbXo=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Makes Bootstrap optional, drops jQuery
+      # https://github.com/processone/ejabberd/pull/4558
+      url = "https://patch-diff.githubusercontent.com/raw/processone/ejabberd/pull/4558.patch";
+      hash = "sha256-ETl2Zf7O6roxtf7DthJqL+tj4RvEfW94735sGM8x/GM=";
+    })
+  ];
 
   passthru.tests = {
     inherit (nixosTests) ejabberd;
@@ -186,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
+    (lib.enableFeature withBootstrap "bootstrap")
   ]
   ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
 
@@ -196,6 +232,10 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p _build/default/lib
     touch _build/default/lib/.got
     touch _build/default/lib/.built
+  '';
+
+  preBuild = lib.optionalString npmToolingUsed /* sh */ ''
+    npm run postinstall
   '';
 
   env.REBAR_IGNORE_DEPS = 1;
