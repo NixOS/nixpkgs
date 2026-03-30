@@ -1,15 +1,16 @@
 {
   buildGoModule,
   fetchFromGitHub,
-  fetchYarnDeps,
   lib,
   nixosTests,
   nodejs,
   stash,
   stdenv,
   testers,
-  yarnBuildHook,
-  yarnConfigHook,
+  fetchPnpmDeps,
+  pnpm_10,
+  pnpmConfigHook,
+  buildNpmPackage,
 }:
 let
   inherit (lib.importJSON ./version.json)
@@ -17,7 +18,7 @@ let
     srcHash
     vendorHash
     version
-    yarnHash
+    pnpmHash
     ;
 
   pname = "stash";
@@ -25,22 +26,42 @@ in
 buildGoModule (
   finalAttrs:
   let
-    frontend = stdenv.mkDerivation (final: {
+    pnpmDeps = fetchPnpmDeps {
+      inherit
+        pname
+        version
+        ;
+      fetcherVersion = 3;
+      hash = finalAttrs.pnpmHash;
+      src = finalAttrs.src;
+      sourceRoot = "${finalAttrs.src.name}/ui/v2.5";
+      pnpm = pnpm_10;
+    };
+    frontend = buildNpmPackage (final: {
       pname = "${finalAttrs.pname}-ui";
       inherit (finalAttrs) version gitHash;
-      src = "${finalAttrs.src}/ui/v2.5";
+      src = finalAttrs.src;
+      sourceRoot = "${finalAttrs.src.name}/ui/v2.5";
 
-      yarnOfflineCache = fetchYarnDeps {
-        yarnLock = "${final.src}/yarn.lock";
-        hash = finalAttrs.yarnHash;
-      };
+      npmConfigHook = pnpmConfigHook;
+
+      npmDeps = pnpmDeps;
+      pnpmDeps = pnpmDeps;
 
       nativeBuildInputs = [
-        yarnConfigHook
-        yarnBuildHook
-        # Needed for executing package.json scripts
         nodejs
+        pnpmConfigHook
+        pnpm_10
       ];
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir $out
+        mv dist $out
+
+        runHook postInstall
+      '';
 
       postPatch = ''
         substituteInPlace codegen.ts \
@@ -52,12 +73,12 @@ buildGoModule (
 
         export HOME=$(mktemp -d)
         export VITE_APP_DATE='1970-01-01 00:00:00'
-        export VITE_APP_GITHASH=${finalAttrs.gitHash}
-        export VITE_APP_STASH_VERSION=v${finalAttrs.version}
+        export VITE_APP_GITHASH=${gitHash}
+        export VITE_APP_STASH_VERSION=v${version}
         export VITE_APP_NOLEGACY=true
 
-        yarn --offline run gqlgen
-        yarn --offline build
+        npm run gqlgen
+        npm run build
 
         mv build $out
 
@@ -73,7 +94,7 @@ buildGoModule (
       pname
       version
       gitHash
-      yarnHash
+      pnpmHash
       vendorHash
       ;
 
@@ -112,9 +133,10 @@ buildGoModule (
 
     strictDeps = true;
 
+    proxyVendor = true;
+
     passthru = {
       inherit frontend;
-      updateScript = ./update.py;
       tests = {
         inherit (nixosTests) stash;
         version = testers.testVersion {
