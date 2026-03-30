@@ -19,15 +19,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "25.09.00";
+  version = "26.03.00";
 
   src = fetchzip {
     url = "https://fwts.ubuntu.com/release/fwts-V${finalAttrs.version}.tar.gz";
-    hash = "sha256-OJI2O9MptckmGj4rTrh9haIGaXJOO3er59yIorbgSVw=";
+    hash = "sha256-w4KIGag+o7XQ9qLE6oJ0EgzwEp4Rq5nSsWPP0oeQ44A=";
     stripRoot = false;
   };
 
-  sourceRoot = "${finalAttrs.src.name}/fwts-${finalAttrs.version}";
+  sourceRoot = "${finalAttrs.src.name}/fwts";
 
   nativeBuildInputs = [
     autoreconfHook
