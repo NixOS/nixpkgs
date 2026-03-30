@@ -1,12 +1,13 @@
 {
   lib,
   stdenv,
+  fetchDebianPatch,
   fetchFromGitLab,
   runCommand,
   mafft,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "mafft";
   version = "7.526";
 
@@ -16,6 +17,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-VNe00r12qEkLEbpZdJCe5xZ73JA3uAmuAeG+eSeRDI0=";
   };
+
+  patches = [
+    # fix build with gcc 15
+    (fetchDebianPatch {
+      inherit pname;
+      debianRevision = "1";
+      version = "7.525";
+      patch = "gcc-15";
+      hash = "sha256-TKmQoecM1hUffLVkE2SkefY4NEjxIrQPq23lpeJx9RY=";
+    })
+  ];
 
   preBuild = ''
     cd ./core
