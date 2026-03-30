@@ -60,10 +60,10 @@ jobs:
           github_token: ${{ steps.app-token.outputs.token }}
 
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
         if: ${{ failure() }}
-        with:
-          issue-number: 105153
-          body: |
+        env:
+          BODY_TEXT: |
             Periodic merge from `${{ inputs.from }}` into [`${{ inputs.into }}`](https://github.com/NixOS/nixpkgs/tree/${{ inputs.into }}) has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
-          token: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh pr comment 105153 --body "$BODY_TEXT"
