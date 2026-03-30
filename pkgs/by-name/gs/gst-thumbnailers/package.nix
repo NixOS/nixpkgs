@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Generate thumbnailer for video and audio files";
     homepage = "https://gitlab.gnome.org/GNOME/gst-thumbnailers";
+    changelog = "https://gitlab.gnome.org/GNOME/gst-thumbnailers/-/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.aleksana ];
     platforms = lib.platforms.linux;
