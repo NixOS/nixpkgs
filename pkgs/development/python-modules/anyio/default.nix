@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.12.1";
+  version = "4.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "agronholm";
     repo = "anyio";
     tag = version;
-    hash = "sha256-7rfQ6mwB2sNKc28ZPMZNgVs7TFgBUBzH6xGXmtfzX9k=";
+    hash = "sha256-W2uR1VwI9u4QIPmbcYp8jDatEdya97NaJwAABlaRHzM=";
   };
 
   build-system = [ setuptools-scm ];
