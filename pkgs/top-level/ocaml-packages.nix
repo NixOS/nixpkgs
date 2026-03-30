@@ -223,6 +223,8 @@ let
 
         caqti-lwt = callPackage ../development/ocaml-modules/caqti/lwt.nix { };
 
+        caqti-miou = callPackage ../development/ocaml-modules/caqti/miou.nix { };
+
         caqti-type-calendar = callPackage ../development/ocaml-modules/caqti/type-calendar.nix { };
 
         carton = callPackage ../development/ocaml-modules/carton {
