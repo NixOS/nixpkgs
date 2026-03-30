@@ -5,12 +5,20 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  sphinxHook,
+  sphinx-autodoc-typehints,
+  sphinx-rtd-theme,
 }:
 
 buildPythonPackage rec {
   pname = "discid";
   version = "1.4.0";
   pyproject = true;
+
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchPypi {
     inherit pname version;
@@ -30,6 +38,12 @@ buildPythonPackage rec {
         --replace "_open_library(_LIB_NAME)" \
                   "_open_library('${libdiscid}/lib/libdiscid${extension}')"
     '';
+
+  nativeBuildInputs = [
+    sphinxHook
+    sphinx-autodoc-typehints
+    sphinx-rtd-theme
+  ];
 
   meta = {
     description = "Python binding of libdiscid";
