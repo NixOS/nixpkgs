@@ -16,6 +16,7 @@
   libxi,
   libxcursor,
   libx11,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rusty-path-of-building";
@@ -115,6 +116,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A cross-platform runtime for Path of Building and Path of Building 2.";
