@@ -80,18 +80,19 @@ rec {
         inherit buildCommand name;
         passAsFile = [ "buildCommand" ] ++ (derivationArgs.passAsFile or [ ]);
       }
-      // {
-        ${if !derivationArgs ? meta then "pos" else null} =
-          let
-            args = builtins.attrNames derivationArgs;
-          in
-          if builtins.length args > 0 then
-            builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
-          else
-            null;
-        ${if runLocal then "preferLocalBuild" else null} = true;
-        ${if runLocal then "allowSubstitutes" else null} = false;
-      }
+      // (
+        let
+          args = builtins.attrNames derivationArgs;
+        in
+        {
+          ${
+            if builtins.length args > 0 && derivationArgs.meta.description or null == null then "pos" else null
+          } =
+            builtins.unsafeGetAttrPos (builtins.head args) derivationArgs;
+          ${if runLocal then "preferLocalBuild" else null} = true;
+          ${if runLocal then "allowSubstitutes" else null} = false;
+        }
+      )
       // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
@@ -123,7 +124,6 @@ rec {
     runCommand name
       (
         {
-          pos = builtins.unsafeGetAttrPos "name" args;
           inherit
             text
             executable
@@ -131,14 +131,14 @@ rec {
             allowSubstitutes
             preferLocalBuild
             ;
+          meta = {
+            ${if executable && matches != null then "mainProgram" else null} = lib.head matches;
+          }
+          // meta
+          // derivationArgs.meta or { };
           passAsFile = [ "text" ] ++ derivationArgs.passAsFile or [ ];
-          meta =
-            lib.optionalAttrs (executable && matches != null) {
-              mainProgram = lib.head matches;
-            }
-            // meta
-            // derivationArgs.meta or { };
           passthru = passthru // derivationArgs.passthru or { };
+          ${if meta.description or null == null then "pos" else null} = builtins.unsafeGetAttrPos "name" args;
         }
         // removeAttrs derivationArgs [
           "passAsFile"
@@ -265,7 +265,6 @@ rec {
         name
         meta
         passthru
-        derivationArgs
         ;
       executable = true;
       destination = "/bin/${name}";
@@ -321,6 +320,11 @@ rec {
           ''
         else
           checkPhase;
+
+      derivationArgs = {
+        ${if meta.description or null == null then "pos" else null} = builtins.unsafeGetAttrPos "name" args;
+      }
+      // derivationArgs;
     };
 
   # Create a C binary
@@ -380,7 +384,7 @@ rec {
       checkPhase ? "", # syntax checks, e.g. for scripts
       meta ? { },
       passthru ? { },
-    }:
+    }@args:
     runCommandLocal name
       {
         inherit
@@ -391,6 +395,7 @@ rec {
           passthru
           destination
           ;
+        ${if meta.description or null == null then "pos" else null} = builtins.unsafeGetAttrPos "name" args;
       }
       ''
         file=$out$destination
