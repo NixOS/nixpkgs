@@ -9017,7 +9017,6 @@ with pkgs;
 
   libzim = callPackage ../development/libraries/libzim {};
 
-
   libzmf = callPackage ../development/libraries/libzmf {};
 
   libreddit = callPackage ../servers/libreddit {
@@ -13285,7 +13284,6 @@ with pkgs;
 
   zpool-iostat-viz = callPackage ../tools/filesystems/zpool-iostat-viz { };
 
-
   ### SHELLS
 
   runtimeShell = "${runtimeShellPackage}${runtimeShellPackage.shellPath}";
@@ -15779,7 +15777,6 @@ with pkgs;
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
@@ -15806,7 +15803,6 @@ with pkgs;
   };
   php80Extensions = recurseIntoAttrs php80.extensions;
   php80Packages = recurseIntoAttrs php80.packages;
-
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -18280,7 +18276,6 @@ with pkgs;
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
-
   bicpl = callPackage ../development/libraries/science/biology/bicpl { };
 
   bicgl = callPackage ../development/libraries/science/biology/bicgl { inherit (darwin.apple_sdk.frameworks) GLUT; };
@@ -18289,7 +18284,6 @@ with pkgs;
   bionic = if stdenv.hostPlatform.useAndroidPrebuilt
     then pkgs."androidndkPkgs_${stdenv.hostPlatform.ndkVer}".libraries
     else callPackage ../os-specific/linux/bionic-prebuilt { };
-
 
   bobcat = callPackage ../development/libraries/bobcat
     (lib.optionalAttrs (with stdenv.hostPlatform; isAarch64 && isLinux) {
@@ -19288,7 +19282,6 @@ with pkgs;
 
   qt-mobility = callPackage ../development/libraries/qt-mobility {};
 
-
   qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
 
   qxmpp = libsForQt5.callPackage ../development/libraries/qxmpp {};
@@ -19427,7 +19420,6 @@ with pkgs;
   gtk4 = callPackage ../development/libraries/gtk/4.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
-
 
   # On darwin gtk uses cocoa by default instead of x11.
   gtk3-x11 = gtk3.override {
@@ -20389,7 +20381,6 @@ with pkgs;
     appliance = libguestfs-appliance;
     autoreconfHook = buildPackages.autoreconfHook264;
   };
-
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
@@ -23247,7 +23238,6 @@ with pkgs;
     jdk = jdk8;
   };
 
-
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   yuicompressor = callPackage ../development/tools/yuicompressor { };
@@ -23332,7 +23322,6 @@ with pkgs;
 
   # Alternative lisp-modules implementation
   lispPackages_new = recurseIntoAttrs (callPackage ../development/lisp-modules-new/lisp-packages.nix {});
-
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -25874,7 +25863,6 @@ with pkgs;
     withNetworkd = true;
   };
 
-
   udev = systemd; # TODO: change to systemdMinimal
 
   systemd-wait = callPackage ../os-specific/linux/systemd-wait { };
@@ -27456,7 +27444,6 @@ with pkgs;
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix {
     boost = boost175;
   };
-
 
   armcord = callPackage ../applications/networking/instant-messengers/armcord { };
 
@@ -33283,7 +33270,6 @@ with pkgs;
   };
   libfakeXinerama = callPackage ../tools/X11/xpra/libfakeXinerama.nix { };
 
-
   xplayer = callPackage ../applications/video/xplayer {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad;
     inherit (cinnamon) xapp;
@@ -34964,7 +34950,6 @@ with pkgs;
 
   xmoto = callPackage ../games/xmoto { };
 
-
   inherit (callPackage ../games/xonotic { })
     xonotic-data
     xonotic;
@@ -34983,7 +34968,6 @@ with pkgs;
   xonotic-sdl-unwrapped = xonotic-sdl.xonotic-unwrapped;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
-
 
   xpilot-ng = callPackage ../games/xpilot { };
   bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
@@ -35976,7 +35960,6 @@ with pkgs;
   yices = callPackage ../applications/science/logic/yices {
     gmp-static = gmp.override { withStatic = true; };
   };
-
 
   inherit (callPackages ../applications/science/logic/z3 { python = python2; })
     z3_4_11
