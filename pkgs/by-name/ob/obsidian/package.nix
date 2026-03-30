@@ -6,6 +6,7 @@
   electron,
   makeDesktopItem,
   imagemagick,
+  autoPatchelfHook,
   writeScript,
   _7zz,
   commandLineArgs ? "",
@@ -71,6 +72,7 @@ let
       meta
       ;
     nativeBuildInputs = [
+      autoPatchelfHook
       makeWrapper
       imagemagick
     ];
@@ -81,6 +83,7 @@ let
         --add-flags $out/share/obsidian/app.asar \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-wayland-ime=true --wayland-text-input-version=3}}" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
+      install -m 755 -D obsidian-cli $out/bin/obsidian-cli
       install -m 444 -D resources/app.asar $out/share/obsidian/app.asar
       install -m 444 -D resources/obsidian.asar $out/share/obsidian/obsidian.asar
       install -m 444 -D "${desktopItem}/share/applications/"* \
@@ -118,7 +121,8 @@ let
       runHook preInstall
       mkdir -p $out/{Applications/${appname}.app,bin}
       cp -R . $out/Applications/${appname}.app
-      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/obsidian
+      makeWrapper $out/Applications/${appname}.app/Contents/MacOS/obsidian-cli $out/bin/obsidian-cli
       runHook postInstall
     '';
   };
