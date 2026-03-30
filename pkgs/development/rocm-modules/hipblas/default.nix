@@ -24,7 +24,7 @@
 # Can also use cuBLAS
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipblas";
-  version = "7.2.0";
+  version = "7.2.1";
 
   outputs = [
     "out"
@@ -41,10 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "hipBLAS";
+    repo = "rocm-libraries";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-w7myy4FO2vKm91OOfSGWO3bxR8jAvjU68oqI7aJX82c=";
+    sparseCheckout = [
+      "projects/hipblas"
+      "shared"
+    ];
+    hash = "sha256-1+aNDotV5liHBnGddmWtaKYCcsWPxQD3AoEubnghV0M=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/hipblas";
 
   postPatch = ''
     substituteInPlace library/CMakeLists.txt \
@@ -110,11 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
       rmdir $out/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
   passthru.tests.hipblas-tested = hipblas.override {
     buildTests = true;
     buildBenchmarks = true;
@@ -123,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ROCm BLAS marshalling library";
-    homepage = "https://github.com/ROCm/hipBLAS";
+    homepage = "https://github.com/ROCm/rocm-libraries/tree/develop/projects/hipblas";
     license = with lib.licenses; [ mit ];
     teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
