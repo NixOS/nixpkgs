@@ -12,13 +12,13 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-channelz";
-  version = "1.78.1";
+  version = "1.80.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "grpcio_channelz";
     inherit version;
-    hash = "sha256-OnUpauDkLIQsZQVeC45nZWtqAikIZUdPxGTxPKvp35Q=";
+    hash = "sha256-fs6As480ti6Q5uHFqghYXwwPE8GpyI6vdNioZxw6n6E=";
   };
 
   build-system = [ setuptools ];
