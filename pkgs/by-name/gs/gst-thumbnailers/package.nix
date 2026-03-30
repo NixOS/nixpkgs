@@ -14,6 +14,7 @@
   libglycin,
   glycin-loaders,
   callPackage,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.thumbnailers = callPackage ./tests.nix { };
+    updateScript = nix-update-script { };
   };
 
   meta = {
