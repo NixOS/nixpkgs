@@ -12,15 +12,20 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "7.2.0";
+  version = "7.2.1";
   pname = "rocminfo";
 
   src = fetchFromGitHub {
     owner = "ROCm";
-    repo = "rocminfo";
+    repo = "rocm-systems";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-Md91iH2YWU7ziNE//xxKuk2RrXdujO9mY6SZY5R9TqA=";
+    sparseCheckout = [
+      "projects/rocminfo"
+      "shared"
+    ];
+    hash = "sha256-0esRBEXVibC2uzyonpc0ABNNHQ2NAWZrBmmg6p1zP0c=";
   };
+  sourceRoot = "${finalAttrs.src.name}/projects/rocminfo";
 
   strictDeps = true;
 
@@ -38,15 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     sed 's,lsmod | grep ,${busybox}/bin/lsmod | ${gnugrep}/bin/grep ,' -i rocminfo.cc
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
-  };
+  passthru.updateScript = rocmUpdateScript { inherit finalAttrs; };
 
   meta = {
     description = "ROCm Application for Reporting System Info";
-    homepage = "https://github.com/ROCm/rocminfo";
+    homepage = "https://github.com/ROCm/rocm-systems/tree/develop/projects/rocminfo";
     license = lib.licenses.ncsa;
     mainProgram = "rocminfo";
     maintainers = with lib.maintainers; [ lovesegfault ];
