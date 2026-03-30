@@ -24,3 +24,5 @@ build nix
 upload nix
 build mcporter
 upload mcporter
+build nexa
+upload nexa
