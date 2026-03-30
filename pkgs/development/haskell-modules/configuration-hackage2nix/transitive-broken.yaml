@@ -5,6 +5,7 @@
 dont-distribute-packages:
 
  - 4Blocks
+ - a-piece-of-flake
  - a50
  - abcBridge
  - AbortT-monadstf
@@ -331,6 +332,8 @@ dont-distribute-packages:
  - bricks-syntax
  - brillo-examples
  - bronyradiogermany-streaming
+ - brush-strokes
+ - brush-stroking
  - btc-lsp
  - btree
  - buchhaltung
@@ -1242,6 +1245,7 @@ dont-distribute-packages:
  - GuiHaskell
  - GuiTV
  - h3spec
+ - haal-models
  - habit
  - hablo
  - Hach
@@ -1657,6 +1661,7 @@ dont-distribute-packages:
  - HSHHelpers
  - hsinspect-lsp
  - hslogstash
+ - hsmrc-marc8
  - HSoundFile
  - HsParrot
  - hspec-dirstream
@@ -1771,6 +1776,20 @@ dont-distribute-packages:
  - igrf
  - ihaskell-rlangqq
  - ihaskell-symtegration
+ - ihp
+ - ihp-datasync
+ - ihp-datasync-typescript
+ - ihp-graphql
+ - ihp-hspec
+ - ihp-ide
+ - ihp-job-dashboard
+ - ihp-mail
+ - ihp-migrate
+ - ihp-schema-compiler
+ - ihp-sitemap
+ - ihp-ssc
+ - ihp-typed-sql
+ - ihp-welcome
  - ihttp
  - imap
  - imbib
@@ -1960,6 +1979,7 @@ dont-distribute-packages:
  - koji-tool
  - korfu
  - ks-test
+ - ktx-font
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
@@ -2533,6 +2553,7 @@ dont-distribute-packages:
  - parco-attoparsec
  - parco-parsec
  - parconc-examples
+ - parquet-haskell
  - parquet-hs
  - parse-help
  - parsestar
@@ -3521,6 +3542,7 @@ dont-distribute-packages:
  - trurl
  - tsession-happstack
  - tsweb
+ - tui-launcher
  - tuntap-simple
  - tup-functor
  - tuple-gen
