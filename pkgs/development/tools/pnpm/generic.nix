@@ -10,6 +10,7 @@
   testers,
   buildPackages,
   bashNonInteractive,
+  tests,
 
   withNode ? true,
   version,
@@ -43,16 +44,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rm -r package/dist/reflink.*node package/dist/vendor
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    let
+      # Use ESM pnpm for versions > 11
+      ext = if lib.versionOlder finalAttrs.version "11" then "cjs" else "mjs";
+    in
+    ''
+      runHook preInstall
 
-    install -d $out/{bin,libexec}
-    cp -R . $out/libexec/pnpm
-    ln -s $out/libexec/pnpm/bin/pnpm.cjs $out/bin/pnpm
-    ln -s $out/libexec/pnpm/bin/pnpx.cjs $out/bin/pnpx
+      install -d $out/{bin,libexec}
+      cp -R . $out/libexec/pnpm
+      ln -s $out/libexec/pnpm/bin/pnpm.${ext} $out/bin/pnpm
+      ln -s $out/libexec/pnpm/bin/pnpx.${ext} $out/bin/pnpx
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   postInstall =
     if lib.toInt (lib.versions.major version) < 9 then
@@ -105,9 +111,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           );
       inherit nodejs majorVersion;
 
-      tests.version = lib.optionalAttrs withNode (
-        testers.testVersion { package = finalAttrs.finalPackage; }
-      );
+      tests = {
+        inherit (tests) pnpm;
+        version = lib.optionalAttrs withNode (testers.testVersion { package = finalAttrs.finalPackage; });
+      };
       updateScript = writeScript "pnpm-update-script" ''
         #!/usr/bin/env nix-shell
         #!nix-shell -i bash -p curl jq common-updater-scripts
