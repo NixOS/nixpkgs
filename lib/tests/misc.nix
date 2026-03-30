@@ -2936,6 +2936,53 @@ runTests {
     expected = "«foo»";
   };
 
+  # renderOptionValue shows all multi-line raw strings as plain Nix code blocks to avoid
+  # both the `''...''` wrapper noise and confusing escape sequences (`''` → `'''`,
+  # `${` → `''${`) that `toPretty` would produce.
+  testRenderOptionValueMultilineString = {
+    expr = lib.options.renderOptionValue "line one\nline two\n";
+    expected = {
+      _type = "literalMD";
+      text = "```nix\nline one\nline two\n```";
+    };
+  };
+
+  testRenderOptionValueMultilineStringWithQuotes = {
+    # `''` would produce `'''` in `''...''` form
+    expr = lib.options.renderOptionValue ("line with '' quotes\nmore\n");
+    expected = {
+      _type = "literalMD";
+      text = "```nix\nline with '' quotes\nmore\n```";
+    };
+  };
+
+  testRenderOptionValueMultilineStringWithInterpolation = {
+    # `${` would produce `''${` in `''...''` form
+    expr = lib.options.renderOptionValue ("has $" + "{interpolation}\nmore\n");
+    expected = {
+      _type = "literalMD";
+      text = "```nix\nhas $" + "{interpolation}\nmore\n```";
+    };
+  };
+
+  testRenderOptionValueSingleContentLineWithTrailingNewline = {
+    # A single content line with trailing newline (e.g. `programs.npm.npmrc`) is still
+    # multi-line per `lib.splitString "\n"` and must use the plain code block form.
+    expr = lib.options.renderOptionValue ("prefix = $" + "{HOME}/.npm\n");
+    expected = {
+      _type = "literalMD";
+      text = "```nix\nprefix = $" + "{HOME}/.npm\n```";
+    };
+  };
+
+  testRenderOptionValueSinglelineString = {
+    expr = lib.options.renderOptionValue "just a string";
+    expected = {
+      _type = "literalExpression";
+      text = "\"just a string\"";
+    };
+  };
+
   testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
