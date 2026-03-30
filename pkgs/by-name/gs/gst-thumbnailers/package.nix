@@ -81,7 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.gnome.org/GNOME/gst-thumbnailers";
     changelog = "https://gitlab.gnome.org/GNOME/gst-thumbnailers/-/blob/${finalAttrs.src.tag}/NEWS";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      thunze
+    ];
     platforms = lib.platforms.linux;
   };
 })
