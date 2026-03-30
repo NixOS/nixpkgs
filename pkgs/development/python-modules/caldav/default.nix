@@ -70,6 +70,8 @@ buildPythonPackage rec {
     "test_rfc8764_test_conf"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "caldav" ];
 
   meta = {
