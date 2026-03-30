@@ -72,10 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       asl20 # or
       mit
     ];
-    maintainers = with lib.maintainers; [
-      matthiasbeyer
-      defelo
-    ];
+    teams = [ lib.teams.radicle ];
     mainProgram = "rad-tui";
   };
 })

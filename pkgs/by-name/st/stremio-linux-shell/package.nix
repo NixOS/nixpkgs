@@ -66,11 +66,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     substituteInPlace src/config.rs \
       --replace-fail "@serverjs@" "${placeholder "out"}/share/stremio/server.js"
 
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace $cargoDepsCopy/xkbcommon-dl-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/xkbcommon-dl-*/src/lib.rs \
       --replace-fail "libxkbcommon.so.0" "${libxkbcommon}/lib/libxkbcommon.so.0"
-    substituteInPlace $cargoDepsCopy/xkbcommon-dl-*/src/x11.rs \
+    substituteInPlace $cargoDepsCopy/*/xkbcommon-dl-*/src/x11.rs \
       --replace-fail "libxkbcommon-x11.so.0" "${libxkbcommon}/lib/libxkbcommon-x11.so.0"
   '';
 
