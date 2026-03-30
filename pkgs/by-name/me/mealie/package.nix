@@ -5,7 +5,7 @@
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
-  python3Packages,
+  python3,
   nltk-data,
   writeShellScript,
   nix-update-script,
@@ -22,8 +22,8 @@ let
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
-  pythonpkgs = python3Packages;
-  python = pythonpkgs.python;
+  python = python3;
+  pythonpkgs = python.pkgs;
 in
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
