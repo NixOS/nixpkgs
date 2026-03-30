@@ -7292,6 +7292,8 @@ self: super: with self; {
 
   hyperscan = callPackage ../development/python-modules/hyperscan { };
 
+  hyponcloud = callPackage ../development/python-modules/hyponcloud { };
+
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
