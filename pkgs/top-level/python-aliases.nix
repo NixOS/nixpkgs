@@ -150,6 +150,7 @@ mapAliases {
   django-crispy-bootstrap3 = crispy-bootstrap3; # added 2025-06-11
   django-crispy-bootstrap4 = crispy-bootstrap4; # added 2025-06-11
   django-crispy-bootstrap5 = crispy-bootstrap5; # added 2025-06-11
+  django-cryptography = throw "'django-cryptography' has been removed as it was unmaintained upstream"; # Added 2026-03-22
   django-modelsearch = modelsearch; # added 2026-03-02
   django_3 = throw "Django 3 has reached it's EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
   django_4 = throw "Django 4 has reached it's EOL in 2026-04 and has therefore been removed."; # added 2026-03-30
