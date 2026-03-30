@@ -433,7 +433,10 @@
     "index.html#katamari-tarballs",
     "index.html#individual-tarballs",
     "index.html#generating-nix-expressions",
-    "index.html#overriding-the-generator"
+    "index.html#overriding-the-generator",
+    "index.html#javascript-node2nix",
+    "index.html#javascript-node2nix-preparation",
+    "index.html#javascript-node2nix-pitfalls"
   ],
   "sec-nixpkgs-release-26.05-lib": [
     "release-notes.html#sec-nixpkgs-release-26.05-lib"
@@ -3659,15 +3662,6 @@
   ],
   "javascript-corepack": [
     "index.html#javascript-corepack"
-  ],
-  "javascript-node2nix": [
-    "index.html#javascript-node2nix"
-  ],
-  "javascript-node2nix-preparation": [
-    "index.html#javascript-node2nix-preparation"
-  ],
-  "javascript-node2nix-pitfalls": [
-    "index.html#javascript-node2nix-pitfalls"
   ],
   "javascript-pnpm": [
     "index.html#javascript-pnpm"

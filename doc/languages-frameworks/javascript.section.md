@@ -99,7 +99,7 @@ Then when building the frontend you can just symlink the node_modules directory.
 
 ### buildNpmPackage {#javascript-buildNpmPackage}
 
-`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file (as used in [node2nix](#javascript-node2nix)).
+`buildNpmPackage` allows you to package npm-based projects in Nixpkgs without the use of an auto-generated dependencies file.
 It works by utilizing npm's cache functionality -- creating a reproducible cache that contains the dependencies of a project, and pointing npm to it.
 
 Here's an example:
@@ -305,25 +305,6 @@ It's recommended to set `package-lock-only = true` in your project-local [`.npmr
 ### corepack {#javascript-corepack}
 
 This package puts the corepack wrappers for pnpm and yarn in your PATH, and they will honor the `packageManager` setting in the `package.json`.
-
-### node2nix {#javascript-node2nix}
-
-#### Preparation {#javascript-node2nix-preparation}
-
-You will need to generate a Nix expression for the dependencies. Don't forget the `-l package-lock.json` if there is a lock file. Most probably you will need the `--development` to include the `devDependencies`
-
-So the command will most likely be:
-```sh
-node2nix --development -l package-lock.json
-```
-
-See `node2nix` [docs](https://github.com/svanderburg/node2nix) for more info.
-
-#### Pitfalls {#javascript-node2nix-pitfalls}
-
-- If upstream package.json does not have a "version" attribute, `node2nix` will crash. You will need to add it like shown in [the package.json section](#javascript-upstream-package-json).
-- `node2nix` has some [bugs](https://github.com/svanderburg/node2nix/issues/238) related to working with lock files from npm distributed with `nodejs_16`.
-- `node2nix` does not like missing packages from npm. If you see something like `Cannot resolve version: vue-loader-v16@undefined` then you might want to try another tool. The package might have been pulled off of npm.
 
 ### pnpm {#javascript-pnpm}
 

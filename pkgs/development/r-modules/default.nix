@@ -531,6 +531,10 @@ let
       cargo
       rustc
     ];
+    waysign = with pkgs; [
+      cargo
+      rustc
+    ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [
       fftw.dev
@@ -1724,6 +1728,7 @@ let
     "ceramic"
     "connections"
     "covidmx"
+    "ggiraph"
     "csodata"
     "DiceView"
     "facmodTS"
@@ -2036,13 +2041,6 @@ let
       postPatch = "patchShebangs configure";
     });
 
-    hypeR = old.hypeR.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace NAMESPACE R/db_msig.R --replace-fail \
-        "msigdbr_show_species" "msigdbr_species"
-      '';
-    });
-
     alcyon = old.alcyon.overrideAttrs (attrs: {
       configureFlags = [
         "--enable-force-openmp"
@@ -2250,6 +2248,10 @@ let
         pkgs.cargo
         pkgs.rustc
       ];
+    });
+
+    waysign = old.waysign.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
