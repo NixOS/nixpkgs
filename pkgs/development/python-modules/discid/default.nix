@@ -8,6 +8,7 @@
   sphinxHook,
   sphinx-autodoc-typehints,
   sphinx-rtd-theme,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +44,10 @@ buildPythonPackage rec {
     sphinxHook
     sphinx-autodoc-typehints
     sphinx-rtd-theme
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
   ];
 
   meta = {
