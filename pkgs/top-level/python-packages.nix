@@ -414,6 +414,8 @@ self: super: with self; {
 
   aionanoleaf = callPackage ../development/python-modules/aionanoleaf { };
 
+  aionanoleaf2 = callPackage ../development/python-modules/aionanoleaf2 { };
+
   aionotion = callPackage ../development/python-modules/aionotion { };
 
   aiontfy = callPackage ../development/python-modules/aiontfy { };
@@ -4378,6 +4380,8 @@ self: super: with self; {
 
   django-sql-utils = callPackage ../development/python-modules/django-sql-utils { };
 
+  django-sslserver = callPackage ../development/python-modules/django-sslserver { };
+
   django-statici18n = callPackage ../development/python-modules/django-statici18n { };
 
   django-storages = callPackage ../development/python-modules/django-storages { };
@@ -4433,6 +4437,10 @@ self: super: with self; {
   django-webpush = callPackage ../development/python-modules/django-webpush { };
 
   django-widget-tweaks = callPackage ../development/python-modules/django-widget-tweaks { };
+
+  django-xforwardedfor-middleware =
+    callPackage ../development/python-modules/django-xforwardedfor-middleware
+      { };
 
   # LTS in extended support phase
   django_4 = callPackage ../development/python-modules/django/4.nix { };
@@ -7291,6 +7299,8 @@ self: super: with self; {
   hyperpyyaml = callPackage ../development/python-modules/hyperpyyaml { };
 
   hyperscan = callPackage ../development/python-modules/hyperscan { };
+
+  hyponcloud = callPackage ../development/python-modules/hyponcloud { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
@@ -19763,6 +19773,8 @@ self: super: with self; {
   turnt = callPackage ../development/python-modules/turnt { };
 
   turrishw = callPackage ../development/python-modules/turrishw { };
+
+  tuya-device-handlers = callPackage ../development/python-modules/tuya-device-handlers { };
 
   tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
 

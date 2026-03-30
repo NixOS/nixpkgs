@@ -11,7 +11,7 @@
 }:
 buildPythonPackage rec {
   pname = "netbox-contract";
-  version = "2.4.4";
+  version = "2.4.5";
   pyproject = true;
 
   disabled = python.pythonVersion != netbox.python.pythonVersion;
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mlebreuil";
     repo = "netbox-contract";
     tag = "v${version}";
-    hash = "sha256-3kjxy6gkhqYrWvl/gbeAxb8m8r3Dihas9cDf50NQMC4=";
+    hash = "sha256-+6dw8vPDNItZRfExL0C5ul2XghoToMHotEAH90B3CmE=";
   };
 
   build-system = [ setuptools ];
