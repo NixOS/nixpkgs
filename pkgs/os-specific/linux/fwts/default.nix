@@ -19,15 +19,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwts";
-  version = "25.09.00";
+  version = "26.05.00";
 
   src = fetchzip {
-    url = "https://fwts.ubuntu.com/release/fwts-V${finalAttrs.version}.tar.gz";
-    hash = "sha256-OJI2O9MptckmGj4rTrh9haIGaXJOO3er59yIorbgSVw=";
+    url = "https://github.com/fwts/fwts/releases/download/V${finalAttrs.version}/fwts-V${finalAttrs.version}.tar.gz";
+    hash = "sha256-7xUh4fKC0bYNwMX5uohTmD4hCP8kDR9I03CgtM5iRFA=";
     stripRoot = false;
   };
 
-  sourceRoot = "${finalAttrs.src.name}/fwts-${finalAttrs.version}";
+  sourceRoot = "${finalAttrs.src.name}/fwts";
 
   nativeBuildInputs = [
     autoreconfHook
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # libfwts uses gzopen/gzclose/gzgets but does not link zlib.
     substituteInPlace src/lib/src/Makefile.am \
-      --replace-fail "-lm -lpthread -lbsd" "-lm -lpthread -lbsd -lz"
+      --replace-fail "-lm -lpthread" "-lm -lpthread -lz"
   '';
 
   enableParallelBuilding = true;
