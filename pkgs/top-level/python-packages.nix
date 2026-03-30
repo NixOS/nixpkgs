@@ -18994,6 +18994,8 @@ self: super: with self; {
 
   tellduslive = callPackage ../development/python-modules/tellduslive { };
 
+  telnetlib3 = callPackage ../development/python-modules/telnetlib3 { };
+
   teltasync = callPackage ../development/python-modules/teltasync { };
 
   temescal = callPackage ../development/python-modules/temescal { };
