@@ -7,7 +7,7 @@
   imagemagick,
   libimagequant,
   lua,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   buildInputs = [
