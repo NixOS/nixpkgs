@@ -7529,6 +7529,8 @@ self: super: with self; {
 
   inform = callPackage ../development/python-modules/inform { };
 
+  infrared-protocols = callPackage ../development/python-modules/infrared-protocols { };
+
   ingredient-parser-nlp = callPackage ../development/python-modules/ingredient-parser-nlp { };
 
   iniconfig = callPackage ../development/python-modules/iniconfig { };
