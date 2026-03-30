@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildGoModule,
   fetchFromGitHub,
 }:
@@ -32,6 +31,5 @@ buildGoModule (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ fab ];
     mainProgram = "librespeed-cli";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

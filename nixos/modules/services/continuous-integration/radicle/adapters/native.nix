@@ -15,7 +15,7 @@ let
 in
 
 {
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.teams = [ lib.teams.radicle ];
 
   options.services.radicle.ci.adapters.native = {
     instances = lib.mkOption {

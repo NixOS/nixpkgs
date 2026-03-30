@@ -2,10 +2,14 @@
   lib,
   buildPythonPackage,
   libgpiod,
+  setuptools,
 }:
 buildPythonPackage {
-  inherit (libgpiod) pname version src;
-  format = "setuptools";
+  pname = "gpiod";
+  inherit (libgpiod) version src;
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   buildInputs = [ libgpiod ];
 

@@ -65,7 +65,8 @@ lua-resty-jwt,,,,,,
 lua-resty-openidc,,,,,,
 lua-resty-openssl,,,,,,
 lua-resty-session,,,,,,
-lua-rtoml,https://raw.githubusercontent.com/lblasc/lua-rtoml/main/lua-rtoml-0.2-0.rockspec,,,,,lblasc
+# we have to set url because luarocks.org lua-rtoml is squatted by another package
+lua-rtoml,https://raw.githubusercontent.com/lblasc/lua-rtoml/eb89439070c72ccf05efb8576abae7643abab354/lua-rtoml-0.3-0.rockspec,,,,,lblasc
 lua-subprocess,https://raw.githubusercontent.com/0x0ade/lua-subprocess/master/subprocess-scm-1.rockspec,,,,5.1,scoder12
 lua-term,,,,,,
 lua-toml,,,,,,
