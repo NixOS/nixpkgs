@@ -247,6 +247,7 @@ let
         config = {
           _module.args = {
             inherit extendModules;
+            finalModules = regularModules;
             moduleType = type;
           };
           _module.specialArgs = specialArgs;
