@@ -8528,12 +8528,6 @@
     name = "Fang-Pen Lin";
     keys = [ { fingerprint = "7130 3454 A7CD 0F0A 941A  F9A3 2A26 9964 AD29 2131"; } ];
   };
-  farcaller = {
-    name = "Vladimir Pouzanov";
-    email = "farcaller@gmail.com";
-    github = "farcaller";
-    githubId = 693;
-  };
   fare = {
     email = "fahree@gmail.com";
     github = "fare";
@@ -13743,6 +13737,12 @@
     github = "kashw2";
     githubId = 15855440;
     name = "Keanu Ashwell";
+  };
+  kasifrasi = {
+    name = "Ardit Abrashi";
+    github = "Kasifrasi";
+    githubId = 73264146;
+    email = "ardit.abrashi03@gmail.com";
   };
   katanallama = {
     github = "katanallama";
@@ -24293,13 +24293,6 @@
     github = "screendriver";
     githubId = 149248;
     name = "Christian Rackerseder";
-  };
-  Scriptkiddi = {
-    email = "nixos@scriptkiddi.de";
-    matrix = "@fritz.otlinghaus:helsinki-systems.de";
-    github = "Scriptkiddi";
-    githubId = 3598650;
-    name = "Fritz Otlinghaus";
   };
   Scrumplex = {
     name = "Sefa Eyeoglu";
