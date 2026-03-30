@@ -3756,6 +3756,8 @@ self: super: with self; {
 
   deep-chainmap = callPackage ../development/python-modules/deep-chainmap { };
 
+  deep-ep = callPackage ../development/python-modules/deep-ep { };
+
   deep-translator = callPackage ../development/python-modules/deep-translator { };
 
   deepdiff = callPackage ../development/python-modules/deepdiff { };
