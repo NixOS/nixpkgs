@@ -19760,6 +19760,8 @@ self: super: with self; {
 
   turrishw = callPackage ../development/python-modules/turrishw { };
 
+  tuya-device-handlers = callPackage ../development/python-modules/tuya-device-handlers { };
+
   tuya-device-sharing-sdk = callPackage ../development/python-modules/tuya-device-sharing-sdk { };
 
   tuya-iot-py-sdk = callPackage ../development/python-modules/tuya-iot-py-sdk { };

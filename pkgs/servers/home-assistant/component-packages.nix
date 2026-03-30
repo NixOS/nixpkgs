@@ -6527,8 +6527,9 @@
     "tuya" =
       ps: with ps; [
         ha-ffmpeg
+        tuya-device-handlers
         tuya-device-sharing-sdk
-      ]; # missing inputs: tuya-device-handlers
+      ];
     "twentemilieu" =
       ps: with ps; [
         twentemilieu
@@ -8196,6 +8197,7 @@
     "trend"
     "triggercmd"
     "tts"
+    "tuya"
     "twentemilieu"
     "twilio"
     "twinkly"
