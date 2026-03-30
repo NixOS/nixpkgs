@@ -3,6 +3,7 @@
   config,
   ags,
   astal,
+  awww,
   bluez,
   bluez-tools,
   brightnessctl,
@@ -27,14 +28,25 @@
   python3,
   pywal16,
   stdenv,
-  swww,
   upower,
   wireplumber,
   wl-clipboard,
   writeShellScript,
+  writeShellScriptBin,
 
   enableCuda ? config.cudaSupport,
 }:
+
+let
+  # TODO: Remove once hyprpanel updates to use `awww`
+  swww-compat = writeShellScriptBin "swww" ''
+    exec awww "$@"
+  '';
+  swww-daemon-compat = writeShellScriptBin "swww-daemon" ''
+    exec awww-daemon "$@"
+  '';
+in
+
 ags.bundle {
   pname = "hyprpanel";
   version = "0-unstable-2026-03-23";
@@ -63,6 +75,7 @@ ags.bundle {
     astal.tray
     astal.wireplumber
 
+    awww
     bluez
     bluez-tools
     brightnessctl
@@ -80,7 +93,8 @@ ags.bundle {
     matugen
     networkmanager
     pywal16
-    swww
+    swww-compat
+    swww-daemon-compat
     upower
     wireplumber
     wl-clipboard
