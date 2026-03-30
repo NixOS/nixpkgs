@@ -6515,7 +6515,7 @@
     name = "Derek Collison";
   };
   DerGrumpf = {
-    email = "p.keier@beyerstedt-it.de";
+    email = "phil.keier@hotmail.com";
     github = "DerGrumpf";
     githubId = 17272572;
     name = "Phil Keier";
