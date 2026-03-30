@@ -35,7 +35,7 @@
   webrtc-audio-processing,
   zam-plugins,
   zita-convolver,
-  wrapGAppsNoGuiHook,
+  wrapGAppsHook3,
 }:
 
 let
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     intltool
     ninja
     pkg-config
-    wrapGAppsNoGuiHook
+    wrapGAppsHook3
     wrapQtAppsHook
   ];
 
