@@ -7,7 +7,8 @@
   openssl,
   rustfmt,
   makeWrapper,
-  wasm-bindgen-cli_0_2_108,
+  esbuild,
+  wasm-bindgen-cli_0_2_114,
   testers,
   dioxus-cli,
   withTelemetry ? false,
@@ -15,15 +16,15 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dioxus-cli";
-  version = "0.7.3";
+  version = "0.7.4";
 
   src = fetchCrate {
     pname = "dioxus-cli";
     version = finalAttrs.version;
-    hash = "sha256-6uG737MNk+wTKqNWgFEd8MsOOvllZLDnIrJPAn5Wjuw=";
+    hash = "sha256-6ZKVnLMq2eB6kj2Ly3z0/dWpZ+x9bJwPtyxE8Ef6haI=";
   };
 
-  cargoHash = "sha256-BdPsdWah/f2pveQViPikIV2riSwjSo+qGOFoP+hHaiM=";
+  cargoHash = "sha256-VrJuT3ori25joRe7kjSr6j8xfbKn5udETviV3id2mG4=";
   buildFeatures = [
     "no-downloads"
   ]
@@ -68,7 +69,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/dx \
-      --suffix PATH : ${lib.makeBinPath [ wasm-bindgen-cli_0_2_108 ]}
+      --suffix PATH : ${
+        lib.makeBinPath [
+          esbuild
+          wasm-bindgen-cli_0_2_114
+        ]
+      }
   '';
 
   meta = {
