@@ -47,6 +47,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       misilelab
+      progrm_jarvis
     ];
     mainProgram = "static-web-server";
   };
