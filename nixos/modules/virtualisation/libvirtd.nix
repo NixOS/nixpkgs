@@ -643,7 +643,7 @@ in
       '';
     };
 
-    system.nssModules = optional (cfg.nss.enable or cfg.nss.enableGuest) cfg.package;
+    system.nssModules = optional (cfg.nss.enable || cfg.nss.enableGuest) cfg.package;
     system.nssDatabases.hosts = mkMerge [
       # ensure that the NSS modules come between mymachines (which is 400) and resolve (which is 501)
       (mkIf cfg.nss.enable (mkOrder 430 [ "libvirt" ]))
