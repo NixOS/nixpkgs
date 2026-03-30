@@ -199,6 +199,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       find $out/lib/ -name "*.la" -exec rm -f \{} \;
 
+      # Fortran .mod files end up in bin output.
+      # Force all headers into the dev output .
+      moveToOutput "include/" "''${!outputDev}"
+
       # The main wrapper that all the rest of the commonly used binaries are
       # symlinked to
       moveToOutput "bin/opal_wrapper" "''${!outputDev}"
