@@ -13,6 +13,8 @@
   fontconfig,
   libglycin,
   glycin-loaders,
+  writableTmpDirAsHomeHook,
+  shared-mime-info,
   callPackage,
   nix-update-script,
 }:
@@ -53,6 +55,21 @@ stdenv.mkDerivation (finalAttrs: {
     libglycin
     glycin-loaders
   ];
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    # fontconfig tries to write to `~/.cache/fontconfig`
+    writableTmpDirAsHomeHook
+  ];
+
+  # Fix missing glycin loaders (glycin-loaders) and incorrectly detected
+  # MIME types (shared-mime-info).
+  preCheck = ''
+    export XDG_DATA_DIRS=${glycin-loaders}/share:${shared-mime-info}/share:$XDG_DATA_DIRS
+  '';
+
+  mesonCheckFlags = [ "-v" ];
 
   passthru = {
     tests.thumbnailers = callPackage ./tests.nix { };
