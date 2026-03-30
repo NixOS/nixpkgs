@@ -9,10 +9,9 @@
   fetchFromGitHub,
   fetchpatch,
   fontmath,
-  fontpens,
   fonttools,
   libxml2,
-  mutatormath,
+  lxml,
   ninja,
   pytestCheckHook,
   runAllTests ? false,
@@ -88,14 +87,14 @@ buildPythonPackage (finalAttrs: {
     booleanoperations
     defcon
     fontmath
-    fontpens
     fonttools
-    mutatormath
+    lxml
     tqdm
     ufonormalizer
     ufoprocessor
   ]
   ++ defcon.optional-dependencies.lxml
+  ++ defcon.optional-dependencies.pens
   ++ fonttools.optional-dependencies.lxml
   ++ fonttools.optional-dependencies.ufo
   ++ fonttools.optional-dependencies.unicode

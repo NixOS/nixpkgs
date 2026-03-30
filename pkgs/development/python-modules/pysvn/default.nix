@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pysvn";
-  version = "1.9.23";
+  version = "1.9.25";
   pyproject = false;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/pysvn/pysvn/V${version}/pysvn-${version}.tar.gz";
-    hash = "sha256-ABru1nng1RaYfZwe0Z0NxE90rU/J2h/BhzUnvgrasCk=";
+    hash = "sha256-M9LzUr/6FZSUWFQdGM6Ew1/ySE5C/Q7cNXi+jGa+JdY=";
   };
 
   patches = [ ./replace-python-first.patch ];
