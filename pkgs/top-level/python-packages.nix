@@ -6597,6 +6597,8 @@ self: super: with self; {
 
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
+  gpiod = callPackage ../development/python-modules/gpiod { inherit (pkgs) libgpiod; };
+
   gpiodevice = callPackage ../development/python-modules/gpiodevice { };
 
   gpiozero = callPackage ../development/python-modules/gpiozero { };
@@ -8698,8 +8700,6 @@ self: super: with self; {
   );
 
   libfive = toPythonModule (pkgs.libfive.override { python3 = python; });
-
-  libgpiod = callPackage ../development/python-modules/libgpiod { inherit (pkgs) libgpiod; };
 
   libgravatar = callPackage ../development/python-modules/libgravatar { };
 
