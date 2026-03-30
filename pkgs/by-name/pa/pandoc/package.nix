@@ -11,12 +11,20 @@
 let
   # Since pandoc 3.0 the pandoc binary resides in the pandoc-cli package.
   static = haskell.lib.compose.justStaticExecutables pandoc-cli;
-  pandoc-cli = selectPandocCLI haskellPackages;
+  pandoc-cli = (selectPandocCLI haskellPackages).overrideScope (
+    final: prev:
+    prev
+    // {
+      pandoc = haskell.lib.compose.overrideCabal (drv: {
+        configureFlags = drv.configureFlags or [ ] ++ [ "-fembed_data_files" ];
+        buildDepends = drv.buildDepends or [ ] ++ [ prev.file-embed ];
+        enableSeparateDataOutput = false;
+      }) prev.pandoc;
+    }
+  );
 
 in
 (haskell.lib.compose.overrideCabal (drv: {
-  configureFlags = drv.configureFlags or [ ] ++ [ "-fembed_data_files" ];
-  buildDepends = drv.buildDepends or [ ] ++ [ pandoc-cli.scope.file-embed ];
   buildTools = (drv.buildTools or [ ]) ++ [
     removeReferencesTo
     installShellFiles
