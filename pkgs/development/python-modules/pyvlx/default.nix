@@ -1,31 +1,26 @@
 {
   lib,
   buildPythonPackage,
+  deprecated,
   fetchFromGitHub,
   pytestCheckHook,
   pyyaml,
   setuptools,
   setuptools-scm,
-  typing-extensions,
   zeroconf,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "pyvlx";
-  version = "0.2.30";
+  version = "0.2.32";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Julius2342";
     repo = "pyvlx";
     tag = finalAttrs.version;
-    hash = "sha256-owrWYBAb/5JAangGwt56gdjJf99C3i04IiKAh1P/MYY=";
+    hash = "sha256-ArNWXvYZ/eZWPUvV8z/+6WsAcm5MTnKblMrUFj51JhM=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools-scm>=8.0" "setuptools-scm"
-  '';
 
   build-system = [
     setuptools
@@ -33,8 +28,8 @@ buildPythonPackage (finalAttrs: {
   ];
 
   dependencies = [
+    deprecated
     pyyaml
-    typing-extensions
     zeroconf
   ];
 
