@@ -687,6 +687,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  radicle = {
+    github = "radicle";
+  };
+
   rocm = {
     github = "rocm";
   };

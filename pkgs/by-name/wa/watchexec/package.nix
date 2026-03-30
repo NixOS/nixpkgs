@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "watchexec";
-  version = "2.3.2";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "watchexec";
     repo = "watchexec";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BJRvz3rFLaOCNhOsEo0rSOgB9BCJ2LMB9XEw8RBWXXs=";
+    hash = "sha256-QXoqRJl4eLBE2rmOBvAhlBRE4OavvEWpGMKlBrxwbaU=";
   };
 
-  cargoHash = "sha256-VtSRC4lyjMo2O9dNbVllcDEx08zQWJMQmQ/2bNMup6U=";
+  cargoHash = "sha256-svDmGwI7YYbGdI5/TMJGPo0wVgBF6aDec9C3fYsHxYQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,7 +46,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --zsh completions/zsh
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v(.+)"
+    ];
+  };
 
   meta = {
     description = "Executes commands in response to file modifications";

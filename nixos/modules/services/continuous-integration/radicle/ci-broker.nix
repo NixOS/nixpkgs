@@ -37,7 +37,7 @@ let
 in
 
 {
-  meta.maintainers = with lib.maintainers; [ defelo ];
+  meta.teams = [ lib.teams.radicle ];
 
   options.services.radicle.ci.broker = {
     enable = lib.mkEnableOption "radicle-ci-broker";
